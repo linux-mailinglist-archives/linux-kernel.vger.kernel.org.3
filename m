@@ -2,122 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DAF545292
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95B7545295
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244828AbiFIRBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S1344103AbiFIREZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiFIRBc (ORCPT
+        with ESMTP id S237847AbiFIREX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:01:32 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1C9B490;
-        Thu,  9 Jun 2022 10:01:31 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id c8so17609633qtj.1;
-        Thu, 09 Jun 2022 10:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jnwjuzj3MrO/cwr2OIkDIAaSQBe3BajVFxJznUYian0=;
-        b=KXqRhtXyWnfMMh67/l7UqFNSak6iRPazY7CXKZ8kXMQ28xL6ZgU/jokUz5eYFK4Fmf
-         RSP4C1zwYfySDnFihTA+aG73lcyhQC2oUpja4Q0z5PZNdMPTSBVEYPXBzvrR3kLqDuUg
-         ER3zClQ+6tt0BFGJmHXW9WWL6C/D68LHpXXhtEzC4d0A960OviV85LsphNuoMihi4fFT
-         YicoSQdctm46hGSz4YgrEhYfyp1IhVjilwY7hZWzC9CLWNXUqD5eVMJb2GoUnLVzr3b2
-         DRSDlDXTuIhIt3SoJuqetEdNDvg+rkRNVFpE574dSoUVTyyg9zOKm2gnPxvyT2p3csIP
-         iHXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jnwjuzj3MrO/cwr2OIkDIAaSQBe3BajVFxJznUYian0=;
-        b=BMNFADqC2KJFEuzd7enq9kZLdIXCqPiqc2NMIsk7DOe5moLPgPsNkvAhcOYt4D1iiD
-         8qKSotbixVh1q62x1llRKLY4sP3/UllogRQ/R/7G0qMhf2MdX3o7lIQf+YXs0wfGDwAb
-         uetnjp6pMMHdB+1N4Dhr1LnghzzfQmVhXqTtJOBzZ30EeFgxPOXvYdmbnkkai+zXFAwK
-         3khxGcl5G2eP7HntsigCNyseqmforT0TptiTkhXE72+Wr8GTn37CZw/saj7Mxx1poAti
-         aLcurJpAevC2JMrbMuwmeM0WNv7h89Q5Qc960e8vDQJ3a11qKfPrPNdfPD4NxTsCzQja
-         mGbA==
-X-Gm-Message-State: AOAM533T4ObLrQErw3264v5boVJdrk+Lf8m/2xfThzK1ay2uxLWTG1DS
-        /p7NFE9SUbFTN+bSyfPrAYz6XLwRrYSCKmD3
-X-Google-Smtp-Source: ABdhPJxUnc6jx6BU5l82GJ9gkvxlowGGDi71/wPGyxGzCs8eaISpn9agirY+M5cMSde/PUqXlbAjrw==
-X-Received: by 2002:ac8:5a11:0:b0:304:bab8:66f3 with SMTP id n17-20020ac85a11000000b00304bab866f3mr32399696qta.388.1654794089992;
-        Thu, 09 Jun 2022 10:01:29 -0700 (PDT)
-Received: from Sassy (bras-base-oshwon9563w-grc-26-142-113-132-114.dsl.bell.ca. [142.113.132.114])
-        by smtp.gmail.com with ESMTPSA id w17-20020a05620a445100b006a7137330e2sm4046161qkp.132.2022.06.09.10.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 10:01:29 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 13:01:27 -0400
-From:   Srivathsan Sivakumar <sri.skumar05@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
-        Coiby Xu <coiby.xu@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: qlge: qlge_main.c: convert do-while loops to for
- loops
-Message-ID: <YqInZ/KNEJFN9kNS@Sassy>
-References: <YqIOp+cPXNxLAnui@Sassy>
- <20220609152653.GZ2146@kadam>
+        Thu, 9 Jun 2022 13:04:23 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B45B0D0E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:04:17 -0700 (PDT)
+X-UUID: ea919fc6e7ff46d1ae53f09593b12f95-20220610
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:f3b7cb63-8a22-4c1f-aa9b-47610791aa59,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:da00d37e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: ea919fc6e7ff46d1ae53f09593b12f95-20220610
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1294950020; Fri, 10 Jun 2022 01:04:13 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 10 Jun 2022 01:04:12 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 10 Jun 2022 01:04:12 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <yf.wang@mediatek.com>
+CC:     <Libo.Kang@mediatek.com>, <Yong.Wu@mediatek.com>,
+        <iommu@lists.linux-foundation.org>, <joro@8bytes.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <ning.li@mediatek.com>,
+        <will@kernel.org>, <wsd_upstream@mediatek.com>
+Subject: Re: [PATCH] iommu/dma: Fix race condition during iova_domain initialization
+Date:   Fri, 10 Jun 2022 01:04:12 +0800
+Message-ID: <20220609170412.30690-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220530120748.31733-1-yf.wang@mediatek.com>
+References: <20220530120748.31733-1-yf.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609152653.GZ2146@kadam>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 06:26:53PM +0300, Dan Carpenter wrote:
-> On Thu, Jun 09, 2022 at 11:15:51AM -0400, Srivathsan Sivakumar wrote:
-> > diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
-> > index 8c35d4c4b851..308e8b621185 100644
-> > --- a/drivers/staging/qlge/qlge_main.c
-> > +++ b/drivers/staging/qlge/qlge_main.c
-> > @@ -3006,13 +3006,13 @@ static int qlge_start_rx_ring(struct qlge_adapter *qdev, struct rx_ring *rx_ring
-> >  		cqicb->flags |= FLAGS_LL;	/* Load lbq values */
-> >  		tmp = (u64)rx_ring->lbq.base_dma;
-> >  		base_indirect_ptr = rx_ring->lbq.base_indirect;
-> > -		page_entries = 0;
-> > -		do {
-> > -			*base_indirect_ptr = cpu_to_le64(tmp);
-> > -			tmp += DB_PAGE_SIZE;
-> > -			base_indirect_ptr++;
-> > -			page_entries++;
-> > -		} while (page_entries < MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN));
-> > +
-> > +		for (page_entries = 0; page_entries <
-> > +			MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); page_entries++) {
-> > +				*base_indirect_ptr = cpu_to_le64(tmp);
-> > +				tmp += DB_PAGE_SIZE;
-> > +				base_indirect_ptr++;
-> > +		}
-> 
-> It's better than the original, but wouldn't it be better yet to write
-> something like this (untested):
-> 
-> 		for (i = 0; i <	MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); i++)
-> 			base_indirect_ptr[i] = cpu_to_le64(tmp + (i * DB_PAGE_SIZE));
-> 
-> Same with the other as well, obviously.
-> 
-> regards,
-> dan carpenter
-> 
+Hi YF,
 
-Hello Dan,
+>When many devices share the same iova domain, iommu_dma_init_domain()
+>may be called at the same time. The checking of iovad->start_pfn will
+>all get false in iommu_dma_init_domain() and both enter init_iova_domain()
+>to do iovad initialization.
 
-Thanks for your input
+After reading this patch.
+It means that we use iovad->start_pfn as a key to tell if an iovad is already initialized,
+but we do not protect iovad->start_pfn from concurrent access.
 
-wouldn't base_indirect_ptr point at a different endian value if tmp is
-added with (i * DB_PAGE_SIZE)?
+So what's happening is like:
 
-Thanks,
-Srivathsan
+   cpu0                                    cpu1
+of_dma_configure_id()              of_dma_configure_id()
+  arch_setup_dma_ops()               arch_setup_dma_ops()
+    iommu_setup_dma_ops()              iommu_setup_dma_ops()
+      init_iova_domain()	 	 init_iova_domain()
+         if (iovad->start_pfn) {           if (iovad->start_pfn) {
+         }                                 }
+         init_iova_domain()                init_iova_domain()
+
+
+init_iova_domain() is called at the same time.
+
+>Fix this by protecting init_iova_domain() with iommu_dma_cookie->mutex.
+
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
+
+>Exception backtrace:
+>rb_insert_color(param1=0xFFFFFF80CD2BDB40, param3=1) + 64
+>init_iova_domain() + 180
+>iommu_setup_dma_ops() + 260
+>arch_setup_dma_ops() + 132
+>of_dma_configure_id() + 468
+>platform_dma_configure() + 32
+>really_probe() + 1168
+>driver_probe_device() + 268
+>__device_attach_driver() + 524
+>__device_attach() + 524
+>bus_probe_device() + 64
+>deferred_probe_work_func() + 260
+>process_one_work() + 580
+>worker_thread() + 1076
+>kthread() + 332
+>ret_from_fork() + 16
+>
+>Signed-off-by: Ning Li <ning.li@mediatek.com>
+>Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+>---
+> drivers/iommu/dma-iommu.c | 17 +++++++++++++----
+> 1 file changed, 13 insertions(+), 4 deletions(-)
+>
+>diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+>index 09f6e1c0f9c0..b38c5041eeab 100644
+>--- a/drivers/iommu/dma-iommu.c
+>+++ b/drivers/iommu/dma-iommu.c
+>@@ -63,6 +63,7 @@ struct iommu_dma_cookie {
+> 
+> 	/* Domain for flush queue callback; NULL if flush queue not in use */
+> 	struct iommu_domain		*fq_domain;
+>+	struct mutex			mutex;
+> };
+> 
+> static DEFINE_STATIC_KEY_FALSE(iommu_deferred_attach_enabled);
+>@@ -309,6 +310,7 @@ int iommu_get_dma_cookie(struct iommu_domain *domain)
+> 	if (!domain->iova_cookie)
+> 		return -ENOMEM;
+> 
+>+	mutex_init(&domain->iova_cookie->mutex);
+> 	return 0;
+> }
+> 
+>@@ -549,26 +551,33 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+> 	}
+> 
+> 	/* start_pfn is always nonzero for an already-initialised domain */
+>+	mutex_lock(&cookie->mutex);
+>
+> 	if (iovad->start_pfn) {
+> 		if (1UL << order != iovad->granule ||
+> 		    base_pfn != iovad->start_pfn) {
+> 			pr_warn("Incompatible range for DMA domain\n");
+>-			return -EFAULT;
+>+			ret = -EFAULT;
+>+			goto done_unlock;
+> 		}
+> 
+>-		return 0;
+>+		ret = 0;
+>+		goto done_unlock;
+> 	}
+> 
+> 	init_iova_domain(iovad, 1UL << order, base_pfn);
+> 	ret = iova_domain_init_rcaches(iovad);
+> 	if (ret)
+>-		return ret;
+>+		goto done_unlock;
+> 
+> 	/* If the FQ fails we can simply fall back to strict mode */
+> 	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
+> 		domain->type = IOMMU_DOMAIN_DMA;
+> 
+>-	return iova_reserve_iommu_regions(dev, domain);
+>+	ret = iova_reserve_iommu_regions(dev, domain);
+>+
+>+done_unlock:
+>+	mutex_unlock(&cookie->mutex);
+>+	return ret;
+> }
+> 
+> /**
+>-- 
+>2.18.0
+>
+>
+>_______________________________________________
+>Linux-mediatek mailing list
+>Linux-mediatek@lists.infradead.org
+>http://lists.infradead.org/mailman/listinfo/linux-mediatek
+>

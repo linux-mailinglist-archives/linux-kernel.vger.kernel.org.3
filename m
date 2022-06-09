@@ -2,354 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339E254558F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A97545592
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiFIUZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 16:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S1343954AbiFIU0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 16:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiFIUZo (ORCPT
+        with ESMTP id S229573AbiFIU0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:25:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BD869CC1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654806342; x=1686342342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=txE7FU3yncMCPt2ZReE/SPe7ebUWewV3IIqWc3P+mT8=;
-  b=XzxuG0DktlzAEweYoouyyYI6nz7C/au5iNnzVtcnCsrGfbnslzNdZOp5
-   CpAlHZRct4xO6v/W25NQ2doI8HCzJTebDg5Q2Sdj5TXX3lT4emvlo1IvO
-   t/DWntLj4r4CY7Hm9sZe+s6gcKrZjT+piNIlNWaJgH6lbBATmvbSwysAa
-   Xu7yEsBth1qt/NNXxMiTAic/6MO4aHPm/aYIRLhLjb97x896EQwM/5pNe
-   BrCo5vbx8u9wroIDZo6Ccyn2ZqMgkLq3qcq1qJfe5MwYfJDqfFimXz+W3
-   8NoWUjnS3qu00hTOgBM6uzMZCOEu2GKiQAS6GEZwYW7XpB1dOIXp3T+eB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260529117"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="260529117"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 13:25:40 -0700
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="533756508"
-Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 13:25:40 -0700
-Date:   Thu, 9 Jun 2022 20:25:40 +0000
-From:   "Raj, Ashok" <ashok.raj@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH v8 04/11] iommu: Add sva iommu_domain support
-Message-ID: <20220609202540.GD33363@araj-dh-work>
-References: <20220607014942.3954894-1-baolu.lu@linux.intel.com>
- <20220607014942.3954894-5-baolu.lu@linux.intel.com>
+        Thu, 9 Jun 2022 16:26:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD2749B4D;
+        Thu,  9 Jun 2022 13:26:16 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.172])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 96D70660174A;
+        Thu,  9 Jun 2022 21:26:15 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654806375;
+        bh=TxDn/EAJ1PhSPoOAcqA3PKEoHsTsX/OcuP68HYLNKqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=POqhT479EDn2iYdm7IfUMSLS9/ZodN5x467kdwoeamdLHH4XK8aF6L3+/PnbFaxeo
+         dj2iDLkctX6iFQo+iRT1X17FxIw9hBSzvnTpjRzt5uwz2ia7hC48K1xew4E5LNXwjR
+         a9SCM6QcYpc1CXf8WQ8UNueFomO7zSokEeotN3WjvR8irWRpN9ZZDKh+M2BBRQgFDl
+         iz+XykHDdrtY0bmzjlKBXpPOd3/YvY2abvHDWI9ZNgJxgpkzdBB8sAHARA3G0uLq45
+         gvKbEoVr/jsy/UtUo2e/hhbwolPB4GKRXL2ex02F/wdzKqa1yGYj4tf4WT5D2QmM5W
+         1Ge4VVbbK26Yg==
+Received: by mercury (Postfix, from userid 1000)
+        id 65BA710605B9; Thu,  9 Jun 2022 22:26:13 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 22:26:13 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Jack Wu <wjack@google.com>
+Cc:     kernel-team@android.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ken Yang <yangken@google.com>,
+        AleX Pelosi <apelosi@google.com>,
+        Vincent Wang <vincentwang@google.com>
+Subject: Re: [PATCH v2] power: supply: add dock type
+Message-ID: <20220609202613.pjojjw7meb4bekfr@mercury.elektranox.org>
+References: <20220307034358.286657-1-wjack@google.com>
+ <CAHnoD8BTEPeRToRtan7LZJae-K3dv0pvBYQrXkrr3scbjUUcTg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fwb3pz4yyfzitsrc"
 Content-Disposition: inline
-In-Reply-To: <20220607014942.3954894-5-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHnoD8BTEPeRToRtan7LZJae-K3dv0pvBYQrXkrr3scbjUUcTg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu
 
-some minor nits.
+--fwb3pz4yyfzitsrc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 07, 2022 at 09:49:35AM +0800, Lu Baolu wrote:
-> The sva iommu_domain represents a hardware pagetable that the IOMMU
-> hardware could use for SVA translation. This adds some infrastructure
-> to support SVA domain in the iommu common layer. It includes:
-> 
-> - Extend the iommu_domain to support a new IOMMU_DOMAIN_SVA domain
->   type. The IOMMU drivers that support SVA should provide the sva
->   domain specific iommu_domain_ops.
-> - Add a helper to allocate an SVA domain. The iommu_domain_free()
->   is still used to free an SVA domain.
-> - Add helpers to attach an SVA domain to a device and the reverse
->   operation.
-> 
-> Some buses, like PCI, route packets without considering the PASID value.
-> Thus a DMA target address with PASID might be treated as P2P if the
-> address falls into the MMIO BAR of other devices in the group. To make
-> things simple, the attach/detach interfaces only apply to devices
-> belonging to the singleton groups, and the singleton is immutable in
-> fabric i.e. not affected by hotplug.
-> 
-> The iommu_attach/detach_device_pasid() can be used for other purposes,
-> such as kernel DMA with pasid, mediation device, etc.
-> 
-> Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> ---
->  include/linux/iommu.h | 45 ++++++++++++++++++++-
->  drivers/iommu/iommu.c | 93 +++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 136 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 3fbad42c0bf8..9173c5741447 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -64,6 +64,9 @@ struct iommu_domain_geometry {
->  #define __IOMMU_DOMAIN_PT	(1U << 2)  /* Domain is identity mapped   */
->  #define __IOMMU_DOMAIN_DMA_FQ	(1U << 3)  /* DMA-API uses flush queue    */
->  
-> +#define __IOMMU_DOMAIN_SHARED	(1U << 4)  /* Page table shared from CPU  */
+Hi,
 
-s/from CPU/with CPU
+On Mon, Mar 07, 2022 at 12:05:25PM +0800, Jack Wu wrote:
+> Currently, power_supply framework supports only Battery, UPS,
+> Mains, USB and WIRELESS power_supply_type. Add dock
+> power_supply_type so that the drivers which supports dock can
+> register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
 
-> +#define __IOMMU_DOMAIN_HOST_VA	(1U << 5)  /* Host CPU virtual address */
+I asked for a driver using this. We do not add/extend sysfs API just
+for the sake of downstream drivers. Either you send the
+new driver/driver changes upstream that need POWER_SUPPLY_TYPE_DOCK,
+or this will not get added.
 
-Do you mean general CPU VA? or Host CPU VA, I'm reading the latter as 2nd
-stage?
+Please don't waste reviewer's time!
 
-> +
->  /*
->   * This are the possible domain-types
->   *
-> @@ -86,15 +89,24 @@ struct iommu_domain_geometry {
->  #define IOMMU_DOMAIN_DMA_FQ	(__IOMMU_DOMAIN_PAGING |	\
->  				 __IOMMU_DOMAIN_DMA_API |	\
->  				 __IOMMU_DOMAIN_DMA_FQ)
-> +#define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SHARED |	\
-> +				 __IOMMU_DOMAIN_HOST_VA)
+-- Sebastian
 
-Doesn't shared automatically mean CPU VA? Do we need another flag?
+> v2: updates to Documentation
+>=20
+> Thanks!
+> Jack
+>=20
+> Jack Wu <wjack@google.com> =E6=96=BC 2022=E5=B9=B43=E6=9C=887=E6=97=A5 =
+=E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:44=E5=AF=AB=E9=81=93=EF=BC=9A
+> >
+> > Add dock power_supply_type for the drivers which supports dock can
+> > register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
+> >
+> > Signed-off-by: Jack Wu <wjack@google.com>
+> > ---
+> >  Documentation/ABI/testing/sysfs-class-power | 2 +-
+> >  drivers/power/supply/power_supply_sysfs.c   | 1 +
+> >  include/linux/power_supply.h                | 1 +
+> >  3 files changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentatio=
+n/ABI/testing/sysfs-class-power
+> > index 859501366777..0b45d9d3a50f 100644
+> > --- a/Documentation/ABI/testing/sysfs-class-power
+> > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > @@ -34,7 +34,7 @@ Description:
+> >                 Describes the main type of the supply.
+> >
+> >                 Access: Read
+> > -               Valid values: "Battery", "UPS", "Mains", "USB", "Wirele=
+ss"
+> > +               Valid values: "Battery", "UPS", "Mains", "USB", "Wirele=
+ss", "Dock"
+> >
+> >  **Battery and USB properties**
+> >
+> > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/=
+supply/power_supply_sysfs.c
+> > index c0dfcfa33206..2b1f18b7f98c 100644
+> > --- a/drivers/power/supply/power_supply_sysfs.c
+> > +++ b/drivers/power/supply/power_supply_sysfs.c
+> > @@ -57,6 +57,7 @@ static const char * const POWER_SUPPLY_TYPE_TEXT[] =
+=3D {
+> >         [POWER_SUPPLY_TYPE_USB_PD_DRP]          =3D "USB_PD_DRP",
+> >         [POWER_SUPPLY_TYPE_APPLE_BRICK_ID]      =3D "BrickID",
+> >         [POWER_SUPPLY_TYPE_WIRELESS]            =3D "Wireless",
+> > +       [POWER_SUPPLY_TYPE_DOCK]                =3D "Dock",
+> >  };
+> >
+> >  static const char * const POWER_SUPPLY_USB_TYPE_TEXT[] =3D {
+> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> > index e218041cc000..8f0425f00803 100644
+> > --- a/include/linux/power_supply.h
+> > +++ b/include/linux/power_supply.h
+> > @@ -189,6 +189,7 @@ enum power_supply_type {
+> >         POWER_SUPPLY_TYPE_USB_PD_DRP,           /* PD Dual Role Port */
+> >         POWER_SUPPLY_TYPE_APPLE_BRICK_ID,       /* Apple Charging Metho=
+d */
+> >         POWER_SUPPLY_TYPE_WIRELESS,             /* Wireless */
+> > +       POWER_SUPPLY_TYPE_DOCK,                 /* Dock Charging */
+> >  };
+> >
+> >  enum power_supply_usb_type {
+> > --
+> > 2.35.1.616.g0bdcbb4464-goog
+> >
 
->  
->  struct iommu_domain {
->  	unsigned type;
->  	const struct iommu_domain_ops *ops;
->  	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
-> -	iommu_fault_handler_t handler;
-> -	void *handler_token;
->  	struct iommu_domain_geometry geometry;
->  	struct iommu_dma_cookie *iova_cookie;
-> +	union {
-> +		struct {	/* IOMMU_DOMAIN_DMA */
-> +			iommu_fault_handler_t handler;
-> +			void *handler_token;
-> +		};
-> +		struct {	/* IOMMU_DOMAIN_SVA */
-> +			struct mm_struct *mm;
-> +		};
-> +	};
->  };
->  
->  static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
-> @@ -262,6 +274,8 @@ struct iommu_ops {
->   * struct iommu_domain_ops - domain specific operations
->   * @attach_dev: attach an iommu domain to a device
->   * @detach_dev: detach an iommu domain from a device
-> + * @set_dev_pasid: set an iommu domain to a pasid of device
-> + * @block_dev_pasid: block pasid of device from using iommu domain
->   * @map: map a physically contiguous memory region to an iommu domain
->   * @map_pages: map a physically contiguous set of pages of the same size to
->   *             an iommu domain.
-> @@ -282,6 +296,10 @@ struct iommu_ops {
->  struct iommu_domain_ops {
->  	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
->  	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
-> +	int (*set_dev_pasid)(struct iommu_domain *domain, struct device *dev,
-> +			     ioasid_t pasid);
-> +	void (*block_dev_pasid)(struct iommu_domain *domain, struct device *dev,
-> +				ioasid_t pasid);
->  
->  	int (*map)(struct iommu_domain *domain, unsigned long iova,
->  		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
-> @@ -679,6 +697,12 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner);
->  void iommu_group_release_dma_owner(struct iommu_group *group);
->  bool iommu_group_dma_owner_claimed(struct iommu_group *group);
->  
-> +struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
-> +					    struct mm_struct *mm);
-> +int iommu_attach_device_pasid(struct iommu_domain *domain, struct device *dev,
-> +			      ioasid_t pasid);
-> +void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
-> +			       ioasid_t pasid);
->  #else /* CONFIG_IOMMU_API */
->  
->  struct iommu_ops {};
-> @@ -1052,6 +1076,23 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->  {
->  	return false;
->  }
-> +
-> +static inline struct iommu_domain *
-> +iommu_sva_domain_alloc(struct device *dev, struct mm_struct *mm)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline int iommu_attach_device_pasid(struct iommu_domain *domain,
-> +					    struct device *dev, ioasid_t pasid)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +static inline void iommu_detach_device_pasid(struct iommu_domain *domain,
-> +					     struct device *dev, ioasid_t pasid)
-> +{
-> +}
->  #endif /* CONFIG_IOMMU_API */
->  
->  /**
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index d1ec855b1f72..e92391dcce33 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -27,6 +27,7 @@
->  #include <linux/module.h>
->  #include <linux/cc_platform.h>
->  #include <trace/events/iommu.h>
-> +#include <linux/sched/mm.h>
->  
->  static struct kset *iommu_group_kset;
->  static DEFINE_IDA(iommu_group_ida);
-> @@ -39,6 +40,7 @@ struct iommu_group {
->  	struct kobject kobj;
->  	struct kobject *devices_kobj;
->  	struct list_head devices;
-> +	struct xarray pasid_array;
->  	struct mutex mutex;
->  	void *iommu_data;
->  	void (*iommu_data_release)(void *iommu_data);
-> @@ -666,6 +668,7 @@ struct iommu_group *iommu_group_alloc(void)
->  	mutex_init(&group->mutex);
->  	INIT_LIST_HEAD(&group->devices);
->  	INIT_LIST_HEAD(&group->entry);
-> +	xa_init(&group->pasid_array);
->  
->  	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
->  	if (ret < 0) {
-> @@ -1961,6 +1964,8 @@ EXPORT_SYMBOL_GPL(iommu_domain_alloc);
->  
->  void iommu_domain_free(struct iommu_domain *domain)
->  {
-> +	if (domain->type == IOMMU_DOMAIN_SVA)
-> +		mmdrop(domain->mm);
->  	iommu_put_dma_cookie(domain);
->  	domain->ops->free(domain);
->  }
-> @@ -3277,3 +3282,91 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->  	return user;
->  }
->  EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
-> +
-> +struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
-> +					    struct mm_struct *mm)
-> +{
-> +	const struct iommu_ops *ops = dev_iommu_ops(dev);
-> +	struct iommu_domain *domain;
-> +
-> +	domain = ops->domain_alloc(IOMMU_DOMAIN_SVA);
-> +	if (!domain)
-> +		return NULL;
-> +
-> +	domain->type = IOMMU_DOMAIN_SVA;
-> +	mmgrab(mm);
-> +	domain->mm = mm;
-> +
-> +	return domain;
-> +}
-> +
-> +static bool iommu_group_immutable_singleton(struct iommu_group *group,
-> +					    struct device *dev)
-> +{
-> +	int count;
-> +
-> +	mutex_lock(&group->mutex);
-> +	count = iommu_group_device_count(group);
-> +	mutex_unlock(&group->mutex);
-> +
-> +	if (count != 1)
-> +		return false;
-> +
-> +	/*
-> +	 * The PCI device could be considered to be fully isolated if all
-> +	 * devices on the path from the device to the host-PCI bridge are
-> +	 * protected from peer-to-peer DMA by ACS.
-> +	 */
-> +	if (dev_is_pci(dev))
-> +		return pci_acs_path_enabled(to_pci_dev(dev), NULL,
-> +					    REQ_ACS_FLAGS);
+--fwb3pz4yyfzitsrc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Does this comprehend RCiEP devices? Since they are optional even if ACS is
-lacking.
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiV2EACgkQ2O7X88g7
++pol7xAAk6Te9AhpNOGXFsk9TC2Kpb0tfwEivH9S/ClEMOsrj8Np01UQdlPIz/yF
+fKXP3JcL/WO9D2MaCyPv4/lUbFj64cAW7fozIeL2TRUP+uwhoxTYN1IoadJggI0M
+gYOsM3ZHIBNQ0BcVIIT4swttwsjNwdGTSMFt1iP+b4T2fLV/lIxIP7Am6Zeq6+bM
+bvp8MGsscO/N1vQy/qRzPv3Go90E3GbKCHnT4wpKolb3Q2pNJ/bn7ndg5xUslVUl
+MhNgcv5mT7RzQGCi83N8IsVz4O6sqypekBWGpyJZauFiJWdwNHdMc/dwPazkOKi+
+tonvEIhtvkBxhDe4rCd6Yeof2OpoaFAFlWCkNnKwhEfw1pNlI0gss9EBOCuVruAb
+ugxZCsEOFXCA6rXBHKyU/Czbn3Ki3PkAbDPYXEKfvU/xE8Sm6eBnagO8YF7M0eAf
+LISPEaeWvJZXbXEZmtbSBqkgInQ//HLPrd3UnzlXRO2+cREblXdml7dJKWd0khDZ
+lyLAynOmm26mCgs1lfXdEYlSKnf6TOpIH111XBCVr/UfEIleSwwPUJqgTlDPQVhF
+NM9k71J7pueA8G7yIWNS8xqtTqTiZZA4pRzGYOVdfgOda6Dd95pVcGSf+onJbaTE
+817IEIOgfmmrUda1NwRc8lcsZLe8enMb5CIy06dRAnzKil5fctw=
+=DbUI
+-----END PGP SIGNATURE-----
 
-> +
-> +	/*
-> +	 * Otherwise, the device came from DT/ACPI, assume it is static and
-> +	 * then singleton can know from the device count in the group.
-> +	 */
-> +	return true;
-> +}
-> +
-> +int iommu_attach_device_pasid(struct iommu_domain *domain, struct device *dev,
-> +			      ioasid_t pasid)
-> +{
-> +	struct iommu_group *group;
-> +	int ret = -EBUSY;
-> +	void *curr;
-> +
-> +	if (!domain->ops->set_dev_pasid)
-> +		return -EOPNOTSUPP;
-> +
-> +	group = iommu_group_get(dev);
-> +	if (!group || !iommu_group_immutable_singleton(group, dev)) {
-> +		iommu_group_put(group);
-> +		return -EINVAL;
-> +	}
-> +
-> +	mutex_lock(&group->mutex);
-> +	curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, GFP_KERNEL);
-> +	if (curr)
-> +		goto out_unlock;
-> +	ret = domain->ops->set_dev_pasid(domain, dev, pasid);
-> +	if (ret)
-> +		xa_erase(&group->pasid_array, pasid);
-> +out_unlock:
-> +	mutex_unlock(&group->mutex);
-> +	iommu_group_put(group);
-> +
-> +	return ret;
-> +}
-> +
-> +void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
-> +			       ioasid_t pasid)
-> +{
-> +	struct iommu_group *group = iommu_group_get(dev);
-> +
-> +	mutex_lock(&group->mutex);
-> +	domain->ops->block_dev_pasid(domain, dev, pasid);
-> +	xa_erase(&group->pasid_array, pasid);
-> +	mutex_unlock(&group->mutex);
-> +
-> +	iommu_group_put(group);
-> +}
-> -- 
-> 2.25.1
-> 
+--fwb3pz4yyfzitsrc--

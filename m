@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC455458BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB995458D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345329AbiFIXlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 19:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S1345629AbiFIXqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 19:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238141AbiFIXld (ORCPT
+        with ESMTP id S232670AbiFIXq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:41:33 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813EE24D6AF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 16:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654818086;
-        bh=Rl9WrMgBIa/yI1Mcm82IC1znT+c2KjvFsK4cEWVrTp0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=AzznsniZIMOvcSyeh3GFojvoMPEQeBJdv/qrsKya71LTllehjVOhT9RksM8fHTJJJ
-         HYip+ebRgIHv8sj2KlAYnmqZjfWUkFw2sw1vLV+chxkybQ3Zvhi6wJ+tAncJ6z1tfI
-         r3ZtjrwfqRbuiE1bHJC21/J9Tdz04608CqJvW6qI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mg6dy-1nXHlg2wmc-00he9L; Fri, 10
- Jun 2022 01:41:26 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     trivial@kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: [PATCH RESEND] workqueue: Switch to new kerneldoc syntax for named variable macro argument
-Date:   Fri, 10 Jun 2022 01:41:10 +0200
-Message-Id: <20220609234111.226879-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
+        Thu, 9 Jun 2022 19:46:26 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB62C11A;
+        Thu,  9 Jun 2022 16:46:25 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id g17-20020a9d6491000000b0060c0f0101ffso6240432otl.7;
+        Thu, 09 Jun 2022 16:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X141ZafwMnCya6zJqjlrPW7zfFJHx0toBuGRvDUmsjo=;
+        b=q0XI0ntOLGfgMtPYG+icei7LjXutXp3f1wiAcFHblSBQLpArWvXjxTipBntsbcUa5q
+         uAuctNRnldKvWtYq1gkFDgB0kTpQYPQIC4IdHb3vJRdBCTUM3tHQ+6BQhB72M0DncDaP
+         yGYp2E8WiYKx8Nwhm/0h+jHI+rgeCZ9oNfNwrpxtlosamsr5k61n8hFpO5GsQjhwIDJa
+         VW4o3S/K1xWzXFEHGkPWiCfCFeLECZpOXn8Upu9Ca3TFWp67de63HE5Sny5P9kCMfbXW
+         24yo2TyJtFDppyZtP58oWsTlrhFr8CZpZ+rusNdW9ccuMJqpDUXamp6uWijgttsrgCzY
+         TgRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X141ZafwMnCya6zJqjlrPW7zfFJHx0toBuGRvDUmsjo=;
+        b=eB3SZGWyztcjnWRt/aW2qQZnrm2YKQinq+6AddxQPyP3Gr9IJpzVGSG6wY8DdBx8Gq
+         uDLoqUU4UZVBmM4uvsLFrq85FzlgRmfQtO7OBt+b/cMQRoGCQAGkLAXcUO8PWRbCxhYN
+         D8pyWjIyQD6Le4VNKM3IyukArZxQVvrWOfdKwsxiEwL6DmDb5ZVeriighVnKGihQ3xwM
+         g4gqAuGcV3hqiYI4vhoaaTAyzFijgvyA0u6PjGXpBnAWisPSIUTW6oOhItOVPalLt6H/
+         dSJqSyY/4/Oetej45oakQeBiDAqQyGLLzIxzWV5AJlbJNN0mBql/rZXSxCMFaTYWdWT/
+         sEaw==
+X-Gm-Message-State: AOAM531ePWeK13rd9711Kz8RQ1Y8ngCzUkv7hD4mvaiVg4oUIvLXnwhc
+        zNl8HmxCRUkj6rbfK3dVYKpsMuAzM7RqajIFqUWk/z+KABxoxA==
+X-Google-Smtp-Source: ABdhPJzn+Em+TQCsBFUUWarhAuEu/9+7NVktDF+yx31ZZZuLx3eXMPhCu3l/Pbw48K8J5jaRzoC/3IURySvaJsp3BiE=
+X-Received: by 2002:a9d:7056:0:b0:60c:f8b:afac with SMTP id
+ x22-20020a9d7056000000b0060c0f8bafacmr6250091otj.30.1654818384775; Thu, 09
+ Jun 2022 16:46:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WDhYrFq0Di5EhwsWXsbXT1hGJtkbYXMcCCLlTiWJAU/aSCsxHiP
- EJA/alH/aNZBGHDlbnT8CQV/laiYaFdJw7UxY76T+N/oSIOneO+vRvWtS1xmeBDS2JFcKRc
- fKqujLUguJ8OxFRjb6ACXsGrsx1iqkfTu2nhqhZKzsAwSwH+30JPDNEePXgLAjcgQjq7AN4
- KvfTTljYaSQ8i/0CUZD4w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0TB8WP92lGo=:itar347bhBe/SQmBhRYxkv
- 58W0/DVrxJ7xzLvNq37Qd0mgFxjVhulBu5Ezzr7RkL3ILvhhNN1+PE2Wopn51PBTb/xLsVoFK
- Sh7+NQl23M88pSvVF1kB3f6hyGsI3pq6EdJUj8uMG8vfQ/4JhILNXw5h2PR4p1FcUe9TClqM4
- I/MIceojcVlw6Plfx/Bh/Q5r+Np0NCr9M30GOV0cCECJzROLNd/0l0Xzr2kLhxGMdk4VmdtGV
- lQ3Ol2A2levpfoQePd8Y5RJVROMdqI4EagMRuIE3kv11qow+v7rqd8zAtAvkyxMOPl+MjxSsr
- 9rjcXa+beBNS7LKTNwLk7+AhspuX0fFmY+hingeNezSoovYCa7nYW1VBNK52nEkMz9qmKz/RJ
- lt2Ea1YlEFBNpxSdJL2KLfpNaGIEI073eVOna6AVznaFsk/g3o4iVWdCk+YVYdLFBStMEnhPd
- 8WDtOG2bUQa9872rSK3TtYiSdCJuONhpcJePbf/ty96FTmOV6lh3+FIoM5c4HnYTNQXnVRUE4
- WUvZk3nqIavkvke/L/IFJVqMring790lkmjbHOhfd48pSm8GNCC5m4+fjRva+Nk0fBVGsw9di
- wAgzYd9enOcLbu3gKbVB/TLjfT6JItzYKDvLmPNACRoRrylvp0L1FLXYtG2iY4rxGCMW2Ohsw
- aeR2i1Yc7nFcujk5qdAvMARUsnXFhdrFz0LoNlVJ5ATUWw0ccmQsfeTmNsJnfCzy58bnAaSJR
- JlZ46Jmj6w2xWHV4o/5olQ/C7NnKa9/+fvTZgJ6OQ1W8iZxJP2XZL0DkNh+I0eeSp/PVbKpzM
- H987cwsdkTeBt2bRjx+OOVTTbg30bP6JOXfdUr383zJ8xKmA497BjBcuGCEQ5OWpre/xK75Qe
- 81chW7O6RSNbeg1w6s+zAFNTbzH9nnmpMwI5zDhx1348q+buYzW0l3XL4hwUBRkRNmY3joZ27
- jJnetPCYCYPG1jauQ+vY0Qk+3WI4wl2djuhhvDsAYn0NsV7iqULrgOJoceaAZXiXXy0kKGrmx
- Yx0Sv9Ts2FukYsL/HWLlG5xbRkdn0sNFxQEn6GM2v6PBy3c6m4ZnM3CSoTnKmMEmEs0QE4xR2
- Nc0nPA1KQyUd+nx221cTZ/pEisW0lt80fiU/iGVL0IICYF53m3V/KD4XA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609062829.293217-1-james.hilliard1@gmail.com> <CAEf4BzaNBcW8ZDWcH5USd9jFshFF78psAjn2mqZp6uVGn0ZK+g@mail.gmail.com>
+In-Reply-To: <CAEf4BzaNBcW8ZDWcH5USd9jFshFF78psAjn2mqZp6uVGn0ZK+g@mail.gmail.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Thu, 9 Jun 2022 17:46:13 -0600
+Message-ID: <CADvTj4oBy3nP3s2BaN_+75dYfkq2x72wG3dC3K09osRzkcw2eA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] libbpf: replace typeof with __typeof__ for -std=c17 compatibility
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The syntax without dots is available since commit 43756e347f21
-("scripts/kernel-doc: Add support for named variable macro arguments").
+On Thu, Jun 9, 2022 at 12:11 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Jun 8, 2022 at 11:28 PM James Hilliard
+> <james.hilliard1@gmail.com> wrote:
+> >
+> > Fixes errors like:
+> > error: expected specifier-qualifier-list before 'typeof'
+> >    14 | #define __type(name, val) typeof(val) *name
+> >       |                           ^~~~~~
+> > ../src/core/bpf/socket_bind/socket-bind.bpf.c:25:9: note: in expansion of macro '__type'
+> >    25 |         __type(key, __u32);
+> >       |         ^~~~~~
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+>
+> If you follow DPDK link you gave me ([0]), you'll see that they ended up doing
+>
+> #ifndef typeof
+> #define typeof __typeof__
+> #endif
+>
+> It's way more localized. Let's do that.
 
-The same HTML output is produced with and without this patch.
+Won't that potentially leak the redefinition into external code including the
+header file?
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Acked-by: Tejun Heo <tj@kernel.org>
-=2D--
-Previous copy:
-- https://lore.kernel.org/lkml/20210320182829.688032-1-j.neuschaefer@gmx.n=
-et/
-=2D--
- include/linux/workqueue.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't see a redefinition of typeof like that used elsewhere in the kernel.
 
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index d15a7730ee18b..83a51c5100e68 100644
-=2D-- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -412,7 +412,7 @@ struct workqueue_struct *alloc_workqueue(const char *f=
-mt,
-  * alloc_ordered_workqueue - allocate an ordered workqueue
-  * @fmt: printf format for the name of the workqueue
-  * @flags: WQ_* flags (only WQ_FREEZABLE and WQ_MEM_RECLAIM are meaningfu=
-l)
-- * @args...: args for @fmt
-+ * @args: args for @fmt
-  *
-  * Allocate an ordered workqueue.  An ordered workqueue executes at
-  * most one work item at any given time in the queued order.  They are
-=2D-
-2.30.1
+However I do see __typeof__ used in many headers already so that approach
+seems to follow normal conventions and seems less risky.
 
+FYI using -std=gnu17 instead of -std=c17 works around this issue with bpf-gcc
+at least so this issue isn't really a blocker like the SEC macro
+issue, I had just
+accidentally mixed the two issues up due to accidentally not clearing out some
+header files when testing, they seem to be entirely separate.
+
+>
+> But also I tried to build libbpf-bootstrap with -std=c17 and
+> immediately ran into issue with asm, so we need to do the same with
+> asm -> __asm__. Can you please update your patch and fix both issues?
+
+Are you hitting that with clang/llvm or bpf-gcc? It doesn't appear that the
+libbpf-bootstrap build system is set up to build with bpf-gcc yet.
+
+>
+>   [0] https://patches.dpdk.org/project/dpdk/patch/2601191342CEEE43887BDE71AB977258213F3012@irsmsx105.ger.corp.intel.com/
+>   [1] https://github.com/libbpf/libbpf-bootstrap
+>
+>
+> >  tools/lib/bpf/bpf_core_read.h   | 16 ++++++++--------
+> >  tools/lib/bpf/bpf_helpers.h     |  4 ++--
+> >  tools/lib/bpf/bpf_tracing.h     | 24 ++++++++++++------------
+> >  tools/lib/bpf/btf.h             |  4 ++--
+> >  tools/lib/bpf/libbpf_internal.h |  6 +++---
+> >  tools/lib/bpf/usdt.bpf.h        |  6 +++---
+> >  tools/lib/bpf/xsk.h             | 12 ++++++------
+> >  7 files changed, 36 insertions(+), 36 deletions(-)
+> >
+>
+> [...]

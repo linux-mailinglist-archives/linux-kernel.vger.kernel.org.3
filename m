@@ -2,149 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBB2544486
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627F3544477
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238737AbiFIHMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 03:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S238033AbiFIHKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 03:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiFIHMH (ORCPT
+        with ESMTP id S230157AbiFIHKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:12:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CE724249C
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654758725; x=1686294725;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/iNWtyXhoUjFCJMWGA58jiCCwl0OUy7BEC+3COjS34M=;
-  b=AZqjWJTz/Rn6O8m0axiw7tjSnBL1pgzD2mSwT/i7VZ8lmxmSykjqcl89
-   l8pASQT7bixcxUNe6hAKbp5VUns4P0qFejVnRRRGJgFdQw/VjeCyFvh1I
-   cxLWP2XBS8fv0I65CYMT902WsxvSoGyfVlUW5lsK4226xl5V5BzILmUlK
-   wjRiBAUFL2+AQGqTNG+HLy0YvmE+Ux2CheKuo6BGmZKIQzOxl0xSYfozK
-   HeyBJvBvYnmWKxWJjzAP0NMpkCr1sjIYsCFyBwntOuARVC+3nMmx3cbPk
-   7+OIDdTNoWwWIzovJR5U3LmTN+FuAzNBib6pBMOALYNV8QKpYr82Bn4dH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="277995417"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="277995417"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 00:12:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="580445921"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 09 Jun 2022 00:12:01 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Joao Martins <joao.m.martins@oracle.com>
-Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [RFC PATCHES 2/2] iommu: Replace put_pages_list() with iommu_free_pgtbl_pages()
-Date:   Thu,  9 Jun 2022 15:08:11 +0800
-Message-Id: <20220609070811.902868-2-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220609070811.902868-1-baolu.lu@linux.intel.com>
-References: <20220609070811.902868-1-baolu.lu@linux.intel.com>
+        Thu, 9 Jun 2022 03:10:50 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAF924249E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:10:49 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v14so4822182wra.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 00:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JJz/uKfPsh9RRifdT1nn+CMGqnTBCL20lTm/X6d1lqM=;
+        b=jsNs38uwEJLDzfg6iOVlGcTuNTHg/2wCkchmIoHgHbUnNvDYT9jX4odCdFR1X5HOVd
+         1oO4u6OSo5Jly3z6iRdb2d85wNER+NQ1fcTpyL/ZvioaAqRUTHW4wLmm/yLSNaqDyCJw
+         DYA3VByqbOklwDmNBCd3Tz6Zrj1nqbAVHzPmPMudE1tO4p289AF0MZLZi0bRdM+b9D9W
+         X+2K8SxU4t1PW9cq/KRjsO+qOEDxsDmujcMAc1jb2Z9Ldd28793q6hEIT5lwZiCcJa4d
+         8VCA8ZF12pUDq5TbPSNRKxaotT9xQSNfqV68lphOy6+zyN+6gT46IGjOqRORnl7U6oh/
+         dA8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JJz/uKfPsh9RRifdT1nn+CMGqnTBCL20lTm/X6d1lqM=;
+        b=BHdT59X5ZbjKWAhm4f8OFPRUYPf67XemCAEVVEUDhBQL3w6hv32mZaIv+G8B6+peLb
+         YgxKbp9A0Lju5NDGl4D6HRFW9PqbV7qfG+8Gv91fcQGWvCEhv4NhIVXoaCgcvrSXS0gF
+         reYqMFaJI9ZA/VRFdLs1ULBHVD1lMsTK7WTW6G3/DVa+p+3hvDsIpVprx/BnDiSoH9oA
+         JEX1M7QgK4im1EpEQoRCkLtRnoChCmy+6EXBR+8Jh8Lj/KYWPYWK7LeSSVd1RHwkWUmN
+         qYHnKGQzyiUbrRsqXRBAb97dSteGc8Rf3t8oVCdXHPSNHUlaRc6Y+Mff7Y/E/AqQR7gO
+         Ordw==
+X-Gm-Message-State: AOAM532h3XMmDdGxzDEDjvPKIpWS0cMdgDmnN5Ms48Y7l8aqtNc7YZzP
+        0PZnJCFFI5MzwQK4+tHuSq8mw/IgKGL7/n0RcjLTkg==
+X-Google-Smtp-Source: ABdhPJylcxfa8lk6sZMPzVdU/PBo3dJQN7FnVwb7dERZQ14FpQB8ahwTtYVRJy9R0o2eeSEMfYKbluxOe47pBBMdUwM=
+X-Received: by 2002:a05:6000:2a4:b0:219:2aad:51ce with SMTP id
+ l4-20020a05600002a400b002192aad51cemr5208677wry.719.1654758648006; Thu, 09
+ Jun 2022 00:10:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CALt099+y4-kJ0OqVeKaAjAbs4inOkR-WE0FmyiJRDc1-Ev9UKw@mail.gmail.com>
+ <20220603124956.GA18365@lst.de> <CALt099JqRXwsGnq_DmHmnwPyB0K9Y+-BZUG_YoGxOg7G7ZZh9w@mail.gmail.com>
+ <20220609042736.GA31823@lst.de>
+In-Reply-To: <20220609042736.GA31823@lst.de>
+From:   Michael Schaller <misch@google.com>
+Date:   Thu, 9 Jun 2022 09:10:11 +0200
+Message-ID: <CALt099+_EoSmigM5LizV8g7KFY=n0dcfPv4Ycw=YrCDvhJELMg@mail.gmail.com>
+Subject: Re: New partition on loop device doesn't appear in /dev anymore with
+ kernel 5.17.0 and newer (repro script included)
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Therefore, RCU protected page free will take effect if necessary.
+On Thu, Jun 9, 2022 at 6:27 AM Christoph Hellwig <hch@lst.de> wrote:
+> Any chance I could trick you into submitting your reproducer to blktests:
+>
+>    https://github.com/osandov/blktests
+>
+> ?
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/amd/io_pgtable.c | 5 ++---
- drivers/iommu/dma-iommu.c      | 6 ++++--
- drivers/iommu/intel/iommu.c    | 4 ++--
- 3 files changed, 8 insertions(+), 7 deletions(-)
+No need to trick me. ;-)
+https://github.com/osandov/blktests/pull/93
 
-diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
-index 6608d1717574..a62d5dafd7f2 100644
---- a/drivers/iommu/amd/io_pgtable.c
-+++ b/drivers/iommu/amd/io_pgtable.c
-@@ -423,7 +423,7 @@ static int iommu_v1_map_page(struct io_pgtable_ops *ops, unsigned long iova,
- 	}
- 
- 	/* Everything flushed out, free pages now */
--	put_pages_list(&freelist);
-+	iommu_free_pgtbl_pages(&dom->domain, &freelist);
- 
- 	return ret;
- }
-@@ -503,8 +503,7 @@ static void v1_free_pgtable(struct io_pgtable *iop)
- 
- 	/* Make changes visible to IOMMUs */
- 	amd_iommu_domain_update(dom);
--
--	put_pages_list(&freelist);
-+	iommu_free_pgtbl_pages(&dom->domain, &freelist);
- }
- 
- static struct io_pgtable *v1_alloc_pgtable(struct io_pgtable_cfg *cfg, void *cookie)
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index f90251572a5d..a948358c3e51 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -132,7 +132,8 @@ static void fq_ring_free(struct iommu_dma_cookie *cookie, struct iova_fq *fq)
- 		if (fq->entries[idx].counter >= counter)
- 			break;
- 
--		put_pages_list(&fq->entries[idx].freelist);
-+		iommu_free_pgtbl_pages(cookie->fq_domain,
-+				       &fq->entries[idx].freelist);
- 		free_iova_fast(&cookie->iovad,
- 			       fq->entries[idx].iova_pfn,
- 			       fq->entries[idx].pages);
-@@ -228,7 +229,8 @@ static void iommu_dma_free_fq(struct iommu_dma_cookie *cookie)
- 		struct iova_fq *fq = per_cpu_ptr(cookie->fq, cpu);
- 
- 		fq_ring_for_each(idx, fq)
--			put_pages_list(&fq->entries[idx].freelist);
-+			iommu_free_pgtbl_pages(cookie->fq_domain,
-+					       &fq->entries[idx].freelist);
- 	}
- 
- 	free_percpu(cookie->fq);
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 19024dc52735..f429671e837f 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1891,7 +1891,7 @@ static void domain_exit(struct dmar_domain *domain)
- 		LIST_HEAD(freelist);
- 
- 		domain_unmap(domain, 0, DOMAIN_MAX_PFN(domain->gaw), &freelist);
--		put_pages_list(&freelist);
-+		iommu_free_pgtbl_pages(&domain->domain, &freelist);
- 	}
- 
- 	kfree(domain);
-@@ -4510,7 +4510,7 @@ static void intel_iommu_tlb_sync(struct iommu_domain *domain,
- 				      start_pfn, nrpages,
- 				      list_empty(&gather->freelist), 0);
- 
--	put_pages_list(&gather->freelist);
-+	iommu_free_pgtbl_pages(domain, &gather->freelist);
- }
- 
- static phys_addr_t intel_iommu_iova_to_phys(struct iommu_domain *domain,
--- 
-2.25.1
 
+Michael Schaller
+Site Reliability Engineer - Software Engineer
+misch@google.com
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

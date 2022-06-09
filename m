@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C7F5441BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 05:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347875441C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 05:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237381AbiFIDEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 23:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
+        id S237434AbiFIDIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 23:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbiFIDEG (ORCPT
+        with ESMTP id S232220AbiFIDId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 23:04:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB7237DDB4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 20:04:05 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LJTRP3qGZzjXNL;
-        Thu,  9 Jun 2022 11:02:41 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 11:04:02 +0800
-Subject: Re: [PATCH v2] mm/vmscan: don't try to reclaim freed folios
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220608141432.23258-1-linmiaohe@huawei.com>
- <YqDuu2KBofxl1s49@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <e7178c73-9dbf-2d5f-735d-c23937fc9997@huawei.com>
-Date:   Thu, 9 Jun 2022 11:04:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 8 Jun 2022 23:08:33 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D1B14AC94;
+        Wed,  8 Jun 2022 20:08:33 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r71so20684178pgr.0;
+        Wed, 08 Jun 2022 20:08:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=67bIcBJxkdHMwodE6TZHTnr6h/1O1DDdmeeU0CyUDGM=;
+        b=b3UEvGQzNb7mEFiWVFdjpy1EUyGNyFXVb1Ak/H/prr9bWavu9redg0bilShz6c2key
+         LLkvGAFklXBog/o2sBmneH2eBu+S2LSzSzu4GTGqPBV6qFu3/HWHfa5KzsKKhW0yos+v
+         3nLjFbmNHi/de8pmKZOZi6ZjoCCskP1fBF7HRJl1J0hVcuNK8vs0WCO/UHRJ5GLXUv2t
+         xc0K1ptGqQHiv3/eXxV/Bx/IT2pEDQDn9OCeR8Cn3DIf181raCe6PK4KEXSaH3TGNyiQ
+         86HKEz/7gjaKix6WaYc8NixM5cGVAHFtaX3Iewsj4DczrtBIcOn3D/HveKmGKz5KbCsg
+         xpEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=67bIcBJxkdHMwodE6TZHTnr6h/1O1DDdmeeU0CyUDGM=;
+        b=0umWzL1yPnqSiVxH2y8EjSRZjhpgbtVCICwCm0TU0hbMipvKFW83tEY55WHw7uZ6/4
+         Jm/40GP20auDxJeO18xOqiE+FwF1o/SI6EOQt3aKWRQg9tOrbDkF5IvT/dwtC+L1gzt0
+         3CC6TbSJFsYhFULn9V1PxY/ni39AgUyhHaZlmns1VgulQjjy8nNGx4+vqXXIjatmpBVa
+         Z1ErnlCNfe5Ew6O5wuek9cBk7m/kIEMA8Ku0IUYa6gmYgRWCXShneNYparmvqdCFP8DN
+         17+WbdaOzO7mH/34v5A1y7lk1gvCYXp++M/YwCijey4QR9JJ8rPDmdqXNMgYxzwTbtms
+         NaXw==
+X-Gm-Message-State: AOAM5330BRJfxGVSBxneg0yS4EfSkHHGbad6KUmd3jqEuip3G4rGOqNj
+        nOegW3UloBgHnGpV37qE7aw=
+X-Google-Smtp-Source: ABdhPJy4/FG6aAyHA+xGFV+bNbj1TyeEfrhH2qKtw8zG+oJTHarUhVKaNiOwdg8IfD844fYt7USPqQ==
+X-Received: by 2002:a63:90c8:0:b0:3fc:ad6f:6e96 with SMTP id a191-20020a6390c8000000b003fcad6f6e96mr32999010pge.256.1654744112191;
+        Wed, 08 Jun 2022 20:08:32 -0700 (PDT)
+Received: from localhost (subs02-180-214-232-92.three.co.id. [180.214.232.92])
+        by smtp.gmail.com with ESMTPSA id b13-20020a17090acc0d00b001e2d4ef6160sm14829916pju.27.2022.06.08.20.08.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 20:08:31 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 10:08:29 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/879] 5.18.3-rc1 review
+Message-ID: <YqFkLQ7Dh5xVACQW@debian.me>
+References: <20220607165002.659942637@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <YqDuu2KBofxl1s49@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/9 2:47, Matthew Wilcox wrote:
-> On Wed, Jun 08, 2022 at 10:14:32PM +0800, Miaohe Lin wrote:
->> If folios were freed from under us, there's no need to reclaim them. Skip
->> these folios to save lots of cpu cycles and avoid possible unnecessary
->> disk I/O.
-> 
-> Yes, but I asked how often this happened, and you said you didn't know.
-> Do you have any data?  I'm reluctant to make a function which is over
+On Tue, Jun 07, 2022 at 06:51:58PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.3 release.
+> There are 879 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-This is just like the page_count == 1 case when doing page migration in unmap_and_move().
+Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
+armv7 with neon fpu) and arm64 (bcm2711_defconfig, GCC 12.1.0).
 
-> 400 LOC already any longer.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-I'm fine to resend this patch until your work is done (It will be really grateful if I
-will be notified when that work is done).
-
-Thanks!
-
-> 
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->> v2:
->>   use folio_ref_freeze to guard against race with GUP (fast). Many thanks
->>   Matthew for pointing this out.
->> ---
->>  mm/vmscan.c | 10 ++++++++--
->>  1 file changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/vmscan.c b/mm/vmscan.c
->> index 13d34d9593bb..547ae7ae6ab1 100644
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -1610,13 +1610,19 @@ static unsigned int shrink_page_list(struct list_head *page_list,
->>  		folio = lru_to_folio(page_list);
->>  		list_del(&folio->lru);
->>  
->> +		nr_pages = folio_nr_pages(folio);
->> +
->> +		if (folio_ref_count(folio) == 1 &&
->> +		    folio_ref_freeze(folio, 1)) {
->> +			/* folio was freed from under us. So we are done. */
->> +			goto free_it;
->> +		}
->> +
->>  		if (!folio_trylock(folio))
->>  			goto keep;
->>  
->>  		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
->>  
->> -		nr_pages = folio_nr_pages(folio);
->> -
->>  		/* Account the number of base pages */
->>  		sc->nr_scanned += nr_pages;
->>  
->> -- 
->> 2.23.0
->>
-> 
-> .
-> 
-
+-- 
+An old man doll... just what I always wanted! - Clara

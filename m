@@ -2,119 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63F8545527
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17DE54552B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239947AbiFITsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 15:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S240119AbiFITvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 15:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiFITsq (ORCPT
+        with ESMTP id S234832AbiFITvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 15:48:46 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355453A8F93
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:48:45 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o17so21067930pla.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 12:48:45 -0700 (PDT)
+        Thu, 9 Jun 2022 15:51:13 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA2A226562
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:51:12 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gl15so35653229ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 12:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nXEceEngZ7WCunTddR9XXHFw5048HaJXvLYe+oVs8EQ=;
-        b=f3YofbG6O3DXat2Z5Fk1DvlH7dqsre3W33HaF4Zap2+S9uPch4cTzGocNe+WQ7O8Sg
-         eMRyUSjv6vKn6IOGaPGEINVU3zhjfrVOGUjY8OuVXWTu5yNpFuZprDPKHh5k8UvpLS35
-         1f/Ezk9N31CA1h7cyX/8+D9PQFFvgZippNtNEAWo+zs0oVTzBvSCIp3S9spyVbMCUdLP
-         TNUxb6HJfVmmHMxZ6f7JOdTnHoZQcp4BEYYwe0foOwXtECyoKsG9hBGuGCfxXrEruTBo
-         7znnSnrgKmnfGJtU3ztx9xdnHUhr+rqmZ4NQ0LExyU4YcAaQJiqSPrIJr+EZqEHtB63O
-         xQyw==
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aabekdX1Xu6nGH+V0mihMdec0zOM722rNngzJgCXDQ4=;
+        b=XTrue6mqPn+8RMjHht0tYm8c3g3Vcu0E4RvBDSWuAqxiHKqjV8KaaWrz+yBgD5FFgo
+         hJ6p4kAsHBSIQlIXpku5l++l0jrcGB9ykN4J1qV1IQRCLaXnfMexL2YbvN42uzE1J0Cn
+         Sf81tEYXivntzyNmDigF0bELfC7Ot8YXMFUhEqeZ9PMX1Ds4z3C4DvUgim9NaM8KRyw+
+         GPuQ9dhIb9LJGZnkiKDliJWJBF4yNvICcQAEMN9099haY3bka4ZyYHEJfOyIsJPUMrQv
+         62KPa/GRUXErixIbCW6VG1e7s8utVtIqZxoxUZBNu0h2CrJFEeXmnRiF7FFHY4NaVN2f
+         jgaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nXEceEngZ7WCunTddR9XXHFw5048HaJXvLYe+oVs8EQ=;
-        b=Aj/8zFpQCnQj/1tkjFS5rIqtpEv8hFBaNyQzat6evC/KylZO2wNDaWFYskBMhIV6G0
-         vTec6IbUC509ofzWV5efcEbWi898L46PlIKFEXoVHlzTv+D2a4TooN5AJ0Adnc7HAlro
-         5sVyIXDFpnJ1L/wEyeSX5BDNMeK5HWzTvio0Nh1UqJ8AWp6c8mlMak4BXGxmZ2P/C2xr
-         liXOFx/YhmsMpPqbnX0ACP0SBeM/iXvsqV2sUZtD/WJcFu8BCFdmnN2cJOq13sgle9/m
-         lXcxzdGFC+JTQ4J+Mc4Qkt7y/qxucy5kjcqUXsc3YCETRLNLJ7PLkPcA4m8o4Gn9h8fN
-         dRYw==
-X-Gm-Message-State: AOAM531QwIQ1zG2FurIkEkvH34SuJ1S2KbhYLJrft9I3qzgBWrR1nNSU
-        nuv/bPNn1xpAJOraz+QjOawVxg==
-X-Google-Smtp-Source: ABdhPJxkzOCwThQpBmILmmWW81/sQwDdYPkN9tMdQS1cLfvLlLVKNOAUAbg89SZVyxibYIfRduZq3Q==
-X-Received: by 2002:a17:902:d2c7:b0:167:7637:7023 with SMTP id n7-20020a170902d2c700b0016776377023mr24137420plc.18.1654804124518;
-        Thu, 09 Jun 2022 12:48:44 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id jb15-20020a170903258f00b001688f2ff292sm4846499plb.222.2022.06.09.12.48.43
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aabekdX1Xu6nGH+V0mihMdec0zOM722rNngzJgCXDQ4=;
+        b=uBNZDg56HdoJ1xHb9mDHjK2Tq3HJ/jLEbV7nyZXVi5bcYuz4kkTA3ds6waRHzCF3cW
+         kcdSgWXj848CuOl9HsL0ZlSdIMhc6TrxbveLQlQx+nL4xk8Zy8vC+BzQm+DYlJhIjZ8r
+         VE6l7Iiv63GVZ/T8pQnyO+fiLR6yv41/X25Apw8aHx9RkhEW6LsAo0Z3jWlKxzFinzqZ
+         14ISZ2+D5ae6Tv0/uK2WR6OQfdt8YBWDUZf6UqhKHELRmDEjg0b+WgoQJh80PiqffgYX
+         C1nkakHEIKOhB6JO3BbcLy+73BqTSB0ynwe/FblPbeUzPprsBQab5upY4EqYKWHC9gaN
+         30bw==
+X-Gm-Message-State: AOAM530NNSGJwiH2p8mYoJ+GsgqhzT+nCbxzE6QoSSn0uvdxDCVRQSYO
+        j/UvyYMar8C0qENsMvi3WBRlPA==
+X-Google-Smtp-Source: ABdhPJxjZoPjPeZa5kkKqcWtwV5tyv/jwJjKvbDfrpxpoAuMGYNKBrKyvIafMQYtBaBbq1IlB38Z9Q==
+X-Received: by 2002:a17:906:d8b8:b0:711:c73e:906b with SMTP id qc24-20020a170906d8b800b00711c73e906bmr23370395ejb.225.1654804270799;
+        Thu, 09 Jun 2022 12:51:10 -0700 (PDT)
+Received: from localhost.localdomain (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
+        by smtp.gmail.com with ESMTPSA id x14-20020a170906b08e00b006ff52dfccf3sm10977550ejy.211.2022.06.09.12.51.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 12:48:43 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 19:48:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org,
-        anup@brainfault.org, Raghavendra Rao Ananta <rananta@google.com>,
-        eric.auger@redhat.com
-Subject: Re: [PATCH v2 000/144] KVM: selftests: Overhaul APIs, purge VCPU_ID
-Message-ID: <YqJOlysCQLGSrt7h@google.com>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <21570ac1-e684-7983-be00-ba8b3f43a9ee@redhat.com>
- <93b87b7b5a599c1dfa47ee025f0ae9c4@kernel.org>
- <YqEupumS/m5IArTj@google.com>
- <20220609074027.fntbvcgac4nroy35@gator>
+        Thu, 09 Jun 2022 12:51:10 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     caleb.connolly@linaro.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: qcom: bam_dma: fix runtime PM underflow
+Date:   Thu,  9 Jun 2022 20:50:43 +0100
+Message-Id: <20220609195043.1544625-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609074027.fntbvcgac4nroy35@gator>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022, Andrew Jones wrote:
-> On Wed, Jun 08, 2022 at 11:20:06PM +0000, Sean Christopherson wrote:
-> > On Wed, Jun 08, 2022, Marc Zyngier wrote:
-> > > On 2022-06-07 16:27, Paolo Bonzini wrote:
-> > > > Marc, Christian, Anup, can you please give this a go?
-> > > 
-> > > Can you please, pretty please, once and for all, kill that alias you
-> > > seem to have for me and  email me on an address I actually can read?
-> > > 
-> > > I can't remember how many times you emailed me on my ex @arm.com address
-> > > over the past 2+years...
-> > > 
-> > > The same thing probably applies to Sean, btw.
-> > 
-> > Ha!  I was wondering how my old @intel address snuck in...
-> > 
-> > On the aarch64 side, with the following tweaks, courtesy of Raghu, all tests
-> > pass.  I'll work these into the next version, and hopefully also learn how to
-> > run on aarch64 myself...
-> > 
-> > Note, the i => 0 "fix" in test_v3_typer_accesses() is a direct revert of patch 3,
-> > "KVM: selftests: Fix typo in vgic_init test".  I'll just drop that patch unless
-> > someone figures out why doing the right thing causes the test to fail.
-> 
-> CCing Eric for that one.
+When PM runtime is disabled, pm_runtime_get() isn't called, but
+pm_runtime_put() still is. Fix this by creating a matching wrapper
+on pm_runtime_put_autosuspend().
 
-> > @@ -424,7 +424,7 @@ static void test_v3_typer_accesses(void)
-> >                             KVM_DEV_ARM_VGIC_CTRL_INIT, NULL);
-> > 
-> >         for (i = 0; i < NR_VCPUS ; i++) {
-> > -               ret = v3_redist_reg_get(v.gic_fd, i, GICR_TYPER, &val);
-> > +               ret = v3_redist_reg_get(v.gic_fd, 0, GICR_TYPER, &val);
-> >                 TEST_ASSERT(!ret && !val, "read GICR_TYPER before rdist region setting");
+Fixes: dbad41e7bb5f ("dmaengine: qcom: bam_dma: check if the runtime pm enabled")
+Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+---
+ drivers/dma/qcom/bam_dma.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-Figured it out, "val" should be "i * 0x100", not "0".  The asserts in this test
-are awful and don't print the actual "val".  test_assert() shares part of the blame
-for printing a stale errno, but holy moly this test makes it painful to debug
-trivial issues.
+diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
+index 87f6ca1541cf..a36dedee262e 100644
+--- a/drivers/dma/qcom/bam_dma.c
++++ b/drivers/dma/qcom/bam_dma.c
+@@ -566,6 +566,14 @@ static int bam_pm_runtime_get_sync(struct device *dev)
+ 	return 0;
+ }
+ 
++static int bam_pm_runtime_put_autosuspend(struct device *dev)
++{
++	if (pm_runtime_enabled(dev))
++		return pm_runtime_put_autosuspend(dev);
++
++	return 0;
++}
++
+ /**
+  * bam_free_chan - Frees dma resources associated with specific channel
+  * @chan: specified channel
+@@ -617,7 +625,7 @@ static void bam_free_chan(struct dma_chan *chan)
+ 
+ err:
+ 	pm_runtime_mark_last_busy(bdev->dev);
+-	pm_runtime_put_autosuspend(bdev->dev);
++	bam_pm_runtime_put_autosuspend(bdev->dev);
+ }
+ 
+ /**
+@@ -793,7 +801,7 @@ static int bam_pause(struct dma_chan *chan)
+ 	bchan->paused = 1;
+ 	spin_unlock_irqrestore(&bchan->vc.lock, flag);
+ 	pm_runtime_mark_last_busy(bdev->dev);
+-	pm_runtime_put_autosuspend(bdev->dev);
++	bam_pm_runtime_put_autosuspend(bdev->dev);
+ 
+ 	return 0;
+ }
+@@ -819,7 +827,7 @@ static int bam_resume(struct dma_chan *chan)
+ 	bchan->paused = 0;
+ 	spin_unlock_irqrestore(&bchan->vc.lock, flag);
+ 	pm_runtime_mark_last_busy(bdev->dev);
+-	pm_runtime_put_autosuspend(bdev->dev);
++	bam_pm_runtime_put_autosuspend(bdev->dev);
+ 
+ 	return 0;
+ }
+@@ -936,7 +944,7 @@ static irqreturn_t bam_dma_irq(int irq, void *data)
+ 	}
+ 
+ 	pm_runtime_mark_last_busy(bdev->dev);
+-	pm_runtime_put_autosuspend(bdev->dev);
++	bam_pm_runtime_put_autosuspend(bdev->dev);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -1111,7 +1119,7 @@ static void bam_start_dma(struct bam_chan *bchan)
+ 			bam_addr(bdev, bchan->id, BAM_P_EVNT_REG));
+ 
+ 	pm_runtime_mark_last_busy(bdev->dev);
+-	pm_runtime_put_autosuspend(bdev->dev);
++	bam_pm_runtime_put_autosuspend(bdev->dev);
+ }
+ 
+ /**
+-- 
+2.36.1
+

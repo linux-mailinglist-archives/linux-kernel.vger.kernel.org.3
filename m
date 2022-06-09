@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3997154554F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4C5545552
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240770AbiFIUHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 16:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        id S240806AbiFIUHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 16:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbiFIUHE (ORCPT
+        with ESMTP id S232818AbiFIUH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:07:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5925EA890;
-        Thu,  9 Jun 2022 13:07:02 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.172])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 394FD66016A4;
-        Thu,  9 Jun 2022 21:07:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654805221;
-        bh=uKKUfNmIi+Zd1mcPoZ1earm4WK5quuiscVKXFqUEUkg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E7CdeNVQb6vu/ZiCBKU3AEB60L3/CfBegAnAoA+d96NEx+VMlqWcAvuXMQvzlDZLF
-         0S1N/pd/qOKYN4mNrqkI9nhEKXg6CaOMqwUKGeDqNWWx4BHSgxQQuhCSW8wTHG1n1L
-         3+7oxdq2SMLO+OUX7sSaRloc7vRR0q4Ygu0zV6PzagtFs9yBjqusrfpeviqDC0Xwz9
-         MXzaToHkoAtQmy/dasUMggXFfhaeG0V3XnV21g8SYZ1ZJsmNmWa0dywjQSgdQQI/A1
-         8NJO+WgdrX0DOD8VebXStrn8yO/870yX+v/b57m4L+DvNHwR3H88lKlk8RA6qV0b3z
-         9+Ef+vyUL7ZuA==
-Received: by mercury (Postfix, from userid 1000)
-        id BF4F610605B9; Thu,  9 Jun 2022 22:06:58 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 22:06:58 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] power: supply: cros_peripheral: Use struct_size()
- helper in kzalloc()
-Message-ID: <20220609200658.52gkhfmyxlo7m273@mercury.elektranox.org>
-References: <20220607150344.30669-1-xiaohuizhang@ruc.edu.cn>
+        Thu, 9 Jun 2022 16:07:28 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB11AEBEA1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=34uETwjOE3l3Hek/7Bpl7iywBTk
+        bCV2WpprJc3BJKCQ=; b=QyLVSL7Xr/RtMGF0FptMtiRGlD5DcEfNc4YyXxVz3nM
+        /SLtbzUgmJgngxoIpqmplogmWeTk3oF3d7LsoCY4vR5feblej6seZC32jPkKwPhR
+        dh5rjW2ICZOR3B1Su2dlbWHnoLZk2SQ+YSMq9RmMf7DdNs2Yw3cSklMKfHB+4Q/Q
+        =
+Received: (qmail 3442927 invoked from network); 9 Jun 2022 22:07:24 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jun 2022 22:07:24 +0200
+X-UD-Smtp-Session: l3s3148p1@LqiBXgnhY2JZD+yI
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] thermal: rcar_gen3_thermal: improve logging during probe
+Date:   Thu,  9 Jun 2022 22:07:09 +0200
+Message-Id: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7vwcz63s2insf2fj"
-Content-Disposition: inline
-In-Reply-To: <20220607150344.30669-1-xiaohuizhang@ruc.edu.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,71 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When setting up a new board, a plain "Can't register thermal zone"
+didn't help me much because the thermal zones in DT were all fine. I
+just had a sensor entry too much in the parent TSC node. Reword the
+failure/success messages to contain the sensor number to make it easier
+to understand which sensor is affected. Example output now:
 
---7vwcz63s2insf2fj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip point
+rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip point
+rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip point
+rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
 
-Hi,
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-On Tue, Jun 07, 2022 at 11:03:44PM +0800, Xiaohui Zhang wrote:
-> Similar to the handling of cros_usbpd_charger_ec_command in commit 441d38=
-c60fbe
-> ("power: supply: cros_usbpd: Use struct_size() helper in kzalloc()"),
-> we thought a patch might be needed here as well.
->=20
-> Make use of the struct_size() helper instead of an open-coded version,
-> in order to avoid any potential type mistakes or integer overflows that,
-> in the worst scenario, could lead to heap overflows.
->=20
-> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+Change from v1: reword the dev_info string to be more like the original
+one. Added a check to add the plural-'s' only when needed.
 
-Thanks, queued.
+Geert: is this better now?
 
--- Sebastian
+ drivers/thermal/rcar_gen3_thermal.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
->  drivers/power/supply/cros_peripheral_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/pow=
-er/supply/cros_peripheral_charger.c
-> index 9fe6d826148d..1379afd9698d 100644
-> --- a/drivers/power/supply/cros_peripheral_charger.c
-> +++ b/drivers/power/supply/cros_peripheral_charger.c
-> @@ -63,7 +63,7 @@ static int cros_pchg_ec_command(const struct charger_da=
-ta *charger,
->  	struct cros_ec_command *msg;
->  	int ret;
-> =20
-> -	msg =3D kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
-> +	msg =3D kzalloc(struct_size(msg, data, max(outsize, insize)), GFP_KERNE=
-L);
->  	if (!msg)
->  		return -ENOMEM;
-> =20
-> --=20
-> 2.17.1
->=20
+diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+index ccdf8a24ddc7..f7357b5bd506 100644
+--- a/drivers/thermal/rcar_gen3_thermal.c
++++ b/drivers/thermal/rcar_gen3_thermal.c
+@@ -511,7 +511,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
+ 							    &rcar_gen3_tz_of_ops);
+ 		if (IS_ERR(zone)) {
+-			dev_err(dev, "Can't register thermal zone\n");
++			dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
+ 			ret = PTR_ERR(zone);
+ 			goto error_unregister;
+ 		}
+@@ -533,7 +533,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 		if (ret < 0)
+ 			goto error_unregister;
+ 
+-		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
++		dev_info(dev, "Sensor %u: Loaded %u trip point%s\n", i, ret,
++			 ret == 1 ? "" : "s");
+ 	}
+ 
+ 	if (!priv->num_tscs) {
+-- 
+2.35.1
 
---7vwcz63s2insf2fj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiUuIACgkQ2O7X88g7
-+pqBrQ/+NpRAu9t1a5kNmFxbt4E+NHasjLyQb4cX2IBSfj2ZAfuHH0NJWQpCRV7r
-LZHqIQhXw33vJrrF8wG7ae5/SEQyEaWi1hpanbOyGE0G5xU5np6+aaBABTa32QY3
-skiJcBlBAeLnHsV4ntCyRmNnWB00yHOMJYISm4/jJITgiiecq5F25DPPADAtTJow
-rL8akBBHzC/iz7uilTy13vuoGJrPjqE1jEduG1XA/HK6up/sxk8eqqcZoClsH8A2
-XFzkIiU387xMf+szrm/rlDFZvs4f1N5B3ai36gZNF2rgmDGFHE9dHJXQi6TJwHl+
-NQc/TOtLnfGYOAV+WD2nKr40qKBT8ayfMx+Zdkbcfl6LXFHvHePLkClVipDyBMcT
-4QxyX69QHKI64yItweXDqeecyonLP4GxgtkRJtoo/TkklTcRvzLSy3pvrO/IDAlP
-GsrH9X7+Du/XPjytQALUziiwqEXFNRcSt17XMp3n+4uuMCyPuzLLzHYfMaZseKK9
-04Vm1Zjt1spVFUijl9HgAGarlrNQ9cqEeOALnu/FxPAf1DNojZN1p8iH6e6UHqb9
-GHPNkvc5PMWHEmba6Sx7NFSw8l3EMsXwCp85W4v9E6M6oWA11wRXwnbiksVrHOsx
-CS6eo7tyQp07kcfvedHIGZS7RNhVh4nAEFrd4UOT6s+mNAOH1nI=
-=tccd
------END PGP SIGNATURE-----
-
---7vwcz63s2insf2fj--

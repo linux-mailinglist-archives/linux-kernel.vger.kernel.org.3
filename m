@@ -2,155 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9E054559C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E468954559E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344276AbiFIU2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 16:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S1344324AbiFIU3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 16:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344443AbiFIU2a (ORCPT
+        with ESMTP id S241211AbiFIU3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:28:30 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F161E453A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:28:29 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id y79so4784500iof.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 13:28:29 -0700 (PDT)
+        Thu, 9 Jun 2022 16:29:13 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A55D26EE9F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:29:12 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o6-20020a17090a0a0600b001e2c6566046so405155pjo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 13:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3Nw44iAbwAa4TflzWFQ+4t9iEMEgwQigUnBEPSy2g/k=;
-        b=eCVdfwl+sZP/ibvZ80kK63PQ3Sh/oBkBYkRdSjPDzKRU9ru7cAkhxnVX+Rb+uUllh7
-         cav3j3Jphu7yDVxZgaoQ67MG0FhSR2q5YCNhgh6LtZitq7VXD/bVhh2uFeEgLg3s4Dl0
-         BCUzC1msyNN8ojDEwDouGhNkg+8DZcPG+uc6U=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C4/yJYyLya7rE6Jieokr56CujDpfPfuLcGNiEECS+QU=;
+        b=CjppovKB2YLi+/umkUgs7TGbUGFHqjbhz+/vuQpURnYcTn7Y/XOYbzw0Ykj8khDf1D
+         lU6118PzbLcDnYEohwwuQpWRqLnFFor88HMkhxJnTWzVFPYmlDCWI4t25w0FcOY9LsJ3
+         Xx+fRvY97K5Q4b9fyl2wIJsNDu8BFxuzsJC2MBkEM8rOua9Xl2avo9S7S1w8ygcb6WQp
+         l07wjz7O+ipoSddpByuvOEx8LLG0at/WFa44rE+IaodvVFqdep6gbL1AbyDvvOmSNBeS
+         GcNHdTH1imkTwWGYIM5B+u73KBCppBXzzkigAH/N4DrtNRxqLpENGyWxu6onk+j5isHM
+         5lXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3Nw44iAbwAa4TflzWFQ+4t9iEMEgwQigUnBEPSy2g/k=;
-        b=asbiI/uiMkLZJYf5DImk4wRoXvyvA+axiqnIcC4s83yStl30KgNKd2k+tIB/yh3AWO
-         nANzLpxStmetijoUDXKxuB1Z0IkDF0IjvFwtOe48h97YEUACRTfM5L9ryD7QEY8ninF2
-         G7i6NgCOQ7a1F1Yg1WuXZHnLuWG5qwFsjjdlJMonoY83YL3g7G2L8Nqk7ADVDvVJrkMm
-         /4B9KOBvWKPrfj97yFA2TD7wSSpado3cnop9SiRG13o5a4dnJ8e0QzcSHOSHWv2NGIgo
-         KrscsKRFgbhPYIdZnhBAGd94Xp8btV0zQXlOhQdGyX+iYCDyYHIq9aHKiQrUeyHFeQHI
-         h6iQ==
-X-Gm-Message-State: AOAM53342Pv+oiYfNgEKqNs0kzJPNWYwyD21nAyIaxRvZ36tKh+0KgVa
-        kSTJBLyr1TzXw0zygSGpbOkmbw==
-X-Google-Smtp-Source: ABdhPJxbQIaLSSPsBgoBjp+quiVTIwhy4GAXCQk3zsrCyl7vpS6M4JiVHPY0sLztvZQcCpGTILp1gg==
-X-Received: by 2002:a05:6638:2616:b0:331:fff5:764f with SMTP id m22-20020a056638261600b00331fff5764fmr2602376jat.267.1654806508802;
-        Thu, 09 Jun 2022 13:28:28 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i12-20020a02ca0c000000b0032e7d0a79basm9880459jak.158.2022.06.09.13.28.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 13:28:28 -0700 (PDT)
-Subject: Re: [PATCH V8 0/4] Add unit test module for AMD P-State driver
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220526034725.1708916-1-li.meng@amd.com>
- <fbd6bc2f-b6d7-497e-410c-4a82876075ff@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5792136d-079e-6e1e-0bf5-aed1b3db6566@linuxfoundation.org>
-Date:   Thu, 9 Jun 2022 14:28:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C4/yJYyLya7rE6Jieokr56CujDpfPfuLcGNiEECS+QU=;
+        b=vGNHmLhNUsdxJRt21dwBg/jgEEQUWNJsmcGE/S4WGa9OLvAwilJFaZNgXZWi/Xe+Cq
+         /LSp671VvMi6J8P+ELj41wTjnGUAuhKCaoErcxusDxdKmVx1wfDSyKPqutnYCJeEBxby
+         m40uTkDSIYbiz8QFcWrIikxTzVT5MBAAp2OPthqAR1EJ7eUjAvdM54ddDPFJrt9n0jvy
+         LSvIJb523Hfw8l7ldGJkzdJoE0lpYJEZWiT/1lvlK2rpJpyYQ9uHWp7lmDZ3JFy4hhp/
+         quhcAPpcjsLPwbPBSzuZp8vUdJWfjfVQfhlQWWBnXL8Cl3ASW3m3NKWx8Jx2sMt/+Eqh
+         CMlg==
+X-Gm-Message-State: AOAM531FEVWfWs/d12VEY2Jyyx173Ohu3rydEmlaoZzX1B01eJYUFYQn
+        22Hp3JfawEUBUOG1Q2yQLsz5pw==
+X-Google-Smtp-Source: ABdhPJx0nBU6Y+TUh04OO6/IROXMWJ7hUc76Ud455mDwfSNlb8nAgIObkwH4NgXB0NSx9cPem36m4g==
+X-Received: by 2002:a17:90a:b284:b0:1e3:826b:d11d with SMTP id c4-20020a17090ab28400b001e3826bd11dmr5147277pjr.79.1654806551448;
+        Thu, 09 Jun 2022 13:29:11 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090301c300b0016511314b94sm17748369plh.159.2022.06.09.13.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 13:29:10 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 20:29:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Marc Orr <marcorr@google.com>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <YqJYEheLiGI4KqXF@google.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
+ <20220607065749.GA1513445@chaop.bj.intel.com>
+ <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
+ <20220608021820.GA1548172@chaop.bj.intel.com>
+ <CAGtprH8xyf07jMN7ubTC__BvDj+z41uVGRiCJ7Rc5cv3KWg03w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <fbd6bc2f-b6d7-497e-410c-4a82876075ff@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGtprH8xyf07jMN7ubTC__BvDj+z41uVGRiCJ7Rc5cv3KWg03w@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 9:44 AM, Shuah Khan wrote:
-> On 5/25/22 9:47 PM, Meng Li wrote:
->> Hi all:
->>
->> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
->> the functions of amd-pstate driver.
->> It could import as a module to launch some test tasks.
->> 1) It can help all users to verify their processor support (SBIOS/
->> Firmware or Hardware).
->> 2) Kernel can have a basic function test to avoid the kernel regression
->> during the update.
->> 3) We can introduce more functional or performance tests to align the
->> together, it will benefit power and performance scale optimization.
->>
->> We upstream out AMD P-state driver into Linux kernel and use this unit
->> test module to verify the required conditions and basic functions of
->> amd-pstate before integration test.
->>
->> We use test module in the kselftest frameworks to implement it.
->> We create amd-pstate-ut module and tie it into kselftest.
->>
->> For example: The test case aput_acpi_cpc is used to check whether the
->> _CPC object is exist in SBIOS.
->> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
->> existed at the detected processor, so it is a necessary condition.
->>
->> At present, it only implements the basic framework and some simple test
->> cases.
->>
->> TODO : 1) we will add more test cases to improve the depth and coverage of
->> the test. E.X. use the script to trigger the tbench, gitsource, kernbench,
->> netperf, speedometer, and etc. testing and monitor the cpu frequency and
->> performance goals change, power consumption at runtime.
->>
->> Please check the documentation amd-pstate.rst for details of the test steps.
->>
->> See patch series in below git repo:
->> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
->> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
->> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
->> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
->> V5: https://lore.kernel.org/lkml/20220505022913.329259-1-li.meng@amd.com/
->> V6: https://lore.kernel.org/lkml/20220519134737.359290-1-li.meng@amd.com/
->> V7: https://lore.kernel.org/lkml/20220522115423.1147282-1-li.meng@amd.com/
->>
+On Wed, Jun 08, 2022, Vishal Annapurve wrote:
+> ...
+> > With this patch series, it's actually even not possible for userspace VMM
+> > to allocate private page by a direct write, it's basically unmapped from
+> > there. If it really wants to, it should so something special, by intention,
+> > that's basically the conversion, which we should allow.
+> >
 > 
->>
->> Changes from V7 -> V8:
->> - cpufreq: amd-pstate:
->> - - amend commit message.
->> - - amend module description.
->> - Documentation: amd-pstate:
->> - - amend commit message.
->> - - Remove the personal data.
->>
+> A VM can pass GPA backed by private pages to userspace VMM and when
+> Userspace VMM accesses the backing hva there will be pages allocated
+> to back the shared fd causing 2 sets of pages backing the same guest
+> memory range.
 > 
-> Looks good to me. Thank you.
-> 
-> Rafael, Viresh,
-> 
-> How do you want to handle this patch series? We are in merge window
-> and this would be for Linux 5.20 based on the changes and content.
-> 
-> Would you like to take the entire patch series through your tree, you
-> have my Ack(s) and Reviewed-by(s)
-> 
+> > Thanks for bringing this up. But in my mind I still think userspace VMM
+> > can do and it's its responsibility to guarantee that, if that is hard
+> > required.
 
-Picking this back up since rc1 is out. How do we want to handle this patch
-series?
+That was my initial reaction too, but there are unfortunate side effects to punting
+this to userspace. 
 
-thanks,
--- Shuah
+> By design, userspace VMM is the decision-maker for page
+> > conversion and has all the necessary information to know which page is
+> > shared/private. It also has the necessary knobs to allocate/free the
+> > physical pages for guest memory. Definitely, we should make userspace
+> > VMM more robust.
+> 
+> Making Userspace VMM more robust to avoid double allocation can get
+> complex, it will have to keep track of all in-use (by Userspace VMM)
+> shared fd memory to disallow conversion from shared to private and
+> will have to ensure that all guest supplied addresses belong to shared
+> GPA ranges.
+
+IMO, the complexity argument isn't sufficient justfication for introducing new
+kernel functionality.  If multiple processes are accessing guest memory then there
+already needs to be some amount of coordination, i.e. it can't be _that_ complex.
+
+My concern with forcing userspace to fully handle unmapping shared memory is that
+it may lead to additional performance overhead and/or noisy neighbor issues, even
+if all guests are well-behaved.
+
+Unnmapping arbitrary ranges will fragment the virtual address space and consume
+more memory for all the result VMAs.  The extra memory consumption isn't that big
+of a deal, and it will be self-healing to some extent as VMAs will get merged when
+the holes are filled back in (if the guest converts back to shared), but it's still
+less than desirable.
+
+More concerning is having to take mmap_lock for write for every conversion, which
+is very problematic for configurations where a single userspace process maps memory
+belong to multiple VMs.  Unmapping and remapping on every conversion will create a
+bottleneck, especially if a VM has sub-optimal behavior and is converting pages at
+a high rate.
+
+One argument is that userspace can simply rely on cgroups to detect misbehaving
+guests, but (a) those types of OOMs will be a nightmare to debug and (b) an OOM
+kill from the host is typically considered a _host_ issue and will be treated as
+a missed SLO.
+
+An idea for handling this in the kernel without too much complexity would be to
+add F_SEAL_FAULT_ALLOCATIONS (terrible name) that would prevent page faults from
+allocating pages, i.e. holes can only be filled by an explicit fallocate().  Minor
+faults, e.g. due to NUMA balancing stupidity, and major faults due to swap would
+still work, but writes to previously unreserved/unallocated memory would get a
+SIGSEGV on something it has mapped.  That would allow the userspace VMM to prevent
+unintentional allocations without having to coordinate unmapping/remapping across
+multiple processes.

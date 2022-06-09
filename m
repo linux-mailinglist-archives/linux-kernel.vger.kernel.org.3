@@ -2,474 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3871F54544A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CF6545450
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345486AbiFISlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S1345511AbiFISlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344341AbiFISlH (ORCPT
+        with ESMTP id S243660AbiFISlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:41:07 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B3D5F58;
-        Thu,  9 Jun 2022 11:41:05 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id p69so4266120iod.0;
-        Thu, 09 Jun 2022 11:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=J5cO+c3VWDWtDGQ/VZ7m7J37V3VxlHs2DiTN4lG9LWo=;
-        b=BL9BMdvGJ9MxlWwy9ZVGtasBIFO0h7IoiZzbnaN2vl91+O3NJ+Iw0yLV6RVC99IvhD
-         86JPGwmsqmoJaNJpCyQV6hwlIHncCPGhTW94fUvs/p2jV9IfEoxIHmktiA4Kz6IR0g6Q
-         Q9UqPDRzPd0S22lwBvprUTmGXjGpraD0zVmHmdKPJE+6J7JUzO6Czd8j/vClwZ5svDDv
-         Vrj3qQFXLAXx2EycIuZ5X0Sd+Q/faorzp+olmiaPko9DmT+DGHs8cxdL5ASo0Mg4KS1k
-         CyPSgjmFDBLHA+5TDSyWSyDmVckZIy1Hjz+kIISayWuyhwmMrUFPLX0FuG2MM5hC/P16
-         1zKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=J5cO+c3VWDWtDGQ/VZ7m7J37V3VxlHs2DiTN4lG9LWo=;
-        b=MzrySM0Tjp9TXjBPSByYNtczqWukYl49u9+mnwK1g0eeaH9NqUiwJjbja1YfyO4iRx
-         mvtOkM/Oh4xs2gTYm5oUDDIDzN1KVRbjP3zFHtNiktbn+WXg6fZyFDc6IgGm85O7YkLY
-         Co8KTWViqN4U6oDQ2l1QOKw5pPxDPx9k59J0Ar8eYH1O+Ao1orvaD/Et11uuycMxwXVy
-         jTEvKXI0sBFM3IibPpGehSmP/lgYtgQcfZ11NDHMgdjc70rKSR7Viq5q3yBcC4MPZ6Qd
-         4w694n1HLjhdo0BNXWhniFs/gintxiM2DJgRBeaRolu/n8PxP4QPWeghHE7l7jl9Fnol
-         J2Yg==
-X-Gm-Message-State: AOAM531Tc4Ivg8LTUeO27JjZ033N6vCwrBH/Kl+xiLajuoYHwIyY/4W7
-        fnM15gsS7Lbvdnbr0OnKEhXC9QX6XE7dfrIDhKve1pgMk2Je6g==
-X-Google-Smtp-Source: ABdhPJz6CY50dDCLdogImfvRqktbIKrlHvxFMUeZcm5RPkahHgtr3MX9G+0D0aoTmiuMF2gx29aDSVmBUVtQ/Xl8hhA=
-X-Received: by 2002:a6b:3ec4:0:b0:669:b9e6:cd97 with SMTP id
- l187-20020a6b3ec4000000b00669b9e6cd97mr449781ioa.128.1654800065076; Thu, 09
- Jun 2022 11:41:05 -0700 (PDT)
+        Thu, 9 Jun 2022 14:41:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AC8156B7A;
+        Thu,  9 Jun 2022 11:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654800100; x=1686336100;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=GnJzHQEegaxYJXWZ27CRChER80Ptsc2CXjyVogRpGpo=;
+  b=adpglyQbcxrhyVo9Nd85TgpcSMRxQG/MrIacJNmRC2b+NVPT0VJuLZPt
+   3VFOKkDivFoHaSTzNBKyadK1g20PQoerACCtgAx7dTXvNMu9c6kGuJZAa
+   sld2pcEj4bOJSJS+0TEAPJaU027QAef4G+2o0aOv9VT93l5bVdZUDZJgG
+   jdXH+VCfdcdSJzgF+uZ6ko1xDFpRUr7dLD8NwKsqUQKDgc/dFoxkhQerj
+   ivSgnoCJSxRpY7AqpFE/T2WX8Qa3r5boKLl1k34G2fpFAfQZKrPQ0ubod
+   rOG15FvIxZHEdAnLt6Ipcax2nZLK3ohcYw6dymOSACyzqiN4GEeg6AfB2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363709072"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="363709072"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 11:41:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="671460758"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2022 11:41:39 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 9 Jun 2022 11:41:39 -0700
+Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 9 Jun 2022 11:41:39 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 9 Jun 2022 11:41:39 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 9 Jun 2022 11:41:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jhowz4NMcYZfDRxk1gWVYe3+wHE9eIcVQpUuSKHx4cQhaXs54Gd2pHVr24NZixvUBkuKWU+BF9c3k1pfGIgiTQlnqzgl9467wacIuPOYgvaYAnZH/1VGy2TQ9Q9SOFkJBIu0ZJmwy5mT4p8UTNZAMxUyKWuM3vIMHQ8CZf7N1nlYsWY60IFMvA4dmwdV5p1HN6U3XJBiMxWOfV/bQuduGqUybiwazKLRAs3ejLcL/SgCkHxvOq7hhpvcqzHY45PdEZPAGkBgRjuRjx8QZLXNXtcfCwEvNFkxdg1O4j1M4wgoZQ1zrMPpuBQZfdLm/Pn91MnS7w5ye4vKPu1hji62ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GnJzHQEegaxYJXWZ27CRChER80Ptsc2CXjyVogRpGpo=;
+ b=c677enGyhYsHlr24p2J9xfPoBg4Gs07A2Ms/ekIg09ruz0MVqNNVd3fczvTOVdJIr0Y24YDkoeI9z3bD3UEvzaHjGQkBbP30GgNNrXpIUS8FbBrCZwkzLvNizrT9K+guTfinscNubXMmcVqgfToKT5rQhqo1MKZOMjgCoJQDO/lTYy8rsSiYPzH54WGHdWUICaKRQEGjOB5NFtThjlB4o5z8SKdGVVOSZY2lkTghdc78BGMP6s4Caqp6r7Fwlbim6xeuR7w1gHjv8t1t2Rkvs2gKk3K+CmFc4JeQdJYn2v0EMLTEVo1JMbyk732EYyE684Kby+1W76CVc/j6i998zw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by DS0PR11MB6326.namprd11.prod.outlook.com (2603:10b6:8:ce::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Thu, 9 Jun
+ 2022 18:41:36 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::6463:8e61:8405:30f4]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::6463:8e61:8405:30f4%11]) with mapi id 15.20.5314.019; Thu, 9 Jun 2022
+ 18:41:36 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "hch@lst.de" <hch@lst.de>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>
+CC:     "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "zepan@sipeed.com" <zepan@sipeed.com>,
+        "iii@linux.ibm.com" <iii@linux.ibm.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "joey.gouly@arm.com" <joey.gouly@arm.com>,
+        "anemo@mba.ocn.ne.jp" <anemo@mba.ocn.ne.jp>,
+        "egorenar@linux.ibm.com" <egorenar@linux.ibm.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "luis.machado@linaro.org" <luis.machado@linaro.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jniethe5@gmail.com" <jniethe5@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "dja@axtens.net" <dja@axtens.net>,
+        "liaochang1@huawei.com" <liaochang1@huawei.com>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "huschle@linux.ibm.com" <huschle@linux.ibm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "dave.anglin@bell.net" <dave.anglin@bell.net>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "atomlin@redhat.com" <atomlin@redhat.com>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "philipp.tomsich@vrull.eu" <philipp.tomsich@vrull.eu>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
+        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "nathaniel@profian.com" <nathaniel@profian.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
+        "Sakkinen, Jarkko" <jarkko@profian.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "tmricht@linux.ibm.com" <tmricht@linux.ibm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "nico@fluxnic.net" <nico@fluxnic.net>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "kernel@esmil.dk" <kernel@esmil.dk>,
+        "ashimida@linux.alibaba.com" <ashimida@linux.alibaba.com>,
+        "elver@google.com" <elver@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "Keshavamurthy, Anil S" <anil.s.keshavamurthy@intel.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
+        "changbin.du@intel.com" <changbin.du@intel.com>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Thread-Topic: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Thread-Index: AQHYfARLeB5VUjkE/kuMrIbBjl/m8K1HaQ6A
+Date:   Thu, 9 Jun 2022 18:41:36 +0000
+Message-ID: <e7dedb9086193ca7682edc10fabc4195894e5146.camel@intel.com>
+References: <20220608000014.3054333-1-jarkko@profian.com>
+         <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
+         <YqAy0qjI4Lktk/uJ@iki.fi>
+         <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
+         <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
+         <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
+         <YqEF6+YKqCHsWZJW@bombadil.infradead.org> <20220609034852.GA30873@lst.de>
+         <YqH0iEgsi6+bwS3x@bombadil.infradead.org>
+In-Reply-To: <YqH0iEgsi6+bwS3x@bombadil.infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 27189eb0-b55c-45ab-7fe9-08da4a47aee1
+x-ms-traffictypediagnostic: DS0PR11MB6326:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <DS0PR11MB63263E7000D819957ABD6255C9A79@DS0PR11MB6326.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: n9qRhMXacaHR8ssVuPgZ97nSeEGIzYwgMELj+yTDV7Ybgd4Cg/Bg3QnWDsXM0f+t1AW0ckdu1103VoggfoyNpzpnsopW180u/CYYwMCnS6M/lLDSIEpK4cUDuoCPL472nYwn+koD70mp3jbvDBUo+ergZ2HrJmFKajfEZE5yJ9OCaNcdxO1elWOc2+6SLwaO/zCsmhcl/qTeQqPQvum6UG1LTD9kQBw1fWmmRFMoepQ2UMZwCpO/XetA+q/HnKFe/99tRprVIDT11HMi9tot8Z+92xNWmE25accYpKQDQCaaEvcHiSs18P5qXrEWNgbWiqxg5IAmILLVed8h/sIw49Rv0xF0QPNq/0258JmOzSEqtTOdpxrCfwBDA7qFVsAyW+T9nhr/E4r/5cbKgUzgsuyNBRneujBdSGiLcK6XcDkTrgoaqOBJr3gOZ25O5Ps3PJzy29xrf/Kn31NXqD37xVhTeMYwpIVPhAJS0wtEbWtNB9elUjAZlbbf90GTBWnR34F4AxcnGVwB6Uq6hJA4J2yU2fD78JEjxDGtjTOmCfmPrGeHgfKaKDNE2KDPuCgP98XOM/+J7nE5GpOdJDt81I/kUmI3zMUu/d2K+kG0AJThJvFfrH6xAEyGMVbQpJgptu/ww6RkbazDX3YCrIMMJvhTI0DvJlEZGkbEam8fcMEOx3PRB/BT08qETO1oPZwplkgR8oB6TpFHweYnoVMPpVwhmXjXRUqj2jXXK/Zk9Hg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6486002)(82960400001)(508600001)(6512007)(26005)(2906002)(38070700005)(36756003)(316002)(54906003)(122000001)(110136005)(83380400001)(66946007)(5660300002)(71200400001)(64756008)(76116006)(2616005)(66556008)(8676002)(66446008)(66476007)(7416002)(4326008)(7366002)(7336002)(8936002)(186003)(38100700002)(86362001)(7406005)(6506007)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cHNqQ0xPdkdVYVBFSUt0K0grbmZrOEZScUpLOUdmdXFRT1hmZ21Zc3pKa2Mr?=
+ =?utf-8?B?dGNLMlUwb3VQY2JsTWE1V1FtOWRFWUhVL0h3SFUxTEl0bndvb0hvNjlUdm5m?=
+ =?utf-8?B?VVp3NmZjS2MvL2RIY2lSakl0WUJFVi8rZ1BZNGxUbWZBVmNudVR5elBLSUFN?=
+ =?utf-8?B?RnMxa01BQWhwckNnZ003b2ppcVQ3eHVTelFHZ3BlSjdSazI4QU10SHV1UEd1?=
+ =?utf-8?B?YmJLdTFWY1M2T0l5cXB0TE1ZWWRBUnlFM09qN3FaTUtMdVo4WGtVR1h3WXlT?=
+ =?utf-8?B?YW1mWTRUVmVwbG5zRE5MQUVIWjRLVVluWFN5TVVZOWhkYUtjdkc5OFBkUE1S?=
+ =?utf-8?B?Sm1sWTRuRVA3ajVCYS9HRE1FQUpTQUI4QVByeC9udGhzeThRZGxPbTdObjgx?=
+ =?utf-8?B?N1EvSmhFdTJYRml0RVo5aTZ0dm4zZ2FvamtYSm9SSWlMMHl0NmdGVGVHaklx?=
+ =?utf-8?B?UW15dFQySVlEZExpbnRabTNVYU5TNTBGMnlKUVlZdVdOdHduOFFFQTVmaWND?=
+ =?utf-8?B?WXhLNFB2SkFoOXZsczZUMkROd0prdHJTNms2ZlE3VytkbWxxVzBndVNSU0Z3?=
+ =?utf-8?B?eUFhcTZ2M0R6UmxPRmg0YnZnZ1BLVStkRnVSQUhMNkc3UkErOENLNGdsdFJm?=
+ =?utf-8?B?N0FUeW45emorYmhkbDBsa3dlOXBLY21xclNHU3pJVm1YWmE0anVXK0hVekZP?=
+ =?utf-8?B?TFdwTVNzM1NGOHY0SUZzb2sxUXgyUU9OT093SVk2Ri9xVVlNYkUxQi9IVk1S?=
+ =?utf-8?B?ZndISnF6OGVmUEk0RVcrRUZjK0lLWUJIdHRKcmF5VXJPa3cwdGsvaXZsa01n?=
+ =?utf-8?B?bUpieTNVd3d4M3BMN1pNdzJmMHQrN1dHbnBNZFJQWDJpalpEUjhhZm9jVlZF?=
+ =?utf-8?B?b09VSVBuZklyVzI1NUZYS3NyUW1IbGRHVUF1TmpzRkNzQllVanFOZkpmQ2VC?=
+ =?utf-8?B?MWY4dHVManNRdUNucCtDZjNTMFNjbjIvaDI3UFdyc3F5QTc5aTcrUkRlN2hk?=
+ =?utf-8?B?NlB2KzFiVm9NUGVZZjBELzNpYVByZTBXTWpNOHdQZWxkSys1Wk1BTmZmanVN?=
+ =?utf-8?B?b0Q5elY1T2lPNjd2NEpBeXp0N2owS3h2Z0RqRUJmcjlBSHZvTVI3K2xHK2py?=
+ =?utf-8?B?L0NBaU1QbGZDMk14bHNTcHYrR3VydzI4MU01RG1qRS9ld3o3a1NsUWRRdGRL?=
+ =?utf-8?B?N2tYcVhzT3JCTlZweDRPTTFOSXRXeW5mZDFRaEVZMjMySVV6TU1XZGJqbVJV?=
+ =?utf-8?B?MCtPOFVvNDlsajlmSzByZmYzTGwvMzdvWVRiZjhPcm1MaG1vbWt0NWJOemQ4?=
+ =?utf-8?B?cmZnNk9COU9CSjU2OTcwNXZGRkY3a1ZtajIxL0lOTGl2RG5oTExWeGY2UGRN?=
+ =?utf-8?B?VUI5RUZtSHhFNjhoVFozVmZkeGd2R0Y1elNTOFNpUWpQZWdRUHpSdFVNL0Rv?=
+ =?utf-8?B?VHZteDZhd1I3eFc4Y0o5UWUra01DMjF5ZUdsR2c5QzBPN3htanBXdEFoaDlB?=
+ =?utf-8?B?S0VtNUNsRGhYbm5xTTR5VzZVQW1qSjA4T3ZIeG9CUHVSVUJ4VFBaRzJPZjFL?=
+ =?utf-8?B?RDFiaWdFT0ZzYnpNUzJiUU1NSG5sVzNtUHUzeG9EOUxLQWRPSDdwNXBMUXBH?=
+ =?utf-8?B?R0FQZCtTNnJEM2NkRWdvbXJKZGl3YXNSU0VqVUZ0anJrOFM1RUlvM284SXRW?=
+ =?utf-8?B?bDZWK2VXWTdOYTcwR3RObUJ6WDFzMFBJNXljRXRlT0hLUjFCMlJNLzR4clIx?=
+ =?utf-8?B?a1ZNMGFKampMZHg2NkUrWW9lditobGlGci93b1dKUWlhZmlZUVhnTmdpRnc5?=
+ =?utf-8?B?SG5meEpXVnpQdmJVUWtTdnhKK0lkTTQ0RCtaNmlZbndWa0JYbThzNFBQMmJs?=
+ =?utf-8?B?MjVPTFo1MWxzb2pWbGZCWEpteUdTVFluYWhrMHpUQUhaQWZzMUMvejM0V3h3?=
+ =?utf-8?B?ODNTQmgyckcyQ3Z6aUlJSTNtOWc2L0pocGJPRElEdjZyb0gvZnBpQW94ZlVI?=
+ =?utf-8?B?ZDNxNi9EVU8xdUlxeDZMTmxWcTVyUXRlVGtYekpMZHFUNzk5bWk2SmdtekxF?=
+ =?utf-8?B?elVRbDBCSzZGUEhVTWZZRkE1M3FLazlyMzJPelBxQjRkYmJlN1MrNGFQa1dj?=
+ =?utf-8?B?ckM1ZTdDdmljWDdIQUFhUjNZdjBCdW1GZlIydWVXQkU4MktkdGVNd201S0N3?=
+ =?utf-8?B?T2pkUWl3QTArak9rVjNKQ2J3TWh5ZHBZU3M0RHFGbjZjQ1dPaHRvL2c1MWpI?=
+ =?utf-8?B?T3J1bFhNdW5KN1VMUHZvWU94OGpHMkxIQ2xQSXZYRGxkVGwzV1g0U0lhQk4y?=
+ =?utf-8?B?VWNIM0cwWVROcDJibW9QeDBtSEphTGpRTnd4ejQ4cGo1V0FwUmg1NmNPY0JY?=
+ =?utf-8?Q?ms2JWep+TdGrPVwUiAzTkwsSDGbPXIS89nXbS?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4BAAC4A892B18A45A2D9180E62C156E9@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
- <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
- <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
- <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com> <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
-In-Reply-To: <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 9 Jun 2022 20:40:29 +0200
-Message-ID: <CA+icZUUOQcc4uiVbv+tJzPr_ED7e4tD0u9tC8mcn2BRe3sdPAg@mail.gmail.com>
-Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
- and OpenSSL v3.0.x
-To:     Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27189eb0-b55c-45ab-7fe9-08da4a47aee1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2022 18:41:36.2868
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dauXqRR3LKWAhInZy9JNdoGuT/+wdObAzJrkJuADQfRoEIbwZ7aYn8k7fUtHkSa98WticLLIdE1wEoby9bRvsd69SVwBmpU9uXbKzr3cUbU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6326
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 6:05 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, May 27, 2022 at 9:47 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Tue, May 24, 2022 at 9:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Thu, May 19, 2022 at 12:01 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > >
-> > > > [ CC Kees and Salvatore ]
-> > > >
-> > > > The Debian kernel-team ships a fix (4 hours young):
-> > > >
-> > > > commit: 13e234d459c11946efba647c3daf15e03abb0d99
-> > > > "sign-file: Convert API usage to support OpenSSL v3"
-> > > >
-> > > > *untested*
-> > >
-> > > @Kees:
-> > >
-> > > Any updates on the part of certs/extract-cert.c?
-> > >
-> >
-> > [ CC Tasmiya Nalatwad ]
-> >
-> > There are several more reports on this issue (see [3]).
-> >
-> > I did a quick test with Kees' patch from [2] and my attached patch
-> > "extract-cert: Suppress warnings with OpenSSL v3 API".
-> >
-> > Now, I see no more warnings due to OpenSSL v3 API:
-> >
-> > $ egrep 'sign-file|extract-cert'
-> > ../build-log_5.18.0-2-amd64-clang14-lto.txt
-> > 176:  clang -Wp,-MMD,scripts/.sign-file.d -Wall -Wmissing-prototypes
-> > -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
-> > -Wdeclaration-after-statement         -o scripts/sign-file
-> > scripts/sign-file.c   -lcrypto
-> > 2053:  clang -Wp,-MMD,certs/.extract-cert.d -Wall -Wmissing-prototypes
-> > -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
-> > -Wdeclaration-after-statement       -Wno-deprecated-declarations   -o
-> > certs/extract-cert certs/extract-cert.c   -lcrypto
-> > 2068:  certs/extract-cert "" certs/x509_certificate_list
-> > 2069:  certs/extract-cert "" certs/signing_key.x509
-> >
-> > config-5.18-dileks: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
-> >
-> > -Sedat-
-> >
-> > [1] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
-> > [2] https://salsa.debian.org/kernel-team/linux/-/commit/13e234d459c11946efba647c3daf15e03abb0d99
-> > [3] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
-> >
->
-> [ CC James Bottomley ]
->
-> [PATCH] extract-cert: Force build against OpenSSL API Compat v1.1.x
->
-> ...works as well.
->
-> -Sedat-
->
-
-Why go back and forth... do it like Alexander the Great and the Gordian knot.
-
-Sword - Swash - Done.
-
-commit 6bfb56e93bcef41859c2d5ab234ffd80b691be35
-"cert host tools: Stop complaining about deprecated OpenSSL functions"
-
--Sedat-
-
-[1] https://git.kernel.org/linus/6bfb56e93bcef41859c2d5ab234ffd80b691be35
-
-P.S.: BTW, perf needs also a openssl-v3 fix as well.
-
-$ git show -1 for-5.19/openssl3-perf-dileks-20220605
-commit 3cd76edba5753061b88acb22e9adaece0b9cb2b4
-(for-5.19/openssl3-perf-dileks-20220605)
-Author: Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun Jun 5 14:23:06 2022 +0200
-
-   perf: openssl-v3: Force build against OpenSSL API Compat v1.1.x
-
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 73e0762092fe..4da73213f89b 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -140,6 +140,7 @@ FEATURE_CHECK_LDFLAGS-libunwind-x86 += -lunwind
--llzma -lunwind-x86
-FEATURE_CHECK_LDFLAGS-libunwind-x86_64 += -lunwind -llzma -lunwind-x86_64
-
-FEATURE_CHECK_LDFLAGS-libcrypto = -lcrypto
-+FEATURE_CHECK_LDFLAGS-libcrypto += -DOPENSSL_API_COMPAT=0x10100000L
-
-ifdef CSINCLUDES
-  LIBOPENCSD_CFLAGS := -I$(CSINCLUDES)
-@@ -780,6 +781,7 @@ ifndef NO_LIBCRYPTO
-  else
-    CFLAGS += -DHAVE_LIBCRYPTO_SUPPORT
-    EXTLIBS += -lcrypto
-+    EXTLIBS += -DOPENSSL_API_COMPAT=0x10100000L
-    $(call detected,CONFIG_CRYPTO)
-  endif
-endif
-
-
-$ git show -1 for-5.19/openssl3-extract_cert-dileks-v3-20220605
-commit 730a634c8ea1814c13abfff490c8a5fc48a4e25e
-(for-5.19/openssl3-extract_cert-dileks-v3-20220605)
-Author: Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Mon Jun 6 10:14:57 2022 +0200
-
-   extract-cert: openssl-v3: Force build against OpenSSL API Compat v1.1.x
-
-diff --git a/certs/Makefile b/certs/Makefile
-index bb904f90f139..c24f31107c6a 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -87,4 +87,5 @@ targets += x509_revocation_list
-hostprogs := extract-cert
-
-HOSTCFLAGS_extract-cert.o = $(shell $(HOSTPKG_CONFIG) --cflags
-libcrypto 2> /dev/null)
-+HOSTCFLAGS_extract-cert.o += -DOPENSSL_API_COMPAT=0x10100000L
-HOSTLDLIBS_extract-cert = $(shell $(HOSTPKG_CONFIG) --libs libcrypto
-2> /dev/null || echo -lcrypto)
-
-
-$ git show -1 for-5.19/openssl3-sign_file-kees-20220518
-commit 711a9d3ddccb1303a0b3b85166b86159ba8dcfa5
-(for-5.19/openssl3-sign_file-kees-20220518)
-Author: Kees Cook <keescook@chromium.org>
-Date:   Wed May 18 14:51:29 2022 -0700
-
-   sign-file: Convert API usage to support OpenSSL v3
-
-   OpenSSL's ENGINE API is deprecated in OpenSSL v3.0, along with some
-   other functions. Remove the ENGINE use and a macro work-around for
-   ERR_get_error_line().
-
-   Cc: David Howells <dhowells@redhat.com>
-   Cc: David Woodhouse <dwmw2@infradead.org>
-   Cc: Eric Biggers <ebiggers@kernel.org>
-   Cc: Shuah Khan <skhan@linuxfoundation.org>
-   Cc: Salvatore Bonaccorso <carnil@debian.org>
-   Cc: keyrings@vger.kernel.org
-   Suggested-by: Adam Langley <agl@google.com>
-   Co-developed-by: Lee Jones <lee.jones@linaro.org>
-   Signed-off-by: Lee Jones <lee.jones@linaro.org>
-   Signed-off-by: Kees Cook <keescook@chromium.org>
-   Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index fbd34b8e8f57..2d633c5f57c3 100644
---- a/scripts/sign-file.c
-+++ b/scripts/sign-file.c
-@@ -52,6 +52,10 @@
-#include <openssl/pkcs7.h>
-#endif
-
-+#if OPENSSL_VERSION_MAJOR >= 3
-+#define ERR_get_error_line(f, l)       ERR_get_error_all(f, l, NULL,
-NULL, NULL)
-+#endif
-+
-struct module_signature {
-       uint8_t         algo;           /* Public-key crypto algorithm [0] */
-       uint8_t         hash;           /* Digest algorithm [0] */
-@@ -92,16 +96,6 @@ static void display_openssl_errors(int l)
-       }
-}
-
--static void drain_openssl_errors(void)
--{
--       const char *file;
--       int line;
--
--       if (ERR_peek_error() == 0)
--               return;
--       while (ERR_get_error_line(&file, &line)) {}
--}
--
-#define ERR(cond, fmt, ...)                            \
-       do {                                            \
-               bool __cond = (cond);                   \
-@@ -135,35 +129,14 @@ static int pem_pw_cb(char *buf, int len, int w, void *v)
-static EVP_PKEY *read_private_key(const char *private_key_name)
-{
-       EVP_PKEY *private_key;
-+       BIO *b;
-
--       if (!strncmp(private_key_name, "pkcs11:", 7)) {
--               ENGINE *e;
--
--               ENGINE_load_builtin_engines();
--               drain_openssl_errors();
--               e = ENGINE_by_id("pkcs11");
--               ERR(!e, "Load PKCS#11 ENGINE");
--               if (ENGINE_init(e))
--                       drain_openssl_errors();
--               else
--                       ERR(1, "ENGINE_init");
--               if (key_pass)
--                       ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
--                           "Set PKCS#11 PIN");
--               private_key = ENGINE_load_private_key(e, private_key_name,
--                                                     NULL, NULL);
--               ERR(!private_key, "%s", private_key_name);
--       } else {
--               BIO *b;
--
--               b = BIO_new_file(private_key_name, "rb");
--               ERR(!b, "%s", private_key_name);
--               private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
--                                                     NULL);
--               ERR(!private_key, "%s", private_key_name);
--               BIO_free(b);
--       }
--
-+       b = BIO_new_file(private_key_name, "rb");
-+       ERR(!b, "%s", private_key_name);
-+       private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
-+                                             NULL);
-+       ERR(!private_key, "%s", private_key_name);
-+       BIO_free(b);
-       return private_key;
-}
-
--EOT-
-
-> > > >
-> > > > On Thu, May 19, 2022 at 11:55 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > here, I am on Debian/unstable AMD64.
-> > > > >
-> > > > > Recently (or still) there is/was a transition to OpenSSL see below link.
-> > > > >
-> > > > > The warnings look like:
-> > > > >
-> > > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > > > > is deprecated [-Wdeprecated-declarations]
-> > > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > > > > [-Wdeprecated-declarations]
-> > > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 395:certs/extract-cert.c:46:14: warning: 'ERR_get_error_line' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 407:certs/extract-cert.c:59:9: warning: 'ERR_get_error_line' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 420:certs/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines'
-> > > > > is deprecated [-Wdeprecated-declarations]
-> > > > > 432:certs/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated
-> > > > > [-Wdeprecated-declarations]
-> > > > > 444:certs/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated
-> > > > > [-Wdeprecated-declarations]
-> > > > > 456:certs/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 468:certs/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > >
-> > > > > More detailed output:
-> > > > >
-> > > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 190-        while ((e = ERR_get_error_line(&file, &line))) {
-> > > > > 191-                    ^
-> > > > > 192-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > > > > been explicitly marked deprecated here
-> > > > > 193-OSSL_DEPRECATEDIN_3_0
-> > > > > 194-^
-> > > > > 195-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > > 196-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > > 197-                                                ^
-> > > > > 198-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > > 'OSSL_DEPRECATED'
-> > > > > 199-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > > 200-                                                   ^
-> > > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 202-        while (ERR_get_error_line(&file, &line)) {}
-> > > > > 203-               ^
-> > > > > 204-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > > > > been explicitly marked deprecated here
-> > > > > 205-OSSL_DEPRECATEDIN_3_0
-> > > > > 206-^
-> > > > > 207-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > > 208-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > > 209-                                                ^
-> > > > > 210-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > > 'OSSL_DEPRECATED'
-> > > > > 211-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > > 212-                                                   ^
-> > > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > > > > is deprecated [-Wdeprecated-declarations]
-> > > > > 214-                ENGINE_load_builtin_engines();
-> > > > > 215-                ^
-> > > > > 216-/usr/include/openssl/engine.h:358:1: note:
-> > > > > 'ENGINE_load_builtin_engines' has been explicitly marked deprecated
-> > > > > here
-> > > > > 217-OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
-> > > > > 218-^
-> > > > > 219-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > > 220-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > > 221-                                                ^
-> > > > > 222-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > > 'OSSL_DEPRECATED'
-> > > > > 223-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > > 224-                                                   ^
-> > > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > > > > [-Wdeprecated-declarations]
-> > > > > 226-                e = ENGINE_by_id("pkcs11");
-> > > > > 227-                    ^
-> > > > > 228-/usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been
-> > > > > explicitly marked deprecated here
-> > > > > 229-OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
-> > > > > 230-^
-> > > > > 231-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > > 232-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > > 233-                                                ^
-> > > > > 234-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > > 'OSSL_DEPRECATED'
-> > > > > 235-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > > 236-                                                   ^
-> > > > > 237-scripts/sign-file.c:   ld.lld -r -o
-> > > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/objtool-in.o
-> > > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86
-> > > > > /special.o /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/decode.o
-> > > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > > > > 239-                if (ENGINE_init(e))
-> > > > > 240-                    ^
-> > > > > 241-/usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been
-> > > > > explicitly marked deprecated here
-> > > > > 242-OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
-> > > > > 243-^
-> > > > > 244-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > > 245-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > > 246-                                                ^
-> > > > > 247-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > > 'OSSL_DEPRECATED'
-> > > > > 248-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > > 249-                                                   ^
-> > > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 251-                        ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
-> > > > > 252-                             ^
-> > > > > 253-/usr/include/openssl/engine.h:478:1: note:
-> > > > > 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
-> > > > > 254-OSSL_DEPRECATEDIN_3_0
-> > > > > 255-^
-> > > > > 256-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > > 257-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > > 258-                                                ^
-> > > > > 259-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > > 'OSSL_DEPRECATED'
-> > > > > 260-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > > 261-                                                   ^
-> > > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > > > > deprecated [-Wdeprecated-declarations]
-> > > > > 263-                private_key = ENGINE_load_private_key(e, private_key_name,
-> > > > > 264-                              ^
-> > > > > 265-/usr/include/openssl/engine.h:637:1: note:
-> > > > > 'ENGINE_load_private_key' has been explicitly marked deprecated here
-> > > > > 266-OSSL_DEPRECATEDIN_3_0
-> > > > > 267-^
-> > > > > 268-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > > 269-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > > 270-                                                ^
-> > > > > 271-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > > 'OSSL_DEPRECATED'
-> > > > > 272-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > > 273-
-> > > > >
-> > > > > Relevant OpenSSL v3.0.3 header files are attached.
-> > > > > My kernel-config, too.
-> > > > >
-> > > > > If you need further information, please let me know.
-> > > > >
-> > > > > Regards,
-> > > > > -Sedat-
-> > > > >
-> > > > > [1] https://release.debian.org/transitions/html/auto-openssl.html
+T24gVGh1LCAyMDIyLTA2LTA5IGF0IDA2OjI0IC0wNzAwLCBMdWlzIENoYW1iZXJsYWluIHdyb3Rl
+Og0KPiBPbiBUaHUsIEp1biAwOSwgMjAyMiBhdCAwNTo0ODo1MkFNICswMjAwLCBDaHJpc3RvcGgg
+SGVsbHdpZyB3cm90ZToNCj4gPiBPbiBXZWQsIEp1biAwOCwgMjAyMiBhdCAwMToyNjoxOVBNIC0w
+NzAwLCBMdWlzIENoYW1iZXJsYWluIHdyb3RlOg0KPiA+ID4gTm8sIHRoYXQgd2FzIHJlbW92ZWQg
+YmVjYXVzZSBpdCBoYXMgb25seSBvbmUgdXNlci4NCj4gPiANCj4gPiBUaGF0IGlzIG9ubHkgcGFy
+dCBvZiB0aGUgc3RvcnkuICBUaGUgb3RoZXIgcGFydCBpcyB0aGF0IHRoZSBvdmVyYWxsDQo+ID4g
+a2VybmVsIHNpbXBseSBkb2VzIG5vdCBoYXZlIGFueSBidXNpbmVzcyBhbGxvY2F0aW5nIGV4dXRh
+YmxlDQo+ID4gbWVtb3J5Lg0KPiA+IEV4ZWN1dGFibGUgbWVtb3J5IGlzIGEgdmVyeSBzcGVjaWFs
+IGNvbmNlcHQgZm9yIG1vZHVsZXMgb3IgbW9kdWxlLQ0KPiA+IGxpa2UNCj4gPiBjb2RlIGxpa2Ug
+a3Byb2JlcywgYW5kIHNob3VsZCBub3QgYmUgZXhwb3NlZCBhcyBhIGdlbmVyYWwgY29uY2VwdC4N
+Cj4gDQo+IEl0IGlzIG5vdCBqdXN0IG1vZHVsZXMgYW5kIGtwcm9iZXMsIGl0IGlzIGFsc28gZnRy
+YWNlIGFuZCBicGYgdG9vDQo+IG5vdy4NCj4gU28gd2hpbGUgaXQgc2hvdWxkIG5vdCBiZSB1c2Vk
+IGV2ZXJ5d2hlcmUgY2FsbGluZyBpdCBtb2R1bGVfYWxsb2MoKQ0KPiBpcyBqdXN0IGNvbmZ1c2lu
+ZyBhdCB0aGlzIHBvaW50LiBMaWtld2lzZSwgbW9kdWxlX2FsbG9jX2h1Z2UoKSBpcw0KPiBiZWlu
+ZyBwcm9wb3NlZCB0b28gYW5kIEknZCByYXRoZXIgd2UgZGVhbCB3aXRoIHRoaXMgcHJvcGVybHkg
+aW4NCj4gYWxpZ21lbnQNCj4gb2YgdGFraW5nIGNhcmUgb2YgdGhlIHJlbmFtZSBhcyB3ZWxsLg0K
+PiANCj4gSWYgdGhlIGNvbmNlcm4gaXMgdG8gcmVzdHJpY3QgYWNjZXNzIHdlIGNhbiB1c2UgdGhl
+IG1vZHVsZSBuYW1lc3BhY2UNCj4gc3R1ZmYNCj4gc28gdG8gZW5zdXJlIG9ubHkgaW50ZW5kZWQg
+dXNlcnMgZ2V0IGFjY2VzcyB0byBpdC4NCg0KQlBGIGV2ZW4gaGFzIG11bHRpcGxlIHVzZXMgZm9y
+IHRleHQgYWxsb2NhdGlvbi4gSXQgaGFzIGl0cyBvd24NCnRyYW1wb2xpbmUgZmVhdHVyZSB0aGF0
+IHB1dHMgZGlmZmVyZW50IHR5cGUgb2YgdGV4dCBpbiB0aGUgYWxsb2NhdGlvbiwNCndpdGggaXRz
+IG93biBhbGxvY2F0aW9uIHJvdXRpbmUuIEkgbG9va3MgbGlrZSB0aGVyZSBhcmUgZXZlbiBtb3Jl
+DQpsaXR0bGUgYWxsb2NhdG9ycyBpbiB0aGVyZS4NCg0KU28geWVhLCB0aGVyZSBzZWVtcyB0byBi
+ZSBhIGxvdCBvZiB0aGUga2VybmVsIGluIHRoZSBidXNpbmVzcyBvZg0KZHluYW1pY2FsbHkgZ2Vu
+ZXJhdGVkIHRleHQsIGZvciBiZXR0ZXIgb3Igd29yc2UuIEkgYWdyZWUgdGhhdCBpdCBuZWVkcw0K
+dG8gYmUgZG9uZSBjYXJlZnVsbHkuIEhvd2V2ZXIsIHRoZXNlIHVzYWdlcyBhbHdheXMgc2VlbSB0
+byBoYXZlIHRoZQ0Kc2FtZSBwcm9ibGVtcyAoV15YLCBhcmNoIGVjY2VudHJpY2l0aWVzLCBldGMp
+LiBTbyBJIGRvbid0IHRoaW5rIHdlDQpzaG91bGQgaGlkZSBhd2F5IHRoZSBwaWVjZXMuIEluc3Rl
+YWQgd2Ugc2hvdWxkIGhhdmUgc29tZXRoaW5nIHdpdGgNCmd1YXJkIHJhaWxzIG9uIGl0LCBzbyB0
+aGV5IGNhbid0IGdldCB0aGUgYWxsb2NhdGlvbiBwYXJ0IHdyb25nLg0KDQpCdXQgSSBndWVzcyB0
+aGUgcXVlc3Rpb24gaGVyZSBpczogd2hhdCBzaG91bGQgd2UgZG8gaW4gdGhlIG1lYW50aW1lPyBJ
+dA0KaXMga2luZCBvZiBzaW1pbGFyIHRvIHRoZSBxdWVzdGlvbnMgdGhhdCBjYW1lIHVwIGFyb3Vu
+ZCB0aGUgYnBmIHByb2cNCnBhY2sgYWxsb2NhdG9yLiBTaG91bGQgd2UgaG9sZCB1cCBhbGxvY2F0
+b3IgcmVsYXRlZCB3b3JrIHVudGlsDQp1bmRlcmx5aW5nIHByb2JsZW1zIGFyZSByZXNvbHZlZCBh
+bmQgdGhlcmUgaXMgc29tZSBtYXR1cmUgY29yZQ0Kc29sdXRpb24/DQoNClBlcnNvbmFsbHkgSSBo
+YWQgdGhvdWdodCB3ZSB3b3VsZCBuZWVkIHRvIGRvIHNvbWUgY2xlYW4gc3dpdGNoIHRvIGENCm11
+Y2ggZGlmZmVyZW50IGludGVyZmFjZS4gSSBzdGlsbCB0aGluayBzb21lZGF5IGl0IHdpbGwgYmUg
+cmVxdWlyZWQsDQpidXQgaXQgc2VlbXMgdG8gYmUgZXZvbHZpbmcgbmF0dXJhbGx5IGZvciB0aGUg
+dGltZSBiZWluZy4NCg0KTGlrZSBzYXkgZm9yIGEgbmV4dCBzdGVwIHdlIG1vdmVkIHByb2cgcGFj
+ayBvdXQgb2YgYnBmIGludG8gY29yZSBjb2RlLA0KZ2F2ZSBpdCBpdCdzIG93biBjb3B5IG9mIG1v
+ZHVsZV9hbGxvYygpLCBhbmQgdGhlbiBtYWRlIGtwcm9iZXMgdXNlIGl0Lg0KVGhlbiB3ZSB3b3Vs
+ZCBoYXZlIHNvbWV0aGluZyB3aXRoIGltcHJvdmVkIFdeWCBndWFyZCByYWlscywgYW5kIGtwcm9i
+ZXMNCndvdWxkIG5vdCBkZXBlbmQgb24gbW9kdWxlcyBhbnltb3JlLiBJIHRoaW5rIG1heWJlIGl0
+J3MgYSBzdGVwIGluIHRoZQ0KcmlnaHQgZGlyZWN0aW9uLCBldmVuIGlmIGl0J3Mgbm90IHBlcmZl
+Y3QuDQo=

@@ -2,203 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC409544250
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E833544251
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237120AbiFIEEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 00:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S236852AbiFIEFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 00:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236175AbiFIEEo (ORCPT
+        with ESMTP id S230137AbiFIEFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 00:04:44 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BDE21F9C8
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:04:42 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id i15so2534107plr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 21:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zY5mFinMaMydRM+H9UjtKkuWSUe8T7k3YskeQQPjglc=;
-        b=5pcuzgGc3KBBFq/TL1YCOhhPlIrvGxqmJS9pDZOYdOG1VGHxT+uZqf9JOa/4l1K6X5
-         092+6X4ZZO+JXbC4846duJGZd5Wq/uOAFkUeq2NAJ2U6oXcxvor25M8/SfcMktkETzH/
-         VUgKoR43Ka+v5PDqZYzLlChYpe24PNasEDGR9GsJepygHa7n0+SCzVXSIuGBxxHwFM6l
-         dngHYNvRBLMCxY5jYSBB4eAtY1IUsdAOZJNY7GNU7+aBOdX01+Jdp+vktzgtWKmb5saH
-         0NUlHFKxQzknqYr/D26kG/DXegbR0aA6vk/0i+YgfrR7aXTAO9qy0t/ykINGPvQwmZtQ
-         /RlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zY5mFinMaMydRM+H9UjtKkuWSUe8T7k3YskeQQPjglc=;
-        b=0LzRb32TiZvdhMUALp4C4v48AaR2ZM+cU1lNXnV+bFByJtmpASVbSbe6XbcggYlGnu
-         1J/ZFoCOWPecOXXqpGAYtAYlsDt3MncuhM+E9ZId3/l2HITx6j+Jax7qYXY41tGYCshG
-         MG+YT690LcfuJfWFJH/CVIK0r6xsSX091ty1BUepB1QG3VZcHOhbkavau88bmma7/PTe
-         2e7uE5Foywk+og+HdYFYpe8Gt9pJAd29DG8T/8idDshLuWf9TqaSV7HdavqH4HilPiMq
-         7jVvDdBrcccN2Oru41tV7F/4oKP1F08XxAZ6kdG1lHWc6LC0CvdJ6oCqud4XlEunFtkZ
-         /EaA==
-X-Gm-Message-State: AOAM533OpcVPAf6Q6YSau/n0cAW9jGEev6MDCKiUAe7RTV3II+pQgtvR
-        PknpQJfPI7Cjwzh0ic+Rkc5ziA==
-X-Google-Smtp-Source: ABdhPJwLD5D90RbLdd1NhQp9diUE2EhXlyXUqaO7S6k3tR7O5xwtfMN8z7LwN9K2fHURcGSStMdhCA==
-X-Received: by 2002:a17:903:228c:b0:163:baf6:582a with SMTP id b12-20020a170903228c00b00163baf6582amr37184890plh.43.1654747481887;
-        Wed, 08 Jun 2022 21:04:41 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b00163ffe73300sm15887049plg.137.2022.06.08.21.04.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 21:04:41 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        mgorman@techsingularity.net, peterz@infradead.org,
-        dhowells@redhat.com, willy@infradead.org, Liam.Howlett@Oracle.com,
-        kemi.wang@intel.com, mhocko@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, Muchun Song <songmuchun@bytedance.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] mm: sysctl: fix missing numa_stat when !CONFIG_HUGETLB_PAGE
-Date:   Thu,  9 Jun 2022 12:03:42 +0800
-Message-Id: <20220609040342.2703-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+        Thu, 9 Jun 2022 00:05:37 -0400
+X-Greylist: delayed 13308 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 21:05:36 PDT
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E095C21FBD5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:05:36 -0700 (PDT)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 58ED810047B81
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:05:36 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id z9QNn4X09OnjCz9QOnHdjL; Thu, 09 Jun 2022 04:05:36 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=JPj+D+Gb c=1 sm=1 tr=0 ts=62a17190
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=JPEYwPQDsx4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=HaFmDPmJAAAA:8
+ a=dShPbfN-9lO91TPQ_oYA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7oizPfCnCXpicOi1usfiu5FQzBJH1HzcGmli5C//IHw=; b=fm7Mb8fB8AB3YDHvxBl8kVN9B9
+        EaTH4l4MRp8+3OWu1iD9AuxKbTMuXtV/Grudf4+OXZK0XFIl+PNJyazCVSYzUlQdn4ZjYCG76s2qI
+        JozYlEs+lTrBeMhVMDGN67ctKQR3keHjg7fonAdL3uDPe4xqiwJuJDKTwUlrEaYtZmtZ0OKZ+sHGe
+        mQWIwBJ6I5DooQzUnXFvk4BrBvBei0tk0k9qtJv8to1I4ekjiUMGrd1rVwRD7zpLT4LRXmYGII16+
+        CkWw2AGSOhkGfuV4dehQPMgwCtZfOMZ6YZVjTi1/v98c6A4FeixNO8PQurQv1JtXz8gWUJxwFcK4+
+        /gbwwcpA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54594 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1nz9QN-003KxI-H5;
+        Wed, 08 Jun 2022 22:05:35 -0600
+Subject: Re: [PATCH] riscv: don't warn for sifive erratas in modules
+To:     Heiko Stuebner <heiko@sntech.de>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, hch@lst.de
+References: <20220608120849.1695191-1-heiko@sntech.de>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220608120849.1695191-1-heiko@sntech.de>
+Message-ID: <21e02dbd-75b0-e5c6-29d8-fc853c72aa01@w6rz.net>
+Date:   Wed, 8 Jun 2022 21:05:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nz9QN-003KxI-H5
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:54594
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 5
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"numa_stat" should not be included in the scope of CONFIG_HUGETLB_PAGE,
-if CONFIG_HUGETLB_PAGE is not configured even if CONFIG_NUMA is configured,
-"numa_stat" is missed form /proc.  Remove it out of CONFIG_HUGETLB_PAGE
-and move numa_stat sysctl handling to mm/vmstat.c.
+On 6/8/22 5:08 AM, Heiko Stuebner wrote:
+> The SiFive errata code contains code checking applicable erratas
+> vs. actually applied erratas to suggest missing erratas to the
+> user when their Kconfig options are not enabled.
+>
+> In the main kernel image one can be quite sure that all available
+> erratas appear at least once, so that check will succeed.
+> On the other hand modules can very well not use any errata-relevant
+> code, so the newly added module-alternative support may also patch
+> the module code, but not touch SiFive-specific erratas at all.
+>
+> So to restore the original behaviour don't warn when patching
+> modules. This will keep the warning if necessary for the main kernel
+> image but prevent spurious warnings for modules.
+>
+> Of course having such a vendor-specific warning may not be needed at
+> all, as CONFIG_ERRATA_SIFIVE is selected by CONFIG_SOC_SIFIVE and the
+> individual erratas are default-y so disabling them requires
+> deliberate action anyway. But for now just restore the old behaviour.
+>
+> Fixes: a8e910168bba ("riscv: implement module alternatives")
+> Reported-by: Ron Economos <re@w6rz.net>
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>   arch/riscv/errata/sifive/errata.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
+> index 672f02b21ce0..1031038423e7 100644
+> --- a/arch/riscv/errata/sifive/errata.c
+> +++ b/arch/riscv/errata/sifive/errata.c
+> @@ -111,6 +111,7 @@ void __init_or_module sifive_errata_patch_func(struct alt_entry *begin,
+>   			cpu_apply_errata |= tmp;
+>   		}
+>   	}
+> -	if (cpu_apply_errata != cpu_req_errata)
+> +	if (stage != RISCV_ALTERNATIVES_MODULE &&
+> +	    cpu_apply_errata != cpu_req_errata)
+>   		warn_miss_errata(cpu_req_errata - cpu_apply_errata);
+>   }
 
-Fixes: 4518085e127d ("mm, sysctl: make NUMA stats configurable")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Cc: <stable@vger.kernel.org>
----
- include/linux/vmstat.h |  5 -----
- kernel/sysctl.c        |  9 ---------
- mm/vmstat.c            | 52 +++++++++++++++++++++++++-------------------------
- 3 files changed, 26 insertions(+), 40 deletions(-)
+Tested on HiFive Unmatched. Works good and the spurious warning is 
+suppressed.
 
-diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
-index bfe38869498d..1297a6b8ba23 100644
---- a/include/linux/vmstat.h
-+++ b/include/linux/vmstat.h
-@@ -13,12 +13,7 @@
- extern int sysctl_stat_interval;
- 
- #ifdef CONFIG_NUMA
--#define ENABLE_NUMA_STAT   1
--#define DISABLE_NUMA_STAT   0
--extern int sysctl_vm_numa_stat;
- DECLARE_STATIC_KEY_TRUE(vm_numa_stat_key);
--int sysctl_vm_numa_stat_handler(struct ctl_table *table, int write,
--		void *buffer, size_t *length, loff_t *ppos);
- #endif
- 
- struct reclaim_stat {
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index e52b6e372c60..3d6f36f230bb 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2107,15 +2107,6 @@ static struct ctl_table vm_table[] = {
- 		.mode           = 0644,
- 		.proc_handler   = &hugetlb_mempolicy_sysctl_handler,
- 	},
--	{
--		.procname		= "numa_stat",
--		.data			= &sysctl_vm_numa_stat,
--		.maxlen			= sizeof(int),
--		.mode			= 0644,
--		.proc_handler	= sysctl_vm_numa_stat_handler,
--		.extra1			= SYSCTL_ZERO,
--		.extra2			= SYSCTL_ONE,
--	},
- #endif
- 	 {
- 		.procname	= "hugetlb_shm_group",
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 373d2730fcf2..e10afbee888e 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -33,8 +33,6 @@
- #include "internal.h"
- 
- #ifdef CONFIG_NUMA
--int sysctl_vm_numa_stat = ENABLE_NUMA_STAT;
--
- /* zero numa counters within a zone */
- static void zero_zone_numa_counters(struct zone *zone)
- {
-@@ -73,35 +71,37 @@ static void invalid_numa_statistics(void)
- 	zero_global_numa_counters();
- }
- 
--static DEFINE_MUTEX(vm_numa_stat_lock);
--
--int sysctl_vm_numa_stat_handler(struct ctl_table *table, int write,
--		void *buffer, size_t *length, loff_t *ppos)
-+static int sysctl_numa_stat_handler(struct ctl_table *table, int write,
-+				    void *buffer, size_t *length, loff_t *ppos)
- {
--	int ret, oldval;
-+	int ret;
-+	struct static_key *key = table->data;
-+	static DEFINE_MUTEX(lock);
- 
--	mutex_lock(&vm_numa_stat_lock);
--	if (write)
--		oldval = sysctl_vm_numa_stat;
--	ret = proc_dointvec_minmax(table, write, buffer, length, ppos);
--	if (ret || !write)
--		goto out;
--
--	if (oldval == sysctl_vm_numa_stat)
--		goto out;
--	else if (sysctl_vm_numa_stat == ENABLE_NUMA_STAT) {
--		static_branch_enable(&vm_numa_stat_key);
--		pr_info("enable numa statistics\n");
--	} else {
--		static_branch_disable(&vm_numa_stat_key);
-+	mutex_lock(&lock);
-+	ret = proc_do_static_key(table, write, buffer, length, ppos);
-+	if (!ret && write && !static_key_enabled(key))
- 		invalid_numa_statistics();
--		pr_info("disable numa statistics, and clear numa counters\n");
--	}
--
--out:
--	mutex_unlock(&vm_numa_stat_lock);
-+	mutex_unlock(&lock);
- 	return ret;
- }
-+
-+static struct ctl_table numa_stat_sysctl[] = {
-+	{
-+		.procname	= "numa_stat",
-+		.data		= &vm_numa_stat_key.key,
-+		.mode		= 0644,
-+		.proc_handler	= sysctl_numa_stat_handler,
-+	},
-+	{ }
-+};
-+
-+static int __init numa_stat_sysctl_init(void)
-+{
-+	register_sysctl_init("vm", numa_stat_sysctl);
-+	return 0;
-+}
-+late_initcall(numa_stat_sysctl_init);
- #endif
- 
- #ifdef CONFIG_VM_EVENT_COUNTERS
--- 
-2.11.0
+Tested-by: Ron Economos <re@w6rz.net>
 

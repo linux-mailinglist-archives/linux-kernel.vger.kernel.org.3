@@ -2,111 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1267C544E7C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6A6544E80
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbiFIOOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
+        id S238960AbiFIOPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbiFIOOr (ORCPT
+        with ESMTP id S238349AbiFIOPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:14:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0351719C4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654784085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4XBKvHmwR/IvhiCpGn2MggHZNtRmBYysvOLx4s1tsdc=;
-        b=aueGElee75dC8Mfm4uP69yt9d85LiTMisnfjWUM/jqxkti4revIwXm8X0X5dRnnt8snYU1
-        8HXAfSK5Pq7g8EUNlXvQ+XvTxKuPdQMo0QzwQdCWTnwoDClt5Ry0Zha5Do5fHgtj+FZJhP
-        IQdU+zvx0sOrF4ocPHyO4qbQJuwgorE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-126-4mrVnexEO5OLtFd6GEWNSg-1; Thu, 09 Jun 2022 10:14:42 -0400
-X-MC-Unique: 4mrVnexEO5OLtFd6GEWNSg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C60F294EDEC;
-        Thu,  9 Jun 2022 14:14:41 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C119F18EA6;
-        Thu,  9 Jun 2022 14:14:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wh6+KUi+T8Ncn6BWTHDTJCzrJxgT47SWbq-ZWs1_vbvHA@mail.gmail.com>
-References: <CAHk-=wh6+KUi+T8Ncn6BWTHDTJCzrJxgT47SWbq-ZWs1_vbvHA@mail.gmail.com> <20220422134308.1613610-1-svens@linux.ibm.com> <202204221052.85D0C427@keescook> <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com> <202206081404.F98F5FC53E@keescook> <CAHk-=wiFn-_OaWKY=nXt3YSiy=obrNoQW_u7zKO7qoArez=GUw@mail.gmail.com> <AEEBCF5D-8402-441D-940B-105AA718C71F@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, dchinner@redhat.com,
-        Kees Cook <keescook@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] s390: disable -Warray-bounds
+        Thu, 9 Jun 2022 10:15:30 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2FF71DAB
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:15:28 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id n10so47788925ejk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 07:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xMZyHB+w1HZyBtjYMs8VhyGH58NpWoIROf4SCsJgVWE=;
+        b=IHfLfPqINk7QaemV+fnV7fo1ZYEA9/I2MgUtE2RiNbc6CjqAc2dVvhHP6lyYYroDa9
+         Btg7oV8h6m2pfWzlCHGvCcDTcw7pxjsTyjpbIYw6dPKrpXJHHisL2zCA2yuGtrk7QCIp
+         px21nXKdE0RpOq3V6GbPTBVyPpt4hkWmU9JLFuVFSGu4IK7SLMQpP248PfFxY+wx6KLE
+         ZR0cMC6Lic7+BaBSEH6kXcnedohAd5llgl5UciHgNnTKDqeOZZTEPFbg6qmJDqxPguLg
+         VzROxqS2E9P1v+lvmA5yA8oQTUewsPFedXXNZ15QsBxmGxQmreKxQs5MjO7ij0JiBfTg
+         8ywg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xMZyHB+w1HZyBtjYMs8VhyGH58NpWoIROf4SCsJgVWE=;
+        b=No5ZBk0aj/ed+AvQYHMdGq5o4MBLuDkDo8VwXz6kvcu2fKPW5QhEoFFWm5/D9shQqM
+         MckBLXfuGibMs16w4ewOQ7yF3ZPEHWE6IbQEvUyqlFh5ICII2WWT+73mih8a7kL97Mjc
+         lT/27EU9aDCSzj05wyie6yI2fGUGH6g5gN9gkgJcMYsvYj4zUfwP0RL+/HHOw/QEWdUy
+         hSZRJxZSf23vcgCm1vt7Mvhhc810EHiVoj1zj4TIEvXkxvyCtfxHMmiRUpt12pVzqU7R
+         tchCItURKCRhYXZtkupTMbAUQrL/73SaTTuzS6nyAvdRN1HMnhOX6HBPy76xl9vSVDAs
+         YMQg==
+X-Gm-Message-State: AOAM533qbziHxAO6OJb1MMy2m4BRvW+lmExV7GKMGLE5+VYEM6Egclq2
+        rFTdc6eMVVlLlthV8rEpVZKtVQ==
+X-Google-Smtp-Source: ABdhPJwsQpdC8zY3pVgw5zuU9Lvz3PaHrGxutuHe3kM9BTzGZe/6dDFTxGXvB8QTefO1W0gh7jjJeA==
+X-Received: by 2002:a17:907:d24:b0:712:1142:88c7 with SMTP id gn36-20020a1709070d2400b00712114288c7mr1505148ejc.435.1654784126853;
+        Thu, 09 Jun 2022 07:15:26 -0700 (PDT)
+Received: from [192.168.0.198] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id rn13-20020a170906d92d00b006f3ef214df2sm10603243ejb.88.2022.06.09.07.15.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 07:15:26 -0700 (PDT)
+Message-ID: <e0f7146d-3ccc-a194-bb1e-c3475ca8c29e@linaro.org>
+Date:   Thu, 9 Jun 2022 16:15:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4147482.1654784079.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 09 Jun 2022 15:14:39 +0100
-Message-ID: <4147483.1654784079@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 32/48] arm64: dts: rockchip: align gpio-key node names
+ with dtschema
+Content-Language: en-US
+To:     Maya Matuszczyk <maccraft123mc@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-kernel@vger.kernel.org
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
+ <20220609114026.380682-3-krzysztof.kozlowski@linaro.org>
+ <CAO_MupKxvaXRQvMyEUZMThBZ9033OeJec+BtBndjs5oZ3etTEQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAO_MupKxvaXRQvMyEUZMThBZ9033OeJec+BtBndjs5oZ3etTEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On 09/06/2022 15:57, Maya Matuszczyk wrote:
+> czw., 9 cze 2022 o 13:56 Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> napisał(a):
+>>
+>> The node names should be generic and DT schema expects certain pattern
+>> (e.g. with key/button/switch).
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  arch/arm64/boot/dts/rockchip/rk3308-evb.dts   |  2 +-
+>>  .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 32 +++++++++----------
+>>  .../boot/dts/rockchip/rk3328-nanopi-r2s.dts   |  2 +-
+>>  arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi  |  2 +-
+>>  .../boot/dts/rockchip/rk3368-geekbox.dts      |  2 +-
+>>  .../dts/rockchip/rk3368-orion-r68-meta.dts    |  2 +-
+>>  .../boot/dts/rockchip/rk3368-px5-evb.dts      |  2 +-
+>>  arch/arm64/boot/dts/rockchip/rk3368-r88.dts   |  2 +-
+>>  .../boot/dts/rockchip/rk3399-firefly.dts      |  2 +-
+>>  .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  2 +-
+>>  .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  2 +-
+>>  .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  2 +-
+>>  .../boot/dts/rockchip/rk3399-khadas-edge.dtsi |  2 +-
+>>  .../boot/dts/rockchip/rk3399-nanopi-r4s.dts   |  4 +--
+>>  .../boot/dts/rockchip/rk3399-nanopi4.dtsi     |  2 +-
+>>  .../boot/dts/rockchip/rk3399-orangepi.dts     |  2 +-
+>>  .../boot/dts/rockchip/rk3399-pinebook-pro.dts |  4 +--
+>>  .../boot/dts/rockchip/rk3399-roc-pc.dtsi      |  2 +-
+>>  .../boot/dts/rockchip/rk3399-rockpro64.dtsi   |  2 +-
+>>  .../boot/dts/rockchip/rk3399-sapphire.dtsi    |  2 +-
+>>  .../boot/dts/rockchip/rk3566-pinenote.dtsi    |  2 +-
+>>  21 files changed, 38 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+>> index 9b4f855ea5d4..4b5413b12bfa 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+>> @@ -75,7 +75,7 @@ gpio-keys {
+>>                 pinctrl-names = "default";
+>>                 pinctrl-0 = <&pwr_key>;
+>>
+>> -               power {
+>> +               power-key {
+>>                         gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
+>>                         linux,code = <KEY_POWER>;
+>>                         label = "GPIO Key Power";
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> index ea0695b51ecd..72328dd993ee 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> @@ -71,82 +71,82 @@ gpio-keys {
+>>                  * |------------------------------------------------|
+>>                  */
+>>
+>> -               sw1 {
+>> +               switch-1 {
+> Wouldn't it make more sense to rename this and all other
+> renamed nodes in this dts into "button-dpad-up" or "button-1",
+> as on the physical device those are buttons and the naming
+> scheme of "sw" + number seems to be a carryover from
+> downstream sources.
 
-> > Yeah. Happily, this has already been solved, but it looks like David d=
-idn't do a pull yet for it?
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/=
-log/?h=3Dfscache-next
-> =
+Can be buttons. I assumed SW comes from some kind of switch.
+I assume you mean only this Odroid Go2 DTS, because some other DTSes
+(like EVB above) explicitly call it "Key Power".
 
-> Good.
 
-Do you want it tagging and a pull req generating, even though it's a singl=
-e
-patch?
-
-Note that Dave Chinner would rather I converted code like:
-
-	struct myfs_inode *myfsinode =3D xyz;
-	myfsinode->netfs.inode.i_ino =3D 123;
-
-to something like:
-
-	struct myfs_inode *myfsinode =3D xyz;
-	struct inode *inode =3D VFS_I(myfsinode);
-	inode->i_ino =3D 123;
-
-where the translation is wrapped inside a VFS_I() macro in every filesyste=
-m
-and wants this across all filesystems.  I think the former looks cleaner, =
-but
-he has a point about how to deal with yet another layer of wrapping being
-inserted in the future.  Do you have a preference?
-
-David
-
+Best regards,
+Krzysztof

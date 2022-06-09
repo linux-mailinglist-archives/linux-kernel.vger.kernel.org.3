@@ -2,178 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF8C5449DB
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8935449DC
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243487AbiFILTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        id S243483AbiFILT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243145AbiFILTQ (ORCPT
+        with ESMTP id S243444AbiFILTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:19:16 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41248DDEE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:19:15 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id z9so5489324wmf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+ZJSswCGWMaH9Gz+kOuAf6ytw6vrkr1yTN4Lg9FPtP0=;
-        b=xBqrNg9KKVu6SZc1GxgXSEhR+1JZWXAkOge99tA0ORYzfEbChmi+5TViL7TUfnrJPb
-         X2DGKMm1z56pyydomoMZS3qB1rGaH7FnuwyV89l79P6jDuAIrU5n+MWZRGq6+Vk2VY92
-         8XE93wJE037IHOlwXYDm9CaBEhz9q5awUjOBK5I6YzOGhryDT+tvBh92Qn6tDBl8yxU8
-         tX2O4xlYB1hDQKLsS0NQLcXXWW10Hd/o2EJR38JHI66cyzLK+QiqAagqP034HM1SGu8g
-         5a8f8T7mHgEkjoDOlk0imBzW8SScWBkKuvOxlsNCTN4q5pbT7J1NjQy4oTALU224EhFg
-         qRKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+ZJSswCGWMaH9Gz+kOuAf6ytw6vrkr1yTN4Lg9FPtP0=;
-        b=pUT3c5unvvWIO8srip/s6w3y//Y15Dvy9TTltJB74WHcwK9m4eO9jtT09lWCtoJRg/
-         9k8GEPLCsAjh7LvwWfJ2QAHG7epTh2jXfcHusDYhWYgP1PBLCFxhRQbozwFy7qHPFjzK
-         2Zw78yUdRE29XsGjbHCAtAFWCbY4Ax9Jh5d1mXT9dksaix0rqQKOkx4J3Wmmhy5mllan
-         ITkwRoE2sV6pyn+EoMY4J5QaOXeGLf+3QLkZ4VVI0tLVSk4VvkBpfqDqDu/dPTI12a9e
-         o33kUSkcXUF82L2V9W2eozhfq3w2HePTV1WOfOJh/n3G1q4bVNuhGGYtlu2WsuzoMkKt
-         cKqQ==
-X-Gm-Message-State: AOAM532AocMCF+sq7ubX9DoNP858VuSMlv6VIy73UCHQ2mkvAVc7LYFg
-        hrIaUUZxZsE9NKg1V8vHPky3GQ==
-X-Google-Smtp-Source: ABdhPJw9zn0RkOe5DdDX7WWpabkr6e5Ps+WJTiyo5lJVo1Rp0/Xgi4rkCipV2m0jY4nKsH4ucoVpSQ==
-X-Received: by 2002:a05:600c:a0b:b0:39c:3551:b226 with SMTP id z11-20020a05600c0a0b00b0039c3551b226mr2746192wmp.201.1654773554158;
-        Thu, 09 Jun 2022 04:19:14 -0700 (PDT)
-Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id o22-20020a1c7516000000b003942a244ed1sm26477850wmc.22.2022.06.09.04.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:19:13 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 2/2] ASoC: codecs: wcd9335: move gains from SX_TLV to S8_TLV
-Date:   Thu,  9 Jun 2022 12:19:01 +0100
-Message-Id: <20220609111901.318047-3-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220609111901.318047-1-srinivas.kandagatla@linaro.org>
-References: <20220609111901.318047-1-srinivas.kandagatla@linaro.org>
+        Thu, 9 Jun 2022 07:19:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E525113F88
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:19:17 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1654773556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1WfcyJ5/Z+Ptknrmt9EKb2lYt88mTxvWrPcDw1CBGnQ=;
+        b=JnUH5R2kmNT60oLX6YGZ7fFh2oyH4muKjrWKPkLleJhv0c9c3imtVAyWZ5CGshMdbpcvSK
+        qshUKVrIvAosjByUWaGgJ8yGXbhA7JQT+HG6IJmSVRPm6x4owodJS1VDP9l0TCHAGYk3yK
+        Bp55yd6cyrqcsYlzakoe6cDA3t15+4151JyLf+caKhQxbdmrE0sRoKY72B5b7lT8LPFmo8
+        bnoO94cfBPsQI9Up/C/wO9+D30c6GxdSiH6B8gBnpKPNarnDoBfh3OvNpkAnaJUUXMs2lM
+        Y27jWiFmcp6aSaMZb5NM+ERN4Quy2HBOvbh/8mhJLTJooT9n5KPZMGrq8jsaZQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1654773556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1WfcyJ5/Z+Ptknrmt9EKb2lYt88mTxvWrPcDw1CBGnQ=;
+        b=N8p5zbYzCHfPItKgtIV/lJfoNNSjpu7xVICfMkMRp+PylHOVGu/4v/8HLeXruN360n3X+S
+        rCqEJIsmj4yLveAw==
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, kasan-dev@googlegroups.com
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+In-Reply-To: <CAMuHMdVmoj3Tqz65VmSuVL2no4+bGC=qdB8LWoB=vyASf9vS+g@mail.gmail.com>
+References: <20220421212250.565456-1-john.ogness@linutronix.de>
+ <20220421212250.565456-15-john.ogness@linutronix.de>
+ <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
+ <Ymfwk+X0CHq6ex3s@alley>
+ <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+ <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
+ <Ymjy3rHRenba7r7R@alley>
+ <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+ <87fslyv6y3.fsf@jogness.linutronix.de>
+ <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+ <87k0b6blz2.fsf@jogness.linutronix.de>
+ <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
+ <87y1zkkrjy.fsf@jogness.linutronix.de>
+ <CAMuHMdVmoj3Tqz65VmSuVL2no4+bGC=qdB8LWoB=vyASf9vS+g@mail.gmail.com>
+Date:   Thu, 09 Jun 2022 13:25:15 +0206
+Message-ID: <87fske3wzw.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move all the digital gains form using SX_TLV to S8_TLV, these gains are
-actually 8 bit gains with 7th signed bit and ranges from -84dB to +40dB
+(Added RANDOM NUMBER DRIVER and KFENCE people.)
 
-rest of the Qualcomm wcd codecs uses these properly.
+Hi Geert,
 
-Fixes: 8c4f021d806a ("ASoC: wcd9335: add basic controls")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/codecs/wcd9335.c | 81 +++++++++++++++++---------------------
- 1 file changed, 36 insertions(+), 45 deletions(-)
+On 2022-06-08, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>     =============================
+>     [ BUG: Invalid wait context ]
+>     5.19.0-rc1-ebisu-00802-g06a0dd60d6e4 #431 Not tainted
+>     -----------------------------
+>     swapper/0/1 is trying to lock:
+>     ffffffc00910bac8 (base_crng.lock){....}-{3:3}, at:
+> crng_make_state+0x148/0x1e4
+>     other info that might help us debug this:
+>     context-{5:5}
+>     2 locks held by swapper/0/1:
+>      #0: ffffffc008f8ae00 (console_lock){+.+.}-{0:0}, at:
+> printk_activate_kthreads+0x10/0x54
+>      #1: ffffffc009da4a28 (&meta->lock){....}-{2:2}, at:
+> __kfence_alloc+0x378/0x5c4
+>     stack backtrace:
+>     CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> 5.19.0-rc1-ebisu-00802-g06a0dd60d6e4 #431
+>     Hardware name: Renesas Ebisu-4D board based on r8a77990 (DT)
+>     Call trace:
+>      dump_backtrace.part.0+0x98/0xc0
+>      show_stack+0x14/0x28
+>      dump_stack_lvl+0xac/0xec
+>      dump_stack+0x14/0x2c
+>      __lock_acquire+0x388/0x10a0
+>      lock_acquire+0x190/0x2c0
+>      _raw_spin_lock_irqsave+0x6c/0x94
+>      crng_make_state+0x148/0x1e4
+>      _get_random_bytes.part.0+0x4c/0xe8
+>      get_random_u32+0x4c/0x140
+>      __kfence_alloc+0x460/0x5c4
+>      kmem_cache_alloc_trace+0x194/0x1dc
+>      __kthread_create_on_node+0x5c/0x1a8
+>      kthread_create_on_node+0x58/0x7c
+>      printk_start_kthread.part.0+0x34/0xa8
+>      printk_activate_kthreads+0x4c/0x54
+>      do_one_initcall+0xec/0x278
+>      kernel_init_freeable+0x11c/0x214
+>      kernel_init+0x24/0x124
+>      ret_from_fork+0x10/0x20
 
-diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
-index 617a36a89dfe..6e9c93540f7a 100644
---- a/sound/soc/codecs/wcd9335.c
-+++ b/sound/soc/codecs/wcd9335.c
-@@ -2253,51 +2253,42 @@ static int wcd9335_rx_hph_mode_put(struct snd_kcontrol *kc,
- 
- static const struct snd_kcontrol_new wcd9335_snd_controls[] = {
- 	/* -84dB min - 40dB max */
--	SOC_SINGLE_SX_TLV("RX0 Digital Volume", WCD9335_CDC_RX0_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX1 Digital Volume", WCD9335_CDC_RX1_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX2 Digital Volume", WCD9335_CDC_RX2_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX3 Digital Volume", WCD9335_CDC_RX3_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX4 Digital Volume", WCD9335_CDC_RX4_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX5 Digital Volume", WCD9335_CDC_RX5_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX6 Digital Volume", WCD9335_CDC_RX6_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX7 Digital Volume", WCD9335_CDC_RX7_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX8 Digital Volume", WCD9335_CDC_RX8_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX0 Mix Digital Volume",
--			  WCD9335_CDC_RX0_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX1 Mix Digital Volume",
--			  WCD9335_CDC_RX1_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX2 Mix Digital Volume",
--			  WCD9335_CDC_RX2_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX3 Mix Digital Volume",
--			  WCD9335_CDC_RX3_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX4 Mix Digital Volume",
--			  WCD9335_CDC_RX4_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX5 Mix Digital Volume",
--			  WCD9335_CDC_RX5_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX6 Mix Digital Volume",
--			  WCD9335_CDC_RX6_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX7 Mix Digital Volume",
--			  WCD9335_CDC_RX7_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX8 Mix Digital Volume",
--			  WCD9335_CDC_RX8_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX0 Digital Volume", WCD9335_CDC_RX0_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX1 Digital Volume", WCD9335_CDC_RX1_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX2 Digital Volume", WCD9335_CDC_RX2_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX3 Digital Volume", WCD9335_CDC_RX3_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX4 Digital Volume", WCD9335_CDC_RX4_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX5 Digital Volume", WCD9335_CDC_RX5_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX6 Digital Volume", WCD9335_CDC_RX6_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX7 Digital Volume", WCD9335_CDC_RX7_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX8 Digital Volume", WCD9335_CDC_RX8_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX0 Mix Digital Volume", WCD9335_CDC_RX0_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX1 Mix Digital Volume", WCD9335_CDC_RX1_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX2 Mix Digital Volume", WCD9335_CDC_RX2_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX3 Mix Digital Volume", WCD9335_CDC_RX3_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX4 Mix Digital Volume", WCD9335_CDC_RX4_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX5 Mix Digital Volume", WCD9335_CDC_RX5_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX6 Mix Digital Volume", WCD9335_CDC_RX6_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX7 Mix Digital Volume", WCD9335_CDC_RX7_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX8 Mix Digital Volume", WCD9335_CDC_RX8_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
- 	SOC_ENUM("RX INT0_1 HPF cut off", cf_int0_1_enum),
- 	SOC_ENUM("RX INT0_2 HPF cut off", cf_int0_2_enum),
- 	SOC_ENUM("RX INT1_1 HPF cut off", cf_int1_1_enum),
--- 
-2.25.1
+I am guessing you have CONFIG_PROVE_RAW_LOCK_NESTING enabled?
 
+We are seeing a spinlock (base_crng.lock) taken while holding a
+raw_spinlock (meta->lock).
+
+kfence_guarded_alloc()
+  raw_spin_trylock_irqsave(&meta->lock, flags)
+    prandom_u32_max()
+      prandom_u32()
+        get_random_u32()
+          get_random_bytes()
+            _get_random_bytes()
+              crng_make_state()
+                spin_lock_irqsave(&base_crng.lock, flags);
+
+I expect it is allowed to create kthreads via kthread_run() in
+early_initcalls.
+
+John Ogness

@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856AD544D17
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED59C544D1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242037AbiFINHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S238572AbiFINH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234225AbiFINHW (ORCPT
+        with ESMTP id S237515AbiFINHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:07:22 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D049243ADB;
-        Thu,  9 Jun 2022 06:07:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654780040; x=1686316040;
+        Thu, 9 Jun 2022 09:07:45 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC07A85EE4;
+        Thu,  9 Jun 2022 06:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654780062; x=1686316062;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=Fl/DeaRiuO25zldEFBbUHA7BW4qeWpTsDW533TsAWhc=;
-  b=gz4hz1I1QlrwXlGZ5h/01fUkE/DB2QWA6qRiYEBMAE0jplD5Cd+/cJSB
-   FEa5qQvjIUWWslkAX/70Ma84II32ktpHykPSgG0fQAS62LovwHNel+SB2
-   ORFzIRWBUqLWJNGub6BO9YW2hamF5s/QKMi+o2xw5rwLUNTgIeAruWDnC
-   HMr+q/5JJYh2/QDZYvGpbCGeH98Dw9UmiTI+5pvGsRxeBgI5U6btH4Zc8
-   R/KtojAWIgCcTRNgL4s4ObYvlfOcZXCvrSP3ikAnkqepHaX2FkJB+dD3G
-   C2SvZkxkkjLPPbWwltm9QitISAEDtsUooWhv7VEkEc1uRfvaxT60pI4LZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="302642056"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="302642056"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 06:07:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="580577218"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 09 Jun 2022 06:07:20 -0700
-Received: from [10.252.211.126] (kliang2-MOBL.ccr.corp.intel.com [10.252.211.126])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 9885B5808F0;
-        Thu,  9 Jun 2022 06:07:18 -0700 (PDT)
-Message-ID: <501e5a2f-4e5a-1d32-b933-5b74e9775aa5@linux.intel.com>
-Date:   Thu, 9 Jun 2022 09:07:17 -0400
+  bh=PTrfA4+QXjPYtg7WES29RLAhtkp56K5doQjbZoUFJhE=;
+  b=jNsOoN3zr0VsoaCsDIUIirWSxEpEmyil8DZK4060SeD1KHnHYlZQgRkW
+   01GRR4LJq9QBdRHDxtSzfT4AxAs3CuLKQRuJyYbpH6Lg2qzT0tMxMCGa0
+   HQJzKPLN6mTymJSM95TQqGXW7jW0Vn/mERVG5cSYm04oJ7xKaHL1UTTiF
+   M=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Jun 2022 06:07:41 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 06:07:41 -0700
+Received: from [10.242.59.11] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
+ 06:07:37 -0700
+Message-ID: <58c87a74-52e3-1133-f5cc-56c098f0273e@quicinc.com>
+Date:   Thu, 9 Jun 2022 18:37:34 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/2] perf vendor events intel: Rename tremontx to
- snowridgex
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V5] arm64: perf: Make exporting of pmu events configurable
 Content-Language: en-US
-To:     zhengjun.xing@linux.intel.com, acme@kernel.org,
-        peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com
-References: <20220609094222.2030167-1-zhengjun.xing@linux.intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220609094222.2030167-1-zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Will Deacon <will@kernel.org>
+CC:     <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <catalin.marinas@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1653306574-20946-1-git-send-email-quic_c_spathi@quicinc.com>
+ <20220609100247.GA2187@willie-the-truck>
+ <4f5dbc00-e25b-f6ff-8585-31fc50f48a21@quicinc.com>
+ <20220609113225.GA2326@willie-the-truck>
+From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+In-Reply-To: <20220609113225.GA2326@willie-the-truck>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,99 +69,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 6/9/2022 5:02 PM, Will Deacon wrote:
+> [Please don't top-post]
+>
+> On Thu, Jun 09, 2022 at 04:05:20PM +0530, Srinivasarao Pathipati wrote:
+>> On 6/9/2022 3:32 PM, Will Deacon wrote:
+>>> On Mon, May 23, 2022 at 05:19:34PM +0530, Srinivasarao Pathipati wrote:
+>>>> The PMU export bit (PMCR_EL0.X) is getting reset during pmu reset,
+>>>> Make is configurable using sysctls to enable/disable at runtime.
+>>>> It can also be enabled at early bootup with kernel arguments.
+>>>>
+>>>> Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+>>>> ---
+>>>> Changes since V4:
+>>>> 	- Registering sysctls dynamically for only arm64 as suggested by Will
+>>>> 	- Not removed the code to configure with kernel parameters
+>>>> 	  as the sysctl's kernel parameter(sysctl.kernel.export_pmu_events)
+>>>> 	  is not working at early bootup. pmu_reset() getting called before
+>>>> 	  sysctl's kernel parameter is set.
+>>> Why do you need this during early bootup? Perf won't program any events
+>>> until much later and if somebody else is configuring the PMU before
+>>> entering Linux then they can also set that X bit in the PMCR.
+>> On our Qualcomm platforms, The X bit is getting set by firmware at early
+>> bootup for Qualcomm use cases
+>> and non-secure world is resetting it, that causing issue.
+> What "Qualcomm use cases" and why should we care about them upstream?
 
-On 6/9/2022 5:42 AM, zhengjun.xing@linux.intel.com wrote:
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> 
-> Tremontx was an old name for Snowridgex, so rename Tremontx to Snowridgex.
-> 
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Thanks Will & Robin for your inputs .
 
-The patch series look good to me.
+Understood your point ,  pushed next version [V6] after removing kernel 
+parameters code.
 
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
-> ---
-> Change log:
->    v2:
->      * no change since v1.
-> 
->   tools/perf/pmu-events/arch/x86/mapfile.csv                      | 2 +-
->   .../pmu-events/arch/x86/{tremontx => snowridgex}/cache.json     | 0
->   .../arch/x86/{tremontx => snowridgex}/floating-point.json       | 0
->   .../pmu-events/arch/x86/{tremontx => snowridgex}/frontend.json  | 0
->   .../pmu-events/arch/x86/{tremontx => snowridgex}/memory.json    | 0
->   .../pmu-events/arch/x86/{tremontx => snowridgex}/other.json     | 0
->   .../pmu-events/arch/x86/{tremontx => snowridgex}/pipeline.json  | 0
->   .../arch/x86/{tremontx => snowridgex}/uncore-memory.json        | 0
->   .../arch/x86/{tremontx => snowridgex}/uncore-other.json         | 0
->   .../arch/x86/{tremontx => snowridgex}/uncore-power.json         | 0
->   .../arch/x86/{tremontx => snowridgex}/virtual-memory.json       | 0
->   11 files changed, 1 insertion(+), 1 deletion(-)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/cache.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/floating-point.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/frontend.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/memory.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/other.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/pipeline.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/uncore-memory.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/uncore-other.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/uncore-power.json (100%)
->   rename tools/perf/pmu-events/arch/x86/{tremontx => snowridgex}/virtual-memory.json (100%)
-> 
-> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> index f5a382421a60..9852bca98d59 100644
-> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> @@ -40,7 +40,7 @@ GenuineIntel-6-8[CD],v1,tigerlake,core
->   GenuineIntel-6-A7,v1,icelake,core
->   GenuineIntel-6-6A,v1,icelakex,core
->   GenuineIntel-6-6C,v1,icelakex,core
-> -GenuineIntel-6-86,v1,tremontx,core
-> +GenuineIntel-6-86,v1,snowridgex,core
->   GenuineIntel-6-96,v1,elkhartlake,core
->   GenuineIntel-6-97,v1,alderlake,core
->   GenuineIntel-6-9A,v1,alderlake,core
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/cache.json b/tools/perf/pmu-events/arch/x86/snowridgex/cache.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/cache.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/cache.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/floating-point.json b/tools/perf/pmu-events/arch/x86/snowridgex/floating-point.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/floating-point.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/floating-point.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/frontend.json b/tools/perf/pmu-events/arch/x86/snowridgex/frontend.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/frontend.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/frontend.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/memory.json b/tools/perf/pmu-events/arch/x86/snowridgex/memory.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/memory.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/memory.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/other.json b/tools/perf/pmu-events/arch/x86/snowridgex/other.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/other.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/other.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/pipeline.json b/tools/perf/pmu-events/arch/x86/snowridgex/pipeline.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/pipeline.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/pipeline.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/uncore-memory.json b/tools/perf/pmu-events/arch/x86/snowridgex/uncore-memory.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/uncore-memory.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/uncore-memory.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/uncore-other.json b/tools/perf/pmu-events/arch/x86/snowridgex/uncore-other.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/uncore-other.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/uncore-other.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/uncore-power.json b/tools/perf/pmu-events/arch/x86/snowridgex/uncore-power.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/uncore-power.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/uncore-power.json
-> diff --git a/tools/perf/pmu-events/arch/x86/tremontx/virtual-memory.json b/tools/perf/pmu-events/arch/x86/snowridgex/virtual-memory.json
-> similarity index 100%
-> rename from tools/perf/pmu-events/arch/x86/tremontx/virtual-memory.json
-> rename to tools/perf/pmu-events/arch/x86/snowridgex/virtual-memory.json
+>
+> Will

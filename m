@@ -2,163 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CF55448C6
+	by mail.lfdr.de (Postfix) with ESMTP id F3D3B5448C7
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242527AbiFIKZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S242235AbiFIK0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233741AbiFIKZd (ORCPT
+        with ESMTP id S233741AbiFIK0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:25:33 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672C8C3644;
-        Thu,  9 Jun 2022 03:25:32 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c2so30543394edf.5;
-        Thu, 09 Jun 2022 03:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=BF6ToR34rwIt5IS191pj4nLe5IsCsROznE05uP/+Uqs=;
-        b=gtqh7qJZ0+9U+7O4nUcZEdHelSNVMDaG0OEAYUkiVxz31j1tif25vJdCXhsog2i0F0
-         hLQcvE1btMskuHBWmmxwD7JNZTdliKE3mEB5Yu5B+S93BmPfX9us4+BhAJXWGi8Lgap+
-         9ajET1/btAhBqayca1UWvEfr+u01ytkVQYZel7e58Vo984RfsnG/A7vyiU+tS3tld8gx
-         whuUXyob9HsaA4MgQB0MI4BhuZXRGC0KL3CzS/l2YEj3sP3OcNsE8LpeeqNvquV5CdAm
-         ryEHdAvZOn+2XKTx0jHkDEHCnMq050n8TZLxjxQldP5KFQSpGsbnSOtfP1YSNjOTXnP8
-         R0Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=BF6ToR34rwIt5IS191pj4nLe5IsCsROznE05uP/+Uqs=;
-        b=l/XKr4VCPdoRtzE3V8zHf2P95bhUvBAUnWcI+KCFSe3QSEy+6eF9asC1hQ2D/uVNc8
-         rgiOvBjLDPUf3laDpSRjId25nKOuNdOeWoS1QBtw7N4lj9JlIO+RfcCB3IBSAdpiHsod
-         YTqA5lFURFY7YeXtFbFVZx16gPnawXsMn21CsExfaXGKqULV3QkpYq3OVlWDRc/Jqfn6
-         wYkZ/cA53etj4UNzFsmvsKg4DIHuoBwbkRaz10ERMp5hEzzvJt3DdpmH6X2KpDTowzu3
-         TzkzlfA71rEt2G+ZSD3u6+2vgque+XtMs6RpP/keYGNuEbir5gbW26AIwWn08KOONqke
-         GdOw==
-X-Gm-Message-State: AOAM531zfX1gzZwkhWA14C+oY0KZsIHWh+Fw6yyvFxQROqds+zZPhgBp
-        GWsyVc5z7m5omxPTkA2ztKo=
-X-Google-Smtp-Source: ABdhPJyeeDg7TxdkBdqiyTzlSIIZTnDroZskZzCgvxigfPZd5Wfw12Qot2iob0xzzEXxgfwEAGuVCg==
-X-Received: by 2002:a05:6402:3318:b0:42d:f04b:f50a with SMTP id e24-20020a056402331800b0042df04bf50amr44005739eda.210.1654770330865;
-        Thu, 09 Jun 2022 03:25:30 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id en22-20020a056402529600b0043120d5f3dcsm9146510edb.14.2022.06.09.03.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 03:25:30 -0700 (PDT)
-Message-ID: <62a1ca9a.1c69fb81.3b355.0b02@mx.google.com>
-X-Google-Original-Message-ID: <YqHKlxUo/0OnIGwD@Ansuel-xps.>
-Date:   Thu, 9 Jun 2022 12:25:27 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] dt-bindings: mtd: qcom_nandc: document
- qcom,boot-partitions binding
-References: <20220608001030.18813-1-ansuelsmth@gmail.com>
- <20220608001030.18813-3-ansuelsmth@gmail.com>
- <20220609072029.GA2758@thinkpad>
+        Thu, 9 Jun 2022 06:26:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFD312D140;
+        Thu,  9 Jun 2022 03:26:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D46BB82C86;
+        Thu,  9 Jun 2022 10:26:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D37CC34114;
+        Thu,  9 Jun 2022 10:25:58 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 11:25:55 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Vasily Averin <vvs@openvz.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Subject: Re: [next] arm64: boot failed - next-20220606
+Message-ID: <YqHKs19RBubUNrve@arm.com>
+References: <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
+ <20220607162504.7fd5a92a@canb.auug.org.au>
+ <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
+ <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
+ <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
+ <CALvZod72bp9ejY+KghaUGkoXDrOMMbs_ofsopGib=MY4jzhRkg@mail.gmail.com>
+ <CA+G9fYu6mayYrrYK+0Rn1K7HOM6WbaOhnJSx-Wv6CaKBDpaT2g@mail.gmail.com>
+ <2a4cc632-c936-1e42-4fdc-572334c58ee1@openvz.org>
+ <44530040-0384-796e-143f-b7293886753c@huawei.com>
+ <20220609101153.GB2187@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609072029.GA2758@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220609101153.GB2187@willie-the-truck>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 12:50:29PM +0530, Manivannan Sadhasivam wrote:
-> On Wed, Jun 08, 2022 at 02:10:29AM +0200, Ansuel Smith wrote:
-> > Document new qcom,boot-partition binding used to apply special
-> > read/write layout to boot partitions.
-> > 
-> > QCOM apply a special layout where spare data is not protected
-> > by ECC for some special pages (used for boot partition). Add
-> > Documentation on how to declare these special pages.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 26 +++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > index 84ad7ff30121..a0914ccb95b0 100644
-> > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > @@ -102,6 +102,30 @@ allOf:
-> >              - const: rx
-> >              - const: cmd
-> >  
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - qcom,ipq806x-nand
-> > +
-> > +    then:
-> > +      properties:
-> > +        qcom,boot-partitions:
-> > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
+On Thu, Jun 09, 2022 at 11:11:54AM +0100, Will Deacon wrote:
+> On Thu, Jun 09, 2022 at 11:44:09AM +0800, Kefeng Wang wrote:
+> > On 2022/6/9 10:49, Vasily Averin wrote:
+> > > mem_cgroup_from_obj():
+> > > ffff80000836cf40:       d503245f        bti     c
+> > > ffff80000836cf44:       d503201f        nop
+> > > ffff80000836cf48:       d503201f        nop
+> > > ffff80000836cf4c:       d503233f        paciasp
+> > > ffff80000836cf50:       d503201f        nop
+> > > ffff80000836cf54:       d2e00021        mov     x1, #0x1000000000000            // #281474976710656
+> > > ffff80000836cf58:       8b010001        add     x1, x0, x1
+> > > ffff80000836cf5c:       b25657e4        mov     x4, #0xfffffc0000000000         // #-4398046511104
+> > > ffff80000836cf60:       d34cfc21        lsr     x1, x1, #12
+> > > ffff80000836cf64:       d37ae421        lsl     x1, x1, #6
+> > > ffff80000836cf68:       8b040022        add     x2, x1, x4
+> > > ffff80000836cf6c:       f9400443        ldr     x3, [x2, #8]
+> > > 
+> > > x5 : ffff80000a96f000 x4 : fffffc0000000000 x3 : ffff80000ad5e680
+> > > x2 : fffffe00002bc240 x1 : 00000200002bc240 x0 : ffff80000af09740
+> > > 
+> > > x0 = 0xffff80000af09740 is an argument of mem_cgroup_from_obj()
+> > > according to System.map it is init_net
+> > > 
+> > > This issue is caused by calling virt_to_page() on address of static variable init_net.
+> > > Arm64 consider that addresses of static variables are not valid virtual addresses.
+> > > On x86_64 the same API works without any problem.
 > 
-> Wondering if u32 is enough for covering all ranges? Other than this,
+> This just depends on whether or not the kernel is running out of the linear
+> mapping or not. On arm64, we use the vmalloc area for the kernel image and
+> so virt_to_page() won't work, just like it won't work for modules on other
+> architectures.
 > 
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> 
-> Thanks,
-> Mani
->
+> How are module addresses handled by mem_cgroup_from_obj()?
 
-I mean they are offset and sizes... Considering it's an old SoC and max
-nand mounted is 1g we should be safe with u32.
+It doesn't look like they are handled in any way. It just expects the
+pointer to be a linear map one. Something like below:
 
-> > +          items:
-> > +            items:
-> > +              - description: offset
-> > +              - description: size
-> > +          description:
-> > +            Boot partition use a different layout where the 4 bytes of spare
-> > +            data are not protected by ECC. Use this to declare these special
-> > +            partitions by defining first the offset and then the size.
-> > +
-> > +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
-> > +
-> > +            Refer to the ipq8064 example on how to use this special binding.
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > @@ -135,6 +159,8 @@ examples:
-> >          nand-ecc-strength = <4>;
-> >          nand-bus-width = <8>;
-> >  
-> > +        qcom,boot-partitions = <0x0 0x58a0000>;
-> > +
-> >          partitions {
-> >            compatible = "fixed-partitions";
-> >            #address-cells = <1>;
-> > -- 
-> > 2.36.1
-> > 
-> 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 27cebaa53472..795bf3673fa7 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2860,6 +2860,11 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
+ 	if (mem_cgroup_disabled())
+ 		return NULL;
+ 
++	if (is_module_address((unsigned long)p))
++		return NULL;
++	else if (is_kernel((unsigned long)p))
++		return NULL;
++
+ 	folio = virt_to_folio(p);
+ 
+ 	/*
 
 -- 
-	Ansuel
+Catalin

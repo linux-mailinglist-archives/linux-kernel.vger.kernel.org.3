@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F8F544CAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8375E544CAE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238817AbiFIMy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S243447AbiFIMyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiFIMyV (ORCPT
+        with ESMTP id S243657AbiFIMyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:54:21 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F72712B037;
-        Thu,  9 Jun 2022 05:54:20 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id h187so18634703oif.4;
-        Thu, 09 Jun 2022 05:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1qmlkIQGWWghNqPvcjQHEoq54ltBSdpD6XTRbIpAXQc=;
-        b=m+4ICiMwzrvFQekFk7vR1Ff9y061YztrPdeG1cXCQCmAlrzziA/h6dtqVv+1J4o6j/
-         lJeNAxz1HSUUVmBnudeiVl4ILCKmfHaufS9vrcBh4l35xjyX7EJHSy1Xou/jgp3i6bvK
-         x0dfo9TMAuNRnBXINpgAwYetfN+aUWe7wruX5pw4NPWBTh1HmrdJFk/pmgZwRWd7wY4t
-         hA/SADx8k1w1lBhQmVkQ7v1HN4fKF3tAHO1uO3PRh1SLIsUPVYBlnW2JTM0CIpiwUP5g
-         BRuEzb8jDfql9AHzVIBemEsLItpxbY5gYp0/iDJdCUWeHv/Rx4lZ0hKLnSKnw/Z6naql
-         Aokg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=1qmlkIQGWWghNqPvcjQHEoq54ltBSdpD6XTRbIpAXQc=;
-        b=HZIGvtlpLE/ViAiEQzOfQHbe6u+pDKijby9nE1Ws/MBwX2J8/mdt/r8doDNUc2n6zJ
-         ME7QG/5Ul5iz2jJfERskX02cxY+cYe2ivWheN3DhY5j9S1vLBrG2UFoLNnMkvugdITNX
-         JeOlf/lfztqe8nty2+jwzA+GUzxlGoegGicdE7Wz1A4YxX6X6YddOOPvSqTaSbQjLMQe
-         fSOt85o3Xo9d3NG4Cvnw0V7nla3oXNCnwmWA44qr9WmZTmM2OYYtH8I4rXDBDgYAQiQx
-         ChFS7WSYetxXNdqm/8mKPXq4PjOXY9hvquoqQAs8MOd21/giOyYetZu90vQDZJR497YT
-         MJLA==
-X-Gm-Message-State: AOAM532E+v3+bPas31b7lf3qbNKnuHtDNjAuX7KLvGxm6zYvLmYJ5/gq
-        /pYfPjTZ6dYg2iF8M9qkJKJWgv/xzNQ=
-X-Google-Smtp-Source: ABdhPJwOMwq4COCWH4Zzsr4EMI3ankGeS2uaFE+jIgcs7LJkXrzKZXHnYY1QND9sbY24AVRCJJbEDQ==
-X-Received: by 2002:aca:b786:0:b0:32b:8df1:919b with SMTP id h128-20020acab786000000b0032b8df1919bmr1664699oif.190.1654779259676;
-        Thu, 09 Jun 2022 05:54:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v10-20020a056870424a00b000f317901b29sm11041648oac.4.2022.06.09.05.54.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 05:54:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 9 Jun 2022 05:54:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     jdelvare@suse.com, dev_public@wujek.eu,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 -next] hwmon: (pmbus) fix build error unused-function
-Message-ID: <20220609125417.GA1681487@roeck-us.net>
-References: <20220609120448.139907-1-renzhijie2@huawei.com>
+        Thu, 9 Jun 2022 08:54:38 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB67D133268
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654779276; x=1686315276;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EC9/baAFvetCe0MCCc7G/jgHuaCiWwhsYL8R+sTGxk8=;
+  b=KEhP7QwMyzEI9ib1YJD/dSLL19AnJXUIhDBfCrakWkAry/fiCOAb1hgk
+   OfdIhSzD+dNtfg/QyjUHgDdGzcHHXdR8WoBzoj7WotI5HzUZKATDp8t8X
+   9mbmLEii2oM+hLNRSPx/z/u7aH1BinWhf7eUA/r+iXUhceUv4OlqGwox5
+   /O5H7NfshwiURiGfU0JWDly089xcUVUnNYUhPWzvYMLyEkE5CDLQsxoT9
+   XDZRDLqzq44rIsrR3+Eocl+hnF+rPjzqSfMSzXluSn6oe6SqK0gXD6PjG
+   LPVUbdSxUsVQGWM2tYj5HRR2UEs10+HthegQt4LFExqgAlBObuW5fowU2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="274791933"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="274791933"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 05:54:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="580573004"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 09 Jun 2022 05:54:33 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzHgH-000Fzh-0v;
+        Thu, 09 Jun 2022 12:54:33 +0000
+Date:   Thu, 9 Jun 2022 20:54:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yuan Yao <yuan.yao@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 449/453]
+ arch/x86/kernel/fpu/xstate.c:718:14: warning: format '%ld' expects argument
+ of type 'long int', but argument 2 has type 'unsigned int'
+Message-ID: <202206092038.sxicJCDm-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609120448.139907-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:04:48PM +0800, Ren Zhijie wrote:
-> If CONFIG_PMBUS is y and CONFIG_DEBUG_FS is not set.
-> 
-> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will be failed, like this:
-> drivers/hwmon/pmbus/pmbus_core.c:593:13: error: ‘pmbus_check_block_register’ defined but not used [-Werror=unused-function]
->  static bool pmbus_check_block_register(struct i2c_client *client, int page,
->              ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> make[3]: *** [drivers/hwmon/pmbus/pmbus_core.o] Error 1
-> make[2]: *** [drivers/hwmon/pmbus] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [drivers/hwmon] Error 2
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [drivers] Error 2
-> 
-> To fix building warning, use __maybe_unused to attach this func.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: c3ffc3a1ff83("hwmon: (pmbus) add a function to check the presence of a block register")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   64f3ddf316eab9398414b94e62a01d185e6e94c8
+commit: c00f6297349a8d81049eefe338ee079179787e28 [449/453] X86: FPU: Fix unexpected #PF while executing XRSTORS
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220609/202206092038.sxicJCDm-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/c00f6297349a8d81049eefe338ee079179787e28
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout c00f6297349a8d81049eefe338ee079179787e28
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/
 
-Applied.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Guenter
+All warnings (new ones prefixed by >>):
 
-> ---
-> v2: use __maybe_unused to attach this function, which Guenter suggested.
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 809e666cb52b..e6d3a1118453 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -590,7 +590,7 @@ bool pmbus_check_word_register(struct i2c_client *client, int page, int reg)
->  }
->  EXPORT_SYMBOL_NS_GPL(pmbus_check_word_register, PMBUS);
->  
-> -static bool pmbus_check_block_register(struct i2c_client *client, int page,
-> +static bool __maybe_unused pmbus_check_block_register(struct i2c_client *client, int page,
->  				       int reg)
->  {
->  	int rv;
+   In file included from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from arch/x86/include/asm/processor.h:17,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/compat.h:10,
+                    from arch/x86/kernel/fpu/xstate.c:8:
+   arch/x86/kernel/fpu/xstate.c: In function 'init_xstate_size':
+>> arch/x86/kernel/fpu/xstate.c:718:14: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'unsigned int' [-Wformat=]
+     718 |              "Too small init_fpstate size:%ld expected:%d\n",
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     719 |              sizeof(init_fpstate_full), kernel_size);
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~
+         |              |
+         |              unsigned int
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
+     132 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                 ^~~~~~
+   include/asm-generic/bug.h:175:9: note: in expansion of macro 'no_printk'
+     175 |         no_printk(format);                                              \
+         |         ^~~~~~~~~
+   arch/x86/kernel/fpu/xstate.c:717:9: note: in expansion of macro 'WARN'
+     717 |         WARN(kernel_size > sizeof(init_fpstate_full),
+         |         ^~~~
+   arch/x86/kernel/fpu/xstate.c:718:45: note: format string is defined here
+     718 |              "Too small init_fpstate size:%ld expected:%d\n",
+         |                                           ~~^
+         |                                             |
+         |                                             long int
+         |                                           %d
+
+
+vim +718 arch/x86/kernel/fpu/xstate.c
+
+   685	
+   686	static int __init init_xstate_size(void)
+   687	{
+   688		/* Recompute the context size for enabled features: */
+   689		unsigned int user_size, kernel_size, kernel_default_size;
+   690		bool compacted = cpu_feature_enabled(X86_FEATURE_XSAVES);
+   691	
+   692		/* Uncompacted user space size */
+   693		user_size = get_xsave_size_user();
+   694	
+   695		/*
+   696		 * XSAVES kernel size includes supervisor states and
+   697		 * uses compacted format when available.
+   698		 *
+   699		 * XSAVE does not support supervisor states so
+   700		 * kernel and user size is identical.
+   701		 */
+   702		if (compacted)
+   703			kernel_size = get_xsaves_size_no_independent();
+   704		else
+   705			kernel_size = user_size;
+   706	
+   707		kernel_default_size =
+   708			xstate_calculate_size(fpu_kernel_cfg.default_features, compacted);
+   709	
+   710		/* Ensure we have the space to store all default enabled features. */
+   711		if (!is_supported_xstate_size(kernel_default_size))
+   712			return -EINVAL;
+   713	
+   714		if (!paranoid_xstate_size_valid(kernel_size))
+   715			return -EINVAL;
+   716	
+   717		WARN(kernel_size > sizeof(init_fpstate_full),
+ > 718		     "Too small init_fpstate size:%ld expected:%d\n",
+   719		     sizeof(init_fpstate_full), kernel_size);
+   720	
+   721		fpu_kernel_cfg.max_size = kernel_size;
+   722		fpu_user_cfg.max_size = user_size;
+   723	
+   724		fpu_kernel_cfg.default_size = kernel_default_size;
+   725		fpu_user_cfg.default_size =
+   726			xstate_calculate_size(fpu_user_cfg.default_features, false);
+   727	
+   728		return 0;
+   729	}
+   730	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

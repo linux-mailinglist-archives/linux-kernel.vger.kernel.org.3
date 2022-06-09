@@ -2,129 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D56544C38
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B114E544C3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245518AbiFIMgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S245536AbiFIMgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245480AbiFIMgN (ORCPT
+        with ESMTP id S245521AbiFIMgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:36:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E765D1F626;
-        Thu,  9 Jun 2022 05:36:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10FBD61A69;
-        Thu,  9 Jun 2022 12:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EEDC34114;
-        Thu,  9 Jun 2022 12:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654778168;
-        bh=Dgg+l1uq53d7NWf3gWp4/VPMNeVbJoee/e+EUeptoPM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IkZ1GuZbO169V0cqtLzdXkDv4dwaS9vE+vk8VZ2TgM7wnvaoxc8ihMpPAHLkDQC3h
-         TSCJ1w6QnngkvtvQJ3H3JtNjcQOQ7YrFK3pqtsPZaqfV3o/K1lz4sIaSMU0CYIGAht
-         pGvi1C6Cu7P8xWOKr0ow1hgHxF8Sh6/xOKyWxPbNL3DWg6C++eXPE2CSus+7U89cmg
-         ejBVjhIxbsHBOA8r0d1jzD8rllZ0MzwULav/6ODbDVEgTquguTkwVz6PKaHbyP9XYm
-         BOqmfVEClkBP2CMn3rbghfOh97MBUNgANfzoMHDRCGOSvdKUWWvjNSOHeouk9e6ArJ
-         QyDlmQKQQf0Pg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nzHOO-0005MO-GS; Thu, 09 Jun 2022 14:36:04 +0200
-Date:   Thu, 9 Jun 2022 14:36:04 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add support for Cinterion MV31 with
- new baseline
-Message-ID: <YqHpNAaY/Oez8TrJ@hovoldconsulting.com>
-References: <20220601034740.5438-1-slark_xiao@163.com>
+        Thu, 9 Jun 2022 08:36:38 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4031DE8;
+        Thu,  9 Jun 2022 05:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1654778189; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DmkQrS2GZnU4WU6MdKYgfrBEToonLo9W7ELjbdd0gZY=;
+        b=AyXyPKoytLKO8j56ZrycISKjWJ1+k28k/h1kldybb/7juL5l7D22CqimiLle+W2rpBZbrK
+        KzzgTot68mJ2+msATvN6w3uZPICa2giw3HID0ryRQqwi+1xc7l/oGWe77C/FZZ3fq2cEre
+        o6ZwobkGUPJLwFd+aQax/LVjiuGxdzY=
+Date:   Thu, 09 Jun 2022 13:36:19 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] pinctrl: ingenic: Convert to immutable irq chip
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <J0N7DR.9XKBU8Q47U6Y2@crapouillou.net>
+In-Reply-To: <1458d1b8982aa5a84680ebeb869f1c78@kernel.org>
+References: <20220607110525.36922-1-aidanmacdonald.0x0@gmail.com>
+        <TC84DR.BXHQAW8NSA8H@crapouillou.net>
+        <OUo8utshKyFB2wcmtEAH6jswJGetDRWg@localhost>
+        <8TF7DR.ISCIMDT0UMMA@crapouillou.net>
+        <1458d1b8982aa5a84680ebeb869f1c78@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601034740.5438-1-slark_xiao@163.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 11:47:40AM +0800, Slark Xiao wrote:
-> Adding support for Cinterion device MV31 with Qualcomm
-> new baseline. Use different PIDs to separate it from
-> previous base line products.
-> All interfaces settings keep same as previous.
-> 
-> Below is test evidence:
-> T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480 MxCh= 0
-> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=1e2d ProdID=00b8 Rev=04.14
-> S:  Manufacturer=Cinterion
-> S:  Product=Cinterion PID 0x00B8 USB Mobile Broadband
-> S:  SerialNumber=90418e79
-> C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> 
-> T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  7 Spd=480 MxCh= 0
-> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=1e2d ProdID=00b9 Rev=04.14
-> S:  Manufacturer=Cinterion
-> S:  Product=Cinterion PID 0x00B9 USB Mobile Broadband
-> S:  SerialNumber=90418e79
-> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> 
-> For PID 00b8, interface 3 is GNSS port which don't use serial driver.
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  drivers/usb/serial/option.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index e60425bbf537..5e26e90db7d6 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -432,6 +432,8 @@ static void option_instat_callback(struct urb *urb);
->  #define CINTERION_PRODUCT_CLS8			0x00b0
->  #define CINTERION_PRODUCT_MV31_MBIM		0x00b3
->  #define CINTERION_PRODUCT_MV31_RMNET		0x00b7
-> +#define CINTERION_PRODUCT_MV31_MBIM2		0x00b8
-> +#define CINTERION_PRODUCT_MV31_RMNET2		0x00b9
+Hi Marc,
 
-Thanks for the patch. I've applied it now after renaming the defines to
-make the variant an infix instead (e.g. CINTERION_PRODUCT_MV31_2_MBIM).
+Le jeu., juin 9 2022 at 13:08:53 +0100, Marc Zyngier <maz@kernel.org> a=20
+=E9crit :
+> On 2022-06-09 11:00, Paul Cercueil wrote:
+>> Hi Aidan,
+>>=20
+>> Le mar., juin 7 2022 at 17:47:19 +0100, Aidan MacDonald
+>> <aidanmacdonald.0x0@gmail.com> a =E9crit :
+>>>=20
+>>> Paul Cercueil <paul@crapouillou.net> writes:
+>>>=20
+>>>>  Hi Aidan,
+>>>>=20
+>>>>  Le mar., juin 7 2022 at 12:05:25 +0100, Aidan MacDonald
+>>>>  <aidanmacdonald.0x0@gmail.com> a =E9crit :
+>>>>>  Update the driver to use an immutable IRQ chip to fix this=20
+>>>>> warning:
+>>>>>      "not an immutable chip, please consider fixing it!"
+>>>>>  Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>>>>>  ---
+>>>>>   drivers/pinctrl/pinctrl-ingenic.c | 33=20
+>>>>> =7F=7F=7F=7F++++++++++++++++++-------------
+>>>>>   1 file changed, 19 insertions(+), 14 deletions(-)
+>>>>>  diff --git a/drivers/pinctrl/pinctrl-ingenic.c
+>>>>>  b/drivers/pinctrl/pinctrl-ingenic.c
+>>>>>  index 1ca11616db74..37258fb05be3 100644
+>>>>>  --- a/drivers/pinctrl/pinctrl-ingenic.c
+>>>>>  +++ b/drivers/pinctrl/pinctrl-ingenic.c
+>>>>>  @@ -135,7 +135,6 @@ struct ingenic_pinctrl {
+>>>>>   struct ingenic_gpio_chip {
+>>>>>   	struct ingenic_pinctrl *jzpc;
+>>>>>   	struct gpio_chip gc;
+>>>>>  -	struct irq_chip irq_chip;
+>>>>>   	unsigned int irq, reg_base;
+>>>>>   };
+>>>>>  @@ -3419,6 +3418,8 @@ static void ingenic_gpio_irq_enable(struct=20
+>>>>> =7F=7F=7F=7Firq_data
+>>>>>  *irqd)
+>>>>>   	struct ingenic_gpio_chip *jzgc =3D gpiochip_get_data(gc);
+>>>>>   	int irq =3D irqd->hwirq;
+>>>>>  +	gpiochip_enable_irq(gc, irq);
+>>>>>  +
+>>>>>   	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
+>>>>>   		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
+>>>>>   	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
+>>>>>  @@ -3443,6 +3444,8 @@ static void=20
+>>>>> ingenic_gpio_irq_disable(struct =7F=7F=7F=7Firq_data
+>>>>>  *irqd)
+>>>>>   		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, false);
+>>>>>   	else
+>>>>>   		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, false);
+>>>>>  +
+>>>>>  +	gpiochip_disable_irq(gc, irq);
+>>>>>   }
+>>>>>   static void ingenic_gpio_irq_ack(struct irq_data *irqd)
+>>>>>  @@ -3684,6 +3687,20 @@ static void=20
+>>>>> ingenic_gpio_irq_release(struct =7F=7F=7F=7Firq_data
+>>>>>  *data)
+>>>>>   	return gpiochip_relres_irq(gpio_chip, data->hwirq);
+>>>>>   }
+>>>>>  +static const struct irq_chip ingenic_gpio_irqchip =3D {
+>>>>>  +	.name			=3D "gpio",
+>>>>>  +	.irq_enable		=3D ingenic_gpio_irq_enable,
+>>>>>  +	.irq_disable		=3D ingenic_gpio_irq_disable,
+>>>>>  +	.irq_unmask		=3D ingenic_gpio_irq_unmask,
+>>>>>  +	.irq_mask		=3D ingenic_gpio_irq_mask,
+>>>>>  +	.irq_ack		=3D ingenic_gpio_irq_ack,
+>>>>>  +	.irq_set_type		=3D ingenic_gpio_irq_set_type,
+>>>>>  +	.irq_set_wake		=3D ingenic_gpio_irq_set_wake,
+>>>>>  +	.irq_request_resources	=3D ingenic_gpio_irq_request,
+>>>>>  +	.irq_release_resources	=3D ingenic_gpio_irq_release,
+>>>>>  +	.flags			=3D IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
+>>>>>  +};
+>>>>>  +
+>>>>>   static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl=20
+>>>>> *jzpc,
+>>>>>   		int pin, int func)
+>>>>>   {
+>>>>>  @@ -4172,20 +4189,8 @@ static int __init=20
+>>>>> ingenic_gpio_probe(struct
+>>>>>  ingenic_pinctrl *jzpc,
+>>>>>   	if (!jzgc->irq)
+>>>>>   		return -EINVAL;
+>>>>>  -	jzgc->irq_chip.name =3D jzgc->gc.label;
+>>>>>  -	jzgc->irq_chip.irq_enable =3D ingenic_gpio_irq_enable;
+>>>>>  -	jzgc->irq_chip.irq_disable =3D ingenic_gpio_irq_disable;
+>>>>>  -	jzgc->irq_chip.irq_unmask =3D ingenic_gpio_irq_unmask;
+>>>>>  -	jzgc->irq_chip.irq_mask =3D ingenic_gpio_irq_mask;
+>>>>>  -	jzgc->irq_chip.irq_ack =3D ingenic_gpio_irq_ack;
+>>>>>  -	jzgc->irq_chip.irq_set_type =3D ingenic_gpio_irq_set_type;
+>>>>>  -	jzgc->irq_chip.irq_set_wake =3D ingenic_gpio_irq_set_wake;
+>>>>>  -	jzgc->irq_chip.irq_request_resources =3D=20
+>>>>> ingenic_gpio_irq_request;
+>>>>>  -	jzgc->irq_chip.irq_release_resources =3D=20
+>>>>> ingenic_gpio_irq_release;
+>>>>>  -	jzgc->irq_chip.flags =3D IRQCHIP_MASK_ON_SUSPEND;
+>>>>>  -
+>>>>>   	girq =3D &jzgc->gc.irq;
+>>>>>  -	girq->chip =3D &jzgc->irq_chip;
+>>>>>  +	gpio_irq_chip_set_chip(girq, &ingenic_gpio_irqchip);
+>>>>=20
+>>>>  This will change each irq_chip's name to "gpio", do we want that?
+>>>>=20
+>>>>  You didn't remove jzgc->irq_chip, so maybe what you could do is
+>>>>  jzgc->irq_chip =3D ingenic_gpio_irqchip;
+>>>>  jzgc->irq_chip.name =3D jzgc->gc.label;
+>>>>  gpio_irq_chip_set_chip(girq, &jzgc->irq_chip);
+>>>>=20
+>>>>  Thoughts?
+>>>>=20
+>>>>  Cheers,
+>>>>  -Paul
+>>>>=20
+>>>=20
+>>> I wondered that myself, but it doesn't seem to affect anything=20
+>>> except
+>>> what is displayed in /proc/interrupts. Is the name used anywhere=20
+>>> else
+>>> where it might cause confusion?
+>>=20
+>> I don't really know. If it only really affects the display in
+>> /proc/interrupts then I'm fine with it. In doubt, I'd prefer to keep
+>> the existing names.
+>>=20
+>>> The only similar case I could find was pinctrl-microchip-sgpio.c=20
+>>> where
+>>> microchip_sgpio_register_bank() is called in a loop and registers=20
+>>> the
+>>> same irq chip repeatedly, so it's probably(?) okay to do this here.=20
+>>> It
+>>> seems to defeat the point of immutable irqchips if they just have=20
+>>> to =7F=7Fbe
+>>> copied anyway...
+>>=20
+>> The point of immutable irqchips is that they aren't modified by the
+>> core, if I understand it correctly. Immutable doesn't mean it has to
+>> be static const.
+>=20
+> I want these to be made const. I agree that the fancy string should
+> be kept (sadly), as it is a userspace visible change, and we don't
+> do that.
+>=20
+> You can solve it using the irq_print_chip() callback as part of
+> your irq_chip structures. See 3344265a2692 for an example.
 
->  #define CINTERION_PRODUCT_MV32_WA		0x00f1
->  #define CINTERION_PRODUCT_MV32_WB		0x00f2
->  
-> @@ -1979,6 +1981,10 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(3)},
->  	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET, 0xff),
->  	  .driver_info = RSVD(0)},
-> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_MBIM2, 0xff),
-> +	  .driver_info = RSVD(3)},
-> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET2, 0xff),
-> +	  .driver_info = RSVD(0)},
->  	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
->  	  .driver_info = RSVD(3)},
->  	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
+Works for me.
 
-Johan
+Cheers,
+-Paul
+
+

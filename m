@@ -2,109 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A02B54589E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895F35458A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242189AbiFIXYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 19:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S1344493AbiFIX1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 19:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiFIXYL (ORCPT
+        with ESMTP id S229520AbiFIX1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:24:11 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAA9156B6D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 16:24:10 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id a15so40264950lfb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 16:24:10 -0700 (PDT)
+        Thu, 9 Jun 2022 19:27:36 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9481FC509E;
+        Thu,  9 Jun 2022 16:27:32 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q11so18397955oih.10;
+        Thu, 09 Jun 2022 16:27:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GEFimUlvbzlYBEwgNMXz/kgCUClpMd8S7embt+3S67k=;
-        b=OXo8cl/f5RR2QG82SuqbtuvrAT3zgfLUCgtl6dE3mbH5MD0MYpSDUra4e0rn6NKAMu
-         XAcXYw8PgvmGYveRHfdiFPFI8TnC5Kbe3d0uC7sgnAPqJNDyb5hGp0bdSh3ubx8IAf8b
-         qffpe6N4DPwkspWnanK4W7sCgyXS5FT3CDa8xK69m7Mk6fQPwX9MaX3G1wDh3txM+fwz
-         UqE5ye3GIN77G9BQoPhHJh02INEKpJdAmvtIfFaoNoNgikAm6LhpCkpq6stYv/qXrkOw
-         b9JwnzB2kpTT3TZ4Uhyd0BPJO7aERXwH1OPNSl+M8NMoaFKcegqOA1aKhEGHuczVLxqz
-         pcmw==
+        bh=r2zquoBlyQYb0xUw0WILuwwlhoJAz1Yr+gxlaVgrIzQ=;
+        b=R9yQw97QyVFjpGwK8iCen+SZo/CqYIuXT9YhYg3LIK26/6cPYcqu75zN1VeGrrulwi
+         B0kU0Z19+kYrX9XwGMWTTUl/oJJkaTs1ToNxZtQGPOL38kS3ZiT/cz1P09bJX/0XxseJ
+         wHbJE6sIpQNKnPEriRrVq7ZOq4PVd8kQcF/QNUJ6Tpb9aWmBamIFSv/9L2ZYmnFGUBgg
+         8mpJBRPrlaBBtaaVqa8eWQRnSJOTQPSvuK5Z1+avTvuy8SKAgro+iti6Aq8KY+f9Q4rb
+         1vrQNkUilVVQYkZ/ab40rJw/oo2obFyM1dExRcFLx1gB1XBtlpH7F9DKukfH8AgbXeDT
+         Ybug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GEFimUlvbzlYBEwgNMXz/kgCUClpMd8S7embt+3S67k=;
-        b=pZexnNmx5I2VTELnTdMc0i8VeQtK2t7LWbSmqEKwks30IXcra1X+31rcs9Nc064UUk
-         Ita/RVDgqNNNgRoO+lHol8TBL4NP6WdfgfsT9MXruo1OBu1ysbn/P5+A2uXEcrmveAMk
-         nTLMo/vt9uw7SrJG4q7wfrkF7snjS9qt6MlknsiFSoDKKMMEFpADJoSlaiEVsgoN7Xaz
-         5BKVjiB4zdUTY5OVtV8YHwJ6miKcfjOHFaeU+/A54C+k0nbHRTa1e8HlztFsNOO5AiyM
-         BbnYsFTb73S/vd77QQHAiuVLLY4+qR0oeUb3p4ajJDOXvbIrEHbAMJ5x5cPM81IcgYv7
-         ySYA==
-X-Gm-Message-State: AOAM5307YRLaabx4iyutbYJHgslMOl4YoX3FWt5WWhzNv5mZ1uDXXTHn
-        faC3R9xyJxZswbST82F/KWYtOAa2TiFh5slMwu8j0A==
-X-Google-Smtp-Source: ABdhPJxZ9D6scmVmMCKxMCHwRwJCz+W1zYnSffVkRb2dVLKyqKiee8qpE89ys12AioU4EoXa8RrnAqi7/S0lQE/iEP8=
-X-Received: by 2002:a05:6512:68e:b0:47d:ae64:fcf4 with SMTP id
- t14-20020a056512068e00b0047dae64fcf4mr730984lfe.685.1654817048572; Thu, 09
- Jun 2022 16:24:08 -0700 (PDT)
+        bh=r2zquoBlyQYb0xUw0WILuwwlhoJAz1Yr+gxlaVgrIzQ=;
+        b=gN/hMvP2eIyWqX969WIp2ndmIqpyrdkv+PxYKvCWYE36JcMsHChju+IClybfFqUJTr
+         EMX6yi/vo6Cc6xFe7ytQ6CdmbYmW5xuA3ocoTIEY8VaSI+pN2GZZRwgeud9z/ff05aln
+         +nUsgrkCw9ZfcuM7iiS3jSrJDqZhemnHHmKBE84ru2sqt8E/ftAv4QeOGYBY7ElenPLZ
+         CuuFx4vjLIVEFLTZ4jAqV9cCDpV2xer8JOBpZv6Cb0WuH/zJEOaCuozV7x2ytYeE63fv
+         GXSOllsXb2otNdrtqy4O3TyoPI+mK1j4vhuFt7axGIuZ0rqwseNCxst2bWooWbfT36m0
+         Oexw==
+X-Gm-Message-State: AOAM530PapR0XHZ5jVqqh3gJvZHOBfghYz61fgEE5WU1QoR0pDXZ62nI
+        4047jdrVirC6iqQmxWm/5gEu3X5sN7IBgikV7mEqfSo5zlIdZQ==
+X-Google-Smtp-Source: ABdhPJxQdHqD9ikHF8uja9enFoxxY+vHyOeATZhP2LNha+l6nKgYPdtNdI/s5t3zAjGuESut420aKAAZKvvknWFmbL8=
+X-Received: by 2002:a05:6808:114f:b0:32b:1be0:2316 with SMTP id
+ u15-20020a056808114f00b0032b1be02316mr2900052oiu.200.1654817251717; Thu, 09
+ Jun 2022 16:27:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-4-shy828301@gmail.com>
-In-Reply-To: <20220606214414.736109-4-shy828301@gmail.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Thu, 9 Jun 2022 16:23:31 -0700
-Message-ID: <CAAa6QmRTt2EXJTudBf7DK6yPTr2DRDUbGZiHDC8pAmKRwoB4_A@mail.gmail.com>
-Subject: Re: [v3 PATCH 3/7] mm: khugepaged: remove the redundant anon vma check
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <20220609062412.3950380-1-james.hilliard1@gmail.com> <CAEf4BzbL8ivLH=HZDFTNyCTFjhWrWLcY3K34Ef+q4Pr+oDe_Gw@mail.gmail.com>
+In-Reply-To: <CAEf4BzbL8ivLH=HZDFTNyCTFjhWrWLcY3K34Ef+q4Pr+oDe_Gw@mail.gmail.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Thu, 9 Jun 2022 17:27:20 -0600
+Message-ID: <CADvTj4opMh978fMBV7cH89wbS1N_PK31AybZJ5NUacnp4kBeqg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] libbpf: fix broken gcc SEC pragma macro
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
+On Thu, Jun 9, 2022 at 12:13 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> The hugepage_vma_check() already checked it, so remove the redundant
-> check.
+> On Wed, Jun 8, 2022 at 11:24 PM James Hilliard
+> <james.hilliard1@gmail.com> wrote:
+> >
+> > It seems the gcc preprocessor breaks unless pragmas are wrapped
+> > individually inside macros when surrounding __attribute__.
+> >
+> > Fixes errors like:
+> > error: expected identifier or '(' before '#pragma'
+> >   106 | SEC("cgroup/bind6")
+> >       | ^~~
+> >
+> > error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+> >   114 | char _license[] SEC("license") = "GPL";
+> >       | ^~~
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> > Changes v2 -> v3:
+> >   - just fix SEC pragma
+> > Changes v1 -> v2:
+> >   - replace typeof with __typeof__ instead of changing pragma macros
+> > ---
+> >  tools/lib/bpf/bpf_helpers.h | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> > index fb04eaf367f1..66d23c47c206 100644
+> > --- a/tools/lib/bpf/bpf_helpers.h
+> > +++ b/tools/lib/bpf/bpf_helpers.h
+> > @@ -22,11 +22,12 @@
+> >   * To allow use of SEC() with externs (e.g., for extern .maps declarations),
+> >   * make sure __attribute__((unused)) doesn't trigger compilation warning.
+> >   */
+> > +#define DO_PRAGMA(x) _Pragma(#x)
+> >  #define SEC(name) \
+> > -       _Pragma("GCC diagnostic push")                                      \
+> > -       _Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")          \
+> > +       DO_PRAGMA("GCC diagnostic push")                                    \
+> > +       DO_PRAGMA("GCC diagnostic ignored \"-Wignored-attributes\"")        \
+> >         __attribute__((section(name), used))                                \
+> > -       _Pragma("GCC diagnostic pop")                                       \
+> > +       DO_PRAGMA("GCC diagnostic pop")                                     \
+> >
 >
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> ---
->  mm/khugepaged.c | 3 ---
->  1 file changed, 3 deletions(-)
+> I'm not going to accept this unless I can repro it in the first place.
+> Using -std=c17 doesn't trigger such issue. Please provide the repro
+> first. Building systemd is not a repro, unfortunately. Please try to
+> do it based on libbpf-bootstrap ([0])
 >
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index d0f8020164fc..7a5d1c1a1833 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -966,9 +966,6 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
->                 return SCAN_ADDRESS_RANGE;
->         if (!hugepage_vma_check(vma, vma->vm_flags))
->                 return SCAN_VMA_CHECK;
-> -       /* Anon VMA expected */
-> -       if (!vma->anon_vma || !vma_is_anonymous(vma))
-> -               return SCAN_VMA_CHECK;
->         return 0;
->  }
->
-> --
-> 2.26.3
->
->
+>   [0] https://github.com/libbpf/libbpf-bootstrap
 
-So, I don't know if this is possible, but I wonder if there is a race here:
+Seems to reproduce just fine already there with:
+https://github.com/libbpf/libbpf-bootstrap/blob/31face36d469a0e3e4c4ac1cafc66747d3150930/examples/c/minimal.bpf.c
 
-hugepage_vma_revalidate() is called in the anon path when mmap_lock
-after dropped + reacquired, and we want to refind / revalidate the
-vma, since it might have changed.
+See here:
+$ /home/buildroot/buildroot/output/per-package/libbpf/host/bin/bpf-gcc
+-Winline -O2 -mframe-limit=32767 -mco-re -gbtf -std=gnu17 -v
+-D__x86_64__ -mlittle-endian -I
+/home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include
+minimal.bpf.c -o minimal.bpf.o
+Using built-in specs.
+COLLECT_GCC=/home/buildroot/buildroot/output/per-package/libbpf/host/bin/bpf-gcc.br_real
+COLLECT_LTO_WRAPPER=/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../libexec/gcc/bpf-buildroot-none/12.1.0/lto-wrapper
+Target: bpf-buildroot-none
+Configured with: ./configure
+--prefix=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host
+--sysconfdir=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host/etc
+--localstatedir=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host/var
+--enable-shared --disable-static --disable-gtk-doc
+--disable-gtk-doc-html --disable-doc --disable-docs
+--disable-documentation --disable-debug --with-xmlto=no --with-fop=no
+--disable-nls --disable-dependency-tracking
+--target=bpf-buildroot-none
+--prefix=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host
+--sysconfdir=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host/etc
+--enable-languages=c --with-gnu-ld --enable-static
+--disable-decimal-float --disable-gcov --disable-libssp
+--disable-multilib --disable-shared
+--with-gmp=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host
+--with-mpc=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host
+--with-mpfr=/home/buildroot/buildroot/output/per-package/host-gcc-bpf/host
+--with-pkgversion='Buildroot 2022.05-118-ge052166011-dirty'
+--with-bugurl=http://bugs.buildroot.net/ --without-zstd --without-isl
+--without-cloog
+Thread model: single
+Supported LTO compression algorithms: zlib
+gcc version 12.1.0 (Buildroot 2022.05-118-ge052166011-dirty)
+COLLECT_GCC_OPTIONS='--sysroot=/home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot'
+'-Winline' '-O2' '-mframe-limit=32767' '-mco-re' '-gbtf' '-std=gnu17'
+'-v' '-D' '__x86_64__' '-mlittle-endian' '-I'
+'/home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include'
+'-o' 'minimal.bpf.o' '-dumpdir' 'minimal.bpf.o-'
+ /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../libexec/gcc/bpf-buildroot-none/12.1.0/cc1
+-quiet -v -I /home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include
+-iprefix /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/bpf-buildroot-none/12.1.0/
+-isysroot /home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot
+-D __x86_64__ minimal.bpf.c -quiet -dumpdir minimal.bpf.o- -dumpbase
+minimal.bpf.c -dumpbase-ext .c -mframe-limit=32767 -mco-re
+-mlittle-endian -gbtf -O2 -Winline -std=gnu17 -version -o
+/tmp/cct4AXvg.s
+GNU C17 (Buildroot 2022.05-118-ge052166011-dirty) version 12.1.0
+(bpf-buildroot-none)
+    compiled by GNU C version 12.1.0, GMP version 6.2.1, MPFR version
+4.1.0, MPC version 1.2.1, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory
+"/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/sys-include"
+ignoring nonexistent directory
+"/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/include"
+ignoring duplicate directory
+"/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/include"
+ignoring duplicate directory
+"/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/include-fixed"
+ignoring nonexistent directory
+"/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/sys-include"
+ignoring nonexistent directory
+"/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include
+ /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/bpf-buildroot-none/12.1.0/include
+ /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/gcc/bpf-buildroot-none/12.1.0/include-fixed
+End of search list.
+GNU C17 (Buildroot 2022.05-118-ge052166011-dirty) version 12.1.0
+(bpf-buildroot-none)
+    compiled by GNU C version 12.1.0, GMP version 6.2.1, MPFR version
+4.1.0, MPC version 1.2.1, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 9bf241ca1a2dd4ffd7652c5e247c9be8
+minimal.bpf.c:6:1: error: expected '=', ',', ';', 'asm' or
+'__attribute__' before '#pragma'
+    6 | char LICENSE[] SEC("license") = "Dual BSD/GPL";
+      | ^~~
+minimal.bpf.c:6:1: error: expected identifier or '(' before '#pragma'
+minimal.bpf.c:10:1: error: expected identifier or '(' before '#pragma'
+   10 | SEC("tp/syscalls/sys_enter_write")
+      | ^~~
 
-There is the possibility that the memory was unmapped, then remapped
-as file or shmem. If so, hugepage_vma_check() could return true
-without actually checking vma->anon_vma || !vma_is_anonymous(vma) -
-and we probably do want to (re)validate that this is indeed still an
-anon vma.
+>
+> >  /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
+> >  #undef __always_inline
+> > --
+> > 2.25.1
+> >

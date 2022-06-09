@@ -2,120 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FCA545259
+	by mail.lfdr.de (Postfix) with ESMTP id E054654525A
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344923AbiFIQvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S1344891AbiFIQvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344726AbiFIQuf (ORCPT
+        with ESMTP id S1344887AbiFIQvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 12:50:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC98E21
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:50:33 -0700 (PDT)
-Date:   Thu, 09 Jun 2022 16:50:31 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1654793432;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u15XumVur9JpMXMMkU3BZwJ8hWCd8qkWcy1gDSKwbZg=;
-        b=vVqVMXuqRVZjnRJcm3kbuRa05wx29AePSuQJXeZi71B7gunHqjubvuxS+t9TnKJZGh20GE
-        BSwa9Ovnnnbw51Ilephb08n6OvqJFvbb2gUvtr5lgUdISb+esh9aV9fDGHcoAjkZdv2nDs
-        CuWZRbfoH3lICNokWG1/jTQeHSFxOjNCgfgQf/C9MknPoxdNzlv0bV433iOK/Qubyd9zT+
-        xKrMUhANU/JZC1rrgTaBR15EzF1bnSK25ZfHYP0P5ze/uCVb2QMg7OrHM5ozV1SQeQJ/0Z
-        BDJtLgWu2gfONk8aLwy92hvOp8yLITBMkk1ZKpUgZKdICOhqpqvjoZIGHArRPA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1654793432;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u15XumVur9JpMXMMkU3BZwJ8hWCd8qkWcy1gDSKwbZg=;
-        b=eISXRXNoGPP+1njjiNQltmKOYkDBC8oIg4xox4AdysamK/+C8q2Q9JAJPNuivWAqO6r8Qt
-        XlPIkD2a7PVAveCw==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] genirq: PM: Use runtime PM for chained
- interrupts
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Liu Ying <victor.liu@nxp.com>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
-In-Reply-To: <26973cddee5f527ea17184c0f3fccb70bc8969a0.camel@pengutronix.de>
-References: <26973cddee5f527ea17184c0f3fccb70bc8969a0.camel@pengutronix.de>
+        Thu, 9 Jun 2022 12:51:03 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987D8A7E20
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:50:54 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 25so31716941edw.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 09:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E2+fNvmvqWQKCDAUtcMyd7aXG5n324Z+HdNSzbIXbwY=;
+        b=cNg6um7nb4nsy8UZupEsWZNHMESEj7pcV8kfXlsQGluYfUfW6CxrwB0vWECsZVGvDC
+         YdqdDxzW4KhSSo0ErUP2b7x7wvuB5yML2DZZ5WGYkbTZS+hMOmzLGMdfYMpoPOiIoj5+
+         Nww5cc17i1TZn60VrQC0+FBhYlVvi3+MMiWVw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E2+fNvmvqWQKCDAUtcMyd7aXG5n324Z+HdNSzbIXbwY=;
+        b=cmOveKJq55fQ7mOfmIER5LgOWk7Dx3onDPIevtISdWvVRWiSVj8KQ+eCPCzN1ts6Lv
+         EAQ+XDsdE4Y1UpkpGEWwy6TSr0HCjkHadtpSaUERsZxAiNsCPaP/fot4E2Qb2sjkqZ7R
+         DTWjbdD0A5F+pC9At2Jyn4Y0r4TrrcVNdTn55L6KFCseCoHm0SYzWCCuyM5fPbS8Xm9A
+         GgL4rphZl5/Ho6Tlb8/sYBhem+Wiomkp5MNjSf8BDP1klqbXq1CVfW+FeQaY+INqR3HD
+         HTN1juRR6olrXDkR5mmfZYmzRgwYwuC2zF5rqCVlU8TE0SaXvzsH2/sIJLBiOjrXrQJR
+         Fozw==
+X-Gm-Message-State: AOAM530Qgx2iBdLX06szIGp2qtFAkyxWPaZYgHNJKEegdu5aT+OKgdoF
+        5ZUVsII0ZXq5jNx8wH5XKjVZqv0vnoLl6OZe
+X-Google-Smtp-Source: ABdhPJylpGM460UIkEY3SFFQRoTYF9mjcTN7zUe/Y2e3K1hNASc4C+M7c0gSshSYSSYIh+lrearfuQ==
+X-Received: by 2002:a05:6402:1941:b0:413:2b5f:9074 with SMTP id f1-20020a056402194100b004132b5f9074mr46642678edz.414.1654793452648;
+        Thu, 09 Jun 2022 09:50:52 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id o8-20020a1709062e8800b006f3ef214e0esm10916844eji.116.2022.06.09.09.50.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 09:50:51 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id k19so33194921wrd.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 09:50:50 -0700 (PDT)
+X-Received: by 2002:a5d:608d:0:b0:218:3cfa:afe9 with SMTP id
+ w13-20020a5d608d000000b002183cfaafe9mr23536562wrt.422.1654793450068; Thu, 09
+ Jun 2022 09:50:50 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165479343125.4207.18391675887674520232.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220608161334.2140611-1-robdclark@gmail.com>
+In-Reply-To: <20220608161334.2140611-1-robdclark@gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 9 Jun 2022 09:50:37 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WJotkL=BN-qvyEjVpa8Fsbt_15D-8wV3RUe8j5dA41gQ@mail.gmail.com>
+Message-ID: <CAD=FV=WJotkL=BN-qvyEjVpa8Fsbt_15D-8wV3RUe8j5dA41gQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm: Switch ordering of runpm put vs devfreq_idle
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+Hi,
 
-Commit-ID:     668a9fe5c6a1bcac6b65d5e9b91a9eca86f782a3
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/668a9fe5c6a1bcac6b65d5e9b91a9eca86f782a3
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Wed, 08 Jun 2022 14:45:35 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Thu, 09 Jun 2022 15:58:13 +01:00
+On Wed, Jun 8, 2022 at 9:13 AM Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> I've seen a few crashes like:
+>
+>     CPU: 0 PID: 216 Comm: A618-worker Tainted: G        W         5.4.196 #7
+>     Hardware name: Google Wormdingler rev1+ INX panel board (DT)
+>     pstate: 20c00009 (nzCv daif +PAN +UAO)
+>     pc : msm_readl+0x14/0x34
+>     lr : a6xx_gpu_busy+0x40/0x80
+>     sp : ffffffc011b93ad0
+>     x29: ffffffc011b93ad0 x28: ffffffe77cba3000
+>     x27: 0000000000000001 x26: ffffffe77bb4c4ac
+>     x25: ffffffa2f227dfa0 x24: ffffffa2f22aab28
+>     x23: 0000000000000000 x22: ffffffa2f22bf020
+>     x21: ffffffa2f22bf000 x20: ffffffc011b93b10
+>     x19: ffffffc011bd4110 x18: 000000000000000e
+>     x17: 0000000000000004 x16: 000000000000000c
+>     x15: 000001be3a969450 x14: 0000000000000400
+>     x13: 00000000000101d6 x12: 0000000034155555
+>     x11: 0000000000000001 x10: 0000000000000000
+>     x9 : 0000000100000000 x8 : ffffffc011bd4000
+>     x7 : 0000000000000000 x6 : 0000000000000007
+>     x5 : ffffffc01d8b38f0 x4 : 0000000000000000
+>     x3 : 00000000ffffffff x2 : 0000000000000002
+>     x1 : 0000000000000000 x0 : ffffffc011bd4110
+>     Call trace:
+>      msm_readl+0x14/0x34
+>      a6xx_gpu_busy+0x40/0x80
+>      msm_devfreq_get_dev_status+0x70/0x1d0
+>      devfreq_simple_ondemand_func+0x34/0x100
+>      update_devfreq+0x50/0xe8
+>      qos_notifier_call+0x2c/0x64
+>      qos_max_notifier_call+0x1c/0x2c
+>      notifier_call_chain+0x58/0x98
+>      __blocking_notifier_call_chain+0x74/0x84
+>      blocking_notifier_call_chain+0x38/0x48
+>      pm_qos_update_target+0xf8/0x19c
+>      freq_qos_apply+0x54/0x6c
+>      apply_constraint+0x60/0x104
+>      __dev_pm_qos_update_request+0xb4/0x184
+>      dev_pm_qos_update_request+0x38/0x58
+>      msm_devfreq_idle_work+0x34/0x40
+>      kthread_worker_fn+0x144/0x1c8
+>      kthread+0x140/0x284
+>      ret_from_fork+0x10/0x18
+>     Code: f9000bf3 910003fd aa0003f3 d503201f (b9400260)
+>     ---[ end trace f6309767a42d0831 ]---
+>
+> Which smells a lot like touching hw after power collapse.  This seems
+> a bit like a race/timing issue elsewhere, as pm_runtime_get_if_in_use()
+> in a6xx_gpu_busy() should have kept us from touching hw if it wasn't
+> powered.
 
-genirq: PM: Use runtime PM for chained interrupts
+I dunno if we want to change the commit message since I think my patch
+[1] addresses the above problem?
 
-When requesting an interrupt, we correctly call into the runtime
-PM framework to guarantee that the underlying interrupt controller
-is up and running.
+[1] https://lore.kernel.org/r/20220609094716.v2.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid
 
-However, we fail to do so for chained interrupt controllers, as
-the mux interrupt is not requested along the same path.
 
-Augment __irq_do_set_handler() to call into the runtime PM code
-in this case, making sure the PM flow is the same for all interrupts.
+> But, we've seen cases where the idle_work scheduled by
+> msm_devfreq_idle() ends up racing with the resume path.  Which, again,
+> shouldn't be a problem other than unnecessary freq changes.
+>
+> v2. Only move the runpm _put_autosuspend, and not the _mark_last_busy()
+>
+> Fixes: 9bc95570175a ("drm/msm: Devfreq tuning")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Link: https://lore.kernel.org/r/20210927152928.831245-1-robdclark@gmail.com
+> ---
+>  drivers/gpu/drm/msm/msm_gpu.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Reported-by: Lucas Stach <l.stach@pengutronix.de>
-Tested-by: Liu Ying <victor.liu@nxp.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/26973cddee5f527ea17184c0f3fccb70bc8969a0.camel@pengutronix.de
----
- kernel/irq/chip.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+In any case, your patch fixes the potential WARN_ON and seems like the
+right thing to do, so:
 
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index e6b8e56..886789d 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -1006,8 +1006,10 @@ __irq_do_set_handler(struct irq_desc *desc, irq_flow_handler_t handle,
- 		if (desc->irq_data.chip != &no_irq_chip)
- 			mask_ack_irq(desc);
- 		irq_state_set_disabled(desc);
--		if (is_chained)
-+		if (is_chained) {
- 			desc->action = NULL;
-+			WARN_ON(irq_chip_pm_put(irq_desc_get_irq_data(desc)));
-+		}
- 		desc->depth = 1;
- 	}
- 	desc->handle_irq = handle;
-@@ -1033,6 +1035,7 @@ __irq_do_set_handler(struct irq_desc *desc, irq_flow_handler_t handle,
- 		irq_settings_set_norequest(desc);
- 		irq_settings_set_nothread(desc);
- 		desc->action = &chained_action;
-+		WARN_ON(irq_chip_pm_get(irq_desc_get_irq_data(desc)));
- 		irq_activate_and_startup(desc, IRQ_RESEND);
- 	}
- }
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

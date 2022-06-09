@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8D05448A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23E95448AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242251AbiFIKUu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Jun 2022 06:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S240326AbiFIKXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiFIKUp (ORCPT
+        with ESMTP id S232931AbiFIKXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:20:45 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27655366AB;
-        Thu,  9 Jun 2022 03:20:43 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31336535373so85124857b3.2;
-        Thu, 09 Jun 2022 03:20:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6UMvM2Od2zd3FK0Vx+mbZXyfmn7so9sKMco52kVS4vI=;
-        b=u8BCgFG9FoHEd+EDzpKZSKymPjfA+oCsTWR7pxdwQLMP971nYB2e7FRIbSFoVXTtej
-         dRs3M6unf/wGxdOlLAageGCbnnh4qy+dWcRyxGqnbo7Spmz+T3ZBKJpx/rj+OgcEyHud
-         PwHWBu2LkR8RVsulVgcUwZYKs9j0dn+dnHHgHZMCy6779Phap/fa4nnpwBdh54j3Pjfh
-         RvaQhgf1wntXG+UDKwhohKq2/UPrbfV9MTQjRJU2qC4tQCHhl+Qeg0DVZ8eSYXyXCgzY
-         WwM8aRsFPEBE3dF75W6r+imDzmSL9UtG/fZfhpeGWIQIVdRg2XYVI2/k94FfDaIGMtzn
-         wulg==
-X-Gm-Message-State: AOAM531P2+TZqBc12hujRgvalZLrMHDXs6YOIOWLpnLv0KmStbjR7cpx
-        9ySBfuBWxsQTAuKykIq+wGDWJV9acdP0/MF/NnLFiLL6pl8=
-X-Google-Smtp-Source: ABdhPJx8V1va8MPi99jGEZGUmafmjgzGfiLzAR8cpH6L+rWX736AiJTComkjSe00FioyENanmEbvDoXwVZvLs4kVh8w=
-X-Received: by 2002:a0d:c442:0:b0:2fe:beab:1fef with SMTP id
- g63-20020a0dc442000000b002febeab1fefmr42566152ywd.196.1654770042242; Thu, 09
- Jun 2022 03:20:42 -0700 (PDT)
+        Thu, 9 Jun 2022 06:23:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29834838C;
+        Thu,  9 Jun 2022 03:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vdnmsD6W54WojvbIoqoa8hdXCumYn6AqBOHiv7DMgfw=; b=H+wJ1ZydkyC3RMRDSPXLOfbj8b
+        AJdRQy0TYqTmU6GVmZNgl3jRqGfGwH1A+G468h5SwROwfWSWQ+PpM33X5smM7miiSKD0oCtIA3Ybr
+        0wkzxhTCw7KsmreB/oiF2LFBq6v+3bRxqirMJcrk0r1xovLFuJHDdkNZ87byFERGrnDcuyGvtcDaZ
+        9D+06ivELXdFRce3IGs9G5FvbvXqsyayeRpD9Px1dZpTXad2nDLoi0vLWJdGKlkmQ+waLTcnAZaMV
+        i6fGjkDG7+DirhEHk+EJCKN+ao4CLkT+5+7CrCIRhiKIw8BLwiToUd2QQrK+q9DzVbZ+/7T9c8/VW
+        RSZufhQQ==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nzFKF-006Lcy-6e; Thu, 09 Jun 2022 10:23:39 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5D104981287; Thu,  9 Jun 2022 12:23:37 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 12:23:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-tip-commits@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, x86@kernel.org
+Subject: Re: [tip: x86/fpu] intel_idle: Add a new flag to initialize the AMX
+ state
+Message-ID: <YqHKKa/yamRS06tC@worktop.programming.kicks-ass.net>
+References: <20220608164748.11864-3-chang.seok.bae@intel.com>
+ <165471675715.4207.17983340888752028780.tip-bot2@tip-bot2>
 MIME-Version: 1.0
-References: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
- <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Jun 2022 12:20:31 +0200
-Message-ID: <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
-Subject: Re: [CFP] Power Management and Thermal Control MC at LPC 2022
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <165471675715.4207.17983340888752028780.tip-bot2@tip-bot2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[I see I sent this from my personal e-mail address, sorry for the confusion.]
+On Wed, Jun 08, 2022 at 07:32:37PM -0000, tip-bot2 for Chang S. Bae wrote:
+> @@ -134,6 +140,9 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>  	if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
+>  		local_irq_enable();
+>  
+> +	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+> +		fpu_idle_fpregs();
+> +
+>  	mwait_idle_with_hints(eax, ecx);
+>  
+>  	return index;
 
-On Tue, Jun 7, 2022 at 5:30 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
->
-> Hi All,
->
-> On Wed, May 25, 2022 at 7:48 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
-> >
-> > Hi All,
-> >
-> > The Power Management and Thermal Control micro-conference:
-> >
-> > https://lpc.events/event/16/contributions/1158/
-> >
-> > has been accepted for the LPC 2022, so if you have a topic for
-> > discussion in that session, please submit it through the LPC web page:
-> >
-> > https://lpc.events/event/16/abstracts/
-> >
-> > (please choose Power Management and Thermal Control MC as the track).
-> > Please also submit topics already listed in the MC description.
-> >
-> > Please note that the LPC is mostly about discussing work in progress
-> > and development proposals, so make sure that your topic falls into
-> > this category.  In particular, please avoid submitting topics
-> > regarding work that has already been done.
-> >
-> > The LPC will be held in Dublin this year, but it should be possible to
-> > participate in the sessions remotely, so it should be fine to submit a
-> > topic even if you cannot go to Dublin in person.
-> >
-> > Looking forward to seeing you all at the LPC!
->
-> The deadline for topic submissions is approaching (it appears to be June 15).
+This will conflict with an intel_idle patch Rafael took from me; the
+resolution would be something along these lines:
 
-There are 5 topics submitted ATM, 4 from Intel and 1 from AMD.  ARM is
-obviously underrepresented.
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -166,6 +166,13 @@ static __cpuidle int intel_idle_irq(stru
+ 	return ret;
+ }
+ 
++static __cpuidle int intel_idle_xstate(struct cpuidle_device *dev,
++				       struct cpuidle_driver *drv, int index)
++{
++	fpu_idle_fpregs();
++	return __intel_idle(dev, drv, index);
++}
++
+ /**
+  * intel_idle_s2idle - Ask the processor to enter the given idle state.
+  * @dev: cpuidle device of the target CPU.
+@@ -1831,6 +1838,9 @@ static void __init intel_idle_init_cstat
+ 		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_IRQ_ENABLE)
+ 			drv->states[drv->state_count].enter = intel_idle_irq;
+ 
++		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_INIT_XSTATE)
++			drv->states[drv->state_count].enter = intel_idle_xstate;
++
+ 		if ((disabled_states_mask & BIT(drv->state_count)) ||
+ 		    ((icpu->use_acpi || force_use_acpi) &&
+ 		     intel_idle_off_by_default(mwait_hint) &&

@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BA2544C44
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2E7544C45
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245584AbiFIMhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
+        id S245607AbiFIMho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245521AbiFIMhf (ORCPT
+        with ESMTP id S245548AbiFIMhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 08:37:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3337422B26;
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4781C22BCF;
         Thu,  9 Jun 2022 05:37:34 -0700 (PDT)
 Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LJk8Y6CfvzgYc1;
-        Thu,  9 Jun 2022 20:35:41 +0800 (CST)
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LJk8Z2vztz1GCSf;
+        Thu,  9 Jun 2022 20:35:42 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
  dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -25,15 +25,17 @@ Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
 Received: from localhost.localdomain (10.67.165.24) by
  kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 20:37:31 +0800
+ 15.1.2375.24; Thu, 9 Jun 2022 20:37:32 +0800
 From:   Weili Qian <qianweili@huawei.com>
 To:     <herbert@gondor.apana.org.au>
 CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
         <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
-Subject: [PATCH 0/3] crypto: hisilicon/qm - modify event interrupt processing
-Date:   Thu, 9 Jun 2022 20:31:16 +0800
-Message-ID: <20220609123119.27252-1-qianweili@huawei.com>
+Subject: [PATCH 1/3] crypto: hisilicon/qm - add functions for releasing resources
+Date:   Thu, 9 Jun 2022 20:31:17 +0800
+Message-ID: <20220609123119.27252-2-qianweili@huawei.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220609123119.27252-1-qianweili@huawei.com>
+References: <20220609123119.27252-1-qianweili@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -50,21 +52,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset contains following updates:
-1. Modify accelerator devices event irq processing.
-2. Some cleanups.
+The resources allocated by hisi_qm_memory_init() are released by
+hisi_qm_uninit(). Add hisi_qm_memory_uninit() to release resources,
+no functional change.
 
-Weili Qian (3):
-  crypto: hisilicon/qm - add functions for releasing resources
-  crypto: hisilicon/qm - move alloc qm->wq to qm.c
-  crypto: hisilicon/qm - modify event irq processing
+Signed-off-by: Weili Qian <qianweili@huawei.com>
+---
+ drivers/crypto/hisilicon/qm.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
- drivers/crypto/hisilicon/qm.c            | 203 +++++++++++++++--------
- drivers/crypto/hisilicon/sec2/sec_main.c |  24 +--
- drivers/crypto/hisilicon/zip/zip_main.c  |  17 +-
- include/linux/hisi_acc_qm.h              |   8 +-
- 4 files changed, 141 insertions(+), 111 deletions(-)
-
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index b4ca2eb034d7..903896ab5be5 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -3672,6 +3672,21 @@ static void qm_last_regs_uninit(struct hisi_qm *qm)
+ 	debug->qm_last_words = NULL;
+ }
+ 
++static void hisi_qm_memory_uninit(struct hisi_qm *qm)
++{
++	struct device *dev = &qm->pdev->dev;
++
++	hisi_qp_memory_uninit(qm, qm->qp_num);
++	if (qm->qdma.va) {
++		hisi_qm_cache_wb(qm);
++		dma_free_coherent(dev, qm->qdma.size,
++				  qm->qdma.va, qm->qdma.dma);
++	}
++
++	idr_destroy(&qm->qp_idr);
++	kfree(qm->factor);
++}
++
+ /**
+  * hisi_qm_uninit() - Uninitialize qm.
+  * @qm: The qm needed uninit.
+@@ -3680,13 +3695,9 @@ static void qm_last_regs_uninit(struct hisi_qm *qm)
+  */
+ void hisi_qm_uninit(struct hisi_qm *qm)
+ {
+-	struct pci_dev *pdev = qm->pdev;
+-	struct device *dev = &pdev->dev;
+-
+ 	qm_last_regs_uninit(qm);
+ 
+ 	qm_cmd_uninit(qm);
+-	kfree(qm->factor);
+ 	down_write(&qm->qps_lock);
+ 
+ 	if (!qm_avail_state(qm, QM_CLOSE)) {
+@@ -3694,14 +3705,7 @@ void hisi_qm_uninit(struct hisi_qm *qm)
+ 		return;
+ 	}
+ 
+-	hisi_qp_memory_uninit(qm, qm->qp_num);
+-	idr_destroy(&qm->qp_idr);
+-
+-	if (qm->qdma.va) {
+-		hisi_qm_cache_wb(qm);
+-		dma_free_coherent(dev, qm->qdma.size,
+-				  qm->qdma.va, qm->qdma.dma);
+-	}
++	hisi_qm_memory_uninit(qm);
+ 	hisi_qm_set_state(qm, QM_NOT_READY);
+ 	up_write(&qm->qps_lock);
+ 
 -- 
 2.33.0
 

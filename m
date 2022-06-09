@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6F3544246
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DCF544249
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237176AbiFIEAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 00:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S236941AbiFIEB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 00:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiFIEAO (ORCPT
+        with ESMTP id S234685AbiFIEB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 00:00:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772276FA33;
-        Wed,  8 Jun 2022 21:00:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1623361C4F;
-        Thu,  9 Jun 2022 04:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67B58C34115;
-        Thu,  9 Jun 2022 04:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654747213;
-        bh=xTcjtWkH+5a+nce5MAwRaQbSWW626I4jvMlSp+LMiyQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HtvZX0u0vTMLT2Sis3EZYKifU37kJAiZp0B5NzFWJeHKXPTAd/z1MhjTXP1p3aEdw
-         oe5Rl2FEsJqP4izJwbcuV9L4Zica6362HgV/M3Trrb/Eyg46sPysRzEkqq1scwxhwQ
-         hZnQ0m2MkA/a0749NACEdyn4N3vAgMd5kLGId7CQqte7D7dePnU2FOsAcWCeXorwEK
-         mkX482BIrBaaY2Adae5xNO02diTvu6UiGb4rjRqt40Ngok302gyr2orAkMHDHiCxsM
-         0+8Ry4lm8JN496qhZjYU4eSTX8AUb5VIPI4W00Vw1dV+pSNqYKQhv/dGHUZ1VBiAEU
-         ieUtVrjO/DKeQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C07AE737ED;
-        Thu,  9 Jun 2022 04:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Jun 2022 00:01:26 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29CC7C159
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:01:24 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id 69-20020a6b0148000000b00669a17a2916so1467146iob.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 21:01:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=RSLiPAtENbTkSowwv2uPq1Qvn2KqDjp9roHFS/8AUSY=;
+        b=nZ54gbz2k14WQwLk6T3r10klj3Ik3yMpY2ELAd3Gy1MMFhywSNXaA8ZlwJbcj4oWKD
+         Z4Z1u5sK+T0CmSTxuWVN0F+xZTME3rdVwVtgrnrbCTNhqU5wI212mKIrcMPl25/9/eUe
+         4cqRKKdN4WWPoC1GJsHa+AVMB0sXayAQd0qYEI5U32nDReGLSdz0arBiaa1BRifYjub8
+         CDUaJyctq/FXGVAVEHtxaCm6D+P9ClWOiFp4nBJz0BZ5GrpKjKIrgkYk0z5Z2fzV4+9n
+         E/DHKkn2LtSha6Y5sS5E21ONlMNyuolKOfraYcfqp6i4+fGoxwmj99oGZY2I3jqoOp0i
+         +Ukg==
+X-Gm-Message-State: AOAM532Uq9F3ds4Khq/0xMHoiYuyVpqvhd3EdASnG64biOtti9Ma0zZL
+        zq/X7HHuLonpoFjOkrSfV0t0Cmta0BroNrTTKbYWxrHfHeMZ
+X-Google-Smtp-Source: ABdhPJzyyKP5vrE2Hdhnme0jjwLAT91coYM95JWyNU9CSxjGxkjNdnqp5wWX5vLENY+BTkGhKSApw8vnAMk8Hjrua/U/wupKTUa0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: altera: Fix refcount leak in altera_tse_mdio_create
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165474721330.28317.7209219946969772778.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Jun 2022 04:00:13 +0000
-References: <20220607041144.7553-1-linmq006@gmail.com>
-In-Reply-To: <20220607041144.7553-1-linmq006@gmail.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     joyce.ooi@intel.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, vbridgers2013@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1645:b0:2d6:5dd3:e627 with SMTP id
+ v5-20020a056e02164500b002d65dd3e627mr3465147ilu.268.1654747284259; Wed, 08
+ Jun 2022 21:01:24 -0700 (PDT)
+Date:   Wed, 08 Jun 2022 21:01:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000124e9105e0fbe047@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in
+ corrupted (2)
+From:   syzbot <syzbot+efe1afd49d981d281ae4@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
+        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, wangyufen@huawei.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+syzbot found the following issue on:
 
-On Tue,  7 Jun 2022 08:11:43 +0400 you wrote:
-> Every iteration of for_each_child_of_node() decrements
-> the reference count of the previous node.
-> When break from a for_each_child_of_node() loop,
-> we need to explicitly call of_node_put() on the child node when
-> not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> [...]
+HEAD commit:    03c312cc5f47 Add linux-next specific files for 20220608
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=155a4b73f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a0a0f5184fb46b
+dashboard link: https://syzkaller.appspot.com/bug?extid=efe1afd49d981d281ae4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168d9ebff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125c6e5ff00000
 
-Here is the summary with links:
-  - net: altera: Fix refcount leak in altera_tse_mdio_create
-    https://git.kernel.org/netdev/net/c/11ec18b1d8d9
+The issue was bisected to:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+commit d8616ee2affcff37c5d315310da557a694a3303d
+Author: Wang Yufen <wangyufen@huawei.com>
+Date:   Tue May 24 07:53:11 2022 +0000
+
+    bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=138a4b57f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=104a4b57f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=178a4b57f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+efe1afd49d981d281ae4@syzkaller.appspotmail.com
+Fixes: d8616ee2affc ("bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues")
+
+BUG: sleeping function called from invalid context at kernel/workqueue.c:3010
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3611, name: syz-executor124
+preempt_count: 201, expected: 0
+RCU nest depth: 0, expected: 0
+3 locks held by syz-executor124/3611:
+ #0: ffff888073295c10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:742 [inline]
+ #0: ffff888073295c10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
+ #1: ffff888073ff1ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1691 [inline]
+ #1: ffff888073ff1ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: tcp_close+0x1e/0xc0 net/ipv4/tcp.c:2908
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,300 +2,474 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63007545445
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3871F54544A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345482AbiFISjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S1345486AbiFISlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244450AbiFISjk (ORCPT
+        with ESMTP id S1344341AbiFISlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:39:40 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F90C687D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:39:37 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a29so10824412lfk.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 11:39:37 -0700 (PDT)
+        Thu, 9 Jun 2022 14:41:07 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B3D5F58;
+        Thu,  9 Jun 2022 11:41:05 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id p69so4266120iod.0;
+        Thu, 09 Jun 2022 11:41:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=de7CZ8jeEcERGED2Q96ugWzLITXNhs+e7DuD9EZQpkI=;
-        b=Z3UGsAv2k8V7+UhtCeOEPgRUU8g3Gd5ZsoDNWGXDXBx63L2yq4A5L1yAa4y4PlXPC/
-         s6sJVvfhSSdKcaZZOPvZNolhW1/I5Ywy0r8A68dG826aaekyPcC+lndkpzjfFIt+IWC0
-         CtGS1RgpLSe+QcQ0ORHIYlA9QNWL8a7o8/tjm/U0x5eJ8oYBkPuPuOoiW5W6GnACdHWI
-         oXgZ8B40x/z5lyBx4qYrXb7HBFvX6aoHpXuVV3iJBNJnNiz4x8Vd5XdIMJdlPGt0NYM6
-         r08cTDfZkgJe4PuW/t6tNa8w1UaVthWe6f+XYpLyZnkQQo7a1qybjxDKPsoUe3pbK8F8
-         6XJA==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=J5cO+c3VWDWtDGQ/VZ7m7J37V3VxlHs2DiTN4lG9LWo=;
+        b=BL9BMdvGJ9MxlWwy9ZVGtasBIFO0h7IoiZzbnaN2vl91+O3NJ+Iw0yLV6RVC99IvhD
+         86JPGwmsqmoJaNJpCyQV6hwlIHncCPGhTW94fUvs/p2jV9IfEoxIHmktiA4Kz6IR0g6Q
+         Q9UqPDRzPd0S22lwBvprUTmGXjGpraD0zVmHmdKPJE+6J7JUzO6Czd8j/vClwZ5svDDv
+         Vrj3qQFXLAXx2EycIuZ5X0Sd+Q/faorzp+olmiaPko9DmT+DGHs8cxdL5ASo0Mg4KS1k
+         CyPSgjmFDBLHA+5TDSyWSyDmVckZIy1Hjz+kIISayWuyhwmMrUFPLX0FuG2MM5hC/P16
+         1zKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=de7CZ8jeEcERGED2Q96ugWzLITXNhs+e7DuD9EZQpkI=;
-        b=NJkkkl2yh9qKIRnMF009/T51whFCfUH2arV2LkWhagWHLga5CwHB5bGoyjZP9UzFy2
-         bGJ/USx1RwzpnJg5QVf4S+usWmtLkAdGGAtHDLgQabnbMX05h5kwE+AyLGQTNzeSJN/y
-         MOByJIqx7Ao0OpHFbv5p9dOmDIDOF1eG0tkRCAvQxyOy+m7lQ5CguAE3EbKepPgB/FWW
-         MRG2rPVexaNqPSSLPgL4iYj5i5pIzQf3dajk+7x0XkuqVN/cJksynXGbQMrEjzXzuNCI
-         8bblEHB9Z0x+SDt1zzjYpLk5ky3E9BF1QpvXfw8f0Agb776nIiUcWrYwEEM2iL5+Oaz3
-         IMVw==
-X-Gm-Message-State: AOAM530XW0ZtrfZYSpHD1xUFmCfWcZSuIXwUz0BIxEaCP8lnDMRc3rPe
-        OGVhPNO0NPCRr6cQxtHoSj4=
-X-Google-Smtp-Source: ABdhPJyxgn8y703PIdZdT+iSaqkj7xP8yQhxWw4Bbr2lxRzCyaF5hcAgLMHi7vf3aYveYvKsHF5wpg==
-X-Received: by 2002:a05:6512:606:b0:478:fdce:eef8 with SMTP id b6-20020a056512060600b00478fdceeef8mr29927481lfe.461.1654799975798;
-        Thu, 09 Jun 2022 11:39:35 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id l28-20020a2e571c000000b0024f3d1dae7csm3796073ljb.4.2022.06.09.11.39.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 11:39:35 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/2] xen/grant-table: Use unpopulated DMAable pages
- instead of real RAM ones
-To:     Stefano Stabellini <sstabellini@kernel.org>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com>
- <1652810658-27810-3-git-send-email-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <7f886dfb-2b42-bc70-d55f-14ecd8144e3e@gmail.com>
-Date:   Thu, 9 Jun 2022 21:39:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=J5cO+c3VWDWtDGQ/VZ7m7J37V3VxlHs2DiTN4lG9LWo=;
+        b=MzrySM0Tjp9TXjBPSByYNtczqWukYl49u9+mnwK1g0eeaH9NqUiwJjbja1YfyO4iRx
+         mvtOkM/Oh4xs2gTYm5oUDDIDzN1KVRbjP3zFHtNiktbn+WXg6fZyFDc6IgGm85O7YkLY
+         Co8KTWViqN4U6oDQ2l1QOKw5pPxDPx9k59J0Ar8eYH1O+Ao1orvaD/Et11uuycMxwXVy
+         jTEvKXI0sBFM3IibPpGehSmP/lgYtgQcfZ11NDHMgdjc70rKSR7Viq5q3yBcC4MPZ6Qd
+         4w694n1HLjhdo0BNXWhniFs/gintxiM2DJgRBeaRolu/n8PxP4QPWeghHE7l7jl9Fnol
+         J2Yg==
+X-Gm-Message-State: AOAM531Tc4Ivg8LTUeO27JjZ033N6vCwrBH/Kl+xiLajuoYHwIyY/4W7
+        fnM15gsS7Lbvdnbr0OnKEhXC9QX6XE7dfrIDhKve1pgMk2Je6g==
+X-Google-Smtp-Source: ABdhPJz6CY50dDCLdogImfvRqktbIKrlHvxFMUeZcm5RPkahHgtr3MX9G+0D0aoTmiuMF2gx29aDSVmBUVtQ/Xl8hhA=
+X-Received: by 2002:a6b:3ec4:0:b0:669:b9e6:cd97 with SMTP id
+ l187-20020a6b3ec4000000b00669b9e6cd97mr449781ioa.128.1654800065076; Thu, 09
+ Jun 2022 11:41:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
+ <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
+ <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
+ <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com> <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
+In-Reply-To: <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 9 Jun 2022 20:40:29 +0200
+Message-ID: <CA+icZUUOQcc4uiVbv+tJzPr_ED7e4tD0u9tC8mcn2BRe3sdPAg@mail.gmail.com>
+Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
+ and OpenSSL v3.0.x
+To:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 04.06.22 00:19, Stefano Stabellini wrote:
-
-
-Hello Stefano
-
-Thank you for having a look and sorry for the late response.
-
-> On Tue, 17 May 2022, Oleksandr Tyshchenko wrote:
->> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>
->> Depends on CONFIG_XEN_UNPOPULATED_ALLOC. If enabled then unpopulated
->> DMAable (contiguous) pages will be allocated for grant mapping into
->> instead of ballooning out real RAM pages.
->>
->> TODO: Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages()
->> fails.
->>
->> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->> ---
->>   drivers/xen/grant-table.c | 27 +++++++++++++++++++++++++++
->>   1 file changed, 27 insertions(+)
->>
->> diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
->> index 8ccccac..2bb4392 100644
->> --- a/drivers/xen/grant-table.c
->> +++ b/drivers/xen/grant-table.c
->> @@ -864,6 +864,25 @@ EXPORT_SYMBOL_GPL(gnttab_free_pages);
->>    */
->>   int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
->>   {
->> +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
->> +	int ret;
-> This is an alternative implementation of the same function.
-
-Currently, yes.
-
-
->   If we are
-> going to use #ifdef, then I would #ifdef the entire function, rather
-> than just the body. Otherwise within the function body we can use
-> IS_ENABLED.
-
-
-Good point. Note, there is one missing thing in current patch which is 
-described in TODO.
-
-"Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages() 
-fails."  So I will likely use IS_ENABLED within the function body.
-
-If CONFIG_XEN_UNPOPULATED_ALLOC is enabled then gnttab_dma_alloc_pages() 
-will try to call xen_alloc_unpopulated_dma_pages() the first and if 
-fails then fallback to allocate RAM pages and balloon them out.
-
-One moment is not entirely clear to me. If we use fallback in 
-gnttab_dma_alloc_pages() then we must use fallback in 
-gnttab_dma_free_pages() as well, we cannot use 
-xen_free_unpopulated_dma_pages() for real RAM pages. The question is how 
-to pass this information to the gnttab_dma_free_pages()? The first idea 
-which comes to mind is to add a flag to struct gnttab_dma_alloc_args...
-
-
+On Fri, May 27, 2022 at 6:05 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
->> +	ret = xen_alloc_unpopulated_dma_pages(args->dev, args->nr_pages,
->> +			args->pages);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	ret = gnttab_pages_set_private(args->nr_pages, args->pages);
->> +	if (ret < 0) {
->> +		gnttab_dma_free_pages(args);
-> it should xen_free_unpopulated_dma_pages ?
-
-Besides calling the xen_free_unpopulated_dma_pages(), we also need to 
-call gnttab_pages_clear_private() here, this is what 
-gnttab_dma_free_pages() is doing.
-
-I can change to call both function instead:
-
-     gnttab_pages_clear_private(args->nr_pages, args->pages);
-     xen_free_unpopulated_dma_pages(args->dev, args->nr_pages, args->pages);
-
-Shall I?
-
-
+> On Fri, May 27, 2022 at 9:47 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Tue, May 24, 2022 at 9:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Thu, May 19, 2022 at 12:01 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > >
+> > > > [ CC Kees and Salvatore ]
+> > > >
+> > > > The Debian kernel-team ships a fix (4 hours young):
+> > > >
+> > > > commit: 13e234d459c11946efba647c3daf15e03abb0d99
+> > > > "sign-file: Convert API usage to support OpenSSL v3"
+> > > >
+> > > > *untested*
+> > >
+> > > @Kees:
+> > >
+> > > Any updates on the part of certs/extract-cert.c?
+> > >
+> >
+> > [ CC Tasmiya Nalatwad ]
+> >
+> > There are several more reports on this issue (see [3]).
+> >
+> > I did a quick test with Kees' patch from [2] and my attached patch
+> > "extract-cert: Suppress warnings with OpenSSL v3 API".
+> >
+> > Now, I see no more warnings due to OpenSSL v3 API:
+> >
+> > $ egrep 'sign-file|extract-cert'
+> > ../build-log_5.18.0-2-amd64-clang14-lto.txt
+> > 176:  clang -Wp,-MMD,scripts/.sign-file.d -Wall -Wmissing-prototypes
+> > -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
+> > -Wdeclaration-after-statement         -o scripts/sign-file
+> > scripts/sign-file.c   -lcrypto
+> > 2053:  clang -Wp,-MMD,certs/.extract-cert.d -Wall -Wmissing-prototypes
+> > -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
+> > -Wdeclaration-after-statement       -Wno-deprecated-declarations   -o
+> > certs/extract-cert certs/extract-cert.c   -lcrypto
+> > 2068:  certs/extract-cert "" certs/x509_certificate_list
+> > 2069:  certs/extract-cert "" certs/signing_key.x509
+> >
+> > config-5.18-dileks: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
+> >
+> > -Sedat-
+> >
+> > [1] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
+> > [2] https://salsa.debian.org/kernel-team/linux/-/commit/13e234d459c11946efba647c3daf15e03abb0d99
+> > [3] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
+> >
 >
+> [ CC James Bottomley ]
 >
->> +		return ret;
->> +	}
->> +
->> +	args->vaddr = page_to_virt(args->pages[0]);
->> +	args->dev_bus_addr = page_to_phys(args->pages[0]);
-> There are two things to note here.
+> [PATCH] extract-cert: Force build against OpenSSL API Compat v1.1.x
 >
-> The first thing to note is that normally we would call pfn_to_bfn to
-> retrieve the dev_bus_addr of a page because pfn_to_bfn takes into
-> account foreign mappings. However, these are freshly allocated pages
-> without foreign mappings, so page_to_phys/dma should be sufficient.
-
-agree
-
-
+> ...works as well.
 >
+> -Sedat-
 >
-> The second has to do with physical addresses and DMA addresses. The
-> functions are called gnttab_dma_alloc_pages and
-> xen_alloc_unpopulated_dma_pages which make you think we are retrieving a
-> DMA address here. However, to get a DMA address we need to call
-> page_to_dma rather than page_to_phys.
->
-> page_to_dma takes into account special offsets that some devices have
-> when accessing memory. There are real cases on ARM where the physical
-> address != DMA address, e.g. RPi4.
 
-I got it. Now I am in doubt whether it would be better to name the API:
+Why go back and forth... do it like Alexander the Great and the Gordian knot.
 
-xen_alloc_unpopulated_cma_pages()
+Sword - Swash - Done.
 
-or
+commit 6bfb56e93bcef41859c2d5ab234ffd80b691be35
+"cert host tools: Stop complaining about deprecated OpenSSL functions"
 
-xen_alloc_unpopulated_contiguous_pages()
+-Sedat-
 
-What do you think?
+[1] https://git.kernel.org/linus/6bfb56e93bcef41859c2d5ab234ffd80b691be35
 
+P.S.: BTW, perf needs also a openssl-v3 fix as well.
 
->
-> However, to call page_to_dma you need to specify as first argument the
-> DMA-capable device that is expected to use those pages for DMA (e.g. an
-> ethernet device or a MMC controller.) While the args->dev we have in
-> gnttab_dma_alloc_pages is the gntdev_miscdev.
+$ git show -1 for-5.19/openssl3-perf-dileks-20220605
+commit 3cd76edba5753061b88acb22e9adaece0b9cb2b4
+(for-5.19/openssl3-perf-dileks-20220605)
+Author: Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun Jun 5 14:23:06 2022 +0200
 
-agree
+   perf: openssl-v3: Force build against OpenSSL API Compat v1.1.x
 
-As I understand, at this time it is unknown for what exactly device 
-these pages are supposed to be used at the end.
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 73e0762092fe..4da73213f89b 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -140,6 +140,7 @@ FEATURE_CHECK_LDFLAGS-libunwind-x86 += -lunwind
+-llzma -lunwind-x86
+FEATURE_CHECK_LDFLAGS-libunwind-x86_64 += -lunwind -llzma -lunwind-x86_64
 
-For now, it is only known that these pages to be used by userspace PV 
-backend for grant mappings.
+FEATURE_CHECK_LDFLAGS-libcrypto = -lcrypto
++FEATURE_CHECK_LDFLAGS-libcrypto += -DOPENSSL_API_COMPAT=0x10100000L
 
-
->
-> So this interface cannot actually be used to allocate memory that is
-> supposed to be DMA-able by a DMA-capable device, such as an ethernet
-> device.
-
-agree
-
-
->
-> But I think that should be fine because the memory is meant to be used
-> by a userspace PV backend for grant mappings. If any of those mappings
-> end up being used for actual DMA in the kernel they should go through the
-> drivers/xen/swiotlb-xen.c and xen_phys_to_dma should be called, which
-> ends up calling page_to_dma as appropriate.
->
-> It would be good to double-check that the above is correct and, if so,
-> maybe add a short in-code comment about it:
->
-> /*
->   * These are not actually DMA addresses but regular physical addresses.
->   * If these pages end up being used in a DMA operation then the
->   * swiotlb-xen functions are called and xen_phys_to_dma takes care of
->   * the address translations:
->   *
->   * - from gfn to bfn in case of foreign mappings
->   * - from physical to DMA addresses in case the two are different for a
->   *   given DMA-mastering device
->   */
-
-I agree this needs to be re-checked. But, there is one moment here, if 
-userspace PV backend runs in other than Dom0 domain (non 1:1 mapped 
-domain), the xen-swiotlb seems not to be in use then? How to be in this 
-case?
+ifdef CSINCLUDES
+  LIBOPENCSD_CFLAGS := -I$(CSINCLUDES)
+@@ -780,6 +781,7 @@ ifndef NO_LIBCRYPTO
+  else
+    CFLAGS += -DHAVE_LIBCRYPTO_SUPPORT
+    EXTLIBS += -lcrypto
++    EXTLIBS += -DOPENSSL_API_COMPAT=0x10100000L
+    $(call detected,CONFIG_CRYPTO)
+  endif
+endif
 
 
->
->
->
->> +	return ret;
->> +#else
->>   	unsigned long pfn, start_pfn;
->>   	size_t size;
->>   	int i, ret;
->> @@ -910,6 +929,7 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
->>   fail:
->>   	gnttab_dma_free_pages(args);
->>   	return ret;
->> +#endif
->>   }
->>   EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
->>   
->> @@ -919,6 +939,12 @@ EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
->>    */
->>   int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
->>   {
->> +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
->> +	gnttab_pages_clear_private(args->nr_pages, args->pages);
->> +	xen_free_unpopulated_dma_pages(args->dev, args->nr_pages, args->pages);
->> +
->> +	return 0;
->> +#else
->>   	size_t size;
->>   	int i, ret;
->>   
->> @@ -946,6 +972,7 @@ int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
->>   		dma_free_wc(args->dev, size,
->>   			    args->vaddr, args->dev_bus_addr);
->>   	return ret;
->> +#endif
->>   }
->>   EXPORT_SYMBOL_GPL(gnttab_dma_free_pages);
->>   #endif
->> -- 
->> 2.7.4
->>
--- 
-Regards,
+$ git show -1 for-5.19/openssl3-extract_cert-dileks-v3-20220605
+commit 730a634c8ea1814c13abfff490c8a5fc48a4e25e
+(for-5.19/openssl3-extract_cert-dileks-v3-20220605)
+Author: Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon Jun 6 10:14:57 2022 +0200
 
-Oleksandr Tyshchenko
+   extract-cert: openssl-v3: Force build against OpenSSL API Compat v1.1.x
 
+diff --git a/certs/Makefile b/certs/Makefile
+index bb904f90f139..c24f31107c6a 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -87,4 +87,5 @@ targets += x509_revocation_list
+hostprogs := extract-cert
+
+HOSTCFLAGS_extract-cert.o = $(shell $(HOSTPKG_CONFIG) --cflags
+libcrypto 2> /dev/null)
++HOSTCFLAGS_extract-cert.o += -DOPENSSL_API_COMPAT=0x10100000L
+HOSTLDLIBS_extract-cert = $(shell $(HOSTPKG_CONFIG) --libs libcrypto
+2> /dev/null || echo -lcrypto)
+
+
+$ git show -1 for-5.19/openssl3-sign_file-kees-20220518
+commit 711a9d3ddccb1303a0b3b85166b86159ba8dcfa5
+(for-5.19/openssl3-sign_file-kees-20220518)
+Author: Kees Cook <keescook@chromium.org>
+Date:   Wed May 18 14:51:29 2022 -0700
+
+   sign-file: Convert API usage to support OpenSSL v3
+
+   OpenSSL's ENGINE API is deprecated in OpenSSL v3.0, along with some
+   other functions. Remove the ENGINE use and a macro work-around for
+   ERR_get_error_line().
+
+   Cc: David Howells <dhowells@redhat.com>
+   Cc: David Woodhouse <dwmw2@infradead.org>
+   Cc: Eric Biggers <ebiggers@kernel.org>
+   Cc: Shuah Khan <skhan@linuxfoundation.org>
+   Cc: Salvatore Bonaccorso <carnil@debian.org>
+   Cc: keyrings@vger.kernel.org
+   Suggested-by: Adam Langley <agl@google.com>
+   Co-developed-by: Lee Jones <lee.jones@linaro.org>
+   Signed-off-by: Lee Jones <lee.jones@linaro.org>
+   Signed-off-by: Kees Cook <keescook@chromium.org>
+   Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+index fbd34b8e8f57..2d633c5f57c3 100644
+--- a/scripts/sign-file.c
++++ b/scripts/sign-file.c
+@@ -52,6 +52,10 @@
+#include <openssl/pkcs7.h>
+#endif
+
++#if OPENSSL_VERSION_MAJOR >= 3
++#define ERR_get_error_line(f, l)       ERR_get_error_all(f, l, NULL,
+NULL, NULL)
++#endif
++
+struct module_signature {
+       uint8_t         algo;           /* Public-key crypto algorithm [0] */
+       uint8_t         hash;           /* Digest algorithm [0] */
+@@ -92,16 +96,6 @@ static void display_openssl_errors(int l)
+       }
+}
+
+-static void drain_openssl_errors(void)
+-{
+-       const char *file;
+-       int line;
+-
+-       if (ERR_peek_error() == 0)
+-               return;
+-       while (ERR_get_error_line(&file, &line)) {}
+-}
+-
+#define ERR(cond, fmt, ...)                            \
+       do {                                            \
+               bool __cond = (cond);                   \
+@@ -135,35 +129,14 @@ static int pem_pw_cb(char *buf, int len, int w, void *v)
+static EVP_PKEY *read_private_key(const char *private_key_name)
+{
+       EVP_PKEY *private_key;
++       BIO *b;
+
+-       if (!strncmp(private_key_name, "pkcs11:", 7)) {
+-               ENGINE *e;
+-
+-               ENGINE_load_builtin_engines();
+-               drain_openssl_errors();
+-               e = ENGINE_by_id("pkcs11");
+-               ERR(!e, "Load PKCS#11 ENGINE");
+-               if (ENGINE_init(e))
+-                       drain_openssl_errors();
+-               else
+-                       ERR(1, "ENGINE_init");
+-               if (key_pass)
+-                       ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
+-                           "Set PKCS#11 PIN");
+-               private_key = ENGINE_load_private_key(e, private_key_name,
+-                                                     NULL, NULL);
+-               ERR(!private_key, "%s", private_key_name);
+-       } else {
+-               BIO *b;
+-
+-               b = BIO_new_file(private_key_name, "rb");
+-               ERR(!b, "%s", private_key_name);
+-               private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
+-                                                     NULL);
+-               ERR(!private_key, "%s", private_key_name);
+-               BIO_free(b);
+-       }
+-
++       b = BIO_new_file(private_key_name, "rb");
++       ERR(!b, "%s", private_key_name);
++       private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
++                                             NULL);
++       ERR(!private_key, "%s", private_key_name);
++       BIO_free(b);
+       return private_key;
+}
+
+-EOT-
+
+> > > >
+> > > > On Thu, May 19, 2022 at 11:55 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > here, I am on Debian/unstable AMD64.
+> > > > >
+> > > > > Recently (or still) there is/was a transition to OpenSSL see below link.
+> > > > >
+> > > > > The warnings look like:
+> > > > >
+> > > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
+> > > > > is deprecated [-Wdeprecated-declarations]
+> > > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
+> > > > > [-Wdeprecated-declarations]
+> > > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
+> > > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 395:certs/extract-cert.c:46:14: warning: 'ERR_get_error_line' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 407:certs/extract-cert.c:59:9: warning: 'ERR_get_error_line' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 420:certs/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines'
+> > > > > is deprecated [-Wdeprecated-declarations]
+> > > > > 432:certs/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated
+> > > > > [-Wdeprecated-declarations]
+> > > > > 444:certs/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated
+> > > > > [-Wdeprecated-declarations]
+> > > > > 456:certs/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 468:certs/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > >
+> > > > > More detailed output:
+> > > > >
+> > > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 190-        while ((e = ERR_get_error_line(&file, &line))) {
+> > > > > 191-                    ^
+> > > > > 192-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
+> > > > > been explicitly marked deprecated here
+> > > > > 193-OSSL_DEPRECATEDIN_3_0
+> > > > > 194-^
+> > > > > 195-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > > 196-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > > 197-                                                ^
+> > > > > 198-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > > 'OSSL_DEPRECATED'
+> > > > > 199-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > > 200-                                                   ^
+> > > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 202-        while (ERR_get_error_line(&file, &line)) {}
+> > > > > 203-               ^
+> > > > > 204-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
+> > > > > been explicitly marked deprecated here
+> > > > > 205-OSSL_DEPRECATEDIN_3_0
+> > > > > 206-^
+> > > > > 207-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > > 208-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > > 209-                                                ^
+> > > > > 210-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > > 'OSSL_DEPRECATED'
+> > > > > 211-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > > 212-                                                   ^
+> > > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
+> > > > > is deprecated [-Wdeprecated-declarations]
+> > > > > 214-                ENGINE_load_builtin_engines();
+> > > > > 215-                ^
+> > > > > 216-/usr/include/openssl/engine.h:358:1: note:
+> > > > > 'ENGINE_load_builtin_engines' has been explicitly marked deprecated
+> > > > > here
+> > > > > 217-OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
+> > > > > 218-^
+> > > > > 219-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > > 220-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > > 221-                                                ^
+> > > > > 222-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > > 'OSSL_DEPRECATED'
+> > > > > 223-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > > 224-                                                   ^
+> > > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
+> > > > > [-Wdeprecated-declarations]
+> > > > > 226-                e = ENGINE_by_id("pkcs11");
+> > > > > 227-                    ^
+> > > > > 228-/usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been
+> > > > > explicitly marked deprecated here
+> > > > > 229-OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
+> > > > > 230-^
+> > > > > 231-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > > 232-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > > 233-                                                ^
+> > > > > 234-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > > 'OSSL_DEPRECATED'
+> > > > > 235-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > > 236-                                                   ^
+> > > > > 237-scripts/sign-file.c:   ld.lld -r -o
+> > > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/objtool-in.o
+> > > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86
+> > > > > /special.o /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/decode.o
+> > > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
+> > > > > 239-                if (ENGINE_init(e))
+> > > > > 240-                    ^
+> > > > > 241-/usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been
+> > > > > explicitly marked deprecated here
+> > > > > 242-OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
+> > > > > 243-^
+> > > > > 244-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > > 245-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > > 246-                                                ^
+> > > > > 247-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > > 'OSSL_DEPRECATED'
+> > > > > 248-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > > 249-                                                   ^
+> > > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 251-                        ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
+> > > > > 252-                             ^
+> > > > > 253-/usr/include/openssl/engine.h:478:1: note:
+> > > > > 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
+> > > > > 254-OSSL_DEPRECATEDIN_3_0
+> > > > > 255-^
+> > > > > 256-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > > 257-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > > 258-                                                ^
+> > > > > 259-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > > 'OSSL_DEPRECATED'
+> > > > > 260-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > > 261-                                                   ^
+> > > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
+> > > > > deprecated [-Wdeprecated-declarations]
+> > > > > 263-                private_key = ENGINE_load_private_key(e, private_key_name,
+> > > > > 264-                              ^
+> > > > > 265-/usr/include/openssl/engine.h:637:1: note:
+> > > > > 'ENGINE_load_private_key' has been explicitly marked deprecated here
+> > > > > 266-OSSL_DEPRECATEDIN_3_0
+> > > > > 267-^
+> > > > > 268-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > > 269-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > > 270-                                                ^
+> > > > > 271-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > > 'OSSL_DEPRECATED'
+> > > > > 272-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > > 273-
+> > > > >
+> > > > > Relevant OpenSSL v3.0.3 header files are attached.
+> > > > > My kernel-config, too.
+> > > > >
+> > > > > If you need further information, please let me know.
+> > > > >
+> > > > > Regards,
+> > > > > -Sedat-
+> > > > >
+> > > > > [1] https://release.debian.org/transitions/html/auto-openssl.html

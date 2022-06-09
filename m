@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F095448D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C958D5448DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242846AbiFIK1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
+        id S242948AbiFIK1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242791AbiFIK1I (ORCPT
+        with ESMTP id S242926AbiFIK11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:27:08 -0400
+        Thu, 9 Jun 2022 06:27:27 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8614200154;
-        Thu,  9 Jun 2022 03:27:04 -0700 (PDT)
-X-UUID: 009436b30a654539b7a5d4b2f444c9cf-20220609
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:1abcdc8a-07b2-4608-93d5-27f0d2cb489c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:90
-X-CID-INFO: VERSION:1.1.5,REQID:1abcdc8a-07b2-4608-93d5-27f0d2cb489c,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:90
-X-CID-META: VersionHash:2a19b09,CLOUDID:38b9ca7e-c8dc-403a-96e8-6237210dceee,C
-        OID:d42f080b6477,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 009436b30a654539b7a5d4b2f444c9cf-20220609
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE3A20A721;
+        Thu,  9 Jun 2022 03:27:23 -0700 (PDT)
+X-UUID: 37b5f56804b245f0bedc5d517cf1dafe-20220609
+X-CID-P-RULE: Spam_GS6885AD
+X-CID-O-INFO: VERSION:1.1.5,REQID:e6b3ba60-25fe-4200-bcfe-16386f963e00,OB:10,L
+        OB:10,IP:0,URL:25,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS6885
+        AD,ACTION:quarantine,TS:115
+X-CID-INFO: VERSION:1.1.5,REQID:e6b3ba60-25fe-4200-bcfe-16386f963e00,OB:10,LOB
+        :10,IP:0,URL:25,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D
+        ,ACTION:quarantine,TS:115
+X-CID-META: VersionHash:2a19b09,CLOUDID:c2bbca7e-c8dc-403a-96e8-6237210dceee,C
+        OID:6666869607ad,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 37b5f56804b245f0bedc5d517cf1dafe-20220609
 Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <tinghan.shen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 246476666; Thu, 09 Jun 2022 18:26:57 +0800
+        with ESMTP id 583217994; Thu, 09 Jun 2022 18:27:17 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
  mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
  Thu, 9 Jun 2022 10:25:59 +0000
@@ -55,37 +55,131 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2 0/3] Add MT8186 ADSP dt-binding
-Date:   Thu, 9 Jun 2022 16:30:58 +0800
-Message-ID: <20220609083101.24195-1-tinghan.shen@mediatek.com>
+Subject: [PATCH v2 3/3] dt-bindings: dsp: mediatek: add mt8186 dsp document
+Date:   Thu, 9 Jun 2022 16:31:01 +0800
+Message-ID: <20220609083101.24195-4-tinghan.shen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220609083101.24195-1-tinghan.shen@mediatek.com>
+References: <20220609083101.24195-1-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
-1. Change mbox-names from mbox0/mbox1 to rep/req for both mt8186 and mt8195.
-2. rename clock-names and remove unused headers
+This patch adds mt8186 dsp document. The dsp is used for Sound Open
+Firmware driver node. It includes registers, clocks, memory regions,
+and mailbox for dsp.
 
-Tinghan Shen (3):
-  dt-bindings: dsp: mediatek: Use meaningful names for mbox
-  firmware: mediatek: Use meaningful names for mbox
-  dt-bindings: dsp: mediatek: add mt8186 dsp document
-
+Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+---
  .../bindings/dsp/mediatek,mt8186-dsp.yaml     | 91 +++++++++++++++++++
- .../bindings/dsp/mediatek,mt8195-dsp.yaml     |  6 +-
- drivers/firmware/mtk-adsp-ipc.c               |  6 +-
- 3 files changed, 99 insertions(+), 4 deletions(-)
+ 1 file changed, 91 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
 
+diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+new file mode 100644
+index 000000000000..33c78f89d296
+--- /dev/null
++++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+@@ -0,0 +1,91 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/dsp/mediatek,mt8186-dsp.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek mt8186 DSP core
++
++maintainers:
++  - Tinghan Shen <tinghan.shen@mediatek.com>
++
++description: |
++  MediaTek mt8186 SoC contains a DSP core used for
++  advanced pre- and post- audio processing.
++
++properties:
++  compatible:
++    const: mediatek,mt8186-dsp
++
++  reg:
++    items:
++      - description: Address and size of the DSP config registers
++      - description: Address and size of the DSP SRAM
++      - description: Address and size of the DSP secure registers
++      - description: Address and size of the DSP bus registers
++
++  reg-names:
++    items:
++      - const: cfg
++      - const: sram
++      - const: sec
++      - const: bus
++
++  clocks:
++    items:
++      - description: mux for audio dsp clock
++      - description: mux for audio dsp local bus
++
++  clock-names:
++    items:
++      - const: audiodsp
++      - const: adsp_bus
++
++  power-domains:
++    maxItems: 1
++
++  mboxes:
++    items:
++      - description: ipc reply between host and audio DSP.
++      - description: ipc request between host and audio DSP.
++
++  mbox-names:
++    items:
++      - const: rep
++      - const: req
++
++  memory-region:
++    items:
++      - description: dma buffer between host and DSP.
++      - description: DSP system memory.
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - power-domains
++  - mbox-names
++  - mboxes
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8186-clk.h>
++    dsp@10680000 {
++        compatible = "mediatek,mt8186-dsp";
++        reg = <0x10680000 0x2000>,
++              <0x10800000 0x100000>,
++              <0x1068b000 0x100>,
++              <0x1068f000 0x1000>;
++        reg-names = "cfg", "sram", "sec", "bus";
++        clocks = <&topckgen CLK_TOP_AUDIODSP>,
++                 <&topckgen CLK_TOP_ADSP_BUS>;
++        clock-names = "audiodsp",
++                      "adsp_bus";
++        power-domains = <&spm 6>;
++        mbox-names = "rep", "req";
++        mboxes = <&adsp_mailbox0>, <&adsp_mailbox1>;
++    };
 -- 
 2.18.0
 

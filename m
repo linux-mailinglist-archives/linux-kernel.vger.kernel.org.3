@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BA754435A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3CD544359
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236643AbiFIF5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S237848AbiFIF47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232492AbiFIF45 (ORCPT
+        with ESMTP id S236830AbiFIF45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 01:56:57 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D862A961;
-        Wed,  8 Jun 2022 22:56:55 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id e9so9955882pju.5;
-        Wed, 08 Jun 2022 22:56:55 -0700 (PDT)
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332122AC5B;
+        Wed,  8 Jun 2022 22:56:56 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y196so20200250pfb.6;
+        Wed, 08 Jun 2022 22:56:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J+ROJGR9OK4hTjnNSvuFuqvie3SGSL2fBA167xVvJow=;
-        b=gxh9o2fJi/TWeT1xXEEiT1sUxaNVb29tAfiqK++XPPbeguD7H9GOTi5KTw7NaWpmVC
-         1QcraRiVnWGnpjIabp32h83s/ZKV/HKYHYFIT2uExZ2SnL24LdcLVbp09icxSRc1uyKh
-         0+z/8KH5XMlM1u5051ZTU7R+eOgG5t8mqw/3wu9lejJKjw/X9qDRu+rCIyi6wGVeqOOQ
-         iEbNnOMD4mIW9q5F2exUd8G3zhLuSssDp/llNnsrU2oHQhAmNpZ7ILvT1HMtimtHk1sW
-         HhPQJHE56NartfjzNsC88Pg0TsGucP3eHtm/cv1qBDE0wMj2covktdGkEOFfrAUkWh/X
-         KbfQ==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=m0eyMgwIk3CPtPFDkJwbRK4xZhRS0F0NmwDS3qIiC7U=;
+        b=TzgG5VqfYuCYVvUCv6XhOkxOnAu75fHbbbLfYh4fbXKwGqbZtZSdzN+wLtCKGd32YJ
+         aay+C94a8bsfv8u3ZwTMlPn17tjTBQAskqkqAcRjiXvWsKzdKItc41yUUEa2MpKNyDNj
+         Fg97Rcb5ardzecWBV7k3C1HlX/+7bkrlUyhps/s9msTEWvOrLkaxSMQGwdZaQKm77fqn
+         3j49U3hbvj4Dip1+pszEDaufA6/bKG1bIpjpMcJ62cUvgzl94QD7IjTJ/k+r4BpSOQ0C
+         Wttde7cuQ7q8C9CzErM797sQgVw7nEfOVNpp+o92CF071foYrjMQu2jq/rJzVOhV7WMa
+         YOqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=J+ROJGR9OK4hTjnNSvuFuqvie3SGSL2fBA167xVvJow=;
-        b=VZKa+C/6BJvJiA77eAOo86BskRHF95apadYcsbYve9Zrjpe9R6bMaJOxkpO4nVxOOl
-         caVdORwOVjITIVEILkZ3Np4R/sjwY6hP1MUMRqN8Y/TytLCgTPp7dBwFER6dscMCUxm+
-         GGSxykKO0FTypTSAjGviY9S/iGL984KBDu5ZA4PxLDiLCoNvXGJpxEBxdAn5JxiIwTTq
-         pxol0SuQ74NETYaQDI9OEp9krAWUMtTWDbjkvBacIESpvXTKDgGqWzH2efiq6yGPcD9E
-         tEDUBlKcl6Ls9jLy5kQ39q9OZugztcF/7u/APQ0seXZmNBPozJx7D4JZUlLzazw6dW46
-         DvOg==
-X-Gm-Message-State: AOAM530R0ELEZ0HBc2I58XqsO13yUOEFMy36zm7e5ZzXKM29Oy3H3P4X
-        Eb13ojSS2/gUIRMDz6pr1lU=
-X-Google-Smtp-Source: ABdhPJx2abu+SabfDP763NsyMx1+0YDbgDvFz6gDRt9Qsfn2nZSRd2OII12rYUqiik6ZoAWgQMyfQg==
-X-Received: by 2002:a17:90a:de15:b0:1df:63dd:9cfc with SMTP id m21-20020a17090ade1500b001df63dd9cfcmr1785230pjv.200.1654754214499;
-        Wed, 08 Jun 2022 22:56:54 -0700 (PDT)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=m0eyMgwIk3CPtPFDkJwbRK4xZhRS0F0NmwDS3qIiC7U=;
+        b=JZxAFDwb40AgYCvEGzT9LSvFMf6fqmmy4wfT1EUCIC1eIdv3yZzEQFR2MBa4r5Djlj
+         PIL1rJw7IY/aQ0XOX4OGIZdRrEunErGUkE/+k3B6Qli3q5RpUYiChbg0YLERqHJqkqs+
+         KKGIpQlR/OZ5BDM3C4t/wUDHHLtT804IWUdxQU7cscMkq+B2jQt1fmzYTTP6jeK88J4M
+         WOffdQI7SLPjU7nh1A2KkNbY7td38eBcJk2JRMLTM1Nu+oYs4o6ZIDEDZbH+/Jmc4UDV
+         513/y2SyV4OF5nFsO8Ph+MIoHgZnWcvsb1LD9pXMzCei6wCldHaJ1WojlCKiuPqY0FYh
+         /D/g==
+X-Gm-Message-State: AOAM532nn5HU5MxZDnnW30oKgOKF6IFKTDdMKn5TF9avVKE959Eu5bSl
+        oRWb4Yiusr35wWBHQdcEsYWgJuuohPYqow==
+X-Google-Smtp-Source: ABdhPJxS1vEgV2iXzVy2mU3BLc4te2TrAxkypg1G+0tcT/wXmqVzkDCXIDqewKFHi2IjRyNNH2MkKg==
+X-Received: by 2002:a05:6a00:855:b0:51c:27dc:b5c0 with SMTP id q21-20020a056a00085500b0051c27dcb5c0mr16768481pfk.47.1654754215606;
+        Wed, 08 Jun 2022 22:56:55 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:cb0:2c32:ceaf:ea06:c5de])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016196bcf743sm9502413plk.275.2022.06.08.22.56.53
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016196bcf743sm9502413plk.275.2022.06.08.22.56.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 22:56:54 -0700 (PDT)
+        Wed, 08 Jun 2022 22:56:55 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -60,10 +60,12 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCHSET 0/7] perf lock: New lock contention tracepoints support (v3)
-Date:   Wed,  8 Jun 2022 22:56:45 -0700
-Message-Id: <20220609055652.938821-1-namhyung@kernel.org>
+Subject: [PATCH 1/7] perf lock: Print wait times with unit
+Date:   Wed,  8 Jun 2022 22:56:46 -0700
+Message-Id: <20220609055652.938821-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+In-Reply-To: <20220609055652.938821-1-namhyung@kernel.org>
+References: <20220609055652.938821-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,70 +79,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Currently it only prints the time in nsec but it's a bit hard to read
+and takes longer in the screen.  We can change it to use different
+units and keep the number small to save the space.
 
-Kernel v5.19 will have a new set of tracepoints to track lock
-contentions for various lock types.  Unlike tracepoints in LOCKDEP and
-LOCK_STAT, it's hit only for contended locks and lock names are not
-available.  So it needs to collect stack traces and display the caller
-function instead.
+Before:
+  $ perf lock report
 
-Changes in v3)
- * fix build error
- * support data from different kernels/machines
- * skip bad stat unless there's actual bad ones
+                Name   acquired  contended   avg wait (ns) total wait (ns)   max wait (ns)   min wait (ns)
+
+        jiffies_lock        433         32            2778           88908           13570             692
+   &lruvec->lru_lock        747          5           11254           56272           18317            1412
+      slock-AF_INET6          7          1           23543           23543           23543           23543
+    &newf->file_lock        706         15            1025           15388            2279             618
+      slock-AF_INET6          8          1           10379           10379           10379           10379
+         &rq->__lock       2143          5            2037           10185            3462             939
+
+After:
+                Name   acquired  contended     avg wait   total wait     max wait     min wait
+
+        jiffies_lock        433         32      2.78 us     88.91 us     13.57 us       692 ns
+   &lruvec->lru_lock        747          5     11.25 us     56.27 us     18.32 us      1.41 us
+      slock-AF_INET6          7          1     23.54 us     23.54 us     23.54 us     23.54 us
+    &newf->file_lock        706         15      1.02 us     15.39 us      2.28 us       618 ns
+      slock-AF_INET6          8          1     10.38 us     10.38 us     10.38 us     10.38 us
+         &rq->__lock       2143          5      2.04 us     10.19 us      3.46 us       939 ns
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-lock.c | 48 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 40 insertions(+), 8 deletions(-)
+
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 23a33ac15e68..57e396323d05 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -251,6 +251,31 @@ struct lock_key {
+ 	struct list_head	list;
+ };
  
-Changes in v2)
- * add Acked-by from Ian
- * print time with a unit for compact output
- * add some comments  (Ian)
- * remove already applied patch
++static void lock_stat_key_print_time(unsigned long long nsec, int len)
++{
++	static const struct {
++		float base;
++		const char *unit;
++	} table[] = {
++		{ 1e9 * 3600, "h " },
++		{ 1e9 * 60, "m " },
++		{ 1e9, "s " },
++		{ 1e6, "ms" },
++		{ 1e3, "us" },
++		{ 0, NULL },
++	};
++
++	for (int i = 0; table[i].unit; i++) {
++		if (nsec < table[i].base)
++			continue;
++
++		pr_info("%*.2f %s", len - 3, nsec / table[i].base, table[i].unit);
++		return;
++	}
++
++	pr_info("%*llu %s", len - 3, nsec, "ns");
++}
++
+ #define PRINT_KEY(member)						\
+ static void lock_stat_key_print_ ## member(struct lock_key *key,	\
+ 					   struct lock_stat *ls)	\
+@@ -258,11 +283,18 @@ static void lock_stat_key_print_ ## member(struct lock_key *key,	\
+ 	pr_info("%*llu", key->len, (unsigned long long)ls->member);	\
+ }
  
-This patchset merely adds support for the new tracepoints to the
-existing perf lock commands.  So there's no change to the user.  Later
-I'll add new a sub-command dedicated to the tracepoints to make use of
-the additional information.
-
-Example output:
-
-  $ sudo perf lock record -a sleep 3
-
-  $ perf lock report -F acquired,contended,avg_wait,wait_total
-
-                  Name   acquired  contended     avg wait    total wait
-
-   update_blocked_a...         40         40      3.61 us     144.45 us
-   kernfs_fop_open+...          5          5      3.64 us      18.18 us
-    _nohz_idle_balance          3          3      2.65 us       7.95 us
-   tick_do_update_j...          1          1      6.04 us       6.04 us
-    ep_scan_ready_list          1          1      3.93 us       3.93 us
-  ...
-
-You can find the code in the 'perf/lock-contention-v3' branch at
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-Thanks,
-Namhyung
-
-
-Namhyung Kim (7):
-  perf lock: Print wait times with unit
-  perf lock: Allow to use different kernel symbols
-  perf lock: Skip print_bad_events() if nothing bad
-  perf lock: Add lock contention tracepoints record support
-  perf lock: Handle lock contention tracepoints
-  perf record: Allow to specify max stack depth of fp callchain
-  perf lock: Look up callchain for the contended locks
-
- tools/perf/Documentation/perf-lock.txt   |   7 +
- tools/perf/Documentation/perf-record.txt |   5 +
- tools/perf/builtin-lock.c                | 424 ++++++++++++++++++++++-
- tools/perf/util/callchain.c              |  18 +-
- 4 files changed, 432 insertions(+), 22 deletions(-)
-
-
-base-commit: 9886142c7a2226439c1e3f7d9b69f9c7094c3ef6
++#define PRINT_TIME(member)						\
++static void lock_stat_key_print_ ## member(struct lock_key *key,	\
++					   struct lock_stat *ls)	\
++{									\
++	lock_stat_key_print_time((unsigned long long)ls->member, key->len);	\
++}
++
+ PRINT_KEY(nr_acquired)
+ PRINT_KEY(nr_contended)
+-PRINT_KEY(avg_wait_time)
+-PRINT_KEY(wait_time_total)
+-PRINT_KEY(wait_time_max)
++PRINT_TIME(avg_wait_time)
++PRINT_TIME(wait_time_total)
++PRINT_TIME(wait_time_max)
+ 
+ static void lock_stat_key_print_wait_time_min(struct lock_key *key,
+ 					      struct lock_stat *ls)
+@@ -272,7 +304,7 @@ static void lock_stat_key_print_wait_time_min(struct lock_key *key,
+ 	if (wait_time == ULLONG_MAX)
+ 		wait_time = 0;
+ 
+-	pr_info("%*"PRIu64, key->len, wait_time);
++	lock_stat_key_print_time(wait_time, key->len);
+ }
+ 
+ 
+@@ -291,10 +323,10 @@ static const char		*output_fields;
+ struct lock_key keys[] = {
+ 	DEF_KEY_LOCK(acquired, "acquired", nr_acquired, 10),
+ 	DEF_KEY_LOCK(contended, "contended", nr_contended, 10),
+-	DEF_KEY_LOCK(avg_wait, "avg wait (ns)", avg_wait_time, 15),
+-	DEF_KEY_LOCK(wait_total, "total wait (ns)", wait_time_total, 15),
+-	DEF_KEY_LOCK(wait_max, "max wait (ns)", wait_time_max, 15),
+-	DEF_KEY_LOCK(wait_min, "min wait (ns)", wait_time_min, 15),
++	DEF_KEY_LOCK(avg_wait, "avg wait", avg_wait_time, 12),
++	DEF_KEY_LOCK(wait_total, "total wait", wait_time_total, 12),
++	DEF_KEY_LOCK(wait_max, "max wait", wait_time_max, 12),
++	DEF_KEY_LOCK(wait_min, "min wait", wait_time_min, 12),
+ 
+ 	/* extra comparisons much complicated should be here */
+ 	{ }
 -- 
 2.36.1.255.ge46751e96f-goog
 

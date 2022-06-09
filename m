@@ -2,496 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA693544522
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5062544536
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbiFIHxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 03:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S240360AbiFIHzH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Jun 2022 03:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiFIHxM (ORCPT
+        with ESMTP id S233789AbiFIHzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:53:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630B61E3028;
-        Thu,  9 Jun 2022 00:53:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2113B82C3D;
-        Thu,  9 Jun 2022 07:53:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5D4C34114;
-        Thu,  9 Jun 2022 07:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654761187;
-        bh=P3FLNlZhGb3NkhkHCxICHx9Dpls3bm2gQnBATFpOF5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GhgjJQ9I0cybj/OzgI8ZYMTl0Lsr9RRvQ/YBDZuyJTNdw9DPyzNfGsyCx29xiBruO
-         jOymaSYJ57LUxHpOBz/qfP+SJawhMJZP2YLp5pEkieB2cu+4Ysge5HOICBbqxivd56
-         E3JOxpLkNo8quJvYJlqsfcUeAa5cs6usYEXMbdhq+WFAlhmFv8GDnY3rNKiidtZbHF
-         +9cEtD27eLK32vAG/7USmTQtoEKN/Zg2uwK1TolmlCyPyJFICO77SZdubcjSpS4qLv
-         tz/EG+x87joXiVN/CpnwFR+mBIowfJ+6lMWE1pntu8xLXN7AYMQ0wnsSJVmTUXIJPl
-         VQ/PN/XQ9JP2A==
-Date:   Thu, 9 Jun 2022 13:22:54 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] mtd: nand: raw: qcom_nandc: add support for
- unprotected spare data pages
-Message-ID: <20220609075254.GC2758@thinkpad>
-References: <20220608001030.18813-1-ansuelsmth@gmail.com>
- <20220608001030.18813-2-ansuelsmth@gmail.com>
+        Thu, 9 Jun 2022 03:55:04 -0400
+X-Greylist: delayed 110 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Jun 2022 00:55:02 PDT
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 536692F0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:55:02 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2048.outbound.protection.outlook.com [104.47.22.48]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-3-zuiVCqnoN1ucz7FCK5gIjA-2; Thu, 09 Jun 2022 09:53:09 +0200
+X-MC-Unique: zuiVCqnoN1ucz7FCK5gIjA-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ GVAP278MB0055.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:21::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5332.13; Thu, 9 Jun 2022 07:53:07 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5332.013; Thu, 9 Jun 2022
+ 07:53:07 +0000
+Date:   Thu, 9 Jun 2022 09:53:05 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+CC:     Lucas Stach <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "francesco.dolcini@toradex.com" <francesco.dolcini@toradex.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v9 6/8] PCI: imx6: Disable clocks and regulators after
+ link is down
+Message-ID: <20220609075305.GA20630@francesco-nb.int.toradex.com>
+References: <1651801629-30223-1-git-send-email-hongxing.zhu@nxp.com>
+ <1651801629-30223-7-git-send-email-hongxing.zhu@nxp.com>
+ <5be4f4322e00e33fa9417280b0d74ecb7aab913e.camel@pengutronix.de>
+ <AS8PR04MB86763AE6FF5BABE3EBED833B8CA79@AS8PR04MB8676.eurprd04.prod.outlook.com>
+In-Reply-To: <AS8PR04MB86763AE6FF5BABE3EBED833B8CA79@AS8PR04MB8676.eurprd04.prod.outlook.com>
+X-ClientProxiedBy: MR2P264CA0025.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500::13)
+ To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e7f45fce-795b-4826-7ff1-08da49ed171e
+X-MS-TrafficTypeDiagnostic: GVAP278MB0055:EE_
+X-Microsoft-Antispam-PRVS: <GVAP278MB0055B50E7E3139AE93F2A7F8E2A79@GVAP278MB0055.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: 6qzeXLICmbujpvmO2mIemDnfSGfeu8iARt7ttfhIj4/f1sIni9YMu9al6HMHwufvHoYHjx2OF8ysIHtPXtJYbhV7SLstUl3vCzmuZCKjqWPMGyehYNLpOQCIwl01yjXNxtbPwnNLAihO69l04qjWRETrgCARYwSHRQOp1UtnAArLi7JU39CCUBBYqKTUblWH4aSDOGHu2l2ghzzJyyOvyN/TmrlGX0Pr5lj4+N+NUvAYLjIwnOSF+I8jXDn6kL7cEhe2FxT7kl8MU2eS8F326a+raxN9ajmaAHgaD2YEUfpwhIcyRd1YeEgWbKExLxg3RbfsAzjNsSVD76tKsgbpTQe1uK+kyxfmhhflXJduj/W4mP3bHPC1RSjXvc31waaR8h2OWLZqU7V1yJKzjuGKyUDktCpcuooPLxPu7g3foxZsJ7TY26amNXmWxuBXck5KwUWoFyJZKyMui4t+RtpQXwQLNd4LM8DC8q3FYTvCqsudwoqM5Jym48CWVDlbiNsbBDJePIVIXgKMFwIgoBAQV/UToASDncEZnRW8bo3E19vdTHWkiqJTNFVVYCI8KVDLp1tGlsLdIRvOqW/K+RPurSzYTgtw4ZTOyC0HpVnKmGawYXKWLyjARr4ifs+BzFhTUJbP5Fx+iLSNUfV5uIy5oKRzY7s554OlvjkW/M610/7G4BSo4ryno+b15TvDmylxOOdyAxb5EiyhVF3sjxr5ww==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(136003)(396003)(39850400004)(346002)(366004)(316002)(83380400001)(44832011)(5660300002)(66476007)(7416002)(8676002)(66946007)(4326008)(2906002)(66556008)(6916009)(8936002)(54906003)(508600001)(6486002)(38100700002)(6512007)(41300700001)(33656002)(52116002)(26005)(1076003)(186003)(53546011)(86362001)(6506007)(38350700002);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bhURATuq5WBfJYv8p9qTK+kGRhl8/hHvr3FQofgaKVTiMus+ATxyH6uQ+K1W?=
+ =?us-ascii?Q?rCPBGm4mGyufRoCM6Av7D1dGc+tAwAMm2QmiSXrStfI6c/4xvkn0QIZYrxJl?=
+ =?us-ascii?Q?C+6YJhZHoLBfk2AnWmEs3QR4UAPQbLREuQ3+HE5YcYK8ByDnxeOUdfiaTYRe?=
+ =?us-ascii?Q?9IPFCBYMLu/44Gcwx44MyPj0lWdd4bQHMbLH081QtyXYZLPZxrHM65CZa1xO?=
+ =?us-ascii?Q?CPItqgX1divqbT+jgz2kMezJ0h/BaKj7qHeLzrYf4BjzjQAqVx6B3Fzz4WYz?=
+ =?us-ascii?Q?NRvqNHh/ohgjx0MjNvFs//FGrJU9rFz3EpqmdFD6eYLUm7QSmxLRmyh2sDYC?=
+ =?us-ascii?Q?CHtloB10GfTnzol5lWpdcmcg6RNwISMfxGbx4pZKU5nhYp66zWKwRCfe9Xiz?=
+ =?us-ascii?Q?RcJv/3yralQgfSSd9R8fCZ4AyqOpzmp9URQokf3ei2g/4bUNUkValxHoGz8R?=
+ =?us-ascii?Q?Jh2XHTFLDTY7X48fRQaQ6cv4bRmXNLC5PJ7OFuyjuU/Urbdt/6BStZcA2b2f?=
+ =?us-ascii?Q?YabL4GKtkCfj7VLizpTs8kegQCwTE+DGY0G5Wz3himuMe3excBfb51awqi8K?=
+ =?us-ascii?Q?Th2lxPiKqtnB6khK8kJamjlnoJ9Ru0FEgqgzx6AhBdP16tBbljUqrxc1Bapu?=
+ =?us-ascii?Q?1LjS5nhIxq67K4U19aBVzGrEd1fz12y3MhAtm0tEXgn5EsIgO5Z4N9727av2?=
+ =?us-ascii?Q?0j2mqKam1Q4OmJQ3gX9Hp58kYRnjuGzgkna4rIgKw4sD9SYZf9dlYD5fK6Am?=
+ =?us-ascii?Q?FvsKlo3WMVZr6yAticP14kZbxaDZpuFODcTjmsDOeRJJaaLGJ3MiZA+j+fJ2?=
+ =?us-ascii?Q?p4qmWr94tsh/9dfYyqx8wAXpzg514jWAc7CCBbfpwindx+hIVM3MYZ+qydyy?=
+ =?us-ascii?Q?kQM4h4h3kZsHHfgC/OpQMpc5lmDVadssXyBRYeSKpqCxXYV2iGVgbcBik80Q?=
+ =?us-ascii?Q?/OjhrmIa58jICjUxu35/UDF1Evf7/t9szZH5bUh808g1H3H6cPC3xn9sHC4+?=
+ =?us-ascii?Q?amMcvliWhXqnARVlh1RrNdfypndLENT3EbeWhJqd/ISitkYZb0TTooH7zfr0?=
+ =?us-ascii?Q?ujLPEgWF1zPJO27yFxaj0CaFNDSAwDqaagKyZyPaPxR2B/BThkGtS80As2Ec?=
+ =?us-ascii?Q?8XI2b/W9e9n0a1YYtCqqewrFRLtjMNdzWbKApBFUjP2bxsmtPLFQND3R/mqL?=
+ =?us-ascii?Q?FfGiAUKnXepUKWFtmhW7lQAkXSZS6G4+7WGa+MXnlv8s5auu2b0AGPqQi7Ox?=
+ =?us-ascii?Q?8rtyEy48ZQeVoOl5VhAv13pz/5BgRM+SeYJ4SKjGi32D9SkxtQnbI1PygTUJ?=
+ =?us-ascii?Q?/krE1xxv15g+17Mywu1KKUNOETbwmxcHHLY8Tm1gcb71WSHIvUsrCBGR1fGi?=
+ =?us-ascii?Q?xBd/MB1AmmmCXg4S3xl+f5xfFTRDGvNhlZpiYLizYwlwUnWxzBDLYWEINvKM?=
+ =?us-ascii?Q?eivVSJnZZowo06NEMZgHqzgPhtGreduWBz4Xb38wPpR97+yq7iq8PP3UL79i?=
+ =?us-ascii?Q?jL/8g15AGOLyK6z86aafLr5wny4vthdC25OvmA5kFkb3J03j+ZqUD7ot3RrD?=
+ =?us-ascii?Q?sG7wuv6iafMCex3OR07ghsb11wbGdum8RDikc5TiFzxRaWAzQgQs/nY4WfTH?=
+ =?us-ascii?Q?PqAJjZy+WDfD8qS+YKQgaV5kpVsSDFtTxounpE7cQoDSSSXqhTVu4d/rzJgu?=
+ =?us-ascii?Q?bZ5jssaYm9ZTDrrsTVqHooubrHfavDGEMSCsr8LPfY1tjBKQ1XiXXEZG1WIN?=
+ =?us-ascii?Q?n/rcQdfO8VOmgmIf60tXuGfCRv8GSq4=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7f45fce-795b-4826-7ff1-08da49ed171e
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 07:53:07.2329
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6FK+78i1BCAlneeLWn/HbwUMIDlNXk0dj63C0fV3DZisOK3FhguoAFNknz7N/vpZnbni9JE/+2gX0Tw+HS/3mnECWR1167IK/DUeHtLPXJw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0055
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=UTF-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220608001030.18813-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:10:28AM +0200, Ansuel Smith wrote:
-> IPQ8064 nand have special pages where a different layout scheme is used.
-> These special page are used by boot partition and on reading them
-> lots of warning are reported about wrong ECC data and if written to
-> results in broken data and not bootable device.
+On Thu, Jun 09, 2022 at 06:17:46AM +0000, Hongxing Zhu wrote:
+> > -----Original Message-----
+> > From: Lucas Stach <l.stach@pengutronix.de>
+> > Sent: 2022年6月8日 15:35
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; bhelgaas@google.com;
+> > robh+dt@kernel.org; broonie@kernel.org; lorenzo.pieralisi@arm.com;
+> > jingoohan1@gmail.com; festevam@gmail.com;
+> > francesco.dolcini@toradex.com
+> > Cc: linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
+> > <linux-imx@nxp.com>
+> > Subject: Re: [PATCH v9 6/8] PCI: imx6: Disable clocks and regulators after link is
+> > down
+> > 
+> > Am Freitag, dem 06.05.2022 um 09:47 +0800 schrieb Richard Zhu:
+> > > Since i.MX PCIe doesn't support hot-plug, reduce power consumption as
+> > > much as possible by disabling clocks and regulators and returning
+> > > error when the link is down.
+> > >
+> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> > > ---
+> > >  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++++++++++----
+> > >  1 file changed, 15 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
+> > > b/drivers/pci/controller/dwc/pci-imx6.c
+> > > index 3ce3993d5797..d122c12193a6 100644
+> > > --- a/drivers/pci/controller/dwc/pci-imx6.c
+> > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> > > @@ -845,7 +845,9 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
+> > >  	/* Start LTSSM. */
+> > >  	imx6_pcie_ltssm_enable(dev);
+> > >
+> > > -	dw_pcie_wait_for_link(pci);
+> > > +	ret = dw_pcie_wait_for_link(pci);
+> > > +	if (ret)
+> > > +		goto err_out;
+> > 
+> > This adds back error handling that has been intentionally removed in
+> > f81f095e8771 ("PCI: imx6: Allow to probe when dw_pcie_wait_for_link() fails").
+> > While I agree that disabling the clocks and regulators is the right thing to do
+> > when we don't manage to get a link, we should still allow the driver to probe,
+> > so please add a "ret = 0" to this newly added non-fatal error paths.
+> > 
+> Thanks for your review comments.
+> There would be a long latency if the link is down and probe is finished
+>  successfully.
+> Since the dw_pcie_wait_for_link() would be invoked twice in every driver probe
+>  and resume operation later. Each dw_pcie_wait_for_link() would consume about
+>  90,000*10 ~ 100,000*10 u-seconds. I'm afraid that such a long latency would
+>  bring bad user experience.
 > 
-> The layout scheme used by these special page consist in using 512 bytes
-> as the codeword size (even for the last codeword) while writing to CFG0
-> register. This forces the NAND controller to unprotect the 4 bytes of
-> spare data.
+> Here are the logs when probe is allowed when PCIe link is down:
+> [   55.045954][ T1835] imx6q-pcie 5f000000.pcie: PM: calling imx6_pcie_resume_noirq.742dfa074b40dca7ca925f0c49c905ec.cfi_jt+0x0/0x8 @ 1835, parent: bus@5f000000
+> ...
+> [   56.074566][ T1835] imx6q-pcie 5f000000.pcie: Phy link never came up
+> [   57.074816][ T1835] imx6q-pcie 5f000000.pcie: Phy link never came up
+> ...
+> [   57.182300][ T1835] imx6q-pcie 5f000000.pcie: PM: imx6_pcie_resume_noirq.742dfa074b40dca7ca925f0c49c905ec.cfi_jt+0x0/0x8 returned 0 after 2136334 usecs
 > 
-> Since the kernel is unaware of this different layout for these special
-> page, it does try to protect the spare data too during read/write and
-> warn about CRC errors.
+> [   57.182347][ T1835] imx6q-pcie 5f010000.pcie: PM: calling imx6_pcie_resume_noirq.742dfa074b40dca7ca925f0c49c905ec.cfi_jt+0x0/0x8 @ 1835, parent: bus@5f000000
+> ...
+> [   58.210584][ T1835] imx6q-pcie 5f010000.pcie: Phy link never came up
+> [   59.210831][ T1835] imx6q-pcie 5f010000.pcie: Phy link never came up
+> ...
+> [   59.318313][ T1835] imx6q-pcie 5f010000.pcie: PM: imx6_pcie_resume_noirq.742dfa074b40dca7ca925f0c49c905ec.cfi_jt+0x0/0x8 returned 0 after 2135949 usecs
 > 
-> Add support for this by permitting the user to declare these special
-> pages in dts by declaring offset and size of the partition. The driver
-> internally will convert these value to nand pages.
-> 
-> On user read/write the page is checked and if it's a boot page the
-> correct layout is used.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/mtd/nand/raw/qcom_nandc.c | 174 +++++++++++++++++++++++++++++-
->  1 file changed, 169 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-> index 1a77542c6d67..06ee9a836a3b 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -80,8 +80,10 @@
->  #define	DISABLE_STATUS_AFTER_WRITE	4
->  #define	CW_PER_PAGE			6
->  #define	UD_SIZE_BYTES			9
-> +#define	UD_SIZE_BYTES_MASK		GENMASK(18, 9)
->  #define	ECC_PARITY_SIZE_BYTES_RS	19
->  #define	SPARE_SIZE_BYTES		23
-> +#define	SPARE_SIZE_BYTES_MASK		GENMASK(26, 23)
->  #define	NUM_ADDR_CYCLES			27
->  #define	STATUS_BFR_READ			30
->  #define	SET_RD_MODE_AFTER_STATUS	31
-> @@ -102,6 +104,7 @@
->  #define	ECC_MODE			4
->  #define	ECC_PARITY_SIZE_BYTES_BCH	8
->  #define	ECC_NUM_DATA_BYTES		16
-> +#define	ECC_NUM_DATA_BYTES_MASK		GENMASK(25, 16)
->  #define	ECC_FORCE_CLK_OPEN		30
->  
->  /* NAND_DEV_CMD1 bits */
-> @@ -418,6 +421,19 @@ struct qcom_nand_controller {
->  	const struct qcom_nandc_props *props;
->  };
->  
-> +/*
-> + * NAND special boot partitions
-> + *
-> + * @page_offset:		offset of the partition where spare data is not protected
-> + *				by ECC (value in pages)
+> So, I'm prefer that it's better to let the probe failed when link is down. 
+> How do you think about that?
 
-s/page_offset/offset
+I think that recently Bjorn mentioned some concern with this approach,
+and I agree with him.
+I think that the probe of the PCIe root port should not fail if the link
+is down.
 
-> + * @page_offset:		size of the partition where spare data is not protected
-> + *				by ECC (value in pages)
+What is the reason for such a long wait in dw_pcie_wait_for_link()? Is
+this slowing down the resume process as a whole? Why called twice? (I'm
+not familiar with that part of the code)
 
-s/page_offset/size
+Francesco
 
-> + */
-> +struct qcom_nand_boot_partition {
-> +	u32 page_offset;
-> +	u32 page_size;
-
-same here
-
-> +};
-> +
->  /*
->   * NAND chip structure
->   *
-> @@ -444,6 +460,13 @@ struct qcom_nand_controller {
->   * @cfg0, cfg1, cfg0_raw..:	NANDc register configurations needed for
->   *				ecc/non-ecc mode for the current nand flash
->   *				device
-> + *
-> + * @codeword_fixup:		keep track of the current layout used by
-> + *				the driver for read/write operation.
-> + * @nr_boot_partitions:		count of the boot partitions where spare data is not
-> + *				protected by ECC
-
-Align the Kdoc comments w.r.t other members.
-
-> + * @boot_pages:			array of boot partitions where offset and size of the
-> + *				boot partitions are stored
-
-s/boot_pages/boot_partitions
-
->   */
->  struct qcom_nand_host {
->  	struct nand_chip chip;
-> @@ -466,6 +489,10 @@ struct qcom_nand_host {
->  	u32 ecc_bch_cfg;
->  	u32 clrflashstatus;
->  	u32 clrreadstatus;
-> +
-> +	bool codeword_fixup;
-> +	int nr_boot_partitions;
-> +	struct qcom_nand_boot_partition *boot_partitions;
->  };
->  
->  /*
-> @@ -475,6 +502,7 @@ struct qcom_nand_host {
->   * @is_bam - whether NAND controller is using BAM
->   * @is_qpic - whether NAND CTRL is part of qpic IP
->   * @qpic_v2 - flag to indicate QPIC IP version 2
-> + * @use_codeword_fixup - whether NAND has different layout for boot partitions
->   * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
->   */
->  struct qcom_nandc_props {
-> @@ -482,6 +510,7 @@ struct qcom_nandc_props {
->  	bool is_bam;
->  	bool is_qpic;
->  	bool qpic_v2;
-> +	bool use_codeword_fixup;
->  	u32 dev_cmd_reg_start;
->  };
->  
-> @@ -1701,7 +1730,7 @@ qcom_nandc_read_cw_raw(struct mtd_info *mtd, struct nand_chip *chip,
->  	data_size1 = mtd->writesize - host->cw_size * (ecc->steps - 1);
->  	oob_size1 = host->bbm_size;
->  
-> -	if (qcom_nandc_is_last_cw(ecc, cw)) {
-> +	if (qcom_nandc_is_last_cw(ecc, cw) && !host->codeword_fixup) {
->  		data_size2 = ecc->size - data_size1 -
->  			     ((ecc->steps - 1) * 4);
->  		oob_size2 = (ecc->steps * 4) + host->ecc_bytes_hw +
-> @@ -1782,7 +1811,7 @@ check_for_erased_page(struct qcom_nand_host *host, u8 *data_buf,
->  	}
->  
->  	for_each_set_bit(cw, &uncorrectable_cws, ecc->steps) {
-> -		if (qcom_nandc_is_last_cw(ecc, cw)) {
-> +		if (qcom_nandc_is_last_cw(ecc, cw) && !host->codeword_fixup) {
->  			data_size = ecc->size - ((ecc->steps - 1) * 4);
->  			oob_size = (ecc->steps * 4) + host->ecc_bytes_hw;
->  		} else {
-> @@ -1940,7 +1969,7 @@ static int read_page_ecc(struct qcom_nand_host *host, u8 *data_buf,
->  	for (i = 0; i < ecc->steps; i++) {
->  		int data_size, oob_size;
->  
-> -		if (qcom_nandc_is_last_cw(ecc, i)) {
-> +		if (qcom_nandc_is_last_cw(ecc, i) && !host->codeword_fixup) {
->  			data_size = ecc->size - ((ecc->steps - 1) << 2);
->  			oob_size = (ecc->steps << 2) + host->ecc_bytes_hw +
->  				   host->spare_bytes;
-> @@ -2037,6 +2066,55 @@ static int copy_last_cw(struct qcom_nand_host *host, int page)
->  	return ret;
->  }
->  
-> +static bool
-> +qcom_nandc_is_boot_page(struct qcom_nand_host *host, int page)
-
-Move function name to previous line. If it exceeds 100 lines then wrap
-arguments.
-
-s/qcom_nandc_is_boot_page/qcom_nandc_is_boot_partition
-
-> +{
-> +	struct qcom_nand_boot_partition *boot_partition;
-> +	u32 start, end;
-> +	int i;
-> +
-> +	for (i = 0; i < host->nr_boot_partitions; i++) {
-> +		boot_partition = &host->boot_partitions[i];
-> +		start = boot_partition->page_offset;
-> +		end = start + boot_partition->page_size;
-> +
-> +		/* Boot pages are normally at the start of
-
-Block comments should start with:
-
-	/*
-	 * ...
-
-Also, are you sure that only few pages in the partitions have different layout
-and not all pages? If not, then this comment needs to be reworded.
-
-> +		 * the nand in various partition.
-> +		 * Check the page from the boot page end first
-> +		 * to save one extra check and optimize this
-> +		 * in case real no-boot partition are used.
-> +		 */
-> +		if (page < end && page >= start)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static void
-> +qcom_nandc_codeword_fixup(struct qcom_nand_host *host, int page)
-> +{
-> +	bool codeword_fixup = qcom_nandc_is_boot_page(host, page);
-> +
-> +	/* Skip conf write if we are already in the correct mode */
-> +	if (codeword_fixup == host->codeword_fixup)
-> +		return;
-> +
-> +	host->codeword_fixup = codeword_fixup;
-> +
-> +	host->cw_data = codeword_fixup ? 512 : 516;
-> +	host->spare_bytes = host->cw_size - host->ecc_bytes_hw -
-> +			    host->bbm_size - host->cw_data;
-> +
-> +	host->cfg0 &= ~(SPARE_SIZE_BYTES_MASK | UD_SIZE_BYTES_MASK);
-> +	host->cfg0 |= host->spare_bytes << SPARE_SIZE_BYTES |
-> +		      host->cw_data << UD_SIZE_BYTES;
-> +
-> +	host->ecc_bch_cfg &= ~ECC_NUM_DATA_BYTES_MASK;
-> +	host->ecc_bch_cfg |= host->cw_data << ECC_NUM_DATA_BYTES;
-> +	host->ecc_buf_cfg = (codeword_fixup ? 0x1ff : 0x203) << NUM_STEPS;
-
-s/1ff/(512 - 1)
-s/203/(516 - 1)
-
-> +}
-> +
->  /* implements ecc->read_page() */
->  static int qcom_nandc_read_page(struct nand_chip *chip, uint8_t *buf,
->  				int oob_required, int page)
-> @@ -2045,6 +2123,9 @@ static int qcom_nandc_read_page(struct nand_chip *chip, uint8_t *buf,
->  	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
->  	u8 *data_buf, *oob_buf = NULL;
->  
-> +	if (host->nr_boot_partitions)
-> +		qcom_nandc_codeword_fixup(host, page);
-> +
->  	nand_read_page_op(chip, page, 0, NULL, 0);
->  	data_buf = buf;
->  	oob_buf = oob_required ? chip->oob_poi : NULL;
-> @@ -2064,6 +2145,9 @@ static int qcom_nandc_read_page_raw(struct nand_chip *chip, uint8_t *buf,
->  	int cw, ret;
->  	u8 *data_buf = buf, *oob_buf = chip->oob_poi;
->  
-> +	if (host->nr_boot_partitions)
-> +		qcom_nandc_codeword_fixup(host, page);
-> +
->  	for (cw = 0; cw < ecc->steps; cw++) {
->  		ret = qcom_nandc_read_cw_raw(mtd, chip, data_buf, oob_buf,
->  					     page, cw);
-> @@ -2084,6 +2168,9 @@ static int qcom_nandc_read_oob(struct nand_chip *chip, int page)
->  	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
->  	struct nand_ecc_ctrl *ecc = &chip->ecc;
->  
-> +	if (host->nr_boot_partitions)
-> +		qcom_nandc_codeword_fixup(host, page);
-> +
->  	clear_read_regs(nandc);
->  	clear_bam_transaction(nandc);
->  
-> @@ -2104,6 +2191,9 @@ static int qcom_nandc_write_page(struct nand_chip *chip, const uint8_t *buf,
->  	u8 *data_buf, *oob_buf;
->  	int i, ret;
->  
-> +	if (host->nr_boot_partitions)
-> +		qcom_nandc_codeword_fixup(host, page);
-> +
->  	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
->  
->  	clear_read_regs(nandc);
-> @@ -2119,7 +2209,7 @@ static int qcom_nandc_write_page(struct nand_chip *chip, const uint8_t *buf,
->  	for (i = 0; i < ecc->steps; i++) {
->  		int data_size, oob_size;
->  
-> -		if (qcom_nandc_is_last_cw(ecc, i)) {
-> +		if (qcom_nandc_is_last_cw(ecc, i) && !host->codeword_fixup) {
->  			data_size = ecc->size - ((ecc->steps - 1) << 2);
->  			oob_size = (ecc->steps << 2) + host->ecc_bytes_hw +
->  				   host->spare_bytes;
-> @@ -2176,6 +2266,9 @@ static int qcom_nandc_write_page_raw(struct nand_chip *chip,
->  	u8 *data_buf, *oob_buf;
->  	int i, ret;
->  
-> +	if (host->nr_boot_partitions)
-> +		qcom_nandc_codeword_fixup(host, page);
-> +
->  	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
->  	clear_read_regs(nandc);
->  	clear_bam_transaction(nandc);
-> @@ -2194,7 +2287,7 @@ static int qcom_nandc_write_page_raw(struct nand_chip *chip,
->  		data_size1 = mtd->writesize - host->cw_size * (ecc->steps - 1);
->  		oob_size1 = host->bbm_size;
->  
-> -		if (qcom_nandc_is_last_cw(ecc, i)) {
-> +		if (qcom_nandc_is_last_cw(ecc, i) && !host->codeword_fixup) {
->  			data_size2 = ecc->size - data_size1 -
->  				     ((ecc->steps - 1) << 2);
->  			oob_size2 = (ecc->steps << 2) + host->ecc_bytes_hw +
-> @@ -2254,6 +2347,9 @@ static int qcom_nandc_write_oob(struct nand_chip *chip, int page)
->  	int data_size, oob_size;
->  	int ret;
->  
-> +	if (host->nr_boot_partitions)
-> +		qcom_nandc_codeword_fixup(host, page);
-> +
->  	host->use_ecc = true;
->  	clear_bam_transaction(nandc);
->  
-> @@ -2902,6 +2998,71 @@ static int qcom_nandc_setup(struct qcom_nand_controller *nandc)
->  
->  static const char * const probes[] = { "cmdlinepart", "ofpart", "qcomsmem", NULL };
->  
-> +static int qcom_nand_host_parse_boot_partitions(struct qcom_nand_controller *nandc,
-> +						struct qcom_nand_host *host,
-> +						struct device_node *dn)
-> +{
-> +	struct nand_chip *chip = &host->chip;
-> +	struct mtd_info *mtd = nand_to_mtd(chip);
-> +	struct qcom_nand_boot_partition *boot_partition;
-> +	struct device *dev = nandc->dev;
-> +	int partitions_count, i, j, ret;
-> +
-> +	if (!nandc->props->use_codeword_fixup)
-> +		return 0;
-
-Move this check to caller as I suggested previously.
-
-> +
-> +	if (!of_find_property(dn, "qcom,boot-partitions", NULL))
-> +		return 0;
-> +
-> +	partitions_count = of_property_count_u32_elems(dn, "qcom,boot-partitions");
-> +	if (partitions_count < 0) {
-
-partitions_count <= 0
-
-> +		dev_err(dev, "Error parsing boot partition.");
-
-Add newline at the end of error message
-
-> +		return ret;
-> +	}
-> +
-> +	host->nr_boot_partitions = partitions_count / 2;
-> +	host->boot_partitions = devm_kcalloc(dev, host->nr_boot_partitions,
-> +					     sizeof(*host->boot_partitions), GFP_KERNEL);
-> +	if (!host->boot_partitions)
-
-host->nr_boot_partitions = 0;
-
-> +		return -ENOMEM;
-> +
-> +	for (i = 0, j = 0; i < host->nr_boot_partitions; i++, j += 2) {
-> +		boot_partition = &host->boot_partitions[i];
-> +
-> +		ret = of_property_read_u32_index(dn, "qcom,boot-partitions", j,
-> +						 &boot_partition->page_offset);
-> +		if (ret) {
-> +			dev_err(dev, "Error parsing boot partition offset at index %d", i);
-
-Add newline at the end of error message. Do the same for all error prints.
-
-> +			return ret;
-> +		}
-> +
-> +		if (boot_partition->page_offset % mtd->writesize) {
-> +			dev_err(dev, "Boot partition offset not multiple of writesize at index %i",
-> +				i);
-> +			return -EINVAL;
-> +		}
-> +		/* Convert offset to nand pages */
-
-s/pages/partitions
-
-> +		boot_partition->page_offset /= mtd->writesize;
-
-s/page_offset/offset
-
-> +
-> +		ret = of_property_read_u32_index(dn, "qcom,boot-partitions", j + 1,
-> +						 &boot_partition->page_size);
-> +		if (ret) {
-> +			dev_err(dev, "Error parsing boot partition size at index %d", i);
-> +			return ret;
-> +		}
-> +
-> +		if (boot_partition->page_size % mtd->writesize) {
-
-s/page_size/size here and below
-
-> +			dev_err(dev, "Boot partition size not multiple of writesize at index %i",
-> +				i);
-> +			return -EINVAL;
-> +		}
-> +		/* Convert size to nand pages */
-
-s/pages/partitions
-
-Thanks,
-Mani
-
-> +		boot_partition->page_size /= mtd->writesize;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
->  					    struct qcom_nand_host *host,
->  					    struct device_node *dn)
-> @@ -2970,6 +3131,8 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
->  	if (ret)
->  		nand_cleanup(chip);
->  
-> +	qcom_nand_host_parse_boot_partitions(nandc, host, dn);
-> +
->  	return ret;
->  }
->  
-> @@ -3135,6 +3298,7 @@ static int qcom_nandc_remove(struct platform_device *pdev)
->  static const struct qcom_nandc_props ipq806x_nandc_props = {
->  	.ecc_modes = (ECC_RS_4BIT | ECC_BCH_8BIT),
->  	.is_bam = false,
-> +	.use_codeword_fixup = true,
->  	.dev_cmd_reg_start = 0x0,
->  };
->  
-> -- 
-> 2.36.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்

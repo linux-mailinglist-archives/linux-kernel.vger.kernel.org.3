@@ -2,286 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD6F5454C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192365454CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbiFITTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 15:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S245734AbiFITUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 15:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiFITTn (ORCPT
+        with ESMTP id S241240AbiFITUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 15:19:43 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2040.outbound.protection.outlook.com [40.107.223.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3614B2FA635;
-        Thu,  9 Jun 2022 12:19:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KZHm4VzQw3z/Ha5U7Lqmuk7CqyuGlQTW+bzM7gEvBxSu8p7gTQr4I4ERQhcRBKGz6R3SuqMSzb7rkF3AdufRFbvXgI0AOHMAGdqxkMsPFvjgGif3HRdZE15Apx1BwvMbL0hv61f1M8HXR3tIa+UymTMe6j5mHM9Ihfq1aOBe2Y91Zn9wK63L6nXve+ijBqsgOeznYlyaDK0kmbJezhLaEgJ5MFVfZw1FIEryxN1bNdGnlFKLY7dQBWln1Wc7tNkw5sBbckt5aYxRQVq1ucC4I2cCbkIPV7mG5PSwnKz74vqgogJ1iDxSIRR6lprBjwn9YBF8RlMoSSSMa/LoobFFlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h8qK72Ya1CUrBlljsT11CR13uJxA5bcK3iQ8lvqE1tM=;
- b=Nb1NPjvj5uo8q8oWHj9oHzBGe2LFGSnR6Pe/ofKvPYQS9K0B675Kpz9D3fN5l4fUTiKqpkZILQazTMiWtpm+SH5V/5utzwgIlj4kmbxxpZHwOpu9MpzorTZ2uQof2vTzcqkd1eBevXQeU363ydD5ny63Bkl7fD74RQw3D0XE0ED/viAJDOl5/XxnP4B1bKLN+RK0AfkPKcQs9mshWm6w8MM9bQD5RUVW9aEEAyudbpTr+YY9npRGhuM85AqWtuqmOlYs6cjD9by1+FrDkxx2dlAruwrf10bK57waHhMRcFT9re31F+oUX4o2bvA0pCA/kmvwzOm10Fjy/NT4JkTmHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h8qK72Ya1CUrBlljsT11CR13uJxA5bcK3iQ8lvqE1tM=;
- b=Xr+nZ20FQlAN1NpcbnPx+KixKYOYZSm9qRz8yXnokwE1PCYFRYE0iotSIsHKd5Etlxle9GxbIYjNLe+nmfj8FGvukw6d1jF6cUEDTRd01IoxLD2cBe6abNF2M9uZc/Vtvj89Atm6iOgCseCpeQvEphGI0osHm1jH3nT+hOWeZEo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BL3PR12MB6476.namprd12.prod.outlook.com (2603:10b6:208:3bc::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Thu, 9 Jun
- 2022 19:19:38 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::9dfa:d871:2068:662f]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::9dfa:d871:2068:662f%7]) with mapi id 15.20.5332.014; Thu, 9 Jun 2022
- 19:19:38 +0000
-Date:   Thu, 9 Jun 2022 19:19:29 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     bp@alien8.de,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v5 2/2] x86/mce: Add support for Extended Physical
- Address MCA changes
-Message-ID: <YqJHwXkg3Ny9fI3s@yaz-fattaah>
-References: <20220412154038.261750-3-Smita.KoralahalliChannabasappa@amd.com>
- <YlakNe012hhErszh@zn.tnic>
- <YlbZ1k1cT1FVJj4W@yaz-ubuntu>
- <YlbkCK9LU2KdXZUG@zn.tnic>
- <YlbzbZO6AvxOqQb/@agluck-desk3.sc.intel.com>
- <Ylb3/4oi6KAjdsJW@zn.tnic>
- <YlcnN2q9ducdvsUZ@yaz-ubuntu>
- <YlflJfyQR/j/eRkn@zn.tnic>
- <YlmHtlKABn9W0pu5@yaz-ubuntu>
- <YlmfZU2Bg5cRk07J@agluck-desk3.sc.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlmfZU2Bg5cRk07J@agluck-desk3.sc.intel.com>
-X-ClientProxiedBy: MN2PR16CA0040.namprd16.prod.outlook.com
- (2603:10b6:208:234::9) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Thu, 9 Jun 2022 15:20:08 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB87C315DC7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:20:04 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y196so21893552pfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 12:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pKSRlcfMN8Jy+LePPN1dQUeIGJIbL+FMhPMeZkz5dWo=;
+        b=cStiLk4KO8rkH1biOIg8HmRIOY7ZpyZkrivEtpcnbkHorl7YxmQk9y+LCBzYlvDLbQ
+         9SwPWXJ1sCbUopm8KYTNxZYwShaj88nnjCwBzNqTHGCpJe3cmNG02k4YnKclosZe0bAJ
+         vAOGkdSXQMze8+FyTfsNdhtbBdwMoaEkLyBhk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pKSRlcfMN8Jy+LePPN1dQUeIGJIbL+FMhPMeZkz5dWo=;
+        b=VABJiqEC+OBk3OFB6ErHFCwn2XEEW2l4wxKGHtSq5zCmoEGwQbrJjqLlkfLaIJw2qK
+         GbK8Pz+zcxbQxuPa+9WBgcSPQRylFR6qcbprBM1oTpi0qB06TEjZ8NTnHlDhFpiOSJYf
+         IjpcGcmBZ1UU7gNpL5si6cBY6vE9cHdOUpWRrN07nqyiGolWEMAplGFfc3L1GDMGL1kT
+         eTBeEwcCtkusQ+MY2BguQhLzopGg4b56j8jRztfPQgiwUSwTQqZZrwAuRzXCt3KGJFfP
+         vole55lmDAN2AQwzjS+E0WZk62MJ9h3NE10tkvZ5Z7Qnk+n5xNYdOgw20gfbL4pDuJVX
+         Ei3A==
+X-Gm-Message-State: AOAM530CUHfqx78E4qLrTzeBpC4swy5SeZtne0s+0jAunOxc1zJYBsOr
+        rZZ85hjJfEX+664ssZuz1s+W6A==
+X-Google-Smtp-Source: ABdhPJxKZFfEzxiivL6obANxQL0DO7vDM8JjbShRoseO5cRG8jq559V4pHRx9rKuDz1+23fY8Ug2tQ==
+X-Received: by 2002:aa7:888c:0:b0:505:7832:98fc with SMTP id z12-20020aa7888c000000b00505783298fcmr41440874pfe.0.1654802404346;
+        Thu, 09 Jun 2022 12:20:04 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:c543:2c9:1206:951b])
+        by smtp.gmail.com with UTF8SMTPSA id 23-20020a17090a0d5700b001e345c579d5sm56966pju.26.2022.06.09.12.20.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 12:20:04 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>,
+        Peter Chen <peter.chen@kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v22 0/3] usb: misc: Add onboard_usb_hub driver
+Date:   Thu,  9 Jun 2022 12:19:57 -0700
+Message-Id: <20220609192000.990763-1-mka@chromium.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9556644f-05c6-43a4-9a3b-08da4a4cfeff
-X-MS-TrafficTypeDiagnostic: BL3PR12MB6476:EE_
-X-Microsoft-Antispam-PRVS: <BL3PR12MB6476D07B9F3999997D413049F8A79@BL3PR12MB6476.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sKQotBE7JD4IvpzeTX5KcdLuUW1O/yPmNGrMT6VMZeIt1Y0k2k2pgaObibYPr/SQxixzgWEd+zdw4/DQW0t4Ftqfx2adpfZIV+ykPlYYuAv5XGnqRBMX2CCizZYM5qLzHzzmOBICwIVoBW0TPDyF1y1WtRtxLjUlAVR4gts3bJhjSuyGD87w+gyDgQcIUabQSzOuSZtn7Q65ydT1LE8f5NiEMKQqbZF6Ht0h0S/jf6KEkbG9FAE7vz6i7oFOgo9NwsPkyUSHiEgrwTeHOUdHFRvV4k8TAFAJqEeodd9O5BHab1XaTvisYCbK/jvNMHyXk/CNXkogQ5ykIiQ/maiYwLaBC+SJGqI9yqqvvfG1JmfOjI/GEO7qS75qx5Mhg6YYWaJRw0aXtgEXwZYwARK/61P5XQAP6amZhG22gkGL0b0+OFl/uEDp343cVc5zFCY2cTieYcvtAKYIo3hPPEcvC3sK23hJKI24/YIqIskxQ6W5BpC82vUbxjUu6M0UEZcKuN8xcuAjf4mObHwgzSCyc8tNuSvMqqNBuiDvsmSvurWBjqB1MqWkLmgWKuOQ5LlJOc6fHAOF9XKLuUFPxESHhSnxXLiL49HmLc2a6eX2q6kxVnv9suyG/1LIBn8drurC9Yhdra9cbwRKGpb55AnfSVj8kVuglLmFWOmthOhdZ5spyKKre9PTd0X7ZNY2LtU4nFv6eYQXHCyQ5qEW4/5y+A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(33716001)(86362001)(38100700002)(8936002)(508600001)(5660300002)(6486002)(2906002)(44832011)(316002)(6916009)(54906003)(4326008)(8676002)(66476007)(66556008)(66946007)(6666004)(186003)(83380400001)(53546011)(6506007)(9686003)(6512007)(26005)(309714004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2Ke3s7lJYDPJqsLmy+jTH8sbVigI1MdlJoykSoyQgDm/mwcQdoDU44SK+i1d?=
- =?us-ascii?Q?wkUVKZqbXwsPqM3adCCuPzE3hULfL7quqX8JC2geHH3QjZt5HxTj+uufgOAA?=
- =?us-ascii?Q?tozZa26Rk37V1ZdSmM0HopMkGvpBaZnyjg4NltkIBkBcUFRS39zVP2+IDOfF?=
- =?us-ascii?Q?9Zk2lhBqfKMaRjN/uL6HR5XaTl4pwS0FQNKSPrB/tPtY/VfwHm2j6EbqJNhr?=
- =?us-ascii?Q?nZA3VMtwwvySbj+0XgcgVXm9CTQKHyBBDcz+hwv4WrKWqD/83hQCrox3L9nf?=
- =?us-ascii?Q?2N+4aG1sfG6IliDyyFOWsI7rkUAmFuCvH8RE9rFSQfTPOFmuNR/57loLg+Jf?=
- =?us-ascii?Q?nafN3d5CYkT82xOVuvZ9Bxx6vrt7Jo6VAqnDfrJ67BOqIh1BsuKOQ4x6IoDy?=
- =?us-ascii?Q?J0KkqOshsPIbSvxUgs+jNSRAKQ216dymFpKiB+c7UtRdxBAkFAK7KwIa0Ycs?=
- =?us-ascii?Q?a1S1bYARqA5cfeMlhldbFn/1iwFoguo+1XL8bqLnvfpoS601wdu+3TleboYq?=
- =?us-ascii?Q?t3TcYvbzad+fTKPnD8cLQj3J/7c+I5Mg5GTdRpNJVeX/fOmin6242vO94fQ5?=
- =?us-ascii?Q?pb6iYuPidZxkQEh6/gOHQHjYN6fc2ACroY0KVblYDuvnh4kadLpYTEISRyTt?=
- =?us-ascii?Q?NriCx33rDuPJNIWWj+HdwmmHegszcZPIm30tOOmM3CCXLjzgn/tJjFAz7dil?=
- =?us-ascii?Q?7AVssXFXpASjvN/fEHYp5K4AyFYTIvg6tAfW5UeLWDW6YKSwU5VFAH4YsAWs?=
- =?us-ascii?Q?bK3Gj1Sigze0uvCUTsIesNO9Ho3PmPFpqaU0a8Jv1hjxu0rQ+gjZpjd3eUj+?=
- =?us-ascii?Q?bj1FecWpIgPE80J0IE2snNYBFu4HZn92lbUYqlbQpedymzSoluydTWZZ1QEk?=
- =?us-ascii?Q?vi+fjsPq8Mt2gZ4YXbj08C6BHyeHmOlgXTWlMStHtEHQMFpysXeuxbbxbJNP?=
- =?us-ascii?Q?T+Lh6ihyMt0gldfyA2zA/OqaoDdiap/iayW0qHp3wTBLVNuRdSL+U6N5MFN3?=
- =?us-ascii?Q?vclk4vEqXmqf1JE2dJRTL6aeiLAe0rJ4daJRdGidnzP27+JQGwrqT5ljeSbE?=
- =?us-ascii?Q?JqikCmtDFbmnblUv7mE/M6wtf9CU1BQ/GJTF/udo/zvnUKd5Q5EtZBItrTR+?=
- =?us-ascii?Q?PvDH/dVZF6SBIMgSFGr5VeSxetcSokqeR6aDcCrtE6/BDrOoDtQKkgeY7iwY?=
- =?us-ascii?Q?in0E44ZDjZV2E2tyCj0v/NagvQSqN+oXwupW1MKR6TQppkIE5ELNCJqPYa7E?=
- =?us-ascii?Q?tkSwlzY7TooRELZwlK769URkC5D2okheI0zUp/Rkxaj37mtoT/9DYejeRvMK?=
- =?us-ascii?Q?NcB8gbNzKFP5UGQ8NEr8Fm3a4+wjM3CrbN6hOaJHuDjcGOJjh55tGVDPAaXp?=
- =?us-ascii?Q?6+jCx2VTIyHQ6zdAVDcKom2TD+x2NOHwL7M9pHQAFj7NmHUjMpApdEEKlw8z?=
- =?us-ascii?Q?ecPpXvsk/sF4OjYs02M5n/KCI6SoTzqEPyTOhznPulxs0aSED9VVBeN9OViG?=
- =?us-ascii?Q?Y73npjUVlZmHIChHyc9zwd6o5aKbYMbRKsqC8lVDucdInMoy+zcP2qIoWtIj?=
- =?us-ascii?Q?988albXGG4OraEKMtSEdCpV8zMqUqS5wmwtscCLoDRYbbWFOjY+mHWNH1T/I?=
- =?us-ascii?Q?OrsGaAMzAgOHlSrW/bldfg38hDBsAsNd7lph2P0FO8tJvoDnItQ/zv5iZ72v?=
- =?us-ascii?Q?XWG3eezsjT2WfoeWPdkkCufABUd63zE8CpabY6oujsi0YHNEN2FjVd6dwdan?=
- =?us-ascii?Q?oAKISlX2Cw=3D=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9556644f-05c6-43a4-9a3b-08da4a4cfeff
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 19:19:38.5292
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cwHdDQkVc7Ribayzg5C0LPeluSa/NlWGZhaSRb2SWFQg1LjVXBdV0uV2GmkbPz9F/JVldSnBITFu7WF8tp+EFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6476
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 09:37:57AM -0700, Luck, Tony wrote:
-> On Fri, Apr 15, 2022 at 02:56:54PM +0000, Yazen Ghannam wrote:
-> > 3) OS, or optionally BIOS, polls MCA banks and logs any valid errors.
-> >    a) Since MCi_CTL, etc. are cleared due to reset, any errors detected are
-> >       from before the reset.
-> 
-> On Intel not quite any error. H/w can still log to a bank but MCi_STATUS.EN bit
-> will be zero. We've also had some BIOS code that did things that logged errors
-> and then left them for the OS to find during boot.
-> 
-> But this sequence does give more confidence that errors found in banks duing
-> boot are "old".
-> 
-> > I agree. The Intel SDM and AMD APM have the following procedure, in summary.
-> > 
-> > 1) Set MCG_CTL
-> > 2) Set MCi_CTL for all banks
-> > 3) Read MCi_STATUS and log valid errors.
-> > 4) Clear MCi_STATUS
-> > 5) Set CR4.MCE
-> 
-> Yes. That's what the pseudo-code in Intel SDM Example 15-1 says :-(
-> > 
-> > I don't know of a reason why STATUS needs to be cleared after MCi_CTL is set.
-> > The only thing I can think of is that enabling MCi_CTL may cause spurious info
-> > logged in MCi_STATUS, and that needs to be cleared out. I'm asking AMD folks
-> > about it.
-> > 
-> > Of course, this contradicts the flow I outlined above, and also the flow given
-> > in the AMD Processor Programming Reference (PPR). I wonder if the
-> > architectural documents have gotten stale compared to current guidelines. I'm
-> > asking about this too.
-> 
-> I will ask architects about this sequence too.
->
+This series adds:
+- the onboard_usb_hub_driver
+- glue in the generic hub code to create and destroy the
+  onboard_usb_hub platform devices if needed
+- device tree changes that add RTS5411 entries for the QCA SC7180
+  based boards trogdor and lazor
+- a couple of stubs for platform device functions to avoid
+  unresolved symbols with certain kernel configs
 
-Hi everyone,
-It looks like the discrepancy between the Linux code and the x86 documents
-isn't a major concern for AMD systems. However, it is highly recommended that
-the banks are polled before enabling MCA to find any errors from before OS
-boot. It is possible that BIOS may enable MCA before the OS on some systems,
-but this isn't always the case.
+The main issue the driver addresses is that a USB hub needs to be
+powered before it can be discovered. For discrete onboard hubs (an
+example for such a hub is the Realtek RTS5411) this is often solved
+by supplying the hub with an 'always-on' regulator, which is kind
+of a hack. Some onboard hubs may require further initialization
+steps, like changing the state of a GPIO or enabling a clock, which
+requires even more hacks. This driver creates a platform device
+representing the hub which performs the necessary initialization.
+Currently it only supports switching on a single regulator, support
+for multiple regulators or other actions can be added as needed.
+Different initialization sequences can be supported based on the
+compatible string.
 
-Tony,
-Did you get any feedback regarding the sequence above?
+Besides performing the initialization the driver can be configured
+to power the hub off during system suspend. This can help to extend
+battery life on battery powered devices which have no requirements
+to keep the hub powered during suspend. The driver can also be
+configured to leave the hub powered when a wakeup capable USB device
+is connected when suspending, and power it off otherwise.
 
-Also, please see the patch below which is based on Boris' patch from earlier
-in this thread.
+Changes in v22:
+- call onboard_hub_create/destroy_pdevs() from hub_probe/disconnect()
+  instead of doing it from the HCD. When the pdevs are create from the
+  HCD usb_of_get_device_node() (called by onboard_hub_create_pdevs())
+  may return NULL because the USB device for the root hub doesn't
+  exist yet. Creating the pdevs from the hub code also has the
+  advantage of enabling support for nested onboard hubs (as long as
+  all hubs in the chain have DT nodes and are supported by the driver).
+- moved onboard_hub_create_pdevs(), onboard_hub_destroy_pdevs() and
+  of_is_onboard_usb_hub() into a separate file to allow them to be
+  linked into the USB core module (if CONFIG_USB=m)
+- Added extra checks to ensure only one platform device is created
+  for each physical hub. This is necessary because
+  onboard_hub_create_pdevs() is now called from hub_probe() instead
+  of usb_add_hcd(). As a result the function is called twice for
+  typical USB3 hub, once for the USB3 part of the hub, and once for
+  USB <= 2.x. Generally the parent hub downstream of the primary HCD
+  creates the onboard hub platform device.
+- use kzalloc() instead of devm_kzalloc() to allocate list entries. Using
+  managed memory can cause issues since the managed memory is allocated
+  before the device is probed.
+- use a workqueue to (re-)attach the USB driver during/after _probe().
+  This is necessary to avoid self-deadlocks on systems with nested
+  onboard hubs.
+- don't initialize list_head in onboard_hub_create_pdevs(), this needs
+  to be done by the owner, to ensure that onboard_hub_destroy_pdevs()
+  is called with a struct that was properly initialized even when
+  onboard_hub_create_pdevs() is not called.
+- rebased series on v5.19-rc1
 
-Thanks,
-Yazen
+Changes in v21:
+- dropped patch 'driver core: Export device_is_bound()'
+- refactored _find_onboard_hub()
+- removed 'onboard_hub_dev' symlinks from USB devices
+- dropped patch 'arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub'
+  (will be sent separately)
+- rebased series on v5.17-rc4
 
--------
+Changes in v20:
+- addressed review comments from Stephen
+- changed DT node names for hubs
 
-From dc4f5b862080daae1aae22f1ec460d9c4c8b6d20 Mon Sep 17 00:00:00 2001
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 19 May 2022 17:25:47 +0000
-Subject: [PATCH] x86/mce: Remove __mcheck_cpu_init_early()
+Changes in v19:
+- added VID:PID pairs and compatible strings for RTS5414 hub
+- updated comments with RTS5411 USB versions to reflect those
+  reported/supported by the hub
+- rebased series on v5.16
 
-The __mcheck_cpu_init_early() function was introduced so that some
-vendor-specific features are detected before the first MCA polling event
-done in __mcheck_cpu_init_generic().
+Changes in v18:
+- introduced hidden Kconfig option to align module vs. builtin
+  choice with CONFIG_USB (thanks Doug!)
+- added patch 'driver core: Export device_is_bound()'
+- also adjust device tree of pompom rev1
+- dropped the following patches, which aren't needed anymore by this
+  series (though they might still be useful on their own):
+  - usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
+  - arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+  - ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
 
-Currently, __mcheck_cpu_init_early() is only used on AMD-based systems and
-additional code will be needed to support various system configurations.
+Changes in v17:
+- rebased on top of v5.16-rc1
+- moved creation of onboard_hub platform devices from xhci_platform
+  to the generic HCD code
+- addressed review comments for the onboard_hub driver
+- moved Kconfig/defconfig changes to the end of the series. The
+  onboard_hub driver doesn't depend on XHCI_PLATFORM anymore,
+  hence these changes aren't really required for the driver, but
+  they still seem to be a worthwhile improvement
 
-However, the current and future vendor-specific code should be done during
-vendor init. This keeps all the vendor code in a common location and
-simplifies the generic init flow.
+Changes in v16:
+- added patch 'ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+  where needed' to keep arm32 defconfigs effectively unchanged
 
-Move all the __mcheck_cpu_init_early() code into mce_amd_feature_init().
-Also, move __mcheck_cpu_init_generic() after
-__mcheck_cpu_init_prepare_banks() so that MCA is enabled after the first
-MCA polling event.
+Changes in v15:
+- adjusted dependencies of USB_DWC3_CORE to make sure it can only
+  be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+  or USB_DWC3_DUAL_ROLE is selectable
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- arch/x86/kernel/cpu/mce/amd.c  |  4 ++++
- arch/x86/kernel/cpu/mce/core.c | 20 +++-----------------
- 2 files changed, 7 insertions(+), 17 deletions(-)
+Changes in v14:
+- rebased on top of v5.14-rc1
+- dropped DT binding patch which landed in v5.13
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1c87501e0fa3..f65224a2b02d 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -681,6 +681,10 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
- 	u32 low = 0, high = 0, address = 0;
- 	int offset = -1;
- 
-+	mce_flags.overflow_recov = !!cpu_has(c, X86_FEATURE_OVERFLOW_RECOV);
-+	mce_flags.succor	 = !!cpu_has(c, X86_FEATURE_SUCCOR);
-+	mce_flags.smca		 = !!cpu_has(c, X86_FEATURE_SMCA);
-+	mce_flags.amd_threshold	 = 1;
- 
- 	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
- 		if (mce_flags.smca)
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 5f406d135d32..9efd6d010e2d 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1906,19 +1906,6 @@ static int __mcheck_cpu_ancient_init(struct cpuinfo_x86 *c)
- 	return 0;
- }
- 
--/*
-- * Init basic CPU features needed for early decoding of MCEs.
-- */
--static void __mcheck_cpu_init_early(struct cpuinfo_x86 *c)
--{
--	if (c->x86_vendor == X86_VENDOR_AMD || c->x86_vendor == X86_VENDOR_HYGON) {
--		mce_flags.overflow_recov = !!cpu_has(c, X86_FEATURE_OVERFLOW_RECOV);
--		mce_flags.succor	 = !!cpu_has(c, X86_FEATURE_SUCCOR);
--		mce_flags.smca		 = !!cpu_has(c, X86_FEATURE_SMCA);
--		mce_flags.amd_threshold	 = 1;
--	}
--}
--
- static void mce_centaur_feature_init(struct cpuinfo_x86 *c)
- {
- 	struct mca_config *cfg = &mca_cfg;
-@@ -2139,10 +2126,9 @@ void mcheck_cpu_init(struct cpuinfo_x86 *c)
- 
- 	mca_cfg.initialized = 1;
- 
--	__mcheck_cpu_init_early(c);
--	__mcheck_cpu_init_generic();
- 	__mcheck_cpu_init_vendor(c);
- 	__mcheck_cpu_init_prepare_banks();
-+	__mcheck_cpu_init_generic();
- 	__mcheck_cpu_setup_timer();
- }
- 
-@@ -2308,9 +2294,9 @@ static void mce_syscore_shutdown(void)
-  */
- static void mce_syscore_resume(void)
- {
--	__mcheck_cpu_init_generic();
- 	__mcheck_cpu_init_vendor(raw_cpu_ptr(&cpu_info));
- 	__mcheck_cpu_init_prepare_banks();
-+	__mcheck_cpu_init_generic();
- }
- 
- static struct syscore_ops mce_syscore_ops = {
-@@ -2327,8 +2313,8 @@ static void mce_cpu_restart(void *data)
- {
- 	if (!mce_available(raw_cpu_ptr(&cpu_info)))
- 		return;
--	__mcheck_cpu_init_generic();
- 	__mcheck_cpu_init_prepare_banks();
-+	__mcheck_cpu_init_generic();
- 	__mcheck_cpu_init_timer();
- }
- 
+Changes in v13:
+- added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
+  'depends on'" to the series to avoid Kconfig conflicts
+- added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
+  to the series to keep effective defconfig unchanged
+
+Changes in v12:
+- onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+  in onboard_hub.h to also check for the driver built as module
+- onboard_hub_driver: include onboard_hub.h again to make sure there
+  are prototype declarations for the public functions
+
+Changes in v11:
+- support multiple onboard hubs connected to the same parent
+- don't include ‘onboard_hub.h’ from the onboard hub driver
+
+Changes in v10:
+- always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+- keep 'regulator-boot-on' property for pp3300_hub
+
+Changes in v9:
+- added dependency on ONBOARD_USB_HUB (or !ONBOARD_USB_HUB) to
+  USB_PLATFORM_XHCI
+
+Changes in v7:
+- updated DT binding
+- series rebased on qcom/arm64-for-5.13
+
+Changes in v6:
+- updated summary
+
+Changes in v5:
+- cover letter added
+
+Matthias Kaehlcke (3):
+  of/platform: Add stubs for of_platform_device_create/destroy()
+  usb: misc: Add onboard_usb_hub driver
+  usb: core: hub: Create platform devices for onboard hubs in
+    hub_probe()
+
+ .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+ MAINTAINERS                                   |   7 +
+ drivers/usb/core/Makefile                     |   1 +
+ drivers/usb/core/hub.c                        |   9 +-
+ drivers/usb/core/hub.h                        |   1 +
+ drivers/usb/misc/Kconfig                      |  23 +
+ drivers/usb/misc/Makefile                     |   1 +
+ drivers/usb/misc/onboard_usb_hub.c            | 426 ++++++++++++++++++
+ drivers/usb/misc/onboard_usb_hub.h            |  17 +
+ drivers/usb/misc/onboard_usb_hub_pdevs.c      | 129 ++++++
+ include/linux/of_platform.h                   |  22 +-
+ include/linux/usb/onboard_hub.h               |  18 +
+ 12 files changed, 657 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+ create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+ create mode 100644 drivers/usb/misc/onboard_usb_hub.h
+ create mode 100644 drivers/usb/misc/onboard_usb_hub_pdevs.c
+ create mode 100644 include/linux/usb/onboard_hub.h
+
 -- 
-2.25.1
+2.36.1.476.g0c4daa206d-goog
 

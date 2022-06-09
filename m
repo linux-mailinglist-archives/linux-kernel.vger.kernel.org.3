@@ -2,198 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCD95456C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1AC5456C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344542AbiFIVzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 17:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S235825AbiFIV6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 17:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbiFIVzJ (ORCPT
+        with ESMTP id S231699AbiFIV5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 17:55:09 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8594416085B;
-        Thu,  9 Jun 2022 14:55:07 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id y69so19682252oia.7;
-        Thu, 09 Jun 2022 14:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sQrKWWesUkB3fWG+8MpJ7+BZHbgJ6rOJ+xH2t3Vud5Y=;
-        b=kYLuPAJJeljxNhu38lRmbvQtDupw/fxcWqAq3Yr2mPXg4FdrRpPiwhtpuunX1DrZcZ
-         5ghyRqx8xiAzwNziMsh44ew7iOpnNRurW4U0Had9k54mRc5AGXwKevQOmWiVyRP9Efeu
-         SYIFvtCw0RdSsQC3B8J9LU5OSpEyuzmb7/imAQiVRyR9nV7hGjdpjEkeKTbVH2kGLHNi
-         n/Dpf57TTbD4Rbl09qt30BrNKvKW1e2Qq5Txu8oBwo2bI/ZtNJF0iU/pAaUTAsJsPdlu
-         9zX6fZ+KdwXOs2sT2juRZMjmMY/UtcJlkqyVsjirHVGRXscyIYEUbIA/Xy1U8iTPN2Sm
-         iOag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sQrKWWesUkB3fWG+8MpJ7+BZHbgJ6rOJ+xH2t3Vud5Y=;
-        b=kgbf+lG3NBmLBpHObEZbnxpjapiyyobK9SuCv73flUqcT3jyUby8MgYPjSLkp8WxUE
-         7/o1DAeUVuK8/PcjVgTRdeXoH+pfMvj/wMRNSDdKhEWNU2f/l14t2jIaLotbWCds8n1Q
-         HWoxd7cQGPKhadfH0+TzcpLfjH7uBzJ4wlcXP6ZztVLhcg3FIQSBr7zYURx9J4RY5Q4w
-         pOiLj18NlJRRGNvZ3XgR1A9oDVLSJ6R9qNX7hNZuo1TnXn/tnYUKA2SFH1QcbPHn1V6X
-         cj1ZYnfV+lWrlZlJ+w1xydmSpvQD9DvgiC/IRBELkW+/MZN4Lu5i2UcyJmH0fZfMfjez
-         7U1w==
-X-Gm-Message-State: AOAM5323mbuAXEsdRo+Dh40oF605bX8b3ek6woodsPJR7Fku8sbK12d4
-        K3+Drcp1cgI8qhPIydhlUHIug7/wJOXLD47+/BQ=
-X-Google-Smtp-Source: ABdhPJxlYhS47r6a6dc8w5eZ0iuL/yg98VzNNKi9SyC8ZdO1ZisWfyzy+oovUVItwvZsE/jDiBtbswwmuZb8+c4sXIQ=
-X-Received: by 2002:a05:6808:16ac:b0:2f9:52e5:da90 with SMTP id
- bb44-20020a05680816ac00b002f952e5da90mr2966663oib.5.1654811705887; Thu, 09
- Jun 2022 14:55:05 -0700 (PDT)
+        Thu, 9 Jun 2022 17:57:55 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-bgr052101064020.outbound.protection.outlook.com [52.101.64.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5627665D39;
+        Thu,  9 Jun 2022 14:57:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YcPDCO0Y18Enms8qKNccpbab/IF/3XK/SXjs7U2EoKoBhPPkngkCDA6cBQWuDt7ek1qje9tr4zUeHQaOn9+6MGrww+ta4cgs+mc7pEpgkq5kQS3Rg7emeu3I7aUJYJSP1lgcmO7PWG1W+zQYAKm01L1v8c8KDwxJsBM7eg+Ajp79mdSQgS4TH8WUSdy9/ACFdqsyQ6sV4KOxRnp6HjYDCbBTkUDQuzIkCX3VI218ossfw4D+/zDQbdhgltu71OP0oFI+Hfw2+rIUMcqxGQ18NKllxgHxXExSaH9M0lB2qPQ80qPe9qsaLPcEAfWEnYED6epJQLmZqkVTc8RWHxzaPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p6QMxEqA2iGGLukTTl0VpGpIOMNiCbSxVnHUTRKm4n4=;
+ b=c/Bo2U046M6G4LQkWUIfC4tsicteqx0RcJOkpzbRsht4r6wJ18n5dXrTzXOSqc0tX1z/3rHL+BmaZBt8H+ZFZsNT9KST8utiZw3UVhEA62qM6MaC48ThFHjK71HyVK1CfBpy6f7CNQE2GGdD/2T7l7yx/iW/lQhZAA1EgXOOkWyDWLkq8Yf6lyAK7DkQbPNsKzjNkpC8yL45aQmQmAdf832XeVZTS5FzlIjFEiM4HQQ9GtgGpeskjsJ0DzzJWF1wF1UBa/IEPaZUbuNYFcKlttdOPuGja5Y4QcaOt5qiy9i5QkPY+KScsWzzwR2p0FanWB+wAbn8vAjTTHOHP2pkaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p6QMxEqA2iGGLukTTl0VpGpIOMNiCbSxVnHUTRKm4n4=;
+ b=KKZMCLO5NUP+JbSRi93Du6LAhhFEHeep6+z1cKNz4WDtGlGwK0TwQkXMHQTZVcqyZEA8RcJLPHDuZ1JdOzekTIob1f0aKhkijXMexqX1p3C1Nvvc/lmPGceN/QG8TNVuN7WcpDHqHpQdEcU7p/PRRzrVesy4ncdlfANlNub4mTg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from BYAPR21MB1223.namprd21.prod.outlook.com (2603:10b6:a03:103::11)
+ by SJ0PR21MB1871.namprd21.prod.outlook.com (2603:10b6:a03:299::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.6; Thu, 9 Jun
+ 2022 21:57:43 +0000
+Received: from BYAPR21MB1223.namprd21.prod.outlook.com
+ ([fe80::7ceb:34aa:b695:d8ac]) by BYAPR21MB1223.namprd21.prod.outlook.com
+ ([fe80::7ceb:34aa:b695:d8ac%5]) with mapi id 15.20.5353.001; Thu, 9 Jun 2022
+ 21:57:43 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
+Cc:     haiyangz@microsoft.com, decui@microsoft.com, kys@microsoft.com,
+        sthemmin@microsoft.com, paulros@microsoft.com,
+        shacharr@microsoft.com, olaf@aepfle.de, vkuznets@redhat.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next,0/2] net: mana: Add PF and XDP_REDIRECT support
+Date:   Thu,  9 Jun 2022 14:57:06 -0700
+Message-Id: <1654811828-25339-1-git-send-email-haiyangz@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR19CA0060.namprd19.prod.outlook.com
+ (2603:10b6:300:94::22) To BYAPR21MB1223.namprd21.prod.outlook.com
+ (2603:10b6:a03:103::11)
 MIME-Version: 1.0
-References: <20220609145314.2064632-1-zhengjun.xing@linux.intel.com>
- <20220609145314.2064632-5-zhengjun.xing@linux.intel.com> <8358dc65-88d8-1550-96bd-9e66477c4bd5@linux.intel.com>
-In-Reply-To: <8358dc65-88d8-1550-96bd-9e66477c4bd5@linux.intel.com>
-From:   Namhyung Kim <namhyung@gmail.com>
-Date:   Thu, 9 Jun 2022 14:54:54 -0700
-Message-ID: <CAM9d7ch9MR6H3soO17+F9M0hMRYX9b6Tf2oKmKTd60SHxycXLA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] perf x86 evlist: Add default hybrid events for
- perf stat
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, alexander.shishkin@intel.com,
-        Jiri Olsa <jolsa@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: LKML haiyangz <lkmlhyz@microsoft.com>
+X-MS-Exchange-MessageSentRepresentingType: 2
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a19de5e5-a13b-45e6-c07f-08da4a63142a
+X-MS-TrafficTypeDiagnostic: SJ0PR21MB1871:EE_
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-Microsoft-Antispam-PRVS: <SJ0PR21MB187163DEF38EF3B7D96CA9CBACA79@SJ0PR21MB1871.namprd21.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lOofB1CtlUB34ZaLrE7IW5g3eSfJQBS7xYu5z9yqm+QpXXGl2qaTA4PEL1Ox+OriHNAbgXuV4S0YzSnDDf5olOc8e0Ohft7PmUPExgIc/E7DcfUduQDVN3MTV2ISrpTnYQy2RpCw9knacsHjPjRvPXa1Rs0ZeRF0kSZ7c2gKlKrG/Tg03OZvcQrEpInV/bjcGQg9j4fBEcMnO+KUXekvYNfmMrpTGzzVsNuAWN5WSneWJSJQoPjkiEM1+xwdGgzPhi07Ziq7IwFvqV9XHYCfY+U1JkToFm9VHGMaoYImRoeeh0lBnF8PDXYW939e5nS174QAi8UXwSE4Sc0VDG8BAcd29j2Fz+Y4tUDJnnh5gb/Cqfkb+bfX+LJkWlrZAbEKH5gqGtyh/5AzycBXA+p4MuH8tTKvWKu0I/IymWpIkyOEetrqYUIBICEFwpcNXWYAQtg7MFmok2CPghu0h2YZ4h/dBjSdRbRV39KFpTsUKdDpMad6OInvjR3NOQL0jYkS6SGVf+hletQdN3IUVsMwuBh/dh7vDp4rnWAW8XTIH1kztrdNeVMDCFsyOiweaHafNB9TiR0JHgKDXVmYBr686QkZf1KZpguzSGB+P3Es7EkxRtpWEA5Z+m4KVBK/ppAsVBqU56oRLBmLLMWkO3c4ZhOj1mCuXw3E/lsyd1ML0DD+TWl9jrZM3NguwNS5wcOeYVIMlWZB6yrbXlio9eA/wj3G3DmygM8nCqVvcICu8BAkR3rVub58gWduRgCVxmGk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1223.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(83380400001)(10290500003)(36756003)(4326008)(38350700002)(6666004)(2906002)(38100700002)(4744005)(5660300002)(66556008)(66946007)(66476007)(8676002)(186003)(316002)(2616005)(6486002)(7846003)(6506007)(52116002)(82960400001)(6512007)(8936002)(82950400001)(26005)(508600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2Zu8Um+5s8fHuV1e5c8VTl5eQNHyBR+xwhdFZBKt+Nh8LDfYPiss8GWd25mN?=
+ =?us-ascii?Q?2T6ToJQlCVYOIF5lJSh49reDNV+R2czRohui9EPuDLSqWCBBfUA4lll/asjq?=
+ =?us-ascii?Q?YIxtcoz6zQprIS2tXfTkiMkK84wZLv3RzookHwO5IVanyL6EibirGdDQLhNE?=
+ =?us-ascii?Q?HrFZDLdC0u5CaRX1eYL+JcNGwBu9wF9jLUh3FdO3rQRyFArs6oW5e7ds1XtU?=
+ =?us-ascii?Q?uf7JISHxZGJex4W4w7e5XVJCUcOTQ6A2yy0oZ3hHBOyaaMKPdi7BdJvQFyDO?=
+ =?us-ascii?Q?V0ON2NJifWxTm3SowS5o+as9nacsPAzgwlhq5Gqg1sgBsLfZxhqqj9ZyLP1D?=
+ =?us-ascii?Q?n+Y0TKqboKgb0I/495zMSrJYrqkbghLnDlE8zjCDGXd5LC/6WBnVYnp7qRml?=
+ =?us-ascii?Q?DZlyiCDTTAaMrsdU+wv8Ru/945+pItz6UGzZFho6bUNiX3LCJlhtrk+bNy48?=
+ =?us-ascii?Q?ASkzEf75lwwm9E8MXFq+2DHX7Tbm/WEvQnNozxX5bU7/SAfpEVi/PAupFcQw?=
+ =?us-ascii?Q?u2NFUZASzgZLU475NlH70I6pnsZ6n6n5iOfKReM78KDmRK9/Jt9zZr5HRFMS?=
+ =?us-ascii?Q?sLL8eH//K7Vtlg8CREmxBUfIonLmZCaph01oa0xt5sgxqZwUnHoICybR2SpS?=
+ =?us-ascii?Q?ZJapOJR+KjTWWQGKHyVLaQVtuEjAANrGnu/3dLtiSAPGNJNNwwn93qb/sjKh?=
+ =?us-ascii?Q?hexa+Nj/HEalqLcNA8Ja2+rVTcUBf2ubzlYnQlu3zJSUlS1cSZUGwztu5vDZ?=
+ =?us-ascii?Q?imHPd8BJibdCgCdlGW+qsXOtvxCBAwobkg/pXZlrgrBKb2ZBEYZ6irYExXbk?=
+ =?us-ascii?Q?jDU+Y6TS/UEEv99ZKGgTu2mESlcgYYGfjl76jBmOP54xobBmSDxiwbDNr11P?=
+ =?us-ascii?Q?EnCzAcQWryPPYUV1IIjxIrK0C1nDuzU+Gssax4ERrQuBITgNN4Z1pXevp0Ng?=
+ =?us-ascii?Q?m9BwEr2dSQdxt8kz7q/968MRG/UbAw/TovPnjrhxmOd5YyJY6KD61f860ihJ?=
+ =?us-ascii?Q?bo6mzXKrlE088p27rRaaMLvM+Gp8ZS1mjjTmOQhlNkZb6iEpHNWxvMsoQXYU?=
+ =?us-ascii?Q?blDr0Eq7i7cpRoOv9OlnSZCLR9qx49hpTV4gF+6dtCVA83PmCFyY6RyYd/yD?=
+ =?us-ascii?Q?T0AOOKRBl19ub8nYhq2NTZH2wxuGK8iE00+ukOouaKw0yfUxPaNNeb+357uZ?=
+ =?us-ascii?Q?JFwG4IZmJu95HP73J4OoezLbXdxmSbKATezDMXIlWJpQEdj1iP0SY+4fCdoc?=
+ =?us-ascii?Q?onV60O3FOE2NlC6iKT/ERvpRmcZMuJkptNMptn1nm+DENLjvzHwltyARwpCA?=
+ =?us-ascii?Q?cltAlG/vysKP3vhTd2FVeCpUYK1zUYjEAzrqDMj+VA8fghIHhdg811/ElD/E?=
+ =?us-ascii?Q?QgJTZtbJstsxQq/8tgP9ubEB6Vkz5h4RKAUXHD/wguC1xfP12l+R2M37AP9j?=
+ =?us-ascii?Q?iBQN6eJIBY/n8bXw66OKs8VvChzOrzXWwIrJArXYW2oK+a4pE+EwHlLc9xk9?=
+ =?us-ascii?Q?uM60Wus4SHxcLfVLD+90Uz/ZOS5yNYSLT8l4jXbdUt8amoeUWAP7okQ7KpsB?=
+ =?us-ascii?Q?gj2kgBE3nXRpeuSdwy4UBbfrE0fawnI+EpUXtED6AmCYAhQfqxSGXvWNUw7Z?=
+ =?us-ascii?Q?/E0p6ChlXu+16bzjzalt30sygMjOetVctWA+TRYe+r+34qjLv3ui88607aMK?=
+ =?us-ascii?Q?8CiZN+St8J9yQiyup0t4pVSYPHGJbTP6A2IfPsnZ6fGgj6MdNUuXC3rdnaOs?=
+ =?us-ascii?Q?W9abp9AECQ=3D=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a19de5e5-a13b-45e6-c07f-08da4a63142a
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1223.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 21:57:43.0972
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7MklPaEdA8SY+CrBUiMzHTnRo5wCyH2knzq41m5dX+8gVW6qBcQFaFZvBXtO4cjEVsoBp/Y27DY9R4JN43f2aA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1871
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The patch set adds PF and XDP_REDIRECT support.
 
-On Thu, Jun 9, 2022 at 9:01 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
->
->
-> On 6/9/2022 10:53 AM, zhengjun.xing@linux.intel.com wrote:
-> > From: Kan Liang <kan.liang@linux.intel.com>
-> >
-> > Provide a new solution to replace the reverted commit ac2dc29edd21
-> > ("perf stat: Add default hybrid events").
-> >
-> > For the default software attrs, nothing is changed.
-> > For the default hardware attrs, create a new evsel for each hybrid pmu.
-> >
-> > With the new solution, adding a new default attr will not require the
-> > special support for the hybrid platform anymore.
-> >
-> > Also, the "--detailed" is supported on the hybrid platform
-> >
-> > With the patch,
-> >
-> > ./perf stat -a -ddd sleep 1
-> >
-> >   Performance counter stats for 'system wide':
-> >
-> >         32,231.06 msec cpu-clock                 #   32.056 CPUs utilized
-> >               529      context-switches          #   16.413 /sec
-> >                32      cpu-migrations            #    0.993 /sec
-> >                69      page-faults               #    2.141 /sec
-> >       176,754,151      cpu_core/cycles/          #    5.484 M/sec          (41.65%)
-> >       161,695,280      cpu_atom/cycles/          #    5.017 M/sec          (49.92%)
-> >        48,595,992      cpu_core/instructions/    #    1.508 M/sec          (49.98%)
-> >        32,363,337      cpu_atom/instructions/    #    1.004 M/sec          (58.26%)
-> >        10,088,639      cpu_core/branches/        #  313.010 K/sec          (58.31%)
-> >         6,390,582      cpu_atom/branches/        #  198.274 K/sec          (58.26%)
-> >           846,201      cpu_core/branch-misses/   #   26.254 K/sec          (66.65%)
-> >           676,477      cpu_atom/branch-misses/   #   20.988 K/sec          (58.27%)
-> >        14,290,070      cpu_core/L1-dcache-loads/ #  443.363 K/sec          (66.66%)
-> >         9,983,532      cpu_atom/L1-dcache-loads/ #  309.749 K/sec          (58.27%)
-> >           740,725      cpu_core/L1-dcache-load-misses/ #   22.982 K/sec    (66.66%)
-> >   <not supported>      cpu_atom/L1-dcache-load-misses/
-> >           480,441      cpu_core/LLC-loads/       #   14.906 K/sec          (66.67%)
-> >           326,570      cpu_atom/LLC-loads/       #   10.132 K/sec          (58.27%)
-> >               329      cpu_core/LLC-load-misses/ #   10.208 /sec           (66.68%)
-> >                 0      cpu_atom/LLC-load-misses/ #    0.000 /sec           (58.32%)
-> >   <not supported>      cpu_core/L1-icache-loads/
-> >        21,982,491      cpu_atom/L1-icache-loads/ #  682.028 K/sec          (58.43%)
-> >         4,493,189      cpu_core/L1-icache-load-misses/ #  139.406 K/sec    (33.34%)
-> >         4,711,404      cpu_atom/L1-icache-load-misses/ #  146.176 K/sec    (50.08%)
-> >        13,713,090      cpu_core/dTLB-loads/      #  425.462 K/sec          (33.34%)
-> >         9,384,727      cpu_atom/dTLB-loads/      #  291.170 K/sec          (50.08%)
-> >           157,387      cpu_core/dTLB-load-misses/ #    4.883 K/sec         (33.33%)
-> >           108,328      cpu_atom/dTLB-load-misses/ #    3.361 K/sec         (50.08%)
-> >   <not supported>      cpu_core/iTLB-loads/
-> >   <not supported>      cpu_atom/iTLB-loads/
-> >            37,655      cpu_core/iTLB-load-misses/ #    1.168 K/sec         (33.32%)
-> >            61,661      cpu_atom/iTLB-load-misses/ #    1.913 K/sec         (50.03%)
-> >   <not supported>      cpu_core/L1-dcache-prefetches/
-> >   <not supported>      cpu_atom/L1-dcache-prefetches/
-> >   <not supported>      cpu_core/L1-dcache-prefetch-misses/
-> >   <not supported>      cpu_atom/L1-dcache-prefetch-misses/
-> >
-> >         1.005466919 seconds time elapsed
-> >
-> > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> > Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> > ---
-> > Change log:
-> >    v2:
-> >      * The index of all new evsel will be updated when adding to the evlist,
-> >        just set 0 idx for the new evsel.
-> >
-> >   tools/perf/arch/x86/util/evlist.c | 52 ++++++++++++++++++++++++++++++-
-> >   tools/perf/util/evlist.c          |  2 +-
-> >   tools/perf/util/evlist.h          |  2 ++
-> >   3 files changed, 54 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-> > index 777bdf182a58..fd3500fd4b69 100644
-> > --- a/tools/perf/arch/x86/util/evlist.c
-> > +++ b/tools/perf/arch/x86/util/evlist.c
-> > @@ -4,16 +4,66 @@
-> >   #include "util/evlist.h"
-> >   #include "util/parse-events.h"
-> >   #include "topdown.h"
-> > +#include "util/event.h"
-> > +#include "util/pmu-hybrid.h"
-> >
-> >   #define TOPDOWN_L1_EVENTS   "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
-> >   #define TOPDOWN_L2_EVENTS   "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
-> >
-> > +static int ___evlist__add_default_attrs(struct evlist *evlist,
-> > +                                     struct perf_event_attr *attrs,
-> > +                                     size_t nr_attrs)
-> > +{
-> > +     struct perf_cpu_map *cpus;
-> > +     struct evsel *evsel, *n;
-> > +     struct perf_pmu *pmu;
-> > +     LIST_HEAD(head);
-> > +     size_t i = 0;
-> > +
-> > +     for (i = 0; i < nr_attrs; i++)
-> > +             event_attr_init(attrs + i);
-> > +
-> > +     if (!perf_pmu__has_hybrid())
-> > +             return evlist__add_attrs(evlist, attrs, nr_attrs);
-> > +
-> > +     for (i = 0; i < nr_attrs; i++) {
-> > +             if (attrs[i].type == PERF_TYPE_SOFTWARE) {
-> > +                     evsel = evsel__new_idx(attrs + i, evlist->core.nr_entries);
->
-> Although the idx will be updated later, the value doesn't matter.
-> I think it should be better to use 0, rather than
-> evlist->core.nr_entries. Because it's a new evsel and hasn't been added
-> into the evlist yet.
+Dexuan Cui (1):
+  net: mana: Add the Linux MANA PF driver
 
-You can just use evsel__new() which does the same.
+Haiyang Zhang (1):
+  net: mana: Add support of XDP_REDIRECT action
 
-Thanks,
-Namhyung
+ drivers/net/ethernet/microsoft/mana/gdma.h    |  10 ++
+ .../net/ethernet/microsoft/mana/gdma_main.c   |  39 ++++-
+ .../net/ethernet/microsoft/mana/hw_channel.c  |  18 ++-
+ .../net/ethernet/microsoft/mana/hw_channel.h  |   5 +
+ drivers/net/ethernet/microsoft/mana/mana.h    |  70 +++++++++
+ .../net/ethernet/microsoft/mana/mana_bpf.c    |  64 ++++++++
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 148 +++++++++++++++++-
+ .../ethernet/microsoft/mana/mana_ethtool.c    |  12 +-
+ 8 files changed, 360 insertions(+), 6 deletions(-)
+
+-- 
+2.25.1
+

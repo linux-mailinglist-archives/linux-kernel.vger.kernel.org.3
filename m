@@ -2,100 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3A5544697
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CA8544694
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbiFIIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S231124AbiFIIyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242681AbiFIIv6 (ORCPT
+        with ESMTP id S242484AbiFIIxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:51:58 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421E945781
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:51:30 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id o7so12803266eja.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=M8e5RnC6BDCalWH7A1w4Wai2umRpd61YtQBBpmHxCTg=;
-        b=G94I6/e5+zMW3WjmA5mkIh/BZbIwi9fHMwAlv8zSiWQW5mYtBS9tiT+96zVrv6l8Gj
-         bczYIYNi28cSQF6doso2XWgT5IRxnHPky1hBo5YI7rFRDNTdh33dPQJNNboe7HvTytWf
-         wHCo7eYL4MXhFSivL2FYB5eV3VoamvJ6+4H0K4xPSAO2SeknD32ErVAKfbN1EdjeSdhO
-         a/o5BrU4f37Mm8jBgggs8aedhv5lIEDeOXti8dpEu0Yu6QvgP279D2PRsGwmftOE5rVT
-         wj2LFK6kD+2bjBX95997d2PGMlIH0/TUeWNmAnuewbmoPVcU2p+3HFqkgNaACSPGuyq1
-         070Q==
+        Thu, 9 Jun 2022 04:53:00 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FEB1447A6;
+        Thu,  9 Jun 2022 01:51:47 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id s12so38888307ejx.3;
+        Thu, 09 Jun 2022 01:51:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=M8e5RnC6BDCalWH7A1w4Wai2umRpd61YtQBBpmHxCTg=;
-        b=UPL5QNNCvoQtZB7c2tYz58n9IeQq5lOzvcg6INyNE6CaKMPS8hUHs4aEs753zC66HT
-         V+MYcjMz1WYSh7vs0m6N4L2ub7caPw3WXfeD1Q9SUAVX+eR+MwEZwK03vQRdzDdkzb5p
-         Fj15tTP/EguooFGp8jnTuVgvKF+IKq5e8KgoNiRoS8ntsrxYfQ+ar4399KpmmYRr6Uhg
-         pbg9PeZxeHiGE+d19o63599SlgmkwYiGnMKq9CSIoNrrChM8gJ+N85GFdJpvJ32y3val
-         g11DstSpmX6yDdsyr0eu0DXlnp6aIXx6nrlTUunTbTG7aw9SQNUmSVLgn4WCUNQDuoqp
-         oELQ==
-X-Gm-Message-State: AOAM533tSTndHTjCgyDKJd1kEjGJfQ8P8HL0n21QX9y9yPUZ6CD3blBW
-        hwtx+t04ssf3CoB7u7tR0bcXrw==
-X-Google-Smtp-Source: ABdhPJxOe2ebPCCRukL/3pwCqqRVEGK7F4P3I838X2J4i641HLJD2ermkGhgGkY2/WjmEMN7KYWLNw==
-X-Received: by 2002:a17:907:3e91:b0:711:ea5e:2d4 with SMTP id hs17-20020a1709073e9100b00711ea5e02d4mr9199454ejc.52.1654764688817;
-        Thu, 09 Jun 2022 01:51:28 -0700 (PDT)
-Received: from [192.168.0.195] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e1-20020a1709062c0100b0070bdc059ab2sm8916366ejh.138.2022.06.09.01.51.27
+        bh=SXRFuRSOer0UTWqXklwZQzcqdPi/nxqTmlZiGWPV4ZU=;
+        b=GYMHiulDbcN3cmGz4FKnX9FSbT75uZLGViASYny1A722tIGFEEL36aEleXraPN4uJr
+         tNqPH3oGiJS0pA6vrdkyrKMIKWUoxQQqQ9vuEjh6EiNVwv5/xQz1GmBK+PkKSgP/h1x3
+         g+W84kya6l0P9v4e6k3yNJZPNi7VMLzRuQwwkUf6bYOkZf1ZNoKZuyaXMbA2ev4KO1xm
+         4Xrp57z9JHYR2wPjpEu5DGiw8Y+fu8ktnHFs4MBpqH31dxFOwB4Uj9nO2RJwAOtkLWOh
+         XEyeU02HkBO0GWAhz7rjowdjOTmLulzZxrJz7F1yP6w1nofZzPb2T2AJNDQgana4Zs10
+         KUpg==
+X-Gm-Message-State: AOAM533jqAJRCcn1L1JNMe3KefB4NmWo4gfouYpYyNqqEgRZaHPUbbSk
+        fnCDUiTs9XxQL5aE9G61MgWNFmK2z8li9g==
+X-Google-Smtp-Source: ABdhPJy24B6wAVUvxzfMFJIXDhUQZl1sg3OvoUK9EjDNt5l4YigCWvxb8gag30hbyoDGFGvTAlku1g==
+X-Received: by 2002:a17:906:4787:b0:711:d085:88a3 with SMTP id cw7-20020a170906478700b00711d08588a3mr17209001ejc.118.1654764706280;
+        Thu, 09 Jun 2022 01:51:46 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id w2-20020a056402268200b0042ddd08d5f8sm14680854edd.2.2022.06.09.01.51.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 01:51:27 -0700 (PDT)
-Message-ID: <6ade0286-bdd4-c55c-ff02-8e8e7fe5bdce@linaro.org>
-Date:   Thu, 9 Jun 2022 10:51:26 +0200
+        Thu, 09 Jun 2022 01:51:45 -0700 (PDT)
+Message-ID: <926a95c0-3d0b-4dec-4894-3fd756d565a4@kernel.org>
+Date:   Thu, 9 Jun 2022 10:51:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 1/9] dt-bindings: arm: qcom: fix Alcatel OneTouch Idol 3
- compatibles
+Subject: Re: [PATCH 16/36] tty/vt: consolemap: check put_user() in
+ con_get_unimap()
 Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220520123252.365762-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220520123252.365762-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220607104946.18710-1-jslaby@suse.cz>
+ <20220607104946.18710-16-jslaby@suse.cz>
+ <5bf366cc45334bb9a9c3d186ef8d6933@AcuMS.aculab.com>
+ <9780cd63-5cf3-7ee0-4866-160b9de0a3e8@kernel.org>
+In-Reply-To: <9780cd63-5cf3-7ee0-4866-160b9de0a3e8@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 14:32, Krzysztof Kozlowski wrote:
-> The MSM8916 Alcatel OneTouch Idol 3 does not use MTP fallbacks in
-> compatibles:
+On 08. 06. 22, 10:11, Jiri Slaby wrote:
+> On 08. 06. 22, 10:02, David Laight wrote:
+>> From: Jiri Slaby
+>>> Sent: 07 June 2022 11:49
+>>>
+>>> Only the return value of copy_to_user() is checked in con_get_unimap().
+>>> Do the same for put_user() of the count too.
+>>>
+>>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>>> ---
+>>>   drivers/tty/vt/consolemap.c | 3 ++-
+>>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
+>>> index 831450f2bfd1..92b5dddb00d9 100644
+>>> --- a/drivers/tty/vt/consolemap.c
+>>> +++ b/drivers/tty/vt/consolemap.c
+>>> @@ -813,7 +813,8 @@ int con_get_unimap(struct vc_data *vc, ushort ct, 
+>>> ushort __user *uct,
+>>>       console_unlock();
+>>>       if (copy_to_user(list, unilist, min(ect, ct) * sizeof(*unilist)))
+>>>           ret = -EFAULT;
+>>> -    put_user(ect, uct);
+>>> +    if (put_user(ect, uct))
+>>> +        ret = -EFAULT;
+>>>       kvfree(unilist);
+>>>       return ret ? ret : (ect <= ct) ? 0 : -ENOMEM;
+>>>   }
+>>
+>> How is the user expected to check the result of this code?
+>>
+>> AFAICT -ENOMEM is returned if either kmalloc() fails or
+>> the user buffer is too short?
+>> Looks pretty hard to detect which.
 > 
->   msm8916-alcatel-idol347.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
->     ['alcatel,idol347', 'qcom,msm8916'] is too short
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Fixes: e9dd2f7204ed ("dt-bindings: arm: qcom: Document alcatel,idol347 board")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Agreed. The code is far from perfect. We might try to return ENOSPC and 
+> watch what breaks.
 
-Bjorn,
+brltty and kbd (see below) would break at least:
+https://sources.debian.org/src/brltty/6.4-6/Drivers/Screen/Linux/screen.c/#L875
 
-Any comments on these?
+brltty apparently relies exactly on ENOMEM, increases buffer if that 
+error is returned, and retries.
 
-Best regards,
-Krzysztof
+So I don't think we can change that ENOMEM to anything else.
+
+>> I've not looked at the effect of all the patches, but setting
+>> 'ret = -ENOMEM' and breaking the loop when the array is too
+>> small would simplify things.
+
+That would break kbd for example:
+https://sources.debian.org/src/kbd/2.3.0-3/src/libkfont/kdmapop.c/?hl=154#L159
+
+GIO_UNIMAP is called with zero count to actually find out the count...
+
+So apart from the original patch which checks the return value of 
+put_user, we cannot do anything else. (Except decoupling the "?:" to 
+make it more readable.)
+
+thanks,
+-- 
+js
+suse labs

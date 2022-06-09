@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64855450F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D215450FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343817AbiFIPh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S1344544AbiFIPhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344569AbiFIPhO (ORCPT
+        with ESMTP id S1344529AbiFIPhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:37:14 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427991498C7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:37:08 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 20F78732;
-        Thu,  9 Jun 2022 15:37:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 20F78732
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1654789028; bh=jXFbEEfMo94jqkW6tuNpH8AsDAPWTArR6H5stWd/n8g=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=kgRtuxKiWJBVN9UT+ESqsqC2HeVBDChFxPwYco0a3vXwOXGghtp62gbO8MYnC2AS/
-         VrYk+eYdw3eS0ZOOYyU7EDtni7hQNZFA2PpB0/NbDM5fyQtoaBWHIfNM8EaktE7/qJ
-         /57smUCigcNIbTNal9ngJEEWqc9nQ9omtFNToWqwfe+pTqi4udNP+lbQ+arN16D0C0
-         qPeRx9ETKeB/LKQ01bRS9U0TIUQ7Sc952gvek8UwoRCCxnfNTreVpBwRXZmyo7fePY
-         cXQPTj1KqzCTkUJSP/unN/hua8S9FCDiDVcq51hgng//JR3cvF+UpdL4SxEZVis63X
-         iVQT2HuTCpD/Q==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Zheng Zengkai <zhengzengkai@huawei.com>
-Cc:     chenhuacai@kernel.org, kernel@xen0n.name, deller@gmx.de,
-        linux-parisc@vger.kernel.org, vincent.whitchurch@axis.com,
-        richard@nod.at, linux-um@lists.infradead.org, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, vgupta@kernel.org,
-        sergey.matyukevich@synopsys.com,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        liwei391@huawei.com, zhengzengkai@huawei.com
-Subject: Re: [PATCH] Documentation/features: Update the arch support status
- files
-In-Reply-To: <20220609025656.143460-1-zhengzengkai@huawei.com>
-References: <20220609025656.143460-1-zhengzengkai@huawei.com>
-Date:   Thu, 09 Jun 2022 09:37:07 -0600
-Message-ID: <87pmjh4zmk.fsf@meer.lwn.net>
+        Thu, 9 Jun 2022 11:37:33 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8B09CF15;
+        Thu,  9 Jun 2022 08:37:31 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id g201so14560980ybf.12;
+        Thu, 09 Jun 2022 08:37:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oP68gQ771+clRj4cFwUH0Ec4RApgtfD1Z4Jp2OZ6o3Q=;
+        b=KTZOd3Lx6qgH3bZ2+CKWKw7kX1GXH8dj0QuBGSNozzHtcZBpCHb+giK9N90t+BHW1B
+         ImPveg3UN3MFA53ux9XrJ6XTr/hx8uZTN3Nwkji6QCarMw+ENff0nqPOnMrG+QuVZnLS
+         ZcbFWKuj2PABFa4QMHcAxrhgVsy1/K6tciZlKSFUfyMTtMThnyYQponF1oDye4aB0X1K
+         uAzEBmiDcqY9hGAxDbG62Ub4L3N4v53iQq3tAeQYUZvo4XZ8PU21VVZShMx4gX7tICSQ
+         pNWM/4Fc1WcEFcrsALEnCPmlmxXteWU/DrWl7axLudmD0AtDlDYYYTD9JGruYAtI2nyY
+         VD9g==
+X-Gm-Message-State: AOAM5304EDvfEEZvLAJtKtSHIaUdr329zjXEAeMHkSEY13FGK2jjBKF9
+        dfzT8eR/6QT4pv/Ra0gvLAxMYWCGpQtADmkQ2gI=
+X-Google-Smtp-Source: ABdhPJzewuSOGAz8uuz8IRC17huvxlqga12v+Ajz4GI+XfrmsGBeAKa5h8WcMA1Xq9aH/3UoFoD/f99MKmoBn/47fYk=
+X-Received: by 2002:a5b:4a:0:b0:663:7c5b:a5ba with SMTP id e10-20020a5b004a000000b006637c5ba5bamr21326407ybp.81.1654789050580;
+ Thu, 09 Jun 2022 08:37:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1843211.tdWV9SEqCh@kreacher> <3459925.iIbC2pHGDl@kreacher> <YqIRaLdifSnEUN7H@smile.fi.intel.com>
+In-Reply-To: <YqIRaLdifSnEUN7H@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Jun 2022 17:37:19 +0200
+Message-ID: <CAJZ5v0iezaNmhRUp=rm88xgp2kQqyyUn_v8szFDWuEHmSEABQg@mail.gmail.com>
+Subject: Re: [PATCH v1 05/16] USB: ACPI: Use acpi_find_child_by_adr()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zheng Zengkai <zhengzengkai@huawei.com> writes:
-
-> The arch support status files don't match reality as of v5.19-rc1,
-> use the features-refresh.sh to refresh all the arch-support.txt files
-> in place.
+On Thu, Jun 9, 2022 at 5:27 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Signed-off-by: Zheng Zengkai <zhengzengkai@huawei.com>
+> On Thu, Jun 09, 2022 at 03:56:42PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Instead of walking the list of children of an ACPI device directly
+> > in order to find the child matching a given bus address, use
+> > acpi_find_child_by_adr() for this purpose.
+>
+> ...
+>
+> >       if (!parent)
+> >               return NULL;
+>
+> Can be removed because it's embedded in the call below, no?
 
-I've applied this, but added a note to the changelog saying that the
-main change is to add the loong architecture.
+Yes, it can, in analogy with the thunderbolt code.  Will update.
 
-Thanks,
-
-jon
+> > +     return acpi_find_child_by_adr(parent, raw);
+>
+> --

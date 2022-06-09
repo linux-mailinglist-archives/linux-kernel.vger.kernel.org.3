@@ -2,95 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15705450C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF26C5450C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344451AbiFIP0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S1344479AbiFIP0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242972AbiFIP0S (ORCPT
+        with ESMTP id S1344422AbiFIP0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:26:18 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C4E4B407;
-        Thu,  9 Jun 2022 08:26:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654788377; x=1686324377;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LfRhNY4IeUXJ5GUS/DdcyZ4zd1tukJjcMtxj4uvvm2M=;
-  b=RbdIl56mZRFQ++Vb6P+qQtWA/r2/QMNZdslywj73H5r4BRLUlHAvVlUM
-   +OX11BiAAS49Jqv6FPvoBJAbRtEFzWW3uoRFf1lA9J7PwLWyFo5gUhAk7
-   /CSwsgTI3dFUcVJQhT6FUxiZxpR2atAob/B/4WYiy8jAiIX+Y82oHbfpA
-   cn3YlhAcEqe10DCaPOCPhoSG4rvSAlocIs83RK+Ad338n+gFU3IpJ8lu8
-   jXlU31fPwZ9Chqz/+YCagEtwMhMP5UltZ9BNGIxkvKjH04XCwonAaZ3Fx
-   2Y+V2jVST8xpUjP+lWPeZlrw0W05SVRWc8T9v8rxstsJ0S+4AivHKNC6f
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="339078181"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="339078181"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:26:14 -0700
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="684017304"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:26:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nzK2e-000Xy5-Qg;
-        Thu, 09 Jun 2022 18:25:48 +0300
-Date:   Thu, 9 Jun 2022 18:25:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 04/16] thunderbolt: ACPI: Use acpi_find_child_by_adr()
-Message-ID: <YqIQ/HbSS9/0Fe/A@smile.fi.intel.com>
-References: <1843211.tdWV9SEqCh@kreacher>
- <7414189.EvYhyI6sBW@kreacher>
+        Thu, 9 Jun 2022 11:26:19 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5E33DA7C;
+        Thu,  9 Jun 2022 08:26:18 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id BF268732;
+        Thu,  9 Jun 2022 15:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BF268732
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1654788377; bh=kzXiyg6PaQ9/LR5j+f389QxXJKQf9bbIWSaEQxA3ZNs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Nysfa1cYifs83+aNRNQneXD2iTLzP8n3HJYTXr4KVmG39r4MI36b4Pu+euWKbsUSN
+         fCQ0v8XcLNTiFDtQtWG+n4sTepKv4NHuvxrmT1pmMOUYXL8U3LydixO1aJu4OGJ4Z2
+         KrcRhOnfh4egJhfk5Ls1OLvvp7P62eswgwE7VLR9GZ6YKKAWqTahrJwyPIunLE+N21
+         YLFU4g+z531cyvibbykzDzz4vNrbcVbnZ+5p1fAtWpcoiBW2rZRDf0hzkSCdR1JKEF
+         xhSrZNmiXDFj3DfyoVUEwMYsoF8zyhPuIFMXDe9jGKVJ7tzSIq/yrs/yt8uM1XrqY0
+         pZPt3gFfqHiTg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Akira Yokosawa <akiyks@gmail.com>, linux-doc@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH 2/5] docs/doc-guide: Mention make variable SPHINXDIRS
+In-Reply-To: <ff89c064-e24a-0f2f-fc03-b029e5d04338@gmail.com>
+References: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
+ <ff89c064-e24a-0f2f-fc03-b029e5d04338@gmail.com>
+Date:   Thu, 09 Jun 2022 09:26:17 -0600
+Message-ID: <87v8t9504m.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7414189.EvYhyI6sBW@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 03:54:40PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Instead of walking the list of children of an ACPI device directly
-> in order to find the child matching a given bus address, use
-> acpi_find_child_by_adr() for this purpose.
+Akira Yokosawa <akiyks@gmail.com> writes:
 
-...
+> SPHINXDIRS is useful when you want test builds of only those
+> documents affected by your changes.
+>
+> Mention it in the "Sphinx Build" section.
+>
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+> ---
+> This change is inspired from correspondence with Maciej [1].
+>
+> [1]: https://lore.kernel.org/r/f4d40da6-756b-9e75-b867-cc9eedc4b232@gmail.com
+>
+> --
+>  Documentation/doc-guide/sphinx.rst | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
+> index edc4fa023986..efcccab68286 100644
+> --- a/Documentation/doc-guide/sphinx.rst
+> +++ b/Documentation/doc-guide/sphinx.rst
+> @@ -151,6 +151,10 @@ If the theme is not available, it will fall-back to the classic one.
+>  
+>  The Sphinx theme can be overridden by using the ``DOCS_THEME`` make variable.
+>  
+> +There is another make variable ``SPHINXDIRS``, which is useful when test
+> +building a subset of documentation.  Again, see the documentation section
+> +of ``make help`` for the details.
 
->  	if (!adev)
->  		return NULL;
+This should definitely be documented, it's kind of sad that we never did
+that.  Rather than redirect readers to type a "make" command, though,
+why not just tell them how to use it here?
 
-Already checked in the below call, IIUC. Hence can be removed.
+Thanks,
 
-> +	return acpi_find_child_by_adr(adev, port->port);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+jon

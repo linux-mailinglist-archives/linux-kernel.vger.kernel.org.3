@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABAD5449FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F545449D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243617AbiFILYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S242319AbiFILTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243606AbiFILYi (ORCPT
+        with ESMTP id S235095AbiFILTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:24:38 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D021D488BD;
-        Thu,  9 Jun 2022 04:24:36 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LJhYM6gYWzjX9D;
-        Thu,  9 Jun 2022 19:23:35 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 19:24:34 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 19:24:34 +0800
-From:   Weili Qian <qianweili@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
-        Weili Qian <qianweili@huawei.com>
-Subject: [PATCH] crypto: hisilicon/trng - fix local variable type
-Date:   Thu, 9 Jun 2022 19:18:19 +0800
-Message-ID: <20220609111819.29465-1-qianweili@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Thu, 9 Jun 2022 07:19:13 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582E734BAB
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:19:11 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id r123-20020a1c2b81000000b0039c1439c33cso12421979wmr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PqMs3a5YintB0gVdU2B3xyiVVe9JXV55Eno0UBh+s+0=;
+        b=v7+74RRAbyju487rK4ntR27tiHtCsewTc/zp5hlgHR3kJcOJnCNRWY5VFBd9G/K6Wz
+         D1TjizVKFmdemSS28zrviDlHkf4azNLJjsrHE9wOsKtrneN11Qpca/bFltFZLSzBMMrm
+         TREmJFHSjwRwbFSQfpKIFI7SjddVQOWjpMWFe9pBsZWVQbg+kGWFDyGGghEotOKt2P4Y
+         SAYviRvOAWEZddl5Cha1N4GCPKN372GcbKgCiau2Ai2A80QfwJdgR2OdD93STz3DwgH+
+         NGDocMYB/8afYFTP3XQJms6YL4ADQfQ1digdSdAYi/wPbZ/G6OZjETxOM+iaS33aXteF
+         osHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PqMs3a5YintB0gVdU2B3xyiVVe9JXV55Eno0UBh+s+0=;
+        b=b6gu7M0X5XDEKPMpqIcOkLv81bL3T/1oYoOaJSWsUTC+tUHmdurn7aHG2ynOx2oDmC
+         iyjBzaxwHqDgL1b5YXG4MV5348hRqRKUMNRUKmRkGnXCpdfjN3vIZJ7nRd7gut/GSg6F
+         znTsi1MzwQ9aVotaZIOXzRFz0yPrI+k5F7KOHA0FSP2XcaN28d6g5vIYzEE6dOOlvpOG
+         pVU+aE8tvi8dy2J4pxTH6gwAsdWrrJjGbzzjpMSUAofNdAZYp1fJpsE6DYVO0SQqo986
+         QaHgVxlfaAX4POrCI+S5jxAnPVXg7k7IjVm2fy/FiPfX9NwQU7W5aVGlVJBp8ktKCgSf
+         AT9A==
+X-Gm-Message-State: AOAM532vlmrKSC9Xv17JCXYTnzevFoyNPg9gh1thEBTSkfXjvrHpgew+
+        XBXDENF+7AZ1H8r2pOt4YEXRbA==
+X-Google-Smtp-Source: ABdhPJxeAaHpJ6zWscdJmwG7nQ9B4mr0a9rMgXVUoFV3ix4rZgEznulAJ6Mf1aChGhdcn90NgSZDvg==
+X-Received: by 2002:a05:600c:3386:b0:39c:5b81:af9e with SMTP id o6-20020a05600c338600b0039c5b81af9emr2826341wmp.2.1654773549938;
+        Thu, 09 Jun 2022 04:19:09 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id o22-20020a1c7516000000b003942a244ed1sm26477850wmc.22.2022.06.09.04.19.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 04:19:09 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/2] ASoC: codecs: qualcomm move gain to S8_TLV
+Date:   Thu,  9 Jun 2022 12:18:59 +0100
+Message-Id: <20220609111901.318047-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of 'readl_poll_timeout' is '0' or '-ETIMEDOUT'. Therefore,
-change the local variable 'ret' type from 'u32' to 'int'.
+Move all the digital and IIR gains form using SX_TLV to S8_TLV,
+these gains are actually 8 bit gains with 7th signed bit and
+ranges from -84dB to +40dB
 
-Signed-off-by: Weili Qian <qianweili@huawei.com>
----
- drivers/crypto/hisilicon/trng/trng.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested on DB410c with Headset playback
 
-diff --git a/drivers/crypto/hisilicon/trng/trng.c b/drivers/crypto/hisilicon/trng/trng.c
-index 829f2caf0f67..97e500db0a82 100644
---- a/drivers/crypto/hisilicon/trng/trng.c
-+++ b/drivers/crypto/hisilicon/trng/trng.c
-@@ -185,7 +185,7 @@ static int hisi_trng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
- 	struct hisi_trng *trng;
- 	int currsize = 0;
- 	u32 val = 0;
--	u32 ret;
-+	int ret;
- 
- 	trng = container_of(rng, struct hisi_trng, rng);
- 
+Thanks,
+Srini
+
+Srinivas Kandagatla (2):
+  ASoC: codecs: msm8916-wcd-digital: move gains from SX_TLV to S8_TLV
+  ASoC: codecs: wcd9335: move gains from SX_TLV to S8_TLV
+
+ sound/soc/codecs/msm8916-wcd-digital.c | 46 +++++++--------
+ sound/soc/codecs/wcd9335.c             | 81 ++++++++++++--------------
+ 2 files changed, 59 insertions(+), 68 deletions(-)
+
 -- 
-2.33.0
+2.25.1
 

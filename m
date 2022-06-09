@@ -2,146 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41F054542D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450A9545430
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345439AbiFISdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S1345446AbiFISdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiFISc6 (ORCPT
+        with ESMTP id S231907AbiFISdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:32:58 -0400
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F6F32EF6;
-        Thu,  9 Jun 2022 11:32:55 -0700 (PDT)
-Received: by mail-il1-f174.google.com with SMTP id f7so19372620ilr.5;
-        Thu, 09 Jun 2022 11:32:55 -0700 (PDT)
+        Thu, 9 Jun 2022 14:33:16 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7632732EF6;
+        Thu,  9 Jun 2022 11:33:13 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id g25so27098812ljm.2;
+        Thu, 09 Jun 2022 11:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=63i1MSmo29/lZiyPRVcuxToXjRzucauBbf7VDgGDw7c=;
+        b=BS9YAKqCCd2cgZ+f+6knt/gJcHnUmnC8d0YmKtTD9F1mAvBr/4LG/SI26JtxYATtpE
+         kCxM/G3+deeEEdyPwrcI/Lk8FX2qsaZ8ui9RN0x+d559XF1vuHRylLGX5na9YBA4dPpv
+         yDre1NdgKWIlzm3VqsT/TrI6DgNSpx3uwlAymo8k6eskDU1oO9APoSOAR2hC3bdIJCtE
+         63uf+uRVj/XbV8c0tNsYZwe+4nst0qlbJfPM8pqbYbOGKgLFr7u2KlgVGtpSRc8MblB0
+         hjWORsGNHZxC/aurR+s+dEgmeB5ryrFS2x7r2d01MBm+X/zJ+9wFg2KQdaak/m/y+VOw
+         LhQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2fGJOOmf3MnqCqr0U0Gv08/FTGB7aMws3g7bnxXyMQU=;
-        b=elocRYq61JkRmlsVLvm6jWbJcDnqr7zGB1OaWLCBFFmYRZIAs84HWjvKnJF8WUN3vx
-         C4TPqQfOXie7alxSWczFvJpZ6aPUXHcKBG9ypLtSSzLcMlN6wu4Wo2eMlViLVTMqkTEH
-         X0a4eWawanZMLJJirTfVatKg9pMKIyWdlM1FoydqYC/3lJD68FQxrFM+gBoqwJIdcUSY
-         OTp+H+hVX696Dd8Je15xdw8vwRq9iOV4ub1tkTWlPsGdTzRpoUfiXM9M3k7Cxu7uu65S
-         QvP2hZt+6X3AcueeqvhyH56BE9kVmJRQCG45mRL2KX+T48ylmWrRqBMofuNxxYqvbGeP
-         LaqQ==
-X-Gm-Message-State: AOAM5309OFGDkHnIXmN+PSr2wtBI7KrL/oFfgnRZFEaXOvyCc15DpuZv
-        iJ/APz/TAyJACdSogHkb6npnnA5dmA==
-X-Google-Smtp-Source: ABdhPJx31++5ELqY9QeEp0vYvJBKv3sPIqcp+1xkOs3vD1KYC4Dzpfv4vFl3Og62AYuhKQ9LpohUWQ==
-X-Received: by 2002:a92:dc42:0:b0:2d5:4875:1c6f with SMTP id x2-20020a92dc42000000b002d548751c6fmr10194139ilq.65.1654799575238;
-        Thu, 09 Jun 2022 11:32:55 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id e16-20020a056638021000b0033195fabca4sm6237137jaq.175.2022.06.09.11.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 11:32:54 -0700 (PDT)
-Received: (nullmailer pid 4081859 invoked by uid 1000);
-        Thu, 09 Jun 2022 18:32:52 -0000
-Date:   Thu, 9 Jun 2022 12:32:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: mtd: partitions: Support label only
- partition
-Message-ID: <20220609183252.GA4072951-robh@kernel.org>
-References: <20220606151417.19227-1-ansuelsmth@gmail.com>
- <20220606151417.19227-2-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=63i1MSmo29/lZiyPRVcuxToXjRzucauBbf7VDgGDw7c=;
+        b=DQx4MCT4tkv5AMEtYUujkWltwwn8R620WHJ1YiaZfIL9NcBOKBPpIpTpuBw5WwVBOn
+         zc7t9H8x36yBJZGM9ZN7skICXqHnzGfxSqCCIE62rZSmszztPF6mfjWS8tGaudMZP7v0
+         zFW2cdz5VKTw2norErYCUsQo1GhArm8EFBYDcJzWHYwG8abTrIRvaFOJzXenV2aB+e5N
+         wXINaohklOfQbr0EAySAMf8bTZbcK4oS3pWIxbkO63xgudIkMLodHlVVXaW+ou+pQrpq
+         fi3CZU7lox8V5K02e4YR01ASRypWX6oDCsctk+VMtL6JIwdI7gDrMEBzgdIx93JyKBuE
+         yYZw==
+X-Gm-Message-State: AOAM533a/uo7oE8mImA/w+LYbwhzLkMai+rAIbqaSJbFP0Gd9Ooqq805
+        oD0lVZjo6q/UmyVDaKOL4jxbFVb6bAZG4ktCNlk=
+X-Google-Smtp-Source: ABdhPJy5Ho/4uLY7T6tCqh+921GEWGPPTNDBl5Do5LnnhkOQmiHaUc4mupwgsGSACvZZdwXJzyFpbDPPT1M3tl4sXRk=
+X-Received: by 2002:a2e:bd13:0:b0:246:1ff8:6da1 with SMTP id
+ n19-20020a2ebd13000000b002461ff86da1mr59663030ljq.219.1654799590704; Thu, 09
+ Jun 2022 11:33:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220606151417.19227-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220606184731.437300-1-jolsa@kernel.org> <20220606184731.437300-4-jolsa@kernel.org>
+ <CAADnVQJA54Ra8+tV0e0KwSXAg93JRoiefDXWR-Lqatya5YWKpg@mail.gmail.com>
+ <Yp+tTsqPOuVdjpba@krava> <CAADnVQJGoM9eqcODx2LGo-qLo0=O05gSw=iifRsWXgU0XWifAA@mail.gmail.com>
+ <YqBW65t+hlWNok8e@krava> <YqBynO64am32z13X@krava> <20220608084023.4be8ffe2@gandalf.local.home>
+ <CAEf4BzYkHkB60qPxGu0D=x-BidxObX95+1wjEYN8xsK7Dg_4cw@mail.gmail.com> <20220608120830.1ff5c5eb@gandalf.local.home>
+In-Reply-To: <20220608120830.1ff5c5eb@gandalf.local.home>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 9 Jun 2022 11:32:59 -0700
+Message-ID: <CAEf4BzakYUnM3ZNgRbix=Z4bnPpzGiazAffMVh239476qH_c7A@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf 3/3] bpf: Force cookies array to follow symbols sorting
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 05:14:15PM +0200, Ansuel Smith wrote:
-> Document new partition nodes that declare only the label instead of the
-> reg used to provide an OF node for partition registred at runtime by
-> parsers. This is required for nvmem system to declare and detect
-> nvmem-cells.
-> 
-> With these special partitions, the reg / offset is not required.
-> The label binding is used to match the partition allocated by the
-> parser at runtime and the parser will provide reg and offset of the mtd.
-> 
-> NVMEM will use the data from the parser and provide the NVMEM cells
-> declared in the DTS, "connecting" the dynamic partition with a
-> static declaration of cells in them.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../bindings/mtd/partitions/partition.yaml       | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-> index e1ac08064425..bff6fb980e6b 100644
-> --- a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-> @@ -11,6 +11,13 @@ description: |
->    relative offset and size specified. Depending on partition function extra
->    properties can be used.
->  
-> +  A partition may be dynamically allocated by a specific parser at runtime.
-> +  In this specific case, the label is required instead of the reg.
-> +  This is used to assign an OF node to the dynamiccally allocated partition
-> +  so that subsystem like NVMEM can provide an OF node and declare NVMEM cells.
-> +  The OF node will be assigned only if the partition label declared match the
-> +  one assigned by the parser at runtime.
-> +
->  maintainers:
->    - Rafał Miłecki <rafal@milecki.pl>
->  
-> @@ -22,6 +29,8 @@ properties:
->    label:
->      description: The label / name for this partition. If omitted, the label
->        is taken from the node name (excluding the unit address).
-> +      With dynamically allocated partition the label is required and won't
-> +      fallback to the node name.
+On Wed, Jun 8, 2022 at 9:08 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 8 Jun 2022 08:59:50 -0700
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> > Would it be possible to preprocess ftrace_pages to remove such invalid
+> > records (so that by the time we have to report
+> > available_filter_functions there are no invalid records)? Or that data
+> > is read-only when kernel is running?
+>
+> It's possible, but will be time consuming (slow down boot up) and racy. In
+> other words, I didn't feel it was worth it.
+>
+> We can add it. How much of an issue is it to have these place holders for
+> you? Currently, I only see it causes issues with tests. Is it really an
+> issue for use cases?
 
-Generally, label is never required being something for humans rather 
-than the s/w to consume. I don't see any reason why we can't still use 
-the node name (with 'partition-' stripped off).
+I have the tool (retsnoop) that uses available_filter_functions, I'll
+have to update it to ignore such entries. It's a small inconvenience,
+once you know about this change, but multiply that for multiple users
+that use available_filter_functions for some sort of generic tooling
+doing kprobes/tracing, and it adds up. So while it's not horrible,
+ideally user-visible data shouldn't have non-usable placeholders.
 
-If the purpose is to define what the partition contains, then 
-'compatible' is the right thing for that.
+How much slowdown would you expect on start up? Not clear what would
+be racy about this start up preprocessing, but I believe you.
 
->  
->    read-only:
->      description: This parameter, if present, is a hint that this partition
-> @@ -41,7 +50,10 @@ properties:
->        immune to paired-pages corruptions
->      type: boolean
->  
-> -required:
-> -  - reg
-> +if:
-> +  not:
-> +    required: [ reg ]
-> +then:
-> +  required: [ label ]
->  
->  additionalProperties: true
-> -- 
-> 2.36.1
-> 
-> 
+So in summary, it's not the end of the world, but as a user I'd prefer
+not to know about this quirk, of course :)
+
+>
+> -- Steve

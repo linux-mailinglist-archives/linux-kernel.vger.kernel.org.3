@@ -2,175 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B197544E68
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3903A544E6E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245234AbiFIOKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S233822AbiFIOKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241162AbiFIOKD (ORCPT
+        with ESMTP id S237337AbiFIOKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:10:03 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DF94D6A2;
-        Thu,  9 Jun 2022 07:10:00 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1654783798; bh=jHH7bIr15k6Wcan9xWpb2RIAAbwJZGEkdGwUmeH+pik=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=XgcTXKYMtUhTeQO6Ro1EGyNKeIdpm0Get6FyG9/ernuBm5uxzfpY+RZ9qbFfzUG1G
-         nMiPvNPkxTi2YsD4gN8kt2FdsXeBxGW8VWayv/7YVxVlJvWox68X2g88mudvm7kW4o
-         c6vIcj42mzRKd6BBqt19kf6BscBM7EdFKysHPiD8=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH v2 5/5] ASoC: apple: Add macaudio machine driver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <YqH2uCgaedf0HQPE@sirena.org.uk>
-Date:   Thu, 9 Jun 2022 16:09:57 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, asahi@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8961DDD2-93FF-4A18-BCA2-90FCE298F517@cutebit.org>
-References: <20220606191910.16580-1-povik+lin@cutebit.org>
- <20220606191910.16580-6-povik+lin@cutebit.org>
- <YqH2uCgaedf0HQPE@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 9 Jun 2022 10:10:52 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00A1E2E;
+        Thu,  9 Jun 2022 07:10:47 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id fd25so31404137edb.3;
+        Thu, 09 Jun 2022 07:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mEtsDMb1k6CAhwW7ISC2TInxkibSNypnKownS0OQOzM=;
+        b=mgrJ9hp/GfgwWN5tXJmnl8BnnEqXCAKpNGpam7MtrpYO0SI1hQovYwM1cGtHRSBW8N
+         8hwdKmACCRbdEVp3ztBxuOUpU8Lj8cWf+Kx+Z+HJz+f/NStxBiUuk3lNwo/iQqflxvTF
+         InhPQenYDtubdWj0kzqQunKVK2VpuXe5lG3LqH359TPGOV1ya8aUubNqeEJm5slFN9UC
+         s0l6wKpJdTKH6VEkOyvnAWu4FuxiRHTd1mmSc0t20a63BtaAauk73vDVGuMPaKxjSfDI
+         ZF7BlODVAXy32IB8sffpp41YjC1ufolYJTK/mIyUwM1Gg4I4h8Te99MpvvqM5hnlFIwa
+         jqMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mEtsDMb1k6CAhwW7ISC2TInxkibSNypnKownS0OQOzM=;
+        b=bfpDhOe3ZcKZbjcorPwQjYVm6N7fNRquF0Qobpu3I3Pnrj+bCp78CMOXKsmL7M0Bz9
+         Z+lXMfyG2z8aAgEao6Sxkfy8MCkjcaYeBNDgsLCNM9Mggslu+nxOW9C5mDvfZJiDCjh2
+         YdjZGPSyMgQCCielQmf5ciTDZ7YFVmvGAa9Qn+78NZjU+f/W5XH26EQOGDfd1VkJ1R0f
+         f5Z1wv1SqKF8CigoARLcnT94TLyQzbvlU8m/YyVLp6tFMyWPXVK8zaLtW+0nW/72wjCw
+         kQVNHnGwNe3fG9txulbpUtSB878nCH8p2EiymV8kfii/OT02u7L9lPInRDW62+9OOkX6
+         z6Hw==
+X-Gm-Message-State: AOAM532mHO5qujRHkN4OKeSdQJnvAsNOuGEXG+i+W+UP6adwsAqSpPRs
+        WFyud28aZwTnfOSbl8R2m5FevebjqrQ=
+X-Google-Smtp-Source: ABdhPJyeKHQqi9/0tzt/2RVsH3TlW5RXc5Nbx2kxhyDYn4Th+HmG5UQ3rIQ0Tdhh57D5z0Br/W8sFA==
+X-Received: by 2002:a05:6402:3291:b0:42d:dd03:cbb1 with SMTP id f17-20020a056402329100b0042ddd03cbb1mr44742813eda.268.1654783846479;
+        Thu, 09 Jun 2022 07:10:46 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:99ff:907d:6fef:f861? ([2a02:908:1256:79a0:99ff:907d:6fef:f861])
+        by smtp.gmail.com with ESMTPSA id q24-20020aa7d458000000b0042aad9edc9bsm14778769edr.71.2022.06.09.07.10.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 07:10:39 -0700 (PDT)
+Message-ID: <26d3e1c7-d73c-cc95-54ef-58b2c9055f0c@gmail.com>
+Date:   Thu, 9 Jun 2022 16:10:33 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        alexander.deucher@amd.com, daniel@ffwll.ch,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        hughd@google.com, andrey.grodzovsky@amd.com
+References: <20220531100007.174649-1-christian.koenig@amd.com>
+ <20220531100007.174649-4-christian.koenig@amd.com>
+ <YqG67sox6L64E6wV@dhcp22.suse.cz>
+ <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
+ <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 09.06.22 um 14:57 schrieb Michal Hocko:
+> On Thu 09-06-22 14:16:56, Christian König wrote:
+>> Am 09.06.22 um 11:18 schrieb Michal Hocko:
+>>> On Tue 31-05-22 11:59:57, Christian König wrote:
+>>>> This gives the OOM killer an additional hint which processes are
+>>>> referencing shmem files with potentially no other accounting for them.
+>>>>
+>>>> Signed-off-by: Christian König <christian.koenig@amd.com>
+>>>> ---
+>>>>    mm/shmem.c | 6 ++++++
+>>>>    1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/mm/shmem.c b/mm/shmem.c
+>>>> index 4b2fea33158e..a4ad92a16968 100644
+>>>> --- a/mm/shmem.c
+>>>> +++ b/mm/shmem.c
+>>>> @@ -2179,6 +2179,11 @@ unsigned long shmem_get_unmapped_area(struct file *file,
+>>>>    	return inflated_addr;
+>>>>    }
+>>>> +static long shmem_oom_badness(struct file *file)
+>>>> +{
+>>>> +	return i_size_read(file_inode(file)) >> PAGE_SHIFT;
+>>>> +}
+>>> This doesn't really represent the in memory size of the file, does it?
+>> Well the file could be partially or fully swapped out as anonymous memory or
+>> the address space only sparse populated, but even then just using the file
+>> size as OOM badness sounded like the most straightforward approach to me.
+> It covers hole as well, right?
 
-> On 9. 6. 2022, at 15:33, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Mon, Jun 06, 2022 at 09:19:10PM +0200, Martin Povi=C5=A1er wrote:
->=20
->> +		/*
->> +		 * Primary FE
->> +		 *
->> +		 * The mclk/fs ratio at 64 for the primary frontend is =
-important
->> +		 * to ensure that the headphones codec's idea of left =
-and right
->> +		 * in a stereo stream over I2S fits in nicely with =
-everyone else's.
->> +		 * (This is until the headphones codec's driver supports
->> +		 * set_tdm_slot.)
->> +		 *
->> +		 * The low mclk/fs ratio precludes transmitting more =
-than two
->> +		 * channels over I2S, but that's okay since there is the =
-secondary
->> +		 * FE for speaker arrays anyway.
->> +		 */
->> +		.mclk_fs =3D 64,
->> +	},
->=20
-> This seems weird - it looks like it's confusing MCLK and the bit clock
-> for the audio bus.  These are two different clocks.  Note that it's =
-very
-> common for devices to require a higher MCLK/fs ratio to deliver the =
-best
-> audio performance, 256fs is standard.
+Yes, exactly.
 
-On these machines we are not producing any other clock for the codecs
-besides the bit clock, so I am using MCLK interchangeably for it. (It is
-what the sample rate is derived from after all.)
+>
+>> What could happen is that the file is also mmaped and we double account.
+>>
+>>> Also the memcg oom handling could be considerably skewed if the file was
+>>> shared between more memcgs.
+>> Yes, and that's one of the reasons why I didn't touched the memcg by this
+>> and only affected the classic OOM killer.
+> oom_badness is for all oom handlers, including memcg. Maybe I have
+> misread an earlier patch but I do not see anything specific to global
+> oom handling.
 
-One of the codec drivers this is to be used with (cs42l42) expects to be
-given the I2S bit clock with
+As far as I can see the oom_badness() function is only used in oom_kill.c and in procfs to return the oom score. Did I missed something?
 
-  snd_soc_dai_set_sysclk(dai, 0, mclk, SND_SOC_CLOCK_IN);
-
-I can rename mclk to bclk in all of the code to make it clearer maybe.
-Also the platform driver can take the bit clock value from =
-set_bclk_ratio,
-instead of set_sysclk from where it takes it now. The cs42l42 driver I =
-can
-patch too to accept set_bclk_ratio.
-
->> +	{
->> +		/*
->> +		 * Secondary FE
->> +		 *
->> +		 * Here we want frames plenty long to be able to drive =
-all
->> +		 * those fancy speaker arrays.
->> +		 */
->> +		.mclk_fs =3D 256,
->> +	}
->=20
-> Same thing here - this is at least confusing MCLK and the bit clock.
->=20
->> +static bool macaudio_match_kctl_name(const char *pattern, const char =
-*name)
->> +{
->> +	if (pattern[0] =3D=3D '*') {
->> +		int namelen, patternlen;
->> +
->> +		pattern++;
->> +		if (pattern[0] =3D=3D ' ')
->> +			pattern++;
->> +
->> +		namelen =3D strlen(name);
->> +		patternlen =3D strlen(pattern);
->> +
->> +		if (namelen > patternlen)
->> +			name +=3D (namelen - patternlen);
->> +	}
->> +
->> +	return !strcmp(name, pattern);
->> +}
->> +
->> +static int macaudio_limit_volume(struct snd_soc_card *card,
->> +				 const char *pattern, int max)
->> +{
->> +	struct snd_kcontrol *kctl;
->> +	struct soc_mixer_control *mc;
->> +	int found =3D 0;
->> +
->> +	list_for_each_entry(kctl, &card->snd_card->controls, list) {
->> +		if (!macaudio_match_kctl_name(pattern, kctl->id.name))
->> +			continue;
->> +
->> +		found++;
->> +		dev_dbg(card->dev, "limiting volume on '%s'\n", =
-kctl->id.name);
->> +
->> +		/*
->> +		 * TODO: This doesn't decrease the volume if it's =
-already
->> +		 * above the limit!
->> +		 */
->> +		mc =3D (struct soc_mixer_control *)kctl->private_value;
->> +		if (max <=3D mc->max)
->> +			mc->platform_max =3D max;
->> +
->> +	}
->> +
->> +	return found;
->> +}
->=20
-> This shouldn't be open coded in a driver, please factor it out into =
-the
-> core so we've got an API for "set limit X on control Y" then call =
-that.
-
-There=E2=80=99s already snd_soc_limit_volume, but it takes a fixed =
-control name.
-Can I extend it to understand patterns beginning with a wildcard, like
-'* Amp Gain Volume=E2=80=99?
-
+Regards,
+Christian.

@@ -2,105 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A3C544E22
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0EC544E21
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243345AbiFINy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242529AbiFINyU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S242955AbiFINyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 9 Jun 2022 09:54:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF7217908D;
-        Thu,  9 Jun 2022 06:54:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EA2161D6D;
-        Thu,  9 Jun 2022 13:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39BF7C34114;
-        Thu,  9 Jun 2022 13:54:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654782858;
-        bh=EqK3l8EhZM8vr8CZoAbl3TZw+eC3UTreMJMI61a6pu0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nu066p8wi8D0b/W+KtAIMZXEqf8T5so/ZpPARpp2F80qtM8hICLFVIgHQFkZ6BnDU
-         t5Neeq1Qhx6wQjAPHmQ+nUQqPt8y+RGBiiu+lSmynWCOcFRGvfGsiNjviJ2veJmhyz
-         EW2jUoonxInuUbEktvsPb844zUPaQl4vyrpk7Lg7o0s7jJ45/OjKVakLMMxPW1NzLF
-         37g/d8NyLdPYnQp5Mpr/bQP0rcovdbrKay5aAtNarjj6kIjIqSvTM47G5pTtgfLOYc
-         Dl+R6HHCMTebu5wxbkSEOaLfKXW92LbHmNYnfIDhu4P6Xrw2vJrebP4rb8KV8y7xkp
-         GwOtLKhonzk1w==
-Date:   Thu, 9 Jun 2022 14:54:11 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Genevieve Chan <genevieve.chan@starfivetech.com>,
-        =?iso-8859-1?Q?Jo=E3o_M=E1rio?= Domingos 
-        <joao.mario@tecnico.ulisboa.pt>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:RISC-V PMU DRIVERS" <linux-riscv@lists.infradead.org>,
-        "moderated list:ARM PMU PROFILING AND DEBUGGING" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>
-Subject: Re: [PATCH v3 2/4] RISC-V: Support CPUID for risc-v in perf
-Message-ID: <20220609135411.GB3064@willie-the-truck>
-References: <20220607131648.29439-1-nikita.shubin@maquefel.me>
- <20220607131648.29439-3-nikita.shubin@maquefel.me>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239954AbiFINyR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Jun 2022 09:54:17 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C175187C1F;
+        Thu,  9 Jun 2022 06:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654782856; x=1686318856;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8WHG9nK6aexy470xApRDQbfEVWSVqHjL8RYaXy8qf/s=;
+  b=nmapLsYvRurURG0iljLDnOTVzr0c2n2Ugi8jWISoy1S3GpD0s6oKRsZk
+   x7G1iVdTTvlx7ZaP3bVIJvZSMb8UJVfANFO3DtSwBLqIAqwdXjO8teAJF
+   tsUex62ypldEkQe+zq7zyDBmNoGnFYDViFkupJSQrgQECXXYgmQYK7ToS
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 06:54:16 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 06:54:15 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 9 Jun 2022 06:54:15 -0700
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
+ 06:54:14 -0700
+Message-ID: <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
+Date:   Thu, 9 Jun 2022 07:54:13 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220607131648.29439-3-nikita.shubin@maquefel.me>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
+ power down
+Content-Language: en-US
+To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>,
+        <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 04:16:45PM +0300, Nikita Shubin wrote:
-> From: João Mário Domingos <joao.mario@tecnico.ulisboa.pt>
+On 6/9/2022 7:43 AM, Qiang Yu wrote:
+> EP tends to read MSI address/data once and cache them after BME is set.
+> So host should avoid changing MSI address/data after BME is set.
 > 
-> This patch creates the header.c file for the risc-v architecture and introduces support for
-> PMU identification through sysfs.
-> It is now possible to configure pmu-events in risc-v.
+> In pci reset function, host invokes free_irq(), which also clears MSI
+> address/data in EP's PCIe config space. If the invalid address/data
+> are cached and used by EP, MSI triggered by EP wouldn't be received by
+> host, because an invalid MSI data is sent to an invalid MSI address.
 > 
-> Depends on patch [1], that introduces the id sysfs file.
+> To fix this issue, after host runs request_irq() successfully during
+> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
+> request_irq()/free_irq() when we want to power on and power down MHI.
+> Meanwhile, Host should invoke free_irq() when mhi host driver is
+> removed.
+
+I don't think this works for hotplug, nor cases where there are multiple 
+MHI devices on the system.
+
+The EP shouldn't be caching this information for multiple reasons. 
+Masking the MSIs, disabling the MSIs, changing the address when the 
+affinity changes, etc.
+
+It really feels like we are solving the problem in the wrong place.
+
+Right now, this gets a NACK from me.
+
 > 
-> Signed-off-by: João Mário Domingos <joao.mario@tecnico.ulisboa.pt>
-> [Nikita: replaced soc:pmu to riscv-pmu/id]
-> Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
-> Tested-by: Nikita Shubin <n.shubin@yadro.com>
+> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
 > ---
-> v2->v3:
-> - Change 'soc/soc:pmu/id' to 'riscv-pmu/id'
-> ---
->  drivers/perf/riscv_pmu.c            | 18 ++++++++
->  tools/perf/arch/riscv/util/Build    |  1 +
->  tools/perf/arch/riscv/util/header.c | 66 +++++++++++++++++++++++++++++
+>   drivers/bus/mhi/host/init.c        | 31 +++++++++++++++++++++++++++++++
+>   drivers/bus/mhi/host/pci_generic.c |  2 ++
+>   drivers/bus/mhi/host/pm.c          |  4 ++--
+>   3 files changed, 35 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+> index cbb86b2..48cb093 100644
+> --- a/drivers/bus/mhi/host/init.c
+> +++ b/drivers/bus/mhi/host/init.c
+> @@ -18,6 +18,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/vmalloc.h>
+>   #include <linux/wait.h>
+> +#include <linux/irq.h>
 
-You will need to separate out the kernel changes from the tooling changes in
-order to get this merged.
+Should be in alphabetical order
 
-Thanks,
+>   #include "internal.h"
+>   
+>   static DEFINE_IDA(mhi_controller_ida);
+> @@ -168,6 +169,22 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
+>   	unsigned long irq_flags = IRQF_SHARED | IRQF_NO_SUSPEND;
+>   	int i, ret;
+>   
+> +	/*
+> +	 * if irq[0] has action, it represents all MSI IRQs have been
+> +	 * requested, so we just need to enable them.
+> +	 */
 
-Will
+This seems like an assumption about how the interrupts are allocated and 
+assigned that may not hold true for all devices.
+
+> +	if (irq_has_action(mhi_cntrl->irq[0])) {
+> +		enable_irq(mhi_cntrl->irq[0]);
+> +
+> +		for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+> +			if (mhi_event->offload_ev)
+> +				continue;
+> +
+> +			enable_irq(mhi_cntrl->irq[mhi_event->irq]);
+> +		}
+> +		return 0;
+> +	}
+> +
+>   	/* if controller driver has set irq_flags, use it */
+>   	if (mhi_cntrl->irq_flags)
+>   		irq_flags = mhi_cntrl->irq_flags;
+> @@ -179,6 +196,11 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
+>   				   "bhi", mhi_cntrl);
+>   	if (ret)
+>   		return ret;
+> +	/*
+> +	 * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
+> +	 * so disable it explicitly.
+> +	 */
+> +	disable_irq(mhi_cntrl->irq[0]);
+>   
+>   	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>   		if (mhi_event->offload_ev)
+> @@ -200,6 +222,8 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
+>   				mhi_cntrl->irq[mhi_event->irq], i);
+>   			goto error_request;
+>   		}
+> +
+> +		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>   	}
+>   
+>   	return 0;
+> @@ -1003,8 +1027,14 @@ int mhi_register_controller(struct mhi_controller *mhi_cntrl,
+>   
+>   	mhi_create_debugfs(mhi_cntrl);
+>   
+> +	ret = mhi_init_irq_setup(mhi_cntrl);
+> +	if (ret)
+> +		goto error_setup_irq;
+> +
+>   	return 0;
+>   
+> +error_setup_irq:
+> +	mhi_destroy_debugfs(mhi_cntrl);
+>   err_release_dev:
+>   	put_device(&mhi_dev->dev);
+>   err_ida_free:
+> @@ -1027,6 +1057,7 @@ void mhi_unregister_controller(struct mhi_controller *mhi_cntrl)
+>   	struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
+>   	unsigned int i;
+>   
+> +	mhi_deinit_free_irq(mhi_cntrl);
+>   	mhi_destroy_debugfs(mhi_cntrl);
+>   
+>   	destroy_workqueue(mhi_cntrl->hiprio_wq);
+> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> index 6fbc591..60020d0 100644
+> --- a/drivers/bus/mhi/host/pci_generic.c
+> +++ b/drivers/bus/mhi/host/pci_generic.c
+> @@ -945,6 +945,8 @@ static void mhi_pci_remove(struct pci_dev *pdev)
+>   
+>   	mhi_unregister_controller(mhi_cntrl);
+>   	pci_disable_pcie_error_reporting(pdev);
+> +
+> +	pci_free_irq_vectors(pdev);
+>   }
+>   
+>   static void mhi_pci_shutdown(struct pci_dev *pdev)
+> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+> index dc2e8ff..190231c 100644
+> --- a/drivers/bus/mhi/host/pm.c
+> +++ b/drivers/bus/mhi/host/pm.c
+> @@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
+>   	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>   		if (mhi_event->offload_ev)
+>   			continue;
+> -		free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
+> +		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>   		tasklet_kill(&mhi_event->task);
+>   	}
+>   
+> @@ -1182,7 +1182,7 @@ void mhi_power_down(struct mhi_controller *mhi_cntrl, bool graceful)
+>   	/* Wait for shutdown to complete */
+>   	flush_work(&mhi_cntrl->st_worker);
+>   
+> -	free_irq(mhi_cntrl->irq[0], mhi_cntrl);
+> +	disable_irq(mhi_cntrl->irq[0]);
+>   }
+>   EXPORT_SYMBOL_GPL(mhi_power_down);
+>   
+

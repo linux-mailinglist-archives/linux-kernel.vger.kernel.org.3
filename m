@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAC8544DA9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291B3544DAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243850AbiFIN2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S236472AbiFIN3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236472AbiFIN2q (ORCPT
+        with ESMTP id S236324AbiFIN3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:28:46 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EBBC01;
-        Thu,  9 Jun 2022 06:28:44 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d13so4586426plh.13;
-        Thu, 09 Jun 2022 06:28:44 -0700 (PDT)
+        Thu, 9 Jun 2022 09:29:40 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B5922E6BF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:29:38 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id a10so9901662wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:29:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Mz7V2xD1G6h5TvOs7Ag8m6DrvQ9A1f2IYetUk1d+PhQ=;
-        b=B4zn5ZGeBYoVIcQ/k+mcJqq14IHOQj3uKEcxP5ZCiIyILNtXmeX1a3/pZULGcGoyKG
-         9I0bdB9k4gCBE4shh70XOv3E86s8fLu3sfb0mIptRvcxAGmCsf28bCMBmAtzTLL1XylV
-         CiMw/Vfz9t5DifHHm7LcwvGnHpoG3lnnxjvhBnH25Y2d5NagIuvrgYj8b/h2GFphW0qU
-         8q/kFu29nmz7X9a/m0PIVxiZFgkXpKc7cqQ31wQcsdZarUDEdq/4DCXdjTAOjUktct9J
-         xmIlPQKtrKzknalUYLDTowIkXiVRyECcpN7gX7ZAwWUbjygMkeLhrVE/rv/XZFYEcXVX
-         SUVQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rjMuIRUcb0cPQvXILDOIo+coVEcP/6ZTYygCO+zLwZI=;
+        b=llsDjVZg+rOdu3CGzqkX32eaAVwdPsiU1VS8nnyvNRDE8sSblRFHTicWYkcfv1MHXu
+         MdioVqNNs5cZ6VFBcG/BTh+RYCpb4wW/GsS0eXUaIy0clqjbpJSnR1ulbw/7zoIenBq5
+         GrUbInpSMPpuI1FYSkYzT523tdWtskkHSqijsxWHddPhy9Ua2EDYEGOq/3ZraWyloBKi
+         IYBEdx9YQRGK140dTUf06Mckk0WfQToxgONPNEvHd6As8zdXa28IdWZ5JxDGVqVLQktY
+         jr1QPxVBWK0Kbx7LIDEtxfJ3aXBUuioiTK9kFPOUNXroue4i/t/PAPRtgUMUE5v9JXNw
+         txhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Mz7V2xD1G6h5TvOs7Ag8m6DrvQ9A1f2IYetUk1d+PhQ=;
-        b=U5sBmBfKsMAN/BIjOsDGlGCHXIIloc0GMM4z2oKbXHjBiZKnV4GldADtn4uU/bpO7f
-         GvTzyugwo89X5o+XJKIC0JFwnCQDcK+urkRwVoBzFMCUy9ZlquBzXdAGd4ilJoiGbW82
-         XFvV+5vVedSpo/3zvbHS7Vkxf070yAGbAmNEyPKKZivY9LJRZTvPhidcPS8VTu7merHm
-         m19DS55K7by5QhR9CLvWETkZL1uLR7dhPCaoRWlGAh3fl42URY6Td66u5c7m2YcqWJcv
-         fv2HTtbInMpRuP7EUCINmPalFrGBzpAyUGucEhFerozmMzVwERNURbXJ80WnJtJ87wtw
-         hVhA==
-X-Gm-Message-State: AOAM5318vNVecHHdT17vl7ora9ZB7W2p2JWs9cIXiuWVtZPZIsSBZUyR
-        zXpjuarRgIrhmLdTK90Dgxg=
-X-Google-Smtp-Source: ABdhPJxsVethl6NbMzTT/j6FDOIG6XvSlq+VQNCFhGOK00BjXa8MIVhSqSAUY6ozNNcfG32Nj6MKjA==
-X-Received: by 2002:a17:903:1211:b0:15e:8208:8cc0 with SMTP id l17-20020a170903121100b0015e82088cc0mr40322693plh.52.1654781324091;
-        Thu, 09 Jun 2022 06:28:44 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id l21-20020a17090b079500b001e0d4169365sm18521658pjz.17.2022.06.09.06.28.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 06:28:42 -0700 (PDT)
-Message-ID: <15636c13-7fa2-f973-6d3d-361222b839ef@gmail.com>
-Date:   Thu, 9 Jun 2022 22:28:40 +0900
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rjMuIRUcb0cPQvXILDOIo+coVEcP/6ZTYygCO+zLwZI=;
+        b=esCHKYywEcWsqpf9tKYkgiGqxN++3O7g1RpFKGePG+aeU/Z4NdlJHSpd9HVhTqncEY
+         G1s5LjcKNfQOURDz1WVBYbpHrNI1S7Ou12CQ5rhW0oMPglz/CfsBclvmt/rA69xBotNi
+         25/5MkSwUSpreMjqkzLk8Zgdwqc35ni05xED1DCPZY9JDWIg+3lwNah+h0Gt9axMnqHv
+         Uk2mvInFCDFtUBPKTZwWGHZ3jFEnPbd2mh5Kd5TyLVeZ9fF/GtqNq/xnqnPItrJ5g/rP
+         q5vJJCngBKxxE6Qrdb0e6xED4se0wb1l7qwHpxDq6nbaftEXnD/9Tp31UHejGM8M5Th2
+         U/Uw==
+X-Gm-Message-State: AOAM533jxlajJOm7QYtVaK5Plk3nU/puXQxGShMVo0m0nosqIYlyAlVO
+        2cbSPrFbChTrcYiZ3notOf7EIA==
+X-Google-Smtp-Source: ABdhPJyZ8W/NkcPXAC3pwT4egxuS2urSSW5AltvpWbSolwLujgLmjNCc1uFC8yzG/FYW9KPUrP/oOA==
+X-Received: by 2002:a7b:c057:0:b0:39c:4579:42e1 with SMTP id u23-20020a7bc057000000b0039c457942e1mr3381516wmc.102.1654781377037;
+        Thu, 09 Jun 2022 06:29:37 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:dcf:e5ba:10a5:1ea5])
+        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0039c15861001sm26391486wmb.21.2022.06.09.06.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 06:29:36 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 15:29:29 +0200
+From:   Marco Elver <elver@google.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, x86@kernel.org,
+        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/8] perf/hw_breakpoint: Reduce contention with large
+ number of tasks
+Message-ID: <YqH1uUtWHkFr/jDY@elver.google.com>
+References: <20220609113046.780504-1-elver@google.com>
+ <20220609113046.780504-7-elver@google.com>
+ <CACT4Y+aHZ4RTsz_SY=U5NKRWR1M4f0cy1WdepJyBGkbYy7_=TA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: [PATCH 5/5] docs/doc-guide: Put meta title for kernel-doc HTML page
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+aHZ4RTsz_SY=U5NKRWR1M4f0cy1WdepJyBGkbYy7_=TA@mail.gmail.com>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +85,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel-doc.rst has two 1st level section titles of "Writing
-kernel-doc comments" and "Including kernel-doc comments".
+On Thu, Jun 09, 2022 at 03:03PM +0200, Dmitry Vyukov wrote:
+[...]
+> > -/* Serialize accesses to the above constraints */
+> > -static DEFINE_MUTEX(nr_bp_mutex);
+> > +/*
+> > + * Synchronizes accesses to the per-CPU constraints; users of data in bp_cpuinfo
+> > + * must acquire bp_cpuinfo_lock as writer to get a stable snapshot of all CPUs'
+> > + * constraints. Modifications without use may only acquire bp_cpuinfo_lock as a
+> > + * reader, but must otherwise ensure modifications are never lost.
+> > + */
+> 
+> I can't understand this comment.
+> Modifications need to acquire in read mode, while only users must
+> acquire in write mode. Shouldn't it be the other way around? What is
+> "Modifications without use"?
 
-Therefore, rather than using the first one, put a meta title
-of "Kernel-doc comments" for the title of the resulting HTML
-page by using the "title" directive.
+Right, maybe this comment needs tweaking.
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
----
- Documentation/doc-guide/kernel-doc.rst | 2 ++
- 1 file changed, 2 insertions(+)
+The main rules are -- the obvious ones:
 
-diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
-index a7cb2afd7990..9c779bd7a751 100644
---- a/Documentation/doc-guide/kernel-doc.rst
-+++ b/Documentation/doc-guide/kernel-doc.rst
-@@ -1,3 +1,5 @@
-+.. title:: Kernel-doc comments
-+
- ===========================
- Writing kernel-doc comments
- ===========================
--- 
-2.25.1
+	 - plain reads are ok with just a read-lock (target is task,
+	   reading 'cpu_pinned');
 
+	 - plain writes need a write-lock (target is CPU, writing
+	   'cpu_pinned');
 
+the not so obvious one:
+
+	- "modification without use" are the increment/decrement of
+	  tsk_pinned done if the target is a task; in this case, we can
+	  happily allow concurrent _atomic_ increments/decrements from
+	  different tasks as long as there is no "use" i.e. read the
+	  value and check it to make a decision if there is space or not
+	  (this is only done by CPU targets).
+
+So the main idea is that the rwlock when held as a reader permits these
+"modifications without use" concurrently by task targets, but will block
+a CPU target wishing to get a stable snapshot until that acquires the
+rwlock as a writer.
+
+The modifications done by task targets are done on atomic variables, so
+we never loose any increments/decrements, but while these modifications
+are going on, the global view of tsk_pinned may be inconsistent.
+However, we know that once a CPU target acquires the rwlock as a writer,
+there will be no more "readers" -- or rather any task targets that can
+update tsk_pinned concurrently -- and therefore tsk_pinned must be
+stable once we acquire the rwlock as a writer.
+
+I'll have to think some more how to best update the comment...
+
+> > +static DEFINE_RWLOCK(bp_cpuinfo_lock);
+> > +
+> > +/*
+> > + * Synchronizes accesses to the per-task breakpoint list in task_bps_ht. Since
+> > + * rhltable synchronizes concurrent insertions/deletions, independent tasks may
+> > + * insert/delete concurrently; therefore, a mutex per task would be sufficient.
+> > + *
+> > + * To avoid bloating task_struct with infrequently used data, use a sharded
+> > + * mutex that scales with number of CPUs.
+> > + */
+> > +static DEFINE_PER_CPU(struct mutex, task_sharded_mtx);
+> > +
+> > +static struct mutex *get_task_sharded_mtx(struct perf_event *bp)
+> > +{
+> > +       int shard;
+> > +
+> > +       if (!bp->hw.target)
+> > +               return NULL;
+> > +
+> > +       /*
+> > +        * Compute a valid shard index into per-CPU data.
+> > +        */
+> > +       shard = task_pid_nr(bp->hw.target) % nr_cpu_ids;
+> > +       shard = cpumask_next(shard - 1, cpu_possible_mask);
+> > +       if (shard >= nr_cpu_ids)
+> > +               shard = cpumask_first(cpu_possible_mask);
+> > +
+> > +       return per_cpu_ptr(&task_sharded_mtx, shard);
+> > +}
+> > +
+> > +static struct mutex *bp_constraints_lock(struct perf_event *bp)
+> > +{
+> > +       struct mutex *mtx = get_task_sharded_mtx(bp);
+> > +
+> > +       if (mtx) {
+> > +               mutex_lock(mtx);
+> > +               read_lock(&bp_cpuinfo_lock);
+> 
+> Is NR_CPUS == 1 case still important to optimize? I guess with small
+> VMs it may be important again.
+> If so, we could just write-lock bp_cpuinfo_lock always if NR_CPUS == 1.
+
+Not sure, I guess it's easy to add the check for NR_CPUS==1.
+
+[...]
+> > @@ -397,12 +497,11 @@ static void __release_bp_slot(struct perf_event *bp, u64 bp_type)
+> >
+> >  void release_bp_slot(struct perf_event *bp)
+> >  {
+> > -       mutex_lock(&nr_bp_mutex);
+> > +       struct mutex *mtx = bp_constraints_lock(bp);
+> >
+> >         arch_unregister_hw_breakpoint(bp);
+> 
+> If I understand this correctly, this can weaken protection for
+> arch_unregister_hw_breakpoint() and __modify_bp_slot(). Previously
+> they were globally serialized, but now several calls can run in
+> parallel. Is it OK?
+
+__modify_bp_slot() just calls __release_bp_slot() and
+__reserve_bp_slot() which is related to constraints accounting, and is
+all internal to hw_breakpoint.
+
+Only ppc overrides some of the sea arch_ functions. In arch/powerpc:
+arch_unregister_hw_breakpoint() looks like it only accesses
+bp->ctx->task, so that looks ok; however, looks like
+arch_release_bp_slot() might want its own lock because it mutates a
+list, but that lock wants to be in powerpc code.

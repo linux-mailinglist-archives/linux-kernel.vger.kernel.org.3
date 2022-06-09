@@ -2,170 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E522554548D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E22545492
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239081AbiFITBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 15:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S239619AbiFITEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 15:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiFITBF (ORCPT
+        with ESMTP id S229632AbiFITEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 15:01:05 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3020E11A03
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654801264; x=1686337264;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EmjwxxcIPjSKbVJyKUdZT+cLlENxHUYXqwB3T5Diz90=;
-  b=PMHz+O6stWoWPFAEm/sd8Lry7OHV/HwPT8oA+NtP8bOu84rjpnw8QafY
-   msQeXTm+t+znWITSCDYyzhoWEVDivQT/NkGovNvTCP39uWhSzkeRWx2lJ
-   ALhVoG+XdE1/7f230Z3p/dAFyEVLarQgshHh3qUylJhtiAyV8/tVYMkND
-   ouGROuLp24rKDUTlTUylOwrnNrbhguu3YBRFNwR9fo4MINl8wxyocmJQT
-   DB5HUyAmcPAWSMZRABUWdIZQYNXWFkIdV2/2T3yC9rgYumJsZjVGKu0nm
-   wntIhlpw6KjEYi+0WpQJ15GFLE1KYI6nVO0ukxfPnFcwt0UGsN67LOvta
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266161270"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="266161270"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 12:01:03 -0700
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="908473498"
-Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 12:01:03 -0700
-Date:   Thu, 9 Jun 2022 19:01:02 +0000
-From:   "Raj, Ashok" <ashok.raj@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH v8 02/11] iommu: Add max_pasids field in struct dev_iommu
-Message-ID: <20220609190102.GC33363@araj-dh-work>
-References: <20220607014942.3954894-1-baolu.lu@linux.intel.com>
- <20220607014942.3954894-3-baolu.lu@linux.intel.com>
+        Thu, 9 Jun 2022 15:04:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058B53F32D;
+        Thu,  9 Jun 2022 12:04:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9485861DF3;
+        Thu,  9 Jun 2022 19:04:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C24DBC34114;
+        Thu,  9 Jun 2022 19:04:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654801445;
+        bh=Yxnu6+83FYCfv/3NbAs8M+FkZ+oJRuDX8jaMn/PQaZE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DPDtpREhdB0j8JRKxYabn/GSmhFRQx135HzaS1QEKqIVh/3OLWcUqgRccNEM25gmk
+         kG/OrJ39Z46ozUpCD4lB0Pz1Cgw5Nr0wS2LvRNpnFS3G1qnalODO0aE13KHfgq2aVF
+         RBiVXksCRrbDV3G+6tdZE7M8qB5p84hUf24cfmQT69pB4ht/PfI68SUxb2hijm/Alk
+         Iy9ZomiMariI7kTxRnfRkGzQdVh+RKRQraiVWC+Xd/Y3laedlgOxz6E566fV4n10Vd
+         4RCPFzR938EQgajfXo30ffAkTSTF2nYqegz7D/8H6zPQrMmQALtMa5fIpBWwlTlMaX
+         oQLbte0bNq8JA==
+Date:   Fri, 10 Jun 2022 03:03:58 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     jlayton@kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
+        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
+Message-ID: <YqJEHqD15q738aQY@debian>
+Mail-Followup-To: David Howells <dhowells@redhat.com>, jlayton@kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Mike Marshall <hubcap@omnibond.com>, Gao Xiang <xiang@kernel.org>,
+        linux-afs@lists.infradead.org, v9fs-developer@lists.sourceforge.net,
+        devel@lists.orangefs.org, linux-erofs@lists.ozlabs.org,
+        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <165476202136.3999992.433442175457370240.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220607014942.3954894-3-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <165476202136.3999992.433442175457370240.stgit@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 09:49:33AM +0800, Lu Baolu wrote:
-> Use this field to save the number of PASIDs that a device is able to
-> consume. It is a generic attribute of a device and lifting it into the
-> per-device dev_iommu struct could help to avoid the boilerplate code
-> in various IOMMU drivers.
+On Thu, Jun 09, 2022 at 09:07:01AM +0100, David Howells wrote:
+> The maths at the end of iter_xarray_get_pages() to calculate the actual
+> size doesn't work under some circumstances, such as when it's been asked to
+> extract a partial single page.  Various terms of the equation cancel out
+> and you end up with actual == offset.  The same issue exists in
+> iter_xarray_get_pages_alloc().
 > 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Fix these to just use min() to select the lesser amount from between the
+> amount of page content transcribed into the buffer, minus the offset, and
+> the size limit specified.
+> 
+> This doesn't appear to have caused a problem yet upstream because network
+> filesystems aren't getting the pages from an xarray iterator, but rather
+> passing it directly to the socket, which just iterates over it.  Cachefiles
+> *does* do DIO from one to/from ext4/xfs/btrfs/etc. but it always asks for
+> whole pages to be written or read.
+> 
+> Fixes: 7ff5062079ef ("iov_iter: Add ITER_XARRAY")
+> Reported-by: Jeff Layton <jlayton@kernel.org>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> cc: Dominique Martinet <asmadeus@codewreck.org>
+> cc: Mike Marshall <hubcap@omnibond.com>
+> cc: Gao Xiang <xiang@kernel.org>
+> cc: linux-afs@lists.infradead.org
+> cc: v9fs-developer@lists.sourceforge.net
+> cc: devel@lists.orangefs.org
+> cc: linux-erofs@lists.ozlabs.org
+> cc: linux-cachefs@redhat.com
+> cc: linux-fsdevel@vger.kernel.org
+
+Looks good to me,
+
+Reviewed-by: Gao Xiang <xiang@kernel.org>
+
+Thanks,
+Gao Xiang
+
 > ---
->  include/linux/iommu.h |  2 ++
->  drivers/iommu/iommu.c | 26 ++++++++++++++++++++++++++
->  2 files changed, 28 insertions(+)
 > 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 03fbb1b71536..d50afb2c9a09 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -364,6 +364,7 @@ struct iommu_fault_param {
->   * @fwspec:	 IOMMU fwspec data
->   * @iommu_dev:	 IOMMU device this device is linked to
->   * @priv:	 IOMMU Driver private data
-> + * @max_pasids:  number of PASIDs device can consume
->   *
->   * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
->   *	struct iommu_group	*iommu_group;
-> @@ -375,6 +376,7 @@ struct dev_iommu {
->  	struct iommu_fwspec		*fwspec;
->  	struct iommu_device		*iommu_dev;
->  	void				*priv;
-> +	u32				max_pasids;
->  };
+>  lib/iov_iter.c |   20 ++++----------------
+>  1 file changed, 4 insertions(+), 16 deletions(-)
+> 
+> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> index 834e1e268eb6..814f65fd0c42 100644
+> --- a/lib/iov_iter.c
+> +++ b/lib/iov_iter.c
+> @@ -1434,7 +1434,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+>  {
+>  	unsigned nr, offset;
+>  	pgoff_t index, count;
+> -	size_t size = maxsize, actual;
+> +	size_t size = maxsize;
+>  	loff_t pos;
 >  
->  int iommu_device_register(struct iommu_device *iommu,
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 847ad47a2dfd..adac85ccde73 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -20,6 +20,7 @@
->  #include <linux/idr.h>
->  #include <linux/err.h>
->  #include <linux/pci.h>
-> +#include <linux/pci-ats.h>
-
-Is this needed for this patch?
-
->  #include <linux/bitops.h>
->  #include <linux/property.h>
->  #include <linux/fsl/mc.h>
-> @@ -218,6 +219,30 @@ static void dev_iommu_free(struct device *dev)
->  	kfree(param);
+>  	if (!size || !maxpages)
+> @@ -1461,13 +1461,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+>  	if (nr == 0)
+>  		return 0;
+>  
+> -	actual = PAGE_SIZE * nr;
+> -	actual -= offset;
+> -	if (nr == count && size > 0) {
+> -		unsigned last_offset = (nr > 1) ? 0 : offset;
+> -		actual -= PAGE_SIZE - (last_offset + size);
+> -	}
+> -	return actual;
+> +	return min(nr * PAGE_SIZE - offset, maxsize);
 >  }
 >  
-> +static u32 dev_iommu_get_max_pasids(struct device *dev)
-> +{
-> +	u32 max_pasids = dev->iommu->iommu_dev->max_pasids;
-> +	u32 num_bits;
-> +	int ret;
-> +
-> +	if (!max_pasids)
-> +		return 0;
-> +
-> +	if (dev_is_pci(dev)) {
-> +		ret = pci_max_pasids(to_pci_dev(dev));
-> +		if (ret < 0)
-> +			return 0;
-> +
-> +		return min_t(u32, max_pasids, ret);
-
-Ah.. that answers my other question to consider device pasid-max. I guess
-if we need any enforcement of restricting devices that aren't supporting
-the full PASID, that will be done by some higher layer?
-
-too many returns in this function, maybe setup all returns to the end of
-the function might be elegant?
-
-> +	}
-> +
-> +	ret = device_property_read_u32(dev, "pasid-num-bits", &num_bits);
-> +	if (ret)
-> +		return 0;
-> +
-> +	return min_t(u32, max_pasids, 1UL << num_bits);
-> +}
-> +
->  static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
->  {
->  	const struct iommu_ops *ops = dev->bus->iommu_ops;
-> @@ -243,6 +268,7 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
->  	}
+>  /* must be done on non-empty ITER_IOVEC one */
+> @@ -1602,7 +1596,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
+>  	struct page **p;
+>  	unsigned nr, offset;
+>  	pgoff_t index, count;
+> -	size_t size = maxsize, actual;
+> +	size_t size = maxsize;
+>  	loff_t pos;
 >  
->  	dev->iommu->iommu_dev = iommu_dev;
-> +	dev->iommu->max_pasids = dev_iommu_get_max_pasids(dev);
+>  	if (!size)
+> @@ -1631,13 +1625,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
+>  	if (nr == 0)
+>  		return 0;
 >  
->  	group = iommu_group_get_for_dev(dev);
->  	if (IS_ERR(group)) {
-> -- 
-> 2.25.1
+> -	actual = PAGE_SIZE * nr;
+> -	actual -= offset;
+> -	if (nr == count && size > 0) {
+> -		unsigned last_offset = (nr > 1) ? 0 : offset;
+> -		actual -= PAGE_SIZE - (last_offset + size);
+> -	}
+> -	return actual;
+> +	return min(nr * PAGE_SIZE - offset, maxsize);
+>  }
+>  
+>  ssize_t iov_iter_get_pages_alloc(struct iov_iter *i,
+> 
 > 

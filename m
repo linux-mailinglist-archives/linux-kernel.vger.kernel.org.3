@@ -2,66 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58579544B22
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F95A544B28
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244893AbiFIL66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S234615AbiFIMB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244511AbiFIL6y (ORCPT
+        with ESMTP id S229851AbiFIMBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:58:54 -0400
-Received: from gentwo.de (gentwo.de [IPv6:2a02:c206:2048:5042::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EF813CE4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:58:50 -0700 (PDT)
-Received: by gentwo.de (Postfix, from userid 1001)
-        id 0CDE7B00149; Thu,  9 Jun 2022 13:58:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
-        t=1654775927; bh=NzmzzhGPGUY7xZcOQ+0OfmkAMUDNRFa2wttp68Yz7bk=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=mDV8x/vOv68VDjg22k4RMOhgEUyQVhp17be0H3abpHmpzRHLZ6eO0kdAts6i3K9nY
-         /EiGmDVD0hGP/O4Pi+KdVjBAFkYec4qnTpSaNfOhGMLZRGtbGgwRwdqWQSGCP+UJ4s
-         DXp63jvxADrXo3v/B15z140CcV7ptnfpj7f5q+cLQx7j9KPrJc0O06VLtRDDSTiSXs
-         AXGOtstnavFqll3La/hP6p6Df1tSar0ioozucIOfyORzOOuStcR7kYuGcV9q7t+vZi
-         OIAKhJHOuzd+Fe8hRfR2IMAOD+ZzafeFSvO9XR9dBgVI7twEF6uV/hT0Cko/PDQTGN
-         uVtkXOkrMGKrQ==
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.de (Postfix) with ESMTP id 0B516B0012F;
-        Thu,  9 Jun 2022 13:58:47 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 13:58:47 +0200 (CEST)
-From:   Christoph Lameter <cl@gentwo.de>
-To:     Jann Horn <jannh@google.com>
-cc:     Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slub: add missing TID updates on slab deactivation
-In-Reply-To: <20220608182205.2945720-1-jannh@google.com>
-Message-ID: <alpine.DEB.2.22.394.2206091358040.566833@gentwo.de>
-References: <20220608182205.2945720-1-jannh@google.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 9 Jun 2022 08:01:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD1415A32
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:01:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 386F360DE6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94140C34114;
+        Thu,  9 Jun 2022 12:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654776112;
+        bh=u+XcfQReiKtxDuoUpBEx6UyrLDzkBQyxvH5fW+kzcYo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pcSP3/VTTdmDQELmxtlbXoFgmKAGwZcf+V0kLp95iAtBY+KZ9iVAHlfKwm1Io07vp
+         oiF0uIcToS/EpdF9ONCzdQdThqURJoBZYbsdIOevwxgANCYfnyN/rPcmGh5rKY5J7y
+         W9moHY103jFeCYAJQePsbVVdJUi0pwaxZ7cN+w8dvHPV5f6ZJ07sGlLeOPkEN6efXL
+         +vf7IXT5XCaVzcKilP8BdmGt53BLNgW16jalCSZRdUJV/xO0g2ei65VP6eEkrW6HVN
+         2UmEyqkIPIiVv/QgRlYNsNGJxIrd+r57VQzigtaYmwjKQj7jZavHuTT7LHiqUowNK9
+         WI60p8fHdRQaQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nzGrG-00GrMO-6i; Thu, 09 Jun 2022 13:01:50 +0100
+Date:   Thu, 09 Jun 2022 13:01:49 +0100
+Message-ID: <87a6am3v0y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: Re: [PATCH V11 00/10] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <f9bafd6c-0819-9046-e0dd-11e2dd98da38@flygoat.com>
+References: <20220430085344.3127346-1-chenhuacai@loongson.cn>
+        <87v8uk6kfa.wl-maz@kernel.org>
+        <f9bafd6c-0819-9046-e0dd-11e2dd98da38@flygoat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, lvjianmin@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Jun 2022, Jann Horn wrote:
++ Jianmin Lv
 
-> The fastpath in slab_alloc_node() assumes that c->slab is stable as long as
-> the TID stays the same. However, two places in __slab_alloc() currently
-> don't update the TID when deactivating the CPU slab.
+On Fri, 20 May 2022 16:04:28 +0100,
+Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>=20
+>=20
+>=20
+> =E5=9C=A8 2022/5/5 16:58, Marc Zyngier =E5=86=99=E9=81=93:
+> >> LoongArch use ACPI, but ACPI tables cannot describe the hierarchy of
+> >> irqchips, so we initilize the irqchip subsystem in this way (from arch
+> >> code):
+> >>=20
+> >>    cpu_domain =3D loongarch_cpu_irq_init();
+> >>    liointc_domain =3D liointc_acpi_init(cpu_domain, acpi_liointc);
+> >>    eiointc_domain =3D eiointc_acpi_init(cpu_domain, acpi_eiointc);
+> >>    pch_pic_domain =3D pch_pic_acpi_init(eiointc_domain, acpi_pchpic);
+> >>    pch_msi_domain =3D pch_msi_acpi_init(eiointc_domain, acpi_pchmsi);
+> > I said no to this in the past, and I'm going to reiterate: this is
+> > *not* acceptable. This obviously doesn't scale and isn't manageable in
+> > the long run. Hardcoding the topology and the probing order in the
+> > kernel code has repeatedly proved to be a disaster, and yet you refuse
+> > to take any input from past experience. This is pretty worrying.
+> Just my two cents here.
+>=20
+> Those drivers have such a topology just because this was my design to
+> handle irqchip differences between RS780E and LS7A for MIPS-era Loongson.
+>=20
+> TBH, for LoongArch-era Loongson, they should be handled by the same drive=
+r,
+> cuz the topology behind them just looks like GIC PPI SPI and MSI for
+> Arm GIC.
+>=20
+> PCH PIC and eiointc in combination relays interrupts from
+> peripherals just like SPI.  liointc is doing the PPI job. They are
+> not separated modules in hardware, they are interlocked.
 
-Looks ok.
+That was my impression too, but I keep getting pushback on that. I
+wouldn't mind leaving the existing drivers for MIPS only and get new
+ones for Loongson if that made things clearer.
 
-Acked-by: Christoph Lameter <cl@linux.com>
+> The system should be treated as a whole, pretty much like how we see
+> Arm's GIC. The topology will last forever for every ACPI enabled
+> LoongArch PC.
+>=20
+> I see no reason they should be described separately. Adding complicities =
+to
+> ACPI bindings brings no benefit. Changing ACPI binding which is already in
+> final draft stage can only leave us with chaos.
+
+OK. So how do we move forward? You seem to have a good grasp on how
+this should be structured, so can you work with Jianmin Lv to make
+some progress on this?
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

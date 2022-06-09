@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6E2545134
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B858554513D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242382AbiFIPsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S245733AbiFIPvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236467AbiFIPsw (ORCPT
+        with ESMTP id S236467AbiFIPu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:48:52 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D1E51584;
-        Thu,  9 Jun 2022 08:48:51 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id BF199732;
-        Thu,  9 Jun 2022 15:48:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BF199732
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1654789730; bh=wzS4sH2vP/NmHZejwgyf+MxzmvQDlQlgWpCRyix8Jtw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YvqV3u3gaSodZonxEOQl7lpMs4fYJiNOq9svxxs3OUkua7GmJNRqkJqdwsxqEgoR7
-         91rJzPbzIh2Ex5HR/7NMRz/Z1b0nJHk/N8sUAnuqR3TfHRu7drhB3pEvYFXQwV5/Sm
-         SAOMwaGXWoVSIp+TFRcyvxrwx7XEoplRrLYyPGjhrEbLAPklA0MVsp1GRZejXR726U
-         CZu+I3vpshVYT1nN/D+S1fp9HJ+CbreFVhdx7YTr1zz0MaCAkrPfykSQpt4w7y/KGR
-         PnZDeiIStPVmexsHTbnP+6xw35dhhyE5zVOOKig1CH7tTdzIcRXj6H0huPaHxoJGz/
-         dL2wxsl2XccPA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Louis Peens <louis.peens@corigine.com>
-Subject: Re: [PATCH] scripts: kernel-doc: Always increment warnings counter
-In-Reply-To: <20220608142601.832926-1-niklas.soderlund@corigine.com>
-References: <20220608142601.832926-1-niklas.soderlund@corigine.com>
-Date:   Thu, 09 Jun 2022 09:48:50 -0600
-Message-ID: <87mtel4z31.fsf@meer.lwn.net>
+        Thu, 9 Jun 2022 11:50:58 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54DD64D1;
+        Thu,  9 Jun 2022 08:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654789857; x=1686325857;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hkc4R2y3TA8DaxLMcK9RGW0FNcNMEI4tyLUGFtYVlzg=;
+  b=ymmSy1DowptP1ZlKemaB5xVaezr8iemVIyc/Z/1E5/nmKvyhodFqG73B
+   xKXl8gFEwWu8gSHrh0iPSFEsEyAXadTNDPoxpAFgqUde/fDgiMAhd83hk
+   Xapd+7XhgLMWAXeFfRKji3CjFjydoQ7KLYbxQGtuC6VtL6GTTW+9birhc
+   Y=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 09 Jun 2022 08:50:56 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:50:56 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 9 Jun 2022 08:50:55 -0700
+Received: from [10.216.42.89] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
+ 08:50:51 -0700
+Message-ID: <dcf4f390-923b-409e-8a5a-1e0741729a96@quicinc.com>
+Date:   Thu, 9 Jun 2022 21:20:46 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Freedreno] [PATCH] drm/msm: Switch ordering of runpm put vs
+ devfreq_idle
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Sean Paul <sean@poorly.run>
+References: <20210927152928.831245-1-robdclark@gmail.com>
+ <f1c6fff0-a220-86d9-8572-2de3d47ab96a@codeaurora.org>
+ <CAF6AEGtRO2VdweN014JpApQ460=KxEU9uF8jf1U__Gh-bMRo7w@mail.gmail.com>
+ <2e8544dc-1914-92ab-a9c6-e9093a649c49@quicinc.com>
+ <CAF6AEGvgd7AbGG9szgAW1hXPrhfY78Vdh2s8a6Cei1gpScDQNw@mail.gmail.com>
+ <9d321f53-eabc-3f8d-79a9-f2c407aea6f1@quicinc.com>
+ <CAD=FV=WmzKfZEv_vFo=y1OxLx2=PN6jwDC7EdQpdw=TBANE=HQ@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAD=FV=WmzKfZEv_vFo=y1OxLx2=PN6jwDC7EdQpdw=TBANE=HQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,58 +79,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Niklas S=C3=B6derlund <niklas.soderlund@corigine.com> writes:
-
-> Some warnings did not increment the warnings counter making the behavior
-> of running kernel-doc with -Werror unlogical as some warnings would be
-> generated but not treated as errors.
+On 6/9/2022 8:27 PM, Doug Anderson wrote:
+> Hi,
 >
-> Fix this by always incrementing the warnings counter every time a
-> warning related to the input documentation is generated. There is one
-> location in get_sphinx_version() where a warning is printed and the
-> counter is not touched as it concerns the execution environment of the
-> kernel-doc and not the documentation being processed.
-
-So this seems like an improvement, but I have to ask: wouldn't it be far
-better to just add a function to emit a warning and use that rather than
-all these print/++$warnings pairings?  The current way seems repetitive
-and error-prone.
-
-I also have to ask...
-
-> Incrementing the counter only have effect when running kernel-doc in
-> either verbose mode (-v or environment variable KBUILD_VERBOSE) or when
-> treating warnings as errors (-Werror or environment variable
-> KDOC_WERROR). In both cases the number of warnings printed is printed to
-> stderr and for the later the exit code of kernel-doc is non-zero if
-> warnings where encountered.
+> On Thu, Jun 9, 2022 at 7:16 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>> On 6/9/2022 2:17 AM, Rob Clark wrote:
+>>> On Wed, Jun 8, 2022 at 12:36 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>>>> On 6/8/2022 3:00 AM, Rob Clark wrote:
+>>>>> On Tue, Sep 28, 2021 at 7:52 AM Akhil P Oommen <akhilpo@codeaurora.org> wrote:
+>>>>>> On 9/27/2021 8:59 PM, Rob Clark wrote:
+>>>>>>> From: Rob Clark <robdclark@chromium.org>
+>>>>>>>
+>>>>>>> I've seen a few crashes like:
+>>>>>>>
+>>>>>>>         Internal error: synchronous external abort: 96000010 [#1] PREEMPT SMP
+>>>>>>>         Modules linked in: snd_seq_dummy snd_seq snd_seq_device bridge stp llc tun nf_nat_tftp nf_conntrack_tftp nf_nat_ftp nf_conntrack_ftp esp6 ah6 ip6t_REJECT ip6t_ipv6header vhost_vsock vhost vmw_vsock_virtio_transport_common vsock rfcomm algif_hash algif_skcipher af_alg uinput veth xt_cgroup xt_MASQUERADE venus_enc venus_dec videobuf2_dma_contig qcom_spmi_adc5 qcom_spmi_adc_tm5 hci_uart qcom_vadc_common cros_ec_typec qcom_spmi_temp_alarm typec btqca snd_soc_rt5682_i2c snd_soc_rt5682 snd_soc_sc7180 bluetooth snd_soc_qcom_common snd_soc_rl6231 ecdh_generic ecc venus_core v4l2_mem2mem snd_soc_lpass_sc7180 snd_soc_lpass_hdmi snd_soc_lpass_cpu snd_soc_lpass_platform snd_soc_max98357a ip6table_nat fuse iio_trig_sysfs cros_ec_lid_angle cros_ec_sensors cros_ec_sensors_core industrialio_triggered_buffer kfifo_buf cros_ec_sensorhub lzo_rle ath10k_snoc lzo_compress ath10k_core ath zram mac80211 cfg80211 ax88179_178a usbnet mii uvcvideo videobuf2_vmalloc joydev
+>>>>>>>         CPU: 3 PID: 212 Comm: A618-worker Tainted: G W 5.4.139-16300-g88d8e1285982 #1
+>>>>>>>         Hardware name: Google Pompom (rev1) with LTE (DT)
+>>>>>>>         pstate: 60c00009 (nZCv daif +PAN +UAO)
+>>>>>>>         pc : a6xx_gmu_set_oob+0x114/0x200
+>>>>>>>         lr : a6xx_gmu_set_oob+0x10c/0x200
+>>>>>>>         sp : ffffffc011b7bc20
+>>>>>>>         x29: ffffffc011b7bc20 x28: ffffffdad27c5000
+>>>>>>>         x27: 0000000000000001 x26: ffffffdad1521044
+>>>>>>>         x25: ffffffbef7498338 x24: 0000000000000018
+>>>>>>>         x23: 0000000000000002 x22: 0000000000014648
+>>>>>>>         x21: 0000033732fe638b x20: 0000000080000000
+>>>>>>>         x19: ffffffbef7433bc8 x18: 0000000040000000
+>>>>>>>         x17: 000000243508d982 x16: 000000000000b67e
+>>>>>>>         x15: 00000000000090d4 x14: 0000000000000024
+>>>>>>>         x13: 0000000000000024 x12: 0000000000017521
+>>>>>>>         x11: 0000000000000b48 x10: 0000000000326a48
+>>>>>>>         x9 : 1a130d33f6371600 x8 : ffffffc011e54648
+>>>>>>>         x7 : 614948e00005003c x6 : ffffffbe3cd17e60
+>>>>>>>         x5 : 0000000000000040 x4 : 0000000000000004
+>>>>>>>         x3 : 0000000000000000 x2 : ffffffbef7488000
+>>>>>>>         x1 : ffffffbef7488000 x0 : 0000000000000000
+>>>>>>>         Call trace:
+>>>>>>>         a6xx_gmu_set_oob+0x114/0x200
+>>>>>>>         a6xx_gmu_set_freq+0xe0/0x1fc
+>>>>>>>         msm_devfreq_target+0x80/0x13c
+>>>>>>>         msm_devfreq_idle+0x54/0x94
+>>>>>>>         retire_submit+0x170/0x254
+>>>>>>>         retire_submits+0xa4/0xdc
+>>>>>>>         retire_worker+0x1c/0x28
+>>>>>>>         kthread_worker_fn+0xf4/0x1bc
+>>>>>>>         kthread+0x140/0x158
+>>>>>>>         ret_from_fork+0x10/0x18
+>>>>>>>         Code: 52800c81 9415bbe5 f9400a68 8b160108 (b9400108)
+>>>>>>>         ---[ end trace 16b871df2482cd61 ]---
+>>>>>>>         Kernel panic - not syncing: Fatal exception
+>>>>>>>         SMP: stopping secondary CPUs
+>>>>>>>         Kernel Offset: 0x1ac1400000 from 0xffffffc010000000
+>>>>>>>         PHYS_OFFSET: 0xffffffc280000000
+>>>>>>>         CPU features: 0x88102e,2a80aa38
+>>>>>>>         Memory Limit: none
+>>>>>>>
+>>>>>>> Which smells a lot like touching hw after power collapse.  I'm not
+>>>>>>> *entirely* sure how it could have taken 66ms (the autosuspend delay)
+>>>>>>> before we get to a6xx_gmu_set_oob(), but to be safe we should move
+>>>>>>> the pm_runtime_put_autosuspend() after msm_devfreq_idle().
+>>>>>> https://elixir.bootlin.com/linux/v5.15-rc1/source/drivers/gpu/drm/msm/adreno/a6xx_gmu.c#L132
+>>>>>> We have this check in the gmu freq set path which should avoid this
+>>>>>> scenario. I might be a bit pedantic here, but I feel that the original
+>>>>>> code is more accurate. We should immediately mark last busy and put
+>>>>>> runtime_pm refcount.
+>>>>> So, I've been doing some experiments, changing the _put_autosuspend()
+>>>>> to _put_sync(), in the course of tracking down some remaining "GMU
+>>>>> OOB" timeout type issues and related badness, and discovered things
+>>>>> very quickly die with SError splats like below.  Possibly the issue is
+>>>>> that runpm has some race conditions, but I'm not sure we can trust
+>>>>> pm_runtime_get_if_in_use() quite as much as one would like..
+>>>>>
+>>>>> -----------
+>>>>> [   33.225332] CPU: 0 PID: 216 Comm: A618-worker Tainted: G        W
+>>>>>          5.4.196 #7
+>>>>> [   33.225337] Hardware name: Google Wormdingler rev1+ INX panel board (DT)
+>>>>> [   33.225343] pstate: 20c00009 (nzCv daif +PAN +UAO)
+>>>>> [   33.225353] pc : msm_readl+0x14/0x34
+>>>>> [   33.225361] lr : a6xx_gpu_busy+0x40/0x80
+>>>>> [   33.225365] sp : ffffffc011b93ad0
+>>>>> [   33.225371] x29: ffffffc011b93ad0 x28: ffffffe77cba3000
+>>>>> [   33.225377] x27: 0000000000000001 x26: ffffffe77bb4c4ac
+>>>>> [   33.225384] x25: ffffffa2f227dfa0 x24: ffffffa2f22aab28
+>>>>> [   33.225390] x23: 0000000000000000 x22: ffffffa2f22bf020
+>>>>> [   33.225397] x21: ffffffa2f22bf000 x20: ffffffc011b93b10
+>>>>> [   33.225404] x19: ffffffc011bd4110 x18: 000000000000000e
+>>>>> [   33.225410] x17: 0000000000000004 x16: 000000000000000c
+>>>>> [   33.225416] x15: 000001be3a969450 x14: 0000000000000400
+>>>>> [   33.225423] x13: 00000000000101d6 x12: 0000000034155555
+>>>>> [   33.225429] x11: 0000000000000001 x10: 0000000000000000
+>>>>> [   33.225436] x9 : 0000000100000000 x8 : ffffffc011bd4000
+>>>>> [   33.225443] x7 : 0000000000000000 x6 : 0000000000000007
+>>>>> [   33.225450] x5 : ffffffc01d8b38f0 x4 : 0000000000000000
+>>>>> [   33.225457] x3 : 00000000ffffffff x2 : 0000000000000002
+>>>>> [   33.225463] x1 : 0000000000000000 x0 : ffffffc011bd4110
+>>>>> [   33.225471] Call trace:
+>>>>> [   33.225478]  msm_readl+0x14/0x34
+>>>>> [   33.225484]  a6xx_gpu_busy+0x40/0x80
+>>>>> [   33.225490]  msm_devfreq_get_dev_status+0x70/0x1d0
+>>>>> [   33.225500]  devfreq_simple_ondemand_func+0x34/0x100
+>>>>> [   33.225510]  update_devfreq+0x50/0xe8
+>>>>> [   33.225517]  qos_notifier_call+0x2c/0x64
+>>>>> [   33.225523]  qos_max_notifier_call+0x1c/0x2c
+>>>>> [   33.225532]  notifier_call_chain+0x58/0x98
+>>>>> [   33.225539]  __blocking_notifier_call_chain+0x74/0x84
+>>>>> [   33.225545]  blocking_notifier_call_chain+0x38/0x48
+>>>>> [   33.225554]  pm_qos_update_target+0xf8/0x19c
+>>>>> [   33.225560]  freq_qos_apply+0x54/0x6c
+>>>>> [   33.225566]  apply_constraint+0x60/0x104
+>>>>> [   33.225572]  __dev_pm_qos_update_request+0xb4/0x184
+>>>>> [   33.225578]  dev_pm_qos_update_request+0x38/0x58
+>>>>> [   33.225584]  msm_devfreq_idle_work+0x34/0x40
+>>>>> [   33.225591]  kthread_worker_fn+0x144/0x1c8
+>>>>> [   33.225597]  kthread+0x140/0x284
+>>>>> [   33.225604]  ret_from_fork+0x10/0x18
+>>>>> [   33.225617] Code: f9000bf3 910003fd aa0003f3 d503201f (b9400260)
+>>>>> [   33.225623] ---[ end trace f6309767a42d0831 ]---
+>>>>> [   33.236185] SMP: stopping secondary CPUs
+>>>>> [   33.236186] Kernel Offset: 0x276b600000 from 0xffffffc010000000
+>>>>> [   33.236186] PHYS_OFFSET: 0xffffffdf80000000
+>>>>> [   33.236187] CPU features: 0x088102e,2a80aa38
+>>>>> -----------
+>>>> Any chance we are racing with system suspend here? Because, when
+>>>> "dev->power.disable_depth > 0", pm_runtime_get_if_in_use() returns
+>>>> -EINVAL. Then I guess we should look for a positive return value from
+>>>> pm_runtime_get_if_in_use() before proceeding.
+>>> I think that is possible.. although I can still still SErrors in
+>>> a6xx_gpu_busy() with:
+>>>
+>>> ----------
+>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>>> b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>>> index 1ec90a9ca56c..61e1e33f355a 100644
+>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>>> @@ -129,7 +129,7 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct
+>>> dev_pm_opp *opp)
+>>>            * This can get called from devfreq while the hardware is idle. Don't
+>>>            * bring up the power if it isn't already active
+>>>            */
+>>> -       if (pm_runtime_get_if_in_use(gmu->dev) == 0)
+>>> +       if (pm_runtime_get_if_in_use(gmu->dev) <= 0)
+>>>                   return;
+>>>
+>>>           if (!gmu->legacy) {
+>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>> b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>> index 95a6c3361a1e..b17a95f7b85c 100644
+>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>> @@ -1456,7 +1456,7 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu,
+>>> unsigned long *out_sample_rate)
+>>>           *out_sample_rate = 19200000;
+>>>
+>>>           /* Only read the gpu busy if the hardware is already active */
+>>> -       if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
+>>> +       if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) <= 0)
+>>>                   return 0;
+>>>
+>>>           busy_cycles = gmu_read64(&a6xx_gpu->gmu,
+>>> ----------
+>>>
+>>> So I don't think this completely explains it
+>>>
+>>> I am starting to think it might not be a bad idea to drain the gpu's
+>>> kthread working in the suspend path
+>> If it helps, draining kthread sounds like a better solution compared to
+>> the current patch. Because msm_devfreq_idle() is queuing a work which
+>> can still race with autosuspend + system-suspend under enough system
+>> pressure.
+> So I think I've tracked down the crashes that we were seeing and that
+> they are fixed by:
 >
-> Simple test case to demo one of the warnings,
+> https://lore.kernel.org/r/20220609073317.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid
 >
->     $ cat test.c
->     /**
->      * foo() - Description
->      */
->     int bar();
->
->     # Without this change
->     $ ./scripts/kernel-doc -Werror -none test.c
->     test.c:4: warning: expecting prototype for foo(). Prototype was for
->     bar() instead
->
->     # With this change
->     $ ./scripts/kernel-doc -Werror -none test.c
->     test.c:4: warning: expecting prototype for foo(). Prototype was for
->     bar() instead
->     1 warnings as Errors
->
-> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund@corigine.com>
-> Signed-off-by: Simon Horman <simon.horman@corigine.com>
-> Signed-off-by: Louis Peens <louis.peens@corigine.com>
+> That being said, I'm still a fan of landing Rob's patch because it
+> gets rid of the potential WARN_ON in adreno_runtime_suspend() and
+> seems more correct.
+I missed that. Agree
 
-What does this signoff chain mean?  If it really took three people to
-make this patch, then we need Co-developed-by tags to reflect that.
+-Akhil.
+>> -Akhil.
+>>> BR,
+>>> -R
+>>>
+>>>> -Akhil.
+>>>>>> -Akhil.
+>>>>>>
+>>>>>>> Fixes: 9bc95570175a ("drm/msm: Devfreq tuning")
+>>>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>>>>>> ---
+>>>>>>>      drivers/gpu/drm/msm/msm_gpu.c | 6 +++---
+>>>>>>>      1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+>>>>>>> index d1a16642ecd5..2b2bbe7499e6 100644
+>>>>>>> --- a/drivers/gpu/drm/msm/msm_gpu.c
+>>>>>>> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+>>>>>>> @@ -667,9 +667,6 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+>>>>>>>
+>>>>>>>          msm_submit_retire(submit);
+>>>>>>>
+>>>>>>> -     pm_runtime_mark_last_busy(&gpu->pdev->dev);
+>>>>>>> -     pm_runtime_put_autosuspend(&gpu->pdev->dev);
+>>>>>>> -
+>>>>>>>          spin_lock_irqsave(&ring->submit_lock, flags);
+>>>>>>>          list_del(&submit->node);
+>>>>>>>          spin_unlock_irqrestore(&ring->submit_lock, flags);
+>>>>>>> @@ -683,6 +680,9 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+>>>>>>>          mutex_unlock(&gpu->active_lock);
+>>>>>>>
+>>>>>>>          msm_gem_submit_put(submit);
+>>>>>>> +
+>>>>>>> +     pm_runtime_mark_last_busy(&gpu->pdev->dev);
+>>>>>>> +     pm_runtime_put_autosuspend(&gpu->pdev->dev);
+>>>>>>>      }
+>>>>>>>
+>>>>>>>      static void retire_submits(struct msm_gpu *gpu)
+>>>>>>>
 
-Thanks,
-
-jon

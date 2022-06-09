@@ -2,154 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86B25442CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010C25442D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237707AbiFIFCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S237875AbiFIFCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiFIFCd (ORCPT
+        with ESMTP id S230510AbiFIFCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:02:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B8B21911F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:02:31 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LJX3X0KhszgYbh;
-        Thu,  9 Jun 2022 13:00:40 +0800 (CST)
-Received: from kwepemm600012.china.huawei.com (7.193.23.74) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 13:02:30 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.29) by
- kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 13:02:29 +0800
-From:   Guan Jing <guanjing6@huawei.com>
-To:     <naoya.horiguchi@nec.com>, <linmiaohe@huawei.com>,
-        <akpm@linux-foundation.org>
-CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
-        <ruansy.fnst@fujitsu.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Guan Jing <guanjing6@huawei.com>
-Subject: [PATCH -next] =?UTF-8?q?mm=EF=BC=9Afix=20build=20error=20of=20def?= =?UTF-8?q?ined=20but=20not=20used?=
-Date:   Thu, 9 Jun 2022 13:00:28 +0800
-Message-ID: <20220609050028.28645-1-guanjing6@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 9 Jun 2022 01:02:50 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF6B219128;
+        Wed,  8 Jun 2022 22:02:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654750968; x=1686286968;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=zXw+Mis03bohBkfK+hDhw/wFr5Kd1lzp07uRvIK3edI=;
+  b=OV3VHIG5K49NaV0qNx7NjDZr6HKMHAdn5j+6f5+C70S75fPuVBllSk+z
+   ulXWcbNLlRXD29eqsO703NqAslJFLdKKsoqDEJA4hHoygepfequB29tUG
+   ZtAbRvlUqJ43cWEV8iGcDEprYzA8UyO9OA6o/R1zzDfVhICvGuGi1tCPT
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jun 2022 22:02:48 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 22:02:47 -0700
+Received: from [10.242.59.11] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 8 Jun 2022
+ 22:02:44 -0700
+Message-ID: <6820a04b-16d2-3310-6491-835d8727edec@quicinc.com>
+Date:   Thu, 9 Jun 2022 10:32:40 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.29]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600012.china.huawei.com (7.193.23.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V5] arm64: perf: Make exporting of pmu events configurable
+Content-Language: en-US
+To:     <will@kernel.org>, <mark.rutland@arm.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <acme@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <catalin.marinas@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1653306574-20946-1-git-send-email-quic_c_spathi@quicinc.com>
+From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+In-Reply-To: <1653306574-20946-1-git-send-email-quic_c_spathi@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_HUGETLB_PAGE is not set and CONFIG_FS_DAX=y.
-Use command "make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-" to
-build, will fail:
 
-mm/memory-failure.c:568:13: error: ‘collect_procs_fsdax’ defined
-but not used [-Werror=unused-function]
-	static void collect_procs_fsdax(struct page *page,
-             ^~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-make[1]: *** [mm/memory-failure.o] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [mm] Error 2
-make: *** Waiting for unfinished jobs....
+Hi Will / Robin ,
 
-so extending "#ifdef CONFIG_HUGETLB_PAG" to cover
-collect_procs_fsdax() would be a simple resolution.
+Could you please review this change.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: 143ac5cd7289 ("mm: introduce mf_dax_kill_procs() for fsdax case")
-Signed-off-by: Guan Jing <guanjing6@huawei.com>
----
- mm/memory-failure.c | 56 ++++++++++++++++++++++-----------------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
-
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 545f402c4890..952f117e4584 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -561,34 +561,6 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
- 	i_mmap_unlock_read(mapping);
- }
- 
--#ifdef CONFIG_FS_DAX
--/*
-- * Collect processes when the error hit a fsdax page.
-- */
--static void collect_procs_fsdax(struct page *page,
--		struct address_space *mapping, pgoff_t pgoff,
--		struct list_head *to_kill)
--{
--	struct vm_area_struct *vma;
--	struct task_struct *tsk;
--
--	i_mmap_lock_read(mapping);
--	read_lock(&tasklist_lock);
--	for_each_process(tsk) {
--		struct task_struct *t = task_early_kill(tsk, true);
--
--		if (!t)
--			continue;
--		vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
--			if (vma->vm_mm == t->mm)
--				add_to_kill(t, page, pgoff, vma, to_kill);
--		}
--	}
--	read_unlock(&tasklist_lock);
--	i_mmap_unlock_read(mapping);
--}
--#endif /* CONFIG_FS_DAX */
--
- /*
-  * Collect the processes who have the corrupted page mapped to kill.
-  */
-@@ -1540,6 +1512,34 @@ static int try_to_split_thp_page(struct page *page, const char *msg)
- }
- 
- #ifdef CONFIG_HUGETLB_PAGE
-+#ifdef CONFIG_FS_DAX
-+/*
-+ * Collect processes when the error hit a fsdax page.
-+ */
-+static void collect_procs_fsdax(struct page *page,
-+		struct address_space *mapping, pgoff_t pgoff,
-+		struct list_head *to_kill)
-+{
-+	struct vm_area_struct *vma;
-+	struct task_struct *tsk;
-+
-+	i_mmap_lock_read(mapping);
-+	read_lock(&tasklist_lock);
-+	for_each_process(tsk) {
-+		struct task_struct *t = task_early_kill(tsk, true);
-+
-+		if (!t)
-+			continue;
-+		vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
-+			if (vma->vm_mm == t->mm)
-+				add_to_kill(t, page, pgoff, vma, to_kill);
-+		}
-+	}
-+	read_unlock(&tasklist_lock);
-+	i_mmap_unlock_read(mapping);
-+}
-+#endif /* CONFIG_FS_DAX */
-+
- /*
-  * Called from hugetlb code with hugetlb_lock held.
-  *
--- 
-2.17.1
-
+On 5/23/2022 5:19 PM, Srinivasarao Pathipati wrote:
+> The PMU export bit (PMCR_EL0.X) is getting reset during pmu reset,
+> Make is configurable using sysctls to enable/disable at runtime.
+> It can also be enabled at early bootup with kernel arguments.
+>
+> Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+> ---
+> Changes since V4:
+> 	- Registering sysctls dynamically for only arm64 as suggested by Will
+> 	- Not removed the code to configure with kernel parameters
+> 	  as the sysctl's kernel parameter(sysctl.kernel.export_pmu_events)
+> 	  is not working at early bootup. pmu_reset() getting called before
+> 	  sysctl's kernel parameter is set.
+> Changes since V3:
+> 	- export bit is now configurable with sysctl
+> 	- enabling export bit on reset instead of retaining
+>
+> Changes since V2:
+> 	Done below changes as per Will's comments
+> 	- enabling pmcr_x now configurable with kernel parameters and
+> 	  by default it is disabled.
+> 	
+> Changes since V1:
+> 	- Preserving only PMCR_X bit as per Robin Murphy's comment.
+>
+> ---
+>   Documentation/admin-guide/kernel-parameters.txt |  5 +++++
+>   Documentation/admin-guide/sysctl/kernel.rst     |  9 +++++++++
+>   arch/arm64/kernel/perf_event.c                  | 24 ++++++++++++++++++++++++
+>   3 files changed, 38 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index de3da15..2bf1187 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5150,6 +5150,11 @@
+>   			Useful for devices that are detected asynchronously
+>   			(e.g. USB and MMC devices).
+>   
+> +	export_pmu_events
+> +			[KNL,ARM64] Sets the PMU export bit (PMCR_EL0.X), which enables
+> +			the exporting of events over an IMPLEMENTATION DEFINED PMU event
+> +			export bus to another device.
+> +
+>   	retain_initrd	[RAM] Keep initrd memory after extraction
+>   
+>   	rfkill.default_state=
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index ddccd10..db42d4c 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -892,6 +892,15 @@ The default value is 0 (access disabled).
+>   
+>   See Documentation/arm64/perf.rst for more information.
+>   
+> +export_pmu_events (arm64 only)
+> +==============================
+> +Controls the PMU export bit (PMCR_EL0.X), which enables the exporting of
+> +events over an IMPLEMENTATION DEFINED PMU event export bus to another device.
+> +
+> +0: disables exporting of events (default).
+> +
+> +1: enables exporting of events.
+> +
+>   
+>   pid_max
+>   =======
+> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+> index cb69ff1..d93e7c4 100644
+> --- a/arch/arm64/kernel/perf_event.c
+> +++ b/arch/arm64/kernel/perf_event.c
+> @@ -298,6 +298,7 @@ PMU_FORMAT_ATTR(long, "config1:0");
+>   PMU_FORMAT_ATTR(rdpmc, "config1:1");
+>   
+>   static int sysctl_perf_user_access __read_mostly;
+> +static int sysctl_export_pmu_events __read_mostly;
+>   
+>   static inline bool armv8pmu_event_is_64bit(struct perf_event *event)
+>   {
+> @@ -1025,6 +1026,17 @@ static int armv8pmu_filter_match(struct perf_event *event)
+>   	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
+>   }
+>   
+> +static int __init export_pmu_events(char *str)
+> +{
+> +	/* Enable exporting of pmu events at early bootup with kernel
+> +	 * arguments.
+> +	 */
+> +	sysctl_export_pmu_events = 1;
+> +	return 0;
+> +}
+> +
+> +early_param("export_pmu_events", export_pmu_events);
+> +
+>   static void armv8pmu_reset(void *info)
+>   {
+>   	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
+> @@ -1047,6 +1059,9 @@ static void armv8pmu_reset(void *info)
+>   	if (armv8pmu_has_long_event(cpu_pmu))
+>   		pmcr |= ARMV8_PMU_PMCR_LP;
+>   
+> +	if (sysctl_export_pmu_events)
+> +		pmcr |= ARMV8_PMU_PMCR_X;
+> +
+>   	armv8pmu_pmcr_write(pmcr);
+>   }
+>   
+> @@ -1221,6 +1236,15 @@ static struct ctl_table armv8_pmu_sysctl_table[] = {
+>   		.extra1		= SYSCTL_ZERO,
+>   		.extra2		= SYSCTL_ONE,
+>   	},
+> +	{
+> +		.procname       = "export_pmu_events",
+> +		.data           = &sysctl_export_pmu_events,
+> +		.maxlen         = sizeof(unsigned int),
+> +		.mode           = 0644,
+> +		.proc_handler   = proc_dointvec_minmax,
+> +		.extra1         = SYSCTL_ZERO,
+> +		.extra2         = SYSCTL_ONE,
+> +	},
+>   	{ }
+>   };
+>   

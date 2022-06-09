@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635C6545228
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40458545232
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344810AbiFIQj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S244732AbiFIQmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244751AbiFIQjZ (ORCPT
+        with ESMTP id S232459AbiFIQmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 12:39:25 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF03261808;
-        Thu,  9 Jun 2022 09:39:24 -0700 (PDT)
+        Thu, 9 Jun 2022 12:42:10 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF81DA52
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:42:10 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 6292F244E;
+        Thu,  9 Jun 2022 16:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654792764; x=1686328764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p8iFJ3QnHLXyV0XBD0xEpbKqckLKd6ENyKoogA15bwk=;
-  b=ZE0zH0AwoD051GX3JFHfAyt7gRcGwpbN2F/vf+pEctcvY26kpAKFDfAr
-   KE8EVJTygEjxbiYsukuFc/3U1HgYWaxt8adrLpjj+hJZvWmzqJXWwCmXe
-   UUnMAukd6BIihnd8aNicpf5kDMU2zgWQPpeQnJYeqd1ma0/tsVuM2uvmg
-   s=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Jun 2022 09:39:24 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 09:39:22 -0700
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
- 09:39:22 -0700
-Date:   Thu, 9 Jun 2022 09:39:20 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <wens@csie.org>,
-        <jic23@kernel.org>, <lee.jones@linaro.org>, <sre@kernel.org>,
-        <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <lars@metafoo.de>, <rafael@kernel.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 01/17] regmap-irq: Use sub_irq_reg() to calculate
- unmask register address
-Message-ID: <20220609163920.GA7420@quicinc.com>
-References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
- <20220607155324.118102-2-aidanmacdonald.0x0@gmail.com>
+        d=paragon-software.com; s=mail; t=1654792889;
+        bh=y32IiNUxl6m5I0VISQueAwvEd4gOfccyXSQVopjX+0I=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=keGcOE0GqLju67sIkEbWxg1NvfrbRoda8cQNe+eMr0c18+gLwOLQChAOZRCeRZhRU
+         fXaKZUiH8y6E3WRpZ6K5PHXXJRdPfdxjsrZt27ze5WFIZ4MeD5jK/IIpWb4pjoRuuA
+         2V1uxdvBTAH13wBAlF/tKwpDyhx2adJpAtYG2NyE=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 9 Jun 2022 19:42:07 +0300
+Message-ID: <7bfc9b09-e7ee-d781-5ea3-ac31d42c34e1@paragon-software.com>
+Date:   Thu, 9 Jun 2022 19:42:07 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220607155324.118102-2-aidanmacdonald.0x0@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/2] ntfs3: fix NULL deref in ntfs_update_mftmirr
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, <ntfs3@lists.linux.dev>
+CC:     <syzbot+c95173762127ad76a824@syzkaller.appspotmail.com>,
+        <linux-kernel@vger.kernel.org>
+References: <85293dd018cae78e4d48d74ca77710b11eed59ba.1650574393.git.paskripkin@gmail.com>
+ <89d2979c-7e8a-f63f-327e-1969a4c03c11@gmail.com>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <89d2979c-7e8a-f63f-327e-1969a4c03c11@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,21 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 04:53:08PM +0100, Aidan MacDonald wrote:
-> Call sub_irq_reg() instead of calculating the offset of the register
-> to avoid relying on the fact that sub_irq_reg() is a linear function.
 
-Seems like unmask_reg is the only register whose address is not calculated
-using sub_irq_reg(). Switching to using sub_irq_reg() will bring it in line
-with the other calculations.
 
-Could you please incorporate this info in your commit message as well? This
-should be the rationale for this change; that it allows for the get_irq_reg()
-patch should be secondary.
+On 6/4/22 14:42, Pavel Skripkin wrote:
+> On 4/21/22 23:53, Pavel Skripkin wrote:
+>> If ntfs_fill_super() wasn't called then sbi->sb will be equal to NULL.
+>> Code should check this ptr before dereferencing. Syzbot hit this issue
+>> via passing wrong mount param as can be seen from log below
+>>
+>> Fail log:
+>> ntfs3: Unknown parameter 'iochvrset'
+>> general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
+>> KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+>> CPU: 1 PID: 3589 Comm: syz-executor210 Not tainted 5.18.0-rc3-syzkaller-00016-gb253435746d9 #0
+>> ...
+>> Call Trace:
+>>   <TASK>
+>>   put_ntfs+0x1ed/0x2a0 fs/ntfs3/super.c:463
+>>   ntfs_fs_free+0x6a/0xe0 fs/ntfs3/super.c:1363
+>>   put_fs_context+0x119/0x7a0 fs/fs_context.c:469
+>>   do_new_mount+0x2b4/0xad0 fs/namespace.c:3044
+>>   do_mount fs/namespace.c:3383 [inline]
+>>   __do_sys_mount fs/namespace.c:3591 [inline]
+>>
+>> Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
+>> Reported-and-tested-by: syzbot+c95173762127ad76a824@syzkaller.appspotmail.com
+>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> 
+> gentle ping
+> 
+> 
+> 
+> 
+> With regards,
+> Pavel Skripkin
 
-The change seems okay to me, but I'd ideally like someone to pick this up and
-test it out just to make sure it doesn't break existing behaviour for them.
-
-Thank you.
-
-Guru Das.
+1st patch is correct.
+2nd patch is a good catch, but I'm not sure if simply ignoring is good.
+If mftmirr is broken / missing, then theoretically we can continue working.
+But still it's a major fs error.
+I'm thinking about exiting mount with error, and if "force" is present,
+then continue with mount.
+I'll reply again when I'll be sure what is correct behavior.
+Thank you for your work!

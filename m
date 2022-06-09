@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624FA544C3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EE5544C4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245531AbiFIMgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S245631AbiFIMjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245523AbiFIMgg (ORCPT
+        with ESMTP id S238236AbiFIMjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:36:36 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6392317D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:36:34 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id b8so14337313edj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 05:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k534WYxTyqTlyHj7z7jLQha4qD6Bajp/eHQMyN5NOoA=;
-        b=MgXeV2dVHyvEW7LeJK/ajtzstgF8A5WVQUJ8cPJnZ2u4eJ+0stlTeRIhmaT1cTPWnc
-         iZ2z4zTTHYKo6r4VCpwfTJ1iyy3qVV9HTXJtpMigBRNLYl9rT/v03TuylqqWwa6WCdfN
-         XX48OFchMwDtv0VxjeQ3xKkZwnpMhhd+gDEcAmVnPjeMkQcS2TBvOL451TYSnb5D+McB
-         zdTFX78PQLNnAFHJXb1R50Cn1O6GB1Lg9R/FzUEv223GbW1iOlw9K5i8QNE+MU7qcmhv
-         AVGopRE7PNT1M7ymx3f3xVyWH19aBSdn60DInvLsl7uie6MarsqH8qE2n6iteadwwYkI
-         qF5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k534WYxTyqTlyHj7z7jLQha4qD6Bajp/eHQMyN5NOoA=;
-        b=cj+Sh0A9D4M5Q8Sb/MjE34bf7ZtRfDJYKDVbPUEtbBxlDj6PAuc+6zSnjXk89LXvET
-         gjxlKxnQLnm1YXwvg23OSPryAKJiG9oboLyAJdk5VxFtx9wVVhh43C/e5NcmpTDckCR3
-         XHV6ThI77pbMjVUDTog97CMjtYHKglekYpC99aiLQQKbroED0IeBGWHvQo0aS7nDsWOv
-         sNW+D2toBY6vjLj5lmcjfnzBmwueSjFXHbXd6Lmwx9tDb7JvN81tAfFQdD2sCWOZOmSs
-         ZTSL5ux+21jyoupWJMymHOKjEmeJwGVl0yLTZeBcGQxamLAUUeaQ33n6rNcsFwzBjT1L
-         iwBQ==
-X-Gm-Message-State: AOAM531/0eRP58/td//PXdkiPDGLEBiqVhwNluL4RO4i5hRYjOEBohyG
-        RrgeenemHfdKg6dm5HAYjuLPekhH23TQbw4w0R0=
-X-Google-Smtp-Source: ABdhPJzsviw3XcPKRI4vJ4d/dcGwcAAqvFVqEieN/lnYFS2vpDL7wAY96siZ2e9FlBbq2ALsYxWNBiUa8PAYssEiZkc=
-X-Received: by 2002:a05:6402:2554:b0:42d:ee79:559d with SMTP id
- l20-20020a056402255400b0042dee79559dmr44846992edb.175.1654778192904; Thu, 09
- Jun 2022 05:36:32 -0700 (PDT)
+        Thu, 9 Jun 2022 08:39:36 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66956237C9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654778375; x=1686314375;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HdoOTZWIqHs+FaUNN8cQ7KVKOkACAx8qmjAEvnpqn6Y=;
+  b=hcX3pCpv5zAqFJ5M4CLLEUv/gHBGreXXHGV8CvezhKruxjVSErThnjzf
+   UmBUu+pYvojLbMZ/kvkKFMJ+JTlr1VYKEqSUW9C+r2ffBT8gGSRkNqtvW
+   croNdRjBr5QTjtJCLjUZ4Ry9Ftz63k1+S4XVDSyBb/hXaBwFQjfA0ibnI
+   r+B0pWyxvQG+YeoJUYx/0a/kkfzDsINlLDIJCbFSsZNGAuetqMjr+tLR5
+   2ip2WPzMZbYjHmmej+97oWIvbfVa1IIhwguUmSrxuAy5+p9NRFgKKAI2X
+   kMqFoVN//AKJpeIWVObnJW8hxOTUM7axm6mQhKI1EWUCSDaMUtJKNzdXK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="276032635"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="276032635"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 05:39:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="580569062"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 09 Jun 2022 05:39:33 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzHRk-000Fyt-Jq;
+        Thu, 09 Jun 2022 12:39:32 +0000
+Date:   Thu, 9 Jun 2022 20:39:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no
+ previous prototype for '__bswapdi2'
+Message-ID: <202206092022.P4xv1PZI-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220607093449.3100-1-urezki@gmail.com> <20220607093449.3100-4-urezki@gmail.com>
- <YqAVS7rYAmOmlLYH@MiWiFi-R3L-srv>
-In-Reply-To: <YqAVS7rYAmOmlLYH@MiWiFi-R3L-srv>
-From:   Uladzislau Rezki <urezki@gmail.com>
-Date:   Thu, 9 Jun 2022 14:36:22 +0200
-Message-ID: <CA+KHdyWDSUgFQnCPr_i=NwoDNFiqP2Q6Z6pik3djK=TQ=hoSZQ@mail.gmail.com>
-Subject: Re: [PATCH 3/5] mm/vmalloc: Initialize VA's list node after unlink
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,39 +62,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> On 06/07/22 at 11:34am, Uladzislau Rezki (Sony) wrote:
-> > A vmap_area can travel between different places. For example
-> > attached/detached to/from different rb-trees. In order to
-> > prevent fancy bugs, initialize a VA's list node after it is
-> > removed from the list, so it pairs with VA's rb_node which
-> > is also initialized.
-> >
-> > There is no functional change as a result of this patch.
-> >
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > ---
-> >  mm/vmalloc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index 745e89eb6ca1..82771e555273 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -978,7 +978,7 @@ __unlink_va(struct vmap_area *va, struct rb_root *root, bool augment)
-> >       else
-> >               rb_erase(&va->rb_node, root);
-> >
-> > -     list_del(&va->list);
-> > +     list_del_init(&va->list);
->
-> Don't object this change, while list_del poison members, which is also
-> not bad?
->
-It is not bad for sure. The main aim was to be align with what the
-RB_CLEAR_NODE() does, i.e. initialize VA when it is detached
-and be safe with list manipulation when it is detached. For example
-whether it is empty or not: list_empty(), etc.
+Hi Masahiro,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
+commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
+date:   7 months ago
+config: mips-randconfig-r013-20220607 (https://download.01.org/0day-ci/archive/20220609/202206092022.P4xv1PZI-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/mips/boot/compressed/bswapdi.c:2:
+>> arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no previous prototype for '__bswapdi2' [-Wmissing-prototypes]
+       5 | unsigned long long notrace __bswapdi2(unsigned long long u)
+         |                            ^~~~~~~~~~
+
+
+vim +/__bswapdi2 +5 arch/mips/boot/compressed/../../lib/bswapdi.c
+
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   4  
+aedcfbe06558a9 Harvey Hunt  2016-05-25  @5  unsigned long long notrace __bswapdi2(unsigned long long u)
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   6  {
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   7  	return (((u) & 0xff00000000000000ull) >> 56) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   8  	       (((u) & 0x00ff000000000000ull) >> 40) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   9  	       (((u) & 0x0000ff0000000000ull) >> 24) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  10  	       (((u) & 0x000000ff00000000ull) >>  8) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  11  	       (((u) & 0x00000000ff000000ull) <<  8) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  12  	       (((u) & 0x0000000000ff0000ull) << 24) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  13  	       (((u) & 0x000000000000ff00ull) << 40) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  14  	       (((u) & 0x00000000000000ffull) << 56);
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  15  }
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  16  
+
+:::::: The code at line 5 was first introduced by commit
+:::::: aedcfbe06558a9f53002e82d5be64c6c94687726 MIPS: lib: Mark intrinsics notrace
+
+:::::: TO: Harvey Hunt <harvey.hunt@imgtec.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
-Uladzislau Rezki
+0-DAY CI Kernel Test Service
+https://01.org/lkp

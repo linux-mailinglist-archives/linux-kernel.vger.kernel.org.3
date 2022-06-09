@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFEB544A6B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CDC544A71
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242119AbiFILj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        id S233675AbiFILjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240611AbiFILjV (ORCPT
+        with ESMTP id S235161AbiFILjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:39:21 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429C7197984
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:39:18 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id h23so35831512ejj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:39:18 -0700 (PDT)
+        Thu, 9 Jun 2022 07:39:22 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A02D2DD7B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:39:21 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id me5so46366792ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=n04xRHDLPG5HTJiUoTVbiyOiGV01+5rVdjSb2OnFTXM=;
-        b=Ho4w2nM3+Q5bGqtr36/o6zunEJf1I2XT6LKt8qPNLkRCy08ezqkJOGQcvBy5vco1my
-         LGBVSuQy2o3zJ3VRCl5ktdED8AwYX9JPpK6G/5qGM8by9MmCH5kjgAac+5wdKBNIpFR8
-         xwCEy+untlqCgNrdyjBW7OOwtMZ/fatULZ5sRrG0DbV8h1a8fkBFQZrHUVRrHVTdOMOk
-         bFY0Q+lM7yWFhuw7oGtstkGAHtRN906miEa6MNINObX4FBiMpladAqhuYFhntv02FElx
-         IpEdpyFjcGNvTY5jsUxfo3i9hgyGqj3e7n/Ht1bGDfF6O7zBd2Gr4mncFJWMEbpebOEc
-         /opQ==
+        bh=PsY51Y9LbGxALCP41QTkZafNtgUGmXvRyYQiy6lI9FU=;
+        b=zYVkK+/V8ZGti1yZD5tr+qJSCek+CBHl2Nd1S/T3io//rE3MLRz4Uc6JvOZh//3oZf
+         NI0ICECMerr05hjz/YzwcnYcowv9p8XnqaiK9gT1FKO+jvGLlLxJTRc5K8Tyl+cw0tli
+         GCrWHIkFLBzMLB4NdF9ll+WcNamrxTIkPgLQggG/rhOflxUtLzoFk4K8mZ5BvLElGwt6
+         lwfkDaDKEHIUH6k6qBWnaXgka8n9HzeMOXg0ZwINqRaQg3VDZdNZ47Es/FeEi/YCSAuQ
+         lCjAvCwH3a90XTLrXe2L173Z0Tt4dh7LQW3aGReoQTnq25LDPafCnA2RrIgWA9aIlpEG
+         gJCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n04xRHDLPG5HTJiUoTVbiyOiGV01+5rVdjSb2OnFTXM=;
-        b=G/5zMOXEi2kQqGqhBWAzmEcmO0q34AxGrRLEvZYRLMVSj88IJM/kwwAinJeMuxoM/W
-         ETU3gfFct6p9mEy4+OywAbf+mwPQHxtx8z63c6yPrfF8clFl3VIhIe/Rmau+haWAAuuw
-         YBncQI4k6mNgAIVWv5SXJJp0WGeE+0VvSgO5QTZAu+JLhcYMbmdbxN2GhRjvI1xm4hjn
-         EK6y0HfiMmQIqUsJRTCPbtv5is58+ZRGIsbDweEmZxfptLM1NRmRZuDd7SRAIr9SSPXX
-         9/Av9vGopqls+g4hyHmTeFuoF68kZVjkhBSiwe05E6t3lV2CwOzgiNDkDoDT5SGzZIS+
-         VBoA==
-X-Gm-Message-State: AOAM532/3scE2rAlGbpQM9JosecolhGBS8hdb4zX9nW4f/eotTWiU+QT
-        wN1ZcRBPtqXvrf+ToOwDjiMhhQ==
-X-Google-Smtp-Source: ABdhPJwgFvtD9GYY39BjWKd3xyuHcJYvYead1t+NeA7lJVCKNmpwd5ABumStlG++pLlWR2zP3uaRug==
-X-Received: by 2002:a17:906:e202:b0:6fe:478b:7c1 with SMTP id gf2-20020a170906e20200b006fe478b07c1mr35455237ejb.419.1654774757503;
-        Thu, 09 Jun 2022 04:39:17 -0700 (PDT)
+        bh=PsY51Y9LbGxALCP41QTkZafNtgUGmXvRyYQiy6lI9FU=;
+        b=xMgjtwyUZwmORYultAHxzMouMbD752ldYm4VPYGXquiL7ILgbwykNd25O9XmYzKciu
+         WWpvbKI8rLdvgtlTuTFhZch6c8+PpsW6LaB5S/t/o9XEQY4smCYXN1GtWrNKDNWB0zAP
+         PoQcx5XNWdBfXv6unBhtAjSlkkbLVhzbS2rS0YXxb+vmKvecIM2mopunpQY03etcDKTz
+         Ul0CKAh36aX9gykUtH7NYzJiTJfAqB4+gziBqGms3jD0W0TAtHGu4LVHDZHoRkKpASIS
+         QoggFEYrVYsaJG0qDvv+doiMRFARH/DKvDHt060otdBpKZ/L4mxy7Ood0MhdKO4td9M9
+         QnFw==
+X-Gm-Message-State: AOAM532ajsm95pTegDlYWR47ZAJsep4LUvQs7/dXjIt0UxGsNUafBBbb
+        T4ViqzTm6qPWrJ2I13kK0k4UHFx1KmuOKA==
+X-Google-Smtp-Source: ABdhPJxghBIkt/oPlnkhYfc+sNVuqIIRec7ri31pQri4hdc3zeWjKeem2e8hWbd5rY1utC5lGBYtqQ==
+X-Received: by 2002:a17:906:9b86:b0:6f8:24e7:af7d with SMTP id dd6-20020a1709069b8600b006f824e7af7dmr36649187ejc.295.1654774759852;
+        Thu, 09 Jun 2022 04:39:19 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u14-20020aa7d54e000000b0042e21f8c412sm11898495edr.42.2022.06.09.04.39.16
+        by smtp.gmail.com with ESMTPSA id u14-20020aa7d54e000000b0042e21f8c412sm11898495edr.42.2022.06.09.04.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:39:17 -0700 (PDT)
+        Thu, 09 Jun 2022 04:39:19 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         arm@kernel.org, soc@kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 03/48] dt-bindings: input: gpio-keys: accept also interrupt-extended
-Date:   Thu,  9 Jun 2022 13:39:05 +0200
-Message-Id: <20220609113911.380368-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 04/48] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl: align key node name
+Date:   Thu,  9 Jun 2022 13:39:06 +0200
+Message-Id: <20220609113911.380368-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
@@ -68,38 +69,33 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each key device node might have interrupts-extended instead of
-interrupts property:
-
-  fsl-ls1028a-kontron-sl28-var1.dtb: buttons0: power-button: 'anyOf' conditional failed, one must be fixed:
-    'interrupts' is a required property
-    'gpios' is a required property
+gpio-keys schema requires keys to have more generic name.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/input/gpio-keys.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-index e722e681d237..17ac9dff7972 100644
---- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
-+++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-@@ -92,6 +92,8 @@ patternProperties:
-     anyOf:
-       - required:
-           - interrupts
-+      - required:
-+          - interrupts-extended
-       - required:
-           - gpios
+diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+index 47a56b83a610..4c7691c38b10 100644
+--- a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+@@ -152,7 +152,7 @@ examples:
+       pinctrl-names = "default";
+       pinctrl-0 = <&pinctrl_uid>, <&pinmux_uid>;
  
+-      uid {
++      switch-uid {
+         label = "UID";
+         linux,code = <102>;
+         gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
 -- 
 2.34.1
 

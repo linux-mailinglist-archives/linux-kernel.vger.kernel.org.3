@@ -2,262 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08139544962
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF97544964
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242954AbiFIKlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S243294AbiFIKmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243096AbiFIKlf (ORCPT
+        with ESMTP id S243427AbiFIKlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:41:35 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C198B26CE7A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 03:41:16 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v14so5564179wra.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 03:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=s7yDuLsDiBHVsfnrsYNovXy2Bt1H7fS8uyn7ZkgnngU=;
-        b=eDFIq80gPXAMihgJnguV6SYMpluR4TOt/h8hslaOGZ2Q67BrpP7JDYL3w0pqImv5hK
-         ZG15Wt+i//lwZOh2a0wx9h6DZNyfSGFWutabFLjjYnBgD6VkzzrSbo7G/gfin92KSJdb
-         iX/CT3fqT7bd4fgyo3wq0R/vNgsBYxmq8DIOFCm/knmAAf9mwwjnELbf2Kn30/U+zQHk
-         GrB3FDhpdgUv+b5/3IG/HSkwtw3jqrKU44sTSQxTkDV2N8snhF6lPUHIwEfGIixPW7sH
-         1qptmVeN+NxPeIuW8yTQVSaCx3yW8tnDFt9+hmArzooYmyRhgT3ZCxzNiKdZFPYgSTQH
-         wgjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=s7yDuLsDiBHVsfnrsYNovXy2Bt1H7fS8uyn7ZkgnngU=;
-        b=B/AvX2rHcdZSBh9crB7QQNr4cIOmQ7ibFxyhtlEpjsjB+XuW4a09nGKYjtF5B0umD3
-         RLADflDJe4/VmxVT0Fs47mLcjF/YWRk3eaCwSBy8Fw2AIDx2tC/mgGcSRiS+RelA7yI/
-         BPq0RMJphJy9I6QNtpiZq+mlHykHTE1FURs3JA4XQS01ZhiPghjX6tZL4e9Nw8h9TkPu
-         krzGK4U3eoY0AuJ4Zpzkynz94iWom6SKDXz9JfOQK1e1ERac5puCwiX1L5JZPcuy4mPR
-         TMcY0aIm7UjwldYAeo1/oxHy7H6HoXSuLxBiAWQQhzOfOvul/G7xdR6cKGiWjCwMgy/s
-         q1ng==
-X-Gm-Message-State: AOAM532LsACHYH7D6XOBsbOMMvL6XJFH/1hLAQskZs78E48FYAp5yOvz
-        jRjKjowwazv1pX57pUUOdh8eR1s8Yi8LSPnD
-X-Google-Smtp-Source: ABdhPJySkP/Gcqw9Ot76PpqONFdVm06caK34GcJ5EwjfLC4LyV5eeFx3jelqsuqWhs4HRuUa75mquA==
-X-Received: by 2002:adf:f5d0:0:b0:216:5680:b41e with SMTP id k16-20020adff5d0000000b002165680b41emr26289690wrp.216.1654771275138;
-        Thu, 09 Jun 2022 03:41:15 -0700 (PDT)
-Received: from localhost ([109.180.234.132])
-        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0039c15861001sm25820904wmb.21.2022.06.09.03.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 03:41:14 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Riwen Lu <luriwen@hotmail.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, robert.moore@intel.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@acpica.org, Riwen Lu <luriwen@kylinos.com>
-Subject: Re: [PATCH v1] ACPI: Split out processor thermal register from ACPI
- PSS
-References: <TYWP286MB26019A5110491AC2C0157082B1A39@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
-Date:   Thu, 09 Jun 2022 11:41:13 +0100
-In-Reply-To: <TYWP286MB26019A5110491AC2C0157082B1A39@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
-        (Riwen Lu's message of "Sun, 5 Jun 2022 15:58:14 +0800")
-Message-ID: <87h74ui0fq.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 9 Jun 2022 06:41:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6202C265208;
+        Thu,  9 Jun 2022 03:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654771285; x=1686307285;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/rZ/cmVg1xRRULer/B8wH9YfqMjm5s1dbHpQmBQNiu0=;
+  b=J2/fM1TJ//Zrh5vK5JO9lvzKXuzurYs6AlDWv7c9luKXwp3y4oS6ByQ0
+   NadDn1p8hg6JLwn5zCZpjOGGJoUhXZhVrG2sZ34TW874hJt67kkd0vT7+
+   Ck2tpy/RpIXtZLmHSnhwDaPxggSdkvxdHP3jvbT9DN2xCvWi2i/RfwtJc
+   Yr3bMQryrZmkkXeVnQdIhTFAMwLID2R33VyE/cmKvDk/yqEdrFMryxFn2
+   NjW0f/qumENv1D28vl+ogM+B3wMl4JreBOnqO/ZFOLXHh237vmaFXSWaX
+   wHlkI0FwxXQ7wyJ31avgr4l7FsBVWSipoURYzfvoL1rGWSvVgkZuxkh9U
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="302602657"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="302602657"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 03:41:24 -0700
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="637407833"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.28.81]) ([10.255.28.81])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 03:41:22 -0700
+Message-ID: <b6a49ed6-612f-5f53-a08c-c35bae52cfe3@linux.intel.com>
+Date:   Thu, 9 Jun 2022 18:41:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/5] perf stat: Add topdown metrics in the default perf
+ stat on the hybrid machine
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, alexander.shishkin@intel.com,
+        Jiri Olsa <jolsa@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>
+References: <20220607013315.1956301-1-zhengjun.xing@linux.intel.com>
+ <20220607013315.1956301-6-zhengjun.xing@linux.intel.com>
+ <CAM9d7ciZAZzsA=cDojZp8H5tTd-F7NC=OnTMRg3S3cdjCW0+eA@mail.gmail.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAM9d7ciZAZzsA=cDojZp8H5tTd-F7NC=OnTMRg3S3cdjCW0+eA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Riwen,
 
-Riwen Lu <luriwen@hotmail.com> writes:
 
-> From: Riwen Lu <luriwen@kylinos.com>
->
-> In prior commit 239708a3af44 ("ACPI: Split out ACPI PSS from ACPI Processor
-> driver"), move processor thermal register to acpi_pss_perf_init(), and it
-> won't excute if ACPI_CPU_FREQ_PSS not enabled.
->
-> Since ARM64 support P states by CPPC, it should also support processor
-> passive cooling. So split out the processor thermal cooling register from
-> ACPI PSS.
+On 6/9/2022 8:09 AM, Namhyung Kim wrote:
+> On Tue, Jun 7, 2022 at 1:08 AM <zhengjun.xing@linux.intel.com> wrote:
+>>
+>> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>>
+>> Topdown metrics are missed in the default perf stat on the hybrid machine,
+>> add Topdown metrics in default perf stat for hybrid systems.
+>>
+>> Currently, we support the perf metrics Topdown for the p-core PMU in the
+>> perf stat default, the perf metrics Topdown support for e-core PMU will be
+>> implemented later separately. Refactor the code adds two x86 specific
+>> functions. Widen the size of the event name column by 7 chars, so that all
+>> metrics after the "#" become aligned again.
+>>
+>> The perf metrics topdown feature is supported on the cpu_core of ADL. The
+>> dedicated perf metrics counter and the fixed counter 3 are used for the
+>> topdown events. Adding the topdown metrics doesn't trigger multiplexing.
+>>
+>> Before:
+>>
+>>   # ./perf  stat  -a true
+>>
+>>   Performance counter stats for 'system wide':
+>>
+>>               53.70 msec cpu-clock                 #   25.736 CPUs utilized
+>>                  80      context-switches          #    1.490 K/sec
+>>                  24      cpu-migrations            #  446.951 /sec
+>>                  52      page-faults               #  968.394 /sec
+>>           2,788,555      cpu_core/cycles/          #   51.931 M/sec
+>>             851,129      cpu_atom/cycles/          #   15.851 M/sec
+>>           2,974,030      cpu_core/instructions/    #   55.385 M/sec
+>>             416,919      cpu_atom/instructions/    #    7.764 M/sec
+>>             586,136      cpu_core/branches/        #   10.916 M/sec
+>>              79,872      cpu_atom/branches/        #    1.487 M/sec
+>>              14,220      cpu_core/branch-misses/   #  264.819 K/sec
+>>               7,691      cpu_atom/branch-misses/   #  143.229 K/sec
+>>
+>>         0.002086438 seconds time elapsed
+>>
+>> After:
+>>
+>>   # ./perf stat  -a true
+>>
+>>   Performance counter stats for 'system wide':
+>>
+>>               61.39 msec cpu-clock                        #   24.874 CPUs utilized
+>>                  76      context-switches                 #    1.238 K/sec
+>>                  24      cpu-migrations                   #  390.968 /sec
+>>                  52      page-faults                      #  847.097 /sec
+>>           2,753,695      cpu_core/cycles/                 #   44.859 M/sec
+>>             903,899      cpu_atom/cycles/                 #   14.725 M/sec
+>>           2,927,529      cpu_core/instructions/           #   47.690 M/sec
+>>             428,498      cpu_atom/instructions/           #    6.980 M/sec
+>>             581,299      cpu_core/branches/               #    9.470 M/sec
+>>              83,409      cpu_atom/branches/               #    1.359 M/sec
+>>              13,641      cpu_core/branch-misses/          #  222.216 K/sec
+>>               8,008      cpu_atom/branch-misses/          #  130.453 K/sec
+>>          14,761,308      cpu_core/slots/                  #  240.466 M/sec
+>>           3,288,625      cpu_core/topdown-retiring/       #     22.3% retiring
+>>           1,323,323      cpu_core/topdown-bad-spec/       #      9.0% bad speculation
+>>           5,477,470      cpu_core/topdown-fe-bound/       #     37.1% frontend bound
+>>           4,679,199      cpu_core/topdown-be-bound/       #     31.7% backend bound
+>>             646,194      cpu_core/topdown-heavy-ops/      #      4.4% heavy operations       #     17.9% light operations
+>>           1,244,999      cpu_core/topdown-br-mispredict/  #      8.4% branch mispredict      #      0.5% machine clears
+>>           3,891,800      cpu_core/topdown-fetch-lat/      #     26.4% fetch latency          #     10.7% fetch bandwidth
+>>           1,879,034      cpu_core/topdown-mem-bound/      #     12.7% memory bound           #     19.0% Core bound
+>>
+>>         0.002467839 seconds time elapsed
+>>
+>> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+>> ---
+> [SNIP]
+>> +const char *arch_get_topdown_pmu_name(struct evlist *evlist, bool warn)
+>> +{
+>> +       const char *pmu_name = "cpu";
+>> +
+>> +       if (perf_pmu__has_hybrid()) {
+>> +               if (!evlist->hybrid_pmu_name) {
+>> +                       if (warn)
+>> +                               pr_warning
+>> +                                   ("WARNING: default to use cpu_core topdown events\n");
+>> +                       evlist->hybrid_pmu_name =
+>> +                           perf_pmu__hybrid_type_to_pmu("core");
+> 
+> This doesn't look good.  Please consider reducing the
+> indent level like returning early as
+> 
+>      if (!perf_pmu__has_hybrid())
+>          return "cpu";
+> 
+>      if (!evlist->hybrid_pmu_name) {
+>          ...
+> 
+Thanks for the comments, I will update it in the next version.
+> Thanks,
+> Namhyung
+> 
+> 
+>> +               }
+>> +
+>> +               pmu_name = evlist->hybrid_pmu_name;
+>> +       }
+>> +       return pmu_name;
+>> +}
 
-The commit log is a bit difficult to understand - maybe reword as -
-
-    Commit 239708a3af44 ("ACPI: Split out ACPI PSS from ACPI Processor
-    driver"), moves processor thermal registration to acpi_pss_perf_init(),
-    which doesn't get executed if ACPI_CPU_FREQ_PSS is not enabled.
-
-    As ARM64 supports P-states using CPPC, it should be possible to also
-    support processor passive cooling even if PSS is not enabled. Split
-    out the processor thermal cooling register from ACPI PSS to support
-    this.
-
-> Signed-off-by: Riwen Lu <luriwen@kylinos.com>
-> ---
-
-[...]
-
-> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
-> index 368a9edefd0c..c84738a24eca 100644
-> --- a/drivers/acpi/processor_driver.c
-> +++ b/drivers/acpi/processor_driver.c
-> @@ -142,8 +142,6 @@ static int acpi_soft_cpu_dead(unsigned int cpu)
->  static int acpi_pss_perf_init(struct acpi_processor *pr,
->  		struct acpi_device *device)
->  {
-> -	int result = 0;
-> -
->  	acpi_processor_ppc_has_changed(pr, 0);
->  
->  	acpi_processor_get_throttling_info(pr);
-> @@ -151,53 +149,7 @@ static int acpi_pss_perf_init(struct acpi_processor *pr,
->  	if (pr->flags.throttling)
->  		pr->flags.limit = 1;
->  
-> -	pr->cdev = thermal_cooling_device_register("Processor", device,
-> -						   &processor_cooling_ops);
-> -	if (IS_ERR(pr->cdev)) {
-> -		result = PTR_ERR(pr->cdev);
-> -		return result;
-> -	}
-> -
-> -	dev_dbg(&device->dev, "registered as cooling_device%d\n",
-> -		pr->cdev->id);
-> -
-> -	result = sysfs_create_link(&device->dev.kobj,
-> -				   &pr->cdev->device.kobj,
-> -				   "thermal_cooling");
-> -	if (result) {
-> -		dev_err(&device->dev,
-> -			"Failed to create sysfs link 'thermal_cooling'\n");
-> -		goto err_thermal_unregister;
-> -	}
-> -
-> -	result = sysfs_create_link(&pr->cdev->device.kobj,
-> -				   &device->dev.kobj,
-> -				   "device");
-> -	if (result) {
-> -		dev_err(&pr->cdev->device,
-> -			"Failed to create sysfs link 'device'\n");
-> -		goto err_remove_sysfs_thermal;
-> -	}
-> -
->  	return 0;
-> -
-> - err_remove_sysfs_thermal:
-> -	sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
-> - err_thermal_unregister:
-> -	thermal_cooling_device_unregister(pr->cdev);
-> -
-> -	return result;
-> -}
-> -
-> -static void acpi_pss_perf_exit(struct acpi_processor *pr,
-> -		struct acpi_device *device)
-> -{
-> -	if (pr->cdev) {
-> -		sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
-> -		sysfs_remove_link(&pr->cdev->device.kobj, "device");
-> -		thermal_cooling_device_unregister(pr->cdev);
-> -		pr->cdev = NULL;
-> -	}
->  }
->  #else
->  static inline int acpi_pss_perf_init(struct acpi_processor *pr,
-> @@ -205,9 +157,6 @@ static inline int acpi_pss_perf_init(struct acpi_processor *pr,
->  {
->  	return 0;
->  }
-> -
-> -static inline void acpi_pss_perf_exit(struct acpi_processor *pr,
-> -		struct acpi_device *device) {}
->  #endif /* CONFIG_ACPI_CPU_FREQ_PSS */
->  
->  static int __acpi_processor_start(struct acpi_device *device)
-> @@ -229,9 +178,35 @@ static int __acpi_processor_start(struct acpi_device *device)
->  	if (!cpuidle_get_driver() || cpuidle_get_driver() == &acpi_idle_driver)
->  		acpi_processor_power_init(pr);
->  
-> -	result = acpi_pss_perf_init(pr, device);
-> -	if (result)
-> +	acpi_pss_perf_init(pr, device);
-
-The return value of acpi_pss_perf_init() isn't used anymore. Please also
-update the function signature to void and drop the redundant return.
-
-> +
-> +	pr->cdev = thermal_cooling_device_register("Processor", device,
-> +						   &processor_cooling_ops);
-> +	if (IS_ERR(pr->cdev)) {
-> +		result = PTR_ERR(pr->cdev);
->  		goto err_power_exit;
-> +	}
-> +
-> +	dev_dbg(&device->dev, "registered as cooling_device%d\n",
-> +		pr->cdev->id);
-> +
-> +	result = sysfs_create_link(&device->dev.kobj,
-> +				   &pr->cdev->device.kobj,
-> +				   "thermal_cooling");
-> +	if (result) {
-> +		dev_err(&device->dev,
-> +			"Failed to create sysfs link 'thermal_cooling'\n");
-> +		goto err_thermal_unregister;
-> +	}
-> +
-> +	result = sysfs_create_link(&pr->cdev->device.kobj,
->> +				   &device->dev.kobj,
-> +				   "device");
-> +	if (result) {
-> +		dev_err(&pr->cdev->device,
-> +			"Failed to create sysfs link 'device'\n");
-> +		goto err_remove_sysfs_thermal;
-> +	}
-
-Instead of copying the block back here, it would be better to move it
-into a separate function in processor_thermal.c that can be called
-here.
-
->  
->  	status = acpi_install_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
->  					     acpi_processor_notify, device);
-> @@ -239,8 +214,11 @@ static int __acpi_processor_start(struct acpi_device *device)
->  		return 0;
->  
->  	result = -ENODEV;
-> -	acpi_pss_perf_exit(pr, device);
-> -
-> +	sysfs_remove_link(&pr->cdev->device.kobj, "device");
-> +err_remove_sysfs_thermal:
-> +	sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
-> +err_thermal_unregister:
-> +	thermal_cooling_device_unregister(pr->cdev);
->  err_power_exit:
->  	acpi_processor_power_exit(pr);
->  	return result;
-> @@ -277,10 +255,15 @@ static int acpi_processor_stop(struct device *dev)
->  		return 0;
->  	acpi_processor_power_exit(pr);
->  
-> -	acpi_pss_perf_exit(pr, device);
-> -
->  	acpi_cppc_processor_exit(pr);
->  
-> +	if (pr->cdev) {
-> +		sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
-> +		sysfs_remove_link(&pr->cdev->device.kobj, "device");
-> +		thermal_cooling_device_unregister(pr->cdev);
-> +		pr->cdev = NULL;
-> +	}
-> +
-
-Similarly, the removal can also be moved to a function in processor_thermal.c.
-
-Thoughts?
-
-[...]
+-- 
+Zhengjun Xing

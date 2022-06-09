@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0C5544318
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EBC54431D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238322AbiFIFYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
+        id S238273AbiFIFYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238273AbiFIFYH (ORCPT
+        with ESMTP id S238277AbiFIFYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:24:07 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA67225E9D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:24:04 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 10-20020a250d0a000000b0065ca0e7be90so19362378ybn.17
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 22:24:04 -0700 (PDT)
+        Thu, 9 Jun 2022 01:24:10 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418FDE005
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:24:07 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fb7cb07885so193781547b3.23
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 22:24:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=bfkEdtucqgA+wBrOBxrBZd3UEfs8ZNdv2ifdbarRzlY=;
-        b=m+GH7afRGBYGWqJBmM4w4QGt8MCZhwn+CP1UOE+F21RUMbBBtczrX4dpaH1Th5zjis
-         5S6qp7GTToPhKiuLySTPJzaCFI1KR6/8dXZe13wiB6LmZ/xe0yf8PvdBPr+Ok+0x2GdZ
-         F9KeQSU1oKIhH6z3bkKeT54UJNjFiHmG15KjOj1sU8IbSC7CS2pxTYRshhKAblVtZfuH
-         jhC7NKiOrQp6DtxkRsa8jz/FlBvkRtC8dtfKzI4z4YUZ/Tz8davC212ATw4ccRhYXd2o
-         aNBeSMqX1B6ac+B4AKSv+Ftl549whZaXk6ea5N+/HveYjTol1iYFewxASPZxNJt0iEuT
-         oF9w==
+        bh=92Ap8HPAB8/MDXHmk/KascZglACyrXnQYkxdMYEdECc=;
+        b=c+zLR0wVXL9kWNiEJ57kdQibv8Zr0VL9IAwXHVwAVZyRLzSx4FHmS08R8X92ZplbmI
+         JwWF11N1zwiHTbW9SmZ4vb/QH4ZKShWHaH/YgSkPyTt2dpuEuLZxGAC4HzpAJIlK8g1F
+         vzBlyDuOohjGG5ZK/cNkxV6wGysCTSaUjckk9Wmp8VXiGLRSNOZYW1/AXTWBn6yZGFc4
+         2Rib8pTuoWepYbhadEw+NZZlEayCVyc+nwqJ/flEGluYAL7WbBTYW1f+86at6Cy47Q5n
+         nyKHKvQLgkVDkXo+19wYo+iKLuU7doOb4y0GRrkQCrmqdPP/G9OITHbvlijbbos7QKwR
+         xNSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=bfkEdtucqgA+wBrOBxrBZd3UEfs8ZNdv2ifdbarRzlY=;
-        b=bRAw+xrHubUrGqIiKQtGDDOwakc+WcWMgCeirimfRpe0bkH6rXpg4FHOZBXZdjcCFh
-         HVKf37RL4CeqqEIy6RHu1ferySjShFjZ+W46/wfYBeSBztcO4P/7XHHiIeziji6vnoNX
-         qsGKKq7/8E6qd/6WVh6L4S3qUq4Ruebnp6VocBocVzc+rbA3InCnUcxt4HlH/UO2Uxq4
-         6vSOCP4cWfaNv9Rc3WjR4UUJr4MyTnFT51Zp7Y+kTQuwVO9cPxURXaYhWUcnm4iHYawd
-         VnFAZkJ6hxcUuTeQ4srA9z7jyuj7PfSqU7G2UtocOzy2MDrVhZ6VlHjZKn9pDJLKqLdi
-         1j1Q==
-X-Gm-Message-State: AOAM531Oo1OnSjwdqM4BKvLiIjsWSrDGqqVyMAHG08crCx7QoUtUFyF/
-        7dpKsY3lXHviTFzeBINPotNfXLBmy3xH
-X-Google-Smtp-Source: ABdhPJzR1whIf7j55WQjVp8vOL2cQbpNCuyhPsZMw7XC5LhktLRlst3wiJkrl8JtpqpEzCumqhY37TGcvUF+
+        bh=92Ap8HPAB8/MDXHmk/KascZglACyrXnQYkxdMYEdECc=;
+        b=DSINLy9J6yY/xHJrNxmlAjJGgBmMnADozQmH7jG+Rxjsiy5N66Uhgn18wfs6Tm+969
+         mEz7kXbNxkmC23lQwDmOnoH/akOyV5bjlYksk5GOpAu59mhMr8nq1x1V535+0YsxoVd5
+         SMLbwLSSTFMYnJt6aQBD98YzPEziqE00Y0ROAdkCmpy0Xar3man2YbyBUKyV/6NrhXGe
+         xBkM8rzDGjC8WEul7rze4tVDV9ZJeG3h4DBHNruWpt0BFKFaj7C1UOWkKLVwKjgA1tr6
+         NwZtKhIfbkpPECBCTrlwhgloDlUfAdJPiBgMAxMKnJ2N+yyAdTNQbZ4j65IRtkHxH9+Z
+         oS8w==
+X-Gm-Message-State: AOAM531AmNRoVf35WTeVix+I54K2RaicaYsZGFAWwrueqbI0HFyxuBS6
+        u7vAH362nPByCzpdwVE+A3qxGVCppznu
+X-Google-Smtp-Source: ABdhPJyNkg3gb8kG/ZewVhB0Qss0toz5dRxqodcpwXpCLk+fIrqos5bELAzypdRYZvj9VrwV05oVuaVHTLzK
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:ae20:7578:fb21:976b])
- (user=irogers job=sendgmr) by 2002:a81:1414:0:b0:30c:1c83:7702 with SMTP id
- 20-20020a811414000000b0030c1c837702mr41227650ywu.474.1654752244006; Wed, 08
- Jun 2022 22:24:04 -0700 (PDT)
-Date:   Wed,  8 Jun 2022 22:23:52 -0700
+ (user=irogers job=sendgmr) by 2002:a25:6583:0:b0:660:3a01:84f7 with SMTP id
+ z125-20020a256583000000b006603a0184f7mr35986524ybb.130.1654752246414; Wed, 08
+ Jun 2022 22:24:06 -0700 (PDT)
+Date:   Wed,  8 Jun 2022 22:23:53 -0700
 In-Reply-To: <20220609052355.1300162-1-irogers@google.com>
-Message-Id: <20220609052355.1300162-2-irogers@google.com>
+Message-Id: <20220609052355.1300162-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20220609052355.1300162-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 1/4] libperf evsel: Open shouldn't leak fd on failure
+Subject: [PATCH v2 2/4] perf: Align user space counter reading with code
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -80,56 +80,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the perf_event_open fails the fd is opened but the fd is only freed
-by closing (not by delete). Typically when an open fails you don't call
-close and so this results in a memory leak. To avoid this, add a close
-when open fails.
+Align the user space counter reading documentation with the code in
+perf_mmap__read_self. Previously the documentation was based on the perf
+rdpmc test, but now general purpose code is provided by libperf.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/evsel.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ include/uapi/linux/perf_event.h       | 32 ++++++++++++++++-----------
+ tools/include/uapi/linux/perf_event.h | 32 ++++++++++++++++-----------
+ 2 files changed, 38 insertions(+), 26 deletions(-)
 
-diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-index c1d58673f6ef..952f3520d5c2 100644
---- a/tools/lib/perf/evsel.c
-+++ b/tools/lib/perf/evsel.c
-@@ -149,23 +149,30 @@ int perf_evsel__open(struct perf_evsel *evsel, struct perf_cpu_map *cpus,
- 			int fd, group_fd, *evsel_fd;
- 
- 			evsel_fd = FD(evsel, idx, thread);
--			if (evsel_fd == NULL)
--				return -EINVAL;
-+			if (evsel_fd == NULL) {
-+				err = -EINVAL;
-+				goto out;
-+			}
- 
- 			err = get_group_fd(evsel, idx, thread, &group_fd);
- 			if (err < 0)
--				return err;
-+				goto out;
- 
- 			fd = sys_perf_event_open(&evsel->attr,
- 						 threads->map[thread].pid,
- 						 cpu, group_fd, 0);
- 
--			if (fd < 0)
--				return -errno;
-+			if (fd < 0) {
-+				err = -errno;
-+				goto out;
-+			}
- 
- 			*evsel_fd = fd;
- 		}
- 	}
-+out:
-+	if (err)
-+		perf_evsel__close(evsel);
- 
- 	return err;
- }
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index d37629dbad72..3b84e0ad0723 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -538,9 +538,13 @@ struct perf_event_mmap_page {
+ 	 *
+ 	 *     if (pc->cap_usr_time && enabled != running) {
+ 	 *       cyc = rdtsc();
+-	 *       time_offset = pc->time_offset;
+ 	 *       time_mult   = pc->time_mult;
+ 	 *       time_shift  = pc->time_shift;
++	 *       time_offset = pc->time_offset;
++	 *       if (pc->cap_user_time_short) {
++	 *         time_cycles = pc->time_cycles;
++	 *         time_mask = pc->time_mask;
++	 *       }
+ 	 *     }
+ 	 *
+ 	 *     index = pc->index;
+@@ -548,6 +552,9 @@ struct perf_event_mmap_page {
+ 	 *     if (pc->cap_user_rdpmc && index) {
+ 	 *       width = pc->pmc_width;
+ 	 *       pmc = rdpmc(index - 1);
++	 *       pmc <<= 64 - width;
++	 *       pmc >>= 64 - width;
++	 *       count += pmc;
+ 	 *     }
+ 	 *
+ 	 *     barrier();
+@@ -590,25 +597,24 @@ struct perf_event_mmap_page {
+ 	 * If cap_usr_time the below fields can be used to compute the time
+ 	 * delta since time_enabled (in ns) using rdtsc or similar.
+ 	 *
+-	 *   u64 quot, rem;
+-	 *   u64 delta;
+-	 *
+-	 *   quot = (cyc >> time_shift);
+-	 *   rem = cyc & (((u64)1 << time_shift) - 1);
+-	 *   delta = time_offset + quot * time_mult +
+-	 *              ((rem * time_mult) >> time_shift);
++	 *   cyc = time_cycles + ((cyc - time_cycles) & time_mask);
++	 *   delta = time_offset + mul_u64_u32_shr(cyc, time_mult, time_shift);
+ 	 *
+ 	 * Where time_offset,time_mult,time_shift and cyc are read in the
+ 	 * seqcount loop described above. This delta can then be added to
+-	 * enabled and possible running (if index), improving the scaling:
++	 * enabled and possible running (if index) to improve the scaling. Due
++	 * to event multiplexing, running maybe zero and so care is needed to
++	 * avoid division by zero.
+ 	 *
+ 	 *   enabled += delta;
+-	 *   if (index)
++	 *   if (idx)
+ 	 *     running += delta;
+ 	 *
+-	 *   quot = count / running;
+-	 *   rem  = count % running;
+-	 *   count = quot * enabled + (rem * enabled) / running;
++	 *   if (running != 0) {
++	 *     quot = count / running;
++	 *     rem  = count % running;
++	 *     count = quot * enabled + (rem * enabled) / running;
++	 *   }
+ 	 */
+ 	__u16	time_shift;
+ 	__u32	time_mult;
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index d37629dbad72..3b84e0ad0723 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -538,9 +538,13 @@ struct perf_event_mmap_page {
+ 	 *
+ 	 *     if (pc->cap_usr_time && enabled != running) {
+ 	 *       cyc = rdtsc();
+-	 *       time_offset = pc->time_offset;
+ 	 *       time_mult   = pc->time_mult;
+ 	 *       time_shift  = pc->time_shift;
++	 *       time_offset = pc->time_offset;
++	 *       if (pc->cap_user_time_short) {
++	 *         time_cycles = pc->time_cycles;
++	 *         time_mask = pc->time_mask;
++	 *       }
+ 	 *     }
+ 	 *
+ 	 *     index = pc->index;
+@@ -548,6 +552,9 @@ struct perf_event_mmap_page {
+ 	 *     if (pc->cap_user_rdpmc && index) {
+ 	 *       width = pc->pmc_width;
+ 	 *       pmc = rdpmc(index - 1);
++	 *       pmc <<= 64 - width;
++	 *       pmc >>= 64 - width;
++	 *       count += pmc;
+ 	 *     }
+ 	 *
+ 	 *     barrier();
+@@ -590,25 +597,24 @@ struct perf_event_mmap_page {
+ 	 * If cap_usr_time the below fields can be used to compute the time
+ 	 * delta since time_enabled (in ns) using rdtsc or similar.
+ 	 *
+-	 *   u64 quot, rem;
+-	 *   u64 delta;
+-	 *
+-	 *   quot = (cyc >> time_shift);
+-	 *   rem = cyc & (((u64)1 << time_shift) - 1);
+-	 *   delta = time_offset + quot * time_mult +
+-	 *              ((rem * time_mult) >> time_shift);
++	 *   cyc = time_cycles + ((cyc - time_cycles) & time_mask);
++	 *   delta = time_offset + mul_u64_u32_shr(cyc, time_mult, time_shift);
+ 	 *
+ 	 * Where time_offset,time_mult,time_shift and cyc are read in the
+ 	 * seqcount loop described above. This delta can then be added to
+-	 * enabled and possible running (if index), improving the scaling:
++	 * enabled and possible running (if index) to improve the scaling. Due
++	 * to event multiplexing, running maybe zero and so care is needed to
++	 * avoid division by zero.
+ 	 *
+ 	 *   enabled += delta;
+-	 *   if (index)
++	 *   if (idx)
+ 	 *     running += delta;
+ 	 *
+-	 *   quot = count / running;
+-	 *   rem  = count % running;
+-	 *   count = quot * enabled + (rem * enabled) / running;
++	 *   if (running != 0) {
++	 *     quot = count / running;
++	 *     rem  = count % running;
++	 *     count = quot * enabled + (rem * enabled) / running;
++	 *   }
+ 	 */
+ 	__u16	time_shift;
+ 	__u32	time_mult;
 -- 
 2.36.1.255.ge46751e96f-goog
 

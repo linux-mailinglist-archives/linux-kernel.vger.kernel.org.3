@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27DC5450B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15705450C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344476AbiFIPX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S1344451AbiFIP0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344459AbiFIPXv (ORCPT
+        with ESMTP id S242972AbiFIP0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:23:51 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DFD4A90E;
-        Thu,  9 Jun 2022 08:23:50 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id y12so22467522ior.7;
-        Thu, 09 Jun 2022 08:23:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=299eswKa0mqgY89iLNdNeNTHrmqc81eysaCt7mMgwl4=;
-        b=Fr4DgBCj7JF8VchWptUZkZjtfouklK3q1ZrgETFak+V2GX7ar9ZG089MqgidsJm2R/
-         M11hDBy3STx6aS2/1ti3ZyvjegQWzexL0z4rpMbomVxK5U7c/8eeEn8Jr3k4XcWs/Cb/
-         uSGZ3BWXil/eS0Adsw8w67j60B3tMRR9FXk5vjv4BxZYIC2HEYFLb+nOXtUN+hyAJpK5
-         UzwkDDtDBde42P4P2Uv9z4oPTpB6DGXcFOcVU0FKj/oPPwNQqCTNkYApGczb9P1BET2a
-         WJ9SJjIROf/cmtdxYlazRmk0+ieoBKLM45u7SGl9RJ5veyse7giTNfeiNMQZtoHtM3oB
-         QB6w==
-X-Gm-Message-State: AOAM532I1sVjm4BwB6QgmG/pT32wsYrXsOJjwjP/ougVjf0hhvERv04n
-        zSoxX7xyoQNiZqk/urG/Ng==
-X-Google-Smtp-Source: ABdhPJxR1sQ+xMuX17YD4idTrOjOgFbxdnCi8dxeDujaZEfF4hOYNX5amM4P1hmcO4KrqLUgcC/Z/g==
-X-Received: by 2002:a05:6602:2c41:b0:669:8bcf:c6a6 with SMTP id x1-20020a0566022c4100b006698bcfc6a6mr4956029iov.15.1654788229795;
-        Thu, 09 Jun 2022 08:23:49 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id b12-20020a5edc0c000000b00669a3f60e99sm1774533iok.31.2022.06.09.08.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 08:23:49 -0700 (PDT)
-Received: (nullmailer pid 3821183 invoked by uid 1000);
-        Thu, 09 Jun 2022 15:23:47 -0000
-Date:   Thu, 9 Jun 2022 09:23:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: imx_rproc: add
- fsl,startup-delay-ms
-Message-ID: <20220609152347.GA3817946-robh@kernel.org>
-References: <20220609123500.3492475-1-peng.fan@oss.nxp.com>
- <20220609123500.3492475-2-peng.fan@oss.nxp.com>
+        Thu, 9 Jun 2022 11:26:18 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C4E4B407;
+        Thu,  9 Jun 2022 08:26:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654788377; x=1686324377;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LfRhNY4IeUXJ5GUS/DdcyZ4zd1tukJjcMtxj4uvvm2M=;
+  b=RbdIl56mZRFQ++Vb6P+qQtWA/r2/QMNZdslywj73H5r4BRLUlHAvVlUM
+   +OX11BiAAS49Jqv6FPvoBJAbRtEFzWW3uoRFf1lA9J7PwLWyFo5gUhAk7
+   /CSwsgTI3dFUcVJQhT6FUxiZxpR2atAob/B/4WYiy8jAiIX+Y82oHbfpA
+   cn3YlhAcEqe10DCaPOCPhoSG4rvSAlocIs83RK+Ad338n+gFU3IpJ8lu8
+   jXlU31fPwZ9Chqz/+YCagEtwMhMP5UltZ9BNGIxkvKjH04XCwonAaZ3Fx
+   2Y+V2jVST8xpUjP+lWPeZlrw0W05SVRWc8T9v8rxstsJ0S+4AivHKNC6f
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="339078181"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="339078181"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:26:14 -0700
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="684017304"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:26:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nzK2e-000Xy5-Qg;
+        Thu, 09 Jun 2022 18:25:48 +0300
+Date:   Thu, 9 Jun 2022 18:25:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 04/16] thunderbolt: ACPI: Use acpi_find_child_by_adr()
+Message-ID: <YqIQ/HbSS9/0Fe/A@smile.fi.intel.com>
+References: <1843211.tdWV9SEqCh@kreacher>
+ <7414189.EvYhyI6sBW@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609123500.3492475-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <7414189.EvYhyI6sBW@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,40 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:34:59PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Thu, Jun 09, 2022 at 03:54:40PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> add fsl,startup-delay-ms property indicating delay some time after just
-> kicks remote processor.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/remoteproc/fsl,imx-rproc.yaml         | 4 ++++
->  1 file changed, 4 insertions(+)
+> Instead of walking the list of children of an ACPI device directly
+> in order to find the child matching a given bus address, use
+> acpi_find_child_by_adr() for this purpose.
 
-What's the base? Doesn't apply to v5.19-rc1 for me.
+...
 
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> index 64e783234e38..56f3ed18c28c 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> @@ -76,6 +76,10 @@ properties:
->        This property is to specify the resource id of the remote processor in SoC
->        which supports SCFW
->  
-> +  fsl,startup-delay-ms:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+>  	if (!adev)
+>  		return NULL;
 
-Standard unit types don't need a type. 'make dt_binding_check' should 
-have told you this.
+Already checked in the below call, IIUC. Hence can be removed.
 
-> +    description: Startup time that remote processor ready for communication
-> +
->  required:
->    - compatible
->  
-> -- 
-> 2.25.1
-> 
-> 
+> +	return acpi_find_child_by_adr(adev, port->port);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,167 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67FB544D48
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4C0544D4B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244111AbiFINQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S244025AbiFINRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiFINQM (ORCPT
+        with ESMTP id S233763AbiFINRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:16:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00973BB299;
-        Thu,  9 Jun 2022 06:16:11 -0700 (PDT)
+        Thu, 9 Jun 2022 09:17:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436663CA2FD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:17:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E6EA61CE3;
-        Thu,  9 Jun 2022 13:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F2FC34114;
-        Thu,  9 Jun 2022 13:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654780570;
-        bh=adIY73cUSCNwOEj4s+9TfwrvjgCT5vabHNIojXe/1uY=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC6C1B82DC9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590A0C34114;
+        Thu,  9 Jun 2022 13:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654780633;
+        bh=VWVhudhXitwHFDO5y5M/fP2VcY4/QVsKqgiTQAOqbeQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WYPI/dFW/4u4zTXC/IoaW+gqiph/U3f8dUrIV74OlJs0SAnkbFcVND+snhWDy+MYh
-         6ioLbFofSxMV7wfxsQubzFcp7eTHg3LR3D+RM3LC975VPbwms9sD1u0fzMbkuK+7aZ
-         Hq6J0DhKtzTC3IsvGKX9eswrN40xD110OJDrNfNDsCNKB94cTJL53JgZBEcnqbkddT
-         lLTbP/uNM2VCh5PIs/E4J25prK2pS1ggzPizFluCG2fNfVAlxsCvzIncZN5RMqgVXo
-         sxWPPRxk2eVKbDsvcyXmElZHZvHsWOE8mcZOC/F3x32x/sWUjeGTGdnynKF84hiXFL
-         9k55FZrg5hBdg==
-Date:   Thu, 9 Jun 2022 14:16:04 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, asahi@lists.linux.dev
-Subject: Re: [RFC PATCH v2 5/5] ASoC: apple: Add macaudio machine driver
-Message-ID: <YqHylN3xba9XFrF8@sirena.org.uk>
-References: <20220606191910.16580-1-povik+lin@cutebit.org>
- <20220606191910.16580-6-povik+lin@cutebit.org>
+        b=jNfas8vROLNPT8oBljMNAoiNvmlwO40wcKpZRWyQ5mgTG3wPDiQstZ+YzXDw1k0KQ
+         GLFNkH9n+GsmQvqV+qwracnYThiNtNc9lgg4POoooqy2PIy6aoOadL1qCSGYgagcgH
+         NUndr56byvLXB6rtQ/xPqnsKz9YbfNn0rMy2n3R4=
+Date:   Thu, 9 Jun 2022 15:17:10 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wang Wenhu <wenhu.wang@hotmail.com>
+Cc:     christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver
+ implementation
+Message-ID: <YqHy1uXwCLlJmftr@kroah.com>
+References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
+ <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zP4ArPesiXfS095U"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220606191910.16580-6-povik+lin@cutebit.org>
-X-Cookie: Space is limited.
+In-Reply-To: <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 09, 2022 at 03:28:55AM -0700, Wang Wenhu wrote:
+> The l2-cache could be optionally configured as SRAM partly or fully.
+> Users can make use of it as a block of independent memory that offers
+> special usage, such as for debuging or other cratical status info
+> storage which keeps consistently even when the whole system crashed.
+> 
+> The hardware related configuration process utilized the work of the
+> earlier implementation, which has been removed now.
+> See: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=dc21ed2aef4150fc2fcf58227a4ff24502015c03
+> 
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Wang Wenhu <wenhu.wang@hotmail.com>
+> ---
+>  drivers/uio/Kconfig                   |  10 +
+>  drivers/uio/Makefile                  |   1 +
+>  drivers/uio/uio_fsl_85xx_cache_sram.c | 286 ++++++++++++++++++++++++++
+>  3 files changed, 297 insertions(+)
+>  create mode 100644 drivers/uio/uio_fsl_85xx_cache_sram.c
+> 
+> diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
+> index 2e16c5338e5b..9199ced03880 100644
+> --- a/drivers/uio/Kconfig
+> +++ b/drivers/uio/Kconfig
+> @@ -105,6 +105,16 @@ config UIO_NETX
+>  	  To compile this driver as a module, choose M here; the module
+>  	  will be called uio_netx.
+>  
+> +config UIO_FSL_85XX_CACHE_SRAM
+> +	tristate "Freescale 85xx Cache-Sram driver"
+> +	depends on FSL_SOC_BOOKE && PPC32
+> +	help
+> +	  Generic driver for accessing the Cache-Sram form user level. This
+> +	  is extremely helpful for some user-space applications that require
+> +	  high performance memory accesses.
+> +
+> +	  If you don't know what to do here, say N.
 
---zP4ArPesiXfS095U
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Module name information?
 
-On Mon, Jun 06, 2022 at 09:19:10PM +0200, Martin Povi=C5=A1er wrote:
+> +
+>  config UIO_FSL_ELBC_GPCM
+>  	tristate "eLBC/GPCM driver"
+>  	depends on FSL_LBC
+> diff --git a/drivers/uio/Makefile b/drivers/uio/Makefile
+> index f2f416a14228..1ba07d92a1b1 100644
+> --- a/drivers/uio/Makefile
+> +++ b/drivers/uio/Makefile
+> @@ -12,3 +12,4 @@ obj-$(CONFIG_UIO_MF624)         += uio_mf624.o
+>  obj-$(CONFIG_UIO_FSL_ELBC_GPCM)	+= uio_fsl_elbc_gpcm.o
+>  obj-$(CONFIG_UIO_HV_GENERIC)	+= uio_hv_generic.o
+>  obj-$(CONFIG_UIO_DFL)	+= uio_dfl.o
+> +obj-$(CONFIG_UIO_FSL_85XX_CACHE_SRAM)	+= uio_fsl_85xx_cache_sram.o
+> diff --git a/drivers/uio/uio_fsl_85xx_cache_sram.c b/drivers/uio/uio_fsl_85xx_cache_sram.c
+> new file mode 100644
+> index 000000000000..d363f9d2b179
+> --- /dev/null
+> +++ b/drivers/uio/uio_fsl_85xx_cache_sram.c
+> @@ -0,0 +1,286 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Wang Wenhu <wenhu.wang@hotmail.com>
+> + * All rights reserved.
+> + */
+> +
+> +#include <linux/platform_device.h>
+> +#include <linux/uio_driver.h>
+> +#include <linux/stringify.h>
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/of_address.h>
+> +#include <linux/io.h>
+> +
+> +#define DRIVER_NAME		"uio_mpc85xx_cache_sram"
+> +#define UIO_INFO_VER	"0.0.1"
+> +#define UIO_NAME		"uio_cache_sram"
+> +
+> +#define L2CR_L2FI				0x40000000	/* L2 flash invalidate */
+> +#define L2CR_L2IO				0x00200000	/* L2 instruction only */
+> +#define L2CR_SRAM_ZERO			0x00000000	/* L2SRAM zero size */
+> +#define L2CR_SRAM_FULL			0x00010000	/* L2SRAM full size */
+> +#define L2CR_SRAM_HALF			0x00020000	/* L2SRAM half size */
+> +#define L2CR_SRAM_TWO_HALFS		0x00030000	/* L2SRAM two half sizes */
+> +#define L2CR_SRAM_QUART			0x00040000	/* L2SRAM one quarter size */
+> +#define L2CR_SRAM_TWO_QUARTS	0x00050000	/* L2SRAM two quarter size */
+> +#define L2CR_SRAM_EIGHTH		0x00060000	/* L2SRAM one eighth size */
+> +#define L2CR_SRAM_TWO_EIGHTH	0x00070000	/* L2SRAM two eighth size */
+> +
+> +#define L2SRAM_OPTIMAL_SZ_SHIFT	0x00000003	/* Optimum size for L2SRAM */
+> +
+> +#define L2SRAM_BAR_MSK_LO18		0xFFFFC000	/* Lower 18 bits */
+> +#define L2SRAM_BARE_MSK_HI4		0x0000000F	/* Upper 4 bits */
+> +
+> +enum cache_sram_lock_ways {
+> +	LOCK_WAYS_ZERO,
+> +	LOCK_WAYS_EIGHTH,
+> +	LOCK_WAYS_TWO_EIGHTH,
 
-> + *  =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90       =E2=94=8C=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=96=BA =E2=94=8C=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90     =E2=94=8C=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=90
-> + *  =E2=94=82 Primary  =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=A4                 =E2=94=82 Mux =E2=94=82 =
-=E2=94=80=E2=94=80=E2=96=BA =E2=94=82 Speakers =E2=94=82
-> + *  =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98       =E2=94=82    =E2=94=8C=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=96=BA =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=98     =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98
-> + *                =E2=94=8C=E2=94=80=E2=94=80=E2=94=80 =E2=94=82 =E2=94=
-=80=E2=94=80=E2=94=80=E2=94=98             =E2=96=B2
-> + *  =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90  =E2=94=82    =E2=94=82         =
-         =E2=94=82
-> + *  =E2=94=82Secondary =E2=94=9C=E2=94=80=E2=94=80=E2=94=98    =E2=94=82=
-     =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=B4=E2=94=90
-> + *  =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98       =E2=94=9C=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=82Plug-in Demux=E2=94=82
-> + *                     =E2=94=82     =E2=94=94=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=AC=E2=94=98
-> + *                     =E2=94=82                  =E2=94=82
-> + *                     =E2=94=82                  =E2=96=BC
-> + *                     =E2=94=82                 =E2=94=8C=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90     =E2=94=8C=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=90
-> + *                     =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=96=BA =E2=94=82 Mux =E2=94=82 =E2=94=80=E2=94=80=
-=E2=96=BA =E2=94=82Headphones=E2=94=82
-> + *                                       =E2=94=94=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=98     =E2=94=94=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98
+Why not have values for these?
 
-As far as I can tell this demux is entirely software based - why not
-just expose the routing control to userspace and let it handle
-switching (which I suspect may be more featureful than what's
-implemented here)?
+> +	LOCK_WAYS_HALF = 4,
+> +	LOCK_WAYS_FULL = 8,
+> +};
+> +
+> +struct mpc85xx_l2ctlr {
+> +	u32	ctl;		/* 0x000 - L2 control */
 
-> +static int macaudio_jack_event(struct notifier_block *nb, unsigned long =
-event,
-> +                               void *data)
+What is the endian of these u32 values?  You map them directly to
+memory, so they must be specified some way, right?  Please make it
+obvious what they are.
+
+> +	u8	res1[0xC];
+> +	u32	ewar0;		/* 0x010 - External write address 0 */
+> +	u32	ewarea0;	/* 0x014 - External write address extended 0 */
+> +	u32	ewcr0;		/* 0x018 - External write ctrl */
+> +	u8	res2[4];
+> +	u32	ewar1;		/* 0x020 - External write address 1 */
+> +	u32	ewarea1;	/* 0x024 - External write address extended 1 */
+> +	u32	ewcr1;		/* 0x028 - External write ctrl 1 */
+> +	u8	res3[4];
+> +	u32	ewar2;		/* 0x030 - External write address 2 */
+> +	u32	ewarea2;	/* 0x034 - External write address extended 2 */
+> +	u32	ewcr2;		/* 0x038 - External write ctrl 2 */
+> +	u8	res4[4];
+> +	u32	ewar3;		/* 0x040 - External write address 3 */
+> +	u32	ewarea3;	/* 0x044 - External write address extended 3 */
+> +	u32	ewcr3;		/* 0x048 - External write ctrl 3 */
+> +	u8	res5[0xB4];
+> +	u32	srbar0;		/* 0x100 - SRAM base address 0 */
+> +	u32	srbarea0;	/* 0x104 - SRAM base addr reg ext address 0 */
+> +	u32	srbar1;		/* 0x108 - SRAM base address 1 */
+> +	u32	srbarea1;	/* 0x10C - SRAM base addr reg ext address 1 */
+> +	u8	res6[0xCF0];
+> +	u32	errinjhi;	/* 0xE00 - Error injection mask high */
+> +	u32	errinjlo;	/* 0xE04 - Error injection mask low */
+> +	u32	errinjctl;	/* 0xE08 - Error injection tag/ecc control */
+> +	u8	res7[0x14];
+> +	u32	captdatahi;	/* 0xE20 - Error data high capture */
+> +	u32	captdatalo;	/* 0xE24 - Error data low capture */
+> +	u32	captecc;	/* 0xE28 - Error syndrome */
+> +	u8	res8[0x14];
+> +	u32	errdet;		/* 0xE40 - Error detect */
+> +	u32	errdis;		/* 0xE44 - Error disable */
+> +	u32	errinten;	/* 0xE48 - Error interrupt enable */
+> +	u32	errattr;	/* 0xE4c - Error attribute capture */
+> +	u32	erradrrl;	/* 0xE50 - Error address capture low */
+> +	u32	erradrrh;	/* 0xE54 - Error address capture high */
+> +	u32	errctl;		/* 0xE58 - Error control */
+> +	u8	res9[0x1A4];
+> +};
+> +
+> +static int uio_cache_sram_setup(struct platform_device *pdev,
+> +				phys_addr_t base, u8 ways)
 > +{
-> +       struct snd_soc_jack *jack =3D data;
-> +       struct macaudio_snd_data *ma =3D snd_soc_card_get_drvdata(jack->c=
-ard);
+> +	struct mpc85xx_l2ctlr __iomem *l2ctlr = of_iomap(pdev->dev.of_node, 0);
 > +
-> +       ma->jack_plugin_state =3D !!event;
+> +	if (!l2ctlr) {
+> +		dev_err(&pdev->dev, "can not map l2 controller\n");
+> +		return -EINVAL;
+> +	}
 > +
-> +       if (!ma->plugin_demux_kcontrol)
-> +               return 0;
+> +	/* write bits[0-17] to srbar0 */
+> +	out_be32(&l2ctlr->srbar0, lower_32_bits(base) & L2SRAM_BAR_MSK_LO18);
 > +
-> +       snd_soc_dapm_mux_update_power(&ma->card.dapm, ma->plugin_demux_kc=
-ontrol,
-> +                                     ma->jack_plugin_state,
-> +                                     (struct soc_enum *) &macaudio_plugi=
-n_demux_enum, NULL);
+> +	/* write bits[18-21] to srbare0 */
+> +#ifdef CONFIG_PHYS_64BIT
+
+No #ifdef in .c files please.
+
+> +	out_be32(&l2ctlr->srbarea0, upper_32_bits(base) & L2SRAM_BARE_MSK_HI4);
+> +#endif
 > +
-> +       return 0;
+> +	clrsetbits_be32(&l2ctlr->ctl, L2CR_L2E, L2CR_L2FI);
+> +
+> +	switch (ways) {
+> +	case LOCK_WAYS_EIGHTH:
+> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_EIGHTH);
+> +		break;
+> +
+> +	case LOCK_WAYS_TWO_EIGHTH:
+> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_QUART);
+> +		break;
+> +
+> +	case LOCK_WAYS_HALF:
+> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_HALF);
+> +		break;
+> +
+> +	case LOCK_WAYS_FULL:
+> +	default:
+> +		setbits32(&l2ctlr->ctl, L2CR_L2E | L2CR_L2FI | L2CR_SRAM_FULL);
+> +		break;
+> +	}
+> +	eieio();
+> +
+> +	return 0;
 > +}
+> +
+> +static const struct vm_operations_struct uio_cache_sram_vm_ops = {
+> +#ifdef CONFIG_HAVE_IOREMAP_PROT
 
-This should be integrated with the core jack detection stuff in
-soc-jack.c and/or the core stuff that's wrapping - that way you'll
-ensure that events are generated and status readable via all the
-interfaces userspace might be looking for.  The ASoC stuff also has some
-DAPM integration for turning on/off outputs which might DTRT for you if
-you do need it in kernel.
+Same here.
 
---zP4ArPesiXfS095U
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	.access = generic_access_phys,
+> +#endif
+> +};
+> +
+> +static int uio_cache_sram_mmap(struct uio_info *info,
+> +				struct vm_area_struct *vma)
+> +{
+> +	struct uio_mem *mem = info->mem;
+> +
+> +	if (mem->addr & ~PAGE_MASK)
+> +		return -ENODEV;
+> +
+> +	if ((vma->vm_end - vma->vm_start > mem->size) ||
+> +		(mem->size == 0) ||
+> +		(mem->memtype != UIO_MEM_PHYS))
+> +		return -EINVAL;
+> +
+> +	vma->vm_ops = &uio_cache_sram_vm_ops;
+> +	vma->vm_page_prot = pgprot_cached(vma->vm_page_prot);
+> +
+> +	return remap_pfn_range(vma,
+> +						   vma->vm_start,
+> +						   mem->addr >> PAGE_SHIFT,
+> +						   vma->vm_end - vma->vm_start,
+> +						   vma->vm_page_prot);
 
------BEGIN PGP SIGNATURE-----
+Odd indentation, did you use checkpatch.pl on your patch?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKh8pQACgkQJNaLcl1U
-h9A35AgAhc/b4LJ2GElO9+hrXTNIF0hkl2AmactD2FfUXkE/CAfoLDtaK/5RtjeR
-4ybKT5miFOnvG5bzMVTQV8BtLKiT9AI3ABDsuj2QMvaTZ95Y3tgqZh738EQAYB5l
-Qrie4m9HHqjp1dLdqvNcgVTg1QWzIddKaMB7bI0FHITUZVqgcq5qZiAtAZ3GGBeP
-ZIdkYMVLhyEIUpjXpYOlHjgxo2wKs+ixIyN9BonMvX6aSOLNXmI/vuqVPYp8uuvn
-u+WXjidw0QlG2gU2kgnncbugvKNMKm4YcCd+CcQ7q4wrwQbH12DT7uD0X2m1/kVE
-py9WhKEDlJiKgkRkR7GjmWGf2OmarA==
-=P1Mm
------END PGP SIGNATURE-----
+> +}
+> +
+> +static int uio_cache_sram_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *node = pdev->dev.of_node;
+> +	struct uio_info *info;
+> +	struct uio_mem *uiomem;
+> +	const char *dt_name;
+> +	phys_addr_t mem_base;
+> +	u32 l2cache_size;
+> +	u32 mem_size;
+> +	u32 rem;
+> +	u8 ways;
+> +	int ret;
+> +
+> +	if (!node) {
+> +		dev_err(&pdev->dev, "device's of_node is null\n");
 
---zP4ArPesiXfS095U--
+How can that happen?
+
+> +		return -EINVAL;
+> +	}
+
+thanks,
+
+greg k-h

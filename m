@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C845447C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E873A5447C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240752AbiFIJjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S239328AbiFIJke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242775AbiFIJjA (ORCPT
+        with ESMTP id S231911AbiFIJkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:39:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444B73A724
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:38:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E50D2B82C94
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:38:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71CE7C34114;
-        Thu,  9 Jun 2022 09:38:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KWO6SD/+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654767533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XLQ8mMO0hzeJi8rzxsf9luStKEDEI8Zafy1QgR2AB2A=;
-        b=KWO6SD/+lFHS9/dt8B1qD6KGi1uc18TwUSdHr8x8fDXwydBzf8WzB7SrX2t2wQPHZ7u2ig
-        AwGmSU7A2YIpKbZTIRhmrT/3mDj0D/9tuVIaUYdc8zhps4iSGZJu9jUPR+h8IrTQYzwMxl
-        vU6uRNynWcY3WJIJnd5zo7rUxOPcgHc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d6f35694 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 9 Jun 2022 09:38:53 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 11:38:47 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     "R, Monish Kumar" <monish.kumar.r@intel.com>
-Cc:     "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "alan.adamson@oracle.com" <alan.adamson@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Yi Zhang <yi.zhang@redhat.com>,
-        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Rao, Abhijeet" <abhijeet.rao@intel.com>
-Subject: Re: 2 second nvme initialization delay regression in 5.18 [Was: Re:
- [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR
- observed during blktests]
-Message-ID: <YqG/pybFg0P5yQ9a@zx2c4.com>
-References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
- <Ykyf5Zuz1W8yHhNY@zx2c4.com>
- <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
- <CAHmME9o-orF52HzkT80054e3Op5fLOcTHb-KHpvvU7H3FpAJ7A@mail.gmail.com>
- <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
+        Thu, 9 Jun 2022 05:40:31 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAE94AE2E;
+        Thu,  9 Jun 2022 02:40:30 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id b17so7695105qvz.0;
+        Thu, 09 Jun 2022 02:40:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=USvCbIzf7kAWUlatXORQPqOzuZzCVX+P1+Q0wg0R4kk=;
+        b=sLatTqhzzXcYQmVAFNg6p6Tq1D6sVYw+SCYynmxc/YSnyzo5RBPA3Y35ePz5F2aQIZ
+         7gXvohWavA7ltUuFEb8MMFRFLrXMYrXK89rcTnQZlQXsNW+FerbJk2APNIxyaEFQXvIy
+         umQyD2XNAi8QwAbGtNA06dGqbwFrnaIwsTlPRJS36UMrpaqKu6ZBVli0zCpN3BwFOXeA
+         xcs3XFgwG4r1pF8i27f2pYns/vZXenGWxXYfbzWJezrIa8sUEZeX/8Wt2bCbkVyQ6ZAE
+         lAhGXOG/SUCEW2DbtKwG7fRJz3YGbBEzFQ8/7BixD7N02547CFrIVHVAE7Ij2L9OIqm+
+         LWaw==
+X-Gm-Message-State: AOAM533ZCwgQsVu1MDTxAFw0xy2XTb0/6yoh9W6UjtHB83xpTnOCwqKc
+        SpqGsvKR5vvF70n/9A/6aImH/ln+eSO0iA==
+X-Google-Smtp-Source: ABdhPJz+iv0hediA7Bcnt/YymjKhMjXfuX0Ul4PpaBbgIoTYXp1eXEiPKK/celRAw7N1DGeLehYDeg==
+X-Received: by 2002:ad4:5d46:0:b0:464:5970:5b9 with SMTP id jk6-20020ad45d46000000b00464597005b9mr28744911qvb.25.1654767629817;
+        Thu, 09 Jun 2022 02:40:29 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id v5-20020a05622a130500b00304fce6a137sm4784267qtk.66.2022.06.09.02.40.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 02:40:29 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-30ce6492a60so235013257b3.8;
+        Thu, 09 Jun 2022 02:40:28 -0700 (PDT)
+X-Received: by 2002:a81:6157:0:b0:30c:7e4d:b28e with SMTP id
+ v84-20020a816157000000b0030c7e4db28emr41765469ywb.502.1654767628538; Thu, 09
+ Jun 2022 02:40:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 9 Jun 2022 11:40:17 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUWnqppXcOfsr=HU4cuwFx6__GK_Fjbpvdse2e3T0K92A@mail.gmail.com>
+Message-ID: <CAMuHMdUWnqppXcOfsr=HU4cuwFx6__GK_Fjbpvdse2e3T0K92A@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: adjust whitespace around '='
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Monish,
+On Thu, May 26, 2022 at 10:42 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Fix whitespace coding style: use single space instead of tabs or
+> multiple spaces around '=' sign in property assignment.  No functional
+> changes (same DTB).
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Thu, Jun 09, 2022 at 09:32:02AM +0000, R, Monish Kumar wrote:
-> Hi Jason,
-> 
-> I would like to provide justification for this Samsung X5 SSD fix added.
-> We were facing SSD enumeration issue after cold / warm reboot with device 
-> connected ends up with probe failures.
-> 
-> When I debug on this issue, I could find that this device was not enumerating 
-> once the system got booted. Moreover, we were facing this enumeration issue
-> specific to this device. 
-> 
-> Based on analysis, due to deep power state of the device fails to enumerate.
-> So, added the following quirks as a workaround fixe and it helps to enumerate the device after cold/warm reboot. If new Samsung X5 SSD's are working fine as expected, we can remove those 
-> fix. 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.20.
 
-FWIW, all of that should have been in the commit message. Also, "based
-on analysis" - what analysis exactly? I have no way of thinking more
-about the issue at hand other than, "Monish said things are like this in
-a lab".
+Gr{oetje,eeting}s,
 
-In any case, I believe the 970 ID predates that of the X5, and
-destroying battery on those laptops and introducing boot time delays
-isn't really okay. So let's just revert this until somebody can work out
-better how to differentiate drives that need a quirk from drives that
-don't need a quirk.
+                        Geert
 
-I sent this in: https://lore.kernel.org/lkml/20220609084051.4445-1-Jason@zx2c4.com/
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Jason
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

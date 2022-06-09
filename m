@@ -2,83 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56B55455CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E03F5455D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345094AbiFIUke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 16:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S241567AbiFIUlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 16:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiFIUkc (ORCPT
+        with ESMTP id S232101AbiFIUlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:40:32 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A996B156461;
-        Thu,  9 Jun 2022 13:40:31 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id s1so19630560ilj.0;
-        Thu, 09 Jun 2022 13:40:31 -0700 (PDT)
+        Thu, 9 Jun 2022 16:41:08 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06481156789
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:41:05 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id f13so4584477qtb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 13:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j1i9jnkPCwj7hjptqenXLooIsYDic1cbsYQIxJWV6GE=;
+        b=plm4N/skR66NjRrl4/C5+SMQzqXmUlJjH0J0+883ZKmDFiqwT3OV4Bqij/K5nRcp+A
+         dz2MWYDobAigEnjXlHJokJEUyQvmd4jMYs+PYbX0a/m0aKggTDxNFx+x0HQ+DHp9e2f3
+         N9nwqNbnXW3JjaMj/W8BSt+frvPMh+frOxCYhT0+HkZeApQDxi1nlOtFJFZXF+cIPZWq
+         tTgrWbL9cM9qq8SvRBFyzTbIBa9G5/TAJrwRyRTWQuB2Hh6uObVrc3+VokZ/0zYSjB6N
+         ivqUGq/Q/gQjLQl9Io1mQ9M83TTOWPYqBe1nF+8fpiC6oExn/9CvbXI0CAWzfb5MckOM
+         qDZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=JPFIQj3seYABrD7RnegA3z27kpvWq95njxbWEfL3Hw0=;
-        b=yGi4Rx3ymwfZu0/GXgnuKy1MaXFN2dp3V5yeb+VYsXFchef1fa3nUCYbETYUKmaqlm
-         jOEr4JX1QXO9pr+NphKv8w76d2XRbcn72iZWUsk0j5wdfD9QxGog/N73cpor0TVAaCNF
-         TF180rtf6z6mPrEG9T1AhrohLs5HSYixncnkXXoS9oFpDuFl56GcVFVWcbL3naiYjiUa
-         H8NAn8QmZnESQXoSHlWUipRaWsFHzYTCyX7e73nQQ5X8/1LmSdLAtyJLjUKsMJ5ktCIg
-         y1DVwh2cBJXTOWHfCAfavArUhQLTvzFmZSe67+cYJ12efpzYcrPqzU9ZVlrTI/9Fe53k
-         LahQ==
-X-Gm-Message-State: AOAM533aZa7HWUmwYh61vu5ZkQKqsTcGt45sJtNMZfR7pzGfa6bSyP8N
-        mZzkuqWMEvoJ3Ik8cBRJFg==
-X-Google-Smtp-Source: ABdhPJxhSHpw8c73EBmQgcNkousM034q6LSovvCE/09nebqSp36lzkzNkJB+3Yx8hvdNA8+ZmwVqDA==
-X-Received: by 2002:a05:6e02:20e9:b0:2d1:d151:3c53 with SMTP id q9-20020a056e0220e900b002d1d1513c53mr23177829ilv.220.1654807230916;
-        Thu, 09 Jun 2022 13:40:30 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id y11-20020a02904b000000b0033206b52e4csm968762jaf.42.2022.06.09.13.40.29
+        bh=j1i9jnkPCwj7hjptqenXLooIsYDic1cbsYQIxJWV6GE=;
+        b=hr7CxmWBWJY8AzmQSvxl3/xBVP9R1M1OvSbsHvvw56D261BC3T2VnuKJjio/sxazy5
+         wnkvStINtVuu8/IqtFCsIi6tVvHWajUmkxlS23yMuC3qlHWX25BPZV4w96Xg+39wPSQN
+         p3AXA1jaJMT7vlmdw2Su5tqM/Vvrea8RLxZ6EhFuIR3XYu218P6jBHXFci1Futa2pS2/
+         PhJxZXPC6dPE5+ZbRWyE0fQO75x5FG5q+urM9TZayR8MgbNSUS2yX6fdetVhrkhRzPG2
+         7y8z1UqmjbbE3P86qMymCgYhFSaYxPVZjWEKThex/4SMJ34R3D8CbO3wzwOtPgJyIzKh
+         ZQbw==
+X-Gm-Message-State: AOAM5305b2yBrEjh8bXaUxL0v4SuWKQWxmo+bGx3RabwV9xsLQ2U6/G/
+        8zaiWBgRlIlNGtVYK3VZ+2TgVg==
+X-Google-Smtp-Source: ABdhPJxp1k9zfvxgeMouv0XByvqOJbmu7qh92LB53qmBHvgXvd6f2OhwumIXJZDuQs+MM0CyM9KnDw==
+X-Received: by 2002:a05:622a:130a:b0:304:f156:ec9 with SMTP id v10-20020a05622a130a00b00304f1560ec9mr16605646qtk.226.1654807264737;
+        Thu, 09 Jun 2022 13:41:04 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:4759])
+        by smtp.gmail.com with ESMTPSA id w17-20020a05620a445100b006a7137330e2sm4554017qkp.132.2022.06.09.13.41.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 13:40:30 -0700 (PDT)
-Received: (nullmailer pid 63923 invoked by uid 1000);
-        Thu, 09 Jun 2022 20:40:28 -0000
-Date:   Thu, 9 Jun 2022 14:40:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Brian Masney <masneyb@onstation.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 02/14] dt-bindings: sram: qcom,imem: add IMEM memory
- region
-Message-ID: <20220609204028.GA63739-robh@kernel.org>
-References: <20220607171848.535128-1-krzysztof.kozlowski@linaro.org>
- <20220607171848.535128-2-krzysztof.kozlowski@linaro.org>
+        Thu, 09 Jun 2022 13:41:04 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 16:41:04 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
+Message-ID: <YqJa4N/VlS4zN4vf@cmpxchg.org>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+ <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
+ <YqCuE87gCcrnAiXG@cmpxchg.org>
+ <YqDGYjgjcS5OoS3P@cmpxchg.org>
+ <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
+ <YqDncfLeEeBaosrY@cmpxchg.org>
+ <02ee2c97-3bca-8eb6-97d8-1f8743619453@linux.ibm.com>
+ <YqH74WaUzJlb+smt@cmpxchg.org>
+ <20220609152243.00000332@Huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607171848.535128-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609152243.00000332@Huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Jun 2022 19:18:36 +0200, Krzysztof Kozlowski wrote:
-> Add bindings for IMEM memory region (like SRAM) used on several
-> Qualcomm SoCs.  In the downstream (vendor) tree, it comes with several
-> children used for debugging purposes.  The upstreamed parts are much
-> smaller - just image loader and syscon reboot.
+On Thu, Jun 09, 2022 at 03:22:43PM +0100, Jonathan Cameron wrote:
+> I think discussion hinged on it making sense to be able to change
+> rank of a tier rather than create a new tier and move things one by one.
+> Example was wanting to change the rank of a tier that was created
+> either by core code or a subsystem.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/sram/qcom,imem.yaml   | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> 
+> E.g. If GPU driver creates a tier, assumption is all similar GPUs will
+> default to the same tier (if hot plugged later for example) as the
+> driver subsystem will keep a reference to the created tier.
+> Hence if user wants to change the order of that relative to
+> other tiers, the option of creating a new tier and moving the
+> devices would then require us to have infrastructure to tell the GPU
+> driver to now use the new tier for additional devices.
 
-Applied, thanks!
+That's an interesting point, thanks for explaining.
+
+But that could still happen when two drivers report the same tier and
+one of them is wrong, right? You'd still need to separate out by hand
+to adjust rank, as well as handle hotplug events. Driver colllisions
+are probable with coarse categories like gpu, dram, pmem.
+
+Would it make more sense to have the platform/devicetree/driver
+provide more fine-grained distance values similar to NUMA distances,
+and have a driver-scope tunable to override/correct? And then have the
+distance value function as the unique tier ID and rank in one.
+
+That would allow device class reassignments, too, and it would work
+with driver collisions where simple "tier stickiness" would
+not. (Although collisions would be less likely to begin with given a
+broader range of possible distance values.)
+
+Going further, it could be useful to separate the business of hardware
+properties (and configuring quirks) from the business of configuring
+MM policies that should be applied to the resulting tier hierarchy.
+They're somewhat orthogonal tuning tasks, and one of them might become
+obsolete before the other (if the quality of distance values provided
+by drivers improves before the quality of MM heuristics ;). Separating
+them might help clarify the interface for both designers and users.
+
+E.g. a memdev class scope with a driver-wide distance value, and a
+memdev scope for per-device values that default to "inherit driver
+value". The memtier subtree would then have an r/o structure, but
+allow tuning per-tier interleaving ratio[1], demotion rules etc.
+
+[1] https://lore.kernel.org/linux-mm/20220607171949.85796-1-hannes@cmpxchg.org/#t

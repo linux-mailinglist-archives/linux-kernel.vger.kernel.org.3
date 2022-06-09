@@ -2,199 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006FC54454B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A657054454D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240530AbiFIIDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S240040AbiFIIDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbiFIIDi (ORCPT
+        with ESMTP id S238638AbiFIIDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:03:38 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51D665B9;
-        Thu,  9 Jun 2022 01:03:36 -0700 (PDT)
-X-UUID: 150e7171e9e144a9bd74da6109522973-20220609
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:f00b110d-b7e7-44d7-aa51-b685a148e3b7,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:b7eec47e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 150e7171e9e144a9bd74da6109522973-20220609
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1523568253; Thu, 09 Jun 2022 16:03:32 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 9 Jun 2022 16:03:31 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 9 Jun 2022 16:03:31 +0800
-Message-ID: <49162f7d313478f13472eb0f3b07ffa2a47cbeba.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Thu, 9 Jun 2022 16:03:30 +0800
-In-Reply-To: <651e6b993562d53c893d0325d33fa137e98ab596.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <651e6b993562d53c893d0325d33fa137e98ab596.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 9 Jun 2022 04:03:48 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EE1A454
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:03:46 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id l18so17929579lje.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kfk3WjPXEkjxxu8199TyQcaEYE4ZTR9Ij1w+1/8nPfw=;
+        b=LsALkFV6VbtPklOu7SFGbvJSWR0eapJzOWoVO2c8Mytbz4CYteeu9GKfcMSNSkXiDN
+         F7Cgy5hOsIv+hceHHfp4pz4+TtdpwgQU1ZZrHLxz5Ww396C7V0+4gZfML6NiJsXGX0ee
+         JH8ev5P9ETSKfg23MYMZk0+wCfdkXaB6ZdCxA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kfk3WjPXEkjxxu8199TyQcaEYE4ZTR9Ij1w+1/8nPfw=;
+        b=aeN5bNV5sw0fqS8zozv7WcQRCpDa4JhZph0hHhjEb86Yk5uvChR9gRE+HM9byxSFsg
+         GlPiF0qp+X09E0QBFUtNEzAhu2scjn8TaLxTcMgMLdGFGFtej3bjnqUgSLIEKdhjQq+1
+         WvCUKIoLlFjsOzsfwVk/Voiie72Nwpq4Ey+zFmLlNh3iKaLq/aXWoMjvlP0tSokekton
+         FnnZ6WwOq7nFbFMdHrnCwxe3mZqoxhqISjsiwLaOVT2eOLlaX+UDkF0fjNDrfbkb0zJ5
+         1OyF7Lo6BesXHh96Tu6zigoJ4cUkxWoRKoYC06dQ0MCCYv2TC6Y6gQuD5DXxUhwvOZdT
+         ksDw==
+X-Gm-Message-State: AOAM531uL1jNHZs4mD9wiSSo0Gho/YRVLntNJXAxJPFmGcaytof4N17y
+        s/Q0cYkv7IQh8v/Kf39QluA0skrXjyIpfunxvDOrfg==
+X-Google-Smtp-Source: ABdhPJy1tZXzs9j0t8xppWPuJELnuJwtP1u0RmOyO+w6ooXm6MxcxMk+d/0hrlQ8HPVXyVkQU3C1j/iRgSE3YH+Jw9E=
+X-Received: by 2002:a2e:b0d6:0:b0:255:7d62:d75c with SMTP id
+ g22-20020a2eb0d6000000b002557d62d75cmr17775894ljl.118.1654761825131; Thu, 09
+ Jun 2022 01:03:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <22d07a44c80d8e8e1e82b9a806ddc8c6bbb2606e.1654759036.git.jpoimboe@kernel.org>
+In-Reply-To: <22d07a44c80d8e8e1e82b9a806ddc8c6bbb2606e.1654759036.git.jpoimboe@kernel.org>
+From:   Joe Damato <jdamato@fastly.com>
+Date:   Thu, 9 Jun 2022 11:03:33 +0300
+Message-ID: <CALALjgy60jZAOvFfD1HSfPNcSxhtuPq5D_1r=71TthP0B3ipQg@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/mm: Fix RESERVE_BRK() for older binutils
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        jiangshanlai@gmail.com, bp@suse.de, brgerst@gmail.com,
+        Byungchul Park <byungchul.park@lge.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 16:30 +0800, CK Hu wrote:
-> Hi, Rex:
-> 
-> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> > 
-> > It supports the mt8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > ---
-> 
-> [snip]
-> 
-> > +
-> > +static bool mtk_dp_parse_capabilities(struct mtk_dp *mtk_dp)
-> > +{
-> > +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
-> > +	u8 val;
-> > +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
-> > +
-> > +	if (!mtk_dp_plug_state(mtk_dp))
-> > +		return false;
-> > +
-> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER,
-> > DP_SET_POWER_D0);
-> > +	/* Wait for power on */
-> > +	usleep_range(2000, 5000);
-> > +
-> > +	drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
-> > +
-> > +	memcpy(mtk_dp->rx_cap, buf, min(sizeof(mtk_dp->rx_cap),
-> > sizeof(buf)));
-> 
-> sizeof(mtk_dp->rx_cap) is identical to sizeof(buf), so
-> 
-> drm_dp_read_dpcd_caps(&mtk_dp->aux, mtk_dp->rx_cap);
-> 
-> 
+On Thu, Jun 09, 2022 at 12:17:32AM -0700, Josh Poimboeuf wrote:
+> With binutils 2.26, RESERVE_BRK() causes a build failure:
+>
+>   /tmp/ccnGOKZ5.s: Assembler messages:
+>   /tmp/ccnGOKZ5.s:98: Error: missing ')'
+>   /tmp/ccnGOKZ5.s:98: Error: missing ')'
+>   /tmp/ccnGOKZ5.s:98: Error: missing ')'
+>   /tmp/ccnGOKZ5.s:98: Error: junk at end of line, first unrecognized
+>   character is `U'
+>
+> The problem is this line:
+>
+>   RESERVE_BRK(early_pgt_alloc, INIT_PGT_BUF_SIZE)
+>
+> Specifically, the INIT_PGT_BUF_SIZE macro which (via PAGE_SIZE's use
+> _AC()) has a "1UL", which makes older versions of the assembler unhappy.
+> Unfortunately the _AC() macro doesn't work for inline asm.
+>
+> Inline asm was only needed here to convince the toolchain to add the
+> STT_NOBITS flag.  However, if a C variable is placed in a section whose
+> name is prefixed with ".bss", GCC and Clang automatically set
+> STT_NOBITS.  In fact, ".bss..page_aligned" already relies on this trick.
+>
+> So fix the build failure (and simplify the macro) by allocating the
+> variable in C.
+>
+> Also, add NOLOAD to the ".brk" output section clause in the linker
+> script.  This is a failsafe in case the ".bss" prefix magic trick ever
+> stops working somehow.  If there's a section type mismatch, the GNU
+> linker will force the ".brk" output section to be STT_NOBITS.  The LLVM
+> linker will fail with a "section type mismatch" error.
+>
+> Note this also changes the name of the variable from .brk.##name to
+> __brk_##name.  The variable names aren't actually used anywhere, so it's
+> harmless.
+>
+> Reported-by: Joe Damato <jdamato@fastly.com>
+> Reported-by: Byungchul Park <byungchul.park@lge.com>
+> Fixes: a1e2c031ec39 ("x86/mm: Simplify RESERVE_BRK()")
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  arch/x86/include/asm/setup.h  | 38 +++++++++++++++++++----------------
+>  arch/x86/kernel/setup.c       |  5 -----
+>  arch/x86/kernel/vmlinux.lds.S |  4 ++--
+>  3 files changed, 23 insertions(+), 24 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
+> index 7590ac2570b9..f8b9ee97a891 100644
+> --- a/arch/x86/include/asm/setup.h
+> +++ b/arch/x86/include/asm/setup.h
+> @@ -108,19 +108,16 @@ extern unsigned long _brk_end;
+>  void *extend_brk(size_t size, size_t align);
+>
+>  /*
+> - * Reserve space in the brk section.  The name must be unique within the file,
+> - * and somewhat descriptive.  The size is in bytes.
+> + * Reserve space in the .brk section, which is a block of memory from which the
+> + * caller is allowed to allocate very early (before even memblock is available)
+> + * by calling extend_brk().  All allocated memory will be eventually converted
+> + * to memblock.  Any leftover unallocated memory will be freed.
+>   *
+> - * The allocation is done using inline asm (rather than using a section
+> - * attribute on a normal variable) in order to allow the use of @nobits, so
+> - * that it doesn't take up any space in the vmlinux file.
+> + * The size is in bytes.
+>   */
+> -#define RESERVE_BRK(name, size)                                              \
+> -     asm(".pushsection .brk_reservation,\"aw\",@nobits\n\t"          \
+> -         ".brk." #name ":\n\t"                                       \
+> -         ".skip " __stringify(size) "\n\t"                           \
+> -         ".size .brk." #name ", " __stringify(size) "\n\t"           \
+> -         ".popsection\n\t")
+> +#define RESERVE_BRK(name, size)                                      \
+> +     __section(".bss..brk") __aligned(1) __used      \
+> +     static char __brk_##name[size]
+>
+>  extern void probe_roms(void);
+>  #ifdef __i386__
+> @@ -133,12 +130,19 @@ asmlinkage void __init x86_64_start_reservations(char *real_mode_data);
+>
+>  #endif /* __i386__ */
+>  #endif /* _SETUP */
+> -#else
+> -#define RESERVE_BRK(name,sz)                         \
+> -     .pushsection .brk_reservation,"aw",@nobits;     \
+> -.brk.name:                                           \
+> -1:   .skip sz;                                       \
+> -     .size .brk.name,.-1b;                           \
+> +
+> +#else  /* __ASSEMBLY */
+> +
+> +.macro __RESERVE_BRK name, size
+> +     .pushsection .bss..brk, "aw"
+> +SYM_DATA_START(__brk_\name)
+> +     .skip \size
+> +SYM_DATA_END(__brk_\name)
+>       .popsection
+> +.endm
+> +
+> +#define RESERVE_BRK(name, size) __RESERVE_BRK name, size
+> +
+>  #endif /* __ASSEMBLY__ */
+> +
+>  #endif /* _ASM_X86_SETUP_H */
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index 3ebb85327edb..bd6c6fd373ae 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -67,11 +67,6 @@ RESERVE_BRK(dmi_alloc, 65536);
+>  #endif
+>
+>
+> -/*
+> - * Range of the BSS area. The size of the BSS area is determined
+> - * at link time, with RESERVE_BRK() facility reserving additional
+> - * chunks.
+> - */
+>  unsigned long _brk_start = (unsigned long)__brk_base;
+>  unsigned long _brk_end   = (unsigned long)__brk_base;
+>
+> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+> index f5f6dc2e8007..81aba718ecd5 100644
+> --- a/arch/x86/kernel/vmlinux.lds.S
+> +++ b/arch/x86/kernel/vmlinux.lds.S
+> @@ -385,10 +385,10 @@ SECTIONS
+>       __end_of_kernel_reserve = .;
+>
+>       . = ALIGN(PAGE_SIZE);
+> -     .brk : AT(ADDR(.brk) - LOAD_OFFSET) {
+> +     .brk (NOLOAD) : AT(ADDR(.brk) - LOAD_OFFSET) {
+>               __brk_base = .;
+>               . += 64 * 1024;         /* 64k alignment slop space */
+> -             *(.brk_reservation)     /* areas brk users have reserved */
+> +             *(.bss..brk)            /* areas brk users have reserved */
+>               __brk_limit = .;
+>       }
+>
+> --
+> 2.34.3
+>
 
-Hello CK,
+I applied the v2 patch on top of commit 58f9d52ff689 ("Merge tag
+'net-5.19-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net") and the kernel
+builds successfully for me.
 
-I will drop buf[].
+The resulting kernel boots fine on the machine, as well.
 
-> > +	mtk_dp->rx_cap[DP_TRAINING_AUX_RD_INTERVAL] &=
-> > DP_TRAINING_AUX_RD_MASK;
-> > +
-> > +	train_info->link_rate =
-> > +		min_t(int, mtk_dp->max_linkrate, buf[mtk_dp-
-> > > max_linkrate]);
-> > 
-> > +	train_info->lane_count =
-> > +		min_t(int, mtk_dp->max_lanes,
-> > drm_dp_max_lane_count(buf));
-> > +
-> > +	train_info->tps3 = drm_dp_tps3_supported(buf);
-> > +	train_info->tps4 = drm_dp_tps4_supported(buf);
-> > +
-> > +	train_info->sink_ssc =
-> > +		!!(buf[DP_MAX_DOWNSPREAD] & DP_MAX_DOWNSPREAD_0_5);
-> > +
-> > +	train_info->sink_ssc = false;
-> 
-> What does these two statement do?
-> 
+I built the kernel with:
+  - gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609
+  - binutils 2.26.1-1ubuntu1~16.04.8+esm1
 
-ssc = Spread spectrum clock.
-it's for both edp and dp.
+I have not tested with any other build toolchains.
 
-BRs,
-Bo-Chen
-
-> Regards,
-> CK
-> 
-> > +
-> > +	drm_dp_dpcd_readb(&mtk_dp->aux, DP_MSTM_CAP, &val);
-> > +	if (val & DP_MST_CAP) {
-> > +		/* Clear DP_DEVICE_SERVICE_IRQ_VECTOR_ESI0 */
-> > +		drm_dp_dpcd_readb(&mtk_dp->aux,
-> > +				  DP_DEVICE_SERVICE_IRQ_VECTOR_ESI0,
-> > &val);
-> > +		if (val)
-> > +			drm_dp_dpcd_writeb(&mtk_dp->aux,
-> > +					   DP_DEVICE_SERVICE_IRQ_VECTOR
-> > _ESI0,
-> > +					   val);
-> > +	}
-> > +
-> > +	return true;
-> > +}
-> > +
-> 
-> 
-
+Tested-by: Joe Damato <jdamato@fastly.com>

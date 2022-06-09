@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E70C54458C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F87454458E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiFIIUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S231426AbiFIIVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiFIIUv (ORCPT
+        with ESMTP id S229625AbiFIIU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:20:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C582B3B7E7C
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:20:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4013F61335
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:20:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D446C34114
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:20:48 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EYtWQSgb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654762845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HTw/gzxaEhLz0nOO9Yj7AYPfaN2PQMST+llLMdzvydw=;
-        b=EYtWQSgbPAUzIQ2wOciMa+e2kTiux9AzFT975Rk5Sjd67oALzPSbeAwjjwrtU/pphEZeKN
-        H/auFZ50/S3m1XKEliNuIetYpeX31YgK/vH6+2v5wKBjtSYASBj4hVuNyZ8wX3sDdh/xFF
-        6K/ANd16GVjNVWMfWzk7NKJoVul7C8g=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 405f423e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Thu, 9 Jun 2022 08:20:45 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id v22so40542762ybd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:20:45 -0700 (PDT)
-X-Gm-Message-State: AOAM530mNOF2ztYz44T67Vt+7AIWfeOOOAI0XEGn8VvpF5dsJTqHUK7j
-        L9TVOKQ5nt0EtC/YOwuZP9EXK/LjHNOmpTF5EjM=
-X-Google-Smtp-Source: ABdhPJwavQ6tDj1c3W2gP6rzri/NSuiXE0/Aiadbq+tXb2epGwQOC3X2d2qK5Top6IhY7jfK/xTXrPuTTgE/QZt/DZ8=
-X-Received: by 2002:a25:83c2:0:b0:65c:bc75:800b with SMTP id
- v2-20020a2583c2000000b0065cbc75800bmr38694681ybm.373.1654762844293; Thu, 09
- Jun 2022 01:20:44 -0700 (PDT)
+        Thu, 9 Jun 2022 04:20:56 -0400
+Received: from giacobini.uberspace.de (giacobini.uberspace.de [185.26.156.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB8E3B926A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:20:50 -0700 (PDT)
+Received: (qmail 26772 invoked by uid 990); 9 Jun 2022 08:20:48 -0000
+Authentication-Results: giacobini.uberspace.de;
+        auth=pass (plain)
+Message-ID: <d950a0cb-72d3-aa1a-24c1-5a9380681dfd@eknoes.de>
+Date:   Thu, 9 Jun 2022 10:20:47 +0200
 MIME-Version: 1.0
-References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
- <Ykyf5Zuz1W8yHhNY@zx2c4.com>
-In-Reply-To: <Ykyf5Zuz1W8yHhNY@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 9 Jun 2022 10:20:33 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
-Message-ID: <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
-Subject: 2 second nvme initialization delay regression in 5.18 [Was: Re: [bug
- report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR observed
- during blktests]
-To:     Yi Zhang <yi.zhang@redhat.com>, alan.adamson@oracle.com
-Cc:     "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] Bluetooth: RFCOMM: Use skb_trim to trim checksum
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev <netdev@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220608135105.146452-1-soenke.huster@eknoes.de>
+ <CANn89iJ2gf4JfU8KZUYFSA8KgS-gEjhBZtX9WvUmWv2c8kPkJQ@mail.gmail.com>
+From:   =?UTF-8?Q?S=c3=b6nke_Huster?= <soenke.huster@eknoes.de>
+In-Reply-To: <CANn89iJ2gf4JfU8KZUYFSA8KgS-gEjhBZtX9WvUmWv2c8kPkJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Bar: /
+X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-1.07202) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: 0.327979
+Received: from unknown (HELO unkown) (::1)
+        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Thu, 09 Jun 2022 10:20:48 +0200
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+Hi Eric,
 
-On Tue, Apr 5, 2022 at 10:00 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> Using a Samsung SSD 970 EVO Plus 2TB, firmware version 2B2QEXM7, in case
-> that's useful info.
->
-> I also noticed a ~2 second boot delay on 5.18-rc1:
+On 08.06.22 17:33, Eric Dumazet wrote:
+> On Wed, Jun 8, 2022 at 6:51 AM Soenke Huster <soenke.huster@eknoes.de> wrote:
+>>
+>> Use the skb helper instead of direct manipulation. This fixes the
+>> following page fault, when connecting my Android phone:
+>>
+>>     BUG: unable to handle page fault for address: ffffed1021de29ff
+>>     #PF: supervisor read access in kernel mode
+>>     #PF: error_code(0x0000) - not-present page
+>>     RIP: 0010:rfcomm_run+0x831/0x4040 (net/bluetooth/rfcomm/core.c:1751)
+>>
+>> Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+>> ---
+>>  net/bluetooth/rfcomm/core.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
+>> index 7324764384b6..7360e905d045 100644
+>> --- a/net/bluetooth/rfcomm/core.c
+>> +++ b/net/bluetooth/rfcomm/core.c
+>> @@ -1747,8 +1747,8 @@ static struct rfcomm_session *rfcomm_recv_frame(struct rfcomm_session *s,
+>>         type = __get_type(hdr->ctrl);
+>>
+>>         /* Trim FCS */
+>> -       skb->len--; skb->tail--;
+>> -       fcs = *(u8 *)skb_tail_pointer(skb);
+>> +       skb_trim(skb, skb->len - 1);
+>> +       fcs = *(skb->data + skb->len);
+>>
+> 
+> Hmmm... I do not see any difference before/after in term of memory
+> dereference to get fcs.
+> 
+> I think you should give more details on how exactly the bug triggers.
 
-Just FYI, I am still seeing this delay in 5.19-rc1.
+Sorry, yesterday I was not able to track down why exactly it crashes,
+but by now I think I figured it out.
 
-Boot lines from 5.17:
+The crash happens when using Bluetooth in a virtual machine.
+On connecting my Android phone to the physical controller which I use 
+inside the virtual machine via the VirtIO driver, after some seconds
+the crash occurs.
 
-[    0.882680] nvme nvme1: missing or invalid SUBNQN field.
-[    0.882719] nvme nvme1: Shutdown timeout set to 10 seconds
-[    0.885227] nvme nvme1: 8/0/0 default/read/poll queues
-[    0.887910]  nvme1n1: p1 p2 p3
-[    0.888317] nvme nvme0: missing or invalid SUBNQN field.
-[    0.888361] nvme nvme0: Shutdown timeout set to 8 seconds
-[    0.906301] nvme nvme0: 16/0/0 default/read/poll queues
-[    0.910087]  nvme0n1: p1 p2
+Before the trimming step, I examined the skb in gdb and saw, that 
+skb->tail is zero. Thus, skb->tail--; modifies the unsigned integer to -1
+resp. MAX_UINT. In skb_tail_pointer, skb->head + skb->tail is calculated
+which results in the page fault.
 
-Boot lines from 5.18 & 5.19:
+By using skb_trim, skb->tail is set to the accurate value and thus the
+issue is fixed.
 
-[    0.846827] nvme nvme1: missing or invalid SUBNQN field.
-[    0.846857] nvme nvme1: Shutdown timeout set to 10 seconds
-[    0.849043] nvme nvme1: 8/0/0 default/read/poll queues
-[    0.851595]  nvme1n1: p1 p2 p3
-[    3.226962] nvme nvme0: Shutdown timeout set to 8 seconds
-[    3.253890] nvme nvme0: 16/0/0 default/read/poll queues
-[    3.263778]  nvme0n1: p1 p2
-
-The Samsung 970 EVO Plus has a ~2 second delay that wasn't there in 5.17.
-
-Any idea what's going on?
-
-Thanks,
-Jason
+I am not an expert in the Linux kernel area, do you think there is an
+underlying issue anywhere else? When using my Android phone on my host
+computer, I do not have that problem - it might be in some 
+(e.g. virtio_bt?) driver? On the other hand, with the patch my problem
+is solved and the phone is usable in the virtual machine!

@@ -2,165 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283DE5456FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E49545703
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345492AbiFIWMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S244963AbiFIWOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbiFIWM3 (ORCPT
+        with ESMTP id S235102AbiFIWOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:12:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885B414D794;
-        Thu,  9 Jun 2022 15:12:28 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.172])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 9 Jun 2022 18:14:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F55160874;
+        Thu,  9 Jun 2022 15:14:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9545B6601752;
-        Thu,  9 Jun 2022 23:12:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654812746;
-        bh=UeKHAwZPWYRBlM0ssIlCFA3SoNmcDziraTI4lnAG4pA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ESB8FynxqAB0ZtuFqhjILyFPW8Qt44o3mf8r3aaah/qSTCaOKa4l6MdGxPPkwFaZr
-         mrU7aoXWTZqBa2pENpf1ZjqZG6HAN2Edi5vwG47coNqqmr4fYDWX6XnxCHvVE6Q2QZ
-         1gSbU5gQ6NnADbIVuMvUC2qIiATIMvRsNYdmnQZUe7nvRO0JEDz+EI7o62ya+4od79
-         BzIOWPX2LmNeix1cMuQYNUIP5rbGdF+P20VjTG2WTOBVDG18UgpgnZusg64k2nS7zs
-         1jtF0hrlPvmvcAyPqzZpZz1Eu5IQcFhtLDjyXZe0OIMxcLA7GaDmVU+TK86Rn3Ku/6
-         pHxHEWkA1DH+g==
-Received: by mercury (Postfix, from userid 1000)
-        id 646CB10605B9; Fri, 10 Jun 2022 00:12:24 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 00:12:24 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@google.com,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Subject: Re: [RESEND 1/2] power_supply: Register cooling device outside of
- probe
-Message-ID: <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
-References: <20220531183054.6476-1-quic_manafm@quicinc.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3815CB83099;
+        Thu,  9 Jun 2022 22:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8990C34114;
+        Thu,  9 Jun 2022 22:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654812873;
+        bh=H+jLa2rwFapf2Ofk7AqrjLvwyTI2J1EztZNbf9m0syw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=lEkzbE74y9VKqlOW0aCd+63moxuAPWhVC79dtjZKcpDjP2CRWzAAn1OkGvueerRvC
+         uKlPdp3ZxGJvAawBGHgNz662O022+tnX3ZLy1mx59fK/rwUkh9iDvjDUZLklKVXsrN
+         DiQ4w4Bb/F4Xo97a/Vx7bWD8fQ4LJlqO14LgGrw1qnv4QF/YdnTk72CyZj2mnsxxf2
+         EtfozD9ebbjzLFpM4ySgwRi5zvaCkdec6M/6KuRO16wR3JBPZKCE+SApPXydGqnTSC
+         AC6wSbgTqzA+2amQpeJy45P4jzzzHFCJQHj0VzugzGD23C+85wURnohiar8RROZIkN
+         d5f4f7R5rpLVw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dyokn4q3tm7tzwko"
-Content-Disposition: inline
-In-Reply-To: <20220531183054.6476-1-quic_manafm@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220608095623.22327-8-tmaimon77@gmail.com>
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-8-tmaimon77@gmail.com>
+Subject: Re: [PATCH v2 07/20] clk: npcm8xx: add clock controller
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Tomer Maimon <tmaimon77@gmail.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>, arnd@arndb.de,
+        avifishman70@gmail.com, benjaminfair@google.com,
+        biju.das.jz@bp.renesas.com, bjorn.andersson@linaro.org,
+        catalin.marinas@arm.com, daniel.lezcano@linaro.org,
+        geert+renesas@glider.be, gregkh@linuxfoundation.org,
+        j.neuschaefer@gmx.net, jirislaby@kernel.org, joel@jms.id.au,
+        krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        lkundrak@v3.sk, marcel.ziswiler@toradex.com,
+        mturquette@baylibre.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        olof@lixom.net, p.zabel@pengutronix.de, robert.hancock@calian.com,
+        robh+dt@kernel.org, shawnguo@kernel.org, tali.perry1@gmail.com,
+        tglx@linutronix.de, venture@google.com, vkoul@kernel.org,
+        will@kernel.org, wim@linux-watchdog.org, yuenn@google.com
+Date:   Thu, 09 Jun 2022 15:14:31 -0700
+User-Agent: alot/0.10
+Message-Id: <20220609221433.B8990C34114@smtp.kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Tomer Maimon (2022-06-08 02:56:10)
+> diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
+> new file mode 100644
+> index 000000000000..40340c3611b5
+> --- /dev/null
+> +++ b/drivers/clk/clk-npcm8xx.c
+> @@ -0,0 +1,756 @@
+[...]
+> +
+> +#define PLLCON_LOKI    BIT(31)
+> +#define PLLCON_LOKS    BIT(30)
+> +#define PLLCON_FBDV    GENMASK(27, 16)
+> +#define PLLCON_OTDV2   GENMASK(15, 13)
+> +#define PLLCON_PWDEN   BIT(12)
+> +#define PLLCON_OTDV1   GENMASK(10, 8)
+> +#define PLLCON_INDV    GENMASK(5, 0)
+> +
+> +static unsigned long npcm8xx_clk_pll_recalc_rate(struct clk_hw *hw,
+> +                                                unsigned long parent_rat=
+e)
+> +{
+> +       struct npcm8xx_clk_pll *pll =3D to_npcm8xx_clk_pll(hw);
+> +       unsigned long fbdv, indv, otdv1, otdv2;
+> +       unsigned int val;
+> +       u64 ret;
+> +
+> +       if (parent_rate =3D=3D 0) {
+> +               pr_debug("%s: parent rate is zero", __func__);
 
---dyokn4q3tm7tzwko
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Missing newline.
 
-Hi,
-
-On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Pallikunhi =
-wrote:
-> Registering the cooling device from the probe can result in the
-> execution of get_property() function before it gets initialized.
->=20
-> To avoid this, register the cooling device from a workqueue
-> instead of registering in the probe.
->=20
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> ---
-
-This removes error handling from the psy_register_cooler() call, so
-it introduces a new potential problem. If power_supply_get_property()
-is called to early -EAGAIN is returned. So can you elaborate the problem
-that you are seeing with the current code?
-
--- Sebastian
-
->  drivers/power/supply/power_supply_core.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 385814a14a0a..74623c4977db 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
->  }
->  EXPORT_SYMBOL_GPL(power_supply_changed);
-> =20
-> +static int psy_register_cooler(struct power_supply *psy);
->  /*
->   * Notify that power supply was registered after parent finished the pro=
-bing.
->   *
-> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
->   * calling power_supply_changed() directly from power_supply_register()
->   * would lead to execution of get_property() function provided by the dr=
-iver
->   * too early - before the probe ends.
-> + * Also, registering cooling device from the probe will execute the
-> + * get_property() function. So register the cooling device after the pro=
-be.
->   *
->   * Avoid that by waiting on parent's mutex.
->   */
-> @@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struc=
-t work_struct *work)
->  	}
-> =20
->  	power_supply_changed(psy);
-> +	psy_register_cooler(psy);
-> =20
->  	if (psy->dev.parent)
->  		mutex_unlock(&psy->dev.parent->mutex);
-> @@ -1261,10 +1265,6 @@ __power_supply_register(struct device *parent,
->  	if (rc)
->  		goto register_thermal_failed;
-> =20
-> -	rc =3D psy_register_cooler(psy);
-> -	if (rc)
-> -		goto register_cooler_failed;
-> -
->  	rc =3D power_supply_create_triggers(psy);
->  	if (rc)
->  		goto create_triggers_failed;
-> @@ -1294,8 +1294,6 @@ __power_supply_register(struct device *parent,
->  add_hwmon_sysfs_failed:
->  	power_supply_remove_triggers(psy);
->  create_triggers_failed:
-> -	psy_unregister_cooler(psy);
-> -register_cooler_failed:
->  	psy_unregister_thermal(psy);
->  register_thermal_failed:
->  	device_del(dev);
-
---dyokn4q3tm7tzwko
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKicEUACgkQ2O7X88g7
-+pobxg//et2r5ybQ+rdiNpPXGulCO2f3CjkGSb3U14qmfM9ror6eqk3Ow+BAxVjV
-Dp4dYzxjOWZ1jjmUETVH2mgLvxe5EdOFDl/95Lcc8X9RDOl+xAwdf6UheT7omCsw
-cvq4HBLPpV0SiZAiSY7H92u4XPc1o5FNlW2ilCP3oFNH+XlI8y/GWKLxYamuEf4k
-upJV64TUtlC2NTwkAopIIHB92m5T1CW9+9jUe5ISRP1N0P5wEvz+vypsZ2DSjYDO
-nRL9XNcsSq4rnAeol8wxLnSS16IB756/3FgopVq/jFH/6p3ViIYXIEFmkHM8dl7A
-jC5N3Zg4Ro8zLOVgNYeppqdvE6xIplroRyRbelYh0K0LcK+ONIsa+pRsCWWF8fgZ
-9GNZ3TQdFUgdm2Yf2mWoB6PYT8wWu4W+X4QR4t6YS4VbHXzoHhCJdZNnC84xBU6c
-/TxVZG0vXZfscnrEV7NMBYT4l6qJGUnKu4OgEjeua+Uv7bp40qWiMaOd97KKpH3m
-lSqkmUwNN9sU1bqRupGUP1UJDnygBGVhcMGd/VbwUpIepNaEITkwoxaoYvNT3LZ/
-cJxAdbh4NtkY0xEuZnmjGEvDjNqD84kTc4expQQkmI3QcaLpgGcB/WudMfwP7T65
-rEfAAciOmyku6nB05bFmfkkS49uMourYXUPMZ74vv7QQFO7nnFI=
-=UWC+
------END PGP SIGNATURE-----
-
---dyokn4q3tm7tzwko--
+> +               return 0;
+> +       }
+> +
+> +       val =3D readl_relaxed(pll->pllcon);
+> +
+> +       indv =3D FIELD_GET(PLLCON_INDV, val);

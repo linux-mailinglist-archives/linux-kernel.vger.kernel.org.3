@@ -2,141 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82867545516
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9984545518
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344867AbiFITkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 15:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S1343505AbiFITk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 15:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbiFITj4 (ORCPT
+        with ESMTP id S1344881AbiFITkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 15:39:56 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB33C40;
-        Thu,  9 Jun 2022 12:39:55 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id n197so11406442qke.1;
-        Thu, 09 Jun 2022 12:39:55 -0700 (PDT)
+        Thu, 9 Jun 2022 15:40:22 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DFC2BB05
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:40:20 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id l204so43469140ybf.10
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 12:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5tfF4G+wmNAqBae/QUeKWyxAUWGYbkKnmvZF4fbIoOA=;
-        b=OfajvfkaCXPXne9Tib4Z5tBb+GqvdYz7rFZja2WRBM8rUTg3CM5LCehV6+ORtWSbha
-         d1g3DTZJhR6Lsnz9A/ZCKsz2MnQxChU20f7QzbeYBLXlrdI83VcCWL4gpAIwxRoC5sdp
-         UO9npFWrCr+62RwsHFfUAOF7BHpBIqfm8esg2DTyR0ApIBM+4uVCW1lJ1Thg9iOEG2Iq
-         zLZ/3LD54gB4wzey7hQc909D8mYWIyw8fb3CuYk4ojJ/xzJVxkAusj9X3hwahc/OPVdK
-         sXfOw6FhqmEUG3xZMiHOwdYYqpW+36pvEdy0tX5yuRjTIstY/EF4s9YMLYiYQyqIJg/E
-         hKqw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XIsenmbvX8zPgepE4b2x80VaH35pgU5I4dBAafr0Wdg=;
+        b=EiAneKFx7dQ6UHpgwUSCPsCinqQ8+kRNHunXgahvbWb2xfnc7G+Veja9BcCkB55Bdp
+         1sxt1RRjdz3e+3aXrcUsnoo/WL+HVe0gxHuJg/+VcuFznFWq68jfhAQ8bAwewhKtKtLV
+         fxp2yjcVpnZQ/UQkSl4zsidwwLkg9Tfxy1w+YGGF2jci7Sx9Xv2SMHtSgzwjKxyk2Mnq
+         xOzOUkdy/VB465plUgdJsQHvYcidt1ybKCQe80RC1kGrTYvlmRTN3a5tWcP3nVr3EFym
+         HoyKTNB/EoKgBToBYIc7gfp339AU9VIjVixM14LtxIhZxCZQdJyWdUa+NIqOwVj4sYX7
+         TkvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5tfF4G+wmNAqBae/QUeKWyxAUWGYbkKnmvZF4fbIoOA=;
-        b=KKfwLVYva77BxawnVWMRSIHPKIp8JJD8N7lwX/eSa3Htfj8EySEe0TF3gurcHSI5dU
-         1aysDJpEjDx4BNCM0q/gdoAcQuD2uxWyZX6teoAmKljEDmE0QN2dVgvRBqez0GsRUU+O
-         NsTzPogKhl7/avdPqLAOYhcLYoF4zjVJiK6u3IU2uVxG76R0+wQCYuOaFy/TD1A0/qX8
-         85nh6VisuUvm0cjz680Gd5R9c7pOI4AMXdt60uo8F4jmzju1iuubWYuq0qORirku4H3j
-         CQ/iKFyDH5TgcdhdlY7E4aT+t2aVZVhMEY5aSnd+1kSAKN9gWlbWKTLiDL3AdTC13E3A
-         F3QA==
-X-Gm-Message-State: AOAM531xRRXM0k8/K5idJJ5mM5/rL8iLQbVPj5BgiYfqK/fC3p1Cflys
-        xxrrmvZ8UCbXdZn57EhyjNe1lk7eV87zl4J7
-X-Google-Smtp-Source: ABdhPJxGOV2z1lvvqjxepBAVl/Yg+C7IQDKt8+SVGgcnopU5epeGhl3FOP77u7+BUnSSAyTZosH39g==
-X-Received: by 2002:a05:620a:27c2:b0:6a7:1db:a6e2 with SMTP id i2-20020a05620a27c200b006a701dba6e2mr7069571qkp.150.1654803594959;
-        Thu, 09 Jun 2022 12:39:54 -0700 (PDT)
-Received: from Sassy (bras-base-oshwon9563w-grc-26-142-113-132-114.dsl.bell.ca. [142.113.132.114])
-        by smtp.gmail.com with ESMTPSA id u3-20020a372e03000000b006a323e60e29sm19032378qkh.135.2022.06.09.12.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 12:39:54 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 15:39:53 -0400
-From:   Srivathsan Sivakumar <sri.skumar05@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
-        Coiby Xu <coiby.xu@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: qlge: qlge_main.c: convert do-while loops to for
- loops
-Message-ID: <YqJMieQ3Hf8qc6nj@Sassy>
-References: <YqIOp+cPXNxLAnui@Sassy>
- <20220609152653.GZ2146@kadam>
- <YqInZ/KNEJFN9kNS@Sassy>
- <20220609183419.GZ2168@kadam>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XIsenmbvX8zPgepE4b2x80VaH35pgU5I4dBAafr0Wdg=;
+        b=pN6x90ei1KELKR4tmR51p3xzVw3gHPsYlhMlG84VK6Rp+7LMF7+/9XG0GJ3kK6WCWc
+         Q8O4Kh0U3fPwSLsMr0Qwzwp4qR5N4+9VZcPkaFqBlwg62L42rnXo1egItFYmo/PKutE1
+         W8AYfpPc5dZygf50t3SO4cGngg+YfAaue66LL3z1j8b4zXeUk2rWKMl8uwoLZaFSePrV
+         LnHLE/DWJ/LoAI6cAkw1oqjjQlCyegTpztDmEdO3NiN05ZHs5eewTWicUdmI7guL/m2p
+         N/gK/aLKc5wgJoXqXwjB6HMPbnk9nGwsVoRo1HTHzNya61ai283jpjrWNKd0Tq+dOggx
+         0Fqg==
+X-Gm-Message-State: AOAM530we0LUMAWXACmb0F6DG+wLTNYmGcPkH+YoxYkj7N8ZOyTOVvzq
+        dIP+Ntkc/MrmDoGhm9bKQumyCrkyJt6PwXAK54qXfw==
+X-Google-Smtp-Source: ABdhPJxurxfmMQVzOd4DmWf+6cz6lR2YHg//auWGZXvIk9b/uhLCwmVEkHtjn8uxxTPnDooIqhWMIFyfCKSm0IOW+l4=
+X-Received: by 2002:a25:cb8a:0:b0:65c:a718:475c with SMTP id
+ b132-20020a25cb8a000000b0065ca718475cmr42869165ybg.352.1654803619451; Thu, 09
+ Jun 2022 12:40:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609183419.GZ2168@kadam>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220609025515.2086253-1-joshdon@google.com> <CAKfTPtCc4NZ51qruKX1zROFHqg-_MQBadaJfVbYPxT=7c4So=Q@mail.gmail.com>
+In-Reply-To: <CAKfTPtCc4NZ51qruKX1zROFHqg-_MQBadaJfVbYPxT=7c4So=Q@mail.gmail.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Thu, 9 Jun 2022 12:40:08 -0700
+Message-ID: <CABk29NtX7EZsAqrT8vXd6tgWe2HPRNPM=cWxFSSxBtW1MjFqOA@mail.gmail.com>
+Subject: Re: [PATCH] sched: allow newidle balancing to bail out of load_balance
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 09:34:19PM +0300, Dan Carpenter wrote:
-> On Thu, Jun 09, 2022 at 01:01:27PM -0400, Srivathsan Sivakumar wrote:
-> > On Thu, Jun 09, 2022 at 06:26:53PM +0300, Dan Carpenter wrote:
-> > > On Thu, Jun 09, 2022 at 11:15:51AM -0400, Srivathsan Sivakumar wrote:
-> > > > diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
-> > > > index 8c35d4c4b851..308e8b621185 100644
-> > > > --- a/drivers/staging/qlge/qlge_main.c
-> > > > +++ b/drivers/staging/qlge/qlge_main.c
-> > > > @@ -3006,13 +3006,13 @@ static int qlge_start_rx_ring(struct qlge_adapter *qdev, struct rx_ring *rx_ring
-> > > >  		cqicb->flags |= FLAGS_LL;	/* Load lbq values */
-> > > >  		tmp = (u64)rx_ring->lbq.base_dma;
-> > > >  		base_indirect_ptr = rx_ring->lbq.base_indirect;
-> > > > -		page_entries = 0;
-> > > > -		do {
-> > > > -			*base_indirect_ptr = cpu_to_le64(tmp);
-> > > > -			tmp += DB_PAGE_SIZE;
-> > > > -			base_indirect_ptr++;
-> > > > -			page_entries++;
-> > > > -		} while (page_entries < MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN));
-> > > > +
-> > > > +		for (page_entries = 0; page_entries <
-> > > > +			MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); page_entries++) {
-> > > > +				*base_indirect_ptr = cpu_to_le64(tmp);
-> > > > +				tmp += DB_PAGE_SIZE;
-> > > > +				base_indirect_ptr++;
-> > > > +		}
-> > > 
-> > > It's better than the original, but wouldn't it be better yet to write
-> > > something like this (untested):
-> > > 
-> > > 		for (i = 0; i <	MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); i++)
-> > > 			base_indirect_ptr[i] = cpu_to_le64(tmp + (i * DB_PAGE_SIZE));
-> > > 
-> > > Same with the other as well, obviously.
-> > > 
-> > > regards,
-> > > dan carpenter
-> > > 
-> > 
-> > Hello Dan,
-> > 
-> > Thanks for your input
-> > 
-> > wouldn't base_indirect_ptr point at a different endian value if tmp is
-> > added with (i * DB_PAGE_SIZE)?
-> 
-> tmp is cpu endian so we can do math on it.  Then we convert the result
-> to le64.  This is how it works before and after.  What isn't allowed
-> (doesn't make sense) is to do math on endian data so "cpu_to_le64(tmp) +
-> i * DB_PAGE_SIZE" is wrong.
-> 
-> Sparse can detect endian bugs like that:
-> https://lwn.net/Articles/205624/
-> 
-> regards,
-> dan carpenter
+Thanks Vincent,
+
+On Thu, Jun 9, 2022 at 6:42 AM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
 >
+> On Thu, 9 Jun 2022 at 04:55, Josh Don <joshdon@google.com> wrote:
+> >
+> > While doing newidle load balancing, it is possible for new tasks to
+> > arrive, such as with pending wakeups. newidle_balance() already accounts
+> > for this by exiting the sched_domain load_balance() iteration if it
+> > detects these cases. This is very important for minimizing wakeup
+> > latency.
+> >
+> > However, if we are already in load_balance(), we may stay there for a
+> > while before returning back to newidle_balance(). This is most
+> > exacerbated if we enter a 'goto redo' loop in the LBF_ALL_PINNED case. A
+> > very straightforward workaround to this is to adjust should_we_balance()
+> > to bail out if we're doing a CPU_NEWLY_IDLE balance and new tasks are
+> > detected.
+>
+> This one is close to the other tests and I wonder if it should be
+> better placed before taking the busiest rq lock and detaching some
+> tasks.
+>
+> Beside your use case where all other threads can't move in local cpu
+> and load_balance() loops and clears other cpus, most of the time is
+> probably spent in fbg() and fbq() so there are more chance that a task
+> woke in this meantime and I imagine that it becomes useless to take
+> lock and move tasks from another cpu if the local cpu is no more newly
+> idle.
+>
+> Have you tried other places in load_balance() and does this one
+> provide the lowest wakeup latency ?
+>
+> That being said, the current patch makes sense.
 
-I understand now, I'll send the revised patch soon
+I tested with another check after fbg/fbq and there wasn't any
+noticeable improvement to observed wakeup latency (not totally
+unexpected, since it only helps for wakeups that come during fbg/fbq).
+However, I don't think there's any harm in having that extra check in
+the CPU_NEWLY_IDLE case; might as well avoid bouncing the rq lock if
+we can. fbq+fbg are together taking ~3-4us per iteration in my repro.
 
-thanks, 
-Srivathsan
+If there are no objections I can send a v2 with the added delta:
+
+@@ -9906,6 +9906,16 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+                goto out_balanced;
+        }
+
++       /*
++        * fbg/fbq can take a while. In the newly idle case, recheck whether
++        * we should continue with balancing, since it is possible that a
++        * task woke up in the interim.
++        */
++       if (env.idle == CPU_NEWLY_IDLE && !should_we_balance(&env)) {
++               *continue_balancing = 0;
++               goto out_balanced;
++       }
++
+        BUG_ON(busiest == env.dst_rq);
+
+        schedstat_add(sd->lb_imbalance[idle], env.imbalance);

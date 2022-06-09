@@ -2,319 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC98544DB1
+	by mail.lfdr.de (Postfix) with ESMTP id 7C248544DB0
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343809AbiFINa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S1343822AbiFINan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236324AbiFINa0 (ORCPT
+        with ESMTP id S1343637AbiFINal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:30:26 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E9D20AA63;
-        Thu,  9 Jun 2022 06:30:20 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id BD9195C015E;
-        Thu,  9 Jun 2022 09:30:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 09 Jun 2022 09:30:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654781417; x=1654867817; bh=b5Igb65gfn
-        ctwI+RmVcDwth67sj2G3dGQC36Mmle1xo=; b=hrNMVTrTRQEGyDhZAL/1QrQN5N
-        P0aN116ZSMxkNjztkjs7NS5b8SROBAmQQ2f6/Zj4PknLBtlBogQclvBWWxOINVP0
-        +7/n3UUV+CfHpkIV6Zf8StrfdQZDG+DG8DSuzs/k+XfFddv/QH0WTA6wGszWRDFF
-        mqc/JOHVtif8H+QO1t0m2VSiZgl0YSobS06XoudyDIdaiX1swxxPQWY6PQw3zGZA
-        pebiAH0Nn480Gjmw2RQhCLkwVME+n33/UfCQV525mzNVo+TZ3Qp7tWajbaza49Ve
-        5QniqcFlN3hyTTgaq2hoMp8kHu4IS2lY77/5iAe/A8QpofRoh9tcMSp9jSjA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1654781417; x=1654867817; bh=b5Igb65gfnctwI+RmVcDwth67sj2
-        G3dGQC36Mmle1xo=; b=ot/lx1glgu8FRpUD/xpDMAyOKyxEnimxixAshRv3ShVN
-        BQx1BHHX6AE3QMHdGyxjezt1DOMO6qRx2i3r3kN/NM39i5q10X6ljWwl/6aeWvZw
-        ceW6PB7/Uh0WOYU2tC3SMujJPRWxLzpybAPG0wFUG4yXQrOFynu5Rs329tSAk44z
-        OneftqZUsmO28zU+feEChIJzjInZWgC9XIcBGKlhqO4QybiO/Syvvovny7rz/dok
-        HqbLUX6s2BBbzXrJAMSorOSjE9oRNRjxlarpm46SaHo83ygjYwMBmXlW7LUJKpyS
-        olMUEKcOGz4oKKv6F71TLyKc/4OQwUNOIqMI8H7K3A==
-X-ME-Sender: <xms:6fWhYucywhODPj6i5crRPjl4hFU8H56Fu8isoOVhHmVCUKiZQGRezw>
-    <xme:6fWhYoNSVWpOxurkhXGBXwEToKINNrxTNdf9FlNuLxJTUPT2RJMhtshYEfVtTcZZt
-    vBCxmgWI-eas9RL7Wo>
-X-ME-Received: <xmr:6fWhYvgrmpAVb_J5GJBjOy6HrXYNLWG0SEvKq6Oacu4y5Xr_r_fLiXs_lyD2b82aNiU90d-bd50ayXzANaSLYRBvwknUtkr39m6fa4k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtledgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:6fWhYr_0qPI8otBXQiksi79Fkts6kQK-hG8iMobHDaBiK1Wqa6eFwg>
-    <xmx:6fWhYquTK5wgI8fPDIOUoSBQfbOjhToyculi8vGvRxbGb_-oN2vpLg>
-    <xmx:6fWhYiEexJG-w-aiWLc_jBdbZSUCdJ6m1MV8f4Wq1xBfZgW5Hda5DQ>
-    <xmx:6fWhYqEc3mY9dgz5GkH3fofyEnl8ov46_axMc35-axSp5DtL7mButg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Jun 2022 09:30:16 -0400 (EDT)
-Date:   Thu, 9 Jun 2022 15:30:15 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 3/4] drm/bridge: Add devm_drm_bridge_add()
-Message-ID: <20220609133015.e4oj5xur3pzpw7tp@houat>
-References: <20220510192944.2408515-1-dianders@chromium.org>
- <20220510122726.v3.3.Iba4b9bf6c7a1ee5ea2835ad7bd5eaf84d7688520@changeid>
- <20220521091751.opeiqbmc5c2okdq6@houat>
- <CAD=FV=Wea0LT5umK4Xg87cDikim+dSuyLndfydO3_DnTujZr9Q@mail.gmail.com>
- <CAD=FV=XqJuPHxm7HYMvyHBL_zC-BBA_f0MBsZX-jHt7Pk9ngsQ@mail.gmail.com>
- <20220603082139.sfdxb5ndwpvlhklh@penduick>
- <CAA8EJpqrw63K_xxJjawLjEqP-05eUD-k6dy21162hcq7q07jgQ@mail.gmail.com>
- <20220603141405.dybjn3blifau6662@penduick>
- <CAD=FV=Wy_HnshYRcLFRddo0-w=v6sfnzhRYJd+eH0S7uMPxqaQ@mail.gmail.com>
+        Thu, 9 Jun 2022 09:30:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A754E7321
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654781440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1mC1QYmn978WfCQsrC8f3Fo2KEFYsaqiMkr4bIkQmJE=;
+        b=EOdmVzDzz1s6ayDQhdTsbgOhbOrt8mdUywlfWCkEjigFT/v8KcS7Hl0t8tCO99lWZWtvIn
+        +n//P0yTP+N4kx1vjVNLwdYambH+ND7Kg+sqLg4cVn9KqyLp0yg5A13wmZq/q/dtcaAOpz
+        /1IMfx+DCJaXZ84w/DFaBE37c7+enMM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-216-5ZC9NpOeMouIDj5Dlqd0Gg-1; Thu, 09 Jun 2022 09:30:37 -0400
+X-MC-Unique: 5ZC9NpOeMouIDj5Dlqd0Gg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 51D62800882;
+        Thu,  9 Jun 2022 13:30:36 +0000 (UTC)
+Received: from localhost (ovpn-13-143.pek2.redhat.com [10.72.13.143])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 775B81121314;
+        Thu,  9 Jun 2022 13:30:34 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 21:30:30 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 3/5] mm/vmalloc: Initialize VA's list node after unlink
+Message-ID: <YqH19tutOqChQpwM@MiWiFi-R3L-srv>
+References: <20220607093449.3100-1-urezki@gmail.com>
+ <20220607093449.3100-4-urezki@gmail.com>
+ <YqAVS7rYAmOmlLYH@MiWiFi-R3L-srv>
+ <CA+KHdyWDSUgFQnCPr_i=NwoDNFiqP2Q6Z6pik3djK=TQ=hoSZQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wxmfr2nwsxbwozb6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=Wy_HnshYRcLFRddo0-w=v6sfnzhRYJd+eH0S7uMPxqaQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CA+KHdyWDSUgFQnCPr_i=NwoDNFiqP2Q6Z6pik3djK=TQ=hoSZQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---wxmfr2nwsxbwozb6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jun 03, 2022 at 07:56:16AM -0700, Doug Anderson wrote:
-> Hi,
->=20
-> On Fri, Jun 3, 2022 at 7:14 AM Maxime Ripard <maxime@cerno.tech> wrote:
+On 06/09/22 at 02:36pm, Uladzislau Rezki wrote:
 > >
-> > On Fri, Jun 03, 2022 at 01:19:16PM +0300, Dmitry Baryshkov wrote:
-> > > On Fri, 3 Jun 2022 at 11:21, Maxime Ripard <maxime@cerno.tech> wrote:
-> > > >
-> > > > On Tue, May 31, 2022 at 02:06:34PM -0700, Doug Anderson wrote:
-> > > > > On Mon, May 23, 2022 at 10:00 AM Doug Anderson <dianders@chromium=
-=2Eorg> wrote:
-> > > > > > On Sat, May 21, 2022 at 2:17 AM Maxime Ripard <maxime@cerno.tec=
-h> wrote:
-> > > > > > > On Tue, May 10, 2022 at 12:29:43PM -0700, Douglas Anderson wr=
-ote:
-> > > > > > > > This adds a devm managed version of drm_bridge_add(). Like =
-other
-> > > > > > > > "devm" function listed in drm_bridge.h, this function takes=
- an
-> > > > > > > > explicit "dev" to use for the lifetime management. A few no=
-tes:
-> > > > > > > > * In general we have a "struct device" for bridges that mak=
-es a good
-> > > > > > > >   candidate for where the lifetime matches exactly what we =
-want.
-> > > > > > > > * The "bridge->dev->dev" device appears to be the encoder
-> > > > > > > >   device. That's not the right device to use for lifetime m=
-anagement.
-> > > > > > > >
-> > > > > > > > Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > > > > >
-> > > > > > > If we are to introduce more managed helpers, I think it'd be =
-wiser to
-> > > > > > > introduce them as DRM-managed, and not device managed.
-> > > > > > >
-> > > > > > > Otherwise, you'll end up in a weird state when a device has b=
-een removed
-> > > > > > > but the DRM device is still around.
-> > > > > >
-> > > > > > I'm kinda confused. In this case there is no DRM device for the=
- bridge
-> > > > > > and, as per my CL description, "bridge-dev->dev" appears to be =
-the
-> > > > > > encoder device. I wasn't personally involved in discussions abo=
-ut it,
-> > > > > > but I was under the impression that this was expected / normal.=
- Thus
-> > > > > > we can't make this DRM-managed.
-> > > > >
-> > > > > Since I didn't hear a reply,
-> > > >
-> > > > Gah, I replied but it looks like somehow it never reached the ML...
-> > > >
-> > > > Here was my original reply:
-> > > >
-> > > > > > > This adds a devm managed version of drm_bridge_add(). Like ot=
-her
-> > > > > > > "devm" function listed in drm_bridge.h, this function takes an
-> > > > > > > explicit "dev" to use for the lifetime management. A few note=
-s:
-> > > > > > > * In general we have a "struct device" for bridges that makes=
- a good
-> > > > > > >   candidate for where the lifetime matches exactly what we wa=
-nt.
-> > > > > > > * The "bridge->dev->dev" device appears to be the encoder
-> > > > > > >   device. That's not the right device to use for lifetime man=
-agement.
-> > > > > > >
-> > > > > > > Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > > > >
-> > > > > > If we are to introduce more managed helpers, I think it'd be wi=
-ser to
-> > > > > > introduce them as DRM-managed, and not device managed.
-> > > > > >
-> > > > > > Otherwise, you'll end up in a weird state when a device has bee=
-n removed
-> > > > > > but the DRM device is still around.
-> > > > >=3D20
-> > > > > I'm kinda confused. In this case there is no DRM device for the b=
-ridge
-> > > > > and, as per my CL description, "bridge-dev->dev" appears to be the
-> > > > > encoder device.
-> > > >
-> > > > bridge->dev seems right though?
-> > > >
-> > > > > I wasn't personally involved in discussions about it, but I was u=
-nder
-> > > > > the impression that this was expected / normal. Thus we can't make
-> > > > > this DRM-managed.
-> > > >
-> > > > Still, I don't think devm is the right solution to this either.
-> > > >
-> > > > The underlying issue is two-fold:
-> > > >
-> > > >   - Encoders can have a pointer to a bridge through of_drm_find_bri=
-dge
-> > > >     or similar. However, bridges are traditionally tied to their de=
-vice
-> > > >     lifetime (by calling drm_bridge_add in probe, and drm_bridge_re=
-move
-> > > >     in remove). Encoders will typically be tied to the DRM device
-> > > >     however, and that one sticks around until the last application
-> > > >     closes it. We can thus very easily end up with a dangling point=
-er,
-> > > >     and a use-after-free.
-> > > >
-> > > >   - It's not the case yet, but it doesn't seem far fetch to expose
-> > > >     properties of bridges to the userspace. In that case, the users=
-pace
-> > > >     would be likely to still hold references to objects that aren't
-> > > >     there anymore when the bridge is gone.
-> > > >
-> > > > The first is obviously a larger concern, but if we can find a solut=
-ion
-> > > > that would accomodate the second it would be great.
-> > > >
-> > > > As far as I can see, we should fix in two steps:
-> > > >
-> > > >   - in drm_bridge_attach, we should add a device-managed call that =
-will
-> > > >     unregister the main DRM device. We don't allow to probe the mai=
-n DRM
-> > > >     device when the bridge isn't there yet in most case, so it makes
-> > > >     sense to remove it once the bridge is no longer there as well.
+> > On 06/07/22 at 11:34am, Uladzislau Rezki (Sony) wrote:
+> > > A vmap_area can travel between different places. For example
+> > > attached/detached to/from different rb-trees. In order to
+> > > prevent fancy bugs, initialize a VA's list node after it is
+> > > removed from the list, so it pairs with VA's rb_node which
+> > > is also initialized.
 > > >
-> > > The problem is that I do not see a good way to unregister the main DRM
-> > > device outside of it's driver code.
+> > > There is no functional change as a result of this patch.
+> > >
+> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > ---
+> > >  mm/vmalloc.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > > index 745e89eb6ca1..82771e555273 100644
+> > > --- a/mm/vmalloc.c
+> > > +++ b/mm/vmalloc.c
+> > > @@ -978,7 +978,7 @@ __unlink_va(struct vmap_area *va, struct rb_root *root, bool augment)
+> > >       else
+> > >               rb_erase(&va->rb_node, root);
+> > >
+> > > -     list_del(&va->list);
+> > > +     list_del_init(&va->list);
 > >
-> > That's what drmm helpers are doing though: they'll defer the cleanup
-> > until the last user has closed its fd.
->=20
-> I'm a bit confused here. I'll take the concrete example of ps8640
-> since that's what I was working on here.
->=20
-> ...right now the fact that we're using devm means that
-> drm_bridge_remove() will get called when a ps8640 device is unbound,
-> right?
+> > Don't object this change, while list_del poison members, which is also
+> > not bad?
+> >
+> It is not bad for sure. The main aim was to be align with what the
+> RB_CLEAR_NODE() does, i.e. initialize VA when it is detached
+> and be safe with list manipulation when it is detached. For example
+> whether it is empty or not: list_empty(), etc.
 
-Yes
+Agree. list_del() can't make list_empty() work, and RB_CLEAR_NODE() has
+done the clearing already.
 
-> I guess you're saying that the "drm_bridge" memory needs to
-> outlast this, right?
+Then this change looks reasonable to me, thanks.
 
-Since drm_bridge isn't exposing anything to userspace, it would mostly
-be its connector. But they are usually allocated in the same structure,
-so it's pretty much equivalent here.
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
-> That being said, even if the actual memory for drm_bridge outlasts the
-> ps8640 driver lifetime, much of the data would need to be marked
-> invalid I think.
-
-All the device resources, yes. So things like IO mappings, clocks, reset
-lines, regulators, etc.
-
-> If nothing else all function pointers that point into the driver would
-> have to be made NULL, right? Once the device has been unbound it's
-> possible that the underlying module might be removed. I suspect that
-> we'd need to do more than just bogus-up the function pointers, though.
-
-I ... didn't think of the module memory being freed. I don't know the
-module handling code, but if it's an option we could get a reference to
-the module memory to make sure the memory stays around until everything
-has been freed.
-
-If we can't, then we could relocate all the functions inside the kernel
-for the teardown, but I'm sure it's going to be a mess.
-
-> ...so it feels like any solution here needs to take into account
-> _both_ the lifetime of the "struct device" and the "struct
-> drm_device". If the "struct device" goes away but the "struct
-> drm_device" is still around then we need to essentially transition the
-> "struct drm_device" over to a dummy, right?
-
-So we want to make sure we won't access the device resources if they
-aren't there anymore, during the timeframe between the device being
-unbound and the DRM device being unregistered (which can be arbitrarily
-long). Fortunately, drm_device->registered is being toggled as soon as
-we start the unbinding process, and drm_dev_enter()/drm_dev_exit() is
-there to make sure the device is registered.
-
-So we would need to make sure that all device resource access is
-protected by a call to those functions. It's tedious, but it works
-today.
-
-It's a bit more complicated in the case of bridges (as opposed to any
-other entity) because you don't have access to the DRM device when you
-probe, only when you are attached. So you also need to make sure the
-private structure you allocated in probe (using devm_) is properly
-converted to be DRM-managed and freed later on.
-
-Maxime
-
---wxmfr2nwsxbwozb6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYqH15wAKCRDj7w1vZxhR
-xbinAP4k1MWu9RhJ9c2UTXZ6KpsdkD+7929wsLPuo/a9FBhuWgEAgL1lu8WRNZU1
-1XzudSHHZYEO9pNa2rw+qu5uq7XwkQk=
-=02sb
------END PGP SIGNATURE-----
-
---wxmfr2nwsxbwozb6--

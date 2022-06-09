@@ -2,269 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02B25446A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8B45446AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237726AbiFII41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S238867AbiFII4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238084AbiFII4O (ORCPT
+        with ESMTP id S242833AbiFII4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:56:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C42F11462
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654764878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tvWtgkYBzt9DbATf2rlAmzgDtHttB4fvGNf4mSgVDKk=;
-        b=SD6xeiMHcx2NrcrocJGhoPPgamJ/nFOkT3OaD0fKeZQ5dZsWOoQ5gXLMiZwi5qY3xlPfya
-        hXS6ms9HPdo/e7MEisaV7ob5/CRgOd+HiiBAJTvZ9626Ai6mBYddmErVvnuVEE45kzs492
-        a/obPMHzNu95lY2a4WbX8wh4xezLwTE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-539-K6aVV1WrOo2NRoowoubRYg-1; Thu, 09 Jun 2022 04:54:36 -0400
-X-MC-Unique: K6aVV1WrOo2NRoowoubRYg-1
-Received: by mail-wr1-f72.google.com with SMTP id r13-20020adff10d000000b002160e9d64f8so3845412wro.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:54:36 -0700 (PDT)
+        Thu, 9 Jun 2022 04:56:20 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8704D157E83;
+        Thu,  9 Jun 2022 01:55:46 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id r82so40602973ybc.13;
+        Thu, 09 Jun 2022 01:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YH73zntbjDUPK6OxayMeLVDIl0HlwRQITf42qe8fKuo=;
+        b=V6GXE9peuDL15Kn9hH/D5RcvvDtZzc/UqNccmvPVX4+vnl6NSYdtdsX6IqwMyO/R8G
+         xw3uApaEFLyYdGyZmdPL76UuJJTHu3z5E+Jb4VhLRhrnGhG2Kv+iexJUfvbTYY9aQbqd
+         XzylGOiBliWtrO7pcAtc6HmgTeIfAsaP04Km60f333K6TbBup0KdeiY2/b4anYGtekeP
+         zB11DEhfAL2Sf/ig3pIx2sDyFYixMIudkRRwEXy3w2b6UfVpaEpiGdGJbnpU3hqTysfb
+         sQMaeORA5belOJKz/Xt2RynpK7yUUwG/NZOCNv2j0g1aITHyTUmjbbsYuW+CSlEr3eaM
+         +IXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tvWtgkYBzt9DbATf2rlAmzgDtHttB4fvGNf4mSgVDKk=;
-        b=LwJXFatPQAaDHaI5Bmv5lNfiJVx8GZM0JLygUdTwnxPFwrRr76lm9ldPzDaJaHQSpP
-         bCSqHYw3aS0xvPbfuwq0nSvkvfZL8JBKExULaPJn3Y9g0vIkRH5bdhzlhlQuFLAU3GUj
-         ved0whUZc8uZuNdRQma/SgrrlMhb/ngdjdK90BvWapHluzUwcHANuD6ZVEetVYE2zGyw
-         blhWPD85gT11DrTRr2gdkOsJjKwQGskcIOnOdAId0oW+n+j2uOEts2Yh4icawc92e4SR
-         HNBCMGB4SFs5NF2r/Mes8yYkQcaa72BTfD8K24Z7qsupl53XF9gOYLLY9OW6g/RYgfup
-         nKBQ==
-X-Gm-Message-State: AOAM531coSf6XZoaFzpLRUqCk63AYd+ORyW85jfnzth7HUTI5ZQVMfKl
-        gEYzf8riV/Vq5w+xTkax0i/QQ9CBKjXAIzHxTofuUEnaWrmjpvGVkmK+VAbkgFOZ65VNtYv83OP
-        HS4aEgLtVurURdv40akgfsYzu
-X-Received: by 2002:adf:e5d0:0:b0:210:313a:e4dc with SMTP id a16-20020adfe5d0000000b00210313ae4dcmr36674907wrn.152.1654764875097;
-        Thu, 09 Jun 2022 01:54:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzR7k/vdtBFj/GYt/MtBX7xF11gJz7ChUoPOTqELw1aa5VvOp+SIRJBSOhp8lJfnJDnuWfn3g==
-X-Received: by 2002:adf:e5d0:0:b0:210:313a:e4dc with SMTP id a16-20020adfe5d0000000b00210313ae4dcmr36674875wrn.152.1654764874842;
-        Thu, 09 Jun 2022 01:54:34 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-40.retail.telecomitalia.it. [79.46.200.40])
-        by smtp.gmail.com with ESMTPSA id s19-20020a1cf213000000b0039c4945c753sm15291073wmc.39.2022.06.09.01.54.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 01:54:33 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 10:54:28 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v2 0/8] virtio/vsock: experimental zerocopy receive
-Message-ID: <20220609085428.idi4qzydhdpzszzw@sgarzare-redhat>
-References: <e37fdf9b-be80-35e1-ae7b-c9dfeae3e3db@sberdevices.ru>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YH73zntbjDUPK6OxayMeLVDIl0HlwRQITf42qe8fKuo=;
+        b=g/rEwQJDQyhl5qhII6AL0f7inKGRi+oLw4eLIu89dAjWm+UgJZixvr+zqBkdoo1orF
+         XnZOAXZIeBbxqRsUNqqIM6uPKQXmMKL1tMbT2h3sJA61l5IP3yuhhKZtNiHOpORoVQLX
+         LLLdmjjZzIsgSti52JfjFm9kFySwmID4A+zGODdNLfSrwPC5BF8E7o4P4n8IfHIxMNlF
+         +OQNSAQ2tXO+3jaZz5H140+yWSFWJKggcSR5f5IuNFtbqFE4JTMM+TVGXMT9mUZ/M74d
+         LWfW4CfjXxxLIxOa7GuoVR39+cWz+lFdb/ZFiTNUnOk/izz8KXAHId47YuzhaDUTxxEf
+         zJdQ==
+X-Gm-Message-State: AOAM533v9g0F7H7ifJW/kjBqhq0KnwjfhlRwi7RWRdeCKIzuN2KE/tMy
+        ojnkEObUoIhhWBXHi9WFLM5WzpWCMNYEchF8dmg=
+X-Google-Smtp-Source: ABdhPJxsJRoMtdmiUSWdD7H2QGFbayIfQxyv+5R2CkLBeT/bm2uKCoL1UfBGNybBb8z8O4zASBhYCf8uw7euDH3XXAc=
+X-Received: by 2002:a25:3145:0:b0:64e:ac9a:eb27 with SMTP id
+ x66-20020a253145000000b0064eac9aeb27mr37767832ybx.630.1654764945428; Thu, 09
+ Jun 2022 01:55:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <e37fdf9b-be80-35e1-ae7b-c9dfeae3e3db@sberdevices.ru>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220609082433.1191060-1-srinivas.neeli@xilinx.com>
+ <20220609082433.1191060-3-srinivas.neeli@xilinx.com> <20220609083139.sx2adt4raptu2jif@pengutronix.de>
+In-Reply-To: <20220609083139.sx2adt4raptu2jif@pengutronix.de>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Thu, 9 Jun 2022 17:55:34 +0900
+Message-ID: <CAMZ6RqKbdbuxiN8gEQxynnhP=Mmpyureho6dC1fVoPzFb0LfmQ@mail.gmail.com>
+Subject: Re: [PATCH V3 2/2] can: xilinx_can: Add Transmitter delay
+ compensation (TDC) feature support
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>, wg@grandegger.com,
+        davem@davemloft.net, edumazet@google.com, srinivas.neeli@amd.com,
+        neelisrinivas18@gmail.com, appana.durga.rao@xilinx.com,
+        sgoud@xilinx.com, michal.simek@xilinx.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
-I left some comments in the patches, and I'm adding something also here:
+On Thu. 9 juin 2022 at 17:34, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 09.06.2022 13:54:33, Srinivas Neeli wrote:
+> > Added Transmitter delay compensation (TDC) feature support.
+> > In the case of higher measured loop delay with higher baud rates,
+> > observed bit stuff errors. By enabling the TDC feature in
+> > CANFD controllers, will compensate for the measure loop delay in
+> > the receive path.
+> >
+> > Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> > ---
+> > Changes in V3:
+> > -Implemented GENMASK,FIELD_PERP & FIELD_GET Calls.
+> > -Implemented TDC feature for all Xilinx CANFD controllers.
+> > -corrected prescalar to prescaler(typo).
+> > Changes in V2:
+> > -Created two patchs one for revert another for TDC support.
+> > ---
+> >  drivers/net/can/xilinx_can.c | 48 ++++++++++++++++++++++++++++++++----
+> >  1 file changed, 43 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.=
+c
+> > index e179d311aa28..288be69c0aed 100644
+> > --- a/drivers/net/can/xilinx_can.c
+> > +++ b/drivers/net/can/xilinx_can.c
+> > @@ -1,7 +1,7 @@
+> >  // SPDX-License-Identifier: GPL-2.0-or-later
+> >  /* Xilinx CAN device driver
+> >   *
+> > - * Copyright (C) 2012 - 2014 Xilinx, Inc.
+> > + * Copyright (C) 2012 - 2022 Xilinx, Inc.
+> >   * Copyright (C) 2009 PetaLogix. All rights reserved.
+> >   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
+> >   *
+> > @@ -9,6 +9,7 @@
+> >   * This driver is developed for Axi CAN IP and for Zynq CANPS Controll=
+er.
+> >   */
+> >
+> > +#include <linux/bitfield.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/errno.h>
+> >  #include <linux/init.h>
+> > @@ -99,6 +100,7 @@ enum xcan_reg {
+> >  #define XCAN_ESR_STER_MASK           0x00000004 /* Stuff error */
+> >  #define XCAN_ESR_FMER_MASK           0x00000002 /* Form error */
+> >  #define XCAN_ESR_CRCER_MASK          0x00000001 /* CRC error */
+> > +#define XCAN_SR_TDCV_MASK            GENMASK(22, 16) /* TDCV Value */
+> >  #define XCAN_SR_TXFLL_MASK           0x00000400 /* TX FIFO is full */
+> >  #define XCAN_SR_ESTAT_MASK           0x00000180 /* Error status */
+> >  #define XCAN_SR_ERRWRN_MASK          0x00000040 /* Error warning */
+> > @@ -132,6 +134,8 @@ enum xcan_reg {
+> >  #define XCAN_DLCR_BRS_MASK           0x04000000 /* BRS Mask in DLC */
+> >
+> >  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
+> > +#define XCAN_BRPR_TDCO_SHIFT         GENMASK(13, 8)  /* Transmitter De=
+lay Compensation Offset */
+>                           ^^^^^
+> This is a MASK.
+>
+> > +#define XCAN_BRPR_TDC_ENABLE         BIT(16) /* Transmitter Delay Comp=
+ensation (TDC) Enable */
+> >  #define XCAN_BTR_SJW_SHIFT           7  /* Synchronous jump width */
+> >  #define XCAN_BTR_TS2_SHIFT           4  /* Time segment 2 */
+> >  #define XCAN_BTR_SJW_SHIFT_CANFD     16 /* Synchronous jump width */
+> > @@ -276,6 +280,16 @@ static const struct can_bittiming_const xcan_data_=
+bittiming_const_canfd2 =3D {
+> >       .brp_inc =3D 1,
+> >  };
+> >
+> > +/* Transmission Delay Compensation constants for CANFD2.0 and Versal  =
+*/
+> > +static const struct can_tdc_const xcan_tdc_const =3D {
+> > +     .tdcv_min =3D 0,
+> > +     .tdcv_max =3D 0, /* Manual mode not supported. */
+> > +     .tdco_min =3D 0,
+> > +     .tdco_max =3D 64,
+> > +     .tdcf_min =3D 0, /* Filter window not supported */
+> > +     .tdcf_max =3D 0,
+> > +};
+> > +
+> >  /**
+> >   * xcan_write_reg_le - Write a value to the device register little end=
+ian
+> >   * @priv:    Driver private data structure
+> > @@ -405,7 +419,7 @@ static int xcan_set_bittiming(struct net_device *nd=
+ev)
+> >               return -EPERM;
+> >       }
+> >
+> > -     /* Setting Baud Rate prescalar value in BRPR Register */
+> > +     /* Setting Baud Rate prescaler value in BRPR Register */
+>
+> unrelated change, please make it a separate patch
+>
+> >       btr0 =3D (bt->brp - 1);
+> >
+> >       /* Setting Time Segment 1 in BTR Register */
+> > @@ -422,8 +436,12 @@ static int xcan_set_bittiming(struct net_device *n=
+dev)
+> >
+> >       if (priv->devtype.cantype =3D=3D XAXI_CANFD ||
+> >           priv->devtype.cantype =3D=3D XAXI_CANFD_2_0) {
+> > -             /* Setting Baud Rate prescalar value in F_BRPR Register *=
+/
+> > +             /* Setting Baud Rate prescaler value in F_BRPR Register *=
+/
+>
+> same
+>
+> >               btr0 =3D dbt->brp - 1;
+> > +             if (can_tdc_is_enabled(&priv->can))
+> > +                     btr0 |=3D
+> > +                     FIELD_PREP(XCAN_BRPR_TDCO_SHIFT, priv->can.tdc.td=
+co) |
+> > +                     XCAN_BRPR_TDC_ENABLE;
+> >
+> >               /* Setting Time Segment 1 in BTR Register */
+> >               btr1 =3D dbt->prop_seg + dbt->phase_seg1 - 1;
+> > @@ -1483,6 +1501,22 @@ static int xcan_get_berr_counter(const struct ne=
+t_device *ndev,
+> >       return 0;
+> >  }
+> >
+> > +/**
+> > + * xcan_get_auto_tdcv - Get Transmitter Delay Compensation Value
+> > + * @ndev:    Pointer to net_device structure
+> > + * @tdcv:    Pointer to TDCV value
+> > + *
+> > + * Return: 0 on success
+> > + */
+> > +static int xcan_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv=
+)
+> > +{
+> > +     struct xcan_priv *priv =3D netdev_priv(ndev);
+> > +
+> > +     *tdcv =3D FIELD_GET(XCAN_SR_TDCV_MASK, priv->read_reg(priv, XCAN_=
+SR_OFFSET));
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static const struct net_device_ops xcan_netdev_ops =3D {
+> >       .ndo_open       =3D xcan_open,
+> >       .ndo_stop       =3D xcan_close,
+> > @@ -1744,8 +1778,12 @@ static int xcan_probe(struct platform_device *pd=
+ev)
+> >                       &xcan_data_bittiming_const_canfd2;
+> >
+> >       if (devtype->cantype =3D=3D XAXI_CANFD ||
+> > -         devtype->cantype =3D=3D XAXI_CANFD_2_0)
+> > -             priv->can.ctrlmode_supported |=3D CAN_CTRLMODE_FD;
+> > +         devtype->cantype =3D=3D XAXI_CANFD_2_0) {
+> > +             priv->can.ctrlmode_supported |=3D CAN_CTRLMODE_FD |
+> > +                                             CAN_CTRLMODE_TDC_AUTO;
+> > +             priv->can.do_get_auto_tdcv =3D xcan_get_auto_tdcv;
+> > +             priv->can.tdc_const =3D &xcan_tdc_const;
+> > +     }
+> >
+> >       priv->reg_base =3D addr;
+> >       priv->tx_max =3D tx_max;
+> > --
+> > 2.25.1
+> >
+> >
+>
+> Otherwise looks good.
 
-On Fri, Jun 03, 2022 at 05:27:56AM +0000, Arseniy Krasnov wrote:
->                              INTRODUCTION
->
->	Hello, this is experimental implementation of virtio vsock zerocopy
->receive. It was inspired by TCP zerocopy receive by Eric Dumazet. This API uses
->same idea: call 'mmap()' on socket's descriptor, then every 'getsockopt()' will
->fill provided vma area with pages of virtio RX buffers. After received data was
->processed by user, pages must be freed by 'madvise()'  call with MADV_DONTNEED
->flag set(if user won't call 'madvise()', next 'getsockopt()' will 
->fail).
+Same for me. Also, thanks for using the TDC framework. You are the
+first one to use it after I created it!
 
-If it is not too time-consuming, can we have a table/list to compare this 
-and the TCP zerocopy?
+Assuming you address all of Marc=E2=80=99s comment, please add this in your=
+ v4:
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
->
->                                 DETAILS
->
->	Here is how mapping with mapped pages looks exactly: first page mapping
->contains array of trimmed virtio vsock packet headers (in contains only length
->of data on the corresponding page and 'flags' field):
->
->	struct virtio_vsock_usr_hdr {
->		uint32_t length;
->		uint32_t flags;
->		uint32_t copy_len;
->	};
->
->Field  'length' allows user to know exact size of payload within each sequence
->of pages and 'flags' allows user to handle SOCK_SEQPACKET flags(such as message
->bounds or record bounds). Field 'copy_len' is described below in 'v1->v2' part.
->All other pages are data pages from RX queue.
->
->             Page 0      Page 1      Page N
->
->	[ hdr1 .. hdrN ][ data ] .. [ data ]
->           |        |       ^           ^
->           |        |       |           |
->           |        *-------------------*
->           |                |
->           |                |
->           *----------------*
->
->	Of course, single header could represent array of pages (when packet's
->buffer is bigger than one page).So here is example of detailed mapping layout
->for some set of packages. Lets consider that we have the following sequence  of
->packages: 56 bytes, 4096 bytes and 8200 bytes. All pages: 0,1,2,3,4 and 5 will
->be inserted to user's vma(vma is large enough).
 
-In order to have a "userspace polling-friendly approach" and reduce 
-number of syscall, can we allow for example the userspace to mmap at 
-least the first header before packets arrive.
-Then the userspace can poll a flag or other fields in the header to 
-understand that there are new packets.
-
-That would be cool, but in the meantime it would be nice to behave 
-similarly to TCP, which is why the comparison table I mentioned earlier 
-would be useful.
-
->
->	Page 0: [[ hdr0 ][ hdr 1 ][ hdr 2 ][ hdr 3 ] ... ]
->	Page 1: [ 56 ]
->	Page 2: [ 4096 ]
->	Page 3: [ 4096 ]
->	Page 4: [ 4096 ]
->	Page 5: [ 8 ]
->
->	Page 0 contains only array of headers:
->	'hdr0' has 56 in length field.
->	'hdr1' has 4096 in length field.
->	'hdr2' has 8200 in length field.
->	'hdr3' has 0 in length field(this is end of data marker).
->
->	Page 1 corresponds to 'hdr0' and has only 56 bytes of data.
->	Page 2 corresponds to 'hdr1' and filled with data.
->	Page 3 corresponds to 'hdr2' and filled with data.
->	Page 4 corresponds to 'hdr2' and filled with data.
->	Page 5 corresponds to 'hdr2' and has only 8 bytes of data.
->
->	This patchset also changes packets allocation way: today implementation
->uses only 'kmalloc()' to create data buffer. Problem happens when we try to map
->such buffers to user's vma - kernel forbids to map slab pages to user's vma(as
->pages of "not large" 'kmalloc()' allocations are marked with PageSlab flag and
->"not large" could be bigger than one page). So to avoid this, data buffers now
->allocated using 'alloc_pages()' call.
->
->                                   TESTS
->
->	This patchset updates 'vsock_test' utility: two tests for new feature
->were added. First test covers invalid cases. Second checks valid transmission
->case.
->
->                                BENCHMARKING
->
->	For benchmakring I've added small utility 'rx_zerocopy'. It works in
->client/server mode. When client connects to server, server starts sending exact
->amount of data to client(amount is set as input argument).Client reads data and
->waits for next portion of it. Client works in two modes: copy and zero-copy. In
->copy mode client uses 'read()' call while in zerocopy mode sequence of 'mmap()'
->/'getsockopt()'/'madvise()' are used. Smaller amount of time for transmission
->is better. For server, we can set size of tx buffer and for client we can set
->size of rx buffer or rx mapping size(in zerocopy mode). Usage of this utility
->is quiet simple:
->
->For client mode:
->
->./rx_zerocopy --mode client [--zerocopy] [--rx]
->
->For server mode:
->
->./rx_zerocopy --mode server [--mb] [--tx]
->
->[--mb] sets number of megabytes to transfer.
->[--rx] sets size of receive buffer/mapping in pages.
->[--tx] sets size of transmit buffer in pages.
->
->I checked for transmission of 4000mb of data. Here are some results:
->
->                           size of rx/tx buffers in pages
->               *---------------------------------------------------*
->               |    8   |    32    |    64   |   256    |   512    |
->*--------------*--------*----------*---------*----------*----------*
->|   zerocopy   |   24   |   10.6   |  12.2   |   23.6   |    21    | secs to
->*--------------*---------------------------------------------------- process
->| non-zerocopy |   13   |   16.4   |  24.7   |   27.2   |   23.9   | 4000 mb
->*--------------*----------------------------------------------------
->
->Result in first column(where non-zerocopy works better than zerocopy) happens
->because time, spent in 'read()' system call is smaller that time in 'getsockopt'
->+ 'madvise'. I've checked that.
->
->I think, that results are not so impressive, but at least it is not worse than
->copy mode and there is no need to allocate memory for processing date.
->
->                                 PROBLEMS
->
->	Updated packet's allocation logic creates some problem: when host gets
->data from guest(in vhost-vsock), it allocates at least one page for each packet
->(even if packet has 1 byte payload). I think this could be resolved in several
->ways:
->	1) Make zerocopy rx mode disabled by default, so if user didn't enable
->it, current 'kmalloc()' way will be used. <<<<<<< (IMPLEMENTED IN V2)
-
-Yep, but I think we should not allow to change it while we are connected 
-(see comments in the patches.)
-
->	2) Use 'kmalloc()' for "small" packets, else call page allocator. But
->in this case, we have mix of packets, allocated in two different ways thus
->during zerocopying to user(e.g. mapping pages to vma), such small packets will
->be handled in some stupid way: we need to allocate one page for user, copy data
->to it and then insert page to user's vma.
->
->v1 -> v2:
-> 1) Zerocopy receive mode could be enabled/disabled(disabled by default). I
->    didn't use generic SO_ZEROCOPY flag, because in virtio-vsock case this
->    feature depends on transport support. Instead of SO_ZEROCOPY, AF_VSOCK
->    layer flag was added: SO_VM_SOCKETS_ZEROCOPY, while previous meaning of
->    SO_VM_SOCKETS_ZEROCOPY(insert receive buffers to user's vm area) now
->    renamed to SO_VM_SOCKETS_MAP_RX.
-> 2) Packet header which is exported to user now get new field: 'copy_len'.
->    This field handles special case:  user reads data from socket in non
->    zerocopy way(with disabled zerocopy) and then enables zerocopy feature.
->    In this case vhost part will switch data buffer allocation logic from
->    'kmalloc()' to direct calls for buddy allocator. But, there could be
->    some pending 'kmalloc()' allocated packets in socket's rx list, and then
->    user tries to read such packets in zerocopy way, dequeue will fail,
->    because SLAB pages could not be inserted to user's vm area. So when such
->    packet is found during zerocopy dequeue, dequeue loop will break and
->    'copy_len' will show size of such "bad" packet. After user detects this
->    case, it must use 'read()/recv()' calls to dequeue such packet.
-> 3) Also may be move this features under config option?
-
-Do you mean a build config like CONFIG_VSOCK_ZERO_COPY?
-
-I'm not sure it's needed.
-
-Thanks,
-Stefano
-
+Yours sincerely,
+Vincent Mailhol

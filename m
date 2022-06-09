@@ -2,79 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0C5544BA3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D778544BB4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243027AbiFIMXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
+        id S238124AbiFIMX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiFIMXO (ORCPT
+        with ESMTP id S245364AbiFIMXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:23:14 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B19167D3
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:23:13 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id h18-20020a056e021d9200b002d40280eeadso13377942ila.23
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 05:23:13 -0700 (PDT)
+        Thu, 9 Jun 2022 08:23:51 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BA62F008
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:23:49 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id i29so20968606lfp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 05:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=llootBNvnKzlHSo7HBVwmmGvWmrZUKeALsskuPp9oY4=;
+        b=PFIHGY61X8JnRhWtvwXV3fYxBQkbuMhPZHdKbAHE3ATwSdFXTvNH4TNE3BWhkVLrTA
+         RnsJwyyJcVEHEP9Nw5e+K1ihE7iH0Xfit/DfK0NPMl9vttkwJvauVBNABZvteYYsIhEh
+         yv7YZ//OcOg7qT5bGswpxjgt+Kfvd6LF7haJGNsBalV56ROiZBUrZdj6zL22RcMJkqIQ
+         ZwIeIB/NPCZGcTqz0av+IrXgk4syOGa6CvDK6t6N2/4LjyIeWwkjxghkYiKyEOOhAR+U
+         5CXFKlE07dNhpOd0idZE212zOSd6eDxZHxCwrE/ZsdVg350SfgcYq6bDbib5CToscZpb
+         i6Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Cqa5lqsjEiB4OaqqzUaqVfFFKeV1C32L8SOc23gcEU0=;
-        b=NwvifjS0oeKXuN3SbBJ86GFuLV37dcgtVGcPEliVvT5SBIyFWRZMYo7ViYjX4zI9ND
-         t4NVccoI2evR2DwsEwcEBHgmp1kba+lKDpMqzXayIFyhDplSsPYc2VO297TaaEgMvyxy
-         0gxpiq5rDARFPEw88z+knHQmsCCHitRJLHTUcwHDCYgh2jeXOyCIBKeGIGZX4uaGae/U
-         5cUFYGad5F4LxUDj2zF3cXAlIzLSkRrpTt4C62m5r9yJBQCiQNmY7n/qqjAtJqWO6CQ5
-         4r/6Wjq0KRy91tCKqBgMh3eH9aGPBopfw4KeqMhOosO0jheu1IG4YCpyRbD9F2GHUZwF
-         cW/Q==
-X-Gm-Message-State: AOAM531S8D84IMomKbgXOVnWFY++K33x6t5PYWnKH4LcXm6t13nqrHyU
-        aKfDzXvAAkfiJ1dLtKfdjxmlj57wIZ26itP+9LJwUlfUAH1O
-X-Google-Smtp-Source: ABdhPJz7RQMxGYxkvxvtTJnOwb+mbJVrz7KfGsAUKFYfMNGMIc+OzaGjjCWW4tV0z15ZFOJkXGhBvFgkmizSa3m4viNqmuCnCzPn
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=llootBNvnKzlHSo7HBVwmmGvWmrZUKeALsskuPp9oY4=;
+        b=RAFAcfAQgTN1lhUeZMOjgpxvGazF6Iz1+MIL9LjojxLOkKrOfk0MJ3xj2WXuFUk3ey
+         vHgxK+0ozz5PApKyhpRDXgK8qAOQVCDXxYmh8FVrGU8dNuliiuCPqfcEWZ0iF4ng6DtE
+         mGvjhRMTEz+McSwdK9G9XYkh2YNikCvF0VfbVkDq5XIXmoYyByEo57LATXhzfNhXi1aA
+         uatZAImhPXDd0L80YVD9GJl7aMXzduzUoQWTVEuIovdCnLpkrvDLloa/fixtzO2NGqye
+         6QW65nTJCQldjU+M93BxEYbGS8MFhQx2bohgy+sIpe8DjlKTkZ00NsHOS9t+jw6hBust
+         4R5Q==
+X-Gm-Message-State: AOAM530coKhY/GnuPIU1sMjfYOY1bvuOplKUgRXOXOIUVPpNoU9uh9DZ
+        yon1UUv9KDnZ7wE7ZRRUH9Xsy3hOECva0MyfVXazGg==
+X-Google-Smtp-Source: ABdhPJwDpiUpaZytilZz3A9LwfP5rEpTlz66NiST1TJCSJiNj11xLM4RNAU6bTosWzRJ6AUHgpeR9/FZ2okUFaMrfLU=
+X-Received: by 2002:a05:6512:1085:b0:479:478b:d2cc with SMTP id
+ j5-20020a056512108500b00479478bd2ccmr12747169lfg.540.1654777427515; Thu, 09
+ Jun 2022 05:23:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1646:b0:669:89a6:32c6 with SMTP id
- y6-20020a056602164600b0066989a632c6mr4898872iow.203.1654777393073; Thu, 09
- Jun 2022 05:23:13 -0700 (PDT)
-Date:   Thu, 09 Jun 2022 05:23:13 -0700
-In-Reply-To: <000000000000e2fc6405d3061843@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b252fe05e102e228@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in cdc_ncm_tx_fixup
-From:   syzbot <syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, fgheet255t@gmail.com, hdanton@sina.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, lukas@wunner.de, netdev@vger.kernel.org,
-        oliver@neukum.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
+References: <20220609113046.780504-1-elver@google.com> <20220609113046.780504-5-elver@google.com>
+ <CACT4Y+YHp1mxxGNuGke42qcph0ibZb+6Ri_7fNJ+jg11NL-z8g@mail.gmail.com> <CANpmjNMA=UKzpURckHh_Ss14oRoTQ7nZ4yqcb=nV1kBtEcEkdw@mail.gmail.com>
+In-Reply-To: <CANpmjNMA=UKzpURckHh_Ss14oRoTQ7nZ4yqcb=nV1kBtEcEkdw@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 9 Jun 2022 14:23:36 +0200
+Message-ID: <CACT4Y+ayhGH253WA_zXYJjfOK=YxGLDZLzkyyqLHW+EZzJYpEg@mail.gmail.com>
+Subject: Re: [PATCH 4/8] perf/hw_breakpoint: Make hw_breakpoint_weight() inlinable
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, x86@kernel.org,
+        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Thu, 9 Jun 2022 at 14:08, Marco Elver <elver@google.com> wrote:
+> > > Due to being a __weak function, hw_breakpoint_weight() will cause the
+> > > compiler to always emit a call to it. This generates unnecessarily bad
+> > > code (register spills etc.) for no good reason; in fact it appears in
+> > > profiles of `perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512`:
+> > >
+> > >     ...
+> > >     0.70%  [kernel]       [k] hw_breakpoint_weight
+> > >     ...
+> > >
+> > > While a small percentage, no architecture defines its own
+> > > hw_breakpoint_weight() nor are there users outside hw_breakpoint.c,
+> > > which makes the fact it is currently __weak a poor choice.
+> > >
+> > > Change hw_breakpoint_weight()'s definition to follow a similar protocol
+> > > to hw_breakpoint_slots(), such that if <asm/hw_breakpoint.h> defines
+> > > hw_breakpoint_weight(), we'll use it instead.
+> > >
+> > > The result is that it is inlined and no longer shows up in profiles.
+> > >
+> > > Signed-off-by: Marco Elver <elver@google.com>
+> > > ---
+> > >  include/linux/hw_breakpoint.h | 1 -
+> > >  kernel/events/hw_breakpoint.c | 4 +++-
+> > >  2 files changed, 3 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/include/linux/hw_breakpoint.h b/include/linux/hw_breakpoint.h
+> > > index 78dd7035d1e5..9fa3547acd87 100644
+> > > --- a/include/linux/hw_breakpoint.h
+> > > +++ b/include/linux/hw_breakpoint.h
+> > > @@ -79,7 +79,6 @@ extern int dbg_reserve_bp_slot(struct perf_event *bp);
+> > >  extern int dbg_release_bp_slot(struct perf_event *bp);
+> > >  extern int reserve_bp_slot(struct perf_event *bp);
+> > >  extern void release_bp_slot(struct perf_event *bp);
+> > > -int hw_breakpoint_weight(struct perf_event *bp);
+> > >  int arch_reserve_bp_slot(struct perf_event *bp);
+> > >  void arch_release_bp_slot(struct perf_event *bp);
+> > >  void arch_unregister_hw_breakpoint(struct perf_event *bp);
+> > > diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> > > index 8e939723f27d..5f40c8dfa042 100644
+> > > --- a/kernel/events/hw_breakpoint.c
+> > > +++ b/kernel/events/hw_breakpoint.c
+> > > @@ -125,10 +125,12 @@ static __init int init_breakpoint_slots(void)
+> > >  }
+> > >  #endif
+> > >
+> > > -__weak int hw_breakpoint_weight(struct perf_event *bp)
+> >
+> > Humm... this was added in 2010 and never actually used to return
+> > anything other than 1 since then (?). Looks like over-design. Maybe we
+> > drop "#ifndef" and add a comment instead?
+>
+> Then there's little reason for the function either and we can just
+> directly increment/decrement 1 everywhere. If we drop the ability for
+> an arch to override, I feel that'd be cleaner.
+>
+> Either way, codegen won't change though.
+>
+> Preferences?
 
-commit d1408f6b4dd78fb1b9e26bcf64477984e5f85409
-Author: Lukas Wunner <lukas@wunner.de>
-Date:   Thu May 12 08:42:01 2022 +0000
-
-    usbnet: Run unregister_netdev() before unbind() again
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=122a4b57f00000
-start commit:   330f4c53d3c2 ARM: fix build error when BPF_SYSCALL is disa..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ec3d1378e31c88d87f4
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=135ca155700000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: usbnet: Run unregister_netdev() before unbind() again
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+I don't have strong preferences either way.
+Can also be:
+#define HW_BREAKPOINT_WEIGHT 1

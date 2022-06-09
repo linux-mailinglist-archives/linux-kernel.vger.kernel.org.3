@@ -2,121 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EE55453B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1795453B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbiFISGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S238670AbiFISIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242044AbiFISGr (ORCPT
+        with ESMTP id S1345230AbiFISI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:06:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A68D360895
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C6FBB82F57
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 18:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8DDC34114;
-        Thu,  9 Jun 2022 18:06:40 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 19:06:36 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Patrick Wang <patrick.wang.shcn@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yee.lee@mediatek.com
-Subject: Re: [PATCH v3 1/3] mm: kmemleak: add OBJECT_PHYS flag for objects
- allocated with physical address
-Message-ID: <YqI2rE+YB/+06t3w@arm.com>
-References: <20220609124950.1694394-1-patrick.wang.shcn@gmail.com>
- <20220609124950.1694394-2-patrick.wang.shcn@gmail.com>
+        Thu, 9 Jun 2022 14:08:28 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8EB194BFC;
+        Thu,  9 Jun 2022 11:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654798102; x=1686334102;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RlBNIvoycybee5OdSn9wESzBDW5U1rv7sgD4z0EOSQo=;
+  b=WrJocN5G+JzbP1cE6y7MBSahzUVNDWubHp1pd58D4WXytIWs0uTROH9+
+   ezzjNjIZwQAPfddnhRU7ZuB4e48/nnD7kZPDmCVtnO6MoMteif6Mql1UP
+   Sx1wgXgPC75suURTrvduCLImr46Q4EQPr2LkG9b9LaooI3s1txdYgUO7L
+   M=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 11:08:20 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 11:08:20 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 9 Jun 2022 11:08:19 -0700
+Received: from [10.216.5.137] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
+ 11:08:15 -0700
+Message-ID: <349a6a9b-28a9-e859-0db2-d216553d8ad5@quicinc.com>
+Date:   Thu, 9 Jun 2022 23:38:12 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609124950.1694394-2-patrick.wang.shcn@gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] tty: serial: qcom-geni-serial: minor fixes to
+ get_clk_div_rate()
+Content-Language: en-CA
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Stephen Boyd" <swboyd@chromium.org>
+References: <1654021066-13341-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=UF3x5RHrQH-m1X-4kQSsKiufLnkew=VuJz7W9EAi3GHQ@mail.gmail.com>
+ <5d950007-7a92-a41b-e569-79e806adb06a@quicinc.com>
+ <CAD=FV=Xm1LJEoU5dKa5pMgqsHuAXuFVpdHvc1REULhAKTPbGnQ@mail.gmail.com>
+ <ad393ad2-a247-3c61-5033-185d39b5596d@quicinc.com>
+ <CAD=FV=XD+LozhkJZp0C7RUO01T-XuqBA-SJ0EQeyvGk0CxC3JQ@mail.gmail.com>
+ <e677fd02-011f-4f4e-fa73-17dc96aea7d0@quicinc.com>
+ <CAD=FV=UzjnEjMTLTRVXTrz6aoiBymJtnJ1o8dzPN9hn0Be3tng@mail.gmail.com>
+ <da18c508-f32e-fece-6392-e6a95f7c7968@quicinc.com>
+ <CAD=FV=Wytm9EYu=4ndN+En2AFEgPK9NjrUMbFPA_h6TwyxGCYA@mail.gmail.com>
+ <765a170c-d335-d626-0609-7d0f3967b71d@quicinc.com>
+ <CAD=FV=X2wTUH50MqFu=4WifvbTG+df-oYqQBRWeSPES7M2fxNw@mail.gmail.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <CAD=FV=X2wTUH50MqFu=4WifvbTG+df-oYqQBRWeSPES7M2fxNw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:49:48PM +0800, Patrick Wang wrote:
-> @@ -1125,15 +1142,18 @@ EXPORT_SYMBOL(kmemleak_no_scan);
->   *			 address argument
->   * @phys:	physical address of the object
->   * @size:	size of the object
-> - * @min_count:	minimum number of references to this object.
-> - *              See kmemleak_alloc()
->   * @gfp:	kmalloc() flags used for kmemleak internal memory allocations
->   */
-> -void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
-> -			       gfp_t gfp)
-> +void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, gfp_t gfp)
->  {
-> +	pr_debug("%s(0x%pa, %zu)\n", __func__, &phys, size);
-> +
->  	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-> -		kmemleak_alloc(__va(phys), size, min_count, gfp);
-> +		/*
-> +		 * Create object with OBJECT_PHYS flag and
-> +		 * assume min_count 0.
-> +		 */
-> +		create_object_phys((unsigned long)__va(phys), size, 0, gfp);
->  }
->  EXPORT_SYMBOL(kmemleak_alloc_phys);
->  
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index e4f03a6e8e56..749abd2685c4 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -1345,8 +1345,8 @@ __next_mem_pfn_range_in_zone(u64 *idx, struct zone *zone,
->   * from the regions with mirroring enabled and then retried from any
->   * memory region.
->   *
-> - * In addition, function sets the min_count to 0 using kmemleak_alloc_phys for
-> - * allocated boot memory block, so that it is never reported as leaks.
-> + * In addition, function using kmemleak_alloc_phys for allocated boot
-> + * memory block, it is never reported as leaks.
->   *
->   * Return:
->   * Physical address of allocated memory block on success, %0 on failure.
-> @@ -1398,12 +1398,12 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
->  	 */
->  	if (end != MEMBLOCK_ALLOC_NOLEAKTRACE)
->  		/*
-> -		 * The min_count is set to 0 so that memblock allocated
-> -		 * blocks are never reported as leaks. This is because many
-> -		 * of these blocks are only referred via the physical
-> -		 * address which is not looked up by kmemleak.
-> +		 * Memblock allocated blocks are never reported as
-> +		 * leaks. This is because many of these blocks are
-> +		 * only referred via the physical address which is
-> +		 * not looked up by kmemleak.
->  		 */
-> -		kmemleak_alloc_phys(found, size, 0, 0);
-> +		kmemleak_alloc_phys(found, size, 0);
->  
->  	return found;
->  }
-> diff --git a/tools/testing/memblock/linux/kmemleak.h b/tools/testing/memblock/linux/kmemleak.h
-> index 462f8c5e8aa0..5fed13bb9ec4 100644
-> --- a/tools/testing/memblock/linux/kmemleak.h
-> +++ b/tools/testing/memblock/linux/kmemleak.h
-> @@ -7,7 +7,7 @@ static inline void kmemleak_free_part_phys(phys_addr_t phys, size_t size)
->  }
->  
->  static inline void kmemleak_alloc_phys(phys_addr_t phys, size_t size,
-> -				       int min_count, gfp_t gfp)
-> +				       gfp_t gfp)
->  {
->  }
+Hi,
 
-If you respin, I'd move the prototype change to a separate patch (and
-make it first in the series). Otherwise it looks fine:
+Re-sending as my earlier message bounced.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+
+On 6/9/2022 4:07 AM, Doug Anderson wrote:
+> Hi,
+>
+> On Wed, Jun 8, 2022 at 11:34 AM Vijaya Krishna Nivarthi
+> <quic_vnivarth@quicinc.com> wrote:
+>> Hi,
+>>
+>>
+>> On 6/8/2022 12:55 AM, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Tue, Jun 7, 2022 at 10:40 AM Vijaya Krishna Nivarthi
+>>> <quic_vnivarth@quicinc.com> wrote:
+>>>> Hi,
+>>>>
+>>>> On 6/7/2022 1:29 AM, Doug Anderson wrote:
+>>>>
+>>>> My only concern continues to be...
+>>>>
+>>>> Given ser_clk is the final frequency that this function is going to
+>>>> return and best_div is going to be the clk_divider, is it ok if the
+>>>> divider cant divide the frequency exactly?
+>>>>
+>>>> In other words, Can this function output combinations like (402,4)
+>>>> (501,5) ?
+>>>>
+>>>> If ok, then we can go ahead with this patch or even previous perhaps.
+>>> I don't see why not. You're basically just getting a resulting clock
+>>> that's not an integral "Hz", right?
+>>>
+>>> So if "baud" is 9600 and sampling_rate is 16 then desired_clk is (9600
+>>> * 16) = 153600
+>>>
+>>> Let's imagine that we do all the math and we finally decide that our
+>>> best bet is with the rate 922000 and a divider of 6. That means that
+>>> the actual clock we'll make is 153666.67 when we _wanted_ 153600.
+>>> There's no reason it needs to be integral, though, and 153666.67 would
+>>> still be better than making 160000.
+>>>
+>> Thank you for clarification.
+>>>>> power?)
+>>>> Actually power saving was the anticipation behind returning first
+>>>> frequency in original patch, when we cant find exact frequency.
+>>> Right, except that if you just pick the first clock you find it would
+>>> be _wildly_ off. I guess if you really want to do this the right way,
+>>> you need to set a maximum tolerance and pick the first rate you find
+>>> that meets that tolerance. Random web search for "uart baud rate
+>>> tolerance" makes me believe that +/- 5% deviation is OK, but to be
+>>> safe you probably want something lower. Maybe 2%? So if the desired
+>>> clock is within 2% of a clock you can make, can you just pick that
+>>> one?
+>> Ok, 2% seems good.
+>>>>>> Please note that we go past cases when we have an divider that can
+>>>>>> exactly divide the frequency(105/1, 204/2, 303/3) and end up with one
+>>>>>> that doesn't.
+>>>>> Ah, good point. Luckily that's a 1-line fix, right?
+>>>> Apologies, I could not figure out how.
+>>> Ah, sorry. Not quite 1 line, but this (untested)
+>>>
+>>>
+>>> freq = clk_round_rate(clk, mult);
+>>>
+>>> if (freq % desired_clk == 0) {
+>>>    ser_clk = freq;
+>>>    best_div = freq / desired_clk;
+>>>    break;
+>>> }
+>>>
+>>> candidate_div = max(1, DIV_ROUND_CLOSEST(freq, desired_clk));
+>>> candidate_freq = freq / candidate_div;
+>>> diff = abs((long)desired_clk - candidate_freq);
+>>> if (diff < best_diff) {
+>>>     best_diff = diff;
+>>>     ser_clk = freq;
+>>>     best_div = candidate_div;
+>>> }
+>> But then once again, we would likely need 2 loops because while we are
+>> ok with giving up on search for best_div on finding something within 2%
+>> tolerance, we may not want to give up on exact match (freq % desired_clk
+>> == 0 )
+> Ah, it took me a while to understand why two loops. It's because in
+> one case you're trying multiplies and in the other you're bumping up
+> to the next closest clock rate. I don't think you really need to do
+> that. Just test the (rate - 2%) and the rate. How about this (only
+> lightly tested):
+>
+>      ser_clk = 0;
+>      maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
+>      div = 1;
+>      while (div < maxdiv) {
+div <= maxdiv ?
+>          mult = (unsigned long long)div * desired_clk;
+>          if (mult != (unsigned long)mult)
+>              break;
+>
+>          two_percent = mult / 50;
+>
+>          /*
+>           * Loop requesting (freq - 2%) and possibly (freq).
+>           *
+>           * We'll keep track of the lowest freq inexact match we found
+>           * but always try to find a perfect match. NOTE: this algorithm
+>           * could miss a slightly better freq if there's more than one
+>           * freq between (freq - 2%) and (freq) but (freq) can't be made
+>           * exactly, but that's OK.
+>           *
+>           * This absolutely relies on the fact that the Qualcomm clock
+>           * driver always rounds up.
+>           */
+>          test_freq = mult - two_percent;
+>          while (test_freq <= mult) {
+>              freq = clk_round_rate(clk, test_freq);
+>
+>              /*
+>               * A dead-on freq is an insta-win. This implicitly
+>               * handles when "freq == mult"
+>               */
+>              if (!(freq % desired_clk)) {
+>                  *clk_div = freq / desired_clk;
+>                  return freq;
+>              }
+>
+>              /*
+>               * Only time clock framework doesn't round up is if
+>               * we're past the max clock rate. We're done searching
+>               * if that's the case.
+>               */
+>              if (freq < test_freq)
+>                  return ser_clk;
+>
+>              /* Save the first (lowest freq) within 2% */
+>              if (!ser_clk && freq <= mult + two_percent) {
+>                  ser_clk = freq;
+>                  *clk_div = div;
+>              }
+My last concern is with search happening only within 2% tolerance.
+
+Do we fail otherwise?
+
+This real case has best tolerance of 1.9%.
+
+[   17.963672] 20220530 desired_clk-51200000
+[   21.193550] 20220530 returning ser_clk-52174000, div-1, diff-974000
+
+Seems close.
+
+Thank you.
+>
+>              /*
+>               * If we already rounded up past mult then this will
+>               * cause the loop to exit. If not then this will run
+>               * the loop a second time with exactly mult.
+>               */
+>              test_freq = max(freq + 1, mult);
+>          }
+>
+>          /*
+>           * test_freq will always be bigger than mult by at least 1.
+>           * That means we can get the next divider with a DIV_ROUND_UP.
+>           * This has the advantage of skipping by a whole bunch of divs
+>           * If the clock framework already bypassed them.
+>           */
+>          div = DIV_ROUND_UP(test_freq, desired_clk);
+>          }
+>
+>      return ser_clk;

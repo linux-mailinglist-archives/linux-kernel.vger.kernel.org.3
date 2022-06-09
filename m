@@ -2,264 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947E6544E32
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36787544E1E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239533AbiFINxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S233486AbiFINxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiFINxJ (ORCPT
+        with ESMTP id S236453AbiFINxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:53:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82C7221489B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654782786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zpelrKcCBvxZODnS+e4yu6gn9thjf5wVTXhf5pEuG28=;
-        b=TMuUqSNV+JRhq4jfRl9CH8h2tw5NCmaw3BWYkK60g3EGVDQ6D8B4LkLaLO44YfbBxnfWNB
-        8IKvOypjACkRHZOnMsJWwWx1ULjXPyNleS94utCBwfyHCqzJnTXIgjx3kpiAOHkXIYW6La
-        R7IqzLyj9izWkQTjVaod0WQ7ws31sfg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-EbfAzZOFPE-wBWnuLoq_sg-1; Thu, 09 Jun 2022 09:53:01 -0400
-X-MC-Unique: EbfAzZOFPE-wBWnuLoq_sg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D592B811E81;
-        Thu,  9 Jun 2022 13:53:00 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.18.25.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C31C22026D64;
-        Thu,  9 Jun 2022 13:53:00 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 7E614220882; Thu,  9 Jun 2022 09:53:00 -0400 (EDT)
-Date:   Thu, 9 Jun 2022 09:53:00 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v4 1/1] Allow non-extending parallel direct writes on the
- same file.
-Message-ID: <YqH7PO7KtoiXkmVH@redhat.com>
-References: <20220605072201.9237-1-dharamhans87@gmail.com>
- <20220605072201.9237-2-dharamhans87@gmail.com>
- <Yp/CYjONZHoekSVA@redhat.com>
- <34dd96b3-e253-de4e-d5d3-a49bc1990e6f@ddn.com>
- <Yp/KnF0oSIsk0SYd@redhat.com>
- <3d189ccc-437e-d9c0-e9f1-b4e0d2012e3c@ddn.com>
+        Thu, 9 Jun 2022 09:53:41 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054CA1F703D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:53:40 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id x5so26213084edi.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yMMFb3q8dQKJuiEfkSLQTJlf/XhrzWNCwTcjPXBqwk8=;
+        b=IItgPjqhpx0+83mRLTgiGBYEQIi+BKGDe8oSQ+ezGoEQ8ASfW5c3KBNlItx7qhZIt/
+         d7POxEPq0nH13evlIx+T2QQCYuccW9BbltNkKptOFiXBQ1MTG8sL5Ix2Rs12AyGUc1OZ
+         20M3CdkHFWwMDGUs8F6abivuMs7hsD+zcSorF0RWaVAWmgVfLqlhEuRqsuTFeoFawdSR
+         Hn0ZZqDHgai+cR5LgBEHl4GYVmF9tkOe/ZPULlTxeY3K9VZwesffe2BMg2A4BMJdPHA8
+         UXcZ2+Gt+fneWiehw5DVfm4jIF2D5zNSYGHjJT2OX1kKfBtHQnu63HFo7XZMITzQcKIM
+         egGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yMMFb3q8dQKJuiEfkSLQTJlf/XhrzWNCwTcjPXBqwk8=;
+        b=fgOY/SWFK9jPJ2Yr/i6sYAeUULA9MYIxBeaBv9nxgEtz7HyK4z11KfbwEFxJsTyiFh
+         xOehkXoVE8ZPJ+LyhUzADwE7O4NlH3oJ1FPKhPYoadSpR7ww7vds3ydxJ3U+QX1viYWI
+         IS+PCHeoWM1IrAm8l8wiYlGRiLUMgjEWjBMWdg43GusHHaJZmURBOkprODZ+H3WtY8Hi
+         f78CuvmZzPjkTHqe842QOW5DZ+K2j9XTFeTFly2zIaDeKWYjIze87ywEbeVLvbp6/u5G
+         BCyFwdvMcLDTbXoiRYZn8WVfXc7UyTJsSt4p+QysXesPsTnjnADA/Cf860qc2H6S6aZK
+         kA0g==
+X-Gm-Message-State: AOAM532ufpzQ57C26jmSXvKCXLx2sy7iaq8QQPMO0L4FenrndgUmjJfw
+        Pt6G4OeLD93b2yG9s1EmyfF+gkFA0Xm/FwsuUSA=
+X-Google-Smtp-Source: ABdhPJzv2A4wp+xAKyjpuf4pqm0yuKPhCeXw+EKHLTCqRKXsbJIqAK9prUci7/okkqHMgmjZPWX7C2b87OF269RhAIQ=
+X-Received: by 2002:a05:6402:2554:b0:42d:ee79:559d with SMTP id
+ l20-20020a056402255400b0042dee79559dmr45259225edb.175.1654782818596; Thu, 09
+ Jun 2022 06:53:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d189ccc-437e-d9c0-e9f1-b4e0d2012e3c@ddn.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220607093449.3100-1-urezki@gmail.com> <20220607093449.3100-4-urezki@gmail.com>
+ <YqAVS7rYAmOmlLYH@MiWiFi-R3L-srv> <CA+KHdyWDSUgFQnCPr_i=NwoDNFiqP2Q6Z6pik3djK=TQ=hoSZQ@mail.gmail.com>
+ <YqH19tutOqChQpwM@MiWiFi-R3L-srv>
+In-Reply-To: <YqH19tutOqChQpwM@MiWiFi-R3L-srv>
+From:   Uladzislau Rezki <urezki@gmail.com>
+Date:   Thu, 9 Jun 2022 15:53:26 +0200
+Message-ID: <CA+KHdyVGMcFhdiTwUNeFqjJCoFtXhL1T815uMD5isCTNqMSOoA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] mm/vmalloc: Initialize VA's list node after unlink
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 12:42:20AM +0200, Bernd Schubert wrote:
-> 
-> 
-> On 6/8/22 00:01, Vivek Goyal wrote:
-> > On Tue, Jun 07, 2022 at 11:42:16PM +0200, Bernd Schubert wrote:
-> > > 
-> > > 
-> > > On 6/7/22 23:25, Vivek Goyal wrote:
-> > > > On Sun, Jun 05, 2022 at 12:52:00PM +0530, Dharmendra Singh wrote:
-> > > > > From: Dharmendra Singh <dsingh@ddn.com>
-> > > > > 
-> > > > > In general, as of now, in FUSE, direct writes on the same file are
-> > > > > serialized over inode lock i.e we hold inode lock for the full duration
-> > > > > of the write request. I could not found in fuse code a comment which
-> > > > > clearly explains why this exclusive lock is taken for direct writes.
-> > > > > 
-> > > > > Following might be the reasons for acquiring exclusive lock but not
-> > > > > limited to
-> > > > > 1) Our guess is some USER space fuse implementations might be relying
-> > > > >      on this lock for seralization.
-> > > > 
-> > > > Hi Dharmendra,
-> > > > 
-> > > > I will just try to be devil's advocate. So if this is server side
-> > > > limitation, then it is possible that fuse client's isize data in
-> > > > cache is stale. For example, filesystem is shared between two
-> > > > clients.
-> > > > 
-> > > > - File size is 4G as seen by client A.
-> > > > - Client B truncates the file to 2G.
-> > > > - Two processes in client A, try to do parallel direct writes and will
-> > > >     be able to proceed and server will get two parallel writes both
-> > > >     extending file size.
-> > > > 
-> > > > I can see that this can happen with virtiofs with cache=auto policy.
-> > > > 
-> > > > IOW, if this is a fuse server side limitation, then how do you ensure
-> > > > that fuse kernel's i_size definition is not stale.
-> > > 
-> > > Hi Vivek,
-> > > 
-> > > I'm sorry, to be sure, can you explain where exactly a client is located for
-> > > you? For us these are multiple daemons linked to libufse - which you seem to
-> > > call 'server' Typically these clients are on different machines. And servers
-> > > are for us on the other side of the network - like an NFS server.
-> > 
-> > Hi Bernd,
-> > 
-> > Agreed, terminology is little confusing. I am calling "fuse kernel" as
-> > client and fuse daemon (user space) as server. This server in turn might
-> > be the client to another network filesystem and real files might be
-> > served by that server on network.
-> > 
-> > So for simple virtiofs case, There can be two fuse daemons (virtiofsd
-> > instances) sharing same directory (either on local filesystem or on
-> > a network filesystem).
-> 
-> So the combination of fuse-kernel + fuse-daemon == vfs mount.
+On Thu, Jun 9, 2022 at 3:30 PM Baoquan He <bhe@redhat.com> wrote:
+>
+> On 06/09/22 at 02:36pm, Uladzislau Rezki wrote:
+> > >
+> > > On 06/07/22 at 11:34am, Uladzislau Rezki (Sony) wrote:
+> > > > A vmap_area can travel between different places. For example
+> > > > attached/detached to/from different rb-trees. In order to
+> > > > prevent fancy bugs, initialize a VA's list node after it is
+> > > > removed from the list, so it pairs with VA's rb_node which
+> > > > is also initialized.
+> > > >
+> > > > There is no functional change as a result of this patch.
+> > > >
+> > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > ---
+> > > >  mm/vmalloc.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > > > index 745e89eb6ca1..82771e555273 100644
+> > > > --- a/mm/vmalloc.c
+> > > > +++ b/mm/vmalloc.c
+> > > > @@ -978,7 +978,7 @@ __unlink_va(struct vmap_area *va, struct rb_root *root, bool augment)
+> > > >       else
+> > > >               rb_erase(&va->rb_node, root);
+> > > >
+> > > > -     list_del(&va->list);
+> > > > +     list_del_init(&va->list);
+> > >
+> > > Don't object this change, while list_del poison members, which is also
+> > > not bad?
+> > >
+> > It is not bad for sure. The main aim was to be align with what the
+> > RB_CLEAR_NODE() does, i.e. initialize VA when it is detached
+> > and be safe with list manipulation when it is detached. For example
+> > whether it is empty or not: list_empty(), etc.
+>
+> Agree. list_del() can't make list_empty() work, and RB_CLEAR_NODE() has
+> done the clearing already.
+>
+> Then this change looks reasonable to me, thanks.
+>
+> Reviewed-by: Baoquan He <bhe@redhat.com>
+>
+Thanks!
 
-This is fine for regular fuse file systems. For virtiofs fuse-kernel is
-running in a VM and fuse-daemon is running outside the VM on host.
-> 
-> > 
-> > > 
-> > > So now while I'm not sure what you mean with 'client', I'm wondering about
-> > > two generic questions
-> > > 
-> > > a) I need to double check, but we were under the assumption the code in
-> > > question is a direct-io code path. I assume cache=auto would use the page
-> > > cache and should not be effected?
-> > 
-> > By default cache=auto use page cache but if application initiates a
-> > direct I/O, it should use direct I/O path.
-> 
-> Ok, so we are on the same page regarding direct-io.
-> 
-> > 
-> > > 
-> > > b) How would the current lock help for distributed clients? Or multiple fuse
-> > > daemons (what you seem to call server) per local machine?
-> > 
-> > I thought that current lock is trying to protect fuse kernel side and
-> > assumed fuse server (daemon linked to libfuse) can handle multiple
-> > parallel writes. Atleast that's how I thought about the things. I might
-> > be wrong. I am not sure.
-> > 
-> > > 
-> > > For a single vfs mount point served by fuse, truncate should take the
-> > > exclusive lock and parallel writes the shared lock - I don't see a problem
-> > > here either.
-> > 
-> > Agreed that this does not seem like a problem from fuse kernel side. I was
-> > just questioning that where parallel direct writes become a problem. And
-> > answer I heard was that it probably is fuse server (daemon linked with
-> > libfuse) which is expecting the locking. And if that's the case, this
-> > patch is not fool proof. It is possible that file got truncated from
-> > a different client (from a different fuse daemon linked with libfuse).
-> > 
-> > So say A is first fuse daemon and B is another fuse daemon. Both are
-> > clients to some network file system as NFS.
-> > 
-> > - Fuse kernel for A, sees file size as 4G.
-> > - fuse daemon B truncates the file to size 2G.
-> > - Fuse kernel for A, has stale cache, and can send two parallel writes
-> >    say at 3G and 3.5G offset.
-> 
-> I guess you mean inode cache, not data cache, as this is direct-io.
-
-Yes inode cache and cached ->i_size might be an issue. These patches
-used cached ->i_size to determine if parallel direct I/O should be
-allowed or not.
-
-
-> But now
-> why would we need to worry about any cache here, if this is direct-io - the
-> application writes without going into any cache and at the same time a
-> truncate happens? The current kernel side lock would not help here, but a
-> distrubuted lock is needed to handle this correctly?
-> 
-> int fd = open(path, O_WRONLY | O_DIRECT);
-> 
-> clientA: pwrite(fd, buf, 100G, 0) -> takes a long time
-> clientB: ftruncate(fd, 0)
-> 
-> I guess on a local file system that will result in a zero size file. On
-> different fuse mounts (without a DLM) or NFS, undefined behavior.
-> 
-> 
-> > - Fuser daemon A might not like it.(Assuming this is fuse daemon/user
-> >    space side limitation).
-> 
-> I think there are two cases for the fuser daemons:
-> 
-> a) does not have a distributed lock - just needs to handle the writes, the
-> local kernel lock does not protect against distributed races.
-
-Exactly. This is the point I am trying to raise. "Local kernel lock does
-not protect against distributed races".
-
-So in this case local kernel has ->i_size cached and this might be an
-old value and checking i_size does not guarantee that fuse daemon
-will not get parallel extending writes.
-
-> I guess most
-> of these file systems can enable parallel writes, unless the kernel lock is
-> used to handle userspace thread synchronization.
-
-Right. If user space is relying on kernel lock for thread synchronization,
-it can not enable parallel writes.
-
-But if it is not relying on this, it should be able to enable parallel
-writes. Just keep in mind that ->i_size check is not sufficient to
-guarantee that you will not get "two extnding parallel writes". If
-another client on a different machine truncated the file, it is
-possible this client has old cached ->i_size and it will can
-get multiple file extending parallel writes.
-
-So if fuse daemon enables parallel extending writes, it should be
-prepared to deal with multiple extending parallel writes.
-
-And if this is correct assumption, I am wondering why to even try
-to do ->i_size check and try to avoid parallel extending writes
-in fuse kernel. May be there is something I am not aware of. And
-that's why I am just raising questions.
-
-> 
-> b) has a distributed lock - needs a callback to fuse kernel to inform the
-> kernel to invalidate all data.
-> 
-> At DDN we have both of them, a) is in production, the successor b) is being
-> worked on. We might come back with more patches for more callbacks for the
-> DLM - I'm not sure yet.
-> 
-> 
-> > 
-> > I hope I am able to explain my concern. I am not saying that this patch
-> > is not good. All I am saying that fuse daemon (user space) can not rely
-> > on that it will never get two parallel direct writes which can be beyond
-> > the file size. If fuse kernel cache is stale, it can happen. Just trying
-> > to set the expectations right.
-> 
-> 
-> I don't see an issue yet. Regarding virtiofs, does it have a distributed
-> lock manager (DLM)? I guess not?
-
-Nope. virtiofs does not have any DLM.
-
-Vivek
-> 
-> 
-> Thanks,
-> Bernd
-> 
-
+-- 
+Uladzislau Rezki

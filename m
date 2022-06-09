@@ -2,119 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38015452A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F3C5452AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344925AbiFIRHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S1344929AbiFIRIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344602AbiFIRHh (ORCPT
+        with ESMTP id S1343765AbiFIRIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:07:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CC2E8BBC;
-        Thu,  9 Jun 2022 10:07:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4168561A36;
-        Thu,  9 Jun 2022 17:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5366EC341C0;
-        Thu,  9 Jun 2022 17:07:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654794455;
-        bh=ee5TZiNlW7vDizss9nf0y5vrWyHbm4ptXDn+z57/BXo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f3E+ZiKDLvoyP4DzfdYnYL4itaZqOWEFERshly86nHvB4ktXSUT4zhtfL6P+BTW9f
-         6NrIeIdNoVr6SwR6YizswrCvZKS9i0iXZbEryoHZRbNk3vIY4bNvydAZCJJWz8ip27
-         L5wTeHmr+I6amg2hyzkrvV9OHZvXgc8JnKyqhMVOw9BfW9Ikd0HiMCW3vYSqeFY2PA
-         LNBZyn3Z8TSi5t910HFskQ8Zpt5iUA+56jT8zYSUBgne/SY055KskmPEBNZB0w54GY
-         WVrmttEz60MLOpuFp7hMLzq5nFxJQyNJUvBP8kVeAUXA/hnrY4k6fbwfaUioqqoEEL
-         SlQEyMY65XtgA==
-Date:   Thu, 9 Jun 2022 22:37:22 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
+        Thu, 9 Jun 2022 13:08:04 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0059112DBD9;
+        Thu,  9 Jun 2022 10:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654794457;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=kGZmmOADn0EKx1aFs3YZdMQLcwtTt5OJKjbF5f+Rez0=;
+    b=JjDiEl1F3iWYsjzzx1Y3CxkcU62MDCi+eUrW55ZHZT3AuzZifhN8sJ2bh8RaYw93gV
+    X7IJyWbuXU3V15njIAffIS2bkkwihgt8qk+RLm7Ip8ryFJSRfqosYksOHrJvqfOocKY6
+    wEzsKnRfAlmeCAQ9GKf7JcWaJ22Wcpcwq1YhBfFAKWRp+F3xlg1aXVGL7J6V7VsW1Dtp
+    EVuTY3ByedGLBt/90gOizrQwVXyg6ED5NVx7DOlLgBeqKkH2y/PjIpOlG79JDj45ZmX0
+    lCNS8KBC97PCS3E7s/tXSUOKDlWJRCH5lNCW9XmdJDU1yz3ScFI+Ekt/wJs8h1/WAJ4X
+    K/NA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrKw5+aY="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.45.0 SBL|AUTH)
+    with ESMTPSA id 9056edy59H7aBv1
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 9 Jun 2022 19:07:36 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 19:07:29 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Alexander Martinz <amartinz@shiftphones.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] mtd: nand: raw: qcom_nandc: reorder
- qcom_nand_host struct
-Message-ID: <20220609170722.GA5081@thinkpad>
-References: <20220609132344.17548-1-ansuelsmth@gmail.com>
- <20220609132344.17548-2-ansuelsmth@gmail.com>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dylan Van Assche <me@dylanvanassche.be>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom/sdm845-shift-axolotl: Add audio
+ support
+Message-ID: <YqIo0TJHqCx33NLj@gerhold.net>
+References: <20220609095412.211060-1-amartinz@shiftphones.com>
+ <20220609095412.211060-2-amartinz@shiftphones.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609132344.17548-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609095412.211060-2-amartinz@shiftphones.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 03:23:42PM +0200, Ansuel Smith wrote:
-> Reorder qcom_nand_host to save holes in the struct.
+On Thu, Jun 09, 2022 at 11:54:12AM +0200, Alexander Martinz wrote:
+> This patch adds audio support for the SHIFT6mq phone.
+> 
+> The primary microphone and headphone jack are handled by the
+> SDM845 sound card and WCD9340 codec.
+> 
+> The primary speaker needs to go through the TFA9890 speaker
+> amplifier.
+> 
+> Signed-off-by: Alexander Martinz <amartinz@shiftphones.com>
+> Tested-by: Dylan Van Assche <me@dylanvanassche.be>
+> ---
+>  .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 141 ++++++++++++++++++
+>  1 file changed, 141 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+> index fa72f23ef0c2..8c4967d6d0e3 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+[...]
+> @@ -492,6 +494,19 @@ touchscreen@38 {
+>  	};
+>  };
+>  
+> +&i2c11 {
+> +	status = "okay";
+> +	clock-frequency = <400000>;
+> +
+> +	tfa9890_codec: tfa9890@34 {
 
-You forgot to reorder other structs also as I requested :/
+Please use "audio-codec@" as suggested in the bindings. Also, I think a
+label such as "speaker_codec: " would make it more obvious that this is
+the speaker. But that's personal preference. :)
+
+> +		compatible = "nxp,tfa9890";
+> +		reg = <0x34>;
+> +		vddd-supply = <&vreg_s4a_1p8>;
+> +		reset-gpio = <&tlmm 7 0>;
+
+The mainline driver does not support the reset-gpio (it resets via the
+I2C registers instead). Can just drop this.
+
+Alternatively we could document it to the DT schema and describe it here
+for completeness. That way it's already there if someone ever considers
+it necessary for the driver.
+
+> +		#sound-dai-cells = <1>;
+
+Should be <0>. You might want to check your addition with
+"make dtbs_check" to make sure it matches the DT schema. :)
+
+Also, I would recommend adding a "sound-name-prefix". The prefix is used
+for the ALSA mixers which makes it more obvious that they belong to the
+speaker. (See example in DT schema.)
+
+> +	};
+> +};
+> +
+>  &ipa {
+>  	status = "okay";
+>  
+[...]
+> @@ -756,6 +879,24 @@ &venus {
+>  	firmware-name = "qcom/sdm845/axolotl/venus.mbn";
+>  };
+>  
+> +&wcd9340 {
+> +	pinctrl-0 = <&wcd_intr_default>;
+> +	pinctrl-names = "default";
+> +	clock-names = "extclk";
+> +	clocks = <&rpmhcc RPMH_LN_BB_CLK2>;
+> +	reset-gpios = <&tlmm 64 0>;
+
+0 => GPIO_ACTIVE_HIGH
 
 Thanks,
-Mani
-
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/mtd/nand/raw/qcom_nandc.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-> index 1a77542c6d67..7fbbd3e7784c 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -431,11 +431,12 @@ struct qcom_nand_controller {
->   *				and reserved bytes
->   * @cw_data:			the number of bytes within a codeword protected
->   *				by ECC
-> + * @ecc_bytes_hw:		ECC bytes used by controller hardware for this
-> + *				chip
-> + *
->   * @use_ecc:			request the controller to use ECC for the
->   *				upcoming read/write
->   * @bch_enabled:		flag to tell whether BCH ECC mode is used
-> - * @ecc_bytes_hw:		ECC bytes used by controller hardware for this
-> - *				chip
->   * @status:			value to be returned if NAND_CMD_STATUS command
->   *				is executed
->   * @last_command:		keeps track of last command on this chip. used
-> @@ -452,11 +453,12 @@ struct qcom_nand_host {
->  	int cs;
->  	int cw_size;
->  	int cw_data;
-> -	bool use_ecc;
-> -	bool bch_enabled;
->  	int ecc_bytes_hw;
->  	int spare_bytes;
->  	int bbm_size;
-> +
-> +	bool use_ecc;
-> +	bool bch_enabled;
->  	u8 status;
->  	int last_command;
->  
-> -- 
-> 2.36.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Stephan

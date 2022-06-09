@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96063544903
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E080C544905
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242383AbiFIKgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S240362AbiFIKgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240164AbiFIKgH (ORCPT
+        with ESMTP id S240784AbiFIKgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:36:07 -0400
+        Thu, 9 Jun 2022 06:36:10 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D29320FC7E;
-        Thu,  9 Jun 2022 03:36:04 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJgT147GPz6885p;
-        Thu,  9 Jun 2022 18:34:45 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37370212D91;
+        Thu,  9 Jun 2022 03:36:08 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJgT46dzzz689N6;
+        Thu,  9 Jun 2022 18:34:48 +0800 (CST)
 Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 12:36:03 +0200
+ 15.1.2375.24; Thu, 9 Jun 2022 12:36:06 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 11:35:59 +0100
+ 15.1.2375.24; Thu, 9 Jun 2022 11:36:02 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
         <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
@@ -33,9 +33,9 @@ To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
 CC:     <linux-block@vger.kernel.org>, <linux-ide@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <chenxiang66@hisilicon.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH RFC v2 02/18] scsi: core: Resurrect scsi_{get,free}_host_dev()
-Date:   Thu, 9 Jun 2022 18:29:03 +0800
-Message-ID: <1654770559-101375-3-git-send-email-john.garry@huawei.com>
+Subject: [PATCH RFC v2 03/18] scsi: core: Implement reserved command handling
+Date:   Thu, 9 Jun 2022 18:29:04 +0800
+Message-ID: <1654770559-101375-4-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
 References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
@@ -54,100 +54,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 6bd49b1a8d43ec118c55f3aaa7577729b52bde15.
+From: Hannes Reinecke <hare@suse.de>
 
+Quite some drivers are using management commands internally, which
+typically use the same hardware tag pool (ie they are being allocated
+from the same hardware resources) as the 'normal' I/O commands.
+These commands are set aside before allocating the block-mq tag bitmap,
+so they'll never show up as busy in the tag map.
+The block-layer, OTOH, already has 'reserved_tags' to handle precisely
+this situation.
+So this patch adds a new field 'nr_reserved_cmds' to the SCSI host
+template to instruct the block layer to set aside a tag space for these
+management commands by using reserved tags.
+
+Signed-off-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/scsi_scan.c | 57 ++++++++++++++++++++++++++++++++++++++++
- include/scsi/scsi_host.h | 10 +++++++
- 2 files changed, 67 insertions(+)
+ drivers/scsi/hosts.c     |  3 +++
+ drivers/scsi/scsi_lib.c  |  6 +++++-
+ include/scsi/scsi_host.h | 22 +++++++++++++++++++++-
+ 3 files changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 91ac901a6682..925fe63fa370 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -1978,3 +1978,60 @@ void scsi_forget_host(struct Scsi_Host *shost)
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- }
+diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+index 8352f90d997d..27296addaf63 100644
+--- a/drivers/scsi/hosts.c
++++ b/drivers/scsi/hosts.c
+@@ -474,6 +474,9 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
+ 	if (sht->virt_boundary_mask)
+ 		shost->virt_boundary_mask = sht->virt_boundary_mask;
  
-+/**
-+ * scsi_get_host_dev - Create a scsi_device that points to the host adapter itself
-+ * @shost: Host that needs a scsi_device
-+ *
-+ * Lock status: None assumed.
-+ *
-+ * Returns:     The scsi_device or NULL
-+ *
-+ * Notes:
-+ *	Attach a single scsi_device to the Scsi_Host - this should
-+ *	be made to look like a "pseudo-device" that points to the
-+ *	HA itself.
-+ *
-+ *	Note - this device is not accessible from any high-level
-+ *	drivers (including generics), which is probably not
-+ *	optimal.  We can add hooks later to attach.
-+ */
-+struct scsi_device *scsi_get_host_dev(struct Scsi_Host *shost)
-+{
-+	struct scsi_device *sdev = NULL;
-+	struct scsi_target *starget;
++	if (sht->nr_reserved_cmds)
++		shost->nr_reserved_cmds = sht->nr_reserved_cmds;
 +
-+	mutex_lock(&shost->scan_mutex);
-+	if (!scsi_host_scan_allowed(shost))
-+		goto out;
-+	starget = scsi_alloc_target(&shost->shost_gendev, 0, shost->this_id);
-+	if (!starget)
-+		goto out;
+ 	device_initialize(&shost->shost_gendev);
+ 	dev_set_name(&shost->shost_gendev, "host%d", shost->host_no);
+ 	shost->shost_gendev.bus = &scsi_bus_type;
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 6ffc9e4258a8..f6e53c6d913c 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1974,8 +1974,12 @@ int scsi_mq_setup_tags(struct Scsi_Host *shost)
+ 	else
+ 		tag_set->ops = &scsi_mq_ops_no_commit;
+ 	tag_set->nr_hw_queues = shost->nr_hw_queues ? : 1;
 +
-+	sdev = scsi_alloc_sdev(starget, 0, NULL);
-+	if (sdev)
-+		sdev->borken = 0;
-+	else
-+		scsi_target_reap(starget);
-+	put_device(&starget->dev);
-+ out:
-+	mutex_unlock(&shost->scan_mutex);
-+	return sdev;
-+}
-+EXPORT_SYMBOL(scsi_get_host_dev);
+ 	tag_set->nr_maps = shost->nr_maps ? : 1;
+-	tag_set->queue_depth = shost->can_queue;
++	tag_set->queue_depth =
++		shost->can_queue + shost->nr_reserved_cmds;
++	tag_set->reserved_tags = shost->nr_reserved_cmds;
 +
-+/**
-+ * scsi_free_host_dev - Free a scsi_device that points to the host adapter itself
-+ * @sdev: Host device to be freed
-+ *
-+ * Lock status: None assumed.
-+ *
-+ * Returns:     Nothing
-+ */
-+void scsi_free_host_dev(struct scsi_device *sdev)
-+{
-+	BUG_ON(sdev->id != sdev->host->this_id);
-+
-+	__scsi_remove_device(sdev);
-+}
-+EXPORT_SYMBOL(scsi_free_host_dev);
-+
+ 	tag_set->cmd_size = cmd_size;
+ 	tag_set->numa_node = dev_to_node(shost->dma_dev);
+ 	tag_set->flags = BLK_MQ_F_SHOULD_MERGE;
 diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 667d889b92b5..59aef1f178f5 100644
+index 59aef1f178f5..149dcbd4125e 100644
 --- a/include/scsi/scsi_host.h
 +++ b/include/scsi/scsi_host.h
-@@ -790,6 +790,16 @@ void scsi_host_busy_iter(struct Scsi_Host *,
+@@ -366,10 +366,19 @@ struct scsi_host_template {
+ 	/*
+ 	 * This determines if we will use a non-interrupt driven
+ 	 * or an interrupt driven scheme.  It is set to the maximum number
+-	 * of simultaneous commands a single hw queue in HBA will accept.
++	 * of simultaneous commands a single hw queue in HBA will accept
++	 * excluding internal commands.
+ 	 */
+ 	int can_queue;
  
- struct class_container;
- 
-+/*
-+ * These two functions are used to allocate and free a pseudo device
-+ * which will connect to the host adapter itself rather than any
-+ * physical device.  You must deallocate when you are done with the
-+ * thing.  This physical pseudo-device isn't real and won't be available
-+ * from any high-level drivers.
-+ */
-+extern void scsi_free_host_dev(struct scsi_device *);
-+extern struct scsi_device *scsi_get_host_dev(struct Scsi_Host *);
++	/*
++	 * This determines how many commands the HBA will set aside
++	 * for internal commands. This number will be added to
++	 * @can_queue to calcumate the maximum number of simultaneous
++	 * commands sent to the host.
++	 */
++	int nr_reserved_cmds;
 +
- /*
-  * DIF defines the exchange of protection information between
-  * initiator and SBC block device.
+ 	/*
+ 	 * In many instances, especially where disconnect / reconnect are
+ 	 * supported, our host also has an ID on the SCSI bus.  If this is
+@@ -602,6 +611,11 @@ struct Scsi_Host {
+ 	unsigned short max_cmd_len;
+ 
+ 	int this_id;
++
++	/*
++	 * Number of commands this host can handle at the same time.
++	 * This excludes reserved commands as specified by nr_reserved_cmds.
++	 */
+ 	int can_queue;
+ 	short cmd_per_lun;
+ 	short unsigned int sg_tablesize;
+@@ -620,6 +634,12 @@ struct Scsi_Host {
+ 	 */
+ 	unsigned nr_hw_queues;
+ 	unsigned nr_maps;
++
++	/*
++	 * Number of reserved commands to allocate, if any.
++	 */
++	unsigned nr_reserved_cmds;
++
+ 	unsigned active_mode:2;
+ 
+ 	/*
 -- 
 2.26.2
 

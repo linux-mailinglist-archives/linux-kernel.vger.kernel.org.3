@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB4B54549D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72385454A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243836AbiFITFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 15:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S236284AbiFITIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 15:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbiFITFX (ORCPT
+        with ESMTP id S231907AbiFITIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 15:05:23 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592475932E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:05:17 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id o7so16012833eja.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 12:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JJGptLrlivYu3r1Vh/8xt7dfaCVEeV5kDBA6HRnUmvU=;
-        b=deh/HChg+TfSg3z7xn7FcQAIg7H+tQW/ui2M7rcAe+8oHc12MP/eKSOnEhvsgU+0m0
-         Je05b+yG1RJee18y1iFpaLblwneXA/DAXedyYc83XRClm40a8mTttstWVO3HU/NeDnug
-         /t0vZjgrQR+5VXutsYnVM2WND6OgjzGN50n1U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JJGptLrlivYu3r1Vh/8xt7dfaCVEeV5kDBA6HRnUmvU=;
-        b=yl++0BB57rp4dAPWFsOJADGSEGpLmqe5VzfUbyYVdXEzyM7mCSHUj5brZ5HZNvedDA
-         i1AWyT+SxwckY/sOWYGjQ0PZPe5G9AWikxUoVxCM5HUg8Q6ueGMyBPBkoeC8s8hOhP2Z
-         Kp6Kt+6XUaqDFgw/4zVSBonZa6qR2G+YOkAnkOmYdciITuNMxtK/Ul0IJra8MRqJSSI8
-         wKwMJ9wWPk0wQVPZvS3sBmjbswg00OgEhnZz5G8pLBNZ71c9m+qOrB2NSSZzZmIYqhrv
-         nFWRVNzSpGkS5cymV4S5P7fY7eVfMHJyKNKvrDlHQiB4KySoAsls2kLghRY9GtpSi89I
-         fY8w==
-X-Gm-Message-State: AOAM532HU+q34GIvbK6kWBLrHZNkNWCfaJ9r+f2jHApNbovPxk1dlR3u
-        piIoExVjPsnCT6apq8gb7ijxcBlVCKJVCf+U
-X-Google-Smtp-Source: ABdhPJyc8vsoBvZz/aIdDeBmwonp7O7mw/338EG81Py38X6iBdne/V6akZDO1JprkNtpFXRMLjTDpQ==
-X-Received: by 2002:a17:906:8302:b0:70d:7465:495a with SMTP id j2-20020a170906830200b0070d7465495amr33049432ejx.115.1654801515591;
-        Thu, 09 Jun 2022 12:05:15 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id d9-20020a1709063ec900b006fec63e564bsm11200420ejj.30.2022.06.09.12.05.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 12:05:14 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id i205-20020a1c3bd6000000b0039c6fd897b4so51815wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 12:05:13 -0700 (PDT)
-X-Received: by 2002:a1c:5418:0:b0:39c:3552:c85e with SMTP id
- i24-20020a1c5418000000b0039c3552c85emr4853784wmb.68.1654801513341; Thu, 09
- Jun 2022 12:05:13 -0700 (PDT)
+        Thu, 9 Jun 2022 15:08:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD14C26CE49;
+        Thu,  9 Jun 2022 12:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654801710; x=1686337710;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=c38Un+y998cp1mk//MudRgxdikF4s6RsjatPEg81vl0=;
+  b=F05Oe/n/LDmEbUvDAFeOAiOuCAhMxvF7TtNLkWTaRXL0DC8KVnhNUgNl
+   VDr1S9CYE1GcG1w5Gk/Lwun1CCPeKxbTnEY2BHnf8fre3mxtXYX4CBgRl
+   eiF6eg3h4pYxhVSZ59S23mLYMA6Fj+U6Mvw5ITc05mpsgocZxh3he4oPC
+   guVJt9rRMgZ5JpLkQFsg8XeVJyGgGzTfBCxTRtwTs4iaeeTRDDnNiXrbS
+   Izag7k/RYuJLeB0SPKqpubeAs+tNZAjTsqRstCgw9u6U5MBiWYpCdh+9m
+   MXFp5aVN/a+pjHk/dmhAnFoSvSeNjKW0ZBGSTwb5fglEiue7XtzQS7MFu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278533566"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="278533566"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 12:08:14 -0700
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585751984"
+Received: from jeremywe-mobl3.amr.corp.intel.com (HELO [10.209.173.145]) ([10.209.173.145])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 12:08:12 -0700
+Message-ID: <a7ec7867-453c-f22d-ed1c-b793a5351837@linux.intel.com>
+Date:   Thu, 9 Jun 2022 14:08:11 -0500
 MIME-Version: 1.0
-References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
- <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
- <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
- <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
- <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com> <CA+icZUUOQcc4uiVbv+tJzPr_ED7e4tD0u9tC8mcn2BRe3sdPAg@mail.gmail.com>
-In-Reply-To: <CA+icZUUOQcc4uiVbv+tJzPr_ED7e4tD0u9tC8mcn2BRe3sdPAg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 9 Jun 2022 12:04:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiOrXUr0wqHL+hfkzGg_+b7UvtLeB=59KsX8W939bTY-A@mail.gmail.com>
-Message-ID: <CAHk-=wiOrXUr0wqHL+hfkzGg_+b7UvtLeB=59KsX8W939bTY-A@mail.gmail.com>
-Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
- and OpenSSL v3.0.x
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>, keyrings@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v1 14/16] soundwire: Use acpi_dev_for_each_child()
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>, Linux PM <linux-pm@vger.kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <1843211.tdWV9SEqCh@kreacher> <5296779.Sb9uPGUboI@kreacher>
+ <63d7f3ed-b5a9-c869-5d25-a33a1d4e63c8@linux.intel.com>
+ <CAJZ5v0i7xtjrEOXgKiWP5St8OZoiZ4qq+gL62BFrmv-qpeaG_w@mail.gmail.com>
+ <7652ddab-53a5-ac8e-33f5-d25527acb1a6@linux.intel.com>
+ <CAJZ5v0jR1_tO_t90UKQFjYfyE+vOoToJSMCfZ8y37voaYO=wJQ@mail.gmail.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <CAJZ5v0jR1_tO_t90UKQFjYfyE+vOoToJSMCfZ8y37voaYO=wJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 11:41 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> Why go back and forth... do it like Alexander the Great and the Gordian knot.
->
-> Sword - Swash - Done.
->
-> commit 6bfb56e93bcef41859c2d5ab234ffd80b691be35
-> "cert host tools: Stop complaining about deprecated OpenSSL functions"
 
-Well, it's not like that is the *right* fix.
 
-But I think for now, the answer is "leave it like that until we can
-just get rid of the ENGINE API entirely".
+On 6/9/22 12:35, Rafael J. Wysocki wrote:
+> On Thu, Jun 9, 2022 at 6:21 PM Pierre-Louis Bossart
+> <pierre-louis.bossart@linux.intel.com> wrote:
+>>
+>>
+>>>> Shouldn't the return of sdw_acpi_find_one() be trapped, e.g. with
+>>>>
+>>>> return acpi_dev_for_each_child(parent, sdw_acpi_find_one, bus);
+>>>
+>>> Sure, I'll do that.  Thanks!
+>>
+>> I also added this EXPORT_SYMBOL to work-around link errors, not sure if
+>> this is in your tree already?
+> 
+> One of the previous patches in the series is adding the export.
 
-I absolutely detest the "deprecation" warnings. We used to do that in
-the kernel too, and it was a complete disaster. The warnings are very
-noisy, and nobody ever cares about them, so it's simply not worth it.
+ok. I ran a bunch of tests with those two changes, so feel free to take
+my tags:
 
-So we deprecated "__deprecated" in the kernel itself:
-
-  771c035372a0 deprecate the '__deprecated' attribute warnings
-entirely and for good
-
-and I don't think we should care about it when it comes to OpenSSL either.
-
-Eventually, that deprecated interface will go away entirely, and by
-then we hopefully don't care about really old openssl implementations
-and will have gotten rid of the uses.
-
-But for now, I think putting our head in the sand is actually the
-_better_ model rather than fighting some battle over old vs new
-libraries.
-
-Because sometimes, if you ignore a problem, it really does just go away.
-
-                  Linus
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Tested-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>

@@ -2,96 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BF65440FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 03:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AD95440FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 03:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbiFIBUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 21:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S229802AbiFIBWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 21:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiFIBT7 (ORCPT
+        with ESMTP id S229598AbiFIBWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 21:19:59 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590596355
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 18:19:58 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id j6so19756867pfe.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 18:19:58 -0700 (PDT)
+        Wed, 8 Jun 2022 21:22:40 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87B2BE19
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 18:22:37 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id q1so44634948ejz.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 18:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NCXY1rhj4g31vz+NjF0VZ/JPyBEqV1WHyHzZOp4wgvw=;
-        b=bsxfaE3FCpBRPVBEmw/3kUUEGVjUx585asDSWngPjF3ueGFxh64v/wqBwscwkw+14M
-         UbSPLetz7A7Ma3KlOnQB+xYBP3/vY2woLCViGxbQppASW1cosBT5HnLb5ZdIhGfY/bzg
-         TPn1DYxY2diyBDSGzSyMhacCR+WmPpri+btLWSr1GguvdAto9XOdKW5O3FWcBrxS1VtT
-         gIU3O2oJilzyp154ltbIviCl8ydyzjPgztDuUVvhCxXzCIMa63ddKErLsDPptRXwQjWc
-         ZGwWRJCzIGc7+Kam4V7RvgH3MGiVA8vJH5uPfILVek0C4xk0SXQdcwLYJTPAMH/zyq8N
-         4Qxw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NfMuADiFFvnqQyO3r24ufd7TKgEd1X5aHVOraAOXhgk=;
+        b=NR+nKQkeYzC9xA1U3BKfQCA9PuaPmbs8u2UPCtdg9YDYgGVsw1Dg2966hthVHnKni3
+         /98YV3cjD2fYcieuXtT3Q1VYXiLfNXjnXaTn2GSmd288P1m1khn/qNfwvdDEby4WVMAi
+         E3QnRNgsE1YNz4VmvdCTgYX1GTsiaiWCGJ5i0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NCXY1rhj4g31vz+NjF0VZ/JPyBEqV1WHyHzZOp4wgvw=;
-        b=MBcOJlG5EjApdn9wSCODJeRZY3Hp7Lk56S21R32vfo9mhu+JBGbZbhyNq7cE4OEK6O
-         2kPS27YJgG6cVnV+60AER8V2ZgMZA74xIj1fJRNgzi+fjg9EGMyYYJr316IKNMDh+OFS
-         K4Yg3JbU2yQCqiDKRyCiRT6Xi7ZpCQyl9yN5CMX2S7HUB3dpnmo8Jgs+CTYLindIHnFZ
-         5FfmmD6n7ISlwdCI+WYIq/7mLrU3U4s5kLMSe45zeQhF2y45zJSih3Su0zFjaRIRpTDR
-         WF8Md2NpRi3qKKGTmOmHyTlpboGUY5y4aJ1JrMTgY18obFIVD1Uj68OlgdDvoeY6DCEs
-         DosQ==
-X-Gm-Message-State: AOAM531M77Wm6igv9HJskc9urq74zjdymggqyyYmRxa43XP3S32K+z1K
-        vRlWJfukuUmLr9OKWZhvKxPcIiFuL6VR20z8yo+MJg==
-X-Google-Smtp-Source: ABdhPJyXvTK2zcvGkTVvxwueEIUztuz3658ykbIdOrK0OVEgXtAxRxvC3+HfCDRX2jGDSfJvsDeeyg==
-X-Received: by 2002:a05:6a00:244e:b0:51b:3a93:b888 with SMTP id d14-20020a056a00244e00b0051b3a93b888mr37300112pfj.39.1654737597759;
-        Wed, 08 Jun 2022 18:19:57 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b00163d6164889sm15412906plb.236.2022.06.08.18.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 18:19:55 -0700 (PDT)
-From:   luoxueqin <luoxueqin66@gmail.com>
-X-Google-Original-From: luoxueqin <937225041@qq.com>
-To:     jk@ozlabs.org, joel@jms.id.au
-Cc:     alistair@popple.id.au, eajames@linux.ibm.com,
-        linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Luo Xueqin <luoxueqin@kylinos.cn>
-Subject: [PATCH -next] fsi: Fix typo in comment
-Date:   Thu,  9 Jun 2022 09:19:48 +0800
-Message-Id: <20220609011948.53706-1-937225041@qq.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NfMuADiFFvnqQyO3r24ufd7TKgEd1X5aHVOraAOXhgk=;
+        b=nMcvvDzMLECbdoXzMHbRZ5UsFMzHYP+CMVsULWzvzF2Mg1FBwtYj6gqc6OMw1xM0A/
+         lDtChytZs120MhjlM0SLPxPnSpetzpNUSfbCtB25rfmA4o51X+6IBqJXIXSxMAfKsUt9
+         RNnyDBOQWqQSlLR/YbnNkX2F+xnPcgXw2lYdRknSrOr/PasikhASOF1aSr6DiIDINLjS
+         aPH+pObixRfBDYgb4MyM6MC1AZlvSHkRF9tyVvttzqPXoyjzIAUYQfvQ5d4zXoLPdAuj
+         /U1uyGBgHz+Xqyl/9oJRRqJC3bc++LDmaiprqSx3t7xSc06zw8u3dNivSOIH9Aekwhxo
+         sYYg==
+X-Gm-Message-State: AOAM531DZXf7PFCAsesxHbHFkYGzpr4IoUjDsfzVal95moGuquiXFW+8
+        E7HYhol5G75xvYYvwjYg5vz0Ki9K2YSQKE3v
+X-Google-Smtp-Source: ABdhPJx2hIovwbcZPMGGdWpnzzKFgvB/ktjJ1ZNaL4PO0VNoRy14x5iaUqwcL6zkFdz5Iji5KpvaSg==
+X-Received: by 2002:a17:907:2d8a:b0:6f5:df90:45c4 with SMTP id gt10-20020a1709072d8a00b006f5df9045c4mr33041753ejc.662.1654737756021;
+        Wed, 08 Jun 2022 18:22:36 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id e2-20020a1709062d4200b006fec2097d53sm9973886eji.118.2022.06.08.18.22.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 18:22:34 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so11908393wmz.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 18:22:34 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f0e:b0:397:6b94:7469 with SMTP id
+ l14-20020a05600c4f0e00b003976b947469mr693188wmq.145.1654737754130; Wed, 08
+ Jun 2022 18:22:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220422134308.1613610-1-svens@linux.ibm.com> <202204221052.85D0C427@keescook>
+ <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com>
+ <202206081404.F98F5FC53E@keescook> <CAHk-=wiFn-_OaWKY=nXt3YSiy=obrNoQW_u7zKO7qoArez=GUw@mail.gmail.com>
+ <AEEBCF5D-8402-441D-940B-105AA718C71F@chromium.org>
+In-Reply-To: <AEEBCF5D-8402-441D-940B-105AA718C71F@chromium.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 8 Jun 2022 18:22:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh6+KUi+T8Ncn6BWTHDTJCzrJxgT47SWbq-ZWs1_vbvHA@mail.gmail.com>
+Message-ID: <CAHk-=wh6+KUi+T8Ncn6BWTHDTJCzrJxgT47SWbq-ZWs1_vbvHA@mail.gmail.com>
+Subject: Re: [PATCH] s390: disable -Warray-bounds
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luo Xueqin <luoxueqin@kylinos.cn>
+On Wed, Jun 8, 2022 at 5:39 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> I'll take a look; thanks! Should I send them back as a pull request?
 
-Spelling mistake in comment.
+That would be good.
 
-Signed-off-by: Luo Xueqin <luoxueqin@kylinos.cn>
----
- drivers/fsi/fsi-master.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Yeah. Happily, this has already been solved, but it looks like David didn't do a pull yet for it?
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
 
-diff --git a/drivers/fsi/fsi-master.h b/drivers/fsi/fsi-master.h
-index cd6bee5e12a7..4762315a46ba 100644
---- a/drivers/fsi/fsi-master.h
-+++ b/drivers/fsi/fsi-master.h
-@@ -51,7 +51,7 @@
- #define FSI_MMODE_CRS1SHFT	8		/* Clk rate selection 1 shift */
- #define FSI_MMODE_CRS1MASK	0x3ff		/* Clk rate selection 1 mask */
- 
--/* MRESB: Reset brindge */
-+/* MRESB: Reset bridge */
- #define FSI_MRESB_RST_GEN	0x80000000	/* General reset */
- #define FSI_MRESB_RST_ERR	0x40000000	/* Error Reset */
- 
--- 
-2.25.1
+Good.
 
+> For gcc's UBSAN_SHIFT (I typoed this in my first reply) bug, netdev has been moving it to W=1 builds on a per-source basis for the moment:
+>
+> https://git.kernel.org/linus/e95032988053c17baf6c7e27024f5103a19a5f4a
+
+Ugh. That's sad. Since now the gcc-12 misfeature ends up biting
+everybody else too.
+
+> Perhaps these could be even more carefully limited to GCC 12 only, using the Kconfig you suggested?
+
+Yeah, I'd rather just say "gcc-12 gets this thing entirely wrong,
+let's disable it there" than disable it for compilers that get it
+right.
+
+In fact, I'd rather have that global "gcc-12 is broken, disable it",
+than marking "this file shouldn't get checked" kind of logic.
+
+It's wrong blaming the C code, when the compiler is doing bad sh*t.
+
+                Linus

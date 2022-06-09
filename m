@@ -2,100 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC70544874
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20FA544871
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238486AbiFIKOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S234467AbiFIKO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbiFIKO3 (ORCPT
+        with ESMTP id S229654AbiFIKO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:14:29 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E6C1D4222;
-        Thu,  9 Jun 2022 03:14:27 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 0C93E3200928;
-        Thu,  9 Jun 2022 06:14:23 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute4.internal (MEProxy); Thu, 09 Jun 2022 06:14:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1654769663; x=
-        1654856063; bh=3JVSv/3Y7cnWYb5H6IILBv0JoYAgHd/+In59ua4cJ3s=; b=f
-        i34A/lL5DHAJJYwp9WyhPqRjMKGy8n3IZmtblbDb+HRWkJqq9ufQjGYBBlACJlkl
-        kt6yq3iwVwyq3huipPCGq6zLtpHlf6kYV7JpSEm78VNkjZGyNZcHtdV595aL7Xax
-        2MeBYIghSX3tihY4xSh+H15c2I/6mNYrsg498W3aeXfjCrkBOtVfPG37c3dehQis
-        tttMzELkN1B4YiJeeFECgOi8EN6+6pWycsY1sQtOnuy2hFkQUbzYat5QACqHHToW
-        YpN0cQvwyF4s98EK4Gs8WSr8u0d5c3mBFUYNK701ZuNIaziZ1XKXewZONRVAcFwk
-        YyGTLmHxBC90E5otn2wVw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1654769663; x=
-        1654856063; bh=3JVSv/3Y7cnWYb5H6IILBv0JoYAgHd/+In59ua4cJ3s=; b=g
-        U9HeZSPaG/kJSXMkjeZz5mTYDxcpFpKx3MTpO7IFhisD2WCiiNNEW/wujpNwku1h
-        icNHzTivY/EZyJhzT1xm3OgV4x+pTccD9xBZAAWY7HDfIAnHtL2S+oLsPGWAkp+S
-        LV1x6fkemfbuLjWbwOsL43accRIb8ibrl/911rQgx3gxJhKuEqGu8nWyAiRwDL+1
-        iZCNjBQgDRfYtDmjnIbBO32iWwK87O39lW2pYjP2eq4zIkbeTilcMvJKqWw7a5Da
-        wwmvY5Kc4J03Djm/Z2kl6KKX9KIflIdj6BTEgjlNZMZ7L+vjukB7RfGSJOvjVHQS
-        0GichANqdlDRshx0Qh+XA==
-X-ME-Sender: <xms:_sehYpUBAr972p3QKgi5Juqfn1MMR8N2QBWpH__Ipxry44vpTJl8aw>
-    <xme:_sehYpmmmBQbr4m26qyJqJntBfoNAnqj2WjrM_r9uXXunjDKmdFYtXTS_wFKiPr4E
-    QcHgjS2FhnqL74Zuzc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtledgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:_sehYla9GCXZp6WHUfXLJuFjBcTTZkk-NqaufXbA3fHmsnlQ1xdWaA>
-    <xmx:_sehYsVNz2kY9_0NAnBDoFmpxajSed0up5aJ4eyMoXlSqm7roujwLA>
-    <xmx:_sehYjnfAhEJRVoF8l4CBU1U-F-NHqxn8T4k6CxF4_2Y7KlKeXraPQ>
-    <xmx:_8ehYtnzhFXDONtB-X5wvgVV0QYWv-oqk9326LYzk5dwB1wwdnJseg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6B89A36A006D; Thu,  9 Jun 2022 06:14:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-692-gb287c361f5-fm-20220603.003-gb287c361
-Mime-Version: 1.0
-Message-Id: <692f7fc0-4953-408a-93fd-b1fe9b87663c@www.fastmail.com>
-In-Reply-To: <87pmjjzo3k.wl-maz@kernel.org>
-References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
- <20220525121030.16054-7-Dragan.Mladjenovic@syrmia.com>
- <87wndu3tff.wl-maz@kernel.org>
- <0a5dd632-0607-dab6-4de7-1ea248490863@flygoat.com>
- <87pmjjzo3k.wl-maz@kernel.org>
-Date:   Thu, 09 Jun 2022 11:14:01 +0100
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Marc Zyngier" <maz@kernel.org>
-Cc:     "Dragan Mladjenovic" <Dragan.Mladjenovic@syrmia.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Chao-ying Fu" <cfu@wavecomp.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Greg Ungerer" <gerg@kernel.org>,
-        "Hauke Mehrtens" <hauke@hauke-m.de>,
-        "Ilya Lipnitskiy" <ilya.lipnitskiy@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Serge Semin" <fancer.lancer@gmail.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v2 06/12] irqchip: mips-gic: Multi-cluster support
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Thu, 9 Jun 2022 06:14:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4722050F9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 03:14:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A12761D11
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:14:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1152EC34114;
+        Thu,  9 Jun 2022 10:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654769664;
+        bh=SLw1oSh+8LUTAZT86qz5LL5HQ2TFx0Zf2q1ZombaJqw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tfix+sQxFrhbG0Y9h+v2ocj77Fd3DTdWQcMlDxIi6ta9xlyq1qJn280WrFP3O7lYu
+         QWasQ5U9BF63aUGKU7x2eW7eopTW/u2vAjTJs5k/KqKFv1a36N+1MPsti0O+XSUkln
+         sYB1YBaD1gArh8Bvv6GXjU3GnLU2rVNkuQCE5JBIdPpKmnqYQEAkSrTr329fDqEDGg
+         EvObnl14kCVvij6xo249k/y51bHZklpWgMheotdNVx/UjYqn4VuOjT12yvoOKiGFls
+         sOz2OA/75CeE2/pNpJA1Ixxdsi6vZOEngzFmnaf4Oh5n+UpaT90PFHjFP9LJaBe3Xb
+         inHHVfokmRBcg==
+Date:   Thu, 9 Jun 2022 11:14:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>
+Cc:     "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "Weight, Russell H" <russell.h.weight@intel.com>
+Subject: Re: [PATCH v1] regmap: add generic indirect regmap support
+Message-ID: <YqHH+oX/90KXv8dN@sirena.org.uk>
+References: <20220607013755.594554-1-tianfei.zhang@intel.com>
+ <Yp9PdZn2Xu/oqiA8@sirena.org.uk>
+ <alpine.DEB.2.22.394.2206071714420.3001206@rhweight-WRK1>
+ <YqB9O8HhZV2tXo8g@sirena.org.uk>
+ <BN9PR11MB548315C03B09D841B6392E63E3A49@BN9PR11MB5483.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pnYC1NmSS39gOaw/"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB548315C03B09D841B6392E63E3A49@BN9PR11MB5483.namprd11.prod.outlook.com>
+X-Cookie: Space is limited.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,83 +66,55 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--pnYC1NmSS39gOaw/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-=E5=9C=A82022=E5=B9=B46=E6=9C=888=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
-=8D=887:05=EF=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
-> On Tue, 07 Jun 2022 19:23:02 +0100,
-> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->>=20
->>=20
->>=20
->> =E5=9C=A8 2022/6/6 12:47, Marc Zyngier =E5=86=99=E9=81=93:
->> > On Wed, 25 May 2022 13:10:24 +0100,
->> > Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
->> >> From: Paul Burton <paulburton@kernel.org>
->> >>=20
->> >> The MIPS I6500 CPU & CM (Coherence Manager) 3.5 introduce the conc=
-ept of
->> >> multiple clusters to the system. In these systems each cluster con=
-tains
->> >> its own GIC, so the GIC isn't truly global any longer. We do have =
-the
->> >> ability to access registers in the GICs of remote clusters using a
->> >> redirect register block much like the redirect register blocks pro=
-vided
->> >> by the CM & CPC, and configured through the same GCR_REDIRECT regi=
-ster
->> >> that we our mips_cm_lock_other() abstraction builds upon.
->> >>=20
->> >> It is expected that external interrupts are connected identically =
-to all
->> >> clusters. That is, if we have a device providing an interrupt conn=
-ected
->> >> to GIC interrupt pin 0 then it should be connected to pin 0 of eve=
-ry GIC
->> >> in the system. This simplifies things somewhat by allowing us for =
-the
->> >> most part to treat the GIC as though it is still truly global, so =
-long
->> >> as we take care to configure interrupts in the cluster that we wan=
-t them
->> >> affine to.
->> > I can see how this can work for level interrupts, but how does this
->> > work for edge interrupts? Is there any guarantee that the interrupt
->> > will be discarded if routed to a cluster where it isn't configured?
->> It is supposed to mask the interrupt out on the GIC which belongs to =
-the
->> cluster that the interrupt is not routed to.
->>=20
->> When it's masked out GIC simply won't sense any level change.
->>=20
->> I guess it's sort of guarantee?
->
-> Pretty much the opposite. There is a *strong* requirement that a
-> masked interrupt can still detect interrupts, so that on unmask the
-> interrupt fires (you'd otherwise lose edge interrupts pretty often).
-Oops, sorry there is a terminology issue. On MIPS Coherent Manager
-manual it uses terminology of =E2=80=9CMasked=E2=80=9D when vector regis=
-ter of
-a interrupt is cleared.
+On Wed, Jun 08, 2022 at 11:54:26PM +0000, Zhang, Tianfei wrote:
 
-It means implementation will guarantee interrupt will be dropped
-when it=E2=80=99s routed to nowhere.
+> > > Would a different name help?
+> >=20
+> > This wouldn't address the major problem which is...
+> >=20
+> > > > > +	writel(0, ctx->base + INDIRECT_CMD_OFF);
+> > > > > +	ret =3D readl_poll_timeout((ctx->base + INDIRECT_CMD_OFF), cmd,
+> > > > > +				 (!cmd), INDIRECT_INT_US,
+> > INDIRECT_TIMEOUT_US);
+> > > > > +	if (ret)
+> > > > > +		dev_err(ctx->dev, "%s timed out on clearing cmd 0x%xn",
+> > > > > +__func__, cmd);
+> >=20
+> > > > ...and this doesn't look particularly generic, it looks like it's
+> > > > for some particular controller/bridge?
+> >=20
+> > ...that this appears to be entirely specific to some particular device,=
+ it's got
+> > things like hard coded register addresses and timeouts which mean it ca=
+n't be
+> > reused.
+>=20
+> Yet, this is a register access hardware controller/bridge widely used in =
+FPGA IP blocks, like PMCI, HSSI.
+> How about we change the patch title like this:
 
->
-> What does the MIPS GIC arch spec says about this?
-Unfortunately GIC is not a arch spec. It=E2=80=99s just a implementation=
- spec
-of MIPS Coherent Manager.
+> regmap: add indirect register controller support
 
-Thanks.
-- Jiaxun
+No, please enage with my feedback above.
 
->
-> Thanks,
->
-> 	M.
->
-> --=20
-> Without deviation from the norm, progress is not possible.
+--pnYC1NmSS39gOaw/
+Content-Type: application/pgp-signature; name="signature.asc"
 
---=20
-- Jiaxun
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKhx/kACgkQJNaLcl1U
+h9BkuQf7B56QFQztdHtVqb/2t5HdOuKXMNcFF8CV8OVFl8cAdPXPakXcAW5FpAUE
+V4ag+gzdzhZjnaxJ0rF8k5lRDYIZbx4au4oYIrFyJ07Q+va0ezLmKfaisf2IXyuv
+hTXpx+k+j1aBSVh0dAxquKn5tt3Mjq1CEhDiBLyfCyAlEAdyG3Ad7PuQpA3d8Moc
+vzuhzLMf6kMRkRR0njHzvtGtevdaJSmRy3Pm41GNkctZzcyWdidxa8FT45Xcv9E5
+DFoTU+pvKG/e93lx+KIwrjXdtHcSvF3kIiy9JtWRitrwkjvP6aFNtHCjyU7Oyuv/
+04A6GBCGJhvQ2FxUvWS+dFuj8yO55Q==
+=rgTb
+-----END PGP SIGNATURE-----
+
+--pnYC1NmSS39gOaw/--

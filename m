@@ -2,137 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FC454541E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935A954541B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345416AbiFIS0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S1345409AbiFIS0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbiFIS0r (ORCPT
+        with ESMTP id S231627AbiFIS0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:26:47 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4221EF072A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:26:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654799206; x=1686335206;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jr0lIf0jCMlZxD8aPAkcAccpuSBw8ZVqumU2RXeM7gw=;
-  b=XKOsKq+/z4ZNDO7IENwwl3BcGwk9O27swwWRtpxRuw8MuiXBQOQbBL2B
-   p6JpkSo3OU5fPmUlOR5J38sIWN1Lql04B5VVMUAknM3OiEccexj0C1HE3
-   hAHQSTUr9PV0xw1+AbC6hz7Pa6A1YiigOD0t1QZquEbHCx77lZg1+Z2Vx
-   jU0r3YmjScHAAneh1ZH6AfxcJYM9IIv2QE7h1X+LYkpplCJ7l21oKVnEU
-   Qls3fd8/dN033VadKkE/LTPE7ceP/FqFUssLGoXTt2+QDz9JLDgY2AWH6
-   OlOAqGxQIChTPB8R0epWCOGf3juShRno9oJ2NPtDbhjcQctRiCmteki10
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="302750416"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="302750416"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 11:26:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="585726010"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2022 11:26:44 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzMrk-000GGX-BB;
-        Thu, 09 Jun 2022 18:26:44 +0000
-Date:   Fri, 10 Jun 2022 02:26:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype
- for 'lpc32xx_loopback_set'
-Message-ID: <202206100243.FIBW6bJC-lkp@intel.com>
+        Thu, 9 Jun 2022 14:26:11 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820B929C9E;
+        Thu,  9 Jun 2022 11:26:10 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id z11so536574ilq.6;
+        Thu, 09 Jun 2022 11:26:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cLDZQJzvsDyJ7h1hdWbqNlQ6ycdzzAeH1ZyNfeeZj5w=;
+        b=JvREQPrh5CiWz/7Vx5u7gyi/QNOn+Rd8L1EqQkD0sf9h8fR5UoJ4jgREFjBvsPNxif
+         78HPdaQE+vux1Mc5OA8D5Ui8F7n1e4BIkJgbiBbCKq/cvs4fXtUL60EnVE1AbaJQAQPK
+         D7Y4KirqCb/hHO1IOzeIcl3rSTLP91YIzTflIj/oFMQHsC2ztGWfo/Tm8wJXiLqBSmNt
+         XAYESOEd+wNNcyXT1WRjVuor5Enxxn3qeZmJZwvcnioAuSiPiQTfWS3vxejY8lVyO2rY
+         ETNwPkLXHtaDfivP2VOi9JKB/lisZbsL5l3liFx+dfb10s9HV3TzYF5EVeIPwCDWJiOw
+         Oirg==
+X-Gm-Message-State: AOAM532e2nFPP7Takj/DgkJ5AvMaIvSNiyzDvQTSeihpefn7NymYad5B
+        X1uEofeVLslARR/U7mRusQ==
+X-Google-Smtp-Source: ABdhPJyPAu/3NduG0na4VoyumB38tDz2ZNatdC2Ocl+vXixAxmw3qxr/QGPsvo5KIxlV4ZGOwDdRNw==
+X-Received: by 2002:a92:dc88:0:b0:2d5:118c:a3f6 with SMTP id c8-20020a92dc88000000b002d5118ca3f6mr16497974iln.204.1654799169714;
+        Thu, 09 Jun 2022 11:26:09 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id a2-20020a029102000000b0033202bb9829sm1013998jag.49.2022.06.09.11.26.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 11:26:09 -0700 (PDT)
+Received: (nullmailer pid 4072745 invoked by uid 1000);
+        Thu, 09 Jun 2022 18:26:06 -0000
+Date:   Thu, 9 Jun 2022 12:26:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        linux@armlinux.org.uk, vladimir.oltean@nxp.com,
+        grygorii.strashko@ti.com, vigneshr@ti.com, nsekhar@ti.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kishon@ti.com
+Subject: Re: [PATCH v3 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J7200 CPSW5G
+Message-ID: <20220609182606.GA4024580-robh@kernel.org>
+References: <20220606110443.30362-1-s-vadapalli@ti.com>
+ <20220606110443.30362-2-s-vadapalli@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220606110443.30362-2-s-vadapalli@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, Jun 06, 2022 at 04:34:41PM +0530, Siddharth Vadapalli wrote:
+> Update bindings for TI K3 J7200 SoC which contains 5 ports (4 external
+> ports) CPSW5G module and add compatible for it.
+> 
+> Changes made:
+>     - Add new compatible ti,j7200-cpswxg-nuss for CPSW5G.
+>     - Extend pattern properties for new compatible.
+>     - Change maximum number of CPSW ports to 4 for new compatible.
+> 
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 135 ++++++++++++------
+>  1 file changed, 93 insertions(+), 42 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+> index b8281d8be940..49f63aaf5a08 100644
+> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+> @@ -57,6 +57,7 @@ properties:
+>        - ti,am654-cpsw-nuss
+>        - ti,j721e-cpsw-nuss
+>        - ti,am642-cpsw-nuss
+> +      - ti,j7200-cpswxg-nuss
+>  
+>    reg:
+>      maxItems: 1
+> @@ -108,48 +109,98 @@ properties:
+>          const: 1
+>        '#size-cells':
+>          const: 0
+> -
+> -    patternProperties:
+> -      port@[1-2]:
 
-First bad commit (maybe != root cause):
+Just change this to 'port@[1-4]'.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
-commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
-date:   6 days ago
-config: arm-buildonly-randconfig-r012-20220608 (https://download.01.org/0day-ci/archive/20220610/202206100243.FIBW6bJC-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7036440eab3e2d47a775d4616909f8235488d714
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> -        type: object
+> -        description: CPSWxG NUSS external ports
+> -
+> -        $ref: ethernet-controller.yaml#
+> -
+> -        properties:
+> -          reg:
+> -            minimum: 1
+> -            maximum: 2
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+And this to 4.
 
-All warnings (new ones prefixed by >>):
+Then, you just need this to disallow the additional ports:
 
->> arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype for 'lpc32xx_loopback_set' [-Wmissing-prototypes]
-      63 | void lpc32xx_loopback_set(resource_size_t mapbase, int state)
-         |      ^~~~~~~~~~~~~~~~~~~~
+if:
+  not:
+    properties:
+      compatible:
+        contains:
+          const: ti,j7200-cpswxg-nuss
+then:
+  patternProperties:
+    '^port@[3-4]$': false
 
 
-vim +/lpc32xx_loopback_set +63 arch/arm/mach-lpc32xx/serial.c
-
-e6e912c4964ce5 Kevin Wells   2010-07-27  61  
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  62  /* LPC3250 Errata HSUART.1: Hang workaround via loopback mode on inactivity */
-ffba29c9ebd097 Arnd Bergmann 2019-08-09 @63  void lpc32xx_loopback_set(resource_size_t mapbase, int state)
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  64  {
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  65  	int bit;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  66  	u32 tmp;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  67  
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  68  	switch (mapbase) {
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  69  	case LPC32XX_HS_UART1_BASE:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  70  		bit = 0;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  71  		break;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  72  	case LPC32XX_HS_UART2_BASE:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  73  		bit = 1;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  74  		break;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  75  	case LPC32XX_HS_UART7_BASE:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  76  		bit = 6;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  77  		break;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  78  	default:
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  79  		WARN(1, "lpc32xx_hs: Warning: Unknown port at %08x\n", mapbase);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  80  		return;
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  81  	}
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  82  
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  83  	tmp = readl(LPC32XX_UARTCTL_CLOOP);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  84  	if (state)
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  85  		tmp |= (1 << bit);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  86  	else
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  87  		tmp &= ~(1 << bit);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  88  	writel(tmp, LPC32XX_UARTCTL_CLOOP);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  89  }
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  90  EXPORT_SYMBOL_GPL(lpc32xx_loopback_set);
-ffba29c9ebd097 Arnd Bergmann 2019-08-09  91  
-
-:::::: The code at line 63 was first introduced by commit
-:::::: ffba29c9ebd0977dbf77bf6064776716a51b8ae5 serial: lpc32xx: allow compile testing
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Rob

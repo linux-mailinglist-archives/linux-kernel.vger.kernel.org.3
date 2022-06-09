@@ -2,104 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F3D545313
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525BC545316
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344688AbiFIRf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        id S1344992AbiFIRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiFIRfx (ORCPT
+        with ESMTP id S1344967AbiFIRgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:35:53 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426B7169E2B;
-        Thu,  9 Jun 2022 10:35:52 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id p13so42956978ybm.1;
-        Thu, 09 Jun 2022 10:35:52 -0700 (PDT)
+        Thu, 9 Jun 2022 13:36:02 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29182DABC1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:36:00 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so24107955pjm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 10:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=8d0a50vlXPwK/evqvKND5Qkww0VWt34LxBu4KEjcCqk=;
+        b=mBWkbCkHm6C1SNvMBjj+j6cEPOa61p9SJsey0F0Cv9c6q64zIhkL2NWcUDWOWBgQSE
+         3hvcY8aJJ5CE9js7qfPuSxMRdp+PwJ+RGcFhoobDiPqPhmjlwjveTOq6h9e9c9fvdKjJ
+         xaqPS9/TTtxnbdCXlDqjOWrGzSa7YFugpey6R5VEvIrda02aLHk/NUCA4UTANscwIKHT
+         lyoYQZOrkLJEe6gt0kjFfKNxD3I5RxjgWeCtZ8r4XiWuDAQ2omJVomah7Vr6YmV5+Yg8
+         AaLInB+EnpNjsXX2WMHfsJCFn440O3yoSgojqFXjnc/9Ep134YTgCYC0qUWjvsQvAypi
+         Pfww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VC+T5gNopDGm2JXb4Q0gD1ESudpir+AKQBEND4sHjLs=;
-        b=430MJSkaxs7KMOw4QhH8X2FHZuBzUIbs704MKdJjhDzvZXtt04U421Ttkq6Hjvf6Ns
-         ZcF9gFlthCSGBRvWEWbVopNf5xItqCs4ZFbIxD8N/GpCwEQ/eMZ/SeJJgwyjjwWwGr4u
-         aaH7ZmKgP0aZwEtPO8VYYEz+rI9AuFkm1PNP4TqoDQlyihLB1gnqBhqJXc7X2JpopANI
-         ZSg+30MckJsBgE5vBaB0+4WuV5mXVr5TopNwwTSRm/gzuqPd/2o4fZ/mvWkt6dpF1X7w
-         FeQNHBIZ+MRUopoaL3Gc1yock+I8UqN6hHHzwO2yqtsattw9NfTcxAT+gZs65Z0NeB0s
-         nJlw==
-X-Gm-Message-State: AOAM532xGFYOESj0mNy2eEZmFXeQqG4w5TeRx1NKAjMqVva2zjl++kwf
-        GgZ6aj1czNZDXvPRE17OwzwHb+aSp8ZE686CUx0Rtpzq
-X-Google-Smtp-Source: ABdhPJyVIGpmxye5bnwhynEG24c16C312gNtzaFfAseNsDXbDB5re+boNDhXJ5I+yEEdQCOMEXBzOFI0n7W06mBDIAE=
-X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
- o69-20020a25d748000000b0065c6b0055afmr39672546ybg.365.1654796151473; Thu, 09
- Jun 2022 10:35:51 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=8d0a50vlXPwK/evqvKND5Qkww0VWt34LxBu4KEjcCqk=;
+        b=B0Afl28YRPQJixGvPK3i499eqYTHk/LK/AejixWZDHQUPdCy4jY1F16ZpCdR1fs+He
+         olQBXLJu3Y1uzN4Pe+GEamRVza8YtvCqk+Z2LIhOQJ+4u5mtsbfPdelxD03VekV4JvBw
+         4HVrpq5Z1vCL+wUhRCMA60Jd5D0xku7bmyTkX1GnaH/SiwGmz49xqTMArHKa/+I5qpZ1
+         mPnNmKIHipjvzWhod+CNlccdmXc7nFHwaNZRfAZLattiYMQvXtk/VfFVZLiEP5S9OKEV
+         vM5dHTHeRHsOQt4ix5Lftj/NJlK10mj5oDADHlcaJi9lkYmTIMHpHknrXQOxhjjEint7
+         /nQA==
+X-Gm-Message-State: AOAM531Lq62GgfBtppYdgSLqepcskszUwAdCFWz1MrY/2Ywh0fK31ZQG
+        vgcTyXX/YDi6BQSKftfZk0J+fhrIEamQf782xis=
+X-Google-Smtp-Source: ABdhPJz02t2j9WHMmwPEP/pEm3letWNMc0QFGa8k6GnQYlX9k85uJReaT5e6P5kplsIbD38vYJTJHBLZfFvX8QMg0C8=
+X-Received: by 2002:a17:902:9a8d:b0:167:77c3:4c86 with SMTP id
+ w13-20020a1709029a8d00b0016777c34c86mr23041488plp.122.1654796160118; Thu, 09
+ Jun 2022 10:36:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <1843211.tdWV9SEqCh@kreacher> <5296779.Sb9uPGUboI@kreacher>
- <63d7f3ed-b5a9-c869-5d25-a33a1d4e63c8@linux.intel.com> <CAJZ5v0i7xtjrEOXgKiWP5St8OZoiZ4qq+gL62BFrmv-qpeaG_w@mail.gmail.com>
- <7652ddab-53a5-ac8e-33f5-d25527acb1a6@linux.intel.com>
-In-Reply-To: <7652ddab-53a5-ac8e-33f5-d25527acb1a6@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Jun 2022 19:35:40 +0200
-Message-ID: <CAJZ5v0jR1_tO_t90UKQFjYfyE+vOoToJSMCfZ8y37voaYO=wJQ@mail.gmail.com>
-Subject: Re: [PATCH v1 14/16] soundwire: Use acpi_dev_for_each_child()
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>, Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
+Reply-To: evelynjecob47@gmail.com
+Sender: mrsashaalqaddfi117@gmail.com
+Received: by 2002:a17:90a:f2d8:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:35:59
+ -0700 (PDT)
+From:   Evelyn Jacob <evelynjecob47@gmail.com>
+Date:   Thu, 9 Jun 2022 10:35:59 -0700
+X-Google-Sender-Auth: 2fZj3d1iQlwlnZYHAIF8X4cHw2Q
+Message-ID: <CAE+vSYq=317B_dEYMgB57Jv9a7xZj+ZaVpVfr4FEmqqKq=GG_A@mail.gmail.com>
+Subject: Ms.Evelyn
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MILLION_HUNDRED,
+        MONEY_FORM_SHORT,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102d listed in]
+        [list.dnswl.org]
+        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
+        *      [score: 0.9709]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrsashaalqaddfi117[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsashaalqaddfi117[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [evelynjecob47[at]gmail.com]
+        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.6 MONEY_FRAUD_3 Lots of money and several fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 6:21 PM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
->
->
-> >> Shouldn't the return of sdw_acpi_find_one() be trapped, e.g. with
-> >>
-> >> return acpi_dev_for_each_child(parent, sdw_acpi_find_one, bus);
-> >
-> > Sure, I'll do that.  Thanks!
->
-> I also added this EXPORT_SYMBOL to work-around link errors, not sure if
-> this is in your tree already?
+Greetings dearest
 
-One of the previous patches in the series is adding the export.
+I'm a 75 year old woman. I was born an orphan and GOD blessed me
+abundantly with riches but no children nor husband which makes me an
+unhappy woman. Now I am affected with cancer of the lung and breast
+with a partial stroke which has affected my speech. I can no longer
+talk well. and half of my body is paralyzed, I sent this email to you
+with the help of my private female nurse.
 
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
->
-> index 86fa61a21826c..ade6259c19af6 100644
->
-> --- a/drivers/acpi/bus.c
->
-> +++ b/drivers/acpi/bus.c
->
-> @@ -1113,6 +1113,7 @@ int acpi_dev_for_each_child(struct acpi_device *adev,
->
->
->
->         return device_for_each_child(&adev->dev, &adwc,
-> acpi_dev_for_one_check);
->
->  }
->
-> +EXPORT_SYMBOL_GPL(acpi_dev_for_each_child);
->
->
+My condition is really deteriorating day by day and it is really
+giving me lots to think about.  This has prompted my decision to
+donate all I have for charity; I have made numerous donations all over
+the world. After going through your profile, I decided to make my last
+donation of Ten Million Five Hundred Thousand United Kingdom Pounds
+(UK=C2=A310.500, 000, 00) to you as my investment manager. I want you to
+build an Orphanage Home With my name (  Ms.Evelyn Jacob) in your
+country.
+
+If you are willing and able to do this task for the sake of humanity
+then send me below information for more details to receive the funds.
+
+1. Name...................................................
+
+2. Phone number...............................
+
+3. Address.............................................
+
+4. Country of Origin and residence
+
+ Ms.Evelyn Jecob  ,

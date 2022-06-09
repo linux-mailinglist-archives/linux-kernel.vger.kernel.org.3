@@ -2,159 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC6B544D30
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8692544D45
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244899AbiFINLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
+        id S242744AbiFINO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244104AbiFINLL (ORCPT
+        with ESMTP id S234982AbiFINOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:11:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3383113392C;
-        Thu,  9 Jun 2022 06:11:10 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id o7so14094048eja.1;
-        Thu, 09 Jun 2022 06:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/wAwQz6C+ZpVqaDsOvtWkiMwlkZyhViIBwL5COqW1+Y=;
-        b=DfxxG8+SFT1aRPK8Tf6WWRloDCFsXBHC4HaWPyvJeqzEtPjs+G8TMtrYGSkwP4k2AG
-         X2ggQhZIyK0peDiA8p9DnEwZGEJGSzjulxAvJR1Y8++Fb/C7l9w5hOxyiSvJmjYCeZRa
-         E2ea+jdtqu87sZFGo5tGQRi/zVGBCFI2057zo5pV8liUF646b2WmsAY0n9DA0pnwi1LC
-         E2gw71/oo29WuxTysApvrnh2i5m329H2te/xzjQv1Pb7u1HDdyGau5xWr6Mmeui9W3pL
-         lX+NgaBZGCuolnCz4xG82wnO7H9uarEEPUjXdT251CBXIGq1DR0SwoMf85ISFqZ47rLV
-         VaDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/wAwQz6C+ZpVqaDsOvtWkiMwlkZyhViIBwL5COqW1+Y=;
-        b=hNaTu2QMnRKAyQl8T81WgoDRjCd9J+0t8xBv+2xYywpCXFq9M1/8KbX4lzV+Jn+7iZ
-         5bqRgHaPF1nPcgeAuiPv7Q1u/DUIR7ytjL9TftUYNAr2KmENGZNKQj/csnC6pgb8JL74
-         0trpon0eBy86nu3KzYS6pBKOhXXs84VYLeJqGCnu2klO60jy0Ti/cnTfDbxcHITzB6zc
-         KRElfg34vaDBRReJo0QZqRGBjIsx/2uwbaMU/L1Hw3oP3sf7lx7Ci52aS8+D24bNbtjM
-         mYEsjxof9l8hUcShGWRzcIoxcKpxWCSygOB0EjHkNs59Z1qqoWkMwli6COR53JnPCsCF
-         r8sA==
-X-Gm-Message-State: AOAM533pzMRMUe+vheDGjNhXjBgmaFjKqpH/PZlX/xM8JnXYg11vC8tu
-        qBVnHaJi1tb+qYJKsEM90XGegNpPe/p7giY4ZBsPyvZo3H8=
-X-Google-Smtp-Source: ABdhPJw8MLZ71B+p+qbmLV3tlwFIf9HSGvoui9iRj+sWl6mfjkGmIkFa83qvzO2sUT8F9LhUjx+p57vLlPmJk/4k2dM=
-X-Received: by 2002:a17:906:c302:b0:6fe:a216:20a4 with SMTP id
- s2-20020a170906c30200b006fea21620a4mr36999962ejz.556.1654780268695; Thu, 09
- Jun 2022 06:11:08 -0700 (PDT)
+        Thu, 9 Jun 2022 09:14:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BAB39FD7B;
+        Thu,  9 Jun 2022 06:14:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B7FE61CEC;
+        Thu,  9 Jun 2022 13:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3517EC34114;
+        Thu,  9 Jun 2022 13:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654780492;
+        bh=TcM+Ki5Zga/EOuE6ofYMb4YgryOcOqwzJXtoUiKSBIo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ffcnOp0OgPDZpo0pVooP32fBsyasJseFTr596OEn/QKoOYa7UwheZd8Wlwg3TUB46
+         oq7do8KEPEoufXbxLWjhLecayI8hxwn3UCQ+T33OyReWdVdmCbawUCQmybe7JZ7oTb
+         HhVz+zHSnU4gwpIH3WqZlB7pfVvvf+NJxHqdLt1nGho6w/ePbJClUUp2hIKgYUvMEJ
+         58uIbmSIVwSI/KQZOVAORBbGQ857H+aFYiijClWCdQYg9CycDQLitNHJO9gte1OHYP
+         iRX18EyLjytRtN3c0g2ThGzeCHo6Rnqv0/GLJWOrzTCoWWPuP4yUV39SPEQTEXiJ5l
+         oLqhHM/r2BPWw==
+Date:   Thu, 9 Jun 2022 16:12:53 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Guo Ren <guoren@kernel.org>,
+        Jarkko Sakkinen <jarkko@profian.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Message-ID: <YqHx1d+MwRLLzGQe@iki.fi>
+References: <20220608000014.3054333-1-jarkko@profian.com>
+ <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
+ <YqAy0qjI4Lktk/uJ@iki.fi>
+ <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
+ <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220602080644.432156-1-urezki@gmail.com> <20220602080644.432156-2-urezki@gmail.com>
- <20220604155108.GU1790663@paulmck-ThinkPad-P17-Gen-1> <YpxzB3/HRN/EEHa8@pc638.lan>
- <20220607034710.GE1790663@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220607034710.GE1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Uladzislau Rezki <urezki@gmail.com>
-Date:   Thu, 9 Jun 2022 15:10:57 +0200
-Message-ID: <CA+KHdyXU1apQQbVVZ_zX7o86Qp-AQnif2u8aJFULqHNtfCGcSA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] rcu/kvfree: Introduce KFREE_DRAIN_JIFFIES_[MAX/MIN] interval
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 5:47 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Sun, Jun 05, 2022 at 11:10:31AM +0200, Uladzislau Rezki wrote:
-> > > On Thu, Jun 02, 2022 at 10:06:44AM +0200, Uladzislau Rezki (Sony) wrote:
-> > > > Currently the monitor work is scheduled with a fixed interval that
-> > > > is HZ/20 or each 50 milliseconds. The drawback of such approach is
-> > > > a low utilization of page slot in some scenarios. The page can store
-> > > > up to 512 records. For example on Android system it can look like:
-> > > >
-> > > > <snip>
-> > > >   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
-> > > >   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
-> > > >   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
-> > > >   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
-> > > >   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
-> > > >   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
-> > > >   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
-> > > >   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
-> > > >   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
-> > > >   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
-> > > >   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
-> > > >   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
-> > > >   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
-> > > >   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
-> > > >   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
-> > > > <snip>
-> > > >
-> > > > where a page only carries few records to reclaim a memory. In order to
-> > > > improve batching and make utilization more efficient the patch introduces
-> > > > a drain interval that can be set either to KFREE_DRAIN_JIFFIES_MAX or
-> > > > KFREE_DRAIN_JIFFIES_MIN. It is adjusted if a flood is detected, in this
-> > > > case a memory reclaim occurs more often whereas in mostly idle cases the
-> > > > interval is set to its maximum timeout that improves the utilization of
-> > > > page slots.
-> > > >
-> > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > >
-> > > That does look like a problem well worth solving!
-> > >
-> > Agree, better ideas make better final solution :)
+On Wed, Jun 08, 2022 at 09:12:34AM -0700, Song Liu wrote:
+> On Wed, Jun 8, 2022 at 7:21 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > >
-> > >
-> > > But I am missing one thing. If we are having a callback flood, why do we
-> > > need a shorter timeout?
-> > >
-> > To offload faster, because otherwise we run into classical issue, it is a low
-> > memory condition state resulting in OOM.
->
-> But doesn't each callback queued during the flood give us an opportunity
-> to react to the flood?  That will be way more fine-grained than any
-> reasonable timer, right?  Or am I missing something?
->
-We can set the timer to zero or to current "jiffies" to initiate the
-offloading if the
-page is full. In that sense probably it make sense to propagate those two attr.
-to user space, so the user can configure min/max drain interval.
-
-Or we can only deal with fixed interval exposed via sysfs to control it by user.
-In that case we can get rid of MIN one and just trigger a timer if the page is
-full. I think this approach is better.
-
->
-> I do agree that the action would often need to be indirect to avoid the
-> memory-allocation-state hassles, but we already can do that, either via
-> an extremely short-term hrtimer or something like irq-work.
->
-> > > Wouldn't a check on the number of blocks queued be simpler, more direct,
-> > > and provide faster response to the start of a callback flood?
-> > >
-> > I rely on krcp->count because not always we can store the pointer in the page
-> > slots. We can not allocate a page in the caller context thus we use page-cache
-> > worker that fills the cache in normal context. While it populates the cache,
-> > pointers temporary are queued to the linked-list.
+> > Hi Jarkko,
 > >
-> > Any thoughts?
->
-> There are a great many ways to approach this.  One of them is to maintain
-> a per-CPU free-running counter of kvfree_rcu() calls, and to reset this
-> counter each jiffy.
->
-> Or am I missing a trick here?
->
-Do you mean to have a per-cpu timer that checks the per-cpu-freed counter
-and schedule the work when if it is needed? Or i have missed your point?
+> > On Wed, 8 Jun 2022 08:25:38 +0300
+> > Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > > On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
+> > > > .
+> > > >
+> > > > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
+> > > > >
+> > > > > Tracing with kprobes while running a monolithic kernel is currently
+> > > > > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
+> > > > > dependency is a result of kprobes code using the module allocator for the
+> > > > > trampoline code.
+> > > > >
+> > > > > Detaching kprobes from modules helps to squeeze down the user space,
+> > > > > e.g. when developing new core kernel features, while still having all
+> > > > > the nice tracing capabilities.
+> > > > >
+> > > > > For kernel/ and arch/*, move module_alloc() and module_memfree() to
+> > > > > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
+> > > > > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
+> > > > > code with CONFIG_MODULES.
+> > > > >
+> > > > > As the result, kprobes can be used with a monolithic kernel.
+> > > > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
+> > > >
+> > > > Maybe we need a kprobe_alloc, right?
+> > >
+> > > Perhaps not the best name but at least it documents the fact that
+> > > they use the same allocator.
+> > >
+> > > Few years ago I carved up something "half-way there" for kprobes,
+> > > and I used the name text_alloc() [*].
+> > >
+> > > [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/
+> >
+> > Yeah, I remember that. Thank you for updating your patch!
+> > I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
+> > If module support maintainers think this name is not good, you may be
+> > able to rename it as text_alloc() and make the module_alloc() as a
+> > wrapper of it.
+> 
+> IIUC, most users of module_alloc() use it to allocate memory for text, except
+> that module code uses it for both text and data. Therefore, I guess calling it
+> text_alloc() is not 100% accurate until we change the module code (to use
+> a different API to allocate memory for data).
 
--- 
-Uladzislau Rezki
+After reading the feedback, I'd stay on using module_alloc() because
+it has arch-specific quirks baked in. Easier to deal with them in one
+place.
+
+> Thanks,
+> Song
+
+BR, Jarkko

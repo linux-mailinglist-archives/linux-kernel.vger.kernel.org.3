@@ -2,192 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F77F5453A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C025453A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242026AbiFISEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S245071AbiFISFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiFISEb (ORCPT
+        with ESMTP id S238630AbiFISE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:04:31 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586931E3B2A;
-        Thu,  9 Jun 2022 11:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654797869; x=1686333869;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=imxqF1e2K/eKhdUX63RGFoYGL7+Dg+LTZPFNAdvF00Y=;
-  b=jCNnOL9wljj7+BVdGQJDSyTr7rrmxUmN+N7pX8B50YCIIZDe1+02lc0A
-   pZnyd77zS4g5C+IRhm/fxYY99rBxR8R1H+FXZYaOuLxngOmxWKTPo/q8Q
-   2ZcR1z/g1+r+jye99O7ofZYd1+D2BzNeUTCG5dUK2grEy93MBJp72MMvT
-   0=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 09 Jun 2022 11:04:29 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 11:04:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 9 Jun 2022 11:04:28 -0700
-Received: from [10.216.42.89] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
- 11:04:21 -0700
-Message-ID: <a4abf2dd-7bb9-2638-9684-8c140a22491e@quicinc.com>
-Date:   Thu, 9 Jun 2022 23:34:16 +0530
+        Thu, 9 Jun 2022 14:04:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEDC20014D;
+        Thu,  9 Jun 2022 11:04:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68E1661D06;
+        Thu,  9 Jun 2022 18:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27328C34114;
+        Thu,  9 Jun 2022 18:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654797889;
+        bh=pASgOkIhhI/ZJTQJiOxQQ7BetAsfgOyqGy5+OxBbrvU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BTB64wygOFCsPdDhaQrt8ga2Ig64u/kXZw4tZeGJT0YWnHOFEVrA9wtMwDaA4po75
+         tHkRwZ4Z1OS5DEp1vz0DLZjhsVFXOj9cWFGJqF8h1e4ExnGDlLM66vc852A7UGTVkV
+         yEz7FlAClMKRrohieUz/v2D/e1sIUfPAptFYdXD6e5jM5B9XSjou+kMB5JSzyCWkav
+         Vy3bM2wpcA65mdDfoHZTzmvQ2m/dzKtFKO6ebtcmQ6ve9Ss5LpTv7FPNvFa0fZq3IE
+         X+WdUzskIEX0iCxmt+US9NfG657DMkWYw8HIeB0mVRrH72fJJ6NrdiTApIn1c/+71Q
+         Z1MZF3k8udZcQ==
+Date:   Thu, 9 Jun 2022 21:04:34 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "dave.martin@arm.com" <dave.martin@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YqI2MgV9S1iQR9Mq@kernel.org>
+References: <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
+ <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org>
+ <YiZVbPwlgSFnhadv@kernel.org>
+ <CAMe9rOrSLPKdL2gL=yx84zrs-u6ch1AVvjk3oqUe3thR5ZD=dQ@mail.gmail.com>
+ <YpYDKVjMEYVlV6Ya@kernel.org>
+ <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
+ <YpZEDjxSPxUfMxDZ@kernel.org>
+ <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
+ <Ypcd8HQtrn7T41LF@kernel.org>
+ <1d77dcab5d5ee7c565cfc62601d3a28ecf5a6bed.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2] drm/msm: Grab the GPU runtime in a6xx routines, not
- the GMU one
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Eric Anholt" <eric@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Sean Paul <sean@poorly.run>, Wang Qing <wangqing@vivo.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220609094716.v2.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20220609094716.v2.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d77dcab5d5ee7c565cfc62601d3a28ecf5a6bed.camel@intel.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/2022 10:17 PM, Douglas Anderson wrote:
-> >From testing on sc7180-trogdor devices, reading the GMU registers
-> needs the GMU clocks to be enabled. Those clocks get turned on in
-> a6xx_gmu_resume(). Confusingly enough, that function is called as a
-> result of the runtime_pm of the GPU "struct device", not the GMU
-> "struct device".
->
-> Let's grab a reference to the correct device. Incidentally, this makes
-> us match the a5xx routine more closely.
->
-> This is easily shown to fix crashes that happen if we change the GPU's
-> pm_runtime usage to not use autosuspend. It's also believed to fix
-> some long tail GPU crashes even with autosuspend.
->
-> NOTE: the crashes I've seen were fixed by _only_ fixing
-> a6xx_gpu_busy(). However, I believe that the same arguments should be
-> made to a6xx_gmu_set_freq() so I've fixed that case too. To make that
-> fix clean, we've moved the pm runtime grabbing into the GPU file.
->
-> As a bonus fix with this change, we change the pm_runtime get
-> functions to check for <= 0 instead of ==. This handles the case where
-> pm_runtime is disabled.
->
-> Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
-> Changes in v2:
-> - Move the set_freq runtime pm grab to the GPU file.
-> - Use <= for the pm_runtime test, not ==.
->
->   drivers/gpu/drm/msm/adreno/a6xx_gmu.c |  9 ---------
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++++++--
->   2 files changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> index 9f76f5b15759..2410815e77b4 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> @@ -125,17 +125,9 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
->   
->   	trace_msm_gmu_freq_change(gmu->freq, perf_index);
->   
-> -	/*
-> -	 * This can get called from devfreq while the hardware is idle. Don't
-> -	 * bring up the power if it isn't already active
-> -	 */
-> -	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
-> -		return;
-> -
->   	if (!gmu->legacy) {
->   		a6xx_hfi_set_freq(gmu, perf_index);
->   		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> -		pm_runtime_put(gmu->dev);
->   		return;
->   	}
->   
-> @@ -159,7 +151,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
->   		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
->   
->   	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> -	pm_runtime_put(gmu->dev);
->   }
->   
->   unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 42ed9a3c4905..54efd9b76ea6 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -1659,7 +1659,7 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
->   	*out_sample_rate = 19200000;
->   
->   	/* Only read the gpu busy if the hardware is already active */
-> -	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
-> +	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) <= 0)
-You are changing the behavior here when CONFIG_PM is not enabled.
+On Wed, Jun 01, 2022 at 05:24:26PM +0000, Edgecombe, Rick P wrote:
+> On Wed, 2022-06-01 at 11:06 +0300, Mike Rapoport wrote:
+> > > Yea, having something working is really great. My only hesitancy is
+> > > that, per a discussion on the LAM patchset, we are going to make
+> > > this
+> > > enabling API CET only (same semantics for though). I suppose the
+> > > locking API arch_prctl() could still be support other arch
+> > > features,
+> > > but it might be a second CET only regset. It's not the end of the
+> > > world.
+> > 
+> > The support for CET in criu is anyway experimental for now, if the
+> > kernel
+> > API will be slightly different in the end, we'll update criu.
+> > The important things are the ability to control tracee shadow stack
+> > from ptrace, the ability to map the shadow stack at fixed address and
+> > the
+> > ability to control the features at least from ptrace.
+> > As long as we have APIs that provide those, it should be Ok.
+> >  
+> > > I guess the other consideration is tieing CRIU to glibc
+> > > peculiarities.
+> > > Like even if we fix glibc, then CRIU may not work with some other
+> > > libc
+> > > or app that force disables for some weird reason. Is it supposed to
+> > > be
+> > > libc-agnostic?
+> > 
+> > Actually using the ptrace to control the CET features does not tie
+> > criu to
+> > glibc. The current proposal for the arch_prctl() allows libc to lock
+> > CET
+> > features and having a ptrace call to control the lock makes criu
+> > agnostic
+> > to libc behaviour.
+> 
+> From staring at the glibc code, I'm suspicious something was weird with
+> your test setup, as I don't think it should be locking. But I guess to
+> be completely proper you would need to save and restore the lock state
+> anyway. So, ok yea, on balance probably better to have an extra
+> interface.
+> 
+> Should we make it a GET/SET interface?
 
--Akhil.
->   		return 0;
->   
->   	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
-> @@ -1667,7 +1667,7 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
->   			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
->   
->   
-> -	pm_runtime_put(a6xx_gpu->gmu.dev);
-> +	pm_runtime_put(&gpu->pdev->dev);
->   
->   	return busy_cycles;
->   }
-> @@ -1677,9 +1677,18 @@ static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
->   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
->   
-> +	/*
-> +	 * This can get called from devfreq while the hardware is idle. Don't
-> +	 * bring up the power if it isn't already active
-> +	 */
-> +	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) <= 0)
-> +		return;
-> +
->   	mutex_lock(&a6xx_gpu->gmu.lock);
->   	a6xx_gmu_set_freq(gpu, opp);
->   	mutex_unlock(&a6xx_gpu->gmu.lock);
-> +
-> +	pm_runtime_put(&gpu->pdev->dev);
->   }
->   
->   static struct msm_gem_address_space *
+Yes, I think so.
 
+-- 
+Sincerely yours,
+Mike.

@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D6B544B68
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5180C544B72
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243430AbiFIMMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S245202AbiFIMNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245171AbiFIMMF (ORCPT
+        with ESMTP id S237917AbiFIMND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:12:05 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45F81A387
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:12:02 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id w27so30870043edl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 05:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=35+OxtjxgC3eYwAbp4/2PDr0i9pDlp26elktRUGxVwc=;
-        b=MzGcAx8cOg3qkErF9kdH7BugrP0alKEVzRHjKFl7onbm5VHBVIRioqj7Ufvce4vD+E
-         OQQCZgAhLi4bo36II65Qz47HKCnrI0MfnwCoaSLUlQoU76vq7wt9uEFEX6A0w0nlEV1C
-         GraysaFA1hBG0BFBEdfYBwKOreUyt639KhT1WtFwDijJN50hGSIi8cKl2x0PsFKQ6gVu
-         uVC9GlmOl8qRmnhNU7lanJSfg2e8D2ZXZ2O1sqPjyA5z9C/mYEHzN6oeVo2WqtCvGmp7
-         odEkop7niyv5iHdq61CLOypONyAYgONToGUqoYtdXqgUNuX0A8VbmjwMnj2IeTMg9jTg
-         MS8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=35+OxtjxgC3eYwAbp4/2PDr0i9pDlp26elktRUGxVwc=;
-        b=xx+fn5ypb/QhVtGIdrdHiv8wwAeHEwuiD4TiRK2nE3Fkzb6MkCtw0rsMALlGILTwUD
-         uJMfqblA4St1I9Envn2znrIhF9fiTJZzrMciODnmj/mzuwpndSg1vOgziLA2P+mFgO/N
-         PPuBWH3n4l0jLt/3uiPGV0QKgNPriIeaRhb2PJk9i0AFaen6wgRS5/N/Yk2r3f/ACI3X
-         Mbjerd+vGUKGWp5BfpbQH2f7ZVnkO/Kej0k4G0EJJp9v7u76dwYbMUiVpdZUQ2EheBWG
-         L4a31/QwIgVQHafW9gTeU6ow63YIG6WX/Qu2ePnrxe2H+CVaC05pBeQfsJt/5mA3+Tkx
-         B3yQ==
-X-Gm-Message-State: AOAM531IYaY43QKht3pKuK2GiSaeLENy7dJ//ndKWFnENJlD++7NDjvi
-        nIgx7BB6vhdOWM867IU3+EygOw==
-X-Google-Smtp-Source: ABdhPJz0+DDVc2ZrkaX5S9IetfY47zQT7j8sKaKAcXh2Dm/QqxGZ8Bbf9nUDCVbDzQnntW97yJMLQQ==
-X-Received: by 2002:a05:6402:5c9:b0:420:aac6:257b with SMTP id n9-20020a05640205c900b00420aac6257bmr44688465edx.128.1654776721243;
-        Thu, 09 Jun 2022 05:12:01 -0700 (PDT)
-Received: from [192.168.0.197] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170906494800b0070c4abe4706sm9006250ejt.158.2022.06.09.05.12.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 05:12:00 -0700 (PDT)
-Message-ID: <fd3ae279-eb0e-ec5b-2611-15ada34a9c66@linaro.org>
-Date:   Thu, 9 Jun 2022 14:11:59 +0200
+        Thu, 9 Jun 2022 08:13:03 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068A71A387
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:13:01 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LJjcD5BvbzgYbW;
+        Thu,  9 Jun 2022 20:11:08 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 9 Jun
+ 2022 20:12:58 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <dan.j.williams@intel.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH] mm/memremap: fix memunmap_pages() race with get_dev_pagemap()
+Date:   Thu, 9 Jun 2022 20:13:05 +0800
+Message-ID: <20220609121305.2508-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] arch: arm64: qcom: sdm845-shift-axolotl: fix
- Bluetooth firmware loading
-Content-Language: en-US
-To:     Alexander Martinz <amartinz@shiftphones.com>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dylan Van Assche <me@dylanvanassche.be>
-References: <20220609095412.211060-1-amartinz@shiftphones.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220609095412.211060-1-amartinz@shiftphones.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2022 11:54, Alexander Martinz wrote:
-> From: Dylan Van Assche <me@dylanvanassche.be>
-> 
-> Add hsuart0 alias, firmware name and prevent garbage data on Bluetooth UART lines
-> on the SHIFT 6mq based on the Qualcomm SDM845 chip.
-> I discovered that these were missing by comparing the DTS with similar
-> devices such as the Oneplus 6/6T and Dragonboard 845c.
-> 
-> Signed-of-by: Dylan Van Assche <me@dylanvanassche.be>
-> Tested-by: Alexander Martinz <amartinz@shiftphones.co>
+Think about the below scene:
 
-Thanks for the patch. Instead of your Tested-by (or beside) your SoB is
-needed, following Dylan's.
+ CPU1			CPU2
+ memunmap_pages
+   percpu_ref_exit
+     __percpu_ref_exit
+       free_percpu(percpu_count);
+         /* percpu_count is freed here! */
+			 get_dev_pagemap
+			   xa_load(&pgmap_array, PHYS_PFN(phys))
+			     /* pgmap still in the pgmap_array */
+			   percpu_ref_tryget_live(&pgmap->ref)
+			     if __ref_is_percpu
+			       /* __PERCPU_REF_ATOMIC_DEAD not set yet */
+			       this_cpu_inc(*percpu_count)
+			         /* access freed percpu_count here! */
+      ref->percpu_count_ptr = __PERCPU_REF_ATOMIC_DEAD;
+        /* too late... */
+   pageunmap_range
 
-Best regards,
-Krzysztof
+To fix the issue, do percpu_ref_exit() after pgmap_array is emptied. So
+we won't do percpu_ref_tryget_live() against a being freed percpu_ref.
+
+Fixes: b7b3c01b1915 ("mm/memremap_pages: support multiple ranges per invocation")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/memremap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/memremap.c b/mm/memremap.c
+index 8a432cdfd9d4..f0955785150f 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -141,10 +141,10 @@ void memunmap_pages(struct dev_pagemap *pgmap)
+ 	for (i = 0; i < pgmap->nr_range; i++)
+ 		percpu_ref_put_many(&pgmap->ref, pfn_len(pgmap, i));
+ 	wait_for_completion(&pgmap->done);
+-	percpu_ref_exit(&pgmap->ref);
+ 
+ 	for (i = 0; i < pgmap->nr_range; i++)
+ 		pageunmap_range(pgmap, i);
++	percpu_ref_exit(&pgmap->ref);
+ 
+ 	WARN_ONCE(pgmap->altmap.alloc, "failed to free all reserved pages\n");
+ 	devmap_managed_enable_put(pgmap);
+-- 
+2.23.0
+

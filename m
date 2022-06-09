@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35AF545417
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FC454541E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345404AbiFISZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S1345416AbiFIS0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiFISZr (ORCPT
+        with ESMTP id S230129AbiFIS0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:25:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9597144782;
-        Thu,  9 Jun 2022 11:25:45 -0700 (PDT)
-Received: from notapiano (unknown [169.150.201.35])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 34BE266017A8;
-        Thu,  9 Jun 2022 19:25:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654799144;
-        bh=wjYwbyy4txNdLBUZYKXoH1LINavwCoVlNaaWI8BLCAo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S3X604uAwDGo1mcYXm1Peo7/dNqEnhkV2oWvy8T8SZEadRJhtWLJbHclNkl61Vr+n
-         PL4RaC7q2vzIqM1hL+DJ5aWo9oRSvDgfcdv9ThWyuMghbfzudQkHIg3eXAvIFYEDRh
-         DtCVaiprK/t3xRctX6/Yd2wU1bCCPnEQ7gNT93mlXaHM4fauVKI4a6RKnvpaA9Ssdy
-         giKgCZs+OJ8FsnnTBd18RLqgoimezvQ8A4XYleCsmg9IVdYrfz53/WSUHvnYZgz1Yv
-         yktvQM9qr0zRzF/zVrSMQCJZKNppxa6FEN3+fiSrTlyq/AXD0wkNHL6GWnKLhKVIKK
-         8AJJu9HWZ/ktA==
-Date:   Thu, 9 Jun 2022 14:25:37 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Guodong Liu <guodong.liu@mediatek.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v1 2/4] pinctrl: add drive for I2C related pins on mt8192
-Message-ID: <20220609182537.zbqk7gqsyscayv7b@notapiano>
-References: <20220608053909.1252-1-guodong.liu@mediatek.com>
- <20220608053909.1252-3-guodong.liu@mediatek.com>
+        Thu, 9 Jun 2022 14:26:47 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4221EF072A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654799206; x=1686335206;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jr0lIf0jCMlZxD8aPAkcAccpuSBw8ZVqumU2RXeM7gw=;
+  b=XKOsKq+/z4ZNDO7IENwwl3BcGwk9O27swwWRtpxRuw8MuiXBQOQbBL2B
+   p6JpkSo3OU5fPmUlOR5J38sIWN1Lql04B5VVMUAknM3OiEccexj0C1HE3
+   hAHQSTUr9PV0xw1+AbC6hz7Pa6A1YiigOD0t1QZquEbHCx77lZg1+Z2Vx
+   jU0r3YmjScHAAneh1ZH6AfxcJYM9IIv2QE7h1X+LYkpplCJ7l21oKVnEU
+   Qls3fd8/dN033VadKkE/LTPE7ceP/FqFUssLGoXTt2+QDz9JLDgY2AWH6
+   OlOAqGxQIChTPB8R0epWCOGf3juShRno9oJ2NPtDbhjcQctRiCmteki10
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="302750416"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="302750416"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 11:26:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585726010"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2022 11:26:44 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzMrk-000GGX-BB;
+        Thu, 09 Jun 2022 18:26:44 +0000
+Date:   Fri, 10 Jun 2022 02:26:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype
+ for 'lpc32xx_loopback_set'
+Message-ID: <202206100243.FIBW6bJC-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220608053909.1252-3-guodong.liu@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,85 +62,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guodong,
+Hi Arnd,
 
-thank you for the patch. Please see some suggestions below.
+First bad commit (maybe != root cause):
 
-On Wed, Jun 08, 2022 at 01:39:07PM +0800, Guodong Liu wrote:
-> This patch provides the advanced drive raw data setting version
-> for I2C used pins on mt8192
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
+commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
+date:   6 days ago
+config: arm-buildonly-randconfig-r012-20220608 (https://download.01.org/0day-ci/archive/20220610/202206100243.FIBW6bJC-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7036440eab3e2d47a775d4616909f8235488d714
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Please add "mediatek:" on the commit title for this patch and patch 1, like you
-did for 3 and 4.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
-> ---
->  drivers/pinctrl/mediatek/pinctrl-mt8192.c | 31 +++++++++++++++++++++--
->  1 file changed, 29 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8192.c b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-> index 9faf7001369d..d11ff5519e1e 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-> @@ -1259,6 +1259,32 @@ static const struct mtk_pin_field_calc mt8192_pin_r1_range[] = {
->  	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 5, 1),
->  };
->  
-> +static const struct mtk_pin_field_calc mt8192_pin_drv_adv_range[] = {
-> +	PIN_FIELD_BASE(89, 89, 2, 0x0040, 0x10, 0, 5),
-> +	PIN_FIELD_BASE(90, 90, 2, 0x0040, 0x10, 5, 5),
-> +
-> +	PIN_FIELD_BASE(118, 118, 4, 0x0040, 0x10, 0, 3),
-> +	PIN_FIELD_BASE(119, 119, 4, 0x0040, 0x10, 18, 3),
-> +	PIN_FIELD_BASE(120, 120, 4, 0x0040, 0x10, 15, 3),
-> +	PIN_FIELD_BASE(121, 121, 4, 0x0050, 0x10, 3, 3),
-> +	PIN_FIELD_BASE(122, 122, 4, 0x0040, 0x10, 12, 3),
-> +	PIN_FIELD_BASE(123, 123, 4, 0x0050, 0x10, 0, 3),
-> +	PIN_FIELD_BASE(124, 124, 4, 0x0040, 0x10, 9, 3),
-> +	PIN_FIELD_BASE(125, 125, 4, 0x0040, 0x10, 27, 3),
-> +	PIN_FIELD_BASE(139, 139, 4, 0x0040, 0x10, 6, 3),
-> +	PIN_FIELD_BASE(140, 140, 4, 0x0040, 0x10, 24, 3),
-> +	PIN_FIELD_BASE(141, 141, 4, 0x0040, 0x10, 3, 3),
-> +	PIN_FIELD_BASE(142, 142, 4, 0x0040, 0x10, 21, 3),
-> +	PIN_FIELD_BASE(160, 160, 7, 0x0030, 0x10, 0, 3),
-> +	PIN_FIELD_BASE(161, 161, 7, 0x0030, 0x10, 3, 3),
-> +	PIN_FIELD_BASE(200, 200, 8, 0x0010, 0x10, 3, 3),
-> +	PIN_FIELD_BASE(201, 201, 8, 0x0010, 0x10, 9, 3),
-> +	PIN_FIELD_BASE(202, 202, 5, 0x0020, 0x10, 0, 3),
-> +	PIN_FIELD_BASE(203, 203, 5, 0x0020, 0x10, 3, 3),
-> +	PIN_FIELD_BASE(204, 204, 8, 0x0010, 0x10, 0, 3),
-> +	PIN_FIELD_BASE(205, 205, 8, 0x0010, 0x10, 6, 3),
-> +};
-> +
->  static const struct mtk_pin_field_calc mt8192_pin_e1e0en_range[] = {
->  	PIN_FIELD_BASE(118, 118, 4, 0x0040, 0x10, 0, 1),
->  	PIN_FIELD_BASE(119, 119, 4, 0x0040, 0x10, 18, 1),
-> @@ -1357,6 +1383,7 @@ static const struct mtk_pin_reg_calc mt8192_reg_cals[PINCTRL_PIN_REG_MAX] = {
->  	[PINCTRL_PIN_REG_R1] = MTK_RANGE(mt8192_pin_r1_range),
->  	[PINCTRL_PIN_REG_DRV_EN] = MTK_RANGE(mt8192_pin_e1e0en_range),
->  	[PINCTRL_PIN_REG_DRV_E0] = MTK_RANGE(mt8192_pin_e0_range),
-> +	[PINCTRL_PIN_REG_DRV_ADV]	= MTK_RANGE(mt8192_pin_drv_adv_range),
+All warnings (new ones prefixed by >>):
 
-Nit: use space instead of tab before the =.
+>> arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype for 'lpc32xx_loopback_set' [-Wmissing-prototypes]
+      63 | void lpc32xx_loopback_set(resource_size_t mapbase, int state)
+         |      ^~~~~~~~~~~~~~~~~~~~
 
-Thanks,
-Nícolas
 
->  	[PINCTRL_PIN_REG_DRV_E1] = MTK_RANGE(mt8192_pin_e1_range),
->  };
->  
-> @@ -1376,8 +1403,8 @@ static const struct mtk_pin_soc mt8192_data = {
->  	.drive_get	= mtk_pinconf_drive_get_rev1,
->  	.adv_pull_get = mtk_pinconf_adv_pull_get,
->  	.adv_pull_set = mtk_pinconf_adv_pull_set,
-> -	.adv_drive_get = mtk_pinconf_adv_drive_get,
-> -	.adv_drive_set = mtk_pinconf_adv_drive_set,
-> +	.adv_drive_get	= mtk_pinconf_adv_drive_get_raw,
-> +	.adv_drive_set	= mtk_pinconf_adv_drive_set_raw,
->  };
->  
->  static const struct of_device_id mt8192_pinctrl_of_match[] = {
-> -- 
-> 2.25.5
-> 
+vim +/lpc32xx_loopback_set +63 arch/arm/mach-lpc32xx/serial.c
+
+e6e912c4964ce5 Kevin Wells   2010-07-27  61  
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  62  /* LPC3250 Errata HSUART.1: Hang workaround via loopback mode on inactivity */
+ffba29c9ebd097 Arnd Bergmann 2019-08-09 @63  void lpc32xx_loopback_set(resource_size_t mapbase, int state)
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  64  {
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  65  	int bit;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  66  	u32 tmp;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  67  
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  68  	switch (mapbase) {
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  69  	case LPC32XX_HS_UART1_BASE:
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  70  		bit = 0;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  71  		break;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  72  	case LPC32XX_HS_UART2_BASE:
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  73  		bit = 1;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  74  		break;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  75  	case LPC32XX_HS_UART7_BASE:
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  76  		bit = 6;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  77  		break;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  78  	default:
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  79  		WARN(1, "lpc32xx_hs: Warning: Unknown port at %08x\n", mapbase);
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  80  		return;
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  81  	}
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  82  
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  83  	tmp = readl(LPC32XX_UARTCTL_CLOOP);
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  84  	if (state)
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  85  		tmp |= (1 << bit);
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  86  	else
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  87  		tmp &= ~(1 << bit);
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  88  	writel(tmp, LPC32XX_UARTCTL_CLOOP);
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  89  }
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  90  EXPORT_SYMBOL_GPL(lpc32xx_loopback_set);
+ffba29c9ebd097 Arnd Bergmann 2019-08-09  91  
+
+:::::: The code at line 63 was first introduced by commit
+:::::: ffba29c9ebd0977dbf77bf6064776716a51b8ae5 serial: lpc32xx: allow compile testing
+
+:::::: TO: Arnd Bergmann <arnd@arndb.de>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

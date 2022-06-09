@@ -2,90 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21615545686
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043BC545690
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbiFIVg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 17:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S241754AbiFIViI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 17:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiFIVg4 (ORCPT
+        with ESMTP id S241598AbiFIViE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 17:36:56 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407974CD7D;
-        Thu,  9 Jun 2022 14:36:55 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id p128so4046811iof.1;
-        Thu, 09 Jun 2022 14:36:55 -0700 (PDT)
+        Thu, 9 Jun 2022 17:38:04 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735C51E7373;
+        Thu,  9 Jun 2022 14:38:01 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id m25so24289287lji.11;
+        Thu, 09 Jun 2022 14:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xuhZxHj/U/uyrGh0QRL2giIMCZ9xcES2xwt8P7yF6to=;
+        b=JAkyByJksy+qoa6HbOhaGhB/7umKsKTTKRwcNWF42CdK388N8UhTbUlVshl1hbo75U
+         2vG1b8kBfg43EPsLhebV6xvMcvfziFJyCUUScQZuF+5Nof4NGsK6cCKudmtaEdtK7xv6
+         h8o1MYdfg8tYPc47QOgD9PtEIxKvN4sT804N0crGbBtDaMHhBAgW8RbcTBftPzROgRt3
+         b5yGyLvcMCeaS5ERBw2UjCb+CyslfxvZplPLXK8+i48RqQ1O5/F/MwEEQgGqm+qyOuWT
+         gqx92x39oXRUXwcXJnmoHJ2kpMq6fNg/xg6Ikshz+JeNMmsN0yKC/6w8txLih+QxAr0G
+         03Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2GI2KI1Sv9nVJuFCWd4uVdfP1TjuW2GDmuuGQs73bfQ=;
-        b=Rh3MnhnBt0E83Jeba6SVddAiv8ADnVc10r9w4p79vf0UtG+jGdiT4iJeWuRvKy5Ly9
-         FYVMbHO+1qoge5/E/vzojq4kSVJVC5wRGRGfQQcdHyo3nFIPhMDgl6eeHT/ApAmjqYR0
-         8Wt5CK3AH0rpYxq2deIkGQh7b4x27iBCTUtDDAcPj/WPIHS6D00af8vRnlT8hI4xtc9J
-         dx/+Nm8agthoebEG8RWXK3G1/75R4AnnH+PnBLXheXjR4rZhuCYITaDrZRI8Sm8anVxu
-         AJXGzdPOc4ZEEOla9LZLY1zny4p8/GtWhT40/gSVNZeEPUxH8O2l7Eg5nyxHSfl9LlwK
-         Ak8w==
-X-Gm-Message-State: AOAM531TI3CQKx2Mul5izPoRbuIYpvB5v/J1NubK8k432OanYID3sIkC
-        9G/+uhPULOBXh8wcJk4Qa9VEFOw3EA==
-X-Google-Smtp-Source: ABdhPJzmA9HKNjxiz4/zlBnWfsm/zBXu8DtBqt+f4EU3yMC+DxOPgS7LmN16jxvFjKOtvP2Avki6tw==
-X-Received: by 2002:a05:6602:2cca:b0:664:d9c6:3674 with SMTP id j10-20020a0566022cca00b00664d9c63674mr19416950iow.67.1654810614520;
-        Thu, 09 Jun 2022 14:36:54 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id t15-20020a02ccaf000000b00331767e8113sm8418064jap.52.2022.06.09.14.36.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 14:36:54 -0700 (PDT)
-Received: (nullmailer pid 139789 invoked by uid 1000);
-        Thu, 09 Jun 2022 21:36:52 -0000
-Date:   Thu, 9 Jun 2022 15:36:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yoan Picchi <yoan.picchi@arm.com>
-Cc:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH 2/2] Removes the x86 dependency on the QAT drivers
-Message-ID: <20220609213652.GA115440-robh@kernel.org>
-References: <20220607165840.66931-1-yoan.picchi@arm.com>
- <20220607165840.66931-3-yoan.picchi@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xuhZxHj/U/uyrGh0QRL2giIMCZ9xcES2xwt8P7yF6to=;
+        b=M1nGqr+/ywshoWvrFcGlwH1RMqiFnU7JadaeyNpNRQkdIAJARZvNtlJhRtBIcMnice
+         F1UGAsuvdbBjbjsSW5LERJYvETG0jhVTkY8oXipmgLYwdU8VDCJ9y5CY/AEkYZeLQDEY
+         wdaYWUSQjmdHmLGGiRTimJeWv++F9KrlyMwKNEH0utcTSOQalth1h9NpL1fVzUIv8jYd
+         LQ8xvcRAlwVw7098d+X9X19OG3yn6tv0iLJWXvVakJyGNX0DzvLftYCTG9AXEZxxBh5N
+         QtepbmkDFW+Q/z5lU77mZrL1Qd1yeEnqJL5zD6hIW0sK6CSZ4WTR1pag0sjFKeDF92Ik
+         TXTg==
+X-Gm-Message-State: AOAM533GRYb7IFO08rVDBCguYAdrcEbdKPQc1iQmIWyrnWeSuc2qcNlp
+        WtgsSjLhq/iZorMZ5FBL+fcqN+KXslY/WmbMWL4=
+X-Google-Smtp-Source: ABdhPJwUcamBCwOm6ERaUQOFsS9FH0jEHEp1L9m1V9Nk72MnEa1UzUuCExo1sqhaCb60aIqxKCobSgakC6CpKBCiUNk=
+X-Received: by 2002:a05:651c:158c:b0:250:a23d:2701 with SMTP id
+ h12-20020a05651c158c00b00250a23d2701mr60541188ljq.475.1654810679845; Thu, 09
+ Jun 2022 14:37:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607165840.66931-3-yoan.picchi@arm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-12-tmaimon77@gmail.com>
+ <91549b70-08fc-ed6f-c48e-5bcb70ea63d0@linaro.org>
+In-Reply-To: <91549b70-08fc-ed6f-c48e-5bcb70ea63d0@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Fri, 10 Jun 2022 00:37:49 +0300
+Message-ID: <CAP6Zq1j2VZno4w4w0QCYwHnRaVqiM=DnNSmND1vOGDs_wfi2zw@mail.gmail.com>
+Subject: Re: [PATCH v2 11/20] reset: npcm: using syscon instead of device data
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 04:58:40PM +0000, Yoan Picchi wrote:
-> This dependency looks outdated. After the previous patch, we have been able
-> to use this driver to encrypt some data and to create working VF on arm64.
-> We have not tested it yet on any big endian machine, hence the new dependency
+Hi Krzysztof
 
-For the subject, use prefixes matching the subsystem (like you did on 
-patch 1).
+Sorry but I didn't ignore your comment.
 
-The only testing obligation you have is compiling for BE. If kconfig was
-supposed to capture what endianness drivers have been tested or not
-tested with, then lots of drivers are missing the dependency. Kconfig
-depends/select entries should generally be either to prevent compile
-failures (you checked PPC, RiscV, etc.?) or to hide drivers *really*
-specific to a platform. IMO, we should only have !CPU_BIG_ENDIAN if it 
-is known not to work and not easily fixed.
+For not breaking exciting boards I add the following patch in V2
+https://lore.kernel.org/linux-arm-kernel/20220608095623.22327-11-tmaimon77@gmail.com/
 
-Also, with the dependency, no one can test the driver without modifying 
-the kernel and if it does work as-is, then one has to upstream a change 
-and then wait for it to show up in distro kernels. You could mitigate 
-the first part with COMPILE_TEST.
+On Wed, 8 Jun 2022 at 13:08, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 08/06/2022 11:56, Tomer Maimon wrote:
+> > Using syscon device tree property instead of
+> > device data to handle the NPCM general control
+> > registers.
+> >
+>
+> Again ignored the comment.
+>
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  drivers/reset/reset-npcm.c | 11 +++--------
+> >  1 file changed, 3 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
+> > index 2ea4d3136e15..312c3b594b8f 100644
+> > --- a/drivers/reset/reset-npcm.c
+> > +++ b/drivers/reset/reset-npcm.c
+> > @@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
+> >  }
+> >
+> >  static const struct of_device_id npcm_rc_match[] = {
+> > -     { .compatible = "nuvoton,npcm750-reset",
+> > -             .data = (void *)"nuvoton,npcm750-gcr" },
+> > +     { .compatible = "nuvoton,npcm750-reset"},
+> >       { }
+> >  };
+> >
+> > @@ -155,14 +154,10 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+> >       u32 ipsrst1_bits = 0;
+> >       u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
+> >       u32 ipsrst3_bits = 0;
+> > -     const char *gcr_dt;
+> >
+> > -     gcr_dt = (const char *)
+> > -     of_match_device(dev->driver->of_match_table, dev)->data;
+> > -
+> > -     gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
+> > +     gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
+> >       if (IS_ERR(gcr_regmap)) {
+> > -             dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
+> > +             dev_err(&pdev->dev, "Failed to find gcr syscon");
+> >               return PTR_ERR(gcr_regmap);
+>
+> Comment still ignored.
+>
+> There is no point in this review if you keep ignoring what we ask to fix.
+>
+> If something is unclear, ask for clarification. Resending without
+> implementing the comment means that you ignore the review which is waste
+> of my time.
+>
+> I am sorry, but this is not acceptable.
+>
+> Best regards,
+> Krzysztof
 
-Rob
+Best regards,
+
+Tomer

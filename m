@@ -2,199 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA605443CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A8D5443D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237230AbiFIG3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 02:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S238976AbiFIGcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 02:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiFIG3Y (ORCPT
+        with ESMTP id S229754AbiFIGcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 02:29:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F77F5AE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 23:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654756162; x=1686292162;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JwkvfgNXSGk3SC0ZcIqM8dwS2BBg+lmAboqd7nNC/dg=;
-  b=DeMw00FNo2YscpshzRut7G8DgZk90ZrqF3im1O0rlyjWTsAmIhp371wo
-   5ylVIapJP/7oBLcRcuf+/qmhPn7peMv49VhIvtpaNbBdpTnOOXYFI8I3A
-   uTEMYFlMGNwEUknAAyNrdJSWsbL9Rk4kPnlgitIFWsvXFry8jbg9ZnY6/
-   40rx/1PKlMFMQmCr3vAvDcvmzB9BipZXjseSaBrZXiSI3O/2WQqkdlz69
-   oxYgnd/gt/1/nN1aZ2td6ikthe2jCJ8WWcmUWxpEWv5WtUZKIFaPGOI76
-   uo8rIDeB6Nky3CXQadbLjSySprUdGWgJ/eOaO+hZdklXd0hBglOIgsxFq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="260297778"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="260297778"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 23:29:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="827404203"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2022 23:29:20 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzBfU-000Fbh-0n;
-        Thu, 09 Jun 2022 06:29:20 +0000
-Date:   Thu, 9 Jun 2022 14:29:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 25/33]
- arch/mips/include/asm/page.h:262:33: error: call to undeclared function
- 'virt_to_phys'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202206091413.scfY8Gty-lkp@intel.com>
+        Thu, 9 Jun 2022 02:32:32 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D64A12AB6;
+        Wed,  8 Jun 2022 23:32:31 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-e5e433d66dso29909037fac.5;
+        Wed, 08 Jun 2022 23:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DOoHRHCqF9Uw79QAov5iGk1D3tQsN8GR5CeCGUSa2eU=;
+        b=MZkkI1n/EvsXg4vs1Z+p//NsUcnFW8exdoABgPXG40amKrcMoCWUSK4BfFkEjg6f7W
+         RWyAl3DQkSWv+EOZ/J5pqjFvJY6B1k9ZHT4VciC8ye0FoTSFoipvVsA51m+4UL/XbwDi
+         HGEjD7AUvnuOPdrpZNHMj54Uqcl0Z/e5OXY9Dkw7mXcMHMUeBw18/KEaTzcWXCpbI9RK
+         VujHzMsrciXFIS+U7KN4h4Q+YJq2VRnVEIAMxzPfPbhj1lV0m0G8MVJyZIuoOWNMQsyP
+         hqF3I4eTuFVnikpp7H3U7IT95YWLMI7z4X8fQ/JZybr3XlNKO/UbP8q0FPZfEW/s8TAo
+         hYzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DOoHRHCqF9Uw79QAov5iGk1D3tQsN8GR5CeCGUSa2eU=;
+        b=KsK/vj0msOwkzQ1XW36WUANYi0Tf4QRUqwoZi+eOcfWla2lMacOSgitET1zFhLsB5O
+         iFJVzp48ZkcbhT0XEbnImy3suIPcmDdZ5SbdgZvdv83596lvozEUBL6hfKslsahm8mDH
+         RLtLDi2JteaCkBXCAYDVEaRoggVeUeKJVDGGX9zZ1JyjtGhRJNXgvaGmZCWGXz2wEy+r
+         qLC1uNiTwNj3cr/vOkWzW2SfDw8YLndo8LH2TgqyB6REBeHtdjVY2LX2Z1nrVRlA74ZM
+         HU2OidquBNcWfF+IxwJlt6yjXo1JCH6oRTEoGXuIubhrp7rjUjgprqXwqI9X30s+puzx
+         FXxg==
+X-Gm-Message-State: AOAM531Kq3FneTPruzPVmHkDvAKr2xkKxXxYTUYGVQJHwH7e++3Nkspq
+        8/yotqtfhIOJd2p+hl905z0JyNwjfEvZgi6i9TU=
+X-Google-Smtp-Source: ABdhPJx7jfTF+1gqutoTuMpuHPyBNSohGVmVj2gONs6EyyZm8RdwWec5NrIoBw0CPdp4v8lGFPTb8RilUTYv62Jdf/w=
+X-Received: by 2002:a05:6870:3105:b0:f2:9615:ff8e with SMTP id
+ v5-20020a056870310500b000f29615ff8emr825151oaa.200.1654756350402; Wed, 08 Jun
+ 2022 23:32:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220606132741.3462925-1-james.hilliard1@gmail.com>
+ <CAEf4BzZ8eTqVnsLqc52=AyHeAsuVB3Nv7uBW19t2pcb9h7p2hQ@mail.gmail.com>
+ <CADvTj4o2cbCpC40487=rgzSJZ8i94U4RR3=_s8ANE=phPQA6VQ@mail.gmail.com> <CAEf4BzaH0ZzEabjq43eZ4pZ7=SufYswffHwi1POn93Ty9SPJ6Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzaH0ZzEabjq43eZ4pZ7=SufYswffHwi1POn93Ty9SPJ6Q@mail.gmail.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Thu, 9 Jun 2022 00:32:19 -0600
+Message-ID: <CADvTj4r_RmvPbz_+W-E3TFrPwwgHb4Z4XpWYYieTfPhcZWV39g@mail.gmail.com>
+Subject: Re: [PATCH 1/1] libbpf: fix broken gcc pragma macros in bpf_helpers.h/bpf_tracing.h
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
-head:   512fc95a58c7b2e91e267db91a4ec5a54afedd01
-commit: 5149ad804a00e6613abb8f069495e54b79bdfad0 [25/33] MIPS: Make virt_to_pfn() a static inline
-config: mips-randconfig-c004-20220608 (https://download.01.org/0day-ci/archive/20220609/202206091413.scfY8Gty-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=5149ad804a00e6613abb8f069495e54b79bdfad0
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout 5149ad804a00e6613abb8f069495e54b79bdfad0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+On Tue, Jun 7, 2022 at 5:21 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Mon, Jun 6, 2022 at 2:20 PM James Hilliard <james.hilliard1@gmail.com> wrote:
+> >
+> > On Mon, Jun 6, 2022 at 12:02 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Mon, Jun 6, 2022 at 6:28 AM James Hilliard <james.hilliard1@gmail.com> wrote:
+> > > >
+> > > > It seems the gcc preprocessor breaks unless pragmas are wrapped
+> > > > individually inside macros.
+> > > >
+> > > > Fixes errors like:
+> > > > error: expected identifier or '(' before '#pragma'
+> > > >   106 | SEC("cgroup/bind6")
+> > > >       | ^~~
+> > > >
+> > > > error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+> > > >   114 | char _license[] SEC("license") = "GPL";
+> > > >       | ^~~
+> > > >
+> > >
+> > > We've been using this macro in this form for a while with no errors.
+> > > How do you get these errors in the first place?
+> >
+> > I was attempting to compile the systemd bpf programs using gcc 12.1.
+> > https://github.com/systemd/systemd/tree/main/src/core/bpf
+>
+> It would be great to be able to repro it as part of selftests. Can you
+> try gcc 12 with selftests/bpf and see if you get the same problem?
+>
+> >
+> > > _Pragma is supposed to
+> > > be a full equivalent of #pragma specifically to be able to be used in
+> > > macros, so these work-arounds shouldn't be necessary.
+> >
+> > I did try and style this like the nested macro example here:
+> > https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html
+>
+>
+> If you are referring to DO_PRAGMA example? That example is done that
+> way to do argument stringification, but not because _Pragma can't be
+> used as is in macros.
+>
+> >
+> > > Let's first try
+> > > to root cause this.
+> >
+> > I was looking around and it seems there's a bunch of gcc preprocessor
+> > pragma issues in general, restyling this seemed to be the best option
+> > at the moment since a lot looked to be unfixed:
+> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53431
+> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55578
+> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89718
+> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91669
+> >
+>
+> I don't like the obscurity of the changes in this patch and don't see
+> how it fundamentally changes anything. So I'd like to actually try to
+> be able to repro it and see what other solutions there are before
+> committing to this.
+>
+> I also suspect that it's only the SEC() macro that's problematic and
+> we shouldn't touch any other macro at all. But again, I'd like to get
+> a repro first.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ok, yeah looks like it's just the SEC() macro, resent with just that changed:
+https://lore.kernel.org/bpf/20220609062412.3950380-1-james.hilliard1@gmail.com/
 
-All errors (new ones prefixed by >>):
+Seems there's a separate issue with -std=c17 and typeof():
+https://lore.kernel.org/bpf/20220609062829.293217-1-james.hilliard1@gmail.com/
 
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:64:
-   In file included from arch/mips/include/asm/mmiowb.h:5:
-   In file included from arch/mips/include/asm/io.h:29:
->> arch/mips/include/asm/page.h:262:33: error: call to undeclared function 'virt_to_phys'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-                                          ^
-   arch/mips/include/asm/page.h:262:33: note: did you mean 'virt_to_pfn'?
-   arch/mips/include/asm/page.h:255:29: note: 'virt_to_pfn' declared here
-   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
-                               ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:64:
-   In file included from arch/mips/include/asm/mmiowb.h:5:
->> arch/mips/include/asm/io.h:114:27: error: static declaration of 'virt_to_phys' follows non-static declaration
-   static inline phys_addr_t virt_to_phys(const volatile void *x)
-                             ^
-   arch/mips/include/asm/page.h:262:33: note: previous implicit declaration is here
-           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-                                          ^
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
-   void output_ptreg_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_ptreg_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
-   void output_task_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_task_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
-   void output_thread_info_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_info_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
-   void output_thread_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
-   void output_mm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_mm_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
-   void output_sc_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:218:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_sc_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
-   void output_signal_defined(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:253:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_signal_defined(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for function 'output_pm_defines' [-Wmissing-prototypes]
-   void output_pm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:332:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_pm_defines(void)
-   ^
-   static 
-   8 warnings and 2 errors generated.
-   make[2]: *** [scripts/Makefile.build:117: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1196: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/virt_to_phys +262 arch/mips/include/asm/page.h
-
-   254	
-   255	static inline unsigned long virt_to_pfn(const volatile void *kaddr)
-   256	{
-   257		/*
-   258		 * MIPS virt_to_phys() returns a phys_addr_t which is
-   259		 * an unsigned int on MIPS, but the interface expects
-   260		 * unsigned long.
-   261		 */
- > 262		return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-   263	}
-   264	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
-   265	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> > >
+> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > > ---
+> > > >  tools/lib/bpf/bpf_helpers.h | 26 ++++++++++++++------------
+> > > >  tools/lib/bpf/bpf_tracing.h | 26 ++++++++++++++------------
+> > > >  2 files changed, 28 insertions(+), 24 deletions(-)
+> > > >
+> > > > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> > > > index fb04eaf367f1..6d159082727d 100644
+> > > > --- a/tools/lib/bpf/bpf_helpers.h
+> > > > +++ b/tools/lib/bpf/bpf_helpers.h
+> > > > @@ -22,11 +22,13 @@
+> > > >   * To allow use of SEC() with externs (e.g., for extern .maps declarations),
+> > > >   * make sure __attribute__((unused)) doesn't trigger compilation warning.
+> > > >   */
+> > > > +#define __gcc_helpers_pragma(x) _Pragma(#x)
+> > > > +#define __gcc_helpers_diag_pragma(x) __gcc_helpers_pragma("GCC diagnostic " #x)
+> > > >  #define SEC(name) \
+> > > > -       _Pragma("GCC diagnostic push")                                      \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")          \
+> > > > +       __gcc_helpers_diag_pragma(push)                                     \
+> > > > +       __gcc_helpers_diag_pragma(ignored "-Wignored-attributes")           \
+> > > >         __attribute__((section(name), used))                                \
+> > > > -       _Pragma("GCC diagnostic pop")                                       \
+> > > > +       __gcc_helpers_diag_pragma(pop)
+> > > >
+> > > >  /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
+> > > >  #undef __always_inline
+> > > > @@ -215,10 +217,10 @@ enum libbpf_tristate {
+> > > >         static const char ___fmt[] = fmt;                       \
+> > > >         unsigned long long ___param[___bpf_narg(args)];         \
+> > > >                                                                 \
+> > > > -       _Pragma("GCC diagnostic push")                          \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")  \
+> > > > +       __gcc_helpers_diag_pragma(push)                         \
+> > > > +       __gcc_helpers_diag_pragma(ignored "-Wint-conversion")   \
+> > > >         ___bpf_fill(___param, args);                            \
+> > > > -       _Pragma("GCC diagnostic pop")                           \
+> > > > +       __gcc_helpers_diag_pragma(pop)                          \
+> > > >                                                                 \
+> > > >         bpf_seq_printf(seq, ___fmt, sizeof(___fmt),             \
+> > > >                        ___param, sizeof(___param));             \
+> > > > @@ -233,10 +235,10 @@ enum libbpf_tristate {
+> > > >         static const char ___fmt[] = fmt;                       \
+> > > >         unsigned long long ___param[___bpf_narg(args)];         \
+> > > >                                                                 \
+> > > > -       _Pragma("GCC diagnostic push")                          \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")  \
+> > > > +       __gcc_helpers_diag_pragma(push)                         \
+> > > > +       __gcc_helpers_diag_pragma(ignored "-Wint-conversion")   \
+> > > >         ___bpf_fill(___param, args);                            \
+> > > > -       _Pragma("GCC diagnostic pop")                           \
+> > > > +       __gcc_helpers_diag_pragma(pop)                          \
+> > > >                                                                 \
+> > > >         bpf_snprintf(out, out_size, ___fmt,                     \
+> > > >                      ___param, sizeof(___param));               \
+> > > > @@ -264,10 +266,10 @@ enum libbpf_tristate {
+> > > >         static const char ___fmt[] = fmt;                       \
+> > > >         unsigned long long ___param[___bpf_narg(args)];         \
+> > > >                                                                 \
+> > > > -       _Pragma("GCC diagnostic push")                          \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")  \
+> > > > +       __gcc_helpers_diag_pragma(push)                         \
+> > > > +       __gcc_helpers_diag_pragma(ignored "-Wint-conversion")   \
+> > > >         ___bpf_fill(___param, args);                            \
+> > > > -       _Pragma("GCC diagnostic pop")                           \
+> > > > +       __gcc_helpers_diag_pragma(pop)                          \
+> > > >                                                                 \
+> > > >         bpf_trace_vprintk(___fmt, sizeof(___fmt),               \
+> > > >                           ___param, sizeof(___param));          \
+> > > > diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+> > > > index 01ce121c302d..e08ffc290b3e 100644
+> > > > --- a/tools/lib/bpf/bpf_tracing.h
+> > > > +++ b/tools/lib/bpf/bpf_tracing.h
+> > > > @@ -422,16 +422,18 @@ struct pt_regs;
+> > > >   * This is useful when using BPF helpers that expect original context
+> > > >   * as one of the parameters (e.g., for bpf_perf_event_output()).
+> > > >   */
+> > > > +#define __gcc_tracing_pragma(x) _Pragma(#x)
+> > > > +#define __gcc_tracing_diag_pragma(x) __gcc_tracing_pragma("GCC diagnostic " #x)
+> > > >  #define BPF_PROG(name, args...)                                                    \
+> > > >  name(unsigned long long *ctx);                                             \
+> > > >  static __attribute__((always_inline)) typeof(name(0))                      \
+> > > >  ____##name(unsigned long long *ctx, ##args);                               \
+> > > >  typeof(name(0)) name(unsigned long long *ctx)                              \
+> > > >  {                                                                          \
+> > > > -       _Pragma("GCC diagnostic push")                                      \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")              \
+> > > > +       __gcc_tracing_diag_pragma(push)                                     \
+> > > > +       __gcc_tracing_diag_pragma(ignored "-Wint-conversion")               \
+> > > >         return ____##name(___bpf_ctx_cast(args));                           \
+> > > > -       _Pragma("GCC diagnostic pop")                                       \
+> > > > +       __gcc_tracing_diag_pragma(pop)                                      \
+> > > >  }                                                                          \
+> > > >  static __attribute__((always_inline)) typeof(name(0))                      \
+> > > >  ____##name(unsigned long long *ctx, ##args)
+> > > > @@ -462,10 +464,10 @@ static __attribute__((always_inline)) typeof(name(0))                         \
+> > > >  ____##name(struct pt_regs *ctx, ##args);                                   \
+> > > >  typeof(name(0)) name(struct pt_regs *ctx)                                  \
+> > > >  {                                                                          \
+> > > > -       _Pragma("GCC diagnostic push")                                      \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")              \
+> > > > +       __gcc_tracing_diag_pragma(push)                                     \
+> > > > +       __gcc_tracing_diag_pragma(ignored "-Wint-conversion")               \
+> > > >         return ____##name(___bpf_kprobe_args(args));                        \
+> > > > -       _Pragma("GCC diagnostic pop")                                       \
+> > > > +       __gcc_tracing_diag_pragma(pop)                                      \
+> > > >  }                                                                          \
+> > > >  static __attribute__((always_inline)) typeof(name(0))                      \
+> > > >  ____##name(struct pt_regs *ctx, ##args)
+> > > > @@ -486,10 +488,10 @@ static __attribute__((always_inline)) typeof(name(0))                         \
+> > > >  ____##name(struct pt_regs *ctx, ##args);                                   \
+> > > >  typeof(name(0)) name(struct pt_regs *ctx)                                  \
+> > > >  {                                                                          \
+> > > > -       _Pragma("GCC diagnostic push")                                      \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")              \
+> > > > +       __gcc_tracing_diag_pragma(push)                                     \
+> > > > +       __gcc_tracing_diag_pragma(ignored "-Wint-conversion")               \
+> > > >         return ____##name(___bpf_kretprobe_args(args));                     \
+> > > > -       _Pragma("GCC diagnostic pop")                                       \
+> > > > +       __gcc_tracing_diag_pragma(pop)                                      \
+> > > >  }                                                                          \
+> > > >  static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
+> > > >
+> > > > @@ -520,10 +522,10 @@ ____##name(struct pt_regs *ctx, ##args);                              \
+> > > >  typeof(name(0)) name(struct pt_regs *ctx)                                  \
+> > > >  {                                                                          \
+> > > >         struct pt_regs *regs = PT_REGS_SYSCALL_REGS(ctx);                   \
+> > > > -       _Pragma("GCC diagnostic push")                                      \
+> > > > -       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")              \
+> > > > +       __gcc_tracing_diag_pragma(push)             \
+> > > > +       __gcc_tracing_diag_pragma(ignored "-Wint-conversion")               \
+> > > >         return ____##name(___bpf_syscall_args(args));                       \
+> > > > -       _Pragma("GCC diagnostic pop")                                       \
+> > > > +       __gcc_tracing_diag_pragma(pop)                                      \
+> > > >  }                                                                          \
+> > > >  static __attribute__((always_inline)) typeof(name(0))                      \
+> > > >  ____##name(struct pt_regs *ctx, ##args)
+> > > > --
+> > > > 2.25.1
+> > > >

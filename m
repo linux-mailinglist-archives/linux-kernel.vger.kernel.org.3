@@ -2,122 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24221544EF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5656D544F04
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343935AbiFIO3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S1343969AbiFIO3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245115AbiFIO23 (ORCPT
+        with ESMTP id S243764AbiFIO3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:28:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 398581821B5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654784905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D9bt/rT+ACc5asHr7sl5YVnLU/QODOwZ6hb9zGalE84=;
-        b=Qh6wC/HP4n2qDtl8+mCafn/lpyNqoPiI2Ln55jWtNYc8bcWcvGVqyGlksFqn5Dfehqdv8Z
-        jRKoLS75g/8Rx8hIA+ntfi6j4B4uXlx7k+1Ay//+cu9cRQ+LEOFhEkJ8LkJLaodl0QFPIT
-        nlqvCOw3L8HbWmHhagEt7WR0RhM/ZJw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-457-12dzGHS8NZeKbq9Am7eUzw-1; Thu, 09 Jun 2022 10:28:24 -0400
-X-MC-Unique: 12dzGHS8NZeKbq9Am7eUzw-1
-Received: by mail-wr1-f71.google.com with SMTP id e9-20020a5d5949000000b00216ffb6df18so3867571wri.14
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 07:28:24 -0700 (PDT)
+        Thu, 9 Jun 2022 10:29:17 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27B01E6F92
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:29:15 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a2so32153770lfg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 07:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M9W9dRebSTBOmk3r6h+50xRRy5x7WHWQ6L9317Ru0kA=;
+        b=X9500eDveU8KKATmJfgDxeLS5Q33g+1dfFoDxw+uqcyCUINnN7TPd0ztpsPrOSglu+
+         ZYnBYXs4lW0hBch8EJI361d05OR+gzBYJaQvlAXiYJCMIfdXsHei5pkpq/Uk9DIXoBRi
+         LpSCEX2FGfBiEBmLQFEZmd2A202vYREUgoy6pQ4PygjIVGuQLoEvZfK30WI/MetL/M9U
+         5jp9AqstbsZxpaoGbhanid8b4y+ykUuZgBbmtEGByI7/ZmzI2tU73cNFkKJbeAFreP0N
+         cfaYTzdaefkNo+eXfdUfpqDFay+w3dQ/JIznLqGHjM7azqIcZ8rpShA8Qk33XYu5uOIP
+         gDSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D9bt/rT+ACc5asHr7sl5YVnLU/QODOwZ6hb9zGalE84=;
-        b=bUf/vh9y8k+czW5CKUl13wzXF2I68Q6qDQT+A5IpVSM0Yexm5EV0gX6cfqJiGbeIqr
-         zJmWZoB64K96YfxZ6HCyPLRM6yddJzkP6MTfONIxb5Ct9rlCti3o3jZy+m8VeCPC0RlW
-         7NXsNp/K7deEaz8AV5EAWBIVzKYQFfkzprgnZnuvI642nmbt8OD6jBnNC5Y2PKj+v9dW
-         vDTRIedcx4md2Vr/tpZTP8CGYOWEjnNd+5U4fSgCHRYpAl+/Wli8scQG4yxcfIT71ve3
-         vnGzf41ew9OL3tlr5jDInsj+jkp/R3ArYdagsEJ+TZABxz1qAwjF3D0BzzSZNEMLBxHc
-         0qOw==
-X-Gm-Message-State: AOAM5317K9AFEvWMMKDbN/u7BoMkURaCDuOMRZyHk50O5ZaGJbhYbqSf
-        C7zAmY+dDd1qVBn/bDoNJsvHWeIIQbnVwbD4WapsHw3z+dPSaceIoy8eCNEMDsIcdZUrkOUUGt2
-        CSaliiN/6DQuJLmH73bXZ7Cj2TscQ4/7e4NbMRWUESBNPt/w2TXn9awXGeTxAvZhp/3k3+A9n+G
-        A=
-X-Received: by 2002:a05:600c:2312:b0:397:7647:2ac4 with SMTP id 18-20020a05600c231200b0039776472ac4mr3586883wmo.125.1654784902982;
-        Thu, 09 Jun 2022 07:28:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwESbXtfgCVdHUHBlqUyB7+uBGuQskr7UH7a9ukf3MhwYxhwZpS3sh4RAgSo9rKZX/Kfrr0xg==
-X-Received: by 2002:a05:600c:2312:b0:397:7647:2ac4 with SMTP id 18-20020a05600c231200b0039776472ac4mr3586843wmo.125.1654784902646;
-        Thu, 09 Jun 2022 07:28:22 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g19-20020a05600c4ed300b0039c4506bd25sm24810750wmq.14.2022.06.09.07.28.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 07:28:22 -0700 (PDT)
-Message-ID: <66dc8d78-ccd3-ac21-644d-26b8d20ba791@redhat.com>
-Date:   Thu, 9 Jun 2022 16:28:20 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M9W9dRebSTBOmk3r6h+50xRRy5x7WHWQ6L9317Ru0kA=;
+        b=AdRAqPzLvx9aAKj8r1E3eotByMGPBolzXt8u3+O9ApIvztrZVhw4hhGSaQ3ObQ2Mj4
+         A3S343pSZ3vP8A0hhMdxrNofaWgPr+WWEDRZSyrSoRePuSgoAyi+4SjyGav+5VqGeogJ
+         buYa5PNAQdY8We4eJOZ1Ku33zWu3HCqMdnpQR/xRJ/ujtPoq4dLMP5Fj4T5uTDgg51B1
+         rfYQZTm9GVfkSsKGjTAvziw2HPdO3gyAN7ohk/4UU/Yd/TPFCHDXXIwlQudlpI794cbx
+         FY3pgqja1EufZcB/1J8uVpme4qVgYE2Y8cYHRlo4zoPswAWi83HoMwM5hLcXm3XQ8erm
+         K9Ww==
+X-Gm-Message-State: AOAM530By1+AF9wetIBzimstC0PhSid5lI1XyHQP/A5Lrg5duJ6LPiTy
+        nC8W0M9sgV909fHZ0MsJbzFawkwjuzkio+EDnVy6uQ==
+X-Google-Smtp-Source: ABdhPJwapZ/q3hk1YVs/Dv9YjzJzwLpk3w1JrWXItiDXYqKk0pEBggvMR+cCGavHcvvdGN0WXwQMxOC+JKu9guAJEMs=
+X-Received: by 2002:a05:6512:1085:b0:479:478b:d2cc with SMTP id
+ j5-20020a056512108500b00479478bd2ccmr13054137lfg.540.1654784953738; Thu, 09
+ Jun 2022 07:29:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 0/5] Fix some races between sysfb device registration
- and drivers probe
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laszlo Ersek <lersek@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>, kvm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Helge Deller <deller@gmx.de>, Jonathan Corbet <corbet@lwn.net>,
-        Peter Jones <pjones@redhat.com>, linux-doc@vger.kernel.org,
-        linux-fbdev@vger.kernel.org
-References: <20220607182338.344270-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220607182338.344270-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609113046.780504-1-elver@google.com> <20220609113046.780504-2-elver@google.com>
+In-Reply-To: <20220609113046.780504-2-elver@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 9 Jun 2022 16:29:02 +0200
+Message-ID: <CACT4Y+bOFmCyqfSgWS0b5xuwnPqP4V9v2ooJRmFCn0YAtOPmhQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] perf/hw_breakpoint: Optimize list of per-task breakpoints
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, x86@kernel.org,
+        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/22 20:23, Javier Martinez Canillas wrote:
-> The patches in this series contain mostly changes suggested by Daniel Vetter
-> Thomas Zimmermann. They aim to fix existing races between the Generic System
-> Framebuffer (sysfb) infrastructure and the fbdev and DRM device registration.
-> 
-> For example, it is currently possible for sysfb to register a platform
-> device after a real DRM driver was registered and requested to remove the
-> conflicting framebuffers. Or is possible for a simple{fb,drm} to match with
-> a device previously registered by sysfb, even after a real driver is present.
-> 
-> A symptom of this issue, was worked around with the commit fb561bf9abde
-> ("fbdev: Prevent probing generic drivers if a FB is already registered")
-> but that's really a hack and should be reverted instead.
-> 
-> This series attempt to fix it more correctly and revert the mentioned hack.
-> That will also allow to make the num_registered_fb variable not visible to
-> drivers anymore, since that's internal to fbdev core.
-> 
+On Thu, 9 Jun 2022 at 13:31, Marco Elver <elver@google.com> wrote:
+>
+> On a machine with 256 CPUs, running the recently added perf breakpoint
+> benchmark results in:
+>
+>  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
+>  |      Total time: 236.418 [sec]
+>  |
+>  |   123134.794271 usecs/op
+>  |  7880626.833333 usecs/op/cpu
+>
+> The benchmark tests inherited breakpoint perf events across many
+> threads.
+>
+> Looking at a perf profile, we can see that the majority of the time is
+> spent in various hw_breakpoint.c functions, which execute within the
+> 'nr_bp_mutex' critical sections which then results in contention on that
+> mutex as well:
+>
+>     37.27%  [kernel]       [k] osq_lock
+>     34.92%  [kernel]       [k] mutex_spin_on_owner
+>     12.15%  [kernel]       [k] toggle_bp_slot
+>     11.90%  [kernel]       [k] __reserve_bp_slot
+>
+> The culprit here is task_bp_pinned(), which has a runtime complexity of
+> O(#tasks) due to storing all task breakpoints in the same list and
+> iterating through that list looking for a matching task. Clearly, this
+> does not scale to thousands of tasks.
+>
+> While one option would be to make task_struct a breakpoint list node,
+> this would only further bloat task_struct for infrequently used data.
 
-Pushed patches 1-4 to drm-misc (drm-misc-next). Thanks!
+task_struct already has:
 
--- 
-Best regards,
+#ifdef CONFIG_PERF_EVENTS
+  struct perf_event_context *perf_event_ctxp[perf_nr_task_contexts];
+  struct mutex perf_event_mutex;
+  struct list_head perf_event_list;
+#endif
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Wonder if it's possible to use perf_event_mutex instead of the task_sharded_mtx?
+And possibly perf_event_list instead of task_bps_ht? It will contain
+other perf_event types, so we will need to test type as well, but on
+the positive side, we don't need any management of the separate
+container.
 
+
+
+
+> Instead, make use of the "rhashtable" variant "rhltable" which stores
+> multiple items with the same key in a list. This results in average
+> runtime complexity of O(1) for task_bp_pinned().
+>
+> With the optimization, the benchmark shows:
+>
+>  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
+>  |      Total time: 0.208 [sec]
+>  |
+>  |      108.422396 usecs/op
+>  |     6939.033333 usecs/op/cpu
+>
+> On this particular setup that's a speedup of ~1135x.
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+>  include/linux/perf_event.h    |  3 +-
+>  kernel/events/hw_breakpoint.c | 56 ++++++++++++++++++++++-------------
+>  2 files changed, 37 insertions(+), 22 deletions(-)
+>
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index 01231f1d976c..e27360436dc6 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -36,6 +36,7 @@ struct perf_guest_info_callbacks {
+>  };
+>
+>  #ifdef CONFIG_HAVE_HW_BREAKPOINT
+> +#include <linux/rhashtable-types.h>
+>  #include <asm/hw_breakpoint.h>
+>  #endif
+>
+> @@ -178,7 +179,7 @@ struct hw_perf_event {
+>                          * creation and event initalization.
+>                          */
+>                         struct arch_hw_breakpoint       info;
+> -                       struct list_head                bp_list;
+> +                       struct rhlist_head              bp_list;
+>                 };
+>  #endif
+>                 struct { /* amd_iommu */
+> diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> index f32320ac02fd..25c94c6e918d 100644
+> --- a/kernel/events/hw_breakpoint.c
+> +++ b/kernel/events/hw_breakpoint.c
+> @@ -28,7 +28,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/init.h>
+>  #include <linux/slab.h>
+> -#include <linux/list.h>
+> +#include <linux/rhashtable.h>
+>  #include <linux/cpu.h>
+>  #include <linux/smp.h>
+>  #include <linux/bug.h>
+> @@ -55,7 +55,13 @@ static struct bp_cpuinfo *get_bp_info(int cpu, enum bp_type_idx type)
+>  }
+>
+>  /* Keep track of the breakpoints attached to tasks */
+> -static LIST_HEAD(bp_task_head);
+> +static struct rhltable task_bps_ht;
+> +static const struct rhashtable_params task_bps_ht_params = {
+> +       .head_offset = offsetof(struct hw_perf_event, bp_list),
+> +       .key_offset = offsetof(struct hw_perf_event, target),
+> +       .key_len = sizeof_field(struct hw_perf_event, target),
+> +       .automatic_shrinking = true,
+> +};
+>
+>  static int constraints_initialized;
+>
+> @@ -104,17 +110,23 @@ static unsigned int max_task_bp_pinned(int cpu, enum bp_type_idx type)
+>   */
+>  static int task_bp_pinned(int cpu, struct perf_event *bp, enum bp_type_idx type)
+>  {
+> -       struct task_struct *tsk = bp->hw.target;
+> +       struct rhlist_head *head, *pos;
+>         struct perf_event *iter;
+>         int count = 0;
+>
+> -       list_for_each_entry(iter, &bp_task_head, hw.bp_list) {
+> -               if (iter->hw.target == tsk &&
+> -                   find_slot_idx(iter->attr.bp_type) == type &&
+> +       rcu_read_lock();
+> +       head = rhltable_lookup(&task_bps_ht, &bp->hw.target, task_bps_ht_params);
+> +       if (!head)
+> +               goto out;
+> +
+> +       rhl_for_each_entry_rcu(iter, pos, head, hw.bp_list) {
+> +               if (find_slot_idx(iter->attr.bp_type) == type &&
+>                     (iter->cpu < 0 || cpu == iter->cpu))
+>                         count += hw_breakpoint_weight(iter);
+>         }
+>
+> +out:
+> +       rcu_read_unlock();
+>         return count;
+>  }
+>
+> @@ -187,7 +199,7 @@ static void toggle_bp_task_slot(struct perf_event *bp, int cpu,
+>  /*
+>   * Add/remove the given breakpoint in our constraint table
+>   */
+> -static void
+> +static int
+>  toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>                int weight)
+>  {
+> @@ -200,7 +212,7 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>         /* Pinned counter cpu profiling */
+>         if (!bp->hw.target) {
+>                 get_bp_info(bp->cpu, type)->cpu_pinned += weight;
+> -               return;
+> +               return 0;
+>         }
+>
+>         /* Pinned counter task profiling */
+> @@ -208,9 +220,9 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>                 toggle_bp_task_slot(bp, cpu, type, weight);
+>
+>         if (enable)
+> -               list_add_tail(&bp->hw.bp_list, &bp_task_head);
+> +               return rhltable_insert(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
+>         else
+> -               list_del(&bp->hw.bp_list);
+> +               return rhltable_remove(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
+>  }
+>
+>  __weak int arch_reserve_bp_slot(struct perf_event *bp)
+> @@ -308,9 +320,7 @@ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
+>         if (ret)
+>                 return ret;
+>
+> -       toggle_bp_slot(bp, true, type, weight);
+> -
+> -       return 0;
+> +       return toggle_bp_slot(bp, true, type, weight);
+>  }
+>
+>  int reserve_bp_slot(struct perf_event *bp)
+> @@ -335,7 +345,7 @@ static void __release_bp_slot(struct perf_event *bp, u64 bp_type)
+>
+>         type = find_slot_idx(bp_type);
+>         weight = hw_breakpoint_weight(bp);
+> -       toggle_bp_slot(bp, false, type, weight);
+> +       WARN_ON(toggle_bp_slot(bp, false, type, weight));
+>  }
+>
+>  void release_bp_slot(struct perf_event *bp)
+> @@ -679,7 +689,7 @@ static struct pmu perf_breakpoint = {
+>  int __init init_hw_breakpoint(void)
+>  {
+>         int cpu, err_cpu;
+> -       int i;
+> +       int i, ret;
+>
+>         for (i = 0; i < TYPE_MAX; i++)
+>                 nr_slots[i] = hw_breakpoint_slots(i);
+> @@ -690,18 +700,24 @@ int __init init_hw_breakpoint(void)
+>
+>                         info->tsk_pinned = kcalloc(nr_slots[i], sizeof(int),
+>                                                         GFP_KERNEL);
+> -                       if (!info->tsk_pinned)
+> -                               goto err_alloc;
+> +                       if (!info->tsk_pinned) {
+> +                               ret = -ENOMEM;
+> +                               goto err;
+> +                       }
+>                 }
+>         }
+>
+> +       ret = rhltable_init(&task_bps_ht, &task_bps_ht_params);
+> +       if (ret)
+> +               goto err;
+> +
+>         constraints_initialized = 1;
+>
+>         perf_pmu_register(&perf_breakpoint, "breakpoint", PERF_TYPE_BREAKPOINT);
+>
+>         return register_die_notifier(&hw_breakpoint_exceptions_nb);
+>
+> - err_alloc:
+> +err:
+>         for_each_possible_cpu(err_cpu) {
+>                 for (i = 0; i < TYPE_MAX; i++)
+>                         kfree(get_bp_info(err_cpu, i)->tsk_pinned);
+> @@ -709,7 +725,5 @@ int __init init_hw_breakpoint(void)
+>                         break;
+>         }
+>
+> -       return -ENOMEM;
+> +       return ret;
+>  }
+> -
+> -
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

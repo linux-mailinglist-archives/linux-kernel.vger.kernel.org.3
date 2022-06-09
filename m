@@ -2,93 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF5C54439B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBCF54439F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238788AbiFIGND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 02:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37940 "EHLO
+        id S232837AbiFIGPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 02:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiFIGNB (ORCPT
+        with ESMTP id S232575AbiFIGPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 02:13:01 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF4936302;
-        Wed,  8 Jun 2022 23:13:00 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id y19so45414422ejq.6;
-        Wed, 08 Jun 2022 23:13:00 -0700 (PDT)
+        Thu, 9 Jun 2022 02:15:10 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1355F11B6AA;
+        Wed,  8 Jun 2022 23:15:09 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-e5e433d66dso29876521fac.5;
+        Wed, 08 Jun 2022 23:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SmuCshAKgrlfjZbY8MGcPQUYLCKO1JKtOtdHvzL6L9s=;
+        b=RUi0wR9N5ruqs8p04u9ewynC8LNCNe747t2xG6Xc+SLs+U4Q8bVs8WfS+B1rpsv+E0
+         N1sqASDT+fdBt3lD+H3EhS7bKKpUl3EUCL4p+fnsnqXxwj/YbN/G1Sw7cpgd7LKgAc69
+         2GTjlqZ821IDnPE4Dk8AJiD+l90eqjseHbGBXBsB9YaAdxukaqhxvp9AjHq1lVnNB1qL
+         VKv41V3YOmildYghE7jORUEBAcPSZxw5bkyOEkq5jLlj+hvUjQI0D1CMDl7vhhHoImXu
+         MfQfx8hukgQYxQQGIxX3arObQb9sPXaCOIDjIP8B+rPoyrYb6Tdi+Z+Li/a78aUuJgAX
+         Exlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uenxBnmzX5nP05fED5GFTiUFsAaskSMTNeWhKePY7qQ=;
-        b=nJRRzV2t3Y5/X4JVEPyRqa9eSyRFuNjvjWa4OUViToxRzY1MxqTionQ/AZSaMpYmI/
-         c2vjW/anno2oT2wQoqcqZfu5HbqwyPZtZwb1Sk4TiNmAwqetSoYJoj1IUEUNbsGszQUM
-         3KN/O6o0zYfnBUWaGPPIWO8uaVgPM+NVN95cEvyIV9g2sNxDFHLmcywQpwf51JEwzCox
-         0557IuLAf+zAvjdsxYL6omzQlCKh0CjZ1UtSmWXTYSXgoqHiZO4zg73OvxR6v6HlpGjD
-         NaMHCwuLna8vu/VJ79CKKXCmTtZwCt4GWQ7wo8itRiKEsmBG8XBz7WUIThdLudftN1iZ
-         wXMA==
-X-Gm-Message-State: AOAM532DltHTMyp7aNwu59dDJezkP6Ek8P5IJgiOcbayefeaszoScuRb
-        rniOFg9NixB/9mMoV2UtapE=
-X-Google-Smtp-Source: ABdhPJz7K8CMJOyO6WVb0QaA/pvjh1RDnjIBLOP6yt2mPCH2VopWQh8LhACk61TPMK1vWZ4A3KZqAw==
-X-Received: by 2002:a17:906:64d6:b0:711:fca6:bc2b with SMTP id p22-20020a17090664d600b00711fca6bc2bmr4717295ejn.197.1654755178893;
-        Wed, 08 Jun 2022 23:12:58 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id ft29-20020a170907801d00b0071145c2f494sm6407525ejc.27.2022.06.08.23.12.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 23:12:58 -0700 (PDT)
-Message-ID: <5bdc97df-2543-2716-cfd3-34019ac84c96@kernel.org>
-Date:   Thu, 9 Jun 2022 08:12:56 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SmuCshAKgrlfjZbY8MGcPQUYLCKO1JKtOtdHvzL6L9s=;
+        b=1KGm51bVEs6NpHSnvu8CyOtwnxMJ1/UjE92EucESEWn5aYevUmP1OlS6OMuCOkfATH
+         d8tm6X8HfJrxQ2dTjCtrSqiQKL+v4eXfR0v8f/ArdkP7EECVJpMGC1SCFBLhTVrELXvB
+         mE+am6L5u3TA5XMmKi5u7AnCVqfjGxoWURvhBZ8kO5sCZs4tAxG5k4Wdj9fhzWNyuQ+L
+         g9gQhWEt7J3X85SDkPg9PPhh8LjKYsdCsWerzAE4c3uPzQqBKsF3keq1FDCQmnRf6qJn
+         rbGT69LvHq+jXSrzf05CHSXQ9Kz3dH9TnBoFAfPegwNPamyxIPaklIh/ndDeGOxJEOqs
+         w+Ew==
+X-Gm-Message-State: AOAM533HWRDGMSJZuDiS8HrcFStekRkEwHHIf8/w8N/iM5h2CgXl2bh2
+        tbq7EsdT6+BOqt2Ma+O0OjMw3HiTcIrfcJV93jc=
+X-Google-Smtp-Source: ABdhPJwwQCMNBj+w5eZPapW8twI37LK47pxZ08Vz5gS8vlnOXDfFSJZRWG//yB72wptVLSQHZVQUaIJjQuKkFz723CA=
+X-Received: by 2002:a05:6870:3105:b0:f2:9615:ff8e with SMTP id
+ v5-20020a056870310500b000f29615ff8emr807155oaa.200.1654755308353; Wed, 08 Jun
+ 2022 23:15:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5.18 000/879] 5.18.3-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220607165002.659942637@linuxfoundation.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220608064004.1493239-1-james.hilliard1@gmail.com>
+ <b05401b0-308e-03a2-af94-4ecc5322fd1f@iogearbox.net> <CADvTj4pUd2zH8M6BBQGVf9C3dpfhfFEN9ogwKXODj+sarzqPcg@mail.gmail.com>
+ <3230febd-d346-8348-76e7-b9548f01cb87@iogearbox.net>
+In-Reply-To: <3230febd-d346-8348-76e7-b9548f01cb87@iogearbox.net>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Thu, 9 Jun 2022 00:14:57 -0600
+Message-ID: <CADvTj4rPKiBcfoL5q4QpL1z0Gd60K+LVuvgmi2W=TiExFT7AHg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] libbpf: replace typeof with __typeof__
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 06. 22, 18:51, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.3 release.
-> There are 879 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
+On Wed, Jun 8, 2022 at 9:22 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 6/8/22 3:04 PM, James Hilliard wrote:
+> > On Wed, Jun 8, 2022 at 6:50 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >> On 6/8/22 8:40 AM, James Hilliard wrote:
+> >>> It seems the gcc preprocessor breaks when typeof is used with
+> >>> macros.
+> >>>
+> >>> Fixes errors like:
+> >>> error: expected identifier or '(' before '#pragma'
+> >>>     106 | SEC("cgroup/bind6")
+> >>>         | ^~~
+> >>>
+> >>> error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+> >>>     114 | char _license[] SEC("license") = "GPL";
+> >>>         | ^~~
+> >>>
+> >>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >>> ---
+> >>> Changes v1 -> v2:
+> >>>     - replace typeof with __typeof__ instead of changing pragma macros
+> >>> ---
+> >>>    tools/lib/bpf/bpf_core_read.h   | 16 ++++++++--------
+> >>>    tools/lib/bpf/bpf_helpers.h     |  4 ++--
+> >>>    tools/lib/bpf/bpf_tracing.h     | 24 ++++++++++++------------
+> >>>    tools/lib/bpf/btf.h             |  4 ++--
+> >>>    tools/lib/bpf/libbpf_internal.h |  6 +++---
+> >>>    tools/lib/bpf/usdt.bpf.h        |  6 +++---
+> >>>    tools/lib/bpf/xsk.h             | 12 ++++++------
+> >>>    7 files changed, 36 insertions(+), 36 deletions(-)
+> >>>
+> >>> diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
+> >>> index fd48b1ff59ca..d3a88721c9e7 100644
+> >>> --- a/tools/lib/bpf/bpf_core_read.h
+> >>> +++ b/tools/lib/bpf/bpf_core_read.h
+> >>> @@ -111,7 +111,7 @@ enum bpf_enum_value_kind {
+> >>>    })
+> >>>
+> >>>    #define ___bpf_field_ref1(field)    (field)
+> >>> -#define ___bpf_field_ref2(type, field)       (((typeof(type) *)0)->field)
+> >>> +#define ___bpf_field_ref2(type, field)       (((__typeof__(type) *)0)->field)
+> >>>    #define ___bpf_field_ref(args...)                                       \
+> >>>        ___bpf_apply(___bpf_field_ref, ___bpf_narg(args))(args)
+> >>>
+> >>
+> >> Can't we just add the below?
+> >>
+> >> #ifndef typeof
+> >> # define typeof __typeof__
+> >> #endif
 
-openSUSE configs¹⁾ all green.
+Ok, looks like this does appear to work, although just switching to __typeof__
+may be preferable as it should work everywhere.
 
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
+> >
+> >  From what I can tell it's not actually missing, but rather is
+> > preprocessed differently
+> > as the errors seem to be macro related.
+>
+> Are you saying that the above suggestion wouldn't work? Do you have some more
+> details? I'm mainly wondering if there's a way where we could prevent letting
+> typeof() usage slip through in future given from kernel side people are used
+> to it.
 
-¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+I think my build env was using stale headers, I think I figured out
+what's going on,
+the typeof issue is triggered by building with -std=c17, the macro
+issue is unrelated
+and limited to the SEC macro it would appear.
 
--- 
-js
-suse labs
+I suppose running builds with -std=c17 would prevent typeof() usage from
+slipping through.
+
+>
+> > I did also find this change which seems related:
+> > https://github.com/torvalds/linux/commit/8faf7fc597d59b142af41ddd4a2d59485f75f88a
+> >
+> >>
+> >> Thanks,
+> >> Daniel
+>

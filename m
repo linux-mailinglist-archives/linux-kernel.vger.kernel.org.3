@@ -2,103 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCAC544DE3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF974544DE7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343892AbiFINlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S1343897AbiFINlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239763AbiFINlG (ORCPT
+        with ESMTP id S1343895AbiFINll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:41:06 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A59B22
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:41:03 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id a4-20020a056402168400b0042dc5b94da6so17114826edv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:41:03 -0700 (PDT)
+        Thu, 9 Jun 2022 09:41:41 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1494F20BE9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:41:40 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id s10so1796554ljh.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:41:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=eTBiLx7Hu1SlVzsMpZo2b+d4lU4L10GWK2pHkUo+SAE=;
-        b=PeiLjAJ6ilDmNlrQqDLc5/7zn+iw3QxVOy3lE6Xs7rqSb9xNjfWEha4ocIhN6Qnox/
-         VR+/tx2D7fu0/LwRJ/mhFNzt6yK1MmFr9bKKYTKmXKEi9s7b2PQo6kRE70zdgNI2DcPg
-         yh58nzp5dQdS71dkF/UCS6ci2d/WZ7q2gjNigDeq5ktfn+5iAesDLU7p7TlLu97ogvhc
-         z5YQRUEwSpCETE50RvFA/MEkR/6S6f8rfVcSqbb6sTkvU5RzienX0yFsLAAPDXB7+Egs
-         EL9dyN0JhMO0s/A9oToAIB5xvmDPOPj2Ntm0P+YjbX6452pHvsEm9bVPEwJMPsC/yTG0
-         oF5g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PF28ZnQLVsGI2i7ul/dfgqup/8C1a0mc9TiBXmcosYU=;
+        b=OAxGTJUe+XEVGmasomKjfTPF19BOrYj/fEHmMcR16tXmje2L2+5aMxRpp7TxlZz6+J
+         yvlRV1lYkm0XlpTf4tltOaog/KE+I4t+0hk2WrYk3ACPv+Y7oF+vJN9L5yagoTRSCrS/
+         rworsIcSpHAopjkAjIDAp6gLDlsgNfeV+NvL3Db5jTsQRr/8ODDXA4w0x3waW2l6VyvY
+         QuVdTcP44qHWxvGI92Tw8KlDERHWKynUAg3xzD4PoY+1SZM+nkIHAMReHJqIYi8fyhAZ
+         GYTE2tO9RGEqmtMrpDG8JYNiKjyopdZujiWnnYuw9ckMZ1u0SBLz5YG8HyowXxR6qw40
+         Er/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=eTBiLx7Hu1SlVzsMpZo2b+d4lU4L10GWK2pHkUo+SAE=;
-        b=DPZVs3olbcQJvL0pN21qnhagLl7H7VlVxSCKNgNYyixeZ1EIj3CFOQ3eP8K6nbBq4z
-         V+g8Wx6Zcu4tZkGEZb1ccpYFqQV/3J/rR1jyIq9bdl/lcw3Zqb2exwMDQetbgiLsEmOg
-         p04fXMFw9bM1QeyjS2kZJ9OtucvR7UjD5oncumYWm3g6hLZUAREIQza1zAP7CDpHo9dv
-         oHH2kLWLhuq5HEeaKASoji5/ccd0FRQtYLnabAqlH06bQu0sSpI1ZkbCph413tw3quMX
-         bGHzkXjkZOgIavqeJzNhKF7F6MkONLUnxCr6xG6ShrwShhcbTd7VjZ4YFkte+zm8NSpM
-         XF/A==
-X-Gm-Message-State: AOAM5305NzF1XdgspHBUu/MDj1lZNDx6KODvQRlEz7hGKUIK0KHVYSnE
-        7J3A/XLSP6X3paCjnbhTNRiQWsKEj74t
-X-Google-Smtp-Source: ABdhPJw+jQAuK2G5ha/0RJY1berjS7YFIotJofaX8bNXnVGs2fMN5yiilsREOw6VQKoe0TKXHITn89Oos5VS
-X-Received: from coin.lon.corp.google.com ([2a00:79e0:d:204:9556:75c2:7376:a13c])
- (user=pterjan job=sendgmr) by 2002:aa7:ce84:0:b0:42d:ce51:8c6e with SMTP id
- y4-20020aa7ce84000000b0042dce518c6emr46564046edv.10.1654782061822; Thu, 09
- Jun 2022 06:41:01 -0700 (PDT)
-Date:   Thu,  9 Jun 2022 14:40:57 +0100
-Message-Id: <20220609134057.2485190-1-pterjan@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] vboxguest: add missing devm_free_irq
-From:   Pascal Terjan <pterjan@google.com>
-To:     Hans de Goede <hdegoede@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Pascal Terjan <pterjan@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PF28ZnQLVsGI2i7ul/dfgqup/8C1a0mc9TiBXmcosYU=;
+        b=TaMoN6WkbcnvWeuhXiN7xOv4BgdRWssX+MEsvK5cRXRJlwz8wN5p0xBceuaP5UirtM
+         hRzkafuV6JatWjBP4tJeBMz6D3MNYztU4cB/XcuNnYNQZT0QanVc0Ji1V8n7BsmMRo7G
+         JK76B5TaMw0pplMLAx77aPBp0aJZXFS3JfeagAAR5fiOiDbeVbcmhrRdZfX75vBXN9Ns
+         ar0X6DczWVuRvwt96GQrnYWVlPnQOJ0FQndHd0HaHhCOvYVqSKBWqzTBxK9CG6wfF0LY
+         fD4PkdyKiPVBzCkF4SJ14SSpytsVUKhI1h6ybWJgHeHkgie5X3bk5dcwHS1xl/TVe2qe
+         ARgg==
+X-Gm-Message-State: AOAM531SvI7nCA1Fk/sGLioRea/lwNXKH81GBRsRQ5Te5ZFsAlN473QW
+        oHApojpdW5rubFYOvDTpexct8oTsYtAggbZy6WJupQ==
+X-Google-Smtp-Source: ABdhPJxKwbLXuKSnIJ3Phiqmieh/Wr9lduzAjt/Ld23SCuasFCRov3KdDNmTk8meN2KOewMYkB2L7tKO5zGU0Tha5P4=
+X-Received: by 2002:a2e:b0fc:0:b0:255:6f92:f9d4 with SMTP id
+ h28-20020a2eb0fc000000b002556f92f9d4mr22136645ljl.92.1654782098160; Thu, 09
+ Jun 2022 06:41:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220609113046.780504-1-elver@google.com> <20220609113046.780504-6-elver@google.com>
+ <CACT4Y+Zd0Zd_66DZ-f2HG4tR6ZdraFe9b4iEBJmG9p72+7RMWQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+Zd0Zd_66DZ-f2HG4tR6ZdraFe9b4iEBJmG9p72+7RMWQ@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 9 Jun 2022 15:41:26 +0200
+Message-ID: <CACT4Y+appPi5YAdKFB-2caO6xkg89FmV1_4532u7Jx_5CAX9xw@mail.gmail.com>
+Subject: Re: [PATCH 5/8] perf/hw_breakpoint: Remove useless code related to
+ flexible breakpoints
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, x86@kernel.org,
+        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the following warning when unloading the module:
+On Thu, 9 Jun 2022 at 14:04, Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Thu, 9 Jun 2022 at 13:31, Marco Elver <elver@google.com> wrote:
+> >
+> > Flexible breakpoints have never been implemented, with
+> > bp_cpuinfo::flexible always being 0. Unfortunately, they still occupy 4
+> > bytes in each bp_cpuinfo and bp_busy_slots, as well as computing the max
+> > flexible count in fetch_bp_busy_slots().
+> >
+> > This again causes suboptimal code generation, when we always know that
+> > `!!slots.flexible` will be 0.
+> >
+> > Just get rid of the flexible "placeholder" and remove all real code
+> > related to it. Make a note in the comment related to the constraints
+> > algorithm but don't remove them from the algorithm, so that if in future
+> > flexible breakpoints need supporting, it should be trivial to revive
+> > them (along with reverting this change).
+> >
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> Was added in 2009.
+>
+> Acked-by: Dmitry Vyukov <dvyukov@google.com>
+>
+> > ---
+> >  kernel/events/hw_breakpoint.c | 12 +++---------
+> >  1 file changed, 3 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> > index 5f40c8dfa042..afe0a6007e96 100644
+> > --- a/kernel/events/hw_breakpoint.c
+> > +++ b/kernel/events/hw_breakpoint.c
+> > @@ -46,8 +46,6 @@ struct bp_cpuinfo {
+> >  #else
+> >         unsigned int    *tsk_pinned;
+> >  #endif
+> > -       /* Number of non-pinned cpu/task breakpoints in a cpu */
+> > -       unsigned int    flexible; /* XXX: placeholder, see fetch_this_slot() */
+> >  };
+> >
+> >  static DEFINE_PER_CPU(struct bp_cpuinfo, bp_cpuinfo[TYPE_MAX]);
+> > @@ -71,7 +69,6 @@ static bool constraints_initialized __ro_after_init;
+> >  /* Gather the number of total pinned and un-pinned bp in a cpuset */
+> >  struct bp_busy_slots {
 
-[249348.837181] remove_proc_entry: removing non-empty directory 'irq/20', leaking at least 'vboxguest'
-[249348.837219] WARNING: CPU: 0 PID: 6708 at fs/proc/generic.c:715 remove_proc_entry+0x119/0x140
+Do we also want to remove this struct altogether? Now it becomes just
+an int counter.
 
-[249348.837379] Call Trace:
-[249348.837385]  unregister_irq_proc+0xbd/0xe0
-[249348.837392]  free_desc+0x23/0x60
-[249348.837396]  irq_free_descs+0x4a/0x70
-[249348.837401]  irq_domain_free_irqs+0x160/0x1a0
-[249348.837452]  mp_unmap_irq+0x5c/0x60
-[249348.837458]  acpi_unregister_gsi_ioapic+0x29/0x40
-[249348.837463]  acpi_unregister_gsi+0x17/0x30
-[249348.837467]  acpi_pci_irq_disable+0xbf/0xe0
-[249348.837473]  pcibios_disable_device+0x20/0x30
-[249348.837478]  pci_disable_device+0xef/0x120
-[249348.837482]  vbg_pci_remove+0x6c/0x70 [vboxguest]
-
-Signed-off-by: Pascal Terjan <pterjan@google.com>
----
- drivers/virt/vboxguest/vboxguest_linux.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
-index 6e8c0f1c1056..faa4bc9f625c 100644
---- a/drivers/virt/vboxguest/vboxguest_linux.c
-+++ b/drivers/virt/vboxguest/vboxguest_linux.c
-@@ -423,6 +423,7 @@ static void vbg_pci_remove(struct pci_dev *pci)
- 	vbg_gdev = NULL;
- 	mutex_unlock(&vbg_gdev_mutex);
- 
-+	devm_free_irq(gdev->dev, pci->irq, gdev);
- 	device_remove_file(gdev->dev, &dev_attr_host_features);
- 	device_remove_file(gdev->dev, &dev_attr_host_version);
- 	misc_deregister(&gdev->misc_device_user);
--- 
-2.36.1.476.g0c4daa206d-goog
-
+> >         unsigned int pinned;
+> > -       unsigned int flexible;
+> >  };
+> >
+> >  /* Serialize accesses to the above constraints */
+> > @@ -213,10 +210,6 @@ fetch_bp_busy_slots(struct bp_busy_slots *slots, struct perf_event *bp,
+> >
+> >                 if (nr > slots->pinned)
+> >                         slots->pinned = nr;
+> > -
+> > -               nr = info->flexible;
+> > -               if (nr > slots->flexible)
+> > -                       slots->flexible = nr;
+> >         }
+> >  }
+> >
+> > @@ -299,7 +292,8 @@ __weak void arch_unregister_hw_breakpoint(struct perf_event *bp)
+> >  }
+> >
+> >  /*
+> > - * Constraints to check before allowing this new breakpoint counter:
+> > + * Constraints to check before allowing this new breakpoint counter. Note that
+> > + * flexible breakpoints are currently unsupported -- see fetch_this_slot().
+> >   *
+> >   *  == Non-pinned counter == (Considered as pinned for now)
+> >   *
+> > @@ -366,7 +360,7 @@ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
+> >         fetch_this_slot(&slots, weight);
+> >
+> >         /* Flexible counters need to keep at least one slot */
+> > -       if (slots.pinned + (!!slots.flexible) > hw_breakpoint_slots_cached(type))
+> > +       if (slots.pinned > hw_breakpoint_slots_cached(type))
+> >                 return -ENOSPC;
+> >
+> >         ret = arch_reserve_bp_slot(bp);
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >

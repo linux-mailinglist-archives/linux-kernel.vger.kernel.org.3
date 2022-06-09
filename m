@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E6D544C83
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A95544C8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244277AbiFIMtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S245480AbiFIMu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243725AbiFIMtm (ORCPT
+        with ESMTP id S244368AbiFIMuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:49:42 -0400
+        Thu, 9 Jun 2022 08:50:03 -0400
 Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30081.outbound.protection.outlook.com [40.107.3.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46725205D7;
-        Thu,  9 Jun 2022 05:49:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD5C13B8F6;
+        Thu,  9 Jun 2022 05:49:43 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ltk8q31Wzu4Zla7ta4MqyiHmlT8uSZEjW4PVqcDFuSMBq5225zpQN8IG80Mh7hN1AH0BzYxPUcVspYODKEdHyRWrF7H4+69enYUEZQEGy6OIpD9YgrjRLXSMwbAI/OXX97vT/ne+vjk/Nnz8rhNB1gF3n7O2eHRuzNuYlNawRKizFhvurrfY4JtZttLSpLg2ENxEq4v+Mvi2UwIWHoso7Qersdrf1PnOOUDEm2xgBwU1bb70LOjDJQ6KqPC1SCVS9RHJi0Zoom/lzzQ2YMb8iw8215fIOI7PEmfIIsu7AeZiTgZOQpdy5T3YO8DWDEvk8fBmXm8iQvpOV4zI9LbzoA==
+ b=FCe8oBCICmInn0yu7osS8q1BLlkmNCxwQ+CUhhZQ5VtbPCWwo/CU/NZr+N9Z/BRUpLnIdyzhJnAmbut57j0HjiSBRCxOkyyz9N/S9kpQTySHYTfAJM9JVc3gtBoFoSG1J134ygmGUya8CxLsNxj9LTJNu9Nii9tihCpLR6E2zYELoRPoCQBvl+72tiBOY95KyE/03sFP+p8bOfNxDQ9cFq+rfH1J6ZZTqfYea2EVk7ShKQTX9GBv360xIQfUoP3HbYnePYQ6Y3oF40XrwWTyKco8Vt9lxhwbzd+phMBmKDsPx2BfCQGqiUd6bkXUdFsSUz0eDq8q+EQhKZVmKTfibQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xj8PYQOsoyGRHYSChv9kUizYZC1UukY1tJ3BY4Ur7DU=;
- b=P/qzYWGl/LRoI+D+RWHySHvb+Kvxmqw8+dV5MRCTrDr8uCVBAGQfHpk1CAAHbOp6GvM+tDbTbF7WvDss9DfCKOqaH8yKhXNgkTgiwEAO3cXrY1cyNVsz9eqnwTM/LkqM9ySVltlHPx/Q2XKERCdltp5jPb5VrEMiFejOl6AfU8h51LoEzQ1PNy7T7+koalgAEjRjudyo2WAU9DKuKIUhndr8Ji8hCAWdTYpdNsArDpQ5BJZB69JbdnFfjCM23PVbAFtAliDexwjkZkgrfFQM7FYRLEXBEZVBLAjSfxTtkGKOILH62zQ3loFmpqMXl0/Gnsu5Gx/oIXNGjJosYU7m8Q==
+ bh=JqGoqpBaSs2niTdrQf53Lh0KSihjbrum8Izxy3UI/F4=;
+ b=ZA42NOPAgYy5YxwZvSdgAJvn/i7rjZUXhkgm2MrvSQW3lpkRNoBdjUxkKOHQk2tGFBFGVRG7iLlFNUn2wnQ5J5QXo+vUCpbnDw/RGBwpDjUql96tA12jeVRvziWGi206wKxOwmkyu2AcsRF7diNvhm/CY+HrXwHCJCR5TINdyI6XNqJgGL6QbWAjD2EmlWDg1eLIfrP0+e3VUj7Zb1qTxKvrAyfF4pTsmvCMMDk9oc0haTtiIlOAKUZ4vp5FeI6rzOFzoGqekDoxKPMoxFlJOmvCuiO5bp3wo8BmjeReXeTeZE4l6kycWZyLtfBHlpK/dMo4i3iajf8ZOz9xKmBHrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xj8PYQOsoyGRHYSChv9kUizYZC1UukY1tJ3BY4Ur7DU=;
- b=PjJV0gd01hw3VPkMKld+6MqpKqV9dVUjJ6CO/1ymGz16gYbtXnUTSIdGCv+cb6DNRExsjRhMlwp6verse8/RqTvd2hCWDKRFEWSED1ZYiwk5AicQcx72m0OxWg47dVgHCunFBEt44zfTUvN28Ct4U8APui8/74YTNnx+prUKEDE=
+ bh=JqGoqpBaSs2niTdrQf53Lh0KSihjbrum8Izxy3UI/F4=;
+ b=A0a9pH9VQl9faQ/utlFyZI+ygb03eG0kYa3RcrC/mX0ReCt+ZW8Y2OmAN3k7fWVCpnF/8yDZwQoTmlQf+vzTjSCp1+/lbuSkHAY3vyyCty/sVs0a6UwmcW/RKavNf0LJC3McupB6JGuDvTvf/u3FuE6JZgd9RdX2qqHE+vN4t9M=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
  by AM7PR04MB6952.eurprd04.prod.outlook.com (2603:10a6:20b:107::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Thu, 9 Jun
- 2022 12:49:35 +0000
+ 2022 12:49:39 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::a892:e4a9:4769:13a5]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::a892:e4a9:4769:13a5%8]) with mapi id 15.20.5332.012; Thu, 9 Jun 2022
- 12:49:35 +0000
+ 12:49:39 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         sboyd@kernel.org, mturquette@baylibre.com, shawnguo@kernel.org,
@@ -49,9 +49,9 @@ Cc:     aisheng.dong@nxp.com, l.stach@pengutronix.de,
         kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V4 4/7] soc: imx: add i.MX93 SRC power domain driver
-Date:   Thu,  9 Jun 2022 20:50:57 +0800
-Message-Id: <20220609125100.3496633-5-peng.fan@oss.nxp.com>
+Subject: [PATCH V4 5/7] soc: imx: add i.MX93 media blk ctrl driver
+Date:   Thu,  9 Jun 2022 20:50:58 +0800
+Message-Id: <20220609125100.3496633-6-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220609125100.3496633-1-peng.fan@oss.nxp.com>
 References: <20220609125100.3496633-1-peng.fan@oss.nxp.com>
@@ -63,56 +63,56 @@ X-ClientProxiedBy: SI2PR06CA0014.apcprd06.prod.outlook.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2f85fe91-1d55-48ff-e8aa-08da4a16816b
+X-MS-Office365-Filtering-Correlation-Id: 69b3b66a-d0e6-48b0-c235-08da4a16842b
 X-MS-TrafficTypeDiagnostic: AM7PR04MB6952:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB6952AB40B4FDCF532D910DB6C9A79@AM7PR04MB6952.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <AM7PR04MB6952989BB0CB6883E9303305C9A79@AM7PR04MB6952.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dfy4IFxJm6F6UriYT/Q4GXGShWeC3GCGw8038ecIb5FfyVX6tN18yN6OnluRfae5B4GIqmxXHcgEmpbLpqeH/bB0inDil0YPrvM+NUFIeycAt0VOV7wxnqGAtnfm5jJ9xRtKGPCV0r/5/mQWWAuhWyP6tSUBrOGQd3/SgwbtC7N+uWL8d9a11V30hBfzQvBLtGZPSFIvf2/IB4O+L4BRbfy/amSZMzlZtHEZVkDB49//HYV7O3mkS1C55GCXk11s0lRbtWHcIFmn7bWghYU81p72aLWcQKwNNWIh1OvD8YqGAW9ut+wXf4tsOcAD3qUQg2/1NRHNJqmcaUka91AWYbwJdD8YYa3zFg0HUpkgKo9bF5LtXO+CTdbpi5VFW+dzym2dJstp+8JcvDX0s+SIhAEQTQFkz+eHIJEKyXO3njqXbEyOqnNfnt76M9CYcNbSQ7ovxeoNHu7tTh4vLRjWnxM67x1ozUYGH4Phaku/eyb5owVc3afGrJcvGkoXFA0GzraWO7TXIO8y8QmI0TG6oavdPTlnGIL5YAVJ8O798kr7AtjG7PF6XbgssL84WjefsuAuelrlrs0XhrMsxhcXEa+sLWO1qpfhF5ryTJal5N0xuzeM4pW0h/YJ0f5Co3vxrUHOTd9SiWEM7lA98w+A1lb3tCBHnVrXTHCvvg8+UJ63cuPE1ddu+iyWHuAofIcDeG3I1O87TW1KaF6X5gj1nw==
+X-Microsoft-Antispam-Message-Info: zqZHy2QnxdBMUvYhIqSQ+EqftSTDLei+QhC5sICjbJU21UOOmFXwk1tUAqsxNs0FIk5O6iCydHjsHfmoiViQbWzEmuDGxPtHru9vOr91eN39AHbK0PBru8p9VlP8lXT2wsjk3Op1Cj+a+IMXZxFTQrhHOSZDWDykPkhJSa24Q/nS7rjfuN7tLYFRbpQ+AvPYefI4N8mR9hh2+rOrJ5DpwWuv6sN2ixseYbfadUgcH0ep6FrrtiyuiZC2706rq3NQPxEG8HFnjXS797Uq4GrpV7fgSd7N4LtAeiS8J316jEgJYKuvWW6b1QYMFVN1lslxAN6ehpIOXDzwJb+j4EX/rYP+556x2ZwgIo9T6HlcfopLpANhR5Bn8bqrK+j/X7oK+lHluFirJg1cNdR9CC4dm8VnQJ3wpecIo9O6zm8ABuP8xro2UVjaaDlyXbEgqBu3bIsVfBQ0GdpCjmhb1ymtae3igOFL0/UE132Q7DinXcsujNUhl390HXmHlG4O7UEUt+lmvJJ7xWLJPhMk21DWFAydpjd4Y7M6LYGG1qgotm/+c7gENN4xAN+sQ4QOn+Ai8uW+HSf9F9OtyVGvqlrRtAUwihezZt6YJuBFRslUjaHLPYsP6nQ9oE91B7CmrOLmeOk+83bvm/Y/WwYACxuktYP1p5n5dPPRGqsEfYLGWL7BIwDREamm9BB0+dzN/s/S1MMZ0TZbaWqARuz16R3fKw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(6512007)(66556008)(8676002)(2906002)(4326008)(66476007)(26005)(6666004)(6506007)(38100700002)(52116002)(38350700002)(86362001)(316002)(8936002)(2616005)(508600001)(7416002)(1076003)(83380400001)(6486002)(186003)(5660300002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ra1w9lkmr2R6TWGS5/IQry0L//JhJEaOEWtdiKEZNEvf81Y6Mzbz5XcjS0cq?=
- =?us-ascii?Q?qzSb/fDaB29JcyESEwHnmZucHTQjOSFwyrTXNe5wI3X6eo+tgKfJh7rSUs+N?=
- =?us-ascii?Q?evxQAYPYSOXCKeZZd+xS54U3UusnFN+yFLrrgp0YYdSteHKfTSGRZfqGGPzo?=
- =?us-ascii?Q?HEKrj+6zz9rJn2NKMTXrb4/IC1mWo+Icc97NzhifQ7AbfJml0fldnSNiqo1Y?=
- =?us-ascii?Q?IDODW7pfr18FNTxpk0+/w2vaBQTkB5vItzJN3emO5rVii4qlRHAVJoqxfxLA?=
- =?us-ascii?Q?SYnDqTVv4wiVbZiyhYukb+ofOh9qBsLg57EIwzGMMyo/4uRmWKmlarakFyDf?=
- =?us-ascii?Q?/DTy+dmYGHIz0PdmLQfzc5wiacljtv3Hb6h+rWw2o25Gg9LkOBa5lXHwadhB?=
- =?us-ascii?Q?oEarWZ/z4fyJXnlyGi8fF100ifj9LT5Nd+BlT8omeB23zfWexgmOfcAmtiXv?=
- =?us-ascii?Q?ijuFu7WVVQhQEysVa0NIv8Mg+rP3YqtPcLT5FafIE1gpnea46NfD/6bmkWZd?=
- =?us-ascii?Q?K1T/E0jApPNG9FGVGwTCGJAtXs4CUL7tJtLxwcmx/pqWYUi7hdglmFgl2mn+?=
- =?us-ascii?Q?1US6NCFmDOSJCTxCT8XOd+NHxTg2an5vkw8iKDVT78YkMMFnadQ5agZhX9VB?=
- =?us-ascii?Q?JEVK7dCl4FQKXLXBf8GTihPOtayq8ywiv1Ru1UNOB0aX9WEwlcA46/PsOhHP?=
- =?us-ascii?Q?BX5yaBgQxvDRD9+PqE0JX1qMb4cVSsVuZmKYdW0HcEX9DI/3NpfKUPSRvqxR?=
- =?us-ascii?Q?yM7m0K8QJrz4/LMT0hIfJ+nb7ifmVe9mqDCMCjBMr5j6DgOcuZsTwRVfdxWm?=
- =?us-ascii?Q?Oj65VzWwobO5lUz8peG0kvaeTX8rbtnYjSLbVm4ZCIS/qEcPtlMDJ5NjqyTG?=
- =?us-ascii?Q?zPTet7hOAK+SGq36ptzK0xkW1jbt8R81RZ3pIh+JQiN7mIx5GgWx4ruzSaZJ?=
- =?us-ascii?Q?Qwe/6N3pB9BQAGIot6r2Pd9PASLGArTcNABH/Gq3IONsGme+LAj/hI8QTkY3?=
- =?us-ascii?Q?bFF+7h2uOiUrWgu834Z/ZN0qWPMlMPemr57qhp1b4UTyx3pGOXZB6Ro9+86j?=
- =?us-ascii?Q?P0MXLIC5Bj+VM2djCSTju2dJwXUEYB594pT9PfOS2zQ6REFVAy998fdDWkD7?=
- =?us-ascii?Q?tTmllPakO9URLvVsQwly0RF4nnu0fckSuTn2XhBYkl+twm6oz+rfeoqfLjsH?=
- =?us-ascii?Q?pavxQfEHQMhBZ9ZRvLMPJIHNrk+F0b/bM7hrJfuq4O1yMYGIgOJpSq/BARht?=
- =?us-ascii?Q?kDKVw6Sp7N5VZupYTGpYYKClJ0UERQSIelxWIsbAMrU36gINpi1jDT0BdJtR?=
- =?us-ascii?Q?7pXdP4i7/kEaKRhnQf49xv3ausF7gTMPjoLVGLsjoZ3hpUPvwm+dGEaaaRDJ?=
- =?us-ascii?Q?NKFWYJkymZTNOFlNOsVL+kWC5gDn+SI3BHpDTLSDAFH+AT4ZcB0qW7X8Oub1?=
- =?us-ascii?Q?Udr7Zf8zYk3ocmyXTMQRAU1VM05cFDONPq/dsc5lEdwzXWj2jpzZoH7trWnR?=
- =?us-ascii?Q?0Eh5RSx9kXXJJMd6cOD1xYbINwe8cYHw05x8sStbXSuDta3jRf0CsNdnw8Iu?=
- =?us-ascii?Q?J/LYO5Euw7pZpMExj8urWApJxBde2+k5xMODpi63wO8CtzNaHnBkmhzM0N3d?=
- =?us-ascii?Q?ZiqOy5pEWU16j+NXggEsLQOAXB4BDVHyWpuiZos/O9jtvYstulVBB9PPX0dp?=
- =?us-ascii?Q?ilBDn+jk3SYQFguoe2MIlRcEuiHjMhImMploLJITLqM6PDcXi8YW6+JMZJ6P?=
- =?us-ascii?Q?jRP+iUSscw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?viSo6M8kxL80NZcCZQBYl2xLx6MoZ4zZncnk+yeo2DcOYRvrmBuLuV6jO0K1?=
+ =?us-ascii?Q?SaxdwCaaN7fv7kUxUlGKDSLqaD9YmZn2TzbLy0tWl45q8XRncATPL25VFNZU?=
+ =?us-ascii?Q?k3lyCsmFthJpLJBviXC3+SMW2x022m/DLPB3snsKWtNBsA9JyVu9skbr8xxf?=
+ =?us-ascii?Q?AaoA0Lj6BZ6CU5kWClX2KdYoC058uo585xxxz4Mt1FGfyDYPzzBqIbpYMBn2?=
+ =?us-ascii?Q?0r5b4GeRTl20+TRa2S5fQI//VL63JmCUvWtIN9KHHKCxQhu3M+GK08dRCPgG?=
+ =?us-ascii?Q?+hIq9v9KqG2hh/yhOA9H5WgdvOvgpD2D9+45i8X6WTBa7SSQvgxXHdbBt0HW?=
+ =?us-ascii?Q?Z9HZJlntvs12QLGs0rhk5ob2ZuxAIdDQIEm7Lyu+78TWA8oAnH//y2zq/Jcb?=
+ =?us-ascii?Q?ZbE5JfxJ0KTuKPQgguuQLVpUwufRUiqOMEvUS65o8kBRcfR8WHwDdDDI5ARG?=
+ =?us-ascii?Q?T/ZcPykHGFx7/ui5/ZP3b+2kNCVcTOIEQTEypkTtHc5+BOWgW1csNEPMSgq2?=
+ =?us-ascii?Q?vepFo9P63+ccUXtctEW/DAERo/KgJIqDUPOnLC4fvTTln8mkDiqsp/7IR+EH?=
+ =?us-ascii?Q?9C7992OFCTTfgf4cOjnJ3JLSM7I3N8MV0C7CLS5dbikdhmvboF2agF99gTgT?=
+ =?us-ascii?Q?hi8FxfZXE+6w1jjxTs01PT7jQ9sN7HA1NnrB7o0MQDZIRuOcZmIpypO8ftY3?=
+ =?us-ascii?Q?goBIR9moBzEmfuPotnGghzlAtRzJARo+Byg3CrLSYrSXVoxfKo4QRj48OsgI?=
+ =?us-ascii?Q?FtoZGGqIG17skSS3CjLkDYfJqamqsVAdVMYwXK5f15UQamVe8FwBo+rShc0u?=
+ =?us-ascii?Q?B36HHnu2w28NWpkCwpxj2F2lk/L1Gg9erq1sTj8PFr7esUzgURmBb74XnJke?=
+ =?us-ascii?Q?P2HyxAxAu7HqDNgcpwdZG5hQxGf2MKIZld7Sd6h5w4HaaRzqe9xPMySwRmUn?=
+ =?us-ascii?Q?jTBuuuNPzzcFYVekMJNKg6rK8abD+aLf/L8a82H0FfmQkHBodOFB6NMUDyWJ?=
+ =?us-ascii?Q?U+PI5PDtFFVfG54p+dL6hkIpse4KoT0qfETUwX5PFT1AfiLnVGNx3mrUwNBe?=
+ =?us-ascii?Q?N30awwYXcbRpOtOGoBF18ZdI5p8PIIScrP/Lx+AXuHstRwcPbyK4HrxpOno3?=
+ =?us-ascii?Q?APlZNBnjwoyHDLDruLyx3sQtLKkT/msDIJfc9Mu2XZsijyDg6Zs+F7Pj0H6U?=
+ =?us-ascii?Q?2JdCs+mPp5cGK4WlD4378uwZsPuvBDTr+qqJBvgxwCQWw9g17NaQfemzrNzG?=
+ =?us-ascii?Q?x0rN+AoYqtn2lavRtXhynIYgP9rczkvxpL3QwwZJWxlo0oID9jFbiJ8oyw3n?=
+ =?us-ascii?Q?WQyECC+yUaNpBJgivsxRL9swZ8IiT7gMTzUjqMGYO6vb/gD3zcAdrnju2xf6?=
+ =?us-ascii?Q?f6guounD55YddSnkGHqFr+9fHSKLVkjRKe5x5pxSbcnFU6a4hs8aTmWJc3uP?=
+ =?us-ascii?Q?fx0cIqS2cNJG8UmABqsd2cPLB7+U99Tv6n9jgFzXLviZQRXV+niWeDtlM58/?=
+ =?us-ascii?Q?lYNwckQcdJvaNaDy5A56WmEJb1JpS6Svtn3V4O4J18eWwzy4rl/EugxjWd7N?=
+ =?us-ascii?Q?n0LNBvsbinRVMakvkepdGEnRy7PPey8IiiFUB7jk5ddUnUKaBBrwQtv04n4R?=
+ =?us-ascii?Q?ORJnvlx3bqg9m8lBhFHtffRmxcZysXgHZUOIYBteFRrLPkJNcF7RcRaN/gFr?=
+ =?us-ascii?Q?oi25b65hqcfz+iEcXV/9ZpreLm+sPtyMldJBK1JInCXjnaEDC8izhW1Di0g/?=
+ =?us-ascii?Q?tozPk66GWw=3D=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f85fe91-1d55-48ff-e8aa-08da4a16816b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69b3b66a-d0e6-48b0-c235-08da4a16842b
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 12:49:34.9914
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 12:49:39.4948
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O4XgWCcM117Dmzzvn8/ZyIKppW59E13cRmcItmC0F2XuXJnYKGFXNnWL7HDba5SyRmo2t3n+tKTaSaJgD2BkBg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: RsL5JCXyp/HBlm5ELbNgmZL53jB3k8dXcRxaHlFMRdx7pDfRilcJjD0gTb5oVS2l6/3T5Ff9RdFOsESS2bVVDg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6952
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -126,323 +126,364 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-Support controlling power domain managed by System Reset
-Controller(SRC). Current supported power domain is mediamix power
-domain.
+Add i.MX93 mediamix blk ctrl support.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/soc/imx/Kconfig    |  10 ++
- drivers/soc/imx/Makefile   |   1 +
- drivers/soc/imx/imx93-pd.c | 271 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 282 insertions(+)
- create mode 100644 drivers/soc/imx/imx93-pd.c
+ drivers/soc/imx/Makefile         |   2 +-
+ drivers/soc/imx/imx93-blk-ctrl.c | 333 +++++++++++++++++++++++++++++++
+ 2 files changed, 334 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/soc/imx/imx93-blk-ctrl.c
 
-diff --git a/drivers/soc/imx/Kconfig b/drivers/soc/imx/Kconfig
-index a840494e849a..5bfc1dfea28b 100644
---- a/drivers/soc/imx/Kconfig
-+++ b/drivers/soc/imx/Kconfig
-@@ -20,4 +20,14 @@ config SOC_IMX8M
- 	  support, it will provide the SoC info like SoC family,
- 	  ID and revision etc.
- 
-+config SOC_IMX9
-+	tristate "i.MX9 SoC family support"
-+	depends on ARCH_MXC || COMPILE_TEST
-+	default ARCH_MXC && ARM64
-+	select SOC_BUS
-+	select PM_GENERIC_DOMAINS
-+	help
-+	  If you say yes here you get support for the NXP i.MX9 family
-+	  support.
-+
- endmenu
 diff --git a/drivers/soc/imx/Makefile b/drivers/soc/imx/Makefile
-index 63cd29f6d4d2..e3ed07a6bcf9 100644
+index e3ed07a6bcf9..c532aa179f4d 100644
 --- a/drivers/soc/imx/Makefile
 +++ b/drivers/soc/imx/Makefile
-@@ -7,3 +7,4 @@ obj-$(CONFIG_IMX_GPCV2_PM_DOMAINS) += gpcv2.o
+@@ -7,4 +7,4 @@ obj-$(CONFIG_IMX_GPCV2_PM_DOMAINS) += gpcv2.o
  obj-$(CONFIG_SOC_IMX8M) += soc-imx8m.o
  obj-$(CONFIG_SOC_IMX8M) += imx8m-blk-ctrl.o
  obj-$(CONFIG_SOC_IMX8M) += imx8mp-blk-ctrl.o
-+obj-$(CONFIG_SOC_IMX9) += imx93-pd.o
-diff --git a/drivers/soc/imx/imx93-pd.c b/drivers/soc/imx/imx93-pd.c
+-obj-$(CONFIG_SOC_IMX9) += imx93-pd.o
++obj-$(CONFIG_SOC_IMX9) += imx93-pd.o imx93-blk-ctrl.o
+diff --git a/drivers/soc/imx/imx93-blk-ctrl.c b/drivers/soc/imx/imx93-blk-ctrl.c
 new file mode 100644
-index 000000000000..d4f8a8941759
+index 000000000000..42be09688cf1
 --- /dev/null
-+++ b/drivers/soc/imx/imx93-pd.c
-@@ -0,0 +1,271 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/soc/imx/imx93-blk-ctrl.c
+@@ -0,0 +1,333 @@
++// SPDX-License-Identifier: GPL-2.0+
++
 +/*
-+ * Copyright 2022 NXP.
++ * Copyright 2022 NXP, Peng Fan <peng.fan@nxp.com>
 + */
 +
-+#include <linux/clk.h>
-+#include <linux/of_device.h>
-+#include <linux/delay.h>
-+#include <linux/iopoll.h>
++#include <linux/device.h>
 +#include <linux/module.h>
++#include <linux/of_device.h>
 +#include <linux/platform_device.h>
 +#include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
++#include <linux/clk.h>
++
 +#include <dt-bindings/power/fsl,imx93-power.h>
 +
-+#define IMX93_SRC_MEDIAMIX_OFF		0x2400
++#define BLK_SFT_RSTN	0x0
++#define BLK_CLK_EN	0x4
 +
-+#define MIX_SLICE_SW_CTRL_OFF		0x20
-+#define SLICE_SW_CTRL_PSW_CTRL_OFF_MASK	BIT(4)
-+#define SLICE_SW_CTRL_PDN_SOFT_MASK	BIT(31)
++#define BLK_MAX_CLKS 4
 +
-+#define MIX_FUNC_STAT_OFF		0xB4
++struct imx93_blk_ctrl_domain;
 +
-+#define FUNC_STAT_PSW_STAT_MASK		BIT(0)
-+#define FUNC_STAT_RST_STAT_MASK		BIT(2)
-+#define FUNC_STAT_ISO_STAT_MASK		BIT(4)
-+
-+struct imx93_slice_info {
-+	char *name;
-+	u32 mix_off;
-+};
-+
-+struct imx93_plat_data {
-+	u32 num_slice;
-+	struct imx93_slice_info *slices;
-+};
-+
-+struct imx93_power_domain {
-+	struct generic_pm_domain genpd;
++struct imx93_blk_ctrl {
 +	struct device *dev;
-+	void * __iomem base;
-+	const struct imx93_slice_info *slice_info;
-+	struct clk_bulk_data *clks;
++	struct regmap *regmap;
 +	int num_clks;
++	struct clk_bulk_data clks[BLK_MAX_CLKS];
++	struct imx93_blk_ctrl_domain *domains;
++	struct genpd_onecell_data onecell_data;
 +};
 +
-+#define to_imx93_pd(_genpd) container_of(_genpd, struct imx93_power_domain, genpd)
++struct imx93_blk_ctrl_domain_data {
++	const char *name;
++	const char * const *clk_names;
++	int num_clks;
++	u32 rst_mask;
++	u32 clk_mask;
 +
-+struct imx93_slice_info imx93_slice_infos[] = {
-+	[IMX93_POWER_DOMAIN_MEDIAMIX] = {
-+		.name      = "mediamix",
-+		.mix_off = IMX93_SRC_MEDIAMIX_OFF,
-+	}
 +};
 +
-+struct imx93_plat_data imx93_plat_data = {
-+	.num_slice = ARRAY_SIZE(imx93_slice_infos),
-+	.slices = imx93_slice_infos,
++#define DOMAIN_MAX_CLKS 4
++
++struct imx93_blk_ctrl_domain {
++	struct generic_pm_domain genpd;
++	const struct imx93_blk_ctrl_domain_data *data;
++	struct clk_bulk_data clks[DOMAIN_MAX_CLKS];
++	struct imx93_blk_ctrl *bc;
 +};
 +
-+static int imx93_pd_on(struct generic_pm_domain *genpd)
++struct imx93_blk_ctrl_data {
++	int max_reg;
++	const struct imx93_blk_ctrl_domain_data *domains;
++	const struct imx93_blk_ctrl_domain_data *bus;
++	int num_domains;
++};
++
++static const struct imx93_blk_ctrl_domain_data imx93_media_blk_ctl_bus_data = {
++	.clk_names = (const char *[]){ "axi", "apb", "nic", },
++	.num_clks = 3,
++};
++
++static inline struct imx93_blk_ctrl_domain *
++to_imx93_blk_ctrl_domain(struct generic_pm_domain *genpd)
 +{
-+	struct imx93_power_domain *domain = to_imx93_pd(genpd);
-+	const struct imx93_slice_info *slice_info =  domain->slice_info;
-+	void * __iomem addr = domain->base + slice_info->mix_off;
-+	u32 val;
++	return container_of(genpd, struct imx93_blk_ctrl_domain, genpd);
++}
++
++static int imx93_blk_ctrl_power_on(struct generic_pm_domain *genpd)
++{
++	struct imx93_blk_ctrl_domain *domain = to_imx93_blk_ctrl_domain(genpd);
++	const struct imx93_blk_ctrl_domain_data *data = domain->data;
++	struct imx93_blk_ctrl *bc = domain->bc;
 +	int ret;
 +
-+	ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
++	ret = clk_bulk_prepare_enable(bc->num_clks, bc->clks);
 +	if (ret) {
-+		dev_err(domain->dev, "failed to enable clocks for domain: %s\n", genpd->name);
++		dev_err(bc->dev, "failed to enable bus clocks\n");
 +		return ret;
 +	}
 +
-+	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
-+	val &= ~SLICE_SW_CTRL_PDN_SOFT_MASK;
-+	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
-+
-+	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
-+				 !(val & FUNC_STAT_ISO_STAT_MASK), 1, 10000);
++	ret = clk_bulk_prepare_enable(data->num_clks, domain->clks);
 +	if (ret) {
-+		dev_err(domain->dev, "pd_on timeout: name: %s, stat: %x\n", genpd->name, val);
++		dev_err(bc->dev, "failed to enable clocks\n");
 +		return ret;
 +	}
++
++	ret = pm_runtime_get_sync(bc->dev);
++	if (ret < 0) {
++		pm_runtime_put_noidle(bc->dev);
++		dev_err(bc->dev, "failed to power up domain\n");
++		goto disable_clk;
++	}
++
++	/* ungate clk */
++	regmap_clear_bits(bc->regmap, BLK_CLK_EN, data->clk_mask);
++
++	/* release reset */
++	regmap_set_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
++
++	dev_info(bc->dev, "pd_on: name: %s\n", genpd->name);
++
++	return 0;
++
++disable_clk:
++	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
++
++	return ret;
++}
++
++static int imx93_blk_ctrl_power_off(struct generic_pm_domain *genpd)
++{
++	struct imx93_blk_ctrl_domain *domain = to_imx93_blk_ctrl_domain(genpd);
++	const struct imx93_blk_ctrl_domain_data *data = domain->data;
++	struct imx93_blk_ctrl *bc = domain->bc;
++
++	dev_info(bc->dev, "pd_off: name: %s\n", genpd->name);
++
++	regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
++	regmap_set_bits(bc->regmap, BLK_CLK_EN, data->clk_mask);
++
++	pm_runtime_put(bc->dev);
++
++	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
++
++	clk_bulk_disable_unprepare(bc->num_clks, bc->clks);
 +
 +	return 0;
 +}
 +
-+static int imx93_pd_off(struct generic_pm_domain *genpd)
++static struct generic_pm_domain *
++imx93_blk_ctrl_xlate(struct of_phandle_args *args, void *data)
 +{
-+	struct imx93_power_domain *domain = to_imx93_pd(genpd);
-+	const struct imx93_slice_info *slice_info =  domain->slice_info;
-+	void * __iomem addr = domain->base + slice_info->mix_off;
-+	int ret;
-+	u32 val;
++	struct genpd_onecell_data *onecell_data = data;
++	unsigned int index = args->args[0];
 +
-+	/* Power off MIX */
-+	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
-+	val |= SLICE_SW_CTRL_PDN_SOFT_MASK;
-+	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
++	if (args->args_count != 1 ||
++	    index >= onecell_data->num_domains)
++		return ERR_PTR(-EINVAL);
 +
-+	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
-+				 val & FUNC_STAT_PSW_STAT_MASK, 1, 1000);
-+	if (ret) {
-+		dev_err(domain->dev, "pd_off timeout: name: %s, stat: %x\n", genpd->name, val);
-+		return ret;
-+	}
++	return onecell_data->domains[index];
++}
 +
-+	clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
-+
-+	return 0;
-+};
-+
-+static const struct of_device_id imx93_power_domain_ids[] = {
-+	{ .compatible = "fsl,imx93-src", .data = &imx93_plat_data, },
-+	{},
-+};
-+
-+static int imx93_pd_remove(struct platform_device *pdev)
++static int imx93_blk_ctrl_probe(struct platform_device *pdev)
 +{
-+	struct imx93_power_domain *pd = platform_get_drvdata(pdev);
++	const struct imx93_blk_ctrl_data *bc_data;
 +	struct device *dev = &pdev->dev;
-+	const struct imx93_plat_data *data = of_device_get_match_data(dev);
-+	u32 num_domains = data->num_slice;
-+	struct device_node *slice_np, *np;
-+	int ret;
++	struct imx93_blk_ctrl *bc;
++	void __iomem *base;
++	int i, ret;
++	const struct imx93_blk_ctrl_domain_data *bus;
 +
-+	slice_np = of_get_child_by_name(pdev->dev.of_node, "slice");
-+
-+	for_each_child_of_node(slice_np, np) {
-+		struct imx93_power_domain *domain;
-+		u32 index;
-+
-+		if (!of_device_is_available(np))
-+			continue;
-+
-+		ret = of_property_read_u32(np, "reg", &index);
-+		if (ret) {
-+			dev_err(dev, "Failed to read 'reg' property\n");
-+			of_node_put(np);
-+			return ret;
-+		}
-+
-+		if (index >= num_domains) {
-+			dev_warn(dev, "Domain index %d is out of bounds\n", index);
-+			continue;
-+		}
-+
-+		domain = &pd[index];
-+
-+		of_genpd_del_provider(np);
-+
-+		pm_genpd_remove(&domain->genpd);
-+		clk_bulk_put_all(domain->num_clks, domain->clks);
++	struct regmap_config regmap_config = {
++		.reg_bits	= 32,
++		.val_bits	= 32,
++		.reg_stride	= 4,
 +	};
 +
-+	return 0;
-+}
++	bc = devm_kzalloc(dev, sizeof(*bc), GFP_KERNEL);
++	if (!bc)
++		return -ENOMEM;
 +
-+static int imx93_pd_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	const struct imx93_plat_data *data = of_device_get_match_data(dev);
-+	const struct imx93_slice_info *slice_info = data->slices;
-+	struct imx93_power_domain *pd;
-+	u32 num_domains = data->num_slice;
-+	struct device_node *slice_np, *np;
-+	void __iomem *base;
-+	bool is_off;
-+	int ret;
++	bc->dev = dev;
 +
-+	slice_np = of_get_child_by_name(dev->of_node, "slice");
-+	if (!slice_np) {
-+		dev_err(dev, "No slices specified in DT\n");
-+		return -EINVAL;
-+	}
++	bc_data = of_device_get_match_data(dev);
 +
 +	base = devm_platform_ioremap_resource(pdev, 0);
 +	if (IS_ERR(base))
 +		return PTR_ERR(base);
 +
-+	pd = devm_kcalloc(dev, num_domains, sizeof(*pd), GFP_KERNEL);
-+	if (!pd)
++	regmap_config.max_register = bc_data->max_reg;
++	bc->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
++	if (IS_ERR(bc->regmap))
++		return dev_err_probe(dev, PTR_ERR(bc->regmap),
++				     "failed to init regmap\n");
++
++	bc->domains = devm_kcalloc(dev, bc_data->num_domains + 1,
++				   sizeof(struct imx93_blk_ctrl_domain),
++				   GFP_KERNEL);
++	if (!bc->domains)
 +		return -ENOMEM;
 +
-+	platform_set_drvdata(pdev, pd);
++	bus = bc_data->bus;
 +
-+	for_each_child_of_node(slice_np, np) {
-+		struct imx93_power_domain *domain;
-+		u32 index;
++	bc->onecell_data.num_domains = bc_data->num_domains;
++	bc->onecell_data.xlate = imx93_blk_ctrl_xlate;
++	bc->onecell_data.domains =
++		devm_kcalloc(dev, bc_data->num_domains,
++			     sizeof(struct generic_pm_domain *), GFP_KERNEL);
++	if (!bc->onecell_data.domains)
++		return -ENOMEM;
 +
-+		if (!of_device_is_available(np))
-+			continue;
++	for (i = 0; i < bus->num_clks; i++)
++		bc->clks[i].id = bus->clk_names[i];
++	bc->num_clks = bus->num_clks;
 +
-+		ret = of_property_read_u32(np, "reg", &index);
++	ret = devm_clk_bulk_get(dev, bc->num_clks, bc->clks);
++	if (ret) {
++		dev_err_probe(dev, ret, "failed to get bus clock\n");
++		return ret;
++	}
++
++	for (i = 0; i < bc_data->num_domains; i++) {
++		const struct imx93_blk_ctrl_domain_data *data = &bc_data->domains[i];
++		struct imx93_blk_ctrl_domain *domain = &bc->domains[i];
++		int j;
++
++		domain->data = data;
++
++		for (j = 0; j < data->num_clks; j++)
++			domain->clks[j].id = data->clk_names[j];
++
++		ret = devm_clk_bulk_get(dev, data->num_clks, domain->clks);
 +		if (ret) {
-+			dev_err(dev, "Failed to read 'reg' property\n");
-+			of_node_put(np);
-+			return ret;
++			dev_err_probe(dev, ret, "failed to get clock\n");
++			goto cleanup_pds;
 +		}
 +
-+		if (index >= num_domains) {
-+			dev_warn(dev, "Domain index %d is out of bounds\n", index);
-+			continue;
-+		}
++		domain->genpd.name = data->name;
++		domain->genpd.power_on = imx93_blk_ctrl_power_on;
++		domain->genpd.power_off = imx93_blk_ctrl_power_off;
++		domain->bc = bc;
 +
-+		domain = &pd[index];
-+
-+		domain->num_clks = of_clk_bulk_get_all(np, &domain->clks);
-+		if (domain->num_clks < 0) {
-+			return dev_err_probe(domain->dev, domain->num_clks,
-+					     "Failed to get %s's clocks\n",
-+					     slice_info[index].name);
-+		}
-+
-+		domain->genpd.name = slice_info[index].name;
-+		domain->genpd.power_off = imx93_pd_off;
-+		domain->genpd.power_on = imx93_pd_on;
-+		domain->slice_info = &slice_info[index];
-+		domain->base = base;
-+
-+		is_off = readl(domain->base + slice_info->mix_off + MIX_FUNC_STAT_OFF) &
-+			FUNC_STAT_ISO_STAT_MASK;
-+		/* Just to sync the status of hardware */
-+		if (!is_off) {
-+			ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
-+			if (ret) {
-+				dev_err(domain->dev, "failed to enable clocks for domain: %s\n",
-+					domain->genpd.name);
-+				clk_bulk_put_all(domain->num_clks, domain->clks);
-+				return 0;
-+			}
-+		}
-+
-+		dev_info(dev, "%s: state: %x\n", domain->genpd.name,
-+			 readl(domain->base + MIX_FUNC_STAT_OFF));
-+		ret = pm_genpd_init(&domain->genpd, NULL, is_off);
++		ret = pm_genpd_init(&domain->genpd, NULL, true);
 +		if (ret) {
-+			dev_err(dev, "failed to init genpd\n");
-+			clk_bulk_put_all(domain->num_clks, domain->clks);
-+			return ret;
++			dev_err_probe(dev, ret, "failed to init power domain\n");
++			goto cleanup_pds;
 +		}
 +
-+		ret = of_genpd_add_provider_simple(np, &domain->genpd);
-+		if (ret) {
-+			clk_bulk_put_all(domain->num_clks, domain->clks);
-+			return ret;
-+		}
++		bc->onecell_data.domains[i] = &domain->genpd;
++	}
++
++	pm_runtime_enable(dev);
++
++	ret = of_genpd_add_provider_onecell(dev->of_node, &bc->onecell_data);
++	if (ret) {
++		dev_err_probe(dev, ret, "failed to add power domain provider\n");
++		goto cleanup_pds;
++	}
++
++
++	dev_set_drvdata(dev, bc);
++
++	return 0;
++
++cleanup_pds:
++	for (i--; i >= 0; i--)
++		pm_genpd_remove(&bc->domains[i].genpd);
++
++	return ret;
++}
++
++static int imx93_blk_ctrl_remove(struct platform_device *pdev)
++{
++	struct imx93_blk_ctrl *bc = dev_get_drvdata(&pdev->dev);
++	int i;
++
++	of_genpd_del_provider(pdev->dev.of_node);
++
++	for (i = 0; bc->onecell_data.num_domains; i++) {
++		struct imx93_blk_ctrl_domain *domain = &bc->domains[i];
++
++		pm_genpd_remove(&domain->genpd);
 +	}
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id imx93_dt_ids[] = {
-+	{ .compatible = "fsl,imx93-src", .data = &imx93_plat_data, },
-+	{ }
-+};
-+
-+static struct platform_driver imx93_power_domain_driver = {
-+	.driver = {
-+		.name	= "imx93_power_domain",
-+		.owner	= THIS_MODULE,
-+		.of_match_table = imx93_dt_ids,
++static const struct imx93_blk_ctrl_domain_data imx93_media_blk_ctl_domain_data[] = {
++	[IMX93_MEDIABLK_PD_MIPI_DSI] = {
++		.name = "mediablk-mipi-dsi",
++		.clk_names = (const char *[]){ "dsi" },
++		.num_clks = 1,
++		.rst_mask = BIT(11) | BIT(12),
++		.clk_mask = BIT(11) | BIT(12),
 +	},
-+	.probe = imx93_pd_probe,
-+	.remove = imx93_pd_remove,
++	[IMX93_MEDIABLK_PD_MIPI_CSI] = {
++		.name = "mediablk-mipi-csi",
++		.clk_names = (const char *[]){ "cam", "csi" },
++		.num_clks = 2,
++		.rst_mask = BIT(9) | BIT(10),
++		.clk_mask = BIT(9) | BIT(10),
++	},
++	[IMX93_MEDIABLK_PD_PXP] = {
++		.name = "mediablk-pxp",
++		.clk_names = (const char *[]){ "pxp" },
++		.num_clks = 1,
++		.rst_mask = BIT(7) | BIT(8),
++		.clk_mask = BIT(7) | BIT(8),
++	},
++	[IMX93_MEDIABLK_PD_LCDIF] = {
++		.name = "mediablk-lcdif",
++		.clk_names = (const char *[]){ "disp", "lcdif" },
++		.num_clks = 2,
++		.rst_mask = BIT(4) | BIT(5) | BIT(6),
++		.clk_mask = BIT(4) | BIT(5) | BIT(6),
++	},
++	[IMX93_MEDIABLK_PD_ISI] = {
++		.name = "mediablk-isi",
++		.clk_names = (const char *[]){ "isi" },
++		.num_clks = 1,
++		.rst_mask = BIT(2) | BIT(3),
++		.clk_mask = BIT(2) | BIT(3),
++	},
 +};
-+module_platform_driver(imx93_power_domain_driver);
 +
-+MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-+MODULE_DESCRIPTION("NXP i.MX93 power domain driver");
-+MODULE_LICENSE("GPL v2");
++static const struct imx93_blk_ctrl_data imx93_media_blk_ctl_dev_data = {
++	.max_reg = 0x90,
++	.domains = imx93_media_blk_ctl_domain_data,
++	.bus = &imx93_media_blk_ctl_bus_data,
++	.num_domains = ARRAY_SIZE(imx93_media_blk_ctl_domain_data),
++};
++
++static const struct of_device_id imx93_blk_ctrl_of_match[] = {
++	{
++		.compatible = "fsl,imx93-media-blk-ctrl",
++		.data = &imx93_media_blk_ctl_dev_data
++	}, {
++		/* Sentinel */
++	}
++};
++MODULE_DEVICE_TABLE(of, imx93_blk_ctrl_of_match);
++
++static struct platform_driver imx93_blk_ctrl_driver = {
++	.probe = imx93_blk_ctrl_probe,
++	.remove = imx93_blk_ctrl_remove,
++	.driver = {
++		.name = "imx93-blk-ctrl",
++		.of_match_table = imx93_blk_ctrl_of_match,
++	},
++};
++module_platform_driver(imx93_blk_ctrl_driver);
 -- 
 2.25.1
 

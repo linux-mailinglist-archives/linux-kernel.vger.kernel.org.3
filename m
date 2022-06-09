@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6F1544ADE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096BD544ACB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244480AbiFILpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S235424AbiFILnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244543AbiFILmr (ORCPT
+        with ESMTP id S243992AbiFILms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:42:47 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB381F12A2
+        Thu, 9 Jun 2022 07:42:48 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0FA1F12A4
         for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:41:02 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id me5so46374500ejb.2
+Received: by mail-ej1-x62b.google.com with SMTP id y19so46904407ejq.6
         for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SVfrIIONPl2pU7g3Eas4LBzlC/IRw5PSti0JMwZFx1I=;
-        b=wIvtozXbQcmPqcVkitLW8E6lji3pdsQozMAhHWYB0R6Boy+mdR7DwZc3zI2GixONua
-         zuewTleJ7IkdzYsBv5L1np+YoNlZUBl947yej1onr6YASRUl/lvylnD5cP/He3snTi+c
-         06XaAqQxuZhaEQvjDqV2RZ0JcIfDkA8vJy4T9h/mRS5syHBri0FAz+xubEHBkOI/WwJQ
-         6WMhOpXQ0bN4aKrLUPSJ+208HJUnGOu+6ch6BrNLRd+KHbBvMt1XvuEVG9Bz6xQLcn3I
-         k3lg3ehYAMCKAQJ96s6Wv+fE51A9ExnmtJeXI1smXlPi263Hlat+kcCt4BCKFA+Fpwc2
-         hu/g==
+        bh=a7AVzyUmsqVPd91IAsbJZXPj8ozhTONPXm6ECNLQgio=;
+        b=bzsQQpQMea7pB37AbYmp+iBb7tzYIqsnIH+vEjHsewmVTalQt/P9huDagHIU1AoTzX
+         IuAnjSxsWyyjGE/U4REcA9LfcCp5Yv9++0CLm3752tv8d90EK1HXsBRLn58XM9/i4Lht
+         b2nw/fa9JlAoV2BL80uH0iM6BOxSJSKR6bdw5DE2PDIGUiWJya6jHOoDONihw/AK4onp
+         ECCmAa5j2ewt/2OdlndAjdq0mjXnw+FHVUWq+PYy1OaF/lgsWz858DmZreIkbqTmwQJE
+         AM2CEKeqoIoiJg3UleZwjMSiD81bQizM47IhZjeCLLg+D6BXZ62wwTyl4UyIOxHhw1+B
+         E0tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SVfrIIONPl2pU7g3Eas4LBzlC/IRw5PSti0JMwZFx1I=;
-        b=S9V6Il5YFml8HmETxPNzUsRI3RiB0QkAFfzcvdyDI9FP9sGcaMYq3yrA5DIfUkLsbq
-         zTFgX0mRxMI9KOUre6dqkmSvA4U56KNZ1XtorbPdziYVlBvCSZxWBTuCwYTGTDMOuAyE
-         H/GxePD+l/HD7hxXEqIvuZIBkOHPnlnZadY1v8HGjBGJQ5R3KcMu49BlNE5futtdEjkD
-         X2Du0B6O5Djk8oKW9MNtqjby0Nfot1gL74vzI/86tkIEZPtlXICfkwGvTKhS/h0qToPb
-         IJ8n89vg4P9QZajNEikfEupMcq4nfEO/4F8j28O0GTe3CpLuhzErDn7LMORYl+XvRC60
-         M4wA==
-X-Gm-Message-State: AOAM5324VIUj4Y1o852Zg/bkLhAz2gTMsu5qm5EkVB/bALoNy1Oc4xqz
-        25quSAubC2lFnZbpar9XJ9Jurw==
-X-Google-Smtp-Source: ABdhPJxuoQKLVRCbJIz6hjE4taKkPgc8DuF0y71AR64+yrzGXM9oultaUQJmgCrKk8kp5ZdRy0g1iw==
-X-Received: by 2002:a17:907:6d24:b0:70c:81d9:d5b9 with SMTP id sa36-20020a1709076d2400b0070c81d9d5b9mr31335840ejc.597.1654774860896;
-        Thu, 09 Jun 2022 04:41:00 -0700 (PDT)
+        bh=a7AVzyUmsqVPd91IAsbJZXPj8ozhTONPXm6ECNLQgio=;
+        b=RgAoTSjsvKGIcLTHrf/BIfljAYk8fYexNHmOJOwDrPr04pndr0accnqymAsK+JJEYY
+         j0lxEA0OFSGFLOAvviQgUlSTJKOr8Bh83Cf5Y8ccjh+Dy43mb5B4nrxA8gEzP2a7f4XM
+         ig9eIc6IEezPev99WtQ2M1seOOHPY1412n3SkFHcloxmrKJlsIxNUiBL56HLcJ1oJdLa
+         Uvpuz50ZpyE4wSfwJ5a1ekbhEonjHyJJyQHpBd/v5AoOSCWeKlnD5p7+5r6QrxIzOVvA
+         ssckQy7p5djZyDqnzakqhLgqJ6pPZ01ZuFDfQ4j8nlTcujiUSR9IZiVTigL6/Lb5qmvw
+         DQPA==
+X-Gm-Message-State: AOAM530a34++5nF3JFBt26xFtVJynkGnPSg3HQMUCZg9tyoBzm0Yhcjh
+        VMWuN6k+/Q9Uub9MSepoXtkVaA==
+X-Google-Smtp-Source: ABdhPJyWwogLsE1DiHbVVqhQ4XJnLO8mzMs5f7M6JmVUARXRdLSDMkAYFuzgelKC5xtHU6wFcSHc0Q==
+X-Received: by 2002:a17:907:968e:b0:6f4:d80f:f0c3 with SMTP id hd14-20020a170907968e00b006f4d80ff0c3mr33787314ejc.145.1654774862082;
+        Thu, 09 Jun 2022 04:41:02 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm10498662ejb.80.2022.06.09.04.40.59
+        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm10498662ejb.80.2022.06.09.04.41.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:41:00 -0700 (PDT)
+        Thu, 09 Jun 2022 04:41:01 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
@@ -58,9 +58,9 @@ To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 45/48] ARM: dts: at91: correct gpio-keys properties
-Date:   Thu,  9 Jun 2022 13:40:44 +0200
-Message-Id: <20220609114047.380793-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 46/48] ARM: dts: at91: drop unneeded status from gpio-keys
+Date:   Thu,  9 Jun 2022 13:40:45 +0200
+Message-Id: <20220609114047.380793-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
@@ -76,113 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gpio-keys children do not use unit addresses.
+Nodes do not need explicit status=okay.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/at91-kizbox.dts             | 2 --
- arch/arm/boot/dts/at91-kizbox2-common.dtsi    | 2 --
- arch/arm/boot/dts/at91-kizboxmini-common.dtsi | 2 --
- arch/arm/boot/dts/at91-qil_a9260.dts          | 2 --
- arch/arm/boot/dts/at91-wb45n.dts              | 5 +----
- arch/arm/boot/dts/at91-wb50n.dts              | 8 ++------
- 6 files changed, 3 insertions(+), 18 deletions(-)
+ arch/arm/boot/dts/at91-sam9x60ek.dts          | 1 -
+ arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts | 1 -
+ arch/arm/boot/dts/at91-sama5d2_icp.dts        | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/at91-kizbox.dts b/arch/arm/boot/dts/at91-kizbox.dts
-index 87e972eb2ba6..307663b4eec2 100644
---- a/arch/arm/boot/dts/at91-kizbox.dts
-+++ b/arch/arm/boot/dts/at91-kizbox.dts
-@@ -30,8 +30,6 @@ main_xtal {
- 
- 	gpio-keys {
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 7bf99bdbafcf..ade07b9eb101 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -80,7 +80,6 @@ gpio-keys {
  		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+-		status = "okay";
  
- 		button-reset {
- 			label = "PB_RST";
-diff --git a/arch/arm/boot/dts/at91-kizbox2-common.dtsi b/arch/arm/boot/dts/at91-kizbox2-common.dtsi
-index ed7146e23147..e5e21dff882f 100644
---- a/arch/arm/boot/dts/at91-kizbox2-common.dtsi
-+++ b/arch/arm/boot/dts/at91-kizbox2-common.dtsi
-@@ -33,8 +33,6 @@ main_xtal {
+ 		switch-1 {
+ 			label = "SW1";
+diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+index d5652c974748..bd5422495306 100644
+--- a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+@@ -31,7 +31,6 @@ gpio-keys {
  
- 	gpio-keys {
- 		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+-		status = "okay";
  
- 		button-prog {
- 			label = "PB_PROG";
-diff --git a/arch/arm/boot/dts/at91-kizboxmini-common.dtsi b/arch/arm/boot/dts/at91-kizboxmini-common.dtsi
-index 8fb08e6fad7a..42640fe6b6d0 100644
---- a/arch/arm/boot/dts/at91-kizboxmini-common.dtsi
-+++ b/arch/arm/boot/dts/at91-kizboxmini-common.dtsi
-@@ -36,8 +36,6 @@ adc_op_clk {
+ 		switch-4 {
+ 			label = "USER BUTTON";
+diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+index d7b59e16a081..0023b9d74651 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+@@ -47,7 +47,6 @@ gpio-keys {
  
- 	gpio_keys {
- 		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+-		status = "okay";
  
- 		key-prog {
- 			label = "PB_PROG";
-diff --git a/arch/arm/boot/dts/at91-qil_a9260.dts b/arch/arm/boot/dts/at91-qil_a9260.dts
-index d09b3d15a828..9d26f9996348 100644
---- a/arch/arm/boot/dts/at91-qil_a9260.dts
-+++ b/arch/arm/boot/dts/at91-qil_a9260.dts
-@@ -198,8 +198,6 @@ user_led {
- 
- 	gpio_keys {
- 		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
- 
- 		button-user {
- 			label = "user_pb";
-diff --git a/arch/arm/boot/dts/at91-wb45n.dts b/arch/arm/boot/dts/at91-wb45n.dts
-index 3e46b29412d1..ef73f727f7bd 100644
---- a/arch/arm/boot/dts/at91-wb45n.dts
-+++ b/arch/arm/boot/dts/at91-wb45n.dts
-@@ -14,11 +14,8 @@ / {
- 
- 	gpio-keys {
- 		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
- 
--		irqbtn@18 {
--			reg = <18>;
-+		button {
- 			label = "IRQBTN";
- 			linux,code = <99>;
- 			gpios = <&pioB 18 GPIO_ACTIVE_LOW>;
-diff --git a/arch/arm/boot/dts/at91-wb50n.dts b/arch/arm/boot/dts/at91-wb50n.dts
-index e2195bd3e4b4..ec2becf6133b 100644
---- a/arch/arm/boot/dts/at91-wb50n.dts
-+++ b/arch/arm/boot/dts/at91-wb50n.dts
-@@ -15,19 +15,15 @@ / {
- 
- 	gpio-keys {
- 		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
- 
--		btn0@10 {
--			reg = <10>;
-+		button-0 {
- 			label = "BTNESC";
- 			linux,code = <1>; /* ESC button */
- 			gpios = <&pioA 10 GPIO_ACTIVE_LOW>;
- 			wakeup-source;
- 		};
- 
--		irqbtn@31 {
--			reg = <31>;
-+		button-1 {
- 			label = "IRQBTN";
- 			linux,code = <99>; /* SysReq button */
- 			gpios = <&pioE 31 GPIO_ACTIVE_LOW>;
+ 		switch-4 {
+ 			label = "USER_PB1";
 -- 
 2.34.1
 

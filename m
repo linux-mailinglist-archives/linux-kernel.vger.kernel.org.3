@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E873A5447C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635DC5447C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239328AbiFIJke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S242776AbiFIJiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiFIJkb (ORCPT
+        with ESMTP id S234406AbiFIJiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:40:31 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAE94AE2E;
-        Thu,  9 Jun 2022 02:40:30 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id b17so7695105qvz.0;
-        Thu, 09 Jun 2022 02:40:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=USvCbIzf7kAWUlatXORQPqOzuZzCVX+P1+Q0wg0R4kk=;
-        b=sLatTqhzzXcYQmVAFNg6p6Tq1D6sVYw+SCYynmxc/YSnyzo5RBPA3Y35ePz5F2aQIZ
-         7gXvohWavA7ltUuFEb8MMFRFLrXMYrXK89rcTnQZlQXsNW+FerbJk2APNIxyaEFQXvIy
-         umQyD2XNAi8QwAbGtNA06dGqbwFrnaIwsTlPRJS36UMrpaqKu6ZBVli0zCpN3BwFOXeA
-         xcs3XFgwG4r1pF8i27f2pYns/vZXenGWxXYfbzWJezrIa8sUEZeX/8Wt2bCbkVyQ6ZAE
-         lAhGXOG/SUCEW2DbtKwG7fRJz3YGbBEzFQ8/7BixD7N02547CFrIVHVAE7Ij2L9OIqm+
-         LWaw==
-X-Gm-Message-State: AOAM533ZCwgQsVu1MDTxAFw0xy2XTb0/6yoh9W6UjtHB83xpTnOCwqKc
-        SpqGsvKR5vvF70n/9A/6aImH/ln+eSO0iA==
-X-Google-Smtp-Source: ABdhPJz+iv0hediA7Bcnt/YymjKhMjXfuX0Ul4PpaBbgIoTYXp1eXEiPKK/celRAw7N1DGeLehYDeg==
-X-Received: by 2002:ad4:5d46:0:b0:464:5970:5b9 with SMTP id jk6-20020ad45d46000000b00464597005b9mr28744911qvb.25.1654767629817;
-        Thu, 09 Jun 2022 02:40:29 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id v5-20020a05622a130500b00304fce6a137sm4784267qtk.66.2022.06.09.02.40.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 02:40:29 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-30ce6492a60so235013257b3.8;
-        Thu, 09 Jun 2022 02:40:28 -0700 (PDT)
-X-Received: by 2002:a81:6157:0:b0:30c:7e4d:b28e with SMTP id
- v84-20020a816157000000b0030c7e4db28emr41765469ywb.502.1654767628538; Thu, 09
- Jun 2022 02:40:28 -0700 (PDT)
+        Thu, 9 Jun 2022 05:38:16 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2948D2E080
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654767495; x=1686303495;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=32hAsO1+ERVsJtppF5xPs+0dE3EElahoU3zfp8Y2qTA=;
+  b=K8hd73x0ec91QC5jgC3se44y39BnYqztuoXAh4ATgPRIp87iO5P9SVZw
+   ZM1phLmB03rBXUmZW5cW2rST5aGZ3caJ7xlJGEnoACd1JVwRZdCWdrNYy
+   R5oaIu1+UpfuPcvKV3BScT5sulljp26tn1eUzFxCnLxu2cq8o6lWld44b
+   LvAeVgwt319HT8jBMc8qfz5fyZuGsB3ch1U1NifKia3VhbDsQEXMED7pk
+   SzfKRZZawvdaRKseadcnrBLLsDtPIs0aOv4yMCAZQxOKnM9SZDw8FUO1E
+   hCuk6IyDGTgJbudBzahHhRIwfdx3QqZBKN9knknZnxjTcwdEYlKGN2agv
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="162585280"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2022 02:38:14 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 9 Jun 2022 02:38:12 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 9 Jun 2022 02:38:11 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <daniel.lezcano@linaro.org>, <tglx@linutronix.de>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [RESEND][PATCH 0/3] clocksource/drivers/timer-microchip-pit64b: improve clock management
+Date:   Thu, 9 Jun 2022 12:40:38 +0300
+Message-ID: <20220609094041.1796372-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jun 2022 11:40:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUWnqppXcOfsr=HU4cuwFx6__GK_Fjbpvdse2e3T0K92A@mail.gmail.com>
-Message-ID: <CAMuHMdUWnqppXcOfsr=HU4cuwFx6__GK_Fjbpvdse2e3T0K92A@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: adjust whitespace around '='
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 10:42 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.20.
+This series improves clock management on PIT64B driver such that PIT64B
+clocks to be disabled in case driver has been probed to be used as
+clockevent but there is already a better clockevent timer available.
 
-Gr{oetje,eeting}s,
+Along with it added a patch to fix compilation warnings.
 
-                        Geert
+Patches were initially part of series at [1].
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thank you,
+Claudiu Beznea
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+[1] https://lore.kernel.org/linux-arm-kernel/80f949af-ddab-b54d-b6ee-0fbcb1f74b51@linaro.org/T/#mc9969713b69f7874dd3bc6de07e8e8bc9568ead5
+
+Claudiu Beznea (3):
+  clocksource/drivers/timer-microchip-pit64b: remove suspend/resume ops
+    for ce
+  clocksource/drivers/timer-microchip-pit64b: use mchp_pit64b_{suspend,
+    resume}
+  clocksource/drivers/timer-microchip-pit64b: fix compilation warnings
+
+ drivers/clocksource/timer-microchip-pit64b.c | 64 +++++++++-----------
+ 1 file changed, 27 insertions(+), 37 deletions(-)
+
+-- 
+2.34.1
+

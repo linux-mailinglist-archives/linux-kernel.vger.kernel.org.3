@@ -2,85 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDC354465C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1123544654
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiFIIqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S242555AbiFIInh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242899AbiFIIoH (ORCPT
+        with ESMTP id S242369AbiFIIlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:44:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B948848E77
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654764154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EUXb3OtLQfesjMR2aTZtn/nYj0py51rPllhsatp6KLg=;
-        b=GlRgmtA9FltEeNshMH2bUNGKhp7yESUkwxthDcyY+hqZqHWrgGva6c43TFPFyMlxGt4fcg
-        cN+VjJbdAEfvCqchfwgdHhZVKKQiC1QEU0RoVq+Ioera6joduex6fWQSB0cV2ZmKZcNMSc
-        pcWowEoshNyg6DbTZDvV71fYkkdDMRw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-351-YirucgYSN4ahW-0rrOfVLg-1; Thu, 09 Jun 2022 04:42:33 -0400
-X-MC-Unique: YirucgYSN4ahW-0rrOfVLg-1
-Received: by mail-wm1-f69.google.com with SMTP id h189-20020a1c21c6000000b0039c65f0e4ccso1274989wmh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:42:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:references:cc:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=EUXb3OtLQfesjMR2aTZtn/nYj0py51rPllhsatp6KLg=;
-        b=Px+6ypYqlVTYwL/ELaE9/g882ZeRLmMSNaym/aZW7G73ceW1ZUx4MsNfd/3MXeozEg
-         /8KkN0ixcAm8foMa+FHzIC+v9UXN9dJUpWqZBDWzJROAeqdNUGDnhVdyVnSuxL6Lmcr4
-         mMcOfVecBBGjnKoutCX022DSmy9P1TuwyfJyrPMK5VhKmmV3sHoxaDHrtIL/m23MPuDp
-         EnQiWEkNJcMNLKZazta+9SEDSUM7/XSIuar0HTEP3+HQMfMeWs+Cjdu5MIKvC0pJ4TCH
-         knbo+yfcT05z0/JVY9CV45dXa4bG8KAeqEmdsHagnOtgyCoHQQodvPe1vSNuLDPn9riy
-         VnTQ==
-X-Gm-Message-State: AOAM5335cIjoJiDFqk2njiO5KLrzpET87k9jCXzWLSM9s/EZW79XNmJ0
-        KkEjoIILAid8B+zGjCMD29Ksnf7/6Ax0alPTgTT4NfZTuMHIn8u5Nrj0hye0IAPl7EZRPApw2wL
-        YSFCBFFlZAt3vGl1Ns7B9yYj2
-X-Received: by 2002:a5d:6a92:0:b0:210:3387:23ec with SMTP id s18-20020a5d6a92000000b00210338723ecmr36882994wru.102.1654764152228;
-        Thu, 09 Jun 2022 01:42:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwX9SiYs8CeGshCq+oyK5c43j3U3DoJlGXVyZq/2+VB9rKnOKT+FGzdzTsJffnB4AR11tXK4Q==
-X-Received: by 2002:a5d:6a92:0:b0:210:3387:23ec with SMTP id s18-20020a5d6a92000000b00210338723ecmr36882976wru.102.1654764152035;
-        Thu, 09 Jun 2022 01:42:32 -0700 (PDT)
-Received: from [192.168.0.3] (ip-109-42-115-130.web.vodafone.de. [109.42.115.130])
-        by smtp.gmail.com with ESMTPSA id k7-20020a7bc407000000b00397402ae674sm9284836wmi.11.2022.06.09.01.42.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 01:42:31 -0700 (PDT)
-Message-ID: <14fd32f1-1eb8-8eb3-972a-c1858ee6fdb7@redhat.com>
-Date:   Thu, 9 Jun 2022 10:42:30 +0200
+        Thu, 9 Jun 2022 04:41:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D6B255BC;
+        Thu,  9 Jun 2022 01:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654764017; x=1686300017;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UnfjKrEfwOguxSlRW9Y1YKoPzQz/hSYyMcMrhzmc50Q=;
+  b=p9ZgcE2dxJCnxrxQNXTsoVD87NN16VobH07tL9hKV2n8ufWUXW+HROng
+   juJFpjWobpAGam/BloVwBHeCXlEhGh4zyNgb4uq8x1hPCfh8oa6psSXXW
+   au4qpgCF2C/9UrAUGEAAyuXszyMeFgJz+E4ZPpGChUpbfubCYZM7md+yn
+   N4vO4oafvgq/z16jlrOt6HAtaz69HIj6RR1IsxtL1NwZbwE0wXbCv9fG6
+   Je6z+4YQ8D5SKj2LlG4FBD12kXjD3XHpIY0FqGMpd1r1JgqaRv1rbMRua
+   cYEtKJLFNUsuHlUI8omTSABgRl98cpbbAYJuFSVkmEZky7ZbPgtKfXv6z
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="177214862"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2022 01:40:17 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 9 Jun 2022 01:40:18 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 9 Jun 2022 01:40:16 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <broonie@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <tudor.ambarus@microchip.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 0/3] spi: atmel-quadspi: add runtime pm support
+Date:   Thu, 9 Jun 2022 11:42:43 +0300
+Message-ID: <20220609084246.1795419-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <87wndr9qef.fsf@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-From:   Thomas Huth <thuth@redhat.com>
-Subject: Re: [Sean Christopherson] [PATCH v2 000/144] KVM: selftests: Overhaul
- APIs, purge VCPU_ID
-In-Reply-To: <87wndr9qef.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,47 +63,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3 Jun 2022 00:41, Sean Christopherson wrote:
-> 
-> Overhaul KVM's selftest APIs to get selftests to a state where adding new
-> features and writing tests is less painful/disgusting.
-> 
-> Patches 1 fixes a goof in kvm/queue and should be squashed.
-> 
-> I would really, really, really like to get this queued up sooner than
-> later, or maybe just thrown into a separate selftests-specific branch that
-> folks can develop against.  Rebasing is tedious, frustrating, and time
-> consuming.  And spoiler alert, there's another 42 x86-centric patches
-> inbound that builds on this series to clean up CPUID related crud...
-> 
-> The primary theme is to stop treating tests like second class citizens.
-> Stop hiding vcpu, kvm_vm, etc...  There's no sensitive data/constructs, and
-> the encapsulation has led to really, really bad and difficult to maintain
-> code.  E.g. having to pass around the VM just to call a vCPU ioctl(),
-> arbitrary non-zero vCPU IDs, tests having to care about the vCPU ID in the
-> first place, etc...
-> 
-> The other theme in the rework is to deduplicate code and try to set us
-> up for success in the future.  E.g. provide macros/helpers instead of
-> spamming CTRL-C => CTRL-V (see the -1k LoC), structure the VM creation
-> APIs to build on one another, etc...
-> 
-> The absurd patch count (as opposed to just ridiculous) is due to converting
-> each test away from using hardcoded vCPU IDs in a separate patch.  The vast
-> majority of those patches probably aren't worth reviewing in depth, the
-> changes are mostly mechanical in nature.
-> 
-> However, _running_ non-x86 tests (or tests that have unique non-x86
-> behavior) would be extremely valuable.  All patches have been compile tested
-> on x86, arm, risc-v, and s390, but I've only run the tests on x86.  Based on
-> my track record for the x86+common tests, I will be very, very surprised if
-> I didn't break any of the non-x86 tests, e.g. pthread_create()'s 'void *'
-> param tripped me up multiple times.
+Hi,
 
-  Hi,
+The following series adds runtime PM support for atmel-quadspi driver.
+clk_disable()/clk_enable() is called on proper
+runtime_suspend()/runtime_resume() ops. Along with it 2 minor cleanups
+were added (patches 2/3, 3/3).
 
-I just checked your series on s390x, and as far as I can see, the tests 
-still work fine with the patches applied. Thus:
+Thank you,
+Claudiu Beznea
 
-Tested-by: Thomas Huth <thuth@redhat.com>
+Claudiu Beznea (3):
+  spi: atmel-quadspi: add runtime pm support
+  spi: atmel-quadspi: use pm_ptr()
+  spi: atmel-quadspi: align condition to parenthesis
+
+ drivers/spi/atmel-quadspi.c | 104 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 93 insertions(+), 11 deletions(-)
+
+-- 
+2.34.1
 

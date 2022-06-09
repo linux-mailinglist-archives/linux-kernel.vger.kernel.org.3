@@ -2,131 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913675442F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E745442FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236959AbiFIFLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S236691AbiFIFOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238090AbiFIFLU (ORCPT
+        with ESMTP id S229937AbiFIFOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:11:20 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341CA1ADAF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:11:17 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id zARunuQ5DJcJLzARunCJhr; Thu, 09 Jun 2022 07:11:15 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 09 Jun 2022 07:11:15 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <0ad7ff2c-a5ad-1e5f-b186-0a43ce55057c@wanadoo.fr>
-Date:   Thu, 9 Jun 2022 07:11:14 +0200
+        Thu, 9 Jun 2022 01:14:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61991A812
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654751659; x=1686287659;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bPpSNM0qfRRWhttHTWjo22wS6kp4t8cjz8VxzjjV24U=;
+  b=e8PWIfMAktgEJFBbNY0X0B06KhCmb1elL7BkKAxwIm42P7u+iqfehdod
+   +H0zoaRfVu+AOZ6uT+cAp46HfPpKXgRujP1xWQn7PXfxZ2h4bSOw2j1vL
+   8CHgZILUiaWC5QM1OuQwtLZ3/nMULiDCKMAH77U8tOy7fezUkBmvPoj9e
+   36c5V9gQ3MO9EyOl0FPvtjDQQ0vbhkpkfiQ/DQ1AlMk5TSMkeNsavJMFd
+   oWww22ig37CL75idzUjZEEm5AXOWGqW+O6P5HbkTpPBphtGC0SnFztWxJ
+   imwQDd8KgKQU1OCnG7uNO8RKq9SOTfyoNdH6rtqOqnD1G+9tfEmcBRUI9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="257580362"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="257580362"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 22:14:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="580401803"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 08 Jun 2022 22:14:18 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzAUr-000FX3-Er;
+        Thu, 09 Jun 2022 05:14:17 +0000
+Date:   Thu, 9 Jun 2022 13:14:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [avpatel:virtio_rpmsg_bus_fix_v1 23/52] arch/arm64/kvm/mmu.c:789:55:
+ warning: incompatible pointer to integer conversion initializing 'gfp_t'
+ (aka 'unsigned int') with an expression of type 'void *'
+Message-ID: <202206091204.G88SVhNb-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/2] nfp: flower: Remove usage of the deprecated
- ida_simple_xxx API
-Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        oss-drivers@corigine.com, netdev@vger.kernel.org
-References: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
- <721abecd2f40bed319ab9fb3feebbea8431b73ed.1644532467.git.christophe.jaillet@wanadoo.fr>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <721abecd2f40bed319ab9fb3feebbea8431b73ed.1644532467.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 10/02/2022 à 23:35, Christophe JAILLET a écrit :
-> Use ida_alloc_xxx()/ida_free() instead to
-> ida_simple_get()/ida_simple_remove().
-> The latter is deprecated and more verbose.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   .../net/ethernet/netronome/nfp/flower/tunnel_conf.c    | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-> index 9244b35e3855..c71bd555f482 100644
-> --- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-> +++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-> @@ -942,8 +942,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
->   	if (!nfp_mac_idx) {
->   		/* Assign a global index if non-repr or MAC is now shared. */
->   		if (entry || !port) {
-> -			ida_idx = ida_simple_get(&priv->tun.mac_off_ids, 0,
-> -						 NFP_MAX_MAC_INDEX, GFP_KERNEL);
-> +			ida_idx = ida_alloc_max(&priv->tun.mac_off_ids,
-> +						NFP_MAX_MAC_INDEX, GFP_KERNEL);
->   			if (ida_idx < 0)
->   				return ida_idx;
->   
-> @@ -998,7 +998,7 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
->   	kfree(entry);
->   err_free_ida:
->   	if (ida_idx != -1)
-> -		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-> +		ida_free(&priv->tun.mac_off_ids, ida_idx);
->   
->   	return err;
->   }
-> @@ -1061,7 +1061,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
->   		}
->   
->   		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
-> -		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-> +		ida_free(&priv->tun.mac_off_ids, ida_idx);
->   		entry->index = nfp_mac_idx;
->   		return 0;
->   	}
-> @@ -1081,7 +1081,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
->   	/* If MAC has global ID then extract and free the ida entry. */
->   	if (nfp_tunnel_is_mac_idx_global(nfp_mac_idx)) {
->   		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
-> -		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-> +		ida_free(&priv->tun.mac_off_ids, ida_idx);
->   	}
->   
->   	kfree(entry);
+tree:   https://github.com/avpatel/linux.git virtio_rpmsg_bus_fix_v1
+head:   390aaf641ff2f8919268d611e864227265c3f3f2
+commit: 60d5692b8457cf198520e9f19a51922545bfba6a [23/52] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
+config: arm64-buildonly-randconfig-r003-20220608 (https://download.01.org/0day-ci/archive/20220609/202206091204.G88SVhNb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/avpatel/linux/commit/60d5692b8457cf198520e9f19a51922545bfba6a
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel virtio_rpmsg_bus_fix_v1
+        git checkout 60d5692b8457cf198520e9f19a51922545bfba6a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
-Hi,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This has been merged in -next in commit 432509013f66 but for some reason 
-I looked at it again.
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kvm/mmu.c:789:55: warning: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
+           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+                                                                ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
+   1 warning generated.
 
 
-I just wanted to point out that this patch DOES change the behavior of 
-the driver because ida_simple_get() is exclusive of the upper bound, 
-while ida_alloc_max() is inclusive.
+vim +789 arch/arm64/kvm/mmu.c
 
-So, knowing that NFP_MAX_MAC_INDEX = 0xff = 255, with the previous code 
-'ida_idx' was 0 ... 254.
-Now it is 0 ... 255.
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  774  
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  775  /**
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  776   * kvm_phys_addr_ioremap - map a device range to guest IPA
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  777   *
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  778   * @kvm:	The KVM pointer
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  779   * @guest_ipa:	The IPA at which to insert the mapping
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  780   * @pa:		The physical address of the device
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  781   * @size:	The size of the mapping
+c9c0279cc02b4e arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  782   * @writable:   Whether or not to create a writable mapping
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  783   */
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  784  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  785  			  phys_addr_t pa, unsigned long size, bool writable)
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  786  {
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  	phys_addr_t addr;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  788  	int ret = 0;
+c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @789  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  790  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  791  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  792  				     KVM_PGTABLE_PROT_R |
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  793  				     (writable ? KVM_PGTABLE_PROT_W : 0);
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  
+bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  795  	if (is_protected_kvm_enabled())
+bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  796  		return -EPERM;
+bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  797  
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  798  	size += offset_in_page(guest_ipa);
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  799  	guest_ipa &= PAGE_MASK;
+c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  800  
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  801  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
+c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  802  		ret = kvm_mmu_topup_memory_cache(&cache,
+61ffb3a50c4402 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  803  						 kvm_mmu_cache_min_pages(kvm));
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  804  		if (ret)
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  805  			break;
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  806  
+fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  807  		write_lock(&kvm->mmu_lock);
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  808  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  809  					     &cache);
+fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  810  		write_unlock(&kvm->mmu_lock);
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  811  		if (ret)
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  812  			break;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  813  
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  814  		pa += PAGE_SIZE;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  815  	}
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  816  
+c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  817  	kvm_mmu_free_memory_cache(&cache);
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  818  	return ret;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  819  }
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  820  
 
-This still looks good to me, because NFP_MAX_MAC_INDEX is still not a 
-power of 2.
+:::::: The code at line 789 was first introduced by commit
+:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
 
+:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
-But if 255 is a reserved value for whatever reason, then this patch has 
-introduced a bug (apologies for it).
-
-The change of behavior should have been mentioned in the commit 
-description. So I wanted to make sure you was aware in case a follow-up 
-fix is needed.
-
-CJ
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

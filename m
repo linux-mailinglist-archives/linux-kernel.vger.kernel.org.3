@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F5A5442A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362A05442AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236839AbiFIEfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 00:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S237554AbiFIEgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 00:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiFIEfH (ORCPT
+        with ESMTP id S232169AbiFIEgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 00:35:07 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD4FE443C;
-        Wed,  8 Jun 2022 21:35:05 -0700 (PDT)
+        Thu, 9 Jun 2022 00:36:10 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98247B07;
+        Wed,  8 Jun 2022 21:36:08 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id g6so3248969vsb.2;
+        Wed, 08 Jun 2022 21:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654749305; x=1686285305;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=VwSCxtfjoGb5UeI2RV1IBmJ9l3km93Sfi1WxCqZI0Tw=;
-  b=mi42UTkAxylsMT7chku7Tl3u83laI0BYLThRRZDWoVnVPnZqpvvEi4eg
-   xcu5uRy/eBivxjJO2H3DLcZ5dMp8uTzjHVPAP3ng80PhPM28s66FoNnlu
-   1d8hvZYfJvPnY9M65wI62rADeHqes2sOeZlF5M2aYdma1zuUJYdYbGxwM
-   s=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jun 2022 21:35:04 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 21:35:04 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 8 Jun 2022 21:35:04 -0700
-Received: from [10.216.22.79] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 8 Jun 2022
- 21:34:57 -0700
-Message-ID: <20472a54-6ba1-5952-1344-a3864c2fa9f3@quicinc.com>
-Date:   Thu, 9 Jun 2022 10:04:54 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K/i8DYT2ygHvcWIB+TGUjE1cSyP6RpUZJ+cTGMu/weo=;
+        b=MkX92/OX5Jd4R4X4Wew8Jy/pDaEgc8pKlkmzkvLpPA1RUmP9CwVAp4mDE0zWuRwoUN
+         sHJfzwPkd7kyPFb1HFLU+lLqulZbVnaaJGRs1WgCYAIsflL3FZJ8DzogP+jRp2TVLwf1
+         Ne13c4/6HFu8/8IzAfMynFRc/lfRr7q2bylvhRRBJ1mj8iNGM0XBm0zXYDQ04W8q0RVJ
+         M024CeoPPCByj+d1HofI1imrGXkc0KUN8Xmnu7ET4Vy0hhKGQ6DU3tpsZQyrpFEgPPJU
+         AszWyNxmxvXHkSVqZngAalYpGEcQqo3tNjp0yZ7iw/HSovXDXWPJqho0jtJwHvyzbefv
+         4wZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K/i8DYT2ygHvcWIB+TGUjE1cSyP6RpUZJ+cTGMu/weo=;
+        b=Y89a01FnxkPJe0XhmH37dkKgHDR1Upl1a+2s6tMrspHz60jLkcPB7c0aWxP2vem9t8
+         tl1Hwt0wVX+vf3swW2iIBExUvtxGoWmvefaku7XY/qx/vr5jBNyO90wjH/W39B+9PC4D
+         AzjgSHan21K3YpRg4RQWL7NqJZ/C33QawvS5GfERvmbMIDLU0kjQbKgjPyVvMx+iRaB9
+         n8yWuc8lz1USrGa1SSZnFnO+SKP1iovCwu75KrbihX7q99rRcS+eZJ7R267YGoYwQ2wd
+         DwJOJZ89S/qcstG3YOezK+k5EXkjNsNlb/TL/4PiN68UnDXMiP5IqJk+/6fOsZqGzoao
+         o9Vg==
+X-Gm-Message-State: AOAM532mCVz7072ZAJgyzG2nNZ6uei+re07zrdJuQa9v/f6ArpW75Qv6
+        To57dIeLXQd5zbnxgcVOxZ7zLuJG8fz9RQ0o5No=
+X-Google-Smtp-Source: ABdhPJxATreDqd9IudoNJR6VJZ9zNaC3pZreydmxwBOzXGiSBfrzQ6mEOynR6Y9h2KoqVyCehMYW3nQHz1cKElRa+b4=
+X-Received: by 2002:a67:70c4:0:b0:349:d442:f287 with SMTP id
+ l187-20020a6770c4000000b00349d442f287mr17213314vsc.2.1654749367725; Wed, 08
+ Jun 2022 21:36:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 1/2] soundwire: qcom: Add flag for software clock
- gating check
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <vkoul@kernel.org>
-References: <1654696929-20205-1-git-send-email-quic_srivasam@quicinc.com>
- <1654696929-20205-2-git-send-email-quic_srivasam@quicinc.com>
- <90a49c5c-7433-cec4-cb86-1424209a54e4@linux.intel.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <90a49c5c-7433-cec4-cb86-1424209a54e4@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220607153139.35588-1-cgzones@googlemail.com> <08A11E25-0208-4B4F-8759-75C1841E7017@dilger.ca>
+In-Reply-To: <08A11E25-0208-4B4F-8759-75C1841E7017@dilger.ca>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Thu, 9 Jun 2022 07:35:56 +0300
+Message-ID: <CAOQ4uxh1QG_xJ0Ffh=wKksxWKm1ioazmc8SxeYYH9yHT1PMasg@mail.gmail.com>
+Subject: Re: [RFC PATCH] f*xattr: allow O_PATH descriptors
+To:     Andreas Dilger <adilger@dilger.ca>
+Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        selinux@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,36 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 8, 2022 at 9:01 PM Andreas Dilger <adilger@dilger.ca> wrote:
+>
+> On Jun 7, 2022, at 9:31 AM, Christian G=C3=B6ttsche <cgzones@googlemail.c=
+om> wrote:
+> >
+> > From: Miklos Szeredi <mszeredi@redhat.com>
+> >
+> > Support file descriptors obtained via O_PATH for extended attribute
+> > operations.
+> >
+> > Extended attributes are for example used by SELinux for the security
+> > context of file objects. To avoid time-of-check-time-of-use issues whil=
+e
+> > setting those contexts it is advisable to pin the file in question and
+> > operate on a file descriptor instead of the path name. This can be
+> > emulated in userspace via /proc/self/fd/NN [1] but requires a procfs,
+> > which might not be mounted e.g. inside of chroots, see[2].
+>
+> Will this allow get/set xattrs directly on symlinks?  That is one problem
+> that we have with some of the xattrs that are inherited on symlinks, but
+> there is no way to change them.  Allowing setxattr directly on a symlink
+> would be very useful.
 
-On 6/8/2022 9:09 PM, Pierre-Louis Bossart wrote:
-Thanks for Your time  Pierre-Louis!!!
->
-> On 6/8/22 09:02, Srinivasa Rao Mandadapu wrote:
->> Add flag in qcom_swrm_data private data structure for validating
->> software colck gating control requirement.
-> typo: clock
-Okay. Will fix.
->
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> ---
->>   drivers/soundwire/qcom.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
->> index a3fccf0..38c3bf5 100644
->> --- a/drivers/soundwire/qcom.c
->> +++ b/drivers/soundwire/qcom.c
->> @@ -181,6 +181,7 @@ struct qcom_swrm_ctrl {
->>   struct qcom_swrm_data {
->>   	u32 default_cols;
->>   	u32 default_rows;
->> +	bool sw_clk_gate_required;
-> I would have used a different split between patches, where the flag and
-> functionality is introduced, and a second patch where this flag would be
-> set for a specific platform.
-Okay. Will split accordingly!
->
->>   };
->>   
->>   static const struct qcom_swrm_data swrm_v1_3_data = {
+It is possible.
+See: https://github.com/libfuse/libfuse/pull/514
+
+That's why Miklos withdrew this patch:
+https://lore.kernel.org/linux-fsdevel/CAOssrKeV7g0wPg4ozspG4R7a+5qARqWdG+Gx=
+WtXB-MCfbVM=3D9A@mail.gmail.com/
+
+Thanks,
+Amir.

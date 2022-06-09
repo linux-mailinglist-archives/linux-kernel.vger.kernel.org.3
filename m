@@ -2,144 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F3C5452AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5808A5452A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344929AbiFIRIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S245215AbiFIRHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343765AbiFIRIE (ORCPT
+        with ESMTP id S1344534AbiFIRHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:08:04 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0059112DBD9;
-        Thu,  9 Jun 2022 10:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654794457;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=kGZmmOADn0EKx1aFs3YZdMQLcwtTt5OJKjbF5f+Rez0=;
-    b=JjDiEl1F3iWYsjzzx1Y3CxkcU62MDCi+eUrW55ZHZT3AuzZifhN8sJ2bh8RaYw93gV
-    X7IJyWbuXU3V15njIAffIS2bkkwihgt8qk+RLm7Ip8ryFJSRfqosYksOHrJvqfOocKY6
-    wEzsKnRfAlmeCAQ9GKf7JcWaJ22Wcpcwq1YhBfFAKWRp+F3xlg1aXVGL7J6V7VsW1Dtp
-    EVuTY3ByedGLBt/90gOizrQwVXyg6ED5NVx7DOlLgBeqKkH2y/PjIpOlG79JDj45ZmX0
-    lCNS8KBC97PCS3E7s/tXSUOKDlWJRCH5lNCW9XmdJDU1yz3ScFI+Ekt/wJs8h1/WAJ4X
-    K/NA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrKw5+aY="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.45.0 SBL|AUTH)
-    with ESMTPSA id 9056edy59H7aBv1
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 9 Jun 2022 19:07:36 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 19:07:29 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Alexander Martinz <amartinz@shiftphones.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dylan Van Assche <me@dylanvanassche.be>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom/sdm845-shift-axolotl: Add audio
- support
-Message-ID: <YqIo0TJHqCx33NLj@gerhold.net>
-References: <20220609095412.211060-1-amartinz@shiftphones.com>
- <20220609095412.211060-2-amartinz@shiftphones.com>
+        Thu, 9 Jun 2022 13:07:33 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0468CCBD6A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:07:31 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so11836929iov.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 10:07:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Qomqaou+54axI368WL0XNwH/m5OrniWkk2TGmdoD03s=;
+        b=mTVTVJqtenoaiRS0P6SA04Anu+SHfv5GKHvJMJdMP9sQo/1bYvPg8PO2dE/sSko6Xg
+         8lSy9WcXH0PvhtzCIBseoX08oxz1aQGvY/SU+fIxinJAt2Gehl2X70W3r3Vpx2grbGEd
+         iVgRowhwZir/yM9Ii1w4LLmMhaOF/iDgssJvMombFfvvZJbKXNY2waA21Y4BvFRDCWxS
+         idV4O4Gr7cbgbrFBqR7VcuyWhHeBIJLPDfDVYkQoBcluMiEMV9mRb5P9JN6zB2cgdDY0
+         1Ww5AErYsWh67emJUmdx2WvYz0O5ZQqwFhHI5cOhe2PiIVfLWD9YnoXGQLYbdG34aucR
+         PdUg==
+X-Gm-Message-State: AOAM530P8Nb1I2IhSkDqoladfgM9Gx0pbgKbkk8J8etai28rovxjaBxM
+        3LVtJa0YHWBG9NTiHB3Y3qNoVhjKLrqcNSsakpcvsmiFgOQd
+X-Google-Smtp-Source: ABdhPJyVJHg3/m2kQwxyyCxd1zESRTo3sTeDhbK/QZnA+IOspn6syM/GFLrUeOhi2mKdxfhfBAL1NBJ3PIditxTIg9xODgH6XI/i
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609095412.211060-2-amartinz@shiftphones.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:6d0d:0:b0:669:6f9b:68c7 with SMTP id
+ a13-20020a6b6d0d000000b006696f9b68c7mr7846766iod.167.1654794450275; Thu, 09
+ Jun 2022 10:07:30 -0700 (PDT)
+Date:   Thu, 09 Jun 2022 10:07:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006294c805e106db34@google.com>
+Subject: [syzbot] possible deadlock in bpf_trace_printk
+From:   syzbot <syzbot+c49e17557ddb5725583d@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, boqun.feng@gmail.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        hawk@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        longman@redhat.com, mingo@redhat.com, netdev@vger.kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 11:54:12AM +0200, Alexander Martinz wrote:
-> This patch adds audio support for the SHIFT6mq phone.
-> 
-> The primary microphone and headphone jack are handled by the
-> SDM845 sound card and WCD9340 codec.
-> 
-> The primary speaker needs to go through the TFA9890 speaker
-> amplifier.
-> 
-> Signed-off-by: Alexander Martinz <amartinz@shiftphones.com>
-> Tested-by: Dylan Van Assche <me@dylanvanassche.be>
-> ---
->  .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 141 ++++++++++++++++++
->  1 file changed, 141 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> index fa72f23ef0c2..8c4967d6d0e3 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-[...]
-> @@ -492,6 +494,19 @@ touchscreen@38 {
->  	};
->  };
->  
-> +&i2c11 {
-> +	status = "okay";
-> +	clock-frequency = <400000>;
-> +
-> +	tfa9890_codec: tfa9890@34 {
+Hello,
 
-Please use "audio-codec@" as suggested in the bindings. Also, I think a
-label such as "speaker_codec: " would make it more obvious that this is
-the speaker. But that's personal preference. :)
+syzbot found the following issue on:
 
-> +		compatible = "nxp,tfa9890";
-> +		reg = <0x34>;
-> +		vddd-supply = <&vreg_s4a_1p8>;
-> +		reset-gpio = <&tlmm 7 0>;
+HEAD commit:    d678cbd2f867 xsk: Fix handling of invalid descriptors in X..
+git tree:       bpf
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15ea1120080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fc5a30a131480a80
+dashboard link: https://syzkaller.appspot.com/bug?extid=c49e17557ddb5725583d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1342b1f7f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ca7880080000
 
-The mainline driver does not support the reset-gpio (it resets via the
-I2C registers instead). Can just drop this.
+The issue was bisected to:
 
-Alternatively we could document it to the DT schema and describe it here
-for completeness. That way it's already there if someone ever considers
-it necessary for the driver.
+commit dc1f7893a70fe403983bd8492f177bf993940e2c
+Author: Peter Zijlstra <peterz@infradead.org>
+Date:   Wed Mar 30 11:06:54 2022 +0000
 
-> +		#sound-dai-cells = <1>;
+    locking/mutex: Make contention tracepoints more consistent wrt adaptive spinning
 
-Should be <0>. You might want to check your addition with
-"make dtbs_check" to make sure it matches the DT schema. :)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14c55dcff00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16c55dcff00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12c55dcff00000
 
-Also, I would recommend adding a "sound-name-prefix". The prefix is used
-for the ALSA mixers which makes it more obvious that they belong to the
-speaker. (See example in DT schema.)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c49e17557ddb5725583d@syzkaller.appspotmail.com
+Fixes: dc1f7893a70f ("locking/mutex: Make contention tracepoints more consistent wrt adaptive spinning")
 
-> +	};
-> +};
-> +
->  &ipa {
->  	status = "okay";
->  
-[...]
-> @@ -756,6 +879,24 @@ &venus {
->  	firmware-name = "qcom/sdm845/axolotl/venus.mbn";
->  };
->  
-> +&wcd9340 {
-> +	pinctrl-0 = <&wcd_intr_default>;
-> +	pinctrl-names = "default";
-> +	clock-names = "extclk";
-> +	clocks = <&rpmhcc RPMH_LN_BB_CLK2>;
-> +	reset-gpios = <&tlmm 64 0>;
+============================================
+WARNING: possible recursive locking detected
+5.18.0-syzkaller-12122-gd678cbd2f867 #0 Not tainted
+--------------------------------------------
+syz-executor354/3616 is trying to acquire lock:
+ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
+ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
 
-0 => GPIO_ACTIVE_HIGH
+but task is already holding lock:
+ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
+ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
 
-Thanks,
-Stephan
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(trace_printk_lock);
+  lock(trace_printk_lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+4 locks held by syz-executor354/3616:
+ #0: ffffffff8be67668 (delayed_uprobe_lock){+.+.}-{3:3}, at: uprobe_clear_state+0x47/0x420 kernel/events/uprobes.c:1544
+ #1: ffffffff8bd86be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x0/0x340 kernel/trace/./bpf_trace.h:11
+ #2: ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
+ #2: ffffffff8be0d6d8 (trace_printk_lock){..-.}-{2:2}, at: bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
+ #3: ffffffff8bd86be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x0/0x340 kernel/trace/./bpf_trace.h:11
+
+stack backtrace:
+CPU: 1 PID: 3616 Comm: syz-executor354 Not tainted 5.18.0-syzkaller-12122-gd678cbd2f867 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+ check_deadlock kernel/locking/lockdep.c:3031 [inline]
+ validate_chain kernel/locking/lockdep.c:3816 [inline]
+ __lock_acquire.cold+0x1f5/0x3b4 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+ ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
+ bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
+ bpf_prog_0605f9f479290f07+0x2f/0x33
+ bpf_dispatcher_nop_func include/linux/bpf.h:869 [inline]
+ __bpf_prog_run include/linux/filter.h:628 [inline]
+ bpf_prog_run include/linux/filter.h:635 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
+ bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
+ __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
+ trace_contention_begin.constprop.0+0xda/0x1b0 include/trace/events/lock.h:95
+ __pv_queued_spin_lock_slowpath+0x103/0xb50 kernel/locking/qspinlock.c:405
+ pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
+ queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
+ queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
+ do_raw_spin_lock+0x200/0x2a0 kernel/locking/spinlock_debug.c:115
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
+ _raw_spin_lock_irqsave+0x41/0x50 kernel/locking/spinlock.c:162
+ ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
+ bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
+ bpf_prog_0605f9f479290f07+0x2f/0x33
+ bpf_dispatcher_nop_func include/linux/bpf.h:869 [inline]
+ __bpf_prog_run include/linux/filter.h:628 [inline]
+ bpf_prog_run include/linux/filter.h:635 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
+ bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
+ __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
+ trace_contention_begin+0xc0/0x150 include/trace/events/lock.h:95
+ __mutex_lock_common kernel/locking/mutex.c:605 [inline]
+ __mutex_lock+0x13c/0x1350 kernel/locking/mutex.c:747
+ uprobe_clear_state+0x47/0x420 kernel/events/uprobes.c:1544
+ __mmput+0x73/0x4b0 kernel/fork.c:1183
+ mmput+0x56/0x60 kernel/fork.c:1208
+ exit_mm kernel/exit.c:510 [inline]
+ do_exit+0xa12/0x2a00 kernel/exit.c:782
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f15c46e1139
+Code: Unable to access opcode bytes at RIP 0x7f15c46e110f.
+RSP: 002b:00007ffd3b43d738 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f15c475c330 RCX: 00007f15c46e1139
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 00007f15c4756ec0
+R10: 00007ffd3b43d200 R11: 0000000000000246 R12: 00007f15c475c330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

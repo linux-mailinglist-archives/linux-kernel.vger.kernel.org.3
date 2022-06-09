@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20D4544D29
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C198D544D2C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243789AbiFINKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S242388AbiFINKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbiFINKY (ORCPT
+        with ESMTP id S239036AbiFINK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:10:24 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB87AEAD01
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:10:21 -0700 (PDT)
+        Thu, 9 Jun 2022 09:10:26 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C99BED8E7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:10:25 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 40FC5FF807;
-        Thu,  9 Jun 2022 13:10:19 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 61FBF40002;
+        Thu,  9 Jun 2022 13:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654780219;
+        t=1654780224;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ITj+D6pf4vtJjIg4YV1QMKa+PIL6lnpS+3b87tjq90M=;
-        b=mAkTn72lcLs7xI8y9hbrIHnbX5b18ahqU2B5H+lbYuyxFIdQoaezMhxlGYOqMc5GqppSaX
-        wqOnCCaLWC/nPa/NnTnqU1H6GNdll7X8RLDrmc9yOP6VCj8pgDyU0bIOefXuRFzJX8rihP
-        ZAIYPo3L08gnZPKBj08D5veCGppkuMjMaBz4IGvfnS94kzCJQoQqawYVEnmbAwvQQhAxDQ
-        VkEu4bd2+cV7HXpHP4HyFvMFIUIHP+h946m+wfIoBLUBQSfdmqbTAY0+YJFE/BgtdGhR6S
-        6SuVe2ghmdDJORoON1KMf2H4mz/E0xDvs8P1SsNad3Sbw9F7bhqDiZqzObmjmA==
+        bh=SXXb6P9Cvl1Zw0pt22LdE638pd3NE17nBJYMk4WRUpQ=;
+        b=hq7VmEw3j/yIDUeup7m471TiSKlOzA2mlV5ZB2IjEsMBVyRSRy5nezwp7rwoma8nmsp0jC
+        WYfDmg70dhurrG05jWfEuBhIIQwbMev9XxYiSRtWdGI7jzFdTb0JG1gecrPgqE895Y2t+h
+        rU4ru4yMyjam2qD44gyxEER3yVd6M74hKMoYA/DVbzw8zt6jFrsV7YsSobXHMLi/vPkgtA
+        2dxcgzf/MEmUzzyp/kyzPgfFcQBQU35vKWh5dIUtDBk0By4ZTZIfI3ViIEYuLM3oLfp4ir
+        H2Hkan5nLKW5zmpO29afrG1HGwPuvLWlqFmhZnp6ndMdsG0IUz8WaJjMalpZ8g==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     =?utf-8?b?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>
 Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mtdchar: use kvmalloc() for potentially large allocations
-Date:   Thu,  9 Jun 2022 15:10:18 +0200
-Message-Id: <20220609131018.293486-1-miquel.raynal@bootlin.com>
+Subject: Re: [PATCH 1/2] mtdchar: prevent integer overflow in a safety check
+Date:   Thu,  9 Jun 2022 15:10:22 +0200
+Message-Id: <20220609131022.293516-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220516070601.11428-3-kernel@kempniu.pl>
+In-Reply-To: <20220516070601.11428-2-kernel@kempniu.pl>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'83208e106a8e8a859110ebb04a5e927ced911afb'
+X-linux-mtd-patch-commit: b'a1eda864c04cf24ea1130334963c6199318f6f95'
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,17 +57,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-16 at 07:06:01 UTC, =?utf-8?b?TWljaGHFgiBLxJlwaWXFhA==?= wrote:
-> mtdchar_write_ioctl() calls kmalloc() with the 'size' argument set to
-> the smaller of two values: the write request's data/OOB length provided
-> by user space and the erase block size of the MTD device.  If the latter
-> is large, kmalloc() may not be able to serve such allocation requests.
-> Use kvmalloc() instead.  Correspondingly, replace kfree() calls with
-> kvfree() calls.
+On Mon, 2022-05-16 at 07:06:00 UTC, =?utf-8?b?TWljaGHFgiBLxJlwaWXFhA==?= wrote:
+> Commit 6420ac0af95d ("mtdchar: prevent unbounded allocation in MEMWRITE
+> ioctl") added a safety check to mtdchar_write_ioctl() which attempts to
+> ensure that the write request sent by user space does not extend beyond
+> the MTD device's size.  However, that check contains an addition of two
+> struct mtd_write_req fields, 'start' and 'len', both of which are u64
+> variables.  The result of that addition can overflow, allowing the
+> safety check to be bypassed.
+> 
+> The arguably simplest fix - changing the data types of the relevant
+> struct mtd_write_req fields - is not feasible as it would break user
+> space.
+> 
+> Fix by making mtdchar_write_ioctl() truncate the value provided by user
+> space in the 'len' field of struct mtd_write_req, so that only the lower
+> 32 bits of that field are used, preventing the overflow.
+> 
+> While the 'ooblen' field of struct mtd_write_req is not currently used
+> in any similarly flawed safety check, also truncate it to 32 bits, for
+> consistency with the 'len' field and with other MTD routines handling
+> OOB data.
+> 
+> Update include/uapi/mtd/mtd-abi.h accordingly.
 > 
 > Suggested-by: Richard Weinberger <richard@nod.at>
 > Signed-off-by: Michał Kępień <kernel@kempniu.pl>
-> Acked-by: Richard Weinberger <richard@nod.at>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 

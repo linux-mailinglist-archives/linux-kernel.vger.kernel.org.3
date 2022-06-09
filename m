@@ -2,45 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07368544B7B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5874544B82
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245216AbiFIMOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S245286AbiFIMPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237776AbiFIMOU (ORCPT
+        with ESMTP id S237898AbiFIMO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:14:20 -0400
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B3F31504
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=B/M5r4B90mbTkpJzac0CttJDuKdqEl0o8kb84irHerE=;
-        b=o6HzE3W8Ij5m1xQnFcTjjKq6lS2+eQtAgGGHD6sihovrqSSJJnxOzaQglQ4byIMoZwkIAbd7RGY5g
-         37hFqf6tCbEURL8luaZQG2i89IQVM0owNP2JV/hT5o5ZVOU0ncfJZRnSCLLRsZYkJrJzAsx4dDOe7m
-         /UNeWQcZr4imCE6RaYw+Bs15bDAepftCPzslHmzXnxdYe9XFTPvA8zHbX87ZuwcsCdhpS+xz6PkWVd
-         mVOMga98vqwcYxw52YXTNk53FxncTVGYm1109IKlHIxG+h0sdTip7HFeX+nhMa13hxiic1x5mwwv98
-         rW9c19Zlw6CJRuAclIa6PFb6y0RVITA==
-X-MSG-ID: ae2393fb-e7ed-11ec-a2aa-0050569d11ae
-From:   David Jander <david@protonic.nl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        David Jander <david@protonic.nl>
-Subject: [PATCH] spi: Fix per-cpu stats access on 32 bit systems
-Date:   Thu,  9 Jun 2022 14:13:34 +0200
-Message-Id: <20220609121334.2984808-1-david@protonic.nl>
-X-Mailer: git-send-email 2.32.0
+        Thu, 9 Jun 2022 08:14:58 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21FA15BAE9;
+        Thu,  9 Jun 2022 05:14:56 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2598hdMB005036;
+        Thu, 9 Jun 2022 14:14:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=bSH8k7jHxKUyrpoyMJgrVh2iKbBNDn/nCbRq/ihGCaQ=;
+ b=EfLJTcbmaMgZQdN1oH42I7AOQhGK+l87T4temiXrsnVJ52EXeiLiANWgDLtU5o1+4Xbp
+ S2mkEJOoIP2Lweijv22F2RwKe3z3RvH3SG3ztZJWtqkvhsVlKFJ2sZhj88HIKp1tlA5e
+ BNruinEEzRsTv56RyLsRAn9+hgdgvOOdiiwnUdbw4HmdUrUsXGvQo+NLPmmEGxfauDMT
+ Zk5oNrBRN8OqDTDkjrC3Q+quD5DynvBryk7baKMGsw//HdtO7BlCcv1+/aOrlmuOgfay
+ 0RcptKu1pKgrsosu5p3aNr5m3ppQFYASOvFRjipp6IQ1FPZt8aQCPEYxuH1MsZu8U1/l hA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gj3d40h8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 14:14:19 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E7E4110002A;
+        Thu,  9 Jun 2022 14:14:17 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DF6D62171F4;
+        Thu,  9 Jun 2022 14:14:17 +0200 (CEST)
+Received: from [10.48.1.102] (10.75.127.47) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 9 Jun
+ 2022 14:14:16 +0200
+Message-ID: <587eed11-8418-24a2-e8f7-d624ec570ebe@foss.st.com>
+Date:   Thu, 9 Jun 2022 14:14:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] iio: adc: stm32: fix maximum clock rate for stm32mp15x
+Content-Language: en-US
+To:     Olivier Moysan <olivier.moysan@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20220609095234.375925-1-olivier.moysan@foss.st.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20220609095234.375925-1-olivier.moysan@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-09_09,2022-06-09_01,2022-02-23_01
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,107 +78,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 32 bit systems, the following kernel BUG is hit:
+On 6/9/22 11:52, Olivier Moysan wrote:
+> Change maximum STM32 ADC input clock rate to 36MHz, as specified
+> in STM32MP15x datasheets.
+> 
+> Fixes: d58c67d1d851 ("iio: adc: stm32-adc: add support for STM32MP1")
+> 
+> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 
-BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-caller is debug_smp_processor_id+0x18/0x24
-CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc1-00001-g6ae0aec8a366 #181
-Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-Backtrace:
- dump_backtrace from show_stack+0x20/0x24
- r7:81024ffd r6:00000000 r5:81024ffd r4:60000013
- show_stack from dump_stack_lvl+0x60/0x78
- dump_stack_lvl from dump_stack+0x14/0x1c
- r7:81024ffd r6:80f652de r5:80bec180 r4:819a2500
- dump_stack from check_preemption_disabled+0xc8/0xf0
- check_preemption_disabled from debug_smp_processor_id+0x18/0x24
- r8:8119b7e0 r7:81205534 r6:819f5c00 r5:819f4c00 r4:c083d724
- debug_smp_processor_id from __spi_sync+0x78/0x220
- __spi_sync from spi_sync+0x34/0x4c
- r10:bb7bf4e0 r9:c083d724 r8:00000007 r7:81a068c0 r6:822a83c0 r5:c083d724
- r4:819f4c00
- spi_sync from spi_mem_exec_op+0x338/0x370
- r5:000000b4 r4:c083d910
- spi_mem_exec_op from spi_nor_read_id+0x98/0xdc
- r10:bb7bf4e0 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:82358040
- r4:819f7c40
- spi_nor_read_id from spi_nor_detect+0x38/0x114
- r7:82358040 r6:00000000 r5:819f7c40 r4:819f7c40
- spi_nor_detect from spi_nor_scan+0x11c/0xbec
- r10:bb7bf4e0 r9:00000000 r8:00000000 r7:c083da4c r6:00000000 r5:00010101
- r4:819f7c40
- spi_nor_scan from spi_nor_probe+0x10c/0x2d0
- r10:bb7bf4e0 r9:bb7bf4d0 r8:00000000 r7:819f4c00 r6:00000000 r5:00000000
- r4:819f7c40
+Hi Olivier,
 
-per-cpu access needs to be guarded against preemption.
+You can add my:
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
-Fixes: 6598b91b5ac3 ("spi: spi.c: Convert statistics to per-cpu u64_stats_t")
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: David Jander <david@protonic.nl>
----
- drivers/spi/spi.c       |  5 ++++-
- include/linux/spi/spi.h | 10 ++++++++--
- 2 files changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index d94822bf3cec..ac61824b87b5 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -314,11 +314,13 @@ static void spi_statistics_add_transfer_stats(struct spi_statistics *pcpu_stats,
- 					      struct spi_controller *ctlr)
- {
- 	int l2len = min(fls(xfer->len), SPI_STATISTICS_HISTO_SIZE) - 1;
--	struct spi_statistics *stats = this_cpu_ptr(pcpu_stats);
-+	struct spi_statistics *stats;
- 
- 	if (l2len < 0)
- 		l2len = 0;
- 
-+	get_cpu();
-+	stats = this_cpu_ptr(pcpu_stats);
- 	u64_stats_update_begin(&stats->syncp);
- 
- 	u64_stats_inc(&stats->transfers);
-@@ -333,6 +335,7 @@ static void spi_statistics_add_transfer_stats(struct spi_statistics *pcpu_stats,
- 		u64_stats_add(&stats->bytes_rx, xfer->len);
- 
- 	u64_stats_update_end(&stats->syncp);
-+	put_cpu();
- }
- 
- /*
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 2e63b4935deb..c96f526d9a20 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -84,18 +84,24 @@ struct spi_statistics {
- 
- #define SPI_STATISTICS_ADD_TO_FIELD(pcpu_stats, field, count)		\
- 	do {								\
--		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
-+		struct spi_statistics *__lstats;			\
-+		get_cpu();						\
-+		__lstats = this_cpu_ptr(pcpu_stats);			\
- 		u64_stats_update_begin(&__lstats->syncp);		\
- 		u64_stats_add(&__lstats->field, count);			\
- 		u64_stats_update_end(&__lstats->syncp);			\
-+		put_cpu();						\
- 	} while (0)
- 
- #define SPI_STATISTICS_INCREMENT_FIELD(pcpu_stats, field)		\
- 	do {								\
--		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
-+		struct spi_statistics *__lstats;			\
-+		get_cpu();						\
-+		__lstats = this_cpu_ptr(pcpu_stats);			\
- 		u64_stats_update_begin(&__lstats->syncp);		\
- 		u64_stats_inc(&__lstats->field);			\
- 		u64_stats_update_end(&__lstats->syncp);			\
-+		put_cpu();						\
- 	} while (0)
- 
- /**
--- 
-2.32.0
-
+Thanks,
+Fabrice
+> ---
+>  drivers/iio/adc/stm32-adc-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/adc/stm32-adc-core.c b/drivers/iio/adc/stm32-adc-core.c
+> index 142656232157..ce1a63a82034 100644
+> --- a/drivers/iio/adc/stm32-adc-core.c
+> +++ b/drivers/iio/adc/stm32-adc-core.c
+> @@ -805,7 +805,7 @@ static const struct stm32_adc_priv_cfg stm32h7_adc_priv_cfg = {
+>  static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
+>  	.regs = &stm32h7_adc_common_regs,
+>  	.clk_sel = stm32h7_adc_clk_sel,
+> -	.max_clk_rate_hz = 40000000,
+> +	.max_clk_rate_hz = 36000000,
+>  	.has_syscfg = HAS_VBOOSTER | HAS_ANASWVDD,
+>  	.num_irqs = 2,
+>  };

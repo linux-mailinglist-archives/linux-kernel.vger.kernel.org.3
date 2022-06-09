@@ -2,136 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525BC545316
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB4354531D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344992AbiFIRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
+        id S1343775AbiFIRiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344967AbiFIRgC (ORCPT
+        with ESMTP id S237357AbiFIRis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:36:02 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29182DABC1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:36:00 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so24107955pjm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 10:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=8d0a50vlXPwK/evqvKND5Qkww0VWt34LxBu4KEjcCqk=;
-        b=mBWkbCkHm6C1SNvMBjj+j6cEPOa61p9SJsey0F0Cv9c6q64zIhkL2NWcUDWOWBgQSE
-         3hvcY8aJJ5CE9js7qfPuSxMRdp+PwJ+RGcFhoobDiPqPhmjlwjveTOq6h9e9c9fvdKjJ
-         xaqPS9/TTtxnbdCXlDqjOWrGzSa7YFugpey6R5VEvIrda02aLHk/NUCA4UTANscwIKHT
-         lyoYQZOrkLJEe6gt0kjFfKNxD3I5RxjgWeCtZ8r4XiWuDAQ2omJVomah7Vr6YmV5+Yg8
-         AaLInB+EnpNjsXX2WMHfsJCFn440O3yoSgojqFXjnc/9Ep134YTgCYC0qUWjvsQvAypi
-         Pfww==
+        Thu, 9 Jun 2022 13:38:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97F60563BF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654796324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k6TtggULp7/GiOA6VvEvNpW/MHPOaym0FBcYUcuSeZU=;
+        b=IlLX1TYN3xV9vVXmklU+Vdn0/mk/OBIEpHMLjq81Wn3YMKTmaixquqWOLD5tWK3qLVODFG
+        XqBBIqVCNQPKQPf0hA3yJzdQLghvb/lYUNVxdHTF3xJ0cgojH0oJ0VYvaVl1Gqs6A5dDgw
+        A2pw7IlXlgF4H5ZSflJyg6fxLUkrFrQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-281-iimkXWO4Myepf1Ga-u0d0A-1; Thu, 09 Jun 2022 13:38:43 -0400
+X-MC-Unique: iimkXWO4Myepf1Ga-u0d0A-1
+Received: by mail-wm1-f71.google.com with SMTP id l4-20020a05600c1d0400b0039c60535405so2537987wms.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 10:38:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=8d0a50vlXPwK/evqvKND5Qkww0VWt34LxBu4KEjcCqk=;
-        b=B0Afl28YRPQJixGvPK3i499eqYTHk/LK/AejixWZDHQUPdCy4jY1F16ZpCdR1fs+He
-         olQBXLJu3Y1uzN4Pe+GEamRVza8YtvCqk+Z2LIhOQJ+4u5mtsbfPdelxD03VekV4JvBw
-         4HVrpq5Z1vCL+wUhRCMA60Jd5D0xku7bmyTkX1GnaH/SiwGmz49xqTMArHKa/+I5qpZ1
-         mPnNmKIHipjvzWhod+CNlccdmXc7nFHwaNZRfAZLattiYMQvXtk/VfFVZLiEP5S9OKEV
-         vM5dHTHeRHsOQt4ix5Lftj/NJlK10mj5oDADHlcaJi9lkYmTIMHpHknrXQOxhjjEint7
-         /nQA==
-X-Gm-Message-State: AOAM531Lq62GgfBtppYdgSLqepcskszUwAdCFWz1MrY/2Ywh0fK31ZQG
-        vgcTyXX/YDi6BQSKftfZk0J+fhrIEamQf782xis=
-X-Google-Smtp-Source: ABdhPJz02t2j9WHMmwPEP/pEm3letWNMc0QFGa8k6GnQYlX9k85uJReaT5e6P5kplsIbD38vYJTJHBLZfFvX8QMg0C8=
-X-Received: by 2002:a17:902:9a8d:b0:167:77c3:4c86 with SMTP id
- w13-20020a1709029a8d00b0016777c34c86mr23041488plp.122.1654796160118; Thu, 09
- Jun 2022 10:36:00 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k6TtggULp7/GiOA6VvEvNpW/MHPOaym0FBcYUcuSeZU=;
+        b=3N+yGYyUNEIYvKhBhnSIHhluyW/hyGErF8vQ5PBINkvMuV6GgdtXvKd6oDNRb9FfTg
+         dTlyqwThRZwunYLWrnsdAsZDOJ5STkt1UC/3jgBwq67n32Vz8Cs/Vyl16ulSLrUPv9jj
+         RSoa320d+yVVfQDs5EB2hgirRAw6lncYjxEX2kF7rpOk0j7FMzzMSewOmmYJ5ybKXQLC
+         ZMWf2NkdVCybcWs0O18iBnKBOHildyzTd+GA5r0cgWRISwwjdFXEisp7iDyIg0DrSJpS
+         v2aY/GlELuD9uFfsgSGsbW2qE4D2nCR1mSkMZ1CJF0Mj46dQ7vMAt954E0xLWK6khmIJ
+         7hrw==
+X-Gm-Message-State: AOAM532i+HrD6z8wByuxK2aaQlDJw5rRYmNiSertWk6L5DnBRm7JYO2e
+        U2ERfDuTyCFExq+jpLeTzyZtwiB5JfDhctA3tSyMjnkIDogCT+R4Y3Y/2vps6rM0P9zuB9UUW56
+        8VxlvIW4jnSxE+apJMeUZSr+x
+X-Received: by 2002:a5d:6283:0:b0:213:b939:826d with SMTP id k3-20020a5d6283000000b00213b939826dmr35332052wru.543.1654796322052;
+        Thu, 09 Jun 2022 10:38:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJycbjbAoqYi/Z38MH7gotfLoia/Ifcg797dUpu4eGDAE74k+ABciK+rkA2pggXKQtSvmd1fZw==
+X-Received: by 2002:a5d:6283:0:b0:213:b939:826d with SMTP id k3-20020a5d6283000000b00213b939826dmr35332021wru.543.1654796321841;
+        Thu, 09 Jun 2022 10:38:41 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id z2-20020adff1c2000000b0020c5253d8dcsm23897952wro.40.2022.06.09.10.38.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 10:38:41 -0700 (PDT)
+Message-ID: <0bdbec1f-196b-b82e-9d64-06029e250983@redhat.com>
+Date:   Thu, 9 Jun 2022 19:38:39 +0200
 MIME-Version: 1.0
-Reply-To: evelynjecob47@gmail.com
-Sender: mrsashaalqaddfi117@gmail.com
-Received: by 2002:a17:90a:f2d8:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:35:59
- -0700 (PDT)
-From:   Evelyn Jacob <evelynjecob47@gmail.com>
-Date:   Thu, 9 Jun 2022 10:35:59 -0700
-X-Google-Sender-Auth: 2fZj3d1iQlwlnZYHAIF8X4cHw2Q
-Message-ID: <CAE+vSYq=317B_dEYMgB57Jv9a7xZj+ZaVpVfr4FEmqqKq=GG_A@mail.gmail.com>
-Subject: Ms.Evelyn
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MILLION_HUNDRED,
-        MONEY_FORM_SHORT,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102d listed in]
-        [list.dnswl.org]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9709]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrsashaalqaddfi117[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsashaalqaddfi117[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [evelynjecob47[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  1.6 MONEY_FRAUD_3 Lots of money and several fraud phrases
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: Mark olpc_dcon BROKEN [Was: [PATCH v6 5/5] fbdev: Make
+ registered_fb[] private to fbmem.c]
+Content-Language: en-US
+To:     Sam Ravnborg <sam@ravnborg.org>, Jerry Lin <wahahab11@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Laszlo Ersek <lersek@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>, kvm@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        kernel test robot <lkp@intel.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        linux-staging@lists.linux.dev,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        linux-fbdev@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220607182338.344270-1-javierm@redhat.com>
+ <20220607182338.344270-6-javierm@redhat.com>
+ <3ebac271-1276-8132-6175-ca95a26cfcbb@suse.de>
+ <69d8ad0e-efc6-f37d-9aa7-d06f8de16a6a@redhat.com>
+ <YqIskEjUvJo4y4cb@ravnborg.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YqIskEjUvJo4y4cb@ravnborg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings dearest
+Hello Sam,
 
-I'm a 75 year old woman. I was born an orphan and GOD blessed me
-abundantly with riches but no children nor husband which makes me an
-unhappy woman. Now I am affected with cancer of the lung and breast
-with a partial stroke which has affected my speech. I can no longer
-talk well. and half of my body is paralyzed, I sent this email to you
-with the help of my private female nurse.
+On 6/9/22 19:23, Sam Ravnborg wrote:
 
-My condition is really deteriorating day by day and it is really
-giving me lots to think about.  This has prompted my decision to
-donate all I have for charity; I have made numerous donations all over
-the world. After going through your profile, I decided to make my last
-donation of Ten Million Five Hundred Thousand United Kingdom Pounds
-(UK=C2=A310.500, 000, 00) to you as my investment manager. I want you to
-build an Orphanage Home With my name (  Ms.Evelyn Jacob) in your
-country.
+[snip]
 
-If you are willing and able to do this task for the sake of humanity
-then send me below information for more details to receive the funds.
+> 
+> To repeat myself from irc.
+> olpc_dcon is a staging driver and we should avoid inventing anything in
+> core code for to make staging drivers works.
+> Geert suggested EXPORT_SYMPBOL_NS_GPL() that could work and narrow it
+> down to olpc_dcon.
+> The better approach is to mark said driver BROKEN and then someone can
+> fix it it there is anyone who cares.
+> Last commit to olpc_dcon was in 2019: e40219d5e4b2177bfd4d885e7b64e3b236af40ac
+> and maybe Jerry Lin cares enough to fix it.
+> 
+> Added Jerry and Greg to the mail.
+> 
+> 	Sam
+> 
 
-1. Name...................................................
+That does sound like the best approach indeed. And if the driver is kept
+BROKEN for a few releases then it can just remove it from the kernel. If
+someone still uses/cares about the driver, they can fix it as you said,
+and it could even be ported to DRM if is something that's still useful.
 
-2. Phone number...............................
+-- 
+Best regards,
 
-3. Address.............................................
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-4. Country of Origin and residence
-
- Ms.Evelyn Jecob  ,

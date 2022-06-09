@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F68544780
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA3F54478A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241307AbiFIJaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S242241AbiFIJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238564AbiFIJ3x (ORCPT
+        with ESMTP id S239498AbiFIJ3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:29:53 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0425A267CD2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:29:48 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id kq6so33240597ejb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 02:29:48 -0700 (PDT)
+        Thu, 9 Jun 2022 05:29:54 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A23268555
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:29:50 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id o7so12983515eja.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 02:29:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oQCEzz12ukJcqXabLCIweZqpeRWMz2frfEfSdC7n6WI=;
-        b=xEq2Ezz6CrU830NkrO8MBbZYSvUHIf31/ROvyYHt1UvRN8h7Rk8UAddUikfjj4Pe98
-         GKB6iI9LQgq4j8uKqQuLWc3b33FkPKRG5Ied+Sk7gBDribwOGs+EC273NPCD0pYtNa/O
-         0ifY1cDH2fRcHcpi1/Hy5//iyDMd/b1mmwoS69RXU2WtkS8e3JyNtlA5UFgv5B6hhhGk
-         m2aaai2OcDNnI5hunNZa8tOShkHGNb7TG/fxeZu5OrCYR3AcyAonUAIxPwfV4nPX4APO
-         MWO8unOcxkPzhRYGZ3R3hhLY70lXXL/TdkPwzLnPivDx4wbmQjaGtz09bhkm58ElmTdi
-         JzbQ==
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=mM6WMCb4U1Ua1nT40aZTmMzTGzg4MU648qxfTVm3JXk=;
+        b=L9P8wca+7ciOQJEs12e0Qkfn26E7HtyzTpIoXC7a8PgJPk0SQilpoVH4G3+3agpcD7
+         bukBdPCVyQwzlPvz2moxz7aTFZ5WFPFFt2dwgjNf34m5B7SEM3UHTtPEVh/lOBtq0nOf
+         RtxoXgBmQE9UHpKaMaSvNg7NPw0sPgeqhwWX37uBH2LBOnXpa+BdoN249BCy2wNK90zB
+         ZF1UsuisOCjFJCwBXkYyaNEjkfsM5GI0WiPmk5jn6wyYXdJrTl/I51zFRz9ZYJyXrJEX
+         OsLsKMq8v6H29Cp/wGDfXcshlenIpmRjODloQcy65q5xQLwlx0JO1AoMdLN5KQ0DIIlv
+         YJlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oQCEzz12ukJcqXabLCIweZqpeRWMz2frfEfSdC7n6WI=;
-        b=C9z099nHb/RallJTJYnyk6ihlFOtweJTCLV8LGjLCTFx7PUy+PxDfLZ5K4vGo0eoak
-         fz/2Q2aJedf/904TladkxWQvj2GpB43thFnXM/CfA3XqvK1LAtAH7TU8wAshd/Yvl2EE
-         h2tKYWkTYwdGcpbc/lHmnWazEfg2oSNHnELD2c1O68IoiBK8BhtQ78RbooAd2LxfieTk
-         E9ABqjJ/VEKyYfpTAW49pSx58Q3WAndQJPtohiVaNqW7ilEzzHvOMfqkVr4bQvcIbEYh
-         IoE2RxQQdNRuvQ9fD6SNexLkugqV8mU54+DLwo/aTUSyGPHCqvaPpHy/cmZfgFRerk4l
-         gAKA==
-X-Gm-Message-State: AOAM531scF+Oym7bCWU5wEt8UkreHakERQaqU9IHnao1L6FlKKwfRVbe
-        Ljea5nOpL2/nMnhJiT0dogsvAQ==
-X-Google-Smtp-Source: ABdhPJwk+xmn5SurY9iYay63P74ewXYNsm5jhUhp81Z4B4384bJPHBOD2iMAck8Efwj0WS+WPX5O1g==
-X-Received: by 2002:a17:907:62a1:b0:6da:7952:d4d2 with SMTP id nd33-20020a17090762a100b006da7952d4d2mr34722809ejc.260.1654766987446;
-        Thu, 09 Jun 2022 02:29:47 -0700 (PDT)
+        bh=mM6WMCb4U1Ua1nT40aZTmMzTGzg4MU648qxfTVm3JXk=;
+        b=sS7cUONYL/b+1FwfftXNSeZbSiY/zqeHCeQdM9kFlh6bra855clvz7rjz9ieSllhnR
+         tlo9p5+jLGs59jGBvQUpSiuIf3m/JtrLNrbeNc7yybtZD82VP50RY3jhj9lw+UJMUt6O
+         LTFScSxLN+k+Th73jYByucJB01yOBGDgmvxU+2MU4p94M6XQvO3WOdPXIh67sfEsVqKM
+         qxOKhApWwNfrzwkKuxbtBUmDM90T8I3X8zxYPqHPoYb2lQIZQv7pEvUbJQWppKGVGIhV
+         c9xg3LjHXFiIKfIFb5LjMpNFis20Pf1H8pImaZHEheUhtvWLPNZxX0GCZ7It3ogJn555
+         0JSw==
+X-Gm-Message-State: AOAM533ePq5W83SvkHbaKBBOtVALSq7II8OHZ8lwXmUtQAdvNKWx58hl
+        aKRDTB1wOVGRp2cAjXP5QHXavO1VJqSBuxrN
+X-Google-Smtp-Source: ABdhPJyhW9og0a9QQ45Yc1VLDRlN4tfbrY+/J1QJgieiCuV0Ozs3V0oixSAiOANaKTXC8gCQanYF5A==
+X-Received: by 2002:a17:907:c22:b0:711:dc95:3996 with SMTP id ga34-20020a1709070c2200b00711dc953996mr13452930ejc.62.1654766989019;
+        Thu, 09 Jun 2022 02:29:49 -0700 (PDT)
 Received: from prec5560.. ([176.74.57.19])
-        by smtp.gmail.com with ESMTPSA id l9-20020a50cbc9000000b0042ab87ea713sm8653417edi.22.2022.06.09.02.29.46
+        by smtp.gmail.com with ESMTPSA id l9-20020a50cbc9000000b0042ab87ea713sm8653417edi.22.2022.06.09.02.29.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 02:29:46 -0700 (PDT)
+        Thu, 09 Jun 2022 02:29:48 -0700 (PDT)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -56,10 +56,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Dmitry Baryshkov <dmityr.baryshkov@linaro.org>
-Subject: [PATCH v5 3/6] dt-bindings: clock: Add Qcom SM8350 GPUCC bindings
-Date:   Thu,  9 Jun 2022 11:29:37 +0200
-Message-Id: <20220609092940.304740-4-robert.foss@linaro.org>
+Subject: [PATCH v5 4/6] clk: qcom: add support for SM8350 DISPCC
+Date:   Thu,  9 Jun 2022 11:29:38 +0200
+Message-Id: <20220609092940.304740-5-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609092940.304740-1-robert.foss@linaro.org>
 References: <20220609092940.304740-1-robert.foss@linaro.org>
@@ -68,170 +67,1410 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for graphics clock controller for
-Qualcomm Technology Inc's SM8350 SoCs.
+Add support to the SM8350 display clock controller.
+
+While this controller is similar to the sm8250 controller, the differences
+are incompatible due to the .fw_name / .index change.
 
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmityr.baryshkov@linaro.org>
 ---
 
+
+Changes since v1
+ - Remove comment - Dmitry
+
+Changes since v2
+ - Add my SoB - Bjorn
+ - Remove CLK_ASSUME_ENABLED_WHEN_UNUSED flag
+
 Changes since v3
- - Separate from qcom,gpucc
- - Remove clock-names
- - Make example sm8350 based
- - Changed author to me due to size of changes
+ - Add kconfig dependency on SM_GCC_8350 - Konrad
+ - Change hex to lowercase - Konrad
+ - Split from dispcc-sm8250.c implementation
+ - Switch from .fw_name to .index
 
 
+ drivers/clk/qcom/Kconfig         |    9 +
+ drivers/clk/qcom/Makefile        |    1 +
+ drivers/clk/qcom/dispcc-sm8350.c | 1330 ++++++++++++++++++++++++++++++
+ 3 files changed, 1340 insertions(+)
+ create mode 100644 drivers/clk/qcom/dispcc-sm8350.c
 
- .../bindings/clock/qcom,gpucc-sm8350.yaml     | 72 +++++++++++++++++++
- include/dt-bindings/clock/qcom,gpucc-sm8350.h | 52 ++++++++++++++
- 2 files changed, 124 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
- create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8350.h
-
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index b11235c21952..319812a1d614 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -626,6 +626,15 @@ config SM_DISPCC_8250
+ 	  Say Y if you want to support display devices and functionality such as
+ 	  splash screen.
+ 
++config SM_DISPCC_8350
++	tristate "SM8350 Display Clock Controller"
++	depends on SM_GCC_8350
++	help
++	  Support for the display clock controller on Qualcomm Technologies, Inc
++	  SM8350 devices.
++	  Say Y if you want to support display devices and functionality such as
++	  splash screen.
++
+ config SM_DISPCC_6350
+ 	tristate "SM6350 Display Clock Controller"
+ 	depends on SM_GCC_6350
+diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+index ef9c64824424..70f98320eb1d 100644
+--- a/drivers/clk/qcom/Makefile
++++ b/drivers/clk/qcom/Makefile
+@@ -91,6 +91,7 @@ obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+ obj-$(CONFIG_SM_DISPCC_6125) += dispcc-sm6125.o
+ obj-$(CONFIG_SM_DISPCC_6350) += dispcc-sm6350.o
+ obj-$(CONFIG_SM_DISPCC_8250) += dispcc-sm8250.o
++obj-$(CONFIG_SM_DISPCC_8350) += dispcc-sm8350.o
+ obj-$(CONFIG_SM_GCC_6115) += gcc-sm6115.o
+ obj-$(CONFIG_SM_GCC_6125) += gcc-sm6125.o
+ obj-$(CONFIG_SM_GCC_6350) += gcc-sm6350.o
+diff --git a/drivers/clk/qcom/dispcc-sm8350.c b/drivers/clk/qcom/dispcc-sm8350.c
 new file mode 100644
-index 000000000000..0a0546c079a9
+index 000000000000..269a0512f207
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/qcom,gpucc-sm8350.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Graphics Clock & Reset Controller Binding
-+
-+maintainers:
-+  - Robert Foss <robert.foss@linaro.org>
-+
-+description: |
-+  Qualcomm graphics clock control module which supports the clocks, resets and
-+  power domains on Qualcomm SoCs.
-+
-+  See also:
-+    dt-bindings/clock/qcom,gpucc-sm8350.h
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,sm8350-gpucc
-+
-+  clocks:
-+    items:
-+      - description: Board XO source
-+      - description: GPLL0 main branch source
-+      - description: GPLL0 div branch source
-+
-+  '#clock-cells':
-+    const: 1
-+
-+  '#reset-cells':
-+    const: 1
-+
-+  '#power-domain-cells':
-+    const: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - '#clock-cells'
-+  - '#reset-cells'
-+  - '#power-domain-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-sm8350.h>
-+    #include <dt-bindings/clock/qcom,rpmh.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        clock-controller@3d90000 {
-+            compatible = "qcom,sm8350-gpucc";
-+            reg = <0 0x03d90000 0 0x9000>;
-+            clocks = <&rpmhcc RPMH_CXO_CLK>,
-+                     <&gcc GCC_GPU_GPLL0_CLK_SRC>,
-+                     <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
-+            #clock-cells = <1>;
-+            #reset-cells = <1>;
-+            #power-domain-cells = <1>;
-+        };
-+    };
-+...
-diff --git a/include/dt-bindings/clock/qcom,gpucc-sm8350.h b/include/dt-bindings/clock/qcom,gpucc-sm8350.h
-new file mode 100644
-index 000000000000..2ca857f5bfd2
---- /dev/null
-+++ b/include/dt-bindings/clock/qcom,gpucc-sm8350.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++++ b/drivers/clk/qcom/dispcc-sm8350.c
+@@ -0,0 +1,1330 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
 + */
 +
-+#ifndef _DT_BINDINGS_CLK_QCOM_GPU_CC_SM8350_H
-+#define _DT_BINDINGS_CLK_QCOM_GPU_CC_SM8350_H
++#include <linux/clk-provider.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
++#include <linux/reset-controller.h>
 +
-+/* GPU_CC clocks */
-+#define GPU_CC_AHB_CLK			0
-+#define GPU_CC_CB_CLK			1
-+#define GPU_CC_CRC_AHB_CLK		2
-+#define GPU_CC_CX_APB_CLK		3
-+#define GPU_CC_CX_GMU_CLK		4
-+#define GPU_CC_CX_QDSS_AT_CLK		5
-+#define GPU_CC_CX_QDSS_TRIG_CLK		6
-+#define GPU_CC_CX_QDSS_TSCTR_CLK	7
-+#define GPU_CC_CX_SNOC_DVM_CLK		8
-+#define GPU_CC_CXO_AON_CLK		9
-+#define GPU_CC_CXO_CLK			10
-+#define GPU_CC_FREQ_MEASURE_CLK		11
-+#define GPU_CC_GMU_CLK_SRC		12
-+#define GPU_CC_GX_GMU_CLK		13
-+#define GPU_CC_GX_QDSS_TSCTR_CLK	14
-+#define GPU_CC_GX_VSENSE_CLK		15
-+#define GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK	16
-+#define GPU_CC_HUB_AHB_DIV_CLK_SRC	17
-+#define GPU_CC_HUB_AON_CLK		18
-+#define GPU_CC_HUB_CLK_SRC		19
-+#define GPU_CC_HUB_CX_INT_CLK		20
-+#define GPU_CC_HUB_CX_INT_DIV_CLK_SRC	21
-+#define GPU_CC_MND1X_0_GFX3D_CLK	22
-+#define GPU_CC_MND1X_1_GFX3D_CLK	23
-+#define GPU_CC_PLL0			24
-+#define GPU_CC_PLL1			25
-+#define GPU_CC_SLEEP_CLK		26
++#include <dt-bindings/clock/qcom,dispcc-sm8350.h>
 +
-+/* GPU_CC resets */
-+#define GPUCC_GPU_CC_ACD_BCR		0
-+#define GPUCC_GPU_CC_CB_BCR		1
-+#define GPUCC_GPU_CC_CX_BCR		2
-+#define GPUCC_GPU_CC_FAST_HUB_BCR	3
-+#define GPUCC_GPU_CC_GFX3D_AON_BCR	4
-+#define GPUCC_GPU_CC_GMU_BCR		5
-+#define GPUCC_GPU_CC_GX_BCR		6
-+#define GPUCC_GPU_CC_XO_BCR		7
++#include "clk-alpha-pll.h"
++#include "clk-branch.h"
++#include "clk-rcg.h"
++#include "clk-regmap-divider.h"
++#include "common.h"
++#include "gdsc.h"
++#include "reset.h"
 +
-+/* GPU_CC GDSCRs */
-+#define GPU_CX_GDSC			0
-+#define GPU_GX_GDSC			1
++/* Need to match the order of clocks in DT binding */
++enum {
++	DT_BI_TCXO,
++	DT_DP_PHY_PLL_LINK_CLK,
++	DT_DP_PHY_PLL_VCO_DIV_CLK,
++	DT_DPTX1_PHY_PLL_LINK_CLK,
++	DT_DPTX1_PHY_PLL_VCO_DIV_CLK,
++	DT_DPTX2_PHY_PLL_LINK_CLK,
++	DT_DPTX2_PHY_PLL_VCO_DIV_CLK,
++	DT_DSI0_PHY_PLL_OUT_BYTECLK,
++	DT_DSI0_PHY_PLL_OUT_DSICLK,
++	DT_DSI1_PHY_PLL_OUT_BYTECLK,
++	DT_DSI1_PHY_PLL_OUT_DSICLK,
++	DT_EDP_PHY_PLL_LINK_CLK,
++	DT_EDP_PHY_PLL_VCO_DIV_CLK,
++};
 +
-+#endif
++enum {
++	P_BI_TCXO,
++	P_DISP_CC_PLL0_OUT_MAIN,
++	P_DISP_CC_PLL1_OUT_EVEN,
++	P_DISP_CC_PLL1_OUT_MAIN,
++	P_DP_PHY_PLL_LINK_CLK,
++	P_DP_PHY_PLL_VCO_DIV_CLK,
++	P_DPTX1_PHY_PLL_LINK_CLK,
++	P_DPTX1_PHY_PLL_VCO_DIV_CLK,
++	P_DPTX2_PHY_PLL_LINK_CLK,
++	P_DPTX2_PHY_PLL_VCO_DIV_CLK,
++	P_EDP_PHY_PLL_LINK_CLK,
++	P_EDP_PHY_PLL_VCO_DIV_CLK,
++	P_DSI0_PHY_PLL_OUT_BYTECLK,
++	P_DSI0_PHY_PLL_OUT_DSICLK,
++	P_DSI1_PHY_PLL_OUT_BYTECLK,
++	P_DSI1_PHY_PLL_OUT_DSICLK,
++};
++
++static struct pll_vco vco_table[] = {
++	{ 249600000, 2000000000, 0 },
++};
++
++static struct pll_vco lucid_5lpe_vco[] = {
++	{ 249600000, 1750000000, 0 },
++};
++
++static struct alpha_pll_config disp_cc_pll0_config = {
++	.l = 0x47,
++	.alpha = 0xE000,
++	.config_ctl_val = 0x20485699,
++	.config_ctl_hi_val = 0x00002261,
++	.config_ctl_hi1_val = 0x329A699C,
++	.user_ctl_val = 0x00000000,
++	.user_ctl_hi_val = 0x00000805,
++	.user_ctl_hi1_val = 0x00000000,
++};
++
++static struct clk_init_data disp_cc_pll0_init = {
++	.name = "disp_cc_pll0",
++	.parent_data = &(const struct clk_parent_data){
++		.index = DT_BI_TCXO,
++	},
++	.num_parents = 1,
++	.ops = &clk_alpha_pll_lucid_ops,
++};
++
++static struct clk_alpha_pll disp_cc_pll0 = {
++	.offset = 0x0,
++	.vco_table = vco_table,
++	.num_vco = ARRAY_SIZE(vco_table),
++	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
++	.clkr.hw.init = &disp_cc_pll0_init
++};
++
++static struct alpha_pll_config disp_cc_pll1_config = {
++	.l = 0x1F,
++	.alpha = 0x4000,
++	.config_ctl_val = 0x20485699,
++	.config_ctl_hi_val = 0x00002261,
++	.config_ctl_hi1_val = 0x329A699C,
++	.user_ctl_val = 0x00000000,
++	.user_ctl_hi_val = 0x00000805,
++	.user_ctl_hi1_val = 0x00000000,
++};
++
++static struct clk_init_data disp_cc_pll1_init = {
++	.name = "disp_cc_pll1",
++	.parent_data = &(const struct clk_parent_data){
++		.index = DT_BI_TCXO,
++	},
++	.num_parents = 1,
++	.ops = &clk_alpha_pll_lucid_ops,
++};
++
++static struct clk_alpha_pll disp_cc_pll1 = {
++	.offset = 0x1000,
++	.vco_table = vco_table,
++	.num_vco = ARRAY_SIZE(vco_table),
++	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
++	.clkr.hw.init = &disp_cc_pll1_init
++};
++
++static const struct parent_map disp_cc_parent_map_0[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DP_PHY_PLL_LINK_CLK, 1 },
++	{ P_DP_PHY_PLL_VCO_DIV_CLK, 2 },
++	{ P_DPTX1_PHY_PLL_LINK_CLK, 3 },
++	{ P_DPTX1_PHY_PLL_VCO_DIV_CLK, 4 },
++	{ P_DPTX2_PHY_PLL_LINK_CLK, 5 },
++	{ P_DPTX2_PHY_PLL_VCO_DIV_CLK, 6 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_0[] = {
++	{ .index = DT_BI_TCXO },
++	{ .index = DT_DP_PHY_PLL_LINK_CLK },
++	{ .index = DT_DP_PHY_PLL_VCO_DIV_CLK },
++	{ .index = DT_DPTX1_PHY_PLL_LINK_CLK },
++	{ .index = DT_DPTX1_PHY_PLL_VCO_DIV_CLK },
++	{ .index = DT_DPTX2_PHY_PLL_LINK_CLK },
++	{ .index = DT_DPTX2_PHY_PLL_VCO_DIV_CLK },
++};
++
++static const struct parent_map disp_cc_parent_map_1[] = {
++	{ P_BI_TCXO, 0 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_1[] = {
++	{ .index = DT_BI_TCXO },
++};
++
++static const struct parent_map disp_cc_parent_map_2[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DSI0_PHY_PLL_OUT_BYTECLK, 1 },
++	{ P_DSI1_PHY_PLL_OUT_BYTECLK, 2 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_2[] = {
++	{ .index = DT_BI_TCXO },
++	{ .index = DT_DSI0_PHY_PLL_OUT_BYTECLK },
++	{ .index = DT_DSI1_PHY_PLL_OUT_BYTECLK },
++};
++
++static const struct parent_map disp_cc_parent_map_3[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DISP_CC_PLL1_OUT_MAIN, 4 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_3[] = {
++	{ .index = DT_BI_TCXO },
++	{ .hw = &disp_cc_pll1.clkr.hw },
++};
++
++static const struct parent_map disp_cc_parent_map_4[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_EDP_PHY_PLL_LINK_CLK, 1 },
++	{ P_EDP_PHY_PLL_VCO_DIV_CLK, 2},
++};
++
++static const struct clk_parent_data disp_cc_parent_data_4[] = {
++	{ .index = DT_BI_TCXO },
++	{ .index = DT_EDP_PHY_PLL_LINK_CLK},
++	{ .index = DT_EDP_PHY_PLL_VCO_DIV_CLK},
++};
++
++static const struct parent_map disp_cc_parent_map_5[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DISP_CC_PLL0_OUT_MAIN, 1 },
++	{ P_DISP_CC_PLL1_OUT_MAIN, 4 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_5[] = {
++	{ .index = DT_BI_TCXO },
++	{ .hw = &disp_cc_pll0.clkr.hw },
++	{ .hw = &disp_cc_pll1.clkr.hw },
++};
++
++static const struct parent_map disp_cc_parent_map_6[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DSI0_PHY_PLL_OUT_DSICLK, 1 },
++	{ P_DSI1_PHY_PLL_OUT_DSICLK, 2 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_6[] = {
++	{ .index = DT_BI_TCXO },
++	{ .index = DT_DSI0_PHY_PLL_OUT_DSICLK },
++	{ .index = DT_DSI1_PHY_PLL_OUT_DSICLK },
++};
++
++static const struct parent_map disp_cc_parent_map_7[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DISP_CC_PLL1_OUT_MAIN, 4 },
++	/* { P_DISP_CC_PLL1_OUT_EVEN, 5 }, */
++};
++
++static const struct clk_parent_data disp_cc_parent_data_7[] = {
++	{ .index = DT_BI_TCXO },
++	{ .hw = &disp_cc_pll1.clkr.hw },
++	/* { .hw = &disp_cc_pll1_out_even.clkr.hw }, */
++};
++
++static const struct freq_tbl ftbl_disp_cc_mdss_ahb_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	F(37500000, P_DISP_CC_PLL1_OUT_MAIN, 16, 0, 0),
++	F(75000000, P_DISP_CC_PLL1_OUT_MAIN, 8, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_mdss_ahb_clk_src = {
++	.cmd_rcgr = 0x22bc,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_3,
++	.freq_tbl = ftbl_disp_cc_mdss_ahb_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_ahb_clk_src",
++		.parent_data = disp_cc_parent_data_3,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_shared_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_disp_cc_mdss_byte0_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_mdss_byte0_clk_src = {
++	.cmd_rcgr = 0x210c,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_2,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_byte0_clk_src",
++		.parent_data = disp_cc_parent_data_2,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_byte2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_byte1_clk_src = {
++	.cmd_rcgr = 0x2128,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_2,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_byte1_clk_src",
++		.parent_data = disp_cc_parent_data_2,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_byte2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_dp_aux1_clk_src = {
++	.cmd_rcgr = 0x223c,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_1,
++	.freq_tbl = ftbl_disp_cc_mdss_byte0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_dp_aux1_clk_src",
++		.parent_data = disp_cc_parent_data_1,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_dp_aux_clk_src = {
++	.cmd_rcgr = 0x21d8,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_1,
++	.freq_tbl = ftbl_disp_cc_mdss_byte0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_dp_aux_clk_src",
++		.parent_data = disp_cc_parent_data_1,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_dp_link1_clk_src = {
++	.cmd_rcgr = 0x2208,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_0,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_dp_link1_clk_src",
++		.parent_data = disp_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
++		.ops = &clk_byte2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_dp_link_clk_src = {
++	.cmd_rcgr = 0x2174,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_0,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_dp_link_clk_src",
++		.parent_data = disp_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
++		.ops = &clk_byte2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_dp_pixel1_clk_src = {
++	.cmd_rcgr = 0x21c0,
++	.mnd_width = 16,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_0,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_dp_pixel1_clk_src",
++		.parent_data = disp_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
++		.ops = &clk_dp_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_dp_pixel2_clk_src = {
++	.cmd_rcgr = 0x21f0,
++	.mnd_width = 16,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_0,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_dp_pixel2_clk_src",
++		.parent_data = disp_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
++		.ops = &clk_dp_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_dp_pixel_clk_src = {
++	.cmd_rcgr = 0x21a8,
++	.mnd_width = 16,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_0,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_dp_pixel_clk_src",
++		.parent_data = disp_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
++		.ops = &clk_dp_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_edp_aux_clk_src = {
++	.cmd_rcgr = 0x228c,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_1,
++	.freq_tbl = ftbl_disp_cc_mdss_byte0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_edp_aux_clk_src",
++		.parent_data = disp_cc_parent_data_1,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_edp_gtc_clk_src = {
++	.cmd_rcgr = 0x22a4,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_7,
++	.freq_tbl = ftbl_disp_cc_mdss_byte0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_edp_gtc_clk_src",
++		.parent_data = disp_cc_parent_data_7,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_7),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_edp_link_clk_src = {
++	.cmd_rcgr = 0x2270,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_4,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_edp_link_clk_src",
++		.parent_data = disp_cc_parent_data_4,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_4),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_byte2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_edp_pixel_clk_src = {
++	.cmd_rcgr = 0x2258,
++	.mnd_width = 16,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_4,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_edp_pixel_clk_src",
++		.parent_data = disp_cc_parent_data_4,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_4),
++		.ops = &clk_dp_ops,
++	},
++};
++
++static struct clk_branch disp_cc_mdss_edp_aux_clk = {
++	.halt_reg = 0x2078,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2078,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_edp_aux_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_edp_aux_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_edp_gtc_clk = {
++	.halt_reg = 0x207c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x207c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_edp_gtc_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_edp_gtc_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_edp_link_clk = {
++	.halt_reg = 0x2070,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2070,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_edp_link_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_edp_link_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_edp_link_intf_clk = {
++	.halt_reg = 0x2074,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2074,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_edp_link_intf_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_edp_link_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_GET_RATE_NOCACHE,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_edp_pixel_clk = {
++	.halt_reg = 0x206c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x206c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_edp_pixel_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_edp_pixel_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_esc0_clk_src = {
++	.cmd_rcgr = 0x2144,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_2,
++	.freq_tbl = ftbl_disp_cc_mdss_byte0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_esc0_clk_src",
++		.parent_data = disp_cc_parent_data_2,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_esc1_clk_src = {
++	.cmd_rcgr = 0x2160,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_2,
++	.freq_tbl = ftbl_disp_cc_mdss_byte0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_esc1_clk_src",
++		.parent_data = disp_cc_parent_data_2,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_disp_cc_mdss_mdp_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	F(85714286, P_DISP_CC_PLL1_OUT_MAIN, 7, 0, 0),
++	F(100000000, P_DISP_CC_PLL1_OUT_MAIN, 6, 0, 0),
++	F(150000000, P_DISP_CC_PLL1_OUT_MAIN, 4, 0, 0),
++	F(200000000, P_DISP_CC_PLL1_OUT_MAIN, 3, 0, 0),
++	F(300000000, P_DISP_CC_PLL1_OUT_MAIN, 2, 0, 0),
++	F(345000000, P_DISP_CC_PLL0_OUT_MAIN, 4, 0, 0),
++	F(460000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_mdss_mdp_clk_src = {
++	.cmd_rcgr = 0x20c4,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_5,
++	.freq_tbl = ftbl_disp_cc_mdss_mdp_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_mdp_clk_src",
++		.parent_data = disp_cc_parent_data_5,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_5),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_shared_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_pclk0_clk_src = {
++	.cmd_rcgr = 0x2094,
++	.mnd_width = 8,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_6,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_pclk0_clk_src",
++		.parent_data = disp_cc_parent_data_6,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_6),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_pixel_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_pclk1_clk_src = {
++	.cmd_rcgr = 0x20ac,
++	.mnd_width = 8,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_6,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_pclk1_clk_src",
++		.parent_data = disp_cc_parent_data_6,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_6),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_pixel_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_disp_cc_mdss_rot_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	F(200000000, P_DISP_CC_PLL1_OUT_MAIN, 3, 0, 0),
++	F(300000000, P_DISP_CC_PLL1_OUT_MAIN, 2, 0, 0),
++	F(345000000, P_DISP_CC_PLL0_OUT_MAIN, 4, 0, 0),
++	F(460000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_mdss_rot_clk_src = {
++	.cmd_rcgr = 0x20dc,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_5,
++	.freq_tbl = ftbl_disp_cc_mdss_rot_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_rot_clk_src",
++		.parent_data = disp_cc_parent_data_5,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_5),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_shared_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_vsync_clk_src = {
++	.cmd_rcgr = 0x20f4,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_1,
++	.freq_tbl = ftbl_disp_cc_mdss_byte0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_vsync_clk_src",
++		.parent_data = disp_cc_parent_data_1,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_regmap_div disp_cc_mdss_byte0_div_clk_src = {
++	.reg = 0x2124,
++	.shift = 0,
++	.width = 4,
++	.clkr.hw.init = &(struct clk_init_data) {
++		.name = "disp_cc_mdss_byte0_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&disp_cc_mdss_byte0_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div disp_cc_mdss_byte1_div_clk_src = {
++	.reg = 0x2140,
++	.shift = 0,
++	.width = 4,
++	.clkr.hw.init = &(struct clk_init_data) {
++		.name = "disp_cc_mdss_byte1_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&disp_cc_mdss_byte1_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div disp_cc_mdss_dp_link1_div_clk_src = {
++	.reg = 0x2220,
++	.shift = 0,
++	.width = 4,
++	.clkr.hw.init = &(struct clk_init_data) {
++		.name = "disp_cc_mdss_dp_link1_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&disp_cc_mdss_dp_link1_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.ops = &clk_regmap_div_ro_ops,
++	},
++};
++
++static struct clk_regmap_div disp_cc_mdss_dp_link_div_clk_src = {
++	.reg = 0x218c,
++	.shift = 0,
++	.width = 4,
++	.clkr.hw.init = &(struct clk_init_data) {
++		.name = "disp_cc_mdss_dp_link_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&disp_cc_mdss_dp_link_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.ops = &clk_regmap_div_ro_ops,
++	},
++};
++
++static struct clk_branch disp_cc_mdss_ahb_clk = {
++	.halt_reg = 0x207c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x207c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_ahb_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_ahb_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_byte0_clk = {
++	.halt_reg = 0x2028,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2028,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_byte0_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_byte0_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_byte0_intf_clk = {
++	.halt_reg = 0x202c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x202c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_byte0_intf_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_byte0_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_byte1_clk = {
++	.halt_reg = 0x2030,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2030,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_byte1_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_byte1_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_byte1_intf_clk = {
++	.halt_reg = 0x2034,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2034,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_byte1_intf_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_byte1_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_aux1_clk = {
++	.halt_reg = 0x2068,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2068,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_aux1_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_aux1_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_aux_clk = {
++	.halt_reg = 0x2054,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2054,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_aux_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_aux_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_link1_clk = {
++	.halt_reg = 0x205c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x205c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_link1_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_link1_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_link1_intf_clk = {
++	.halt_reg = 0x2060,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2060,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_link1_intf_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_link1_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_link_clk = {
++	.halt_reg = 0x2040,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2040,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_link_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_link_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_link_intf_clk = {
++	.halt_reg = 0x2044,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2044,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_link_intf_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_link_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_pixel1_clk = {
++	.halt_reg = 0x2050,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2050,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_pixel1_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_pixel1_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_pixel2_clk = {
++	.halt_reg = 0x2058,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2058,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_pixel2_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_pixel2_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_dp_pixel_clk = {
++	.halt_reg = 0x204c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x204c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_dp_pixel_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_dp_pixel_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_esc0_clk = {
++	.halt_reg = 0x2038,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2038,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_esc0_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_esc0_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_esc1_clk = {
++	.halt_reg = 0x203c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x203c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_esc1_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_esc1_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_mdp_clk = {
++	.halt_reg = 0x200c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x200c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_mdp_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_mdp_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_mdp_lut_clk = {
++	.halt_reg = 0x201c,
++	.halt_check = BRANCH_VOTED,
++	.clkr = {
++		.enable_reg = 0x201c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_mdp_lut_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_mdp_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_non_gdsc_ahb_clk = {
++	.halt_reg = 0x4004,
++	.halt_check = BRANCH_VOTED,
++	.clkr = {
++		.enable_reg = 0x4004,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_non_gdsc_ahb_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_ahb_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_pclk0_clk = {
++	.halt_reg = 0x2004,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2004,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_pclk0_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_pclk0_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_pclk1_clk = {
++	.halt_reg = 0x2008,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2008,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_pclk1_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_pclk1_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_rot_clk = {
++	.halt_reg = 0x2014,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2014,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_rot_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_rot_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_rscc_ahb_clk = {
++	.halt_reg = 0x400c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x400c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_rscc_ahb_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_ahb_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_rscc_vsync_clk = {
++	.halt_reg = 0x4008,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x4008,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_rscc_vsync_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_vsync_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_vsync_clk = {
++	.halt_reg = 0x2024,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2024,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_vsync_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_vsync_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct gdsc mdss_gdsc = {
++	.gdscr = 0x3000,
++	.en_rest_wait_val = 0x2,
++	.en_few_wait_val = 0x2,
++	.clk_dis_wait_val = 0xf,
++	.pd = {
++		.name = "mdss_gdsc",
++	},
++	.pwrsts = PWRSTS_OFF_ON,
++	.flags = HW_CTRL,
++	.supply = "mmcx",
++};
++
++static struct clk_regmap *disp_cc_sm8350_clocks[] = {
++	[DISP_CC_MDSS_AHB_CLK] = &disp_cc_mdss_ahb_clk.clkr,
++	[DISP_CC_MDSS_AHB_CLK_SRC] = &disp_cc_mdss_ahb_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE0_CLK] = &disp_cc_mdss_byte0_clk.clkr,
++	[DISP_CC_MDSS_BYTE0_CLK_SRC] = &disp_cc_mdss_byte0_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE0_DIV_CLK_SRC] = &disp_cc_mdss_byte0_div_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE0_INTF_CLK] = &disp_cc_mdss_byte0_intf_clk.clkr,
++	[DISP_CC_MDSS_BYTE1_CLK] = &disp_cc_mdss_byte1_clk.clkr,
++	[DISP_CC_MDSS_BYTE1_CLK_SRC] = &disp_cc_mdss_byte1_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE1_DIV_CLK_SRC] = &disp_cc_mdss_byte1_div_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE1_INTF_CLK] = &disp_cc_mdss_byte1_intf_clk.clkr,
++	[DISP_CC_MDSS_DP_AUX1_CLK] = &disp_cc_mdss_dp_aux1_clk.clkr,
++	[DISP_CC_MDSS_DP_AUX1_CLK_SRC] = &disp_cc_mdss_dp_aux1_clk_src.clkr,
++	[DISP_CC_MDSS_DP_AUX_CLK] = &disp_cc_mdss_dp_aux_clk.clkr,
++	[DISP_CC_MDSS_DP_AUX_CLK_SRC] = &disp_cc_mdss_dp_aux_clk_src.clkr,
++	[DISP_CC_MDSS_DP_LINK1_CLK] = &disp_cc_mdss_dp_link1_clk.clkr,
++	[DISP_CC_MDSS_DP_LINK1_CLK_SRC] = &disp_cc_mdss_dp_link1_clk_src.clkr,
++	[DISP_CC_MDSS_DP_LINK1_DIV_CLK_SRC] = &disp_cc_mdss_dp_link1_div_clk_src.clkr,
++	[DISP_CC_MDSS_DP_LINK1_INTF_CLK] = &disp_cc_mdss_dp_link1_intf_clk.clkr,
++	[DISP_CC_MDSS_DP_LINK_CLK] = &disp_cc_mdss_dp_link_clk.clkr,
++	[DISP_CC_MDSS_DP_LINK_CLK_SRC] = &disp_cc_mdss_dp_link_clk_src.clkr,
++	[DISP_CC_MDSS_DP_LINK_DIV_CLK_SRC] = &disp_cc_mdss_dp_link_div_clk_src.clkr,
++	[DISP_CC_MDSS_DP_LINK_INTF_CLK] = &disp_cc_mdss_dp_link_intf_clk.clkr,
++	[DISP_CC_MDSS_DP_PIXEL1_CLK] = &disp_cc_mdss_dp_pixel1_clk.clkr,
++	[DISP_CC_MDSS_DP_PIXEL1_CLK_SRC] = &disp_cc_mdss_dp_pixel1_clk_src.clkr,
++	[DISP_CC_MDSS_DP_PIXEL2_CLK] = &disp_cc_mdss_dp_pixel2_clk.clkr,
++	[DISP_CC_MDSS_DP_PIXEL2_CLK_SRC] = &disp_cc_mdss_dp_pixel2_clk_src.clkr,
++	[DISP_CC_MDSS_DP_PIXEL_CLK] = &disp_cc_mdss_dp_pixel_clk.clkr,
++	[DISP_CC_MDSS_DP_PIXEL_CLK_SRC] = &disp_cc_mdss_dp_pixel_clk_src.clkr,
++	[DISP_CC_MDSS_EDP_AUX_CLK] = &disp_cc_mdss_edp_aux_clk.clkr,
++	[DISP_CC_MDSS_EDP_AUX_CLK_SRC] = &disp_cc_mdss_edp_aux_clk_src.clkr,
++	[DISP_CC_MDSS_EDP_GTC_CLK] = &disp_cc_mdss_edp_gtc_clk.clkr,
++	[DISP_CC_MDSS_EDP_GTC_CLK_SRC] = &disp_cc_mdss_edp_gtc_clk_src.clkr,
++	[DISP_CC_MDSS_EDP_LINK_CLK] = &disp_cc_mdss_edp_link_clk.clkr,
++	[DISP_CC_MDSS_EDP_LINK_CLK_SRC] = &disp_cc_mdss_edp_link_clk_src.clkr,
++	[DISP_CC_MDSS_EDP_LINK_INTF_CLK] = &disp_cc_mdss_edp_link_intf_clk.clkr,
++	[DISP_CC_MDSS_EDP_PIXEL_CLK] = &disp_cc_mdss_edp_pixel_clk.clkr,
++	[DISP_CC_MDSS_EDP_PIXEL_CLK_SRC] = &disp_cc_mdss_edp_pixel_clk_src.clkr,
++	[DISP_CC_MDSS_ESC0_CLK] = &disp_cc_mdss_esc0_clk.clkr,
++	[DISP_CC_MDSS_ESC0_CLK_SRC] = &disp_cc_mdss_esc0_clk_src.clkr,
++	[DISP_CC_MDSS_ESC1_CLK] = &disp_cc_mdss_esc1_clk.clkr,
++	[DISP_CC_MDSS_ESC1_CLK_SRC] = &disp_cc_mdss_esc1_clk_src.clkr,
++	[DISP_CC_MDSS_MDP_CLK] = &disp_cc_mdss_mdp_clk.clkr,
++	[DISP_CC_MDSS_MDP_CLK_SRC] = &disp_cc_mdss_mdp_clk_src.clkr,
++	[DISP_CC_MDSS_MDP_LUT_CLK] = &disp_cc_mdss_mdp_lut_clk.clkr,
++	[DISP_CC_MDSS_NON_GDSC_AHB_CLK] = &disp_cc_mdss_non_gdsc_ahb_clk.clkr,
++	[DISP_CC_MDSS_PCLK0_CLK] = &disp_cc_mdss_pclk0_clk.clkr,
++	[DISP_CC_MDSS_PCLK0_CLK_SRC] = &disp_cc_mdss_pclk0_clk_src.clkr,
++	[DISP_CC_MDSS_PCLK1_CLK] = &disp_cc_mdss_pclk1_clk.clkr,
++	[DISP_CC_MDSS_PCLK1_CLK_SRC] = &disp_cc_mdss_pclk1_clk_src.clkr,
++	[DISP_CC_MDSS_ROT_CLK] = &disp_cc_mdss_rot_clk.clkr,
++	[DISP_CC_MDSS_ROT_CLK_SRC] = &disp_cc_mdss_rot_clk_src.clkr,
++	[DISP_CC_MDSS_RSCC_AHB_CLK] = &disp_cc_mdss_rscc_ahb_clk.clkr,
++	[DISP_CC_MDSS_RSCC_VSYNC_CLK] = &disp_cc_mdss_rscc_vsync_clk.clkr,
++	[DISP_CC_MDSS_VSYNC_CLK] = &disp_cc_mdss_vsync_clk.clkr,
++	[DISP_CC_MDSS_VSYNC_CLK_SRC] = &disp_cc_mdss_vsync_clk_src.clkr,
++	[DISP_CC_PLL0] = &disp_cc_pll0.clkr,
++	[DISP_CC_PLL1] = &disp_cc_pll1.clkr,
++};
++
++static const struct qcom_reset_map disp_cc_sm8350_resets[] = {
++	[DISP_CC_MDSS_CORE_BCR] = { 0x2000 },
++	[DISP_CC_MDSS_RSCC_BCR] = { 0x4000 },
++};
++
++static struct gdsc *disp_cc_sm8350_gdscs[] = {
++	[MDSS_GDSC] = &mdss_gdsc,
++};
++
++static const struct regmap_config disp_cc_sm8350_regmap_config = {
++	.reg_bits	= 32,
++	.reg_stride	= 4,
++	.val_bits	= 32,
++	.max_register	= 0x10000,
++	.fast_io	= true,
++};
++
++static const struct qcom_cc_desc disp_cc_sm8350_desc = {
++	.config = &disp_cc_sm8350_regmap_config,
++	.clks = disp_cc_sm8350_clocks,
++	.num_clks = ARRAY_SIZE(disp_cc_sm8350_clocks),
++	.resets = disp_cc_sm8350_resets,
++	.num_resets = ARRAY_SIZE(disp_cc_sm8350_resets),
++	.gdscs = disp_cc_sm8350_gdscs,
++	.num_gdscs = ARRAY_SIZE(disp_cc_sm8350_gdscs),
++};
++
++static const struct of_device_id disp_cc_sm8350_match_table[] = {
++	{ .compatible = "qcom,sc8180x-dispcc" },
++	{ .compatible = "qcom,sm8150-dispcc" },
++	{ .compatible = "qcom,sm8350-dispcc" },
++	{ .compatible = "qcom,sm8350-dispcc" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, disp_cc_sm8350_match_table);
++
++static void disp_cc_sm8350_pm_runtime_disable(void *data)
++{
++	pm_runtime_disable(data);
++}
++
++static int disp_cc_sm8350_probe(struct platform_device *pdev)
++{
++	struct regmap *regmap;
++	int ret;
++
++	pm_runtime_enable(&pdev->dev);
++
++	ret = devm_add_action_or_reset(&pdev->dev, disp_cc_sm8350_pm_runtime_disable, &pdev->dev);
++	if (ret)
++		return ret;
++
++	ret = pm_runtime_resume_and_get(&pdev->dev);
++	if (ret)
++		return ret;
++
++	regmap = qcom_cc_map(pdev, &disp_cc_sm8350_desc);
++	if (IS_ERR(regmap)) {
++		pm_runtime_put(&pdev->dev);
++		return PTR_ERR(regmap);
++	}
++
++	BUILD_BUG_ON(CLK_ALPHA_PLL_TYPE_TRION != CLK_ALPHA_PLL_TYPE_LUCID);
++
++	disp_cc_mdss_ahb_clk_src.cmd_rcgr = 0x22a0;
++
++	disp_cc_pll0_config.config_ctl_hi1_val = 0x2a9a699c;
++	disp_cc_pll0_config.test_ctl_hi1_val = 0x01800000;
++	disp_cc_pll0_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
++	disp_cc_pll0.vco_table = lucid_5lpe_vco;
++	disp_cc_pll1_config.config_ctl_hi1_val = 0x2a9a699c;
++	disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
++	disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
++	disp_cc_pll1.vco_table = lucid_5lpe_vco;
++
++	clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
++	clk_lucid_pll_configure(&disp_cc_pll1, regmap, &disp_cc_pll1_config);
++
++	/* Enable clock gating for MDP clocks */
++	regmap_update_bits(regmap, 0x8000, 0x10, 0x10);
++
++	/* DISP_CC_XO_CLK always-on */
++	regmap_update_bits(regmap, 0x605c, BIT(0), BIT(0));
++
++	ret = qcom_cc_really_probe(pdev, &disp_cc_sm8350_desc, regmap);
++
++	pm_runtime_put(&pdev->dev);
++
++	return ret;
++}
++
++static struct platform_driver disp_cc_sm8350_driver = {
++	.probe = disp_cc_sm8350_probe,
++	.driver = {
++		.name = "disp_cc-sm8350",
++		.of_match_table = disp_cc_sm8350_match_table,
++	},
++};
++
++static int __init disp_cc_sm8350_init(void)
++{
++	return platform_driver_register(&disp_cc_sm8350_driver);
++}
++subsys_initcall(disp_cc_sm8350_init);
++
++static void __exit disp_cc_sm8350_exit(void)
++{
++	platform_driver_unregister(&disp_cc_sm8350_driver);
++}
++module_exit(disp_cc_sm8350_exit);
++
++MODULE_DESCRIPTION("QTI DISPCC SM8250 Driver");
++MODULE_LICENSE("GPL v2");
 -- 
 2.34.1
 

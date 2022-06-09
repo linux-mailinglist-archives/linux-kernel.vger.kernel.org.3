@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06554545711
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BD3545714
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345554AbiFIWRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S1345588AbiFIWSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbiFIWRl (ORCPT
+        with ESMTP id S1345572AbiFIWSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:17:41 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8EBCA3F7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:17:40 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id p78-20020a254251000000b006607e0a2965so16382166yba.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:17:40 -0700 (PDT)
+        Thu, 9 Jun 2022 18:18:04 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44AA3D1C3
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:18:02 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id z5-20020aa79f85000000b0051baa4e9fb8so12996185pfr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=3yOhmb5LLQ31qT6YeyEoaX0jjcoMdHElvVNlhTaaJU0=;
-        b=RBpkYSjEyD64s1FKNQbtXE7AfdgJKfYmd5PMKe66FHnMYYo7vB0Ncyw1KRR50CoJoo
-         aoycDWjxbUREKPl/jCi5J+ZmN745Yr3i1ib/+VcJJf8M0JMLiwl79xnz8rJSR7GD/eD1
-         lW/QxkZdjk6n9mbnb49kc1QuGbm9WiR5bRhdOxYxvavs/N1vvPSKHy30utzBB/gyWoTU
-         CgiL6ug+u8f1QpKo/0EMJTNBBIk/eilNKeOEcwDZBOTEwWg6fyCqMv4cdogePUE+xetI
-         whOzeQ9ub81nWd36wnDnSka41WjIxLP4QO+2B8XH0LL13vJc0ad+W0zJV+BD/RIy1FOR
-         5kSw==
+        bh=SFFjvyZvefpU9NrWWzQ0TAmvQ8SzfCLTau1AjR7El54=;
+        b=Kr2RYZFWYOeNjzG0DXVZ1PIX9XZMzBF03Z569egSujYX+SETM8BM22isVSs7ZYg0je
+         vtmIi51QjRTMj1fwLrkgjqNVlwKBP1pP5HLG5JFnMd4QeQYx2K01nU1Ejrc/H0elX0dB
+         xVMAEAznym96CzfG/aOkwGNw3H9g+blFPI7HqqKYy6VdsppoXnWpV0WmljI7FHufbK83
+         ON+xFi3394AkXlTQEdIEaihpVBJQ8PGsd812EFScZ5x0FGwt1QmokUw/eccZEX97Itvg
+         V6YGaLMc68zBNDG7tvYESM8uNaTijhm4Fewwwm5H2YtyjsN07CoVm9f4qHoqAerZAXZJ
+         XTVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=3yOhmb5LLQ31qT6YeyEoaX0jjcoMdHElvVNlhTaaJU0=;
-        b=aMUpqg9itjwtX2kpY/LjhUkBHEO/wEgiLFPTL1camzrwfE9l4VbQqqfGAWG+65YcAH
-         3aWCY3eXnFxOCcSZ98ZSNTgDwj4q4kBMhWovv2zJ21kli0eYZkl/PvpWw1tkqz7bqQsn
-         /Mv1KZMKlO03Eq542oebLkC6tkfVGaZtJfhAqjB+ih/ae1iwABYcZaNdBU5qhl6undHk
-         r8cXxscEZ1DVbJWb8ualsiDzzIEWDg+GZZ3wdGbX6QQG69Ik+HyCBCcWH5ZeAufY11Xs
-         jMRFVnxEcR2qG4vdnLz38AXoGYRLqFbVuGZ/ZIaoDZAqZsGSWkd+xQDfrSVgNmUzZS1z
-         uZog==
-X-Gm-Message-State: AOAM530D/Gddk5IJirRvafNtpnfRybdrgT1Q5aUlXdnUuRGi8K34hLMF
-        QnR5CYUh5E++XT92dtgghKE0sFD9
-X-Google-Smtp-Source: ABdhPJzTMnxRPuV6ZGJzvW5l0mMjxHOaj61kW/6XxvKjUl64lqYEHjJSEX/Dfo2Nrwl6bkVAjyNEv78Ldw==
+        bh=SFFjvyZvefpU9NrWWzQ0TAmvQ8SzfCLTau1AjR7El54=;
+        b=NX3Fab4PAToI15oJlh7stMNXK7Jsj9rL5hFOJpuiCBrGip/2fsOJnAGyp1peRLr9jb
+         Cp3JUca84XcHDdY4pKUyKdFxvJOtuR3m5fpuNRGdFjSu4loHFOaI0b6xo4wjJiDabA0n
+         4Herw3lxjAb/OAoI/6JiOA24kmz6dez2u4ptjKFmWGyYH4nmGWEzur7xuYwdMfdf25HJ
+         z0u1jOC8bqhldAid/v8cK2MbNBj2F9ZT3HT08jPs+9u81IbZpLfd+VjUu7BwkraJzOO8
+         Q18o36V2wPWGJe9LLfDgDJQFeOn9bGGPhWnbvXdRaeHUFW/FY3F8c1xBBrkRMJ6sTFxT
+         xfnA==
+X-Gm-Message-State: AOAM533SOpi/v2kWaFZBlUWKzEVcMAScuENkYQ4Y8quWql+8T49xp3Xq
+        XslF3XP/i756wprvZn8SuLxSsdWr
+X-Google-Smtp-Source: ABdhPJweUcyR1bJf/XiwDrAaJ+hZ/VGm1qzwS+oRhWzjXi1BAcLnFDZIdAsYxk3A8uUCFP+evw6wWgyl2Q==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a25:fe0d:0:b0:64d:915f:e73e with SMTP id
- k13-20020a25fe0d000000b0064d915fe73emr42473933ybe.447.1654813059372; Thu, 09
- Jun 2022 15:17:39 -0700 (PDT)
-Date:   Thu,  9 Jun 2022 22:16:20 +0000
+ (user=morbo job=sendgmr) by 2002:a63:35ce:0:b0:3fd:fb5a:a1c3 with SMTP id
+ c197-20020a6335ce000000b003fdfb5aa1c3mr15000208pga.85.1654813082090; Thu, 09
+ Jun 2022 15:18:02 -0700 (PDT)
+Date:   Thu,  9 Jun 2022 22:16:21 +0000
 In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-Message-Id: <20220609221702.347522-2-morbo@google.com>
+Message-Id: <20220609221702.347522-3-morbo@google.com>
 Mime-Version: 1.0
 References: <20220609221702.347522-1-morbo@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 01/12] x86/mce: use correct format characters
+Subject: [PATCH 02/12] x86/CPU/AMD: use correct format characters
 From:   Bill Wendling <morbo@google.com>
 To:     isanbard@gmail.com
 Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
@@ -100,31 +100,66 @@ From: Bill Wendling <isanbard@gmail.com>
 
 When compiling with -Wformat, clang emits the following warnings:
 
-arch/x86/kernel/cpu/mce/core.c:295:9: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-                panic(msg);
-                      ^~~
+arch/x86/kernel/cpu/mce/amd.c:1119:67: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+        err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
+                                                                         ^~~~~~~~~~~~~~~~~~~~~~
+arch/x86/kernel/cpu/mce/amd.c:1151:47: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+        err = kobject_add(&b->blocks->kobj, b->kobj, b->blocks->kobj.name);
+                                                     ^~~~~~~~~~~~~~~~~~~~
+arch/x86/kernel/cpu/mce/amd.c:1157:42: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+                err = kobject_add(&pos->kobj, b->kobj, pos->kobj.name);
+                                                       ^~~~~~~~~~~~~~
+arch/x86/kernel/cpu/mce/amd.c:1187:43: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+                        err = kobject_add(b->kobj, &dev->kobj, name);
+                                                               ^~~~
+                                                               "%s",
 
 Use a string literal for the format string.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Bill Wendling <isanbard@gmail.com>
 ---
- arch/x86/kernel/cpu/mce/core.c | 2 +-
- scripts/Makefile.extrawarn     | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2c8ec5c71712..3d411b7c85ad 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -292,7 +292,7 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
- 	if (!fake_panic) {
- 		if (panic_timeout == 0)
- 			panic_timeout = mca_cfg.panic_timeout;
--		panic(msg);
-+		panic("%s", msg);
- 	} else
- 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 1c87501e0fa3..d19bf0eb0abe 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -1116,7 +1116,8 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ 	else
+ 		tb->blocks = b;
+ 
+-	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
++	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, "%s",
++				   get_name(cpu, bank, b));
+ 	if (err)
+ 		goto out_free;
+ recurse:
+@@ -1148,13 +1149,13 @@ static int __threshold_add_blocks(struct threshold_bank *b)
+ 	struct threshold_block *tmp = NULL;
+ 	int err = 0;
+ 
+-	err = kobject_add(&b->blocks->kobj, b->kobj, b->blocks->kobj.name);
++	err = kobject_add(&b->blocks->kobj, b->kobj, "%s", b->blocks->kobj.name);
+ 	if (err)
+ 		return err;
+ 
+ 	list_for_each_entry_safe(pos, tmp, head, miscj) {
+ 
+-		err = kobject_add(&pos->kobj, b->kobj, pos->kobj.name);
++		err = kobject_add(&pos->kobj, b->kobj, "%s", pos->kobj.name);
+ 		if (err) {
+ 			list_for_each_entry_safe_reverse(pos, tmp, head, miscj)
+ 				kobject_del(&pos->kobj);
+@@ -1184,7 +1185,7 @@ static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
+ 		if (nb && nb->bank4) {
+ 			/* yes, use it */
+ 			b = nb->bank4;
+-			err = kobject_add(b->kobj, &dev->kobj, name);
++			err = kobject_add(b->kobj, &dev->kobj, "%s", name);
+ 			if (err)
+ 				goto out;
  
 -- 
 2.36.1.255.ge46751e96f-goog

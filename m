@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B45544CA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13DE544CA3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245058AbiFIMw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S245382AbiFIMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiFIMw0 (ORCPT
+        with ESMTP id S1343532AbiFIMwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:52:26 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452D017E13;
-        Thu,  9 Jun 2022 05:52:23 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 259CpnrzF023806, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 259CpnrzF023806
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 9 Jun 2022 20:51:50 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 9 Jun 2022 20:51:49 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 9 Jun 2022 20:51:49 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
- RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
- 15.01.2308.021; Thu, 9 Jun 2022 20:51:49 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux@ulli-kroll.de" <linux@ulli-kroll.de>
-Subject: Re: [PATCH v2 10/10] rtw88: disable powersave modes for USB devices
-Thread-Topic: [PATCH v2 10/10] rtw88: disable powersave modes for USB devices
-Thread-Index: AQHYdDPI/ma2VkQlBE+TWL8Uknp8la03pxKAgABucQCADm9uAA==
-Date:   Thu, 9 Jun 2022 12:51:49 +0000
-Message-ID: <8443f8e51774a4f80fed494321fcc410e7174bf1.camel@realtek.com>
-References: <20220530135457.1104091-1-s.hauer@pengutronix.de>
-         <20220530135457.1104091-11-s.hauer@pengutronix.de>
-         <1493412d473614dfafd4c03832e71f86831fa43b.camel@realtek.com>
-         <20220531074244.GN1615@pengutronix.de>
-In-Reply-To: <20220531074244.GN1615@pengutronix.de>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [125.224.76.119]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzYvOSDkuIrljYggMTA6NTU6MDA=?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <89046CFEA2994E40A02DFC7EC4D3F71E@realtek.com>
-Content-Transfer-Encoding: base64
+        Thu, 9 Jun 2022 08:52:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B8F63BF1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:52:50 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 59F5921F23;
+        Thu,  9 Jun 2022 12:52:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654779169; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gAVJbG/BIIN8NJYQzbcQF6blONkojsp0TRzSyE1rwgY=;
+        b=hn7rTMy0i0/3zWDB/8pROVvH88QIpHa0/R4ILl9f+qHSJPcu2hRMqAbErjyjq9n9grVf1r
+        mL2H4yfuQjEMQBLS/m8swK4yH1woIARmdRw1VisbnKMDfuYNPXToOM+fv3nq6HLxVvmxKa
+        3WC+afDbLR0/4tbS1iRZPhF24V/fFws=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 023012C141;
+        Thu,  9 Jun 2022 12:52:48 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 14:52:48 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com,
+        John Ogness <john.ogness@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH v2] mm/kfence: select random number before taking raw lock
+Message-ID: <YqHtIGI7ueuI/ovx@alley>
+References: <CAHmME9rkQDnsTu-8whevtBa_J6aOKT=gQO7kBAxwWrBgKgcyUQ@mail.gmail.com>
+ <20220609123319.17576-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609123319.17576-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTA1LTMxIGF0IDA5OjQyICswMjAwLCBzLmhhdWVyQHBlbmd1dHJvbml4LmRl
-IHdyb3RlOg0KPiBPbiBUdWUsIE1heSAzMSwgMjAyMiBhdCAwMTowNzozNkFNICswMDAwLCBQaW5n
-LUtlIFNoaWggd3JvdGU6DQo+ID4gT24gTW9uLCAyMDIyLTA1LTMwIGF0IDE1OjU0ICswMjAwLCBT
-YXNjaGEgSGF1ZXIgd3JvdGU6DQo+ID4gPiBUaGUgcG93ZXJzYXZlIG1vZGVzIGRvIG5vdCB3b3Jr
-IHdpdGggVVNCIGRldmljZXMgKHRlc3RlZCB3aXRoIGENCj4gPiA+IFJUVzg4MjJDVSkgcHJvcGVy
-bHkuIFdpdGggcG93ZXJzYXZlIG1vZGVzIGVuYWJsZWQgdGhlIGRyaXZlciBpc3N1ZXMNCj4gPiA+
-IG1lc3NhZ2VzIGxpa2U6DQo+ID4gPiANCj4gPiA+IHJ0d184ODIyY3UgMS0xOjEuMjogZmlybXdh
-cmUgZmFpbGVkIHRvIGxlYXZlIGxwcyBzdGF0ZQ0KPiA+ID4gcnR3Xzg4MjJjdSAxLTE6MS4yOiB0
-aW1lZCBvdXQgdG8gZmx1c2ggcXVldWUgMw0KPiA+IA0KPiA+IENvdWxkIHlvdSB0cnkgbW9kdWxl
-IHBhcmFtZXRlciBydHdfZGlzYWJsZV9scHNfZGVlcF9tb2RlPTEgdG8gc2VlDQo+ID4gaWYgaXQg
-Y2FuIHdvcms/DQo+IA0KPiBObywgdGhpcyBtb2R1bGUgcGFyYW1ldGVyIGRvZXNuJ3Qgc2VlbSB0
-byBtYWtlIGFueSBkaWZmZXJlbmNlLg0KPiANCj4gIyBjYXQgL3N5cy9tb2R1bGUvcnR3ODhfY29y
-ZS9wYXJhbWV0ZXJzL2Rpc2FibGVfbHBzX2RlZXANCj4gWQ0KPiANCj4gU3RpbGwgImZpcm13YXJl
-IGZhaWxlZCB0byBsZWF2ZSBscHMgc3RhdGUiIGFuZCBwb29yIHBlcmZvcm1hbmNlLg0KPiANCj4g
-QW55IG90aGVyIGlkZWFzIHdoYXQgbWF5IGdvIHdyb25nIGhlcmU/DQo+IA0KDQpUb2RheSwgSSBi
-b3Jyb3cgYSA4ODIyY3UsIGFuZCB1c2UgeW91ciBwYXRjaHNldCBidXQgcmV2ZXJ0DQpwYXRjaCAx
-MC8xMCB0byByZXByb2R1Y2UgdGhpcyBpc3N1ZS4gV2l0aCBmaXJtd2FyZSA3LjMuMCwNCml0IGxv
-b2tzIGJhZC4gQWZ0ZXIgY2hlY2tpbmcgc29tZXRoaW5nIGFib3V0IGZpcm13YXJlLCBJDQpmb3Vu
-ZCB0aGUgZmlybXdhcmUgaXMgb2xkLCBzbyB1cGdyYWRlIHRvIDkuOS4xMSwgYW5kIHRoZW4NCml0
-IHdvcmtzIHdlbGwgZm9yIDEwIG1pbnV0ZXMsIG5vIGFibm9ybWFsIG1lc3NhZ2VzLg0KDQpQbGVh
-c2UgdHJ5IGlmIGl0IGFsc28gd29ya3MgdG8geW91Lg0KDQpQaW5nLUtlDQoNCg0K
+On Thu 2022-06-09 14:33:19, Jason A. Donenfeld wrote:
+> The RNG uses vanilla spinlocks, not raw spinlocks, so kfence should pick
+> its random numbers before taking its raw spinlocks. This also has the
+> nice effect of doing less work inside the lock. It should fix a splat
+> that Geert saw with CONFIG_PROVE_RAW_LOCK_NESTING:
+> 
+>      dump_backtrace.part.0+0x98/0xc0
+>      show_stack+0x14/0x28
+>      dump_stack_lvl+0xac/0xec
+>      dump_stack+0x14/0x2c
+>      __lock_acquire+0x388/0x10a0
+>      lock_acquire+0x190/0x2c0
+>      _raw_spin_lock_irqsave+0x6c/0x94
+>      crng_make_state+0x148/0x1e4
+>      _get_random_bytes.part.0+0x4c/0xe8
+>      get_random_u32+0x4c/0x140
+>      __kfence_alloc+0x460/0x5c4
+>      kmem_cache_alloc_trace+0x194/0x1dc
+>      __kthread_create_on_node+0x5c/0x1a8
+>      kthread_create_on_node+0x58/0x7c
+>      printk_start_kthread.part.0+0x34/0xa8
+>      printk_activate_kthreads+0x4c/0x54
+>      do_one_initcall+0xec/0x278
+>      kernel_init_freeable+0x11c/0x214
+>      kernel_init+0x24/0x124
+>      ret_from_fork+0x10/0x20
+> 
+> Cc: John Ogness <john.ogness@linutronix.de>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+Thanks a lot for fixing this. It is great to know that the printk
+kthreads were not the culprit here ;-)
+
+Best Regards,
+Petr

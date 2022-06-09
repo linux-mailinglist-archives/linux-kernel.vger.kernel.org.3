@@ -2,156 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFB3544070
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 02:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDBD54407C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 02:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235987AbiFIAPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 20:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S235990AbiFIAUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 20:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235865AbiFIAPN (ORCPT
+        with ESMTP id S229673AbiFIAUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 20:15:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50A224090;
-        Wed,  8 Jun 2022 17:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654733711; x=1686269711;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AuKmeHqO8kg5TU3QFi7lo4/x+Zz36zZKWeKouXntz5o=;
-  b=iLC9tGnFYZjomwW74F8qegclpBWLETu/bqbh6FYgobi8Kr3XCbitWtDl
-   AJZbMrsfQlAbyYFxqGm5x39A+6WodGtrzISbnYdC9kRF8dGRuyrFG03fW
-   qayCXoQpefvAXVaeSJqTdLOaRZ0e10NV7REQ/NIE3B42lwT5/aQDk+23d
-   snCQhIacUfPKLHG3jGPwk7l2uL82GcUlkfC8YwQat4x7JrnM/CIcY9LQz
-   AflDSAYSgFXxtcmXN0DLBLgFb5ApReKyGc7BKQYJLQtT70SXhh0rCDE6O
-   ALmWLTK0LS7XDMQHUlQRpfXURW798gwd0tt4Nv30V9dYeRAtz7+7jt6u0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="278254905"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="278254905"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 17:15:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="670858357"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jun 2022 17:15:08 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz5pL-000FGB-OC;
-        Thu, 09 Jun 2022 00:15:07 +0000
-Date:   Thu, 9 Jun 2022 08:14:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Jongpil Jung <jongpil19.jung@samsung.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH 1/1] iio:proximity:sx9360: Fix hardware gain read/write
-Message-ID: <202206090828.1Q7GljFY-lkp@intel.com>
-References: <20220608010857.1720-1-xiaohuizhang@ruc.edu.cn>
+        Wed, 8 Jun 2022 20:20:03 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0424079380
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 17:20:02 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id i15so2244162plr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 17:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5NNsTE+H5y4+Dn7QhD8QIrDFxBD62atmh2P9kX+CPPA=;
+        b=V083dcgDQA28ZZVOOuJPiir9o22XTZPLxKELJ8SX5j3QT5Jc8euz93PV+5TovRmwoq
+         WTSoTJMSIe+pMoQapwXhCU5lrvyWPO8Wr12FZ+B4L3k/6e8lLaNBKV4Zo+1F0npe4Iy0
+         AhXniNhX646rMbJkJZiQ7cr5pUotuWG1b3j6X784fWZoQlzOs9ziQmq4so9vcDPD7ZwN
+         m4LuH1d69WJoRTbf9k+1QvIvX9V/KdXDjzC7ZMkClHa12wFUZKdk7A5JjqSu7urcsWN6
+         VJkTtbTjMaKZy8/014E++6Fr9BQf4wfZCkUQLYEBM1yz/1MkhWUaNwwRlqrkKLJUvdP3
+         ieHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5NNsTE+H5y4+Dn7QhD8QIrDFxBD62atmh2P9kX+CPPA=;
+        b=bUagRDtIxWKo2Egw6EWnbSQ8ujW4sPOJes2jWRVyjFNG93T1jTFF73SN/Sv2EqM0sf
+         G3wVVxgk49ZvPmetbU7Zc5/ZoxnuriXo46otCE4hhBXhZH2H3XMNPzFUcOmwBliXNeWq
+         DMrGlU5f/hcqCaSmuiUjv2SxG8FQWHvh2StQJRvpYAwJ1Hy8gXZ4tVGyhmYqvd+bmsCf
+         T1qqG2dAcFpjpdXvHtdAc7cnnWMQWavHZ9pB75XpZQH4Ue2pTaMb1UXmwtSqVLPk4cIQ
+         OS8VPOW8V7W7em6fH/tWjENBZOt/aQ8z55XC6jGjVIEutFgPlaYqRqnmymsFL7cntsEh
+         A9/A==
+X-Gm-Message-State: AOAM530nB1uzR3np7NYucaokOKXwV0LM+9gcSOFSdXaIffdUo3/iS/wr
+        u0dUk9Pupgjp1xGzBbu54Dg=
+X-Google-Smtp-Source: ABdhPJz1befrH4ePaNQhNUN4Goi4HJsAwoQRAZico6X1zdYmH2PkOl47ZsPmhteCTITn2ecIqidnTg==
+X-Received: by 2002:a17:902:db0f:b0:166:42b5:c819 with SMTP id m15-20020a170902db0f00b0016642b5c819mr34872393plx.96.1654734001350;
+        Wed, 08 Jun 2022 17:20:01 -0700 (PDT)
+Received: from longfanaikebuke.Dlink (36-236-186-165.dynamic-ip.hinet.net. [36.236.186.165])
+        by smtp.gmail.com with ESMTPSA id jd10-20020a170903260a00b001635a8f9dfdsm4379614plb.26.2022.06.08.17.19.59
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 08 Jun 2022 17:20:01 -0700 (PDT)
+From:   Steven Lung <1030steven@gmail.com>
+To:     mingo@redhat.com
+Cc:     peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, 1030steven@gmail.com
+Subject: [PATCH] sched/fair: Fix minor grammar
+Date:   Thu,  9 Jun 2022 08:19:48 +0800
+Message-Id: <20220609001948.74849-1-1030steven@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608010857.1720-1-xiaohuizhang@ruc.edu.cn>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaohui,
+The letter 's' for 'CPUs' was in capital, and replace the word
+'maybe' with 'may be' would be more appropriate in the sentence,
+since 'maybe' is an adverb.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Steven Lung <1030steven@gmail.com>
+---
+ kernel/sched/fair.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.19-rc1 next-20220608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiaohui-Zhang/iio-proximity-sx9360-Fix-hardware-gain-read-write/20220608-125912
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: openrisc-randconfig-r033-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090828.1Q7GljFY-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bdc0a6947530604152de0d152635e144a486ee32
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xiaohui-Zhang/iio-proximity-sx9360-Fix-hardware-gain-read-write/20220608-125912
-        git checkout bdc0a6947530604152de0d152635e144a486ee32
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/iio/proximity/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/iio/proximity/sx9360.c: In function 'sx9360_read_gain':
->> drivers/iio/proximity/sx9360.c:297:28: error: 'SX9360_REG_PROX_CTRL0_GAIN_RSVD' undeclared (first use in this function); did you mean 'SX9324_REG_PROX_CTRL0_GAIN_RSVD'?
-     297 |         else if (regval == SX9360_REG_PROX_CTRL0_GAIN_RSVD ||
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                            SX9324_REG_PROX_CTRL0_GAIN_RSVD
-   drivers/iio/proximity/sx9360.c:297:28: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/iio/proximity/sx9360.c:298:27: error: 'SX9360_REG_PROX_CTRL0_GAIN_8' undeclared (first use in this function); did you mean 'SX9324_REG_PROX_CTRL0_GAIN_8'?
-     298 |                  regval > SX9360_REG_PROX_CTRL0_GAIN_8)
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                           SX9324_REG_PROX_CTRL0_GAIN_8
-   drivers/iio/proximity/sx9360.c: In function 'sx9360_write_gain':
-   drivers/iio/proximity/sx9360.c:646:32: error: 'SX9360_REG_PROX_CTRL0_GAIN_8' undeclared (first use in this function); did you mean 'SX9324_REG_PROX_CTRL0_GAIN_8'?
-     646 |         if (val <= 0 || gain > SX9360_REG_PROX_CTRL0_GAIN_8)
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                SX9324_REG_PROX_CTRL0_GAIN_8
-   drivers/iio/proximity/sx9360.c: At top level:
->> drivers/iio/proximity/sx9360.c:699:17: error: 'SX9360_REG_PROX_CTRL0_GAIN_1' undeclared here (not in a function); did you mean 'SX9324_REG_PROX_CTRL0_GAIN_1'?
-     699 |                 SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 SX9324_REG_PROX_CTRL0_GAIN_1
->> drivers/iio/proximity/sx9360.c:699:49: error: 'SX9360_REG_PROX_CTRL0_GAIN_SHIFT' undeclared here (not in a function); did you mean 'SX9324_REG_PROX_CTRL0_GAIN_SHIFT'?
-     699 |                 SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
-         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                 SX9324_REG_PROX_CTRL0_GAIN_SHIFT
-
-
-vim +297 drivers/iio/proximity/sx9360.c
-
-   282	
-   283	static int sx9360_read_gain(struct sx_common_data *data,
-   284				    const struct iio_chan_spec *chan, int *val)
-   285	{
-   286		unsigned int reg, regval;
-   287		int ret;
-   288	
-   289		reg = SX9360_REG_PROX_CTRL0_PHR + chan->channel;
-   290		ret = regmap_read(data->regmap, reg, &regval);
-   291		if (ret)
-   292			return ret;
-   293	
-   294		regval = FIELD_GET(SX9360_REG_PROX_CTRL0_GAIN_MASK, regval);
-   295		if (regval)
-   296			regval--;
- > 297		else if (regval == SX9360_REG_PROX_CTRL0_GAIN_RSVD ||
- > 298			 regval > SX9360_REG_PROX_CTRL0_GAIN_8)
-   299			return -EINVAL;
-   300	
-   301		*val = 1 << regval;
-   302	
-   303		return IIO_VAL_INT;
-   304	}
-   305	
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 77b2048a9..f0cade37f 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -960,8 +960,8 @@ update_stats_wait_end_fair(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ 
+ 	/*
+ 	 * When the sched_schedstat changes from 0 to 1, some sched se
+-	 * maybe already in the runqueue, the se->statistics.wait_start
+-	 * will be 0.So it will let the delta wrong. We need to avoid this
++	 * may be already in the runqueue, the se->statistics.wait_start
++	 * will be 0. So it will let the delta wrong. We need to avoid this
+ 	 * scenario.
+ 	 */
+ 	if (unlikely(!schedstat_val(stats->wait_start)))
+@@ -5851,7 +5851,7 @@ DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
+ static struct {
+ 	cpumask_var_t idle_cpus_mask;
+ 	atomic_t nr_cpus;
+-	int has_blocked;		/* Idle CPUS has blocked load */
++	int has_blocked;		/* Idle CPUs has blocked load */
+ 	int needs_update;		/* Newly idle CPUs need their next_balance collated */
+ 	unsigned long next_balance;     /* in jiffy units */
+ 	unsigned long next_blocked;	/* Next update of blocked load in jiffies */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

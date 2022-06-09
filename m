@@ -2,132 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D155457A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC935457A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345307AbiFIWtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S242141AbiFIWuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345809AbiFIWtg (ORCPT
+        with ESMTP id S233809AbiFIWui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:49:36 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1337B5400B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:49:35 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id be31so40218337lfb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:49:34 -0700 (PDT)
+        Thu, 9 Jun 2022 18:50:38 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F115BF6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:50:37 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so625407pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:50:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OAj7kkMIiekJ9rTKt4JAtAfIGa2quITOg+UqYlGq1Vc=;
-        b=h+XSjN/WVesJqDJFOPBbUOjCsElze90l5AUaZpaMfQE4BCHJP6262qTzyHWJva9Bl7
-         Ylea2b1VMRtuu3W6K04USb5N4DyE9/FJG1TJX23DJAAyMpmTkNe0IhcujfXyw2tL6Yzm
-         5AoAwHI63jQHxPEb7KgmYY7AsIWc/AhRsgnJ71aDa/ZsS0NcL3wur4vFJaN8UMyAklRE
-         aEGCgipKXq1q5OQuT+b1/Z3ZAjDVwg+cOz821DhKZdc3CbTWkxewf2eBhHZ6cA8kCpl2
-         vQoxv4lOBXpPPrGtb7sLkscBoEWxzlYML194UCnlDBfFSziOT58BYv12MhyX6zYq7k9Z
-         Vkrg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=86+OU2zu0HQo0h80hOWzoZfp7+C3/RaLCcLpObk4okU=;
+        b=LRdGpJ2DN9iUzIXLjq7TFFay31t4JVL5sF+TcU5L5E9QkwpKgL0PAr2tOFzWd8PVEY
+         MKzrLq5lTxMAUZqrFgFQImLShr146ck3DmdoOC/Nw6GJownBRlFa/bsBADLfBUHFCx3c
+         0qWlvLjG7Jtvjkg8i8Py7qBpjX5mSzSpoTHLmnmHs3d/0gj8EyfRIMO5Lrp9OJ5uCmqU
+         +3bei8n04Qj8KbbQPtM8V+zeDhd+uwTzU6e/1t9R671Rl62BFk/los2+MDJVx/nW04kj
+         1xabhqmU4Uwx3lHZpYS0FPCphCcUjA8YBBQTnF8ouVKyqlGF7nJBt04AfoxreCoA21a2
+         wBhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OAj7kkMIiekJ9rTKt4JAtAfIGa2quITOg+UqYlGq1Vc=;
-        b=3Bvl5JlagV9/RO0tVhfEA2UgBKiUXI/y6H7LMiMtffqKRK0KAbJ4gI9QL7JEtanbGv
-         Btv9w9hjGzGGpUUCSNrYKkk/bknpBzrD/Fh/rIA41kX7BqsQJo/cJQj3GLPzwt3tVS/D
-         s0GpX6E8bYBFpMpOTsiahTWCzXumzEK2+41f3HwhBig6s+G6UN7C8UXmNDvp4FYu4mzm
-         iX/V93kzRFa6OMcjJUXNsbGfWZaNpTqRmIg112G0fXVtABdnnwLrvacUY4QL00Fns6/5
-         Vhs+pgJ3+bm0q6UkBfcSFBj5Db1vfntEQFE9lDAu4YAEnI1AbeYapDlPNAKarA4tQW9D
-         yM/Q==
-X-Gm-Message-State: AOAM53293rw/mrL+Cy4VyALMm9oOpcmIqub+4BjB6Y90FncKaKu26Bsb
-        M07g4jpnBls+v9i0A+64SzUy68lEA55GRi458WMT
-X-Google-Smtp-Source: ABdhPJxZXTnzcCwuX2K8dXo0GsWxPjCKHZ8xLR+ukHeOsc32GB8PW2KE6FFGhS4Nls3KDQ2FUv5nfKYIhCIQyfCKYvU=
-X-Received: by 2002:a05:6512:114e:b0:479:1e02:9318 with SMTP id
- m14-20020a056512114e00b004791e029318mr20896704lfg.156.1654814973186; Thu, 09
- Jun 2022 15:49:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=86+OU2zu0HQo0h80hOWzoZfp7+C3/RaLCcLpObk4okU=;
+        b=aRDXHX83jIquWs+J1WaJbtA07rPQfbU9SzgwHrLVi5N6KFhz6HT54kixsYYFE6ZxqC
+         zVpQBekUa/iQargPTtGLRf9lRfi9lXb2JYTWk3tVQf2bXPJw1oHyaiBa3BFlShg8E/Mr
+         J3lt9Ke+BfkOe/i1Dn5+RnO/EmpXIfD6ISREeNErfldCrHDYb8LiGXzFpDJitBFnGtHr
+         7AwPuLy7TMFK1QvzQ7dO+ESfOFdGYFt1hSdMLhwzDBB9A2Ajn0opPBv6dFUUx3F0oQXP
+         EWfAqhLrHoPb/2yHU33kyt81LkFG2d3Ib6CgAmNDOhV6IDEcCEaCeIjW0eZMhtOTl921
+         iVPw==
+X-Gm-Message-State: AOAM530obrtnOUUqXJuioAOM19Qrz5PQ1qxhTscmabz3yUtzFiR8rXbe
+        HmY+CGieuNeGTBfcqWUBbDuoZw==
+X-Google-Smtp-Source: ABdhPJxCqBlVUFdhyH8Sq2wxDim/OZzBnGusIkiRzN9CqJDp/O3fE4hkwqlQdWQVPtKkEeNHBR4pMA==
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id l5-20020a170903120500b0015e8cbcfd2bmr42052809plh.99.1654815036741;
+        Thu, 09 Jun 2022 15:50:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s8-20020a62e708000000b0051835ccc008sm17688886pfh.115.2022.06.09.15.50.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 15:50:36 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 22:50:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 6/6] KVM: SEV-ES: reuse advance_sev_es_emulated_ins for
+ OUT too
+Message-ID: <YqJ5OXwAyXvQuC2/@google.com>
+References: <20220608121253.867333-1-pbonzini@redhat.com>
+ <20220608121253.867333-7-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-In-Reply-To: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-From:   Bill Wendling <morbo@google.com>
-Date:   Thu, 9 Jun 2022 15:49:21 -0700
-Message-ID: <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Bill Wendling <isanbard@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608121253.867333-7-pbonzini@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
->
-> > This patch set fixes some clang warnings when -Wformat is enabled.
-> >
->
-> tldr:
->
-> -       printk(msg);
-> +       printk("%s", msg);
->
-> the only reason to make this change is where `msg' could contain a `%'.
-> Generally, it came from userspace.
+On Wed, Jun 08, 2022, Paolo Bonzini wrote:
+> complete_emulator_pio_in only has to be called by
+> complete_sev_es_emulated_ins now; therefore, all that the function does
+> now is adjust sev_pio_count and sev_pio_data.  Which is the same for
+> both IN and OUT.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c | 19 +++++++++----------
+>  1 file changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index fd4382602f65..a3651aa74ed7 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -13007,6 +13007,12 @@ int kvm_sev_es_mmio_read(struct kvm_vcpu *vcpu, gpa_t gpa, unsigned int bytes,
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_sev_es_mmio_read);
+>  
+> +static void advance_sev_es_emulated_pio(struct kvm_vcpu *vcpu, unsigned count, int size)
+> +{
+> +	vcpu->arch.sev_pio_count -= count;
+> +	vcpu->arch.sev_pio_data += count * size;
+> +}
+> +
+>  static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+>  			   unsigned int port);
+>  
+> @@ -13030,8 +13036,7 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+>  		int ret = emulator_pio_out(vcpu, size, port, vcpu->arch.sev_pio_data, count);
+>  
+>  		/* memcpy done already by emulator_pio_out.  */
+> -		vcpu->arch.sev_pio_count -= count;
+> -		vcpu->arch.sev_pio_data += count * vcpu->arch.pio.size;
+> +		advance_sev_es_emulated_pio(vcpu, count, size);
 
-It helps kernel developers not accidentally to insert an unescaped '%'
-in their messages, potentially exposing their code to an attack
-vector.
+I think this is a bug fix that should go in a separate patch.  size == vcpu->arch.pio.size
+when kvm_sev_es_outs() is called from complete_sev_es_emulated_outs(), but when
+it's called from kvm_sev_es_string_io() it will hold the size of the previous PIO.
 
-> Otherwise these changes are a
-> useless consumer of runtime resources.
-
-Calling a "printf" style function is already insanely expensive. :-) I
-understand that it's not okay blithely to increase runtime resources
-simply because it's already slow, but in this case it's worthwhile.
-
-> I think it would be better to quieten clang in some fashion.
-
-The "printk" and similar functions all have the "__printf" attribute.
-I don't know of a modification to that attribute which can turn off
-this type of check.
-
--bw
+>  		if (!ret)
+>  			break;
+>  
+> @@ -13047,12 +13052,6 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+>  static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
+>  			  unsigned int port);
+>  
+> -static void advance_sev_es_emulated_ins(struct kvm_vcpu *vcpu, unsigned count, int size)
+> -{
+> -	vcpu->arch.sev_pio_count -= count;
+> -	vcpu->arch.sev_pio_data += count * size;
+> -}
+> -
+>  static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
+>  {
+>  	unsigned count = vcpu->arch.pio.count;
+> @@ -13060,7 +13059,7 @@ static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
+>  	int port = vcpu->arch.pio.port;
+>  
+>  	complete_emulator_pio_in(vcpu, vcpu->arch.sev_pio_data);
+> -	advance_sev_es_emulated_ins(vcpu, count, size);
+> +	advance_sev_es_emulated_pio(vcpu, count, size);
+>  	if (vcpu->arch.sev_pio_count)
+>  		return kvm_sev_es_ins(vcpu, size, port);
+>  	return 1;
+> @@ -13076,7 +13075,7 @@ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
+>  			break;
+>  
+>  		/* Emulation done by the kernel.  */
+> -		advance_sev_es_emulated_ins(vcpu, count, size);
+> +		advance_sev_es_emulated_pio(vcpu, count, size);
+>  		if (!vcpu->arch.sev_pio_count)
+>  			return 1;
+>  	}
+> -- 
+> 2.31.1
+> 

@@ -2,68 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7002A54505D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8914954504F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343785AbiFIPOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S244431AbiFIPMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiFIPO2 (ORCPT
+        with ESMTP id S236467AbiFIPMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:14:28 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A284A46150;
-        Thu,  9 Jun 2022 08:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654787666; x=1686323666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wr33ML0e4lODezvF0rSXZW2gyNc2rLAlNWAvEtgI1TQ=;
-  b=b2ls8HuuIxikpqK190ySTuiJx0LidsWad4miA2YaT/RD0WTlUxjMjhtc
-   0aMcoY0pVMYkkwM/t9YIdgix8wZ3yRBm0oS7wwUXnqf7kD1OaI7nGoqsM
-   77ePbIPoPBbYsTuc/Bauup64Ipd3Hi8JFPMLqzqzJKKYq4SWxRlQZ9a03
-   KanP9teVV95x6r56zbZE56rPubkx9XfmlSUZNi72PKi9HbOfYIEcSJZ24
-   dOFQH7Ew+HqEtsFkG2/YYl+qS7e8Tbm8UNdQHb3tHGZeifamZoRhDKRyK
-   S5I1JskXsRTFi34k0PzKRSYXnR9WmXPGYCcqSjnrn4N/O1ArIkLTkp7dX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="274837351"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="274837351"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:14:26 -0700
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="649312322"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:14:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nzJpR-000XxY-4u;
-        Thu, 09 Jun 2022 18:12:09 +0300
-Date:   Thu, 9 Jun 2022 18:12:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Frank Rowand <frank.rowand@sony.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 00/16] ACPI: Get rid of the list of children in struct
- acpi_device
-Message-ID: <YqINyDTfpNBGDYlb@smile.fi.intel.com>
-References: <1843211.tdWV9SEqCh@kreacher>
+        Thu, 9 Jun 2022 11:12:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86AE5265605
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:12:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2472012FC;
+        Thu,  9 Jun 2022 08:12:15 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 28F353F73B;
+        Thu,  9 Jun 2022 08:12:14 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     will@kernel.org, joro@8bytes.org
+Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        hch@lst.de, john.garry@huawei.com
+Subject: [PATCH v2] iommu/dma: Add config for PCI SAC address trick
+Date:   Thu,  9 Jun 2022 16:12:10 +0100
+Message-Id: <3f06994f9f370f9d35b2630ab75171ecd2065621.1654782107.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1843211.tdWV9SEqCh@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,40 +40,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 03:44:27PM +0200, Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> Confusingly enough, the ACPI subsystem stores the information on the given ACPI
-> device's children in two places: as the list of children in struct acpi_device
-> and (as a result of device registration) in the list of children in the embedded
-> struct device.
-> 
-> These two lists agree with each other most of the time, but not always (like in
-> error paths in some cases), and the list of children in struct acpi_device is
-> not generally safe to use without locking.  In principle, it should always be
-> walked under acpi_device_lock, but in practice holding acpi_scan_lock is
-> sufficient for that too.  However, its users may not know whether or not
-> they operate under acpi_scan_lock and at least in some cases it is not accessed
-> in a safe way (note that ACPI devices may go away as a result of hot-remove,
+For devices stuck behind a conventional PCI bus, saving extra cycles at
+33MHz is probably fairly significant. However since native PCI Express
+is now the norm for high-performance devices, the optimisation to always
+prefer 32-bit addresses for the sake of avoiding DAC is starting to look
+rather anachronistic. Technically 32-bit addresses do have shorter TLPs
+on PCIe, but unless the device is saturating its link bandwidth with
+small transfers it seems unlikely that the difference is appreciable.
 
-> unlike OF nodes).
+What definitely is appreciable, however, is that the IOVA allocator
+doesn't behave all that well once the 32-bit space starts getting full.
+As DMA working sets get bigger, this optimisation increasingly backfires
+and adds considerable overhead to the dma_map path for use-cases like
+high-bandwidth networking. We've increasingly bandaged the allocator
+in attempts to mitigate this, but it remains fundamentally at odds with
+other valid requirements to try as hard as possible to satisfy a request
+within the given limit; what we really need is to just avoid this odd
+notion of a speculative allocation when it isn't beneficial anyway.
 
-Hmm... Does it true for DT overlays? Not an expert in DT overlays, though,
-adding Rob and Frank.
+Unfortunately that's where things get awkward... Having been present on
+x86 for 15 years or so now, it turns out there are systems which fail to
+properly define the upper limit of usable IOVA space for certain devices
+and this trick was the only thing letting them work OK. I had a similar
+ulterior motive for a couple of early arm64 systems when originally
+adding it to iommu-dma, but those really should be fixed with proper
+firmware bindings by now. Let's be brave and default it to off in the
+hope that CI systems and developers will find and fix those bugs, but
+expect that desktop-focused distro configs are likely to want to turn
+it back on for maximum compatibility.
 
-> For this reason, it is better to consolidate the code that needs to walk the
-> children of an ACPI device which is the purpose of this patch series.
-> 
-> Overall, it switches over all of the users of the list of children in struct
-> acpi_device to using helpers based on the driver core's mechanics and finally
-> drops that list, but some extra cleanups are done on the way.
-> 
-> Please refer to the patch changelogs for details.
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
 
-I'm going to look the individual patches.
+v2: Tweak wording to clarify that it's not really an optimisation in
+    general, remove "default X86".
 
+ drivers/iommu/Kconfig     | 26 ++++++++++++++++++++++++++
+ drivers/iommu/dma-iommu.c |  2 +-
+ 2 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+index c79a0df090c0..5a225b48dd00 100644
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -144,6 +144,32 @@ config IOMMU_DMA
+ 	select IRQ_MSI_IOMMU
+ 	select NEED_SG_DMA_LENGTH
+ 
++config IOMMU_DMA_PCI_SAC
++	bool "Enable 64-bit legacy PCI optimisation by default"
++	depends on IOMMU_DMA
++	help
++	  Enable by default an IOMMU optimisation for 64-bit legacy PCI devices,
++	  wherein the DMA API layer will always first try to allocate a 32-bit
++	  DMA address suitable for a single address cycle, before falling back
++	  to allocating from the device's full usable address range. If your
++	  system has 64-bit legacy PCI devices in 32-bit slots where using dual
++	  address cycles reduces DMA throughput significantly, this may be
++	  beneficial to overall performance.
++
++	  If you have a modern PCI Express based system, this feature mostly just
++	  represents extra overhead in the allocation path for no practical
++	  benefit, and it should usually be preferable to say "n" here.
++
++	  However, beware that this feature has also historically papered over
++	  bugs where the IOMMU address width and/or device DMA mask is not set
++	  correctly. If device DMA problems and IOMMU faults start occurring
++	  after disabling this option, it is almost certainly indicative of a
++	  latent driver or firmware/BIOS bug, which would previously have only
++	  manifested with several gigabytes worth of concurrent DMA mappings.
++
++	  If this option is not set, the feature can still be re-enabled at
++	  boot time with the "iommu.forcedac=0" command-line argument.
++
+ # Shared Virtual Addressing
+ config IOMMU_SVA
+ 	bool
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index f90251572a5d..9f9d9ba7f376 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -67,7 +67,7 @@ struct iommu_dma_cookie {
+ };
+ 
+ static DEFINE_STATIC_KEY_FALSE(iommu_deferred_attach_enabled);
+-bool iommu_dma_forcedac __read_mostly;
++bool iommu_dma_forcedac __read_mostly = !IS_ENABLED(CONFIG_IOMMU_DMA_PCI_SAC);
+ 
+ static int __init iommu_dma_forcedac_setup(char *str)
+ {
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.36.1.dirty
 

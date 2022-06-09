@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB70544211
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 05:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23416544217
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 05:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiFIDoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 23:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S236796AbiFIDqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 23:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiFIDoQ (ORCPT
+        with ESMTP id S229833AbiFIDqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 23:44:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6726A237CA8;
-        Wed,  8 Jun 2022 20:44:13 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LJVHZ3v74zRhVr;
-        Thu,  9 Jun 2022 11:40:58 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 11:44:11 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 11:44:10 +0800
-Message-ID: <44530040-0384-796e-143f-b7293886753c@huawei.com>
-Date:   Thu, 9 Jun 2022 11:44:09 +0800
+        Wed, 8 Jun 2022 23:46:40 -0400
+X-Greylist: delayed 64284 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 20:46:39 PDT
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136C12E4342;
+        Wed,  8 Jun 2022 20:46:38 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-189-245.tukw.qwest.net [174.21.189.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id AB106344;
+        Wed,  8 Jun 2022 20:46:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1654746398;
+        bh=P4Tb/8aOs+KwvhOVY6Wu9k5ijZ6jU9WWvWxF6LngbPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J/3CWLUCXEEzHl6OzLto+Nh1NH1v28uCaQ5m8nHcIQ2BjUbtlbTE7i6yfOn4vJGXQ
+         8LI5HyEXGmv3HkBDTYHcR74M6c/a8r8/UnX43LmVsOXYF3SQi0T8MaLhRNwL2DGA8v
+         LtbMUZHyc9ETzNbtnkxY27JeGL+FdttcP5SiA3H0=
+Date:   Wed, 8 Jun 2022 20:46:37 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kconfig: Add findconf script and helper program
+Message-ID: <YqFtHfC59akYP9jB@hatter.bewilderbeest.net>
+References: <20220608095456.27479-1-zev@bewilderbeest.net>
+ <6d6d252d-79e9-4b4c-4a62-aa4018a6254c@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [next] arm64: boot failed - next-20220606
-Content-Language: en-US
-To:     Vasily Averin <vvs@openvz.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <regressions@lists.linux.dev>, <lkft-triage@lists.linaro.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        Qian Cai <quic_qiancai@quicinc.com>
-References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
- <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
- <20220607162504.7fd5a92a@canb.auug.org.au>
- <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
- <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
- <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
- <CALvZod72bp9ejY+KghaUGkoXDrOMMbs_ofsopGib=MY4jzhRkg@mail.gmail.com>
- <CA+G9fYu6mayYrrYK+0Rn1K7HOM6WbaOhnJSx-Wv6CaKBDpaT2g@mail.gmail.com>
- <2a4cc632-c936-1e42-4fdc-572334c58ee1@openvz.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <2a4cc632-c936-1e42-4fdc-572334c58ee1@openvz.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <6d6d252d-79e9-4b4c-4a62-aa4018a6254c@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/6/9 10:49, Vasily Averin wrote:
-> Dear ARM developers,
-> could you please help me to find the reason of this problem?
-Hi,
-> mem_cgroup_from_obj():
-> ffff80000836cf40:       d503245f        bti     c
-> ffff80000836cf44:       d503201f        nop
-> ffff80000836cf48:       d503201f        nop
-> ffff80000836cf4c:       d503233f        paciasp
-> ffff80000836cf50:       d503201f        nop
-> ffff80000836cf54:       d2e00021        mov     x1, #0x1000000000000            // #281474976710656
-> ffff80000836cf58:       8b010001        add     x1, x0, x1
-> ffff80000836cf5c:       b25657e4        mov     x4, #0xfffffc0000000000         // #-4398046511104
-> ffff80000836cf60:       d34cfc21        lsr     x1, x1, #12
-> ffff80000836cf64:       d37ae421        lsl     x1, x1, #6
-> ffff80000836cf68:       8b040022        add     x2, x1, x4
-> ffff80000836cf6c:       f9400443        ldr     x3, [x2, #8]
+On Wed, Jun 08, 2022 at 07:48:44PM PDT, Randy Dunlap wrote:
+>Hi--
 >
-> x5 : ffff80000a96f000 x4 : fffffc0000000000 x3 : ffff80000ad5e680
-> x2 : fffffe00002bc240 x1 : 00000200002bc240 x0 : ffff80000af09740
+>On 6/8/22 02:54, Zev Weiss wrote:
+>> scripts/findconf provides menuconfig's search functionality as a
+>> standalone, non-interactive command, somewhat in the spirit of
+>> scripts/config.  It is meant to be useful for tasks like getting a
+>> quick overview of symbol dependencies or determining which Kconfig
+>> file to edit for a given symbol, without having to fire up one of the
+>> interactive config programs.
+>>
+>> It accepts a single command-line flag, '-v', which causes it to also
+>> print the help text of each matching result.
+>>
+>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> ---
 >
-> x0 = 0xffff80000af09740 is an argument of mem_cgroup_from_obj()
-> according to System.map it is init_net
+>I can see how this could be useful.
+>It's a little easier to use than what I currently do:
 >
-> This issue is caused by calling virt_to_page() on address of static variable init_net.
-> Arm64 consider that addresses of static variables are not valid virtual addresses.
-> On x86_64 the same API works without any problem.
+>$ findconfig  DRM_HISI_HIBMC
+>./drivers/gpu/drm/hisilicon/hibmc/Kconfig:2:config DRM_HISI_HIBMC
+
+I'm guessing 'findconfig' here is some personal shell 
+alias/function/script?  (I can't see any references to it in the kernel 
+source tree.)
+
 >
-> Unfortunately I do not understand the cause of the problem.
-> I do not see any bugs in my patch.
-> I'm using an existing API, mem_cgroup_from_obj(), to find the memory cgroup used
-> to account for the specified object.
-> In particular, in the current case, I wanted to get the memory cgroup of the
-> specified network namespace by the name taken from for_each_net().
-> The first object in this list is the static structure unit_net
+>then $EDITOR that_Kconfig_file
+>
+>
+>In testing, I am seeing this:
+>
+>#
+># using defaults found in /boot/config-5.3.18-150300.59.63-default
+>#
+>.config:421:warning: symbol value 'm' invalid for I8K
+>.config:2335:warning: symbol value 'm' invalid for MTD_NAND_ECC_SW_HAMMING
+>.config:2484:warning: symbol value 'm' invalid for PVPANIC
+>.config:8671:warning: symbol value 'm' invalid for INTERCONNECT
+>.config:9369:warning: symbol value 'm' invalid for CRYPTO_ARCH_HAVE_LIB_BLAKE2S
+>.config:9370:warning: symbol value 'm' invalid for CRYPTO_LIB_BLAKE2S_GENERIC
+>.config:9653:warning: symbol value '1' invalid for KASAN_STACK
+>
 
-root@test:~# cat /proc/kallsyms |grep -w _data
-ffff80000a110000 D _data
-root@test:~# cat /proc/kallsyms |grep -w _end
-ffff80000a500000 B _end
-root@test:~# cat /proc/kallsyms |grep -w init_net
-ffff80000a4eb980 B init_net
+This I assume is just due to the contents of your .config file relative 
+to the current Kconfig definitions and not a problem with anything in 
+this patch?
 
-the init_net is located in data section, on arm64, it is allowed by 
-vmalloc, see
+>How do I specify/choose a .config file to be used?
+>
+>Oh, use KCONFIG_CONFIG=filename
+>
 
-     map_kernel_segment(pgdp, _data, _end, PAGE_KERNEL, &vmlinux_data, 
-0, 0);
+Ah, I guess that'd be a nice thing to add a flag for to the wrapper 
+script -- I'll include that in v2.
 
-and the arm has same behavior.
+>
+>Please update (add) usage/help text in scripts/kconfig/Makefile.
+>
 
-We could let init_net be allocated dynamically, but I think it could 
-change a lot.
+Ack, will do.
 
-Any better sugguestion, Catalin?
+
+Thanks for the review!
+
+
+Zev
 

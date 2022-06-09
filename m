@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0F3544994
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C19154499C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242664AbiFIK70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S236543AbiFILCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234782AbiFIK7X (ORCPT
+        with ESMTP id S234749AbiFILCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 06:59:23 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5081AD8D;
-        Thu,  9 Jun 2022 03:59:21 -0700 (PDT)
+        Thu, 9 Jun 2022 07:02:48 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FE923170
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:02:47 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g205so20762373pfb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:02:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654772361; x=1686308361;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VU8o8/MxiBPpS613WG31zcx2hVkLcBiOKxwc0JXNnV8=;
-  b=By0vbVlaYN9P66cDxKTKKqkBwUl7WWUTxu9VPLF8+Q8NPPjxTCqFlMle
-   rdKv39ipeXfj+yqkT/lg85ZjqtW4yJFYY/oLoQMnQ+tqYMkdaFG9cBxS1
-   ZrlZ1sAZ4Ual0CTlLAae3eFgvLwh24Rg3vtHPrJRU8RRrJXORmJrJ7JBP
-   A=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 03:59:21 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 03:59:21 -0700
-Received: from [10.253.77.106] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
- 03:59:18 -0700
-Message-ID: <38dab556-e285-7271-bc95-98bb052c888a@quicinc.com>
-Date:   Thu, 9 Jun 2022 18:59:16 +0800
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eA2rSMTUFSewTOnPsmOrnE6HCmgRpXaUuyafBR4ipFo=;
+        b=PhF2l/vtHVZjCKAqz4OpktNX8yi0juQT7/9mlOjaRI+WJ/8mFLlvmrChupswhPlMoa
+         bc7vMTDPOhZSuBdmsu8Ao+uRlmChD/jUJbcP2miIjzmjYzQ9L3TWeewo4w8AdkVg1o6p
+         4Y0jslyAC5Xw0nkFpxZEl70DVxJkswiTrwXxo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eA2rSMTUFSewTOnPsmOrnE6HCmgRpXaUuyafBR4ipFo=;
+        b=g2jIbx6CbrNhqLO1lqnJSEsK1bWUXSQGRr4XQxpSrFX9aLdJj0oeTDzRo3EsoAKRj+
+         hUx2yBdNb0JF5Ed2iP+Gvs7cVu5uU1K7MH5oTi6p+bNkObvATeRzcGpCQ928UXxrwu1e
+         AUYGKXGiDhSC2d3NRbPxY7ag+EVeJVszml7veJQId0QSPSX2ovwFEU3VSY30DE+yONFR
+         KjzOCVZ8INkF3cVcVRF00zZDUOIYFjEB/4gszPiP45BnMuwtzd6f4nWVH3QngrWOmPXV
+         UgcS1HqGYrQWBbvjqHDiG9cxrilah/5bWlXWEh1vLr3kUQuDqOpKYoh4P+Pkswi7pHms
+         CMlw==
+X-Gm-Message-State: AOAM530QRh9adr93VfmaaR8sBwpDIDL/s6Yg6OfE50gzb6cZ+YovGzkW
+        tKQs2964KBUH9iL3qCxpIZ4Pjg==
+X-Google-Smtp-Source: ABdhPJyRD8M4C4AIWlnMkoCdrxA428zPc/65lMrKv7boT8iwH7ATo4M+sNcCYcjeZm4RCxc0iZEi5Q==
+X-Received: by 2002:a63:8242:0:b0:3fe:3601:747f with SMTP id w63-20020a638242000000b003fe3601747fmr6713986pgd.314.1654772567192;
+        Thu, 09 Jun 2022 04:02:47 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:1572:8d44:6d26:109d])
+        by smtp.gmail.com with ESMTPSA id t1-20020a1709027fc100b00163f2f9f07csm194145plb.48.2022.06.09.04.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 04:02:46 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 20:02:41 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Nitin Gupta <ngupta@vflare.org>
+Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000140
+Message-ID: <YqHTUdeZ8H0Lnf8E@google.com>
+References: <CA+G9fYtVOfWWpx96fa3zzKzBPKiNu1w3FOD4j++G8MOG3Vs0EA@mail.gmail.com>
+ <Yp47DODPCz0kNgE8@google.com>
+ <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
+ <Yp/kpPA7GdbArXDo@google.com>
+ <YqAL+HeZDk5Wug28@google.com>
+ <YqAMmTiwcyS3Ttla@google.com>
+ <YqEKapKLBgKEXGBg@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] Bluetooth: hci_sync: Fix set up CVSD SCO failure
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-References: <1654763558-20721-1-git-send-email-quic_zijuhu@quicinc.com>
- <5148cb92-8904-baef-ca78-5051612f044b@molgen.mpg.de>
-From:   quic_zijuhu <quic_zijuhu@quicinc.com>
-In-Reply-To: <5148cb92-8904-baef-ca78-5051612f044b@molgen.mpg.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqEKapKLBgKEXGBg@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,17 +82,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/2022 6:56 PM, Paul Menzel wrote:
-> Dear Zijun,
+On (22/06/08 13:45), Minchan Kim wrote:
 > 
-> 
-> Thank you for the fixes. *setup* in the summary is a noun, so no space there. In my reply to v1 I suggested:
-> 
->> Bluetooth: Fix CVSD SCO setup failure
-thank you, i will correct it as your suggestion within v3 patch
-> 
-> 
-> Kind regards,
-> 
-> Paul
+> I am trying to understand the problem. AFAIK, the mapping_area was
+> static allocation per cpu so in zs_cpu_down, we never free the
+> mapping_area itself. Then, why do we need to reinitialize the local
+> lock again?
 
+Well... Something zero-s out that memory. NULL deref in strcmp() in
+lockdep points at NULL ->name. So I'm merely testing my theories here.
+If it's not area lock then it's pool->migrate_lock?

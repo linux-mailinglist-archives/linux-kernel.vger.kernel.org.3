@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A23D544615
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B17544649
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241721AbiFIIiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S242344AbiFIInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbiFIIiH (ORCPT
+        with ESMTP id S242303AbiFIIk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:38:07 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C8A188;
-        Thu,  9 Jun 2022 01:38:06 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id 187so20480488pfu.9;
-        Thu, 09 Jun 2022 01:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eOJK9crUYKXyIABR6BLtgcFnqJSYVkj6ggY7lPw/iao=;
-        b=LAl1d08X8q2e31YN0ruuS4C7xF3BExBRczatwKid46gwkpweQBeZKpjY7IebrKADy1
-         B7gBZE2l/EjyLooNLPI1woQOhXCMT4w/6CCwrIKjjA/wyOhCDiJDad3WBp5NRzj8iyTp
-         ivM979eTiOXFmrGA9KNWhDed+wEC75jzkpoP/12Q7gwAI+R+hnU9sVTdb4o1UJ1wSokk
-         /IOuclVZTU6yLneviGtZ9JKi/MEdLCZAqahoEYDyxsU913IVvHOwJT9cPJ/06d4T8xM6
-         2nZiH5pc6hKisud0BvrIHVflWYMCvna2CuzYPOb4Mo1K2wP4i/cLe/51/WpgGZR9u6Ny
-         BCgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eOJK9crUYKXyIABR6BLtgcFnqJSYVkj6ggY7lPw/iao=;
-        b=Y5aRPtsQAybKJNBxKVo5zta2QtYoo/h1f+SCVX++jq2kt7lYpnRK8VveheczAuJs2a
-         BOl794m0gm9TVgt2FIuSZTfOKVeAx8m+GTz7jKQ/9ftFJCZ3Cc1YRhpewiDEty2rpPfA
-         o7xiNS/8UdLnjHPqpN18BiS9Xlzh4Vb2tu+OJtcxqO8S1MY7wokweijj57Ro+AXC4w67
-         EMjYc5N4N8Cs97T/tDfJXGL/jtmpb9/vzz536ms6+jM5MlblrjnYtAobUT3j3wS6MYz0
-         XVFpZMYaR5kcGOMNatU+eUnGl/gIYadiTHYQtuzszuB1W39hXbbWWy32apa7JOffL1r7
-         06NA==
-X-Gm-Message-State: AOAM531I7HrZwojwzNNP9s0rbLiLAvsyyGr1f/zGmNjeKemGJ2HtIJrP
-        wqC80o8Ml2tdAiCX7FOFnqU=
-X-Google-Smtp-Source: ABdhPJx8jI/nVpRWlGVbTToQMkEUzvbfXlIkQWgiOaIqr9dbjO8e3D+CJoRKgGSCIm6aa374Ikqu1w==
-X-Received: by 2002:a05:6a00:1502:b0:51c:2991:f1c with SMTP id q2-20020a056a00150200b0051c29910f1cmr16805716pfu.37.1654763885935;
-        Thu, 09 Jun 2022 01:38:05 -0700 (PDT)
-Received: from localhost.localdomain ([222.151.198.97])
-        by smtp.gmail.com with ESMTPSA id ru12-20020a17090b2bcc00b001cb6527ca39sm18206436pjb.0.2022.06.09.01.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 01:38:05 -0700 (PDT)
-From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-X-Google-Original-From: Kosuke Fujimoto <fujimotoksouke0@gmail.com>
-To:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     linux-doc@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kosuke Fujimoto <fujimotoksouke0@gmail.com>,
-        Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-Subject: [PATCH] bpf, docs: Fix typo "BFP_ALU" to "BPF_ALU"
-Date:   Thu,  9 Jun 2022 04:39:37 -0400
-Message-Id: <20220609083937.245749-1-fujimotoksouke0@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 9 Jun 2022 04:40:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB97B4AA;
+        Thu,  9 Jun 2022 01:39:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3253EB82C87;
+        Thu,  9 Jun 2022 08:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C157CC34114;
+        Thu,  9 Jun 2022 08:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654763991;
+        bh=VkrIFTKTQbV3RKmsOoc2Bt3MvQh79Kf++bjgUfGWbBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AsQH1IMU2w2VbMZsd0Ve2RcKBOunQgtimDy3fZ9S/0MK8V5K3cMbYw7ITjY95QhE+
+         Ig/yAI9tSzbLkmKt2yOzn9az/YMPbEs4AG8uJ4fiC8yrlD98bSvGMM2q7IJkiEQUGs
+         4Cyq8OWVB3u62OpptmJCCZQ0xAwTTphIr9CNiwVGn4/HBpPdMjSi+dDtwcQN9dTjI1
+         g5SBS0UfjLGssbzxCoBBXD5xAj9cyCwK/3Dz6dakNh3sWsCKe0Tkeycu2qHa+LALfU
+         Zau3Q7pU3FfH8Z2PNFDAe9jkQy4MtYTkAeEpRYdfpB8ze5VwqRXTgRzD1Kzwrl4wY4
+         ngI9h/lLsofhQ==
+Date:   Thu, 9 Jun 2022 10:39:45 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Seth Forshee <seth.forshee@digitalocean.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, lkp@lists.01.org, lkp@intel.com
+Subject: Re: [fs]  e1bbcd277a: xfstests.generic.633.fail
+Message-ID: <20220609083945.c2ezz7ldvqofunpm@wittgenstein>
+References: <20220609081742.GA17678@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220609081742.GA17678@xsang-OptiPlex-9020>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"BFP" should be "BPF"
+On Thu, Jun 09, 2022 at 04:17:42PM +0800, kernel test robot wrote:
+> 
+> 
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-11):
+> 
+> commit: e1bbcd277a53e08d619ffeec56c5c9287f2bf42f ("fs: hold writers when changing mount's idmapping")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> in testcase: xfstests
+> version: xfstests-x86_64-64f2596-1_20220518
+> with following parameters:
+> 
+> 	disk: 4HDD
+> 	fs: xfs
+> 	test: generic-group-31
+> 	ucode: 0xec
+> 
+> test-description: xfstests is a regression test suite for xfs and other files ystems.
+> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+> 
+> 
+> on test machine: 4 threads Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz with 32G memory
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> 
+> 
+> generic/633	- output mismatch (see /lkp/benchmarks/xfstests/results//generic/633.out.bad)
+>     --- tests/generic/633.out	2022-05-18 12:17:48.000000000 +0000
+>     +++ /lkp/benchmarks/xfstests/results//generic/633.out.bad	2022-06-07 15:37:21.117002738 +0000
+>     @@ -1,2 +1,10 @@
+>      QA output created by 633
+>      Silence is golden
+>     +idmapped-mounts.c: 8692: idmapped_mount_create_cb - Device or resource busy - failure: sys_mount_setattr
+>     +idmapped-mounts.c: 8692: idmapped_mount_create_cb - Device or resource busy - failure: sys_mount_setattr
+>     +idmapped-mounts.c: 8692: idmapped_mount_create_cb - Device or resource busy - failure: sys_mount_setattr
+>     +idmapped-mounts.c: 8692: idmapped_mount_create_cb - Device or resource busy - failure: sys_mount_setattr
+>     +idmapped-mounts.c: 8692: idmapped_mount_create_cb - Device or resource busy - failure: sys_mount_setattr
+>     ...
+>     (Run 'diff -u /lkp/benchmarks/xfstests/tests/generic/633.out /lkp/benchmarks/xfstests/results//generic/633.out.bad'  to see the entire diff)
 
-Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
----
- Documentation/bpf/instruction-set.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Since e1bbcd277a53 ("fs: hold writers when changing mount's idmapping")
+this behavior is expected and is explained in detail in the pull request
+that contained this patch.
 
-diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index 1de6a57c7e1e..9e27fbdb2206 100644
---- a/Documentation/bpf/instruction-set.rst
-+++ b/Documentation/bpf/instruction-set.rst
-@@ -127,7 +127,7 @@ BPF_XOR | BPF_K | BPF_ALU64 means::
- Byte swap instructions
- ----------------------
- 
--The byte swap instructions use an instruction class of ``BFP_ALU`` and a 4-bit
-+The byte swap instructions use an instruction class of ``BPF_ALU`` and a 4-bit
- code field of ``BPF_END``.
- 
- The byte swap instructions operate on the destination register
--- 
-2.31.1
+Upstream xfstests has been updated in commit
+781bb995a149 ("vfs/idmapped-mounts: remove invalid test")
+and would not fail.
 
+Thanks!
+Christian

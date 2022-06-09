@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7C4544ABA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34923544AA7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244295AbiFILmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
+        id S244273AbiFILmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244111AbiFILke (ORCPT
+        with ESMTP id S244105AbiFILke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 07:40:34 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B571E0C05
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:40:12 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id gl15so33031399ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:40:11 -0700 (PDT)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768021E0AFD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:40:14 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id u12so46916882eja.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:40:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=P7ZvfBFlgPRJsl6DK8VefG3/ZMxJo+DUINNCMnWClFY=;
-        b=yVmsRslMEUy7wlHAqgMJFz72yzFAB5LWmuXwc4lfybSFvT3pJvwKfsMXOpG8Puc1dD
-         tUDQdzsuJ1GhS5m1t3K1uoPGE09QfML9JqzWT+yOPdMgxllbLb5NByOiPpxregbU5Qcq
-         92H0Vw4/mfkcG+kehOeqpgbKYMxUEs1BO4C2Yv3SXqqZKkZut1xVnDwt2k4ZikG+8A+f
-         EKHKFcO+T+FVtl8kEVHkS5E3E/9D+4z9TZjw6dgqIDnAb+MELuBv8wgFSZXT10dWWRlr
-         7QpOxpDw/5wLtngLULFgEF8ZB+0TZ8rbtn8MJxHDuqrRGMP5fbHQCUFGpbzAFVldeB7B
-         1yAA==
+        bh=CNSMqPOWSXzw+Ck8M30e8l38LaeW0dc38daK1PaMf9A=;
+        b=mNZv/vOTlgWw33oah/CqDorwmXalyTLA9BKQ25HQG6NfYltICakt5zZVVDjeF9AdIB
+         lg9XtD34rEryysprD956jx1BJEB2y+b7QCbjgr/8W7zZ2bhq0YoFP5IKAOQRSyH/xW8q
+         LBk8PH1/qkRnLxCU1Wm9sX4MoV2kxQFNYRgzjhaXSSHoI3q7JdZC+sXukltg5WmyM8Hc
+         ydHE4Ro7TDaiavP+mZCZRdyS/TtWj1t3hs/5vssvk9Ii9ibpl0GYgI3YkMWAQeM0rlmf
+         510h5UMxnN/ap47vWnT78ToH/45kN5npPdfVkwgxJIEWqGJGIEC1NQa9aL08XwH56BYt
+         tJMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=P7ZvfBFlgPRJsl6DK8VefG3/ZMxJo+DUINNCMnWClFY=;
-        b=GeE3LbbRhKPe1lckawxcMl9ysgHjTUJ7IzB0KvYSALvyBrYgg1h8g75nIcX/lt0HGW
-         LjQ8ZvBi0WXAWwNUzmO6zcWHL5UPEiW58Gt0wWefVOAGPWd25dtXPELFajfY3MJZoyxw
-         89MgPniDC5AjOxPtzAkhEz/MNvbgdVtRpkk4O55GBpkDtxTQ0OHaC8vEldtE0ro0X3ha
-         11j/IJV2zTIq7W37HvV5iqgjFRDKHexq2ra9UaWl8FaOIsAo1qzfYcpUBl05kDZGcLS5
-         iduhoG0Qt/JzBz90jsbl9h5u0vDYdt030wZsv5O3skAnDtBfTFzix+Y9keKpwYSkZxrF
-         p+NA==
-X-Gm-Message-State: AOAM533t+2TAKVruS+DG2YuwnDjYMQv1srKg5o+X7fJNWftKORZIf4BG
-        riPZTkLB1Je9Z0iSdyqtxUP4WQ==
-X-Google-Smtp-Source: ABdhPJy4nNBXEdz+l/Sj3rWUAf/e1lV1tSllqUAwXDG63YFIeAVjqjH96BstlWGTQkxOJxGYYXiQCA==
-X-Received: by 2002:a17:906:acb:b0:709:d274:611b with SMTP id z11-20020a1709060acb00b00709d274611bmr35686861ejf.147.1654774811641;
-        Thu, 09 Jun 2022 04:40:11 -0700 (PDT)
+        bh=CNSMqPOWSXzw+Ck8M30e8l38LaeW0dc38daK1PaMf9A=;
+        b=UFQjV9lxjxOAe+wezzRA8zkqJQBiyYUSGZjvYMkYYCz4bVWPn1DBKChiqXPmubrEV0
+         9nC6diVFbrFL3+pQdKvQhZRLhycbnmz+f7AK7zwxQdPXFLx8Pe4KfnsV3dscO+pMUMFQ
+         xKVY/H2yjB15YRxeBWJrWh4x2aETDH/ebfFy3N1uU/SEqo4GnmlVimI9m9Fi6ykot2tV
+         hD+t4sPoUyk4G4udNRymNqyVxatJzQSzEJIBrrLIj6Ht4boby48abHJXst5jvKJ2h66d
+         EjGYYfDISHYagCKDjE5ics66ybzSyALB0hAnGYhAIUwUczcLc9vSilAkxEkPHFs4dcQX
+         p1yg==
+X-Gm-Message-State: AOAM5309Z0bgwiRhwBSzEJA+bg+E8BUrgbkzm+vqYES6hkRZ7Z4O9b8U
+        T0U6Z4XDiCCT0BNmum7ZdRrv4A==
+X-Google-Smtp-Source: ABdhPJxmAk2Y+XroE7iF0LDQjobmFkH/yU0gGNvbSEj5slHvWwdNDLIfiKGfqCCpS+4l9xnWfXsPTA==
+X-Received: by 2002:a17:907:5010:b0:711:f093:3a93 with SMTP id fw16-20020a170907501000b00711f0933a93mr9061053ejc.620.1654774812751;
+        Thu, 09 Jun 2022 04:40:12 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q1-20020a170906360100b006ff59151e34sm10638441ejb.39.2022.06.09.04.40.10
+        by smtp.gmail.com with ESMTPSA id q1-20020a170906360100b006ff59151e34sm10638441ejb.39.2022.06.09.04.40.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:40:11 -0700 (PDT)
+        Thu, 09 Jun 2022 04:40:12 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 22/48] arm64: dts: mediatek: mt7622-bananapi-bpi-r64: align led node names with dtschema
-Date:   Thu,  9 Jun 2022 13:39:55 +0200
-Message-Id: <20220609114002.380563-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 23/48] arm64: dts: mediatek: mt7622-rfb1: correct gpio-keys properties
+Date:   Thu,  9 Jun 2022 13:39:56 +0200
+Message-Id: <20220609114002.380563-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
@@ -74,45 +74,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The node names should be generic and DT schema expects certain pattern
-with 'led'.  Use generic color properties instead of the node name.
+gpio-keys children do not use unit addresses.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-index c2311733d2de..7d1ecf72a6c3 100644
---- a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-@@ -8,6 +8,7 @@
- /dts-v1/;
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
+diff --git a/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts b/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
+index c28da9323a9c..1a86857c9027 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
+@@ -40,7 +40,6 @@ cpu@1 {
  
- #include "mt7622.dtsi"
- #include "mt6380.dtsi"
-@@ -56,14 +57,16 @@ wps-key {
- 	leds {
- 		compatible = "gpio-leds";
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+-		poll-interval = <100>;
  
--		green {
-+		led-0 {
- 			label = "bpi-r64:pio:green";
-+			color = <LED_COLOR_ID_GREEN>;
- 			gpios = <&pio 89 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		red {
-+		led-1 {
- 			label = "bpi-r64:pio:red";
-+			color = <LED_COLOR_ID_RED>;
- 			gpios = <&pio 88 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
+ 		key-factory {
+ 			label = "factory";
 -- 
 2.34.1
 

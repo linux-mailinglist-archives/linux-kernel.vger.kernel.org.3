@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4602F544B3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1EE544B3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244993AbiFIMEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S245027AbiFIMEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237837AbiFIMEA (ORCPT
+        with ESMTP id S244926AbiFIMEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:04:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B316CF61;
-        Thu,  9 Jun 2022 05:03:58 -0700 (PDT)
+        Thu, 9 Jun 2022 08:04:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9F368FAD;
+        Thu,  9 Jun 2022 05:04:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DBB560F54;
-        Thu,  9 Jun 2022 12:03:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC20CC3411F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31D93B82D47;
+        Thu,  9 Jun 2022 12:03:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2DEC341C5;
         Thu,  9 Jun 2022 12:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1654776237;
-        bh=oaoo6MX5VQAXmrWYJ2witm5KxE0LsmNFvQE0kXLGRNg=;
+        bh=S5g9QkaioS1LmOyC7q+wI7Npt3iFDlZoTjKlFeUKQyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HCLqF5TITtjSg7G57lNOyd/djeztt68Y6WSb6NFOaiPwEYNyI7HUP87PQm6yiCUP2
-         MMgBmMfAB7ZkkWX5MzLrcakdYvS83fK8C76OTGge/pazdtJxJll3jQ3bZUvF5f+9jd
-         4cj6v9c4BRIgsq8o0/m02nTCmnGRDUQXqIvdY29GujBNYi9EIMfq4Yyg/XveLzgakq
-         cNUMxY+rjwq68y2FVII+5m71p1sHsAoaxatoDKyFoSfGLsaWWjmOkkHmohw91FjqHH
-         UFMpJWo2xChPmbgbg5uGDkYG0HnR5nAIzHNk07pVmZRt7XbFvzJJFC4+P/i1AjAjza
-         EhMr98JKgeH1Q==
+        b=pRP1l9UCWUpMb/BJtM/d3o+moasB/Qk6d2QgT+ptF0OZqPWudpIkDSs7UfvgMNu2s
+         NgAhXD0D9vA1LQhNjNLW6be1b3apg6SFCQFl5ODb7H92NW1a5YU0Kacu6FNLBrYHWW
+         abUQMWF4rk4mWNhKnxXr9BDTVPh6Y0U6OGoeyOKOA9lIkv0p+WPRUPkWyLW48u8hi5
+         JToQYwB1i1F158Fd3Es3vfj0mXDLAxz917nK7p9Yx9YXKgcCfS64yvKvtZxGQxSAkf
+         AN3H4VITH0LX2xrbaSE8ZeI0AK46zJ6Z+U2q3ekV5CGCfGHJEq6SZftgffOJ1iW2yK
+         ZQVEwcsSYMi5g==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1nzGtF-00014F-QU; Thu, 09 Jun 2022 14:03:53 +0200
+        id 1nzGtF-00014H-T1; Thu, 09 Jun 2022 14:03:53 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -43,9 +43,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 2/3] phy: qcom-qmp: clean up define alignment
-Date:   Thu,  9 Jun 2022 14:03:37 +0200
-Message-Id: <20220609120338.4080-3-johan+linaro@kernel.org>
+Subject: [PATCH 3/3] phy: qcom-qmp: clean up hex defines
+Date:   Thu,  9 Jun 2022 14:03:38 +0200
+Message-Id: <20220609120338.4080-4-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220609120338.4080-1-johan+linaro@kernel.org>
 References: <20220609120338.4080-1-johan+linaro@kernel.org>
@@ -61,95 +61,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the QMP defines by removing some stray white space and making
-sure values are aligned.
+Use lower case hex consistently for define values.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.h | 48 ++++++++++++++---------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.h b/drivers/phy/qualcomm/phy-qcom-qmp.h
-index 626be0ccede2..6d410826ae90 100644
+index 6d410826ae90..3a4f150dd499 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp.h
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp.h
-@@ -627,8 +627,8 @@
- #define QSERDES_V4_TX_INTERFACE_SELECT			0x2c
- #define QSERDES_V4_TX_RES_CODE_LANE_TX			0x34
- #define QSERDES_V4_TX_RES_CODE_LANE_RX			0x38
--#define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX 		0x3c
--#define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_RX 		0x40
-+#define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX		0x3c
-+#define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_RX		0x40
- #define QSERDES_V4_TX_TRANSCEIVER_BIAS_EN		0x54
- #define QSERDES_V4_TX_HIGHZ_DRVR_EN			0x58
- #define QSERDES_V4_TX_TX_POL_INV			0x5c
-@@ -678,7 +678,7 @@
- #define QSERDES_V4_RX_UCDR_SB2_THRESH2			0x050
- #define QSERDES_V4_RX_UCDR_SB2_GAIN1			0x054
- #define QSERDES_V4_RX_UCDR_SB2_GAIN2			0x058
--#define QSERDES_V4_RX_AUX_DATA_TCOARSE_TFINE			0x060
-+#define QSERDES_V4_RX_AUX_DATA_TCOARSE_TFINE		0x060
- #define QSERDES_V4_RX_RCLK_AUXDATA_SEL			0x064
- #define QSERDES_V4_RX_AC_JTAG_ENABLE			0x068
- #define QSERDES_V4_RX_AC_JTAG_MODE			0x078
-@@ -759,26 +759,26 @@
- #define QSERDES_V4_20_RX_MARG_COARSE_CTRL2		0x23c
+@@ -30,7 +30,7 @@
+ #define QSERDES_PLL_CP_CTRL_MODE0			0x080
+ #define QSERDES_PLL_CP_CTRL_MODE1			0x084
+ #define QSERDES_PLL_PLL_RCTRL_MODE0			0x088
+-#define QSERDES_PLL_PLL_RCTRL_MODE1			0x08C
++#define QSERDES_PLL_PLL_RCTRL_MODE1			0x08c
+ #define QSERDES_PLL_PLL_CCTRL_MODE0			0x090
+ #define QSERDES_PLL_PLL_CCTRL_MODE1			0x094
+ #define QSERDES_PLL_BIAS_EN_CTRL_BY_PSM			0x0a4
+@@ -44,7 +44,7 @@
+ #define QSERDES_PLL_DIV_FRAC_START3_MODE0		0x0e0
+ #define QSERDES_PLL_DIV_FRAC_START1_MODE1		0x0e4
+ #define QSERDES_PLL_DIV_FRAC_START2_MODE1		0x0e8
+-#define QSERDES_PLL_DIV_FRAC_START3_MODE1		0x0eC
++#define QSERDES_PLL_DIV_FRAC_START3_MODE1		0x0ec
+ #define QSERDES_PLL_INTEGLOOP_GAIN0_MODE0		0x100
+ #define QSERDES_PLL_INTEGLOOP_GAIN1_MODE0		0x104
+ #define QSERDES_PLL_INTEGLOOP_GAIN0_MODE1		0x108
+@@ -270,11 +270,11 @@
+ #define QPHY_RX_MIN_HIBERN8_TIME			0x140
+ #define QPHY_RX_SIGDET_CTRL2				0x148
+ #define QPHY_RX_PWM_GEAR_BAND				0x154
+-#define QPHY_PLL_LOCK_CHK_DLY_TIME_AUXCLK_LSB		0x1A8
+-#define QPHY_OSC_DTCT_ACTIONS				0x1AC
+-#define QPHY_RX_SIGDET_LVL				0x1D8
+-#define QPHY_L1SS_WAKEUP_DLY_TIME_AUXCLK_LSB		0x1DC
+-#define QPHY_L1SS_WAKEUP_DLY_TIME_AUXCLK_MSB		0x1E0
++#define QPHY_PLL_LOCK_CHK_DLY_TIME_AUXCLK_LSB		0x1a8
++#define QPHY_OSC_DTCT_ACTIONS				0x1ac
++#define QPHY_RX_SIGDET_LVL				0x1d8
++#define QPHY_L1SS_WAKEUP_DLY_TIME_AUXCLK_LSB		0x1dc
++#define QPHY_L1SS_WAKEUP_DLY_TIME_AUXCLK_MSB		0x1e0
  
- /* Only for QMP V4 PHY - UFS PCS registers */
--#define QPHY_V4_PCS_UFS_PHY_START				0x000
--#define QPHY_V4_PCS_UFS_POWER_DOWN_CONTROL			0x004
--#define QPHY_V4_PCS_UFS_SW_RESET				0x008
--#define QPHY_V4_PCS_UFS_TIMER_20US_CORECLK_STEPS_MSB		0x00c
--#define QPHY_V4_PCS_UFS_TIMER_20US_CORECLK_STEPS_LSB		0x010
--#define QPHY_V4_PCS_UFS_PLL_CNTL				0x02c
--#define QPHY_V4_PCS_UFS_TX_LARGE_AMP_DRV_LVL			0x030
--#define QPHY_V4_PCS_UFS_TX_SMALL_AMP_DRV_LVL			0x038
--#define QPHY_V4_PCS_UFS_BIST_FIXED_PAT_CTRL			0x060
--#define QPHY_V4_PCS_UFS_TX_HSGEAR_CAPABILITY			0x074
--#define QPHY_V4_PCS_UFS_RX_HSGEAR_CAPABILITY			0x0b4
--#define QPHY_V4_PCS_UFS_DEBUG_BUS_CLKSEL			0x124
--#define QPHY_V4_PCS_UFS_LINECFG_DISABLE				0x148
--#define QPHY_V4_PCS_UFS_RX_MIN_HIBERN8_TIME			0x150
--#define QPHY_V4_PCS_UFS_RX_SIGDET_CTRL2				0x158
--#define QPHY_V4_PCS_UFS_TX_PWM_GEAR_BAND			0x160
--#define QPHY_V4_PCS_UFS_TX_HS_GEAR_BAND				0x168
-+#define QPHY_V4_PCS_UFS_PHY_START			0x000
-+#define QPHY_V4_PCS_UFS_POWER_DOWN_CONTROL		0x004
-+#define QPHY_V4_PCS_UFS_SW_RESET			0x008
-+#define QPHY_V4_PCS_UFS_TIMER_20US_CORECLK_STEPS_MSB	0x00c
-+#define QPHY_V4_PCS_UFS_TIMER_20US_CORECLK_STEPS_LSB	0x010
-+#define QPHY_V4_PCS_UFS_PLL_CNTL			0x02c
-+#define QPHY_V4_PCS_UFS_TX_LARGE_AMP_DRV_LVL		0x030
-+#define QPHY_V4_PCS_UFS_TX_SMALL_AMP_DRV_LVL		0x038
-+#define QPHY_V4_PCS_UFS_BIST_FIXED_PAT_CTRL		0x060
-+#define QPHY_V4_PCS_UFS_TX_HSGEAR_CAPABILITY		0x074
-+#define QPHY_V4_PCS_UFS_RX_HSGEAR_CAPABILITY		0x0b4
-+#define QPHY_V4_PCS_UFS_DEBUG_BUS_CLKSEL		0x124
-+#define QPHY_V4_PCS_UFS_LINECFG_DISABLE			0x148
-+#define QPHY_V4_PCS_UFS_RX_MIN_HIBERN8_TIME		0x150
-+#define QPHY_V4_PCS_UFS_RX_SIGDET_CTRL2			0x158
-+#define QPHY_V4_PCS_UFS_TX_PWM_GEAR_BAND		0x160
-+#define QPHY_V4_PCS_UFS_TX_HS_GEAR_BAND			0x168
- #define QPHY_V4_PCS_UFS_READY_STATUS			0x180
--#define QPHY_V4_PCS_UFS_TX_MID_TERM_CTRL1			0x1d8
--#define QPHY_V4_PCS_UFS_MULTI_LANE_CTRL1			0x1e0
-+#define QPHY_V4_PCS_UFS_TX_MID_TERM_CTRL1		0x1d8
-+#define QPHY_V4_PCS_UFS_MULTI_LANE_CTRL1		0x1e0
- 
- /* PCIE GEN3 COM registers */
- #define PCIE_GEN3_QHP_COM_SSC_EN_CENTER			0x14
-@@ -1140,8 +1140,8 @@
- /* Only for QMP V5 PHY - TX registers */
- #define QSERDES_V5_TX_RES_CODE_LANE_TX			0x34
- #define QSERDES_V5_TX_RES_CODE_LANE_RX			0x38
--#define QSERDES_V5_TX_RES_CODE_LANE_OFFSET_TX 		0x3c
--#define QSERDES_V5_TX_RES_CODE_LANE_OFFSET_RX 		0x40
-+#define QSERDES_V5_TX_RES_CODE_LANE_OFFSET_TX		0x3c
-+#define QSERDES_V5_TX_RES_CODE_LANE_OFFSET_RX		0x40
- #define QSERDES_V5_TX_LANE_MODE_1			0x84
- #define QSERDES_V5_TX_LANE_MODE_2			0x88
- #define QSERDES_V5_TX_LANE_MODE_3			0x8c
+ /* Only for QMP V3 & V4 PHY - DP COM registers */
+ #define QPHY_V3_DP_COM_PHY_MODE_CTRL			0x00
+@@ -639,7 +639,7 @@
+ #define QSERDES_V4_TX_TRAN_DRVR_EMP_EN			0xb8
+ #define QSERDES_V4_TX_TX_INTERFACE_MODE			0xbc
+ #define QSERDES_V4_TX_PWM_GEAR_1_DIVIDER_BAND0_1	0xd8
+-#define QSERDES_V4_TX_PWM_GEAR_2_DIVIDER_BAND0_1	0xdC
++#define QSERDES_V4_TX_PWM_GEAR_2_DIVIDER_BAND0_1	0xdc
+ #define QSERDES_V4_TX_PWM_GEAR_3_DIVIDER_BAND0_1	0xe0
+ #define QSERDES_V4_TX_PWM_GEAR_4_DIVIDER_BAND0_1	0xe4
+ #define QSERDES_V4_TX_VMODE_CTRL1			0xe8
 -- 
 2.35.1
 

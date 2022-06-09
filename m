@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F3C5450D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63E45450DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344505AbiFIP3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
+        id S242311AbiFIPbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237634AbiFIP3J (ORCPT
+        with ESMTP id S240115AbiFIPbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:29:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2DD31237;
-        Thu,  9 Jun 2022 08:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654788549; x=1686324549;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LcYJN4aKPVwSNGUQj9U9ZpXLKWEeaZUocvmuITdYYBk=;
-  b=hQNfSYECiFAL/nvqfP54VjGLwlXB3EsglTrF1hEr1O3fsG4/+S2p3ch3
-   NUAsGErjapr/MNbM46MVo9Loh1RCGNpbktX4L7J6Uf5EmPLwJT5QAtDeK
-   F2V8aqBj2+NfuQ5NvVeUNqoIBMB5EW0cCpkZwimtluoUrFSMNqiE+pFRR
-   X8doNpyLZxQ0y0k9mmRwhcxZNWW3kof1HScYJ7wMouTkWK/pEJBg9MHvj
-   afUl260RaC3Ib0TchgrfUvJUVYJ7H+pfT+hTsaBR/ttMjBPjyQrF5/C3q
-   lkHgALg4ytZi6DH9lO7FwRnPTi0pQZDApvflHLbJ0G//+OOhwHGSZ+VBD
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266096004"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="266096004"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:29:08 -0700
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="649317532"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:29:06 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nzK5n-000XyN-Rz;
-        Thu, 09 Jun 2022 18:29:03 +0300
-Date:   Thu, 9 Jun 2022 18:29:03 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 06/16] ACPI: container: Use acpi_dev_for_each_child()
-Message-ID: <YqIRv8xnGciF2wBd@smile.fi.intel.com>
-References: <1843211.tdWV9SEqCh@kreacher>
- <3131424.5fSG56mABF@kreacher>
+        Thu, 9 Jun 2022 11:31:50 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9C81AD8A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:31:49 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id el14so16763831qvb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 08:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4U9tS0TY3KQZ435ts/jOG5/NkA8FDER6JfA1XuwruEc=;
+        b=GO/ZD7nJmNNk5znGqfkplygLhVlLFll4LrMSC3aMHrJN95dIQM47T+WK6Hf358NNed
+         pkdfFs2NnoU/a1wY9wkHSerQRTWEZ6TVrSReqSDEKcPt1Xj+pcqsWG10+o0ynboeLcef
+         /ffECQsZZuozFGNsarwsPNyJmCb4YrfRV6ELPYtc1q5AoU3Qd4crtNBUv5ICZhONtUC8
+         o3ZkfFIN6IWLKEjvkYvTMiihc/uFcaQfN+CwpNJgvah3wG+IUUe73IwABrsE5RON9zQh
+         22jK5e/NEByz4FYpel0RBOOC6cqBmcTMdHKhQr3fojpEpTzIrIBMSQfHw/nHyr2e4EW+
+         8YCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4U9tS0TY3KQZ435ts/jOG5/NkA8FDER6JfA1XuwruEc=;
+        b=vbvS3QmXiF1yj22Wfo6/0CAYOVQ9xRXRTgfidwXlctaCGiVkTP0srKsEcepONdVs+p
+         11/5S3YvMut/7mp1HwxpVnYNBrXsiWOjlLCanf4i6hw533UTCetxjl1BLjOVOVhMlSb1
+         C4jbl+bpIeL3O7w3N2DeOp+n0A/kFmYyGIWyyw+RoPFiqTsn0yzUa9rKbtGomzzYVkro
+         9lrB6UIxmPAc5j7TFSTjrVs7Bs4NMOxH2nvPsm7Z1eiS2y6wfeETEqm+EHPH0ntxyC/8
+         GN/2NL6u0fziq1ASkrmodjqP449Ya6lwVJlqWALDfq+QOk2wn6HQiPDpidyUJCl24uDn
+         +94g==
+X-Gm-Message-State: AOAM5315MEylYBAOaUuibysxQcB/moU1P5vnvLAKxAJ1/6P4+tzuQ/e6
+        x4xOZ8thhKUCMzxYNDVnpBM=
+X-Google-Smtp-Source: ABdhPJyGw3HPEdkBQ1FLH0cDnMy0u+XWLFOapa7dgKtiV7lxnCmyJZfpfNO1C2KgxZU2qzih8jwhTg==
+X-Received: by 2002:a05:6214:ccd:b0:46b:b0ee:bece with SMTP id 13-20020a0562140ccd00b0046bb0eebecemr13867099qvx.114.1654788707834;
+        Thu, 09 Jun 2022 08:31:47 -0700 (PDT)
+Received: from Agam.hsd1.mi.comcast.net ([2601:402:4500:22e0::e952])
+        by smtp.gmail.com with ESMTPSA id gb3-20020a05622a598300b002f93554c009sm16795726qtb.59.2022.06.09.08.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 08:31:46 -0700 (PDT)
+From:   Agam Kohli <agamkohli9@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Agam Kohli <agamkohli9@gmail.com>
+Subject: [PATCH] Staging: rts5208: spi: Removed unnecessary ftrace-like logging
+Date:   Thu,  9 Jun 2022 11:31:44 -0400
+Message-Id: <20220609153144.11803-1-agamkohli9@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3131424.5fSG56mABF@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 03:58:24PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Instead of walking the list of children of an ACPI device directly,
-> use acpi_dev_for_each_child() to carry out an action for all of
-> the given ACPI device's children.
+Coding Style Fix
 
-...
+Signed-off-by: Agam Kohli <agamkohli9@gmail.com>
+---
+ drivers/staging/rts5208/spi.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> +	return acpi_dev_for_each_child(ACPI_COMPANION(&cdev->dev),
-> +				       check_offline, NULL);
-
-I would find this on one line better and not missing important details after
-80th character.
-
+diff --git a/drivers/staging/rts5208/spi.c b/drivers/staging/rts5208/spi.c
+index f1e9e80044ed..0d2d065508d3 100644
+--- a/drivers/staging/rts5208/spi.c
++++ b/drivers/staging/rts5208/spi.c
+@@ -460,7 +460,6 @@ int spi_set_parameter(struct scsi_cmnd *srb, struct rtsx_chip *chip)
+ 	spi->clk_div = ((u16)(srb->cmnd[4]) << 8) | srb->cmnd[5];
+ 	spi->write_en = srb->cmnd[6];
+ 
+-	dev_dbg(rtsx_dev(chip), "%s: ", __func__);
+ 	dev_dbg(rtsx_dev(chip), "spi_clock = %d, ", spi->spi_clock);
+ 	dev_dbg(rtsx_dev(chip), "clk_div = %d, ", spi->clk_div);
+ 	dev_dbg(rtsx_dev(chip), "write_en = %d\n", spi->write_en);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.36.1
 

@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253B454431F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0C5544318
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbiFIFYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
+        id S238322AbiFIFYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiFIFYF (ORCPT
+        with ESMTP id S238273AbiFIFYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:24:05 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128F62BDC
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:24:02 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id b6-20020a252e46000000b0065d5168f3f0so19279443ybn.21
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 22:24:02 -0700 (PDT)
+        Thu, 9 Jun 2022 01:24:07 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA67225E9D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:24:04 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 10-20020a250d0a000000b0065ca0e7be90so19362378ybn.17
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 22:24:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=7XF9Ovw3kggDsMB//JiO35wPNulyyyK2DnQRx8sKbCw=;
-        b=Qxt+qHfYhDcOmc8hJ0bwanQhLdkNTTw/fTHYnVI3n9lc9yKskzsAgPUblvzaiKqzki
-         f4R+lZJq29nNw2NS9A2gMI8kKaT12s3IhM+pX4QiU0AQrQ0qe/G4kYYOKL4Oz+KPv82X
-         7lDgoVC5Fl/2mmrBnJzIwfT/hm0Hp/dNnPONk4i7CseHykg9pWWgTQuRqjzOnWZLYoe9
-         kPG0qrkCgz/oKwWwvd0zLDJGFiYnrGgZTbqMxeE3QmbZPzlNqwlr2qca2eSgyrf2s/ej
-         5BDSK7xwy0GfLGHT32urHkpiQqk95ILmj57wVUSRiEvC+FoQ38ZkFZH9Rl0lU3I99xqa
-         pH/Q==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=bfkEdtucqgA+wBrOBxrBZd3UEfs8ZNdv2ifdbarRzlY=;
+        b=m+GH7afRGBYGWqJBmM4w4QGt8MCZhwn+CP1UOE+F21RUMbBBtczrX4dpaH1Th5zjis
+         5S6qp7GTToPhKiuLySTPJzaCFI1KR6/8dXZe13wiB6LmZ/xe0yf8PvdBPr+Ok+0x2GdZ
+         F9KeQSU1oKIhH6z3bkKeT54UJNjFiHmG15KjOj1sU8IbSC7CS2pxTYRshhKAblVtZfuH
+         jhC7NKiOrQp6DtxkRsa8jz/FlBvkRtC8dtfKzI4z4YUZ/Tz8davC212ATw4ccRhYXd2o
+         aNBeSMqX1B6ac+B4AKSv+Ftl549whZaXk6ea5N+/HveYjTol1iYFewxASPZxNJt0iEuT
+         oF9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=7XF9Ovw3kggDsMB//JiO35wPNulyyyK2DnQRx8sKbCw=;
-        b=ygUwdzflJUhO/JP22izNUgX3nFi1yUieK+PNPWclR2uMrsujtL/saK0ZehNb4sHj4H
-         sxTtm/S22LFUrUn3uNnT5pmuS2WxcPCCPXAfs/lCgN2LrQnZrENQPyGwZO7pBsUNtN2Q
-         NZvZmMGBTeG2J0PHtHMqxNdT3ru33iEbKrAFPtXf5RD5TurcDibqgBrb236t9m+CHnNo
-         HShtdoXtlZPCMtU3x28jOz6rbsirNdxVPl7pvVlmXRc4/7nMnYEONyyFlZZAGzD8GP+J
-         JKaprkvox3kjxdL4Siu3h0KA5mW7YsjoJJOGm7VUEi4qs3B3gBNkifoPSASjWBT6crJz
-         PXxQ==
-X-Gm-Message-State: AOAM5331g09Ku7UlAd7UrfVE1yo1I/iX/o5efUfVIO20LtXIOJSK+Bu5
-        kxcS9xsm949kFelLDj1QxSE4+9t4stFD
-X-Google-Smtp-Source: ABdhPJwf1EjrawTD8TkuztwNA6YeKtP7aL1hFxOD/Pfd+D7027QpFXS+X5Jr8E+OajcbsOHLBLEehH23wdcM
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=bfkEdtucqgA+wBrOBxrBZd3UEfs8ZNdv2ifdbarRzlY=;
+        b=bRAw+xrHubUrGqIiKQtGDDOwakc+WcWMgCeirimfRpe0bkH6rXpg4FHOZBXZdjcCFh
+         HVKf37RL4CeqqEIy6RHu1ferySjShFjZ+W46/wfYBeSBztcO4P/7XHHiIeziji6vnoNX
+         qsGKKq7/8E6qd/6WVh6L4S3qUq4Ruebnp6VocBocVzc+rbA3InCnUcxt4HlH/UO2Uxq4
+         6vSOCP4cWfaNv9Rc3WjR4UUJr4MyTnFT51Zp7Y+kTQuwVO9cPxURXaYhWUcnm4iHYawd
+         VnFAZkJ6hxcUuTeQ4srA9z7jyuj7PfSqU7G2UtocOzy2MDrVhZ6VlHjZKn9pDJLKqLdi
+         1j1Q==
+X-Gm-Message-State: AOAM531Oo1OnSjwdqM4BKvLiIjsWSrDGqqVyMAHG08crCx7QoUtUFyF/
+        7dpKsY3lXHviTFzeBINPotNfXLBmy3xH
+X-Google-Smtp-Source: ABdhPJzR1whIf7j55WQjVp8vOL2cQbpNCuyhPsZMw7XC5LhktLRlst3wiJkrl8JtpqpEzCumqhY37TGcvUF+
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:ae20:7578:fb21:976b])
- (user=irogers job=sendgmr) by 2002:a25:2385:0:b0:664:381c:7c98 with SMTP id
- j127-20020a252385000000b00664381c7c98mr1028385ybj.7.1654752241781; Wed, 08
- Jun 2022 22:24:01 -0700 (PDT)
-Date:   Wed,  8 Jun 2022 22:23:51 -0700
-Message-Id: <20220609052355.1300162-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:1414:0:b0:30c:1c83:7702 with SMTP id
+ 20-20020a811414000000b0030c1c837702mr41227650ywu.474.1654752244006; Wed, 08
+ Jun 2022 22:24:04 -0700 (PDT)
+Date:   Wed,  8 Jun 2022 22:23:52 -0700
+In-Reply-To: <20220609052355.1300162-1-irogers@google.com>
+Message-Id: <20220609052355.1300162-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20220609052355.1300162-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 0/4] Tidy user rdpmc documentation and testing
+Subject: [PATCH v2 1/4] libperf evsel: Open shouldn't leak fd on failure
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -76,40 +80,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-libperf's perf_mmap__read_self and the addition of arm64 support mean
-that the perf_event.h and the rdpmc perf test have become
-stale. Refresh the documentation in perf_event.h, remove the x86 rdpmc
-test and port the libperf test as a non-architecture specific test.
+If the perf_event_open fails the fd is opened but the fd is only freed
+by closing (not by delete). Typically when an open fails you don't call
+close and so this results in a memory leak. To avoid this, add a close
+when open fails.
 
-Address sanitizer testing showed libperf leaking fds when the
-perf_event_open failed, add error paths to handle this.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/lib/perf/evsel.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-A comment is added to perf_event.h to avoid a divide by zero when
-scaling counts if the running time is 0. This was previously discussed
-in this thread:
-https://lore.kernel.org/lkml/CAP-5=fVRdqvswtyQMg5cB+ntTGda+SAYskjTQednEH-AeZo13g@mail.gmail.com/
-
-v2. Alters the skip in test_stat_user_read for open to always be a
-    skip as perf_event_open may fail with EACCES (permissions), ENOSYS
-    (not supported) and ENOENT (hypervisor). Adds Rob Herring's
-    acked-by on patch 3.
-
-Ian Rogers (4):
-  libperf evsel: Open shouldn't leak fd on failure
-  perf: Align user space counter reading with code
-  perf test: Remove x86 rdpmc test
-  perf test: Add user space counter reading tests
-
- include/uapi/linux/perf_event.h        |  32 +++--
- tools/include/uapi/linux/perf_event.h  |  32 +++--
- tools/lib/perf/evsel.c                 |  17 ++-
- tools/perf/arch/x86/tests/Build        |   1 -
- tools/perf/arch/x86/tests/arch-tests.c |   2 -
- tools/perf/arch/x86/tests/rdpmc.c      | 182 -------------------------
- tools/perf/tests/mmap-basic.c          | 127 ++++++++++++++++-
- 7 files changed, 176 insertions(+), 217 deletions(-)
- delete mode 100644 tools/perf/arch/x86/tests/rdpmc.c
-
+diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
+index c1d58673f6ef..952f3520d5c2 100644
+--- a/tools/lib/perf/evsel.c
++++ b/tools/lib/perf/evsel.c
+@@ -149,23 +149,30 @@ int perf_evsel__open(struct perf_evsel *evsel, struct perf_cpu_map *cpus,
+ 			int fd, group_fd, *evsel_fd;
+ 
+ 			evsel_fd = FD(evsel, idx, thread);
+-			if (evsel_fd == NULL)
+-				return -EINVAL;
++			if (evsel_fd == NULL) {
++				err = -EINVAL;
++				goto out;
++			}
+ 
+ 			err = get_group_fd(evsel, idx, thread, &group_fd);
+ 			if (err < 0)
+-				return err;
++				goto out;
+ 
+ 			fd = sys_perf_event_open(&evsel->attr,
+ 						 threads->map[thread].pid,
+ 						 cpu, group_fd, 0);
+ 
+-			if (fd < 0)
+-				return -errno;
++			if (fd < 0) {
++				err = -errno;
++				goto out;
++			}
+ 
+ 			*evsel_fd = fd;
+ 		}
+ 	}
++out:
++	if (err)
++		perf_evsel__close(evsel);
+ 
+ 	return err;
+ }
 -- 
 2.36.1.255.ge46751e96f-goog
 

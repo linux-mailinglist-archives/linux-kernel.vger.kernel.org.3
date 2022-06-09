@@ -2,142 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB995458D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344975458D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345629AbiFIXqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 19:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S1345782AbiFIXrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 19:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiFIXq0 (ORCPT
+        with ESMTP id S231949AbiFIXrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:46:26 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB62C11A;
-        Thu,  9 Jun 2022 16:46:25 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id g17-20020a9d6491000000b0060c0f0101ffso6240432otl.7;
-        Thu, 09 Jun 2022 16:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X141ZafwMnCya6zJqjlrPW7zfFJHx0toBuGRvDUmsjo=;
-        b=q0XI0ntOLGfgMtPYG+icei7LjXutXp3f1wiAcFHblSBQLpArWvXjxTipBntsbcUa5q
-         uAuctNRnldKvWtYq1gkFDgB0kTpQYPQIC4IdHb3vJRdBCTUM3tHQ+6BQhB72M0DncDaP
-         yGYp2E8WiYKx8Nwhm/0h+jHI+rgeCZ9oNfNwrpxtlosamsr5k61n8hFpO5GsQjhwIDJa
-         VW4o3S/K1xWzXFEHGkPWiCfCFeLECZpOXn8Upu9Ca3TFWp67de63HE5Sny5P9kCMfbXW
-         24yo2TyJtFDppyZtP58oWsTlrhFr8CZpZ+rusNdW9ccuMJqpDUXamp6uWijgttsrgCzY
-         TgRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X141ZafwMnCya6zJqjlrPW7zfFJHx0toBuGRvDUmsjo=;
-        b=eB3SZGWyztcjnWRt/aW2qQZnrm2YKQinq+6AddxQPyP3Gr9IJpzVGSG6wY8DdBx8Gq
-         uDLoqUU4UZVBmM4uvsLFrq85FzlgRmfQtO7OBt+b/cMQRoGCQAGkLAXcUO8PWRbCxhYN
-         D8pyWjIyQD6Le4VNKM3IyukArZxQVvrWOfdKwsxiEwL6DmDb5ZVeriighVnKGihQ3xwM
-         g4gqAuGcV3hqiYI4vhoaaTAyzFijgvyA0u6PjGXpBnAWisPSIUTW6oOhItOVPalLt6H/
-         dSJqSyY/4/Oetej45oakQeBiDAqQyGLLzIxzWV5AJlbJNN0mBql/rZXSxCMFaTYWdWT/
-         sEaw==
-X-Gm-Message-State: AOAM531ePWeK13rd9711Kz8RQ1Y8ngCzUkv7hD4mvaiVg4oUIvLXnwhc
-        zNl8HmxCRUkj6rbfK3dVYKpsMuAzM7RqajIFqUWk/z+KABxoxA==
-X-Google-Smtp-Source: ABdhPJzn+Em+TQCsBFUUWarhAuEu/9+7NVktDF+yx31ZZZuLx3eXMPhCu3l/Pbw48K8J5jaRzoC/3IURySvaJsp3BiE=
-X-Received: by 2002:a9d:7056:0:b0:60c:f8b:afac with SMTP id
- x22-20020a9d7056000000b0060c0f8bafacmr6250091otj.30.1654818384775; Thu, 09
- Jun 2022 16:46:24 -0700 (PDT)
+        Thu, 9 Jun 2022 19:47:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BBFC965D;
+        Thu,  9 Jun 2022 16:47:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E1616201E;
+        Thu,  9 Jun 2022 23:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43018C34114;
+        Thu,  9 Jun 2022 23:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654818419;
+        bh=75ma3gShevB/s+RL0PO7tBwv+TZNSdvzkkGB14y8o+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kcX+PwMw5mFGo3Hvd5s+OCw0NUn7tGUaFLmRiU7V0WspqeDtxnP4hKHuGR04d0Zh/
+         CmqrhaiNPpoiltOTf+gpcxwOtF2MvuPkzFtYsPvf0fFIr2JbSi7wNC+Csv9+lRUjWi
+         opbqKAFrkAoeuRc7dMMJbhCkSkK4kowoEKuE5crEYe4xnUSu/eOOgwMqFaDAPU8na3
+         fphsoQ/VKiMJbP/Epu6c/rwA+3yiRDVQI2cSRN8LsM296JFCP0HRNxCApnQHSLL/bN
+         I3irVFNVvS/5ZSLwPzuIsM3L6DDs8FHN/TmjloO4XV1i006u9oLMGJ4ej4H8MhUo/V
+         11soWc+hYdL8Q==
+Date:   Thu, 9 Jun 2022 16:46:57 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Deven Bowers <deven.desai@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
+        snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v8 13/17] fsverity: consume builtin signature via LSM
+ hook
+Message-ID: <YqKGcdM3t5gjqBpq@sol.localdomain>
+References: <1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com>
+ <1654714889-26728-14-git-send-email-deven.desai@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20220609062829.293217-1-james.hilliard1@gmail.com> <CAEf4BzaNBcW8ZDWcH5USd9jFshFF78psAjn2mqZp6uVGn0ZK+g@mail.gmail.com>
-In-Reply-To: <CAEf4BzaNBcW8ZDWcH5USd9jFshFF78psAjn2mqZp6uVGn0ZK+g@mail.gmail.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Thu, 9 Jun 2022 17:46:13 -0600
-Message-ID: <CADvTj4oBy3nP3s2BaN_+75dYfkq2x72wG3dC3K09osRzkcw2eA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] libbpf: replace typeof with __typeof__ for -std=c17 compatibility
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654714889-26728-14-git-send-email-deven.desai@linux.microsoft.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 12:11 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Jun 8, 2022 at 11:28 PM James Hilliard
-> <james.hilliard1@gmail.com> wrote:
-> >
-> > Fixes errors like:
-> > error: expected specifier-qualifier-list before 'typeof'
-> >    14 | #define __type(name, val) typeof(val) *name
-> >       |                           ^~~~~~
-> > ../src/core/bpf/socket_bind/socket-bind.bpf.c:25:9: note: in expansion of macro '__type'
-> >    25 |         __type(key, __u32);
-> >       |         ^~~~~~
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
->
-> If you follow DPDK link you gave me ([0]), you'll see that they ended up doing
->
-> #ifndef typeof
-> #define typeof __typeof__
-> #endif
->
-> It's way more localized. Let's do that.
+On Wed, Jun 08, 2022 at 12:01:25PM -0700, Deven Bowers wrote:
+> From: Fan Wu <wufan@linux.microsoft.com>
+> 
+> fsverity represents a mechanism to support both integrity and
+> authenticity protection of a file, supporting both signed and unsigned
+> digests.
+> 
+> An LSM which controls access to a resource based on authenticity and
+> integrity of said resource, can then use this data to make an informed
+> decision on the authorization (provided by the LSM's policy) of said
+> claim.
+> 
+> This effectively allows the extension of a policy enforcement layer in
+> LSM for fsverity, allowing for more granular control of how a
+> particular authenticity claim can be used. For example, "all (built-in)
+> signed fsverity files should be allowed to execute, but only these
+> hashes are allowed to be loaded as kernel modules".
+> 
+> This enforcement must be done in kernel space, as a userspace only
+> solution would fail a simple litmus test: Download a self-contained
+> malicious binary that never touches the userspace stack. This
+> binary would still be able to execute.
+> 
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 
-Won't that potentially leak the redefinition into external code including the
-header file?
+The IMA support for fs-verity, which is now upstream, already does this (except
+that IMA isn't an LSM).  It also doesn't rely on the fs-verity builtin
+signatures, which shouldn't really be used.  Can you elaborate on how what
+you're doing is better?
 
-I don't see a redefinition of typeof like that used elsewhere in the kernel.
-
-However I do see __typeof__ used in many headers already so that approach
-seems to follow normal conventions and seems less risky.
-
-FYI using -std=gnu17 instead of -std=c17 works around this issue with bpf-gcc
-at least so this issue isn't really a blocker like the SEC macro
-issue, I had just
-accidentally mixed the two issues up due to accidentally not clearing out some
-header files when testing, they seem to be entirely separate.
-
->
-> But also I tried to build libbpf-bootstrap with -std=c17 and
-> immediately ran into issue with asm, so we need to do the same with
-> asm -> __asm__. Can you please update your patch and fix both issues?
-
-Are you hitting that with clang/llvm or bpf-gcc? It doesn't appear that the
-libbpf-bootstrap build system is set up to build with bpf-gcc yet.
-
->
->   [0] https://patches.dpdk.org/project/dpdk/patch/2601191342CEEE43887BDE71AB977258213F3012@irsmsx105.ger.corp.intel.com/
->   [1] https://github.com/libbpf/libbpf-bootstrap
->
->
-> >  tools/lib/bpf/bpf_core_read.h   | 16 ++++++++--------
-> >  tools/lib/bpf/bpf_helpers.h     |  4 ++--
-> >  tools/lib/bpf/bpf_tracing.h     | 24 ++++++++++++------------
-> >  tools/lib/bpf/btf.h             |  4 ++--
-> >  tools/lib/bpf/libbpf_internal.h |  6 +++---
-> >  tools/lib/bpf/usdt.bpf.h        |  6 +++---
-> >  tools/lib/bpf/xsk.h             | 12 ++++++------
-> >  7 files changed, 36 insertions(+), 36 deletions(-)
-> >
->
-> [...]
+- Eric

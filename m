@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C404544257
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70114544258
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237160AbiFIEJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 00:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S237507AbiFIEJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 00:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiFIEJc (ORCPT
+        with ESMTP id S237422AbiFIEJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 00:09:32 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC63EF13
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:09:29 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id o8so2823134wro.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 21:09:29 -0700 (PDT)
+        Thu, 9 Jun 2022 00:09:38 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60A227CE9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:09:36 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id c196so20061329pfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 21:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qr3m2Yddcj/9rkP9P1MqPdJ/Rr6E/RCde4JzQwq0ygk=;
-        b=jjA7kaTwlPG+8lAJw8aS2qYkTELSRhTtioIkasP3Ua7Ncb8/Um8F1OEZyiGbMI6SeO
-         ETd1KmKAR6a+w/PaNJyt8tzy4HP7ptThXmSP4ZLLdG/HPw9N535qzDqZ/aaVsB6mpgs4
-         ekokUA+HBIacx6iBplvxFX5b4YM3ZxJ9X0ffgyTEb8LkEJlwYpfaYJOrYnc5ZaefX82u
-         xXximfYvyQtlDROih7T+K0lvuvtzvkPaB9YyinAkRhhjbudH7UkKve6UtSpzaLWj3IEH
-         PgmYE6GWpSDDrFh2H+0Anhh0sjG9TVGHn0ycyusXPfTXgQT5l5+hSgm3wUfg3mh0tas3
-         xbXQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ouk7+Ke+HW093nWEFwQ5D14yOFTrhJHXFT/fgT162bQ=;
+        b=EUct5RkmkaOLADrUzrUz5MXFt81MEoAJJPQJNDRYKMCCRgMZ+kpm7cCxAhIKTHtBIy
+         6Ck22WNMJHvCfqO1etE0f3llvL4v4UBLX0+xI8w0HSPYbCQcndGrC1usEzdb3gec1gDs
+         r9LmND37fJbm//K7ZnhlrftOLznexRtzA4jYLPCUoSCxcaIf368C0a7TXbTzz/yjqjIF
+         6HbsJ40OBeJiq2fUgVMTzVkuwMGQvFeE6Fe+9nl+54rE57gO/x3OB04MJj1SFrXgfoGL
+         PrIJ06T8iIGeeI5L449Pk48yWbe7VsQBAfmkgLKjIvD3gFbxC0PQGqjE0hMxkncI/i4x
+         My1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qr3m2Yddcj/9rkP9P1MqPdJ/Rr6E/RCde4JzQwq0ygk=;
-        b=Jox/oLOIh6RLxGNX8AEeO/4M1Rag5wh/vcF+Mz1U5ccmKTmpF6v5dnmD8sAiDjoenY
-         3eN39Ja9UWBkYAQNDDIf4DPnaEBP4cc6nw6NNPTjT5Z3fftBlIitFWFjLFF7qMVBAt6S
-         IK0w8LDWCfpiunQlPgHpndAVUVyn8T7/vl3kZvnj+YYuNCKzpHreICdnPvY5ClJ7KqF/
-         m2CTxPE2gSeC5DA66WfUgRaCighGX6D3d+QQeQmYS3Hp4Jyfs+imPGa1IBqNgBHfnA0O
-         1/zth0a2BJIvPz64E76UoFpiOov2WgwQzcJu7954gbhbPJahc19MgLnbP27dxSuLADgp
-         Txfg==
-X-Gm-Message-State: AOAM530kG5qwsOWd41ACV6NVKM6lOHdyX2izYSJwWfsfGVuuQ9fIgoxP
-        7B/bh3hZBGGuucXBKhX9FxGkdfEz7UkzxorMNRXcfg==
-X-Google-Smtp-Source: ABdhPJzATZGYNXOEfNeC1xjFpQoXzH0chk3Mdxdc6eyXuvY61inSv66u7opI40j6F9/vdCRh2cJ/4vUkZLFYNZGRkY8=
-X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
- r11-20020a5d6c6b000000b001ea77eadde8mr36664559wrz.690.1654747767939; Wed, 08
- Jun 2022 21:09:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ouk7+Ke+HW093nWEFwQ5D14yOFTrhJHXFT/fgT162bQ=;
+        b=rhXehw8M53oFvkwsVpVJ4KSNCKiVZ59lIY5f2HkNy/lMiaKXP85jnd91WEaOMLifoa
+         mb4WzMjf+o2lMDJjCPVnqXe666fjP+esxyEkzW2cM5rwDKCg73un9ODoSj990g1DvZ7X
+         ii96Z288tff4X2RpmGUJxLqI4y5RuEqX3JNjtRg4scNzZeSCXphfVhauaGCsuqO5kJkY
+         QMiKXSV0ZX5+8Uhv1Od0iNTigZLj9IeWkAPlE9XggNJXDhHzaSA08MpOvv+SWMJNj8Qu
+         Cm/LbakslePaslqN8Bgpi8/KXq53erqO+XG0wjTGNLzbxFomL/u/bFe3Fxij/QrXYWjv
+         cZDw==
+X-Gm-Message-State: AOAM5305cOxhswImCFMufnrpe42Y/4XgUPh/AyHz3uVnOFtJI94vgQ+f
+        RKhEIHq8nhR6/9gqhQun/m3R6w==
+X-Google-Smtp-Source: ABdhPJyRq3/5D98T+QkcS5O1SPAlo57Uw3qIqKhI1hJS+mY3bjIHB2P9+hfcTjWWZR59I3qe2NQuBA==
+X-Received: by 2002:a63:5:0:b0:3fe:2558:677 with SMTP id 5-20020a630005000000b003fe25580677mr7137001pga.113.1654747776233;
+        Wed, 08 Jun 2022 21:09:36 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([2404:9dc0:cd01::1c])
+        by smtp.gmail.com with ESMTPSA id j18-20020a170902759200b001624965d83bsm15592967pll.228.2022.06.08.21.09.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 21:09:35 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] perf trace: Enable ignore_missing_thread for stat
+Date:   Thu,  9 Jun 2022 12:09:24 +0800
+Message-Id: <20220609040924.12885-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220430191122.8667-6-Julia.Lawall@inria.fr>
-In-Reply-To: <20220430191122.8667-6-Julia.Lawall@inria.fr>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 9 Jun 2022 09:39:15 +0530
-Message-ID: <CAAhSdy1kEPYJQdK+f-6Dkb92ScV9fG2m0J2rJSeWjfNFUtjVwA@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: fix typos in comments
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        KVM General <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,34 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 12:41 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
->
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+perf already support ignore_missing_thread for -p, but not yet
+applied to `perf stat -p <pid>`. This patch enables ignore_missing_thread
+for `perf stat -p <pid>`.
 
-I have included this patch for 5.19-rc fixes
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+---
+ tools/perf/builtin-stat.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks,
-Anup
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 4ce87a8eb7d7..d2ecd4d29624 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -2586,6 +2586,8 @@ int cmd_stat(int argc, const char **argv)
+ 	if (evlist__initialize_ctlfd(evsel_list, stat_config.ctl_fd, stat_config.ctl_fd_ack))
+ 		goto out;
+ 
++	/* Enable ignoring missing threads when -p option is defined. */
++	evlist__first(evsel_list)->ignore_missing_thread = target.pid;
+ 	status = 0;
+ 	for (run_idx = 0; forever || run_idx < stat_config.run_count; run_idx++) {
+ 		if (stat_config.run_count != 1 && verbose > 0)
+-- 
+2.20.1
 
->
-> ---
->  arch/riscv/kvm/vmid.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
-> index 2fa4f7b1813d..4a2178c60b5d 100644
-> --- a/arch/riscv/kvm/vmid.c
-> +++ b/arch/riscv/kvm/vmid.c
-> @@ -92,7 +92,7 @@ void kvm_riscv_stage2_vmid_update(struct kvm_vcpu *vcpu)
->                  * We ran out of VMIDs so we increment vmid_version and
->                  * start assigning VMIDs from 1.
->                  *
-> -                * This also means existing VMIDs assignement to all Guest
-> +                * This also means existing VMIDs assignment to all Guest
->                  * instances is invalid and we have force VMID re-assignement
->                  * for all Guest instances. The Guest instances that were not
->                  * running will automatically pick-up new VMIDs because will
->

@@ -2,91 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63E45450DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC895450E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbiFIPbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S1344044AbiFIPcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240115AbiFIPbu (ORCPT
+        with ESMTP id S1343936AbiFIPb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:31:50 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9C81AD8A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:31:49 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id el14so16763831qvb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 08:31:49 -0700 (PDT)
+        Thu, 9 Jun 2022 11:31:58 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106FD4CD71
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:31:56 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 25so31427746edw.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 08:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4U9tS0TY3KQZ435ts/jOG5/NkA8FDER6JfA1XuwruEc=;
-        b=GO/ZD7nJmNNk5znGqfkplygLhVlLFll4LrMSC3aMHrJN95dIQM47T+WK6Hf358NNed
-         pkdfFs2NnoU/a1wY9wkHSerQRTWEZ6TVrSReqSDEKcPt1Xj+pcqsWG10+o0ynboeLcef
-         /ffECQsZZuozFGNsarwsPNyJmCb4YrfRV6ELPYtc1q5AoU3Qd4crtNBUv5ICZhONtUC8
-         o3ZkfFIN6IWLKEjvkYvTMiihc/uFcaQfN+CwpNJgvah3wG+IUUe73IwABrsE5RON9zQh
-         22jK5e/NEByz4FYpel0RBOOC6cqBmcTMdHKhQr3fojpEpTzIrIBMSQfHw/nHyr2e4EW+
-         8YCA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PeAB4WdUupDaLbzIqQrrnRA29amPQ8PYJd3E0QmEGsE=;
+        b=EakJTslO6FLE81sHxNC1bk/UhJdyWwE3LaolAbYnM/XwG1uFz5Ko+NX7UNNu3tbcoN
+         K4rcFigA5wVJgxMnlO7NLPQdS3C/ggA1Vn8OzBb8vvyKZFT1e8iQCHxDYA2eB8gQtft+
+         7HzbxwQvQgZY6ae+bwehfzc7RnStB3PIBUZf7baw2dZU6u3EZKK9c5vh03InUK7PI/Xs
+         PjArKEXUAAVAQfrkTYYW6QeCkqxbR+gH5Pemmw+ozW5iwl6YhpAMgD9p9LlKl6lrcgHH
+         VT+W3GXIoaXr5Nc/REr/+pECZOjR0CqcLiiXkWlDSxBfAIMKAiL7Nj6L+FzleyxE5OcS
+         rrfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4U9tS0TY3KQZ435ts/jOG5/NkA8FDER6JfA1XuwruEc=;
-        b=vbvS3QmXiF1yj22Wfo6/0CAYOVQ9xRXRTgfidwXlctaCGiVkTP0srKsEcepONdVs+p
-         11/5S3YvMut/7mp1HwxpVnYNBrXsiWOjlLCanf4i6hw533UTCetxjl1BLjOVOVhMlSb1
-         C4jbl+bpIeL3O7w3N2DeOp+n0A/kFmYyGIWyyw+RoPFiqTsn0yzUa9rKbtGomzzYVkro
-         9lrB6UIxmPAc5j7TFSTjrVs7Bs4NMOxH2nvPsm7Z1eiS2y6wfeETEqm+EHPH0ntxyC/8
-         GN/2NL6u0fziq1ASkrmodjqP449Ya6lwVJlqWALDfq+QOk2wn6HQiPDpidyUJCl24uDn
-         +94g==
-X-Gm-Message-State: AOAM5315MEylYBAOaUuibysxQcB/moU1P5vnvLAKxAJ1/6P4+tzuQ/e6
-        x4xOZ8thhKUCMzxYNDVnpBM=
-X-Google-Smtp-Source: ABdhPJyGw3HPEdkBQ1FLH0cDnMy0u+XWLFOapa7dgKtiV7lxnCmyJZfpfNO1C2KgxZU2qzih8jwhTg==
-X-Received: by 2002:a05:6214:ccd:b0:46b:b0ee:bece with SMTP id 13-20020a0562140ccd00b0046bb0eebecemr13867099qvx.114.1654788707834;
-        Thu, 09 Jun 2022 08:31:47 -0700 (PDT)
-Received: from Agam.hsd1.mi.comcast.net ([2601:402:4500:22e0::e952])
-        by smtp.gmail.com with ESMTPSA id gb3-20020a05622a598300b002f93554c009sm16795726qtb.59.2022.06.09.08.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 08:31:46 -0700 (PDT)
-From:   Agam Kohli <agamkohli9@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Agam Kohli <agamkohli9@gmail.com>
-Subject: [PATCH] Staging: rts5208: spi: Removed unnecessary ftrace-like logging
-Date:   Thu,  9 Jun 2022 11:31:44 -0400
-Message-Id: <20220609153144.11803-1-agamkohli9@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        bh=PeAB4WdUupDaLbzIqQrrnRA29amPQ8PYJd3E0QmEGsE=;
+        b=vqJAi7OB9S6nfuL9d4vx3ieQLnFBYcdiY3unKlQ9y9SFax81w0v5m+RPkncHo4aU6c
+         PnkIngvIJmdc1lr/nUbXntJEdWJPlqK0x0ARPaYWWN7Ww0GOdH00ZfM4H8luZHcN8vr6
+         8WD67Ocez/cxev+J/JlF8yB/iQm7rLh0JeY+IORX1pYbKnZ/35bnFSwMIjWQq+Un82an
+         Iwb/w0kda4N21Z8ekIAM0tVl3yBif8XurGaFsDKFxu8bDY78JS1gMe0XTLfEoxO2VTN/
+         O0t9+VWMLfsNTAixgc4RYFqbeHHdDziTE4ulibri0QYy3JKz8sIqPFDo0TxgnWKaNpj/
+         NQZQ==
+X-Gm-Message-State: AOAM531olzagXi3DJAOfNENJ/0nYrT+OuOQeTiIOnE6atTONBEH68S/r
+        X3+ekKZpsEMwwbfINf02tsdZIw==
+X-Google-Smtp-Source: ABdhPJwOIiJjZlxWJ8Qllh5BIHfUY6pWFLHsCbCBYUYtWh67b6d6/Fy01aSRrec+f5WJFGHljJB2KQ==
+X-Received: by 2002:a05:6402:2788:b0:431:3f86:1d4e with SMTP id b8-20020a056402278800b004313f861d4emr29911904ede.238.1654788714499;
+        Thu, 09 Jun 2022 08:31:54 -0700 (PDT)
+Received: from [192.168.0.199] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f27-20020a17090624db00b006f3ef214dcdsm10940096ejb.51.2022.06.09.08.31.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 08:31:53 -0700 (PDT)
+Message-ID: <6d460a14-5da3-19f8-c614-307c2e737c17@linaro.org>
+Date:   Thu, 9 Jun 2022 17:31:52 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 04/48] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
+ align key node name
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
+ <20220609113911.380368-3-krzysztof.kozlowski@linaro.org>
+ <YqIP1vYuLztSQR+n@latitude>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YqIP1vYuLztSQR+n@latitude>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coding Style Fix
+On 09/06/2022 17:20, Jonathan Neuschäfer wrote:
+> On Thu, Jun 09, 2022 at 01:39:06PM +0200, Krzysztof Kozlowski wrote:
+>> gpio-keys schema requires keys to have more generic name.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml    | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+>> index 47a56b83a610..4c7691c38b10 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+>> @@ -152,7 +152,7 @@ examples:
+>>        pinctrl-names = "default";
+>>        pinctrl-0 = <&pinctrl_uid>, <&pinmux_uid>;
+>>  
+>> -      uid {
+>> +      switch-uid {
+> 
+> In this example, and more importantly the original copy in
+> nuvoton-wpcm450-supermicro-x9sci-ln4f.dts, I think button-uid fits
+> slightly better, because it's a momentary push button. (Still arguably a
+> switch, but not one that would stay in both the on and off position.)
 
-Signed-off-by: Agam Kohli <agamkohli9@gmail.com>
----
- drivers/staging/rts5208/spi.c | 1 -
- 1 file changed, 1 deletion(-)
+Sure, I'll change it to button-uid.
 
-diff --git a/drivers/staging/rts5208/spi.c b/drivers/staging/rts5208/spi.c
-index f1e9e80044ed..0d2d065508d3 100644
---- a/drivers/staging/rts5208/spi.c
-+++ b/drivers/staging/rts5208/spi.c
-@@ -460,7 +460,6 @@ int spi_set_parameter(struct scsi_cmnd *srb, struct rtsx_chip *chip)
- 	spi->clk_div = ((u16)(srb->cmnd[4]) << 8) | srb->cmnd[5];
- 	spi->write_en = srb->cmnd[6];
- 
--	dev_dbg(rtsx_dev(chip), "%s: ", __func__);
- 	dev_dbg(rtsx_dev(chip), "spi_clock = %d, ", spi->spi_clock);
- 	dev_dbg(rtsx_dev(chip), "clk_div = %d, ", spi->clk_div);
- 	dev_dbg(rtsx_dev(chip), "write_en = %d\n", spi->write_en);
--- 
-2.36.1
+Thanks!
 
+
+Best regards,
+Krzysztof

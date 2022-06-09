@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52802544858
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCCE544864
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 12:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiFIKId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 06:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S242910AbiFIKIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 06:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242775AbiFIKIQ (ORCPT
+        with ESMTP id S242763AbiFIKIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 06:08:16 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E31860FA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378B25FC8;
         Thu,  9 Jun 2022 03:08:15 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CAD9866017CA;
-        Thu,  9 Jun 2022 11:08:11 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD97A66017CC;
+        Thu,  9 Jun 2022 11:08:12 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654769292;
-        bh=pb2gWlG7j2g032SqdnNvyy3B/6lmxFBQubwWdcY6ii4=;
+        s=mail; t=1654769293;
+        bh=Plms5A1aPKPSw6D4rqzNZbSfoJtYh6ZPWxqrodjCyng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q9sTvQ6OjmfN2Xr+h60kQLRKdH+Ux3vnvpmUoxw3cSwR++4MBAYYuBli09cSDm7R9
-         /8vEybuz6HL0qQ3LpazzQETe61gJ2WTP+h+Qoahk2WXFeRpczFWosmchVsQWu4oPoY
-         fRJV1prrWSfchOnxeH/5SNCNFV0hOgK7unGczlDq8gIL0DeVYOz9NZ2wYud5c9YuPo
-         pqwbhAOF+jlLIF807YlqGcdaP5P7aEsSjDSPsX5HjRZVOmcaWB9Pr6IL6p3/eMsCze
-         xj8V0I/woD8cOlcaRepHc2UphyFB9OkBkdrla784kO4WOQs46nyMTgvXvV+IShUwX6
-         nVaHIcLshW5hA==
+        b=hPu7vlTYqvPWk04niq1EAUwsL2W3fSGKAoBbW6zTm2JV9mwOV8aXa//KUFGWQaZxw
+         7s9sYunRMusw/qp+ZxpiHTriyjgwjEt/xlqkrzOKckn8GuiYAHuqoUJYTVX8K2GdfJ
+         3GNQYJjp9RFVOgsZG7JiC0VHrRnAUI3LoeErDsE3eQ7fCICH0xpYdx9hQhdE8uri2g
+         slqkg2Tzkw/DFMnwgck0DA7dvY73eupKyozNYz/2OS56feC6lYMQOCRZCpm0FDf6Sy
+         GY93oKQUTH3z54ZQl9UX+xhgKYppD8kbWauVYDcdMxSdSJ3dAqufFaLpu6bwQJdNTt
+         0EjYwWP1HQ4Pw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -43,9 +43,9 @@ Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski@linaro.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v3 5/6] dt-bindings: iommu: mediatek: Add mediatek,pericfg phandle
-Date:   Thu,  9 Jun 2022 12:08:01 +0200
-Message-Id: <20220609100802.54513-6-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 6/6] iommu: mtk_iommu: Lookup phandle to retrieve syscon to pericfg
+Date:   Thu,  9 Jun 2022 12:08:02 +0200
+Message-Id: <20220609100802.54513-7-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220609100802.54513-1-angelogioacchino.delregno@collabora.com>
 References: <20220609100802.54513-1-angelogioacchino.delregno@collabora.com>
@@ -61,48 +61,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add property "mediatek,pericfg" to let the mtk_iommu driver retrieve
-a phandle to the infracfg syscon instead of performing a per-soc
-compatible lookup in the entire devicetree and set it as a required
-property for MT8195's infra IOMMU.
+On some SoCs (of which only MT8195 is supported at the time of writing),
+the "R" and "W" (I/O) enable bits for the IOMMUs are in the pericfg_ao
+register space and not in the IOMMU space: as it happened already with
+infracfg, it is expected that this list will grow.
+
+Instead of specifying pericfg compatibles on a per-SoC basis, following
+what was done with infracfg, let's lookup the syscon by phandle instead.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../devicetree/bindings/iommu/mediatek,iommu.yaml  | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/iommu/mtk_iommu.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-index 4142a568b293..d5e3272a54e8 100644
---- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-+++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-@@ -116,6 +116,10 @@ properties:
-       Refer to bindings/memory-controllers/mediatek,smi-larb.yaml. It must sort
-       according to the local arbiter index, like larb0, larb1, larb2...
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 90685946fcbe..0ea0848581e9 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -138,6 +138,8 @@
+ /* PM and clock always on. e.g. infra iommu */
+ #define PM_CLK_AO			BIT(15)
+ #define IFA_IOMMU_PCIE_SUPPORT		BIT(16)
++/* IOMMU I/O (r/w) is enabled using PERICFG_IOMMU_1 register */
++#define HAS_PERI_IOMMU1_REG		BIT(17)
  
-+  mediatek,pericfg:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle to the mediatek pericfg syscon
-+
-   '#iommu-cells':
-     const: 1
-     description: |
-@@ -183,6 +187,16 @@ allOf:
-       required:
-         - mediatek,infracfg
+ #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
+ 				((((pdata)->flags) & (mask)) == (_x))
+@@ -187,7 +189,6 @@ struct mtk_iommu_plat_data {
+ 	u32			flags;
+ 	u32			inv_sel_reg;
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: mediatek,mt8195-iommu-infra
-+
-+    then:
-+      required:
-+        - mediatek,pericfg
-+
-   - if: # The IOMMUs don't have larbs.
-       not:
-         properties:
+-	char			*pericfg_comp_str;
+ 	struct list_head	*hw_list;
+ 	unsigned int		iova_region_nr;
+ 	const struct mtk_iommu_iova_region	*iova_region;
+@@ -1218,14 +1219,16 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 			goto out_runtime_disable;
+ 		}
+ 	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
+-		   data->plat_data->pericfg_comp_str) {
+-		infracfg = syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
+-		if (IS_ERR(infracfg)) {
+-			ret = PTR_ERR(infracfg);
+-			goto out_runtime_disable;
++		   MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_PERI_IOMMU1_REG)) {
++		data->pericfg = syscon_regmap_lookup_by_phandle(dev->of_node, "mediatek,pericfg");
++		if (IS_ERR(data->pericfg)) {
++			p = "mediatek,mt8195-pericfg_ao";
++			data->pericfg = syscon_regmap_lookup_by_compatible(p);
++			if (IS_ERR(data->pericfg)) {
++				ret = PTR_ERR(data->pericfg);
++				goto out_runtime_disable;
++			}
+ 		}
+-
+-		data->pericfg = infracfg;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, data);
+@@ -1484,8 +1487,8 @@ static const struct mtk_iommu_plat_data mt8192_data = {
+ static const struct mtk_iommu_plat_data mt8195_data_infra = {
+ 	.m4u_plat	  = M4U_MT8195,
+ 	.flags            = WR_THROT_EN | DCM_DISABLE | STD_AXI_MODE | PM_CLK_AO |
+-			    MTK_IOMMU_TYPE_INFRA | IFA_IOMMU_PCIE_SUPPORT,
+-	.pericfg_comp_str = "mediatek,mt8195-pericfg_ao",
++			    HAS_PERI_IOMMU1_REG | MTK_IOMMU_TYPE_INFRA |
++			    IFA_IOMMU_PCIE_SUPPORT,
+ 	.inv_sel_reg      = REG_MMU_INV_SEL_GEN2,
+ 	.banks_num	  = 5,
+ 	.banks_enable     = {true, false, false, false, true},
 -- 
 2.35.1
 

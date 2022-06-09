@@ -2,167 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D868254432B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903B954432A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238413AbiFIFai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S238386AbiFIFae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236993AbiFIFac (ORCPT
+        with ESMTP id S229849AbiFIFac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Jun 2022 01:30:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B131228714;
-        Wed,  8 Jun 2022 22:30:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DC1FB82C1F;
-        Thu,  9 Jun 2022 05:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B63C34114;
-        Thu,  9 Jun 2022 05:30:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654752629;
-        bh=UPd29q5HWT+IXQLp3cxU4COiMwXAghPMXBh9HBWf3Ek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c1awn6iWRpQKh7vS9DefuUSRw8Hococ8EHfx7JDebWZcKYzojQBUE6mc3bb13agbk
-         uaDYxUvF/6zNY2BjrdZwUHXcWkDiUR1Rt/C9sFrPJX3PM8/ASKqvjrdwi64LrAoqTd
-         UrhDAMQhI5dyazxl99NvitNVc5J/+CyePuqorcVfcToD7ATYQITE0zSab2ds5i9u0U
-         wUw0C7niX9O4/CJuTRxPvk/Uzq14kgW5U/1+eoeO51iiyRIa5XLFosXpQJwHpKDH11
-         18BCPxXDIypiEv3xKYEsbriPhGt6IjGbTB5GQZ4k8NI53/hrltoPBq2gLVeibQTBAF
-         p3InvYON5AYtw==
-Date:   Thu, 9 Jun 2022 08:28:30 +0300
-From:   "jarkko@kernel.org" <jarkko@kernel.org>
-To:     Jonathan McDowell <noodles@fb.com>
-Cc:     Jianglei Nie <niejianglei2021@163.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] KEYS: trusted: Fix memory leak in tpm2_key_encode()
-Message-ID: <YqGE/v0Zgi+g4gY6@iki.fi>
-References: <20220608131732.550234-1-niejianglei2021@163.com>
- <YqCmVi3J10Tcx0Wk@noodles-fedora.dhcp.thefacebook.com>
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFB5227CD6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 22:30:31 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n185so11876198wmn.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 22:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GqVxPTyMN5LSk5+AeVkxx+W87CD161pDvzbwjFm6+gQ=;
+        b=ppfX5cL9GJVYrxGHnfjXRVJ07D6rTaIh988wnDEoyi6c5Ox34r0eWU/UBDtEIU0ZuZ
+         p/ODifY6UvgRrGPpvrnG4hT+W9mQHF7OEapC4RQqObUxbNYz4JRXui6JQ0KTenlgJpgt
+         GNTW9/8r5K0Qsh35abiBd4trapkZK81bnXoH/PlI6AcGDCOxB2jENnq48GI4pcTTzsz0
+         K51lyN5dhq0Rv6ZjPqS6XhUtN5tKBzqftrATAVfH+5o735FpkWM87uwSh3tZ38OxPjWb
+         T5SgRHO6SwQJWZ+Y2moVO/o0HG7r1yen+bxSMZgoGg2XwZ7QgQoxHP5UDHcOsxol/ljt
+         bDVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GqVxPTyMN5LSk5+AeVkxx+W87CD161pDvzbwjFm6+gQ=;
+        b=kERLbcWIeyIir6nEi4MRE0qj5cG9+kpbnK3ftszdyansNwY9JDH5xgtki4UnRr/W09
+         moasnLAX6wlc3j3so0MpsHI6BfUDZr7J0FIieAhuhE7lo99FyI5NcHNpDiqdRMB6+Mgw
+         Lvaj80/4muhmEyZjGapN2ASc3y+76bIk6ESiHljCLLxL4w7sKMOsa7Zim26T9JiwKZAQ
+         ZmrMvbtPsszzFaFExIEzgDq1dtwbcYYvFZk72FkOiPp2iTMqYPEkAvQfzEcnZkkcbE/b
+         gr/MFxHoZC08+fVJALRyxF78mli9S+spaSP9BY8KJ6IcAil40yUClB9YI3bREjfpbP44
+         3YAw==
+X-Gm-Message-State: AOAM533a2+tOrGA5TPXWdIYC2pXwemtfhQYV2ApynsEr9AvONItkjI2Z
+        6Zv/JMGNGrFPnSAa9QftMHiTOPZmF8TeUU/xGc1swQ==
+X-Google-Smtp-Source: ABdhPJy+P7056WQ8engnYC1mHTb9UsiXlHIixlBMPvMOgpTq+KmQ2uox3NULMOxAH6LXfVKDgLQEOlLlMRqr4ZBxD4k=
+X-Received: by 2002:a05:600c:19cb:b0:397:51db:446f with SMTP id
+ u11-20020a05600c19cb00b0039751db446fmr1434807wmq.182.1654752629440; Wed, 08
+ Jun 2022 22:30:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqCmVi3J10Tcx0Wk@noodles-fedora.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220527020653.4160884-1-irogers@google.com>
+In-Reply-To: <20220527020653.4160884-1-irogers@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 8 Jun 2022 22:30:17 -0700
+Message-ID: <CAP-5=fUqBaoDwJB4-rizoP6tYnZAw6YW+wROVYqiNzj7iG+G-Q@mail.gmail.com>
+Subject: Re: [PATCH] perf expr: Allow exponents on floating point values
+To:     Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 01:38:35PM +0000, Jonathan McDowell wrote:
-> On Wed, Jun 08, 2022 at 09:17:32PM +0800, Jianglei Nie wrote:
-> > tpm2_key_encode() allocates a memory chunk from scratch with kmalloc(),
-> > but it is never freed, which leads to a memory leak. Free the memory
-> > chunk with kfree() in the return path.
-> 
-> This change only does the kfree in the success path; "out" just returns
-> the error without freeing the memory.
+On Thu, May 26, 2022 at 7:06 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Pass the optional exponent component through to strtod that already
+> supports it. We already have exponents in ScaleUnit and so this adds
+> uniformity.
+>
+> Reported-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-A valid point.
+Ping. Simple fix with tests, PTAL. Thanks,
+Ian
 
-> > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> > ---
-> >  security/keys/trusted-keys/trusted_tpm2.c | 23 +++++++++++++++++------
-> >  1 file changed, 17 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> > index 0165da386289..8b7ab22950d1 100644
-> > --- a/security/keys/trusted-keys/trusted_tpm2.c
-> > +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> > @@ -32,6 +32,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
-> >  			   struct trusted_key_options *options,
-> >  			   u8 *src, u32 len)
-> >  {
-> > +	int err;
-> >  	const int SCRATCH_SIZE = PAGE_SIZE;
-> >  	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
-
-Also, the fix is half-way there, it does not have OOM
-check for scratch.
-
-I.e. I'd change the declaration as:
-
-        u8 *scratch;
-
-And later on after declarations:
-
-        scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
-        if (!scratch)
-                return -ENOMEM; 
-
-> >  	u8 *work = scratch, *work1;
-> > @@ -57,8 +58,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
-> >  		unsigned char bool[3], *w = bool;
-> >  		/* tag 0 is emptyAuth */
-> >  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
-> > -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-> > -			return PTR_ERR(w);
-> > +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-> > +			err = PTR_ERR(w);
-> > +			goto out;
-> > +		}
-> >  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
-> >  	}
-> >  
-> > @@ -69,8 +72,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
-> >  	 * trigger, so if it does there's something nefarious going on
-> >  	 */
-> >  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-> > -		 "BUG: scratch buffer is too small"))
-> > -		return -EINVAL;
-> > +		 "BUG: scratch buffer is too small")) {
-> > +		err = -EINVAL;
-> > +		goto out;
-> > +	}
-> >  
-> >  	work = asn1_encode_integer(work, end_work, options->keyhandle);
-> >  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
-> > @@ -79,10 +84,16 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
-> >  	work1 = payload->blob;
-> >  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
-> >  				     scratch, work - scratch);
-> > -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-> > -		return PTR_ERR(work1);
-> > +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-> > +		err = -EINVAL;
-> > +		goto out;
-> > +	}
-> > +	kfree(scratch);
-> >  
-> >  	return work1 - payload->blob;
-> > +
-> > +out:
-> > +	return err;
-
-I.e.
-
-        kfree(scratch);
-        return work1 - payload->blob;
-
-err:
-        kfree(scratch);
-        return ret;
-
-
-> >  }
-> >  
-> >  struct tpm2_key_context {
-> > -- 
-> > 2.25.1
-
-BR, Jarkko
+> ---
+>  tools/perf/tests/expr.c | 2 ++
+>  tools/perf/util/expr.l  | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+> index d54c5371c6a6..5c0032fe93ae 100644
+> --- a/tools/perf/tests/expr.c
+> +++ b/tools/perf/tests/expr.c
+> @@ -97,6 +97,8 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+>         ret |= test(ctx, "2.2 > 2.2", 0);
+>         ret |= test(ctx, "2.2 < 1.1", 0);
+>         ret |= test(ctx, "1.1 > 2.2", 0);
+> +       ret |= test(ctx, "1.1e10 < 1.1e100", 1);
+> +       ret |= test(ctx, "1.1e2 > 1.1e-2", 1);
+>
+>         if (ret) {
+>                 expr__ctx_free(ctx);
+> diff --git a/tools/perf/util/expr.l b/tools/perf/util/expr.l
+> index 0a13eb20c814..4dc8edbfd9ce 100644
+> --- a/tools/perf/util/expr.l
+> +++ b/tools/perf/util/expr.l
+> @@ -91,7 +91,7 @@ static int literal(yyscan_t scanner)
+>  }
+>  %}
+>
+> -number         ([0-9]+\.?[0-9]*|[0-9]*\.?[0-9]+)
+> +number         ([0-9]+\.?[0-9]*|[0-9]*\.?[0-9]+)(e-?[0-9]+)?
+>
+>  sch            [-,=]
+>  spec           \\{sch}
+> --
+> 2.36.1.124.g0e6072fb45-goog
+>

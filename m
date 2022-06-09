@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9B35447A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2EE5447AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235008AbiFIJf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S242411AbiFIJga convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Jun 2022 05:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbiFIJfz (ORCPT
+        with ESMTP id S234695AbiFIJg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:35:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C767D654B;
-        Thu,  9 Jun 2022 02:35:51 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D1EC66016FD;
-        Thu,  9 Jun 2022 10:35:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654767350;
-        bh=BH72tA3Gv2tLURwDnY5UsSEkwsx+vUzwp5wTPxVczvk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aFgguC5hMuyVbHwuGvCHFJ/j16RiTIEJQ4LRbUFOphEqEyKiRcnjJxU8B66h/GYQ3
-         GT4U+S2FDQS4S3AGCcCaRin3wtBLGC3hxCBCSeMrx2JX+jozSujwzsrd4N3kasKMZq
-         xb2PmVvm4z1F+7aYRKRxe32oRugDq2sax4108q+hp0dCiiAltoVHxLT5nLh84KlWZN
-         xykOEDKdoJSUMDP3HUAW7qeyPZCEq4cGi6nCaQ2Vq8TijxtaONgDPNjXKCDNkdTaCW
-         5XFKn7XzzqiLqvKcovYV+NFovRiH2SrZtWqaHEKxtODGlePSDyhrTS/200pYBUAocV
-         WLARRgsksZ3cw==
-Message-ID: <1974b83e-967a-41ed-e790-52ceaf349ad3@collabora.com>
-Date:   Thu, 9 Jun 2022 11:35:46 +0200
+        Thu, 9 Jun 2022 05:36:27 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FF52F664;
+        Thu,  9 Jun 2022 02:36:26 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id 68so8880071qkk.9;
+        Thu, 09 Jun 2022 02:36:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mjax5gcHpDCOdlHkRO1oWqhUAzsN643izB/R7ubf5Zg=;
+        b=GROSR0qY7htLnU/CvxIvntRBFqMA8mh2r1A5xvco8n0xwUyHh7HbWwpW7OSx7tQq1b
+         PPaFaJZhTOCcrICQNzmLVPGm7vRYnRmXMVpjts2PVQLzbjvKlprKReyXJ6xZCKsq38xt
+         m06HDYn5ODOxFN3ReGIowYxIi9IBZNKn6VOhvM6qrMxvafUsjNZkAW3Z1rxEYo90eDN0
+         8saQdtAuNyKwURlbw8jDXhAheNCTEvr8H1367VRQiB1U0AtZ/i9+8OVWx0/GfmykDb3X
+         lbwBmUMnrkyitTBZ1I1nBsvIiA30LBeb536oDaA6rwtlgfAsABza84qsaLjv58GXoZTE
+         wQ2g==
+X-Gm-Message-State: AOAM5326o9c0RVH04byjbwCMBJQmxQMYEsogr1U+xaKGmjBR2SxUY4bE
+        vFfGzUa/06xbujv+2WFYVmz9OGctHFrDxA==
+X-Google-Smtp-Source: ABdhPJx/ca9U/coJuHsLM/PJtLIRaxpk/GnhEK4le13Re5pQvQjUFaap27v0eGGt8/CTK4GRYQtOkQ==
+X-Received: by 2002:a37:9e08:0:b0:6a6:a23b:9bbd with SMTP id h8-20020a379e08000000b006a6a23b9bbdmr21126085qke.596.1654767385413;
+        Thu, 09 Jun 2022 02:36:25 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id r23-20020ac85e97000000b00304f98ad3c1sm5146062qtx.29.2022.06.09.02.36.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 02:36:25 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-313a8a8b95aso987037b3.5;
+        Thu, 09 Jun 2022 02:36:24 -0700 (PDT)
+X-Received: by 2002:a0d:d481:0:b0:30c:44f1:2721 with SMTP id
+ w123-20020a0dd481000000b0030c44f12721mr42235528ywd.283.1654767384522; Thu, 09
+ Jun 2022 02:36:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: timer: mediatek: Add CPUX System
- Timer and MT6795 compatible
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        daniel.lezcano@linaro.org
-Cc:     tglx@linutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org
-References: <20220518112435.241116-1-angelogioacchino.delregno@collabora.com>
- <20220518112435.241116-2-angelogioacchino.delregno@collabora.com>
- <afd9ab8e-5bad-54ee-3f44-5e0cfdb22e75@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <afd9ab8e-5bad-54ee-3f44-5e0cfdb22e75@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220608090850.92735-1-clement.leger@bootlin.com>
+In-Reply-To: <20220608090850.92735-1-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 9 Jun 2022 11:36:13 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXACzs8aLgry0ughT4zcU6ZQhL5+SaLPGshXGqNKL88-Q@mail.gmail.com>
+Message-ID: <CAMuHMdXACzs8aLgry0ughT4zcU6ZQhL5+SaLPGshXGqNKL88-Q@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: r9a06g032-rzn1d400-db: enable rtc0
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/06/22 18:11, Matthias Brugger ha scritto:
-> 
-> 
-> On 18/05/2022 13:24, AngeloGioacchino Del Regno wrote:
->> Document the "CPUXGPT" CPU General Purpose Timer, used as ARM/ARM64
->> System Timer on MediaTek platforms and add the MT6795 compatible for it.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   .../devicetree/bindings/timer/mediatek,mtk-timer.txt          | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt 
->> b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
->> index 6f1f9dba6e88..49706cbef45d 100644
->> --- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
->> +++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
->> @@ -2,6 +2,7 @@ MediaTek Timers
->>   ---------------
->>   MediaTek SoCs have two different timers on different platforms,
-> 
-> Nit: There are now three different timers so maybe:
-> "MediaTek SoCs have different timers on different platforms,"
-> 
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> 
+Hi Clément,
 
-Hi Matthias,
-can we please ignore that description nit for this patch?
+On Wed, Jun 8, 2022 at 11:10 AM Clément Léger <clement.leger@bootlin.com> wrote:
+> The RZ/N1D-DB board does have a battery to power the RTC. Enable the
+> RTC device on this board.
+>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 
-I was anyway planning to do a YAML conversion after getting this merged in, perhaps
-we can just fix that on the new one instead?
+Thanks for your patch!
 
-Cheers,
-Angelo
+> --- a/arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts
+> +++ b/arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts
+> @@ -31,3 +31,7 @@ &wdt0 {
+>         timeout-sec = <60>;
+>         status = "okay";
+>  };
+> +
+> +&rtc0 {
+> +       status = "okay";
+> +};
 
->> +- CPUX (ARM/ARM64 System Timer)
->>   - GPT (General Purpose Timer)
->>   - SYST (System Timer)
->> @@ -29,6 +30,9 @@ Required properties:
->>       * "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)
->>       * "mediatek,mt6765-timer" for MT6765 and all above compatible timers (SYST)
->> +    For those SoCs that use CPUX
->> +    * "mediatek,mt6795-systimer" for MT6795 compatible timers (CPUX)
->> +
->>   - reg: Should contain location and length for timer register.
->>   - clocks: Should contain system clock.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.20, with rtc0 moved up to
+preserve sort order (no need to resend).
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,150 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AF454527F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F32B545282
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344950AbiFIQxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S1344852AbiFIQyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbiFIQxb (ORCPT
+        with ESMTP id S244387AbiFIQyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 12:53:31 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA2E12D17
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 09:53:26 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id l18so19513527lje.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 09:53:26 -0700 (PDT)
+        Thu, 9 Jun 2022 12:54:20 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2070.outbound.protection.outlook.com [40.107.101.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30585583A7;
+        Thu,  9 Jun 2022 09:54:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TuRJshWeThNpPQeFnS5vpEz0tSznNOSeTMbq1Pj0QqMJE634i/wcTkaV5xXCmGbsFdVJQuLwKHDxCQsG4AeDRIwm6VznfxorRiV66QknSMjE8Y4j/2PFtQH6sJzdgeBvRVOsFhF/BNfA9khc2vnktuSnqCbe6sBLB5MI88Y0RMfXQVtFgT6unXWlHJYfSWkhoi4I5cqgnWj++OyJAIWR5PZZD+hPRtrupX3hyfXSj6lh+vsn/XGcBpkqoK8qC6+5/V5qwUVkhN4THrkJN2pJKfgj/k0fXfL4n2a/bdgOH4zjNOurBy5INbnalvale5aUUSITXUjJJ8HKnP7i5MGbGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gIEoztxhPArcJ85fWSUy6xel7/OS3ir7tY0wPrcbbw8=;
+ b=D6zBhr6prJauoEtKFwU4BkU5/cpiEpiZPysEanym6DvWvB2y9TJdcDOVfDjpsOJVT6k7JL+H2I3uujIqE775APcLWlWW/QWBRaxYKR7plGMjlLpbj1yxxh8FkHlL1Us1aerGUKp9x605c2D3Z023aoEubUUQsEmbflWuaJGJtOv1wdOD/fqTtFPVzyx5pDTGAvFwE+JU/aoaOHA62+9zi4FGLysyZE1iowzey7onAjKBmxbaFh2j0VnGn+H2W6OgZzTDQAru4tul2WJkmzgoa/RgTkdBYq79/a+GAoVlH5yp48E82uugh6yDrF+CEQOh/dV0F8ReKpDgRxp9hJwuwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RnnI75MEx4lNy+rx7v/bh01lvj2FiAMBVy1u9JepGfo=;
-        b=rMqG2WJPOlD4LQ8ZwCDsf+vQZC1NKtoCU+xmI1t5RCDuq2ySS5PmrgARG1EiNn2RX+
-         Eb7iTRgP8sGNIcNEEbi/NqOM+lt0qQYV3x20KYp6V3al+e/KQpw781+9fEqSMJLW8QQL
-         20IkhuMCuZJYN9Mkw+boqnomMUpkNCuxDQJRX4oHUyoHLAu9PhTI7GnGIVNI83TXU+2V
-         s2RSR2OCyAZYiNcCreJt9MQV8dckZhtArxQ5dwqQ8HrdYsQLCNqSkoHlGsdfmBv8KFon
-         edHyjyy7pby2JLfCK4aGFphbGZtKtnNEcQy2CvuqiDcVI9dQCu5kQ0FzK2THigolw0or
-         gtcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RnnI75MEx4lNy+rx7v/bh01lvj2FiAMBVy1u9JepGfo=;
-        b=4tunZ3/vHdqMdunEyLiyTFFVc56AnodlKeJ3wpcz0q31YcTyuRr+gOFFsrK6MSYquo
-         8qJkdCv6G8CKkovzcKqZTAXkedbzwbqcOlE0pYL/js6gWpKvktHzPOc27TGejslYCn4N
-         I/Zjexp8MPp/K4c4+OKdjBXkzCZxdeGVLzhjW17bga0aw6xSEmSMKNi+d4xfKlk4Xjc1
-         sJUE35jlSb0yDRO7L1Q0wybuvU101V1ltMzXs3YTLE5DvuJLTH085eSiC5UhLxoH61L1
-         CMK6pX/PA3sawjvueHJQGpmFU+hMCQ1M33l/rcG2pLzmmsuYtlcgsLdfxFdzZnN6oGIE
-         C1cQ==
-X-Gm-Message-State: AOAM533TaO4At6Lud5yMlkoTJP8UiMctV/t4ZBYX5y+IcNajKOhVCuzt
-        wUcbLp9+lsRaqieP2odxCKdAAbLvz6gUX7V+SpGoRw==
-X-Google-Smtp-Source: ABdhPJyi2BGKP0TSiPLfQzJczezSNvtxChlMABNaZCpY+QmT5gtvD0zJ+kJ1pH2lKvTQ2wpVF3jpFgpjN+ph+PALAb8=
-X-Received: by 2002:a2e:b0fc:0:b0:255:6f92:f9d4 with SMTP id
- h28-20020a2eb0fc000000b002556f92f9d4mr22608060ljl.92.1654793604135; Thu, 09
- Jun 2022 09:53:24 -0700 (PDT)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gIEoztxhPArcJ85fWSUy6xel7/OS3ir7tY0wPrcbbw8=;
+ b=Zt7IhL5bqjzolbpY51y6xhGT+omp2qx4Mb/DC2cdqdgJF170YpcqFmpJLt9LJLnSVGs8kkFWpsRG+de/rwXQbx5lWqVyD2F57HZWsnD1uXDfegCjFisEkpz6JVOSDY0IyG9Z0gaO1ZxzeajOaoCCzi5K5X5tU1qHI47rqmENPHI=
+Received: from SN6PR08CA0019.namprd08.prod.outlook.com (2603:10b6:805:66::32)
+ by BYAPR02MB5525.namprd02.prod.outlook.com (2603:10b6:a03:a0::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17; Thu, 9 Jun
+ 2022 16:54:17 +0000
+Received: from SN1NAM02FT0028.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:805:66:cafe::9b) by SN6PR08CA0019.outlook.office365.com
+ (2603:10b6:805:66::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13 via Frontend
+ Transport; Thu, 9 Jun 2022 16:54:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0028.mail.protection.outlook.com (10.97.4.206) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Thu, 9 Jun 2022 16:54:16 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 9 Jun 2022 09:54:14 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 9 Jun 2022 09:54:14 -0700
+Envelope-to: git@amd.com,
+ harini.katakam@amd.com,
+ radhey.shyam.pandey@amd.com,
+ davem@davemloft.net,
+ edumazet@google.com,
+ kuba@kernel.org,
+ robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org,
+ pabeni@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
+Received: from [172.23.64.3] (port=39938 helo=xhdvnc103.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <radhey.shyam.pandey@xilinx.com>)
+        id 1nzLQD-0007yV-UW; Thu, 09 Jun 2022 09:54:14 -0700
+Received: by xhdvnc103.xilinx.com (Postfix, from userid 13245)
+        id 299F51054B2; Thu,  9 Jun 2022 22:24:13 +0530 (IST)
+From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <harini.katakam@amd.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <git@amd.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [PATCH v2 net-next] dt-bindings: net: xilinx: document xilinx emaclite driver binding
+Date:   Thu, 9 Jun 2022 22:23:35 +0530
+Message-ID: <1654793615-21290-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-References: <20220609113046.780504-1-elver@google.com> <20220609113046.780504-2-elver@google.com>
- <CACT4Y+bOFmCyqfSgWS0b5xuwnPqP4V9v2ooJRmFCn0YAtOPmhQ@mail.gmail.com> <CANpmjNNtV_6kgoLv=VX3z_oM6ZEvWJNAOj9z4ADcymqmhc+crw@mail.gmail.com>
-In-Reply-To: <CANpmjNNtV_6kgoLv=VX3z_oM6ZEvWJNAOj9z4ADcymqmhc+crw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 9 Jun 2022 18:53:12 +0200
-Message-ID: <CACT4Y+Zq-1nczM2JH7Sr4mZo84gsCRd83RAwwnHwmap-wCOLTQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] perf/hw_breakpoint: Optimize list of per-task breakpoints
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org,
-        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9c682bf5-f878-4293-ad6b-08da4a38b07c
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5525:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR02MB55259E6B099934A7DBC32152C7A79@BYAPR02MB5525.namprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Sz3+evSfwxz5kXz8HJQJmzjSPju1b+dTj3HybgohObM0pLouBQ2xCa38pVwYFCYOMiPPAkahv8bbwlp3jE8HloRFAcIci745jNGFtUxyV9YldhTT/LD227KcnUFp8KGovZ/x/ux8zdSaIFwzZEFMgxUARCxskkxF0LFIOGlSHWT7V4++NHWsy0+yXeqIXAnC5V4jTZZaeZIwiPKGfRW+Hg7+OGBkHcwBuNQ61UIUoRu0pi8mftXykRR5Plx1dX+eK9Cm4jtQEjFRCAolTnExVwceIjvEWz0bX4MPTU2i0ifXzjp/LsR1PNCYiu41qm7qUpkrvxejsUuMpyDmvqau/dxEeW0ISzLz9hLGTDsSzz4pJtFQ9TZv2sNqfNtyW2yH1k1hoEVYeQwZGVwzuO/S/0NNW+kq8z3DyGw0ROWA3bkOp9Ms1cxRFFS45UtKgd3UYjkTCzwuITX5NIUa32WMnz1LS+F0Y7PoeYVEBv2vXe9NOICnUMOEF2gBmpAqf6yBt/19Ve4eAcf4hpjEPtxuc/y37QA/7zA3JFvI1ATkcSawyjejhCwAbYJpsdGyMHRGH+X4zOoQsX0ZP0Lm6lgmbdWoVTr725eZnFk/ipGKqihvkwrFPPSgPbHymrbS5W0pc3gBJ6imuWHK9GR0l8Xb8vlpb/qrpBrXUEgIqzXeX+7TO44ITliItwCemiIIK20V9ZoJTHchKWBoSFOaS+7/ynvvMscbS4V24C6C+iV7XNMcn5/r81vFfeIsV6GpZL+639Q/KiBOO+efHNFTwsF14PAXpeODCFrME6u0ewlSkH0jo4V+SLn+vtHNLicqayc/o06jyJ3uvkxciQNs7GstyQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(83170400001)(42882007)(47076005)(336012)(8936002)(7416002)(8676002)(70206006)(4326008)(26005)(6266002)(2616005)(186003)(6636002)(82310400005)(40460700003)(36756003)(70586007)(54906003)(110136005)(36860700001)(2906002)(966005)(6666004)(42186006)(316002)(356005)(7636003)(508600001)(5660300002)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 16:54:16.5150
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c682bf5-f878-4293-ad6b-08da4a38b07c
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0028.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5525
+X-Spam-Status: No, score=1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-.
-/On Thu, 9 Jun 2022 at 16:56, Marco Elver <elver@google.com> wrote:
-> > > On a machine with 256 CPUs, running the recently added perf breakpoint
-> > > benchmark results in:
-> > >
-> > >  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
-> > >  | # Running 'breakpoint/thread' benchmark:
-> > >  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
-> > >  |      Total time: 236.418 [sec]
-> > >  |
-> > >  |   123134.794271 usecs/op
-> > >  |  7880626.833333 usecs/op/cpu
-> > >
-> > > The benchmark tests inherited breakpoint perf events across many
-> > > threads.
-> > >
-> > > Looking at a perf profile, we can see that the majority of the time is
-> > > spent in various hw_breakpoint.c functions, which execute within the
-> > > 'nr_bp_mutex' critical sections which then results in contention on that
-> > > mutex as well:
-> > >
-> > >     37.27%  [kernel]       [k] osq_lock
-> > >     34.92%  [kernel]       [k] mutex_spin_on_owner
-> > >     12.15%  [kernel]       [k] toggle_bp_slot
-> > >     11.90%  [kernel]       [k] __reserve_bp_slot
-> > >
-> > > The culprit here is task_bp_pinned(), which has a runtime complexity of
-> > > O(#tasks) due to storing all task breakpoints in the same list and
-> > > iterating through that list looking for a matching task. Clearly, this
-> > > does not scale to thousands of tasks.
-> > >
-> > > While one option would be to make task_struct a breakpoint list node,
-> > > this would only further bloat task_struct for infrequently used data.
-> >
-> > task_struct already has:
-> >
-> > #ifdef CONFIG_PERF_EVENTS
-> >   struct perf_event_context *perf_event_ctxp[perf_nr_task_contexts];
-> >   struct mutex perf_event_mutex;
-> >   struct list_head perf_event_list;
-> > #endif
-> >
-> > Wonder if it's possible to use perf_event_mutex instead of the task_sharded_mtx?
-> > And possibly perf_event_list instead of task_bps_ht? It will contain
-> > other perf_event types, so we will need to test type as well, but on
-> > the positive side, we don't need any management of the separate
-> > container.
->
-> Hmm, yes, I looked at that but then decided against messing the
-> perf/core internals. The main issue I have with using perf_event_mutex
-> is that we might interfere with perf/core's locking rules as well as
-> interfere with other concurrent perf event additions. Using
-> perf_event_list is very likely a no-go because it requires reworking
-> perf/core as well.
->
-> I can already hear Peter shouting, but maybe I'm wrong. :-)
+Add basic description for the xilinx emaclite driver DT bindings.
 
-Let's wait for Peter to shout then :)
-A significant part of this change is having per-task data w/o having
-per-task data.
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+---
+Changes since v1:
+- Move ethernet-controller.yaml reference after maintainers.
+- Drop interrupt second cell in example node.
+- Set local-mac-address to all 0s in example node.
+- Put the reg after compatible in DTS code.
 
-The current perf-related data in task_struct is already multiple words
-and it's also not used in lots of production cases.
-Maybe we could have something like:
+Changes since RFC:
+- Add ethernet-controller yaml reference.
+- 4 space indent for DTS example.
+---
+ .../bindings/net/xlnx,emaclite.yaml           | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
 
-  struct perf_task_data* lazily_allocated_perf_data;
+diff --git a/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+new file mode 100644
+index 000000000000..92d8ade988f6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+@@ -0,0 +1,63 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/xlnx,emaclite.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xilinx Emaclite Ethernet controller
++
++maintainers:
++  - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
++  - Harini Katakam <harini.katakam@amd.com>
++
++allOf:
++  - $ref: ethernet-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - xlnx,opb-ethernetlite-1.01.a
++      - xlnx,opb-ethernetlite-1.01.b
++      - xlnx,xps-ethernetlite-1.00.a
++      - xlnx,xps-ethernetlite-2.00.a
++      - xlnx,xps-ethernetlite-2.01.a
++      - xlnx,xps-ethernetlite-3.00.a
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  phy-handle: true
++
++  local-mac-address: true
++
++  xlnx,tx-ping-pong:
++    type: boolean
++    description: hardware supports tx ping pong buffer.
++
++  xlnx,rx-ping-pong:
++    type: boolean
++    description: hardware supports rx ping pong buffer.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - phy-handle
++
++additionalProperties: false
++
++examples:
++  - |
++    axi_ethernetlite_1: ethernet@40e00000 {
++        compatible = "xlnx,xps-ethernetlite-3.00.a";
++        reg = <0x40e00000 0x10000>;
++        interrupt-parent = <&axi_intc_1>;
++        interrupts = <1>;
++        local-mac-address = [00 00 00 00 00 00];
++        phy-handle = <&phy0>;
++        xlnx,rx-ping-pong;
++        xlnx,tx-ping-pong;
++    };
+-- 
+2.25.1
 
-that's lazily allocated on first use instead of the current
-perf_event_ctxp/perf_event_mutex/perf_event_list.
-This way we could both reduce task_size when perf is not used and have
-more perf-related data (incl breakpoints) when it's used.

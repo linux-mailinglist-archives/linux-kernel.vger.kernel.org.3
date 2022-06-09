@@ -2,108 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23E554466E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F685544672
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbiFIIvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S242148AbiFIIuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242633AbiFIIug (ORCPT
+        with ESMTP id S232405AbiFIIuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:50:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED27F145581;
-        Thu,  9 Jun 2022 01:47:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89659619AF;
-        Thu,  9 Jun 2022 08:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50939C34114;
-        Thu,  9 Jun 2022 08:47:28 +0000 (UTC)
-Message-ID: <afafa5db-cf2c-4e4d-7003-2e7d35658a99@xs4all.nl>
-Date:   Thu, 9 Jun 2022 10:47:26 +0200
+        Thu, 9 Jun 2022 04:50:40 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9352945D3;
+        Thu,  9 Jun 2022 01:47:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654764461; x=1686300461;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jwiDmz5pKMi/E7+NzTlVzvRpVv2gzJ5DrLPjuQhFOQA=;
+  b=qhaSypqtE/2wMW7FnQeX9RBPm2gatgE2CTuFsvlrQmr078Y7CO3CyWSH
+   K70Pas5AwkdlK0zPBbn41meGRi5fJH/j+NhnQpqJTZ27WZQH7MTgROsNw
+   LvD8Pe/L4JU87dvmlJ4eoK04cxeSl8U7mQFwnQ8YDZ1gYWOp+ui0RNknF
+   8=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 01:47:40 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 01:47:40 -0700
+Received: from [10.253.77.106] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 9 Jun 2022
+ 01:47:38 -0700
+Message-ID: <600aa8db-6cfd-0e62-7936-e14c4a8c70ed@quicinc.com>
+Date:   Thu, 9 Jun 2022 16:47:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] media: hantro: fix compatible string deprecation warning
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1] Bluetooth: hci_sync: Fix setup CVSD SCO failure
 Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220517143521.1670663-1-martin.kepplinger@puri.sm>
- <0da188fa-efd8-62d0-2ea6-5a8e0c286cb5@arm.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <0da188fa-efd8-62d0-2ea6-5a8e0c286cb5@arm.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+References: <1654762252-19603-1-git-send-email-quic_zijuhu@quicinc.com>
+ <1403aa05-19ec-62f7-42a6-8b224574eb1e@molgen.mpg.de>
+From:   quic_zijuhu <quic_zijuhu@quicinc.com>
+In-Reply-To: <1403aa05-19ec-62f7-42a6-8b224574eb1e@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
-
-On 5/17/22 18:46, Robin Murphy wrote:
-> On 2022-05-17 15:35, Martin Kepplinger wrote:
->> of_device_is_compatible() in the end uses strlen of the string
->> for comparison, so in this case, the condition is true even if
->> the requested string "nxp,imx8mq-vpu-g1" is being used. The first
->> chars containing "nxp,imx8mq-vpu" are the same.
+On 6/9/2022 4:15 PM, Paul Menzel wrote:
+> Dear Zijun,
 > 
-> Have you seen this go wrong in practice? AFAICS, unless you're on SPARC, which seems somewhat unlikely for an i.MX8 peripheral, of_compat_cmp() should map to strcasecmp(), which should do the right thing :/
-
-Robin is correct, the existing code is fine for all but SPARC, which
-won't be using this driver.
-
-I'm rejecting this patch.
-
-Regards,
-
-	Hans
-
 > 
-> Robin.
+> Thank you for your patch.
 > 
->> Fix this by encoding what the comment says.
+> Am 09.06.22 um 10:10 schrieb Zijun Hu:
+> 
+> Maybe for the summary:
+> 
+> Bluetooth: Fix CVSD SCO setup failure
+> 
+>> It will setup SCO after all CVSD eSCO attempts failure, but
+> 
+will correct it within v2 patch
+> The verb is spelled with a space: set up
+> 
+>> still fails to setup SCO finally due to wrong D1/D0 @retrans_effort
+> 
+> Ditto.
+> 
+see above reply
+>> within @esco_param_cvsd, so change it from 0x1 to 0xff to avoid
+>> Invalid HCI Command Parameters error.
 >>
->> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+>> < HCI Command: Setup Synchrono.. (0x01|0x0028) plen 17  #3427
+>>          Handle: 3
+>>          Transmit bandwidth: 8000
+>>          Receive bandwidth: 8000
+>>          Max latency: 65535
+>>          Setting: 0x0060
+>>            Input Coding: Linear
+>>            Input Data Format: 2's complement
+>>            Input Sample Size: 16-bit
+>>            # of bits padding at MSB: 0
+>>            Air Coding Format: CVSD
+>>          Retransmission effort: Optimize for power consumption (0x01)
+>>          Packet type: 0x03c4
+>>            HV3 may be used
+>>            2-EV3 may not be used
+>>            3-EV3 may not be used
+>>            2-EV5 may not be used
+>>            3-EV5 may not be used
+>>> HCI Event: Command Status (0x0f) plen 4               #3428
+>>        Setup Synchronous Connection (0x01|0x0028) ncmd 1
+>>          Status: Success (0x00)
+>>> HCI Event: Synchronous Connect Comp.. (0x2c) plen 17  #3429
+>>          Status: Invalid HCI Command Parameters (0x12)
+>>          Handle: 0
+>>          Address: 14:3F:A6:47:56:15 (OUI 14-3F-A6)
+>>          Link type: SCO (0x00)
+>>          Transmission interval: 0x00
+>>          Retransmission window: 0x00
+>>          RX packet length: 0
+>>          TX packet length: 0
+>>          Air mode: u-law log (0x00)
+> 
+> What is your test setup to reproduce it?
+> 
+this issue is reported by our tester.
+this issue only happens with some kinds of headsets which says it support eSCO but seems no actually.
+it can be reproduced by UBUNTU BT settings UI
+
+D1/D0 @retrans_effort within @esco_param_cvsd are wrong compared with present below definition：
+static const struct sco_param sco_param_cvsd[] = {
+	{ EDR_ESCO_MASK | ESCO_HV3,   0xffff,	0xff }, /* D1 */
+	{ EDR_ESCO_MASK | ESCO_HV1,   0xffff,	0xff }, /* D0 */
+};
+
+additionally, based on BT core spec：
+0x00 No retransmissions (SCO or eSCO connection allowed)
+0x01 At least one retransmission, optimize for power consumption (eSCO connection required).
+0x02 At least one retransmission, optimize for link quality (eSCO connection
+required)
+0xFF Don’t care (SCO or eSCO connection allowed)
+All other values Reserved for future use
+
+for SCO, @retrans_effort is 0x00 or 0xff, must not be 0x01.
+thanks
+
+>> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 >> ---
+>>   net/bluetooth/hci_conn.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->> This is more of a bugreport as the solution doesn't look very elegant
->> to me. I'm happy for advice.
->>
->> thanks,
->>                             martin
->>
->>
->>   drivers/staging/media/hantro/hantro_drv.c | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
->> index ac232b5f7825..014fab637df0 100644
->> --- a/drivers/staging/media/hantro/hantro_drv.c
->> +++ b/drivers/staging/media/hantro/hantro_drv.c
->> @@ -923,10 +923,11 @@ static int hantro_probe(struct platform_device *pdev)
->>         /*
->>        * Support for nxp,imx8mq-vpu is kept for backwards compatibility
->> -     * but it's deprecated. Please update your DTS file to use
->> -     * nxp,imx8mq-vpu-g1 or nxp,imx8mq-vpu-g2 instead.
->> +     * but it's deprecated.
->>        */
->> -    if (of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu"))
->> +    if ((of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu")) &&
->> +        (!of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu-g1")) &&
->> +        (!of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu-g2")))
->>           dev_warn(&pdev->dev, "%s compatible is deprecated\n",
->>                match->compatible);
->>   
+>> diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+>> index 7829433d54c1..2627d5ac15d6 100644
+>> --- a/net/bluetooth/hci_conn.c
+>> +++ b/net/bluetooth/hci_conn.c
+>> @@ -45,8 +45,8 @@ static const struct sco_param esco_param_cvsd[] = {
+>>       { EDR_ESCO_MASK & ~ESCO_2EV3, 0x000a,    0x01 }, /* S3 */
+>>       { EDR_ESCO_MASK & ~ESCO_2EV3, 0x0007,    0x01 }, /* S2 */
+>>       { EDR_ESCO_MASK | ESCO_EV3,   0x0007,    0x01 }, /* S1 */
+>> -    { EDR_ESCO_MASK | ESCO_HV3,   0xffff,    0x01 }, /* D1 */
+>> -    { EDR_ESCO_MASK | ESCO_HV1,   0xffff,    0x01 }, /* D0 */
+>> +    { EDR_ESCO_MASK | ESCO_HV3,   0xffff,    0xff }, /* D1 */
+>> +    { EDR_ESCO_MASK | ESCO_HV1,   0xffff,    0xff }, /* D0 */
+>>   };
+>>     static const struct sco_param sco_param_cvsd[] = {
+> 
+> 
+> Kind regards,
+> 
+> Paul
+

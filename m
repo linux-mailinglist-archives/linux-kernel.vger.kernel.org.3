@@ -2,101 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F8D5452F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28895452F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244081AbiFIRbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
+        id S1344357AbiFIRbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239149AbiFIRbD (ORCPT
+        with ESMTP id S239149AbiFIRbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:31:03 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001142348F4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 10:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=PngJV0fOQLwfKIkqb7hkPhv5VV2jzxuklqa/4eAL0Wc=;
-        b=Xxq+NRf2PMtLyiVHS86SoJwNRzPssFYIVkOdVqqA+g+6M9LoJg9GaMQrG6hmwzEdMQxeKBtuKVJDk
-         ixNQt92nXHp5bjSU7IMMKd/SJ0/+W3oUtHCVEN3Z5Hhkh69GAU7F/Z2eSIUcFiksSr1C03X0y24JM8
-         1cjBAZl472mdM2tjV+pIsSyRclb8yzgYwZhIJ6ftW4uzRctQlmISSjiu6cIutg1HDcpdJfUTyuHFvm
-         RQxSAekV2EX+NXrsr8mvssDFD8+sgO8XLA+VkLxIAeYTVtalTQYe5mz8X4CoK+DgTlNkIaK73AEFBv
-         2hMcv3ArLfAZAcVAvqeBqDF3Cb1deYw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=PngJV0fOQLwfKIkqb7hkPhv5VV2jzxuklqa/4eAL0Wc=;
-        b=e/H/5jol8vzhvLtury+WU8PNc8TExjdg+CCmoAvGFdbAWGDTwNgTdhzT9FEYXOYKhNdJqeh/b/eeJ
-         52ViYCWCg==
-X-HalOne-Cookie: e8b68a89220797ee6f84a44fb1bf6d39574960f8
-X-HalOne-ID: ecbedf15-e819-11ec-8231-d0431ea8bb10
-Received: from mailproxy1.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id ecbedf15-e819-11ec-8231-d0431ea8bb10;
-        Thu, 09 Jun 2022 17:30:58 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 19:30:57 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Stephen Kitt <steve@sk2.org>, linux-fbdev@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Helge Deller <deller@gmx.de>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] fbdev: atmel_lcdfb: Rework backlight status updates
-Message-ID: <YqIuUYUXzxeSgZ/o@ravnborg.org>
-References: <20220608205623.2106113-1-steve@sk2.org>
- <20220609095412.fccofr2e2kpzhw4t@maple.lan>
+        Thu, 9 Jun 2022 13:31:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DD7237C34;
+        Thu,  9 Jun 2022 10:31:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC0D7B82F33;
+        Thu,  9 Jun 2022 17:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4874CC34114;
+        Thu,  9 Jun 2022 17:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654795864;
+        bh=CRmm8/mUX227QEIll5fkaPHrTLEJ+9bs/oYiXXG8QFQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=C8bjlMwUltah62e8/qL8celDTce5n5fF90DChyH3fO8MG/7Hqnv3FRwCFRcEofTTu
+         BEhPlzswk+ZzOfUd5NCkE8gipvjcIk5n0I2U1C3b54etSu6rJqCcN+QvwdCFYfQuq9
+         oF1NGxTHW5aDvJeQ1iV9xT0VjndVsSHwlEQUyAK6/qV2kuzcLgYhK2pC1Ayv0wmbTQ
+         QYOKMqGRvRdZt8h9U6HiZ3XppdfhInf0ReE6EYKucJKTWPOCxnPWKZc5QgP15wxdgh
+         Y/YhbXhS7+PXSYMDWAHDxhu1rSDDA9fvxFSbNOyKBzeuI2b97bc0HFpOEe4XA7/z7z
+         a3PrXQoDo5R1Q==
+Date:   Thu, 9 Jun 2022 12:31:02 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ke Liu <liuke94@huawei.com>
+Cc:     bhelgaas@google.com, nirmal.patel@linux.intel.com,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, kurt.schwemmer@microsemi.com, logang@deltatee.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drivers: pci: Directly use ida_alloc()/free()
+Message-ID: <20220609173102.GA519791@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609095412.fccofr2e2kpzhw4t@maple.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220602071115.3833935-1-liuke94@huawei.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
-
-thanks for taking care of all these backlight simplifications - this
-really helps to make the code simpler and more readable.
-
-On Thu, Jun 09, 2022 at 10:54:12AM +0100, Daniel Thompson wrote:
-> On Wed, Jun 08, 2022 at 10:56:23PM +0200, Stephen Kitt wrote:
-> > Instead of checking the state of various backlight_properties fields
-> > against the memorised state in atmel_lcdfb_info.bl_power,
-> > atmel_bl_update_status() should retrieve the desired state using
-> > backlight_get_brightness (which takes into account the power state,
-> > blanking etc.). This means the explicit checks using props.fb_blank
-> > and props.power can be dropped.
-> > 
-> > Then brightness can only be negative if the backlight is on but
-> > props.brightness is negative, so the test before reading the
-> > brightness value from the hardware can be simplified to
-> > (brightness < 0).
+On Thu, Jun 02, 2022 at 07:11:15AM +0000, Ke Liu wrote:
+> Use ida_alloc()/ida_free() instead of deprecated
+> ida_simple_get()/ida_simple_remove().
 > 
-> props.brightness should always be in the interval 0..max_brightness.
-> 
-> This is enforced by the main backlight code (and APIs to set the
-> brightness use unsigned values). Thus props.brightness could only be
-> negative is the driver explicitly sets a negative value as some kind of
-> placeholder (which this driver does not do).
-> 
-> I don't think there is any need to keep this logic.
+> Signed-off-by: Ke Liu <liuke94@huawei.com>
 
-Daniel is right - please drop the "if (brightness < 0)" logic.
-I have looked a bit on the datasheet in my attempt to do a drm version
-of this driver - something that I am yet to succeed and the backlight
-core avoid any negative values.
+I split the switchtec part off and applied it with Logan's ack to
+pci/ctrl/switchtec for v5.20, thanks!
 
-	Sam
+  PCI: switchtec: Prefer ida_alloc()/free() over ida_simple_get()/remove()
+
+I'll apply the vmd part as soon as one of those folks pipes up.
+
+> ---
+> v2	fix sign-off name suggest by Bjorn Helgaas
+> ---
+>  drivers/pci/controller/vmd.c   | 6 +++---
+>  drivers/pci/switch/switchtec.c | 7 +++----
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index 94a14a3d7e55..49c72c2d8fe7 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -894,7 +894,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  		return -ENOMEM;
+>  
+>  	vmd->dev = dev;
+> -	vmd->instance = ida_simple_get(&vmd_instance_ida, 0, 0, GFP_KERNEL);
+> +	vmd->instance = ida_alloc(&vmd_instance_ida, GFP_KERNEL);
+>  	if (vmd->instance < 0)
+>  		return vmd->instance;
+>  
+> @@ -935,7 +935,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	return 0;
+>  
+>   out_release_instance:
+> -	ida_simple_remove(&vmd_instance_ida, vmd->instance);
+> +	ida_free(&vmd_instance_ida, vmd->instance);
+>  	kfree(vmd->name);
+>  	return err;
+>  }
+> @@ -958,7 +958,7 @@ static void vmd_remove(struct pci_dev *dev)
+>  	vmd_cleanup_srcu(vmd);
+>  	vmd_detach_resources(vmd);
+>  	vmd_remove_irq_domain(vmd);
+> -	ida_simple_remove(&vmd_instance_ida, vmd->instance);
+> +	ida_free(&vmd_instance_ida, vmd->instance);
+>  	kfree(vmd->name);
+>  }
+>  
+> diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+> index c36c1238c604..75be4fe22509 100644
+> --- a/drivers/pci/switch/switchtec.c
+> +++ b/drivers/pci/switch/switchtec.c
+> @@ -1376,8 +1376,7 @@ static struct switchtec_dev *stdev_create(struct pci_dev *pdev)
+>  	dev->groups = switchtec_device_groups;
+>  	dev->release = stdev_release;
+>  
+> -	minor = ida_simple_get(&switchtec_minor_ida, 0, 0,
+> -			       GFP_KERNEL);
+> +	minor = ida_alloc(&switchtec_minor_ida, GFP_KERNEL);
+>  	if (minor < 0) {
+>  		rc = minor;
+>  		goto err_put;
+> @@ -1692,7 +1691,7 @@ static int switchtec_pci_probe(struct pci_dev *pdev,
+>  err_devadd:
+>  	stdev_kill(stdev);
+>  err_put:
+> -	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+> +	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+>  	put_device(&stdev->dev);
+>  	return rc;
+>  }
+> @@ -1704,7 +1703,7 @@ static void switchtec_pci_remove(struct pci_dev *pdev)
+>  	pci_set_drvdata(pdev, NULL);
+>  
+>  	cdev_device_del(&stdev->cdev, &stdev->dev);
+> -	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+> +	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+>  	dev_info(&stdev->dev, "unregistered.\n");
+>  	stdev_kill(stdev);
+>  	put_device(&stdev->dev);
+> -- 
+> 2.25.1
+> 

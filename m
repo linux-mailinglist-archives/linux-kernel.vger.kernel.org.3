@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4A65449D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40305449D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242652AbiFILR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
+        id S242911AbiFILSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242319AbiFILR1 (ORCPT
+        with ESMTP id S240884AbiFILSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:17:27 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D926834BAB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:17:25 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 88B14DFDE2;
-        Thu,  9 Jun 2022 04:17:25 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AdmpqNhmYmWs; Thu,  9 Jun 2022 04:17:24 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1654773444; bh=304FzTc7kUGpYL6mGifeAk9dzSjFz6UXTYRUkbSJLYM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bwfPRCPyEtBLaKFBANzW1EfITBel1MbMTpIqxVevsDRz8FlsIzEOTdP3777X5jOgo
-         Q7OJKXJ+A0k7gziDsfYO1kWfeNf9dMcfHfY6OplonoyGXYL9cEdttyy0gTRCt9521M
-         QdsJO9OPaMkZUDiDx7ef8cIiAVJj3Zrj+Y7GQKcqLneiKpRyy6FDH/oPXBzAifWC+S
-         CoXXLEzCKY5lLt8ims7du21LbPJvrTxCiqmsVN8DKTNIQSYAXiD6qoTRso8G3cw9XJ
-         nHa2cN0bb0cWC7qI5Ck5iYVN0CbAnRVMa0isab5C2SL1STX0s7BXdirnP1rN1o0vqG
-         G9qUsc7uTAeEQ==
-To:     shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com
-Cc:     kernel@pengutronix.de, kernel@puri.sm, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v2] soc: imx: gpcv2: print errno for regulator errors
-Date:   Thu,  9 Jun 2022 13:17:07 +0200
-Message-Id: <20220609111707.2216036-1-martin.kepplinger@puri.sm>
+        Thu, 9 Jun 2022 07:18:17 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D923EAB1;
+        Thu,  9 Jun 2022 04:18:13 -0700 (PDT)
+X-UUID: 31dd457621b54ff68976ebd409c9348a-20220609
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:6b24e070-4e65-495d-ba0d-9a99248133ca,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:92c841e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 31dd457621b54ff68976ebd409c9348a-20220609
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <mengqi.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 253463372; Thu, 09 Jun 2022 19:18:08 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 9 Jun 2022 19:18:07 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 9 Jun 2022 19:18:07 +0800
+From:   Mengqi Zhang <mengqi.zhang@mediatek.com>
+To:     <chaotian.jing@mediatek.com>, <ulf.hansson@linaro.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-mmc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <wenbin.mei@mediatek.com>,
+        Mengqi Zhang <mengqi.zhang@mediatek.com>
+Subject: [PATCH V2] mmc: mediatek: wait dma stop bit reset to 0
+Date:   Thu, 9 Jun 2022 19:17:50 +0800
+Message-ID: <20220609111750.18571-1-mengqi.zhang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make debugging of power management issues easier by printing the reason
-why a regulator fails to be enabled or disabled.
+MediaTek IP requires that after dma stop, it need to wait this dma stop
+bit auto-reset to 0. When bus is in high loading state, it will take a
+while for the dma stop complete. If there is no waiting operation here,
+when program runs to clear fifo and reset, bus will hang.
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+In addition, there should be no return in msdc_data_xfer_next() if
+there is data need be transferred, because no matter what error occurs
+here, it should continue to excute to the following mmc_request_done.
+Otherwise the core layer may wait complete forever.
+
+Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
 ---
+ drivers/mmc/host/mtk-sd.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-revision history
-----------------
-v2: (thank you Ahmad)
- * use %pe format
- * sent out a bit early because it's pretty obvious
-v1:
-https://lore.kernel.org/linux-arm-kernel/64828809-1eb7-dff3-da57-95b545aefc22@pengutronix.de/T/#t
-
-
- drivers/soc/imx/gpcv2.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-index 85aa86e1338a..6383a4edc360 100644
---- a/drivers/soc/imx/gpcv2.c
-+++ b/drivers/soc/imx/gpcv2.c
-@@ -328,7 +328,9 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
- 	if (!IS_ERR(domain->regulator)) {
- 		ret = regulator_enable(domain->regulator);
- 		if (ret) {
--			dev_err(domain->dev, "failed to enable regulator\n");
-+			dev_err(domain->dev,
-+				"failed to enable regulator: %pe\n",
-+				ERR_PTR(ret));
- 			goto out_put_pm;
- 		}
- 	}
-@@ -467,7 +469,9 @@ static int imx_pgc_power_down(struct generic_pm_domain *genpd)
- 	if (!IS_ERR(domain->regulator)) {
- 		ret = regulator_disable(domain->regulator);
- 		if (ret) {
--			dev_err(domain->dev, "failed to disable regulator\n");
-+			dev_err(domain->dev,
-+				"failed to disable regulator: %pe\n",
-+				ERR_PTR(ret));
- 			return ret;
- 		}
- 	}
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 195dc897188b..c925f45786c2 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -1385,12 +1385,15 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+ 		sdr_set_field(host->base + MSDC_DMA_CTRL, MSDC_DMA_CTRL_STOP,
+ 				1);
+ 
++		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CTRL, val,
++						!(val & MSDC_DMA_CTRL_STOP), 1, 20000);
++		if (ret)
++			dev_dbg(host->dev, "DMA stop timed out\n");
++
+ 		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CFG, val,
+ 						!(val & MSDC_DMA_CFG_STS), 1, 20000);
+-		if (ret) {
+-			dev_dbg(host->dev, "DMA stop timed out\n");
+-			return false;
+-		}
++		if (ret)
++			dev_dbg(host->dev, "DMA inactive timed out\n");
+ 
+ 		sdr_clr_bits(host->base + MSDC_INTEN, data_ints_mask);
+ 		dev_dbg(host->dev, "DMA stop\n");
+@@ -2416,6 +2419,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+ 	if (recovery) {
+ 		sdr_set_field(host->base + MSDC_DMA_CTRL,
+ 			      MSDC_DMA_CTRL_STOP, 1);
++		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
++			!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
++			return;
+ 		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
+ 			!(val & MSDC_DMA_CFG_STS), 1, 3000)))
+ 			return;
 -- 
-2.30.2
+2.25.1
 

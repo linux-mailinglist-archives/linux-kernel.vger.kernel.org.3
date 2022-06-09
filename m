@@ -2,57 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF15544554
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477ED544557
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240459AbiFIIHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        id S240499AbiFIIIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240308AbiFIIHe (ORCPT
+        with ESMTP id S240450AbiFIIII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:07:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8832ED7D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:07:33 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nzDCQ-0005Kt-3M; Thu, 09 Jun 2022 10:07:26 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B728C8FD63;
-        Thu,  9 Jun 2022 08:07:24 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 10:07:24 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 03/13] can: slcan: use the alloc_can_skb() helper
-Message-ID: <20220609080724.z2ouwivtgu36b423@pengutronix.de>
-References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
- <20220608165116.1575390-4-dario.binacchi@amarulasolutions.com>
+        Thu, 9 Jun 2022 04:08:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8BD1157F7;
+        Thu,  9 Jun 2022 01:08:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09D9EB82C3C;
+        Thu,  9 Jun 2022 08:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39328C34114;
+        Thu,  9 Jun 2022 08:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654762084;
+        bh=VUEvKySVaE7RF0deKcJ/G+d/pOEYQYj0Bdn8d40rA4M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tb3WsxPnTYPcD3Pccnx794lx7pJ5c4UMK7zLwEDQ1XeZI8aVsvbSymsgP+hreuHn0
+         SPwI6gBoYr8MzRG5E1ssWfXPbNGbZHTNN1pwjieT6pQNxqJDM78FlGomqm1qGYfYBA
+         JeWOQjLoHXv9vPcvIBG/3d1TCnQ7zVRu696rBkxY=
+Date:   Thu, 9 Jun 2022 10:08:01 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ron Economos <re@w6rz.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
+Message-ID: <YqGqYd89cM+IB74e@kroah.com>
+References: <20220607164948.980838585@linuxfoundation.org>
+ <0a063e00-360e-7b63-988c-e6c028063cf9@w6rz.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="atjba7zcmgsgdmzd"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220608165116.1575390-4-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0a063e00-360e-7b63-988c-e6c028063cf9@w6rz.net>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,185 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 08, 2022 at 04:23:04PM -0700, Ron Economos wrote:
+> On 6/7/22 9:53 AM, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.17.14 release.
+> > There are 772 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.14-rc1.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> Regression on RISC-V RV64 (HiFive Unmatched).
+> 
+> An Oops occurs when an NFS file system is mounted.
+> 
+> [   98.244615] FS-Cache: Loaded
+> [   99.311566] NFS: Registering the id_resolver key type
+> [   99.311621] Key type id_resolver registered
+> [   99.311626] Key type id_legacy registered
+> [   99.469053] Unable to handle kernel access to user memory without uaccess
+> routines at virtual address 0000000000000000
+> [   99.479039] Oops [#1]
+> [   99.481246] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 nfs
+> lockd grace fscache netfs nvme_fabrics sunrpc binfmt_misc nls_iso8859_1
+> da9063_onkey lm90 at24 uio_pdrv_genirq uio sch_fq_codel dm_multipath
+> scsi_dh_rdac scsi_dh_emc scsi_dh_alua ipmi_devintf ipmi_msghandler drm
+> backlight ip_tables x_tables autofs4 btrfs blake2b_generic zstd_compress
+> raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx
+> xor raid6_pq libcrc32c raid1 raid0 multipath linear rtc_da9063
+> da9063_regulator mscc macsec nvme macb xhci_pci nvme_core xhci_pci_renesas
+> i2c_ocores phylink
+> [   99.532427] CPU: 2 PID: 889 Comm: mount.nfs Not tainted 5.17.13 #1
+> [   99.538572] Hardware name: SiFive HiFive Unmatched A00 (DT)
+> [   99.544133] epc : nfs_fattr_init+0x1e/0x48 [nfs]
+> [   99.549059]  ra : _nfs41_proc_get_locations+0xb4/0x128 [nfsv4]
+> [   99.555877] epc : ffffffff02332e76 ra : ffffffff023c076c sp :
+> ffffffc894793960
+> [   99.563084]  gp : ffffffff81a2ed00 tp : ffffffd896180000 t0 :
+> ffffffd887720000
+> [   99.570294]  t1 : ffffffff81a9c110 t2 : ffffffff81003c04 s0 :
+> ffffffc894793970
+> [   99.577503]  s1 : ffffffd887700000 a0 : 0000000000000000 a1 :
+> ffffffd883de3d80
+> [   99.584721]  a2 : ffffffd887700000 a3 : ffffffc704608a00 a4 :
+> ffffffff0236aa28
+> [   99.591924]  a5 : ffffffff02410cf8 a6 : ffffffff0240fc00 a7 :
+> 0000000000000006
+> [   99.599134]  s2 : ffffffd885df6000 s3 : ffffffc8947939c8 s4 :
+> ffffffc894793998
+> [   99.606343]  s5 : ffffffd881a9f000 s6 : ffffffc704608a00 s7 :
+> ffffffff021c7db8
+> [   99.613552]  s8 : ffffffff0240fd50 s9 : 0000000000000cc0 s10:
+> 0000003fd7d2e260
+> [   99.620762]  s11: 0000000000016700 t3 : 0000000000000020 t4 :
+> 0000000000000001
+> [   99.627971]  t5 : ffffffdbffdde088 t6 : ffffffdbffdde0a8
+> [   99.633266] status: 0000000200000120 badaddr: 0000000000000000 cause:
+> 000000000000000f
+> [   99.641236] ---[ end trace 0000000000000000 ]---
+> 
+> Manually bisected to this commit:
+> 
+> NFSv4: Fix free of uninitialized nfs4_label on referral lookup.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?h=linux-5.17.y&id=9a4a2efee41c4aca43988c43e16d44656f3c2132
+> 
 
---atjba7zcmgsgdmzd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's odd you see this here on 5.17, but NOT on 5.18 with the same
+commit merged there.  I'll drop this from 5.17 and as this will probably
+be the last (or next to last) 5.17 kernel release, not worry too much
+about it.
 
-On 08.06.2022 18:51:06, Dario Binacchi wrote:
-> It is used successfully by most (if not all) CAN device drivers. It
-> allows to remove replicated code.
->=20
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->=20
-> ---
->=20
-> Changes in v2:
-> - Put the data into the allocated skb directly instead of first
->   filling the "cf" on the stack and then doing a memcpy().
->=20
->  drivers/net/can/slcan.c | 69 +++++++++++++++++++----------------------
->  1 file changed, 32 insertions(+), 37 deletions(-)
->=20
-> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-> index 6162a9c21672..5d87e25e2285 100644
-> --- a/drivers/net/can/slcan.c
-> +++ b/drivers/net/can/slcan.c
-> @@ -54,6 +54,7 @@
->  #include <linux/kernel.h>
->  #include <linux/workqueue.h>
->  #include <linux/can.h>
-> +#include <linux/can/dev.h>
->  #include <linux/can/skb.h>
->  #include <linux/can/can-ml.h>
-> =20
-> @@ -143,85 +144,79 @@ static struct net_device **slcan_devs;
->  static void slc_bump(struct slcan *sl)
->  {
->  	struct sk_buff *skb;
-> -	struct can_frame cf;
-> +	struct can_frame *cf;
->  	int i, tmp;
->  	u32 tmpid;
->  	char *cmd =3D sl->rbuff;
-> =20
-> -	memset(&cf, 0, sizeof(cf));
-> +	skb =3D alloc_can_skb(sl->dev, &cf);
-> +	if (unlikely(!skb)) {
-> +		sl->dev->stats.rx_dropped++;
-> +		return;
-> +	}
-> =20
->  	switch (*cmd) {
->  	case 'r':
-> -		cf.can_id =3D CAN_RTR_FLAG;
-> +		cf->can_id =3D CAN_RTR_FLAG;
->  		fallthrough;
->  	case 't':
->  		/* store dlc ASCII value and terminate SFF CAN ID string */
-> -		cf.len =3D sl->rbuff[SLC_CMD_LEN + SLC_SFF_ID_LEN];
-> +		cf->len =3D sl->rbuff[SLC_CMD_LEN + SLC_SFF_ID_LEN];
->  		sl->rbuff[SLC_CMD_LEN + SLC_SFF_ID_LEN] =3D 0;
->  		/* point to payload data behind the dlc */
->  		cmd +=3D SLC_CMD_LEN + SLC_SFF_ID_LEN + 1;
->  		break;
->  	case 'R':
-> -		cf.can_id =3D CAN_RTR_FLAG;
-> +		cf->can_id =3D CAN_RTR_FLAG;
->  		fallthrough;
->  	case 'T':
-> -		cf.can_id |=3D CAN_EFF_FLAG;
-> +		cf->can_id |=3D CAN_EFF_FLAG;
->  		/* store dlc ASCII value and terminate EFF CAN ID string */
-> -		cf.len =3D sl->rbuff[SLC_CMD_LEN + SLC_EFF_ID_LEN];
-> +		cf->len =3D sl->rbuff[SLC_CMD_LEN + SLC_EFF_ID_LEN];
->  		sl->rbuff[SLC_CMD_LEN + SLC_EFF_ID_LEN] =3D 0;
->  		/* point to payload data behind the dlc */
->  		cmd +=3D SLC_CMD_LEN + SLC_EFF_ID_LEN + 1;
->  		break;
->  	default:
-> -		return;
-> +		goto decode_failed;
->  	}
-> =20
->  	if (kstrtou32(sl->rbuff + SLC_CMD_LEN, 16, &tmpid))
-> -		return;
-> +		goto decode_failed;
-> =20
-> -	cf.can_id |=3D tmpid;
-> +	cf->can_id |=3D tmpid;
-> =20
->  	/* get len from sanitized ASCII value */
-> -	if (cf.len >=3D '0' && cf.len < '9')
-> -		cf.len -=3D '0';
-> +	if (cf->len >=3D '0' && cf->len < '9')
-> +		cf->len -=3D '0';
->  	else
-> -		return;
-> +		goto decode_failed;
-> =20
->  	/* RTR frames may have a dlc > 0 but they never have any data bytes */
-> -	if (!(cf.can_id & CAN_RTR_FLAG)) {
-> -		for (i =3D 0; i < cf.len; i++) {
-> +	if (!(cf->can_id & CAN_RTR_FLAG)) {
-> +		for (i =3D 0; i < cf->len; i++) {
->  			tmp =3D hex_to_bin(*cmd++);
->  			if (tmp < 0)
-> -				return;
-> -			cf.data[i] =3D (tmp << 4);
-> +				goto decode_failed;
-> +
-> +			cf->data[i] =3D (tmp << 4);
->  			tmp =3D hex_to_bin(*cmd++);
->  			if (tmp < 0)
-> -				return;
-> -			cf.data[i] |=3D tmp;
-> +				goto decode_failed;
-> +
-> +			cf->data[i] |=3D tmp;
->  		}
->  	}
-> =20
-> -	skb =3D dev_alloc_skb(sizeof(struct can_frame) +
-> -			    sizeof(struct can_skb_priv));
-> -	if (!skb)
-> -		return;
-> -
-> -	skb->dev =3D sl->dev;
-> -	skb->protocol =3D htons(ETH_P_CAN);
-> -	skb->pkt_type =3D PACKET_BROADCAST;
-> -	skb->ip_summed =3D CHECKSUM_UNNECESSARY;
-> -
-> -	can_skb_reserve(skb);
-> -	can_skb_prv(skb)->ifindex =3D sl->dev->ifindex;
-> -	can_skb_prv(skb)->skbcnt =3D 0;
-> -
-> -	skb_put_data(skb, &cf, sizeof(struct can_frame));
-> -
->  	sl->dev->stats.rx_packets++;
-> -	if (!(cf.can_id & CAN_RTR_FLAG))
-> -		sl->dev->stats.rx_bytes +=3D cf.len;
-> +	if (!(cf->can_id & CAN_RTR_FLAG))
-> +		sl->dev->stats.rx_bytes +=3D cf->len;
-> =20
->  	netif_rx(skb);
-> +	return;
-> +
-> +decode_failed:
-> +	dev_kfree_skb(skb);
+thanks,
 
-Can you increase an error counter in this situation, too?
-
-Marc
-
->  }
-> =20
->  /* parse tty input stream */
-> --=20
-> 2.32.0
->=20
->=20
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---atjba7zcmgsgdmzd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKhqjkACgkQrX5LkNig
-013HUAgAqNyG+WGjiiRutxQFcDB8sjKXLB7vK7+Nxuo1idJ6Ez84UYz7yXxBNub4
-Tj9sLTzWmBocBoRVYOM5shThBLKYABOTJjpU90EyjtsaecGWzZ31GVmtfx95vVFK
-JDMHZP0yQZ45315d0P1/U+XV6uK03MMoUwKvb1fw0dKZ14ZhCgJrHK13n5uvX/by
-Sz8uHCJlp1X2u/ULoNFJLyFFBZt6zSQnh9dOC7Qfq612QzxZZ51mfkQjUwIvsuNx
-fwFav+zthhYOkJZdwcJpTp7ChuHxAuhFF3WTXJI6hMTpVdNDTJaFsVtzjkwz7faF
-HZsSgWXZQ2ASFS1epIjNbjb1yiQ6rg==
-=bf3D
------END PGP SIGNATURE-----
-
---atjba7zcmgsgdmzd--
+greg k-h

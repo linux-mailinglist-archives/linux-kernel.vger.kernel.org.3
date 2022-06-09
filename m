@@ -2,237 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5DA5441AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 04:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D9A5441B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 04:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbiFICzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Jun 2022 22:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S237291AbiFICzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Jun 2022 22:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbiFICzT (ORCPT
+        with ESMTP id S237271AbiFICzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Jun 2022 22:55:19 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6441A0AF7;
-        Wed,  8 Jun 2022 19:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654743318; x=1686279318;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5PYMIT/uUsI3RZRwx4CIFw86+8DJBh3cZNahF5UEA5Y=;
-  b=NmPdV5W+GYaeFVUYN+400nJ5IqZBDGhKjHMieUexTCW+AGP4CMpV8Fqc
-   wWZ03j1EyR3VjpJqkFJcOQI9kadJ82KggF2wy8CEabec9woZGlaXf/Jmg
-   e7QVmJYvuaS86LQx8+snULSFhB7Qr2zUaPf2NNa7yDfhCz32UqyrGybwT
-   tyXfIun68JEpwIoOJHqVNcGMa02wA4Rc5776mRxNV+84cEbZQTFZ64tsx
-   B9zqfc3sZBMcChE3ELhujKS47aBDfmJDT2u8r05eyMBG7iYBVqWP3lKei
-   G2C6/qhCT0PERLV5o6lu7UNDriwvJ0AEoejLZM9BTlFT4G1gwqdU/nsIw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="257554451"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="257554451"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 19:55:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="609963854"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by orsmga008.jf.intel.com with ESMTP; 08 Jun 2022 19:55:15 -0700
-From:   wen.ping.teh@intel.com
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Teh Wen Ping <wen.ping.teh@intel.com>
-Subject: [PATCH v3] arm64: dts: Add support for Stratix 10 Software Virtual Platform
-Date:   Thu,  9 Jun 2022 10:55:00 +0800
-Message-Id: <20220609025500.400695-1-wen.ping.teh@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Jun 2022 22:55:48 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A50F1A29F2;
+        Wed,  8 Jun 2022 19:55:43 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 2592t2o05008872, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 2592t2o05008872
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 9 Jun 2022 10:55:02 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 9 Jun 2022 10:55:02 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 9 Jun 2022 10:55:01 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
+ RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
+ 15.01.2308.021; Thu, 9 Jun 2022 10:55:01 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 05/10] rtw88: iterate over vif/sta list non-atomically
+Thread-Topic: [PATCH v2 05/10] rtw88: iterate over vif/sta list non-atomically
+Thread-Index: AQHYdDPOvAC5P6vVz0elhZc8Fv6eZa1F6gcA
+Date:   Thu, 9 Jun 2022 02:55:01 +0000
+Message-ID: <523bb16608f48852b180121696d31cf82fb55484.camel@realtek.com>
+References: <20220530135457.1104091-1-s.hauer@pengutronix.de>
+         <20220530135457.1104091-6-s.hauer@pengutronix.de>
+In-Reply-To: <20220530135457.1104091-6-s.hauer@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzYvOCDkuIvljYggMTA6MTk6MDA=?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4922BF3DEA0C7049AC1B7D51BF1A184E@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Teh Wen Ping <wen.ping.teh@intel.com>
-
-Add Stratix 10 Software Virtual Platform device tree
-
-Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
----
-
-changes in v2:
--remove indentation before GPL
--change root compatible to "altr,socfpga-stratix10"
--remove bootargs
--move clock-frequency to label
--remove l2-cache
--remove no longer exist authors from commit message
-
-changes in v3:
--change root compatible to "altr,socfpga-stratix10-swvp"
-
- arch/arm64/Kconfig.platforms                  |   3 +-
- arch/arm64/boot/dts/altera/Makefile           |   3 +-
- .../dts/altera/socfpga_stratix10_swvp.dts     | 117 ++++++++++++++++++
- 3 files changed, 121 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
-
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index de9a18d3026f..48abe5dafaae 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -249,7 +249,8 @@ config ARCH_INTEL_SOCFPGA
- 	bool "Intel's SoCFPGA ARMv8 Families"
- 	help
- 	  This enables support for Intel's SoCFPGA ARMv8 families:
--	  Stratix 10 (ex. Altera), Agilex and eASIC N5X.
-+	  Stratix 10 (ex. Altera), Stratix10 Software Virtual Platform,
-+	  Agilex and eASIC N5X.
- 
- config ARCH_SYNQUACER
- 	bool "Socionext SynQuacer SoC Family"
-diff --git a/arch/arm64/boot/dts/altera/Makefile b/arch/arm64/boot/dts/altera/Makefile
-index 4db83fbeb115..1bf0c472f6b4 100644
---- a/arch/arm64/boot/dts/altera/Makefile
-+++ b/arch/arm64/boot/dts/altera/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_stratix10_socdk.dtb \
--				socfpga_stratix10_socdk_nand.dtb
-+				socfpga_stratix10_socdk_nand.dtb \
-+				socfpga_stratix10_swvp.dtb
-diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
-new file mode 100644
-index 000000000000..a8db58573954
---- /dev/null
-+++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
-@@ -0,0 +1,117 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022, Intel Corporation
-+ */
-+
-+#include "socfpga_stratix10.dtsi"
-+
-+/ {
-+	model = "SOCFPGA Stratix 10 SWVP";
-+	compatible = "altr,socfpga-stratix10-swvp", "altr,socfpga-stratix10";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		serial1 = &uart1;
-+
-+		timer0 = &timer0;
-+		timer1 = &timer1;
-+		timer2 = &timer2;
-+		timer3 = &timer3;
-+
-+		ethernet0 = &gmac0;
-+		ethernet1 = &gmac1;
-+		ethernet2 = &gmac2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial1:115200n8";
-+		linux,initrd-start = <0x10000000>;
-+		linux,initrd-end = <0x125c8324>;
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x80000000>;
-+	};
-+};
-+
-+&cpu0 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&cpu1 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&cpu2 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&cpu3 {
-+	enable-method = "spin-table";
-+	cpu-release-addr = <0x0 0x0000fff8>;
-+};
-+
-+&osc1 {
-+	clock-frequency = <25000000>;
-+};
-+
-+&gmac0 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-addr = <0xffffffff>;
-+	snps,max-mtu = <0x0>;
-+};
-+
-+&gmac1 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-addr = <0xffffffff>;
-+};
-+
-+&gmac2 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-addr = <0xffffffff>;
-+};
-+
-+&mmc {
-+	status = "okay";
-+	altr,dw-mshc-ciu-div = <0x3>;
-+	altr,dw-mshc-sdr-timing = <0x0 0x3>;
-+	cap-sd-highspeed;
-+	cap-mmc-highspeed;
-+	broken-cd;
-+	bus-width = <4>;
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&usb0 {
-+	clocks = <&clkmgr STRATIX10_L4_MP_CLK>;
-+	status = "okay";
-+};
-+
-+&usb1 {
-+	clocks = <&clkmgr STRATIX10_L4_MP_CLK>;
-+	status = "okay";
-+};
-+
-+&rst {
-+	altr,modrst-offset = <0x20>;
-+};
-+
-+&sysmgr {
-+	reg = <0xffd12000 0x1000>;
-+	interrupts = <0x0 0x10 0x4>;
-+	cpu1-start-addr = <0xffd06230>;
-+};
--- 
-2.25.1
-
+T24gTW9uLCAyMDIyLTA1LTMwIGF0IDE1OjU0ICswMjAwLCBTYXNjaGEgSGF1ZXIgd3JvdGU6DQo+
+IFRoZSBkcml2ZXIgdXNlcyBpZWVlODAyMTFfaXRlcmF0ZV9hY3RpdmVfaW50ZXJmYWNlc19hdG9t
+aWMoKQ0KPiBhbmQgaWVlZTgwMjExX2l0ZXJhdGVfc3RhdGlvbnNfYXRvbWljKCkgaW4gc2V2ZXJh
+bCBwbGFjZXMgYW5kIGRvZXMNCj4gcmVnaXN0ZXIgYWNjZXNzZXMgaW4gdGhlIGl0ZXJhdG9ycy4g
+VGhpcyBkb2Vzbid0IGNvcGUgd2l0aCB1cGNvbWluZw0KPiBVU0Igc3VwcG9ydCBhcyByZWdpc3Rl
+cnMgY2FuIG9ubHkgYmUgYWNjZXNzZWQgbm9uLWF0b21pY2FsbHkuDQo+IA0KPiBTcGxpdCB0aGVz
+ZSBpbnRvIGEgdHdvIHN0YWdlIHByb2Nlc3M6IEZpcnN0IHVzZSB0aGUgYXRvbWljIGl0ZXJhdG9y
+DQo+IGZ1bmN0aW9ucyB0byBjb2xsZWN0IGFsbCBhY3RpdmUgaW50ZXJmYWNlcyBvciBzdGF0aW9u
+cyBvbiBhIGxpc3QsIHRoZW4NCj4gaXRlcmF0ZSBvdmVyIHRoZSBsaXN0IG5vbi1hdG9taWNhbGx5
+IGFuZCBjYWxsIHRoZSBpdGVyYXRvciBvbiBlYWNoDQo+IGVudHJ5Lg0KPiANCj4gU2lnbmVkLW9m
+Zi1ieTogU2FzY2hhIEhhdWVyIDxzLmhhdWVyQHBlbmd1dHJvbml4LmRlPg0KPiBTdWdnZXN0ZWQt
+Ynk6IFBrc2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KPiAtLS0NCj4gDQo+IE5vdGVzOg0KPiAg
+ICAgQ2hhbmdlcyBzaW5jZSB2MToNCj4gICAgIC0gQ2hhbmdlIHN1YmplY3QNCj4gICAgIC0gQWRk
+IHNvbWUgbG9ja2RlcF9hc3NlcnRfaGVsZCgmcnR3ZGV2LT5tdXRleCk7DQo+ICAgICAtIG1ha2Ug
+bG9jYWxseSB1c2VkIGZ1bmN0aW9ucyBzdGF0aWMNCj4gICAgIC0gQWRkIGNvbW1lbnQgaG93ICZy
+dHdkZXYtPm11dGV4IHByb3RlY3RzIHVzIGZyb20gc3RhdGlvbnMvaW50ZXJmYWNlcw0KPiAgICAg
+ICBiZWluZyBkZWxldGVkIGJldHdlZW4gY29sbGVjdGluZyB0aGVtIGFuZCBpdGVyYXRpbmcgb3Zl
+ciB0aGVtLg0KPiANCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcGh5LmMg
+IHwgICA2ICstDQo+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3BzLmMgICB8
+ICAgMiArLQ0KPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC91dGlsLmMgfCAx
+MDMgKysrKysrKysrKysrKysrKysrKysrKw0KPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRl
+ay9ydHc4OC91dGlsLmggfCAgMTIgKystDQo+ICA0IGZpbGVzIGNoYW5nZWQsIDExNiBpbnNlcnRp
+b25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPiANCj4gDQoNClsuLi5dDQoNCj4gKw0KPiArc3RydWN0
+IHJ0d192aWZzX2VudHJ5IHsNCj4gKwlzdHJ1Y3QgbGlzdF9oZWFkIGxpc3Q7DQo+ICsJc3RydWN0
+IGllZWU4MDIxMV92aWYgKnZpZjsNCj4gKwl1OCBtYWNbRVRIX0FMRU5dOw0KPiArfTsNCj4gKw0K
+PiArc3RydWN0IHJ0d19pdGVyX3ZpZnNfZGF0YSB7DQo+ICsJc3RydWN0IHJ0d19kZXYgKnJ0d2Rl
+djsNCj4gKwlzdHJ1Y3QgbGlzdF9oZWFkIGxpc3Q7DQo+ICt9Ow0KPiArDQo+ICt2b2lkIHJ0d19j
+b2xsZWN0X3ZpZl9pdGVyKHZvaWQgKmRhdGEsIHU4ICptYWMsIHN0cnVjdCBpZWVlODAyMTFfdmlm
+ICp2aWYpDQoNCllvdSBkbyB0aGlzIGNoYW5nZSBpbiBwYXRjaCAicnR3ODg6IEFkZCBjb21tb24g
+VVNCIGNoaXAgc3VwcG9ydCIuDQpQbGVhc2UgbW92ZSB0byBoZXJlLg0KDQotdm9pZCBydHdfY29s
+bGVjdF92aWZfaXRlcih2b2lkICpkYXRhLCB1OCAqbWFjLCBzdHJ1Y3QgaWVlZTgwMjExX3ZpZiAq
+dmlmKQ0KK3N0YXRpYyB2b2lkIHJ0d19jb2xsZWN0X3ZpZl9pdGVyKHZvaWQgKmRhdGEsIHU4ICpt
+YWMsIHN0cnVjdCBpZWVlODAyMTFfdmlmICp2aWYpDQoNCj4gK3sNCj4gKwlzdHJ1Y3QgcnR3X2l0
+ZXJfdmlmc19kYXRhICppdGVyX3N0YXMgPSBkYXRhOw0KPiArCXN0cnVjdCBydHdfdmlmc19lbnRy
+eSAqdmlmc19lbnRyeTsNCj4gKw0KPiArCXZpZnNfZW50cnkgPSBrbWFsbG9jKHNpemVvZigqdmlm
+c19lbnRyeSksIEdGUF9BVE9NSUMpOw0KPiArCWlmICghdmlmc19lbnRyeSkNCj4gKwkJcmV0dXJu
+Ow0KPiArDQo+ICsJdmlmc19lbnRyeS0+dmlmID0gdmlmOw0KPiArCWV0aGVyX2FkZHJfY29weSh2
+aWZzX2VudHJ5LT5tYWMsIG1hYyk7DQo+ICsJbGlzdF9hZGRfdGFpbCgmdmlmc19lbnRyeS0+bGlz
+dCwgJml0ZXJfc3Rhcy0+bGlzdCk7DQo+ICt9DQo+ICsNCj4gK3ZvaWQgcnR3X2l0ZXJhdGVfdmlm
+cyhzdHJ1Y3QgcnR3X2RldiAqcnR3ZGV2LA0KPiArCQkgICAgICB2b2lkICgqaXRlcmF0b3IpKHZv
+aWQgKmRhdGEsIHU4ICptYWMsDQo+ICsJCQkJICAgICAgIHN0cnVjdCBpZWVlODAyMTFfdmlmICp2
+aWYpLA0KPiArCQkgICAgICB2b2lkICpkYXRhKQ0KPiArew0KPiArCXN0cnVjdCBydHdfaXRlcl92
+aWZzX2RhdGEgaXRlcl9kYXRhOw0KPiArCXN0cnVjdCBydHdfdmlmc19lbnQNCg0KWy4uLl0NCg0K
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC91dGlsLmgg
+Yi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3V0aWwuaA0KPiBpbmRleCAwYzIz
+YjUwNjliZTBiLi5kYzg5NjU1MjU0MDAyIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC93aXJl
+bGVzcy9yZWFsdGVrL3J0dzg4L3V0aWwuaA0KPiArKysgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9y
+ZWFsdGVrL3J0dzg4L3V0aWwuaA0KPiBAQCAtNyw5ICs3LDYgQEANCj4gIA0KPiAgc3RydWN0IHJ0
+d19kZXY7DQo+ICANCj4gLSNkZWZpbmUgcnR3X2l0ZXJhdGVfdmlmcyhydHdkZXYsIGl0ZXJhdG9y
+LCBkYXRhKSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+IC0JaWVlZTgwMjExX2l0
+ZXJhdGVfYWN0aXZlX2ludGVyZmFjZXMocnR3ZGV2LT5odywgICAgICAgICAgICAgICAgICAgICAg
+ICBcDQo+IC0JCQlJRUVFODAyMTFfSUZBQ0VfSVRFUl9OT1JNQUwsIGl0ZXJhdG9yLCBkYXRhKQ0K
+PiAgI2RlZmluZSBydHdfaXRlcmF0ZV92aWZzX2F0b21pYyhydHdkZXYsIGl0ZXJhdG9yLCBkYXRh
+KSAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gIAlpZWVlODAyMTFfaXRlcmF0ZV9hY3RpdmVf
+aW50ZXJmYWNlc19hdG9taWMocnR3ZGV2LT5odywgICAgICAgICAgICAgICAgIFwNCj4gIAkJCUlF
+RUU4MDIxMV9JRkFDRV9JVEVSX05PUk1BTCwgaXRlcmF0b3IsIGRhdGEpDQoNCkFmdGVyIHJlYWQg
+TWFydGluJ3MgcGF0Y2hlcywgSSB0aGluayB3ZSBjYW4gcmV2aWV3IGFsbCBwbGFjZXMgd2hlcmUg
+dXNlDQpfYW90bWljIHZlcnNpb24gb2YgdmlmIGFuZCBzdGEsIGV2ZW4gd2UgZG9uJ3QgcmVhbGx5
+IG1lZXQgcHJvYmxlbSBmb3Igbm93Lg0KVGhlbiwgdXNlIG5vbi1hdG9taWMgdmVyc2lvbiBpZiBw
+b3NzaWJsZS4NCg0KUGluZy1LZQ0KDQoNCg==

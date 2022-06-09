@@ -2,101 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4F1544345
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8540D54434A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238024AbiFIFrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        id S238172AbiFIFsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiFIFrS (ORCPT
+        with ESMTP id S231158AbiFIFsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:47:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9075523B557;
-        Wed,  8 Jun 2022 22:47:16 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2591oqkb013192;
-        Thu, 9 Jun 2022 05:47:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=rD56XwPfwvcJV4OHj2qj5QBJ52b3u8YlSv/aLwOv1wg=;
- b=r19LGA28+1bQcqzdrKx/9GXa2nEpy1YiIaAiyzxEPT24A/yfy5wLdsoP7f4KlWEtkRAO
- 7mGGsNzSAYC/sdiB+hTbnFE/0w4u1Q4kTpbiaYktN+6sHfAWz0Lr24w19j5Vp9z4M4rm
- dPxf8tVK8yLwCMyHlyWamX9lZZfunwNukaulYxSRhNBZOx3T2AB8y6PNdEJ3y6TRgTMx
- t7PnvqX5CKUjBg2Xz0b3QTg9FVJcodfV1dCkOclcfupvBPsGB+Q2zTss9YSPHtAE/Ub8
- nyL8pKr+C8Va6WmDDsgdLz6LkxhDXp6VqLfNr89EcfIbo747+LtZI1wew7TQQ9hiMkd+ Ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gk7jdu9x2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 05:47:09 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2595XQxn005197;
-        Thu, 9 Jun 2022 05:47:08 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gk7jdu9wd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 05:47:08 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2595KxIT002469;
-        Thu, 9 Jun 2022 05:47:05 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3gfy18w303-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 05:47:05 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2595l3u023069132
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Jun 2022 05:47:03 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B888A4051;
-        Thu,  9 Jun 2022 05:47:03 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C15AA4040;
-        Thu,  9 Jun 2022 05:46:56 +0000 (GMT)
-Received: from [9.43.103.181] (unknown [9.43.103.181])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Jun 2022 05:46:55 +0000 (GMT)
-Message-ID: <a959de1b-c938-0e9f-73a4-89fbeb33cf97@linux.ibm.com>
-Date:   Thu, 9 Jun 2022 11:16:54 +0530
+        Thu, 9 Jun 2022 01:48:04 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998EE1A0049;
+        Wed,  8 Jun 2022 22:48:02 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 2595ljbS024219;
+        Thu, 9 Jun 2022 14:47:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2595ljbS024219
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654753666;
+        bh=THMhz6Wceyy6ZCLdJWjybc0DlI0gGoaA/DiX+ijqRnE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xVsbK57w0uyaXCVEiIg3LjorSv75JV75jldT2Sr6vYP3B3sLDTUgBsCG3hgj0mWEC
+         GRK552F0KqYYKDQHiakuCuMxIA8VvDSwpUs5lYhGy2NVLp9QIcUB8VAE1bsG54CE49
+         KsAPx9rdWKQ3OZiYF+zcvAVTj9yDpCh7iNXwokvXcLnfjyYUd54wWtASA2/H2nVciw
+         lzVVPTs++WAKEXD/stBTXGJIMw1mxzzpRaX8pbnuGP7lE9MdoNNAW/HORmm/CLL/ac
+         VQed7H0xl37xJU7C83jvz9+as9SOnirEZs6Z6yHpgXVaLikrGHu3j2mkiqTDig7+cB
+         r88ngE4jqyXfQ==
+X-Nifty-SrcIP: [209.85.221.45]
+Received: by mail-wr1-f45.google.com with SMTP id q15so22810837wrc.11;
+        Wed, 08 Jun 2022 22:47:46 -0700 (PDT)
+X-Gm-Message-State: AOAM5301nBBZfmtKIUe9uWEeTXGM+4BnxeZCxsk5QYNOcgFaPCWjc9Bt
+        OoaEPpmWazbH6OiOFnWRG7H7XBI0WEhx2R8iESQ=
+X-Google-Smtp-Source: ABdhPJwrJ2qTe89uEqhh0NQ25s6EGxU7xHHovAW9On194IJT/l/TeJzmuh7jBTEqA1epiwaKhUtVMbrt7RBXFIGnhFs=
+X-Received: by 2002:adf:f948:0:b0:20f:f964:7621 with SMTP id
+ q8-20020adff948000000b0020ff9647621mr37345257wrr.235.1654753664612; Wed, 08
+ Jun 2022 22:47:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] perf expr: Allow exponents on floating point values
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220527020653.4160884-1-irogers@google.com>
-From:   kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <20220527020653.4160884-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: H_QwSiLXt6k68kLg2VPpyXEqYKm2bJX_
-X-Proofpoint-ORIG-GUID: EviJm1Zwh2pOqkriU8fUbMjnPGrK-Ef5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-08_05,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- spamscore=0 malwarescore=0 priorityscore=1501 phishscore=0 impostorscore=0
- mlxscore=0 clxscore=1011 suspectscore=0 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206090020
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220608095456.27479-1-zev@bewilderbeest.net> <6d6d252d-79e9-4b4c-4a62-aa4018a6254c@infradead.org>
+ <YqFtHfC59akYP9jB@hatter.bewilderbeest.net> <a4e7e2ce-8107-712c-1627-b3bb8646ed79@infradead.org>
+In-Reply-To: <a4e7e2ce-8107-712c-1627-b3bb8646ed79@infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 9 Jun 2022 14:47:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARYnQyyQ-5MrH-7_c2HUM63UGuSJQNM5PAoaTaq-r1iug@mail.gmail.com>
+Message-ID: <CAK7LNARYnQyyQ-5MrH-7_c2HUM63UGuSJQNM5PAoaTaq-r1iug@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: Add findconf script and helper program
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Zev Weiss <zev@bewilderbeest.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,46 +62,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch looks fine to me
+On Thu, Jun 9, 2022 at 12:49 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+>
+>
+> On 6/8/22 20:46, Zev Weiss wrote:
+> > On Wed, Jun 08, 2022 at 07:48:44PM PDT, Randy Dunlap wrote:
+> >> Hi--
+> >>
+> >> On 6/8/22 02:54, Zev Weiss wrote:
+> >>> scripts/findconf provides menuconfig's search functionality as a
+> >>> standalone, non-interactive command, somewhat in the spirit of
+> >>> scripts/config.  It is meant to be useful for tasks like getting a
+> >>> quick overview of symbol dependencies or determining which Kconfig
+> >>> file to edit for a given symbol, without having to fire up one of the
+> >>> interactive config programs.
+> >>>
+> >>> It accepts a single command-line flag, '-v', which causes it to also
+> >>> print the help text of each matching result.
+> >>>
+> >>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> >>> ---
+> >>
+> >> I can see how this could be useful.
+> >> It's a little easier to use than what I currently do:
+> >>
+> >> $ findconfig  DRM_HISI_HIBMC
+> >> ./drivers/gpu/drm/hisilicon/hibmc/Kconfig:2:config DRM_HISI_HIBMC
+> >
+> > I'm guessing 'findconfig' here is some personal shell
+> > alias/function/script?  (I can't see any references to it in the kernel
+> > source tree.)
+> >
+>
+> Yes, it's just local.
+>
+> >>
+> >> then $EDITOR that_Kconfig_file
+> >>
+> >>
+> >> In testing, I am seeing this:
+> >>
+> >> #
+> >> # using defaults found in /boot/config-5.3.18-150300.59.63-default
+> >> #
+> >> .config:421:warning: symbol value 'm' invalid for I8K
+> >> .config:2335:warning: symbol value 'm' invalid for
+> >> MTD_NAND_ECC_SW_HAMMING
+> >> .config:2484:warning: symbol value 'm' invalid for PVPANIC
+> >> .config:8671:warning: symbol value 'm' invalid for INTERCONNECT
+> >> .config:9369:warning: symbol value 'm' invalid for
+> >> CRYPTO_ARCH_HAVE_LIB_BLAKE2S
+> >> .config:9370:warning: symbol value 'm' invalid for
+> >> CRYPTO_LIB_BLAKE2S_GENERIC
+> >> .config:9653:warning: symbol value '1' invalid for KASAN_STACK
+> >>
+> >
+> > This I assume is just due to the contents of your .config file relative
+> > to the current Kconfig definitions and not a problem with anything in
+> > this patch?
+>
+> There is no .config file in the linux/ source tree at the top level.
+> I use O=build_dir for all builds.
+>
+> >
+> >> How do I specify/choose a .config file to be used?
+> >>
+> >> Oh, use KCONFIG_CONFIG=filename
+> >>
+> >
+> > Ah, I guess that'd be a nice thing to add a flag for to the wrapper
+> > script -- I'll include that in v2.
+> >
+> >>
+> >> Please update (add) usage/help text in scripts/kconfig/Makefile.
+> >>
+> >
+> > Ack, will do.
+> >
+> >
+> > Thanks for the review!
+> >
+> >
+> > Zev
+> >
 
-Reviewed-By: Kajol Jain<kjain@linux.ibm.com>
 
 
-On 5/27/22 07:36, Ian Rogers wrote:
-> Pass the optional exponent component through to strtod that already
-> supports it. We already have exponents in ScaleUnit and so this adds
-> uniformity.
-> 
-> Reported-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/expr.c | 2 ++
->  tools/perf/util/expr.l  | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-> index d54c5371c6a6..5c0032fe93ae 100644
-> --- a/tools/perf/tests/expr.c
-> +++ b/tools/perf/tests/expr.c
-> @@ -97,6 +97,8 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
->  	ret |= test(ctx, "2.2 > 2.2", 0);
->  	ret |= test(ctx, "2.2 < 1.1", 0);
->  	ret |= test(ctx, "1.1 > 2.2", 0);
-> +	ret |= test(ctx, "1.1e10 < 1.1e100", 1);
-> +	ret |= test(ctx, "1.1e2 > 1.1e-2", 1);
->  
->  	if (ret) {
->  		expr__ctx_free(ctx);
-> diff --git a/tools/perf/util/expr.l b/tools/perf/util/expr.l
-> index 0a13eb20c814..4dc8edbfd9ce 100644
-> --- a/tools/perf/util/expr.l
-> +++ b/tools/perf/util/expr.l
-> @@ -91,7 +91,7 @@ static int literal(yyscan_t scanner)
->  }
->  %}
->  
-> -number		([0-9]+\.?[0-9]*|[0-9]*\.?[0-9]+)
-> +number		([0-9]+\.?[0-9]*|[0-9]*\.?[0-9]+)(e-?[0-9]+)?
->  
->  sch		[-,=]
->  spec		\\{sch}
+
+
+
+
+
+Another idea might be to add the following to
+scripts/kconfig/Makefile:
+
+
+
+@@ -77,7 +76,13 @@ PHONY += $(simple-targets)
+ $(simple-targets): $(obj)/conf
+        $(Q)$< $(silent) --$@ $(Kconfig)
+
+-PHONY += savedefconfig defconfig
++PHONY += findconfig savedefconfig defconfig
++
++findconfig: $(obj)/conf
++       $(Q)$< $(silent) --$@=$(KCONFIG_FIND) $(Kconfig)
++
++%_findconfig: $(obj)/conf
++       $(Q)$< $(silent) --findconfig=$* $(Kconfig)
+
+ savedefconfig: $(obj)/conf
+        $(Q)$< $(silent) --$@=defconfig $(Kconfig)
+
+
+
+
+
+Instead of adding a separate program for this,
+you can modify scripts/kconfig/conf.c
+
+ - add 'findconfig' to enum input_mode
+ - add 'findconfig' to long_opts[]
+ - add 'case findconfig' to main() function
+
+
+
+Then, you can do
+
+$ make findconfig KCONFIG_FIND=DRM_HISI_HIBMC
+
+   or
+
+$ make DRM_HISI_HIBMC_findconfig
+
+  as a shorthand.
+
+
+scripts/findconf is unneeded
+but you can put your own script in ~/bin
+if you want to save your typing even more.
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,246 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790845444BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C975444D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239959AbiFIHYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 03:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
+        id S238743AbiFIH1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 03:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiFIHYn (ORCPT
+        with ESMTP id S232296AbiFIH1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:24:43 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F7E35E36A;
-        Thu,  9 Jun 2022 00:24:40 -0700 (PDT)
-X-UUID: ca9b03a3d11d4a2c9f714498a8aebbea-20220609
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:64c21d66-609b-40f5-8f40-e3069bad7da0,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:5cdc38e5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: ca9b03a3d11d4a2c9f714498a8aebbea-20220609
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1223699442; Thu, 09 Jun 2022 15:24:33 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 9 Jun 2022 15:24:33 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 9 Jun 2022 15:24:33 +0800
-Message-ID: <dba8cf8aac439fdecd9eba7009845d76ebca6666.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thu, 9 Jun 2022 03:27:37 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8137B163F6D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:27:36 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso1097034pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 00:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1na78G+WYnf+bDU7BFeNQ72mHl3X9VY6UTeZz/scWws=;
+        b=dxaeejukIjJiySX01gLIqKev5aQJJwNLrHV58fbo4DG9P6QF2p6Kji3n6hUcepaFLA
+         usWl2HCL75kVDDyV2zNZwWPqAYwPV8uLnruCzinCg8fmJi0T+UlkAxbpspPelswch61n
+         0FpgmZpv8zr9gt9LWaxwPY3/gnF2ll4Wy5y74=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1na78G+WYnf+bDU7BFeNQ72mHl3X9VY6UTeZz/scWws=;
+        b=OMQr/PhCn4kePhO+ByzQuSwSD7ek3w0qLWDPnNWcOv2PZwUXvq7QHaJIT6dczZmy3N
+         V3viLHnlpEam/VM1Ss/mxMRFIbTlKBY9MDFhK4rPq3X1f8c6bFhZSsO8tUhrgjLCDpb1
+         vZAo5nfU1sHDKT/L7V9ap+526fO9M3iOZ4enRYHy+uzUrdGA4CSh8vBq3m5mxqLGR52K
+         VlL+LB5ZyqecufYYAwaSyyL9UbOoU0KAwI4fRuWTnPR5/jbbqeH3KBL7NV9h27XSHEE5
+         SXjkvRJfftSvhG+mSJdgD/f55vpndSYihpao8P9To5zuRQfEyyYfDm2fBeNMJXyXW+l/
+         H4/Q==
+X-Gm-Message-State: AOAM531xAfz8yjnubWOJ/XOVtHdBUcJ7FrJn5LoAky43smtu6TI8yJWu
+        J8lExsBkN/c1YGdT7wi2SQNbxA==
+X-Google-Smtp-Source: ABdhPJweM0KK9iVhSZ8fBaZxUAiJUsiXSH2sG/EeYGjG+JHL8lvAGJbrav8zVhmsuoRbvr0UlIh0KQ==
+X-Received: by 2002:a17:903:22cb:b0:167:992f:60c3 with SMTP id y11-20020a17090322cb00b00167992f60c3mr11306012plg.59.1654759655956;
+        Thu, 09 Jun 2022 00:27:35 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:5119:d95b:c6cd:77fb])
+        by smtp.gmail.com with ESMTPSA id p16-20020a1709027ed000b0016403cae7desm15312221plb.276.2022.06.09.00.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 00:27:35 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?= 
-        <Chunfeng.Yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
-Date:   Thu, 9 Jun 2022 15:24:33 +0800
-In-Reply-To: <49f4f8732eb1df31b0c8a82761e1c4dad9aef106.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-         <f791f46c6307a18818574cb7fb8653bcc84aa9ad.camel@mediatek.com>
-         <75c00caca74b8366ca2c4594a8229b6de95c5f47.camel@mediatek.com>
-         <49f4f8732eb1df31b0c8a82761e1c4dad9aef106.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/8] Add a panel API to set orientation properly
+Date:   Thu,  9 Jun 2022 15:27:14 +0800
+Message-Id: <20220609072722.3488207-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-09 at 10:30 +0800, CK Hu wrote:
-> Hi, Rex:
-> 
-> On Wed, 2022-06-08 at 18:26 +0800, Rex-BC Chen wrote:
-> > On Tue, 2022-06-07 at 15:47 +0800, CK Hu wrote:
-> > > Hi, Rex:
-> > > 
-> > > On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > 
-> > > > This patch adds a DisplayPort driver for the Mediatek mt8195
-> > > > SoC.
-> > > > 
-> > > > It supports the mt8195, the embedded DisplayPort units. It
-> > > > offers
-> > > > DisplayPort 1.4 with up to 4 lanes.
-> > > > 
-> > > > The driver creates a child device for the phy. The child device
-> > > > will
-> > > > never exist without the parent being active. As they are
-> > > > sharing
-> > > > a
-> > > > register range, the parent passes a regmap pointer to the child
-> > > > so
-> > > > that
-> > > > both can work with the same register range. The phy driver sets
-> > > > device
-> > > > data that is read by the parent to get the phy device that can
-> > > > be
-> > > > used
-> > > > to control the phy properties.
-> > > > 
-> > > > This driver is based on an initial version by
-> > > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > > > 
-> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > > ---
-> > > 
-> > > [snip]
-> > > 
-> > > > +
-> > > > +static int mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
-> > > > +{
-> > > > +	ssize_t ret;
-> > > > +	u8 sink_count;
-> > > > +	bool locked;
-> > > > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
-> > > > +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
-> > > > +	u32 link_status_reg = DP_LANE0_1_STATUS;
-> > > > +
-> > > > +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
-> > > > &sink_count);
-> > > > +	if (ret < 0) {
-> > > > +		drm_err(mtk_dp->drm_dev, "Read sink count
-> > > > failed:
-> > > > %ld\n", ret);
-> > > > +		return ret;
-> > > > +	}
-> > > > +
-> > > > +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
-> > > > link_status,
-> > > > +			       sizeof(link_status));
-> > > > +	if (!ret) {
-> > > > +		drm_err(mtk_dp->drm_dev, "Read link status
-> > > > failed:
-> > > > %ld\n",
-> > > > +			ret);
-> > > > +		return ret;
-> > > > +	}
-> > > > +
-> > > > +	locked = drm_dp_channel_eq_ok(link_status,
-> > > > +				      mtk_dp-
-> > > > >train_info.lane_count);
-> > > > +	if (!locked && mtk_dp->train_state >
-> > > > MTK_DP_TRAIN_STATE_TRAINING_PRE)
-> > > 
-> > > Before enter this function, mtk_dp->train_state is set to
-> > > MTK_DP_TRAIN_STATE_STARTUP, so this never happen, drop this.
-> > > 
-> > 
-> > The interrupt from sink device could come any time. Why it's
-> > impossible?
-> 
-> I still ask this question: "For eDP, when does disconnect happened?"
-> If
-> it indeed happen, I still do not like to change state here. When
-> disconnect, the training flow would result in fail finally and need
-> not
-> to change state here, but the training flow would block for a while
-> when disconnect. You could add some check point to check train_info-
-> > cable_plugged_in to quickly break out the training flow.
-> 
-> Regards,
-> CK
-> 
+Panels usually call drm_connector_set_panel_orientation(), which is
+later than drm/kms driver calling drm_dev_register(). This leads to a
+WARN()[1].
 
-Hello CK,
+The orientation property is known earlier. For example, some panels
+parse the property through device tree during probe.
 
-This function is to handle "sink interrupt" and we need to read the
-status from sink device via aux channel.
-edp spec is just add some extension rule from dp spec, this is define
-in dp spec.
+The series add a panel API drm_connector_set_orientation_from_panel()
+for drm/kms drivers. The drivers can call the API to set panel's
+orientation before drm_dev_register().
 
-The basic spec is still "dp", and these are all define in dp spec.
-Therefore, I think we should keep this.
+Panel needs to implement .get_orientation callback to return the property.
 
-BRs,
-Bo-Chen
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220530081910.3947168-2-hsinyi@chromium.org/
 
-> > 
-> > > > +		mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_TRAINING_PRE;
-> > > > +
-> > > > +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
-> > > > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
-> > > > DP_DEVICE_SERVICE_IRQ_VECTOR,
-> > > > +				   DP_REMOTE_CONTROL_COMMAND_PE
-> > > > NDING);
-> > > > +
-> > > > +	if (DP_GET_SINK_COUNT(sink_count) &&
-> > > > +	    (link_status[2] &
-> > > > DP_DOWNSTREAM_PORT_STATUS_CHANGED)) {
-> > > > +		mtk_dp->train_info.check_cap_count = 0;
-> > > > +		mtk_dp->train_state =
-> > > > MTK_DP_TRAIN_STATE_CHECKEDID;
-> > > 
-> > > Why change state from MTK_DP_TRAIN_STATE_STARTUP to
-> > > MTK_DP_TRAIN_STATE_CHECKEDID? In mtk_dp_train_handler(),
-> > > mtk_dp_parse_capabilities() is true then change to
-> > > MTK_DP_TRAIN_STATE_CHECKEDID. Give a reason why these two are
-> > > different.
-> > > 
-> > > Regards,
-> > > CK
-> > > 
-> > 
-> > I will drop this and drop state of MTK_DP_TRAIN_STATE_CHECKEDID.
-> > MTK_DP_TRAIN_STATE_CHECKEDID is only used for audio.
-> > We can check enable status in another place.
-> > 
-> > BRs,
-> > Bo-Chen
-> > 
-> > > > +		msleep(20);
-> > > > +	}
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +
-> > > 
-> > > 
-> > 
-> > 
-> 
-> 
+Hsin-Yi Wang (8):
+  drm/panel: Add an API to allow drm to set orientation from panel
+  drm/panel: boe-tv101wum-nl6: Implement .get_orientation callback
+  drm/panel: panel-edp: Implement .get_orientation callback
+  drm/panel: lvds: Implement .get_orientation callback
+  drm/panel: panel-simple: Implement .get_orientation callback
+  drm/panel: ili9881c: Implement .get_orientation callback
+  drm/panel: elida-kd35t133: Implement .get_orientation callback
+  drm: Config orientation property if panel provides it
+
+ drivers/gpu/drm/bridge/panel.c                | 34 +++++++++++++++++++
+ drivers/gpu/drm/drm_bridge_connector.c        |  8 ++++-
+ drivers/gpu/drm/drm_connector.c               | 31 +++++++++++++++++
+ .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 12 +++++++
+ drivers/gpu/drm/panel/panel-edp.c             | 13 ++++++-
+ drivers/gpu/drm/panel/panel-elida-kd35t133.c  | 12 +++++++
+ drivers/gpu/drm/panel/panel-ilitek-ili9881c.c | 12 +++++++
+ drivers/gpu/drm/panel/panel-lvds.c            | 13 +++++++
+ drivers/gpu/drm/panel/panel-simple.c          | 14 +++++++-
+ include/drm/drm_bridge.h                      | 14 ++++++++
+ include/drm/drm_connector.h                   |  4 +++
+ include/drm/drm_panel.h                       |  9 +++++
+ 12 files changed, 173 insertions(+), 3 deletions(-)
+
+-- 
+2.36.1.255.ge46751e96f-goog
 

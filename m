@@ -2,129 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274E35452D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FFB5452D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239002AbiFIRTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S245466AbiFIRUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239242AbiFIRTV (ORCPT
+        with ESMTP id S237908AbiFIRUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:19:21 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCAEA88BA;
-        Thu,  9 Jun 2022 10:19:19 -0700 (PDT)
-Received: from g550jk.localnet (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B3332CCDF9;
-        Thu,  9 Jun 2022 17:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1654795156; bh=2MPN+doYZMUaXvC0iC9GlfoIDwZjXtdp86X30pYRS8s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=LkphQxXrMOnXuVuC1qZaoqrtpghwAWoxfgVdQoaVnDCtJTtTbZR5CvIYYMCA5O9QB
-         BSPM6RIWIVfdnFljl/Pc4h16y8vvs+3Zsw9v20J5YSr0flQtYf/I+euWkmsUNgHLcy
-         V27ER+iCOi5z9LCcyq68onwPMA6HCGbo++HlZIqc=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Martinz <amartinz@shiftphones.com>,
-        Dylan Van Assche <me@dylanvanassche.be>,
-        Alexander Martinz <amartinz@shiftphones.com>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom/sdm845-shift-axolotl: Add audio support
-Date:   Thu, 09 Jun 2022 19:19:15 +0200
-Message-ID: <11993096.O9o76ZdvQC@g550jk>
-In-Reply-To: <20220609095412.211060-2-amartinz@shiftphones.com>
-References: <20220609095412.211060-1-amartinz@shiftphones.com> <20220609095412.211060-2-amartinz@shiftphones.com>
+        Thu, 9 Jun 2022 13:20:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F8510A626;
+        Thu,  9 Jun 2022 10:20:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3DF2B82CF1;
+        Thu,  9 Jun 2022 17:20:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A294C34114;
+        Thu,  9 Jun 2022 17:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654795207;
+        bh=4NBmqBaLVY+yEmiNx4pjhS4d00HTDgx39QqkUmgT31Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=hX5PbRpEXk03UpYoLoF3BSzu2mTvSdWIS2Gtshh1PrRcCxQbELdYJnLUugLyF2GkH
+         kZgNxJ/29o/0r79EIUvzKXv/hIN/FQB1ef+v6M7yEHREzK80bqS/PczhbaYWEcbJ/I
+         v2EXX0d37HVcN7M1opZzMOadRxlBQjO/Zun4KGa6cQ7M0WcyXkg4RyT0xeZ4+HidTs
+         lcOUN/HEKjGmk0cly2IGUSdbu7x3p7DGoEpa61PuJBRaWA6qQHdRcx86aTQS3a96Y3
+         Pxz6eS821Q8/bcHVOq5wkADwMwoj/zeGbygiuTTXV4uHGLXkIQc13bPKqA8nZWF3Ov
+         jq1HQ5szGRpPg==
+Date:   Thu, 9 Jun 2022 12:20:05 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "francesco.dolcini@toradex.com" <francesco.dolcini@toradex.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v9 5/8] PCI: imx6: Refine the regulator usage
+Message-ID: <20220609172005.GA514802@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR04MB8676EFCB2BA9C1DD0F33C4FA8CA79@AS8PR04MB8676.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+On Thu, Jun 09, 2022 at 06:19:47AM +0000, Hongxing Zhu wrote:
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: 2022年6月9日 2:55
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>
+> > Cc: l.stach@pengutronix.de; bhelgaas@google.com; robh+dt@kernel.org;
+> > broonie@kernel.org; lorenzo.pieralisi@arm.com; jingoohan1@gmail.com;
+> > festevam@gmail.com; francesco.dolcini@toradex.com;
+> > linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
+> > <linux-imx@nxp.com>
+> > Subject: Re: [PATCH v9 5/8] PCI: imx6: Refine the regulator usage
+> > 
+> > On Fri, May 06, 2022 at 09:47:06AM +0800, Richard Zhu wrote:
+> > > The driver should undo any enables it did itself. The regulator
+> > > disable shouldn't be basing decisions on regulator_is_enabled().
 
-On Donnerstag, 9. Juni 2022 11:54:12 CEST Alexander Martinz wrote:
-> This patch adds audio support for the SHIFT6mq phone.
-> 
-> The primary microphone and headphone jack are handled by the
-> SDM845 sound card and WCD9340 codec.
-> 
-> The primary speaker needs to go through the TFA9890 speaker
-> amplifier.
-> 
-> Signed-off-by: Alexander Martinz <amartinz@shiftphones.com>
-> Tested-by: Dylan Van Assche <me@dylanvanassche.be>
-> ---
->  .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 141 ++++++++++++++++++
->  1 file changed, 141 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts index
-> fa72f23ef0c2..8c4967d6d0e3 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-> @@ -8,6 +8,8 @@
-> 
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include <dt-bindings/sound/qcom,q6afe.h>
-> +#include <dt-bindings/sound/qcom,q6asm.h>
->  #include "sdm845.dtsi"
->  #include "pm8998.dtsi"
->  #include "pmi8998.dtsi"
-> @@ -492,6 +494,19 @@ touchscreen@38 {
->  	};
->  };
-> 
-> +&i2c11 {
-> +	status = "okay";
-> +	clock-frequency = <400000>;
-> +
-> +	tfa9890_codec: tfa9890@34 {
-> +		compatible = "nxp,tfa9890";
-> +		reg = <0x34>;
-> +		vddd-supply = <&vreg_s4a_1p8>;
-> +		reset-gpio = <&tlmm 7 0>;
-> +		#sound-dai-cells = <1>;
-> +	};
-> +};
-> +
->  &ipa {
->  	status = "okay";
-> 
-> @@ -530,6 +545,27 @@ volume_down_resin: resin {
->  	};
->  };
-> 
-> +&q6afedai {
-> +	qi2s@22 {
-> +		reg = <22>;
-> +		qcom,sd-lines = <0>;
-> +	};
-> +};
+The driver should disable things if an error occurs after it has
+enabled something, or if it enabled something during probe and we're
+now detaching the driver.  That doesn't look like the case here.
 
-While my patch hasn't been reviewed yet, I have proposed to change the magic 
-number <22> to the constant QUATERNARY_MI2S_RX here in existing dts files which 
-better describes what the reg here is.
+> > > To keep the balance of the regulator usage counter, disable the
+> > > regulator just behind of imx6_pcie_assert_core_reset() in resume and
+> > > shutdown.
+> > 
+> > In subject, "Refine" doesn't tell me anything about what's happening here.
+>
+> Thanks for your comments.
+> How about the following one?
+> PCI: imx6: Do regulator disable without the regulator_is_enabled check
 
-https://lore.kernel.org/linux-arm-msm/20220603094710.64591-1-luca.weiss@fairphone.com/
+That's too low-level, like describing the C code line by line.
+I'm hoping for something about the purpose for the patch so
+"git log --oneline" can tell a coherent story.
 
-Maybe worth doing the same here for v2?
+Apparently this is about disabling the power regulator when the slot
+isn't being used, so maybe it could say something about that.
 
-Regards
-Luca
+  $ git grep -Ep "regulator_(en|dis)able" drivers/pci/controller/
 
+shows that in other drivers, this being done in
+probe/remove/suspend/resume-type paths.  imx6 should be similar.
 
-
+Bjorn

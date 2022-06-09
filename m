@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3757054472D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4248544733
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241379AbiFIJSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S241223AbiFIJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbiFIJSk (ORCPT
+        with ESMTP id S240825AbiFIJSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:18:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ACC1AF0E;
-        Thu,  9 Jun 2022 02:18:37 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D622E6CF;
-        Thu,  9 Jun 2022 11:18:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1654766316;
-        bh=XqbV2uJBHM4471KRakRKgntn/CTn4mUBsoshtAeVQLs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OYrYCVWJWjrDLZ6ycZDOMJq3GQi//h/AXg7U7ktS0/Dg3pYV8K3vjsdNjnkfbhXxC
-         X8YWj4Yv9jR8ur4jIdcwV0QO2ak4QbKCIgPKtYj/glFLtEuQVETJZ8v0l3ttCrTZJc
-         dL8DyLcPQa0jVJHwrPvACi3kAdwFgb3qUEUa3X7Q=
-Date:   Thu, 9 Jun 2022 12:18:30 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: Fix spurious DMA max segment size
- warnings
-Message-ID: <YqG65hU4SLUrxMI7@pendragon.ideasonboard.com>
-References: <20220609082246.13182-1-tiwai@suse.de>
+        Thu, 9 Jun 2022 05:18:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1F91AF0E;
+        Thu,  9 Jun 2022 02:18:40 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 897FE21DD8;
+        Thu,  9 Jun 2022 09:18:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654766319; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HayFit8bzwaDzpMDwYah/6SiOyQ4+BuRvDiuto6PjDE=;
+        b=J3GHj6NgeZC2l6CCYS42pH1ur4gz/kZ8MjGwuv4MbjKYXuPXxJ+9p2sVq8TpFihaL3ga3L
+        OiWYpUIDPFjIZgZ9CnMwU2mlrRW3/WMDJfS2SqBYd9qIWY6OST8injns6Do0hW5LlP8Sp/
+        haVizaclvKA0L+81Pw2138qaN9TGJvI=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 351742C142;
+        Thu,  9 Jun 2022 09:18:39 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 11:18:38 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        christian.koenig@amd.com, alexander.deucher@amd.com,
+        daniel@ffwll.ch, viro@zeniv.linux.org.uk,
+        akpm@linux-foundation.org, hughd@google.com,
+        andrey.grodzovsky@amd.com
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Message-ID: <YqG67sox6L64E6wV@dhcp22.suse.cz>
+References: <20220531100007.174649-1-christian.koenig@amd.com>
+ <20220531100007.174649-4-christian.koenig@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220609082246.13182-1-tiwai@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220531100007.174649-4-christian.koenig@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Takashi,
-
-(CC'ing Greg and the linux-usb mailing list)
-
-Thank you for the patch.
-
-On Thu, Jun 09, 2022 at 10:22:46AM +0200, Takashi Iwai wrote:
-> As default, the DMA max segment size is set to 64k, and uvcvideo may
-> overflow that size easily, resulting in a warning like:
+On Tue 31-05-22 11:59:57, Christian König wrote:
+> This gives the OOM killer an additional hint which processes are
+> referencing shmem files with potentially no other accounting for them.
 > 
->   DMA-API: xhci_hcd 0000:00:14.0: mapping sg segment longer than device claims to support [len=98304] [max=65536]
-> 
-> Explicitly set up the DMA max segment size for avoiding spurious kernel
-> warnings.
-> 
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Christian König <christian.koenig@amd.com>
 > ---
->  drivers/media/usb/uvc/uvc_video.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  mm/shmem.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index 1b4cc934109e..25aa6e6a6906 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -2160,6 +2160,8 @@ int uvc_video_init(struct uvc_streaming *stream)
->  	for_each_uvc_urb(uvc_urb, stream)
->  		INIT_WORK(&uvc_urb->work, uvc_video_copy_data_work);
->  
-> +	dma_set_max_seg_size(uvc_stream_to_dmadev(stream), UINT_MAX);
-> +
-
-uvc_stream_to_dmadev() returns the pointer to the HCD's struct device,
-which is shared between all drivers on the bus. Is it really fine for a
-USB device driver to change the maximum segment size of the HCD device
-directly ?
-
->  	return 0;
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 4b2fea33158e..a4ad92a16968 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2179,6 +2179,11 @@ unsigned long shmem_get_unmapped_area(struct file *file,
+>  	return inflated_addr;
 >  }
 >  
+> +static long shmem_oom_badness(struct file *file)
+> +{
+> +	return i_size_read(file_inode(file)) >> PAGE_SHIFT;
+> +}
+
+This doesn't really represent the in memory size of the file, does it?
+Also the memcg oom handling could be considerably skewed if the file was
+shared between more memcgs.
 
 -- 
-Regards,
-
-Laurent Pinchart
+Michal Hocko
+SUSE Labs

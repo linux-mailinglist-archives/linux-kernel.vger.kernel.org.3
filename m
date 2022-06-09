@@ -2,143 +2,465 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E114544446
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B04E544447
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 08:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238371AbiFIGwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 02:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
+        id S238073AbiFIGxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 02:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237153AbiFIGwt (ORCPT
+        with ESMTP id S232582AbiFIGxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 02:52:49 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE4953C53
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 23:52:47 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id fd25so29933002edb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 23:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7w6u3Xd33wxktNKaceti1epk3OamWWDXisMnmnBnY5c=;
-        b=hp6x9MrKPi02oXdemNYzs9JUekFDdY3lqPBElqUTf0SYEKHOgLuvljrlVLIo6X0ozC
-         1DSBRkztNFfmURzW4e7VFzsfNZIQTBVr0WxTYv8U8/wSM50sOuVHCuRv3Ama7yFLKYBv
-         Wybmeps43ARY+4ROqhQak1jtE7ljsfY52cKHylZbZVxTsNrsxKBhN6RUL1KJYg1+Ym5R
-         bMVhCeb9D1CXkBZZY8+LOuSVdocXyc4eimrL20iv7Ap2aP9YxGqNARlzUmBvxUvTsuNv
-         iD075DpyIvuLVp73DB5wbUjxOhFOOZodobJHY93NpGFuIa4CC18mECNZQtpl+DGbAtcw
-         hS9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7w6u3Xd33wxktNKaceti1epk3OamWWDXisMnmnBnY5c=;
-        b=4TkTSnozDj0ahubqWYiUXcYZYfV3lehfkwlCRKpLHKift5ADRRlaCc1XbGXG7DOdi7
-         sKT992f8HEP9lmrLKIhj3enoDEbgnD0y7Oh3qf7JgNKTn+8HWWcfoX5s+IpOjk5v/7eb
-         L6XASBrK/jfBilTqi9nFS3EQsq0yt5NdIAVpX8rpX+24fFfAOm0X20+7bMWc1qLyYOwd
-         ZLoXrD+tiirb7PEpj7vj0oaK13ZTXNyfuPFQqPNfq5F4fwawIvv46I05gOy1Lda5RJhd
-         YXGIqwEj5lxxstiiCZMrBE3nk4s6e0DTcqZ5/wmijSUV5zmWYJUId+8MXyzMGVrZVRl8
-         BvRA==
-X-Gm-Message-State: AOAM532462H5Z34XJb5mp6DwPnDPg7cc8bByqVIPGzROkh2yK9qSTGRg
-        h48USAur/6oABR0tfmZCeJHLSA==
-X-Google-Smtp-Source: ABdhPJyHtXQ14Br4hcGLA30u2+zhNuN3OqNmOEZdKiZvzq4pGAaLT8XvVotmXlcEFsSxxrH7JYRZqQ==
-X-Received: by 2002:a05:6402:1d4a:b0:42e:93de:17f4 with SMTP id dz10-20020a0564021d4a00b0042e93de17f4mr35271968edb.8.1654757566520;
-        Wed, 08 Jun 2022 23:52:46 -0700 (PDT)
-Received: from [192.168.0.194] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170906494800b0070c4abe4706sm8630850ejt.158.2022.06.08.23.52.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 23:52:45 -0700 (PDT)
-Message-ID: <7f8269fc-f2cb-e0b6-8c81-cc7950b325e5@linaro.org>
-Date:   Thu, 9 Jun 2022 08:52:44 +0200
+        Thu, 9 Jun 2022 02:53:09 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43A353E3D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 23:53:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654757586; x=1686293586;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jrHs19jIeUgJUzgSJ4rKmx9+3kKLzOCLn3MoJGelHgE=;
+  b=dE9huyH5aJe1nTDJ+0YC4pSZHvaAfetiBuwSlCoNNQnBK1ID6PipVDSb
+   C5pO6MVhKMlwY4BXKHWaDAlnMqzYi+T+KB9pc9SHnLp2tKb2zxgXMTOYu
+   mDXp60IuGILq0qZYXgTm9LzoFpBCN62Ne2cnTUdbA8QzbZvcMVRrxKB2s
+   6P2Ko/vl0IzpVnFf8fsGtBvA9JWL2RstuhX+bM3PuegATmRggD9OYF7b3
+   v7yMe4a1ItkylzyKuJ5SW7JDWDtO5edFnveMp2FIurXuwk8uiGhAPQTYz
+   QORxzuqlpZyVWnXcHt2AZpiU0s2sqzwbbBUijs0srxTVEqplha3dUhmED
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="257602510"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="257602510"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 23:53:06 -0700
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="637306264"
+Received: from weihongz-mobl.ccr.corp.intel.com ([10.254.214.60])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 23:53:01 -0700
+Message-ID: <287da19d187e816075e5772a22c63bdf9a5cb198.camel@intel.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory
+ tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Thu, 09 Jun 2022 14:52:58 +0800
+In-Reply-To: <CAHbLzkoLr+RugZ4nq-HpVK2S3frnSor5MJPxRH4PsUPC-sfEGQ@mail.gmail.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+         <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
+         <CAHbLzkrWer5-HgujZ12b=qxtT2ByV0+Sy7fsYb2EBgHAGRuPpw@mail.gmail.com>
+         <ccd58db2398cb5f8df72ead1c131e8a5914755f1.camel@intel.com>
+         <CAHbLzkoLr+RugZ4nq-HpVK2S3frnSor5MJPxRH4PsUPC-sfEGQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH 2/2] dt-bindings: input: gpio-keys: document label and
- autorepeat properties
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>
-References: <20220603101601.542054-1-krzysztof.kozlowski@linaro.org>
- <20220603101601.542054-3-krzysztof.kozlowski@linaro.org>
- <Ypo6Q8/SuPGxp/ac@google.com>
- <ca93699e-f905-c0ee-8ddb-1be2491fc8cc@linaro.org>
- <CAL_JsqLQSBV9_An2=2euSQcesRjvEqE0kQ7bQh86P+BaEzvN1A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_JsqLQSBV9_An2=2euSQcesRjvEqE0kQ7bQh86P+BaEzvN1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2022 23:20, Rob Herring wrote:
-> On Sun, Jun 5, 2022 at 9:15 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 03/06/2022 18:43, Dmitry Torokhov wrote:
->>> On Fri, Jun 03, 2022 at 12:16:01PM +0200, Krzysztof Kozlowski wrote:
->>>> The original text bindings documented "autorepeat" and "label"
->>>> properties (in the device node, beside the nodes with keys).
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>  Documentation/devicetree/bindings/input/gpio-keys.yaml | 8 ++++++++
->>>>  1 file changed, 8 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
->>>> index 49d388dc8d78..b1c910a5e233 100644
->>>> --- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
->>>> +++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
->>>> @@ -15,6 +15,14 @@ properties:
->>>>        - gpio-keys
->>>>        - gpio-keys-polled
->>>>
->>>> +  autorepeat:
->>>> +    type: boolean
->>>> +    description:
->>>> +      Enable operating system (not hardware) key auto repeat feature.
->>>
->>> Should we refer to the generic input device property here instead (one
->>> on described in input.yaml)?
->>
->> You mean copy the description from input.yaml or say something like:
->> "see input.yaml"?
+On Wed, 2022-06-08 at 09:37 -0700, Yang Shi wrote:
+> On Tue, Jun 7, 2022 at 6:34 PM Ying Huang <ying.huang@intel.com> wrote:
+> > 
+> > On Tue, 2022-06-07 at 14:32 -0700, Yang Shi wrote:
+> > > On Fri, Jun 3, 2022 at 6:43 AM Aneesh Kumar K.V
+> > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > > 
+> > > > In the current kernel, memory tiers are defined implicitly via a
+> > > > demotion path relationship between NUMA nodes, which is created
+> > > > during the kernel initialization and updated when a NUMA node is
+> > > > hot-added or hot-removed.  The current implementation puts all
+> > > > nodes with CPU into the top tier, and builds the tier hierarchy
+> > > > tier-by-tier by establishing the per-node demotion targets based
+> > > > on the distances between nodes.
+> > > > 
+> > > > This current memory tier kernel interface needs to be improved for
+> > > > several important use cases,
+> > > > 
+> > > > The current tier initialization code always initializes
+> > > > each memory-only NUMA node into a lower tier.  But a memory-only
+> > > > NUMA node may have a high performance memory device (e.g. a DRAM
+> > > > device attached via CXL.mem or a DRAM-backed memory-only node on
+> > > > a virtual machine) and should be put into a higher tier.
+> > > > 
+> > > > The current tier hierarchy always puts CPU nodes into the top
+> > > > tier. But on a system with HBM or GPU devices, the
+> > > > memory-only NUMA nodes mapping these devices should be in the
+> > > > top tier, and DRAM nodes with CPUs are better to be placed into the
+> > > > next lower tier.
+> > > > 
+> > > > With current kernel higher tier node can only be demoted to selected nodes on the
+> > > > next lower tier as defined by the demotion path, not any other
+> > > > node from any lower tier.  This strict, hard-coded demotion order
+> > > > does not work in all use cases (e.g. some use cases may want to
+> > > > allow cross-socket demotion to another node in the same demotion
+> > > > tier as a fallback when the preferred demotion node is out of
+> > > > space), This demotion order is also inconsistent with the page
+> > > > allocation fallback order when all the nodes in a higher tier are
+> > > > out of space: The page allocation can fall back to any node from
+> > > > any lower tier, whereas the demotion order doesn't allow that.
+> > > > 
+> > > > The current kernel also don't provide any interfaces for the
+> > > > userspace to learn about the memory tier hierarchy in order to
+> > > > optimize its memory allocations.
+> > > > 
+> > > > This patch series address the above by defining memory tiers explicitly.
+> > > > 
+> > > > This patch introduce explicity memory tiers with ranks. The rank
+> > > > value of a memory tier is used to derive the demotion order between
+> > > > NUMA nodes. The memory tiers present in a system can be found at
+> > > > 
+> > > > /sys/devices/system/memtier/memtierN/
+> > > > 
+> > > > The nodes which are part of a specific memory tier can be listed
+> > > > via
+> > > > /sys/devices/system/memtier/memtierN/nodelist
+> > > > 
+> > > > "Rank" is an opaque value. Its absolute value doesn't have any
+> > > > special meaning. But the rank values of different memtiers can be
+> > > > compared with each other to determine the memory tier order.
+> > > > 
+> > > > For example, if we have 3 memtiers: memtier0, memtier1, memiter2, and
+> > > > their rank values are 300, 200, 100, then the memory tier order is:
+> > > > memtier0 -> memtier2 -> memtier1, where memtier0 is the highest tier
+> > > > and memtier1 is the lowest tier.
+> > > > 
+> > > > The rank value of each memtier should be unique.
+> > > > 
+> > > > A higher rank memory tier will appear first in the demotion order
+> > > > than a lower rank memory tier. ie. while reclaim we choose a node
+> > > > in higher rank memory tier to demote pages to as compared to a node
+> > > > in a lower rank memory tier.
+> > > > 
+> > > > For now we are not adding the dynamic number of memory tiers.
+> > > > But a future series supporting that is possible. Currently
+> > > > number of tiers supported is limitted to MAX_MEMORY_TIERS(3).
+> > > > When doing memory hotplug, if not added to a memory tier, the NUMA
+> > > > node gets added to DEFAULT_MEMORY_TIER(1).
+> > > > 
+> > > > This patch is based on the proposal sent by Wei Xu <weixugc@google.com> at [1].
+> > > > 
+> > > > [1] https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com
+> > > > 
+> > > > Suggested-by: Wei Xu <weixugc@google.com>
+> > > > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > > > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> > > > ---
+> > > >  include/linux/memory-tiers.h |  20 ++++
+> > > >  mm/Kconfig                   |  11 ++
+> > > >  mm/Makefile                  |   1 +
+> > > >  mm/memory-tiers.c            | 188 +++++++++++++++++++++++++++++++++++
+> > > >  4 files changed, 220 insertions(+)
+> > > >  create mode 100644 include/linux/memory-tiers.h
+> > > >  create mode 100644 mm/memory-tiers.c
+> > > > 
+> > > > diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+> > > > new file mode 100644
+> > > > index 000000000000..e17f6b4ee177
+> > > > --- /dev/null
+> > > > +++ b/include/linux/memory-tiers.h
+> > > > @@ -0,0 +1,20 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +#ifndef _LINUX_MEMORY_TIERS_H
+> > > > +#define _LINUX_MEMORY_TIERS_H
+> > > > +
+> > > > +#ifdef CONFIG_TIERED_MEMORY
+> > > > +
+> > > > +#define MEMORY_TIER_HBM_GPU    0
+> > > > +#define MEMORY_TIER_DRAM       1
+> > > > +#define MEMORY_TIER_PMEM       2
+> > > > +
+> > > > +#define MEMORY_RANK_HBM_GPU    300
+> > > > +#define MEMORY_RANK_DRAM       200
+> > > > +#define MEMORY_RANK_PMEM       100
+> > > > +
+> > > > +#define DEFAULT_MEMORY_TIER    MEMORY_TIER_DRAM
+> > > > +#define MAX_MEMORY_TIERS  3
+> > > > +
+> > > > +#endif /* CONFIG_TIERED_MEMORY */
+> > > > +
+> > > > +#endif
+> > > > diff --git a/mm/Kconfig b/mm/Kconfig
+> > > > index 169e64192e48..08a3d330740b 100644
+> > > > --- a/mm/Kconfig
+> > > > +++ b/mm/Kconfig
+> > > > @@ -614,6 +614,17 @@ config ARCH_ENABLE_HUGEPAGE_MIGRATION
+> > > >  config ARCH_ENABLE_THP_MIGRATION
+> > > >         bool
+> > > > 
+> > > > +config TIERED_MEMORY
+> > > > +       bool "Support for explicit memory tiers"
+> > > > +       def_bool n
+> > > > +       depends on MIGRATION && NUMA
+> > > > +       help
+> > > > +         Support to split nodes into memory tiers explicitly and
+> > > > +         to demote pages on reclaim to lower tiers. This option
+> > > > +         also exposes sysfs interface to read nodes available in
+> > > > +         specific tier and to move specific node among different
+> > > > +         possible tiers.
+> > > 
+> > > IMHO we should not need a new kernel config. If tiering is not present
+> > > then there is just one tier on the system. And tiering is a kind of
+> > > hardware configuration, the information could be shown regardless of
+> > > whether demotion/promotion is supported/enabled or not.
+> > 
+> > I think so too.  At least it appears unnecessary to let the user turn
+> > on/off it at configuration time.
+> > 
+> > All the code should be enclosed by #if defined(CONFIG_NUMA) &&
+> > defined(CONIFIG_MIGRATION).  So we will not waste memory in small
+> > systems.
 > 
-> No, just:
-> 
-> $ref: input.yaml#
-> properties:
->   autorepeat: true
-> 
-> And 'poll-interval' needs its definition removed.
-> 
-> It's a bit strange for input.yaml to be referenced in both the parent
-> and child nodes, but that's the nature of the input bindings. Maybe
-> input.yaml could be split? Doesn't really look like it to me. The main
-> issue with one file is the users need to list out which properties
-> they use (not a bad thing).
-> 
-> Note that this series (patch 1) is going to conflict with what I just
-> sent out[1].
+> CONFIG_NUMA alone should be good enough. CONFIG_MIGRATION is enabled
+> by default if NUMA is enabled. And MIGRATION is just used to support
+> demotion/promotion. Memory tiers exist even though demotion/promotion
+> is not supported, right?
 
-I can rebase on top of it.
+Yes.  You are right.  For example, in the following patch, memory tiers
+are used for allocation interleaving.
 
-I understand that idea of the series looks good, so I will work on DTSes
-and v2 of this.
+https://lore.kernel.org/lkml/20220607171949.85796-1-hannes@cmpxchg.org/
+
+Best Regards,
+Huang, Ying
+
+> > 
+> > > > +
+> > > >  config HUGETLB_PAGE_SIZE_VARIABLE
+> > > >         def_bool n
+> > > >         help
+> > > > diff --git a/mm/Makefile b/mm/Makefile
+> > > > index 6f9ffa968a1a..482557fbc9d1 100644
+> > > > --- a/mm/Makefile
+> > > > +++ b/mm/Makefile
+> > > > @@ -92,6 +92,7 @@ obj-$(CONFIG_KFENCE) += kfence/
+> > > >  obj-$(CONFIG_FAILSLAB) += failslab.o
+> > > >  obj-$(CONFIG_MEMTEST)          += memtest.o
+> > > >  obj-$(CONFIG_MIGRATION) += migrate.o
+> > > > +obj-$(CONFIG_TIERED_MEMORY) += memory-tiers.o
+> > > >  obj-$(CONFIG_DEVICE_MIGRATION) += migrate_device.o
+> > > >  obj-$(CONFIG_TRANSPARENT_HUGEPAGE) += huge_memory.o khugepaged.o
+> > > >  obj-$(CONFIG_PAGE_COUNTER) += page_counter.o
+> > > > diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> > > > new file mode 100644
+> > > > index 000000000000..7de18d94a08d
+> > > > --- /dev/null
+> > > > +++ b/mm/memory-tiers.c
+> > > > @@ -0,0 +1,188 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +#include <linux/types.h>
+> > > > +#include <linux/device.h>
+> > > > +#include <linux/nodemask.h>
+> > > > +#include <linux/slab.h>
+> > > > +#include <linux/memory-tiers.h>
+> > > > +
+> > > > +struct memory_tier {
+> > > > +       struct list_head list;
+> > > > +       struct device dev;
+> > > > +       nodemask_t nodelist;
+> > > > +       int rank;
+> > > > +};
+> > > > +
+> > > > +#define to_memory_tier(device) container_of(device, struct memory_tier, dev)
+> > > > +
+> > > > +static struct bus_type memory_tier_subsys = {
+> > > > +       .name = "memtier",
+> > > > +       .dev_name = "memtier",
+> > > > +};
+> > > > +
+> > > > +static DEFINE_MUTEX(memory_tier_lock);
+> > > > +static LIST_HEAD(memory_tiers);
+> > > > +
+> > > > +
+> > > > +static ssize_t nodelist_show(struct device *dev,
+> > > > +                            struct device_attribute *attr, char *buf)
+> > > > +{
+> > > > +       struct memory_tier *memtier = to_memory_tier(dev);
+> > > > +
+> > > > +       return sysfs_emit(buf, "%*pbl\n",
+> > > > +                         nodemask_pr_args(&memtier->nodelist));
+> > > > +}
+> > > > +static DEVICE_ATTR_RO(nodelist);
+> > > > +
+> > > > +static ssize_t rank_show(struct device *dev,
+> > > > +                        struct device_attribute *attr, char *buf)
+> > > > +{
+> > > > +       struct memory_tier *memtier = to_memory_tier(dev);
+> > > > +
+> > > > +       return sysfs_emit(buf, "%d\n", memtier->rank);
+> > > > +}
+> > > > +static DEVICE_ATTR_RO(rank);
+> > > > +
+> > > > +static struct attribute *memory_tier_dev_attrs[] = {
+> > > > +       &dev_attr_nodelist.attr,
+> > > > +       &dev_attr_rank.attr,
+> > > > +       NULL
+> > > > +};
+> > > > +
+> > > > +static const struct attribute_group memory_tier_dev_group = {
+> > > > +       .attrs = memory_tier_dev_attrs,
+> > > > +};
+> > > > +
+> > > > +static const struct attribute_group *memory_tier_dev_groups[] = {
+> > > > +       &memory_tier_dev_group,
+> > > > +       NULL
+> > > > +};
+> > > > +
+> > > > +static void memory_tier_device_release(struct device *dev)
+> > > > +{
+> > > > +       struct memory_tier *tier = to_memory_tier(dev);
+> > > > +
+> > > > +       kfree(tier);
+> > > > +}
+> > > > +
+> > > > +/*
+> > > > + * Keep it simple by having  direct mapping between
+> > > > + * tier index and rank value.
+> > > > + */
+> > > > +static inline int get_rank_from_tier(unsigned int tier)
+> > > > +{
+> > > > +       switch (tier) {
+> > > > +       case MEMORY_TIER_HBM_GPU:
+> > > > +               return MEMORY_RANK_HBM_GPU;
+> > > > +       case MEMORY_TIER_DRAM:
+> > > > +               return MEMORY_RANK_DRAM;
+> > > > +       case MEMORY_TIER_PMEM:
+> > > > +               return MEMORY_RANK_PMEM;
+> > > > +       }
+> > > > +
+> > > > +       return 0;
+> > > > +}
+> > > > +
+> > > > +static void insert_memory_tier(struct memory_tier *memtier)
+> > > > +{
+> > > > +       struct list_head *ent;
+> > > > +       struct memory_tier *tmp_memtier;
+> > > > +
+> > > > +       list_for_each(ent, &memory_tiers) {
+> > > > +               tmp_memtier = list_entry(ent, struct memory_tier, list);
+> > > > +               if (tmp_memtier->rank < memtier->rank) {
+> > > > +                       list_add_tail(&memtier->list, ent);
+> > > > +                       return;
+> > > > +               }
+> > > > +       }
+> > > > +       list_add_tail(&memtier->list, &memory_tiers);
+> > > > +}
+> > > > +
+> > > > +static struct memory_tier *register_memory_tier(unsigned int tier)
+> > > > +{
+> > > > +       int error;
+> > > > +       struct memory_tier *memtier;
+> > > > +
+> > > > +       if (tier >= MAX_MEMORY_TIERS)
+> > > > +               return NULL;
+> > > > +
+> > > > +       memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
+> > > > +       if (!memtier)
+> > > > +               return NULL;
+> > > > +
+> > > > +       memtier->dev.id = tier;
+> > > > +       memtier->rank = get_rank_from_tier(tier);
+> > > > +       memtier->dev.bus = &memory_tier_subsys;
+> > > > +       memtier->dev.release = memory_tier_device_release;
+> > > > +       memtier->dev.groups = memory_tier_dev_groups;
+> > > > +
+> > > > +       insert_memory_tier(memtier);
+> > > > +
+> > > > +       error = device_register(&memtier->dev);
+> > > > +       if (error) {
+> > > > +               list_del(&memtier->list);
+> > > > +               put_device(&memtier->dev);
+> > > > +               return NULL;
+> > > > +       }
+> > > > +       return memtier;
+> > > > +}
+> > > > +
+> > > > +__maybe_unused // temporay to prevent warnings during bisects
+> > > > +static void unregister_memory_tier(struct memory_tier *memtier)
+> > > > +{
+> > > > +       list_del(&memtier->list);
+> > > > +       device_unregister(&memtier->dev);
+> > > > +}
+> > > > +
+> > > > +static ssize_t
+> > > > +max_tier_show(struct device *dev, struct device_attribute *attr, char *buf)
+> > > > +{
+> > > > +       return sysfs_emit(buf, "%d\n", MAX_MEMORY_TIERS);
+> > > > +}
+> > > > +static DEVICE_ATTR_RO(max_tier);
+> > > > +
+> > > > +static ssize_t
+> > > > +default_tier_show(struct device *dev, struct device_attribute *attr, char *buf)
+> > > > +{
+> > > > +       return sysfs_emit(buf, "memtier%d\n", DEFAULT_MEMORY_TIER);
+> > > > +}
+> > > > +static DEVICE_ATTR_RO(default_tier);
+> > > > +
+> > > > +static struct attribute *memory_tier_attrs[] = {
+> > > > +       &dev_attr_max_tier.attr,
+> > > > +       &dev_attr_default_tier.attr,
+> > > > +       NULL
+> > > > +};
+> > > > +
+> > > > +static const struct attribute_group memory_tier_attr_group = {
+> > > > +       .attrs = memory_tier_attrs,
+> > > > +};
+> > > > +
+> > > > +static const struct attribute_group *memory_tier_attr_groups[] = {
+> > > > +       &memory_tier_attr_group,
+> > > > +       NULL,
+> > > > +};
+> > > > +
+> > > > +static int __init memory_tier_init(void)
+> > > > +{
+> > > > +       int ret;
+> > > > +       struct memory_tier *memtier;
+> > > > +
+> > > > +       ret = subsys_system_register(&memory_tier_subsys, memory_tier_attr_groups);
+> > > > +       if (ret)
+> > > > +               panic("%s() failed to register subsystem: %d\n", __func__, ret);
+> > > > +
+> > > > +       /*
+> > > > +        * Register only default memory tier to hide all empty
+> > > > +        * memory tier from sysfs.
+> > > > +        */
+> > > > +       memtier = register_memory_tier(DEFAULT_MEMORY_TIER);
+> > > > +       if (!memtier)
+> > > > +               panic("%s() failed to register memory tier: %d\n", __func__, ret);
+> > > > +
+> > > > +       /* CPU only nodes are not part of memory tiers. */
+> > > > +       memtier->nodelist = node_states[N_MEMORY];
+> > > > +
+> > > > +       return 0;
+> > > > +}
+> > > > +subsys_initcall(memory_tier_init);
+> > > > +
+> > > > --
+> > > > 2.36.1
+> > > > 
+> > 
+> > 
 
 
-Best regards,
-Krzysztof

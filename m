@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1426B545675
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59EB54567D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236892AbiFIV0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 17:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S236967AbiFIVbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 17:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbiFIVZy (ORCPT
+        with ESMTP id S230030AbiFIVa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 17:25:54 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7853A81CB;
-        Thu,  9 Jun 2022 14:25:53 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id a15so39918743lfb.9;
-        Thu, 09 Jun 2022 14:25:53 -0700 (PDT)
+        Thu, 9 Jun 2022 17:30:57 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFFC275CA;
+        Thu,  9 Jun 2022 14:30:54 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id e4so11655756ljl.1;
+        Thu, 09 Jun 2022 14:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=U4IZraFzH/fc6lguBHVeQeCPbmXku16+PH5/TRbu+AM=;
-        b=RC47ywgyo1TUXdMXpXkEo4vFFCEao/sI6jAzruyxLD19u09a1EJrPhapVX7rMJwvIE
-         2JjmWbt4OmEY9BGEswVtb4AtdCjU/GOyyGmbIgsP0xukLXu1XCTTRg0sALm9n+FNeS3b
-         7+APoxeJULphUZLfr+xFbY0dKHtBP9mxcC1J+zU5E4wg7r2fKsPUlsWV+H+L9+LVU9or
-         2xw80B10e61BnvjuDcUd/dszHkVGA5hPFDdZqE6e6S+Lr1wWBVaJ/UI0XtZ/IRnSWr5y
-         +Oa9AxXvGW1lNdtjpbLn0PDWGkXm6Skfk+zIv1QLrJQ+01lHSmbHQFEFnm07pOzF+MA/
-         bN6g==
+        bh=+X+hSIuCzgb8u3X3IIj+QVdVBieGi/ipj8I6jv9SVfY=;
+        b=B4bFqZL2CFXTVG65Kz0IqAXblvU1uNDsCXYYpuzfx1D5eO5g0YyV8oxSP+CTkFeAxg
+         +o3zKeoEXNFtcDF06q8xKFOo8z8Lg8U5p05ABDhuqlI0FVi4WnRp/QGvGbTGtGj462US
+         Xx5ipxShzEpkP6bB+Zr+KkHL7krh9oQ9GAwDK9XRCfiSbicM38pWplW01BzJul0ucuLo
+         jchhM/mrewHi25ZTBaa0EXHdpo8zRGfMYTfycwA2E5gUkqPuIghN3XQs9ZSJObms6G7C
+         LYss1PaXLrm3eWaWLazjfTpHrCiCslpQ2HlMvMIw9KZiWQTAXeEBWgAbO+J2h30XLlAb
+         Ks1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U4IZraFzH/fc6lguBHVeQeCPbmXku16+PH5/TRbu+AM=;
-        b=sGsvpQNCCDwbgDxFsuhEFQF61zsifGUBADB4MAdIMzWBH8u3crLaaJeCM/7MZK32qx
-         oIXQQtZNIGUMcbrUdcIaE6vtbzTL5nyMHubrg/57JVmMIYaoSwFfkqEz/khJ8b+bmSXk
-         JZknxW6Gc3SQghvVqnTpSAr4JZ4iLmLeSdssXQIXtev8wVrOdyn0oo+dzBsBU0ALL4e9
-         4Lu7lXo2yBN0SUeLkSAIWckRyOn+Epuy4pzaBfUVPq6Cwr9poWcKGQVj1KTTGLHTpc+C
-         +8S/NgNLyRsLDpJJhj/Rkf8BdSg5k8AlYv2R9Wje8FY0seN7+GUnA3MXBG27ZYycuxvV
-         uV5g==
-X-Gm-Message-State: AOAM532Vf5A4vE22pVkP1f4m6X5LlvdPKtpqYa2Vtvf0Vcd5GnaTtvdA
-        OlMuy+x47D7lq25o5GxzpEfvJvmGKcFMeYI2Od4=
-X-Google-Smtp-Source: ABdhPJz/ixQLlEnHwe0V/CFg8tjeFJsLlPv2eEsEGo7/F1gfd5wKnSDLJbBEv4KPXW6BnQHVl0H4l0HwB2DOY+rNRTg=
-X-Received: by 2002:a05:6512:1052:b0:479:1f92:13b4 with SMTP id
- c18-20020a056512105200b004791f9213b4mr18761878lfb.200.1654809951471; Thu, 09
- Jun 2022 14:25:51 -0700 (PDT)
+        bh=+X+hSIuCzgb8u3X3IIj+QVdVBieGi/ipj8I6jv9SVfY=;
+        b=6lAok4+/xxsnYto54fYYuD4sh/11lIv/xGmrZTej2U42LbvJ5vE4Tc3M5+ACVYGKt0
+         5RZ6wmlbRaQzo7Njh2D/eeA0LdgOsQeOJIBrwT36iMXVGRuhj0lA7amW+mi4FLry/Zpj
+         jWk95t7SjwWUo1yXXBi7mQsk4NNK+ICYLfFn3BmNFDTvMo70Kuk6Vz6xNSziLX3JOKFR
+         W0V8MW/sGzX3OM5ktcNB5XF0kVTt+7qXBDGVo/U3yOHcpNk/UScwwX30gtW27MvmjWT9
+         XRNansaHfxulTHqUMkotxKCrp6UXA9V0wwStrcHGZoo73w2ndrTPPOfqO4y7AQiTlX0p
+         BgVA==
+X-Gm-Message-State: AOAM532Cp5T1PF7A0O56F/SaIcFG0Hlb/IM4qX63TMaJHMSliYRyjEFZ
+        Zse7u7T/mouP+PH2omqdgTDck2BGxCIVFLktHmY=
+X-Google-Smtp-Source: ABdhPJx3Z43TlI2Ag+K2FOcYIRBYxKYFJQGfTFWGDMiLNnCYfvvQ3Bzq0zYKxXQcHgs3RO+qXVgPYOxFY8+5yf5sEGs=
+X-Received: by 2002:a2e:81ca:0:b0:255:78c0:cb21 with SMTP id
+ s10-20020a2e81ca000000b0025578c0cb21mr20226995ljg.240.1654810252988; Thu, 09
+ Jun 2022 14:30:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-9-tmaimon77@gmail.com>
- <b06eb0bd-08b8-87b8-fdd7-4cad07d1fa89@linaro.org>
-In-Reply-To: <b06eb0bd-08b8-87b8-fdd7-4cad07d1fa89@linaro.org>
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-11-tmaimon77@gmail.com>
+ <3aa70c91-d6d7-e2eb-9c45-a1fb0a5751ca@linaro.org>
+In-Reply-To: <3aa70c91-d6d7-e2eb-9c45-a1fb0a5751ca@linaro.org>
 From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Fri, 10 Jun 2022 00:25:40 +0300
-Message-ID: <CAP6Zq1iD-Sc5jv0GF-jiXFqB7aWs_jiuy8mTrVm4hmvP+LecRA@mail.gmail.com>
-Subject: Re: [PATCH v2 08/20] dt-bindings: reset: modify to general NPCM name
+Date:   Fri, 10 Jun 2022 00:30:42 +0300
+Message-ID: <CAP6Zq1iCJO3AzHnG7RSQ1pyVwayxs+X3iVM4U=6j2k0EgR7psg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/20] ARM: dts: nuvoton: add reset syscon property
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -103,25 +103,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-Will revert the change in V3
+Thanks for your comments
 
-On Wed, 8 Jun 2022 at 13:03, Krzysztof Kozlowski
+On Wed, 8 Jun 2022 at 13:07, Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
 > On 08/06/2022 11:56, Tomer Maimon wrote:
-> > Modify nuvoton,npcm750-reset specific name to
-> > general NPCM file name, nuvoton,npcm-reset.
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  .../{nuvoton,npcm750-reset.yaml => nuvoton,npcm-reset.yaml}     | 2 +-
+> > Add nuvoton,sysgcr syscon property to the reset
+> > node to handle the general control registers.
 >
->
-> No. Name from the first compatible should be used.
+> Wrong wrapping.
+it will be very helpful if you could point me what wrong wrapped in
+the commit message, is it the explanation or the header? or something
+else?
 >
 > Best regards,
 > Krzysztof
 
-Thanks,
+Best regards,
 
 Tomer

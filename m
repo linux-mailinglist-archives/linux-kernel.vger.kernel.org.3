@@ -2,188 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B52544340
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7270C54433A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238469AbiFIFkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        id S238466AbiFIFju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237522AbiFIFj6 (ORCPT
+        with ESMTP id S229673AbiFIFjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:39:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27C73FDA7;
-        Wed,  8 Jun 2022 22:39:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87718B82C20;
-        Thu,  9 Jun 2022 05:39:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C191AC34114;
-        Thu,  9 Jun 2022 05:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654753192;
-        bh=ZBzW7c26dslHeRr0ieKbrHN+05ZdER8p0imFsIG2U6Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F2o+ddHoBAh/ztSTEKLJZaE98wUIiQxUNoAdW7BKWVIFeAQYKxd9oL3vnlesLyKiT
-         VPKotdlsvpJZKg7TX7GrDwbwHGgxs3Qf8sMkZdCE0hRTpjzlMCugH24kzF76BmzYme
-         FUzeMivArYzPXUNpXIYaEwcOX33YkdGM40VXdm0o37FlvFRqULsbkJoYQ5wnf0eIx0
-         TsgucyhkqJSUb8zaXjI6z38KzJrwe/5gEy/qHB66zJJ+NN0dJalvYXl+h/dTuz52xO
-         KDwJeNKP7bAq38rvYsyIpD7YkTJTxX5WVGn8fBd514jOuj6Fut8wOy/CTcFyzoQstK
-         voCzneXRcBiJw==
-Date:   Thu, 9 Jun 2022 08:37:54 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@profian.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Song Liu <song@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dave Anglin <dave.anglin@bell.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jordan Niethe <jniethe5@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liao Chang <liaochang1@huawei.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Wu Caize <zepan@sipeed.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tobias Huschle <huschle@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqGHMs4ha7JMvODf@iki.fi>
-References: <20220608000014.3054333-1-jarkko@profian.com>
- <CAMj1kXFsdEq6XZ6eOuf8Ks-F4qgneVxFeLYNN_S4JaPy8koEyw@mail.gmail.com>
+        Thu, 9 Jun 2022 01:39:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B6CBB9;
+        Wed,  8 Jun 2022 22:39:44 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2594oZrA007235;
+        Thu, 9 Jun 2022 05:39:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=EDv8jyraTXFV1hw++h1FdwyA3FCiO7E2HB87LfjQkpU=;
+ b=avU1EKVydkzHE0/iHyZv9+eMhEPLlGV86gyO7RN/NWRsil5nWJvVDlk9jAuK/pIJiudj
+ LreH1Rx7YdRjAJrkHSDCQ7LXdzOpWAIHzjntxHByiYgjZrdXaog4JbTVLAy98hYQUCQp
+ TCzIZyG/aNJKSTicbVMAnRvMVXM4ingBBviOJw0swl9756R6Fr+mHeAeUurCF8lPKazv
+ dC0uuXahB6Cd6zLbZbrWRIUixiSv0/QI0epzCxJrOSGFcdN8gSaT9qF8erM5Da35wQB0
+ JzlLffw1hfTtZ+VXgTkVKB9GaaGV4pMZLPp7Zlv5asIUVTmUVs6W/eMmzffCGbkoNyVF qw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gka6nrrhb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 05:39:31 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2595dU4R005982;
+        Thu, 9 Jun 2022 05:39:30 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gka6nrrg7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 05:39:30 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2595JrUB031113;
+        Thu, 9 Jun 2022 05:39:27 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3gfy18w31d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 05:39:27 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2595dRKY21823904
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Jun 2022 05:39:27 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC173A4059;
+        Thu,  9 Jun 2022 05:39:24 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E1C9CA4040;
+        Thu,  9 Jun 2022 05:39:16 +0000 (GMT)
+Received: from [9.43.103.181] (unknown [9.43.103.181])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Jun 2022 05:39:16 +0000 (GMT)
+Message-ID: <4ae75240-0673-5429-2d03-54050e7013c2@linux.ibm.com>
+Date:   Thu, 9 Jun 2022 11:09:15 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFsdEq6XZ6eOuf8Ks-F4qgneVxFeLYNN_S4JaPy8koEyw@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 1/4] libperf evsel: Open shouldn't leak fd on failure
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220609052355.1300162-1-irogers@google.com>
+ <20220609052355.1300162-2-irogers@google.com>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <20220609052355.1300162-2-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YNrYLek-BB5zL9Mh_v5ZdutMw0erXPBA
+X-Proofpoint-GUID: bByjQRBQuVR01CJOhRdM5AeehKiNPloK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-08_05,2022-06-07_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 clxscore=1011 bulkscore=0 phishscore=0
+ impostorscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206090020
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 06:27:51PM +0200, Ard Biesheuvel wrote:
-> Hello Jarkko,
+
+
+On 6/9/22 10:53, Ian Rogers wrote:
+> If the perf_event_open fails the fd is opened but the fd is only freed
+> by closing (not by delete). Typically when an open fails you don't call
+> close and so this results in a memory leak. To avoid this, add a close
+> when open fails.
 > 
-> On Wed, 8 Jun 2022 at 02:02, Jarkko Sakkinen <jarkko@profian.com> wrote:
-> >
-> > Tracing with kprobes while running a monolithic kernel is currently
-> > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
-> > dependency is a result of kprobes code using the module allocator for the
-> > trampoline code.
-> >
-> > Detaching kprobes from modules helps to squeeze down the user space,
-> > e.g. when developing new core kernel features, while still having all
-> > the nice tracing capabilities.
-> >
-> > For kernel/ and arch/*, move module_alloc() and module_memfree() to
-> > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
-> > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
-> > code with CONFIG_MODULES.
-> >
-> > As the result, kprobes can be used with a monolithic kernel.
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/perf/evsel.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+
+Patch looks fine to me
+
+Reviewed-By: Kajol Jain<kjain@linux.ibm.com>
+
 > 
-> I think I may have mentioned this the previous time as well, but I
-> don't think this is the right approach.
-
-OK, I apologize for my ignorance. It's been a while.
-
-> Kprobes uses alloc_insn_page() to allocate executable memory, but the
-> requirements for this memory are radically different compared to
-> loadable modules, which need to be within an arch-specific distance of
-> the core kernel, need KASAN backing etc etc.
-> 
-> This is why arm64, for instance, does not implement alloc_insn_page()
-> in terms of module_alloc() [and likely does not belong in this patch
-> for that reason]
-> 
-> Is there any reason kprobes cannot simply use vmalloc()?
-
-All arch's, except nios2 use vmalloc() in the end for module_alloc().
-nios2 uses kmalloc() for the reasons that I'm not aware of, but it does
-not support kprobes in the first place.
-
-Based on this, I think that could work out just fine.
-
-I could cope with that.
-
-BR, Jarkko
+> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
+> index c1d58673f6ef..952f3520d5c2 100644
+> --- a/tools/lib/perf/evsel.c
+> +++ b/tools/lib/perf/evsel.c
+> @@ -149,23 +149,30 @@ int perf_evsel__open(struct perf_evsel *evsel, struct perf_cpu_map *cpus,
+>  			int fd, group_fd, *evsel_fd;
+>  
+>  			evsel_fd = FD(evsel, idx, thread);
+> -			if (evsel_fd == NULL)
+> -				return -EINVAL;
+> +			if (evsel_fd == NULL) {
+> +				err = -EINVAL;
+> +				goto out;
+> +			}
+>  
+>  			err = get_group_fd(evsel, idx, thread, &group_fd);
+>  			if (err < 0)
+> -				return err;
+> +				goto out;
+>  
+>  			fd = sys_perf_event_open(&evsel->attr,
+>  						 threads->map[thread].pid,
+>  						 cpu, group_fd, 0);
+>  
+> -			if (fd < 0)
+> -				return -errno;
+> +			if (fd < 0) {
+> +				err = -errno;
+> +				goto out;
+> +			}
+>  
+>  			*evsel_fd = fd;
+>  		}
+>  	}
+> +out:
+> +	if (err)
+> +		perf_evsel__close(evsel);
+>  
+>  	return err;
+>  }

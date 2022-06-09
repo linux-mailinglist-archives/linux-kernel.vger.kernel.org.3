@@ -2,55 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C3C5451B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5A95451C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243678AbiFIQTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S245479AbiFIQVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiFIQTn (ORCPT
+        with ESMTP id S237389AbiFIQVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 12:19:43 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BED55BE;
-        Thu,  9 Jun 2022 09:19:40 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1654791578; bh=4oG/+gfqOkTh35XvvWAtX5REN3FZwalZARzou9YHdB4=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=kd2Riq/FkSbvoJq2jjAf5MBgfp6q/RYP7eGUCErvWm+Pc0yqe6Br5pbsGU0kyhXou
-         WDPbyTDjTow1Pf4Hs2LDNl7nBheIGLZdcovSs/jTdg8aYrDrO4ZaXPckBS7BU/FGVE
-         A83JrJ3SU+rSCE3/BmHsI4XgoBLjxwceApHMXgZ0=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH v2 5/5] ASoC: apple: Add macaudio machine driver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <YqIWtzphzVGmbIOe@sirena.org.uk>
-Date:   Thu, 9 Jun 2022 18:19:37 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, asahi@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4DA6EE04-D23B-437B-8FBA-9223EAA71219@cutebit.org>
-References: <20220606191910.16580-1-povik+lin@cutebit.org>
- <20220606191910.16580-6-povik+lin@cutebit.org>
- <YqHylN3xba9XFrF8@sirena.org.uk>
- <0E611F13-96E3-41FD-9550-F900B2EFB00A@cutebit.org>
- <YqILv21K+tZ00Qhx@sirena.org.uk>
- <2A0422B8-8367-457E-A146-730F7C3DE66B@cutebit.org>
- <YqIWtzphzVGmbIOe@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 9 Jun 2022 12:21:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2241B55BE;
+        Thu,  9 Jun 2022 09:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654791695; x=1686327695;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0CsSwkvejVm3bVTO7Azc2brKlKE9Yji53qGgFJwL8DY=;
+  b=I/OSSC+LOPbYIcRBRIlnWwhEvDzUz4c76FAwOpo2jOZM48P+Lv6IvImX
+   u/A5ydLhxMWG4BiOLwqklfK/Q0njFNb10u7bwPxzQEqtT5YalSQZsTs6a
+   vG0xhgLCVgKsQCxoxlZQkdaDjZaQQoAL/+TNx9GpXVax2lD0UmWGmWKg+
+   yaBiA5RZx928T9NlxqqEJFmbDFRkFBSxYKgQ/8lKXx6cJSW6HmBrxwyG4
+   1KhRA3ZXPiXdl5Va5SqDUA9B5/knA8RFUYJZbEd0ueahMtyXOXLVowLAj
+   Q4rYyZSDIwZMy4pKAurE1wUnATFavNqK5ZO9HcY5LvkpmpesBXCzBtvtY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="277363613"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="277363613"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 09:21:34 -0700
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585661484"
+Received: from jeremywe-mobl3.amr.corp.intel.com (HELO [10.209.173.145]) ([10.209.173.145])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 09:21:33 -0700
+Message-ID: <7652ddab-53a5-ac8e-33f5-d25527acb1a6@linux.intel.com>
+Date:   Thu, 9 Jun 2022 11:21:32 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v1 14/16] soundwire: Use acpi_dev_for_each_child()
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>, Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <1843211.tdWV9SEqCh@kreacher> <5296779.Sb9uPGUboI@kreacher>
+ <63d7f3ed-b5a9-c869-5d25-a33a1d4e63c8@linux.intel.com>
+ <CAJZ5v0i7xtjrEOXgKiWP5St8OZoiZ4qq+gL62BFrmv-qpeaG_w@mail.gmail.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <CAJZ5v0i7xtjrEOXgKiWP5St8OZoiZ4qq+gL62BFrmv-qpeaG_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,74 +75,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> On 9. 6. 2022, at 17:50, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Thu, Jun 09, 2022 at 05:24:49PM +0200, Martin Povi=C5=A1er wrote:
->>> On 9. 6. 2022, at 17:03, Mark Brown <broonie@kernel.org> wrote:
->=20
-> Why is this off list?
+>> Shouldn't the return of sdw_acpi_find_one() be trapped, e.g. with
+>>
+>> return acpi_dev_for_each_child(parent, sdw_acpi_find_one, bus);
+> 
+> Sure, I'll do that.  Thanks!
 
-By accident, added the CC list back with this reply (hopefully it
-still attaches to the thread when people receive it).
+I also added this EXPORT_SYMBOL to work-around link errors, not sure if
+this is in your tree already?
 
->>> That's basically no userspaces at this point TBH.  I'm not convinced
->>> it's a good idea to be adding custom code for that use case.
->>=20
->> FWIW I know of at least one user of the WIP audio support on Macs who
->> would welcome this feature. My preference is to keep it in, but in
->> the end I guess it=E2=80=99s your call.
->=20
-> I'd rather not have this open coded in individual drivers, we already
-> have an unfortunate abundance of jack detection interfaces.  If we're
-> going to add anything I'd rather it were in core code and TBH I'm
-> struggling to be enthusiastic.
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
 
-Noted.
+index 86fa61a21826c..ade6259c19af6 100644
 
-> Can you say anything more about the use case?
+--- a/drivers/acpi/bus.c
 
-I can restate: The alleged use case is running userspace without sound
-server, but having playback switch transparently between speakers and
-headphones even mid-stream based on jack detection.
++++ b/drivers/acpi/bus.c
 
->>>> I looked at the existing DAPM integration but I couldn=E2=80=99t =
-figure out
->>>> how to switch the demux with it.
->=20
->>> Yes, it won't do that.  If you can't stream the same audio to both =
-then
->>> you'd need something else.
->=20
->> I don=E2=80=99t understand what=E2=80=99s meant by streaming the same =
-audio here.
->=20
-> Playing one audio stream from the host which appears on both speakers
-> and headphones - I don't know what the mixing and muxing capabilities =
-of
-> the hardware are.
->=20
->> Taking a guess: The existing DAPM integration can enable the =
-headphones
->> path based on jack being plugged in, but it can=E2=80=99t disable the =
-speakers
->> path like the demux does?
->=20
-> No, that works perfectly fine - you can enable or disable pins =
-depending
-> on the jack state.
+@@ -1113,6 +1113,7 @@ int acpi_dev_for_each_child(struct acpi_device *adev,
 
-Ah, I peeked into soc-jack.c. What about this then: If I understand what
-pins represent, they would be at the remote end of the DAPM paths. So if
-for the speakers I add something like
 
-   Headphones Codec Out =E2=80=94> Jack pin
 
-                       +--> Always-on pin
-                       |
-   Speaker Amp Out -> Mux
-                       |
-                       +--> Jack inverted pin
+        return device_for_each_child(&adev->dev, &adwc,
+acpi_dev_for_one_check);
 
-and let userspace control the mux, it would in effect support the same
-use cases as what I attempted in the code so far. Sounds somewhat right?
+ }
+
++EXPORT_SYMBOL_GPL(acpi_dev_for_each_child);
+
 

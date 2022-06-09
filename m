@@ -2,93 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9514E544DE8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B9D544DEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343898AbiFINlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S1343914AbiFINmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343901AbiFINln (ORCPT
+        with ESMTP id S239413AbiFINmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:41:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAFA25EB5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:41:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B209F61D42
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 13:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8304C34114;
-        Thu,  9 Jun 2022 13:41:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654782099;
-        bh=YfwemhhRNfHkDcE7hmvHDoWfd3apl8aK4u9+a87TYAU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=j6NCY82atJdRW+KDfnW10DrMSfLqY+EmOIQyNSG4Tfr3eoio+yE9T2rPOp1IeO1E+
-         PGqCi7NT+bUklMuWQinSASg0FxPEAW31dDfB6AErks7p6O43T12oUgPkfCzuP53h2p
-         O4bporKziDJnDVZ/9Z5AUn2PCu6JNev8RDpud/cbmgpyRDlN7MdIU/OToaqCtFiknN
-         +xMaYj7UO9+y+X6z4JVWNAbNmH36Sar2yz5w5oRbcAv8Hy5MNAhVHEkuP6TcfApGsd
-         Yj5N3r9FLXNbmjD+IcFuVY7X/St6Us9AvlKDNAlD97hMtGVXaX4H91wL22A67T0UMb
-         gNdr6wJFeQGjQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     cgel.zte@gmail.com, shengjiu.wang@gmail.com
-Cc:     perex@perex.cz, Xiubo.Lee@gmail.com, linuxppc-dev@lists.ozlabs.org,
-        alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        festevam@gmail.com, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn, linux-arm-kernel@lists.infradead.org,
-        zealci@zte.com.cn, nicoleotsuka@gmail.com
-In-Reply-To: <20220606033705.291048-1-chi.minghao@zte.com.cn>
-References: <20220606033705.291048-1-chi.minghao@zte.com.cn>
-Subject: Re: [PATCH V2] ASoC: imx-audmux: remove unnecessary check of clk_disable_unprepare/clk_prepare_enable
-Message-Id: <165478209647.1066808.13320829803906102569.b4-ty@kernel.org>
-Date:   Thu, 09 Jun 2022 14:41:36 +0100
+        Thu, 9 Jun 2022 09:42:13 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44397FEF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:42:12 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ef5380669cso241292097b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xSvIszg41YMUB0OV8b/JkbwpxKqkk0pMuRPXoeAKH+s=;
+        b=exnnBhW1pJj419qnNLzb1tnxM3GSlbSPoRYEb1L9jaNZ2sz+k4+hHDwNhCPbcteTC4
+         IcxBTWH4ttqQnuCRXWBO8tOmUQJWvXGzUHakMo8PfbmyLbd75H0LjnuRd/AscR/Gw/on
+         bcpvpSvu9tYB+QsFo0owwUeWj6s+r/MhguqmDehnzbimRxF56PYpecfK4mM76eMwuoez
+         hXknX5FlGOhvlBiW9cR/1CbAWqaCTnYMwrw7gIdIUtq5tncePU5skEpL6FoaeMoksJJp
+         nmEs4lTh21mHWMTRmQCAhUB651Tc71i5znT2EKPVKMF5xhludwnPWAVL2KcTlV/i1kvi
+         18ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xSvIszg41YMUB0OV8b/JkbwpxKqkk0pMuRPXoeAKH+s=;
+        b=fkYGnPBfI+G228MmHGsPL24dbi58Sz0/Bgs4LAJqJ8gS72AMb64cQXwr/o1TvvMuUl
+         +LfNqJTcnpjbdRHjEk+I5hJCxXJARmZY7V4DDMEUjE7gDoCKy3Lvbrp9jkfCADf+N9sW
+         6L9bZkrKhkumOhCRuqcUe4MGdWiBgr2qrs7N9wWYPLlxvTjNwbKqjjCFBI9W7nN1Wpa9
+         et9U+pflZWj92vi0UmakqNBTIRknOubZcxGfVokOiH4DXjuQPTF8yCeMJEFHOI+S5rb2
+         Gc11KRn1+ezVOD+coq84JGoUnRuyyMeyTDrTl5hV1eOHR/HVAjiZUZFv4ckPtp8r5ady
+         hpGw==
+X-Gm-Message-State: AOAM530ivEIXW7zncnTJxbZQC6V5Hsu8/zqsoQe1+ZL8SjCkGqosde66
+        0heGyFWLpA/4fJ6ubhK69Y0jZTqYFJOCB72uHULH8g==
+X-Google-Smtp-Source: ABdhPJwCPQezLCT6rFtj/zaqkekbVaYa1FocOh1levOOd/STu2w+RlAm/NCtynyJYSqUMv3ZON7VNEJ72rkD++aEOLE=
+X-Received: by 2002:a81:6189:0:b0:2eb:deb5:9f63 with SMTP id
+ v131-20020a816189000000b002ebdeb59f63mr41133144ywb.319.1654782131365; Thu, 09
+ Jun 2022 06:42:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220609025515.2086253-1-joshdon@google.com>
+In-Reply-To: <20220609025515.2086253-1-joshdon@google.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 9 Jun 2022 15:41:59 +0200
+Message-ID: <CAKfTPtCc4NZ51qruKX1zROFHqg-_MQBadaJfVbYPxT=7c4So=Q@mail.gmail.com>
+Subject: Re: [PATCH] sched: allow newidle balancing to bail out of load_balance
+To:     Josh Don <joshdon@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Jun 2022 03:37:05 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Because clk_disable_unprepare/clk_prepare_enable already checked NULL clock
-> parameter, so the additional checks are unnecessary, just remove them.
-> 
-> 
+On Thu, 9 Jun 2022 at 04:55, Josh Don <joshdon@google.com> wrote:
+>
+> While doing newidle load balancing, it is possible for new tasks to
+> arrive, such as with pending wakeups. newidle_balance() already accounts
+> for this by exiting the sched_domain load_balance() iteration if it
+> detects these cases. This is very important for minimizing wakeup
+> latency.
+>
+> However, if we are already in load_balance(), we may stay there for a
+> while before returning back to newidle_balance(). This is most
+> exacerbated if we enter a 'goto redo' loop in the LBF_ALL_PINNED case. A
+> very straightforward workaround to this is to adjust should_we_balance()
+> to bail out if we're doing a CPU_NEWLY_IDLE balance and new tasks are
+> detected.
 
-Applied to
+This one is close to the other tests and I wonder if it should be
+better placed before taking the busiest rq lock and detaching some
+tasks.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Beside your use case where all other threads can't move in local cpu
+and load_balance() loops and clears other cpus, most of the time is
+probably spent in fbg() and fbq() so there are more chance that a task
+woke in this meantime and I imagine that it becomes useless to take
+lock and move tasks from another cpu if the local cpu is no more newly
+idle.
 
-Thanks!
+Have you tried other places in load_balance() and does this one
+provide the lowest wakeup latency ?
 
-[1/1] ASoC: imx-audmux: remove unnecessary check of clk_disable_unprepare/clk_prepare_enable
-      commit: 142d456204cf4dabe18be59e043d806440f609d4
+That being said, the current patch makes sense.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+>
+> This was tested with the following reproduction:
+> - two threads that take turns sleeping and waking each other up are
+>   affined to two cores
+> - a large number of threads with 100% utilization are pinned to all
+>   other cores
+>
+> Without this patch, wakeup latency was ~120us for the pair of threads,
+> almost entirely spent in load_balance(). With this patch, wakeup latency
+> is ~6us.
+>
+> Signed-off-by: Josh Don <joshdon@google.com>
+> ---
+>  kernel/sched/fair.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 8c5b74f66bd3..5abf30117824 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9834,9 +9834,15 @@ static int should_we_balance(struct lb_env *env)
+>         /*
+>          * In the newly idle case, we will allow all the CPUs
+>          * to do the newly idle load balance.
+> +        *
+> +        * However, we bail out if we already have tasks or a wakeup pending,
+> +        * to optimize wakeup latency.
+>          */
+> -       if (env->idle == CPU_NEWLY_IDLE)
+> +       if (env->idle == CPU_NEWLY_IDLE) {
+> +               if (env->dst_rq->nr_running > 0 || env->dst_rq->ttwu_pending)
+> +                       return 0;
+>                 return 1;
+> +       }
+>
+>         /* Try to find first idle CPU */
+>         for_each_cpu_and(cpu, group_balance_mask(sg), env->cpus) {
+> --
+> 2.36.1.476.g0c4daa206d-goog
+>

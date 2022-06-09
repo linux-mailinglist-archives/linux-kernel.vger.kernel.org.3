@@ -2,140 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E833544251
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C404544257
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236852AbiFIEFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 00:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S237160AbiFIEJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 00:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiFIEFh (ORCPT
+        with ESMTP id S231128AbiFIEJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 00:05:37 -0400
-X-Greylist: delayed 13308 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 21:05:36 PDT
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E095C21FBD5
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:05:36 -0700 (PDT)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 58ED810047B81
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:05:36 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id z9QNn4X09OnjCz9QOnHdjL; Thu, 09 Jun 2022 04:05:36 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=JPj+D+Gb c=1 sm=1 tr=0 ts=62a17190
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=JPEYwPQDsx4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=HaFmDPmJAAAA:8
- a=dShPbfN-9lO91TPQ_oYA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7oizPfCnCXpicOi1usfiu5FQzBJH1HzcGmli5C//IHw=; b=fm7Mb8fB8AB3YDHvxBl8kVN9B9
-        EaTH4l4MRp8+3OWu1iD9AuxKbTMuXtV/Grudf4+OXZK0XFIl+PNJyazCVSYzUlQdn4ZjYCG76s2qI
-        JozYlEs+lTrBeMhVMDGN67ctKQR3keHjg7fonAdL3uDPe4xqiwJuJDKTwUlrEaYtZmtZ0OKZ+sHGe
-        mQWIwBJ6I5DooQzUnXFvk4BrBvBei0tk0k9qtJv8to1I4ekjiUMGrd1rVwRD7zpLT4LRXmYGII16+
-        CkWw2AGSOhkGfuV4dehQPMgwCtZfOMZ6YZVjTi1/v98c6A4FeixNO8PQurQv1JtXz8gWUJxwFcK4+
-        /gbwwcpA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54594 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1nz9QN-003KxI-H5;
-        Wed, 08 Jun 2022 22:05:35 -0600
-Subject: Re: [PATCH] riscv: don't warn for sifive erratas in modules
-To:     Heiko Stuebner <heiko@sntech.de>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu, hch@lst.de
-References: <20220608120849.1695191-1-heiko@sntech.de>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220608120849.1695191-1-heiko@sntech.de>
-Message-ID: <21e02dbd-75b0-e5c6-29d8-fc853c72aa01@w6rz.net>
-Date:   Wed, 8 Jun 2022 21:05:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 9 Jun 2022 00:09:32 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC63EF13
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Jun 2022 21:09:29 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id o8so2823134wro.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Jun 2022 21:09:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qr3m2Yddcj/9rkP9P1MqPdJ/Rr6E/RCde4JzQwq0ygk=;
+        b=jjA7kaTwlPG+8lAJw8aS2qYkTELSRhTtioIkasP3Ua7Ncb8/Um8F1OEZyiGbMI6SeO
+         ETd1KmKAR6a+w/PaNJyt8tzy4HP7ptThXmSP4ZLLdG/HPw9N535qzDqZ/aaVsB6mpgs4
+         ekokUA+HBIacx6iBplvxFX5b4YM3ZxJ9X0ffgyTEb8LkEJlwYpfaYJOrYnc5ZaefX82u
+         xXximfYvyQtlDROih7T+K0lvuvtzvkPaB9YyinAkRhhjbudH7UkKve6UtSpzaLWj3IEH
+         PgmYE6GWpSDDrFh2H+0Anhh0sjG9TVGHn0ycyusXPfTXgQT5l5+hSgm3wUfg3mh0tas3
+         xbXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qr3m2Yddcj/9rkP9P1MqPdJ/Rr6E/RCde4JzQwq0ygk=;
+        b=Jox/oLOIh6RLxGNX8AEeO/4M1Rag5wh/vcF+Mz1U5ccmKTmpF6v5dnmD8sAiDjoenY
+         3eN39Ja9UWBkYAQNDDIf4DPnaEBP4cc6nw6NNPTjT5Z3fftBlIitFWFjLFF7qMVBAt6S
+         IK0w8LDWCfpiunQlPgHpndAVUVyn8T7/vl3kZvnj+YYuNCKzpHreICdnPvY5ClJ7KqF/
+         m2CTxPE2gSeC5DA66WfUgRaCighGX6D3d+QQeQmYS3Hp4Jyfs+imPGa1IBqNgBHfnA0O
+         1/zth0a2BJIvPz64E76UoFpiOov2WgwQzcJu7954gbhbPJahc19MgLnbP27dxSuLADgp
+         Txfg==
+X-Gm-Message-State: AOAM530kG5qwsOWd41ACV6NVKM6lOHdyX2izYSJwWfsfGVuuQ9fIgoxP
+        7B/bh3hZBGGuucXBKhX9FxGkdfEz7UkzxorMNRXcfg==
+X-Google-Smtp-Source: ABdhPJzATZGYNXOEfNeC1xjFpQoXzH0chk3Mdxdc6eyXuvY61inSv66u7opI40j6F9/vdCRh2cJ/4vUkZLFYNZGRkY8=
+X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
+ r11-20020a5d6c6b000000b001ea77eadde8mr36664559wrz.690.1654747767939; Wed, 08
+ Jun 2022 21:09:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nz9QN-003KxI-H5
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:54594
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 5
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220430191122.8667-6-Julia.Lawall@inria.fr>
+In-Reply-To: <20220430191122.8667-6-Julia.Lawall@inria.fr>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 9 Jun 2022 09:39:15 +0530
+Message-ID: <CAAhSdy1kEPYJQdK+f-6Dkb92ScV9fG2m0J2rJSeWjfNFUtjVwA@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: fix typos in comments
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 5:08 AM, Heiko Stuebner wrote:
-> The SiFive errata code contains code checking applicable erratas
-> vs. actually applied erratas to suggest missing erratas to the
-> user when their Kconfig options are not enabled.
+On Sun, May 1, 2022 at 12:41 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
 >
-> In the main kernel image one can be quite sure that all available
-> erratas appear at least once, so that check will succeed.
-> On the other hand modules can very well not use any errata-relevant
-> code, so the newly added module-alternative support may also patch
-> the module code, but not touch SiFive-specific erratas at all.
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
 >
-> So to restore the original behaviour don't warn when patching
-> modules. This will keep the warning if necessary for the main kernel
-> image but prevent spurious warnings for modules.
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+
+I have included this patch for 5.19-rc fixes
+
+Thanks,
+Anup
+
 >
-> Of course having such a vendor-specific warning may not be needed at
-> all, as CONFIG_ERRATA_SIFIVE is selected by CONFIG_SOC_SIFIVE and the
-> individual erratas are default-y so disabling them requires
-> deliberate action anyway. But for now just restore the old behaviour.
->
-> Fixes: a8e910168bba ("riscv: implement module alternatives")
-> Reported-by: Ron Economos <re@w6rz.net>
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 > ---
->   arch/riscv/errata/sifive/errata.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+>  arch/riscv/kvm/vmid.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
-> index 672f02b21ce0..1031038423e7 100644
-> --- a/arch/riscv/errata/sifive/errata.c
-> +++ b/arch/riscv/errata/sifive/errata.c
-> @@ -111,6 +111,7 @@ void __init_or_module sifive_errata_patch_func(struct alt_entry *begin,
->   			cpu_apply_errata |= tmp;
->   		}
->   	}
-> -	if (cpu_apply_errata != cpu_req_errata)
-> +	if (stage != RISCV_ALTERNATIVES_MODULE &&
-> +	    cpu_apply_errata != cpu_req_errata)
->   		warn_miss_errata(cpu_req_errata - cpu_apply_errata);
->   }
-
-Tested on HiFive Unmatched. Works good and the spurious warning is 
-suppressed.
-
-Tested-by: Ron Economos <re@w6rz.net>
-
+> diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
+> index 2fa4f7b1813d..4a2178c60b5d 100644
+> --- a/arch/riscv/kvm/vmid.c
+> +++ b/arch/riscv/kvm/vmid.c
+> @@ -92,7 +92,7 @@ void kvm_riscv_stage2_vmid_update(struct kvm_vcpu *vcpu)
+>                  * We ran out of VMIDs so we increment vmid_version and
+>                  * start assigning VMIDs from 1.
+>                  *
+> -                * This also means existing VMIDs assignement to all Guest
+> +                * This also means existing VMIDs assignment to all Guest
+>                  * instances is invalid and we have force VMID re-assignement
+>                  * for all Guest instances. The Guest instances that were not
+>                  * running will automatically pick-up new VMIDs because will
+>

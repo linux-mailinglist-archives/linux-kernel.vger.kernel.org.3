@@ -2,96 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BF254473A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445C654473B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240825AbiFIJTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S239512AbiFIJTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiFIJTQ (ORCPT
+        with ESMTP id S241776AbiFIJT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:19:16 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84441F2FE;
-        Thu,  9 Jun 2022 02:19:15 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id y15so16714975qtx.4;
-        Thu, 09 Jun 2022 02:19:15 -0700 (PDT)
+        Thu, 9 Jun 2022 05:19:27 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E9E1F2FE
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:19:26 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso5590650wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 02:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f/iBGt4xN7zzCFQSjNLwi4Ry+Kpyk/3pfrO2M9cm4OQ=;
+        b=iuL3C0TadnvQ/K14iUfaUoZbhV2yRA+ewm1TptnZf8FjVkH2jA3YFNACeR+uxyeoc1
+         S4b8x3fuYzWpMPSVr5L7V0up1RJ7KDmA0ZjN98Ov+EajgfD4IGrPMe5e0sU6uRY7VMus
+         gmG7Fjbj3h13widN8jJRdUhxiRmAFVfblP5iWwQmB3HojvJva8WVnkZ9ALha6vKK8tl6
+         Ect8ifuxuthfEzJwXbn1vIVrqFtJPGZQgV6OM5LajtL++cWYdgL4HPymBqscHTifNZPg
+         4gtcf2kQ7xL72MjEFi/XZxoR5CznRHUdsDjxP+Gd87CTOE/QTzPSqfCg4BrIyZ7BW1xe
+         qCyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zLBQ/1iNltaWLswe/a2+FpHCpp5bwmu+I0N93NCsVa0=;
-        b=hCB5P60uwqvEHwrii49UW2qAEnxCznKQZYaKAC5atg3eZGOj7aCsy7e5F2J8/wj1DE
-         8SihwBMe2O4b8lMmdhnfyU054iGEacy6LaF8cPTXdXuIIB4cXKnPnlKAQghSpXhhsBRi
-         e7SAHj0dKpgDXstUMJjRI3lkUBL5jkj+9iRMZkoyoV2g8exNba7ZnP249GDukIWBK5g2
-         ODsXvLjQmJcek8VLcWlYHUiyXC8XuUtyn62YFArX3axWqnjbZCs1WVuV6YAOxWwOJEHQ
-         IeIc6lGx1/2OC1OsP2fQkhrWqvKP5RFaLuvjQinhdXJPqw7xGx0st/51+mQGQA+bnpqn
-         ZYeA==
-X-Gm-Message-State: AOAM532kec0vIS4mHnSP6xSK0GGyex41Je+pKoeRruyzOKWcefGIDEDu
-        GOcHxmq2Rz1pVHZbQWFcp2Uhg8NxOyAiFg==
-X-Google-Smtp-Source: ABdhPJzVlRlMeNTwj9AbZz1pk5P/M1Lu4925n9bpgOJldmE9C3W66Jz0edLrEPK48kT0Y/Iyxw4LXg==
-X-Received: by 2002:ac8:5f12:0:b0:305:c3d:c1da with SMTP id x18-20020ac85f12000000b003050c3dc1damr1888749qta.492.1654766354685;
-        Thu, 09 Jun 2022 02:19:14 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id hh8-20020a05622a618800b00304f3e320f2sm5731766qtb.4.2022.06.09.02.19.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 02:19:14 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id g201so12917358ybf.12;
-        Thu, 09 Jun 2022 02:19:14 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr39923091ybu.604.1654766354021; Thu, 09
- Jun 2022 02:19:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f/iBGt4xN7zzCFQSjNLwi4Ry+Kpyk/3pfrO2M9cm4OQ=;
+        b=v1ze2B2YKxe06phsbRSXm2JpVDcnF0LEo5mbHQi9ksMsoAYoShnltdfYL6E2kEP5Vq
+         n8zLHi6kg7w7BKQ5Mw2RFmpXNGoktUEXAhoKyguKYQqN2DVpJrPAjipGg2JbtwalX3qx
+         VXkYQaTq2VX3PiucCP2WurjQgTiunABQ39wGgOH7VQxxRxczh7UBsjIU7ozmhVTHWAlH
+         upf/APYs0g6HpLvfYamyiZk4H82yFQn97ZsSU2L1STdXkrpNdZbFbBUo1u+la2b3RoKT
+         Dfn1APrDa6QYEUjGU+bgaL3Byj1JgG/L0XLgk34Cfca0tVl1SWT1gaV4bbOqLCrr8kRZ
+         hJBQ==
+X-Gm-Message-State: AOAM5313NhrQ+Yq83KI+4n5mBAlV1tzJnzR2DdLoEi0v+DwUzDQWPaHn
+        9qHY4oUa2O0bWCjXgXF8NTKsdw==
+X-Google-Smtp-Source: ABdhPJwFZrOR/0oGzmAtsFR27TnfBD5OvFlRRibuQc57qR4bFY2nupml8YcXoSl2/M2wBwLsfNyzCg==
+X-Received: by 2002:a1c:cc07:0:b0:397:b2f:ac59 with SMTP id h7-20020a1ccc07000000b003970b2fac59mr2303142wmb.157.1654766365179;
+        Thu, 09 Jun 2022 02:19:25 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id u12-20020adfdb8c000000b002119c1a03e4sm22758115wri.31.2022.06.09.02.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 02:19:24 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 10:19:22 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Lucas Stach <l.stach@pengutronix.de>
+Subject: Re: [RESEND PATCH v3] drm/cma-helper: Describe what a "contiguous
+ chunk" actually means
+Message-ID: <20220609091922.6gn2nlysrpndfu4n@maple.lan>
+References: <20220608135821.1153346-1-daniel.thompson@linaro.org>
+ <YqDCTrlPmDZQei8Q@phenom.ffwll.local>
 MIME-Version: 1.0
-References: <20220525151355.24175-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220525151355.24175-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jun 2022 11:19:02 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVhteUVZ0+kaSggEntrwSYtrNEB-CNopPCmdJsRrqkYRg@mail.gmail.com>
-Message-ID: <CAMuHMdVhteUVZ0+kaSggEntrwSYtrNEB-CNopPCmdJsRrqkYRg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: r8a779f0: Add thermal support
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linh Phung <linh.phung.jy@renesas.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqDCTrlPmDZQei8Q@phenom.ffwll.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 5:14 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> From: Linh Phung <linh.phung.jy@renesas.com>
->
-> Add support for 3 TSC nodes of thermal. The 4th node is for the control
-> domain and not for Linux.
->
-> Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
-> [wsa: rebased, fixed resource size, removed unused 4th node breaking probe]
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+On Wed, Jun 08, 2022 at 05:37:50PM +0200, Daniel Vetter wrote:
+> On Wed, Jun 08, 2022 at 02:58:21PM +0100, Daniel Thompson wrote:
+> > Since it's inception in 2012 it has been understood that the DRM GEM CMA
+> > helpers do not depend on CMA as the backend allocator. In fact the first
+> > bug fix to ensure the cma-helpers work correctly with an IOMMU backend
+> > appeared in 2014. However currently the documentation for
+> > drm_gem_cma_create() talks about "a contiguous chunk of memory" without
+> > making clear which address space it will be a contiguous part of.
+> > Additionally the CMA introduction is actively misleading because it only
+> > contemplates the CMA backend.
+> > 
+> > This matters because when the device accesses the bus through an IOMMU
+> > (and don't use the CMA backend) then the allocated memory is contiguous
+> > only in the IOVA space. This is a significant difference compared to the
+> > CMA backend and the behaviour can be a surprise even to someone who does
+> > a reasonable level of code browsing (but doesn't find all the relevant
+> > function pointers ;-) ).
+> > 
+> > Improve the kernel doc comments accordingly.
+> > 
+> > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+> > Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> > ---
+> > 
+> > Notes:
+> >     Am I Cc:ing the correct reviewers/maintainers with this patch? There
+> >     has been no negative feedback but I've been rebasing and re-posting it
+> >     for three kernel cycles now. Do I need to queue it somewhere special or
+> >     get it in front of someone specific?
+> 
+> Occasionally stuff falls through a few too many cracks, that's all. We
+> have tons of committers for drm-misc (and Lucas is one of them), but
+> sometimes they shy away from pushing themselves and others see the r-b and
+> assume it's already handled, and then it doesn't move :-/
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+No worries. Arguably I should have asked this question a little earlier
+anyway.
 
-Gr{oetje,eeting}s,
 
-                        Geert
+Thanks for pushing it.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Daniel.

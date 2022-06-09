@@ -2,133 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EE3544CAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D366544C95
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243016AbiFIMxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
+        id S1343603AbiFIMuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbiFIMvJ (ORCPT
+        with ESMTP id S1343518AbiFIMud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:51:09 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867B1129EF9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:51:04 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 123so11379047pgb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 05:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KwSRcViehwfAYeRTO3icyIMXkIxuHW5eq5bOlxud59g=;
-        b=NOqJF7S/WByS4u665bimD3BKbv7ahHS1l6RPUqD0TU5ms64qlM4kF5yV7KJC89nNHv
-         a17tntzu44cTUIoP8sSPb6j87kVUhI/unLOiNJNhaNEwSlOy/1wkKEwuGoFp20WZ6Eeh
-         rRbbhfDIC5738q4r1eRNRkWTD1pmIwbvuv7zZGApID/OoUv7fr+jIwIoVwIFa19T6U2U
-         Fxfpm7umKjzBN7pyUYtp2+7NdwJ/axPsWaCm6tA//usReZMhlnpEtOeCE1hiolMUKL64
-         D7uSlc3ofD5f6FnlZZTkZH8+mxYZiXrURz6eEM3Y9p7ATd+yBSQ57nLxaMv2skT8IT6o
-         Ftxg==
+        Thu, 9 Jun 2022 08:50:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F178694AB
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 05:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654779024;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jSyVt04wqMoyKuQwGc4zbS9w9C6qNO7mTJG8w/5DiLs=;
+        b=Rl3YETfEkiQD6P2TsO5Q+i5VUelvKEU17hm+QH6XVlbmrAJ7L3t+EKioFBQ5V87wSzaX2K
+        P9vJkXK6o5F0e3B84HtDADUGHQ9+35O3pCsp1XpTsGXgoMQ02jOISrg18N3vhiAfq/tIlh
+        UX1g0Zx+CYCEYOq3jeqHpE2JcOdz03I=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-63kbGtiINVyJe9I4d414oQ-1; Thu, 09 Jun 2022 08:50:23 -0400
+X-MC-Unique: 63kbGtiINVyJe9I4d414oQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 130-20020a1c0288000000b0039c6608296dso1813526wmc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 05:50:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KwSRcViehwfAYeRTO3icyIMXkIxuHW5eq5bOlxud59g=;
-        b=mNJtrJ3cGaxp3IdjWvO7IPKlV+Gf5SOV2DcYAyfqybKpv5mYobnLhBiwvfmWSdmI9e
-         7h2/LtBWqC62K1QHhS6kXcNhQbGF9HVOrHTl9dD4vtdkZLP6N3qFo//PLu/QO2yHti32
-         u64VNvvbtUZ0wXdmiLwoqtN1sFSFA1QzjKdd9pEKbnS9DtUzxdJZcE7Si1d12Kujwbmy
-         XF1tWF24wC6Tv0PVW9/ca4PjkiLdWwt+xApBap0af1IeSavFN1NIo0+muey6LlE8d1ed
-         lEK8FrpcDMevZ7FdonPShCjsOyojgmENySN71tOngypkFFfbXROXLut/fGTE5ZmrjGy0
-         UjHg==
-X-Gm-Message-State: AOAM531wtbDxpmoa63hYCGE+ivK9DXwpleUSWE8aPHb/XhNjPCH0uzU8
-        BVOZAiPuku5gkss4AIFDhAQ=
-X-Google-Smtp-Source: ABdhPJwKD7D9ZF1N62MeDGI5N2JXZ4WpXk3reHXe99z40A6BXMvU8ygtsV1HC2LEIcBh9MHFwuZQTw==
-X-Received: by 2002:a63:82c6:0:b0:3fe:3600:f816 with SMTP id w189-20020a6382c6000000b003fe3600f816mr7343707pgd.155.1654779064103;
-        Thu, 09 Jun 2022 05:51:04 -0700 (PDT)
-Received: from localhost ([101.86.206.203])
-        by smtp.gmail.com with ESMTPSA id a190-20020a6390c7000000b003c62fa02f08sm17294112pge.43.2022.06.09.05.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 05:51:03 -0700 (PDT)
-From:   Patrick Wang <patrick.wang.shcn@gmail.com>
-To:     catalin.marinas@arm.com, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        yee.lee@mediatek.com, patrick.wang.shcn@gmail.com
-Subject: [PATCH v3 3/3] mm: kmemleak: check physical address when scan
-Date:   Thu,  9 Jun 2022 20:49:50 +0800
-Message-Id: <20220609124950.1694394-4-patrick.wang.shcn@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220609124950.1694394-1-patrick.wang.shcn@gmail.com>
-References: <20220609124950.1694394-1-patrick.wang.shcn@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=jSyVt04wqMoyKuQwGc4zbS9w9C6qNO7mTJG8w/5DiLs=;
+        b=kj7c/4s9o2H1OFG9EFGucmlj0RTSZYGJLJyb6SOLG60z6st6mtZ5RvF7woLCObvzAm
+         5jI3p7EgMv+JvGmfIO1Cn4KYJN11wEIdZPoocBgPM8fEZOucdXfBDeXp7XloK4f0fiCn
+         UBuRH0g6XYQW8nfoGiFHd9c+/rZTYnhMiDzwiBYzFC8BEMVGynJYsNybbBpu4tBg1mxZ
+         qZtwG/UMN4DFf8hR5NXKYUslDMd+z8yRy0AdyJvm9gyWSebYXa45bGpyVlHYBR4aXqNf
+         uF2U1LpN9DigbzHMGu8NwRqYY0WWUlNnNQAVN/JEmSJlPOIEcamPaGleCg2GH0n0TJct
+         4ctA==
+X-Gm-Message-State: AOAM532+nzOJU5ksHw9EH4/v9W5lkClOBLGBZrII/5lDH5D+CyPQMOKn
+        GQwvAYezoSyO04c0k9t1IrAgWU3xyun0I3AuYe8+AP/nJ2+IvVb6hYn3u/186RUCfjsVpqQPm6H
+        crlRAwaBG265/Q3UlMYBUOsgE
+X-Received: by 2002:a1c:4c0d:0:b0:39c:5233:1873 with SMTP id z13-20020a1c4c0d000000b0039c52331873mr3299339wmf.28.1654779022063;
+        Thu, 09 Jun 2022 05:50:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyJlGErsfVOd4GnScqiilTH958FLxgjsObuI+18makmIYSKefVpu0HdsVXKQhmSAU7kjNobOQ==
+X-Received: by 2002:a1c:4c0d:0:b0:39c:5233:1873 with SMTP id z13-20020a1c4c0d000000b0039c52331873mr3299322wmf.28.1654779021707;
+        Thu, 09 Jun 2022 05:50:21 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id j8-20020a056000124800b002185d79dc7fsm5672822wrx.75.2022.06.09.05.50.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 05:50:21 -0700 (PDT)
+Message-ID: <b2a81248-03fc-afb3-1041-d8206e95e08a@redhat.com>
+Date:   Thu, 9 Jun 2022 14:50:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 03/19] fs: Add aops->migrate_folio
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-mm@kvack.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org,
+        virtualization@lists.linux-foundation.org,
+        Christoph Hellwig <hch@lst.de>
+References: <20220608150249.3033815-1-willy@infradead.org>
+ <20220608150249.3033815-4-willy@infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220608150249.3033815-4-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the physical address of objects for its boundary
-when scan instead of in kmemleak_*_phys().
+On 08.06.22 17:02, Matthew Wilcox (Oracle) wrote:
+> Provide a folio-based replacement for aops->migratepage.  Update the
+> documentation to document migrate_folio instead of migratepage.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  Documentation/filesystems/locking.rst |  5 ++--
+>  Documentation/filesystems/vfs.rst     | 13 ++++++-----
+>  Documentation/vm/page_migration.rst   | 33 ++++++++++++++-------------
+>  include/linux/fs.h                    |  4 +++-
+>  mm/compaction.c                       |  4 +++-
+>  mm/migrate.c                          | 11 +++++----
+>  6 files changed, 40 insertions(+), 30 deletions(-)
+> 
+> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+> index c0fe711f14d3..3d28b23676bd 100644
+> --- a/Documentation/filesystems/locking.rst
+> +++ b/Documentation/filesystems/locking.rst
+> @@ -253,7 +253,8 @@ prototypes::
+>  	void (*free_folio)(struct folio *);
+>  	int (*direct_IO)(struct kiocb *, struct iov_iter *iter);
+>  	bool (*isolate_page) (struct page *, isolate_mode_t);
+> -	int (*migratepage)(struct address_space *, struct page *, struct page *);
+> +	int (*migrate_folio)(struct address_space *, struct folio *dst,
+> +			struct folio *src, enum migrate_mode);
+>  	void (*putback_page) (struct page *);
 
-Fixes: 23c2d497de21 ("mm: kmemleak: take a full lowmem check in kmemleak_*_phys()")
-Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
----
- mm/kmemleak.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+isolate_page/putback_page are leftovers from the previous patch, no?
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 155f50e1a604..387d6fa402c6 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1184,7 +1184,7 @@ void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, gfp_t gfp)
- {
- 	pr_debug("%s(0x%pa, %zu)\n", __func__, &phys, size);
- 
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (kmemleak_enabled)
- 		/*
- 		 * Create object with OBJECT_PHYS flag and
- 		 * assume min_count 0.
-@@ -1204,7 +1204,7 @@ void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
- {
- 	pr_debug("%s(0x%pa)\n", __func__, &phys);
- 
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (kmemleak_enabled)
- 		delete_object_part((unsigned long)phys, size, true);
- }
- EXPORT_SYMBOL(kmemleak_free_part_phys);
-@@ -1218,7 +1218,7 @@ void __ref kmemleak_ignore_phys(phys_addr_t phys)
- {
- 	pr_debug("%s(0x%pa)\n", __func__, &phys);
- 
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (kmemleak_enabled)
- 		make_black_object((unsigned long)phys, true);
- }
- EXPORT_SYMBOL(kmemleak_ignore_phys);
-@@ -1493,6 +1493,17 @@ static void kmemleak_scan(void)
- 			dump_object_info(object);
- 		}
- #endif
-+
-+		/* ignore objects outside lowmem (paint them black) */
-+		if ((object->flags & OBJECT_PHYS) &&
-+		   !(object->flags & OBJECT_NO_SCAN)) {
-+			unsigned long phys = object->pointer;
-+
-+			if (PHYS_PFN(phys) < min_low_pfn ||
-+			    PHYS_PFN(phys + object->size) >= max_low_pfn)
-+				__paint_it(object, KMEMLEAK_BLACK);
-+		}
-+
- 		/* reset the reference count (whiten the object) */
- 		object->count = 0;
- 		if (color_gray(object) && get_object(object))
+>  	int (*launder_folio)(struct folio *);
+>  	bool (*is_partially_uptodate)(struct folio *, size_t from, size_t count);
+> @@ -281,7 +282,7 @@ release_folio:		yes
+>  free_folio:		yes
+>  direct_IO:
+>  isolate_page:		yes
+> -migratepage:		yes (both)
+> +migrate_folio:		yes (both)
+>  putback_page:		yes
+
+Dito.
+
+>  launder_folio:		yes
+>  is_partially_uptodate:	yes
+> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
+> index a08c652467d7..3ae1b039b03f 100644
+> --- a/Documentation/filesystems/vfs.rst
+> +++ b/Documentation/filesystems/vfs.rst
+> @@ -740,7 +740,8 @@ cache in your filesystem.  The following members are defined:
+>  		/* isolate a page for migration */
+>  		bool (*isolate_page) (struct page *, isolate_mode_t);
+>  		/* migrate the contents of a page to the specified target */
+> -		int (*migratepage) (struct page *, struct page *);
+> +		int (*migrate_folio)(struct mapping *, struct folio *dst,
+> +				struct folio *src, enum migrate_mode);
+>  		/* put migration-failed page back to right list */
+>  		void (*putback_page) (struct page *);
+
+Dito.
+
+>  		int (*launder_folio) (struct folio *);
+> @@ -935,12 +936,12 @@ cache in your filesystem.  The following members are defined:
+>  	is successfully isolated, VM marks the page as PG_isolated via
+>  	__SetPageIsolated.
+>  
+> -``migrate_page``
+> +``migrate_folio``
+>  	This is used to compact the physical memory usage.  If the VM
+> -	wants to relocate a page (maybe off a memory card that is
+> -	signalling imminent failure) it will pass a new page and an old
+> -	page to this function.  migrate_page should transfer any private
+> -	data across and update any references that it has to the page.
+> +	wants to relocate a folio (maybe from a memory device that is
+> +	signalling imminent failure) it will pass a new folio and an old
+> +	folio to this function.  migrate_folio should transfer any private
+> +	data across and update any references that it has to the folio.
+>  
+>  ``putback_page``
+>  	Called by the VM when isolated page's migration fails.
+
+Dito.
+
+> diff --git a/Documentation/vm/page_migration.rst b/Documentation/vm/page_migration.rst
+> index 8c5cb8147e55..e0f73ddfabb1 100644
+> --- a/Documentation/vm/page_migration.rst
+> +++ b/Documentation/vm/page_migration.rst
+> @@ -181,22 +181,23 @@ which are function pointers of struct address_space_operations.
+>     Once page is successfully isolated, VM uses page.lru fields so driver
+>     shouldn't expect to preserve values in those fields.
+>  
+> -2. ``int (*migratepage) (struct address_space *mapping,``
+> -|	``struct page *newpage, struct page *oldpage, enum migrate_mode);``
+> -
+> -   After isolation, VM calls migratepage() of driver with the isolated page.
+> -   The function of migratepage() is to move the contents of the old page to the
+> -   new page
+> -   and set up fields of struct page newpage. Keep in mind that you should
+> -   indicate to the VM the oldpage is no longer movable via __ClearPageMovable()
+> -   under page_lock if you migrated the oldpage successfully and returned
+> -   MIGRATEPAGE_SUCCESS. If driver cannot migrate the page at the moment, driver
+> -   can return -EAGAIN. On -EAGAIN, VM will retry page migration in a short time
+> -   because VM interprets -EAGAIN as "temporary migration failure". On returning
+> -   any error except -EAGAIN, VM will give up the page migration without
+> -   retrying.
+> -
+> -   Driver shouldn't touch the page.lru field while in the migratepage() function.
+> +2. ``int (*migrate_folio) (struct address_space *mapping,``
+> +|	``struct folio *dst, struct folio *src, enum migrate_mode);``
+> +
+> +   After isolation, VM calls the driver's migrate_folio() with the
+> +   isolated folio.  The purpose of migrate_folio() is to move the contents
+> +   of the source folio to the destination folio and set up the fields
+> +   of destination folio.  Keep in mind that you should indicate to the
+> +   VM the source folio is no longer movable via __ClearPageMovable()
+> +   under folio if you migrated the source successfully and returned
+> +   MIGRATEPAGE_SUCCESS.  If driver cannot migrate the folio at the
+> +   moment, driver can return -EAGAIN. On -EAGAIN, VM will retry folio
+> +   migration in a short time because VM interprets -EAGAIN as "temporary
+> +   migration failure".  On returning any error except -EAGAIN, VM will
+> +   give up the folio migration without retrying.
+> +
+> +   Driver shouldn't touch the folio.lru field while in the migrate_folio()
+> +   function.
+>  
+>  3. ``void (*putback_page)(struct page *);``
+
+Hmm, here it's a bit more complicated now, because we essentially have
+two paths: LRU+migrate_folio or !LRU+movable_ops
+(isolate/migrate/putback page)
+
+
+
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 

@@ -2,134 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AD6544D62
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A5B544D6B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343725AbiFINVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S242836AbiFINWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239220AbiFINVu (ORCPT
+        with ESMTP id S235210AbiFINWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:21:50 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E9A2125E;
-        Thu,  9 Jun 2022 06:21:49 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id i15so3471957plr.1;
-        Thu, 09 Jun 2022 06:21:49 -0700 (PDT)
+        Thu, 9 Jun 2022 09:22:40 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AAA18373
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:22:38 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id n28so31188188edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:22:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
-         :subject:content-transfer-encoding;
-        bh=rFaXek2NFszA7z8/5j/QiJWYFBDWni1TZzV01h7e2o4=;
-        b=qeEbZYTwbjOcNmh18HdiG7WuRITTKr01mHLpq3REDCE07J7CR0KGGZ7jbTrLF1ZXg6
-         xxVkDBVCJ154xAGhozCiQY+o0sSN2/tbL/lxceJgRv2tRW8dg7iDwxoM2DVkfsNPB5MX
-         l25on4/LqLcSH5qvgQn33q5VQfgqF/ep9UNSss3+mzORvvDSmPb/IKt0QdGStLSmPBBH
-         alIEFg5O5HNp4RIMxaX5M2xE8+FNWvOj7fsOyAvltav6aQHzcHk9yMqLmMcAwRjcoGdj
-         KsR+x2ji/1npC2DdiZV10qEjumJ9m8io2BkYFxNqVuFLwAAI5vEwgTHsPKe8FLNIalIW
-         6zqg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nPMBIqsJZwcPYHy4tA1bMGL8vPZI0Il4YAYQQ5QYP70=;
+        b=HcyOqScH0H7f0QBbSZpnZWOuxME9FUTvh0o4cXzuLeQk+NOezh1q7LxxcYFZFNw6zU
+         mZniV6vvuxjuq/HjCk6/69/omoJIFpua/zC/93/JWnALilG9KhAyGa9gcJ4kgLg6R9Vt
+         pZW6nyofEFdiiGFNE+i8EhE9mebe/H8CMU/KCEy/nj87uAZy2ryT/0BvVfwSmRm5kdk3
+         uErkK9ou5SC8ttxhJFbJo4KLQuWVsH4uRg56RWUuqbr/fg1iUbt2ecsdwSxi4HLg6B9b
+         uWNziFNvxq0Mm4Jc3V5lIfdIrksokxD/8ZBurL9kl5GI1zCostGBmEYlaJCm0vtjsMrP
+         QjWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:subject:content-transfer-encoding;
-        bh=rFaXek2NFszA7z8/5j/QiJWYFBDWni1TZzV01h7e2o4=;
-        b=DYhCsWZol2NYvEyi2H20f6JbqR9VxgC77XdA0FqExGb1SZNdkZ4pr61Vwkf35YkaF0
-         7heiZRIWf96hbEZmqdEuc+MkIyccMx1Kb02rwQsTM1ceeok0YYUdDTi6EOh4eFWv2sHc
-         Sr7/w71p5E9f7fzWPxCzYtvmyXB33UO8lY2/KKQUY1gI6AASoQd9wcXHVuplwqZNenlr
-         Hjm3GIHkuKn//caHQi6ubyP30LkSnvnIMvQkI8CtmedQcL5l/QAEn2M0EFA+KOuwXmQS
-         /MWjQaQwBbwsDXFatx07HWp9gWdkamudkhTjxlDuC9dtHVhVtxVPBQG8sOzE4rL3388x
-         uaog==
-X-Gm-Message-State: AOAM532fdHLSJHe39Iid6WL8+xR3qB+1rJcRqDOyaCSgr8JGA/nHZEQv
-        fDLFX7NvRBihTAm7kQ7zfqc=
-X-Google-Smtp-Source: ABdhPJx5yb06Bu2N7ztWW8nQ5QKYoHUEycB1nH3sZlau3YSzdYoMb/98LtrJzuJlo3UPjulAWDgC6Q==
-X-Received: by 2002:a17:902:9a4c:b0:156:6735:b438 with SMTP id x12-20020a1709029a4c00b001566735b438mr38950728plv.46.1654780908466;
-        Thu, 09 Jun 2022 06:21:48 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id k13-20020aa7998d000000b0050dc76281ecsm13889815pfh.198.2022.06.09.06.21.45
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nPMBIqsJZwcPYHy4tA1bMGL8vPZI0Il4YAYQQ5QYP70=;
+        b=OTrj1SloTF/U1seiqZRCdnXd9o86bkjHplq5qOwi3Q79lNgMIxb0bE8l/x40hlHQi2
+         3EXGRjPTFfNNzGJSyPyGWdjEjUhQRKR+xzqJYlnepA8B9/YwKWtIPw+Jc8XD/upPjJ7Y
+         SK39omUHag1pN5TairzMqqpcbPfWDRSPSZ/fg3ox2S8ae+7OWNGDMmK0oBHsUO/gCzW/
+         RIkHRSHKJubIxPMV8hUv08laO3g5KG7v3dxpwXUGXDFfmhH6OSuDcJODLJ/9HXfZyUEI
+         1hLz0lASc7CPGGYIBYxJu1mXOqn0q8bhokL7C3hv8UJHL2CE/R5ZQze6pkpE2/kZ5k8E
+         V5TQ==
+X-Gm-Message-State: AOAM5326H4lMKCRqM07Y1u+0+EVCaNH8GeBXzDZvO1uReLtDgFo6iR3U
+        h4Sct4pqw3ZPVDCjiqCo5W0Qrg==
+X-Google-Smtp-Source: ABdhPJycqxez50LdWJaT0BJ8GA7qrEg33IF52lV1YBM9+fDCeVtIUlfKDd3+doY6QFvG1RpSBUGiyA==
+X-Received: by 2002:a05:6402:27cc:b0:42d:de10:4b6c with SMTP id c12-20020a05640227cc00b0042dde104b6cmr46324557ede.424.1654780956908;
+        Thu, 09 Jun 2022 06:22:36 -0700 (PDT)
+Received: from [192.168.0.198] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s22-20020a1709062ed600b006feb875503fsm2211664eji.78.2022.06.09.06.22.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 06:21:47 -0700 (PDT)
-Message-ID: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
-Date:   Thu, 9 Jun 2022 22:21:44 +0900
+        Thu, 09 Jun 2022 06:22:35 -0700 (PDT)
+Message-ID: <082366b0-6811-b492-c68c-12f9a9ee512e@linaro.org>
+Date:   Thu, 9 Jun 2022 15:22:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 06/20] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH 0/5] docs/doc-guide: Sphinx related updates
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220608095623.22327-1-tmaimon77@gmail.com>
+ <20220608095623.22327-7-tmaimon77@gmail.com>
+ <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
+ <CAP6Zq1geJyaDrP2CBY3FHe5y-L=bCptX1pzAkNypY+TS5vXzMA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1geJyaDrP2CBY3FHe5y-L=bCptX1pzAkNypY+TS5vXzMA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 09/06/2022 15:17, Tomer Maimon wrote:
+> Hi Krzysztof,
+> 
+> Thanks for your comments.
+> 
+> On Wed, 8 Jun 2022 at 13:03, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 08/06/2022 11:56, Tomer Maimon wrote:
+>>> Add binding for the Arbel BMC NPCM8XX Clock controller.
+>>>
+>>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+>>> ---
+>>>  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 63 +++++++++++++++++++
+>>>  .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 50 +++++++++++++++
+>>>  2 files changed, 113 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>>>  create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>>> new file mode 100644
+>>> index 000000000000..e1f375716bc5
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>>> @@ -0,0 +1,63 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Nuvoton NPCM8XX Clock Controller Binding
+>>> +
+>>> +maintainers:
+>>> +  - Tomer Maimon <tmaimon77@gmail.com>
+>>> +
+>>> +description: |
+>>> +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+>>> +  generates and supplies clocks to all modules within the BMC.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - nuvoton,npcm845-clk
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    items:
+>>> +      - description: 25M reference clock
+>>> +      - description: CPU reference clock
+>>> +      - description: MC reference clock
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: refclk
+>>> +      - const: sysbypck
+>>> +      - const: mcbypck
+>>> +
+>>
+>> I asked what is the suffix about and you replied "ck"... ok, so let's
+>> make clear. This should be:
+>>
+>>     items:
+>>       - const: ref
+>>       - const: sysbyp
+>>       - const: mcbyp
+>>
+>> or something similar, without the same suffix all over.
+> The clock names are the same clock name in our spec, this why we
+> prefer to leave the clock names as is.
 
-This small set of patches fill in a couple of missing info and update
-outdated guidelines in doc-guide/sphinx.rst.
+The naming with useless suffixes does not help. If your spec had
+"refclk_really_clock_this_is_a_clock" you also would insist on that? It
+does not make sense.
 
-Patch 1/5 adds a footnote on expected improvements of images embedded in
-PDF documents by the support of Inkscape in kfigure.py added in v5.18.
+>>
+>>> diff --git a/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+>>> new file mode 100644
+>>> index 000000000000..229915a254a5
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+>>
+>> Same comment as before. No changes here...
+>>
+> about the comments from V1::
+> - Krzysztof: Filename - same as bindings, so nuvoton,npcm845-clk.h
+> In NPCM7XX we use the same include file and clock source
+> dt-binding
+> https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/devicetree/bindings/clock/nuvoton,npcm750-clk.txt
+> dt-binding include
+> https://elixir.bootlin.com/linux/v5.19-rc1/source/include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
+> we prefer to be align with our older BMC version
 
-Patch 2/5 mentions the make variable SPHINXDIRS, which is helpful in
-test-building a subset of documents.  This change was inspired by
-an earlier comment of Maciej.  He also suggested the update of
-changes.rst to indicate the requirement of Sphinx 2.4 or later for
-"make htmldocs", but changes.rst is not touched in this patch set
-as there is an on-going discussion about updating minimal required
-version of Sphinx [1].
+Older has incorrect name, so do not align to incorrect one. What is the
+logic behind having header not matching the bindings file? It makes it
+only more difficult to connect these two.
 
-[1]: "Sphinx pre v3 -- removing support"
-     https://lore.kernel.org/linux-doc/LO3P123MB26810D190462B6BBBF1305F6C2A19@LO3P123MB2681.GBRP123.PROD.OUTLOOK.COM/
+> 
+> - Krzysztof: Dual license, same as bindings.
+> modified in the file * SPDX-License-Identifier: (GPL-2.0-only OR
+> BSD-2-Clause) */
+> the same license approved in en7523-clk include file and pushed to
+> Linux kernel 5.19 :
+> https://elixir.bootlin.com/linux/v5.19-rc1/source/include/dt-bindings/clock/en7523-clk.h
 
-Patches 3/5 and 4/5 are RFCs.
-The guidelines for title adornments were written well before the
-transition to subdirectory based documentation.
-Here, I'm suggesting a version of guidelines based on my personal
-preference.  I am expecting at least a few comments from others
-because I don't think there is any consensus on how far these
-guidelines should be followed, especially for existing documents.
-This update was inspired by private communication with Miguel and
-Jon.
+I don't understand this comment at all. I am not commenting about
+en7523-clk.h. I am commenting about the header here - it should have
+dual license. What en7523-clk.h has to do with it?
 
-Patch 3/5 updates the guidelines for title adornments. The change is
-done in-place for ease of review.
-
-Patch 4/5 moves the item expanded by Patch 3/5 from the bullet lists
-into its own subsection.
-
-Patch 5/5 is a PoC of adding a meta title to kernel-doc.rst by using
-the "title" directive mentioned in Patch 3/5.
-
-Any feedback is welcome!
-
-        Thanks, Akira
---
-Akira Yokosawa (5):
-  docs/doc-guide: Add footnote on Inkscape for better images in PDF
-    documents
-  docs/doc-guide: Mention make variable SPHINXDIRS
-  docs/doc-guide: Update guidelines for title adornments
-  docs/doc-guide: Pull guidelines for title adornments out into
-    subsection
-  docs/doc-guide: Put meta title for kernel-doc HTML page
-
- Documentation/doc-guide/kernel-doc.rst |  2 +
- Documentation/doc-guide/sphinx.rst     | 98 +++++++++++++++++++-------
- 2 files changed, 76 insertions(+), 24 deletions(-)
-
-
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
--- 
-2.25.1
-
+Best regards,
+Krzysztof

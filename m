@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E9E544E3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CCA544E2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343629AbiFIN4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S245603AbiFIN4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245505AbiFINzx (ORCPT
+        with ESMTP id S245514AbiFIN4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:55:53 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8991344DE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 06:55:51 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id c196so21171454pfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 06:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2tLHzK+mawqr5s4YQ6aG7zolZuEOi6xg/YnpIdOHgKA=;
-        b=NyQLoPCJ3Fw1Rd/RGxC+T32bhwep+nu9XPymI+sdFXniE5ncki+AyZjF1fI9FAvhg4
-         Sd5BckuKevSoBcFbK6aZaFh8Kzat3G+uSAqRhBR4WBWpOOcVKlaExzWaHMw367fik5B9
-         3QbcbwmyQOcwBpBwlGFrgxkQD4/1mx7ahCEJDokNSmGRdu6VIgTBZXbkPU8DcwkwnDT9
-         qZudTLrtNMJP2US4cdNk6i+6HSIexRMbVZADyrgdK3UyFHn7roMgdruLGog8dPIjB/9u
-         LSbl7vBuXu11RixFHrtp9Q82e7uJJt36zylh1BLV6lJuO5LLowub7Yiy0TwWHwrAbVPs
-         188A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2tLHzK+mawqr5s4YQ6aG7zolZuEOi6xg/YnpIdOHgKA=;
-        b=yWDU7PIQsE+XVBYEOLswtTfHpEX50EqlvF9NylZ/ShKRAgTQ9cH/bDRATAdaO3hDF7
-         yKqH4hhi0QG71c6X0oyMvyWTqu/ESyZsMGv5YAJsj4/Iaqqx6vhRRpt1XAWTWuLtqJ7T
-         AbKZ/GEB+7H7e7GobAUjHDWA41yhFFYqtoNi1BS952x8N4G/gTfrn6KiVV8EksQA1JTr
-         08CY2WltEJLemNScpKnDAzbUgbLOwnuQZXzyMVIefDDv484Lqxw3SFdUlV84yBdEYiCc
-         5dP2kwj+AE7qwpgF//LFOyNRLAKmPpvXZUthPG/E56HAQN6s0pVHMGXwV0BeinXSOm51
-         tvdA==
-X-Gm-Message-State: AOAM532a3emWyka3bKoZnUeGjYMw43K2pU+2b4bN5yLu0R4t+r4pu1Wk
-        vx8oHTw3ogmRrIwzp0i7aMliPQ==
-X-Google-Smtp-Source: ABdhPJw3Ip8vO/1+HSILbK6hPsf2Tnb1VWLRa9LQz5MYHsS2lwxwBEZCQ0c7Omj0EJ7aXxIunxnCsQ==
-X-Received: by 2002:a63:40c3:0:b0:3fd:12b8:3207 with SMTP id n186-20020a6340c3000000b003fd12b83207mr30674164pga.57.1654782951047;
-        Thu, 09 Jun 2022 06:55:51 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090ace0a00b001e31803540fsm16034735pju.6.2022.06.09.06.55.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 06:55:50 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 13:55:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] KVM: selftests: Add MONITOR/MWAIT quirk test
-Message-ID: <YqH74glDW88oZBzi@google.com>
-References: <20220608224516.3788274-1-seanjc@google.com>
- <20220608224516.3788274-6-seanjc@google.com>
- <20220609063720.wf4famdgoucbglnq@yy-desk-7060>
+        Thu, 9 Jun 2022 09:56:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FB42A979;
+        Thu,  9 Jun 2022 06:56:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BE4FB82DF3;
+        Thu,  9 Jun 2022 13:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92084C34114;
+        Thu,  9 Jun 2022 13:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654782982;
+        bh=ZFAylpFPdXpnDgSAOTeAWTe07vZUdY80vnrc0rD1Zwk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pKwWuA/1IrL+tANFoM3hAMgCOccR0jKv2caj0MODqpuZlOHNU/KEUBqR5hSQiWlvc
+         +51OqII6lI735wAn8N59w2LN+7z4dGBsR+uxyictvVvan6GuWwsfzauzMYN+1siRKn
+         tC6xjUeJashWP6i3+r+T8y7Wg4f/NaKb/eKFe+K0ckofL482ZpZKP99J6ryTJwjFwG
+         dUFk3vD/mKIHjE/E5OKhq/ZJbcXX41V7zFZpJPHQwJqKqXT7NkSPp0c0F386k3UfY8
+         E/3qGvT3ruyAA8YlhgVzvslW2VOXt5x4zJ9kp465zWhgC7eN2rQJndGuF4/AXWK7QL
+         favHAhRYH8vLA==
+Date:   Thu, 9 Jun 2022 09:56:21 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Denis Ciocca <denis.ciocca@st.com>, linus.walleij@linaro.org,
+        lars@metafoo.de, andy.shevchenko@gmail.com, aardelean@deviqon.com,
+        cai.huoqing@linux.dev, linux-iio@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.18 03/68] iio: st_sensors: Add a local lock for
+ protecting odr
+Message-ID: <YqH8BTZ240DeZ9fq@sashalap>
+References: <20220607174846.477972-1-sashal@kernel.org>
+ <20220607174846.477972-3-sashal@kernel.org>
+ <20220608102651.000035b0@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220609063720.wf4famdgoucbglnq@yy-desk-7060>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220608102651.000035b0@Huawei.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022, Yuan Yao wrote:
-> On Wed, Jun 08, 2022 at 10:45:16PM +0000, Sean Christopherson wrote:
-> > +static void guest_monitor_wait(int testcase)
-> > +{
-> > +	/*
-> > +	 * If both MWAIT and its quirk are disabled, MONITOR/MWAIT should #UD,
-> > +	 * in all other scenarios KVM should emulate them as nops.
-> > +	 */
-> > +	bool fault_wanted = (testcase & MWAIT_QUIRK_DISABLED) &&
-> > +			    (testcase & MWAIT_DISABLED);
-> > +	u8 vector;
-> > +
-> > +	GUEST_SYNC(testcase);
-> > +
-> > +	vector = kvm_asm_safe("monitor");
-> > +	if (fault_wanted)
-> > +		GUEST_ASSERT_2(vector == UD_VECTOR, testcase, vector);
-> > +	else
-> > +		GUEST_ASSERT_2(!vector, testcase, vector);
-> > +
-> > +	vector = kvm_asm_safe("monitor");
-> 
-> emmm... should one of the "monitor" be "mwait" ?
+On Wed, Jun 08, 2022 at 10:26:51AM +0100, Jonathan Cameron wrote:
+>On Tue,  7 Jun 2022 13:47:29 -0400
+>Sasha Levin <sashal@kernel.org> wrote:
+>
+>> From: Miquel Raynal <miquel.raynal@bootlin.com>
+>>
+>> [ Upstream commit 474010127e2505fc463236470908e1ff5ddb3578 ]
+>>
+>> Right now the (framework) mlock lock is (ab)used for multiple purposes:
+>> 1- protecting concurrent accesses over the odr local cache
+>> 2- avoid changing samplig frequency whilst buffer is running
+>>
+>> Let's start by handling situation #1 with a local lock.
+>>
+>> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+>> Cc: Denis Ciocca <denis.ciocca@st.com>
+>> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+>> Link: https://lore.kernel.org/r/20220207143840.707510-7-miquel.raynal@bootlin.com
+>> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>Hi Sasha,
+>
+>This one is a cleanup rather than a fix. It's part of a long term move to stop
+>drivers using an internal lock (which works, but limits our ability to
+>change the core code).  No problem backporting it if it makes
+>taking some other fix easier, but I'm not immediately seeing such a patch.
 
-/facepalm
+Yup, it's not a dependency. I'll drop it.
 
-Thanks for catching my copy+paste fail!
+-- 
+Thanks,
+Sasha

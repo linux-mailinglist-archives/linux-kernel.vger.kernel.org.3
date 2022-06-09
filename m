@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9984545518
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761B454551B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 21:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343505AbiFITk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 15:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S1344969AbiFITlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 15:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344881AbiFITkW (ORCPT
+        with ESMTP id S235428AbiFITlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 15:40:22 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DFC2BB05
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 12:40:20 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id l204so43469140ybf.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 12:40:20 -0700 (PDT)
+        Thu, 9 Jun 2022 15:41:37 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E34C2AE16;
+        Thu,  9 Jun 2022 12:41:36 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id r3so19502566ilt.8;
+        Thu, 09 Jun 2022 12:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XIsenmbvX8zPgepE4b2x80VaH35pgU5I4dBAafr0Wdg=;
-        b=EiAneKFx7dQ6UHpgwUSCPsCinqQ8+kRNHunXgahvbWb2xfnc7G+Veja9BcCkB55Bdp
-         1sxt1RRjdz3e+3aXrcUsnoo/WL+HVe0gxHuJg/+VcuFznFWq68jfhAQ8bAwewhKtKtLV
-         fxp2yjcVpnZQ/UQkSl4zsidwwLkg9Tfxy1w+YGGF2jci7Sx9Xv2SMHtSgzwjKxyk2Mnq
-         xOzOUkdy/VB465plUgdJsQHvYcidt1ybKCQe80RC1kGrTYvlmRTN3a5tWcP3nVr3EFym
-         HoyKTNB/EoKgBToBYIc7gfp339AU9VIjVixM14LtxIhZxCZQdJyWdUa+NIqOwVj4sYX7
-         TkvA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=71iYptaNG07P3/tG5EFj3K6ZS83KYPVTGHrVS45OcC4=;
+        b=GuQsZ7dvXODnYAR/bmBMt8/tZNxCdof97wut3zR7nPYHowAPDcqJOsnjwGrpNwEn7d
+         MXVClq5HHTZz4BmAfiGCLNHhjR0XLk2YRteJQprCni8NiibClLSe2O+vhmgvZQozOaEE
+         9L35Rs3PAciO6AVy1cz+z3Zo42qAY5/Cjem9f5YFFayqBBoA+865LKyXVEds4nLZGWbw
+         Zp8QaIVw9dtdAQXPCZ/ZSxXf62nH0V7tmWPwMtHggcvnbMVoxPx5J/5SUSza8M6/dyl+
+         DMk10ULjBSQXQdC7/m8I9Fpr2gTnj+TXNT2/OvJKJuS/PSgHlgE+hwFRkq/4yw8ihkSY
+         atYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XIsenmbvX8zPgepE4b2x80VaH35pgU5I4dBAafr0Wdg=;
-        b=pN6x90ei1KELKR4tmR51p3xzVw3gHPsYlhMlG84VK6Rp+7LMF7+/9XG0GJ3kK6WCWc
-         Q8O4Kh0U3fPwSLsMr0Qwzwp4qR5N4+9VZcPkaFqBlwg62L42rnXo1egItFYmo/PKutE1
-         W8AYfpPc5dZygf50t3SO4cGngg+YfAaue66LL3z1j8b4zXeUk2rWKMl8uwoLZaFSePrV
-         LnHLE/DWJ/LoAI6cAkw1oqjjQlCyegTpztDmEdO3NiN05ZHs5eewTWicUdmI7guL/m2p
-         N/gK/aLKc5wgJoXqXwjB6HMPbnk9nGwsVoRo1HTHzNya61ai283jpjrWNKd0Tq+dOggx
-         0Fqg==
-X-Gm-Message-State: AOAM530we0LUMAWXACmb0F6DG+wLTNYmGcPkH+YoxYkj7N8ZOyTOVvzq
-        dIP+Ntkc/MrmDoGhm9bKQumyCrkyJt6PwXAK54qXfw==
-X-Google-Smtp-Source: ABdhPJxurxfmMQVzOd4DmWf+6cz6lR2YHg//auWGZXvIk9b/uhLCwmVEkHtjn8uxxTPnDooIqhWMIFyfCKSm0IOW+l4=
-X-Received: by 2002:a25:cb8a:0:b0:65c:a718:475c with SMTP id
- b132-20020a25cb8a000000b0065ca718475cmr42869165ybg.352.1654803619451; Thu, 09
- Jun 2022 12:40:19 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=71iYptaNG07P3/tG5EFj3K6ZS83KYPVTGHrVS45OcC4=;
+        b=tK8faTKIhOhGjCPGwfPAAfaq4EaebcVOfp1LsBTOr//kLnwrzlQhDEwx6n+F3WQZtQ
+         hYbX/x9P9xVNRv1QIOXD2l/KDjjmAG69sNfTuqIx9tkKDD7lMEt5wXq8ixVhdi1fQsdz
+         /ZR6RWZ/nTb/eqL1u5ZzTi2qQ1oO5KqKF9MpY/3tSMHZukugTpL7+lV11FmdxB2yEjJi
+         bbZ58MJGQDjBXGL4Xpmu4Gs/GEAT6VZhIrP3DBCd4g0m9RGkY4+V1klUcZw73zTisHz+
+         WQ54ibPfb5wasHhgr1O7NOTDhelcB6kMxNLFkSWbuFlc6rcPL1cBbJEqjjNKTW8T13yM
+         rztA==
+X-Gm-Message-State: AOAM532tx8EvUjSVqeugy4Usmg9X2OALQ0pZTEmAA+JjOZqbaHwPVBJ7
+        GP5HUzvyNaPE8oOaeh6wacvhuvAJ+EevBmk8kNI=
+X-Google-Smtp-Source: ABdhPJxvWX610D95EXqepdWY33Gdrfy6HLe9BtybsWcWQ8xt3jVG0cSU+jSbbH4K2Av8MS9p2dA5TH9aDLdtgCQXYRY=
+X-Received: by 2002:a05:6e02:16ce:b0:2d3:edec:17a5 with SMTP id
+ 14-20020a056e0216ce00b002d3edec17a5mr21537349ilx.4.1654803695998; Thu, 09 Jun
+ 2022 12:41:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609025515.2086253-1-joshdon@google.com> <CAKfTPtCc4NZ51qruKX1zROFHqg-_MQBadaJfVbYPxT=7c4So=Q@mail.gmail.com>
-In-Reply-To: <CAKfTPtCc4NZ51qruKX1zROFHqg-_MQBadaJfVbYPxT=7c4So=Q@mail.gmail.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Thu, 9 Jun 2022 12:40:08 -0700
-Message-ID: <CABk29NtX7EZsAqrT8vXd6tgWe2HPRNPM=cWxFSSxBtW1MjFqOA@mail.gmail.com>
-Subject: Re: [PATCH] sched: allow newidle balancing to bail out of load_balance
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
+ <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
+ <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
+ <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
+ <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
+ <CA+icZUUOQcc4uiVbv+tJzPr_ED7e4tD0u9tC8mcn2BRe3sdPAg@mail.gmail.com>
+ <CAHk-=wiOrXUr0wqHL+hfkzGg_+b7UvtLeB=59KsX8W939bTY-A@mail.gmail.com>
+ <CA+icZUUma1B8KFWF-ed9sjXH4QpCRZ+B2pON3uAFkTUs77tMzw@mail.gmail.com>
+ <20220609192308.GB10732@1wt.eu> <CAHk-=wimC_B+nCJrXwuvWULz6ycFFmRMT1Uc+PeM5wJdma_VFw@mail.gmail.com>
+ <20220609193238.GD10732@1wt.eu> <CAHk-=wg8t3S3kWjzTywO5RTv4QrTSYYapEw10kFgD-dRLt08ug@mail.gmail.com>
+In-Reply-To: <CAHk-=wg8t3S3kWjzTywO5RTv4QrTSYYapEw10kFgD-dRLt08ug@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 9 Jun 2022 21:41:00 +0200
+Message-ID: <CA+icZUUo1PYQ6EjwsK=meBrXnxyxrC_PtY2qe4L3BM2MdO6=Gg@mail.gmail.com>
+Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
+ and OpenSSL v3.0.x
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Willy Tarreau <w@1wt.eu>, Kees Cook <keescook@chromium.org>,
+        keyrings@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,65 +83,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Vincent,
-
-On Thu, Jun 9, 2022 at 6:42 AM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
+On Thu, Jun 9, 2022 at 9:34 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> On Thu, 9 Jun 2022 at 04:55, Josh Don <joshdon@google.com> wrote:
+> On Thu, Jun 9, 2022 at 12:32 PM Willy Tarreau <w@1wt.eu> wrote:
 > >
-> > While doing newidle load balancing, it is possible for new tasks to
-> > arrive, such as with pending wakeups. newidle_balance() already accounts
-> > for this by exiting the sched_domain load_balance() iteration if it
-> > detects these cases. This is very important for minimizing wakeup
-> > latency.
-> >
-> > However, if we are already in load_balance(), we may stay there for a
-> > while before returning back to newidle_balance(). This is most
-> > exacerbated if we enter a 'goto redo' loop in the LBF_ALL_PINNED case. A
-> > very straightforward workaround to this is to adjust should_we_balance()
-> > to bail out if we're doing a CPU_NEWLY_IDLE balance and new tasks are
-> > detected.
+> > Finally we did better and disabled engines completely!
 >
-> This one is close to the other tests and I wonder if it should be
-> better placed before taking the busiest rq lock and detaching some
-> tasks.
+> Some day that fix will make it to me, and I can remove that ugly pragma.
 >
-> Beside your use case where all other threads can't move in local cpu
-> and load_balance() loops and clears other cpus, most of the time is
-> probably spent in fbg() and fbq() so there are more chance that a task
-> woke in this meantime and I imagine that it becomes useless to take
-> lock and move tasks from another cpu if the local cpu is no more newly
-> idle.
->
-> Have you tried other places in load_balance() and does this one
-> provide the lowest wakeup latency ?
->
-> That being said, the current patch makes sense.
 
-I tested with another check after fbg/fbq and there wasn't any
-noticeable improvement to observed wakeup latency (not totally
-unexpected, since it only helps for wakeups that come during fbg/fbq).
-However, I don't think there's any harm in having that extra check in
-the CPU_NEWLY_IDLE case; might as well avoid bouncing the rq lock if
-we can. fbq+fbg are together taking ~3-4us per iteration in my repro.
+For the part scripts/sign-file.c - you looked at...?
 
-If there are no objections I can send a v2 with the added delta:
+https://lore.kernel.org/lkml/20220518215129.264872-1-keescook@chromium.org/
 
-@@ -9906,6 +9906,16 @@ static int load_balance(int this_cpu, struct rq *this_rq,
-                goto out_balanced;
-        }
-
-+       /*
-+        * fbg/fbq can take a while. In the newly idle case, recheck whether
-+        * we should continue with balancing, since it is possible that a
-+        * task woke up in the interim.
-+        */
-+       if (env.idle == CPU_NEWLY_IDLE && !should_we_balance(&env)) {
-+               *continue_balancing = 0;
-+               goto out_balanced;
-+       }
-+
-        BUG_ON(busiest == env.dst_rq);
-
-        schedstat_add(sd->lb_imbalance[idle], env.imbalance);
+-Sedat-

@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A057D545029
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5208354502F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343851AbiFIPHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        id S1344114AbiFIPIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243905AbiFIPHO (ORCPT
+        with ESMTP id S1344133AbiFIPI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:07:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5FA3AA9E8;
-        Thu,  9 Jun 2022 08:07:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 983FFB82DE6;
-        Thu,  9 Jun 2022 15:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDD14C34115;
-        Thu,  9 Jun 2022 15:07:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654787230;
-        bh=sr7x9nyyc6Swg+unCedL/fcC7RNlzrz9OBX0Z8PtW2w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TmTCsIUcRHP8cYOWzsESc7rdP8dbhJLzPFBVFPWqAQh8AyUbeVvXZOJZeMSIiGwLO
-         2nO1Fi+QMcB/5BmACfKI5lZlbhg+Y3lXtetC57VlZ8AzyaMRWUiYnLUAzYr5tNgmNj
-         R8pmr7uV49KorN6IUaOMU/vZ2UfUiIQibv0FMbEoB6J8H6ECa7qBSLvSV25GKcnG9r
-         ZMnxI/PSBktUAULW/sto0d0mgg9hd24kVRi66PbX0ypU8tM1QaKvvZb+H6NfGcf53T
-         604jOe1tP/s6daahxVEi+kSF2qLg+solsR8sWApJVC+Gmnxz8IpHItxxyCjwKqcItp
-         xUs8ox/NpvFVg==
-Date:   Thu, 9 Jun 2022 16:07:04 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH -lkmm] docs/memory-barriers: Fix inconsistent name of
- 'data dependency barrier'
-Message-ID: <20220609150703.GB3289@willie-the-truck>
-References: <cc2c7885-ac75-24f3-e18a-e77f97c91b4c@gmail.com>
- <20220607133432.GA32701@willie-the-truck>
- <Yp9h4Cmo0UNZp6xD@rowland.harvard.edu>
- <d6fab7d9-cf22-cb64-d4dd-50cf8bdd4bba@gmail.com>
+        Thu, 9 Jun 2022 11:08:29 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF527CDE9;
+        Thu,  9 Jun 2022 08:08:28 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id a10so22392298ioe.9;
+        Thu, 09 Jun 2022 08:08:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nAv69gpcPWI9Low0xHefIateOKeB8tVbI9fswYi40nM=;
+        b=lVEklPxlARZDppoKII0ezz70Kk3EQSAj0alX2JyJzIqS3K68ztm5Ysx5h0923+/YU0
+         JvoRIwNchBMtPh5AwuJFGvIonQu9JQ2j6gXAFt/SxI6wjvdcY8fjoVkZMmhX1um80Zjo
+         U9DxcehEE8lzs/HJAmyYG7yg48ptnJn73XVGe/BuRl9QuXtxRN1P/N2fgIG2FiMHJPP0
+         0bkhlW8uWgfhxAUehZaoiiQSwv0QeFhHe1dRmDHwacZPWO6xLOTM7y88hP27yZN1b/qJ
+         t3xe3bv6+ubEkdGVD/PbxkUtfoXxB2Z4S6WCIr/UmvDzVJBv7rB0L2wd8InVCVynJjDB
+         Gqsw==
+X-Gm-Message-State: AOAM5318/MNVqBf13nUY8wV2ThAehXDj6IqzamHu+1NR7OKh9a3GXi5I
+        F5oJN3c0LcnEsPx7SrJVw/J0oCkULg==
+X-Google-Smtp-Source: ABdhPJw/GiO2Y1Nfl+vdnO3TJaRJzKOYQd9vP5AIMiesXHagezYV5WnL5NCT3JUuEpT4Qe4UHq/VPA==
+X-Received: by 2002:a05:6638:16cf:b0:332:2bc:b7d5 with SMTP id g15-20020a05663816cf00b0033202bcb7d5mr1401791jat.172.1654787307750;
+        Thu, 09 Jun 2022 08:08:27 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y10-20020a02354a000000b00331f48289easm2031970jae.136.2022.06.09.08.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 08:08:27 -0700 (PDT)
+Received: (nullmailer pid 3800045 invoked by uid 1000);
+        Thu, 09 Jun 2022 15:08:25 -0000
+Date:   Thu, 9 Jun 2022 09:08:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Atul Khare <atulkhare@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: sifive: add cache-set value of 2048
+Message-ID: <20220609150825.GA3783956-robh@kernel.org>
+References: <CABMhjYq8WbHcA=8dRxHVy=-NhL3+GaRKsBb3X2bG2-6Azd2S1g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d6fab7d9-cf22-cb64-d4dd-50cf8bdd4bba@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CABMhjYq8WbHcA=8dRxHVy=-NhL3+GaRKsBb3X2bG2-6Azd2S1g@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +65,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 11:00:46AM +0900, Akira Yokosawa wrote:
-> On Tue, 7 Jun 2022 10:34:08 -0400, Alan Stern wrote:
-> > On Tue, Jun 07, 2022 at 02:34:33PM +0100, Will Deacon wrote:
-> >> Alternatively, maybe we should be removing the historical stuff from the
-> >> document altogether if it's no longer needed. We don't have any occurrences
-> >> of read_barrier_depends() anymore, so why confuse people with it?
-> > 
-> > How about relegating discussion of these barriers to a special 
-> > "historical" or "niche architecture" section of the document?  In a 
-> > separate patch, of course.
+On Wed, Jun 08, 2022 at 04:39:31PM -0700, Atul Khare wrote:
+> Fixes Running device tree schema validation error messages like
+> '... cache-sets:0:0: 1024 was expected'.
 > 
-> Another option would be to add a section on "Ordering guarantees by
-> dependencies", and explain three variants: address, data, and
-> control.  We have only "control dependencies" section at the moment
-> and uses "data dependency" without properly defining it. 
-> 
-> Address dependencies are special in that they can provide load-to-load
-> ordering guarantees as well as those of load-to-store.
-> Alpha doesn't provide these guarantees at the architecture level, hence
-> the implicit address-dependency barrier in READ_ONCE().
-> 
-> Also, IIUC, arm64's READ_ONCE() is promoted to acquire-load when
-> LTO is enabled.  It is to cope with the possible (but not observed
-> yet) transformation of address dependencies into control dependencies,
-> which can't provide load-to-load ordering guarantees.
-> 
-> These points can be added later in memory-barriers.txt, but I'm
-> afraid I might not be up to such involved changes.
+> The existing bindings had a single enumerated value of 1024, which
+> trips up the dt-schema checks. The ISA permits any arbitrary power
+> of two for the cache-sets value, but we decided to add the single
+> additional value of 2048 because we couldn't spot an obvious way
+> to express the constraint in the schema.
 
-I think we should try hard to avoid documenting how specific architectures
-implement the memory model (in this document, at least); it's likely to
-stagnate and it encourages people to rely on the behaviours of a specific
-architecture rather than the portable guarantees offered by the higher-level
-memory model.
+There is not any way to express power of 2, so you have to list values. 
+Rather than just adding 1 more value, I would add at least a few more so 
+we're not adding these one by one. This is for a specific cache 
+implementation, so it can't really be *any* power of 2. Designs have 
+some limits or physics does.
 
-Will
+> 
+> Signed-off-by: Atul Khare <atulkhare@rivosinc.com>
+> ---
+> Changes since v1 [1]: Rebased on latest version
+
+What version is that because this did not apply to v5.19-rc1 for some 
+reason.
+
+> [1]: https://tinyurl.com/yvdvmsjd
+> ---
+> ---
+>  Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> index e2d330bd4608..309517b78e84 100644
+> --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> @@ -46,7 +46,9 @@ properties:
+>      const: 2
+> 
+>    cache-sets:
+> -    const: 1024
+> +    # Note: Technically this can be any power of 2, but we didn't see
+> an obvious way
+> +    # to express the constraint in Yaml
+> +    enum: [1024, 2048]
+> 
+>    cache-size:
+>      const: 2097152
+
+Surely this is not fixed either?
+
+> --
+> 2.34.1
+> 

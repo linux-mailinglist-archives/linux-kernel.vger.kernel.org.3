@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AFF54543E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63007545445
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 20:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345468AbiFIShr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 14:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
+        id S1345482AbiFISjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 14:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233030AbiFIShn (ORCPT
+        with ESMTP id S244450AbiFISjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 14:37:43 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3726193D7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:37:41 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31332df12a6so102476167b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 11:37:41 -0700 (PDT)
+        Thu, 9 Jun 2022 14:39:40 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F90C687D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 11:39:37 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a29so10824412lfk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 11:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Hj76BK0VwQ76C6uNuhyu2UOiDef16x6n+WhyTwiuL8=;
-        b=RXSLJN2r52szX6Cnw+KXoRkm5vFEmwzfQJR7lJ/Ixw/a4O/IdfAI9SSV6dT03AzgUP
-         M+w40EuKmIQpz0K5O7olO6ouYCrw/mP2EPuyvHUyotiJED4+hKPEman/oWmGeKfposGF
-         f6kKJcrRXpk4J/dR2UPUa7/yG8CHSRZxUTXNVlVIIPc+byUzzS4AQN/5O7+S2DvEDWud
-         Akol4RAuQgb/gL1FMVAcwaGcDgWS7ZBaFX4uIygMvU21K6SZvKJ24dIH42Yx/1lQrAG0
-         FCrMbdbH+2ZPdt3SWlt9OlcSqzL2d7TxDky9DyGIsCv/5LTw/jdAwAOFTWKxRW1yl6jW
-         y3wQ==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=de7CZ8jeEcERGED2Q96ugWzLITXNhs+e7DuD9EZQpkI=;
+        b=Z3UGsAv2k8V7+UhtCeOEPgRUU8g3Gd5ZsoDNWGXDXBx63L2yq4A5L1yAa4y4PlXPC/
+         s6sJVvfhSSdKcaZZOPvZNolhW1/I5Ywy0r8A68dG826aaekyPcC+lndkpzjfFIt+IWC0
+         CtGS1RgpLSe+QcQ0ORHIYlA9QNWL8a7o8/tjm/U0x5eJ8oYBkPuPuOoiW5W6GnACdHWI
+         oXgZ8B40x/z5lyBx4qYrXb7HBFvX6aoHpXuVV3iJBNJnNiz4x8Vd5XdIMJdlPGt0NYM6
+         r08cTDfZkgJe4PuW/t6tNa8w1UaVthWe6f+XYpLyZnkQQo7a1qybjxDKPsoUe3pbK8F8
+         6XJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Hj76BK0VwQ76C6uNuhyu2UOiDef16x6n+WhyTwiuL8=;
-        b=ejXt9+EP+UAbarEnVRzEY4FprA7QsURCKEiA+EIJbAV6eGMT4LbIpDcVN0YKIenZzM
-         H4NRi6JL92JahNGV2MFMDtwILsDwDIqSyBLuy7z+qtiumTSEBoJ93S4Us0zOhZ8HKXQe
-         fRuRTZCWnorZYkW9F1hCpHWKRedGddvF8mX9ZGzfjXTQaNBWbqTHeBGTq3h4UQNNBNF6
-         9qk2quzwWFoVYo2jiwu8H1VxKXRqq9GhiTANBDNFxXn4M2du7xzGUWggZIyc1OkhJRlu
-         QnzGfM/qj+94zQ3QMBVBpyX5HYOZBFuebBWszZUnlBDPEVrSbuvzR8gQQtN86CgRlk2r
-         QxBA==
-X-Gm-Message-State: AOAM533t1Ab9IkQEjKz9Wxq268eq/jUdplvT36ITHeqd75mEDvvemQ6r
-        nGMBoddQFHrrZMAseBBzOaIxe4akdkzleNXencuoTg==
-X-Google-Smtp-Source: ABdhPJyPun0oORefCEO0LL2xiAgBLsvVeq0N5dshMTrTTvEQkgH3BMTQ7tdvm5AN6boSy1DBa7+bcxeIx+gFcsxeKbo=
-X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
- s12-20020a819b0c000000b002f4c5227d3cmr44383963ywg.316.1654799860756; Thu, 09
- Jun 2022 11:37:40 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=de7CZ8jeEcERGED2Q96ugWzLITXNhs+e7DuD9EZQpkI=;
+        b=NJkkkl2yh9qKIRnMF009/T51whFCfUH2arV2LkWhagWHLga5CwHB5bGoyjZP9UzFy2
+         bGJ/USx1RwzpnJg5QVf4S+usWmtLkAdGGAtHDLgQabnbMX05h5kwE+AyLGQTNzeSJN/y
+         MOByJIqx7Ao0OpHFbv5p9dOmDIDOF1eG0tkRCAvQxyOy+m7lQ5CguAE3EbKepPgB/FWW
+         MRG2rPVexaNqPSSLPgL4iYj5i5pIzQf3dajk+7x0XkuqVN/cJksynXGbQMrEjzXzuNCI
+         8bblEHB9Z0x+SDt1zzjYpLk5ky3E9BF1QpvXfw8f0Agb776nIiUcWrYwEEM2iL5+Oaz3
+         IMVw==
+X-Gm-Message-State: AOAM530XW0ZtrfZYSpHD1xUFmCfWcZSuIXwUz0BIxEaCP8lnDMRc3rPe
+        OGVhPNO0NPCRr6cQxtHoSj4=
+X-Google-Smtp-Source: ABdhPJyxgn8y703PIdZdT+iSaqkj7xP8yQhxWw4Bbr2lxRzCyaF5hcAgLMHi7vf3aYveYvKsHF5wpg==
+X-Received: by 2002:a05:6512:606:b0:478:fdce:eef8 with SMTP id b6-20020a056512060600b00478fdceeef8mr29927481lfe.461.1654799975798;
+        Thu, 09 Jun 2022 11:39:35 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id l28-20020a2e571c000000b0024f3d1dae7csm3796073ljb.4.2022.06.09.11.39.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 11:39:35 -0700 (PDT)
+Subject: Re: [RFC PATCH 2/2] xen/grant-table: Use unpopulated DMAable pages
+ instead of real RAM ones
+To:     Stefano Stabellini <sstabellini@kernel.org>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
+References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com>
+ <1652810658-27810-3-git-send-email-olekstysh@gmail.com>
+ <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <7f886dfb-2b42-bc70-d55f-14ecd8144e3e@gmail.com>
+Date:   Thu, 9 Jun 2022 21:39:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220609113046.780504-1-elver@google.com> <20220609113046.780504-2-elver@google.com>
- <CACT4Y+bOFmCyqfSgWS0b5xuwnPqP4V9v2ooJRmFCn0YAtOPmhQ@mail.gmail.com>
- <CANpmjNNtV_6kgoLv=VX3z_oM6ZEvWJNAOj9z4ADcymqmhc+crw@mail.gmail.com> <CACT4Y+Zq-1nczM2JH7Sr4mZo84gsCRd83RAwwnHwmap-wCOLTQ@mail.gmail.com>
-In-Reply-To: <CACT4Y+Zq-1nczM2JH7Sr4mZo84gsCRd83RAwwnHwmap-wCOLTQ@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 9 Jun 2022 20:37:04 +0200
-Message-ID: <CANpmjNNC7ry59OXsJrPMf56Xi63chexaDfnP4t8_4MG7S5ZgCg@mail.gmail.com>
-Subject: Re: [PATCH 1/8] perf/hw_breakpoint: Optimize list of per-task breakpoints
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org,
-        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,95 +79,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 at 18:53, Dmitry Vyukov <dvyukov@google.com> wrote:
+
+On 04.06.22 00:19, Stefano Stabellini wrote:
+
+
+Hello Stefano
+
+Thank you for having a look and sorry for the late response.
+
+> On Tue, 17 May 2022, Oleksandr Tyshchenko wrote:
+>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>
+>> Depends on CONFIG_XEN_UNPOPULATED_ALLOC. If enabled then unpopulated
+>> DMAable (contiguous) pages will be allocated for grant mapping into
+>> instead of ballooning out real RAM pages.
+>>
+>> TODO: Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages()
+>> fails.
+>>
+>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>> ---
+>>   drivers/xen/grant-table.c | 27 +++++++++++++++++++++++++++
+>>   1 file changed, 27 insertions(+)
+>>
+>> diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
+>> index 8ccccac..2bb4392 100644
+>> --- a/drivers/xen/grant-table.c
+>> +++ b/drivers/xen/grant-table.c
+>> @@ -864,6 +864,25 @@ EXPORT_SYMBOL_GPL(gnttab_free_pages);
+>>    */
+>>   int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
+>>   {
+>> +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
+>> +	int ret;
+> This is an alternative implementation of the same function.
+
+Currently, yes.
+
+
+>   If we are
+> going to use #ifdef, then I would #ifdef the entire function, rather
+> than just the body. Otherwise within the function body we can use
+> IS_ENABLED.
+
+
+Good point. Note, there is one missing thing in current patch which is 
+described in TODO.
+
+"Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages() 
+fails."  So I will likely use IS_ENABLED within the function body.
+
+If CONFIG_XEN_UNPOPULATED_ALLOC is enabled then gnttab_dma_alloc_pages() 
+will try to call xen_alloc_unpopulated_dma_pages() the first and if 
+fails then fallback to allocate RAM pages and balloon them out.
+
+One moment is not entirely clear to me. If we use fallback in 
+gnttab_dma_alloc_pages() then we must use fallback in 
+gnttab_dma_free_pages() as well, we cannot use 
+xen_free_unpopulated_dma_pages() for real RAM pages. The question is how 
+to pass this information to the gnttab_dma_free_pages()? The first idea 
+which comes to mind is to add a flag to struct gnttab_dma_alloc_args...
+
+
 >
-> .
-> /On Thu, 9 Jun 2022 at 16:56, Marco Elver <elver@google.com> wrote:
-> > > > On a machine with 256 CPUs, running the recently added perf breakpoint
-> > > > benchmark results in:
-> > > >
-> > > >  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
-> > > >  | # Running 'breakpoint/thread' benchmark:
-> > > >  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
-> > > >  |      Total time: 236.418 [sec]
-> > > >  |
-> > > >  |   123134.794271 usecs/op
-> > > >  |  7880626.833333 usecs/op/cpu
-> > > >
-> > > > The benchmark tests inherited breakpoint perf events across many
-> > > > threads.
-> > > >
-> > > > Looking at a perf profile, we can see that the majority of the time is
-> > > > spent in various hw_breakpoint.c functions, which execute within the
-> > > > 'nr_bp_mutex' critical sections which then results in contention on that
-> > > > mutex as well:
-> > > >
-> > > >     37.27%  [kernel]       [k] osq_lock
-> > > >     34.92%  [kernel]       [k] mutex_spin_on_owner
-> > > >     12.15%  [kernel]       [k] toggle_bp_slot
-> > > >     11.90%  [kernel]       [k] __reserve_bp_slot
-> > > >
-> > > > The culprit here is task_bp_pinned(), which has a runtime complexity of
-> > > > O(#tasks) due to storing all task breakpoints in the same list and
-> > > > iterating through that list looking for a matching task. Clearly, this
-> > > > does not scale to thousands of tasks.
-> > > >
-> > > > While one option would be to make task_struct a breakpoint list node,
-> > > > this would only further bloat task_struct for infrequently used data.
-> > >
-> > > task_struct already has:
-> > >
-> > > #ifdef CONFIG_PERF_EVENTS
-> > >   struct perf_event_context *perf_event_ctxp[perf_nr_task_contexts];
-> > >   struct mutex perf_event_mutex;
-> > >   struct list_head perf_event_list;
-> > > #endif
-> > >
-> > > Wonder if it's possible to use perf_event_mutex instead of the task_sharded_mtx?
-> > > And possibly perf_event_list instead of task_bps_ht? It will contain
-> > > other perf_event types, so we will need to test type as well, but on
-> > > the positive side, we don't need any management of the separate
-> > > container.
-> >
-> > Hmm, yes, I looked at that but then decided against messing the
-> > perf/core internals. The main issue I have with using perf_event_mutex
-> > is that we might interfere with perf/core's locking rules as well as
-> > interfere with other concurrent perf event additions. Using
-> > perf_event_list is very likely a no-go because it requires reworking
-> > perf/core as well.
-> >
-> > I can already hear Peter shouting, but maybe I'm wrong. :-)
+>> +	ret = xen_alloc_unpopulated_dma_pages(args->dev, args->nr_pages,
+>> +			args->pages);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	ret = gnttab_pages_set_private(args->nr_pages, args->pages);
+>> +	if (ret < 0) {
+>> +		gnttab_dma_free_pages(args);
+> it should xen_free_unpopulated_dma_pages ?
+
+Besides calling the xen_free_unpopulated_dma_pages(), we also need to 
+call gnttab_pages_clear_private() here, this is what 
+gnttab_dma_free_pages() is doing.
+
+I can change to call both function instead:
+
+     gnttab_pages_clear_private(args->nr_pages, args->pages);
+     xen_free_unpopulated_dma_pages(args->dev, args->nr_pages, args->pages);
+
+Shall I?
+
+
 >
-> Let's wait for Peter to shout then :)
-> A significant part of this change is having per-task data w/o having
-> per-task data.
 >
-> The current perf-related data in task_struct is already multiple words
-> and it's also not used in lots of production cases.
-> Maybe we could have something like:
+>> +		return ret;
+>> +	}
+>> +
+>> +	args->vaddr = page_to_virt(args->pages[0]);
+>> +	args->dev_bus_addr = page_to_phys(args->pages[0]);
+> There are two things to note here.
 >
->   struct perf_task_data* lazily_allocated_perf_data;
+> The first thing to note is that normally we would call pfn_to_bfn to
+> retrieve the dev_bus_addr of a page because pfn_to_bfn takes into
+> account foreign mappings. However, these are freshly allocated pages
+> without foreign mappings, so page_to_phys/dma should be sufficient.
+
+agree
+
+
 >
-> that's lazily allocated on first use instead of the current
-> perf_event_ctxp/perf_event_mutex/perf_event_list.
-> This way we could both reduce task_size when perf is not used and have
-> more perf-related data (incl breakpoints) when it's used.
+>
+> The second has to do with physical addresses and DMA addresses. The
+> functions are called gnttab_dma_alloc_pages and
+> xen_alloc_unpopulated_dma_pages which make you think we are retrieving a
+> DMA address here. However, to get a DMA address we need to call
+> page_to_dma rather than page_to_phys.
+>
+> page_to_dma takes into account special offsets that some devices have
+> when accessing memory. There are real cases on ARM where the physical
+> address != DMA address, e.g. RPi4.
 
-I don't mind either option, so keeping task_struct bloat in mind, we have:
+I got it. Now I am in doubt whether it would be better to name the API:
 
-  1. rhashtable option, no changes to task_struct.
+xen_alloc_unpopulated_cma_pages()
 
-  2. add the breakpoint mutex + list to task_struct.
+or
 
-  3. add something like hw_breakpoint_task_data* and allocate lazily.
+xen_alloc_unpopulated_contiguous_pages()
 
-  4. (your proposal) move all of perf data into a new struct (+add
-hw_breakpoint things in there) that is lazily allocated.
+What do you think?
 
-I don't think perf is that infrequently used, and I can't estimate
-performance impact, so I don't like #4 too much personally. My
-preferred compromise would be #3, but at the same time I'd rather not
-bloat task_struct even with 8 extra infrequently used bytes. Am I too
-paranoid?
 
-Preferences?
+>
+> However, to call page_to_dma you need to specify as first argument the
+> DMA-capable device that is expected to use those pages for DMA (e.g. an
+> ethernet device or a MMC controller.) While the args->dev we have in
+> gnttab_dma_alloc_pages is the gntdev_miscdev.
+
+agree
+
+As I understand, at this time it is unknown for what exactly device 
+these pages are supposed to be used at the end.
+
+For now, it is only known that these pages to be used by userspace PV 
+backend for grant mappings.
+
+
+>
+> So this interface cannot actually be used to allocate memory that is
+> supposed to be DMA-able by a DMA-capable device, such as an ethernet
+> device.
+
+agree
+
+
+>
+> But I think that should be fine because the memory is meant to be used
+> by a userspace PV backend for grant mappings. If any of those mappings
+> end up being used for actual DMA in the kernel they should go through the
+> drivers/xen/swiotlb-xen.c and xen_phys_to_dma should be called, which
+> ends up calling page_to_dma as appropriate.
+>
+> It would be good to double-check that the above is correct and, if so,
+> maybe add a short in-code comment about it:
+>
+> /*
+>   * These are not actually DMA addresses but regular physical addresses.
+>   * If these pages end up being used in a DMA operation then the
+>   * swiotlb-xen functions are called and xen_phys_to_dma takes care of
+>   * the address translations:
+>   *
+>   * - from gfn to bfn in case of foreign mappings
+>   * - from physical to DMA addresses in case the two are different for a
+>   *   given DMA-mastering device
+>   */
+
+I agree this needs to be re-checked. But, there is one moment here, if 
+userspace PV backend runs in other than Dom0 domain (non 1:1 mapped 
+domain), the xen-swiotlb seems not to be in use then? How to be in this 
+case?
+
+
+>
+>
+>
+>> +	return ret;
+>> +#else
+>>   	unsigned long pfn, start_pfn;
+>>   	size_t size;
+>>   	int i, ret;
+>> @@ -910,6 +929,7 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
+>>   fail:
+>>   	gnttab_dma_free_pages(args);
+>>   	return ret;
+>> +#endif
+>>   }
+>>   EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
+>>   
+>> @@ -919,6 +939,12 @@ EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
+>>    */
+>>   int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
+>>   {
+>> +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
+>> +	gnttab_pages_clear_private(args->nr_pages, args->pages);
+>> +	xen_free_unpopulated_dma_pages(args->dev, args->nr_pages, args->pages);
+>> +
+>> +	return 0;
+>> +#else
+>>   	size_t size;
+>>   	int i, ret;
+>>   
+>> @@ -946,6 +972,7 @@ int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
+>>   		dma_free_wc(args->dev, size,
+>>   			    args->vaddr, args->dev_bus_addr);
+>>   	return ret;
+>> +#endif
+>>   }
+>>   EXPORT_SYMBOL_GPL(gnttab_dma_free_pages);
+>>   #endif
+>> -- 
+>> 2.7.4
+>>
+-- 
+Regards,
+
+Oleksandr Tyshchenko
+

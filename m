@@ -2,89 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C343954554C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3997154554F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240725AbiFIUEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 16:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
+        id S240770AbiFIUHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 16:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235428AbiFIUEs (ORCPT
+        with ESMTP id S232983AbiFIUHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:04:48 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E8A5253F;
-        Thu,  9 Jun 2022 13:04:47 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id p69so4492746iod.0;
-        Thu, 09 Jun 2022 13:04:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aYLB3MXMG/zUWxx6YIU5grgpq0m+C2J/TptDhmwSbzU=;
-        b=Duy7Sqd9LkLZ4x1Capr+kGijZeZloVHKmqXp4sEITfSM3o+gT0h5FEK2pB/zhSYHAY
-         1mVQiZ555SyO45bH3vJ5LDM0garygWQ5l+J6rpVxtW8Ea/I6PoIQXO5qieYu1AjCuuXl
-         m0QTbkz6uQxqzW9K6PmljvsecxEUFTgdhCsdKvO63SmD7ygiN7Dpuz318GiNgsgRhEep
-         bdSkZNFpau6eohuI4d/AH6xfkMOXMD+7lFlgvcglmaGBp1p9ssQz95abEnj8TiTsuT5d
-         moS3fI27LdFwlf98zAjTb75Ktu1f4Ww39Yn0+W2yb5j1c48LThej7VEbKd3TJeq3ewDL
-         8kTw==
-X-Gm-Message-State: AOAM531RHYlNzMHEWclQqIOtwYf7V1TAKDpT2NVtOszmB+bdZOFyh/Fo
-        myIxJWx5JGDZgjHo44iBkg==
-X-Google-Smtp-Source: ABdhPJzPzwcZRopSbyq0oyqhcTeySTRI6+hP54iIEiP9HuD2LWBkyBnv3X+aT3kaJHFPyTFS7p3WQg==
-X-Received: by 2002:a5d:9818:0:b0:65b:ae2:863e with SMTP id a24-20020a5d9818000000b0065b0ae2863emr19266534iol.31.1654805086533;
-        Thu, 09 Jun 2022 13:04:46 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id s8-20020a92ae08000000b002d149ec2606sm10731012ilh.65.2022.06.09.13.04.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 13:04:46 -0700 (PDT)
-Received: (nullmailer pid 14636 invoked by uid 1000);
-        Thu, 09 Jun 2022 20:04:44 -0000
-Date:   Thu, 9 Jun 2022 14:04:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Dan Murphy <dmurphy@ti.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next 1/3] dt-bindings: dp83867: add binding for
- io_impedance_ctrl nvmem cell
-Message-ID: <20220609200444.GA14557-robh@kernel.org>
-References: <20220606202220.1670714-1-linux@rasmusvillemoes.dk>
- <20220606202220.1670714-2-linux@rasmusvillemoes.dk>
+        Thu, 9 Jun 2022 16:07:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5925EA890;
+        Thu,  9 Jun 2022 13:07:02 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.172])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 394FD66016A4;
+        Thu,  9 Jun 2022 21:07:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654805221;
+        bh=uKKUfNmIi+Zd1mcPoZ1earm4WK5quuiscVKXFqUEUkg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E7CdeNVQb6vu/ZiCBKU3AEB60L3/CfBegAnAoA+d96NEx+VMlqWcAvuXMQvzlDZLF
+         0S1N/pd/qOKYN4mNrqkI9nhEKXg6CaOMqwUKGeDqNWWx4BHSgxQQuhCSW8wTHG1n1L
+         3+7oxdq2SMLO+OUX7sSaRloc7vRR0q4Ygu0zV6PzagtFs9yBjqusrfpeviqDC0Xwz9
+         MXzaToHkoAtQmy/dasUMggXFfhaeG0V3XnV21g8SYZ1ZJsmNmWa0dywjQSgdQQI/A1
+         8NJO+WgdrX0DOD8VebXStrn8yO/870yX+v/b57m4L+DvNHwR3H88lKlk8RA6qV0b3z
+         9+Ef+vyUL7ZuA==
+Received: by mercury (Postfix, from userid 1000)
+        id BF4F610605B9; Thu,  9 Jun 2022 22:06:58 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 22:06:58 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] power: supply: cros_peripheral: Use struct_size()
+ helper in kzalloc()
+Message-ID: <20220609200658.52gkhfmyxlo7m273@mercury.elektranox.org>
+References: <20220607150344.30669-1-xiaohuizhang@ruc.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7vwcz63s2insf2fj"
 Content-Disposition: inline
-In-Reply-To: <20220606202220.1670714-2-linux@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220607150344.30669-1-xiaohuizhang@ruc.edu.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Jun 2022 22:22:18 +0200, Rasmus Villemoes wrote:
-> We have a board where measurements indicate that the current three
-> options - leaving IO_IMPEDANCE_CTRL at the (factory calibrated) reset
-> value or using one of the two boolean properties to set it to the
-> min/max value - are too coarse.
-> 
-> There is no documented mapping from the 32 possible values of the
-> IO_IMPEDANCE_CTRL field to values in the range 35-70 ohms, and the
-> exact mapping is likely to vary from chip to chip. So add a DT binding
-> for an nvmem cell which can be populated during production with a
-> value suitable for each specific board.
-> 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
->  .../devicetree/bindings/net/ti,dp83867.yaml    | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--7vwcz63s2insf2fj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Tue, Jun 07, 2022 at 11:03:44PM +0800, Xiaohui Zhang wrote:
+> Similar to the handling of cros_usbpd_charger_ec_command in commit 441d38=
+c60fbe
+> ("power: supply: cros_usbpd: Use struct_size() helper in kzalloc()"),
+> we thought a patch might be needed here as well.
+>=20
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows that,
+> in the worst scenario, could lead to heap overflows.
+>=20
+> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/cros_peripheral_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/pow=
+er/supply/cros_peripheral_charger.c
+> index 9fe6d826148d..1379afd9698d 100644
+> --- a/drivers/power/supply/cros_peripheral_charger.c
+> +++ b/drivers/power/supply/cros_peripheral_charger.c
+> @@ -63,7 +63,7 @@ static int cros_pchg_ec_command(const struct charger_da=
+ta *charger,
+>  	struct cros_ec_command *msg;
+>  	int ret;
+> =20
+> -	msg =3D kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
+> +	msg =3D kzalloc(struct_size(msg, data, max(outsize, insize)), GFP_KERNE=
+L);
+>  	if (!msg)
+>  		return -ENOMEM;
+> =20
+> --=20
+> 2.17.1
+>=20
+
+--7vwcz63s2insf2fj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiUuIACgkQ2O7X88g7
++pqBrQ/+NpRAu9t1a5kNmFxbt4E+NHasjLyQb4cX2IBSfj2ZAfuHH0NJWQpCRV7r
+LZHqIQhXw33vJrrF8wG7ae5/SEQyEaWi1hpanbOyGE0G5xU5np6+aaBABTa32QY3
+skiJcBlBAeLnHsV4ntCyRmNnWB00yHOMJYISm4/jJITgiiecq5F25DPPADAtTJow
+rL8akBBHzC/iz7uilTy13vuoGJrPjqE1jEduG1XA/HK6up/sxk8eqqcZoClsH8A2
+XFzkIiU387xMf+szrm/rlDFZvs4f1N5B3ai36gZNF2rgmDGFHE9dHJXQi6TJwHl+
+NQc/TOtLnfGYOAV+WD2nKr40qKBT8ayfMx+Zdkbcfl6LXFHvHePLkClVipDyBMcT
+4QxyX69QHKI64yItweXDqeecyonLP4GxgtkRJtoo/TkklTcRvzLSy3pvrO/IDAlP
+GsrH9X7+Du/XPjytQALUziiwqEXFNRcSt17XMp3n+4uuMCyPuzLLzHYfMaZseKK9
+04Vm1Zjt1spVFUijl9HgAGarlrNQ9cqEeOALnu/FxPAf1DNojZN1p8iH6e6UHqb9
+GHPNkvc5PMWHEmba6Sx7NFSw8l3EMsXwCp85W4v9E6M6oWA11wRXwnbiksVrHOsx
+CS6eo7tyQp07kcfvedHIGZS7RNhVh4nAEFrd4UOT6s+mNAOH1nI=
+=tccd
+-----END PGP SIGNATURE-----
+
+--7vwcz63s2insf2fj--

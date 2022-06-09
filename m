@@ -2,144 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CF254572F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A16545725
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345666AbiFIWTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
+        id S1345655AbiFIWTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345597AbiFIWTW (ORCPT
+        with ESMTP id S1345680AbiFIWTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:19:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B7C457BC;
-        Thu,  9 Jun 2022 15:19:20 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 259LqV4d021237;
-        Thu, 9 Jun 2022 22:18:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=5HFels0siO9Bs1KgO2JhJGYpJaNAG8PeqPH7KCpQZ8I=;
- b=iAzYl3HGbDPjGXTh3OP2TMtL8+E00E4alPACUjc12mHEx1F0g4Wav7UU13WA58TpKEN/
- v6svbQGfFE5DAdCcgmlNFzKBE+Eg000u0UbngUGaRd/c6ooO0uKyt8bL4tWzFKvEH80x
- w3pe1l2FoKqhiHzfDe0FNnF7eEOGiyQ//lcjABbhVvN3CyO8iJL8P/m9rSQR2RFK4Jqf
- ZvD55hb1u8ldwCuT+DqIv4ppav4SCUQUf3IjuBlPaM7mQLxC4GlYpocdXVXrVmdKSxG1
- Io++Oyg5UxHMfTpYFdaQswQqtjpC6/7M3jgumv2ROuP29D2kSIu3MfU8vvZRNRU/0hjV RA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gks5cgctx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 22:18:51 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 259MD8WL005156;
-        Thu, 9 Jun 2022 22:18:51 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gks5cgct7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 22:18:51 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 259M6fwY027968;
-        Thu, 9 Jun 2022 22:18:49 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gfy19ff4p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 22:18:49 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 259MIkPq9175434
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Jun 2022 22:18:46 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEFFC4C044;
-        Thu,  9 Jun 2022 22:18:46 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD1FF4C040;
-        Thu,  9 Jun 2022 22:18:44 +0000 (GMT)
-Received: from sig-9-65-64-6.ibm.com (unknown [9.65.64.6])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Jun 2022 22:18:44 +0000 (GMT)
-Message-ID: <5db507747b2be22499e7357ce65f1800b36e1de4.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 2/4] kexec, KEYS: make the code in
- bzImage64_verify_sig generic
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Chun-Yi Lee <jlee@suse.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 09 Jun 2022 18:18:44 -0400
-In-Reply-To: <20220512070123.29486-3-coxu@redhat.com>
-References: <20220512070123.29486-1-coxu@redhat.com>
-         <20220512070123.29486-3-coxu@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7wDBaP3m-VYgn90ZlORpX0j8Rd3YzlsY
-X-Proofpoint-GUID: BG6JqiSb9BIi2R873tnMtsXFSjA4dDlA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-09_15,2022-06-09_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 clxscore=1011 adultscore=0 mlxscore=0 mlxlogscore=781
- impostorscore=0 bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206090082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Jun 2022 18:19:18 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A91D1FA
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 15:19:08 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f9so10872704plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 15:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YULgola7K497MBlM6Pfvzbon5/Nm8Tu+pAooiIC9hlw=;
+        b=GlOpLLlbuCZm916o3oGh2cF5PooLoBW5W20ClJJY90wE155D+yME0t7SkksQwN1lRK
+         aumrDVpwKzc6OGHzg4M9BgL4PK3QxQU12CxsoOhKevC8xc/dYTRp9yCp7w4GyWAY88U8
+         +uoBt+wuOAE+F+435zyJV8EBiC+pqzXBy7GJs8JoinzdN1aS/QuHFQawfW3qNj6LkWEW
+         FvuX+WgVYvcbCkN9EKtLlGQ5BFohie4ujmlYN31DcQE9CHjkLPD0dPh5PteM/5ZrV6rl
+         uuZxeYfP6Nn4Al3uNNLMf/US+ZOiRtmTdfTx6rjEPjwzoeL1x17S+hgceHkjMbY3aKA4
+         PckA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YULgola7K497MBlM6Pfvzbon5/Nm8Tu+pAooiIC9hlw=;
+        b=8NO4B5uHU6YQMEnlJmTq+qBmiMHi5qVNN5tE/8vtDCzqLZTY+ve2rAXdNfgjdvbA32
+         MIyiHZXzr6+HxePrrQ7CtoQB4Sy9875eXrp4MBzX+ZVEP7MrV+dx1YdIdMix2kpB2BYJ
+         fCwQHpyUU6HivbNAve/S0oqEV7KkjQPfwfw3WhUpz0nmbWfFyK36MHllgaqaPUCaZGFJ
+         gfUEoYjXb81BJqRDwoW/+bIKnSZpT205DR0zZb/ZyZfdlgmrzGtVCMRlqLvJ/EnkW9uz
+         gB5AkGfuCzF8cP/DGWUtZ4TUgMhRSXqdQ54EjG75at8AH5zAlaTUWRK24DVcyE6kaXSo
+         bYqA==
+X-Gm-Message-State: AOAM5328uHL2p1OHZTiVCDGYKXDlyKTBZ2izpLRtm3dDtXS6TKpCYFFH
+        3fwT2lZcIFyV8Dcvn0Tk5cLF6g==
+X-Google-Smtp-Source: ABdhPJzVrvk6q78nh7Ue2eeMbkCIjL2IwjqmzrEUkajeU7gsKvrNiyqUTY+0T0A7h07wuRPLb8B5Lw==
+X-Received: by 2002:a17:902:ef93:b0:163:de9e:edf8 with SMTP id iz19-20020a170902ef9300b00163de9eedf8mr41749061plb.151.1654813147192;
+        Thu, 09 Jun 2022 15:19:07 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q8-20020a170902eb8800b00167804a044fsm8631422plg.56.2022.06.09.15.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 15:19:06 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 22:19:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 3/6] KVM: x86: wean in-kernel PIO from vcpu->arch.pio*
+Message-ID: <YqJx1/26XGLBX3AH@google.com>
+References: <20220608121253.867333-1-pbonzini@redhat.com>
+ <20220608121253.867333-4-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608121253.867333-4-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Coiby,
+On Wed, Jun 08, 2022, Paolo Bonzini wrote:
+>  static void complete_emulator_pio_in(struct kvm_vcpu *vcpu, void *val)
+> @@ -7482,16 +7486,11 @@ static int emulator_pio_in(struct kvm_vcpu *vcpu, int size,
+>  		 * shenanigans as KVM doesn't support modifying the rep count,
+>  		 * and the emulator ensures @count doesn't overflow the buffer.
+>  		 */
+> +		complete_emulator_pio_in(vcpu, val);
+> +		return 1;
+>  	} else {
+> -		int r = __emulator_pio_in(vcpu, size, port, count);
+> -		if (!r)
+> -			return r;
+> -
+> -		/* Results already available, fall through.  */
+> +		return __emulator_pio_in(vcpu, size, port, val, count);
 
-On Thu, 2022-05-12 at 15:01 +0800, Coiby Xu wrote:
-> commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
-> signature verify") adds platform keyring support on x86 kexec but not
-> arm64.
-> 
-> The code in bzImage64_verify_sig makes use of system keyrings including
-> .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
-> verify signed kernel image as PE file. Make it generic so both x86_64
-> and arm64 can use it.
+Any objections to not using an "else"?  I.e.
 
-^uses the keys on the .builtin_trusted_keys, .machine, if configured
-and enabled, .secondary_trusted_keys, also if configured, and .platform
-keyrings to verify the signed kernel image as PE file. 
+	if (vcpu->arch.pio.count) {
+		/*
+		 * Complete a previous iteration that required userspace I/O.
+		 * Note, @count isn't guaranteed to match pio.count as userspace
+		 * can modify ECX before rerunning the vCPU.  Ignore any such
+		 * shenanigans as KVM doesn't support modifying the rep count,
+		 * and the emulator ensures @count doesn't overflow the buffer.
+		 */
+		complete_emulator_pio_in(vcpu, val);
+		return 1;
+	}
+	return __emulator_pio_in(vcpu, size, port, val, count);
 
-> 
-> @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
->  				 const Elf_Shdr *relsec,
->  				 const Elf_Shdr *symtab);
->  int arch_kimage_file_post_load_cleanup(struct kimage *image);
-> +#ifdef CONFIG_KEXEC_SIG
-> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> +int kexec_kernel_verify_pe_sig(const char *kernel,
-> +				    unsigned long kernel_len);
-
-Please join this line with the previous one.
-
-> +#endif
-> +#endif
->  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  	}
+> -
+> -	complete_emulator_pio_in(vcpu, val);
+> -	return 1;
+>  }
 >  
->  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+>  static int emulator_pio_in_emulated(struct x86_emulate_ctxt *ctxt,
+> @@ -7506,14 +7505,8 @@ static int emulator_pio_out(struct kvm_vcpu *vcpu, int size,
+>  			    unsigned short port, const void *val,
+>  			    unsigned int count)
+>  {
+> -	int ret;
+> -
+>  	trace_kvm_pio(KVM_PIO_OUT, port, size, count, val);
+> -	ret = emulator_pio_in_out(vcpu, size, port, (void *)val, count, false);
+> -	if (ret)
+> -                vcpu->arch.pio.count = 0;
+> -
+> -        return ret;
+> +	return emulator_pio_in_out(vcpu, size, port, (void *)val, count, false);
+>  }
+>  
+>  static int emulator_pio_out_emulated(struct x86_emulate_ctxt *ctxt,
+> @@ -13064,20 +13057,20 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+>  static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
+>  			  unsigned int port);
+>  
+> -static void advance_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
+> +static void advance_sev_es_emulated_ins(struct kvm_vcpu *vcpu, unsigned count, int size)
+>  {
+> -	unsigned count = vcpu->arch.pio.count;
+> -	complete_emulator_pio_in(vcpu, vcpu->arch.sev_pio_data);
+>  	vcpu->arch.sev_pio_count -= count;
+> -	vcpu->arch.sev_pio_data += count * vcpu->arch.pio.size;
+> +	vcpu->arch.sev_pio_data += count * size;
+>  }
+>  
+>  static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
+>  {
+> +	unsigned count = vcpu->arch.pio.count;
 
-thanks,
+Opportunistically use an "unsigned int" if you spin another version?
 
-Mimi
+>  	int size = vcpu->arch.pio.size;
+>  	int port = vcpu->arch.pio.port;
+>  
+> -	advance_sev_es_emulated_ins(vcpu);
+> +	complete_emulator_pio_in(vcpu, vcpu->arch.sev_pio_data);
+> +	advance_sev_es_emulated_ins(vcpu, count, size);
 
+Eww.  The dependency between vcpu->arch.pio.count and complete_emulator_pio_in()
+is nasty.  Can you add a comment above count to reduce the likelihood of someone
+using vcpu->arch.pio.count directly here instead of making a snapshot?
+
+	/*
+	 * Snapshot the count before completing userspace I/O, which will
+	 * consume the userspace data and thus clear vcpu->arch.pio.count.
+	 */
+	unsigned int count = vcpu->arch.pio.count;
+
+>  	if (vcpu->arch.sev_pio_count)
+>  		return kvm_sev_es_ins(vcpu, size, port);
+>  	return 1;
+> @@ -13089,11 +13082,11 @@ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
+>  	for (;;) {
+>  		unsigned int count =
+>  			min_t(unsigned int, PAGE_SIZE / size, vcpu->arch.sev_pio_count);
+> -		if (!__emulator_pio_in(vcpu, size, port, count))
+> +		if (!__emulator_pio_in(vcpu, size, port, vcpu->arch.sev_pio_data, count))
+>  			break;
+>  
+>  		/* Emulation done by the kernel.  */
+> -		advance_sev_es_emulated_ins(vcpu);
+> +		advance_sev_es_emulated_ins(vcpu, count, size);
+>  		if (!vcpu->arch.sev_pio_count)
+>  			return 1;
+>  	}
+> -- 
+> 2.31.1
+> 
+> 

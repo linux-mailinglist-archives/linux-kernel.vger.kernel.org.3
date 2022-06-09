@@ -2,178 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6765D5445F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A40F5445F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241322AbiFIIci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S241581AbiFIIdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241715AbiFIIcB (ORCPT
+        with ESMTP id S241879AbiFIIcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:32:01 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811CD1915F5;
-        Thu,  9 Jun 2022 01:31:11 -0700 (PDT)
-X-UUID: 6660f43d258840179452c6ba1bd48469-20220609
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:8d2ad28d-98c5-4792-97f0-f0705005eee0,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:20
-X-CID-META: VersionHash:2a19b09,CLOUDID:892ac67e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 6660f43d258840179452c6ba1bd48469-20220609
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 330506934; Thu, 09 Jun 2022 16:31:06 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 9 Jun 2022 16:31:05 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Thu, 9 Jun 2022 16:31:05 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        YC Hung <yc.hung@mediatek.com>,
-        Curtis Malainey <cujomalainey@chromium.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2 3/3] dt-bindings: dsp: mediatek: add mt8186 dsp document
-Date:   Thu, 9 Jun 2022 16:31:01 +0800
-Message-ID: <20220609083101.24195-4-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220609083101.24195-1-tinghan.shen@mediatek.com>
-References: <20220609083101.24195-1-tinghan.shen@mediatek.com>
+        Thu, 9 Jun 2022 04:32:35 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C6419CB57
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:31:44 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id w13-20020a17090a780d00b001e8961b355dso8872997pjk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sS4MgQu//5lSEEE1q6KXTrd1V5xl/lXvZSVVghs7MXw=;
+        b=A6fON0R19AwVP4siIpMfsE0jiVUbdZTxhdZgGuDcnHo5MuncqBIVRWqZEOYy8GRVLH
+         jMEW/8GQXhBtMn8nhODuLfSu9cMIIB6dnqoNFXW5OpWxMKcdCjkIV1rnO4kY5Lkxvaeh
+         c6+9AUkHIYE7RrSnxcSDbZ79NrmHVCajSlzPZrpRbvThDImtRXxR4EVDXRLD1DvB1mil
+         A1Iq5lX4+7EX1b4I6a2gttHd6IPPCLjQ0iZJKaeq+2Q25eaZXnkvfIQCmVFug3ZypDED
+         0HBgQs60DNdoL73hElE9UY+n9VzstUa3KBhTvcaaxDrPcnam1hO3uxoiuvATM734zq+0
+         GWig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sS4MgQu//5lSEEE1q6KXTrd1V5xl/lXvZSVVghs7MXw=;
+        b=JVHzRiqkayFx3O9E2CccSPZCsSbtFBzYz2ZuzNKtxaSbYY0qib2j7ChuQGTdFALhf4
+         XqOgskwCQh6G/OgpQz3B+S/aNUP5PHhoqjCEiYAc2NyNIHmx6upuAtNK7McavtvE58JA
+         GRdKf+9DDyqGAaroCT4guOmRw9PRxqNsIdLffbUYgkoV+/ep3CbnYk6iVqCPmY6Huing
+         gMU4FcYGow22D/6aze1ziYY50+rdzlNFYBBiHHSqbKpkXkXU1jGLWkqKtVmpBdtSz3eB
+         tzBGCCrsovG5fe9RKBUY0z3yYVTS50uOxt6pnzUJjeCbXAsLTefwWqeOi+vEn0lDPWiJ
+         o2aA==
+X-Gm-Message-State: AOAM5323Ay/SvbQAlsyr7qMM28wMk5RB8pk6ll8sSqMAtSiZYunxCXOl
+        qBq+adGyxWE3Zo0MV8lLVw==
+X-Google-Smtp-Source: ABdhPJyMKPE0SMsVlrskRJxIXsELInHCqg+E38JgCSBPo303Em9YKygyvCF4vs7WaLSaQ7dn0RwOrg==
+X-Received: by 2002:a17:902:ec88:b0:166:33fe:a60c with SMTP id x8-20020a170902ec8800b0016633fea60cmr38199895plg.157.1654763503831;
+        Thu, 09 Jun 2022 01:31:43 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id c11-20020aa7880b000000b00518e1251197sm17074597pfo.148.2022.06.09.01.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 01:31:43 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org, fseidel@suse.de
+Cc:     linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] tty: nozomi: Return an error when failing to create the sysfs
+Date:   Thu,  9 Jun 2022 16:31:33 +0800
+Message-Id: <20220609083133.4120738-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds mt8186 dsp document. The dsp is used for Sound Open
-Firmware driver node. It includes registers, clocks, memory regions,
-and mailbox for dsp.
+The driver does not handle the error of the creation of sysfs, resulting
+in duplicate file names being created.
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+The following log can reveal it:
+
+[   52.907211] sysfs: cannot create duplicate filename '/devices/pci0000:00/0000:00:05.0/card_type'
+[   52.907224] Call Trace:
+[   52.907269]  sysfs_add_file_mode_ns+0x23f/0x2b0
+[   52.907281]  sysfs_create_file_ns+0xe9/0x170
+[   52.907321]  nozomi_card_init+0x97f/0x12c0 [nozomi]
+
+Fix this bug by returning an error when failing to create the sysfs.
+
+Fixes: 20fd1e3bea55 ("nozomi driver")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 ---
- .../bindings/dsp/mediatek,mt8186-dsp.yaml     | 91 +++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+ drivers/tty/nozomi.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-new file mode 100644
-index 000000000000..33c78f89d296
---- /dev/null
-+++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-@@ -0,0 +1,91 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/dsp/mediatek,mt8186-dsp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/tty/nozomi.c b/drivers/tty/nozomi.c
+index 0454c78deee6..d0ad1b9898f5 100644
+--- a/drivers/tty/nozomi.c
++++ b/drivers/tty/nozomi.c
+@@ -1282,14 +1282,26 @@ static ssize_t open_ttys_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(open_ttys);
+ 
+-static void make_sysfs_files(struct nozomi *dc)
++static int make_sysfs_files(struct nozomi *dc)
+ {
+-	if (device_create_file(&dc->pdev->dev, &dev_attr_card_type))
++	int err;
 +
-+title: MediaTek mt8186 DSP core
++	err = device_create_file(&dc->pdev->dev, &dev_attr_card_type);
++	if (err) {
+ 		dev_err(&dc->pdev->dev,
+ 			"Could not create sysfs file for card_type\n");
+-	if (device_create_file(&dc->pdev->dev, &dev_attr_open_ttys))
++		return err;
++	}
 +
-+maintainers:
-+  - Tinghan Shen <tinghan.shen@mediatek.com>
++	err = device_create_file(&dc->pdev->dev, &dev_attr_open_ttys);
++	if (err) {
++		device_remove_file(&dc->pdev->dev, &dev_attr_card_type);
+ 		dev_err(&dc->pdev->dev,
+ 			"Could not create sysfs file for open_ttys\n");
++		return err;
++	}
 +
-+description: |
-+  MediaTek mt8186 SoC contains a DSP core used for
-+  advanced pre- and post- audio processing.
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt8186-dsp
-+
-+  reg:
-+    items:
-+      - description: Address and size of the DSP config registers
-+      - description: Address and size of the DSP SRAM
-+      - description: Address and size of the DSP secure registers
-+      - description: Address and size of the DSP bus registers
-+
-+  reg-names:
-+    items:
-+      - const: cfg
-+      - const: sram
-+      - const: sec
-+      - const: bus
-+
-+  clocks:
-+    items:
-+      - description: mux for audio dsp clock
-+      - description: mux for audio dsp local bus
-+
-+  clock-names:
-+    items:
-+      - const: audiodsp
-+      - const: adsp_bus
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  mboxes:
-+    items:
-+      - description: ipc reply between host and audio DSP.
-+      - description: ipc request between host and audio DSP.
-+
-+  mbox-names:
-+    items:
-+      - const: rep
-+      - const: req
-+
-+  memory-region:
-+    items:
-+      - description: dma buffer between host and DSP.
-+      - description: DSP system memory.
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - clock-names
-+  - power-domains
-+  - mbox-names
-+  - mboxes
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8186-clk.h>
-+    dsp@10680000 {
-+        compatible = "mediatek,mt8186-dsp";
-+        reg = <0x10680000 0x2000>,
-+              <0x10800000 0x100000>,
-+              <0x1068b000 0x100>,
-+              <0x1068f000 0x1000>;
-+        reg-names = "cfg", "sram", "sec", "bus";
-+        clocks = <&topckgen CLK_TOP_AUDIODSP>,
-+                 <&topckgen CLK_TOP_ADSP_BUS>;
-+        clock-names = "audiodsp",
-+                      "adsp_bus";
-+        power-domains = <&spm 6>;
-+        mbox-names = "rep", "req";
-+        mboxes = <&adsp_mailbox0>, <&adsp_mailbox1>;
-+    };
++	return 0;
+ }
+ 
+ static void remove_sysfs_files(struct nozomi *dc)
+@@ -1383,7 +1395,9 @@ static int nozomi_card_init(struct pci_dev *pdev,
+ 
+ 	DBG1("base_addr: %p", dc->base_addr);
+ 
+-	make_sysfs_files(dc);
++	ret = make_sysfs_files(dc);
++	if (ret)
++		goto err_free_irq;
+ 
+ 	dc->index_start = ndev_idx * MAX_PORT;
+ 	ndevs[ndev_idx] = dc;
+@@ -1420,6 +1434,8 @@ static int nozomi_card_init(struct pci_dev *pdev,
+ 		tty_unregister_device(ntty_driver, dc->index_start + i);
+ 		tty_port_destroy(&dc->port[i].port);
+ 	}
++	remove_sysfs_files(dc);
++err_free_irq:
+ 	free_irq(pdev->irq, dc);
+ err_free_all_kfifo:
+ 	i = MAX_PORT;
 -- 
-2.18.0
+2.25.1
 

@@ -2,141 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1115545713
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CF254572F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 00:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345566AbiFIWSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 18:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S1345666AbiFIWTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 18:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbiFIWR4 (ORCPT
+        with ESMTP id S1345597AbiFIWTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:17:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13191CC1;
-        Thu,  9 Jun 2022 15:17:54 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.172])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 846836601752;
-        Thu,  9 Jun 2022 23:17:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654813073;
-        bh=MDbdaDhtE3Q+wc17/NHVK22+YjezJBLMU2iTMKmf188=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RFBQ7SbMoeV0jgvXumEArTw8ahybc5BKeUgwJmN5A41Q65wEhOc6+jbewnEnRJhin
-         xeSkLxzN7z5ef95PXfxXFMhyQ0qbAa3Q7a0nJCiqf/U5stDRToFJaqTZsecSgX6sGe
-         0OhBTPIXHcb2raI7tfU5nrmQ3piSrq9guDcikE9suMJ3SYdo/yOkftqtguOj38kyxX
-         K5ouKuhIjpj/6Rp4FZ4ef3ysT+4XEA7rM/SfkkXyDGAOjwvFkbygOfEKwuSsw46Sfa
-         /H17V88uI6cpjOhasQhdvBYv4+zvIHkKQGHmkiwxI1L/5rwTvGci180DG+xhN54Oij
-         D3vpJj6Ztf6gA==
-Received: by mercury (Postfix, from userid 1000)
-        id A8A0010605B9; Fri, 10 Jun 2022 00:17:51 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 00:17:51 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@google.com,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Subject: Re: [RESEND 2/2] power_supply: Use of-thermal cdev registration API
-Message-ID: <20220609221751.wjgazwamzodejfxt@mercury.elektranox.org>
-References: <20220531183054.6476-1-quic_manafm@quicinc.com>
- <20220531183054.6476-2-quic_manafm@quicinc.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="koppcha23r66m7mj"
-Content-Disposition: inline
-In-Reply-To: <20220531183054.6476-2-quic_manafm@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 9 Jun 2022 18:19:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B7C457BC;
+        Thu,  9 Jun 2022 15:19:20 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 259LqV4d021237;
+        Thu, 9 Jun 2022 22:18:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=5HFels0siO9Bs1KgO2JhJGYpJaNAG8PeqPH7KCpQZ8I=;
+ b=iAzYl3HGbDPjGXTh3OP2TMtL8+E00E4alPACUjc12mHEx1F0g4Wav7UU13WA58TpKEN/
+ v6svbQGfFE5DAdCcgmlNFzKBE+Eg000u0UbngUGaRd/c6ooO0uKyt8bL4tWzFKvEH80x
+ w3pe1l2FoKqhiHzfDe0FNnF7eEOGiyQ//lcjABbhVvN3CyO8iJL8P/m9rSQR2RFK4Jqf
+ ZvD55hb1u8ldwCuT+DqIv4ppav4SCUQUf3IjuBlPaM7mQLxC4GlYpocdXVXrVmdKSxG1
+ Io++Oyg5UxHMfTpYFdaQswQqtjpC6/7M3jgumv2ROuP29D2kSIu3MfU8vvZRNRU/0hjV RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gks5cgctx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 22:18:51 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 259MD8WL005156;
+        Thu, 9 Jun 2022 22:18:51 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gks5cgct7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 22:18:51 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 259M6fwY027968;
+        Thu, 9 Jun 2022 22:18:49 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gfy19ff4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 22:18:49 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 259MIkPq9175434
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Jun 2022 22:18:46 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BEFFC4C044;
+        Thu,  9 Jun 2022 22:18:46 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BD1FF4C040;
+        Thu,  9 Jun 2022 22:18:44 +0000 (GMT)
+Received: from sig-9-65-64-6.ibm.com (unknown [9.65.64.6])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Jun 2022 22:18:44 +0000 (GMT)
+Message-ID: <5db507747b2be22499e7357ce65f1800b36e1de4.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 2/4] kexec, KEYS: make the code in
+ bzImage64_verify_sig generic
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Chun-Yi Lee <jlee@suse.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 09 Jun 2022 18:18:44 -0400
+In-Reply-To: <20220512070123.29486-3-coxu@redhat.com>
+References: <20220512070123.29486-1-coxu@redhat.com>
+         <20220512070123.29486-3-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7wDBaP3m-VYgn90ZlORpX0j8Rd3YzlsY
+X-Proofpoint-GUID: BG6JqiSb9BIi2R873tnMtsXFSjA4dDlA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-09_15,2022-06-09_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 clxscore=1011 adultscore=0 mlxscore=0 mlxlogscore=781
+ impostorscore=0 bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206090082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Coiby,
 
---koppcha23r66m7mj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2022-05-12 at 15:01 +0800, Coiby Xu wrote:
+> commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
+> signature verify") adds platform keyring support on x86 kexec but not
+> arm64.
+> 
+> The code in bzImage64_verify_sig makes use of system keyrings including
+> .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
+> verify signed kernel image as PE file. Make it generic so both x86_64
+> and arm64 can use it.
 
-Hi,
+^uses the keys on the .builtin_trusted_keys, .machine, if configured
+and enabled, .secondary_trusted_keys, also if configured, and .platform
+keyrings to verify the signed kernel image as PE file. 
 
-On Wed, Jun 01, 2022 at 12:00:54AM +0530, Manaf Meethalavalappu Pallikunhi =
-wrote:
-> With thermal frameworks of-thermal interface, thermal zone parameters can
-> be defined in devicetree. This includes cooling device mitigation levels
-> for a thermal zone. To take advantage of this, cooling device should use
-> the thermal_of_cooling_device_register API to register a cooling device.
->=20
-> Use thermal_of_cooling_device_register API to register the power supply
-> cooling device. This enables power supply cooling device be included in t=
-he
-> thermal zone parameter in devicetree.
->=20
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> ---
->
->  drivers/power/supply/power_supply_core.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 74623c4977db..4593450920a4 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1157,9 +1157,15 @@ static int psy_register_cooler(struct power_supply=
- *psy)
->  	for (i =3D 0; i < psy->desc->num_properties; i++) {
->  		if (psy->desc->properties[i] =3D=3D
->  				POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT) {
-> -			psy->tcd =3D thermal_cooling_device_register(
-> -							(char *)psy->desc->name,
-> -							psy, &psy_tcd_ops);
-> +			if (psy->dev.parent)
-> +				psy->tcd =3D thermal_of_cooling_device_register(
-> +						dev_of_node(psy->dev.parent),
-> +						(char *)psy->desc->name,
-> +						psy, &psy_tcd_ops);
+> 
+> @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 const Elf_Shdr *relsec,
+>  				 const Elf_Shdr *symtab);
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> +#ifdef CONFIG_KEXEC_SIG
+> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> +int kexec_kernel_verify_pe_sig(const char *kernel,
+> +				    unsigned long kernel_len);
 
-if (psy->of_node)
-    psy->tcd =3D thermal_of_cooling_device_register(psy->of_node, ...);
-else
-    psy->tcd =3D thermal_cooling_device_register(...);
+Please join this line with the previous one.
 
---- Sebastian
+> +#endif
+> +#endif
+>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  
+>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
 
-> +			else
-> +				psy->tcd =3D thermal_cooling_device_register(
-> +						(char *)psy->desc->name,
-> +						psy, &psy_tcd_ops);
->  			return PTR_ERR_OR_ZERO(psy->tcd);
->  		}
->  	}
+thanks,
 
---koppcha23r66m7mj
-Content-Type: application/pgp-signature; name="signature.asc"
+Mimi
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKicY8ACgkQ2O7X88g7
-+ppnJA/+KPGz3XV7XmAFhZKzeHyCLLToNsB3415VF1viueQ8uXD1lgE3KDXhBPiY
-H1TC4phj8lzNDNJekbH03bZB61P/9pMco/fmKXsqFeumL2Ubtl1FOqEoutRUeUff
-yjGD+X/pV+dvfelv/6S1Fo6QcHoLfrVMw0vMn9FYlS/ijh1C8mYVrLY1EMMrI7sT
-i4pZ6SRODWogwqKogRQhcOg/odOzHOlD01N+rtas06+IRNmuv8ijAYp0ZVbw0AH6
-MjD+hOVi6se7s+7l5vo1ZBhlVn+P/m1pKUaGkmdykZr62w40qClyapX3ojtSB6jZ
-bkG7MkSWDtB5M96/pw+MZR49J+zlkXwN7Vou4pMmG9EKm7QaYKSGRo4cEH+3fzil
-TXB6IrXnDYI42+9rTLYW/+cU9/eRYJYzUzDadehTRvXhk3T7vCF6Im35FoFPcznd
-RoDAip5VbkFVUHxGr9dO6ggvMiEZcO/qD0NWpujAWmkzzMvZw1qdMjq/od/FHjwf
-73sColCqzJJPw2CJVUBPn01uci0Df67SwYs5jNjg1Ug9UCstRGrx/keVoMUFduPm
-tsR2pOW7oRkXvlyoxBx6ENO7nJP2mBALs4sdRSHX3qxCALqxJproAWX3NVi3x5hz
-n1x/PjaGc5rzTq9UflK0t5963VJGOcJ3Zcy69AMPQoqv2JJZz08=
-=J1bd
------END PGP SIGNATURE-----
-
---koppcha23r66m7mj--

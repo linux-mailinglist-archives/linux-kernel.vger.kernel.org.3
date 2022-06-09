@@ -2,140 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6DF545294
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DAF545292
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 19:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343692AbiFIRCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 13:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
+        id S244828AbiFIRBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 13:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiFIRCl (ORCPT
+        with ESMTP id S230107AbiFIRBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 13:02:41 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E02CAC365C;
-        Thu,  9 Jun 2022 10:02:38 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 259H13QN010121;
-        Thu, 9 Jun 2022 19:01:03 +0200
-Date:   Thu, 9 Jun 2022 19:01:03 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Will Deacon <will@kernel.org>
-Cc:     Vegard Nossum <vegard.nossum@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
+        Thu, 9 Jun 2022 13:01:32 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1C9B490;
+        Thu,  9 Jun 2022 10:01:31 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id c8so17609633qtj.1;
+        Thu, 09 Jun 2022 10:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jnwjuzj3MrO/cwr2OIkDIAaSQBe3BajVFxJznUYian0=;
+        b=KXqRhtXyWnfMMh67/l7UqFNSak6iRPazY7CXKZ8kXMQ28xL6ZgU/jokUz5eYFK4Fmf
+         RSP4C1zwYfySDnFihTA+aG73lcyhQC2oUpja4Q0z5PZNdMPTSBVEYPXBzvrR3kLqDuUg
+         ER3zClQ+6tt0BFGJmHXW9WWL6C/D68LHpXXhtEzC4d0A960OviV85LsphNuoMihi4fFT
+         YicoSQdctm46hGSz4YgrEhYfyp1IhVjilwY7hZWzC9CLWNXUqD5eVMJb2GoUnLVzr3b2
+         DRSDlDXTuIhIt3SoJuqetEdNDvg+rkRNVFpE574dSoUVTyyg9zOKm2gnPxvyT2p3csIP
+         iHXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jnwjuzj3MrO/cwr2OIkDIAaSQBe3BajVFxJznUYian0=;
+        b=BMNFADqC2KJFEuzd7enq9kZLdIXCqPiqc2NMIsk7DOe5moLPgPsNkvAhcOYt4D1iiD
+         8qKSotbixVh1q62x1llRKLY4sP3/UllogRQ/R/7G0qMhf2MdX3o7lIQf+YXs0wfGDwAb
+         uetnjp6pMMHdB+1N4Dhr1LnghzzfQmVhXqTtJOBzZ30EeFgxPOXvYdmbnkkai+zXFAwK
+         3khxGcl5G2eP7HntsigCNyseqmforT0TptiTkhXE72+Wr8GTn37CZw/saj7Mxx1poAti
+         aLcurJpAevC2JMrbMuwmeM0WNv7h89Q5Qc960e8vDQJ3a11qKfPrPNdfPD4NxTsCzQja
+         mGbA==
+X-Gm-Message-State: AOAM533T4ObLrQErw3264v5boVJdrk+Lf8m/2xfThzK1ay2uxLWTG1DS
+        /p7NFE9SUbFTN+bSyfPrAYz6XLwRrYSCKmD3
+X-Google-Smtp-Source: ABdhPJxUnc6jx6BU5l82GJ9gkvxlowGGDi71/wPGyxGzCs8eaISpn9agirY+M5cMSde/PUqXlbAjrw==
+X-Received: by 2002:ac8:5a11:0:b0:304:bab8:66f3 with SMTP id n17-20020ac85a11000000b00304bab866f3mr32399696qta.388.1654794089992;
+        Thu, 09 Jun 2022 10:01:29 -0700 (PDT)
+Received: from Sassy (bras-base-oshwon9563w-grc-26-142-113-132-114.dsl.bell.ca. [142.113.132.114])
+        by smtp.gmail.com with ESMTPSA id w17-20020a05620a445100b006a7137330e2sm4046161qkp.132.2022.06.09.10.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 10:01:29 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 13:01:27 -0400
+From:   Srivathsan Sivakumar <sri.skumar05@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+        Coiby Xu <coiby.xu@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Solar Designer <solar@openwall.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Subject: Re: [PATCH v2] Documentation/security-bugs: overhaul
-Message-ID: <20220609170102.GC9541@1wt.eu>
-References: <20220606194850.26122-1-vegard.nossum@oracle.com>
- <20220607090726.GB32282@willie-the-truck>
- <a0728939-0852-57e8-6d4b-8c11c73569bb@oracle.com>
- <20220609145127.GD3064@willie-the-truck>
+        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: qlge: qlge_main.c: convert do-while loops to for
+ loops
+Message-ID: <YqInZ/KNEJFN9kNS@Sassy>
+References: <YqIOp+cPXNxLAnui@Sassy>
+ <20220609152653.GZ2146@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609145127.GD3064@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220609152653.GZ2146@kadam>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A few quick points below.
-
-On Thu, Jun 09, 2022 at 03:51:27PM +0100, Will Deacon wrote:
-> > "calendar days" -- this got changed just to make it more readable. Maybe
-> > it's just me and my personal experience, but this wording seemed
-> > redundant. Why would "day" default to anything but a calendar day except
-> > in a business setting (which this is not)?
+On Thu, Jun 09, 2022 at 06:26:53PM +0300, Dan Carpenter wrote:
+> On Thu, Jun 09, 2022 at 11:15:51AM -0400, Srivathsan Sivakumar wrote:
+> > diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
+> > index 8c35d4c4b851..308e8b621185 100644
+> > --- a/drivers/staging/qlge/qlge_main.c
+> > +++ b/drivers/staging/qlge/qlge_main.c
+> > @@ -3006,13 +3006,13 @@ static int qlge_start_rx_ring(struct qlge_adapter *qdev, struct rx_ring *rx_ring
+> >  		cqicb->flags |= FLAGS_LL;	/* Load lbq values */
+> >  		tmp = (u64)rx_ring->lbq.base_dma;
+> >  		base_indirect_ptr = rx_ring->lbq.base_indirect;
+> > -		page_entries = 0;
+> > -		do {
+> > -			*base_indirect_ptr = cpu_to_le64(tmp);
+> > -			tmp += DB_PAGE_SIZE;
+> > -			base_indirect_ptr++;
+> > -			page_entries++;
+> > -		} while (page_entries < MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN));
+> > +
+> > +		for (page_entries = 0; page_entries <
+> > +			MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); page_entries++) {
+> > +				*base_indirect_ptr = cpu_to_le64(tmp);
+> > +				tmp += DB_PAGE_SIZE;
+> > +				base_indirect_ptr++;
+> > +		}
 > 
-> In the past, people were unclear as to whether this included weekends,
-> public holidays etc and so being explicit helps.
-
-In fact that's often the problem between what is known from insiders
-and what is understood outside. The original 5 days used to allow to
-include a Monday's fix into the Sunday's -rc. It then extended to 7
-days to improve the likelyhood that participants involved the first
-day were available on the release day, but that was always implicitly
-"calendar days" or at least reminded as such during private discussions.
-But with more and more professionals reporting bugs as part of their
-job, the risk that this is implicitly understood with work days is much
-more present nowadays and I think it's worth being explicit here.
-
-> > "extension to 14 calendar days" -- I changed this after comments from
-> > Willy who said too many people took this to mean that 7 days was the
-> > norm and that 14 days was still an acceptable proposal in most cases. I
-> > _think_ (but I'm not sure) that 14 days is not even really the absolute
-> > maximum, depending on the severity of the bug.
+> It's better than the original, but wouldn't it be better yet to write
+> something like this (untested):
 > 
-> The current text says:
+> 		for (i = 0; i <	MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); i++)
+> 			base_indirect_ptr[i] = cpu_to_le64(tmp + (i * DB_PAGE_SIZE));
 > 
->  | ... an exceptional extension to 14 calendar days if it is agreed that
->  | the criticality of the bug requires more time. The only valid reason
->  | for deferring the publication of a fix is to accommodate the logistics
->  | of QA and large scale rollouts which require release coordination.
+> Same with the other as well, obviously.
 > 
-> which I think is pretty clear; it states the single criterion under which
-> an exceptional extension to 14 days will be considered. There's no mention
-> of this in the rewrite.
-
-Indeed, it's important to keep that sentence to make sure reporters do
-not count on that upfront.
-
-> The current document is clear that any
-> agreed embargo begins only from the point where we have a robust fix:
+> regards,
+> dan carpenter
 > 
->   | Once a robust fix has been developed, the release process starts.
-> 
-> This is important -- if distributions mistakenly think that they have a
-> maximum of seven days to describe the problem, involve the right people,
-> iterate on a patch, backport it, test it and deploy it then they'll do
-> all of this in private and just notify security@ at the end, at which
-> point it's either a waste of time or the patch is found not to be as
-> robust as they thought because the right people weren't involved.
 
-This part is particularly important and is indeed at the core of some
-of the recent trouble. We need to make it clearer that it can take more
-time to develop a fix, possibly adding more and more people, but that
-once the fix is confirmed, the process starts and the only reason for
-an embargo is QA/rollout (which explains why there's no reason for a
-long embargo since everything is ready). But that brings back the
-concern that if we suggest that the reporter contacts linux-distros
-after the fix is ready, he may be bound by a 2-week embargo (unless
-it's fine to cut it to one week max by default). We need to make sure
-to limit friction because many reporters are first-timers and it's
-really unpleasant for them to be bounced between lists with different
-policies and being told they can't ask for this or that.
+Hello Dan,
 
-> > It's always possible to go into more detail about what "robust" means
-> > exactly or who makes this decision (and how), but I think brevity does a
-> > lot to keep things readable.
-> 
-> What exactly is unreadable with the current doc?
+Thanks for your input
 
-I don't think there's anything unreadable, however both you (Will)
-and me are on the list and have implicit knowledge of certain things.
-Vegard is not and his perception is useful because it's closer to the
-one from a reporter who tries to find their way through all this. Even
-a feeling like "it's too difficult to grasp" can be listened to IMHO.
+wouldn't base_indirect_ptr point at a different endian value if tmp is
+added with (i * DB_PAGE_SIZE)?
 
-Just my two cents,
-Willy
+Thanks,
+Srivathsan

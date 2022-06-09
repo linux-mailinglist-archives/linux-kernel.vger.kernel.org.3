@@ -2,68 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FFA5442C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F28D5442C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 06:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234574AbiFIEpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 00:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S236918AbiFIEsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 00:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiFIEpA (ORCPT
+        with ESMTP id S229791AbiFIEss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 00:45:00 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7DE23687C;
-        Wed,  8 Jun 2022 21:44:58 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VFqwi0e_1654749895;
-Received: from 30.97.48.137(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VFqwi0e_1654749895)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Jun 2022 12:44:55 +0800
-Message-ID: <59676cdf-a719-efcd-d5c1-b43198dc4348@linux.alibaba.com>
-Date:   Thu, 9 Jun 2022 12:45:05 +0800
+        Thu, 9 Jun 2022 00:48:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6900A6424;
+        Wed,  8 Jun 2022 21:48:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 136B3B81DBA;
+        Thu,  9 Jun 2022 04:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6301AC34114;
+        Thu,  9 Jun 2022 04:48:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654750124;
+        bh=pc9Sx5FD1mon9/oL66m0qEe+QZMPjUEMwctwj/Wa2iA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HKlCDrS9O4/4OXh5vJ7KFIcVdn1e/EcaQTVVH5DhcBruNKKLJFkFqS6XWjrzhgbOY
+         LuhAKe4UZdjd+B0EPWuqAd+jVJrWHJwxnzvoJX0Pt5/iagf5a/OKhxtD+qdCPRIIBr
+         gkBRaVIpFcDYt/X+getsVw7dANejFpOVz191w3KHodJgJBH0/TEU4pXIF7jG2rkQ55
+         oqf2qfdvV6cRPh28uVOeTpRyCmCurkQs6O/WGKx8h2ed35kLqkiXo+PkSWZenn15Vw
+         6CSee0tt4W6FSadFh8Sf7BvHtFLBQt1JjgcvhXd8+xamBYxiuXlpSFTt/e1U4alEw6
+         2hstkkz3HrT2g==
+Date:   Thu, 9 Jun 2022 07:46:46 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Morten Linderud <morten@linderud.pw>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
+ address
+Message-ID: <YqF7NktlAJg26Bvd@iki.fi>
+References: <20220608123109.678343-1-morten@linderud.pw>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [mm] 9b12e49e9b: BUG:Bad_page_state_in_process
-To:     Matthew Wilcox <willy@infradead.org>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-arch@vger.kernel.org, lkp@lists.01.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org
-References: <d35f42f7b598f629437940f941826e2cc49a97f6.1654271618.git.baolin.wang@linux.alibaba.com>
- <20220608143819.GA31193@xsang-OptiPlex-9020>
- <YqC7K0e2FFp7vT6i@casper.infradead.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YqC7K0e2FFp7vT6i@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608123109.678343-1-morten@linderud.pw>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/8/2022 11:07 PM, Matthew Wilcox wrote:
-> On Wed, Jun 08, 2022 at 10:38:19PM +0800, kernel test robot wrote:
->>
->>
->> Greeting,
->>
->> FYI, we noticed the following commit (built with gcc-11):
->>
->> commit: 9b12e49e9b02bbaca8041f236a6b2fd4586d45c8 ("[RFC PATCH 3/3] mm: Add kernel PTE level pagetable pages account")
+On Wed, Jun 08, 2022 at 02:31:08PM +0200, Morten Linderud wrote:
+> tpm_read_log_acpi() should return -ENODEV when no eventlog from the ACPI
+> table is found. If the firmware vendor includes an invalid log address
+> we are unable to map from the ACPI memory and the function returns -EIO
+> which would abort discovery of the eventlog.
 > 
->> [   75.338681][ T4873] BUG: Bad page state in process 444  pfn:20b066
->> [   75.338840][ T4873] page:0000000016cf0259 refcount:0 mapcount:-512 mapping:0000000000000000 index:0x0 pfn:0x20b066
-> 
-> mapcount:-512 is PG_table.  Somebody forgot to call
-> pgtable_pte_page_dtor() (or similar)
+> This change ensure we always return -ENODEV in tpm_read_log_acpi() and
+> fallback to the EFI configuration table.
 
-Right. Thanks for reminding. :)
+Please do not use "we" in commit messages. Or start a sentence
+with "this patch", "this commit" or "this change". It is always
+best just to go down to the roots and use imperative form.
+
+E.g. you could rephrase the last paragraph as
+
+"Change the return value from -EIO to -ENODEV when acpi_os_map_iomem()
+fails to map the event log."
+
+> The following hardware was used to test this issue:
+>     Framework Laptop (Pre-production)
+>     BIOS: INSYDE Corp, Revision: 3.2
+>     TPM Device: NTC, Firmware Revision: 7.2
+> 
+> Dump of the faulty ACPI TPM2 table:
+>     [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface Table]
+>     [004h 0004   4]                 Table Length : 0000004C
+>     [008h 0008   1]                     Revision : 04
+>     [009h 0009   1]                     Checksum : 2B
+>     [00Ah 0010   6]                       Oem ID : "INSYDE"
+>     [010h 0016   8]                 Oem Table ID : "TGL-ULT"
+>     [018h 0024   4]                 Oem Revision : 00000002
+>     [01Ch 0028   4]              Asl Compiler ID : "ACPI"
+>     [020h 0032   4]        Asl Compiler Revision : 00040000
+> 
+>     [024h 0036   2]               Platform Class : 0000
+>     [026h 0038   2]                     Reserved : 0000
+>     [028h 0040   8]              Control Address : 0000000000000000
+>     [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
+> 
+>     [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
+>     [040h 0064   4]           Minimum Log Length : 00010000
+>     [044h 0068   8]                  Log Address : 000000004053D000
+> 
+> Signed-off-by: Morten Linderud <morten@linderud.pw>
+> 
+> ---
+> 
+> v2: Tweak commit message and opt to return -ENODEV instead of loosening up the
+>     if condition in tpm_read_log()
+> 
+> ---
+>  drivers/char/tpm/eventlog/acpi.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+> index 1b18ce5ebab1..2b15d6eebd69 100644
+> --- a/drivers/char/tpm/eventlog/acpi.c
+> +++ b/drivers/char/tpm/eventlog/acpi.c
+> @@ -136,8 +136,12 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  
+>  	ret = -EIO;
+>  	virt = acpi_os_map_iomem(start, len);
+> -	if (!virt)
+> +	if (!virt) {
+> +		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
+> +		/* try EFI log next */
+> +		ret = -ENODEV;
+>  		goto err;
+> +	}
+
+It is wrong to try out EFI, if this fails. TPM2 ACPI table was already
+detected.
+
+>  
+>  	memcpy_fromio(log->bios_event_log, virt, len);
+>  
+> -- 
+> 2.36.1
+
+What you are using this for? Without any actual bug report, this 
+is an obvious NAK.
+
+BR, Jarkko

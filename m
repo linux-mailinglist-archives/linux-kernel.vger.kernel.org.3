@@ -2,200 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C19545602
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E904854560A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 22:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345328AbiFIUwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 16:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S1345338AbiFIUxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 16:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344645AbiFIUwE (ORCPT
+        with ESMTP id S1345356AbiFIUxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:52:04 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CA913C36F;
-        Thu,  9 Jun 2022 13:52:02 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 259J4EKT015600;
-        Thu, 9 Jun 2022 20:51:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=VKGC39wbdxKGFFK2VemgpjaP8wZguh/RcrARxgL5Jxc=;
- b=i5XbjQJH5VCFm+Lxsi6IqWSDhmPvlqC67mgHxqgmf21YfIxtTazUoV+qiVfLM5Y3vtXZ
- hJKypoR1toaOUKbzG5MwGcividUo09Z66uiqqTDamjKykmwPs6shOIjfYliyyU/cL9I4
- AncckCkAtduFLZ8TFeQFoe2e4+FHHzOZKdVCOQe8qA/o6cF4ZJLF57IaSDkB+3ce+nOA
- 4tuiCjMUnV/9wzaz+TTCl7yIrnC91+l/bnZSREYacXHEiHpXVEy4K7GiE7gFCH8jwoEv
- WDlYeCoVGCWCdoci2rT/3DVvRY1cPJQ3EAZGmj0o9Uf/u8/0moG43zxNFXL1L8AveDD/ Ww== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gfydqv4fa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 09 Jun 2022 20:51:31 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 259KeeLe001402;
-        Thu, 9 Jun 2022 20:51:31 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu534g6-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 09 Jun 2022 20:51:31 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eKDvhUqLk8VsPkO5Y9h5o5p53YM7PJPgHVN/7DxS8qCil7bGvJi7XKSNKGfSVvh2PAntJoMMrkMg+IjTxlWN7tj7PL7HM1Z+hJ/9KDC0nNY1ia0GhNYLBjQH+0UMMCBDFUaDPY/53/ESEd3lO5xW7krb1NBPoB2ostjuuer4ktNvwVfUao6xeFTTcG8fnKaMrEv6QhG5PUPL+9+94TcfElXNan6SaxhbdhsywV0Ecpen9X//GaS+NXNwojwQdJrGPqPkKnbYxd0QBmyfKtmwFsSznXHi5Qfn+dJ71y6+Mocw9+XHKoCtLllmbieVjLoNYax3MgyyGvMc0PuAhrEI7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VKGC39wbdxKGFFK2VemgpjaP8wZguh/RcrARxgL5Jxc=;
- b=WEklM/4UJpq5Sr7vxnrQ7d7OLOXojlmyuKklNZcOH9r7ugB3epbk4zTZBlXOQXo3Ic5svk8nVCvhPIhc5Nwr5N8VMtQPiypporgojjBrCVuBwcClZnnAZNU8CYiua5UI/oopf/Vmp95Qppyh+ri4W4BCpzilUPz3gFZnzfEnBepLiTPJMs17+IjJbnVBxb1rDtBnGrtvvgnLh+6oNgXl2KZFYwSGoXc0BZbnIVz8a4MfR69ABzx2Z7uNKYDJNSfzWxMPXbwf1DR1cRGOp7KqosX8Lrk8HSZR99UVa61c1/pRiqvq5k7Fucu1904I8gqwveXR73mKAvAl8mTdsQpLWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VKGC39wbdxKGFFK2VemgpjaP8wZguh/RcrARxgL5Jxc=;
- b=A3dgRL++w24JckvHWrELNQkd84B5J2uYvmROWgbboBPBtFYba81V6UiGPCcFOIzNbbrGbiDI6Q8rCIfxEcxhH4s39TdifbP2jh4xjghkWcLQ3MK3+CvClBw48PcFe4o1ApC+NwtlcD68hTvSIPjkrwOZNmgYWBXggeEsAyoGXF8=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by PH7PR10MB5699.namprd10.prod.outlook.com (2603:10b6:510:127::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Thu, 9 Jun
- 2022 20:51:28 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::2125:9bb7:bfeb:81f9]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::2125:9bb7:bfeb:81f9%8]) with mapi id 15.20.5332.012; Thu, 9 Jun 2022
- 20:51:28 +0000
-Message-ID: <f05f20c9-9738-bc31-591e-743e0382f44c@oracle.com>
-Date:   Thu, 9 Jun 2022 13:51:25 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 16/19] hugetlb: Convert to migrate_folio
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org
-References: <20220608150249.3033815-1-willy@infradead.org>
- <20220608150249.3033815-17-willy@infradead.org>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-In-Reply-To: <20220608150249.3033815-17-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0047.namprd04.prod.outlook.com
- (2603:10b6:303:6a::22) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        Thu, 9 Jun 2022 16:53:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126D32E13CA;
+        Thu,  9 Jun 2022 13:53:23 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.172])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 929BB6601649;
+        Thu,  9 Jun 2022 21:53:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654808001;
+        bh=GLewdZGGHjUSe1VII7HyLaIQ1QG/YNTmpuKFRFF1oQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h+/XxMvhY6SD+QdWkuQ+5WlCbhpFwW2Cs+PXidRlqVtJc+aD1vzXwShA+EBfb2X8Y
+         NF6TXADsHhou+uuot4BE8D2Yv7RoV2BIfJ3loploojFhCtJ0WeGMA0voJQqWXBdYIM
+         j4tufuvKC48U6giNusNys58sQKfGN+NWVQ7IEZDid6a3+7M3ROzYoQIB3xKr9TgKWO
+         du28CaAFMwcKo4WscIREs+jE4z0cao5fM1XS+KYQZI2N12ZIaUWHU3xUfoc03BxSRM
+         uRudyJQh8NDI3QQuoxNV6ye9CKzbVQLTRUM9gXqQ82CEnsZZAmnRYYOTBoyR5w//tS
+         PMLRvjLpSEbCQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 79F9310605B9; Thu,  9 Jun 2022 22:53:19 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 22:53:19 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, quic_gurus@quicinc.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 13/17] power: supply: axp20x_usb_power: Add support
+ for AXP192
+Message-ID: <20220609205319.ws5a74xjyxfrdx6p@mercury.elektranox.org>
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-14-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 075de71e-0c62-46d6-7522-08da4a59d369
-X-MS-TrafficTypeDiagnostic: PH7PR10MB5699:EE_
-X-Microsoft-Antispam-PRVS: <PH7PR10MB569989B5AF6555E18FDADC39E2A79@PH7PR10MB5699.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ATu+kf6i3a8YOA+mbilpFf0sCSF3j6w3rNeZPbaoPg5XhPBki80zBNdaWhucYF3BTgtbToaYXlZUx7sKnRNMZKrODgbnmOSUUtYZIXhD78EQo1kVagRJ7JMBsZhm32ipUWR15O6voq/oDt4XsTdgLJ9QS4ivMGHJ1bwUEjv0vF3gNfEVJaKtJIRypm0E3ZKphzfW48KBYAnz05XwW3q1BxAzS/O0l+QQyjZrx1ROrQC6MC9bfbXNY8lSqAWR42rgofcgQ9x4xkIDqmWE7YYtxhpa3NCJDxoylxjb/y/VKBYd754lNJX+7e2qe/gvOks90EF9DDkw5+tE7uKoTdFzSDC3vGF+YVPb28JVhL7OkCQUSs8Nc/GkVwECqbc9zVJpE2RoccP59jkLbcp/b95L6fzYR3cP4RP8lveitwfrFZmPkdlIso6e7bIbbL4RXVNoBFVGYmaM8FWjKgDtH/1b7Ey7XYe+uJZV5vO0UGYH6tyODnsW2Qy/bM8BA+JS7dCeGrvalCeWNnc3Pb8SQ+z5R/YYn3GMZl5mF2azJgKXunuYU+RY1Czgqicq4Nz34lhb9MegT78NZ7AJRUhx9tNoJJtu84hP8qp1tLwBpiKU5WfixYLHme+R2fTu9ikNGo4pvii6GcaIB30OgLU9pCdkfueD7WJdzzJbU6S7MWRR5JJyPo+3XzUU+yKbjh7Dw2/Lk+Z5qiZ4lqJFnv3ze9Z8lfyqxJUAO7MEZeRcnFwhLeE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(44832011)(6666004)(66476007)(8676002)(66946007)(316002)(83380400001)(5660300002)(66556008)(4326008)(7416002)(86362001)(31696002)(2906002)(6512007)(26005)(8936002)(53546011)(2616005)(38100700002)(186003)(508600001)(6486002)(36756003)(31686004)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NkNrU1JWa0IyOHhNVWhoUDhMUXN0am1IbTNQNmZHc2lrUTRKdG1hVjBMWGVS?=
- =?utf-8?B?a0l2MGU3UktvOW9vQjRCZmN1OW43YUYxaXE3dnR1R3h3clcrc3pFeTB4b003?=
- =?utf-8?B?ZXdUYi9SL2dGdGJtM3AwQk9DaWsxclBzVVBFOENsWlBJeXJUbWVJeE5lWGJo?=
- =?utf-8?B?cWRKYjN3Uklpd0dWMkxTSzJ6cXcxVFlnbitkYWdudlFZdWlOZmVORjBtWXhQ?=
- =?utf-8?B?MkdoOW1FRkpRNGlPdUQ5NkEzb090eUliK2lYRnV0Y1laWi9LRGR3citUekF5?=
- =?utf-8?B?c2g3LytMUW1FZXBqekhORFdFU0p2dnVvdHUxMHZaZWdMNFl4VVRQVUd1WExC?=
- =?utf-8?B?WXVNMlZUWWV3VGthUXoxUEZrNFdaSnJacm44aGMxczhIUHlobFlGVFYrWlFu?=
- =?utf-8?B?d2ZITkE4QnpJYXV4QmVlcjhUbFRxdFB0cy9YOGRyNkRaUlRBR1VTVU8zSXNp?=
- =?utf-8?B?WDRGcno5YWxBTDhKSW5pczNmN0FrOGdCYnArdFJxZmdIQXI4blk5aE1oQkZ0?=
- =?utf-8?B?S1NoVzkydFZJWE53TjF4QWg3dDJ1M3F0d1piZzA1ZnJzVkNsN0ovR2JOcEUv?=
- =?utf-8?B?OHNMbURzZUt5aFhDUzB1NmZCd0FRRnhHdTQvcXZSYzBsdFVhRnVGOXE1T3Q0?=
- =?utf-8?B?eGl6YzRFOEpWcXMxMU5ZNkdYWHFaOFl0eWpkZGhoUXFVZXAvSTJ6UEpkeEM0?=
- =?utf-8?B?cDVEUHB6UEpyYjEyelhtaDFKVUhwT0kvcTEzMHRJbS80OUF4OE15aGJTb1Rv?=
- =?utf-8?B?WXhEQTZ2c05mYmNQMWdIRXlya3l3SmFOdjhCM0Y1WVEzeHUyOU5kWGlBV05z?=
- =?utf-8?B?aWdISUhNMmo1cFpDc0wvNDl3YU1NTlE5WkdUVXNVek9vLzVKb1R0ZE05NVd1?=
- =?utf-8?B?UUs4SW5lVWdoQzlDWHduR0xWSUdvT0huZGNTcjFsS2dYWW8vbnRHQ0dPU3pM?=
- =?utf-8?B?ZmNUaEFYRDFKNEdXbWRIRWhpYkh0WWE0Q0pXUk5RMWNQT2ljckpxWjlVV1B2?=
- =?utf-8?B?bk8zQWdZeVdNd253NHMwUXZrMUxYcGZGRGc3Z0pNOEZUQnRiY3pyaDVDTjBt?=
- =?utf-8?B?Q2luck42U1lUS09aUExJN3N3SnNRdTRqd0R1WXczekFvbTNBd3k3dUJITVhT?=
- =?utf-8?B?aVYxaHdJQ2xjTEtvWjhSY21JeGhGZXdQWGZSZXR5U1lqWDZxdVNqOFk2VWR2?=
- =?utf-8?B?WU1KeENLM3FDdVFOdU9QTW00ck1yOTZINnFyK0lwa1hPZkJpVWJNT3ZCbXM3?=
- =?utf-8?B?R0FTRDB2US84TU56WS9rdGh4RzVTTGpERlBNS2pXODVVaStDSUJIc0Q1eTFY?=
- =?utf-8?B?dWJUSGNjcWVCTDV2MjZjTGlWNDhZclFYN05uQVF1UDkrNERLcGtKMnRVVTFI?=
- =?utf-8?B?RU5PS25mRlpMQWRjNG12azROK1liNkZSK0pyYnBTb1pUbUxxVFJwVS94VnBY?=
- =?utf-8?B?QkhCMG9xWWtGRS9HdjZvbk9BeVVIeHBzYituckYvbkRaRDFWMWlCYUMxb3U1?=
- =?utf-8?B?bG0yREdvT0NQUzlzNGgyWDE3N0hKVDgySEpmMWx0VFVqYUIwWXVvajdsUkNW?=
- =?utf-8?B?anZOZGlxWXpUV0lvK204UE5EOTB0WkRQTWF0bC9vRFJ0cTdwSTRQa3ZkUXdq?=
- =?utf-8?B?cElIV2pzdWVXWC9Leis1M2theC9MaDFqSXErNTcrUGdxRnhMb2V4U2dtcW9P?=
- =?utf-8?B?QUhNYW5sNWJxQk14SFNTZmYyU2lWV2sxd1VIOHJSU1hEUFlFQkJUa0tkaDFJ?=
- =?utf-8?B?WlVBdDBEN2Q1MGFmQVhoT0xtZERYOG1uc1dYeHpIMCtUdTFqL2UyNTd3citY?=
- =?utf-8?B?NExJYlFtN1NZVFhab1FjM0xLc1BxMmxMNFduenM0YnNPNGZEOUdHNmZXUnBG?=
- =?utf-8?B?WHh2VmxRWXBiSHFSSGcybEdLL2VUbW9aTmUrSjdXaXordVVMTkRpSUszMXly?=
- =?utf-8?B?NXd0aUhnQW9BZ0RmdVFxSUt4U0VrUzFFM2V3ejhFNGh0clhyQTNHVExFdWcz?=
- =?utf-8?B?QzZnZzhjeDRFaURVWkdGRXoxd1BrSXIzZDY0VW1lRkRZU3ZRUEUxazNQR0hl?=
- =?utf-8?B?TldEeFJMUUM5c3pvZjNoTnZzcVZKVmM3VVJBdkJudTRJdXhzL0dPZnFXSFFE?=
- =?utf-8?B?aFllL2tSMlF6TEdvSHppLzd1SWovWUltVWlkMGJQdDNkVmhaR3B2TWJHNlZ5?=
- =?utf-8?B?OVNEOWNCRzZCWDRTZGdkOUI0K0tmV2tJd0JVUFpiTC85dDVYMGVEakNEWmZ0?=
- =?utf-8?B?L1NsWU5BVUU5Uy9Oa3lKY2c0QURzU1B4RWVBOWNpQWJxZVpLdTRUcjRKSzdN?=
- =?utf-8?B?MFc3MkZUSTgyK2gxVjR0Q0hNYkpIQlNoanNlVWhFcGkvTG5NK3R6c0NaZ3dF?=
- =?utf-8?Q?BnKBw1SW4mmlvZXg=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 075de71e-0c62-46d6-7522-08da4a59d369
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 20:51:28.7513
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2u1pmY5xWxrnPy21ETxQek0CpzFh1IXmm0vUk1Ji4SBaVjLPlBG/RrtGx9HMPIOCAu176Y5z6ha2508o2xlNTA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5699
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
- definitions=2022-06-09_15:2022-06-09,2022-06-09 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- adultscore=0 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206090077
-X-Proofpoint-GUID: 3vM0fDCxXuAEST9ERr7m89dz6funb3Pu
-X-Proofpoint-ORIG-GUID: 3vM0fDCxXuAEST9ERr7m89dz6funb3Pu
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5qrqrngzkurwra5x"
+Content-Disposition: inline
+In-Reply-To: <20220607155324.118102-14-aidanmacdonald.0x0@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 08:02, Matthew Wilcox (Oracle) wrote:
-> This involves converting migrate_huge_page_move_mapping().  We also need a
-> folio variant of hugetlb_set_page_subpool(), but that's for a later patch.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+
+--5qrqrngzkurwra5x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Tue, Jun 07, 2022 at 04:53:20PM +0100, Aidan MacDonald wrote:
+> The AXP192 is mostly the same as the AXP202 but has a different
+> current limit.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  fs/hugetlbfs/inode.c    | 23 ++++++++++++++---------
->  include/linux/migrate.h |  6 +++---
->  mm/migrate.c            | 18 +++++++++---------
->  3 files changed, 26 insertions(+), 21 deletions(-)
-> 
 
-Thanks,
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-> index 14d33f725e05..eca1d0fabd7e 100644
-> --- a/fs/hugetlbfs/inode.c
-> +++ b/fs/hugetlbfs/inode.c
-> @@ -954,28 +954,33 @@ static int hugetlbfs_symlink(struct user_namespace *mnt_userns,
->  	return error;
+-- Sebastian
+
+>  drivers/power/supply/axp20x_usb_power.c | 80 +++++++++++++++++++++----
+>  1 file changed, 69 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supp=
+ly/axp20x_usb_power.c
+> index a1e6d1d44808..03145374ae72 100644
+> --- a/drivers/power/supply/axp20x_usb_power.c
+> +++ b/drivers/power/supply/axp20x_usb_power.c
+> @@ -48,6 +48,9 @@
+>  #define AXP813_VBUS_CLIMIT_2000mA	2
+>  #define AXP813_VBUS_CLIMIT_2500mA	3
+> =20
+> +#define AXP192_VBUS_CLIMIT_EN		BIT(1)
+> +#define AXP192_VBUS_CLIMIT_100mA	BIT(0)
+> +
+>  #define AXP20X_ADC_EN1_VBUS_CURR	BIT(2)
+>  #define AXP20X_ADC_EN1_VBUS_VOLT	BIT(3)
+> =20
+> @@ -121,6 +124,24 @@ static void axp20x_usb_power_poll_vbus(struct work_s=
+truct *work)
+>  		mod_delayed_work(system_power_efficient_wq, &power->vbus_detect, DEBOU=
+NCE_TIME);
 >  }
->  
-> -static int hugetlbfs_migrate_page(struct address_space *mapping,
-> -				struct page *newpage, struct page *page,
-> +#ifdef CONFIG_MIGRATION
+> =20
+> +static int axp192_get_current_max(struct axp20x_usb_power *power, int *v=
+al)
+> +{
+> +	unsigned int v;
+> +	int ret =3D regmap_read(power->regmap, AXP20X_VBUS_IPSOUT_MGMT, &v);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!(v & AXP192_VBUS_CLIMIT_EN))
+> +		*val =3D -1;
+> +	else if (v & AXP192_VBUS_CLIMIT_100mA)
+> +		*val =3D 100000;
+> +	else
+> +		*val =3D 500000;
+> +
+> +	return 0;
+> +}
+> +
+>  static int axp20x_get_current_max(struct axp20x_usb_power *power, int *v=
+al)
+>  {
+>  	unsigned int v;
+> @@ -179,7 +200,7 @@ static int axp20x_usb_power_get_property(struct power=
+_supply *psy,
+>  	enum power_supply_property psp, union power_supply_propval *val)
+>  {
+>  	struct axp20x_usb_power *power =3D power_supply_get_drvdata(psy);
+> -	unsigned int input, v;
+> +	unsigned int input, v, reg;
+>  	int ret;
+> =20
+>  	switch (psp) {
+> @@ -215,6 +236,8 @@ static int axp20x_usb_power_get_property(struct power=
+_supply *psy,
+>  	case POWER_SUPPLY_PROP_CURRENT_MAX:
+>  		if (power->axp20x_id =3D=3D AXP813_ID)
+>  			return axp813_get_current_max(power, &val->intval);
+> +		else if (power->axp20x_id =3D=3D AXP192_ID)
+> +			return axp192_get_current_max(power, &val->intval);
+>  		return axp20x_get_current_max(power, &val->intval);
+>  	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>  		if (IS_ENABLED(CONFIG_AXP20X_ADC)) {
+> @@ -256,16 +279,20 @@ static int axp20x_usb_power_get_property(struct pow=
+er_supply *psy,
+> =20
+>  		val->intval =3D POWER_SUPPLY_HEALTH_GOOD;
+> =20
+> -		if (power->axp20x_id =3D=3D AXP202_ID) {
+> -			ret =3D regmap_read(power->regmap,
+> -					  AXP20X_USB_OTG_STATUS, &v);
+> -			if (ret)
+> -				return ret;
+> +		if (power->axp20x_id =3D=3D AXP192_ID)
+> +			reg =3D AXP192_USB_OTG_STATUS;
+> +		else if (power->axp20x_id =3D=3D AXP202_ID)
+> +			reg =3D AXP20X_USB_OTG_STATUS;
+> +		else
+> +			/* Other chips do not have an OTG status register */
+> +			break;
+> =20
+> -			if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
+> -				val->intval =3D
+> -					POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+> -		}
+> +		ret =3D regmap_read(power->regmap, reg, &v);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
+> +			val->intval =3D POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+>  		break;
+>  	case POWER_SUPPLY_PROP_PRESENT:
+>  		val->intval =3D !!(input & AXP20X_PWR_STATUS_VBUS_PRESENT);
+> @@ -316,6 +343,24 @@ static int axp20x_usb_power_set_voltage_min(struct a=
+xp20x_usb_power *power,
+>  	return -EINVAL;
+>  }
+> =20
+> +static int axp192_usb_power_set_current_max(struct axp20x_usb_power *pow=
+er,
+> +					    int intval)
+> +{
+> +	int val =3D AXP192_VBUS_CLIMIT_EN;
+> +	const int mask =3D AXP192_VBUS_CLIMIT_EN | AXP192_VBUS_CLIMIT_100mA;
+> +
+> +	switch (intval) {
+> +	case 100000:
+> +		val |=3D AXP192_VBUS_CLIMIT_100mA;
+> +		fallthrough;
+> +	case 500000:
+> +		return regmap_update_bits(power->regmap,
+> +					  AXP20X_VBUS_IPSOUT_MGMT, mask, val);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+>  static int axp813_usb_power_set_current_max(struct axp20x_usb_power *pow=
+er,
+>  					    int intval)
+>  {
+> @@ -383,6 +428,9 @@ static int axp20x_usb_power_set_property(struct power=
+_supply *psy,
+>  		if (power->axp20x_id =3D=3D AXP813_ID)
+>  			return axp813_usb_power_set_current_max(power,
+>  								val->intval);
+> +		else if (power->axp20x_id =3D=3D AXP192_ID)
+> +			return axp192_usb_power_set_current_max(power,
+> +								val->intval);
+>  		return axp20x_usb_power_set_current_max(power, val->intval);
+> =20
+>  	default:
+> @@ -468,6 +516,13 @@ struct axp_data {
+>  	enum axp20x_variants		axp20x_id;
+>  };
+> =20
+> +static const struct axp_data axp192_data =3D {
+> +	.power_desc	=3D &axp20x_usb_power_desc,
+> +	.irq_names	=3D axp20x_irq_names,
+> +	.num_irq_names	=3D ARRAY_SIZE(axp20x_irq_names),
+> +	.axp20x_id	=3D AXP192_ID,
+> +};
+> +
+>  static const struct axp_data axp202_data =3D {
+>  	.power_desc	=3D &axp20x_usb_power_desc,
+>  	.irq_names	=3D axp20x_irq_names,
+> @@ -600,7 +655,7 @@ static int axp20x_usb_power_probe(struct platform_dev=
+ice *pdev)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	if (power->axp20x_id =3D=3D AXP202_ID) {
+> +	if (power->axp20x_id =3D=3D AXP192_ID || power->axp20x_id =3D=3D AXP202=
+_ID) {
+>  		/* Enable vbus valid checking */
+>  		ret =3D regmap_update_bits(power->regmap, AXP20X_VBUS_MON,
+>  					 AXP20X_VBUS_MON_VBUS_VALID,
+> @@ -659,6 +714,9 @@ static int axp20x_usb_power_probe(struct platform_dev=
+ice *pdev)
+> =20
+>  static const struct of_device_id axp20x_usb_power_match[] =3D {
+>  	{
+> +		.compatible =3D "x-powers,axp192-usb-power-supply",
+> +		.data =3D &axp192_data,
+> +	}, {
+>  		.compatible =3D "x-powers,axp202-usb-power-supply",
+>  		.data =3D &axp202_data,
+>  	}, {
+> --=20
+> 2.35.1
+>=20
 
-and, thanks for adding the #ifdef CONFIG_MIGRATION to save a little space.
+--5qrqrngzkurwra5x
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Mike Kravetz
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiXb8ACgkQ2O7X88g7
++pqxoQ/8D+GXBnmCcBb/KfGUzljFGpaLbqTNy1CYmFQZqTmVeJz9JPZlWVME/6Fk
++q+SJ3JHWeTQQCZQc2YtDmxWL3qJ0VwOXYrViZWvTm7ZC1YMuTpL8C8JPu3vd0f8
+aS4PM7T4ASzy6uAs8cMYXJnDKA+8DmAuljePBYofU/CdyR19OEyQbTxTk0nUDswI
+Zb1akk4N5XfokCji3r2h1G5Ka0QjnO9oIkQ085od6Bxnusum+orL36VuFJ8yHD28
+sq5GnkhAmIYOt4WPvq09a/oPUneTLoDGxZmV81y0tpNf7D6gEK3XuTJYWPjZ6l7W
+iDe4qAzGLwu5R24T0QUEAvdSbrJUY7VNtb8+r5JuNmxZtHf3YZfvqiXPyxV3XXZf
+Uy0OYEmfBvkcY1MwiM4sIaV+280t3/bmfJip4qa9WuHM+eqH3ymnb8VpU4UByv4c
+Eqs2X2fhjORsayq9IJcJwZVKBslB76igNGIyQP7kCO/uQleUfsOhDAR8rX103uA2
+i1uxgDKcIBezw2gh26MjHUmPA/QAHzRub9vu53PSdVCGo95XM+b1uBnwh+uQp56g
+H7IqS0Pa8xQ003WK3Wp7au09KyghE201xKps7SJcrpcZyOm9LRhmS+++jZ9UnQX3
+7mIbm/2j8D//F+7VuRtpJzOZ4nFD4PNWHMVFmncDUuc+sKEtNmg=
+=8R3Z
+-----END PGP SIGNATURE-----
+
+--5qrqrngzkurwra5x--

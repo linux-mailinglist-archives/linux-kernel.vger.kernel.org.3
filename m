@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D357544F13
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56874544F1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243826AbiFIObK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        id S235463AbiFIOar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343489AbiFIObG (ORCPT
+        with ESMTP id S235645AbiFIOao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:31:06 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E52E1FBF7B;
-        Thu,  9 Jun 2022 07:30:56 -0700 (PDT)
+        Thu, 9 Jun 2022 10:30:44 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671686129D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:30:43 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id c196so21254245pfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 07:30:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654785056; x=1686321056;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=KcVpOMqtcK0GLgko7LK59DZwvEdtoQYB3VprnfPBpDI=;
-  b=fZNDrVuVsgROABYZMs5UXWt6sSamwsGEuORSLwijUJgDKvAqAYsyx657
-   qHNPRqn/sf4m7TazY1wy9dZqlP399tUSIkWzOpH49S5Eyar0J9FTzc3vS
-   3Wl0N7pgtegP6CAgOGehQxHrIZWgbSdgKoVBwDfmm4gcDJVvPH96oe2Ov
-   w=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jun 2022 07:30:56 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 07:30:56 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 9 Jun 2022 07:30:55 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 9 Jun 2022 07:30:49 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <vkoul@kernel.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v4 2/2] ASoC: qcom: soundwire: Enable software clock gating requirement flag
-Date:   Thu, 9 Jun 2022 20:00:23 +0530
-Message-ID: <1654785023-1667-3-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654785023-1667-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1654785023-1667-1-git-send-email-quic_srivasam@quicinc.com>
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=f3+B3/4f/EYX1WyHVwNor7M5aRUmp3PSGvyyEnFuqik=;
+        b=Uf0gZWDEqsfPzDO/WoOCeZ9zDaQpoG7mpw39fhVrNd4PT36eVUs/AWQRnJc1PGQy6z
+         MxJsCavq8e0r4QA2C5/DW163OyruGXogIMjLQqO9hOiXLcO9KAdDyetG2+YKxTQhKLEs
+         2Z2d8kh+Z+YW308jK/76QcgUk6kjZDzT2Hb++SdFAaMfqm1xGDHP/BHFdd3FUq7HYUxE
+         8N59xPbFsSOX7aqE9KZ3G0JG1v++Eu9VcU+yovBX8rENqdxOXtKpG9kuVkCEfUv35Ylq
+         93P03ULGNI5XIOFC8wrJz30QYpAsVBQrYnTwXdh5W3ycKKateO+O5A+JJHeMY2GkmYv8
+         FX2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=f3+B3/4f/EYX1WyHVwNor7M5aRUmp3PSGvyyEnFuqik=;
+        b=VcgfiBm1fZ8vvm8sJQOf7hDTQFJ1S47HyFUbpJ81sjQRFDPB2d1aihNWaBcV8xo0x7
+         srT7xiBlWdyucZ0mi4HfvWBl/Au8ZLSbhyu0iUHA9k52toj50J2JKneIHzmxH53accXG
+         4OOHsdgMKQ1pXP6UfEbWob41bGsPIqkwW90oL0eec9eNLxT1CX+x1A/55ZMwAznyMpof
+         GKwHUUkrd3Mourt58w8BKTC5T/Fb4uO/XUw/oeuJWh1FHG9AXpjO9pHnnoKuc1nHzrtS
+         5XyqizfRqTtaQcX8Rx5uZcyjZT2NZg7jbQaF3xS44pWuG0Z++j0kDM0fMqYzVTMYZV+K
+         5YwQ==
+X-Gm-Message-State: AOAM532aU2z/CoJ5T5vhyNu9+n5JZXLU1hxfbKOE6tCHbtu8lK4i9Lai
+        xPmPi/DIWrCN68L2rX8sqjSABw==
+X-Google-Smtp-Source: ABdhPJwWUD/Bnzq1gZvJJF6L4NnyDUcnw3k9MegfjCLajnnt2E7D2M2H5E8/ChxURaJNbJ6cPyrKfw==
+X-Received: by 2002:a62:8101:0:b0:51b:b859:7043 with SMTP id t1-20020a628101000000b0051bb8597043mr40685565pfd.25.1654785042892;
+        Thu, 09 Jun 2022 07:30:42 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170902784800b001640ab19773sm17226263pln.58.2022.06.09.07.30.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 07:30:42 -0700 (PDT)
+Message-ID: <b39cdb9c-aa2a-0f49-318b-8632b2989433@linaro.org>
+Date:   Thu, 9 Jun 2022 07:30:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [cgroup] 3c87862ca1:
+ WARNING:at_kernel/softirq.c:#__local_bh_enable_ip
+Content-Language: en-US
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, cgroups@vger.kernel.org,
+        lkp@lists.01.org, Michal Koutny <mkoutny@suse.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20220609085641.GB17678@xsang-OptiPlex-9020>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <20220609085641.GB17678@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable software clock gating flag in private data for SC7280
-based platforms, which are soundwire 1.6.0 version based.
+On 6/9/22 01:56, kernel test robot wrote:
+> 
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-11):
+> 
+> commit: 3c87862ca13147416d900cf82ca56bb2f23910bf ("[PATCH v2] cgroup: serialize css kill and release paths")
+> url:https://github.com/intel-lab-lkp/linux/commits/Tadeusz-Struk/cgroup-serialize-css-kill-and-release-paths/20220606-014132
+> base:https://git.kernel.org/cgit/linux/kernel/git/tj/cgroup.git  for-next
+> patch link:https://lore.kernel.org/netdev/20220603181321.443716-1-tadeusz.struk@linaro.org
+> 
+> in testcase: boot
+> 
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot<oliver.sang@intel.com>
+> 
+> 
+> [ 55.821003][ C1] WARNING: CPU: 1 PID: 1 at kernel/softirq.c:363 __local_bh_enable_ip (kernel/softirq.c:363)
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/soundwire/qcom.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Looks like that will need to be spin_lock_irq(&css->lock) instead of spin_lock_bh(&css->lock)
+I can respin the patch, but I would like to request some feedback on it first.
 
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index 8e163da..b1bdf17 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -194,6 +194,12 @@ static const struct qcom_swrm_data swrm_v1_5_data = {
- 	.default_cols = 16,
- };
- 
-+static const struct qcom_swrm_data swrm_v1_6_data = {
-+	.default_rows = 50,
-+	.default_cols = 16,
-+	.sw_clk_gate_required = true,
-+};
-+
- #define to_qcom_sdw(b)	container_of(b, struct qcom_swrm_ctrl, bus)
- 
- static int qcom_swrm_ahb_reg_read(struct qcom_swrm_ctrl *ctrl, int reg,
-@@ -1564,7 +1570,7 @@ static const struct dev_pm_ops swrm_dev_pm_ops = {
- static const struct of_device_id qcom_swrm_of_match[] = {
- 	{ .compatible = "qcom,soundwire-v1.3.0", .data = &swrm_v1_3_data },
- 	{ .compatible = "qcom,soundwire-v1.5.1", .data = &swrm_v1_5_data },
--	{ .compatible = "qcom,soundwire-v1.6.0", .data = &swrm_v1_5_data },
-+	{ .compatible = "qcom,soundwire-v1.6.0", .data = &swrm_v1_6_data },
- 	{/* sentinel */},
- };
- 
+Tejun, Michal
+Are you interested in fixing this at syzbot issue all? Do you have any more feedback on this?
+
 -- 
-2.7.4
-
+Thanks,
+Tadeusz

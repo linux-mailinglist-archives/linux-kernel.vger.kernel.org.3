@@ -2,37 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8914954504F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448B2545054
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 17:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244431AbiFIPMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 11:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S1344095AbiFIPMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 11:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236467AbiFIPMR (ORCPT
+        with ESMTP id S240661AbiFIPMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 11:12:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86AE5265605
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 08:12:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2472012FC;
-        Thu,  9 Jun 2022 08:12:15 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 28F353F73B;
-        Thu,  9 Jun 2022 08:12:14 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     will@kernel.org, joro@8bytes.org
-Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, john.garry@huawei.com
-Subject: [PATCH v2] iommu/dma: Add config for PCI SAC address trick
-Date:   Thu,  9 Jun 2022 16:12:10 +0100
-Message-Id: <3f06994f9f370f9d35b2630ab75171ecd2065621.1654782107.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.36.1.dirty
+        Thu, 9 Jun 2022 11:12:32 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1DAB1F;
+        Thu,  9 Jun 2022 08:12:31 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id f7so18968615ilr.5;
+        Thu, 09 Jun 2022 08:12:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CGEoHPza3xdvV7CwQXyXz/OI0Wr6yYkBqPLhFgmXcEI=;
+        b=Bh2ELTycg4ma/KbeTqEgQmpGXOXFGVSjbglpZjFShrAZhRHRGsWkIlhIwWrLsPQxbx
+         nxE6I4VMKEOevXBqjPgpSTKnnPytzina7CswLWf8uV1lHRXER/zdAmhiQjTLH+h2vp0H
+         Dm/CSLokw5VDXe5RKLQ1kBm2U2nzt1jbCBIAPd8FMLgPrazG71QGQGOV7Hcr5d6TIIpi
+         HPiUHK2Ai1lvo6DYDAxyDldeD2AIP1WgqXqYCSq/xKG0n5AHoWgJsTcs+8d/ZT6hOeQl
+         5WwWULJ6PaNl7NlllA8OjOcW8lxxPk+pIRE4TTuSR5uKBbh48Guhr9ww66TYdCTQ6Z8E
+         nTvQ==
+X-Gm-Message-State: AOAM532Fw7FGKe4xwno2y0vA3WN1ROsDrvvjCCQnZAc6wOJ1Kh/oaI2s
+        l9wrKSeZopqndqVGap8I9g==
+X-Google-Smtp-Source: ABdhPJxO74uRCvSmQ2Qo1e121V5wl+KoVx7z04wk1OQqECEb6tExG/JJBd5b7j1HEtIB6qWquwjzmQ==
+X-Received: by 2002:a05:6e02:180e:b0:2d3:c497:710 with SMTP id a14-20020a056e02180e00b002d3c4970710mr22275012ilv.166.1654787550592;
+        Thu, 09 Jun 2022 08:12:30 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id m7-20020a056638408700b0032b3a7817b3sm9599623jam.119.2022.06.09.08.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 08:12:30 -0700 (PDT)
+Received: (nullmailer pid 3805410 invoked by uid 1000);
+        Thu, 09 Jun 2022 15:12:28 -0000
+Date:   Thu, 9 Jun 2022 09:12:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Atul Khare <atulkhare@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: sifive: add gpio-line-names
+Message-ID: <20220609151228.GA3800290-robh@kernel.org>
+References: <CABMhjYp4ChJ3KfP=jQmA5nnv7YB=Kkanjb2KwDEVWSS+Sn5m1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABMhjYp4ChJ3KfP=jQmA5nnv7YB=Kkanjb2KwDEVWSS+Sn5m1g@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,95 +65,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For devices stuck behind a conventional PCI bus, saving extra cycles at
-33MHz is probably fairly significant. However since native PCI Express
-is now the norm for high-performance devices, the optimisation to always
-prefer 32-bit addresses for the sake of avoiding DAC is starting to look
-rather anachronistic. Technically 32-bit addresses do have shorter TLPs
-on PCIe, but unless the device is saturating its link bandwidth with
-small transfers it seems unlikely that the difference is appreciable.
+On Wed, Jun 08, 2022 at 04:39:39PM -0700, Atul Khare wrote:
+> Fixes device tree schema validation messages like 'gpio-line-names'
+> does not match any of the regexes: 'pinctrl-[0-9]+' From schema: ...
+> sifive,gpio.yaml'.
+> 
+> The bindings were missing the gpio-line-names element, which was
+> causing the dt-schema checker to trip-up.
+> 
+> Signed-off-by: Atul Khare <atulkhare@rivosinc.com>
+> ---
+> Changes since v1 [1]: Rebased on latest version
 
-What definitely is appreciable, however, is that the IOVA allocator
-doesn't behave all that well once the 32-bit space starts getting full.
-As DMA working sets get bigger, this optimisation increasingly backfires
-and adds considerable overhead to the dma_map path for use-cases like
-high-bandwidth networking. We've increasingly bandaged the allocator
-in attempts to mitigate this, but it remains fundamentally at odds with
-other valid requirements to try as hard as possible to satisfy a request
-within the given limit; what we really need is to just avoid this odd
-notion of a speculative allocation when it isn't beneficial anyway.
+This one also doesn't apply.
 
-Unfortunately that's where things get awkward... Having been present on
-x86 for 15 years or so now, it turns out there are systems which fail to
-properly define the upper limit of usable IOVA space for certain devices
-and this trick was the only thing letting them work OK. I had a similar
-ulterior motive for a couple of early arm64 systems when originally
-adding it to iommu-dma, but those really should be fixed with proper
-firmware bindings by now. Let's be brave and default it to off in the
-hope that CI systems and developers will find and fix those bugs, but
-expect that desktop-focused distro configs are likely to want to turn
-it back on for maximum compatibility.
+> [1]: https://tinyurl.com/yvdvmsjd
+> ---
+> ---
+>  Documentation/devicetree/bindings/gpio/sifive,gpio.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+> b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+> index 939e31c48081..787ce7300118 100644
+> --- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+> @@ -47,6 +47,9 @@ properties:
+>      default: 16
+> 
+>    gpio-controller: true
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+blank line
 
-v2: Tweak wording to clarify that it's not really an optimisation in
-    general, remove "default X86".
-
- drivers/iommu/Kconfig     | 26 ++++++++++++++++++++++++++
- drivers/iommu/dma-iommu.c |  2 +-
- 2 files changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-index c79a0df090c0..5a225b48dd00 100644
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -144,6 +144,32 @@ config IOMMU_DMA
- 	select IRQ_MSI_IOMMU
- 	select NEED_SG_DMA_LENGTH
- 
-+config IOMMU_DMA_PCI_SAC
-+	bool "Enable 64-bit legacy PCI optimisation by default"
-+	depends on IOMMU_DMA
-+	help
-+	  Enable by default an IOMMU optimisation for 64-bit legacy PCI devices,
-+	  wherein the DMA API layer will always first try to allocate a 32-bit
-+	  DMA address suitable for a single address cycle, before falling back
-+	  to allocating from the device's full usable address range. If your
-+	  system has 64-bit legacy PCI devices in 32-bit slots where using dual
-+	  address cycles reduces DMA throughput significantly, this may be
-+	  beneficial to overall performance.
-+
-+	  If you have a modern PCI Express based system, this feature mostly just
-+	  represents extra overhead in the allocation path for no practical
-+	  benefit, and it should usually be preferable to say "n" here.
-+
-+	  However, beware that this feature has also historically papered over
-+	  bugs where the IOMMU address width and/or device DMA mask is not set
-+	  correctly. If device DMA problems and IOMMU faults start occurring
-+	  after disabling this option, it is almost certainly indicative of a
-+	  latent driver or firmware/BIOS bug, which would previously have only
-+	  manifested with several gigabytes worth of concurrent DMA mappings.
-+
-+	  If this option is not set, the feature can still be re-enabled at
-+	  boot time with the "iommu.forcedac=0" command-line argument.
-+
- # Shared Virtual Addressing
- config IOMMU_SVA
- 	bool
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index f90251572a5d..9f9d9ba7f376 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -67,7 +67,7 @@ struct iommu_dma_cookie {
- };
- 
- static DEFINE_STATIC_KEY_FALSE(iommu_deferred_attach_enabled);
--bool iommu_dma_forcedac __read_mostly;
-+bool iommu_dma_forcedac __read_mostly = !IS_ENABLED(CONFIG_IOMMU_DMA_PCI_SAC);
- 
- static int __init iommu_dma_forcedac_setup(char *str)
- {
--- 
-2.36.1.dirty
-
+> +  gpio-line-names:
+> +    minItems: 1
+> +    maxItems: 32
+> 
+>  required:
+>    - compatible
+> --
+> 2.34.1
+> 

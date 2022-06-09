@@ -2,68 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627F3544477
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2EE54448C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 09:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238033AbiFIHKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 03:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S239480AbiFIHNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 03:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiFIHKu (ORCPT
+        with ESMTP id S231128AbiFIHM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:10:50 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAF924249E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 00:10:49 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v14so4822182wra.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 00:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JJz/uKfPsh9RRifdT1nn+CMGqnTBCL20lTm/X6d1lqM=;
-        b=jsNs38uwEJLDzfg6iOVlGcTuNTHg/2wCkchmIoHgHbUnNvDYT9jX4odCdFR1X5HOVd
-         1oO4u6OSo5Jly3z6iRdb2d85wNER+NQ1fcTpyL/ZvioaAqRUTHW4wLmm/yLSNaqDyCJw
-         DYA3VByqbOklwDmNBCd3Tz6Zrj1nqbAVHzPmPMudE1tO4p289AF0MZLZi0bRdM+b9D9W
-         X+2K8SxU4t1PW9cq/KRjsO+qOEDxsDmujcMAc1jb2Z9Ldd28793q6hEIT5lwZiCcJa4d
-         8VCA8ZF12pUDq5TbPSNRKxaotT9xQSNfqV68lphOy6+zyN+6gT46IGjOqRORnl7U6oh/
-         dA8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JJz/uKfPsh9RRifdT1nn+CMGqnTBCL20lTm/X6d1lqM=;
-        b=BHdT59X5ZbjKWAhm4f8OFPRUYPf67XemCAEVVEUDhBQL3w6hv32mZaIv+G8B6+peLb
-         YgxKbp9A0Lju5NDGl4D6HRFW9PqbV7qfG+8Gv91fcQGWvCEhv4NhIVXoaCgcvrSXS0gF
-         reYqMFaJI9ZA/VRFdLs1ULBHVD1lMsTK7WTW6G3/DVa+p+3hvDsIpVprx/BnDiSoH9oA
-         JEX1M7QgK4im1EpEQoRCkLtRnoChCmy+6EXBR+8Jh8Lj/KYWPYWK7LeSSVd1RHwkWUmN
-         qYHnKGQzyiUbrRsqXRBAb97dSteGc8Rf3t8oVCdXHPSNHUlaRc6Y+Mff7Y/E/AqQR7gO
-         Ordw==
-X-Gm-Message-State: AOAM532h3XMmDdGxzDEDjvPKIpWS0cMdgDmnN5Ms48Y7l8aqtNc7YZzP
-        0PZnJCFFI5MzwQK4+tHuSq8mw/IgKGL7/n0RcjLTkg==
-X-Google-Smtp-Source: ABdhPJylcxfa8lk6sZMPzVdU/PBo3dJQN7FnVwb7dERZQ14FpQB8ahwTtYVRJy9R0o2eeSEMfYKbluxOe47pBBMdUwM=
-X-Received: by 2002:a05:6000:2a4:b0:219:2aad:51ce with SMTP id
- l4-20020a05600002a400b002192aad51cemr5208677wry.719.1654758648006; Thu, 09
- Jun 2022 00:10:48 -0700 (PDT)
+        Thu, 9 Jun 2022 03:12:58 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2160E2428ED;
+        Thu,  9 Jun 2022 00:12:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VFrcIPJ_1654758771;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VFrcIPJ_1654758771)
+          by smtp.aliyun-inc.com;
+          Thu, 09 Jun 2022 15:12:52 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     andi@etezian.org, broonie@kernel.org, alim.akhtar@samsung.com,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next v2] spi: Return true/false (not 1/0) from bool function
+Date:   Thu,  9 Jun 2022 15:12:50 +0800
+Message-Id: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <CALt099+y4-kJ0OqVeKaAjAbs4inOkR-WE0FmyiJRDc1-Ev9UKw@mail.gmail.com>
- <20220603124956.GA18365@lst.de> <CALt099JqRXwsGnq_DmHmnwPyB0K9Y+-BZUG_YoGxOg7G7ZZh9w@mail.gmail.com>
- <20220609042736.GA31823@lst.de>
-In-Reply-To: <20220609042736.GA31823@lst.de>
-From:   Michael Schaller <misch@google.com>
-Date:   Thu, 9 Jun 2022 09:10:11 +0200
-Message-ID: <CALt099+_EoSmigM5LizV8g7KFY=n0dcfPv4Ycw=YrCDvhJELMg@mail.gmail.com>
-Subject: Re: New partition on loop device doesn't appear in /dev anymore with
- kernel 5.17.0 and newer (repro script included)
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +41,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 6:27 AM Christoph Hellwig <hch@lst.de> wrote:
-> Any chance I could trick you into submitting your reproducer to blktests:
->
->    https://github.com/osandov/blktests
->
-> ?
+Return boolean values ("true" or "false") instead of 1 or 0 from bool
+function.
 
-No need to trick me. ;-)
-https://github.com/osandov/blktests/pull/93
+As reported by coccicheck:
+./drivers/spi/spi-s3c64xx.c:385:9-10: WARNING: return of 0/1 in function
+'s3c64xx_spi_can_dma' with return type bool
 
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/spi/spi-s3c64xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Michael Schaller
-Site Reliability Engineer - Software Engineer
-misch@google.com
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 82558e37c735..28e7b7cb68a7 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -382,7 +382,7 @@ static bool s3c64xx_spi_can_dma(struct spi_master *master,
+ 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
+ 		return xfer->len > (FIFO_LVL_MASK(sdd) >> 1) + 1;
+ 	} else {
+-		return 0;
++		return false;
+ 	}
+ 
+ }
+-- 
+2.20.1.7.g153144c
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg

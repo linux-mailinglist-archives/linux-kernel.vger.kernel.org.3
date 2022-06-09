@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F906544A09
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658E3544A10
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 13:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243577AbiFIL0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 07:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S243704AbiFIL1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 07:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiFIL0l (ORCPT
+        with ESMTP id S232361AbiFIL1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:26:41 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F093611E483
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 04:26:40 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id z17so20820031pff.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 04:26:40 -0700 (PDT)
+        Thu, 9 Jun 2022 07:27:45 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A5316A520;
+        Thu,  9 Jun 2022 04:27:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=V4IYMDqP7Q3RRyht9p4c+8sPxp25evrg3IFf8iyBHM0=;
-        b=A6GJjzlSq+ZIMpBaEppi0DLytXW7CwNtB9jJEKfRFg8tpuFUhWIpExRT8yGgP1Twe3
-         UEXH4I86hWsKAmY1Rlet8GqXh6hAnQOtcR82ojJd6WC+Dte6mXJ5pbXX421Z74Jl8WEK
-         8M1lx85EMJ8swfR2r9mVStZP7PuRQaAGvVb5vETjIXEEdUeEVvA12h8JYi/CGrQu8JYB
-         +ihQPHEBbc/Ie4N3pXAgTOjMq5H7rxXWlePd3bHhO+SdTJWwjC0UOIgnFe8MDNGAFwZT
-         QweViCG63wXK+f+cwj2QKDoNLI71TJeWXd37e7zVkMn1B6ApPPrvpGtjEtV8qx7GoIyN
-         J4Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=V4IYMDqP7Q3RRyht9p4c+8sPxp25evrg3IFf8iyBHM0=;
-        b=Mnc8apjQu2+UUbEGhkpgo6X79Zo9QMNNGgsuFIpXs6d6ehUkv44PdF2tFLrhEoxjPZ
-         FLttZzaRXnadSRQdFiRXL7cRjPepZk/FR3uCTeSfKwE2B4oIvJfWuehFZ/uQDcbHb89j
-         A+ULaF0gL8rlqqJMazmmhRu6dflzRM9yXWSnMLgXI07SqgrHcOBIqkEN6/F2B/XsC9jF
-         /l/rea659l6ul6M1s1zsdk5nP1Td2m2uej35L7czPwEgBNYek84gAH/9m32yKQmWwsJP
-         p7WRYyzt0xAH0cCWRuIfrnmtGLFg3ry+3Lpeg45fdO72o4J1GD5xfuw2CNrPTFFPmLGb
-         2MHQ==
-X-Gm-Message-State: AOAM531T+JWF3FOqSwA3jfRWqjUdMStaAa/Hx1ikrf7SmXlTaBXg00rU
-        m/0pPRJTLhgejqIqGFWx/y6W
-X-Google-Smtp-Source: ABdhPJw42NUzFVmYVWRCmMNT8kSTjxDpaoLNjchqNA909Y8IVWjVRVzfRaaTUOCzma9ZVewl0DRXgw==
-X-Received: by 2002:aa7:8d11:0:b0:51c:4f6d:1562 with SMTP id j17-20020aa78d11000000b0051c4f6d1562mr9721191pfe.14.1654774000221;
-        Thu, 09 Jun 2022 04:26:40 -0700 (PDT)
-Received: from thinkpad ([117.217.188.216])
-        by smtp.gmail.com with ESMTPSA id r8-20020a638f48000000b00401a9bc0f33sm376191pgn.85.2022.06.09.04.26.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:26:39 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 16:56:30 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_ramkri@quicinc.com, swboyd@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v1] PCI: qcom: Allow L1 and its sub states on qcom dwc
- wrapper
-Message-ID: <20220609112630.GG2758@thinkpad>
-References: <1654240730-31322-1-git-send-email-quic_krichai@quicinc.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1654774064;
+  x=1686310064;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bhskym4sqQMSOth67vOfsFUFtLxH4cebU75ziJNIKt4=;
+  b=KqH6xDCergcQvqxlnEwkcNL+B4agtQ2M1T8RDtmeiwIsaiDXPpQaV8dh
+   u7m+qIt0W5SawDunUAL+zXyZt5FbMjF0RHJm+nPk61KVJhlWgK87xMHEN
+   /NtK94K/dSgUCd6aBT80Lw5dphkwmJbiP/B4YnQHVsp/TH2pXIdN9roH4
+   XrWlYf3TlJZ5QnVDGGJGarBv3FCNWeDTulG9Od6k43k35FsYNYYMa+Z3E
+   KvmbGeDtX5W+4brEkpbaDSZOEKmRTxrJ1Wc/s37fRte98Hxqc1SLR7qL4
+   WZUb3iLnYULdSkoobidTfCf51YQVYzozL7yTtuJPgWLWBbfZ49xj5JzJz
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <krzysztof.kozlowski@linaro.org>, <tglx@linutronix.de>,
+        <daniel.lezcano@linaro.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <alim.akhtar@samsung.com>,
+        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
+Subject: [PATCH v4 0/4] clocksource: Add MCT support for ARTPEC-8
+Date:   Thu, 9 Jun 2022 13:27:34 +0200
+Message-ID: <20220609112738.359385-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1654240730-31322-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:48:50PM +0530, Krishna chaitanya chundru wrote:
-> Allow L1 and its sub-states in the qcom dwc pcie wrapper.
+This series add supports for the timer block on ARTPEC-8.  The block itself is
+fully compatible with the existing exynos4210-mct driver.  The ARTPEC-8 SoC
+uses this block from two separate processors running Linux (AMP) so it needs
+some extra code to allow this sharing.
 
-s/wrapper/driver
+v4:
+- Rebase on v5.19-rc1 where all pre-requisites are merged
+- Minor rework of patch 4 as requested, see patch for details
 
-Also there is no need to use "qcom dwc" in subject. Prefix makes it explicit.
+v3:
+- Split and rename devicetree properties
+- Add vendor prefix to devicetree properties
+- Change descriptions of properties to hopefully describe hardware
+- Remove addition of more global variables to the driver
 
-> By default its disabled. So enable it explicitly.
-> 
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 6ab9089..f60645c 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -41,6 +41,9 @@
->  #define L23_CLK_RMV_DIS				BIT(2)
->  #define L1_CLK_RMV_DIS				BIT(1)
->  
-> +#define PCIE20_PARF_PM_CTRL			0x20
-> +#define REQ_NOT_ENTR_L1				BIT(5)
-> +
->  #define PCIE20_PARF_PHY_CTRL			0x40
->  #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
->  #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
-> @@ -1267,6 +1270,11 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
->  	val |= BIT(4);
->  	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
->  
-> +	/* Clear PARF PM REQ_NOT_ENTR_L1 bit to allow L1 states */
+v2:
+- The series is now rebased on top of Krzysztof's patch "dt-bindings: timer:
+  exynos4210-mct: describe known hardware and its interrupts".
+- Combine the Kconfig change and the local timer change into one series
+- Use devicetree property rather than module parameter for the local timer handling
+- Add specific compatible with the correct number of interrupts.
 
-Mentioning the field in comment is redundant. Just say "Enable L1 and L1ss"
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
 
-Thanks,
-Mani
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: alim.akhtar@samsung.com
 
-> +	val = readl(pcie->parf + PCIE20_PARF_PM_CTRL);
-> +	val &= ~REQ_NOT_ENTR_L1;
-> +	writel(val, pcie->parf + PCIE20_PARF_PM_CTRL);
-> +
->  	if (IS_ENABLED(CONFIG_PCI_MSI)) {
->  		val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
->  		val |= BIT(31);
-> -- 
-> 2.7.4
-> 
+Cc: devicetree@vger.kernel.org
+Cc: robh+dt@kernel.org
 
+Vincent Whitchurch (4):
+  dt-bindings: timer: exynos4210-mct: Add ARTPEC-8 MCT support
+  clocksource/drivers/exynos_mct: Support frc-shared property
+  clocksource/drivers/exynos_mct: Support local-timers property
+  clocksource/drivers/exynos_mct: Enable building on ARTPEC
+
+ .../timer/samsung,exynos4210-mct.yaml         | 26 ++++++
+ drivers/clocksource/Kconfig                   |  2 +-
+ drivers/clocksource/exynos_mct.c              | 83 +++++++++++++++++--
+ 3 files changed, 101 insertions(+), 10 deletions(-)
+
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+

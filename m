@@ -2,129 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8ED54470F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3666F544710
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241129AbiFIJPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S241467AbiFIJPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240651AbiFIJPh (ORCPT
+        with ESMTP id S240237AbiFIJPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:15:37 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B1C19299;
-        Thu,  9 Jun 2022 02:15:36 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id 15so12107785qki.6;
-        Thu, 09 Jun 2022 02:15:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7nTBBYryHSMMkovXdmbTlpzxYn9tgvrwGD6VKVeo3rI=;
-        b=LoPFjriZuXVeF6lAFuiPtTPyJsMwMV8M0jL/9Bi+Y6fM8OdXNZEYjjTUXGDFmLJHgQ
-         eVca2xutLCtB8ivo++3Pm/Tml/sVdj56aunh2mcfgxadONm3vrbaEnSZIsbo8SZxqq9r
-         gixR59ohG5E24FSCTbZjpIiqkZzZr5UEV0auMyPXUsb33l9JaXVa5r9c+S6epo0YMDcR
-         0jvk70J0a7+47wDMHGWoCyGBdzoc+9QwzvhdDuEuWg7fbHK/ff/NUYYsuGWPkDHSsD1i
-         v/StmyAuYsB2PCgfPWUgC3JKtfT81Z4tcBcNMatr+EpvwyN1taFNoj4+pfjxZjO2JveF
-         q1Iw==
-X-Gm-Message-State: AOAM531XLG1ZDcQSprnVTC9QnqS9bFNv687e8kTude97Q/eVRj6m9Hxj
-        lk6lmgj32Z2S/88QTtAaUzbnMCWR5h6UtQ==
-X-Google-Smtp-Source: ABdhPJz/1We6QwUuziB5GoCh/cgmeXDc1kek5l623fMSL0phV7X5WWvw8bjtUA4ICwG4gZz3y4+maw==
-X-Received: by 2002:a05:620a:125a:b0:6a6:bfab:5c45 with SMTP id a26-20020a05620a125a00b006a6bfab5c45mr13277299qkl.736.1654766135283;
-        Thu, 09 Jun 2022 02:15:35 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05620a440c00b006a6a904c0a5sm6102817qkp.107.2022.06.09.02.15.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 02:15:34 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id r3so6569563ybr.6;
-        Thu, 09 Jun 2022 02:15:34 -0700 (PDT)
-X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
- o69-20020a25d748000000b0065c6b0055afmr37699311ybg.365.1654766134128; Thu, 09
- Jun 2022 02:15:34 -0700 (PDT)
+        Thu, 9 Jun 2022 05:15:42 -0400
+Received: from mail.shift-gmbh.com (mail.shift-gmbh.com [85.10.195.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9051A046;
+        Thu,  9 Jun 2022 02:15:37 -0700 (PDT)
+From:   Alexander Martinz <amartinz@shiftphones.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shiftphones.com;
+        s=2018; t=1654766135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3C0P7njZbEY2mv2K04P5MzImLsWwwilysYXKw/K0dJc=;
+        b=g1uhscyUpcEDF+FG2zbBdF7RR9E4gRfIrE7QVEY+50XKOD+7ZFFr6zbOTKdiURHLKieYjR
+        OR9isjvF9jzul6OH7NuidmLnuApljWNdHD/t3xLzAaPNTHC+AHPzsbUUj2Id0U6886CiWE
+        P5RKMEQ6iNJuby3fRMwj4pLKYhj8cyzFBuaWOIWmVlogSg4/tjTPaBQ+lGSSrp4EIymVyA
+        RSFsEIn0CC/vMy45HzoLixgPgGChLO6tXuH0SKY3VdnbnqaEgNIiF72v02Bc15CWQsEH6P
+        DYMdfQ8hU5xAtNIt3cR83BocNlwPLFfrLVs851OWsx9oonE7qDpVefLh1RjSww==
+To:     me@dylanvanassche.be
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, robh+dt@kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Alexander Martinz <amartinz@shiftphones.com>
+Subject: Re: [PATCH] arm64: dts: qcom/sdm845-shift-axolotl: Enable pmi9889 LPG LED
+Date:   Thu,  9 Jun 2022 11:15:26 +0200
+Message-Id: <20220609091526.132133-1-amartinz@shiftphones.com>
+In-Reply-To: <20220512054439.13971-1-me@dylanvanassche.be>
+References: <20220512054439.13971-1-me@dylanvanassche.be>
 MIME-Version: 1.0
-References: <20220525151216.24133-1-wsa+renesas@sang-engineering.com> <20220525151216.24133-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220525151216.24133-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jun 2022 11:15:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWEzhE8aAfsDRpzpv=ZFLb7Cn0r-En0K6O7heT6OA1JEA@mail.gmail.com>
-Message-ID: <CAMuHMdWEzhE8aAfsDRpzpv=ZFLb7Cn0r-En0K6O7heT6OA1JEA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: rcar_gen3_thermal: improve logging during probe
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=amartinz@shiftphones.com smtp.mailfrom=amartinz@shiftphones.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-On Wed, May 25, 2022 at 7:07 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> When setting up a new board, a plain "Can't register thermal zone"
-> didn't help me much because the thermal zones in DT were all fine. I
-> just had a sensor entry too much in the parent TSC node. Reword the
-> failure/success messages to contain the sensor number to make it easier
-> to understand which sensor is affected. Example output now:
+On 2022-05-12 07:44 +0200, Dylan Van Assche wrote:
+> Enables the RGB notification LED on the SHIFT 6mq (sdm845-shift-axolotl)
+> with the Qualcomm Light Pulse Generator bindings by Bjorn Andersson [1].
+> Patches are merged in for-next branch of linux-leds.
+> Tested these changes on the SHIFT 6mq.
 >
-> rcar_gen3_thermal e6198000.thermal: Sensor 0: Trip points loaded: 1
-> rcar_gen3_thermal e6198000.thermal: Sensor 1: Trip points loaded: 1
-> rcar_gen3_thermal e6198000.thermal: Sensor 2: Trip points loaded: 1
-> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/commit/?h=for-next&id=a8e53db46f19f67be6a26488aafb7d10c78e33bd
 >
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
 
-Thanks for your patch!
+Thank you very much, Dylan!
 
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -511,7 +511,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->                 zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
->                                                             &rcar_gen3_tz_of_ops);
->                 if (IS_ERR(zone)) {
-> -                       dev_err(dev, "Can't register thermal zone\n");
-> +                       dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
-
-LGTM.
-
->                         ret = PTR_ERR(zone);
->                         goto error_unregister;
->                 }
-> @@ -533,7 +533,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->                 if (ret < 0)
->                         goto error_unregister;
->
-> -               dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
-> +               dev_info(dev, "Sensor %u: Trip points loaded: %u\n", i, ret);
-
-I actually prefer the old wording (I'm undecided about "sensor" vs.
-"TSC", though, but consistency rules), as it makes it clear "ret"
-is the number of trip points, and not a success code.
-
->         }
->
->         if (!priv->num_tscs) {
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Alexander Martinz <amartinz@shiftphones.com>
+Tested-by: Alexander Martinz <amartinz@shiftphones.com>

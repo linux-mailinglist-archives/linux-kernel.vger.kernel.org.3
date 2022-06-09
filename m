@@ -2,126 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052BE54434B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0DC54434E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 07:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238533AbiFIFsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 01:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S238501AbiFIFtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 01:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiFIFsV (ORCPT
+        with ESMTP id S232296AbiFIFs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:48:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CE723B70A;
-        Wed,  8 Jun 2022 22:48:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D51A1B82C20;
-        Thu,  9 Jun 2022 05:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C35C34114;
-        Thu,  9 Jun 2022 05:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654753697;
-        bh=srvycSML/3DtXuGTOU81tu/ONwTrX8FWExQdjZdpSHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PpU8+4R5/EkFK7UvLyHRVyIZ8XCh8GpzDaIeagtOUeiI4TpXM1CfKmuss5/zoDqsg
-         8QoXCaAlyJqBSB7sBXLYpo4N7iv71diwLmmxUCnUcPdGzDm9JTwfER1LOQgajba8d6
-         00Y5qiZY/F34QkvvUDJHm6RdrQYT85L20QXje5VuPUi5XfInM4m5PUol30TjD1HNY8
-         tkhV3b1moxJAW+a+/y5Gpsql5phAM1DL/3iSbCif6wLEZ3gbZugCydsA7fJLCPHAkO
-         gTgp23USO6LkjmbXiuPbWI28cx4cASf4FPdCMWk6NDHILxR/AL9jxDE1pafnCtAndb
-         7FrojzZRPyajw==
-Date:   Thu, 9 Jun 2022 11:18:12 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com, stable@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RESEND PATCH v2] dmaengine: mxs: fix driver registering
-Message-ID: <YqGJnORzbp2xiEU3@matsya>
-References: <20220607095829.1035903-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607095829.1035903-1-dario.binacchi@amarulasolutions.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 9 Jun 2022 01:48:57 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D4525AD5B;
+        Wed,  8 Jun 2022 22:48:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654753736; x=1686289736;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=X6xY/YfYwXt/shABIBSZM3vNDaFed04f3Z096mVyREU=;
+  b=LOJx/gRIkeZDxn+0uAXiPl7cBYP2dFoEcnCsqnnz3rLga7mFFw+u36/X
+   CtfDEQHiddLIVvIiVHS+thu9yslJD7IZ7FEPQSyaNvuvV+RiTVwjsSwsP
+   AwqkpkFCdbg+euII2N7Dv6oBwa1aeWhZQXvPaDEu+3stSrab0cSnAOZv3
+   tkyNVmhZgcOtZiUiX9BwJo3r7cGQ/C/3iWx62qqS+aoPxhbB+84J4a5Yi
+   0sZ9UG5NJ5Ae7U6FT+ph7kBO+0b2jksikn4CBxJs+KR6N8B46pw5f4mAP
+   M6VSQl0B/roFaDIPuCJydBDEsjWt3e4/j1CxZvRnvEFVs6PRDoSCzypH2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="338927173"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="338927173"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 22:48:55 -0700
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585312688"
+Received: from xwang29-mobl.ccr.corp.intel.com ([10.249.168.108])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 22:48:52 -0700
+Message-ID: <ac80ed671fc2482524b9234c444d765e2f8d87f1.camel@intel.com>
+Subject: Re: [net]  6922110d15: suspend-stress.fail
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com, yu.c.chen@intel.com
+Date:   Thu, 09 Jun 2022 13:48:50 +0800
+In-Reply-To: <20220608054553.GA7499@1wt.eu>
+References: <20220605143935.GA27576@xsang-OptiPlex-9020>
+         <20220607174730.018fe58e@kernel.org> <20220608054553.GA7499@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-06-22, 11:58, Dario Binacchi wrote:
-> Driver registration fails on SOC imx8mn as its supplier, the clock
-> control module, is not ready. Since platform_driver_probe(), as
-> reported by its description, is incompatible with deferred probing,
-> we have to use platform_driver_register().
-> 
-> Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
-> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Cc: stable@vger.kernel.org
-> 
-> ---
-> 
-> Changes in v2:
-> - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
-> 
->  drivers/dma/mxs-dma.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
-> index 994fc4d2aca4..b8a3e692330d 100644
-> --- a/drivers/dma/mxs-dma.c
-> +++ b/drivers/dma/mxs-dma.c
-> @@ -670,7 +670,7 @@ static enum dma_status mxs_dma_tx_status(struct dma_chan *chan,
->  	return mxs_chan->status;
->  }
->  
-> -static int __init mxs_dma_init(struct mxs_dma_engine *mxs_dma)
-> +static int mxs_dma_init(struct mxs_dma_engine *mxs_dma)
+Hi,
 
-why drop __init for these...?
+On Wed, 2022-06-08 at 07:45 +0200, Willy Tarreau wrote:
+> On Tue, Jun 07, 2022 at 05:47:30PM -0700, Jakub Kicinski wrote:
+> > On Sun, 5 Jun 2022 22:39:35 +0800 kernel test robot wrote:
+> > > Greeting,
+> > > 
+> > > FYI, we noticed the following commit (built with gcc-11):
+> > > 
+> > > commit: 6922110d152e56d7569616b45a1f02876cf3eb9f ("net:
+> > > linkwatch: fix failure to restore device state across
+> > > suspend/resume")
+> > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git
+> > > master
+> > > 
+> > > in testcase: suspend-stress
+> > > version: 
+> > > with following parameters:
+> > > 
+> > > 	mode: freeze
+> > > 	iterations: 10
+> > > 
+> > > 
+> > > 
+> > > on test machine: 4 threads Ivy Bridge with 4G memory
+> > > 
+> > > caused below changes (please refer to attached dmesg/kmsg for
+> > > entire log/backtrace):
+> > > 
+> > > 
+> > > 
+> > > 
+> > > If you fix the issue, kindly add following tag
+> > > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > 
+> > > 
+> > > Suspend to freeze 1/10:
+> > > Done
+> > > Suspend to freeze 2/10:
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > network not ready
+> > > Done
+> > 
+> > What's the failure? I'm looking at this script:
+> > 
+> > https://github.com/intel/lkp-tests/blob/master/tests/suspend-stress
+> > 
+> > And it seems that we are not actually hitting any "exit 1" paths
+> > here.
 
->  {
->  	int ret;
->  
-> @@ -741,7 +741,7 @@ static struct dma_chan *mxs_dma_xlate(struct of_phandle_args *dma_spec,
->  				     ofdma->of_node);
->  }
->  
-> -static int __init mxs_dma_probe(struct platform_device *pdev)
-> +static int mxs_dma_probe(struct platform_device *pdev)
->  {
->  	struct device_node *np = pdev->dev.of_node;
->  	const struct mxs_dma_type *dma_type;
-> @@ -839,10 +839,7 @@ static struct platform_driver mxs_dma_driver = {
->  		.name	= "mxs-dma",
->  		.of_match_table = mxs_dma_dt_ids,
->  	},
-> +	.probe = mxs_dma_probe,
->  };
->  
-> -static int __init mxs_dma_module_init(void)
-> -{
-> -	return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
-> -}
 
-> -subsys_initcall(mxs_dma_module_init);
-> +module_platform_driver(mxs_dma_driver);
-> -- 
-> 2.32.0
+In our test, we do 10 back-to-back suspend iterations,
 
--- 
-~Vinod
+1. tell the server the machine is going to suspend
+2. do suspend
+3. resumed by rtc
+4. check network availability
+5. tell the server the machine is resumed, and update the local log to
+the server
+6. goto 1
+
+As the test is done remotely, from server side, we only know that step
+1 is done, the test machine may either hang in suspend, or lost network
+connection after resume. The only way to bring it back on line is to do
+a hard reset, but as we're using ramdisk, there is no log can tell us
+which step the test stucks before reboot.
+
+You can see the above log only when the network is already back.
+
+The reason why we think it is a regression is that
+after 10x10 suspend iterations (10 tests, each test is done after a
+refresh boot, and each tests contains 10 suspend iterations)
+
+With the first bad commit:
+0/10 passed
+with the head that contains the commit
+1/10 passed
+With the parent of the first bad commit or with the first bad commit
+reverted,
+10/10 passed
+
+> 
+> I'm not sure how the test has to be interpreted but one possible
+> interpretation is that the link really takes time to re-appear and
+> that prior to the fix, the link was believed to still be up since
+> the event was silently lost during suspend, while now the link is
+> correctly being reported as being down and something is waiting for
+> it to be up again, as it possibly should. Thus it could be possible
+> that the fix revealed an incorrect expectation in that test.
+
+Just to be clear, the network is really up. That is why we can see this
+log which is sent back from the test machine via network after resume.
+
+thanks,
+rui
+

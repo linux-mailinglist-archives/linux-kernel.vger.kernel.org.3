@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D496B5447A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9B35447A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 11:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242104AbiFIJec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 05:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S235008AbiFIJf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 05:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234972AbiFIJea (ORCPT
+        with ESMTP id S233025AbiFIJfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 05:34:30 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1CB1D01C9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 02:34:28 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id h23so35235108ejj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 02:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V00S6RIlLw/XlryCtnGLUCT1UyFL8GwBHHHmfaLtRjQ=;
-        b=H7a1XEerxRHzmv3lekwWcxkuFmyr2YEq0ctxzQdNl1BRtFRR0EpQIt0JUi8dR86l96
-         ITowpVjKSgSdbHAoFsrY7fiRDpWKLXfdnjsylOTUdxZCvHNcGxzuq2rArpAI26cykLQI
-         Qg5gG2rwgd6JKqraj8Rm405Ck3y0N3DNpQ1h1diMWdhNhPzhTBjrZ8EXy4a3vUnuUFwC
-         jBA3Bo/ZAOiU8joRtjLQ+OsBcNWoOozt/m5KYIWBVTjBTMXVJeIuIdy2cUu4anMU4Ld2
-         mLP3jOFHdCcYAcADb8jqBs4G21m5c3hAaHhtZ79qQVIshXhHiOa0lVTHrh1Y4pBNObw8
-         TzEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V00S6RIlLw/XlryCtnGLUCT1UyFL8GwBHHHmfaLtRjQ=;
-        b=rsSj5ld78fF6WxyYYD+uUMnzAmggq1LsuGcz3+/1vaOqP50pu1NUWe88MpEp9l/f5N
-         hPXw9FLLWWtCmtc5ma2UXLjMd2vKXVh2VCXSQJkeXC38ts9jcOaBLM62l85Z37+9mwQG
-         /CoWOpVDbTdsEdotFixFSuxDi3tTm9HhzQIBplxIzONzi6InE5ZWN1MKpSu+wtGE+NMp
-         O8EyBx01nORjzyUCoRIWUaEUxMOBrPO7KCYid+m9IdLYp6og4WeHSzF/X9RrpnJ2MwAT
-         gd2JvHzsJMH5nPzuhwLVyzGY2GLYRD/9IoBOmXVDB+wPk44vVGI6EQKhro+FEAk8Kimt
-         WXfQ==
-X-Gm-Message-State: AOAM53372QDsOEM9Y+JavylLZ7ihAsi73hWkOFMzVSjbj4WF7YamnxA9
-        fbjHkxTK0LrAkIcc5xsff+gmGm2U76r7+vbzREiCI2Y6Luk=
-X-Google-Smtp-Source: ABdhPJx9wh5mgQuA/plhLvGR9odnRMKNZuw+e7p5cqq6yzPGSyolfIGb13lWdprIfBt5HNxP+ZIRY9K+Qp1dNJ8VVX0=
-X-Received: by 2002:a17:907:3e21:b0:711:ea36:914e with SMTP id
- hp33-20020a1709073e2100b00711ea36914emr9489374ejc.101.1654767267471; Thu, 09
- Jun 2022 02:34:27 -0700 (PDT)
+        Thu, 9 Jun 2022 05:35:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C767D654B;
+        Thu,  9 Jun 2022 02:35:51 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D1EC66016FD;
+        Thu,  9 Jun 2022 10:35:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654767350;
+        bh=BH72tA3Gv2tLURwDnY5UsSEkwsx+vUzwp5wTPxVczvk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aFgguC5hMuyVbHwuGvCHFJ/j16RiTIEJQ4LRbUFOphEqEyKiRcnjJxU8B66h/GYQ3
+         GT4U+S2FDQS4S3AGCcCaRin3wtBLGC3hxCBCSeMrx2JX+jozSujwzsrd4N3kasKMZq
+         xb2PmVvm4z1F+7aYRKRxe32oRugDq2sax4108q+hp0dCiiAltoVHxLT5nLh84KlWZN
+         xykOEDKdoJSUMDP3HUAW7qeyPZCEq4cGi6nCaQ2Vq8TijxtaONgDPNjXKCDNkdTaCW
+         5XFKn7XzzqiLqvKcovYV+NFovRiH2SrZtWqaHEKxtODGlePSDyhrTS/200pYBUAocV
+         WLARRgsksZ3cw==
+Message-ID: <1974b83e-967a-41ed-e790-52ceaf349ad3@collabora.com>
+Date:   Thu, 9 Jun 2022 11:35:46 +0200
 MIME-Version: 1.0
-References: <20220520164726.60638-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220520164726.60638-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 9 Jun 2022 11:34:16 +0200
-Message-ID: <CAMRc=McdOQUwb7U_G_p57cFWiF5Pcmo9pM3QwnUr9a3O-X28kw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: cdev: Fix kernel doc for struct line
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dipen Patel <dipenp@nvidia.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: timer: mediatek: Add CPUX System
+ Timer and MT6795 compatible
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        daniel.lezcano@linaro.org
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org
+References: <20220518112435.241116-1-angelogioacchino.delregno@collabora.com>
+ <20220518112435.241116-2-angelogioacchino.delregno@collabora.com>
+ <afd9ab8e-5bad-54ee-3f44-5e0cfdb22e75@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <afd9ab8e-5bad-54ee-3f44-5e0cfdb22e75@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 6:47 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Kernel doc validator is not happy:
->   gpiolib-cdev.c:487: warning: Function parameter or member 'hdesc' not described in 'line'
->   gpiolib-cdev.c:487: warning: Function parameter or member 'raw_level' not described in 'line'
->   gpiolib-cdev.c:487: warning: Function parameter or member 'total_discard_seq' not described in 'line'
->   gpiolib-cdev.c:487: warning: Function parameter or member 'last_seqno' not described in 'line'
->
-> Describe above mentioned parameters.
->
-> Fixes: 2068339a6c35 ("gpiolib: cdev: Add hardware timestamp clock type")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/gpio/gpiolib-cdev.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> index f5aa5f93342a..d0dc68d04059 100644
-> --- a/drivers/gpio/gpiolib-cdev.c
-> +++ b/drivers/gpio/gpiolib-cdev.c
-> @@ -421,6 +421,10 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
->   * @work: the worker that implements software debouncing
->   * @sw_debounced: flag indicating if the software debouncer is active
->   * @level: the current debounced physical level of the line
-> + * @hdesc: the Hardware Timestamp Engine (HTE) descriptor
-> + * @raw_level: the line level at the time of event
-> + * @total_discard_seq: the running counter of the discarded events
-> + * @last_seqno: the last sequence number before debounce period expires
->   */
->  struct line {
->         struct gpio_desc *desc;
-> --
-> 2.35.1
->
+Il 07/06/22 18:11, Matthias Brugger ha scritto:
+> 
+> 
+> On 18/05/2022 13:24, AngeloGioacchino Del Regno wrote:
+>> Document the "CPUXGPT" CPU General Purpose Timer, used as ARM/ARM64
+>> System Timer on MediaTek platforms and add the MT6795 compatible for it.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   .../devicetree/bindings/timer/mediatek,mtk-timer.txt          | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt 
+>> b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+>> index 6f1f9dba6e88..49706cbef45d 100644
+>> --- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+>> +++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+>> @@ -2,6 +2,7 @@ MediaTek Timers
+>>   ---------------
+>>   MediaTek SoCs have two different timers on different platforms,
+> 
+> Nit: There are now three different timers so maybe:
+> "MediaTek SoCs have different timers on different platforms,"
+> 
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Hi Matthias,
+can we please ignore that description nit for this patch?
 
-Feel free to take it through whatever tree is appropriate.
+I was anyway planning to do a YAML conversion after getting this merged in, perhaps
+we can just fix that on the new one instead?
 
-Bart
+Cheers,
+Angelo
+
+>> +- CPUX (ARM/ARM64 System Timer)
+>>   - GPT (General Purpose Timer)
+>>   - SYST (System Timer)
+>> @@ -29,6 +30,9 @@ Required properties:
+>>       * "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)
+>>       * "mediatek,mt6765-timer" for MT6765 and all above compatible timers (SYST)
+>> +    For those SoCs that use CPUX
+>> +    * "mediatek,mt6795-systimer" for MT6795 compatible timers (CPUX)
+>> +
+>>   - reg: Should contain location and length for timer register.
+>>   - clocks: Should contain system clock.
+

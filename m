@@ -2,222 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A657054454D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991B8544553
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 10:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240040AbiFIIDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 04:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S239394AbiFIIHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 04:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238638AbiFIIDs (ORCPT
+        with ESMTP id S232772AbiFIIHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 04:03:48 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EE1A454
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:03:46 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id l18so17929579lje.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 01:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kfk3WjPXEkjxxu8199TyQcaEYE4ZTR9Ij1w+1/8nPfw=;
-        b=LsALkFV6VbtPklOu7SFGbvJSWR0eapJzOWoVO2c8Mytbz4CYteeu9GKfcMSNSkXiDN
-         F7Cgy5hOsIv+hceHHfp4pz4+TtdpwgQU1ZZrHLxz5Ww396C7V0+4gZfML6NiJsXGX0ee
-         JH8ev5P9ETSKfg23MYMZk0+wCfdkXaB6ZdCxA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kfk3WjPXEkjxxu8199TyQcaEYE4ZTR9Ij1w+1/8nPfw=;
-        b=aeN5bNV5sw0fqS8zozv7WcQRCpDa4JhZph0hHhjEb86Yk5uvChR9gRE+HM9byxSFsg
-         GlPiF0qp+X09E0QBFUtNEzAhu2scjn8TaLxTcMgMLdGFGFtej3bjnqUgSLIEKdhjQq+1
-         WvCUKIoLlFjsOzsfwVk/Voiie72Nwpq4Ey+zFmLlNh3iKaLq/aXWoMjvlP0tSokekton
-         FnnZ6WwOq7nFbFMdHrnCwxe3mZqoxhqISjsiwLaOVT2eOLlaX+UDkF0fjNDrfbkb0zJ5
-         1OyF7Lo6BesXHh96Tu6zigoJ4cUkxWoRKoYC06dQ0MCCYv2TC6Y6gQuD5DXxUhwvOZdT
-         ksDw==
-X-Gm-Message-State: AOAM531uL1jNHZs4mD9wiSSo0Gho/YRVLntNJXAxJPFmGcaytof4N17y
-        s/Q0cYkv7IQh8v/Kf39QluA0skrXjyIpfunxvDOrfg==
-X-Google-Smtp-Source: ABdhPJy1tZXzs9j0t8xppWPuJELnuJwtP1u0RmOyO+w6ooXm6MxcxMk+d/0hrlQ8HPVXyVkQU3C1j/iRgSE3YH+Jw9E=
-X-Received: by 2002:a2e:b0d6:0:b0:255:7d62:d75c with SMTP id
- g22-20020a2eb0d6000000b002557d62d75cmr17775894ljl.118.1654761825131; Thu, 09
- Jun 2022 01:03:45 -0700 (PDT)
+        Thu, 9 Jun 2022 04:07:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E67C6FD04
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 01:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654762029;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5p3HkdYZl79byUiBWy+T3SbLU5ysf1MJCDMDD4vnnFU=;
+        b=SGJIpSOn9OOMzF+XoHeeHVJwEGbTWVKAzcpMKgMn00445uibdFOnxSo2NI/6u0Ql1FW7dg
+        hvnaF/TlL+6Jbc9Juu1KRMTeghz9JEHk5LUgdXPcx8pV3k3oNi/VXEzIgnd5lqhJcTAgZz
+        S+eV02+LEa7IXkzJbsEFTv12wjgqjvE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-467-xQzNKroLMPilsuVMymIF-w-1; Thu, 09 Jun 2022 04:07:04 -0400
+X-MC-Unique: xQzNKroLMPilsuVMymIF-w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05752101E985;
+        Thu,  9 Jun 2022 08:07:04 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A1864619F3;
+        Thu,  9 Jun 2022 08:07:02 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
+From:   David Howells <dhowells@redhat.com>
+To:     jlayton@kernel.org
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
+        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, dhowells@redhat.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 09 Jun 2022 09:07:01 +0100
+Message-ID: <165476202136.3999992.433442175457370240.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-References: <22d07a44c80d8e8e1e82b9a806ddc8c6bbb2606e.1654759036.git.jpoimboe@kernel.org>
-In-Reply-To: <22d07a44c80d8e8e1e82b9a806ddc8c6bbb2606e.1654759036.git.jpoimboe@kernel.org>
-From:   Joe Damato <jdamato@fastly.com>
-Date:   Thu, 9 Jun 2022 11:03:33 +0300
-Message-ID: <CALALjgy60jZAOvFfD1HSfPNcSxhtuPq5D_1r=71TthP0B3ipQg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/mm: Fix RESERVE_BRK() for older binutils
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        jiangshanlai@gmail.com, bp@suse.de, brgerst@gmail.com,
-        Byungchul Park <byungchul.park@lge.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 12:17:32AM -0700, Josh Poimboeuf wrote:
-> With binutils 2.26, RESERVE_BRK() causes a build failure:
->
->   /tmp/ccnGOKZ5.s: Assembler messages:
->   /tmp/ccnGOKZ5.s:98: Error: missing ')'
->   /tmp/ccnGOKZ5.s:98: Error: missing ')'
->   /tmp/ccnGOKZ5.s:98: Error: missing ')'
->   /tmp/ccnGOKZ5.s:98: Error: junk at end of line, first unrecognized
->   character is `U'
->
-> The problem is this line:
->
->   RESERVE_BRK(early_pgt_alloc, INIT_PGT_BUF_SIZE)
->
-> Specifically, the INIT_PGT_BUF_SIZE macro which (via PAGE_SIZE's use
-> _AC()) has a "1UL", which makes older versions of the assembler unhappy.
-> Unfortunately the _AC() macro doesn't work for inline asm.
->
-> Inline asm was only needed here to convince the toolchain to add the
-> STT_NOBITS flag.  However, if a C variable is placed in a section whose
-> name is prefixed with ".bss", GCC and Clang automatically set
-> STT_NOBITS.  In fact, ".bss..page_aligned" already relies on this trick.
->
-> So fix the build failure (and simplify the macro) by allocating the
-> variable in C.
->
-> Also, add NOLOAD to the ".brk" output section clause in the linker
-> script.  This is a failsafe in case the ".bss" prefix magic trick ever
-> stops working somehow.  If there's a section type mismatch, the GNU
-> linker will force the ".brk" output section to be STT_NOBITS.  The LLVM
-> linker will fail with a "section type mismatch" error.
->
-> Note this also changes the name of the variable from .brk.##name to
-> __brk_##name.  The variable names aren't actually used anywhere, so it's
-> harmless.
->
-> Reported-by: Joe Damato <jdamato@fastly.com>
-> Reported-by: Byungchul Park <byungchul.park@lge.com>
-> Fixes: a1e2c031ec39 ("x86/mm: Simplify RESERVE_BRK()")
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> ---
->  arch/x86/include/asm/setup.h  | 38 +++++++++++++++++++----------------
->  arch/x86/kernel/setup.c       |  5 -----
->  arch/x86/kernel/vmlinux.lds.S |  4 ++--
->  3 files changed, 23 insertions(+), 24 deletions(-)
->
-> diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
-> index 7590ac2570b9..f8b9ee97a891 100644
-> --- a/arch/x86/include/asm/setup.h
-> +++ b/arch/x86/include/asm/setup.h
-> @@ -108,19 +108,16 @@ extern unsigned long _brk_end;
->  void *extend_brk(size_t size, size_t align);
->
->  /*
-> - * Reserve space in the brk section.  The name must be unique within the file,
-> - * and somewhat descriptive.  The size is in bytes.
-> + * Reserve space in the .brk section, which is a block of memory from which the
-> + * caller is allowed to allocate very early (before even memblock is available)
-> + * by calling extend_brk().  All allocated memory will be eventually converted
-> + * to memblock.  Any leftover unallocated memory will be freed.
->   *
-> - * The allocation is done using inline asm (rather than using a section
-> - * attribute on a normal variable) in order to allow the use of @nobits, so
-> - * that it doesn't take up any space in the vmlinux file.
-> + * The size is in bytes.
->   */
-> -#define RESERVE_BRK(name, size)                                              \
-> -     asm(".pushsection .brk_reservation,\"aw\",@nobits\n\t"          \
-> -         ".brk." #name ":\n\t"                                       \
-> -         ".skip " __stringify(size) "\n\t"                           \
-> -         ".size .brk." #name ", " __stringify(size) "\n\t"           \
-> -         ".popsection\n\t")
-> +#define RESERVE_BRK(name, size)                                      \
-> +     __section(".bss..brk") __aligned(1) __used      \
-> +     static char __brk_##name[size]
->
->  extern void probe_roms(void);
->  #ifdef __i386__
-> @@ -133,12 +130,19 @@ asmlinkage void __init x86_64_start_reservations(char *real_mode_data);
->
->  #endif /* __i386__ */
->  #endif /* _SETUP */
-> -#else
-> -#define RESERVE_BRK(name,sz)                         \
-> -     .pushsection .brk_reservation,"aw",@nobits;     \
-> -.brk.name:                                           \
-> -1:   .skip sz;                                       \
-> -     .size .brk.name,.-1b;                           \
-> +
-> +#else  /* __ASSEMBLY */
-> +
-> +.macro __RESERVE_BRK name, size
-> +     .pushsection .bss..brk, "aw"
-> +SYM_DATA_START(__brk_\name)
-> +     .skip \size
-> +SYM_DATA_END(__brk_\name)
->       .popsection
-> +.endm
-> +
-> +#define RESERVE_BRK(name, size) __RESERVE_BRK name, size
-> +
->  #endif /* __ASSEMBLY__ */
-> +
->  #endif /* _ASM_X86_SETUP_H */
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 3ebb85327edb..bd6c6fd373ae 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -67,11 +67,6 @@ RESERVE_BRK(dmi_alloc, 65536);
->  #endif
->
->
-> -/*
-> - * Range of the BSS area. The size of the BSS area is determined
-> - * at link time, with RESERVE_BRK() facility reserving additional
-> - * chunks.
-> - */
->  unsigned long _brk_start = (unsigned long)__brk_base;
->  unsigned long _brk_end   = (unsigned long)__brk_base;
->
-> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> index f5f6dc2e8007..81aba718ecd5 100644
-> --- a/arch/x86/kernel/vmlinux.lds.S
-> +++ b/arch/x86/kernel/vmlinux.lds.S
-> @@ -385,10 +385,10 @@ SECTIONS
->       __end_of_kernel_reserve = .;
->
->       . = ALIGN(PAGE_SIZE);
-> -     .brk : AT(ADDR(.brk) - LOAD_OFFSET) {
-> +     .brk (NOLOAD) : AT(ADDR(.brk) - LOAD_OFFSET) {
->               __brk_base = .;
->               . += 64 * 1024;         /* 64k alignment slop space */
-> -             *(.brk_reservation)     /* areas brk users have reserved */
-> +             *(.bss..brk)            /* areas brk users have reserved */
->               __brk_limit = .;
->       }
->
-> --
-> 2.34.3
->
+The maths at the end of iter_xarray_get_pages() to calculate the actual
+size doesn't work under some circumstances, such as when it's been asked to
+extract a partial single page.  Various terms of the equation cancel out
+and you end up with actual == offset.  The same issue exists in
+iter_xarray_get_pages_alloc().
 
-I applied the v2 patch on top of commit 58f9d52ff689 ("Merge tag
-'net-5.19-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net") and the kernel
-builds successfully for me.
+Fix these to just use min() to select the lesser amount from between the
+amount of page content transcribed into the buffer, minus the offset, and
+the size limit specified.
 
-The resulting kernel boots fine on the machine, as well.
+This doesn't appear to have caused a problem yet upstream because network
+filesystems aren't getting the pages from an xarray iterator, but rather
+passing it directly to the socket, which just iterates over it.  Cachefiles
+*does* do DIO from one to/from ext4/xfs/btrfs/etc. but it always asks for
+whole pages to be written or read.
 
-I built the kernel with:
-  - gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609
-  - binutils 2.26.1-1ubuntu1~16.04.8+esm1
+Fixes: 7ff5062079ef ("iov_iter: Add ITER_XARRAY")
+Reported-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Alexander Viro <viro@zeniv.linux.org.uk>
+cc: Dominique Martinet <asmadeus@codewreck.org>
+cc: Mike Marshall <hubcap@omnibond.com>
+cc: Gao Xiang <xiang@kernel.org>
+cc: linux-afs@lists.infradead.org
+cc: v9fs-developer@lists.sourceforge.net
+cc: devel@lists.orangefs.org
+cc: linux-erofs@lists.ozlabs.org
+cc: linux-cachefs@redhat.com
+cc: linux-fsdevel@vger.kernel.org
+---
 
-I have not tested with any other build toolchains.
+ lib/iov_iter.c |   20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
 
-Tested-by: Joe Damato <jdamato@fastly.com>
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index 834e1e268eb6..814f65fd0c42 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -1434,7 +1434,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+ {
+ 	unsigned nr, offset;
+ 	pgoff_t index, count;
+-	size_t size = maxsize, actual;
++	size_t size = maxsize;
+ 	loff_t pos;
+ 
+ 	if (!size || !maxpages)
+@@ -1461,13 +1461,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+ 	if (nr == 0)
+ 		return 0;
+ 
+-	actual = PAGE_SIZE * nr;
+-	actual -= offset;
+-	if (nr == count && size > 0) {
+-		unsigned last_offset = (nr > 1) ? 0 : offset;
+-		actual -= PAGE_SIZE - (last_offset + size);
+-	}
+-	return actual;
++	return min(nr * PAGE_SIZE - offset, maxsize);
+ }
+ 
+ /* must be done on non-empty ITER_IOVEC one */
+@@ -1602,7 +1596,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
+ 	struct page **p;
+ 	unsigned nr, offset;
+ 	pgoff_t index, count;
+-	size_t size = maxsize, actual;
++	size_t size = maxsize;
+ 	loff_t pos;
+ 
+ 	if (!size)
+@@ -1631,13 +1625,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
+ 	if (nr == 0)
+ 		return 0;
+ 
+-	actual = PAGE_SIZE * nr;
+-	actual -= offset;
+-	if (nr == count && size > 0) {
+-		unsigned last_offset = (nr > 1) ? 0 : offset;
+-		actual -= PAGE_SIZE - (last_offset + size);
+-	}
+-	return actual;
++	return min(nr * PAGE_SIZE - offset, maxsize);
+ }
+ 
+ ssize_t iov_iter_get_pages_alloc(struct iov_iter *i,
+
+

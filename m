@@ -2,126 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A686E545658
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD264545666
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 23:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbiFIVND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 17:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
+        id S236419AbiFIVT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 17:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345583AbiFIVMz (ORCPT
+        with ESMTP id S229844AbiFIVTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 17:12:55 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0722E26D8AD
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 14:12:54 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id g17-20020a9d6491000000b0060c0f0101ffso6005334otl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 14:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+w8VVwED6Dp8wTgVB+vZ7Un8RsUPAYrcjHRsKAD4xYo=;
-        b=InsJbxZvLSkW6zLt3p6dpNfxY2n8892EJhnqGHT9ypiLAMtlGyFQTSMqKwKgDgDjV5
-         iXKFqQTPl1XJHrEeBYg0+0rGmHZiRgZK/mMTrd5PdOWXVoLP8FtsG/q8peJpbJ2BcYy1
-         7vOUIrm7WI+Mwr66LkywqKxeM8wRrdIToCRaw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+w8VVwED6Dp8wTgVB+vZ7Un8RsUPAYrcjHRsKAD4xYo=;
-        b=X217SyJZFD83itx0hRK8nWqXkLPGJcdgRG7GdsWNUpMEwP2RtHw7San9mYlcdhaOh7
-         ZpqXcCTbW1D8gEQp2RzVG6f51e3oHs7hplsXhGIXF1YVlTjZTFAnvaZxIZlFot5aGqlx
-         gtIPB2J3+wKRODN5er5QuJk6WQsKoI6jbSzg+ZC/OmpM39g6UNG54h/lMSU+Vk5YseFY
-         fKZX/ecDNOz8vtESfcmuJkpepUpY7o+zAg3krZzdOoKp9Aqcgi41v0zwzdBh2wBVS2xo
-         8SNc5wPPHk0hJDbGurIHGPPvsDMTM3XTgp75LbQFOJ3CYh5ke2/iajp4TpuNvuhkzzQ4
-         IA9w==
-X-Gm-Message-State: AOAM530hL9aKHGnOHmAd3eEjko9BT3h3HHT2P4IPVLYfLGPjkpVY2yxX
-        ZsXzY7IygvyOic+Kq4Mp6uG1bhSLOvXQPA==
-X-Google-Smtp-Source: ABdhPJyNQ0HXAQ4Z6PJBiKgrnpq9DxaLq1ka8Z5MjlwseLsdKqrTZSLQJ3UbUlYFLUJPgSLmW/zZDQ==
-X-Received: by 2002:a05:6830:1e89:b0:60c:1c6d:476b with SMTP id n9-20020a0568301e8900b0060c1c6d476bmr3975832otr.288.1654809173354;
-        Thu, 09 Jun 2022 14:12:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id lc15-20020a056871418f00b000f5eb6b409bsm10939453oab.45.2022.06.09.14.12.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 14:12:52 -0700 (PDT)
-Subject: Re: [PATCH] selftests: make use of GUP_TEST_FILE macro
-To:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Nico Pache <npache@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220609203217.3206247-1-jsavitz@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <cd8ca757-b041-cc3b-75af-eef20df65019@linuxfoundation.org>
-Date:   Thu, 9 Jun 2022 15:12:51 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 9 Jun 2022 17:19:55 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ADE9809A;
+        Thu,  9 Jun 2022 14:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654809592; x=1686345592;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5sAU2Ig67BTLOTd4lRYOYpFpghiJtCgqxprRCYAiNvw=;
+  b=HuBWEPc7ybzCyIEL5DMKHiRFbIgNmmVijSjCpp1aJzu35OxCthEmlUrl
+   L6NaRnwdlUS21LFTn+RCbSscTaUsMR9P3qVoantZ+bCHjL2ml5Ao9Nzh+
+   tV9CtpX5Gtxs/hXPsyf84Qi9eM3GvE+NJxMKk+71vWe6xY+mCZg7Cnw9X
+   Fc+2QFiW3LZJrfYOyJ+FmI4md8Be7s7R4JEcvHChUt3O2wog0BJXRuIAC
+   SlSDTLl9NuIJzj5QXHvFdhlln8SIG0BNKTqbrkwuQiND7O8lBT4HbmJ4S
+   wTeR6mrTd/wrYd7K8wGWJ03/qLetXYM0gQwcqAuAhVOscLwxPQZMn9dO4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="339176881"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="339176881"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 14:19:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="616095702"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 09 Jun 2022 14:19:49 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzPZF-000GOt-7O;
+        Thu, 09 Jun 2022 21:19:49 +0000
+Date:   Fri, 10 Jun 2022 05:19:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
+ warning: unused variable 'samsung_jpeg_match'
+Message-ID: <202206100528.noekKuMz-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220609203217.3206247-1-jsavitz@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/22 2:32 PM, Joel Savitz wrote:
-> Commit 17de1e559cf1 ("selftests: clarify common error when running
-> gup_test") had most of its hunks dropped due to a conflict with another
-> patch accepted into Linux around the same time that implemented the same
-> behavior as a subset of other changes.
-> 
-> However, the remaining hunk defines the GUP_TEST_FILE macro without
-> making use of it. This patch makes use of the macro in the two relevant
-> places.
-> 
-> Furthermore, the above mentioned commit's log message erroneously describes
-> the changes that were dropped from the patch.
-> 
-> This patch corrects the record.
-> 
-> Fixes: 17de1e559cf1 ("selftests: clarify common error when running gup_test")
-> 
-> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-> ---
->   tools/testing/selftests/vm/gup_test.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-> index 6bb36ca71cb5..a309876d832f 100644
-> --- a/tools/testing/selftests/vm/gup_test.c
-> +++ b/tools/testing/selftests/vm/gup_test.c
-> @@ -209,7 +209,7 @@ int main(int argc, char **argv)
->   	if (write)
->   		gup.gup_flags |= FOLL_WRITE;
->   
-> -	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
-> +	gup_fd = open(GUP_TEST_FILE, O_RDWR);
->   	if (gup_fd == -1) {
->   		switch (errno) {
->   		case EACCES:
-> @@ -224,7 +224,7 @@ int main(int argc, char **argv)
->   			printf("check if CONFIG_GUP_TEST is enabled in kernel config\n");
->   			break;
->   		default:
-> -			perror("failed to open /sys/kernel/debug/gup_test");
-> +			perror("failed to open " GUP_TEST_FILE);
->   			break;
->   		}
->   		exit(KSFT_SKIP);
-> 
+Hi Mauro,
 
-Thank you for finding and fixing the problem.
+FYI, the error/warning still remains.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
+commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+date:   3 months ago
+config: s390-randconfig-r022-20220609 (https://download.01.org/0day-ci/archive/20220610/202206100528.noekKuMz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/samsung/s5p-jpeg/
 
-thanks,
--- Shuah
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+
+6c96dbbc2aa9f5b drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d93 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d93 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d93 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d93 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367b drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367b drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367b drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5b drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5b drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5b drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725e drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

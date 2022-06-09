@@ -2,157 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74B0544FE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D08F544FE7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 16:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236881AbiFIOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 10:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S1343524AbiFIOz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 10:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiFIOzX (ORCPT
+        with ESMTP id S241642AbiFIOzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 10:55:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A8236BD8D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:55:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A05A61EAF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 14:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4979BC34115;
-        Thu,  9 Jun 2022 14:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654786521;
-        bh=eg4c/i/irnZMEP6mKQEIVBuI8eTDIHIJs8haa+fIvEo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G/lF9txPIpYj7wQCrO7ZR6jp1sCTYQsybNCn462UCC20Ci3sPcCtD2QbMjR64aUI6
-         Y0x0H7GAHpjc3ONci92SBr0BdLzfFXiI2vvpJ3OONtzxraxqGoms9/azOVfHind3bq
-         oG9PhpLNWWb+675nxPEeME6Ks9ILtA3my/WHcRT97J2lANfgERYKRLE29Ul01ioW5f
-         4DCeAzjxWTvnH+dSHExpt3TURfviqsm8lJAb7xbPh1lkjUiu2fQDFjVzWbEdLpyhh1
-         1F320MFREkEUuIdXQBBxpwUzp+6doe4pqO+dGaJx90XR8jay2eeYQE2tjkS9BRrTJ4
-         2xnnMClezxPnw==
-Date:   Thu, 9 Jun 2022 07:55:18 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] s390: disable -Warray-bounds
-Message-ID: <YqIJ1iimwIlFDa4n@dev-arch.thelio-3990X>
-References: <20220422134308.1613610-1-svens@linux.ibm.com>
- <202204221052.85D0C427@keescook>
- <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com>
- <202206081404.F98F5FC53E@keescook>
- <CAHk-=wiFn-_OaWKY=nXt3YSiy=obrNoQW_u7zKO7qoArez=GUw@mail.gmail.com>
+        Thu, 9 Jun 2022 10:55:51 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8850137F051
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 07:55:49 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id x4so12725630pfj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 07:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ERqpHHB15unBSTeHEqEMR3UFvMYfb3/GCbSADTuIbHA=;
+        b=AkkQ1lNNSImZ+9IyPfR9U+c4QA+kolWUMUz3suIATQi0Q2AT516ThrNMDTDlnvc7YE
+         /ZhYeyTdnRriWNOxky9myWCfBKm4Sn1EWd1VrHKfPD1yEyHRqP4S1+QQbz/iIxwNIBjn
+         JQ7GFOFH08vZ6a6OHq94eZcvHzamYR/fbyvHYugF2OElBhX86mXkX1rNNeZpILEQFfBF
+         dE7hNmYosDvhTkksbpmcq2gzj7a/JVXxBPr73g/1Daer4sv0xHXFMfv/WYodigfXFFLF
+         X02RmIDCx9AtutgUj4ELTanbechY5vI8hnlVa9VUMddqUEjvdpZtsBkslYmL32KxgL8H
+         lhiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ERqpHHB15unBSTeHEqEMR3UFvMYfb3/GCbSADTuIbHA=;
+        b=Ztutv1Zyy10G/ABaXSy+pgJ5tjiXOCfjAbYoMwqKfuqa/AQ2LfB5oG/eg4QPl/0xqS
+         YX25KOGZrpy7nDyDyJZ+zXOnQjWfZftZiWs6K80O+9GzaqxkHuxX85fCo7Ff3WMRnTYe
+         i6dGizLYcxuQ8UDutgbBGE5soVHEOXcgehgKyTn0y+4cZCuWI4lydbawETHggmbchtUs
+         babmXSxiOeV6wdqfwsSNgZXjmgCfIqNzdn6ZqNvBvwYIyEodbHREfMoTC7XX6/fxie+A
+         yBZ2KAm5A3V2OeKUjfvEwEmG+7mEuec5/uDV9pyJaNvj9WX/89c39L0VPRWd2DelIGUD
+         JwPQ==
+X-Gm-Message-State: AOAM531dROHHysxcnJNaRduV2OLx1OT7xDFXZAXM+5QGHGxKTIBmTjLd
+        sBhresMasRa4Fh3PVWy07opKQQ==
+X-Google-Smtp-Source: ABdhPJy8b0sXVZ9mcdG0q6aDwplLKBr+elC41y+xW9yxBNhIl6TnCHVg9fqa2vtTLTESAaaUZeU85A==
+X-Received: by 2002:aa7:8d0f:0:b0:518:d867:bae8 with SMTP id j15-20020aa78d0f000000b00518d867bae8mr39566603pfe.13.1654786548865;
+        Thu, 09 Jun 2022 07:55:48 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j188-20020a62c5c5000000b0051c77027d7fsm2702846pfg.218.2022.06.09.07.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 07:55:48 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 14:55:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, dmy@semihalf.com,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle
+ state
+Message-ID: <YqIJ8HtdqnoVzfQD@google.com>
+References: <20220609110337.1238762-1-jaz@semihalf.com>
+ <20220609110337.1238762-2-jaz@semihalf.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wiFn-_OaWKY=nXt3YSiy=obrNoQW_u7zKO7qoArez=GUw@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609110337.1238762-2-jaz@semihalf.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:59:29PM -0700, Linus Torvalds wrote:
-
-Just one small drive by comment in case this ends up going in in one
-form or another.
-
->  Makefile                         |  4 ++++
->  arch/s390/Makefile               | 10 +---------
->  drivers/gpu/drm/imx/ipuv3-crtc.c |  2 +-
->  init/Kconfig                     |  5 +++++
->  4 files changed, 11 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index c43d825a3c4c..b2e93c1a8021 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -788,6 +788,7 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
->  KBUILD_CFLAGS += $(stackp-flags-y)
->  
->  KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
-> +KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
->  KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->  
->  ifdef CONFIG_CC_IS_CLANG
-> @@ -805,6 +806,9 @@ endif
->  KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
->  KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
->  
-> +# These result in bogus false positives
-> +KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
+On Thu, Jun 09, 2022, Grzegorz Jaszczyk wrote:
+> +9. KVM_HC_SYSTEM_S2IDLE
+> +------------------------
 > +
->  ifdef CONFIG_FRAME_POINTER
->  KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
->  else
-> diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-> index d73611b35164..e1abb0d03824 100644
-> --- a/arch/s390/Makefile
-> +++ b/arch/s390/Makefile
-> @@ -32,15 +32,7 @@ KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
->  KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
->  KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
->  KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
-> -
-> -ifdef CONFIG_CC_IS_GCC
-> -	ifeq ($(call cc-ifversion, -ge, 1200, y), y)
-> -		ifeq ($(call cc-ifversion, -lt, 1300, y), y)
-> -			KBUILD_CFLAGS += $(call cc-disable-warning, array-bounds)
-> -			KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, array-bounds)
-> -		endif
-> -	endif
-> -endif
-> +KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CC_NO_ARRAY_BOUNDS),-Wno-array-bounds)
+> +:Architecture: x86
+> +:Status: active
+> +:Purpose: Notify the hypervisor that the guest is entering s2idle state.
 
-I think this should be $(CONFIG_CC_NO_ARRAY_BOUNDS)?
+What about exiting s2idle?  E.g.
 
->  
->  UTS_MACHINE	:= s390x
->  STACK_SIZE	:= $(if $(CONFIG_KASAN),65536,16384)
-> diff --git a/drivers/gpu/drm/imx/ipuv3-crtc.c b/drivers/gpu/drm/imx/ipuv3-crtc.c
-> index 9c8829f945b2..f7863d6dea80 100644
-> --- a/drivers/gpu/drm/imx/ipuv3-crtc.c
-> +++ b/drivers/gpu/drm/imx/ipuv3-crtc.c
-> @@ -69,7 +69,7 @@ static void ipu_crtc_disable_planes(struct ipu_crtc *ipu_crtc,
->  	drm_atomic_crtc_state_for_each_plane(plane, old_crtc_state) {
->  		if (plane == &ipu_crtc->plane[0]->base)
->  			disable_full = true;
-> -		if (&ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
-> +		if (ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
->  			disable_partial = true;
->  	}
->  
-> diff --git a/init/Kconfig b/init/Kconfig
-> index c984afc489de..ccb1302d6edd 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -885,6 +885,11 @@ config CC_IMPLICIT_FALLTHROUGH
->  	default "-Wimplicit-fallthrough=5" if CC_IS_GCC && $(cc-option,-Wimplicit-fallthrough=5)
->  	default "-Wimplicit-fallthrough" if CC_IS_CLANG && $(cc-option,-Wunreachable-code-fallthrough)
->  
-> +config CC_NO_ARRAY_BOUNDS
-> +	bool
-> +	depends on CC_IS_GCC
-> +	default y if GCC_VERSION >= 120000 && GCC_VERSION < 130000
-> +
->  #
->  # For architectures that know their GCC __int128 support is sound
->  #
+  1. VM0 enters s2idle
+  2. host notes that VM0 is in s2idle
+  3. VM0 exits s2idle
+  4. host still thinks VM0 is in s2idle
+  5. VM1 enters s2idle
+  6. host thinks all VMs are in s2idle, suspends the system
 
-Cheers,
-Nathan
+> +static void s2idle_hypervisor_notify(void)
+> +{
+> +	if (static_cpu_has(X86_FEATURE_HYPERVISOR))
+> +		kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
+
+Checking the HYPERVISOR flag is not remotely sufficient.  The hypervisor may not
+be KVM, and if it is KVM, it may be an older version of KVM that doesn't support
+the hypercall.  The latter scenario won't be fatal unless KVM has been modified,
+but blindly doing a hypercall for a different hypervisor could have disastrous
+results, e.g. the registers ABIs are different, so the above will make a random
+request depending on what is in other GPRs.
+
+The bigger question is, why is KVM involved at all?  KVM is just a dumb pipe out
+to userspace, and not a very good one at that.  There are multiple well established
+ways to communicate with the VMM without custom hypercalls.
+
+I bet if you're clever this can even be done without any guest changes, e.g. I
+gotta imagine acpi_sleep_run_lps0_dsm() triggers MMIO/PIO with the right ACPI
+configuration.

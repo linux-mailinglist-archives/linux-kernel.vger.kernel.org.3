@@ -2,139 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F22544D52
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B532544D54
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343716AbiFINSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S1343735AbiFINSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239163AbiFINR7 (ORCPT
+        with ESMTP id S245534AbiFINSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:17:59 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5333F3CBE2A;
-        Thu,  9 Jun 2022 06:17:54 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 9 Jun 2022 21:17:27
- +0800 (GMT+08:00)
-X-Originating-IP: [106.117.78.144]
-Date:   Thu, 9 Jun 2022 21:17:27 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Paolo Abeni" <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, jreuter@yaina.de,
-        ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-hams@vger.kernel.org, thomas@osterried.de
-Subject: Re: [PATCH v3] net: ax25: Fix deadlock caused by skb_recv_datagram
- in ax25_recvmsg
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <22175690a4e89a78abcb8244dfd0bdd0005267a5.camel@redhat.com>
-References: <20220608012923.17505-1-duoming@zju.edu.cn>
- <22175690a4e89a78abcb8244dfd0bdd0005267a5.camel@redhat.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 9 Jun 2022 09:18:02 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FCF3CBE2A;
+        Thu,  9 Jun 2022 06:18:00 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id a2so31821507lfg.5;
+        Thu, 09 Jun 2022 06:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9H4dOb7IaIcY52Tw6WWiljInSfJiOJbeD3ghXohKUWk=;
+        b=bxQvhZiJyJvGenAgd1C3qiVyZH4ml/Vnom25DFpoC731mCeBREubO4jUNTENKxajXI
+         MR7U3ddjUCoMlr94nBmzEpBeJvuDXEB4HnnaYJ4xnZrR2sPFuLgxOuqrN4kkfkES6Iiw
+         ti9BmmUPpa3hFl3+Zc/z/bPGNz3VCCT15NGOCugqxHdTW/AkKBAfV76k9CiaScYOKqHP
+         KbgKcr377DEMvYCj0FOCu+WyDp6YuJOl1YptRleIGyBJJMESsuQX3KcpfOkmYJ/lzpku
+         emeAUmFuDjlnZfTYGGf7DPIXv1uMZqHlgj1QLdeFtC+2zieBgGMkxqJejaLhPLJi/Efl
+         q5qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9H4dOb7IaIcY52Tw6WWiljInSfJiOJbeD3ghXohKUWk=;
+        b=IsI8jgiNFNrkpBfZYaIq8P1FRHzm6EihbzZjOeOfIF+khwvJ1ppeumno3LLujJZevU
+         IuFD256g9pFeoNxc2YitZm0O9pNVHNeV9t673TrDQVIQvZq9DJf5mi0/7rQAH2FScHoE
+         /WQuUQgbfks+yMhHkivYaq9LGXX1oyy14gvYsv6IfmYESlAJkIyeeiro6/+Mz6Qs07Fq
+         cxUnenC11rtDvIUlCm6aBMvIx3EeS2RK17bNCCIVCoz9j7YvQHClGurQ4GvHkUpvyeTg
+         9Q91ZszDCYM4lAZ+8RL5uj4evZUkkIHN2tBecn/l3ydTeCpI5OV1nG7ZZmqPUMrwIwcp
+         U6jQ==
+X-Gm-Message-State: AOAM531DHiiK68nmwC5t8bX2ipXFMeVsFWi1b3UYuqFbVbWM/NSXZ8lL
+        fbUv0e6JGGiOxAUVKGi/aQ8t3NXgkKGE9glmijo=
+X-Google-Smtp-Source: ABdhPJxz9i9pVE0BdHMV70Vwi186ROVaHboigU3uL+CKro67Q69etkqlQSJOajfipTkSsc8z60rVUCQteSPARaV4mpI=
+X-Received: by 2002:a05:6512:703:b0:479:157a:c18d with SMTP id
+ b3-20020a056512070300b00479157ac18dmr21665529lfs.639.1654780678706; Thu, 09
+ Jun 2022 06:17:58 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <4ccdba76.5ee33.181489cd6e4.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgAHbtjn8qFiI3DWAQ--.44508W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIQAVZdtaIJ7gABsr
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-7-tmaimon77@gmail.com>
+ <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
+In-Reply-To: <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Thu, 9 Jun 2022 16:17:47 +0300
+Message-ID: <CAP6Zq1geJyaDrP2CBY3FHe5y-L=bCptX1pzAkNypY+TS5vXzMA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/20] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDA5IEp1biAyMDIyIDEwOjQxOjAyICswMjAwIFBhb2xvIHdyb3RlOgoK
-PiBPbiBXZWQsIDIwMjItMDYtMDggYXQgMDk6MjkgKzA4MDAsIER1b21pbmcgWmhvdSB3cm90ZToK
-PiA+IFRoZSBza2JfcmVjdl9kYXRhZ3JhbSgpIGluIGF4MjVfcmVjdm1zZygpIHdpbGwgaG9sZCBs
-b2NrX3NvY2sKPiA+IGFuZCBibG9jayB1bnRpbCBpdCByZWNlaXZlcyBhIHBhY2tldCBmcm9tIHRo
-ZSByZW1vdGUuIElmIHRoZSBjbGllbnQKPiA+IGRvZXNuYHQgY29ubmVjdCB0byBzZXJ2ZXIgYW5k
-IGNhbGxzIHJlYWQoKSBkaXJlY3RseSwgaXQgd2lsbCBub3QKPiA+IHJlY2VpdmUgYW55IHBhY2tl
-dHMgZm9yZXZlci4gQXMgYSByZXN1bHQsIHRoZSBkZWFkbG9jayB3aWxsIGhhcHBlbi4KPiA+IAo+
-ID4gVGhlIGZhaWwgbG9nIGNhdXNlZCBieSBkZWFkbG9jayBpcyBzaG93biBiZWxvdzoKPiA+IAo+
-ID4gWyAgMzY5LjYwNjk3M10gSU5GTzogdGFzayBheDI1X2RlYWRsb2NrOjE1NyBibG9ja2VkIGZv
-ciBtb3JlIHRoYW4gMjQ1IHNlY29uZHMuCj4gPiBbICAzNjkuNjA4OTE5XSAiZWNobyAwID4gL3By
-b2Mvc3lzL2tlcm5lbC9odW5nX3Rhc2tfdGltZW91dF9zZWNzIiBkaXNhYmxlcyB0aGlzIG1lc3Nh
-Z2UuCj4gPiBbICAzNjkuNjEzMDU4XSBDYWxsIFRyYWNlOgo+ID4gWyAgMzY5LjYxMzMxNV0gIDxU
-QVNLPgo+ID4gWyAgMzY5LjYxNDA3Ml0gIF9fc2NoZWR1bGUrMHgyZjkvMHhiMjAKPiA+IFsgIDM2
-OS42MTUwMjldICBzY2hlZHVsZSsweDQ5LzB4YjAKPiA+IFsgIDM2OS42MTU3MzRdICBfX2xvY2tf
-c29jaysweDkyLzB4MTAwCj4gPiBbICAzNjkuNjE2NzYzXSAgPyBkZXN0cm95X3NjaGVkX2RvbWFp
-bnNfcmN1KzB4MjAvMHgyMAo+ID4gWyAgMzY5LjYxNzk0MV0gIGxvY2tfc29ja19uZXN0ZWQrMHg2
-ZS8weDcwCj4gPiBbICAzNjkuNjE4ODA5XSAgYXgyNV9iaW5kKzB4YWEvMHgyMTAKPiA+IFsgIDM2
-OS42MTk3MzZdICBfX3N5c19iaW5kKzB4Y2EvMHhmMAo+ID4gWyAgMzY5LjYyMDAzOV0gID8gZG9f
-ZnV0ZXgrMHhhZS8weDFiMAo+ID4gWyAgMzY5LjYyMDM4N10gID8gX194NjRfc3lzX2Z1dGV4KzB4
-N2MvMHgxYzAKPiA+IFsgIDM2OS42MjA2MDFdICA/IGZwcmVnc19hc3NlcnRfc3RhdGVfY29uc2lz
-dGVudCsweDE5LzB4NDAKPiA+IFsgIDM2OS42MjA2MTNdICBfX3g2NF9zeXNfYmluZCsweDExLzB4
-MjAKPiA+IFsgIDM2OS42MjE3OTFdICBkb19zeXNjYWxsXzY0KzB4M2IvMHg5MAo+ID4gWyAgMzY5
-LjYyMjQyM10gIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ2LzB4YjAKPiA+IFsg
-IDM2OS42MjMzMTldIFJJUDogMDAzMzoweDdmNDNjOGFhOGFmNwo+ID4gWyAgMzY5LjYyNDMwMV0g
-UlNQOiAwMDJiOjAwMDA3ZjQzYzgxOTdlZjggRUZMQUdTOiAwMDAwMDI0NiBPUklHX1JBWDogMDAw
-MDAwMDAwMDAwMDAzMQo+ID4gWyAgMzY5LjYyNTc1Nl0gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJC
-WDogMDAwMDAwMDAwMDAwMDAwMCBSQ1g6IDAwMDA3ZjQzYzhhYThhZjcKPiA+IFsgIDM2OS42MjY3
-MjRdIFJEWDogMDAwMDAwMDAwMDAwMDAxMCBSU0k6IDAwMDA1NTc2OGUyMDIxZDAgUkRJOiAwMDAw
-MDAwMDAwMDAwMDA1Cj4gPiBbICAzNjkuNjI4NTY5XSBSQlA6IDAwMDA3ZjQzYzgxOTdmMDAgUjA4
-OiAwMDAwMDAwMDAwMDAwMDExIFIwOTogMDAwMDdmNDNjODE5ODcwMAo+ID4gWyAgMzY5LjYzMDIw
-OF0gUjEwOiAwMDAwMDAwMDAwMDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6IDAwMDA3
-ZmZmODQ1ZTZhZmUKPiA+IFsgIDM2OS42MzIyNDBdIFIxMzogMDAwMDdmZmY4NDVlNmFmZiBSMTQ6
-IDAwMDA3ZjQzYzgxOTdmYzAgUjE1OiAwMDAwN2Y0M2M4MTk4NzAwCj4gPiAKPiA+IFRoaXMgcGF0
-Y2ggbW92ZXMgdGhlIHNrYl9yZWN2X2RhdGFncmFtKCkgYmVmb3JlIGxvY2tfc29jaygpIGluIG9y
-ZGVyIHRoYXQKPiA+IG90aGVyIGZ1bmN0aW9ucyB0aGF0IG5lZWQgbG9ja19zb2NrIGNvdWxkIGJl
-IGV4ZWN1dGVkLiBXaGF0YHMgbW9yZSwgd2UKPiA+IGFkZCBza2JfZnJlZV9kYXRhZ3JhbSgpIGJl
-Zm9yZSBnb3RvIG91dCBpbiBvcmRlciB0byBtaXRpZ2F0ZSBtZW1vcnkgbGVhay4KPiA+IAo+ID4g
-U3VnZ2VzdGVkLWJ5OiBUaG9tYXMgT3N0ZXJyaWVkIDx0aG9tYXNAb3N0ZXJyaWVkLmRlPgo+ID4g
-U2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gPiBSZXBv
-cnRlZC1ieTogVGhvbWFzIEhhYmV0cyA8dGhvbWFzQEBoYWJldHMuc2U+Cj4gPiAtLS0KPiA+IENo
-YW5nZXMgaW4gdjM6Cj4gPiAgIC0gQWRkIHNrYl9mcmVlX2RhdGFncmFtKCkgYmVmb3JlIGdvdG8g
-b3V0IGluIG9yZGVyIHRvIG1pdGlnYXRlIG1lbW9yeSBsZWFrLgo+ID4gCj4gPiAgbmV0L2F4MjUv
-YWZfYXgyNS5jIHwgMTIgKysrKysrKy0tLS0tCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0
-aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL25ldC9heDI1L2Fm
-X2F4MjUuYyBiL25ldC9heDI1L2FmX2F4MjUuYwo+ID4gaW5kZXggOTUzOTNiYjI3NjAuLjYyYWE1
-OTkzMDkzIDEwMDY0NAo+ID4gLS0tIGEvbmV0L2F4MjUvYWZfYXgyNS5jCj4gPiArKysgYi9uZXQv
-YXgyNS9hZl9heDI1LmMKPiA+IEBAIC0xNjY1LDYgKzE2NjUsMTEgQEAgc3RhdGljIGludCBheDI1
-X3JlY3Ztc2coc3RydWN0IHNvY2tldCAqc29jaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3Qg
-c2l6ZSwKPiA+ICAJaW50IGNvcGllZDsKPiA+ICAJaW50IGVyciA9IDA7Cj4gPiAgCj4gPiArCS8q
-IE5vdyB3ZSBjYW4gdHJlYXQgYWxsIGFsaWtlICovCj4gPiArCXNrYiA9IHNrYl9yZWN2X2RhdGFn
-cmFtKHNrLCBmbGFncywgJmVycik7Cj4gPiArCWlmICghc2tiKQo+ID4gKwkJZ290byBkb25lOwo+
-ID4gKwo+IAo+IE5vdGUgdGhhdCB0aGlzIGNhdXNlcyBhIGJlaGF2aW9yIGNoYW5nZTogYmVmb3Jl
-IHRoaXMgcGF0Y2gsIGNhbGxpbmcKPiByZWN2bXNnKCkgb24gdW5jb25uZWN0ZWQgc2VxcGFja2V0
-IHNvY2tldHMgcmV0dXJuZWQgaW1tZWRpYXRlbGx5IHdpdGgKPiBhbiBlcnJvciAoZHVlIHRvIHRo
-ZSB0aGUgY2hlY2sgYmVsb3cpLCBub3cgaXQgYmxvY2tzLiAKPiAKPiBUaGUgY2hhbmdlIG1heSBj
-b25mdXNlICg9PSBicmVhaykgdXNlci1zcGFjZSBhcHBsaWNhdGlvbnMuIEkgdGhpbmsgaXQKPiB3
-b3VsZCBiZSBiZXR0ZXIgcmVwbGFjaW5nIHNrYl9yZWN2X2RhdGFncmFtIHdpdGggYW4gb3Blbi1j
-b2RlZCB2YXJpYW50Cj4gb2YgaXQgcmVsZWFzaW5nIHRoZSBzb2NrZXQgbG9jayBiZWZvcmUgdGhl
-Cj4gX19za2Jfd2FpdF9mb3JfbW9yZV9wYWNrZXRzKCkgY2FsbCBhbmQgcmUtYWNxdWlyaW5nIGl0
-IGFmdGVyIHN1Y2ggY2FsbC4KPiBTb21ld2hhdCBhbGlrZSBfX3VuaXhfZGdyYW1fcmVjdm1zZygp
-LgoKVGhhbmsgeW91IGZvciB5b3VyIHRpbWUgYW5kIHN1Z2dlc3Rpb25zIQpJIHRoaW5rIHRoZSBm
-b2xsb3dpbmcgbWV0aG9kIG1heSBzb2x2ZSB0aGUgcHJvYmxlbS4KCmRpZmYgLS1naXQgYS9uZXQv
-YXgyNS9hZl9heDI1LmMgYi9uZXQvYXgyNS9hZl9heDI1LmMKaW5kZXggOTUzOTNiYjI3NjAuLjUx
-YjQ0MWM4MzdjIDEwMDY0NAotLS0gYS9uZXQvYXgyNS9hZl9heDI1LmMKKysrIGIvbmV0L2F4MjUv
-YWZfYXgyNS5jCkBAIC0xNjc1LDggKzE2NzUsMTAgQEAgc3RhdGljIGludCBheDI1X3JlY3Ztc2co
-c3RydWN0IHNvY2tldCAqc29jaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3Qgc2l6ZSwKICAg
-ICAgICAgICAgICAgIGdvdG8gb3V0OwogICAgICAgIH0KCisgICAgICAgcmVsZWFzZV9zb2NrKHNr
-KTsKICAgICAgICAvKiBOb3cgd2UgY2FuIHRyZWF0IGFsbCBhbGlrZSAqLwogICAgICAgIHNrYiA9
-IHNrYl9yZWN2X2RhdGFncmFtKHNrLCBmbGFncywgJmVycik7CisgICAgICAgbG9ja19zb2NrKHNr
-KTsKICAgICAgICBpZiAoc2tiID09IE5VTEwpCiAgICAgICAgICAgICAgICBnb3RvIG91dDsKClRo
-ZSBza2JfcmVjdl9kYXRhZ3JhbSgpIGlzIGZyZWUgb2YgcmFjZSBjb25kaXRpb25zIGFuZCBjb3Vs
-ZCBiZSByZS1lbnRyYW50LgpTbyBjYWxsaW5nIHNrYl9yZWN2X2RhdGFncmFtKCkgd2l0aG91dCB0
-aGUgcHJvdGVjdGlvbiBvZiBsb2NrX3NvY2soKSBpcyBvay4KCldoYXQncyBtb3JlLCByZWxlYXNp
-bmcgdGhlIGxvY2tfc29jaygpIGJlZm9yZSBza2JfcmVjdl9kYXRhZ3JhbSgpIHdpbGwgbm90CmNh
-dXNlIFVBRiBidWdzLiBCZWNhdXNlIHRoZSBzb2NrIHdpbGwgbm90IGJlIGRlYWxsb2NhdGVkIHVu
-bGVzcyB3ZSBjYWxsCmF4MjVfcmVsZWFzZSgpLCBidXQgYXgyNV9yZWxlYXNlKCkgYW5kIGF4MjVf
-cmVjdm1zZygpIGNvdWxkIG5vdCBydW4gaW4gcGFyYWxsZWwuCgpBbHRob3VnaCB0aGUgInNrLT5z
-a19zdGF0ZSIgbWF5IGJlIGNoYW5nZWQgZHVlIHRvIHRoZSByZWxlYXNlIG9mIGxvY2tfc29jaygp
-LAppdCB3aWxsIG5vdCBpbmZsdWVuY2UgdGhlIGZvbGxvd2luZyBvcGVyYXRpb25zIGluIGF4MjVf
-cmVjdm1zZygpLgoKPiBJbiBhbnkgY2FzZSB0aGlzIGxhY2tzIGEgJ0ZpeGVzJyBwb2ludGluZyB0
-byB0aGUgY29tbWl0IGludHJvZHVjaW5nIHRoZQo+IGlzc3VlIGFkZHJlc3NlZCBoZXJlLgoKVGhl
-IGNvbW1pdCB0aGF0IG5lZWQgdG8gYmUgZml4ZWQgaXMgYmVsb3c6CkZpeGVzOiA0MGQwYTkyM2Y1
-NWEgKCJJbXBsZW1lbnQgbG9ja2luZyBvZiBpbnRlcm5hbCBkYXRhIGZvciBORVQvUk9NIGFuZCBS
-T1NFLiAiKQppbiBsaW51eC0yLjYuMTItcmMyLgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3U=
+Hi Krzysztof,
 
+Thanks for your comments.
+
+On Wed, 8 Jun 2022 at 13:03, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 08/06/2022 11:56, Tomer Maimon wrote:
+> > Add binding for the Arbel BMC NPCM8XX Clock controller.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 63 +++++++++++++++++++
+> >  .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 50 +++++++++++++++
+> >  2 files changed, 113 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> >  create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > new file mode 100644
+> > index 000000000000..e1f375716bc5
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > @@ -0,0 +1,63 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM8XX Clock Controller Binding
+> > +
+> > +maintainers:
+> > +  - Tomer Maimon <tmaimon77@gmail.com>
+> > +
+> > +description: |
+> > +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+> > +  generates and supplies clocks to all modules within the BMC.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - nuvoton,npcm845-clk
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: 25M reference clock
+> > +      - description: CPU reference clock
+> > +      - description: MC reference clock
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: refclk
+> > +      - const: sysbypck
+> > +      - const: mcbypck
+> > +
+>
+> I asked what is the suffix about and you replied "ck"... ok, so let's
+> make clear. This should be:
+>
+>     items:
+>       - const: ref
+>       - const: sysbyp
+>       - const: mcbyp
+>
+> or something similar, without the same suffix all over.
+The clock names are the same clock name in our spec, this why we
+prefer to leave the clock names as is.
+>
+> > diff --git a/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> > new file mode 100644
+> > index 000000000000..229915a254a5
+> > --- /dev/null
+> > +++ b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+>
+> Same comment as before. No changes here...
+>
+about the comments from V1::
+- Krzysztof: Filename - same as bindings, so nuvoton,npcm845-clk.h
+In NPCM7XX we use the same include file and clock source
+dt-binding
+https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/devicetree/bindings/clock/nuvoton,npcm750-clk.txt
+dt-binding include
+https://elixir.bootlin.com/linux/v5.19-rc1/source/include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
+we prefer to be align with our older BMC version
+
+- Krzysztof: Dual license, same as bindings.
+modified in the file * SPDX-License-Identifier: (GPL-2.0-only OR
+BSD-2-Clause) */
+the same license approved in en7523-clk include file and pushed to
+Linux kernel 5.19 :
+https://elixir.bootlin.com/linux/v5.19-rc1/source/include/dt-bindings/clock/en7523-clk.h
+
+>
+>
+> Best regards,
+> Krzysztof
+
+Best regards,
+
+Tomer

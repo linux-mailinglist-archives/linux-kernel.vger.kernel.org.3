@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DE654585C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EA454586F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbiFIXRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 19:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S1346029AbiFIXSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 19:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346000AbiFIXQq (ORCPT
+        with ESMTP id S234177AbiFIXSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:16:46 -0400
-Received: from sonic302-28.consmr.mail.ne1.yahoo.com (sonic302-28.consmr.mail.ne1.yahoo.com [66.163.186.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1E13C2DFA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 16:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654816597; bh=sOP/u9XSiyXDsyWFcZALcYNGLP44f48Lv7XWnF70Jx0=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=oijcy3r1t5T6sXKFa+hn6pjA8OYv+L87ACg6zQpq55PVHTbsBg+ZZPcfNaJTGNBPBTZo4U+5gp8ALjj5P6YLkWSfPmDs7+yCOteaV+nfthEaeYCUxQhTg6BbjbgpZ9WPriCz6BjRV/Tf25OWm1PT4RPujE68CUkrH+/oECsIVeVReVyB/aXnY6IBpfYy0DovaeDxE6EV/m0prufXJbjQgflIbmkUjAvNLpU/Czv8nmzxxWdel3ier3bA/VN9vn+j4tqsIAOWFaqEXeDE5Rck14E1vKCCS1f5yMdhyN2qinzuK8ZvoPW8vksvj64e+eAgcUi/Qr985ZeCrETbIJWLQw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654816597; bh=h1NBTZFRwcSiPprNLBIDKxaWb3cwxLces4joWcWpzM0=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=liFn2N5ommPexOFic5HSH3Q9D+dqqjlMcl+EGeXLCbophTFxehRqH92e2tQ60g4q2O2pGgZjKKOmdKAHCcLurq2qCPIKOVc2VRR3YXpvKz/zPScknwhfTclI6f5TXmbr6tb0Q4CP4lHu1PvlB8aDIqfn0pf6HIe0lBL0nKN6VppXR7qAZ7XZRVyhaBHReEwOthJlysyL6PE+HogcWT7GvJuMhDuAh3/KMASjm2KhwDzULsXUJ1mRg09SBuDrTtAQtemiQpp/wNpN4IKwiOI8ObrT638VuqcAfNpiOo+D9BWW1+gxlNQsEBanhqLmKEzg3oRp0S4lJbFdhNHfNIiLnA==
-X-YMail-OSG: JB3RrvUVM1mVTzw75xNm6gMSu_FMHEFaAZItJERN.tBpdox2lxhbvTPto5ELAF5
- 5lMQEsc0f8zlD_E9db4MFWCfp.PXBr5Ck51_136fi1_KXAjEJpxoR9G5JbapmKn0pbGRSws_BEHE
- t_FCgHWcKfEwD4dE3CGbWuK5QeQNoaFPyda2CcinYMmM.FuSWp.Iu8QzetDNwBpb_axZmgV267vn
- 62CE5Wu0zRbAfdKrIqEvP1sTK2UZbEXcLM9b.v0sq95HMbeMz6yUU0loZinagRklKEJwTtpJBbXB
- Xr8Z2UXgcMne6krhUQpaa2mCL3mjNXLP8cO00.9jH5QxEjUSvgsxWSwIUqbqbsuMZu46qQGpeefN
- yfnpWHWHGi2mp2rs18whjC0HbGWP8kxiduEgZsfywf55lJWyblCp3SYurT627_PsVuonOGOam3A5
- E1Uj9Psj8lX5Ogu85Q2Im.xHGD_9KI.oJAaoiyoggvD1PG1i7LooMOetes2RUoYCal_SOlxK5HRJ
- WVkLsPls6BuG5LnWCiDMdUkj53EMpFgImeaNqZfGqtceAX473gOaXEtk3BvOITPpUCQl0uLO1kCf
- zBaYf7y_dI8IW4yHttP38T8xf1wuoHZXGgtdO21txIMs06PJo9wIDTEp0eB26Xuw5dIxbbSrzyOx
- qsUMyNe55WKX.4rjc24wYeJBDRnNK_yh5RksnvV4SNH9m1yRVsU1jdod4wTCVcShwXJptW4XziY6
- olv55stDkTsUbzsqHKtun2F2oEItU0OOchkiSEqAp5XVQBj3vIFhbFwm7SOrpQUcX4DXAAUazxZY
- 8jEEOGxhLYTWbaSgNcRIhqOeiNsXzb1aoiLotL45bvFSXKLTuJEA0.zNjaTpcU.s5ZYC9Qh43BVe
- 99jmT5EorWlwmaG8X_XbTacJ2CPM1h0hEzZ0r9JMrsG0EGERmFEcZ9yZhoZT5AQvxgY4ewmy3yjZ
- vyR3PBI0HcnVJdqfUCEpX2YkP0MtEQFjCsH3aovUd_MMJ5Th5c5BLaEUHvqshZWphwPtG6x2mvpx
- R80Pj09lWchCxNGztlw6y5.otpGYrPQjG40XQmqk0vImC_Dtwe6sIXcgUQbghMSsgBRWl0drRFi7
- FHSQZCKcU2F0CsKZBwBn_1IZiN3rricuQeJQ6KAkxWUDOsM_RahBO0YfEywCvdjpJvwTPbyARgjM
- 9xnwtY5iJWu.DSp8ESmmsQqmqK8aDUGAA7jTY0bP7sQEwVYoHsMgidG.ORFIqG8pntXmhL1cK.qe
- a5VBwxkWIcjjDqtI3MQjRWoPY7L_xbscQjIuWaaC6qKHmQdzHKIcR5tLI38oXSmIhNCH4XUmZieM
- tM_Cb_Cbcal6P_UjEmjWWKWV5cPJxph856a_TwmAqXGL.EmNKdVkqryNEWt58emxRPJtFNkviq2K
- Aer7vHcAGt2M941kTyQFKZEPH.FJ5FPZGgJZ1odxUAxHYXTGPr7fDeUqufqZxKKs4neQMDYBNJTX
- H.0MIEufHdUTNNEbAQDVHAzLWYriRtaWW_mB5EKVrDdkzxf2gS6ZKmb78rV1.vL3Ijk.HdGlJmXh
- Jkg3h_WwPfHX1EXORSCd1Ue5KzpN2UHDgSpGJMwlUKdGjBJ4cc5_ZDaZqJHvizPvNFwcEx6PJvKo
- Y4Na20qlZKWgQMtVbh4K_HteTQHh.1SZQyjhRVPU4D5xcK.NsVkshPjeTO1GVRkU72zIKuRYmxoE
- Mah_iWXQBcX43wJF.ACBEpEjj4b0sKihEBnoV9RGVhbDR7XhBI2ZJ8Jw9sPTQWn8CzUb1Nxx2qtO
- gLKG_5xr.fSwksn5c5.36rIk.x8JPwxOQMSxZDmjSAKc9Z4lM0iABjeK9QIFmLI4GvexUUHGeXYl
- .ICvmNA67Uo8t0ibz2xhaCWlXRH7FQv7aSXxD4D7raZARhshKyogETjrXnjAr_LxGSpck3woJ1hY
- sNVY0JxvjldRnvut.H5tPadMeMVkOTwVm0U6Ir1dIM0ohBadAOffAqAIBGUvWA_UHU_AxHCJ.7TK
- Qj4gj.Ti786sYFNqvGzW.l59UxN6SlO6tnEet9F1ljuXkjN8PA6FRf0.pvNw1XEdbZbXJ8kxMmXv
- dIOEMdt18UBdVsXzdcmyqi85BLM1ftSB7xaqTwIZZLHNv6OEaEwnfHTv.4E8ObZwII3VnzhyGr3j
- Ph1vF07bpVMQGycE4T2FH.hbGcZ7f9Frhq_AXsPQ7Y7TWvMaHDREJL6JpW5MA4i2bw9wx3KaC3eU
- EQ8zhPJbzFrJMXKlk8eSFUBMjD4hCg6Lz1UMBVlXiSOxQEc1g_vtmgwSAq0Jh.STww5KzhFGyqq3
- 20hVR
+        Thu, 9 Jun 2022 19:18:15 -0400
+Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9892228D2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 16:18:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654816693; bh=24rji6yhLM60tKiaW3koqJxEUprVyhNR7W0FtoSk84M=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=iZgFtghnxA8EvMbF97FRXIzb3Cz0ml4FGXa3KuHjvVzfBMu26mBW8o+ztqX/qcQlZCnhyKqtHvQ+aqqn7peXepwXayhMGKz/vUOJmNAPnskiqo9WxAOgVnEoUS+YP7gtKsnSBvOo2Lc99FN9p9BxnpfGQIqdHdov8H/PB4NL4lt+tMo+SGjF7auhKquTHCCyqQaroIFkUAlfpBsru19qlmRWLdtjauPLwg7v+tK1gkikdeBfafXfzrBC8FCYreFbdxcTtKL9mQOFwOkOnoKwqndnXnzBFB1bLt4UCwyqoW//BRnVQADPU9e+JOleYKk3xYpB0y+B2C/gKvSGAyPhcw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654816693; bh=vcr+npHmOBkkY3RAnj7uNcmp7G/luaJFOphqqZG9B1S=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=ObUryDeoA93mp+GOu62cm+LU/qhVvNWLUUjaC3vcjaulCZYj65rK3NJudDz5vpyuyA8F/WMrn1JM0bN2pMSyDqBE9bm3tUmvVoGsRBwtmTzgkNbJPmTXUn2tOTfdo6Yo+syQ3GDzagRb+fsLVDnm8SNupESKPgn986kdci0Ultd/2yYpPDr0LMWrk7PuXRta5Kr7vVXK9VDPA1KjuGxehNFGUJjaIiJ5xoAie4WfLjFZrZlLmj4tpVqmm37tNrg6xktRDH/2uiHVPLax7THPnfI11w58wVWHuldhGlZE6UI3E3JIPyEPdeOG5wWmxM8PuMU2LbkihRA+W0I11HsD9g==
+X-YMail-OSG: TwSCrlIVM1lN8fjay3zUrpP_zTnxvTq2f6nqnoiaXBDIxnaajuMASTCr24t._zc
+ 0_tViRc4aCprVaoz8aB8zWGI2609N6MNEHPKWePTdnZbwoHTDCDgGZl84fFs8gKNIzVbGSgK_xTl
+ Dfp2S6D2i8aO3UCZrzruQDkirb6fKNYE8dePDevfgX7EQzOOI21x0teO_uWxMpIIqCE.cCENdolr
+ JKeIW84OHrJr68jx4W.zInr3Q6zdA.Q3Rfa5Q.0TVQBAIzEh3tCXtH_2ZHJqywO_S2CDUJIReoYQ
+ 4GwQZwMUpiHzHgTKmsPuvo3DRa4dObPiqHg_xPQtVdnjju.VAB9VRQpPMOc.0REx_dmPcG8WaK08
+ 9KTcT0gfHbHO5Ta9UZ2JibZwJfkvTvKsGLNeS6ThRpIOgVpZnvE3fvnn.9dlI5.MPhZ4xREpeYzv
+ pzPKCzvk32MbO_GCelTyzIwQBQQE7dMnthGoNgq6qVMINaeOSdabAPv.46UZy8OYEEY_1YO6BMYb
+ yPQvITfyBN9gwKb6PD8wnA0pPB47ds4Ks4PczipuiucCnn_JFbgzTatjZLShh27rYPiTEJ.zWw3Z
+ I1dUywItaw2A85IksTm.nFJLe53O.KJ7kmaLYPtSqWHTPMYtrRhb8bbP7L4WsoPeZYxO.pvm05Nh
+ 4P1mmQspeVo7FofTfymO8F5OZ8DTTCSMVgmEpKaAMnDwy0mAzMHZSsx.RbHryZmscyNFTqZL.gBN
+ wqD06aiLjCNuFd19NAD3kZWFGtuurFWmiglzs6HnrKHefs80XE.3gR.R8CanjE5Jum3uFGZTSRxH
+ EQD8eUmbIvID7YrWq7N2kesg7.sHi79irDPrluc9sBxdQyQUO8guUhRpEwPX2MBigk9FHqsCXHjw
+ x9xz3ObVLWoZlDz6LlwA3yJ20CZ1aKXRrbzes3ExUKA3A32rRvMVCxu8P97PiZGWG0EqWEFYoQTf
+ AMJ.lfOI2AuZVfMpsQTVbMLR6NOg24EPt1iJ20ttZPG4GDbxsiYMshUnb087njkqcv_Cqgayni2m
+ wdd1Pb9CV5eQwlP1hpuZBULNd8gzKXg29zk_5WoplmYHdXwJcV5xQYuaf4XQW.prddU5VHCR3SZE
+ HHUd1YjE5PNI_uPCwMKNx.fLFvYJ3TUGhQHF5ymRuyyeWsZqni5OiJBQIqv.34m1fXWGrLIyFPGL
+ ODqLBKFvXWvF6gsVeaxq_Z9hY.k8Lw7OLaEWrRyHZztLP891fwu8CYZ.4zZrPjvgDUDaUnOEZJ74
+ ifkJqTkpPiVgVNS1OfmWQm.hEBr6IKAWI2Zx8XZklk1.6QIw9TuYWgjwz8wO9VxJc_clSVPCLdv.
+ s2x_xYo2585PTO9OQj6Cz3sh3AOGb890vRqei.sydRPL5HtvEJXZyzXSaGvgoL06_91YzJ7.KxUq
+ ioALxbVXH0B3Kdcq9LFV23KcqjHoFRiB5T9p0tN56IuLD2vMWtbBYk7iO7eagqnBDudfVZlwQADv
+ brnU6oUQcTNq3mLKwdb0QeUY3Yqs5WVWuSLubdEsnsYHGZkEFoRPzopes4srHzyw0zDtU3n2rdy.
+ ADZg1ujepKOYb8yErduaVHUoovUY7Qg4Q29gG0L.3nreZrToBcwcFcMicDyOte5fp_zT9XWB4eRX
+ de1jyolC8fEEuqTRz.ieEsFF1TeValeWsyh8OVNxpxHNtN6rgPefCHXxxwC4PkZSqdcbYtoCmeTT
+ EJMrT94kk1lXqHMErJnUkw72rJrzFjK9dDScZ2PhtB2ijnozJTqdGpaOUxdPnmtikA9lydQh1W61
+ UTA9TU0CeBwaqMDYt0iW.ic2a0bSy6BJUjVlIG3BKfpewgdRas10Zbmt5xw1m_okOtHA_UQ.xJMW
+ VwZZaoGse31QC.FB6vSgHAO8xdKseZ.eIfe8xuQv5GRhYOO34jf5Ck8sISfbWANzXMQLMxR1kNzT
+ 5Yq9wAM0Jqxylc4MmDSCB6X_uSolUTwkdIApdOQBFgNbyPirMChs16m7zt6KTJG0u4HfBWgZ0G8f
+ MPP8ROssTIMj_h3iULazbuJQTrwutBfm792QEyBSI7n9eCTuZ5JtEi5heAvk71D5Y4mLRg0qB8ug
+ 95qJUKlutuCCPiyQWmEjany_cZuj5chqrlrSlh0WOY740tO2mlGILmYxQ7WKteycFAVJkkHhhhIF
+ W8tlaxZoyStTPG8Y0yXkETwpoypiDscJ_rbAu2Rm9a4voNA4LjWvS8_s61t9NVxIobmscwrYAyh2
+ KUQBvNMreM19VhnNzYi.A6ieVjCPSnARZA4qIKlz9scInm.P_XrFi5Nkdj.jLBsWm4sSavlN0lXY
+ .TtTl2VFz33dpldQfls9RmpxCH1BJCTkjDZX5eBuMVm2Ml8YBiN0ZW5HC
 X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Thu, 9 Jun 2022 23:16:37 +0000
-Received: by hermes--canary-production-ne1-799d7bd497-7lvgk (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2d9a335cac260a86aa8227596f2c755a;
-          Thu, 09 Jun 2022 23:16:32 +0000 (UTC)
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 9 Jun 2022 23:18:13 +0000
+Received: by hermes--canary-production-bf1-856dbf94db-ld7kl (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8bd0cd8ed239bc60f51b90fd11ae18df;
+          Thu, 09 Jun 2022 23:18:07 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
@@ -60,9 +60,9 @@ Cc:     casey@schaufler-ca.com, linux-audit@redhat.com,
         keescook@chromium.org, john.johansen@canonical.com,
         penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
         stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v36 29/33] Audit: Add record for multiple object contexts
-Date:   Thu,  9 Jun 2022 16:01:42 -0700
-Message-Id: <20220609230146.319210-30-casey@schaufler-ca.com>
+Subject: [PATCH v36 30/33] netlabel: Use a struct lsmblob in audit data
+Date:   Thu,  9 Jun 2022 16:01:43 -0700
+Message-Id: <20220609230146.319210-31-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220609230146.319210-1-casey@schaufler-ca.com>
 References: <20220609230146.319210-1-casey@schaufler-ca.com>
@@ -70,263 +70,110 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a new audit record AUDIT_MAC_OBJ_CONTEXTS.
-An example of the MAC_OBJ_CONTEXTS (1421) record is:
-
-    type=MAC_OBJ_CONTEXTS[1421]
-    msg=audit(1601152467.009:1050):
-    obj_selinux=unconfined_u:object_r:user_home_t:s0
-
-When an audit event includes a AUDIT_MAC_OBJ_CONTEXTS record
-the "obj=" field in other records in the event will be "obj=?".
-An AUDIT_MAC_OBJ_CONTEXTS record is supplied when the system has
-multiple security modules that may make access decisions based
-on an object security context.
+Remove scaffolding in netlabel audit by keeping subject
+lsm information in an lsmblob structure instead of a secid.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-Acked-by: Paul Moore <paul@paul-moore.com>
 ---
- include/linux/audit.h      |  5 +++
- include/uapi/linux/audit.h |  1 +
- kernel/audit.c             | 49 ++++++++++++++++++++++-
- kernel/auditsc.c           | 79 ++++++++++++--------------------------
- 4 files changed, 78 insertions(+), 56 deletions(-)
+ include/net/netlabel.h            | 2 +-
+ net/netlabel/netlabel_unlabeled.c | 4 +---
+ net/netlabel/netlabel_user.c      | 4 +---
+ net/netlabel/netlabel_user.h      | 6 +-----
+ security/smack/smackfs.c          | 2 +-
+ 5 files changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index de661c571401..4f4ef63df52b 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -190,6 +190,8 @@ extern void		    audit_log_path_denied(int type,
- 						  const char *operation);
- extern void		    audit_log_lost(const char *message);
+diff --git a/include/net/netlabel.h b/include/net/netlabel.h
+index 73fc25b4042b..d9aaa264e29c 100644
+--- a/include/net/netlabel.h
++++ b/include/net/netlabel.h
+@@ -97,7 +97,7 @@ struct calipso_doi;
  
-+extern void audit_log_object_context(struct audit_buffer *ab,
-+				     struct lsmblob *blob);
- extern int audit_log_subject_context(struct audit_buffer *ab,
- 				     struct lsmblob *blob);
- extern int audit_log_task_context(struct audit_buffer *ab);
-@@ -252,6 +254,9 @@ static inline void audit_log_key(struct audit_buffer *ab, char *key)
- { }
- static inline void audit_log_path_denied(int type, const char *operation)
- { }
-+static inline  void audit_log_object_context(struct audit_buffer *ab,
-+					     struct lsmblob *blob)
-+{ }
- static inline int audit_log_subject_context(struct audit_buffer *ab,
- 					    struct lsmblob *blob)
+ /* NetLabel audit information */
+ struct netlbl_audit {
+-	u32 secid;
++	struct lsmblob lsmblob;
+ 	kuid_t loginuid;
+ 	unsigned int sessionid;
+ };
+diff --git a/net/netlabel/netlabel_unlabeled.c b/net/netlabel/netlabel_unlabeled.c
+index 8deee7e176a9..9277c6dd79f5 100644
+--- a/net/netlabel/netlabel_unlabeled.c
++++ b/net/netlabel/netlabel_unlabeled.c
+@@ -1529,13 +1529,11 @@ int __init netlbl_unlabel_defconf(void)
+ 	int ret_val;
+ 	struct netlbl_dom_map *entry;
+ 	struct netlbl_audit audit_info;
+-	struct lsmblob blob;
+ 
+ 	/* Only the kernel is allowed to call this function and the only time
+ 	 * it is called is at bootup before the audit subsystem is reporting
+ 	 * messages so don't worry to much about these values. */
+-	security_current_getsecid_subj(&blob);
+-	audit_info.secid = lsmblob_first(&blob);
++	security_current_getsecid_subj(&audit_info.lsmblob);
+ 	audit_info.loginuid = GLOBAL_ROOT_UID;
+ 	audit_info.sessionid = 0;
+ 
+diff --git a/net/netlabel/netlabel_user.c b/net/netlabel/netlabel_user.c
+index 42812bdfc31a..e72dfe2da77a 100644
+--- a/net/netlabel/netlabel_user.c
++++ b/net/netlabel/netlabel_user.c
+@@ -84,7 +84,6 @@ struct audit_buffer *netlbl_audit_start_common(int type,
+ 					       struct netlbl_audit *audit_info)
  {
-diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index 7a5966b46f38..e5fae08982ca 100644
---- a/include/uapi/linux/audit.h
-+++ b/include/uapi/linux/audit.h
-@@ -144,6 +144,7 @@
- #define AUDIT_MAC_CALIPSO_ADD	1418	/* NetLabel: add CALIPSO DOI entry */
- #define AUDIT_MAC_CALIPSO_DEL	1419	/* NetLabel: del CALIPSO DOI entry */
- #define AUDIT_MAC_TASK_CONTEXTS	1420	/* Multiple LSM task contexts */
-+#define AUDIT_MAC_OBJ_CONTEXTS	1421	/* Multiple LSM objext contexts */
+ 	struct audit_buffer *audit_buf;
+-	struct lsmblob blob;
  
- #define AUDIT_FIRST_KERN_ANOM_MSG   1700
- #define AUDIT_LAST_KERN_ANOM_MSG    1799
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 4ec86d696753..0f9393f5aa4a 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -1107,7 +1107,6 @@ int is_audit_feature_set(int i)
- 	return af.features & AUDIT_FEATURE_TO_MASK(i);
+ 	if (audit_enabled == AUDIT_OFF)
+ 		return NULL;
+@@ -97,8 +96,7 @@ struct audit_buffer *netlbl_audit_start_common(int type,
+ 			 from_kuid(&init_user_ns, audit_info->loginuid),
+ 			 audit_info->sessionid);
+ 
+-	lsmblob_init(&blob, audit_info->secid);
+-	audit_log_subject_context(audit_buf, &blob);
++	audit_log_subject_context(audit_buf, &audit_info->lsmblob);
+ 
+ 	return audit_buf;
+ }
+diff --git a/net/netlabel/netlabel_user.h b/net/netlabel/netlabel_user.h
+index 34bb6572f33b..56a634244a6e 100644
+--- a/net/netlabel/netlabel_user.h
++++ b/net/netlabel/netlabel_user.h
+@@ -32,11 +32,7 @@
+  */
+ static inline void netlbl_netlink_auditinfo(struct netlbl_audit *audit_info)
+ {
+-	struct lsmblob blob;
+-
+-	security_current_getsecid_subj(&blob);
+-	/* scaffolding until secid is converted */
+-	audit_info->secid = lsmblob_first(&blob);
++	security_current_getsecid_subj(&audit_info->lsmblob);
+ 	audit_info->loginuid = audit_get_loginuid(current);
+ 	audit_info->sessionid = audit_get_sessionid(current);
+ }
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index 314336463111..f74207f6c71e 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -186,7 +186,7 @@ static void smk_netlabel_audit_set(struct netlbl_audit *nap)
+ 
+ 	nap->loginuid = audit_get_loginuid(current);
+ 	nap->sessionid = audit_get_sessionid(current);
+-	nap->secid = skp->smk_secid;
++	nap->lsmblob.secid[smack_lsmid.slot] = skp->smk_secid;
  }
  
--
- static int audit_get_feature(struct sk_buff *skb)
- {
- 	u32 seq;
-@@ -2288,6 +2287,54 @@ int audit_log_task_context(struct audit_buffer *ab)
- }
- EXPORT_SYMBOL(audit_log_task_context);
- 
-+void audit_log_object_context(struct audit_buffer *ab, struct lsmblob *blob)
-+{
-+	int i;
-+	int error;
-+	struct lsmcontext context;
-+
-+	if (!lsm_multiple_contexts()) {
-+		error = security_secid_to_secctx(blob, &context, LSMBLOB_FIRST);
-+		if (error) {
-+			if (error != -EINVAL)
-+				goto error_path;
-+			return;
-+		}
-+		audit_log_format(ab, " obj=%s", context.context);
-+		security_release_secctx(&context);
-+	} else {
-+		audit_log_format(ab, " obj=?");
-+		error = audit_buffer_aux_new(ab, AUDIT_MAC_OBJ_CONTEXTS);
-+		if (error)
-+			goto error_path;
-+
-+		for (i = 0; i < LSMBLOB_ENTRIES; i++) {
-+			if (blob->secid[i] == 0)
-+				continue;
-+			error = security_secid_to_secctx(blob, &context, i);
-+			if (error) {
-+				audit_log_format(ab, "%sobj_%s=?",
-+						 i ? " " : "",
-+						 lsm_slot_to_name(i));
-+				if (error != -EINVAL)
-+					audit_panic("error in audit_log_object_context");
-+			} else {
-+				audit_log_format(ab, "%sobj_%s=%s",
-+						 i ? " " : "",
-+						 lsm_slot_to_name(i),
-+						 context.context);
-+				security_release_secctx(&context);
-+			}
-+		}
-+
-+		audit_buffer_aux_end(ab);
-+	}
-+	return;
-+
-+error_path:
-+	audit_panic("error in audit_log_object_context");
-+}
-+
- void audit_log_d_path_exe(struct audit_buffer *ab,
- 			  struct mm_struct *mm)
- {
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index be2811d21ba8..d091eee4b991 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -1114,36 +1114,25 @@ static inline void audit_free_context(struct audit_context *context)
- 	kfree(context);
- }
- 
--static int audit_log_pid_context(struct audit_context *context, pid_t pid,
--				 kuid_t auid, kuid_t uid,
--				 unsigned int sessionid,
--				 struct lsmblob *blob, char *comm)
-+static void audit_log_pid_context(struct audit_context *context, pid_t pid,
-+				  kuid_t auid, kuid_t uid,
-+				  unsigned int sessionid,
-+				  struct lsmblob *blob, char *comm)
- {
- 	struct audit_buffer *ab;
--	struct lsmcontext lsmctx;
--	int rc = 0;
- 
- 	ab = audit_log_start(context, GFP_KERNEL, AUDIT_OBJ_PID);
- 	if (!ab)
--		return rc;
-+		return;
- 
- 	audit_log_format(ab, "opid=%d oauid=%d ouid=%d oses=%d", pid,
- 			 from_kuid(&init_user_ns, auid),
- 			 from_kuid(&init_user_ns, uid), sessionid);
--	if (lsmblob_is_set(blob)) {
--		if (security_secid_to_secctx(blob, &lsmctx, LSMBLOB_FIRST)) {
--			audit_log_format(ab, " obj=(none)");
--			rc = 1;
--		} else {
--			audit_log_format(ab, " obj=%s", lsmctx.context);
--			security_release_secctx(&lsmctx);
--		}
--	}
-+	if (lsmblob_is_set(blob))
-+		audit_log_object_context(ab, blob);
- 	audit_log_format(ab, " ocomm=");
- 	audit_log_untrustedstring(ab, comm);
- 	audit_log_end(ab);
--
--	return rc;
- }
- 
- static void audit_log_execve_info(struct audit_context *context,
-@@ -1420,18 +1409,10 @@ static void show_special(struct audit_context *context, int *call_panic)
- 				 from_kgid(&init_user_ns, context->ipc.gid),
- 				 context->ipc.mode);
- 		if (osid) {
--			struct lsmcontext lsmcxt;
- 			struct lsmblob blob;
- 
- 			lsmblob_init(&blob, osid);
--			if (security_secid_to_secctx(&blob, &lsmcxt,
--						     LSMBLOB_FIRST)) {
--				audit_log_format(ab, " osid=%u", osid);
--				*call_panic = 1;
--			} else {
--				audit_log_format(ab, " obj=%s", lsmcxt.context);
--				security_release_secctx(&lsmcxt);
--			}
-+			audit_log_object_context(ab, &blob);
- 		}
- 		if (context->ipc.has_perm) {
- 			audit_log_end(ab);
-@@ -1588,19 +1569,8 @@ static void audit_log_name(struct audit_context *context, struct audit_names *n,
- 				 from_kgid(&init_user_ns, n->gid),
- 				 MAJOR(n->rdev),
- 				 MINOR(n->rdev));
--	if (lsmblob_is_set(&n->lsmblob)) {
--		struct lsmcontext lsmctx;
--
--		if (security_secid_to_secctx(&n->lsmblob, &lsmctx,
--					     LSMBLOB_FIRST)) {
--			audit_log_format(ab, " osid=?");
--			if (call_panic)
--				*call_panic = 2;
--		} else {
--			audit_log_format(ab, " obj=%s", lsmctx.context);
--			security_release_secctx(&lsmctx);
--		}
--	}
-+	if (lsmblob_is_set(&n->lsmblob))
-+		audit_log_object_context(ab, &n->lsmblob);
- 
- 	/* log the audit_names record type */
- 	switch (n->type) {
-@@ -1805,21 +1775,20 @@ static void audit_log_exit(void)
- 		struct audit_aux_data_pids *axs = (void *)aux;
- 
- 		for (i = 0; i < axs->pid_count; i++)
--			if (audit_log_pid_context(context, axs->target_pid[i],
--						  axs->target_auid[i],
--						  axs->target_uid[i],
--						  axs->target_sessionid[i],
--						  &axs->target_lsm[i],
--						  axs->target_comm[i]))
--				call_panic = 1;
--	}
--
--	if (context->target_pid &&
--	    audit_log_pid_context(context, context->target_pid,
--				  context->target_auid, context->target_uid,
--				  context->target_sessionid,
--				  &context->target_lsm, context->target_comm))
--			call_panic = 1;
-+			audit_log_pid_context(context, axs->target_pid[i],
-+					      axs->target_auid[i],
-+					      axs->target_uid[i],
-+					      axs->target_sessionid[i],
-+					      &axs->target_lsm[i],
-+					      axs->target_comm[i]);
-+	}
-+
-+	if (context->target_pid)
-+		audit_log_pid_context(context, context->target_pid,
-+				      context->target_auid, context->target_uid,
-+				      context->target_sessionid,
-+				      &context->target_lsm,
-+				      context->target_comm);
- 
- 	if (context->pwd.dentry && context->pwd.mnt) {
- 		ab = audit_log_start(context, GFP_KERNEL, AUDIT_CWD);
+ /*
 -- 
 2.35.1
 

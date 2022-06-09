@@ -2,547 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35585545189
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0E754519F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 18:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbiFIQF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 12:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S1344733AbiFIQLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 12:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiFIQFy (ORCPT
+        with ESMTP id S1344716AbiFIQLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 12:05:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A789613892A;
-        Thu,  9 Jun 2022 09:05:52 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 259Fxcj0011420;
-        Thu, 9 Jun 2022 16:05:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Ionq+1sLp9BiqhJLVZfsLskBCazoUK6xUpZm2BAiiJs=;
- b=plbCagQ/zx31MtTPKxukRN0Kcx+h2aD1bkjjG6dMf79H3tvKPQ4nKwKNx7I4zsOCA8aZ
- TbiWDi4W2bzgQHHZTy87AEhsrs3YUu2EXP+T3lqMqT0jCK/i0GibHwkmQP9AYO71EqCY
- wT7wE+qYXNwGLjZsTS5LF2CJTGpxA3S5ecSHGTQuEBL/uWtiUH78Vdb3wUVuSWxn4B5p
- XuYei405S3rxjyDrhXC2l1P3I6OuC7olPeBPI0Rv8h0nqtzRy33l+3OFHLjlF4aUonGb
- jUYdTyyE1cIpd99EdAKi5EGAppCeoynWrFNBn0vvNvFS8WCTC6A+EnJpnDkkL+/zTcsQ 6g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkm07r3r4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 16:05:45 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 259G5BoF029443;
-        Thu, 9 Jun 2022 16:05:45 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gkm07r3qq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 16:05:45 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 259G5LMX011146;
-        Thu, 9 Jun 2022 16:05:44 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04dal.us.ibm.com with ESMTP id 3gfy1akvcb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Jun 2022 16:05:44 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 259G5gmL36372842
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Jun 2022 16:05:42 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F63C136051;
-        Thu,  9 Jun 2022 16:05:42 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF8BA136059;
-        Thu,  9 Jun 2022 16:05:40 +0000 (GMT)
-Received: from farman-thinkpad-t470p (unknown [9.211.94.47])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Jun 2022 16:05:40 +0000 (GMT)
-Message-ID: <9001ce801360e3ed1482e15b5e8ec0cccc26ad64.camel@linux.ibm.com>
-Subject: Re: [PATCH] vfio: de-extern-ify function prototypes
-From:   Eric Farman <farman@linux.ibm.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     kwankhede@nvidia.com, mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        diana.craciun@oss.nxp.com, cohuck@redhat.com,
-        eric.auger@redhat.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, jgg@nvidia.com, yishaih@nvidia.com,
-        hch@lst.de
-Date:   Thu, 09 Jun 2022 12:05:39 -0400
-In-Reply-To: <165471414407.203056.474032786990662279.stgit@omen>
-References: <165471414407.203056.474032786990662279.stgit@omen>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QLnhjnmaaH_QFQA6-xW0JnUtRe2hOXGP
-X-Proofpoint-GUID: 0sTcPT-982aElfTBdzLAGsYK3SwzNkGb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-09_12,2022-06-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- suspectscore=0 clxscore=1011 mlxlogscore=999 adultscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206090062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Jun 2022 12:11:42 -0400
+Received: from azure-sdnproxy-3.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6CD48BDA1D;
+        Thu,  9 Jun 2022 09:11:35 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 10 Jun 2022 00:10:48
+ +0800 (GMT+08:00)
+X-Originating-IP: [106.117.78.144]
+Date:   Fri, 10 Jun 2022 00:10:48 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Paolo Abeni" <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, jreuter@yaina.de,
+        ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-hams@vger.kernel.org, thomas@osterried.de
+Subject: Re: [PATCH v3] net: ax25: Fix deadlock caused by skb_recv_datagram
+ in ax25_recvmsg
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <548f2a708c106fbc8784b1c4c7740643749a3952.camel@redhat.com>
+References: <20220608012923.17505-1-duoming@zju.edu.cn>
+ <22175690a4e89a78abcb8244dfd0bdd0005267a5.camel@redhat.com>
+ <4ccdba76.5ee33.181489cd6e4.Coremail.duoming@zju.edu.cn>
+ <548f2a708c106fbc8784b1c4c7740643749a3952.camel@redhat.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Message-ID: <379f4146.5e94f.181493b8c18.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgC3PiGIG6Ji1SSMAQ--.38090W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgUQAVZdtaIQ6gAQsg
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 12:55 -0600, Alex Williamson wrote:
-> The use of 'extern' in function prototypes has been disrecommended in
-> the kernel coding style for several years now, remove them from all
-> vfio
-> related files so contributors no longer need to decide between style
-> and
-> consistency.
-> 
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-
-Reviewed-by: Eric Farman <farman@linux.ibm.com>
-
-> ---
-> 
-> A patch in the same vein was proposed about a year ago, but tied to
-> an ill
-> fated series and forgotten.  Now that we're at the beginning of a new
-> development cycle, I'd like to propose kicking off the v5.20 vfio
-> next
-> branch with this patch and would kindly ask anyone with pending
-> respins or
-> significant conflicts to rebase on top of this patch.  Thanks!
-> 
->  Documentation/driver-api/vfio-mediated-device.rst |   10 ++-
->  drivers/s390/cio/vfio_ccw_cp.h                    |   12 ++--
->  drivers/s390/cio/vfio_ccw_private.h               |    6 +-
->  drivers/vfio/fsl-mc/vfio_fsl_mc_private.h         |    2 -
->  drivers/vfio/platform/vfio_platform_private.h     |   21 +++---
->  include/linux/vfio.h                              |   70 ++++++++++-
-> ----------
->  include/linux/vfio_pci_core.h                     |   65 ++++++++++-
-> ---------
->  7 files changed, 91 insertions(+), 95 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/vfio-mediated-device.rst
-> b/Documentation/driver-api/vfio-mediated-device.rst
-> index eded8719180f..1c57815619fd 100644
-> --- a/Documentation/driver-api/vfio-mediated-device.rst
-> +++ b/Documentation/driver-api/vfio-mediated-device.rst
-> @@ -114,11 +114,11 @@ to register and unregister itself with the core
-> driver:
->  
->  * Register::
->  
-> -    extern int  mdev_register_driver(struct mdev_driver *drv);
-> +    int mdev_register_driver(struct mdev_driver *drv);
->  
->  * Unregister::
->  
-> -    extern void mdev_unregister_driver(struct mdev_driver *drv);
-> +    void mdev_unregister_driver(struct mdev_driver *drv);
->  
->  The mediated bus driver's probe function should create a vfio_device
-> on top of
->  the mdev_device and connect it to an appropriate implementation of
-> @@ -127,8 +127,8 @@ vfio_device_ops.
->  When a driver wants to add the GUID creation sysfs to an existing
-> device it has
->  probe'd to then it should call::
->  
-> -	extern int  mdev_register_device(struct device *dev,
-> -	                                 struct mdev_driver
-> *mdev_driver);
-> +    int mdev_register_device(struct device *dev,
-> +                             struct mdev_driver *mdev_driver);
->  
->  This will provide the 'mdev_supported_types/XX/create' files which
-> can then be
->  used to trigger the creation of a mdev_device. The created
-> mdev_device will be
-> @@ -136,7 +136,7 @@ attached to the specified driver.
->  
->  When the driver needs to remove itself it calls::
->  
-> -	extern void mdev_unregister_device(struct device *dev);
-> +    void mdev_unregister_device(struct device *dev);
->  
->  Which will unbind and destroy all the created mdevs and remove the
-> sysfs files.
->  
-> diff --git a/drivers/s390/cio/vfio_ccw_cp.h
-> b/drivers/s390/cio/vfio_ccw_cp.h
-> index e4c436199b4c..3194d887e08e 100644
-> --- a/drivers/s390/cio/vfio_ccw_cp.h
-> +++ b/drivers/s390/cio/vfio_ccw_cp.h
-> @@ -41,11 +41,11 @@ struct channel_program {
->  	struct ccw1 *guest_cp;
->  };
->  
-> -extern int cp_init(struct channel_program *cp, union orb *orb);
-> -extern void cp_free(struct channel_program *cp);
-> -extern int cp_prefetch(struct channel_program *cp);
-> -extern union orb *cp_get_orb(struct channel_program *cp, u32
-> intparm, u8 lpm);
-> -extern void cp_update_scsw(struct channel_program *cp, union scsw
-> *scsw);
-> -extern bool cp_iova_pinned(struct channel_program *cp, u64 iova);
-> +int cp_init(struct channel_program *cp, union orb *orb);
-> +void cp_free(struct channel_program *cp);
-> +int cp_prefetch(struct channel_program *cp);
-> +union orb *cp_get_orb(struct channel_program *cp, u32 intparm, u8
-> lpm);
-> +void cp_update_scsw(struct channel_program *cp, union scsw *scsw);
-> +bool cp_iova_pinned(struct channel_program *cp, u64 iova);
->  
->  #endif
-> diff --git a/drivers/s390/cio/vfio_ccw_private.h
-> b/drivers/s390/cio/vfio_ccw_private.h
-> index 7272eb788612..b7163bac8cc7 100644
-> --- a/drivers/s390/cio/vfio_ccw_private.h
-> +++ b/drivers/s390/cio/vfio_ccw_private.h
-> @@ -119,10 +119,10 @@ struct vfio_ccw_private {
->  	struct work_struct	crw_work;
->  } __aligned(8);
->  
-> -extern int vfio_ccw_mdev_reg(struct subchannel *sch);
-> -extern void vfio_ccw_mdev_unreg(struct subchannel *sch);
-> +int vfio_ccw_mdev_reg(struct subchannel *sch);
-> +void vfio_ccw_mdev_unreg(struct subchannel *sch);
->  
-> -extern int vfio_ccw_sch_quiesce(struct subchannel *sch);
-> +int vfio_ccw_sch_quiesce(struct subchannel *sch);
->  
->  extern struct mdev_driver vfio_ccw_mdev_driver;
->  
-> diff --git a/drivers/vfio/fsl-mc/vfio_fsl_mc_private.h
-> b/drivers/vfio/fsl-mc/vfio_fsl_mc_private.h
-> index 4ad63ececb91..7a29f572f93d 100644
-> --- a/drivers/vfio/fsl-mc/vfio_fsl_mc_private.h
-> +++ b/drivers/vfio/fsl-mc/vfio_fsl_mc_private.h
-> @@ -39,7 +39,7 @@ struct vfio_fsl_mc_device {
->  	struct vfio_fsl_mc_irq      *mc_irqs;
->  };
->  
-> -extern int vfio_fsl_mc_set_irqs_ioctl(struct vfio_fsl_mc_device
-> *vdev,
-> +int vfio_fsl_mc_set_irqs_ioctl(struct vfio_fsl_mc_device *vdev,
->  			       u32 flags, unsigned int index,
->  			       unsigned int start, unsigned int count,
->  			       void *data);
-> diff --git a/drivers/vfio/platform/vfio_platform_private.h
-> b/drivers/vfio/platform/vfio_platform_private.h
-> index 520d2a8e8375..691b43f4b2b2 100644
-> --- a/drivers/vfio/platform/vfio_platform_private.h
-> +++ b/drivers/vfio/platform/vfio_platform_private.h
-> @@ -78,21 +78,20 @@ struct vfio_platform_reset_node {
->  	vfio_platform_reset_fn_t of_reset;
->  };
->  
-> -extern int vfio_platform_probe_common(struct vfio_platform_device
-> *vdev,
-> -				      struct device *dev);
-> +int vfio_platform_probe_common(struct vfio_platform_device *vdev,
-> +			       struct device *dev);
->  void vfio_platform_remove_common(struct vfio_platform_device *vdev);
->  
-> -extern int vfio_platform_irq_init(struct vfio_platform_device
-> *vdev);
-> -extern void vfio_platform_irq_cleanup(struct vfio_platform_device
-> *vdev);
-> +int vfio_platform_irq_init(struct vfio_platform_device *vdev);
-> +void vfio_platform_irq_cleanup(struct vfio_platform_device *vdev);
->  
-> -extern int vfio_platform_set_irqs_ioctl(struct vfio_platform_device
-> *vdev,
-> -					uint32_t flags, unsigned index,
-> -					unsigned start, unsigned count,
-> -					void *data);
-> +int vfio_platform_set_irqs_ioctl(struct vfio_platform_device *vdev,
-> +				 uint32_t flags, unsigned index,
-> +				 unsigned start, unsigned count, void
-> *data);
->  
-> -extern void __vfio_platform_register_reset(struct
-> vfio_platform_reset_node *n);
-> -extern void vfio_platform_unregister_reset(const char *compat,
-> -					   vfio_platform_reset_fn_t
-> fn);
-> +void __vfio_platform_register_reset(struct vfio_platform_reset_node
-> *n);
-> +void vfio_platform_unregister_reset(const char *compat,
-> +				    vfio_platform_reset_fn_t fn);
->  #define vfio_platform_register_reset(__compat, __reset)		
-> \
->  static struct vfio_platform_reset_node __reset ## _node = {	\
->  	.owner = THIS_MODULE,					\
-> diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-> index aa888cc51757..49580fa2073a 100644
-> --- a/include/linux/vfio.h
-> +++ b/include/linux/vfio.h
-> @@ -140,19 +140,19 @@ int vfio_mig_get_next_state(struct vfio_device
-> *device,
->  /*
->   * External user API
->   */
-> -extern struct iommu_group *vfio_file_iommu_group(struct file *file);
-> -extern bool vfio_file_enforced_coherent(struct file *file);
-> -extern void vfio_file_set_kvm(struct file *file, struct kvm *kvm);
-> -extern bool vfio_file_has_dev(struct file *file, struct vfio_device
-> *device);
-> +struct iommu_group *vfio_file_iommu_group(struct file *file);
-> +bool vfio_file_enforced_coherent(struct file *file);
-> +void vfio_file_set_kvm(struct file *file, struct kvm *kvm);
-> +bool vfio_file_has_dev(struct file *file, struct vfio_device
-> *device);
->  
->  #define VFIO_PIN_PAGES_MAX_ENTRIES	(PAGE_SIZE/sizeof(unsigned
-> long))
->  
-> -extern int vfio_pin_pages(struct vfio_device *device, unsigned long
-> *user_pfn,
-> -			  int npage, int prot, unsigned long
-> *phys_pfn);
-> -extern int vfio_unpin_pages(struct vfio_device *device, unsigned
-> long *user_pfn,
-> -			    int npage);
-> -extern int vfio_dma_rw(struct vfio_device *device, dma_addr_t
-> user_iova,
-> -		       void *data, size_t len, bool write);
-> +int vfio_pin_pages(struct vfio_device *device, unsigned long
-> *user_pfn,
-> +		   int npage, int prot, unsigned long *phys_pfn);
-> +int vfio_unpin_pages(struct vfio_device *device, unsigned long
-> *user_pfn,
-> +		     int npage);
-> +int vfio_dma_rw(struct vfio_device *device, dma_addr_t user_iova,
-> +		void *data, size_t len, bool write);
->  
->  /* each type has independent events */
->  enum vfio_notify_type {
-> @@ -162,13 +162,13 @@ enum vfio_notify_type {
->  /* events for VFIO_IOMMU_NOTIFY */
->  #define VFIO_IOMMU_NOTIFY_DMA_UNMAP	BIT(0)
->  
-> -extern int vfio_register_notifier(struct vfio_device *device,
-> -				  enum vfio_notify_type type,
-> -				  unsigned long *required_events,
-> -				  struct notifier_block *nb);
-> -extern int vfio_unregister_notifier(struct vfio_device *device,
-> -				    enum vfio_notify_type type,
-> -				    struct notifier_block *nb);
-> +int vfio_register_notifier(struct vfio_device *device,
-> +			   enum vfio_notify_type type,
-> +			   unsigned long *required_events,
-> +			   struct notifier_block *nb);
-> +int vfio_unregister_notifier(struct vfio_device *device,
-> +			     enum vfio_notify_type type,
-> +			     struct notifier_block *nb);
->  
->  
->  /*
-> @@ -178,25 +178,24 @@ struct vfio_info_cap {
->  	struct vfio_info_cap_header *buf;
->  	size_t size;
->  };
-> -extern struct vfio_info_cap_header *vfio_info_cap_add(
-> -		struct vfio_info_cap *caps, size_t size, u16 id, u16
-> version);
-> -extern void vfio_info_cap_shift(struct vfio_info_cap *caps, size_t
-> offset);
-> +struct vfio_info_cap_header *vfio_info_cap_add(struct vfio_info_cap
-> *caps,
-> +					       size_t size, u16 id,
-> +					       u16 version);
-> +void vfio_info_cap_shift(struct vfio_info_cap *caps, size_t offset);
->  
-> -extern int vfio_info_add_capability(struct vfio_info_cap *caps,
-> -				    struct vfio_info_cap_header *cap,
-> -				    size_t size);
-> +int vfio_info_add_capability(struct vfio_info_cap *caps,
-> +			     struct vfio_info_cap_header *cap, size_t
-> size);
->  
-> -extern int vfio_set_irqs_validate_and_prepare(struct vfio_irq_set
-> *hdr,
-> -					      int num_irqs, int
-> max_irq_type,
-> -					      size_t *data_size);
-> +int vfio_set_irqs_validate_and_prepare(struct vfio_irq_set *hdr,
-> +				       int num_irqs, int max_irq_type,
-> +				       size_t *data_size);
->  
->  struct pci_dev;
->  #if IS_ENABLED(CONFIG_VFIO_SPAPR_EEH)
-> -extern void vfio_spapr_pci_eeh_open(struct pci_dev *pdev);
-> -extern void vfio_spapr_pci_eeh_release(struct pci_dev *pdev);
-> -extern long vfio_spapr_iommu_eeh_ioctl(struct iommu_group *group,
-> -				       unsigned int cmd,
-> -				       unsigned long arg);
-> +void vfio_spapr_pci_eeh_open(struct pci_dev *pdev);
-> +void vfio_spapr_pci_eeh_release(struct pci_dev *pdev);
-> +long vfio_spapr_iommu_eeh_ioctl(struct iommu_group *group, unsigned
-> int cmd,
-> +				unsigned long arg);
->  #else
->  static inline void vfio_spapr_pci_eeh_open(struct pci_dev *pdev)
->  {
-> @@ -230,10 +229,9 @@ struct virqfd {
->  	struct virqfd		**pvirqfd;
->  };
->  
-> -extern int vfio_virqfd_enable(void *opaque,
-> -			      int (*handler)(void *, void *),
-> -			      void (*thread)(void *, void *),
-> -			      void *data, struct virqfd **pvirqfd, int
-> fd);
-> -extern void vfio_virqfd_disable(struct virqfd **pvirqfd);
-> +int vfio_virqfd_enable(void *opaque, int (*handler)(void *, void *),
-> +		       void (*thread)(void *, void *), void *data,
-> +		       struct virqfd **pvirqfd, int fd);
-> +void vfio_virqfd_disable(struct virqfd **pvirqfd);
->  
->  #endif /* VFIO_H */
-> diff --git a/include/linux/vfio_pci_core.h
-> b/include/linux/vfio_pci_core.h
-> index 23c176d4b073..22de2bce6394 100644
-> --- a/include/linux/vfio_pci_core.h
-> +++ b/include/linux/vfio_pci_core.h
-> @@ -147,23 +147,23 @@ struct vfio_pci_core_device {
->  #define is_irq_none(vdev) (!(is_intx(vdev) || is_msi(vdev) ||
-> is_msix(vdev)))
->  #define irq_is(vdev, type) (vdev->irq_type == type)
->  
-> -extern void vfio_pci_intx_mask(struct vfio_pci_core_device *vdev);
-> -extern void vfio_pci_intx_unmask(struct vfio_pci_core_device *vdev);
-> +void vfio_pci_intx_mask(struct vfio_pci_core_device *vdev);
-> +void vfio_pci_intx_unmask(struct vfio_pci_core_device *vdev);
->  
-> -extern int vfio_pci_set_irqs_ioctl(struct vfio_pci_core_device
-> *vdev,
-> -				   uint32_t flags, unsigned index,
-> -				   unsigned start, unsigned count, void
-> *data);
-> +int vfio_pci_set_irqs_ioctl(struct vfio_pci_core_device *vdev,
-> +			    uint32_t flags, unsigned index,
-> +			    unsigned start, unsigned count, void
-> *data);
->  
-> -extern ssize_t vfio_pci_config_rw(struct vfio_pci_core_device *vdev,
-> -				  char __user *buf, size_t count,
-> -				  loff_t *ppos, bool iswrite);
-> +ssize_t vfio_pci_config_rw(struct vfio_pci_core_device *vdev,
-> +			   char __user *buf, size_t count,
-> +			   loff_t *ppos, bool iswrite);
->  
-> -extern ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev,
-> char __user *buf,
-> -			       size_t count, loff_t *ppos, bool
-> iswrite);
-> +ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev, char
-> __user *buf,
-> +			size_t count, loff_t *ppos, bool iswrite);
->  
->  #ifdef CONFIG_VFIO_PCI_VGA
-> -extern ssize_t vfio_pci_vga_rw(struct vfio_pci_core_device *vdev,
-> char __user *buf,
-> -			       size_t count, loff_t *ppos, bool
-> iswrite);
-> +ssize_t vfio_pci_vga_rw(struct vfio_pci_core_device *vdev, char
-> __user *buf,
-> +			size_t count, loff_t *ppos, bool iswrite);
->  #else
->  static inline ssize_t vfio_pci_vga_rw(struct vfio_pci_core_device
-> *vdev,
->  				      char __user *buf, size_t count,
-> @@ -173,32 +173,31 @@ static inline ssize_t vfio_pci_vga_rw(struct
-> vfio_pci_core_device *vdev,
->  }
->  #endif
->  
-> -extern long vfio_pci_ioeventfd(struct vfio_pci_core_device *vdev,
-> loff_t offset,
-> -			       uint64_t data, int count, int fd);
-> +long vfio_pci_ioeventfd(struct vfio_pci_core_device *vdev, loff_t
-> offset,
-> +			uint64_t data, int count, int fd);
->  
-> -extern int vfio_pci_init_perm_bits(void);
-> -extern void vfio_pci_uninit_perm_bits(void);
-> +int vfio_pci_init_perm_bits(void);
-> +void vfio_pci_uninit_perm_bits(void);
->  
-> -extern int vfio_config_init(struct vfio_pci_core_device *vdev);
-> -extern void vfio_config_free(struct vfio_pci_core_device *vdev);
-> +int vfio_config_init(struct vfio_pci_core_device *vdev);
-> +void vfio_config_free(struct vfio_pci_core_device *vdev);
->  
-> -extern int vfio_pci_register_dev_region(struct vfio_pci_core_device
-> *vdev,
-> -					unsigned int type, unsigned int
-> subtype,
-> -					const struct vfio_pci_regops
-> *ops,
-> -					size_t size, u32 flags, void
-> *data);
-> +int vfio_pci_register_dev_region(struct vfio_pci_core_device *vdev,
-> +				 unsigned int type, unsigned int
-> subtype,
-> +				 const struct vfio_pci_regops *ops,
-> +				 size_t size, u32 flags, void *data);
->  
-> -extern int vfio_pci_set_power_state(struct vfio_pci_core_device
-> *vdev,
-> -				    pci_power_t state);
-> +int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev,
-> +			     pci_power_t state);
->  
-> -extern bool __vfio_pci_memory_enabled(struct vfio_pci_core_device
-> *vdev);
-> -extern void vfio_pci_zap_and_down_write_memory_lock(struct
-> vfio_pci_core_device
-> -						    *vdev);
-> -extern u16 vfio_pci_memory_lock_and_enable(struct
-> vfio_pci_core_device *vdev);
-> -extern void vfio_pci_memory_unlock_and_restore(struct
-> vfio_pci_core_device *vdev,
-> -					       u16 cmd);
-> +bool __vfio_pci_memory_enabled(struct vfio_pci_core_device *vdev);
-> +void vfio_pci_zap_and_down_write_memory_lock(struct
-> vfio_pci_core_device *vdev);
-> +u16 vfio_pci_memory_lock_and_enable(struct vfio_pci_core_device
-> *vdev);
-> +void vfio_pci_memory_unlock_and_restore(struct vfio_pci_core_device
-> *vdev,
-> +					u16 cmd);
->  
->  #ifdef CONFIG_VFIO_PCI_IGD
-> -extern int vfio_pci_igd_init(struct vfio_pci_core_device *vdev);
-> +int vfio_pci_igd_init(struct vfio_pci_core_device *vdev);
->  #else
->  static inline int vfio_pci_igd_init(struct vfio_pci_core_device
-> *vdev)
->  {
-> @@ -207,8 +206,8 @@ static inline int vfio_pci_igd_init(struct
-> vfio_pci_core_device *vdev)
->  #endif
->  
->  #ifdef CONFIG_S390
-> -extern int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device
-> *vdev,
-> -				       struct vfio_info_cap *caps);
-> +int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
-> +				struct vfio_info_cap *caps);
->  #else
->  static inline int vfio_pci_info_zdev_add_caps(struct
-> vfio_pci_core_device *vdev,
->  					      struct vfio_info_cap
-> *caps)
-> 
-> 
-
+SGVsbG8sCgpPbiBUaHUsIDA5IEp1biAyMDIyIDE1OjMzOjAyICswMjAwIFBhb2xvIHdyb3RlOgoK
+PiA+ID4gPiBUaGUgc2tiX3JlY3ZfZGF0YWdyYW0oKSBpbiBheDI1X3JlY3Ztc2coKSB3aWxsIGhv
+bGQgbG9ja19zb2NrCj4gPiA+ID4gYW5kIGJsb2NrIHVudGlsIGl0IHJlY2VpdmVzIGEgcGFja2V0
+IGZyb20gdGhlIHJlbW90ZS4gSWYgdGhlIGNsaWVudAo+ID4gPiA+IGRvZXNuYHQgY29ubmVjdCB0
+byBzZXJ2ZXIgYW5kIGNhbGxzIHJlYWQoKSBkaXJlY3RseSwgaXQgd2lsbCBub3QKPiA+ID4gPiBy
+ZWNlaXZlIGFueSBwYWNrZXRzIGZvcmV2ZXIuIEFzIGEgcmVzdWx0LCB0aGUgZGVhZGxvY2sgd2ls
+bCBoYXBwZW4uCj4gPiA+ID4gCj4gPiA+ID4gVGhlIGZhaWwgbG9nIGNhdXNlZCBieSBkZWFkbG9j
+ayBpcyBzaG93biBiZWxvdzoKPiA+ID4gPiAKPiA+ID4gPiBbICAzNjkuNjA2OTczXSBJTkZPOiB0
+YXNrIGF4MjVfZGVhZGxvY2s6MTU3IGJsb2NrZWQgZm9yIG1vcmUgdGhhbiAyNDUgc2Vjb25kcy4K
+PiA+ID4gPiBbICAzNjkuNjA4OTE5XSAiZWNobyAwID4gL3Byb2Mvc3lzL2tlcm5lbC9odW5nX3Rh
+c2tfdGltZW91dF9zZWNzIiBkaXNhYmxlcyB0aGlzIG1lc3NhZ2UuCj4gPiA+ID4gWyAgMzY5LjYx
+MzA1OF0gQ2FsbCBUcmFjZToKPiA+ID4gPiBbICAzNjkuNjEzMzE1XSAgPFRBU0s+Cj4gPiA+ID4g
+WyAgMzY5LjYxNDA3Ml0gIF9fc2NoZWR1bGUrMHgyZjkvMHhiMjAKPiA+ID4gPiBbICAzNjkuNjE1
+MDI5XSAgc2NoZWR1bGUrMHg0OS8weGIwCj4gPiA+ID4gWyAgMzY5LjYxNTczNF0gIF9fbG9ja19z
+b2NrKzB4OTIvMHgxMDAKPiA+ID4gPiBbICAzNjkuNjE2NzYzXSAgPyBkZXN0cm95X3NjaGVkX2Rv
+bWFpbnNfcmN1KzB4MjAvMHgyMAo+ID4gPiA+IFsgIDM2OS42MTc5NDFdICBsb2NrX3NvY2tfbmVz
+dGVkKzB4NmUvMHg3MAo+ID4gPiA+IFsgIDM2OS42MTg4MDldICBheDI1X2JpbmQrMHhhYS8weDIx
+MAo+ID4gPiA+IFsgIDM2OS42MTk3MzZdICBfX3N5c19iaW5kKzB4Y2EvMHhmMAo+ID4gPiA+IFsg
+IDM2OS42MjAwMzldICA/IGRvX2Z1dGV4KzB4YWUvMHgxYjAKPiA+ID4gPiBbICAzNjkuNjIwMzg3
+XSAgPyBfX3g2NF9zeXNfZnV0ZXgrMHg3Yy8weDFjMAo+ID4gPiA+IFsgIDM2OS42MjA2MDFdICA/
+IGZwcmVnc19hc3NlcnRfc3RhdGVfY29uc2lzdGVudCsweDE5LzB4NDAKPiA+ID4gPiBbICAzNjku
+NjIwNjEzXSAgX194NjRfc3lzX2JpbmQrMHgxMS8weDIwCj4gPiA+ID4gWyAgMzY5LjYyMTc5MV0g
+IGRvX3N5c2NhbGxfNjQrMHgzYi8weDkwCj4gPiA+ID4gWyAgMzY5LjYyMjQyM10gIGVudHJ5X1NZ
+U0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ2LzB4YjAKPiA+ID4gPiBbICAzNjkuNjIzMzE5XSBS
+SVA6IDAwMzM6MHg3ZjQzYzhhYThhZjcKPiA+ID4gPiBbICAzNjkuNjI0MzAxXSBSU1A6IDAwMmI6
+MDAwMDdmNDNjODE5N2VmOCBFRkxBR1M6IDAwMDAwMjQ2IE9SSUdfUkFYOiAwMDAwMDAwMDAwMDAw
+MDMxCj4gPiA+ID4gWyAgMzY5LjYyNTc1Nl0gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJCWDogMDAw
+MDAwMDAwMDAwMDAwMCBSQ1g6IDAwMDA3ZjQzYzhhYThhZjcKPiA+ID4gPiBbICAzNjkuNjI2NzI0
+XSBSRFg6IDAwMDAwMDAwMDAwMDAwMTAgUlNJOiAwMDAwNTU3NjhlMjAyMWQwIFJESTogMDAwMDAw
+MDAwMDAwMDAwNQo+ID4gPiA+IFsgIDM2OS42Mjg1NjldIFJCUDogMDAwMDdmNDNjODE5N2YwMCBS
+MDg6IDAwMDAwMDAwMDAwMDAwMTEgUjA5OiAwMDAwN2Y0M2M4MTk4NzAwCj4gPiA+ID4gWyAgMzY5
+LjYzMDIwOF0gUjEwOiAwMDAwMDAwMDAwMDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6
+IDAwMDA3ZmZmODQ1ZTZhZmUKPiA+ID4gPiBbICAzNjkuNjMyMjQwXSBSMTM6IDAwMDA3ZmZmODQ1
+ZTZhZmYgUjE0OiAwMDAwN2Y0M2M4MTk3ZmMwIFIxNTogMDAwMDdmNDNjODE5ODcwMAo+ID4gPiA+
+IAo+ID4gPiA+IFRoaXMgcGF0Y2ggbW92ZXMgdGhlIHNrYl9yZWN2X2RhdGFncmFtKCkgYmVmb3Jl
+IGxvY2tfc29jaygpIGluIG9yZGVyIHRoYXQKPiA+ID4gPiBvdGhlciBmdW5jdGlvbnMgdGhhdCBu
+ZWVkIGxvY2tfc29jayBjb3VsZCBiZSBleGVjdXRlZC4gV2hhdGBzIG1vcmUsIHdlCj4gPiA+ID4g
+YWRkIHNrYl9mcmVlX2RhdGFncmFtKCkgYmVmb3JlIGdvdG8gb3V0IGluIG9yZGVyIHRvIG1pdGln
+YXRlIG1lbW9yeSBsZWFrLgo+ID4gPiA+IAo+ID4gPiA+IFN1Z2dlc3RlZC1ieTogVGhvbWFzIE9z
+dGVycmllZCA8dGhvbWFzQG9zdGVycmllZC5kZT4KPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBEdW9t
+aW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+ID4gPiBSZXBvcnRlZC1ieTogVGhvbWFz
+IEhhYmV0cyA8dGhvbWFzQEBoYWJldHMuc2U+Cj4gPiA+ID4gLS0tCj4gPiA+ID4gQ2hhbmdlcyBp
+biB2MzoKPiA+ID4gPiAgIC0gQWRkIHNrYl9mcmVlX2RhdGFncmFtKCkgYmVmb3JlIGdvdG8gb3V0
+IGluIG9yZGVyIHRvIG1pdGlnYXRlIG1lbW9yeSBsZWFrLgo+ID4gPiA+IAo+ID4gPiA+ICBuZXQv
+YXgyNS9hZl9heDI1LmMgfCAxMiArKysrKysrLS0tLS0KPiA+ID4gPiAgMSBmaWxlIGNoYW5nZWQs
+IDcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPiA+ID4gPiAKPiA+ID4gPiBkaWZmIC0t
+Z2l0IGEvbmV0L2F4MjUvYWZfYXgyNS5jIGIvbmV0L2F4MjUvYWZfYXgyNS5jCj4gPiA+ID4gaW5k
+ZXggOTUzOTNiYjI3NjAuLjYyYWE1OTkzMDkzIDEwMDY0NAo+ID4gPiA+IC0tLSBhL25ldC9heDI1
+L2FmX2F4MjUuYwo+ID4gPiA+ICsrKyBiL25ldC9heDI1L2FmX2F4MjUuYwo+ID4gPiA+IEBAIC0x
+NjY1LDYgKzE2NjUsMTEgQEAgc3RhdGljIGludCBheDI1X3JlY3Ztc2coc3RydWN0IHNvY2tldCAq
+c29jaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3Qgc2l6ZSwKPiA+ID4gPiAgCWludCBjb3Bp
+ZWQ7Cj4gPiA+ID4gIAlpbnQgZXJyID0gMDsKPiA+ID4gPiAgCj4gPiA+ID4gKwkvKiBOb3cgd2Ug
+Y2FuIHRyZWF0IGFsbCBhbGlrZSAqLwo+ID4gPiA+ICsJc2tiID0gc2tiX3JlY3ZfZGF0YWdyYW0o
+c2ssIGZsYWdzLCAmZXJyKTsKPiA+ID4gPiArCWlmICghc2tiKQo+ID4gPiA+ICsJCWdvdG8gZG9u
+ZTsKPiA+ID4gPiArCj4gPiA+IAo+ID4gPiBOb3RlIHRoYXQgdGhpcyBjYXVzZXMgYSBiZWhhdmlv
+ciBjaGFuZ2U6IGJlZm9yZSB0aGlzIHBhdGNoLCBjYWxsaW5nCj4gPiA+IHJlY3Ztc2coKSBvbiB1
+bmNvbm5lY3RlZCBzZXFwYWNrZXQgc29ja2V0cyByZXR1cm5lZCBpbW1lZGlhdGVsbHkgd2l0aAo+
+ID4gPiBhbiBlcnJvciAoZHVlIHRvIHRoZSB0aGUgY2hlY2sgYmVsb3cpLCBub3cgaXQgYmxvY2tz
+LiAKPiA+ID4gCj4gPiA+IFRoZSBjaGFuZ2UgbWF5IGNvbmZ1c2UgKD09IGJyZWFrKSB1c2VyLXNw
+YWNlIGFwcGxpY2F0aW9ucy4gSSB0aGluayBpdAo+ID4gPiB3b3VsZCBiZSBiZXR0ZXIgcmVwbGFj
+aW5nIHNrYl9yZWN2X2RhdGFncmFtIHdpdGggYW4gb3Blbi1jb2RlZCB2YXJpYW50Cj4gPiA+IG9m
+IGl0IHJlbGVhc2luZyB0aGUgc29ja2V0IGxvY2sgYmVmb3JlIHRoZQo+ID4gPiBfX3NrYl93YWl0
+X2Zvcl9tb3JlX3BhY2tldHMoKSBjYWxsIGFuZCByZS1hY3F1aXJpbmcgaXQgYWZ0ZXIgc3VjaCBj
+YWxsLgo+ID4gPiBTb21ld2hhdCBhbGlrZSBfX3VuaXhfZGdyYW1fcmVjdm1zZygpLgo+ID4gCj4g
+PiBUaGFuayB5b3UgZm9yIHlvdXIgdGltZSBhbmQgc3VnZ2VzdGlvbnMhCj4gPiBJIHRoaW5rIHRo
+ZSBmb2xsb3dpbmcgbWV0aG9kIG1heSBzb2x2ZSB0aGUgcHJvYmxlbS4KPiA+IAo+ID4gZGlmZiAt
+LWdpdCBhL25ldC9heDI1L2FmX2F4MjUuYyBiL25ldC9heDI1L2FmX2F4MjUuYwo+ID4gaW5kZXgg
+OTUzOTNiYjI3NjAuLjUxYjQ0MWM4MzdjIDEwMDY0NAo+ID4gLS0tIGEvbmV0L2F4MjUvYWZfYXgy
+NS5jCj4gPiArKysgYi9uZXQvYXgyNS9hZl9heDI1LmMKPiA+IEBAIC0xNjc1LDggKzE2NzUsMTAg
+QEAgc3RhdGljIGludCBheDI1X3JlY3Ztc2coc3RydWN0IHNvY2tldCAqc29jaywgc3RydWN0IG1z
+Z2hkciAqbXNnLCBzaXplX3Qgc2l6ZSwKPiA+ICAgICAgICAgICAgICAgICBnb3RvIG91dDsKPiA+
+ICAgICAgICAgfQo+ID4gCj4gPiArICAgICAgIHJlbGVhc2Vfc29jayhzayk7Cj4gPiAgICAgICAg
+IC8qIE5vdyB3ZSBjYW4gdHJlYXQgYWxsIGFsaWtlICovCj4gPiAgICAgICAgIHNrYiA9IHNrYl9y
+ZWN2X2RhdGFncmFtKHNrLCBmbGFncywgJmVycik7Cj4gPiArICAgICAgIGxvY2tfc29jayhzayk7
+Cj4gPiAgICAgICAgIGlmIChza2IgPT0gTlVMTCkKPiA+ICAgICAgICAgICAgICAgICBnb3RvIG91
+dDsKPiA+IAo+ID4gVGhlIHNrYl9yZWN2X2RhdGFncmFtKCkgaXMgZnJlZSBvZiByYWNlIGNvbmRp
+dGlvbnMgYW5kIGNvdWxkIGJlIHJlLWVudHJhbnQuCj4gPiBTbyBjYWxsaW5nIHNrYl9yZWN2X2Rh
+dGFncmFtKCkgd2l0aG91dCB0aGUgcHJvdGVjdGlvbiBvZiBsb2NrX3NvY2soKSBpcyBvay4KPiA+
+IAo+ID4gV2hhdCdzIG1vcmUsIHJlbGVhc2luZyB0aGUgbG9ja19zb2NrKCkgYmVmb3JlIHNrYl9y
+ZWN2X2RhdGFncmFtKCkgd2lsbCBub3QKPiA+IGNhdXNlIFVBRiBidWdzLiBCZWNhdXNlIHRoZSBz
+b2NrIHdpbGwgbm90IGJlIGRlYWxsb2NhdGVkIHVubGVzcyB3ZSBjYWxsCj4gPiBheDI1X3JlbGVh
+c2UoKSwgYnV0IGF4MjVfcmVsZWFzZSgpIGFuZCBheDI1X3JlY3Ztc2coKSBjb3VsZCBub3QgcnVu
+IGluIHBhcmFsbGVsLgo+ID4gCj4gPiBBbHRob3VnaCB0aGUgInNrLT5za19zdGF0ZSIgbWF5IGJl
+IGNoYW5nZWQgZHVlIHRvIHRoZSByZWxlYXNlIG9mIGxvY2tfc29jaygpLAo+ID4gaXQgd2lsbCBu
+b3QgaW5mbHVlbmNlIHRoZSBmb2xsb3dpbmcgb3BlcmF0aW9ucyBpbiBheDI1X3JlY3Ztc2coKS4K
+PiAKPiBPbmUgb2YgdGhlIGRvd25zaWRlIG9mIHRoZSBhYm92ZSBpcyB0aGF0IHJlY3Ztc2coKSB3
+aWxsIHVuY29uZGl0aW9uYWxseQo+IGFjcXVpcmUgYW5kIHJlbGVhc2UgdGhlIHNvY2tldCBsb2Nr
+IHR3aWNlIHdoaWNoIGNhbiBoYXZlIG5vbgo+IHRyaXZpYWwvbmFzdHkgc2lkZSBlZmZlY3RzIG9u
+IHByb2Nlc3Mgc2NoZWR1bGluZy4KPiAKPiBXaXRoIHRoZSBzdWdnZXN0ZWQgY2hhbmdlIHRoZSBz
+b2NrZXQgbG9jayB3aWxsIGJlIHJlbGVhc2VkIG9ubHkgd2hlbgo+IHJlY3Ztc2cgd2lsbCBibG9j
+ayBhbmQgdGhhdCBzaG91bGQgcHJvZHVjZSBuaWNlciBvdmVyYWwgYmVoYXZpb3IuCgpJIHRlc3Qg
+dGhlIGZvbGxvd2luZyBtZXRob2QsIGl0IHJ1bnMgd2VsbC4KCmRpZmYgLS1naXQgYS9uZXQvYXgy
+NS9hZl9heDI1LmMgYi9uZXQvYXgyNS9hZl9heDI1LmMKaW5kZXggOTUzOTNiYjI3NjAuLjI4ODhh
+ZWU5MWE1IDEwMDY0NAotLS0gYS9uZXQvYXgyNS9hZl9heDI1LmMKKysrIGIvbmV0L2F4MjUvYWZf
+YXgyNS5jCkBAIC0xNjYxLDkgKzE2NjEsMTIgQEAgc3RhdGljIGludCBheDI1X3JlY3Ztc2coc3Ry
+dWN0IHNvY2tldCAqc29jaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3Qgc2l6ZSwKICAgICAg
+ICAgICAgICAgICAgICAgICAgaW50IGZsYWdzKQogewogICAgICAgIHN0cnVjdCBzb2NrICpzayA9
+IHNvY2stPnNrOwotICAgICAgIHN0cnVjdCBza19idWZmICpza2I7CisgICAgICAgc3RydWN0IHNr
+X2J1ZmYgKnNrYiwgKmxhc3Q7CisgICAgICAgc3RydWN0IHNrX2J1ZmZfaGVhZCAqc2tfcXVldWU7
+CiAgICAgICAgaW50IGNvcGllZDsKICAgICAgICBpbnQgZXJyID0gMDsKKyAgICAgICBib29sIGlz
+X2Jsb2NrID0gZmFsc2U7CisgICAgICAgbG9uZyB0aW1lbzsKCiAgICAgICAgbG9ja19zb2NrKHNr
+KTsKICAgICAgICAvKgpAQCAtMTY3Niw5ICsxNjc5LDI5IEBAIHN0YXRpYyBpbnQgYXgyNV9yZWN2
+bXNnKHN0cnVjdCBzb2NrZXQgKnNvY2ssIHN0cnVjdCBtc2doZHIgKm1zZywgc2l6ZV90IHNpemUs
+CiAgICAgICAgfQoKICAgICAgICAvKiBOb3cgd2UgY2FuIHRyZWF0IGFsbCBhbGlrZSAqLwotICAg
+ICAgIHNrYiA9IHNrYl9yZWN2X2RhdGFncmFtKHNrLCBmbGFncywgJmVycik7Ci0gICAgICAgaWYg
+KHNrYiA9PSBOVUxMKQotICAgICAgICAgICAgICAgZ290byBvdXQ7CisgICAgICAgc2tfcXVldWUg
+PSAmc2stPnNrX3JlY2VpdmVfcXVldWU7CisgICAgICAgdGltZW8gPSBzb2NrX3JjdnRpbWVvKHNr
+LCBmbGFncyAmIE1TR19ET05UV0FJVCk7CisgICAgICAgc2tiID0gX19za2JfdHJ5X3JlY3ZfZGF0
+YWdyYW0oc2ssIHNrX3F1ZXVlLCBmbGFncywgMCwgJmVyciwKKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAmbGFzdCk7CisgICAgICAgaWYgKCFza2IgJiYgKGVyciA9PSAtRUFH
+QUlOKSkgeworICAgICAgICAgICAgICAgaXNfYmxvY2sgPSB0cnVlOworICAgICAgICAgICAgICAg
+cmVsZWFzZV9zb2NrKHNrKTsKKyAgICAgICAgICAgICAgIGRvIHsKKyAgICAgICAgICAgICAgICAg
+ICAgICAgc2tiID0gX19za2JfdHJ5X3JlY3ZfZGF0YWdyYW0oc2ssIHNrX3F1ZXVlLCBmbGFncywg
+MCwgJmVyciwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAmbGFzdCk7CisgICAgICAgICAgICAgICAgICAgICAgIGlmIChza2IpCisgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs7CisKKyAgICAgICAgICAgICAgICAgICAgICAg
+aWYgKGVyciAhPSAtRUFHQUlOKQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdvdG8g
+ZG9uZTsKKyAgICAgICAgICAgICAgIH0gd2hpbGUgKHRpbWVvICYmCisgICAgICAgICAgICAgICAg
+ICAgICAgICFfX3NrYl93YWl0X2Zvcl9tb3JlX3BhY2tldHMoc2ssIHNrX3F1ZXVlLCAmZXJyLAor
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICZ0
+aW1lbywgbGFzdCkpOworICAgICAgICAgICAgICAgaWYoIXNrYikKKyAgICAgICAgICAgICAgICAg
+ICAgICAgZ290byBkb25lOworICAgICAgIH0KKyAgICAgICBpZiAoaXNfYmxvY2spCisgICAgICAg
+ICAgICAgICBsb2NrX3NvY2soc2spOwoKICAgICAgICBpZiAoIXNrX3RvX2F4MjUoc2spLT5waWRp
+bmNsKQogICAgICAgICAgICAgICAgc2tiX3B1bGwoc2tiLCAxKTsgICAgICAgICAgICAgICAvKiBS
+ZW1vdmUgUElEICovCkBAIC0xNzI1LDYgKzE3NDgsNyBAQCBzdGF0aWMgaW50IGF4MjVfcmVjdm1z
+ZyhzdHJ1Y3Qgc29ja2V0ICpzb2NrLCBzdHJ1Y3QgbXNnaGRyICptc2csIHNpemVfdCBzaXplLAog
+b3V0OgogICAgICAgIHJlbGVhc2Vfc29jayhzayk7CgorZG9uZToKICAgICAgICByZXR1cm4gZXJy
+OwogfQoKSSB0aGluayB0aGlzIG1ldGhvZCBjb3VsZCBzb2x2ZSB0aGUgcHJvYmxlbS4gV2VsY29t
+ZSBtb3JlIGFkdmljZS4KCkJlc3QgcmVnYXJkcywKRHVvbWluZyBaaG91

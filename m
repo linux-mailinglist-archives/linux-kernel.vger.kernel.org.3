@@ -2,109 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49364544CD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A9A544CD4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343604AbiFINAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S1343587AbiFINA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244167AbiFIM74 (ORCPT
+        with ESMTP id S1343630AbiFINAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:59:56 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D195313EB9;
-        Thu,  9 Jun 2022 05:59:55 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3137eb64b67so38601227b3.12;
-        Thu, 09 Jun 2022 05:59:55 -0700 (PDT)
+        Thu, 9 Jun 2022 09:00:23 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414914A3F0;
+        Thu,  9 Jun 2022 06:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=adYpahK+RjveaJ81KLRCwb/NRKB4wZWg1u6S/wEqrF4=;
-        b=XaYI4mXJjPjBN4hM0twTQo2PvDXcOm4PS7KigPBCBQNHaMvy1DG7taA5VgGSKu9Rrf
-         qDhflEU075jABeHjt9t3KE26MrRacH9p+sB0JGC/3pbAeMQwsxwa5adPAygilD9WlZx4
-         GliIFVV2lB790+7OHqVR15ZRpwQEN5/4C0CahvkMwDjdyjupRDoN658mVFLhX4UvfATA
-         s8B8AwhBqDcgzgmrMpMnGvx9y7crj8yk+ucAMHG8FCL7GVW7cc4fJnH4erB8v4SUTSsu
-         Xapdix/S1m8IjzpYKChODpQ5qMzXr2L2c4UZfPETCrXpcpfBBCpuakJTUQRGFBzjIbBv
-         HXnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=adYpahK+RjveaJ81KLRCwb/NRKB4wZWg1u6S/wEqrF4=;
-        b=Dc5bV9Cto3rDKqYQnnIU5cKqSr7yVgKbHzlCT62oKU2VHCsSeIzTvzOSjJp+//2tSV
-         TuoqWkT/q03ZK16NCB947Pp3JDt8buyXtVBOgiQgAnhEW/L04Fi5ObuCn0eIpZ9n4ocQ
-         BlLQeVtbt47nVkJ4x0fbFU+3VKOSrnFf+/Pz2MXs0pqqCkQ7ejYyl5fxybHQH4/2RU1C
-         jUDwMS18k5j4HY2PwZUUR3D1U/aOzh7tqgnRbeb4/UHKVgx/SmT44DcqanHHouTwUZg+
-         hphVAlY7duBzeJgoLWrNfa5ixURjK4ted7YK5uZNQR1fmG/xjEsudQ73js91d+BUKP8W
-         ZYeg==
-X-Gm-Message-State: AOAM533RLcsEn2y3QD+qK9QMRglg+0xjeDxFvAtB/9hBMdPQF6EPTmS3
-        W13oKqCpInyKmAS514bTGDcuKVloj91IYPwX/w==
-X-Google-Smtp-Source: ABdhPJzb42fHZWsZOMjZ1rIWT3YnhW413kXIySlzuQKMmPXfvAAo94UdOeKLjvw7k6z8ZCoVoV1C0/g9x4fI47aGp84=
-X-Received: by 2002:a81:4bc7:0:b0:313:7a99:5c with SMTP id y190-20020a814bc7000000b003137a99005cmr7071984ywa.51.1654779594980;
- Thu, 09 Jun 2022 05:59:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220525032341.3182-1-warp5tw@gmail.com> <20220525032341.3182-3-warp5tw@gmail.com>
- <YqEAbm2T5zKmk/Nw@kunai>
-In-Reply-To: <YqEAbm2T5zKmk/Nw@kunai>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Thu, 9 Jun 2022 20:59:44 +0800
-Message-ID: <CACD3sJYEud8yagD-8m1UWYNmk7-gkg3R-kmK40Mf65cFb9N5eQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] i2c: npcm: Remove own slave addresses 2:10
-To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, jsd@semihalf.com, sven@svenpeter.dev,
-        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654779614; x=1686315614;
+  h=from:to:cc:subject:date:message-id;
+  bh=MbluhEaJzamnhyK/2T+/wKWSz4GPM1oLHU1upxZh1bA=;
+  b=WPLD68DbZDWaxxpOhDc+kSPDlxypjyKTacj4jkv9MeWUN9QDo1KpyxVm
+   MorHx6Cv/xfktb9sTBIrSy8DkD+m8lGuA6bcKNl7xDkSdzc8EudG1Qa9U
+   4IPGGIkzGURDcywc/Za4ziw+Nl/E64gMBQZRI8ZyaUmjmt3j5Ns9Vz75K
+   o=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 09 Jun 2022 06:00:10 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 09 Jun 2022 06:00:09 -0700
+X-QCInternal: smtphost
+Received: from hu-c-spathi-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.108.59])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 09 Jun 2022 18:29:53 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 212714)
+        id C53E83E5A; Thu,  9 Jun 2022 18:29:51 +0530 (+0530)
+From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+To:     will@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+Subject: [PATCH V6] arm64: perf: Make exporting of pmu events configurable
+Date:   Thu,  9 Jun 2022 18:29:49 +0530
+Message-Id: <1654779589-19937-1-git-send-email-quic_c_spathi@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram:
+The PMU export bit (PMCR_EL0.X) is getting reset during pmu reset,
+Make it configurable using sysctls to enable/disable at runtime.
 
-Thank you for your review and comments.
+Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+---
+Changes since V5:
+	- removed configuring with kernel parameters.
+Changes since V4:
+	- Registering sysctls dynamically for only arm64 as suggested by Will
+	- Not removed the code to configure with kernel parameters 
+	  as the sysctl's kernel parameter(sysctl.kernel.export_pmu_events)
+	  is not working at early bootup. pmu_reset() getting called before 
+	  sysctl's kernel parameter is set.
+Changes since V3:
+	- export bit is now configurable with sysctl
+	- enabling export bit on reset instead of retaining
 
-Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=889=E6=97=A5 =
-=E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=884:02=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Wed, May 25, 2022 at 11:23:38AM +0800, Tyrone Ting wrote:
-> > From: Tali Perry <tali.perry1@gmail.com>
-> >
-> > NPCM can support up to 10 own slave addresses. In practice, only one
-> > address is actually being used. In order to access addresses 2 and abov=
-e,
-> > need to switch register banks. The switch needs spinlock.
-> > To avoid using spinlock for this useless feature removed support of SA =
->=3D
-> > 2. Also fix returned slave event enum.
-> >
-> > Remove some comment since the bank selection is not required. The bank
-> > selection is not required since the supported slave addresses are reduc=
-ed.
-> >
-> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
-ver")
-> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
->
-> Applied to for-next, thanks!
->
+Changes since V2:
+	Done below changes as per Will's comments
+	- enabling pmcr_x now configurable with kernel parameters and
+	  by default it is disabled.
+	
+Changes since V1:
+	- Preserving only PMCR_X bit as per Robin Murphy's comment.
 
-Best Regards,
-Tyrone
+---
+ Documentation/admin-guide/sysctl/kernel.rst | 11 +++++++++++
+ arch/arm64/kernel/perf_event.c              | 13 +++++++++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index ddccd10..c2ecd84 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -267,6 +267,17 @@ domain names are in general different. For a detailed discussion
+ see the ``hostname(1)`` man page.
+ 
+ 
++export_pmu_events (arm64 only)
++==============================
++
++Controls the PMU export bit (PMCR_EL0.X), which enables the exporting of
++events over an IMPLEMENTATION DEFINED PMU event export bus to another device.
++
++0: disables exporting of events (default).
++
++1: enables exporting of events.
++
++
+ firmware_config
+ ===============
+ 
+diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+index cb69ff1..a8c32a0 100644
+--- a/arch/arm64/kernel/perf_event.c
++++ b/arch/arm64/kernel/perf_event.c
+@@ -298,6 +298,7 @@ PMU_FORMAT_ATTR(long, "config1:0");
+ PMU_FORMAT_ATTR(rdpmc, "config1:1");
+ 
+ static int sysctl_perf_user_access __read_mostly;
++static int sysctl_export_pmu_events __read_mostly;
+ 
+ static inline bool armv8pmu_event_is_64bit(struct perf_event *event)
+ {
+@@ -1047,6 +1048,9 @@ static void armv8pmu_reset(void *info)
+ 	if (armv8pmu_has_long_event(cpu_pmu))
+ 		pmcr |= ARMV8_PMU_PMCR_LP;
+ 
++	if (sysctl_export_pmu_events)
++		pmcr |= ARMV8_PMU_PMCR_X;
++
+ 	armv8pmu_pmcr_write(pmcr);
+ }
+ 
+@@ -1221,6 +1225,15 @@ static struct ctl_table armv8_pmu_sysctl_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
++	{
++		.procname       = "export_pmu_events",
++		.data           = &sysctl_export_pmu_events,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = proc_dointvec_minmax,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
+ 	{ }
+ };
+ 
+-- 
+2.7.4
+

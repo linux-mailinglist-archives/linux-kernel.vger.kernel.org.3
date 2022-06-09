@@ -2,187 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F376544D88
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCCC544D8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 15:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343635AbiFINYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 09:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S237623AbiFINZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 09:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343879AbiFINYq (ORCPT
+        with ESMTP id S1343868AbiFINZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:24:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9A31451CA;
-        Thu,  9 Jun 2022 06:24:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SFRCVVrRGHSCzaC+svV91Zy2fb9KgpsgW9PodQQtuVA=; b=ZXUIBRWwS9a1A+i7Wlnvbq7c8v
-        6SK4in80vdIW70IGh6Qwe/9mFxNaBZtzv0uCfovEqg5B7wUC50nw2bh7ER+xaP3QNR+1iZYXnNxos
-        S1DekrsiVQcuauqgAW2+sZFC/1rHvD65HUzk2WexFzY/WbUzTA0pWZot8NWi77yxehXc35lrntlkB
-        Qm2bnOZFbox6CvC5LSuNuJ2I85jiSSXcaN35yBtUgsVQkHMxSoBGhW1SghmYnnm8iMvnQWF6TnUmW
-        X1ud3JxTTmlPwgF7s5xG9BVcKDfLwreRR4yef4m+LNO6b+HhdBpLgVt2qZH1BGOEUFylRzfms6+VM
-        DcV1sHDg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nzI9A-0027yT-Ln; Thu, 09 Jun 2022 13:24:24 +0000
-Date:   Thu, 9 Jun 2022 06:24:24 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Song Liu <song@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Guo Ren <guoren@kernel.org>,
-        Jarkko Sakkinen <jarkko@profian.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dave Anglin <dave.anglin@bell.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jordan Niethe <jniethe5@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liao Chang <liaochang1@huawei.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Wu Caize <zepan@sipeed.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tobias Huschle <huschle@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqH0iEgsi6+bwS3x@bombadil.infradead.org>
-References: <20220608000014.3054333-1-jarkko@profian.com>
- <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
- <YqAy0qjI4Lktk/uJ@iki.fi>
- <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
- <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
- <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
- <YqEF6+YKqCHsWZJW@bombadil.infradead.org>
- <20220609034852.GA30873@lst.de>
+        Thu, 9 Jun 2022 09:25:06 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96FB152BB2;
+        Thu,  9 Jun 2022 06:25:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so26681600pju.1;
+        Thu, 09 Jun 2022 06:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+QrEfwNyUObZpg4FR+sDjlTmpv+zGn+vrSq3i8QmgIA=;
+        b=KjljSREzL0wSolOtkUlpNwONHUFbpDBeP4bOEVdzkt7/LC+m0uNQ952f84SvOUHVuN
+         bMD7CDu5uh2CMmetkp8JZR+W/2B5oNX6TX4koHVCBkolsJkCkxzquLgmLdfYXRp/8TAd
+         CuCO8abxzcObs0NX31sjtO6YZc4FtEPkOcpbeS+dEVA0PR9ECTg9QYihqMurlTSsZUgz
+         nGiu3dc+PalMt9Uf2UfpkBbDsHpSum7BdqTLV8OJWN4vyGUcQlZAQ77z0jJFunrQ6Aao
+         OGvxqAPnh3BNEoWDZ9UmymrKJsIW3IlRdC7xpY1uJg6QASP57GEOxro2NRBvcuCweXGY
+         7P1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+QrEfwNyUObZpg4FR+sDjlTmpv+zGn+vrSq3i8QmgIA=;
+        b=AZ3NN2irCrrh2m8IOaVFX1Yf2ztpB5fROI9ZnaOaj0H1O9n3j0hMZjVEYx11aWSsiJ
+         7Z6lAKJ+xAEQn58OidaqH+hX46/nm0AyqxbEC43EfDWIOkZc8/ZO5kv2JZT3mhDiXfYA
+         9dQo/78+bgj16hyUFe0ZwerXPw6hxVoh3u9QhsJzTBpKqMRgr8GHR+D6f1ZYiaY8Nioj
+         P3iAGgS0l7WKm9c2kHnWonUGfRl/tu3voSVJXUdPZ2z4vuzrTpSurpaJ8yJnwps5gwut
+         ezfUtNXzpg3kqq+BxQ8MK3pASseBaPva6N1UV1UxxT81M1SKFMJcY0FHVeo/MeVHz0SF
+         /uKA==
+X-Gm-Message-State: AOAM533swU1KKvwU2rqc2TKKhJ5c/5mXGCkehPj+2xwP3N4OmS5HcqrQ
+        EPvxRcXOOOeoRP+XNmK9nB0lxi8o2II=
+X-Google-Smtp-Source: ABdhPJwsevakWlOrt4ajIp6BMcqWo0rbDiVYcTI3fI1UWc0KtcPGoRi7pihMy42NUg8+RwLL19mXhQ==
+X-Received: by 2002:a17:90b:4c4e:b0:1e3:368b:c09c with SMTP id np14-20020a17090b4c4e00b001e3368bc09cmr3466584pjb.140.1654781103319;
+        Thu, 09 Jun 2022 06:25:03 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id t15-20020a17090340cf00b0016168e90f2csm16596512pld.208.2022.06.09.06.25.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 06:25:02 -0700 (PDT)
+Message-ID: <ff89c064-e24a-0f2f-fc03-b029e5d04338@gmail.com>
+Date:   Thu, 9 Jun 2022 22:24:58 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609034852.GA30873@lst.de>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: [PATCH 2/5] docs/doc-guide: Mention make variable SPHINXDIRS
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 05:48:52AM +0200, Christoph Hellwig wrote:
-> On Wed, Jun 08, 2022 at 01:26:19PM -0700, Luis Chamberlain wrote:
-> > No, that was removed because it has only one user.
-> 
-> That is only part of the story.  The other part is that the overall
-> kernel simply does not have any business allocating exutable memory.
-> Executable memory is a very special concept for modules or module-like
-> code like kprobes, and should not be exposed as a general concept.
+SPHINXDIRS is useful when you want test builds of only those
+documents affected by your changes.
 
-It is not just modules and kprobes, it is also ftrace and bpf too now.
-So while it should not be used everywhere calling it module_alloc()
-is just confusing at this point. Likewise, module_alloc_huge() is
-being proposed too and I'd rather we deal with this properly in aligment
-of taking care of the rename as well.
+Mention it in the "Sphinx Build" section.
 
-If the concern is to restrict access we can use the module namespace stuff
-so to ensure only intended users get access to it.
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+---
+This change is inspired from correspondence with Maciej [1].
 
-> Especially as executable memory really should not also be writable
-> for security reasons.  In other words, we should actually never
-> allocate executable memory, every.  We might seal memory and then
-> mark it executable after having written to it, which is how modules
-> and kprobes are implemented on all modern Linux ports anyway.
+[1]: https://lore.kernel.org/r/f4d40da6-756b-9e75-b867-cc9eedc4b232@gmail.com
 
-The respective free *should* do the executable bits, and there
-is no generic way to do this for all archs and so it is open coded
-today. In fact some architectures need further work / help and so
-split up the module data and exect already on v5.19+ with the new
-ARCH_WANTS_MODULES_DATA_IN_VMALLOC. See this thread for details:
+--
+ Documentation/doc-guide/sphinx.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-https://lkml.kernel.org/r/Yo1XTN441qbNTLGR@bombadil.infradead.org
+diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
+index edc4fa023986..efcccab68286 100644
+--- a/Documentation/doc-guide/sphinx.rst
++++ b/Documentation/doc-guide/sphinx.rst
+@@ -151,6 +151,10 @@ If the theme is not available, it will fall-back to the classic one.
+ 
+ The Sphinx theme can be overridden by using the ``DOCS_THEME`` make variable.
+ 
++There is another make variable ``SPHINXDIRS``, which is useful when test
++building a subset of documentation.  Again, see the documentation section
++of ``make help`` for the details.
++
+ To remove the generated documentation, run ``make cleandocs``.
+ 
+ .. [#ink] Having ``inkscape(1)`` from Inkscape (https://inkscape.org)
+-- 
+2.25.1
 
-Doing this work is not easy, but if we're going to do it, it must
-be done right.
 
-  Luis

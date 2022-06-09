@@ -2,178 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D02544CB2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6020C544CBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Jun 2022 14:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244470AbiFIMzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 08:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S243234AbiFIM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 08:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242938AbiFIMzU (ORCPT
+        with ESMTP id S235182AbiFIM5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:55:20 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA4B60C6;
-        Thu,  9 Jun 2022 05:55:18 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJkW201N5z6H784;
-        Thu,  9 Jun 2022 20:51:42 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 14:55:15 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 9 Jun 2022 14:55:15 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 0/9] bpf: Per-operation map permissions
-Thread-Topic: [PATCH v2 0/9] bpf: Per-operation map permissions
-Thread-Index: AQHYdo5e8PiAHSOEuEKwSGGt9PxhiK0+C0EAgAkHoBA=
-Date:   Thu, 9 Jun 2022 12:55:15 +0000
-Message-ID: <4b6864c25f47419d99ed86873276ee59@huawei.com>
-References: <20220602143748.673971-1-roberto.sassu@huawei.com>
- <CAEf4BzbL6c7V+-REL7V=dERrpyTus9+9qW8nW0UZn49Y_5x-MA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbL6c7V+-REL7V=dERrpyTus9+9qW8nW0UZn49Y_5x-MA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 9 Jun 2022 08:57:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE3A2BF9;
+        Thu,  9 Jun 2022 05:57:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7B10021F24;
+        Thu,  9 Jun 2022 12:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654779424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U28j2PjZN2oiqvKxhUnwyd/bN75hpBsh2AgbH09Uz7A=;
+        b=cFkohmjy7k4OX9d1OaQPtTN9EE/zJV2ErpgiPH7m8blNWJJ6BBZeoEmEz449KI0rfzy2BA
+        XVeJQYaCgUF2mN2YG6+08pn+iSIHSyBrXQeAga+1sko3yRfSLWaHAiur5hWq9muNl5oJnw
+        q766pmidjn9XorGZeH2GHV38FRhBu+g=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3EEAD2C141;
+        Thu,  9 Jun 2022 12:57:04 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 14:57:03 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, alexander.deucher@amd.com, daniel@ffwll.ch,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        hughd@google.com, andrey.grodzovsky@amd.com
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Message-ID: <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
+References: <20220531100007.174649-1-christian.koenig@amd.com>
+ <20220531100007.174649-4-christian.koenig@amd.com>
+ <YqG67sox6L64E6wV@dhcp22.suse.cz>
+ <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBBbmRyaWkgTmFrcnlpa28gW21haWx0bzphbmRyaWkubmFrcnlpa29AZ21haWwuY29t
-XQ0KPiBTZW50OiBGcmlkYXksIEp1bmUgMywgMjAyMiAxMTowMCBQTQ0KPiBPbiBUaHUsIEp1biAy
-LCAyMDIyIGF0IDc6MzggQU0gUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29t
-Pg0KPiB3cm90ZToNCj4gPg0KPiA+IFdpdGggdGhlIGJwZl9tYXAgc2VjdXJpdHkgaG9vaywgYW4g
-ZUJQRiBwcm9ncmFtIGlzIGFibGUgdG8gcmVzdHJpY3QgYWNjZXNzDQo+ID4gdG8gYSBtYXAuIEZv
-ciBleGFtcGxlLCBpdCBtaWdodCBhbGxvdyBvbmx5IHJlYWQgYWNjZXNzZXMgYW5kIGRlbnkgd3Jp
-dGUNCj4gPiBhY2Nlc3Nlcy4NCj4gPg0KPiA+IFVuZm9ydHVuYXRlbHksIHBlcm1pc3Npb25zIGFy
-ZSBub3QgYWNjdXJhdGVseSBzcGVjaWZpZWQgYnkgbGliYnBmIGFuZA0KPiA+IGJwZnRvb2wuIEFz
-IGEgY29uc2VxdWVuY2UsIGV2ZW4gaWYgdGhleSBhcmUgcmVxdWVzdGVkIHRvIHBlcmZvcm0gYQ0K
-PiA+IHJlYWQtbGlrZSBvcGVyYXRpb24sIHN1Y2ggYXMgYSBtYXAgbG9va3VwLCB0aGF0IG9wZXJh
-dGlvbiBmYWlscyBldmVuIGlmIHRoZQ0KPiA+IGNhbGxlciBoYXMgdGhlIHJpZ2h0IHRvIGRvIHNv
-Lg0KPiA+DQo+ID4gRXZlbiB3b3JzZSwgdGhlIGl0ZXJhdGlvbiBvdmVyIGV4aXN0aW5nIG1hcHMg
-c3RvcHMgYXMgc29vbiBhcyBhDQo+ID4gd3JpdGUtcHJvdGVjdGVkIG9uZSBpcyBlbmNvdW50ZXJl
-ZC4gTWFwcyBhZnRlciB0aGUgd3JpdGUtcHJvdGVjdGVkIG9uZSBhcmUNCj4gPiBub3QgYWNjZXNz
-aWJsZSwgZXZlbiBpZiB0aGUgdXNlciBoYXMgdGhlIHJpZ2h0IHRvIHBlcmZvcm0gb3BlcmF0aW9u
-cyBvbg0KPiA+IHRoZW0uDQo+ID4NCj4gPiBBdCBsb3cgbGV2ZWwsIHRoZSBwcm9ibGVtIGlzIHRo
-YXQgb3Blbl9mbGFncyBhbmQgZmlsZV9mbGFncywgcmVzcGVjdGl2ZWx5DQo+ID4gaW4gdGhlIGJw
-Zl9tYXBfZ2V0X2ZkX2J5X2lkKCkgYW5kIGJwZl9vYmpfZ2V0KCksIGFyZSBzZXQgdG8gemVyby4g
-VGhlDQo+ID4ga2VybmVsIGludGVycHJldHMgdGhpcyBhcyBhIHJlcXVlc3QgdG8gb2J0YWluIGEg
-ZmlsZSBkZXNjcmlwdG9yIHdpdGggZnVsbA0KPiA+IHBlcm1pc3Npb25zLg0KPiA+DQo+ID4gRm9y
-IHNvbWUgb3BlcmF0aW9ucywgbGlrZSBzaG93IG9yIGR1bXAsIGEgcmVhZCBmaWxlIGRlc2NyaXB0
-b3IgaXMgZW5vdWdoLg0KPiA+IFRob3NlIG9wZXJhdGlvbnMgY291bGQgYmUgc3RpbGwgcGVyZm9y
-bWVkIGV2ZW4gaW4gYSB3cml0ZS1wcm90ZWN0ZWQgbWFwLg0KPiA+DQo+ID4gQWxzbyBmb3Igc2Vh
-cmNoaW5nIGEgbWFwIGJ5IG5hbWUsIHdoaWNoIHJlcXVpcmVzIGdldHRpbmcgdGhlIG1hcCBpbmZv
-LCBhDQo+ID4gcmVhZCBmaWxlIGRlc2NyaXB0b3IgaXMgZW5vdWdoLiBJZiBhbiBvcGVyYXRpb24g
-cmVxdWlyZXMgbW9yZSBwZXJtaXNzaW9ucywNCj4gPiB0aGV5IGNvdWxkIHN0aWxsIGJlIHJlcXVl
-c3RlZCBsYXRlciwgYWZ0ZXIgdGhlIHNlYXJjaC4NCj4gPg0KPiA+IEZpcnN0LCBzb2x2ZSBib3Ro
-IHByb2JsZW1zIGJ5IGV4dGVuZGluZyBsaWJicGYgd2l0aCB0d28gbmV3IGZ1bmN0aW9ucywNCj4g
-PiBicGZfbWFwX2dldF9mZF9ieV9pZF9mbGFncygpIGFuZCBicGZfb2JqX2dldF9mbGFncygpLCB3
-aGljaCB1bmxpa2UgdGhlaXINCj4gPiBjb3VudGVycGFydHMgYnBmX21hcF9nZXRfZmRfYnlfaWQo
-KSBhbmQgYnBmX29ial9nZXQoKSwgaGF2ZSB0aGUgYWRkaXRpb25hbA0KPiA+IHBhcmFtZXRlciBm
-bGFncyB0byBzcGVjaWZ5IHRoZSBuZWVkZWQgcGVybWlzc2lvbnMgZm9yIGFuIG9wZXJhdGlvbi4N
-Cj4gPg0KPiA+IFRoZW4sIHByb3BhZ2F0ZSB0aGUgZmxhZ3MgaW4gYnBmdG9vbCBmcm9tIHRoZSBm
-dW5jdGlvbnMgaW1wbGVtZW50aW5nIHRoZQ0KPiA+IHN1YmNvbW1hbmRzIGRvd24gdG8gdGhlIGZ1
-bmN0aW9ucyBjYWxsaW5nIGJwZl9tYXBfZ2V0X2ZkX2J5X2lkKCkgYW5kDQo+ID4gYnBmX29ial9n
-ZXQoKSwgYW5kIHJlcGxhY2UgdGhlIGxhdHRlciBmdW5jdGlvbnMgd2l0aCB0aGVpciBuZXcgdmFy
-aWFudC4NCj4gPiBJbml0aWFsbHksIHNldCB0aGUgZmxhZ3MgdG8gemVybywgc28gdGhhdCB0aGUg
-Y3VycmVudCBiZWhhdmlvciBkb2VzIG5vdA0KPiA+IGNoYW5nZS4NCj4gPg0KPiA+IFRoZSBvbmx5
-IGV4Y2VwdGlvbiBpcyBmb3IgbWFwIHNlYXJjaCBieSBuYW1lLCB3aGVyZSBhIHJlYWQtb25seSBw
-ZXJtaXNzaW9uDQo+ID4gaXMgcmVxdWVzdGVkLCByZWdhcmRsZXNzIG9mIHRoZSBvcGVyYXRpb24s
-IHRvIGdldCB0aGUgbWFwIGluZm8uIEluIHRoaXMNCj4gPiBjYXNlLCByZXF1ZXN0IGEgbmV3IGZp
-bGUgZGVzY3JpcHRvciBpZiBhIHdyaXRlLWxpa2Ugb3BlcmF0aW9uIG5lZWRzIHRvIGJlDQo+ID4g
-cGVyZm9ybWVkIGFmdGVyIHRoZSBzZWFyY2guDQo+ID4NCj4gPiBGaW5hbGx5LCBpZGVudGlmeSBv
-dGhlciByZWFkLWxpa2Ugb3BlcmF0aW9ucyBpbiBicGZ0b29sIGFuZCBmb3IgdGhvc2UNCj4gPiBy
-ZXBsYWNlIHRoZSB6ZXJvIHZhbHVlIGZvciBmbGFncyB3aXRoIEJQRl9GX1JET05MWS4NCj4gPg0K
-PiA+IFRoZSBwYXRjaCBzZXQgaXMgb3JnYW5pemVkIGFzIGZvbGxvd3MuDQo+ID4NCj4gPiBQYXRj
-aGVzIDEtMiBpbnRyb2R1Y2UgdGhlIHR3byBuZXcgdmFyaWFudHMgb2YgYnBmX21hcF9nZXRfZmRf
-YnlfaWQoKSBhbmQNCj4gPiBicGZfb2JqX2dldCgpIGluIGxpYmJwZiwgbmFtZWQgcmVzcGVjdGl2
-ZWx5IGJwZl9tYXBfZ2V0X2ZkX2J5X2lkX2ZsYWdzKCkNCj4gPiBhbmQgYnBmX29ial9nZXRfZmxh
-Z3MoKS4NCj4gPg0KPiA+IFBhdGNoZXMgMy03IHByb3BhZ2F0ZSB0aGUgZmxhZ3MgaW4gYnBmdG9v
-bCBmcm9tIHRoZSBmdW5jdGlvbnMgaW1wbGVtZW50aW5nDQo+ID4gdGhlIHN1YmNvbW1hbmRzIHRv
-IHRoZSB0d28gbmV3IGxpYmJwZiBmdW5jdGlvbnMsIGFuZCBhbHdheXMgc2V0IGZsYWdzIHRvDQo+
-ID4gQlBGX0ZfUkRPTkxZIGZvciB0aGUgbWFwIHNlYXJjaCBvcGVyYXRpb24uDQo+ID4NCj4gPiBQ
-YXRjaCA4IGFkanVzdHMgcGVybWlzc2lvbnMgZGVwZW5kaW5nIG9uIHRoZSBtYXAgb3BlcmF0aW9u
-IHBlcmZvcm1lZC4NCj4gPg0KPiA+IFBhdGNoIDkgZW5zdXJlcyB0aGF0IHJlYWQtb25seSBhY2Nl
-c3NlcyB0byBhIHdyaXRlLXByb3RlY3RlZCBtYXAgc3VjY2VlZA0KPiA+IGFuZCB3cml0ZSBhY2Nl
-c3NlcyBzdGlsbCBmYWlsLiBBbHNvIGVuc3VyZSB0aGF0IG1hcCBzZWFyY2ggaXMgYWx3YXlzDQo+
-ID4gc3VjY2Vzc2Z1bCBldmVuIGlmIHRoZXJlIGFyZSB3cml0ZS1wcm90ZWN0ZWQgbWFwcy4NCj4g
-Pg0KPiA+IENoYW5nZWxvZw0KPiA+DQo+ID4gdjE6DQo+ID4gICAtIERlZmluZSBwZXItb3BlcmF0
-aW9uIHBlcm1pc3Npb25zIHJhdGhlciB0aGFuIHJldHJ5aW5nIGFjY2VzcyB3aXRoDQo+ID4gICAg
-IHJlYWQtb25seSBwZXJtaXNzaW9uIChzdWdnZXN0ZWQgYnkgRGFuaWVsKQ0KPiA+ICAgICBodHRw
-czovL2xvcmUua2VybmVsLm9yZy9icGYvMjAyMjA1MzAwODQ1MTQuMTAxNzAtMS0NCj4gcm9iZXJ0
-by5zYXNzdUBodWF3ZWkuY29tLw0KPiA+DQo+ID4gUm9iZXJ0byBTYXNzdSAoOSk6DQo+ID4gICBs
-aWJicGY6IEludHJvZHVjZSBicGZfbWFwX2dldF9mZF9ieV9pZF9mbGFncygpDQo+ID4gICBsaWJi
-cGY6IEludHJvZHVjZSBicGZfb2JqX2dldF9mbGFncygpDQo+ID4gICBicGZ0b29sOiBBZGQgZmxh
-Z3MgcGFyYW1ldGVyIHRvIG9wZW5fb2JqX3Bpbm5lZF9hbnkoKSBhbmQNCj4gPiAgICAgb3Blbl9v
-YmpfcGlubmVkKCkNCj4gPiAgIGJwZnRvb2w6IEFkZCBmbGFncyBwYXJhbWV0ZXIgdG8gKl9wYXJz
-ZV9mZCgpIGZ1bmN0aW9ucw0KPiA+ICAgYnBmdG9vbDogQWRkIGZsYWdzIHBhcmFtZXRlciB0byBt
-YXBfcGFyc2VfZmRzKCkNCj4gPiAgIGJwZnRvb2w6IEFkZCBmbGFncyBwYXJhbWV0ZXIgdG8gbWFw
-X3BhcnNlX2ZkX2FuZF9pbmZvKCkNCj4gPiAgIGJwZnRvb2w6IEFkZCBmbGFncyBwYXJhbWV0ZXIg
-aW4gc3RydWN0X29wcyBmdW5jdGlvbnMNCj4gPiAgIGJwZnRvb2w6IEFkanVzdCBtYXAgcGVybWlz
-c2lvbnMNCj4gPiAgIHNlbGZ0ZXN0cy9icGY6IEFkZCBtYXAgYWNjZXNzIHRlc3RzDQo+ID4NCj4g
-PiAgdG9vbHMvYnBmL2JwZnRvb2wvYnRmLmMgICAgICAgICAgICAgICAgICAgICAgIHwgIDExICst
-DQo+ID4gIHRvb2xzL2JwZi9icGZ0b29sL2Nncm91cC5jICAgICAgICAgICAgICAgICAgICB8ICAg
-NCArLQ0KPiA+ICB0b29scy9icGYvYnBmdG9vbC9jb21tb24uYyAgICAgICAgICAgICAgICAgICAg
-fCAgNTIgKystLQ0KPiA+ICB0b29scy9icGYvYnBmdG9vbC9pdGVyLmMgICAgICAgICAgICAgICAg
-ICAgICAgfCAgIDIgKy0NCj4gPiAgdG9vbHMvYnBmL2JwZnRvb2wvbGluay5jICAgICAgICAgICAg
-ICAgICAgICAgIHwgICA5ICstDQo+ID4gIHRvb2xzL2JwZi9icGZ0b29sL21haW4uaCAgICAgICAg
-ICAgICAgICAgICAgICB8ICAxNyArLQ0KPiA+ICB0b29scy9icGYvYnBmdG9vbC9tYXAuYyAgICAg
-ICAgICAgICAgICAgICAgICAgfCAgMjQgKy0NCj4gPiAgdG9vbHMvYnBmL2JwZnRvb2wvbWFwX3Bl
-cmZfcmluZy5jICAgICAgICAgICAgIHwgICAzICstDQo+ID4gIHRvb2xzL2JwZi9icGZ0b29sL25l
-dC5jICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQ0KPiA+ICB0b29scy9icGYvYnBmdG9v
-bC9wcm9nLmMgICAgICAgICAgICAgICAgICAgICAgfCAgMTIgKy0NCj4gPiAgdG9vbHMvYnBmL2Jw
-ZnRvb2wvc3RydWN0X29wcy5jICAgICAgICAgICAgICAgIHwgIDM5ICsrLQ0KPiA+ICB0b29scy9s
-aWIvYnBmL2JwZi5jICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTYgKy0NCj4gPiAgdG9v
-bHMvbGliL2JwZi9icGYuaCAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAyICsNCj4gPiAg
-dG9vbHMvbGliL2JwZi9saWJicGYubWFwICAgICAgICAgICAgICAgICAgICAgIHwgICAyICsNCj4g
-PiAgLi4uL2JwZi9wcm9nX3Rlc3RzL3Rlc3RfbWFwX2NoZWNrX2FjY2Vzcy5jICAgIHwgMjY0ICsr
-KysrKysrKysrKysrKysrKw0KPiA+ICAuLi4vc2VsZnRlc3RzL2JwZi9wcm9ncy9tYXBfY2hlY2tf
-YWNjZXNzLmMgICAgfCAgNjUgKysrKysNCj4gPiAgMTYgZmlsZXMgY2hhbmdlZCwgNDUyIGluc2Vy
-dGlvbnMoKyksIDcyIGRlbGV0aW9ucygtKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQNCj4gdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdGVzdF9tYXBfY2hlY2tfYWNjZXNz
-LmMNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9w
-cm9ncy9tYXBfY2hlY2tfYWNjZXNzLmMNCj4gPg0KPiA+IC0tDQo+ID4gMi4yNS4xDQo+ID4NCj4g
-DQo+IEFsc28gY2hlY2sgQ0kgZmFpbHVyZXMgKFswXSkuDQoNClRoYW5rcyBmb3IgdGhlIHJldmll
-dyBBbmRyaWkuIFdpbGwgc2VuZCBhIG5ldyB2ZXJzaW9uIG9mIHRoZQ0KcGF0Y2ggc2V0IHNvb24u
-DQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIg
-NTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBZYW5nIFhpLCBMaSBIZQ0KDQo+IHRl
-c3RfdGVzdF9tYXBfY2hlY2tfYWNjZXNzOlBBU1M6c2tlbCAwIG5zZWMNCj4gdGVzdF90ZXN0X21h
-cF9jaGVja19hY2Nlc3M6UEFTUzpza2VsIDAgbnNlYw0KPiB0ZXN0X3Rlc3RfbWFwX2NoZWNrX2Fj
-Y2VzczpQQVNTOmJwZl9vYmplY3RfX2ZpbmRfbWFwX2J5X25hbWUgMCBuc2VjDQo+IHRlc3RfdGVz
-dF9tYXBfY2hlY2tfYWNjZXNzOlBBU1M6YnBmX29ial9nZXRfaW5mb19ieV9mZCAwIG5zZWMNCj4g
-dGVzdF90ZXN0X21hcF9jaGVja19hY2Nlc3M6UEFTUzpicGZfbWFwX2dldF9mZF9ieV9pZCAwIG5z
-ZWMNCj4gdGVzdF90ZXN0X21hcF9jaGVja19hY2Nlc3M6UEFTUzpicGZfbWFwX2dldF9mZF9ieV9p
-ZF9mbGFncyAwIG5zZWMNCj4gdGVzdF90ZXN0X21hcF9jaGVja19hY2Nlc3M6UEFTUzpicGZfbWFw
-X2dldF9mZF9ieV9pZF9mbGFncyAwIG5zZWMNCj4gdGVzdF90ZXN0X21hcF9jaGVja19hY2Nlc3M6
-UEFTUzpicGZfbWFwX2xvb2t1cF9lbGVtIDAgbnNlYw0KPiB0ZXN0X3Rlc3RfbWFwX2NoZWNrX2Fj
-Y2VzczpQQVNTOmJwZl9tYXBfdXBkYXRlX2VsZW0gMCBuc2VjDQo+IHRlc3RfdGVzdF9tYXBfY2hl
-Y2tfYWNjZXNzOlBBU1M6YnBmX21hcF91cGRhdGVfZWxlbSAwIG5zZWMNCj4gdGVzdF90ZXN0X21h
-cF9jaGVja19hY2Nlc3M6UEFTUzpicGZfbWFwX19waW4gMCBuc2VjDQo+IHRlc3RfdGVzdF9tYXBf
-Y2hlY2tfYWNjZXNzOlBBU1M6YnBmX29ial9nZXRfZmxhZ3MgMCBuc2VjDQo+IHRlc3RfdGVzdF9t
-YXBfY2hlY2tfYWNjZXNzOlBBU1M6YnBmX29ial9nZXRfZmxhZ3MgMCBuc2VjDQo+IHRlc3RfdGVz
-dF9tYXBfY2hlY2tfYWNjZXNzOkZBSUw6YnBmdG9vbCBtYXAgbGlzdCAtIGVycm9yOiAxMjcNCj4g
-IzE4OSB0ZXN0X21hcF9jaGVja19hY2Nlc3M6RkFJTA0KPiANCj4gICBbMF0gaHR0cHM6Ly9naXRo
-dWIuY29tL2tlcm5lbC0NCj4gcGF0Y2hlcy9icGYvcnVucy82NzMwNzk2Njg5P2NoZWNrX3N1aXRl
-X2ZvY3VzPXRydWUNCg==
+On Thu 09-06-22 14:16:56, Christian König wrote:
+> Am 09.06.22 um 11:18 schrieb Michal Hocko:
+> > On Tue 31-05-22 11:59:57, Christian König wrote:
+> > > This gives the OOM killer an additional hint which processes are
+> > > referencing shmem files with potentially no other accounting for them.
+> > > 
+> > > Signed-off-by: Christian König <christian.koenig@amd.com>
+> > > ---
+> > >   mm/shmem.c | 6 ++++++
+> > >   1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/mm/shmem.c b/mm/shmem.c
+> > > index 4b2fea33158e..a4ad92a16968 100644
+> > > --- a/mm/shmem.c
+> > > +++ b/mm/shmem.c
+> > > @@ -2179,6 +2179,11 @@ unsigned long shmem_get_unmapped_area(struct file *file,
+> > >   	return inflated_addr;
+> > >   }
+> > > +static long shmem_oom_badness(struct file *file)
+> > > +{
+> > > +	return i_size_read(file_inode(file)) >> PAGE_SHIFT;
+> > > +}
+> > This doesn't really represent the in memory size of the file, does it?
+> 
+> Well the file could be partially or fully swapped out as anonymous memory or
+> the address space only sparse populated, but even then just using the file
+> size as OOM badness sounded like the most straightforward approach to me.
+
+It covers hole as well, right?
+
+> What could happen is that the file is also mmaped and we double account.
+> 
+> > Also the memcg oom handling could be considerably skewed if the file was
+> > shared between more memcgs.
+> 
+> Yes, and that's one of the reasons why I didn't touched the memcg by this
+> and only affected the classic OOM killer.
+
+oom_badness is for all oom handlers, including memcg. Maybe I have
+misread an earlier patch but I do not see anything specific to global
+oom handling.
+
+-- 
+Michal Hocko
+SUSE Labs

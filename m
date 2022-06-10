@@ -2,309 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0E1545A21
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9B1545A2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240542AbiFJCdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 22:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S240623AbiFJCfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 22:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344794AbiFJCde (ORCPT
+        with ESMTP id S231573AbiFJCft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 22:33:34 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE8A1660A8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 19:33:31 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id j7so22900756pjn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 19:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=h5wjvAfvmc3hQDHOJgTAUHot2+LF/XxihF052IFv5TI=;
-        b=3VaZpqIvI/J1A3re8Htg7EDIVwMo6MeNwaxFNAqEj4v6OHRj8ES9oG9J5XtMQYG496
-         7fuaJxYoKdl+tN792AhGFiOy7Fpfc8Lr+haRviqE7FGOit3QVBh9Zmzl+k9zQNQMP2pi
-         by/ZedpyoWU9HJSGy5YnZ3Zm/+U0Y85AFknQf7O8ttv1PicS3Qlz5/R1y3Nh9CZ6Npu2
-         BYZVTuHV28eow0HBJEnEmJHn/2hwO1XxtFIu0qxE4DmRKFSLUzK4rOjI+Ocd8Z+WDk0+
-         /pSV8ekFC2sP2zflSDn/kWpDXejSvoZsVzCq8tP8lHnzSYZiBUmRrM0y4GxkVl8c9Htt
-         mQSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=h5wjvAfvmc3hQDHOJgTAUHot2+LF/XxihF052IFv5TI=;
-        b=cY6jGV8jypRfIShXooLuBdMpKxOaKqqK9VBypul30T6Ph0eR1tRSEv6bqQ/RwfuDzV
-         HOrCM8A5gujDT4Nw3en3vnVetoXi/ajoETn0LHn7ajAeMUqCKSHHPUDzBXrPyvsyy2RK
-         +sec0fytEIqLrd08dOPpYWGSbk2cxQsWEAPPvlNIs0ZMGJfagW8NS8z9El3bXtapTeZR
-         80PuS2Whbb4Wnan4S8Od6QWqOBTXz+6A3xTUieEPw41yJqH8YlDAAGYWBCyT8jRBbk+D
-         4K/ZjQZE6z4AFS8pNFB2aKLT22GMVg6Go/wrgtCZSamq/1nqqakBraqbhIjwx4ZfFhkG
-         mn9A==
-X-Gm-Message-State: AOAM533MCbLKkiGofznUuBogT7duQF6C9R9NX26Nfv+fc6ZMS7ryi3cg
-        QsQw2OuI4fdiRoK+yDSQym4S2A==
-X-Google-Smtp-Source: ABdhPJwvi9kLXUS59J0d4sPwKM8mXEyRW0q+S6pGLzLrfPy+fr86kvrWBwDqb1tD8jUxoeJEn3wyww==
-X-Received: by 2002:a17:90b:3c4e:b0:1e3:36c8:8496 with SMTP id pm14-20020a17090b3c4e00b001e336c88496mr6322932pjb.82.1654828411413;
-        Thu, 09 Jun 2022 19:33:31 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id o19-20020a170903009300b001620db30cd6sm17432481pld.201.2022.06.09.19.33.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Jun 2022 19:33:31 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH v6 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-Date:   Fri, 10 Jun 2022 10:33:08 +0800
-Message-Id: <20220610023308.93798-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220610023308.93798-1-zhoufeng.zf@bytedance.com>
-References: <20220610023308.93798-1-zhoufeng.zf@bytedance.com>
+        Thu, 9 Jun 2022 22:35:49 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066FE4F44E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 19:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654828549; x=1686364549;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p7WLU+IK69OBzOtjzZZocvi403jXX7hShBwzlKgpaEc=;
+  b=Cd5uGfIqALFoTOx43l2iuVYix3QXPN8QG8QlyxtB8BcQQqMxNG0cM53F
+   ChosdFK5pq9UQYkVfpqgq1BJVVBwVUHXXzqQFNDWaOq9CelWES2Luj1Lb
+   5iBrxSf2GbfDxocOY7giCHPt29hQVwRdnwBgJXqvXcnZtBxmEpodmm3YN
+   7+kuy+iJ/k9coS/7tPV1f/1BMN5TQdQXdyzdDUbLuV93ueVKMW2a0bBw1
+   vHKYEsvo0op6sK7PpOQCvqsJmwt7p+byC6Jnjv2ZIfNDgKo4izoj6oGV3
+   TLgnlKnOnFTYSjDy4jME4aUiJQleZChmAfVT3Aa9Ozkc8TxN43tcm23If
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341555031"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="341555031"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 19:35:48 -0700
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="637874939"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 19:35:45 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
+        broonie@kernel.org, gregkh@linuxfoundation.org,
+        srinivas.kandagatla@linaro.org,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        bard.liao@intel.com
+Subject: [PATCH 0/2] soundwire: Intel: add trigger callback
+Date:   Fri, 10 Jun 2022 10:35:35 +0800
+Message-Id: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+The .trigger callback will be used in ASoC.
+Hi Vinod, Could you provied a tag so that Mark can take the tag to
+his tree?
 
-Add benchmark for hash_map to reproduce the worst case
-that non-stop update when map's free is zero.
+Bard Liao (1):
+  soundwire: Intel: add trigger callback
 
-Just like this:
-./run_bench_bpf_hashmap_full_update.sh
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-1:hash_map_full_perf 555830 events per sec
-...
+Pierre-Louis Bossart (1):
+  soundwire: intel: uniquify debug message
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- tools/testing/selftests/bpf/Makefile          |  4 +-
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../benchs/bench_bpf_hashmap_full_update.c    | 96 +++++++++++++++++++
- .../run_bench_bpf_hashmap_full_update.sh      | 11 +++
- .../bpf/progs/bpf_hashmap_full_update_bench.c | 40 ++++++++
- 5 files changed, 152 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
+ drivers/soundwire/intel.c           | 36 ++++++++++++++++++-----------
+ include/linux/soundwire/sdw_intel.h |  1 +
+ 2 files changed, 23 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 2d3c8c8f558a..8ad7a733a505 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -560,6 +560,7 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
- $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
- $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
- $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
-+$(OUTPUT)/bench_bpf_hashmap_full_update.o: $(OUTPUT)/bpf_hashmap_full_update_bench.skel.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
-@@ -571,7 +572,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_ringbufs.o \
- 		 $(OUTPUT)/bench_bloom_filter_map.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
--		 $(OUTPUT)/bench_strncmp.o
-+		 $(OUTPUT)/bench_strncmp.o \
-+		 $(OUTPUT)/bench_bpf_hashmap_full_update.o
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
- 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index f061cc20e776..d8aa62be996b 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -396,6 +396,7 @@ extern const struct bench bench_hashmap_with_bloom;
- extern const struct bench bench_bpf_loop;
- extern const struct bench bench_strncmp_no_helper;
- extern const struct bench bench_strncmp_helper;
-+extern const struct bench bench_bpf_hashmap_full_update;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -430,6 +431,7 @@ static const struct bench *benchs[] = {
- 	&bench_bpf_loop,
- 	&bench_strncmp_no_helper,
- 	&bench_strncmp_helper,
-+	&bench_bpf_hashmap_full_update,
- };
- 
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-new file mode 100644
-index 000000000000..cec51e0ff4b8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include <argp.h>
-+#include "bench.h"
-+#include "bpf_hashmap_full_update_bench.skel.h"
-+#include "bpf_util.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct bpf_hashmap_full_update_bench *skel;
-+} ctx;
-+
-+#define MAX_LOOP_NUM 10000
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 1) {
-+		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true) {
-+		/* trigger the bpf program */
-+		syscall(__NR_getpgid);
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *consumer(void *input)
-+{
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+	int map_fd, i, max_entries;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = bpf_hashmap_full_update_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->bss->nr_loops = MAX_LOOP_NUM;
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
-+	/* fill hash_map */
-+	map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
-+	max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
-+	for (i = 0; i < max_entries; i++)
-+		bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
-+}
-+
-+void hashmap_report_final(struct bench_res res[], int res_cnt)
-+{
-+	unsigned int nr_cpus = bpf_num_possible_cpus();
-+	int i;
-+
-+	for (i = 0; i < nr_cpus; i++) {
-+		u64 time = ctx.skel->bss->percpu_time[i];
-+
-+		if (!time)
-+			continue;
-+
-+		printf("%d:hash_map_full_perf %lld events per sec\n",
-+		       i, ctx.skel->bss->nr_loops * 1000000000ll / time);
-+	}
-+}
-+
-+const struct bench bench_bpf_hashmap_full_update = {
-+	.name = "bpf-hashmap-ful-update",
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.consumer_thread = consumer,
-+	.measure = measure,
-+	.report_progress = NULL,
-+	.report_final = hashmap_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
-new file mode 100755
-index 000000000000..1e2de838f9fa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
-@@ -0,0 +1,11 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+nr_threads=`expr $(cat /proc/cpuinfo | grep "processor"| wc -l) - 1`
-+summary=$($RUN_BENCH -p $nr_threads bpf-hashmap-ful-update)
-+printf "$summary"
-+printf "\n"
-diff --git a/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c b/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
-new file mode 100644
-index 000000000000..56957557e3e1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define MAX_ENTRIES 1000
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, u32);
-+	__type(value, u64);
-+	__uint(max_entries, MAX_ENTRIES);
-+} hash_map_bench SEC(".maps");
-+
-+u64 __attribute__((__aligned__(256))) percpu_time[256];
-+u64 nr_loops;
-+
-+static int loop_update_callback(__u32 index, u32 *key)
-+{
-+	u64 init_val = 1;
-+
-+	bpf_map_update_elem(&hash_map_bench, key, &init_val, BPF_ANY);
-+	return 0;
-+}
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	u32 cpu = bpf_get_smp_processor_id();
-+	u32 key = cpu + MAX_ENTRIES;
-+	u64 start_time = bpf_ktime_get_ns();
-+
-+	bpf_loop(nr_loops, loop_update_callback, &key, 0);
-+	percpu_time[cpu & 255] = bpf_ktime_get_ns() - start_time;
-+	return 0;
-+}
 -- 
-2.20.1
+2.17.1
 

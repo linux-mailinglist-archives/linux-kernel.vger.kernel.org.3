@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EA8545CE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE03C545CE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346455AbiFJHKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S1346604AbiFJHKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245205AbiFJHKU (ORCPT
+        with ESMTP id S1346454AbiFJHKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:10:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3BE32389B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95315B831EE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CB8C34114;
-        Fri, 10 Jun 2022 07:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654845015;
-        bh=1jF8gOkC5M5t8KtZ2Se+Cle7+3XpHMvrmN0dAG10DtM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kp1832CJeRB1cCRc9vhuUq7VMGWZNNoGoOnvd8/Ct5zebCAGy27nmtP2PSTuli1pD
-         MSZUuGHPwwARQdvFal0UMwx2LZtyNI3K54RAsnQ4c9EMqEpTujvLRuPpx2m/UU6tye
-         emtH+t1nftg8I2hJ4mpDgN6uEGNTd15OPn+8cfSM=
-Date:   Fri, 10 Jun 2022 09:10:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jerry Lin <wahahab11@gmail.com>, Helge Deller <deller@gmx.de>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: olpc_dcon: mark driver as broken
-Message-ID: <YqLuVMVQc5qm5ld7@kroah.com>
-References: <20220609223424.907174-1-javierm@redhat.com>
+        Fri, 10 Jun 2022 03:10:22 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA96F325269
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:10:19 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id r26-20020a5d96da000000b006699181eb7dso4104189iol.14
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:10:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=1s4eQtwNPIFPmijyqkQxRHOcZ3UNMSKoKcH4SMx+dwU=;
+        b=hoAs//1Xof9xeMWzblW3EgnTTJ7T6aik1HPBS/ciEzuojuAcODDquvgPch5fPXW2rA
+         Y4Gqza+Bse+NB4fKG+dDcOqMA5teNtxvebpXSb4ztS7Iq5e9HMoa5XNnboQk/EEk4/Tk
+         Z/swK88ZoCtGeuidfo4yV6b2tJZkBmO3amBJr+fARqR0K+fzGZoENhO5cT3js6TANH+z
+         g2hlVgXGptbvxc7LFADWWK+pdKCH+U3pRgZiclSpkC9881vsNEzymiUuZ4N9IUOThprb
+         y3eBkvQR5wS6Qs4Hcm2G9zWt8j+NdyWYyR0Rn7pehshr7FKSFjjeAGiNn039OTQC/hDl
+         iimA==
+X-Gm-Message-State: AOAM530jDDplIFdaOYSkUxFLTtuseKTcvQtp0ag9U8HpR79cuho7iJPn
+        2bQ/SqXFNyVNlYq549dTEQrcE1lZEuh16S2jX+PEIBcU69MG
+X-Google-Smtp-Source: ABdhPJy5bafZuLIonGH4GUOrP3ruXh8F7X7gdTY46sCg3pH3RDVeUt5B+QRwB61fcauuyJ3F6YRJ4lORT1xiAPOmM/UOYzheuU2c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609223424.907174-1-javierm@redhat.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3892:b0:331:e9b0:80f2 with SMTP id
+ b18-20020a056638389200b00331e9b080f2mr6982887jav.133.1654845019061; Fri, 10
+ Jun 2022 00:10:19 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 00:10:19 -0700
+In-Reply-To: <0000000000003ce9d105e0db53c8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000085068105e112a117@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in copy_page_from_iter_atomic (2)
+From:   syzbot <syzbot+d2dd123304b4ae59f1bd@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
+        hch@lst.de, josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:34:24AM +0200, Javier Martinez Canillas wrote:
-> The commit eecb3e4e5d9d ("staging: olpc_dcon: add OLPC display controller
-> (DCON) support") added this driver in 2010, and has been in staging since
-> then. It was marked as broken at some point because it didn't even build
-> but that got removed once the build issues were addressed.
-> 
-> But it seems that the work to move this driver out of staging has stalled,
-> the last non-trivial change to fix one of the items mentioned in its todo
-> file was commit e40219d5e4b2 ("staging: olpc_dcon: allow simultaneous XO-1
-> and XO-1.5 support") in 2019.
-> 
-> And even if work to destage the driver is resumed, the fbdev subsystem has
-> been deprecated for a long time and instead it should be ported to DRM.
-> 
-> Now this driver is preventing to land a kernel wide change, that makes the
-> num_registered_fb symbol to be private to the fbmem.c file.
-> 
-> So let's just mark the driver as broken. Someone can then work on making
-> it not depend on the num_registered_fb symbol, allowing to drop the broken
-> dependency again.
+syzbot has bisected this issue to:
 
-Thanks for doing this, will go queue it up now for 5.19-final.
+commit 4cd4aed63125ccd4efc35162627827491c2a7be7
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Fri May 27 08:43:20 2022 +0000
 
-greg k-h
+    btrfs: fold repair_io_failure into btrfs_repair_eb_io_failure
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1332525ff00000
+start commit:   ff539ac73ea5 Add linux-next specific files for 20220609
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10b2525ff00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1732525ff00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5002042f00a8bce
+dashboard link: https://syzkaller.appspot.com/bug?extid=d2dd123304b4ae59f1bd
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d6d7cff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1113b2bff00000
+
+Reported-by: syzbot+d2dd123304b4ae59f1bd@syzkaller.appspotmail.com
+Fixes: 4cd4aed63125 ("btrfs: fold repair_io_failure into btrfs_repair_eb_io_failure")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

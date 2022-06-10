@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93858545E9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A46D545E7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347372AbiFJISs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S1347447AbiFJISw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347323AbiFJISU (ORCPT
+        with ESMTP id S1347380AbiFJISZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:18:20 -0400
+        Fri, 10 Jun 2022 04:18:25 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E183237943;
-        Fri, 10 Jun 2022 01:18:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63EA82431B0;
+        Fri, 10 Jun 2022 01:18:20 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id B107E16A9;
-        Fri, 10 Jun 2022 11:19:01 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com B107E16A9
+        by mail.baikalelectronics.com (Postfix) with ESMTP id AD39E16AA;
+        Fri, 10 Jun 2022 11:19:02 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com AD39E16AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1654849141;
-        bh=PZFSfsCT24HFXj3Ecc6Vn3a7tOVoW/wc6B5ZrH2r9og=;
+        d=baikalelectronics.ru; s=mail; t=1654849142;
+        bh=YC8mhxZWlVipdQB79Q7/wQI6740jLdk6WakSOhvy74Q=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=AXhY9zFTvv4QQ7iOL8URRmLIIM/pOy7Hy827CSLgvOR1CjDCP+C6c+7daoF9YoA1q
-         2ui/tyTewWgnu27O0hNG3yj9obKCSnCeWEs7t5ywvlxKPmNEF5xDrtC14qOfcnsGxy
-         Omone8uQoTehfJfcLYqq8WFgFVhcPkAq/8/R2NQ8=
+        b=aJEIpofTiH5h5kpDnPFE9zQtcys2DQLkWcbntsQGMPt+jIIfTXwuoB/iuybP8vUgI
+         TKSB9jApQu0Kav97oa38UAIrf+kE1ffjXk8oYN+AvZX3cINyHVUVGpVqS08bFoSvFy
+         r9L5XqSEU+pfB5+kdVcecAmRYGYBTl1DPuUduPbw=
 Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 11:18:09 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 11:18:10 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v4 08/23] ata: libahci_platform: Sanity check the DT child nodes number
-Date:   Fri, 10 Jun 2022 11:17:46 +0300
-Message-ID: <20220610081801.11854-9-Sergey.Semin@baikalelectronics.ru>
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v4 09/23] ata: libahci_platform: Parse ports-implemented property in resources getter
+Date:   Fri, 10 Jun 2022 11:17:47 +0300
+Message-ID: <20220610081801.11854-10-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -57,68 +61,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having greater than AHCI_MAX_PORTS (32) ports detected isn't that critical
-from the further AHCI-platform initialization point of view since
-exceeding the ports upper limit will cause allocating more resources than
-will be used afterwards. But detecting too many child DT-nodes doesn't
-seem right since it's very unlikely to have it on an ordinary platform. In
-accordance with the AHCI specification there can't be more than 32 ports
-implemented at least due to having the CAP.NP field of 5 bits wide and the
-PI register of dword size. Thus if such situation is found the DTB must
-have been corrupted and the data read from it shouldn't be reliable. Let's
-consider that as an erroneous situation and halt further resources
-allocation.
-
-Note it's logically more correct to have the nports set only after the
-initialization value is checked for being sane. So while at it let's make
-sure nports is assigned with a correct value.
+The ports-implemented property is mainly used on the OF-based platforms
+with no ports mapping initialized by a bootloader/BIOS firmware. Seeing
+the same of_property_read_u32()-based pattern has already been implemented
+in the generic AHCI LLDD (glue) driver and in the Mediatek, St AHCI
+drivers let's move the property read procedure to the generic
+ahci_platform_get_resources() method. Thus we'll have the forced ports
+mapping feature supported for each OF-based platform which requires that,
+and stop re-implementing the same pattern in there a bit simplifying the
+code.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-
 ---
+ drivers/ata/ahci_mtk.c         | 2 --
+ drivers/ata/ahci_platform.c    | 3 ---
+ drivers/ata/ahci_st.c          | 3 ---
+ drivers/ata/libahci_platform.c | 3 +++
+ 4 files changed, 3 insertions(+), 8 deletions(-)
 
-Changelog v2:
-- Drop the else word from the child_nodes value checking if-else-if
-  statement (@Damien) and convert the after-else part into the ternary
-  operator-based statement.
-
-Changelog v4:
-- Fix some logical mistakes in the patch log. (@Sergei Shtylyov)
----
- drivers/ata/libahci_platform.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
-index 814804582d1d..8aed7b29c7ab 100644
---- a/drivers/ata/libahci_platform.c
-+++ b/drivers/ata/libahci_platform.c
-@@ -451,15 +451,22 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
- 		}
+diff --git a/drivers/ata/ahci_mtk.c b/drivers/ata/ahci_mtk.c
+index 1f6c85fde983..c056378e3e72 100644
+--- a/drivers/ata/ahci_mtk.c
++++ b/drivers/ata/ahci_mtk.c
+@@ -118,8 +118,6 @@ static int mtk_ahci_parse_property(struct ahci_host_priv *hpriv,
+ 				   SYS_CFG_SATA_EN);
  	}
  
--	hpriv->nports = child_nodes = of_get_child_count(dev->of_node);
-+	/*
-+	 * Too many sub-nodes most likely means having something wrong with
-+	 * the firmware.
-+	 */
-+	child_nodes = of_get_child_count(dev->of_node);
-+	if (child_nodes > AHCI_MAX_PORTS) {
-+		rc = -EINVAL;
-+		goto err_out;
-+	}
+-	of_property_read_u32(np, "ports-implemented", &hpriv->force_port_map);
+-
+ 	return 0;
+ }
  
- 	/*
- 	 * If no sub-node was found, we still need to set nports to
- 	 * one in order to be able to use the
- 	 * ahci_platform_[en|dis]able_[phys|regulators] functions.
- 	 */
--	if (!child_nodes)
--		hpriv->nports = 1;
-+	hpriv->nports = child_nodes ?: 1;
+diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+index 28a8de5b48b9..9b56490ecbc3 100644
+--- a/drivers/ata/ahci_platform.c
++++ b/drivers/ata/ahci_platform.c
+@@ -56,9 +56,6 @@ static int ahci_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
  
- 	hpriv->phys = devm_kcalloc(dev, hpriv->nports, sizeof(*hpriv->phys), GFP_KERNEL);
- 	if (!hpriv->phys) {
+-	of_property_read_u32(dev->of_node,
+-			     "ports-implemented", &hpriv->force_port_map);
+-
+ 	if (of_device_is_compatible(dev->of_node, "hisilicon,hisi-ahci"))
+ 		hpriv->flags |= AHCI_HFLAG_NO_FBS | AHCI_HFLAG_NO_NCQ;
+ 
+diff --git a/drivers/ata/ahci_st.c b/drivers/ata/ahci_st.c
+index 7526653c843b..068621099c00 100644
+--- a/drivers/ata/ahci_st.c
++++ b/drivers/ata/ahci_st.c
+@@ -168,9 +168,6 @@ static int st_ahci_probe(struct platform_device *pdev)
+ 
+ 	st_ahci_configure_oob(hpriv->mmio);
+ 
+-	of_property_read_u32(dev->of_node,
+-			     "ports-implemented", &hpriv->force_port_map);
+-
+ 	err = ahci_platform_init_host(pdev, hpriv, &st_ahci_port_info,
+ 				      &ahci_platform_sht);
+ 	if (err) {
+diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+index 8aed7b29c7ab..1a7060646009 100644
+--- a/drivers/ata/libahci_platform.c
++++ b/drivers/ata/libahci_platform.c
+@@ -483,6 +483,9 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+ 		goto err_out;
+ 	}
+ 
++	of_property_read_u32(dev->of_node,
++			     "ports-implemented", &hpriv->force_port_map);
++
+ 	if (child_nodes) {
+ 		for_each_child_of_node(dev->of_node, child) {
+ 			u32 port;
 -- 
 2.35.1
 

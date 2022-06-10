@@ -2,63 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF3254592A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C787545930
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238174AbiFJAa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
+        id S242289AbiFJAdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiFJAa4 (ORCPT
+        with ESMTP id S230371AbiFJAdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:30:56 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08222C12E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654821052; x=1686357052;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=ElC5/vrGK81B1vG9DhjSFK/X+qtdP0hbu7/JdDZXK94=;
-  b=YhzIx4zXh5Irlq0EAzO2QV94kga0kTWt8HKOyz/0Hpk+opvvn9PvpH8K
-   xoYdYzleho7bzPXwd1RyuNhwFNiirpk+OczTzXTHn+P3Ag7Po+zMjmrVC
-   V8dEdDy4EjMQnke+BwX+RdTccBp2P4FoPKwc6CRuM7GnhpPawpYknI4zx
-   vXxgFykNQDoh75yiDG7jml/0tQe2ri/8m/qelHl9j/6GuQTL9JG7qW03S
-   oBB9C39nSb33acjrcmtyXqD0Xxl9SXFriBi90gcz7/45WYYm8A0uaV0V2
-   6SjcsMUdXCkRgf/cx4dFhuy+t2BcXft988ORetIv8rIkd3Z8iCUNPPx0g
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341533770"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="341533770"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:30:52 -0700
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="827901500"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:30:51 -0700
-Date:   Thu, 9 Jun 2022 17:30:43 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Mark Brown <broonie@kernel.org>
-cc:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>
-Subject: Re: [PATCH v1] regmap: add generic indirect regmap support
-In-Reply-To: <YqHH+oX/90KXv8dN@sirena.org.uk>
-Message-ID: <alpine.DEB.2.22.394.2206091655490.1640209@rhweight-WRK1>
-References: <20220607013755.594554-1-tianfei.zhang@intel.com> <Yp9PdZn2Xu/oqiA8@sirena.org.uk> <alpine.DEB.2.22.394.2206071714420.3001206@rhweight-WRK1> <YqB9O8HhZV2tXo8g@sirena.org.uk> <BN9PR11MB548315C03B09D841B6392E63E3A49@BN9PR11MB5483.namprd11.prod.outlook.com>
- <YqHH+oX/90KXv8dN@sirena.org.uk>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 9 Jun 2022 20:33:03 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6D5366A7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:33:00 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id c2so21030641lfk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M1G6Hf9v6f6xyLP2a6Gh7yfuFJ+6ipgBJHHWwU80v1c=;
+        b=GzLaviOqRCp4B7LqsBfA2qFyX6V1uMUAbIpS5ZG+ymr/9aN/hsQn1QW3PtN+GmgInQ
+         He0Q1Uquu8aHzwNdzglLiDyax/ofVj35MhNvH0zBU7U/FgsC8lV4WZcV1MRSavA6givw
+         MwwoH6cUS805gA1B/kna/OiRrljxuadDNbWQe2uk3jqSGIPZTj1Nggn2aFmaJOxpn0ee
+         keyXmIa2x54GZzES+MYP7V0JK7Y0RzKUk9jyYpIawwn1bBhBPn8bT+rMBalAXRhKRGqN
+         ws66+mukc8/rRLkWY5c5tACdnnEguXj7+LFVYthISMqK0wDGsAxLLnOu3EGgFefxrZxd
+         +Qcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M1G6Hf9v6f6xyLP2a6Gh7yfuFJ+6ipgBJHHWwU80v1c=;
+        b=f6p1VdBLr2qFvZ6ImT+X+jTcnYVwvSRhH0JJwL47DAL0bJchYMUkABVdj0CagvKsi2
+         MbkJ6auQS39OQf31AnMEoUAlnRMAZDvMDRaOOeG0cvjxkE+L+qpHNt7h42Rfviwmj5zk
+         2GqO5AO5BBgyduNLb+fTtx6OIsxfgkx80ru6borvt0g9o3Zt04HgoKrqd3dOwW8wxKpM
+         JQyA3YXZKdVDTYu2Z26lXNGH0amQMS/ofeKCoIi/jCgYGf3eph1/rYl/XtC0GeEXPnAl
+         D8rfqsIKdERFUb+JvuLgxDAUW6uH7lRy2YSvFUnskdRj3HIM1hCLX1YF7AJc/veFJZy7
+         hiDQ==
+X-Gm-Message-State: AOAM531SVWtHY9lRx4IHoF2kCDOtnx37M70tFx97qarXFA8auxiLTMdq
+        LEKGCVHPkkVCkEw09D7E786l9ry7WNjNq94JFnTDZA==
+X-Google-Smtp-Source: ABdhPJwmAai5PXOj7tGhLdM9ZQqNV5Wv1qkbCkukxf252/r1aHu4spL4q3u9asT4a5t/dEsKFtmgLChgmJAimWPi9do=
+X-Received: by 2002:a05:6512:ad6:b0:479:5599:d834 with SMTP id
+ n22-20020a0565120ad600b004795599d834mr11951775lfu.103.1654821178297; Thu, 09
+ Jun 2022 17:32:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
+In-Reply-To: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 9 Jun 2022 17:32:46 -0700
+Message-ID: <CAKwvOdmfC3kgGuimbtG8n74f8qJ5+vd3GeHg14oOxkKOfuQfBg@mail.gmail.com>
+Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Bill Wendling <morbo@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     Bill Wendling <isanbard@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jan Kara <jack@suse.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Network Development <netdev@vger.kernel.org>,
+        alsa-devel@alsa-project.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Justin Stitt <jstitt007@gmail.com>,
+        Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_TVD_FUZZY_SECURITIES,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,63 +103,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Thu, 9 Jun 2022, Mark Brown wrote:
-
-> On Wed, Jun 08, 2022 at 11:54:26PM +0000, Zhang, Tianfei wrote:
+On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
 >
->>>> Would a different name help?
->>>
->>> This wouldn't address the major problem which is...
->>>
->>>>>> +	writel(0, ctx->base + INDIRECT_CMD_OFF);
->>>>>> +	ret = readl_poll_timeout((ctx->base + INDIRECT_CMD_OFF), cmd,
->>>>>> +				 (!cmd), INDIRECT_INT_US,
->>> INDIRECT_TIMEOUT_US);
->>>>>> +	if (ret)
->>>>>> +		dev_err(ctx->dev, "%s timed out on clearing cmd 0x%xn",
->>>>>> +__func__, cmd);
->>>
->>>>> ...and this doesn't look particularly generic, it looks like it's
->>>>> for some particular controller/bridge?
->>>
->>> ...that this appears to be entirely specific to some particular device, it's got
->>> things like hard coded register addresses and timeouts which mean it can't be
->>> reused.
->>
->> Yet, this is a register access hardware controller/bridge widely used in FPGA IP blocks, like PMCI, HSSI.
->> How about we change the patch title like this:
+> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
 >
->> regmap: add indirect register controller support
+> > This patch set fixes some clang warnings when -Wformat is enabled.
+
+It looks like this series fixes -Wformat-security, which while being a
+member of the -Wformat group, is intentionally disabled in the kernel
+and somewhat orthogonal to enabling -Wformat with Clang.
+
+-Wformat is a group flag (like -Wall) that enables multiple other
+flags implicitly.  Reading through
+clang/include/clang/Basic/DiagnosticGroups.td in clang's sources, it
+looks like:
+
+1. -Wformat is a group flag.
+2. -Wformat-security is a member of the -Wformat group; enabling
+-Wformat will enable -Wformat-security.
+3. -Wformat itself is a member of -Wmost (never heard of -Wmost, but
+w/e). So -Wmost will enable -Wformat will enable -Wformat-security.
+4. -Wmost is itself a member of -Wall. -Wall enables -Wmost enables
+-Wformat enables -Wformat security.
+
+Looking now at Kbuild:
+1. Makefile:523 adds -Wall to KBUILD_CFLAGS.
+2. The same assignment expression but on line 526 immediately disables
+-Wformat-security via -Wno-format-security.
+3. scripts/Makefile.extrawarn disables -Wformat via -Wno-format only
+for clang (via guard of CONFIG_CC_IS_CLANG).
+
+We _want_ -Wformat enabled for clang so that developers aren't sending
+patches that trigger -Wformat with GCC (if they didn't happen to test
+their code with both).  It's disabled for clang until we can build the
+kernel cleanly with it enabled, which we'd like to do.
+
+I don't think that we need to enable -Wformat-security to build with
+-Wformat for clang.
+
+I suspect based on Randy's comment on patch 1/12 that perhaps -Wformat
+was _added_ to KBUILD_CFLAGS in scripts/Makefile.extrawarn rather than
+-Wno-format being _removed_.  The former would re-enable
+-Wformat-security due to the grouping logic described above.  The
+latter is probably closer to our ultimate goal of enabling -Wformat
+coverage for clang (or rather not disabling the coverage via
+-Wno-format; a double negative).
+
+I'm pretty sure the kernel doesn't support %n in format strings...see
+the comment above vsnprintf in lib/vsprintf.c.  Are there other
+attacks other than %n that -Wformat-security guards against? Maybe
+there's some context on the commit that added -Wno-format-security to
+the kernel?  Regardless, I don't think enabling -Wformat-security is a
+blocker for enabling -Wformat (or...disabling -Wno-format...two sides
+of the same coin) for clang.
+
+> >
 >
-> No, please enage with my feedback above.
+> tldr:
 >
+> -       printk(msg);
+> +       printk("%s", msg);
+>
+> the only reason to make this change is where `msg' could contain a `%'.
+> Generally, it came from userspace.  Otherwise these changes are a
+> useless consumer of runtime resources.
+>
+> I think it would be better to quieten clang in some fashion.
 
-Hi Mark,
 
-I think part of the confusion is that this patch should have been included 
-in a patch set that actually uses this regmap.  This patch really should 
-be included with the following:
 
-https://lore.kernel.org/all/20220607032833.3482-1-tianfei.zhang@intel.com
-
-The hard coded register definitions are offsets to the passed in void 
-__iomem base address.  This set of registers provides the semantics of 
-indirect register read/write to whatever the register set is connected 
-to on the back end.  Conceptually this could be considered a specific type 
-indirect register access controller, but currently we have very different 
-backend implementations in RTL.  Part of our intent is to have consistent 
-register interfaces for our FPGA IP so multiple drivers can reuse this 
-regmap.
-
-I totally agree the hardcoded timeout values used for polling should be 
-parameterized.
-
-We would like to submit a v2 patch set that combines this patch with the 
-first consumer of the regmap, PMCI.  We would also parameterize the 
-timeout values, but most importantly the name must be better.  It is a 
-long name, but how about something like "Intel FPGA Indirect Register 
-Interface"?
-
-Matthew Gerlach
+-- 
+Thanks,
+~Nick Desaulniers

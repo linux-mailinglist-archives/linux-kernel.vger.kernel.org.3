@@ -2,206 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B041546693
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2409B54669D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344661AbiFJM0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 08:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S244661AbiFJM1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245428AbiFJM0l (ORCPT
+        with ESMTP id S233151AbiFJM1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:26:41 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD4E2D2530
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:26:39 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id r1so5416452plo.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:26:39 -0700 (PDT)
+        Fri, 10 Jun 2022 08:27:05 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C6420BB2D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:27:03 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id h23so42116737ejj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JQd3cZZglBGuv+koPRhcabLewHLT00jyRGFi+QsDi+s=;
-        b=j4p+Wn5VFiG1u8/FOoebn+HCQVFrBmjRKQ4DgRdq39k0j7rFQHxmSm2A6/OyAIeoLD
-         ACC6ItbMasygaaHlolFNFGeS6r2KzwoFZpRdROqghoT7AUtSnQwtrxeSWxMAb9xn3/mC
-         fpXb9WWCHwD7Nesl2Jve9oZroDP33S4p6jNlavWmbxzAPguGrAL5Qq93KAlHLY1QxbjX
-         aKb10839GkMx0Fkx2t7UN5LpcwD21GWhFITvThcWMEYTpRCpqYHW81V22M8IJBp7dCES
-         AKf9lbw5GV8KLQdW4vD4pr7JF1mbM26xNJvN1kXn3x8uF31tGs4qsqd7EQtjoVeNcYc4
-         H32Q==
+         :cc;
+        bh=Aru8d9opYdqmVU7zQRIwciw2rKwv+H6TohRF9x2A7Ww=;
+        b=bP+L/F9vpe6SrwpYqU2bPZIg64aQeFcuARRZQXdjsQO3LDSbAXkmnQw3f09WYEUL1v
+         2eCTbDzVARwxEWMkjUn2i2F5yESMTj0/GC+5KLf5MNKHKPAC11hHWxH3WPkLSJAGzhW6
+         B72J/9rj7IMSnvbxmddXcbcLW/eNaP4VA3lw+lmJoa3meD+oU+6QkRemknztYCOHgI3g
+         0Eb2eL8dmdwknYS33FNu4Miw+2TWQaarPmEdunJ5Ilg/en02e95Y817XCgRoK/y5NPvN
+         OmdyOm4YjzK4j1xHN078P4C5PF0p6KqZwACfUYyAgZqLY54RgbTI5zFWL1SzXmlty7h0
+         dLeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JQd3cZZglBGuv+koPRhcabLewHLT00jyRGFi+QsDi+s=;
-        b=59uBqDwoMgc5w5zNM5wouES/cPskZf8KPAOQdfji3F3b5J/kjcTPGLnIfeSxlPIrfh
-         c2uyI+F4nXR03S5NhUwikhrC5FoKigka98gexsPvoYSS/7W/yCDz3inj4L4Ytgob2iq4
-         9xCKAKGcvx7aw1xOBq/vER/12ThuQxjY2aBVx5NgYi8nipGGAEFfhyIs5jVOHq6fnoAr
-         6K8Ce48rpDsoHlky3vABDJAn7kFrO9PFRm+bp1UVvOu4CJYThJN3o7CXcipuEF6kCaxP
-         7Esp1CkiNxOgOWQGOmAftyl4E0jyitCRP/Vc4x4tqJhuWAm+dcnCAuwkgs4MuyyLG/ko
-         VQoA==
-X-Gm-Message-State: AOAM532ZHhbU5ZRqz+ckcNkSi336INYRLslZAVw98QVYdauHxf5mPaPJ
-        jYU20Xd4tdIbR8D3ArsFHJVcD6386w7I6tTQg4BGNw==
-X-Google-Smtp-Source: ABdhPJyI9XVeJog1tDRqARKViAnhr2jYHe7tzCoLd5OlCRiC8TcP67f8q9Pd04BcpPjCWInDE8Y5Cv08WUeUZ68ySyg=
-X-Received: by 2002:a17:903:2303:b0:166:313f:a85f with SMTP id
- d3-20020a170903230300b00166313fa85fmr45260497plh.57.1654863998845; Fri, 10
- Jun 2022 05:26:38 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=Aru8d9opYdqmVU7zQRIwciw2rKwv+H6TohRF9x2A7Ww=;
+        b=uqbrwu+2o6pARm+A2++2P6kE4o6m1PvQ8heI6LoO6J3mMwuU/rhQmhe/nfLA8W7tPO
+         yhBd+5qmjvRLJcMmFvO6pAdIzOqKXhjXSrwKUTVGlzyAP30/bpiOPt/fA5VUBnbynwxC
+         YuxNdMxsmf/WHlkGwj8IBwMmdhzzrq+Awp8jKAwblQ95FSetsnxAqciY0FtFRcdWvGdm
+         AVvho77Uk96HU70W5AqInm2P7jhSuSnVSuubYHGrgRJ4YoUcVTeifjwIZ55rqygxF6uR
+         L9vL/f4eqYNu+vS7oMDDLtDoy4js2VFZRfnp6MH/LQYz3OtyRT/723zgLJSnPHIAyes4
+         hNJg==
+X-Gm-Message-State: AOAM531c2XfovPiIqJ57WspslxnCoEHo/m3X2cD7ucC+Q8cZHhnGChCA
+        Hi/KycYpDI108rMLzT8u5fIA1MzfA8Y5QD3oo2zeZA==
+X-Google-Smtp-Source: ABdhPJzlOAUF7lf77UWUH6vF/DqJlWlqZoKgWH5EhJRsseBG/FKbYMCUuKJPy7ZH6W8ggwSTCxrJqWKXIhgAr/4wIlM=
+X-Received: by 2002:a17:907:90c8:b0:711:c8e1:7109 with SMTP id
+ gk8-20020a17090790c800b00711c8e17109mr25478777ejb.492.1654864021559; Fri, 10
+ Jun 2022 05:27:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
- <YqIJ8HtdqnoVzfQD@google.com>
-In-Reply-To: <YqIJ8HtdqnoVzfQD@google.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Fri, 10 Jun 2022 14:26:27 +0200
-Message-ID: <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Dunn <daviddunn@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>, dbehr@google.com, dtor@google.com
+References: <20220610075152.10214-1-Sergey.Semin@baikalelectronics.ru> <20220610104500.28774-1-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220610104500.28774-1-Sergey.Semin@baikalelectronics.ru>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 10 Jun 2022 14:26:51 +0200
+Message-ID: <CAMRc=Mc=WYNS3uhDmWGwVsQd5q9i+qYvXuJ_Ks5MwU4Rjdh4Zw@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: dwapb: Don't print error on -EPROBE_DEFER
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Hoan Tran <hoan@os.amperecomputing.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-czw., 9 cze 2022 o 16:55 Sean Christopherson <seanjc@google.com> napisa=C5=
-=82(a):
+On Fri, Jun 10, 2022 at 12:45 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
 >
-> On Thu, Jun 09, 2022, Grzegorz Jaszczyk wrote:
-> > +9. KVM_HC_SYSTEM_S2IDLE
-> > +------------------------
-> > +
-> > +:Architecture: x86
-> > +:Status: active
-> > +:Purpose: Notify the hypervisor that the guest is entering s2idle stat=
-e.
+> Currently if the APB or Debounce clocks aren't yet ready to be requested
+> the DW GPIO driver will correctly handle that by deferring the probe
+> procedure, but the error is still printed to the system log. It needlessly
+> pollutes the log since there was no real error but a request to postpone
+> the clock request procedure since the clocks subsystem hasn't been fully
+> initialized yet. Let's fix that by using the dev_err_probe method to print
+> the APB/clock request error status. It will correctly handle the deferred
+> probe situation and print the error if it actually happens.
 >
-> What about exiting s2idle?  E.g.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 >
->   1. VM0 enters s2idle
->   2. host notes that VM0 is in s2idle
->   3. VM0 exits s2idle
->   4. host still thinks VM0 is in s2idle
->   5. VM1 enters s2idle
->   6. host thinks all VMs are in s2idle, suspends the system
-
-I think that this problem couldn't be solved by adding notification
-about exiting s2idle. Please consider (even after simplifying your
-example to one VM):
-1. VM0 enters s2idle
-2. host notes about VM0 is in s2idle
-3. host continues with system suspension but in the meantime VM0 exits
-s2idle and sends notification but it is already too late (VM could not
-even send notification on time).
-
-Above could be actually prevented if the VMM had control over the
-guest resumption. E.g. after VMM receives notification about guest
-entering s2idle state, it would park the vCPU actually preventing it
-from exiting s2idle without VMM intervention.
-
+> ---
 >
-> > +static void s2idle_hypervisor_notify(void)
-> > +{
-> > +     if (static_cpu_has(X86_FEATURE_HYPERVISOR))
-> > +             kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
+> Link: https://lore.kernel.org/linux-gpio/20220610075152.10214-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v2:
+> - Use the dev_err_probe() return value as the return status of the
+>   corresponding method. (@Philipp Zabel)
+> ---
+>  drivers/gpio/gpio-dwapb.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 >
-> Checking the HYPERVISOR flag is not remotely sufficient.  The hypervisor =
-may not
-> be KVM, and if it is KVM, it may be an older version of KVM that doesn't =
-support
-> the hypercall.  The latter scenario won't be fatal unless KVM has been mo=
-dified,
-> but blindly doing a hypercall for a different hypervisor could have disas=
-trous
-> results, e.g. the registers ABIs are different, so the above will make a =
-random
-> request depending on what is in other GPRs.
-
-Good point: we've actually thought about not confusing/breaking VMMs
-so I've introduced KVM_CAP_X86_SYSTEM_S2IDLE VM capability in the
-second patch, but not breaking different hypervisors is another story.
-Would hiding it under new 's2idle_notify_kvm' module parameter work
-for upstream?:
-
-+static bool s2idle_notify_kvm __read_mostly;
-+module_param(s2idle_notify_kvm, bool, 0644);
-+MODULE_PARM_DESC(s2idle_notify_kvm, "Notify hypervisor about guest
-entering s2idle state");
-+
-..
-+static void s2idle_hypervisor_notify(void)
-+{
-+       if (static_cpu_has(X86_FEATURE_HYPERVISOR) &&
-s2idle_notify_kvm)
-+               kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
-+}
-+
-
+> diff --git a/drivers/gpio/gpio-dwapb.c b/drivers/gpio/gpio-dwapb.c
+> index b0f3aca61974..9467d695a33e 100644
+> --- a/drivers/gpio/gpio-dwapb.c
+> +++ b/drivers/gpio/gpio-dwapb.c
+> @@ -652,10 +652,9 @@ static int dwapb_get_clks(struct dwapb_gpio *gpio)
+>         gpio->clks[1].id = "db";
+>         err = devm_clk_bulk_get_optional(gpio->dev, DWAPB_NR_CLOCKS,
+>                                          gpio->clks);
+> -       if (err) {
+> -               dev_err(gpio->dev, "Cannot get APB/Debounce clocks\n");
+> -               return err;
+> -       }
+> +       if (err)
+> +               return dev_err_probe(gpio->dev, err,
+> +                                    "Cannot get APB/Debounce clocks\n");
 >
-> The bigger question is, why is KVM involved at all?  KVM is just a dumb p=
-ipe out
-> to userspace, and not a very good one at that.  There are multiple well e=
-stablished
-> ways to communicate with the VMM without custom hypercalls.
-
-Could you please kindly advise about the recommended way of
-communication with VMM, taking into account that we want to send this
-notification just before entering s2idle state (please see also answer
-to next comment), which is at a very late stage of the suspend process
-with a lot of functionality already suspended?
-
+>         err = clk_bulk_prepare_enable(DWAPB_NR_CLOCKS, gpio->clks);
+>         if (err) {
+> --
+> 2.35.1
 >
->
-> I bet if you're clever this can even be done without any guest changes, e=
-.g. I
-> gotta imagine acpi_sleep_run_lps0_dsm() triggers MMIO/PIO with the right =
-ACPI
-> configuration.
 
-The problem is that between acpi_sleep_run_lps0_dsm and the place
-where we introduced hypercall there are several places where we can
-actually cancel and not enter the suspend state. So trapping on
-acpi_sleep_run_lps0_dsm which triggers MMIO/PIO would be premature.
+Applied, thanks!
 
-The other reason for doing it in this place is the fact that
-s2idle_enter is called from an infinite loop inside s2idle_loop, which
-could be interrupted by e.g. ACPI EC GPE (not aim for waking-up the
-system) so s2idle_ops->wake() would return false and s2idle_enter will
-be triggered again. In this case we would want to get notification
-about guests actually entering s2idle state again, which wouldn't be
-possible if we would rely on acpi_sleep_run_lps0_dsm.
-
-Best regards,
-Grzegorz
+Bart

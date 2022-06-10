@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC1F5466C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7355466CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235263AbiFJMqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 08:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        id S237009AbiFJMsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiFJMql (ORCPT
+        with ESMTP id S233412AbiFJMse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:46:41 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0676618E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654865200; x=1686401200;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2fPRffznqP3QJikn1bGV+biqojxGyPlNiUoj0REL35Q=;
-  b=YcNbvXQBZmCA4aV6zuiHYOkTqxPHP0jzVvifaDSg7lPJH6IaqI8Hs2R7
-   ztavY5TXAT9sYOvj7s5YglVp0zsmgh5SG0F7BvEpkw+p0CHhuQEHaGIjL
-   ftTn3adq9Uz65zoxvziYl6hz8MGcJApLVpLrV/+EX7JNa5Hpxh+MBtCsA
-   pxhxAnTazVxhw9TRVzXYEWNBrlzpOEpPjo8nW738yrsUAgC1k9RQlYDex
-   j+KdrWqtHQlEv/P2calnWzTtDZcJMrKsAXECL2zrry34aCR6KsfTA51t8
-   wqDWMyIsj91hTNwET3xCVvQh5tNtgT7mGoxgLHAeWXvtLvlRTV9uZzkMB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="257452818"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="257452818"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:46:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="671831932"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jun 2022 05:46:39 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nze2A-000Hwf-U6;
-        Fri, 10 Jun 2022 12:46:38 +0000
-Date:   Fri, 10 Jun 2022 20:46:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [vireshk-pm:opp/linux-next 51/52] drivers/opp/core.c:97:6: warning:
- no previous prototype for function 'assert_single_clk'
-Message-ID: <202206102000.LY9iR2Ek-lkp@intel.com>
+        Fri, 10 Jun 2022 08:48:34 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680B321E1B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:48:32 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id e184so46823391ybf.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Sfhj5wdwRUjdvuShztWnVmtciB4bmqpt/yCTTC/qT1Q=;
+        b=qoZTrQOJJqrmNKCLNaP7NcaBbh6iuWsbFYB4xngaH5zEuOzNZW6X3YyQT+0y+znjuR
+         6QqH53aKiZ0M6kT8bMm5wk4M2Y7q6LbjfmYtl2kHAxSbgXzm9cPQqj8I1+HQOlC6KukY
+         3rxaQFs1KPUP8o9qvjb5DsegfPRckr9Op4Diqhg6tyzHowUpPFO5Z4nj4YqEcS6LtBTs
+         kfPImQh6bzaT+3Wbuy/KCB8B2VTUIFcIW87uswO5foKzxgyADBNrDPlCGSxNW6vqeKya
+         r16heKxo6iDywBjlZy/PuvQ7l3ebsiOZnpia3wOvhoAmX1VEEQAgsur91muSJ53DrknD
+         eSmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Sfhj5wdwRUjdvuShztWnVmtciB4bmqpt/yCTTC/qT1Q=;
+        b=nHDxVTXVjQfVNV8m15kBMyUcTYIV4odxUxO1M+uLdZPEKlJKcQVuKWWKUideibuG8e
+         oghAGjAO3flmuWSkeFGOgF89uBDRo9FerYi45szAgSYxMJQ+0SCyuJLBYz6eldBqSp6N
+         pFt9x17sjqGb5XJMby3QwQWbHNACWlBL632Xbqjqq6dkFFLY09gQ2buGmLeSHjDcaCe2
+         67f2c9FMfeKjaqEM2y8Ndg/XXaTp+FIesUSArEVpXMDg3Li40MitEZ01Gwj+q68YWHZx
+         M7iuwCHV8EuZ1raP3cjxk0AWZ0p0zsunHVmt3/cy7yG50Xli43qetHX5vQwOvrPixcl2
+         nEEQ==
+X-Gm-Message-State: AOAM533Wobagk+WVOb7cQsc3Na3/8vKL1Z7GWlQz/mLqTAZwqJNMMVyD
+        L6PJe8oobeYqmGJ+3nJvSln1/k+1BsU0imYpsYs=
+X-Google-Smtp-Source: ABdhPJwgGuJKr0Lv+asRzvW54Hvakrc7XqpEufJMBXIOtQFdLCsHv05NLGfrUagPF2W/jDZvLrjpttsGr6KfKNGRq/w=
+X-Received: by 2002:a25:7611:0:b0:65c:b595:2822 with SMTP id
+ r17-20020a257611000000b0065cb5952822mr43370508ybc.228.1654865311641; Fri, 10
+ Jun 2022 05:48:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 10 Jun 2022 08:48:18 -0400
+Message-ID: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
+Subject: [BUG] Threaded printk breaks early debugging
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,52 +64,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
-head:   76c4db9b37866c60306d39ed982cba56af15ff00
-commit: a62471a6205813e478c21edb405d62285ea6be6e [51/52] OPP: Assert clk_count == 1 for single clk helpers
-config: arm64-randconfig-r025-20220610 (https://download.01.org/0day-ci/archive/20220610/202206102000.LY9iR2Ek-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 70d35fe1257e429266b83025997b400e9f79110e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=a62471a6205813e478c21edb405d62285ea6be6e
-        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
-        git fetch --no-tags vireshk-pm opp/linux-next
-        git checkout a62471a6205813e478c21edb405d62285ea6be6e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/opp/
+Good Morning,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+First, I love this patch from a functional standpoint! However I've
+run into an issue debugging early boot issues. Anything that causes
+the kernel threading system to die (for example here, a NPE) causes
+the boot console to halt before it outputs the error.
 
-All warnings (new ones prefixed by >>):
+Would it be possible to have both a kconfig option and a runtime
+option to toggle printk_fallback_preferred_direct()? Currently I've
+had to force it at all times while debugging.
 
->> drivers/opp/core.c:97:6: warning: no previous prototype for function 'assert_single_clk' [-Wmissing-prototypes]
-   bool assert_single_clk(struct opp_table *opp_table)
-        ^
-   drivers/opp/core.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool assert_single_clk(struct opp_table *opp_table)
-   ^
-   static 
-   drivers/opp/core.c:1634:43: warning: variable 'clk_size' set but not used [-Wunused-but-set-variable]
-           int supply_count, supply_size, icc_size, clk_size;
-                                                    ^
-   2 warnings generated.
+Thanks again for this amazing work!
 
-
-vim +/assert_single_clk +97 drivers/opp/core.c
-
-    95	
-    96	/* Returns true for single clock, false with WARN otherwise */
-  > 97	bool assert_single_clk(struct opp_table *opp_table)
-    98	{
-    99		return !WARN_ON(opp_table->clk_count != 1);
-   100	}
-   101	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Very Respectfully,
+Peter Geis

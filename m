@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1A15467C9
+	by mail.lfdr.de (Postfix) with ESMTP id 37BBC5467C7
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242883AbiFJNyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S1349271AbiFJNyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349385AbiFJNx1 (ORCPT
+        with ESMTP id S237952AbiFJNxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:53:27 -0400
+        Fri, 10 Jun 2022 09:53:34 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D9E3BF90
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:53:22 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ADgenT000506;
-        Fri, 10 Jun 2022 13:53:00 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ABB1B781
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:53:29 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ADT6cb015200;
+        Fri, 10 Jun 2022 13:53:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=szGl0zKm3QjDi8xSMZ5Y2+UVCIioP7aBYdmHCnk5z9I=;
- b=V5SYUQWewXyu6GuMgWVeIx5sLQUisw3NTR+BDnusUr3M0Wmwjee4hIP4UvqZRJ5FKJIx
- HHBTKM7TeOREZzF9/23a/Y4G9qUM6Avs0MeNaOdxsIHScjesd+Ve1WCsmsQ2+nbKC/H3
- HvquJmnnWg/BLOqJ7VHd71kiv0FqahPIKvWSlJczF+UIOqfMgKMmHz3oiYskyuuvdJPT
- Xpgep6nMRCwkd6oPth8NIVnjm257IVq1CCI0sFJE5ClieQ2mgNmueqkKrYqTLR5j8VZQ
- cirjpwTwjEKOO24r2rvZnJlkN/4V84xx2xvus4RpTo3cownmAbTQm34sRRNg8++y2xmr aA== 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=rI84I7wspvHHqUf4pjJ7TpdsDGLmC4j2TgOSa1F1baQ=;
+ b=EFjgkU8KMzihH97djhIzOWBxLxoI8o4dKTKbb8AIY8xAZynAetU4cmc9XVfCMxJV3HE2
+ AMpfAvGyiFRo4DRJQZKKiOGramnB1FiasM1+1P08td/6yMhRyv16cCGvFw/8dzs6M1zx
+ i3IZLNInIHHJan3S8WBUQ0oR+Icw58kT+9EmzryW0LaOCAiqmvpueSKRtp5Eq5VurZT+
+ 2prFsr8mLddE2C+Ue0oab/H2XMUvPU2XyVMqe51VFoaURhZCEOCMWnsOOdQL56acagy1
+ sS9Q6qu1+xeY76uhSLtsi7YIi2N2RJCRthIWsoYfwSekYLFRgCZRpREW7FZtBu0jffr/ /g== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm72vr5xq-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6vn0h0j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:53:00 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25ADhu27002648;
-        Fri, 10 Jun 2022 13:52:59 GMT
+        Fri, 10 Jun 2022 13:53:09 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25ADprNp009760;
+        Fri, 10 Jun 2022 13:53:09 GMT
 Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm72vr5x9-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6vn0h04-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:52:59 +0000
+        Fri, 10 Jun 2022 13:53:08 +0000
 Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25ADZTst010094;
-        Fri, 10 Jun 2022 13:52:58 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04dal.us.ibm.com with ESMTP id 3gfy1au73d-1
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25ADZWpC010128;
+        Fri, 10 Jun 2022 13:53:07 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma04dal.us.ibm.com with ESMTP id 3gfy1au748-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:52:58 +0000
+        Fri, 10 Jun 2022 13:53:07 +0000
 Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25ADqvng23790058
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25ADr6G444171672
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 13:52:57 GMT
+        Fri, 10 Jun 2022 13:53:06 GMT
 Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CF136A05A;
+        by IMSVA (Postfix) with ESMTP id 513376A04D;
+        Fri, 10 Jun 2022 13:53:06 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CAA816A04F;
         Fri, 10 Jun 2022 13:52:57 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A2AA6A047;
-        Fri, 10 Jun 2022 13:52:49 +0000 (GMT)
 Received: from skywalker.ibmuc.com (unknown [9.43.90.151])
         by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jun 2022 13:52:48 +0000 (GMT)
+        Fri, 10 Jun 2022 13:52:57 +0000 (GMT)
 From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
 To:     linux-mm@kvack.org, akpm@linux-foundation.org
 Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
@@ -77,26 +78,25 @@ Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         David Rientjes <rientjes@google.com>,
         "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v6 01/13] mm/demotion: Add support for explicit memory tiers
-Date:   Fri, 10 Jun 2022 19:22:17 +0530
-Message-Id: <20220610135229.182859-2-aneesh.kumar@linux.ibm.com>
+Subject: [PATCH v6 02/13] mm/demotion: Move memory demotion related code
+Date:   Fri, 10 Jun 2022 19:22:18 +0530
+Message-Id: <20220610135229.182859-3-aneesh.kumar@linux.ibm.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220610135229.182859-1-aneesh.kumar@linux.ibm.com>
 References: <20220610135229.182859-1-aneesh.kumar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XEyqjwiRh_dxJGpK6b_cU4Wvb03wdeD3
-X-Proofpoint-GUID: dr5aKRfieEzUnMQ4lFBxBhumwV1XFDyL
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: z0V8WEKAxWuBD3oT9NEWGJvVLMNZHA0K
+X-Proofpoint-ORIG-GUID: 4_p3rNHBm226WvrDM59SFCuIvBhtyo1e
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-10_06,2022-06-09_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- malwarescore=0 bulkscore=0 impostorscore=0 clxscore=1015
- priorityscore=1501 mlxlogscore=999 mlxscore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2206100052
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ mlxscore=0 adultscore=0 spamscore=0 priorityscore=1501 phishscore=0
+ bulkscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206100056
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -106,241 +106,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the current kernel, memory tiers are defined implicitly via a
-demotion path relationship between NUMA nodes, which is created
-during the kernel initialization and updated when a NUMA node is
-hot-added or hot-removed.  The current implementation puts all
-nodes with CPU into the top tier, and builds the tier hierarchy
-tier-by-tier by establishing the per-node demotion targets based
-on the distances between nodes.
+This move memory demotion related code to mm/memory-tiers.c.
+No functional change in this patch.
 
-This current memory tier kernel interface needs to be improved for
-several important use cases,
-
-The current tier initialization code always initializes
-each memory-only NUMA node into a lower tier.  But a memory-only
-NUMA node may have a high performance memory device (e.g. a DRAM
-device attached via CXL.mem or a DRAM-backed memory-only node on
-a virtual machine) and should be put into a higher tier.
-
-The current tier hierarchy always puts CPU nodes into the top
-tier. But on a system with HBM or GPU devices, the
-memory-only NUMA nodes mapping these devices should be in the
-top tier, and DRAM nodes with CPUs are better to be placed into the
-next lower tier.
-
-With current kernel higher tier node can only be demoted to selected nodes on the
-next lower tier as defined by the demotion path, not any other
-node from any lower tier.  This strict, hard-coded demotion order
-does not work in all use cases (e.g. some use cases may want to
-allow cross-socket demotion to another node in the same demotion
-tier as a fallback when the preferred demotion node is out of
-space), This demotion order is also inconsistent with the page
-allocation fallback order when all the nodes in a higher tier are
-out of space: The page allocation can fall back to any node from
-any lower tier, whereas the demotion order doesn't allow that.
-
-The current kernel also don't provide any interfaces for the
-userspace to learn about the memory tier hierarchy in order to
-optimize its memory allocations.
-
-This patch series address the above by defining memory tiers explicitly.
-
-This patch introduce explicity memory tiers with ranks. The rank
-value of a memory tier is used to derive the demotion order between
-NUMA nodes. The memory tiers present in a system can be found at
-
-"Rank" is an opaque value. Its absolute value doesn't have any
-special meaning. But the rank values of different memtiers can be
-compared with each other to determine the memory tier order.
-
-For example, if we have 3 memtiers: memtier0, memtier1, memiter2, and
-their rank values are 300, 200, 100, then the memory tier order is:
-memtier0 -> memtier1 -> memtier2, where memtier0 is the highest tier
-and memtier2 is the lowest tier.
-
-The rank value of each memtier should be unique.
-
-A higher rank memory tier will appear first in the demotion order
-than a lower rank memory tier. ie. while reclaim we choose a node
-in higher rank memory tier to demote pages to as compared to a node
-in a lower rank memory tier.
-
-This patchset introduce 3 memory tiers (memtier0, memtier1 and memtier2)
-which are created by different kernel subsystems. The default memory
-tier created by the kernel is memtier1. Once created these memory tiers
-are not destroyed even if they don't have any NUMA nodes assigned to
-them.
-
-This patch is based on the proposal sent by Wei Xu <weixugc@google.com> at [1].
-
-[1] https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com
-
-/sys/devices/system/memtier/memtierN/
-
-The nodes which are part of a specific memory tier can be listed
-via
-/sys/devices/system/memtier/memtierN/nodelist
-
-Suggested-by: Wei Xu <weixugc@google.com>
-Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
 Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 ---
- include/linux/memory-tiers.h | 20 ++++++++
- mm/Kconfig                   |  3 ++
- mm/Makefile                  |  1 +
- mm/memory-tiers.c            | 89 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 113 insertions(+)
- create mode 100644 include/linux/memory-tiers.h
- create mode 100644 mm/memory-tiers.c
+ include/linux/memory-tiers.h |  6 ++++
+ include/linux/migrate.h      |  2 --
+ mm/memory-tiers.c            | 61 ++++++++++++++++++++++++++++++++++++
+ mm/migrate.c                 | 60 +----------------------------------
+ mm/vmscan.c                  |  1 +
+ 5 files changed, 69 insertions(+), 61 deletions(-)
 
 diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-new file mode 100644
-index 000000000000..e17f6b4ee177
---- /dev/null
+index e17f6b4ee177..44c3c3b16a36 100644
+--- a/include/linux/memory-tiers.h
 +++ b/include/linux/memory-tiers.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_MEMORY_TIERS_H
-+#define _LINUX_MEMORY_TIERS_H
-+
-+#ifdef CONFIG_TIERED_MEMORY
-+
-+#define MEMORY_TIER_HBM_GPU	0
-+#define MEMORY_TIER_DRAM	1
-+#define MEMORY_TIER_PMEM	2
-+
-+#define MEMORY_RANK_HBM_GPU	300
-+#define MEMORY_RANK_DRAM	200
-+#define MEMORY_RANK_PMEM	100
-+
-+#define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
-+#define MAX_MEMORY_TIERS  3
-+
-+#endif	/* CONFIG_TIERED_MEMORY */
-+
-+#endif
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 169e64192e48..bb5aa585ab41 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -614,6 +614,9 @@ config ARCH_ENABLE_HUGEPAGE_MIGRATION
- config ARCH_ENABLE_THP_MIGRATION
- 	bool
+@@ -2,6 +2,8 @@
+ #ifndef _LINUX_MEMORY_TIERS_H
+ #define _LINUX_MEMORY_TIERS_H
  
-+config TIERED_MEMORY
-+	def_bool NUMA
-+
- config HUGETLB_PAGE_SIZE_VARIABLE
- 	def_bool n
- 	help
-diff --git a/mm/Makefile b/mm/Makefile
-index 6f9ffa968a1a..482557fbc9d1 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -92,6 +92,7 @@ obj-$(CONFIG_KFENCE) += kfence/
- obj-$(CONFIG_FAILSLAB) += failslab.o
- obj-$(CONFIG_MEMTEST)		+= memtest.o
- obj-$(CONFIG_MIGRATION) += migrate.o
-+obj-$(CONFIG_TIERED_MEMORY) += memory-tiers.o
- obj-$(CONFIG_DEVICE_MIGRATION) += migrate_device.o
- obj-$(CONFIG_TRANSPARENT_HUGEPAGE) += huge_memory.o khugepaged.o
- obj-$(CONFIG_PAGE_COUNTER) += page_counter.o
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-new file mode 100644
-index 000000000000..d9fa955f208e
---- /dev/null
-+++ b/mm/memory-tiers.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
 +#include <linux/types.h>
-+#include <linux/nodemask.h>
-+#include <linux/slab.h>
-+#include <linux/memory-tiers.h>
 +
-+struct memory_tier {
-+	struct list_head list;
-+	nodemask_t nodelist;
-+	int id;
-+	int rank;
+ #ifdef CONFIG_TIERED_MEMORY
+ 
+ #define MEMORY_TIER_HBM_GPU	0
+@@ -15,6 +17,10 @@
+ #define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
+ #define MAX_MEMORY_TIERS  3
+ 
++extern bool numa_demotion_enabled;
++#else
++#define numa_demotion_enabled	false
++
+ #endif	/* CONFIG_TIERED_MEMORY */
+ 
+ #endif
+diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+index 069a89e847f3..43e737215f33 100644
+--- a/include/linux/migrate.h
++++ b/include/linux/migrate.h
+@@ -78,7 +78,6 @@ static inline int migrate_huge_page_move_mapping(struct address_space *mapping,
+ #if defined(CONFIG_MIGRATION) && defined(CONFIG_NUMA)
+ extern void set_migration_target_nodes(void);
+ extern void migrate_on_reclaim_init(void);
+-extern bool numa_demotion_enabled;
+ extern int next_demotion_node(int node);
+ #else
+ static inline void set_migration_target_nodes(void) {}
+@@ -87,7 +86,6 @@ static inline int next_demotion_node(int node)
+ {
+         return NUMA_NO_NODE;
+ }
+-#define numa_demotion_enabled  false
+ #endif
+ 
+ #ifdef CONFIG_COMPACTION
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index d9fa955f208e..9c6b40d7e0bf 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/types.h>
++#include <linux/device.h>
+ #include <linux/nodemask.h>
+ #include <linux/slab.h>
+ #include <linux/memory-tiers.h>
+@@ -87,3 +88,63 @@ static int __init memory_tier_init(void)
+ 	return 0;
+ }
+ subsys_initcall(memory_tier_init);
++
++bool numa_demotion_enabled = false;
++
++#ifdef CONFIG_SYSFS
++static ssize_t numa_demotion_enabled_show(struct kobject *kobj,
++					  struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%s\n",
++			  numa_demotion_enabled ? "true" : "false");
++}
++
++static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
++					   struct kobj_attribute *attr,
++					   const char *buf, size_t count)
++{
++	ssize_t ret;
++
++	ret = kstrtobool(buf, &numa_demotion_enabled);
++	if (ret)
++		return ret;
++
++	return count;
++}
++
++static struct kobj_attribute numa_demotion_enabled_attr =
++	__ATTR(demotion_enabled, 0644, numa_demotion_enabled_show,
++	       numa_demotion_enabled_store);
++
++static struct attribute *numa_attrs[] = {
++	&numa_demotion_enabled_attr.attr,
++	NULL,
 +};
 +
-+static DEFINE_MUTEX(memory_tier_lock);
-+static LIST_HEAD(memory_tiers);
++static const struct attribute_group numa_attr_group = {
++	.attrs = numa_attrs,
++};
 +
-+/*
-+ * Keep it simple by having  direct mapping between
-+ * tier index and rank value.
-+ */
-+static inline int get_rank_from_tier(unsigned int tier)
++static int __init numa_init_sysfs(void)
 +{
-+	switch (tier) {
-+	case MEMORY_TIER_HBM_GPU:
-+		return MEMORY_RANK_HBM_GPU;
-+	case MEMORY_TIER_DRAM:
-+		return MEMORY_RANK_DRAM;
-+	case MEMORY_TIER_PMEM:
-+		return MEMORY_RANK_PMEM;
++	int err;
++	struct kobject *numa_kobj;
++
++	numa_kobj = kobject_create_and_add("numa", mm_kobj);
++	if (!numa_kobj) {
++		pr_err("failed to create numa kobject\n");
++		return -ENOMEM;
 +	}
-+	return -1;
-+}
-+
-+static void insert_memory_tier(struct memory_tier *memtier)
-+{
-+	struct list_head *ent;
-+	struct memory_tier *tmp_memtier;
-+
-+	list_for_each(ent, &memory_tiers) {
-+		tmp_memtier = list_entry(ent, struct memory_tier, list);
-+		if (tmp_memtier->rank < memtier->rank) {
-+			list_add_tail(&memtier->list, ent);
-+			return;
-+		}
++	err = sysfs_create_group(numa_kobj, &numa_attr_group);
++	if (err) {
++		pr_err("failed to register numa group\n");
++		goto delete_obj;
 +	}
-+	list_add_tail(&memtier->list, &memory_tiers);
-+}
-+
-+static struct memory_tier *register_memory_tier(unsigned int tier,
-+						unsigned int rank)
-+{
-+	struct memory_tier *memtier;
-+
-+	if (tier >= MAX_MEMORY_TIERS)
-+		return ERR_PTR(-EINVAL);
-+
-+	memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
-+	if (!memtier)
-+		return ERR_PTR(-ENOMEM);
-+
-+	memtier->id   = tier;
-+	memtier->rank = rank;
-+
-+	insert_memory_tier(memtier);
-+
-+	return memtier;
-+}
-+
-+static int __init memory_tier_init(void)
-+{
-+	struct memory_tier *memtier;
-+
-+	/*
-+	 * Register only default memory tier to hide all empty
-+	 * memory tier from sysfs.
-+	 */
-+	memtier = register_memory_tier(DEFAULT_MEMORY_TIER,
-+				       get_rank_from_tier(DEFAULT_MEMORY_TIER));
-+
-+	if (IS_ERR(memtier))
-+		panic("%s() failed to register memory tier: %ld\n",
-+		      __func__, PTR_ERR(memtier));
-+
-+	/* CPU only nodes are not part of memory tiers. */
-+	memtier->nodelist = node_states[N_MEMORY];
-+
 +	return 0;
++
++delete_obj:
++	kobject_put(numa_kobj);
++	return err;
 +}
-+subsys_initcall(memory_tier_init);
++subsys_initcall(numa_init_sysfs);
++#endif /* CONFIG_SYSFS */
+diff --git a/mm/migrate.c b/mm/migrate.c
+index e51588e95f57..29cacc217e38 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -2508,64 +2508,6 @@ void __init migrate_on_reclaim_init(void)
+ 	set_migration_target_nodes();
+ 	cpus_read_unlock();
+ }
++#endif /* CONFIG_NUMA */
+ 
+-bool numa_demotion_enabled = false;
+-
+-#ifdef CONFIG_SYSFS
+-static ssize_t numa_demotion_enabled_show(struct kobject *kobj,
+-					  struct kobj_attribute *attr, char *buf)
+-{
+-	return sysfs_emit(buf, "%s\n",
+-			  numa_demotion_enabled ? "true" : "false");
+-}
+-
+-static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
+-					   struct kobj_attribute *attr,
+-					   const char *buf, size_t count)
+-{
+-	ssize_t ret;
+-
+-	ret = kstrtobool(buf, &numa_demotion_enabled);
+-	if (ret)
+-		return ret;
+-
+-	return count;
+-}
+-
+-static struct kobj_attribute numa_demotion_enabled_attr =
+-	__ATTR(demotion_enabled, 0644, numa_demotion_enabled_show,
+-	       numa_demotion_enabled_store);
+-
+-static struct attribute *numa_attrs[] = {
+-	&numa_demotion_enabled_attr.attr,
+-	NULL,
+-};
+-
+-static const struct attribute_group numa_attr_group = {
+-	.attrs = numa_attrs,
+-};
+-
+-static int __init numa_init_sysfs(void)
+-{
+-	int err;
+-	struct kobject *numa_kobj;
+ 
+-	numa_kobj = kobject_create_and_add("numa", mm_kobj);
+-	if (!numa_kobj) {
+-		pr_err("failed to create numa kobject\n");
+-		return -ENOMEM;
+-	}
+-	err = sysfs_create_group(numa_kobj, &numa_attr_group);
+-	if (err) {
+-		pr_err("failed to register numa group\n");
+-		goto delete_obj;
+-	}
+-	return 0;
+-
+-delete_obj:
+-	kobject_put(numa_kobj);
+-	return err;
+-}
+-subsys_initcall(numa_init_sysfs);
+-#endif /* CONFIG_SYSFS */
+-#endif /* CONFIG_NUMA */
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index f7d9a683e3a7..3a8f78277f99 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -50,6 +50,7 @@
+ #include <linux/printk.h>
+ #include <linux/dax.h>
+ #include <linux/psi.h>
++#include <linux/memory-tiers.h>
+ 
+ #include <asm/tlbflush.h>
+ #include <asm/div64.h>
 -- 
 2.36.1
 

@@ -2,85 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90205545F7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CF5545F74
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347451AbiFJImJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S1347820AbiFJIk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239779AbiFJImH (ORCPT
+        with ESMTP id S1347922AbiFJIkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:42:07 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219551FA6C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:42:02 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1654850386tif11fbf
-Received: from localhost.localdomain ( [182.148.15.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 10 Jun 2022 16:39:31 +0800 (CST)
-X-QQ-SSF: 01000000002000C0H000B00A0000000
-X-QQ-FEAT: ZHWZeLXy+8cOxDPLyuwRmzpNsjh1fQNcUTozYbxsddqVmpR3yZs0SiudcbKuW
-        RztaTflJn89M1v+BOmlBdDa67Dqc3AM2U+2aTwLZZQr7fS6zQBwKnW8Ev/oqeRt8fx55g3l
-        drXo36cmFGxsaESEYQSBJ1zLmie7lS+WoJ7w1cTWRItUSFh8DpAy0eh3H0S4mBtOlQj/2Cl
-        TSZkVfcfVDmyeVcqjDGSNCFWG7C6c5IaxlzEwRFzEE88l0VI80XJN3BysvO23HZ4tVJgZQb
-        Bsi7KGinRDb4BnuRYehbOqQCJJ8KuhFHI12Xw8OcQkDsHVVJWficNWXYJF1zFKmJEERi2in
-        ih7HJyubBOsb0/Q0EAV33Tpp0QN4WANMIimkTg7
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     geert@linux-m68k.org
-Cc:     funaho@jurai.org, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH v2] m68k: mac: Fix typo in comment
-Date:   Fri, 10 Jun 2022 16:39:24 +0800
-Message-Id: <20220610083924.32877-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 10 Jun 2022 04:40:21 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2055519038
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:40:20 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-30fdbe7467cso230266127b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Y9js5siYkXmTlCcqhnBttnSyxADQBz416pvWYIEpQLc=;
+        b=MWoSw9aN1k9ACFkxYohmtn6bcP8F/dnn2OkswCnt3jJJOGEEy3u2qjj3YR+DG5NUZ2
+         SlVaNtds1yBoe2csJdMH1A2luuJOQ6bGushZRQuEpa357R5UwpahmQdjvhTIaVo0TICK
+         HPE1VN2x0+HbMlDA5UrdYbiYS/IFDyncENyuZ+g/xziIpZE9HY3iTOkSpcbAi5hr6Yml
+         ZqL/cTZtyR3uJnypqKvu6OY812v8ibuEWo7nO8joVBnoyzZutYTuD5jX6KPT2arjGDif
+         aiLu5SFWq7WEpV2GHBUYEk03u1NMoHJgCh0SpA+taNN9pRCYcussMln4izassYh6nfG4
+         etVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Y9js5siYkXmTlCcqhnBttnSyxADQBz416pvWYIEpQLc=;
+        b=yQWmPpP0UmOkLf8d8csD3Mqu67i8PnkbI2kaB+26Htx8CIEoUi/H8J9sokBWSDq4ck
+         JZhCjm9eKYapMOZwFTQQlGgppN7ga8jl3dctXMKDJ0deF4EqVSgVCDLtG7ohbY+uRti0
+         UmbVctzO2Gy0j9AjoIFkj0lV9/sDJGaBw12WdrE4SXLHJWiDnut8xwVPtMt6UwP5M6PX
+         OxhyTXEUmmNycZNaeQr6fJvPqlyf3osFIoYm0FFQrZD1INW07p22f2R+0HX5skMpXqfT
+         rKOWJJpTsLjJGh0Z3ZoEzTUR9AAt0viRxN+OrJoW2RfYVv2IhrC7w4Peg7aBZetjYn11
+         w8Zw==
+X-Gm-Message-State: AOAM532A44CCHJVIpGtV3wWoqTeqq4z+b6HEY2ycg8a5x2puqxBSBk5B
+        U3w1LQGanmf+wrZyrjV4OjgiopwDFfvTHNsdrEr2gA==
+X-Google-Smtp-Source: ABdhPJzTeAzIrk04WGbwRnb/1rU3YjD+kBesukZkSgAMmy++D6UL2koc33Qw5/mwbF66PlaSovKzbvwOVn5rXLM6iJs=
+X-Received: by 2002:a81:4909:0:b0:30c:34d5:9f2c with SMTP id
+ w9-20020a814909000000b0030c34d59f2cmr47467546ywa.489.1654850418987; Fri, 10
+ Jun 2022 01:40:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610021445.2441579-1-jianhao_xu@smail.nju.edu.cn>
+ <3f460707-e267-e749-07fc-c44604cd5713@iogearbox.net> <tencent_29981C021E6150B064C7DBA3@qq.com>
+In-Reply-To: <tencent_29981C021E6150B064C7DBA3@qq.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 10 Jun 2022 01:40:06 -0700
+Message-ID: <CANn89iKHfi=kQY1FC=07COJfVX4ROTnGkM_1uKvOfPfdhqt4Ow@mail.gmail.com>
+Subject: Re: [PATCH] net: sched: fix potential null pointer deref
+To:     Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>, jhs <jhs@mojatatu.com>,
+        "xiyou.wangcong" <xiyou.wangcong@gmail.com>,
+        jiri <jiri@resnulli.us>, davem <davem@davemloft.net>,
+        kuba <kuba@kernel.org>, pabeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'an'.
-The second "and" should not be deleted, but replaced by "an".
+On Fri, Jun 10, 2022 at 1:09 AM Jianhao Xu <jianhao_xu@smail.nju.edu.cn> wr=
+ote:
+>
+> Hi,
+>
+> TBH, We do not have a reproducer. This is found by our static analysis to=
+ol. We can not see any clue of the context here of mq_queue_get() to ensure=
+ it never returns NULL.
+>
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
-Changes since v1
-*Change comments "and and" to "and an"
 
- arch/m68k/mac/iop.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+All netdev devices have their dev->_tx allocated in netif_alloc_netdev_queu=
+es()
 
-diff --git a/arch/m68k/mac/iop.c b/arch/m68k/mac/iop.c
-index de156a027f5b..010b3b5ae8e8 100644
---- a/arch/m68k/mac/iop.c
-+++ b/arch/m68k/mac/iop.c
-@@ -25,7 +25,7 @@
-  *		  check this.)
-  * 990605 (jmt) - Rearranged things a bit wrt IOP detection; iop_present is
-  *		  gone, IOP base addresses are now in an array and the
-- *		  globally-visible functions take an IOP number instead of an
-+ *		  globally-visible functions take an IOP number instead of
-  *		  an actual base address.
-  * 990610 (jmt) - Finished the message passing framework and it seems to work.
-  *		  Sending _definitely_ works; my adb-bus.c mods can send
-@@ -66,7 +66,7 @@
-  * a shared memory area in the IOP RAM. Each IOP has seven "channels"; each
-  * channel is connected to a specific software driver on the IOP. For example
-  * on the SCC IOP there is one channel for each serial port. Each channel has
-- * an incoming and and outgoing message queue with a depth of one.
-+ * an incoming and an outgoing message queue with a depth of one.
-  *
-  * A message is 32 bytes plus a state byte for the channel (MSG_IDLE, MSG_NEW,
-  * MSG_RCVD, MSG_COMPLETE). To send a message you copy the message into the
--- 
-2.36.1
+There is absolutely no way MQ qdisc could be attached to a device that
+has failed netif_alloc_netdev_queues() step.
 
+
+
+> I would appreciate it if you could tell me why when you found out it was =
+our false positive. It will be helpful for us to improve our tool.
+
+
+Please do not send patches before you can provide a detailed
+explanation of a real bug.
+
+If you need help, post instead a [RFC] with a message explaining how
+far you went into your analysis.
+
+A patch should be sent only once you are absolutely sure that there is
+a real bug to fix.
+
+Thank you.
+
+
+>
+> Thanks.
+> ------------------ Original ------------------
+> From:  "Daniel Borkmann"<daniel@iogearbox.net>;
+> Date:  Fri, Jun 10, 2022 09:14 AM
+> To:  "Jianhao Xu"<jianhao_xu@smail.nju.edu.cn>; "jhs"<jhs@mojatatu.com>; =
+"xiyou.wangcong"<xiyou.wangcong@gmail.com>; "jiri"<jiri@resnulli.us>; "dave=
+m"<davem@davemloft.net>; "edumazet"<edumazet@google.com>; "kuba"<kuba@kerne=
+l.org>; "pabeni"<pabeni@redhat.com>;
+> Cc:  "netdev"<netdev@vger.kernel.org>; "linux-kernel"<linux-kernel@vger.k=
+ernel.org>;
+> Subject:  Re: [PATCH] net: sched: fix potential null pointer deref
+>
+> Hi Jianhao,
+>
+> On 6/10/22 4:14 AM, Jianhao Xu wrote:
+> > mq_queue_get() may return NULL, a check is needed to avoid using
+> > the NULL pointer.
+> >
+> > Signed-off-by: Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
+>
+> Do you have a reproducer where this is triggered?
+>
+> > ---
+> >   net/sched/sch_mq.c | 6 ++++++
+> >   1 file changed, 6 insertions(+)
+> >
+> > diff --git a/net/sched/sch_mq.c b/net/sched/sch_mq.c
+> > index 83d2e54bf303..9aca4ca82947 100644
+> > --- a/net/sched/sch_mq.c
+> > +++ b/net/sched/sch_mq.c
+> > @@ -201,6 +201,8 @@ static int mq_graft(struct Qdisc *sch, unsigned lon=
+g cl, struct Qdisc *new,
+> >   static struct Qdisc *mq_leaf(struct Qdisc *sch, unsigned long cl)
+> >   {
+> >  struct netdev_queue *dev_queue =3D mq_queue_get(sch, cl);
+> > + if (!dev_queue)
+> > +return NULL;
+> >
+> >  return dev_queue->qdisc_sleeping;
+> >   }
+> > @@ -218,6 +220,8 @@ static int mq_dump_class(struct Qdisc *sch, unsigne=
+d long cl,
+> >   struct sk_buff *skb, struct tcmsg *tcm)
+> >   {
+> >  struct netdev_queue *dev_queue =3D mq_queue_get(sch, cl);
+> > + if (!dev_queue)
+> > +return -1;
+> >
+> >  tcm->tcm_parent =3D TC_H_ROOT;
+> >  tcm->tcm_handle |=3D TC_H_MIN(cl);
+> > @@ -229,6 +233,8 @@ static int mq_dump_class_stats(struct Qdisc *sch, u=
+nsigned long cl,
+> >         struct gnet_dump *d)
+> >   {
+> >  struct netdev_queue *dev_queue =3D mq_queue_get(sch, cl);
+> > + if (!dev_queue)
+> > +return -1;
+> >
+> >  sch =3D dev_queue->qdisc_sleeping;
+> >  if (gnet_stats_copy_basic(d, sch->cpu_bstats, &sch->bstats, true) < 0 =
+||
+> >
+>

@@ -2,69 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF80546A1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF1D546A2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345957AbiFJQJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S238720AbiFJQOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239010AbiFJQI5 (ORCPT
+        with ESMTP id S237375AbiFJQO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:08:57 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA866141;
-        Fri, 10 Jun 2022 09:08:55 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id y12so25748714ior.7;
-        Fri, 10 Jun 2022 09:08:55 -0700 (PDT)
+        Fri, 10 Jun 2022 12:14:28 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E301BEB9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:14:27 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id e66so25183061pgc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vxkopfx3oitF+1kts0RbzQLYlRaI5LJzdMqQSDy1/EQ=;
-        b=dLBm4bPkIR3mpGg+Q5ocQC0UzT3Ru2tFsf+60ANewme9OXhFy4K3BLnaRyaXR9ouYA
-         QahViZu4cwoQKFgzEXVh8NCuyyM+5wk/VkldqXTMIwC+e6Fh+54wVY2aOCVYpovlVTqI
-         stZLB1OcirhXo/tpXAsApaN4eqrYdSZlzUNUGL+Vas/KlNhY7RmSNaxWUysoiEdeEzMK
-         g88K0TGLiIqfMo5vxYM9BJgwC/bDBkgTP8thBGRKWlJF/JV+u3yYSr151vYGk+UTd3/C
-         Y8ogwWhBxUsAP9PeyC4TCuUXwUOqFdzA9JcyknG6QlyTxeNCDwtU0LkrDq4LnU8mq5kn
-         EDig==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sqYpRJpV7hTVkJzWeySC/55ywPreerEYyAHVK7rq9LA=;
+        b=ZehwwLYuij7pbQaghWD2GrdTIOfQ1XgasEUmVI+nhvd82X4ZEWGF79XBvheRliFM+8
+         LQlrxByJVokCQ/gINBsFhOZhZjHXcpmAir492TXOaXI7iC/F7Bwi4ptRQtYUbYGyY5SQ
+         TxK5qW/wV8CCV8YqQLV5jWM8YEEm92a1WCcQVxigUczBkLKzhwgrSGPjDy4yzeckQMEl
+         k23GcmLFp8s0aWbczjuNfnjBEB9gzzj7nGZZJi5rfah1FRb/8MQ3Cd99incf77459IOk
+         fmV8msfIleb4V2r4FMWvWw0fr1RX3bQCUO2JP23SfG2qby97FTF15ddfD8Y7n8su8tG3
+         h2BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vxkopfx3oitF+1kts0RbzQLYlRaI5LJzdMqQSDy1/EQ=;
-        b=IF3rUXRE3IfjHb7r7fIeP+2+YY6ms/MO++f0xpOCFo3KR376WhasDnuTtJmFjvUWtE
-         CJj30dhVyKjHhWxsXqPbQKuhFagopZ5aos1IndX+Gxbhf+pudSsZye+6yuSWxqSrR1hd
-         nf6Ysj/BbbGbOLUXulT/PVpFg7gXioUbdiEftfFHdgSMMqpX+PdBHC3dclBwc+kn8XIJ
-         dMaMzen/9zaP/RyDzcC88Ax3M4nKtkxFITHbLShoEgq7U7lhkYhATzGGbZqtL38YJFOc
-         QO14smw3GaPNSrIgRyef79eOcwQuFIV6FbxKw3l9SKFxF+wYvE28p8DIuB7bTQ5nbqr8
-         opFw==
-X-Gm-Message-State: AOAM531kpNZg2ksuuhrTkrbHiH6fh1TvhE7s5C2Dvb29X6kOYTHaGFNi
-        iyCZxgOFePnPKd+yRb2Kubel8PINBLEGstUfIgwTUmxCxj8yig==
-X-Google-Smtp-Source: ABdhPJyMpIVJAjZH7mO3KZXqPIGwH3H2WfsDBbF+S8G6fzBvx+qqT+Z9hpdH8U4fQJ3zGwsJqHT37VorBzHa+AXLbo8=
-X-Received: by 2002:a05:6602:1606:b0:669:6745:80e9 with SMTP id
- x6-20020a056602160600b00669674580e9mr11202365iow.177.1654877334850; Fri, 10
- Jun 2022 09:08:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
- <732154bc-aa35-2326-2b64-87b6c4dd02e7@gmail.com> <871qvw2898.fsf@intel.com>
-In-Reply-To: <871qvw2898.fsf@intel.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 10 Jun 2022 18:08:43 +0200
-Message-ID: <CANiq72n3MQnjenbQGBUKD+SqNzdGUyJW9zjTOVY4+6cKBRc9ig@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/5] docs/doc-guide: Update guidelines for title adornments
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Akira Yokosawa <akiyks@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sqYpRJpV7hTVkJzWeySC/55ywPreerEYyAHVK7rq9LA=;
+        b=26aUmJbBfeJ5oAzoN9m0myJZY1IQt9X18fsC7MTlf0gVkfZSmAlGCRNIANqqCFCrfU
+         KPXPf7iD9UXcPnZlvhGhIqeEMuQSZM5D4OrXddLlifBpqC10f+wNNMlvlHeA6+KWpDc2
+         bgtNyjoBZ8Jvt03h/tAaAfPp3jmIvJC10Bi2+ojw4NnOekJkBiv6NADJ5DaZ4THTANhH
+         GXgd02LdvEyEMO3xNV0tq/v/oMHYc+eCm387Km3U/C5abX3AbPlIPrwQCGQsHNEBVt+v
+         lKXdiAPUQBRdcr93f+Pnr0ktMwtb1CMbhVwb28aeLXL2dKFtUhPSq4rmb2+NzGTOBARY
+         QuVw==
+X-Gm-Message-State: AOAM533IgBS2r5Sz88RChYmmlIqqs8l3Wfj8CjP2suZYHwLyysNyHWOO
+        llNEDzUO4QF+PeiCSkMh4bSx+A==
+X-Google-Smtp-Source: ABdhPJzxrryZznx/9GnvIIDqh+c23V5/Xt5ZsJHD0N8PohIbtiXWvM06mGWU66DmH3LeRvNyTftAHA==
+X-Received: by 2002:a63:5:0:b0:3fe:2558:677 with SMTP id 5-20020a630005000000b003fe25580677mr14572323pga.113.1654877666234;
+        Fri, 10 Jun 2022 09:14:26 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id r11-20020a170902e3cb00b0015e8d4eb28csm18669442ple.214.2022.06.10.09.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 09:14:25 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 16:14:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <YqNt3Sgzge5Rph/R@google.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-5-chao.p.peng@linux.intel.com>
+ <8840b360-cdb2-244c-bfb6-9a0e7306c188@kernel.org>
+ <YofeZps9YXgtP3f1@google.com>
+ <20220523132154.GA947536@chaop.bj.intel.com>
+ <YoumuHUmgM6TH20S@google.com>
+ <20220530132613.GA1200843@chaop.bj.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530132613.GA1200843@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,61 +104,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:11 AM Jani Nikula
-<jani.nikula@linux.intel.com> wrote:
->
-> When I wrote the original guidelines, it was my subjective decision to
-> steer towards using the same title adornment styles and ordering across
-> the kernel documentation. I intentionally left out all the
-> reStructuredText details about this, because the definitive
-> documentation is the reStructuredText documentation we can refer to.
->
-> While the "Nth level title" is a more precise description, I'm not sure
-> it's actually helpful without describing how these levels should map to
-> kernel documentation structure. (Not saying the original did that
-> either, but then there wasn't much structure to speak of.)
+On Mon, May 30, 2022, Chao Peng wrote:
+> On Mon, May 23, 2022 at 03:22:32PM +0000, Sean Christopherson wrote:
+> > Actually, if the semantics are that userspace declares memory as private, then we
+> > can reuse KVM_MEMORY_ENCRYPT_REG_REGION and KVM_MEMORY_ENCRYPT_UNREG_REGION.  It'd
+> > be a little gross because we'd need to slightly redefine the semantics for TDX, SNP,
+> > and software-protected VM types, e.g. the ioctls() currently require a pre-exisitng
+> > memslot.  But I think it'd work...
+> 
+> These existing ioctls looks good for TDX and probably SNP as well. For
+> softrware-protected VM types, it may not be enough. Maybe for the first
+> step we can reuse this for all hardware based solutions and invent new
+> interface when software-protected solution gets really supported.
+> 
+> There is semantics difference for fd-based private memory. Current above
+> two ioctls() use userspace addreess(hva) while for fd-based it should be
+> fd+offset, and probably it's better to use gpa in this case. Then we
+> will need change existing semantics and break backward-compatibility.
 
-To give a bit of context: this patch followed from a question I asked
-to Jonathan and Akira privately. Currently it is hard to tell the
-"nesting level", and even worse, existing files are not consistent and
-checking is not automated. Therefore, an easy way to handle this is to
-request to follow the same pattern regardless of nesting across the
-tree.
+My thought was to keep the existing semantics for VMs with type==0, i.e. SEV and
+SEV-ES VMs.  It's a bit gross, but the pinning behavior is a dead end for SNP and
+TDX, so it effectively needs to be deprecated anyways.  I'm definitely not opposed
+to a new ioctl if Paolo or others think this is too awful, but burning an ioctl
+for this seems wasteful.
 
-> Improving the documentation on documentation is great, but I think it's
-> a bad sign when length of the notes and warnings on something far exceed
-> the length of the thing being documented. The bulk of the text should be
-> helpful enough for people to DTRT, while leaving out exhaustive
-> descriptions of all the details that should just be references to
-> reStructuredText documentation.
+Then generic KVM can do something like:
 
-Perhaps we can move the rationale to the commit message, and keep only
-the current rules in the document. What about something like:
+	case KVM_MEMORY_ENCRYPT_REG_REGION:
+	case KVM_MEMORY_ENCRYPT_UNREG_REGION:
+		struct kvm_enc_region region;
 
-"""
-Please stick to this relative order of adornments within each file
-(i.e. regardless of nesting level across the kernel tree):
+		if (!kvm_arch_vm_supports_private_memslots(kvm))
+			goto arch_vm_ioctl;
 
-    1. ``=`` with overline.
-    2. ``=``.
-    3. ``-``.
-    4. ``~``.
+		r = -EFAULT;
+		if (copy_from_user(&region, argp, sizeof(region)))
+			goto out;
 
-For instance::
+		r = kvm_set_encrypted_region(ioctl, &region);
+		break;
+	default:
+arch_vm_ioctl:
+		r = kvm_arch_vm_ioctl(filp, ioctl, arg);
 
-    =====
-    First
-    =====
 
-    Second
-    ======
+where common KVM provides
 
-    Third
-    -----
+  __weak void kvm_arch_vm_supports_private_memslots(struct kvm *kvm)
+  {
+	return false;
+  }
 
-    Fourth
-    ~~~~~~
-"""
+and x86 overrides that to
 
-Cheers,
-Miguel
+  bool kvm_arch_vm_supports_private_memslots(struct kvm *kvm)
+  {
+  	/* I can't remember what we decided on calling type '0' VMs. */
+	return !!kvm->vm_type;
+  }
+
+and if someone ever wants to enable private memslot for SEV/SEV-ES guests we can
+always add a capability or even a new VM type.
+
+pKVM on arm can then obviously implement kvm_arch_vm_supports_private_memslots()
+to grab whatever identifies a pKVM VM.

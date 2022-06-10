@@ -2,277 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1019454607F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E61545F85
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348405AbiFJIvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S1347259AbiFJInx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344251AbiFJIvA (ORCPT
+        with ESMTP id S243453AbiFJInu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:51:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358911D4227;
-        Fri, 10 Jun 2022 01:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654851059; x=1686387059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=etC3uz8qUuWgAsIvtsfrLwFYKAKR7aLj+1lVe6qTKuw=;
-  b=BDnm5jblDI/BJ1fMpxKz41dTv15Oe8QOoGw/R2kv09jRhZ0TH+WAtbke
-   ZCBgF0V8v9QULF9VDLqA/c9aQbBHv873djpIpK5ia/mxyulMfl4MgQ5Yn
-   NvNqCNFi0gmI8TAxy0wg9uqXNqx3x+4fzps8N2xI8SyyLpAgU5mwgpDYu
-   YoQbL73YQQFhvT19Tway0ChFquZxicfAhPEnM7DrmT4j9+R+VvNlpyPaa
-   lRNCHH89mvYGE++wzYnujvKoVJQlm0/GGGWTqu2EP8QEhDBgqVg4Jv1rS
-   NsOMvLZe0xY0AcpLnKunsOtQgsyCjUQxNH20HyyMe+yHMcy/ZTM3TatOx
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363893926"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="363893926"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 01:50:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="638025972"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2022 01:50:55 -0700
-Date:   Fri, 10 Jun 2022 16:42:59 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
-        Ivan Bornyakov <brnkv.i1@gmail.com>,
-        Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v17 1/4] fpga: fpga-mgr: support bitstream offset in
-  image buffer
-Message-ID: <20220610084259.GB693376@yilunxu-OptiPlex-7050>
-References: <20220609154752.20781-1-i.bornyakov@metrotek.ru>
- <20220609154752.20781-2-i.bornyakov@metrotek.ru>
- <20220610074311.GA693376@yilunxu-OptiPlex-7050>
- <20220610081342.45x65lxbuxozej57@x260>
+        Fri, 10 Jun 2022 04:43:50 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8386F205E3;
+        Fri, 10 Jun 2022 01:43:49 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id c14so24126729pgu.13;
+        Fri, 10 Jun 2022 01:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fnzztiv9XavT4IQNbT2bMnkx97CUI42MYbUmzR1Txe8=;
+        b=osnoxH5cTtQfl6/nlBpHZXqOKwchJOW7c6MPa94k864V/AAgr3P3DwrNci01DQafpm
+         fDQbtVzsLAwF9fIP3xHC1EOv/AGJea/tJ+39ydOMHEUSe1keNTiNsY8g8MzUBZ+9Fn/r
+         ROp2MBqAyfmCRvCaGOeUIat8fLsvtZ0LkD0mEu5xC3mrgOOcZdXwO0TnVF7u/Myd1K5A
+         alZvDpvEOPtcXYakblhG3iC5Mn1nVPTB1MCCYtsGNUUvYK31SPL3pFUyBgBY4fiSMVUQ
+         7WUcrM6yd/pmxTfyluVHwiG5dlx68ynTmlXgXHffDN8PaSXTEQvq9x/wxRkTMPCWoZyD
+         tlBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fnzztiv9XavT4IQNbT2bMnkx97CUI42MYbUmzR1Txe8=;
+        b=AnIAzKxhw/sD+oLCd9GzziM/cCCF3PM4IBjUIExontpN6bGWyfYHQOm8P67VixiTAm
+         GAP2dnqqQVzCX3k9r4y9tpydQXWYOiUdwr1156caJ8KHRHGhSIaB0AZJSO5QC3K2S+58
+         N8dnQmB+8cUmOMV0lVFj9tZ1r0NN5X7M33ng1QRbfdAcgf13XljV0ua/ChUPLxdiX4gd
+         tK9ntwGQO2u7b3t8og7BppXuJG8pJj0dvnXteapIsYlziTx56n0tlNK6pnr5+EiuXUIt
+         NPWYZ4btrhOsxby9cEst2eQMfGF76CFdPkPhOcfs4uLgP1p7i2dVdpgwnQ3gSEn9bAmC
+         2Unw==
+X-Gm-Message-State: AOAM530FslniwsW5VUzno9S36XmNhGASg3cmEwLxukXNOzL77d9uQeOD
+        kWKF0JGNNOwFqZ6C+9PStK4=
+X-Google-Smtp-Source: ABdhPJzEYrGovMTXImTbXk9YA87MxIb9ZVrue/3Zo4riO+iJWCIyynA12osskNdE0FBUUb1xsJE/1w==
+X-Received: by 2002:a63:4726:0:b0:3fd:9e47:6b3f with SMTP id u38-20020a634726000000b003fd9e476b3fmr24629903pga.321.1654850628852;
+        Fri, 10 Jun 2022 01:43:48 -0700 (PDT)
+Received: from localhost.localdomain ([1.200.147.12])
+        by smtp.gmail.com with ESMTPSA id c28-20020aa7953c000000b0051c01aa7d31sm11703568pfp.46.2022.06.10.01.43.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 01:43:48 -0700 (PDT)
+From:   medadyoung@gmail.com
+X-Google-Original-From: ctcchien@nuvoton.com
+To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: [PATCH v12 0/3] EDAC: nuvoton: Add nuvoton NPCM memory controller driver
+Date:   Fri, 10 Jun 2022 16:43:37 +0800
+Message-Id: <20220610084340.2268-1-ctcchien@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610081342.45x65lxbuxozej57@x260>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:13:42AM +0300, Ivan Bornyakov wrote:
-> On Fri, Jun 10, 2022 at 03:43:11PM +0800, Xu Yilun wrote:
-> > On Thu, Jun 09, 2022 at 06:47:49PM +0300, Ivan Bornyakov wrote:
-> > > At the moment FPGA manager core loads to the device entire image
-> > > provided to fpga_mgr_load(). But it is not always whole FPGA image
-> > > buffer meant to be written to the device. In particular, .dat formatted
-> > > image for Microchip MPF contains meta info in the header that is not
-> > > meant to be written to the device. This is issue for those low level
-> > > drivers that loads data to the device with write() fpga_manager_ops
-> > > callback, since write() can be called in iterator over scatter-gather
-> > > table, not only linear image buffer. On the other hand, write_sg()
-> > > callback is provided with whole image in scatter-gather form and can
-> > > decide itself which part should be sent to the device.
-> > > 
-> > > Add header_size and data_size to the fpga_image_info struct and adjust
-> > > fpga_mgr_write() callers with respect to them.
-> > > 
-> > >   * info->header_size indicates part at the beginning of image buffer
-> > >     that is *not* meant to be written to the device. It is optional and
-> > >     can be 0.
-> > > 
-> > >   * info->data_size is the size of actual bitstream data that *is* meant
-> > >     to be written to the device, starting at info->header_size from the
-> > >     beginning of image buffer. It is also optional and can be 0, which
-> > >     means bitstream data is up to the end of image buffer.
-> > > 
-> > > Also add parse_header() callback to fpga_manager_ops, which purpose is
-> > > to set info->header_size and info->data_size. At least
-> > > initial_header_size bytes of image buffer will be passed into
-> > > parse_header() first time. If it is not enough, parse_header() should
-> > > set desired size into info->header_size and return -EAGAIN, then it will
-> > > be called again with greater part of image buffer on the input.
-> > > 
-> > > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> > > ---
-> > >  drivers/fpga/fpga-mgr.c       | 243 +++++++++++++++++++++++++++++-----
-> > >  include/linux/fpga/fpga-mgr.h |  17 ++-
-> > >  2 files changed, 229 insertions(+), 31 deletions(-)
-> > > 
-> > > diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> > > index 08dc85fcd511..0854fbc8f11e 100644
-> > > --- a/drivers/fpga/fpga-mgr.c
-> > > +++ b/drivers/fpga/fpga-mgr.c
-> > 
-> > Should we check in fpga_mgr_create, that initial_header_size must not be
-> > 0 if parse_header() is defined. If we pass no data to parse_header(),
-> > does it make any sense?
-> > 
-> 
-> If FPGA image is mapped, whole buffer will be passed to parse_header(),
-> regardless of initial_header_size.
-> 
-> If FPGA image is sg_table and initial_header_size is 0, first sg
-> fragment will be passed to parse_header() in
-> fpga_mgr_parse_header_sg_first().
-> 
-> If low level driver's parse_header() is buggy and return -EAGAIN without
-> setting desired size into info->header_size, we will fail in
-> fpga_mgr_parse_header_sg() with -ENOMEM.
-> 
-> static ssize_t fpga_mgr_parse_header_sg(...)
-> {
-> 	size_t header_size = mgr->mops->initial_header_size; /* header_size == 0 */
-> 	...
-> 
-> 	do {
-> 		if (info->header_size) /* header_size is still 0 */
-> 			header_size = info->header_size;
-> 
-> 		buf = krealloc(buf, header_size, GFP_KERNEL); /* returned buf will be NULL */
-> 		if (!buf) {
-> 			ret = -ENOMEM;
-> 			break;
-> 		}
-> 
-> 		...
-> 
-> 	} while (ret == -EAGAIN);
-> 
-> 	...
-> }
-> 
-> So, I believe it is OK to define parse_header() without defining
-> initial_header_size.
+From: Medad CChien <ctcchien@nuvoton.com>
 
-That's good to me.
+Support memory controller for Nuvoton NPCM SoC.
 
-> 
-> > > @@ -74,6 +74,15 @@ static inline int fpga_mgr_write_complete(struct fpga_manager *mgr,
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static inline int fpga_mgr_parse_header(struct fpga_manager *mgr,
-> > > +					struct fpga_image_info *info,
-> > > +					const char *buf, size_t count)
-> > > +{
-> > > +	if (mgr->mops->parse_header)
-> > > +		return mgr->mops->parse_header(mgr, info, buf, count);
-> > > +	return 0;
-> > > +}
-> > > +
-> > >  static inline int fpga_mgr_write_init(struct fpga_manager *mgr,
-> > >  				      struct fpga_image_info *info,
-> > >  				      const char *buf, size_t count)
-> > > @@ -136,24 +145,145 @@ void fpga_image_info_free(struct fpga_image_info *info)
-> > >  EXPORT_SYMBOL_GPL(fpga_image_info_free);
-> > >  
-> > >  /*
-> > > - * Call the low level driver's write_init function.  This will do the
-> > > + * Call the low level driver's parse_header function with entire FPGA image
-> > > + * buffer on the input. This will set info->header_size and info->data_size.
-> > > + */
-> > > +static int fpga_mgr_parse_header_mapped(struct fpga_manager *mgr,
-> > > +					struct fpga_image_info *info,
-> > > +					const char *buf, size_t count)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
-> > > +	ret = fpga_mgr_parse_header(mgr, info, buf, count);
-> > > +
-> > > +	if (info->header_size + info->data_size > count) {
-> > > +		dev_err(&mgr->dev, "Bitsream data outruns FPGA image\n");
-> > > +		ret = -EINVAL;
-> > > +	}
-> > > +
-> > > +	if (ret) {
-> > > +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> > > +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> > > +	}
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +/*
-> > > + * Call the low level driver's parse_header function with first fragment of
-> > > + * scattered FPGA image on the input. If header fits first fragment,
-> > > + * parse_header will set info->header_size and info->data_size. If it is not,
-> > > + * parse_header will set desired size to info->header_size and -EAGAIN will be
-> > > + * returned.
-> > > + */
-> > > +static int fpga_mgr_parse_header_sg_first(struct fpga_manager *mgr,
-> > > +					  struct fpga_image_info *info,
-> > > +					  struct sg_table *sgt)
-> > > +{
-> > > +	size_t header_size = mgr->mops->initial_header_size;
-> > > +	struct sg_mapping_iter miter;
-> > > +	int ret;
-> > > +
-> > > +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
-> > > +
-> > > +	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> > > +	if (sg_miter_next(&miter) &&
-> > > +	    miter.length >= header_size)
-> > > +		ret = fpga_mgr_parse_header(mgr, info, miter.addr, miter.length);
-> > > +	else
-> > > +		ret = -EAGAIN;
-> > > +	sg_miter_stop(&miter);
-> > > +
-> > > +	if (ret && ret != -EAGAIN) {
-> > > +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> > > +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> > > +	}
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +/*
-> > > + * Copy scattered FPGA image fragments to temporary buffer and call the
-> > > + * low level driver's parse_header function. This should be called after
-> > > + * fpga_mgr_parse_header_sg_first() returned -EAGAIN. In case of success,
-> > > + * pointer to the newly allocated image header copy will be set into *ret_buf
-> > > + * and its size will be returned. *ret_buf needs to be freed by caller.
-> > > + */
-> > > +static ssize_t fpga_mgr_parse_header_sg(struct fpga_manager *mgr,
-> > > +					struct fpga_image_info *info,
-> > > +					struct sg_table *sgt, char **ret_buf)
-> > 
-> > Since the function allocs buffer for the user, I suggest it still returns
-> > the buffer pointer. The buffer size could be an output parameter.
-> > 
-> 
-> OK, will do that.
-> 
-> > > +{
-> > > +	size_t len, header_size = mgr->mops->initial_header_size;
-> > > +	char *buf = NULL;
-> > > +	int ret;
-> > > +
-> > > +	do {
-> > > +		if (info->header_size)
-> > > +			header_size = info->header_size;
-> > > +
-> > > +		buf = krealloc(buf, header_size, GFP_KERNEL);
-> > > +		if (!buf) {
-> > > +			ret = -ENOMEM;
-> > 
-> > If you need to return ERROR value, ERR_PTR() could be used.
-> > 
-> > 
-> > BTW: Have you tried to test your FPGA programming using sg buffers? I want
-> > to ensure these changes are actually tested?
-> > 
-> 
-> Of course, but not every single error path, to be honest. Yet, I'm
-> trying my best.
+Addressed comments from:
+ - Rob Herring : https://lkml.org/lkml/2022/2/25/1103
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/27/63
+ - Rob Herring : https://lkml.org/lkml/2022/3/2/828
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/294
+ - Jonathan Neuschäfer : https://lkml.org/lkml/2022/3/11/1167
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/293
+ - Rob Herring : https://lkml.org/lkml/2022/3/11/575
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/305
+ - Avi Fishman : https://lkml.org/lkml/2022/3/13/339
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/14/93
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/14/95
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/15/378
+ - Boris Petkov : https://lkml.org/lkml/2022/3/17/561
+ - Paul Menzel : https://lkml.org/lkml/2022/4/9/47
+ - Paul Menzel : https://lkml.org/lkml/2022/4/11/182
+ - Borislav Petkov : https://lkml.org/lkml/2022/4/8/871
+ - Paul Menzel : https://lkml.org/lkml/2022/4/9/51
+ - Paul Menzel : https://lkml.org/lkml/2022/4/9/65
+ - Rob Herring : https://lkml.org/lkml/2022/4/21/681
+ - Paul Menzel : https://lkml.org/lkml/2022/5/3/307
+ - Paul Menzel : https://lkml.org/lkml/2022/5/3/304
+ - Borislav Petkov : https://lkml.org/lkml/2022/5/3/343
+ - Paul Menzel https://lkml.org/lkml/2022/5/10/47
+ - Paul Menzel https://lkml.org/lkml/2022/5/10/127
 
-That's fine. Thanks for your support.
+Changes since version 12:
+ - Pass ecc event count to edac_mc_handle_error.
+
+Changes since version 11:
+ - Update MAINTAINERS file
+
+Changes since version 10:
+ - Add one more maintainer.
+ - Correct indentation in npcm_edac.c.
+ - Add datasheet information in commit message.
+
+Changes since version 9:
+ - Add a necessary blank line in Kconfig for EDAC_NPCM.
+ - Reflow for 75 characters per line in commit message of devicetree file.
+ - Remove wrong tags in all the commit message.
+ - Reorder content in commit message of NPCM memory controller driver.
+
+Changes since version 8:
+ - Add new line character at the end of file of yaml file
+
+Changes since version 7:
+ - Refactor npcm_edac.c.
+ - Sort strings in npcm_edac.c.
+ - Reflow code for 75 characters per line.
+ - Summarize errors and warnings reported by kernel test robot.
+ - Shorten name of values to make them become more readable in npcm_edac.c.
+ - Put spaces between the * and the text in npcm_edac.c.
+
+Changes since version 6:
+ - Fix warnings in npcm_edac.c.
+ - Add information reported by kernel test robot <lkp@intel.com>.
+
+Changes since version 5:
+ - Update commit message for NPCM memory controller driver.
+
+Changes since version 4:
+ - Update filename in nuvoton,npcm-memory-controller.yaml.
+ - Add COMPILE_TEST in Kconfig.
+ - Fix errors in npcm_edac.c.
+ - Remove unnecessary checking after of_match_device() and of_device_get_match_data().
+
+Changes since version 3:
+ - Rename npcm-edac.yaml as nuvoton,npcm-memory-controller.yaml.
+ - Drop 'EDAC' in title of nuvoton,npcm-memory-controller.yaml.
+ - Update compatible in nuvoton,npcm-memory-controller.yaml.
+
+Changes since version 2:
+ - Update description and compatible in npcm-edac.yaml.
+ - Remove address-cells and size-cells in npcm-edac.yaml.
+ - Reorder the items of examples in npcm-edac.yaml.
+ - Reorder header file in driver.
+
+Changes since version 1:
+ - Add nuvoton,npcm750-memory-controller property in NPCM devicetree.
+ - Add new property in edac binding document.
+ - Add new driver for nuvoton NPCM memory controller.
+
+Medad CChien (3):
+  dt-bindings: edac: nuvoton: add NPCM memory controller
+  ARM: dts: nuvoton: Add memory controller node
+  EDAC: nuvoton: Add NPCM memory controller driver
+
+ .../edac/nuvoton,npcm-memory-controller.yaml  |  62 ++
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   7 +
+ drivers/edac/Kconfig                          |  17 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/npcm_edac.c                      | 680 ++++++++++++++++++
+ 6 files changed, 769 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+ create mode 100644 drivers/edac/npcm_edac.c
+
+-- 
+2.17.1
+

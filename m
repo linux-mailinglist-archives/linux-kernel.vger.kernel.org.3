@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDD3546970
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5769546971
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344827AbiFJPdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 11:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S1344912AbiFJPfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 11:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiFJPdp (ORCPT
+        with ESMTP id S238346AbiFJPfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:33:45 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7BE17ED36;
-        Fri, 10 Jun 2022 08:33:43 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id BB6A5520171;
-        Fri, 10 Jun 2022 17:33:41 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.27) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Fri, 10 Jun
- 2022 17:33:40 +0200
-Date:   Fri, 10 Jun 2022 17:33:36 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Message-ID: <20220610153336.GA8881@lxhi-065>
-References: <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
- <541e9ea1-024f-5c22-0b58-f8692e6c1eb1@landley.net>
- <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
- <1561909199.3985.33.camel@linux.ibm.com>
- <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
- <1561991485.4067.14.camel@linux.ibm.com>
- <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
- <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
- <20220609102627.GA3922@lxhi-065>
- <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+        Fri, 10 Jun 2022 11:35:03 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148CB1CF178
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:35:02 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id h27so3384989ybj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C14q5Dy6Du+XHvgXj/VVrOd11AGI0NT/UdqNE8EdfT4=;
+        b=Knbu7UAyfQ9/FBzc3DL1apaZSuXrKn83d3MtaAVYfYl0no7peCglt6G2ZzMZzV67dq
+         AA705/VF7SMPxEnDOG07G247GA9eif2QHe43vSOQB1WDZM29CSIiPIFG0nObuGBWL/5g
+         9cDIjOpqkH90hUqh1OPfGQ2eP3S5DtxFURji18+qpMr8BIqqxYmECZha+3/OaY+a4Go4
+         /DLQa1gi83e5YJcJm5gQ4ma5kN6cLPnycMHXGfXtcZ217Hj5Dhz4Pzhwl9+f4yhlg63Z
+         dvGUNmc+7vuWipq28hCch+cpXZN7rRF4m0TO+KQ6QBU27ft2JjUB5CNtaLp1JGx3BsBL
+         LsJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C14q5Dy6Du+XHvgXj/VVrOd11AGI0NT/UdqNE8EdfT4=;
+        b=hqlzhZdao9A7F5LCB4rJOIVkQmReO1KLL6cqEhGfIwmCcaJHhVSF3qaeqUpGFtGaTt
+         jqYxhcbVobds6+BIbifVDXga/9HXCimCaURQs1PRyI/5mE2mVH6vhCrrn/BBxt5CsnXm
+         8hm28wJmMim5U6gAs2Hta95JmsW1u9CfGZZASSE3AiX0uCq/Dx7+gPKaTNF0DOqFfqNu
+         NAfEzP8PNVfM07WYwYYR75+XiybjwultnZWHDZzw3CIngDaKc8OEw/QzOk2yvOG13lET
+         cG073gwl6DPGglYoNtwhnqvuofzCc2fKwpyMXQfXQ944zUxAZBc83XudzWMs1y9UxQZx
+         KElA==
+X-Gm-Message-State: AOAM530tJLHpwUSClrUudQr7kA+EKVZkuuWiT5VBLgDBMXyqPVf5pWSo
+        rUBrM0m0lt+vslDaQxVeZ8lGZHyXoM8tmyR03Cg=
+X-Google-Smtp-Source: ABdhPJyE0wTeNeQSFfZWpdVduVIqNiDJ6Db1s47ilpLanpPzyafdxrAH+yvrGRlISWMDLXFqBCaW6UEvu/qHPAhZKxk=
+X-Received: by 2002:a25:d195:0:b0:663:ff7a:b5bc with SMTP id
+ i143-20020a25d195000000b00663ff7ab5bcmr13226171ybg.51.1654875301266; Fri, 10
+ Jun 2022 08:35:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.27]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
+ <87y1y48spg.fsf@jogness.linutronix.de>
+In-Reply-To: <87y1y48spg.fsf@jogness.linutronix.de>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 10 Jun 2022 11:34:47 -0400
+Message-ID: <CAMdYzYr-Wo713Y4qjboTpoK6GcrYfKCfRJAEizwXw6-=dymVzg@mail.gmail.com>
+Subject: Re: [BUG] Threaded printk breaks early debugging
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Roberto,
+On Fri, Jun 10, 2022 at 11:05 AM John Ogness <john.ogness@linutronix.de> wrote:
+>
+> Hi Peter,
+>
+> On 2022-06-10, Peter Geis <pgwipeout@gmail.com> wrote:
+> > However I've run into an issue debugging early boot issues. Anything
+> > that causes the kernel threading system to die (for example here, a
+> > NPE) causes the boot console to halt before it outputs the error.
+>
+> A null pointer exception should trigger a panic, which will cause printk
+> to enter direct mode for the oops. It should be just as effective as
+> before introducing the printing kthreads.
 
-On Do, Jun 09, 2022 at 11:05:45 +0000, Roberto Sassu wrote:
-> > From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
-> > Sent: Thursday, June 9, 2022 12:26 PM
-> > Dear Roberto,
-> > Cc: Yamada-san, linux-kbuild
-> > 
-> > On Mi, Jul 24, 2019 at 05:34:53 +0200, Roberto Sassu wrote:
-> > > Is there anything I didn't address in this patch set, that is delaying
-> > > the review? I would appreciate if you can give me a feedback, positive
-> > > or negative.
-> > >
-> > > Thanks a lot!
-> > >
-> > > Roberto
-> > 
-> > Some of our users have recently asked for this patch series.
-> 
-> Hello
-> 
-> thanks for your interest in this patch set.
-> 
-> > Could you please feedback if this is the latest revision available or
-> > maybe there is a newer one developed and potentially not shared on LKML?
-> 
-> Yes, it is the latest revision available. There might have been few
-> fixes in the final code. You may want to have a look at:
+This might be a side effect of the fact that this is on a low powered
+arm64 board. I noticed with threading enabled during large bursts the
+console drops an excessive amount of messages. It's especially
+apparent during the handover from earlycon to the normal console.
 
-Many thanks for the links to the updated patch revisions. It looks
-like the new versions added a couple of bugfixes and refinements.
+>
+> Can you please provide a test case or patch that will trigger the
+> problem you refer to?
 
-With more users now using this feature, do you think there is a higher
-chance for upstreaming, compared to 2019 (original submission date)?
+Unfortunately no, unless you have a Rockchip rk356x device with both
+DSI and HDMI. We're working on adding DSI support to the new video
+output driver, and when both are enabled it tosses a NPE.
 
-Best Regards,
-Eugeniu
+>
+> > Would it be possible to have both a kconfig option and a runtime
+> > option to toggle printk_fallback_preferred_direct()? Currently I've
+> > had to force it at all times while debugging.
+>
+> It would be trivial to provide a boot parameter for this behavior, but I
+> think we first need to see a real problem and also see if we can fix
+> that problem.
+>
+> John Ogness

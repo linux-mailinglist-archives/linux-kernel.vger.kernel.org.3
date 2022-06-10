@@ -2,186 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760A8546F37
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B160546F40
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350907AbiFJVZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S1348721AbiFJVap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348721AbiFJVZX (ORCPT
+        with ESMTP id S1346371AbiFJVak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:25:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263DD1F89B1;
-        Fri, 10 Jun 2022 14:25:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB12CB837C6;
-        Fri, 10 Jun 2022 21:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBEBC341C4;
-        Fri, 10 Jun 2022 21:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654896317;
-        bh=+yOYQf/molwfJfp3mc62IB7uUe79xlOHDuVNNoHLbxQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PWDDxD/MTpJXCcqo8cDBRdQPlRHGDZEVW2HsxMG6PD/E53sbqsEaK+/jfvyqUHr/3
-         d95HuTziadxlfer9hgoZqy8qNANzuuoh525MaZVb5XwHabSscUQGsSp/4SDTl4KBQ4
-         Me8KJ/vVhuT1g2hiSW3cxrCYndp09x0BoR+MrGr+//GqYr4CT02mIazMC0E8bMZG16
-         EhW5gIAFqKUoIuRFqzaGHREtqlFDpyFQLMyZXT71GUDfzH+Jx1wEWSD0ILinNbwOsM
-         Vg93mTsRJGCs9qrMTbuaqR9L2FSsK5nFbY5XX3NSPCnamLaVHxYzLc9daW48g7B4we
-         iiP9TIje/5R4A==
-Received: by mail-vk1-f173.google.com with SMTP id q186so85641vkh.8;
-        Fri, 10 Jun 2022 14:25:17 -0700 (PDT)
-X-Gm-Message-State: AOAM5332pw3IdjpmCTEOMmtF30mst/oB2Ko+ZgE8vNdinodXqwDdGXws
-        Izu64YLwPLn7gm0FIXS9yGPGWvm8Bw1/fD2oew==
-X-Google-Smtp-Source: ABdhPJznf30KHWe8+z+YOq+izPos96vlalgcSMg0OYweCf6ENJfJTZBrfLeqOWSlufxTTtn0BIGqeF6S2vYhe3jMi2M=
-X-Received: by 2002:a1f:aac7:0:b0:35e:1c45:def with SMTP id
- t190-20020a1faac7000000b0035e1c450defmr11545955vke.35.1654896316529; Fri, 10
- Jun 2022 14:25:16 -0700 (PDT)
+        Fri, 10 Jun 2022 17:30:40 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B0916F35A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:30:38 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id u8so119038wrm.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=95Jw5s5U+9h+RH3k4GM+5YUCgDK6/y0zF6sj5xk3tV0=;
+        b=I+ONCW4N40xi6OHman8kT5DVagz+dhj6LV2/JU1uBHo+0lmkQbKluqGvs343u50BiS
+         OyvUQ4SPAlJtyZOqfiIWw4B7wLi1gaxgumSP6uftAkDU76vru5Oo+77mrE0i9qhYJ1Dj
+         jQA0YKZTzSfZtqzfixdeJuPJ/r4nZCV6ViCmqpISYzWBLUSyhDBw77FX6rMZFxmlfcNN
+         Lfrl98LpKkvIFHqxznHvSNq8sQyfhl7nVGOQoP75TBvCmjitZYk8Jq7e+KBEHa28eMky
+         OUKnIRVFISHidByYyg5+mBN3C+AoCqeHKMyfjs6CuC5cZoGFs4SZYnlM1X0zRNJc6cx0
+         bsAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=95Jw5s5U+9h+RH3k4GM+5YUCgDK6/y0zF6sj5xk3tV0=;
+        b=K4nD27bTdrx6Cv50q/ONn4qVQEG5e8D9RYJTo0piTs5HyL/luTDlVrqoQIdwe5WMKF
+         NgQ0TL091ytopg0izv+QpGol76bTZJ8bTpsTYvdlt3jNjlnD+JypvyuxKbB9QprnflQ9
+         ZYUIX3IQXUl/5ELe5veitjNSHz1YnScBCHveitQtRqtxrta8+RC5TfIACrDkF8PrNY5G
+         FWmsewVX5aVMR8juGCs0ZkzImpTN+aWjajXAPYi2wRE7E2qI55ZRU39oM14jYp0Z29Fi
+         oA4o6KI4EdgnTR4RVRiVmRS06WHvrYXLbVRPlTDX4v6HDcIYtm8l0/S5E6Vhe7sVt4Yl
+         r4mg==
+X-Gm-Message-State: AOAM530YoYN4jOuNm58zhhiTywawJS2oz9ddtXrp+RiwNnKV+cnIE1b3
+        ++ATgNG0Mknqth0gmyjEAdSmipWj4rxQ66O0hcyGvA==
+X-Google-Smtp-Source: ABdhPJxzGybtZ6uQAuitoi6eQ4H1r7WjMlGRVlPssDwL2Qk1WogiF+6kTSmqyCidwoPtKlFgR+vNONC+zuhdPj2u5WM=
+X-Received: by 2002:adf:fb05:0:b0:20a:e113:8f3f with SMTP id
+ c5-20020adffb05000000b0020ae1138f3fmr45526846wrr.534.1654896636555; Fri, 10
+ Jun 2022 14:30:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610203818.2193593-1-robh@kernel.org> <YqOvmrDGgS0AubU4@ravnborg.org>
-In-Reply-To: <YqOvmrDGgS0AubU4@ravnborg.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 10 Jun 2022 15:25:05 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJmkp=LUa+TmFo=3dZAKPhPNMGFWj5jyHq_Q9RxZqz4qw@mail.gmail.com>
-Message-ID: <CAL_JsqJmkp=LUa+TmFo=3dZAKPhPNMGFWj5jyHq_Q9RxZqz4qw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: display: panel-simple: Add Arm virtual
- platforms display
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220610194435.2268290-7-yosryahmed@google.com> <202206110544.D5cTU0WQ-lkp@intel.com>
+In-Reply-To: <202206110544.D5cTU0WQ-lkp@intel.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 10 Jun 2022 14:30:00 -0700
+Message-ID: <CAJD7tkZqCrqx0UFHVXv3VMNNk8YJrJGtVVy_tP3GDTryh375PQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 6/8] cgroup: bpf: enable bpf programs to
+ integrate with rstat
+To:     kernel test robot <lkp@intel.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Michal Hocko <mhocko@kernel.org>, kbuild-all@lists.01.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 2:55 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+On Fri, Jun 10, 2022 at 2:23 PM kernel test robot <lkp@intel.com> wrote:
 >
-> Hi Rob,
+> Hi Yosry,
 >
-> On Fri, Jun 10, 2022 at 02:38:18PM -0600, Rob Herring wrote:
-> > 'arm,rtsm-display' is a panel for Arm, Ltd. virtual platforms (e.g. FVP).
-> > The binding has been in use for a long time, but was never documented.
-> >
-> > Some users and an example have a 'panel-dpi' compatible, but that's not
-> > needed without a 'panel-timing' node which none of the users have since
-> > commit 928faf5e3e8d ("arm64: dts: fvp: Remove panel timings"). The
-> > example does have a 'panel-timing' node, but it should not for the
-> > same reasons the node was removed in the dts files. So update the
-> > example in arm,pl11x.yaml to match the schema.
-> >
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Robin Murphy <robin.murphy@arm.com>
-> > Cc: Andre Przywara <andre.przywara@arm.com>
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../bindings/display/arm,pl11x.yaml           | 15 +-------------
-> >  .../bindings/display/panel/panel-simple.yaml  | 20 +++++++++++++------
-> >  2 files changed, 15 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/display/arm,pl11x.yaml b/Documentation/devicetree/bindings/display/arm,pl11x.yaml
-> > index b545c6d20325..6cc9045e5c68 100644
-> > --- a/Documentation/devicetree/bindings/display/arm,pl11x.yaml
-> > +++ b/Documentation/devicetree/bindings/display/arm,pl11x.yaml
-> > @@ -159,25 +159,12 @@ examples:
-> >      };
-> >
-> >      panel {
-> > -        compatible = "arm,rtsm-display", "panel-dpi";
-> > -        power-supply = <&vcc_supply>;
-> > +        compatible = "arm,rtsm-display";
-> >
-> >          port {
-> >              clcd_panel: endpoint {
-> >                  remote-endpoint = <&clcd_pads>;
-> >              };
-> >          };
-> > -
-> > -        panel-timing {
-> > -            clock-frequency = <25175000>;
-> > -            hactive = <640>;
-> > -            hback-porch = <40>;
-> > -            hfront-porch = <24>;
-> > -            hsync-len = <96>;
-> > -            vactive = <480>;
-> > -            vback-porch = <32>;
-> > -            vfront-porch = <11>;
-> > -            vsync-len = <2>;
-> > -        };
-> >      };
-> >  ...
-> > diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-> > index 21ba90c9fe33..97afd276c54a 100644
-> > --- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-> > +++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-> > @@ -19,9 +19,6 @@ description: |
-> >
-> >    If the panel is more advanced a dedicated binding file is required.
-> >
-> > -allOf:
-> > -  - $ref: panel-common.yaml#
-> > -
-> >  properties:
-> >
-> >    compatible:
-> > @@ -35,6 +32,8 @@ properties:
-> >        - ampire,am-480272h3tmqw-t01h
-> >          # Ampire AM-800480R3TMQW-A1H 7.0" WVGA TFT LCD panel
-> >        - ampire,am800480r3tmqwa1h
-> > +        # Arm, Ltd. Virtual Platforms Display
-> > +      - arm,rtsm-display
-> >          # AU Optronics Corporation 10.1" WSVGA TFT LCD panel
-> >        - auo,b101aw03
-> >          # AU Optronics Corporation 10.1" WSVGA TFT LCD panel
-> > @@ -340,9 +339,18 @@ properties:
-> >
-> >  additionalProperties: false
-> >
-> > -required:
-> > -  - compatible
-> > -  - power-supply
-> > +allOf:
-> > +  - $ref: panel-common.yaml#
-> > +  - if:
-> > +      # Most 'simple' panels must have a single supply, but a virtual display does not
-> > +      not:
-> > +        properties:
-> > +          compatible:
-> > +            contains:
-> > +              const: arm,rtsm-display
-> > +    then:
-> > +      required:
-> > +        - power-supply
+> Thank you for the patch! Yet something to improve:
 >
-> Sorry, but I do not like this change. The beauty of panel-simple is that
-> this is a collection of simple display with identical bindings because
-> the HW is more or less the same (in general - not in details like size
-> etc).
+> [auto build test ERROR on bpf-next/master]
 >
-> Any panels that requires more are pushed out to their own binding and
-> for arm,rtsm-display that would be better.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220611-034720
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220611/202206110544.D5cTU0WQ-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/83f297e2b47dc41b511f071b9eadf38339387b41
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220611-034720
+>         git checkout 83f297e2b47dc41b511f071b9eadf38339387b41
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    kernel/cgroup/rstat.c:161:22: warning: no previous prototype for 'bpf_rstat_flush' [-Wmissing-prototypes]
+>      161 | __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+>          |                      ^~~~~~~~~~~~~~~
+> >> kernel/cgroup/rstat.c:509:10: error: 'const struct btf_kfunc_id_set' has no member named 'sleepable_set'; did you mean 'release_set'?
+>      509 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
+>          |          ^~~~~~~~~~~~~
+>          |          release_set
+>    kernel/cgroup/rstat.c:509:27: warning: excess elements in struct initializer
+>      509 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
+>          |                           ^
+>    kernel/cgroup/rstat.c:509:27: note: (near initialization for 'bpf_rstat_kfunc_set')
+>
+>
+> vim +509 kernel/cgroup/rstat.c
+>
+>    505
+>    506  static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
+>    507          .owner          = THIS_MODULE,
+>    508          .check_set      = &bpf_rstat_check_kfunc_ids,
+>  > 509          .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
+>    510  };
+>    511
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
-But I require less...
+AFAICT these failures are because the patch series depends on a patch
+in the mailing list [1] that is not in bpf-next, as explained by the
+cover letter.
 
-> It is not this single exceptions that bothers me, it is the many
-> exceptions we will have in a few years from now.
-
-Fair enough, I'll make it a separate file.
-
-Rob
+[1] https://lore.kernel.org/bpf/20220421140740.459558-5-benjamin.tissoires@redhat.com/

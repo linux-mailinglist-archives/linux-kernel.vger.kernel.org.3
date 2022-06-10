@@ -2,164 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E904E546F74
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702D2546F79
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348341AbiFJV5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S1347870AbiFJV7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347797AbiFJV5Q (ORCPT
+        with ESMTP id S243046AbiFJV7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:57:16 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D18317A8D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:57:15 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25AK4PA3013538;
-        Fri, 10 Jun 2022 21:56:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=Ah1q/mlyzuwQjVr+0PaIA+PZqMDHC3wQFrogkSXgZ1o=;
- b=twvFhPE2hMl+9jDxQPaZ6hPSr5g5f+sVWYa5EKYaReCYaHZyme6fCvCluyt94gT1VK5L
- E9J76yJ+BXNaV/VKV3nAHOQ3ORCX8Br1cvV1hhLWsfKWWbX0J++lXtUsR69SjNbtMmbE
- KZ7sKY4oqn97s2kRqE+4s6GZZPXVHu0OqBlMKIi9TTp88xTu/mk5Vy5fWLsqVUGPqX+r
- W2fu/pjUhCvFW273l44LRRA2MZcuOqt+6bwqUP/+CCppi9/neIRopn4lMMi87fC3RuMv
- EON3GXFbE9TSWrJ7s/vAmBxrpink4+MGopueDV/BxmWUZ57u+JJD/O9BuzvqV3DiVa0m 7Q== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gfydqxjwx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 21:56:16 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25ALURow035728;
-        Fri, 10 Jun 2022 21:56:15 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu70apy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 21:56:15 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RkfIyM7RiKKEhZlKQMn5AG0Stv1daxuZRc6CgGjA+f5/gjHT0P8s6KWDVLOsMckVeVEiE4/RynRYK1ROhHRtthZRBOCGdE1td4UYabgcVMK1JpXCPmam3ZCvHOoJDOFfAPiqt54mBUIGSjPE5U41zmxgrqhciNJuMREXtdp97q3Jq/1HJmVIxJf2iwJLMzHBPGn+jp1oWEPAvQX6JMdaSpcSzmn7WrlC5/xU7sUTSA+AyPgH+E71WZIS2SQN/ds2QrAbrX9QtrNnt8/F0ZlanceoaDc05cebgoR9EcYTI+deTYIW5Kby+k4bNVEPRVKpN6utlz33RKxLSnamt7jz8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ah1q/mlyzuwQjVr+0PaIA+PZqMDHC3wQFrogkSXgZ1o=;
- b=S+Q8TeJNBI8rDNDuZau8dDQmxhwc9ZWNJ6GrnYaRm62bwrNZrEZj3PWkfjPB9cwxy5UiE6ejFlZvC5HnrhCwd5XrYzA8acGcQzryw9M/yOsfeMuApuRhgORis8X2Kmvk5H7ZemSNummNlr8+7+ivL+kxEFFQUCGS9i5amuLKmhSj6HgUlc3Xd8yADQeQqseYdhYMTOmwlrkVa1Ww+OLZGimhNTt3/hJvI13ZkRqRadZPkpTf6Itc/tAP08Vm5glt8VCc1YAl9OB66AX8B7HBtPiovRPleJQTD/LYts3SQ/ycTDhQl5gsUX0coMhAK43TajmoUNymNM9jXgSRWMFdqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 10 Jun 2022 17:59:00 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E6811468E;
+        Fri, 10 Jun 2022 14:58:55 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id p18so522503lfr.1;
+        Fri, 10 Jun 2022 14:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ah1q/mlyzuwQjVr+0PaIA+PZqMDHC3wQFrogkSXgZ1o=;
- b=AxKzW2CfhOl6Ha43E4IrDl+dLlbthxL9dgpYr2bNksa3w7cQlzNTKhxZils/pyA3y9drnQNIvMXsB0oxCOEG8ujj2BqZjh0Uj0H/OaazJ65ismvf66UXJKY6qRM8AdVhgXG2CfserLzhmNPCaHwSp1ycGfIRvAl5J6EZyhrJXpw=
-Received: from BN7PR10MB2659.namprd10.prod.outlook.com (2603:10b6:406:c5::18)
- by MWHPR10MB1887.namprd10.prod.outlook.com (2603:10b6:300:10b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.15; Fri, 10 Jun
- 2022 21:56:13 +0000
-Received: from BN7PR10MB2659.namprd10.prod.outlook.com
- ([fe80::54fd:3174:8ce4:985a]) by BN7PR10MB2659.namprd10.prod.outlook.com
- ([fe80::54fd:3174:8ce4:985a%6]) with mapi id 15.20.5332.014; Fri, 10 Jun 2022
- 21:56:13 +0000
-Subject: Re: [PATCH RFC v1 4/7] swiotlb: to implement io_tlb_high_mem
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     iommu@lists.linux-foundation.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, m.szyprowski@samsung.com,
-        jgross@suse.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, sstabellini@kernel.org,
-        mpe@ellerman.id.au, konrad.wilk@oracle.com, mst@redhat.com,
-        jasowang@redhat.com, joe.jin@oracle.com
-References: <20220609005553.30954-1-dongli.zhang@oracle.com>
- <20220609005553.30954-5-dongli.zhang@oracle.com>
- <YqF/sphJj6n+22Si@infradead.org>
-From:   Dongli Zhang <dongli.zhang@oracle.com>
-Message-ID: <e6345c27-78fd-be72-9551-1d1fd5db37a4@oracle.com>
-Date:   Fri, 10 Jun 2022 14:56:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-In-Reply-To: <YqF/sphJj6n+22Si@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR04CA0023.namprd04.prod.outlook.com
- (2603:10b6:5:334::28) To BN7PR10MB2659.namprd10.prod.outlook.com
- (2603:10b6:406:c5::18)
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=afNBlLkJJKTEMkCxvJSwBmNG9UxwUmzxSaYdEqHx/mg=;
+        b=iC/k1aIYIg3UfAPHfN83ZCN8Vv7OVjkgaCJ7igf76EbJmKJzmLvUv6cIgWM906nkka
+         +JQsyiKSvDsrTN/xVMuzGPqDnioz5sHBADEjBiIjvzfc8iw0rrgifi3Eumanu93Y3Dij
+         LWk2dlB4IdKrjkK5/6TujdOVFuKzVyFd9U4luteJU3M+PEQyKFa+oNUje1/PGW2Qc1/6
+         PW4CObkmQvHroauXTYf0dcVauZlmeVenisNXGdf0cSF44M1S2NXHxMLtuR7PtrrpJUQK
+         TQcHZ8XxUANwIOWtzhqI9+G5ygiBicyTEQ7fAhp6SZDSvHjLRyU/HhJ6I+shUqLM9rNV
+         /JZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=afNBlLkJJKTEMkCxvJSwBmNG9UxwUmzxSaYdEqHx/mg=;
+        b=UiZvb3hfy9NmRJPP0l7x8FSJ3J+meLRuBvVZwLaM7W4mHpw//TknySZfcCWUXOz+5d
+         GFzsaMK/k7lBDd40ORTFuXNJCVhePXkp84FDGjozjhzRinDripM1L6EmGkUkm3ryncbV
+         yFU//WfAV+pIRp3xejaKbaxE6Ms5syfRSUiuTfizbQUqlEoyCHulTF5c8sBWXUIfYhCr
+         HansXmNte3x/4gTxYXyYkBGK0McRicXJps3GU/SgLQ3T3SzNdg5qDEIzDCPd5hifkhvh
+         Fk4ZgKMVUYVLgBCqgI5YrRI0uAZhSA/WtVJrM9Kt81cPdag1ANJ5fSlwQFhMHipIk0Aa
+         K5Jg==
+X-Gm-Message-State: AOAM533Wmu5+eNjZ47vQ0NDbbpF4vYpOcGF7wGWoUTT7cGQ/VrcfBgFX
+        gxkF1pNiPU9rPuVjrJDGX4Y=
+X-Google-Smtp-Source: ABdhPJwQU2SdbrIVdUoU8xDwmoFclJutuNXd1GFV6/YPgIR9v/fa0ikFUPMFQ3tJl2PLcZWWcaXxYg==
+X-Received: by 2002:a05:6512:15a2:b0:478:ffaa:89 with SMTP id bp34-20020a05651215a200b00478ffaa0089mr28877624lfb.658.1654898333169;
+        Fri, 10 Jun 2022 14:58:53 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id w26-20020a2e999a000000b00258e71c643asm97069lji.64.2022.06.10.14.58.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 14:58:52 -0700 (PDT)
+Date:   Sat, 11 Jun 2022 00:58:50 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 19/23] ata: ahci: Add DWC AHCI SATA controller support
+Message-ID: <20220610215850.ju76kxjquwef6kd3@mobilestation>
+References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610081801.11854-20-Sergey.Semin@baikalelectronics.ru>
+ <6c02f8ef-8aea-8f80-590d-343f67a96f8d@infradead.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3d1c90ed-5e46-4fa9-ef24-08da4b2c0924
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1887:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB18874953901C1646FDF821D9F0A69@MWHPR10MB1887.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g3DMbLC2NULjwmYZwgktrD/KIFgWWHKyIx4cQciMNUNL3NH3Dxaw508Vcej5050h3vD0RliliGOAbYLXZTuGwfDRxO/ePEL+vFlAgiwOL0ErnAAOt0L+9Lqs7iFkvUSQj2Iyux1CV5+Hn8JgLsJdE+HfZHyEJ6UPhNAlZIYOmHuer8YgQGvGteoqqgBqXVTwQe+BwNZtHpS8/cgkelYox3PrZC9q3D4SpmS7/pkgk9JM5dlMB4iAN7DkLhqsJrAIJsYDzrepUyjljKMcwJQrZWEjJQtTIBcR7IqYhdKHMjVpkg+rZHgJRAf+Tv8JL6A/ygvd3KK0Ap+BCTfWnioT1kAA5ehXZ9kJfZ0j18sRgLdsLDjvWYUcWqzeitx+4plaZ2au/vpQwTNIOD4lDfedzb/ONLLfWbXJan26VQtZVCMeCV5ngbVB8uHGinoJAbY/cXICdajPXZaG8ATZTyI8nW1unFq5Ydrm5DGiB+Rpq1D1HsAswwwwOWuvkDHHmOXF7HDGPKj1HKPj1gqBzXUbM5NFRPu/7yBU32P/eV93U1fNWDWwO2dlb5kZ6jFMWqwTVJRtYPtmeD7yhKhkUJIpivjQHpK6zeEgcZRjhTYtoU0auLC46NRbeeh7yPV+R/cdvPRhw+2iet7m4tGkrCsHMT7E9m/epqX48pFhiAdVaOL1An+B9ldXHIMwFklcc9E5RfLYuFKOJycct4Peitll1bSYexZk/pyLDWWO6k0EAGO+tsRLWWTe+7vXUcSh2Qwn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR10MB2659.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(44832011)(7416002)(2616005)(6486002)(508600001)(8936002)(5660300002)(83380400001)(186003)(6666004)(316002)(86362001)(2906002)(107886003)(6512007)(31696002)(6506007)(53546011)(36756003)(8676002)(66476007)(66946007)(66556008)(4326008)(6916009)(31686004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SElMakVJdHpJcUg2VVlKOTA5OG9Od041YndoTzdGQ3FyVGNBS0d3amkrOHh6?=
- =?utf-8?B?RElTenFzSXRaQmZuSDlPOEhVK2N6blVnNElHRDJuY2FvSDJteVBpbnlieXE2?=
- =?utf-8?B?eXNUMlRHUXVqK0g3cjBaZXB1R3NEeElKRmcyRmNod0dYdzh5eEhGWTdteGJF?=
- =?utf-8?B?MEQzc1NUQkFlZzNRVnJZclk5UEpjU3cwTG1rSVlaUmh6L2xBUzlaTFY4dC9p?=
- =?utf-8?B?dDZxTTFXRWt2VHZTQ0J2eHFmclQ3TjhDbE90dDRLa1BJcVI0dHJlcFFGdTJB?=
- =?utf-8?B?dThyc3BNeGpjOXgzTTBOUzVwKy91Y25OUW1QQnJJUGphUEc5MWxPclN3T0pO?=
- =?utf-8?B?aVpNQ0QwNGZ5ZUk5d3g3ZWxHNW9aeW1mOW44WlpTMnE2VmtRSWNwdTRYUGox?=
- =?utf-8?B?OVlRUTZEdWNOT25LREE4eWtBU2N5dDVoUkUxZy90WUUyYTJwWmE0bXdvZFdM?=
- =?utf-8?B?SkNDaFM4dWZSekxad0pRSHphQzV2czUzTm11b1hHbm1aYVEwTmk5elRCbnpt?=
- =?utf-8?B?WnBlUkhjMEdDejVVa2tPU3FNS1RVTUZjVEFkVkw0YTFza1R4Rk9vMHorc2VY?=
- =?utf-8?B?blBIVE9FR0lrUmRzbjZNbmxUamIwQ3lDN003aVhvYUlZSnVJREdSVi9sZHZV?=
- =?utf-8?B?MDBGanAyQWFXRVVndkNpZlptaEJwM1dNU0xaTEgwZ0xKYUhZSi9NR0FnKzNI?=
- =?utf-8?B?ejRqZ1djM0w2QnM3WkJMV3Uxd01iUUhFY1hwT2d2K3kyNTZtUWlySnpEMUFk?=
- =?utf-8?B?TVhhcjU3K0pjWmtZalIzZkFaMmZtREYzVHU5eGZ0dkZRRTFJeTkrSU1KK2V3?=
- =?utf-8?B?NmlmVy9SOHM3dkdmdndPSzB2UVZQVHExSWpwVFdNOGRKZ2IwMUZOc0U1akpB?=
- =?utf-8?B?U1o4TWIySkFjVnpHZWpWamYxNEVubEowUEg4eDFqWnQwV25SZDI2TCs0U1Qv?=
- =?utf-8?B?S3lnVmFUZGhFV3dEbWtSZ0kwV1FuUWlWUFhTSWdSWTkrRWpHTnRXeWVGWHRv?=
- =?utf-8?B?U2RtT0JtTlduR0NkWVlVNUx6OXBFZ1lXNzUwdGRxdlpLcXk0TnRrcXdTZmRx?=
- =?utf-8?B?UGk3SWZJR3hua0RmZWRvQVRvRDV2elBXMFRYQjZIcm16dWsyUjVMQm5YNzNL?=
- =?utf-8?B?NVdFTVF0clU4ZjFiZzNUZzhGb2JyNnAwT3VqS2srY0RTaVFTZTdiVjNVVUts?=
- =?utf-8?B?TXc1bnNRdThwRFJiek02Y094YVlaMnJkaGsxMGJYSFVKS0JUelZXcVZ1T2pX?=
- =?utf-8?B?Q1VxOHd4dXRibDdxakNnQWNFSHJuWUZkSC9TQTFnOGVkeGVvUzUrL1lQSUIr?=
- =?utf-8?B?UnI4QlN4SUxsRmg1ZU1RQk0rU0FqUCtUV0JmN3MxVUxqcjM0SUlLdmRYSXo0?=
- =?utf-8?B?aHJrSFR6QWpGRUVGSjVpZ0ttUVBzWnUwbEVKdzd2bG5lWnM2Qm5aSktlaERq?=
- =?utf-8?B?K09Wc0s3amNRUUtLczRFbFB0QzZKN0tYOWtxSExGbllzSjhKck02Nmo4bndz?=
- =?utf-8?B?T0VUSU5WRG1rWGdheHN4R2QyRElZRm1UaG9EUTNoeGw0Q1FKOGVyY1cyNXdw?=
- =?utf-8?B?QitZdjRQQW9mZ3F1N2YzQ2V0Zk1lU2VHelZzV1diYmF4V28wOG5qZmxtYWlV?=
- =?utf-8?B?Q2RyZ3hFNzdKNG1RWi92THZweTlBQTQ4L3B5SEZ5a0tzTk9pTnAxRW5BckI5?=
- =?utf-8?B?Z1BvRnlkbXVvalIxc0ZFNWVUcGJUUDZBc0hMWHlObFBDRUFsVXlpbUx0ZmZ3?=
- =?utf-8?B?RS9WN2FiQXdlTFl0WUhaMWVGTzJiOVVuY1ZnbXNJdFcrSGZGRGJneXo4SjZI?=
- =?utf-8?B?OWhQNjg3RjdqQ2NvWkdHSmpCbGhoTSsyL24vamVaYXEwMHNINTVOcmExclF2?=
- =?utf-8?B?TkVJSXNRTDQ5UjRPaDlTWWFwRnU3TUlpUC8zaG9UWmUrQ2QvYkJ4U1NENnhQ?=
- =?utf-8?B?eTR1RXEvbG1iU0dzZFJSOHRiTHNjSnJsZFZ0KzRnd2dndGhiNFEzRHhmZzkx?=
- =?utf-8?B?aFdUa0psKzZ2c3pMZEl3enBEM003Tjl0bUpUQUZsRkZqU1lFL1h5VDBSbnd1?=
- =?utf-8?B?Mi9EcktDTTQ5eGlRTWxQUnk1L1h6N1dkVjRVSmwxK3owUkFTRlNtYzRxcXNr?=
- =?utf-8?B?cmRhYU5HR0R1VVBkZHhsbUV5QnJrUW9heDJVUnN3SFpJTlMvWXZEZmRHdzlE?=
- =?utf-8?B?dVpXZ3hNQzhvb3FBODFrcHNVTVFvNUVnU000RXcraWFtZ0NneUFSM0ZqSGlC?=
- =?utf-8?B?N3lOSzhTYVpndDgwd3U5amRhL1dnMDh1RDlHTUR5Z3RWNDhvR1ZZYnd1RE5P?=
- =?utf-8?B?VGh6T0hxTVJyU0E1KzYrVHBVaFcvSXFTR3N5Zmtqa25jdmVsZ0kvY213V2dG?=
- =?utf-8?Q?XbFAqF6a3vabdqTnQpttHFELvaFmdK/s2RvHB?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d1c90ed-5e46-4fa9-ef24-08da4b2c0924
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR10MB2659.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 21:56:13.1656
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FxU1E+KjBkwdSLtMS5Eqqir0vGhxNcn33SnePkFruX5zkUnvfuLqNGXAqJlDVkrZiPFY7PcwSg6MgUl9Xy7U4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1887
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
- definitions=2022-06-10_09:2022-06-09,2022-06-10 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 phishscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206100082
-X-Proofpoint-GUID: X_VrRHmM9J-mUPYgf3I4FFxvCnOFl0Og
-X-Proofpoint-ORIG-GUID: X_VrRHmM9J-mUPYgf3I4FFxvCnOFl0Og
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c02f8ef-8aea-8f80-590d-343f67a96f8d@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -167,32 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+On Fri, Jun 10, 2022 at 09:34:46AM -0700, Randy Dunlap wrote:
+> Hi--
 
-On 6/8/22 10:05 PM, Christoph Hellwig wrote:
-> All this really needs to be hidden under the hood.
+Hi Randy
+
+> 
+> On 6/10/22 01:17, Serge Semin wrote:
+> > diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> > index bb45a9c00514..95e0e022b5bb 100644
+> > --- a/drivers/ata/Kconfig
+> > +++ b/drivers/ata/Kconfig
+> > @@ -176,6 +176,16 @@ config AHCI_DM816
+> >  
+> >  	  If unsure, say N.
+> >  
+> > +config AHCI_DWC
+> > +	tristate "Synopsys DWC AHCI SATA support"
+> > +	select SATA_HOST
+> > +	default SATA_AHCI_PLATFORM
 > 
 
-Since this patch file has 200+ lines, would you please help clarify what does
-'this' indicate?
+> I don't think this needs to default to SATA_AHCI_PLATFORM.
+> It might build a driver that isn't needed.
+> And it's incompatible with "If unsure, say N."
 
-The idea of this patch:
+Basically you are right, but this particular setting is connected with
+the modification I've done in the drivers/ata/ahci_platform.c driver
+in the framework of this commit. I've moved the "snps,spear-ahci" and
+"snps,dwc-ahci" compatible devices support to the new driver. Thus
+should I omit the SATA_AHCI_PLATFORM dependency their default kernel
+configs will lack the corresponding controllers support. If it's not a
+problem and we can rely on the kernel build system ability to ask
+whether the new config needs to be set/cleared, then I would be very
+happy to drop the default setting. What do you think?
 
-1. Convert the functions to initialize swiotlb into callee. The callee accepts
-'true' or 'false' as arguments to indicate whether it is for default or new
-swiotlb buffer, e.g., swiotlb_init_remap() into __swiotlb_init_remap().
+-Sergey
 
-2. At the caller side to decide if we are going to call the callee to create the
-extra buffer.
-
-Do you mean the callee if still *too high level* and all the
-decision/allocation/initialization should be down at *lower level functions*?
-
-E.g., if I re-work the "struct io_tlb_mem" to make the 64-bit buffer as the 2nd
-array of io_tlb_mem->slots[32_or_64][index], the user will only notice it is the
-default 'io_tlb_default_mem', but will not be able to know if it is allocated
-from 32-bit or 64-bit buffer.
-
-Thank you very much for the feedback.
-
-Dongli Zhang
+> 
+> > +	help
+> > +	  This option enables support for the Synopsys DWC AHCI SATA
+> > +	  controller implementation.
+> > +
+> > +	  If unsure, say N.
+> 
+> -- 
+> ~Randy

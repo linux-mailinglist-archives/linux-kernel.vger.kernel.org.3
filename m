@@ -2,144 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21035466C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC1F5466C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233565AbiFJMok convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Jun 2022 08:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
+        id S235263AbiFJMqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiFJMoi (ORCPT
+        with ESMTP id S229608AbiFJMql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:44:38 -0400
-Received: from relay5.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E5D18E;
-        Fri, 10 Jun 2022 05:44:35 -0700 (PDT)
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id 06E07121083;
-        Fri, 10 Jun 2022 12:44:30 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 08E1F2002A;
-        Fri, 10 Jun 2022 12:44:18 +0000 (UTC)
-Message-ID: <cd59f3eab3d2b4f069f4ebf169b33307eaa9e50d.camel@perches.com>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-From:   Joe Perches <joe@perches.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bill Wendling <morbo@google.com>
-Cc:     Jan Engelhardt <jengelh@inai.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bill Wendling <isanbard@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Date:   Fri, 10 Jun 2022 05:44:18 -0700
-In-Reply-To: <YqLUn3RdZ9HAKZKu@kroah.com>
-References: <20220609221702.347522-1-morbo@google.com>
-         <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-         <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
-         <nssn2ps-6n86-nqq6-9039-72847760nnq@vanv.qr>
-         <CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
-         <YqLUn3RdZ9HAKZKu@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Fri, 10 Jun 2022 08:46:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0676618E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654865200; x=1686401200;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2fPRffznqP3QJikn1bGV+biqojxGyPlNiUoj0REL35Q=;
+  b=YcNbvXQBZmCA4aV6zuiHYOkTqxPHP0jzVvifaDSg7lPJH6IaqI8Hs2R7
+   ztavY5TXAT9sYOvj7s5YglVp0zsmgh5SG0F7BvEpkw+p0CHhuQEHaGIjL
+   ftTn3adq9Uz65zoxvziYl6hz8MGcJApLVpLrV/+EX7JNa5Hpxh+MBtCsA
+   pxhxAnTazVxhw9TRVzXYEWNBrlzpOEpPjo8nW738yrsUAgC1k9RQlYDex
+   j+KdrWqtHQlEv/P2calnWzTtDZcJMrKsAXECL2zrry34aCR6KsfTA51t8
+   wqDWMyIsj91hTNwET3xCVvQh5tNtgT7mGoxgLHAeWXvtLvlRTV9uZzkMB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="257452818"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="257452818"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:46:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="671831932"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Jun 2022 05:46:39 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nze2A-000Hwf-U6;
+        Fri, 10 Jun 2022 12:46:38 +0000
+Date:   Fri, 10 Jun 2022 20:46:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [vireshk-pm:opp/linux-next 51/52] drivers/opp/core.c:97:6: warning:
+ no previous prototype for function 'assert_single_clk'
+Message-ID: <202206102000.LY9iR2Ek-lkp@intel.com>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 08E1F2002A
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: r8ecgxf89uwg9qffzdumnqfsj56kpo1p
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19T013fSZHIO4BR28mlFWzRzi2PPI2hbJs=
-X-HE-Tag: 1654865058-93434
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-10 at 07:20 +0200, Greg Kroah-Hartman wrote:
-> On Thu, Jun 09, 2022 at 04:16:16PM -0700, Bill Wendling wrote:
-> > On Thu, Jun 9, 2022 at 4:03 PM Jan Engelhardt <jengelh@inai.de> wrote:
-> > > On Friday 2022-06-10 00:49, Bill Wendling wrote:
-> > > > On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > > > On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
-> > > > > 
-> > > > > > This patch set fixes some clang warnings when -Wformat is enabled.
-> > > > > 
-> > > > > tldr:
-> > > > > 
-> > > > > -       printk(msg);
-> > > > > +       printk("%s", msg);
-> > > > > 
-> > > > > Otherwise these changes are a
-> > > > > useless consumer of runtime resources.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+head:   76c4db9b37866c60306d39ed982cba56af15ff00
+commit: a62471a6205813e478c21edb405d62285ea6be6e [51/52] OPP: Assert clk_count == 1 for single clk helpers
+config: arm64-randconfig-r025-20220610 (https://download.01.org/0day-ci/archive/20220610/202206102000.LY9iR2Ek-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 70d35fe1257e429266b83025997b400e9f79110e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=a62471a6205813e478c21edb405d62285ea6be6e
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/linux-next
+        git checkout a62471a6205813e478c21edb405d62285ea6be6e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/opp/
 
-> > > > Calling a "printf" style function is already insanely expensive.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I expect the printk code itself dominates, not the % scan cost.
+All warnings (new ones prefixed by >>):
 
-> > > Perhaps you can split vprintk_store in the middle (after the call to
-> > > vsnprintf), and offer the second half as a function of its own (e.g.
-> > > "puts"). Then the tldr could be
-> > > 
-> > > - printk(msg);
-> > > + puts(msg);
-> > 
-> > That might be a nice compromise. Andrew, what do you think?
-> 
-> You would need to do that for all of the dev_printk() variants, so I
-> doubt that would ever be all that useful as almost no one should be
-> using a "raw" printk() these days.
+>> drivers/opp/core.c:97:6: warning: no previous prototype for function 'assert_single_clk' [-Wmissing-prototypes]
+   bool assert_single_clk(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool assert_single_clk(struct opp_table *opp_table)
+   ^
+   static 
+   drivers/opp/core.c:1634:43: warning: variable 'clk_size' set but not used [-Wunused-but-set-variable]
+           int supply_count, supply_size, icc_size, clk_size;
+                                                    ^
+   2 warnings generated.
 
-True.  The kernel has ~20K variants like that.
 
-$ git grep -P '\b(?:(?:\w+_){1,3}(?:alert|emerg|crit|err|warn|notice|info|cont|debug|dbg)|printk)\s*\(".*"\s*\)\s*;' | wc -l
-21160
+vim +/assert_single_clk +97 drivers/opp/core.c
 
-That doesn't include the ~3K uses like
+    95	
+    96	/* Returns true for single clock, false with WARN otherwise */
+  > 97	bool assert_single_clk(struct opp_table *opp_table)
+    98	{
+    99		return !WARN_ON(opp_table->clk_count != 1);
+   100	}
+   101	
 
-#define foo "bar"
-	printk(foo);
-
-$ git grep -P '\b(?:(?:\w+_){1,3}(?:alert|emerg|crit|err|warn|info|notice|debug|dbg|cont)|printk)\s*\((?:\s*\w+){1,3}\s*\)\s*;'|wc -l
-2922
-
-There are apparently only a few hundred uses of variants like:
-
-	printk("%s", foo)
-
-$ git grep -P '\b(?:(?:\w+_){1,3}(?:alert|emerg|crit|err|warn|info|notice|debug|dbg|cont)|printk)\s*\(\s*"%s(?:\\n)?"\s*,\s*(?:".*"|\w+)\s*\)\s*;' | wc -l
-305
-
-unless I screwed up my greps (which of course is quite possible)
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

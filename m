@@ -2,47 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5B354649B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF885464B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346979AbiFJKw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S1349259AbiFJKwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239945AbiFJKwE (ORCPT
+        with ESMTP id S1345195AbiFJKwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:52:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E9A52FEF7D;
-        Fri, 10 Jun 2022 03:48:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 724FA12FC;
-        Fri, 10 Jun 2022 03:48:46 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C9613F766;
-        Fri, 10 Jun 2022 03:48:44 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 11:48:40 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Yoan Picchi <yoan.picchi@arm.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH 2/2] Removes the x86 dependency on the QAT drivers
-Message-ID: <20220610114840.10db23ea@donnerap.cambridge.arm.com>
-In-Reply-To: <20220609213652.GA115440-robh@kernel.org>
-References: <20220607165840.66931-1-yoan.picchi@arm.com>
- <20220607165840.66931-3-yoan.picchi@arm.com>
- <20220609213652.GA115440-robh@kernel.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Fri, 10 Jun 2022 06:52:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F10A30545B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654858138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CWkh+WwrOXy+lr72hI3IJZ1D1qWbN8stgCGKeJESz34=;
+        b=ArAw1ADEIS8vebxKZ93YBIuwm2Sh8/zcPv3q+hardnrDKcQiCLh2gsUQCv+0wTNuqkM6Rk
+        4Gmu68NQeyC5TDDxOIqn+i+VAnRKRGtTaO6UziZ8MQJ636ngBSD9Yzxeq16tUyzNyD8/Zq
+        +ipcwsUUOjdrd5I7xZU4MCKMOJ2Ryx4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-kdLxpJK5MLutOl0n-5KCYA-1; Fri, 10 Jun 2022 06:48:55 -0400
+X-MC-Unique: kdLxpJK5MLutOl0n-5KCYA-1
+Received: by mail-wm1-f71.google.com with SMTP id k32-20020a05600c1ca000b0039c4cf75023so1122223wms.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:48:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CWkh+WwrOXy+lr72hI3IJZ1D1qWbN8stgCGKeJESz34=;
+        b=V4uNiw9dRHwK18kopoAeRIqw0Lv+R3nQ3Atz7d9QNcnaZxwZkRQgKRdC0STXLdk4fa
+         WgmfvvVD4W/EIRM5/6nhiRrQK3VK/b7J26MDTzfy28DV2UaIlN1oAbFg/U6hbLWB20N2
+         0mYLDYHCrKLBiwQ60GH5IoBssXnPalc9n2ltKRf3ju2uMvEF8w6zwtx/vyQSxjVhFqM7
+         Y2e63ZX/qY5NMG5QJL3bfo9mDfoK8WUQo/7QG4X2BkL+zPh0RCkk9rnPaxOiGgc8fbka
+         srHYBprcleWr1Y3bpQt6pZprrmi/jFuC0yl5ghFgYEpNg5SQkm3NUKHn/isXu36jhxOJ
+         CFzw==
+X-Gm-Message-State: AOAM531bFO6EUxuhMqi5MiKesBbkrkyLoP8xqq0LNJV4hLVDi1QUDJov
+        FrPMjJKdD7rt+Wt5HboxuMs8U5jQStJeYgHiQteDSYJYGyn96Czolzusjev8X8bj86FdBXqXd17
+        hmzwI92cUmtsiQ/ntLGV6f+/J
+X-Received: by 2002:a7b:c310:0:b0:38c:f07a:e10d with SMTP id k16-20020a7bc310000000b0038cf07ae10dmr8284536wmj.110.1654858134639;
+        Fri, 10 Jun 2022 03:48:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy0W/iRnqZGok+Dtln1QGHn4dkyrs5LOr4eKgyWhEe1ws2y4/hUtrhhuo/t9QkujNnxNRICuw==
+X-Received: by 2002:a7b:c310:0:b0:38c:f07a:e10d with SMTP id k16-20020a7bc310000000b0038cf07ae10dmr8284516wmj.110.1654858134365;
+        Fri, 10 Jun 2022 03:48:54 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id d12-20020adff2cc000000b00215859413f3sm20414628wrp.107.2022.06.10.03.48.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 03:48:53 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 12:48:51 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 126/144] KVM: selftests: Convert kvm_binary_stats_test
+ away from vCPU IDs
+Message-ID: <20220610104851.g2r6yzd6j22xod6m@gator>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <20220603004331.1523888-127-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603004331.1523888-127-seanjc@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,58 +81,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 15:36:52 -0600
-Rob Herring <robh@kernel.org> wrote:
-
-Hi,
-
-> On Tue, Jun 07, 2022 at 04:58:40PM +0000, Yoan Picchi wrote:
-> > This dependency looks outdated. After the previous patch, we have been able
-> > to use this driver to encrypt some data and to create working VF on arm64.
-> > We have not tested it yet on any big endian machine, hence the new dependency  
+On Fri, Jun 03, 2022 at 12:43:13AM +0000, Sean Christopherson wrote:
+> Track vCPUs by their 'struct kvm_vcpu' object in kvm_binary_stats_test,
+> not by their ID.  The per-vCPU helpers will soon take a vCPU instead of a
+> VM+vcpu_id pair.
 > 
-> For the subject, use prefixes matching the subsystem (like you did on 
-> patch 1).
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  tools/testing/selftests/kvm/kvm_binary_stats_test.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
 > 
-> The only testing obligation you have is compiling for BE.
+> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> index 407e9ea8e6f3..dfc3cf531ced 100644
+> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> @@ -172,9 +172,9 @@ static void vm_stats_test(struct kvm_vm *vm)
+>  	TEST_ASSERT(fcntl(stats_fd, F_GETFD) == -1, "Stats fd not freed");
+>  }
+>  
+> -static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
+> +static void vcpu_stats_test(struct kvm_vcpu *vcpu)
+>  {
+> -	int stats_fd = vcpu_get_stats_fd(vm, vcpu_id);
+> +	int stats_fd = vcpu_get_stats_fd(vcpu->vm, vcpu->id);
+>  
+>  	stats_test(stats_fd);
+>  	close(stats_fd);
+> @@ -195,6 +195,7 @@ static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
+>  int main(int argc, char *argv[])
+>  {
+>  	int i, j;
+> +	struct kvm_vcpu **vcpus;
+>  	struct kvm_vm **vms;
+>  	int max_vm = DEFAULT_NUM_VM;
+>  	int max_vcpu = DEFAULT_NUM_VCPU;
+> @@ -220,17 +221,21 @@ int main(int argc, char *argv[])
+>  	/* Create VMs and VCPUs */
+>  	vms = malloc(sizeof(vms[0]) * max_vm);
+>  	TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
+> +
+> +	vcpus = malloc(sizeof(struct kvm_vcpu *) * max_vm * max_vcpu);
+> +	TEST_ASSERT(vcpus, "Allocate memory for storing vCPU pointers");
+> +
+>  	for (i = 0; i < max_vm; ++i) {
+>  		vms[i] = vm_create_barebones();
+>  		for (j = 0; j < max_vcpu; ++j)
+> -			__vm_vcpu_add(vms[i], j);
+> +			vcpus[j * max_vcpu + i] = __vm_vcpu_add(vms[i], j);
 
-So I just compiled for arm64 BE, powerpc BE & LE, and riscv again:
-$ file qat_c62xvf.ko
-qat_c62xvf.ko: ELF 64-bit MSB relocatable, ARM aarch64, version 1 (SYSV),
-BuildID[sha1]=630cc0ee5586c7aeb6e0ab5567ce2f2f7cc46adf, with debug_info,
-not stripped
-qat_c62xvf.ko: ELF 64-bit MSB relocatable, 64-bit PowerPC or cisco 7500,
-version 1 (SYSV), BuildID[sha1]=4090ba181cf95f27108bf3ecde0776f12ef2b636,
-not stripped
-qat_c62xvf.ko: ELF 64-bit LSB relocatable, 64-bit PowerPC or cisco 7500,
-version 1 (SYSV), BuildID[sha1]=2cb0fd09d5bc36c8918fcd061c9f3dac1546cf0d,
-not stripped
-qat_c62xvf.ko: ELF 64-bit LSB relocatable, UCB RISC-V, version 1 (SYSV),
-BuildID[sha1]=bfaa53df7e9aad79d3ab4c05e75ca9169227f6b8, not stripped
+The expression for the index should be 'i * max_vcpu + j'. The swapped
+i,j usage isn't causing problems now because
+DEFAULT_NUM_VM == DEFAULT_NUM_VCPU, but that could change.
 
-All built without errors or warnings, for every of the enabled drivers.
+>  	}
+>  
+>  	/* Check stats read for every VM and VCPU */
+>  	for (i = 0; i < max_vm; ++i) {
+>  		vm_stats_test(vms[i]);
+>  		for (j = 0; j < max_vcpu; ++j)
+> -			vcpu_stats_test(vms[i], j);
+> +			vcpu_stats_test(vcpus[j * max_vcpu + i]);
 
-> If kconfig was
-> supposed to capture what endianness drivers have been tested or not
-> tested with, then lots of drivers are missing the dependency. Kconfig
-> depends/select entries should generally be either to prevent compile
-> failures (you checked PPC, RiscV, etc.?) or to hide drivers *really*
-> specific to a platform. IMO, we should only have !CPU_BIG_ENDIAN if it 
-> is known not to work and not easily fixed.
+Same comment as above.
 
-Fair enough, I leave that decision to Giovanni. I have plans to test this
-with BE, but getting a BE setup on a server is not trivial, both for
-userland and actual booting, so this will take some time. We just didn't
-want to block this on some BE concerns.
+Thanks,
+drew
 
-> Also, with the dependency, no one can test the driver without modifying 
-> the kernel and if it does work as-is, then one has to upstream a change 
-> and then wait for it to show up in distro kernels. You could mitigate 
-> the first part with COMPILE_TEST.
+>  	}
+>  
+>  	for (i = 0; i < max_vm; ++i)
+> -- 
+> 2.36.1.255.ge46751e96f-goog
+> 
 
-Yeah, that's a good point, we were already bitten by this, the initial
-testing was done on a stable distro kernel (v5.4), and it worked fine
-already there.
-
-Cheers,
-Andre

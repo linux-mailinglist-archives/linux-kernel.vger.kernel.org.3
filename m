@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A50546364
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB49054636B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348724AbiFJKSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S1347961AbiFJKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244420AbiFJKSG (ORCPT
+        with ESMTP id S245415AbiFJKUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:18:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3203E5D6;
-        Fri, 10 Jun 2022 03:18:03 -0700 (PDT)
+        Fri, 10 Jun 2022 06:20:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6885B40934;
+        Fri, 10 Jun 2022 03:20:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F4A61F93;
-        Fri, 10 Jun 2022 10:18:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81020C3411E;
-        Fri, 10 Jun 2022 10:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654856282;
-        bh=Mgof106cR39tCNt2/D1vN1oOa5Rp+UIYZiiD80oMBuY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OgpKivqT9cZqXAgrW/tfIVrc5r8vOzX/GEqwOLFyBG2EaoIOyj128iD8Gi9w0U5MZ
-         Gr/rM4W9g8rimCzQAq6pifSKCrHsQm22eg0Gkzrb14KZKep8f174nubAuG3Pem6HnX
-         dhD2abwlHXkE+xhfVXWHQGjR+2/Sfz7fXjhbgmw8=
-Date:   Fri, 10 Jun 2022 12:17:54 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v9 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/
-Message-ID: <YqMaUroS87rjnCny@kroah.com>
-References: <20220309023404.1221453-1-xji@analogixsemi.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C70961FA9;
+        Fri, 10 Jun 2022 10:20:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EAB5C3411D;
+        Fri, 10 Jun 2022 10:20:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654856404;
+        bh=FhYDRCSqPldOOqIsWfKTZqDwNGGJRG4SY0AMoIQzzuQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uIwKZGbgKW+IHqzONys2A1e3ShYXsXsnw52BFyXQHd01pd1ggU5nA6xoVSohGt+sT
+         P/adhkwed/VTWUtIhRzPDT9FznYdXqjd8FHplIAV/4KuMSkgXs1asHe6GVcvSpQpFt
+         AE5K4Fk9aE9NOHtGqFJ0Swu2coVU6Hj7tNhZ8c/cbfmdpXocBKRGDDeMjAWRvcDY94
+         2VQWnTx72cuxLXuxXPhqZYMkS0HoCarbsj/MesR4U31SmUsaKcohDKg9VmhQKKt2pN
+         YMMyGb1KwvX28FgJmb4CIGNJCFJWMgoY0dHItUlcVcC7VbGduTCOf/31iD6DQzKHg7
+         cipL3F3yLKLjg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1nzbkF-0001m1-Ta; Fri, 10 Jun 2022 12:19:59 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     stable@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH stable-5.17] PCI: qcom: Fix pipe clock imbalance
+Date:   Fri, 10 Jun 2022 12:19:45 +0200
+Message-Id: <20220610101945.6808-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309023404.1221453-1-xji@analogixsemi.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 10:34:01AM +0800, Xin Ji wrote:
-> USB PD controllers which consisting of a microcontroller (acting as the TCPM)
-> and a port controller (TCPC) - may require that the driver for the PD
-> controller accesses directly also the on-chip port controller in some cases.
-> 
-> Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
-> 
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> 
-> ---
-> V8 -> V9: Add more commit message
-> V7 -> V8: Fix Guanter's comment, remove unnecessary explain
-> 
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
->  drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
->  drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
->  {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
->  5 files changed, 5 insertions(+), 7 deletions(-)
->  rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+commit fdf6a2f533115ec5d4d9629178f8196331f1ac50 upstream.
 
-I need an ack by the typec maintainers/developers before I can take this
-(hint...)
+Fix a clock imbalance introduced by ed8cc3b1fc84 ("PCI: qcom: Add support
+for SDM845 PCIe controller"), which enables the pipe clock both in init()
+and in post_init() but only disables in post_deinit().
 
-thanks,
+Note that the pipe clock was also never disabled in the init() error
+paths and that enabling the clock before powering up the PHY looks
+questionable.
 
-greg k-h
+Link: https://lore.kernel.org/r/20220401133351.10113-1-johan+linaro@kernel.org
+Fixes: ed8cc3b1fc84 ("PCI: qcom: Add support for SDM845 PCIe controller")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: stable@vger.kernel.org      # 5.6
+[ johan: adjust context for 5.17 ]
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/pci/controller/dwc/pcie-qcom.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index c19cd506ed3f..18d571f08cdc 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1230,12 +1230,6 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+ 		goto err_disable_clocks;
+ 	}
+ 
+-	ret = clk_prepare_enable(res->pipe_clk);
+-	if (ret) {
+-		dev_err(dev, "cannot prepare/enable pipe clock\n");
+-		goto err_disable_clocks;
+-	}
+-
+ 	/* configure PCIe to RC mode */
+ 	writel(DEVICE_TYPE_RC, pcie->parf + PCIE20_PARF_DEVICE_TYPE);
+ 
+-- 
+2.35.1
+

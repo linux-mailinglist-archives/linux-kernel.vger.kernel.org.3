@@ -2,192 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9646545906
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4F0545907
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239155AbiFJALm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S233835AbiFJANC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiFJALh (ORCPT
+        with ESMTP id S231631AbiFJAM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:11:37 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBB34BBAC
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:11:35 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-fb1ae0cd9cso1369668fac.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lN+fOqwv9bBcDqIpukqHItG5mOqsK9h2lCdbXTf1cPM=;
-        b=DayT0SdBt1ymTKyry+8RI8dWvFXfKXAgjmO8VhNnB1yoDZK63YuzcCUTHD3X1Z3+t5
-         KxmGEbccYszaa9LA1rH+uPvXkUot/k7y+eYJ5dVw1vcNDUZMV9ll/y/F+7N08dr0Wzcn
-         baBzETzPA15Z2tn9QgoF5S7+WOA0j8RJa/fH3l+HKIsIdEIRN75ENG6RuJQTaJE4f7s+
-         tdQ6ePOMDHk+W48X2uZ7KmmqPYEcwu7pMK65fJXjpYRLWoV5X97j/IkcgrkGUpYpxwIB
-         E5LIO66muSm/XASIShQU2K4+YUS/ejVNHYtSotPk8eFHXkkvvETkJhzMm8POKoBM9Wup
-         sSZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lN+fOqwv9bBcDqIpukqHItG5mOqsK9h2lCdbXTf1cPM=;
-        b=vtxgtmUoZfVTSCeldghlXolDnJgNr8xAsr2aEJ6tETVxQ/EnwdP5VRZ/gqp9RhjO4K
-         DTniRANfuVn4bUV0UXOuGh1l0J2FxFbU59M/fa1pLZYlYZEDbzjYXQPKvvdwQs4GXb0D
-         hJU+0zkJBYNIz0/m/pOvuWWozKIsPmL4qGLo4P/e6jgTTBY7ipjCRxFp5skVW5uWgptP
-         SMBwsWlD69alLTlKfd00+QABgJi+Pw1ae3cfJs1lNM3TDVwcgDwYHPivZ1E6V9Zr+Thn
-         pfqbIBpCKRFC6PyVZ4eCDMfn1BJiGqAl1g02zdtbNm8IxizjbLtF1wiyfO478Md3B+YZ
-         iXCQ==
-X-Gm-Message-State: AOAM531YWjPfqXGUA6jBLnpiZy4+X2Lzt0rF0Y4AXVAIIs4CErvTPdL3
-        JYNVTF9rJtoH8mlz3rgolEiQDpDTA9KGwRcjEUDqTA==
-X-Google-Smtp-Source: ABdhPJzdaT0C30mX9Im9rqGsL6x1Rmi0294lLn68XE92+pqgxWwSN0AqB6f3CMYnEGDUJ7ZH1btvuZX8xfTHzXelZbU=
-X-Received: by 2002:a05:6870:b616:b0:e2:f8bb:5eb with SMTP id
- cm22-20020a056870b61600b000e2f8bb05ebmr3338490oab.218.1654819893261; Thu, 09
- Jun 2022 17:11:33 -0700 (PDT)
+        Thu, 9 Jun 2022 20:12:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49A6280F02
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654819975; x=1686355975;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=muShz80N5WXbIaJ1H26l8GvCgTypGQ83+6ajKlOUXWg=;
+  b=iYG+Ew5q3nFq19memfPWwb8JqJeuxUgckhZUxUvG6Hh1gxJ9yNACagvk
+   M0pG98WZ9iSFa2dF2I4voivuTiac+8VWeLbLjD1Ro4ojhmUeRerS3Xk9G
+   GvFh0DIYt52jBy5yl6+W9bLHIXHq2hYStBxRNnzWZRlIID77K9mDyBl10
+   UegfmfDH4BhCzim4HTZd61CeK7HnThqfKwJGNwnl9z+upaEIMGvvbHYKq
+   zUrjtLg+RPbB3k9SZocnkJCegeDeQbq2DakwA67Tl5hKs01ojMWOdpzqr
+   JY5nCwsFikdcBQEU5f7PzsFMq0e5a0nhL6WgJlgeQzoY5FTqVJmx/oe21
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363789594"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="363789594"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:12:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="684247958"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Jun 2022 17:12:53 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzSGj-000GW6-7U;
+        Fri, 10 Jun 2022 00:12:53 +0000
+Date:   Fri, 10 Jun 2022 08:11:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ramesh Errabolu <Ramesh.Errabolu@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>
+Subject: [agd5f:drm-next 156/174]
+ drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:1542:11: warning:
+ variable 'i' set but not used
+Message-ID: <202206100824.0OO7jTU5-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
- <20220607065749.GA1513445@chaop.bj.intel.com> <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
- <20220608021820.GA1548172@chaop.bj.intel.com>
-In-Reply-To: <20220608021820.GA1548172@chaop.bj.intel.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Thu, 9 Jun 2022 17:11:21 -0700
-Message-ID: <CAA03e5GmJw8u83=OG2wYrhdO81Sx5Jme-jkUnoTMQ7cc_o7u=w@mail.gmail.com>
-Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 7:22 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> On Tue, Jun 07, 2022 at 05:55:46PM -0700, Marc Orr wrote:
-> > On Tue, Jun 7, 2022 at 12:01 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> > >
-> > > On Mon, Jun 06, 2022 at 01:09:50PM -0700, Vishal Annapurve wrote:
-> > > > >
-> > > > > Private memory map/unmap and conversion
-> > > > > ---------------------------------------
-> > > > > Userspace's map/unmap operations are done by fallocate() ioctl on the
-> > > > > backing store fd.
-> > > > >   - map: default fallocate() with mode=0.
-> > > > >   - unmap: fallocate() with FALLOC_FL_PUNCH_HOLE.
-> > > > > The map/unmap will trigger above memfile_notifier_ops to let KVM map/unmap
-> > > > > secondary MMU page tables.
-> > > > >
-> > > > ....
-> > > > >    QEMU: https://github.com/chao-p/qemu/tree/privmem-v6
-> > > > >
-> > > > > An example QEMU command line for TDX test:
-> > > > > -object tdx-guest,id=tdx \
-> > > > > -object memory-backend-memfd-private,id=ram1,size=2G \
-> > > > > -machine q35,kvm-type=tdx,pic=no,kernel_irqchip=split,memory-encryption=tdx,memory-backend=ram1
-> > > > >
-> > > >
-> > > > There should be more discussion around double allocation scenarios
-> > > > when using the private fd approach. A malicious guest or buggy
-> > > > userspace VMM can cause physical memory getting allocated for both
-> > > > shared (memory accessible from host) and private fds backing the guest
-> > > > memory.
-> > > > Userspace VMM will need to unback the shared guest memory while
-> > > > handling the conversion from shared to private in order to prevent
-> > > > double allocation even with malicious guests or bugs in userspace VMM.
-> > >
-> > > I don't know how malicious guest can cause that. The initial design of
-> > > this serie is to put the private/shared memory into two different
-> > > address spaces and gives usersapce VMM the flexibility to convert
-> > > between the two. It can choose respect the guest conversion request or
-> > > not.
-> >
-> > For example, the guest could maliciously give a device driver a
-> > private page so that a host-side virtual device will blindly write the
-> > private page.
->
-> With this patch series, it's actually even not possible for userspace VMM
-> to allocate private page by a direct write, it's basically unmapped from
-> there. If it really wants to, it should so something special, by intention,
-> that's basically the conversion, which we should allow.
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   64f6516e60b0bbe6abfc9f1d9f1999012e0f11a6
+commit: 0f28cca87e9afc22280c44d378d2a6e249933977 [156/174] drm/amdkfd: Extend KFD device topology to surface peer-to-peer links
+config: arm64-randconfig-r023-20220609 (https://download.01.org/0day-ci/archive/20220610/202206100824.0OO7jTU5-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 0f28cca87e9afc22280c44d378d2a6e249933977
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/
 
-I think Vishal did a better job to explain this scenario in his last
-reply than I did.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > It's possible for a usrspace VMM to cause double allocation if it fails
-> > > to call the unback operation during the conversion, this may be a bug
-> > > or not. Double allocation may not be a wrong thing, even in conception.
-> > > At least TDX allows you to use half shared half private in guest, means
-> > > both shared/private can be effective. Unbacking the memory is just the
-> > > current QEMU implementation choice.
-> >
-> > Right. But the idea is that this patch series should accommodate all
-> > of the CVM architectures. Or at least that's what I know was
-> > envisioned last time we discussed this topic for SNP [*].
->
-> AFAICS, this series should work for both TDX and SNP, and other CVM
-> architectures. I don't see where TDX can work but SNP cannot, or I
-> missed something here?
+All warnings (new ones prefixed by >>):
 
-Agreed. I was just responding to the "At least TDX..." bit. Sorry for
-any confusion.
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:1542:11: warning: variable 'i' set but not used [-Wunused-but-set-variable]
+           uint32_t i, k;
+                    ^
+   1 warning generated.
 
-> >
-> > Regardless, it's important to ensure that the VM respects its memory
-> > budget. For example, within Google, we run VMs inside of containers.
-> > So if we double allocate we're going to OOM. This seems acceptable for
-> > an early version of CVMs. But ultimately, I think we need a more
-> > robust way to ensure that the VM operates within its memory container.
-> > Otherwise, the OOM is going to be hard to diagnose and distinguish
-> > from a real OOM.
->
-> Thanks for bringing this up. But in my mind I still think userspace VMM
-> can do and it's its responsibility to guarantee that, if that is hard
-> required. By design, userspace VMM is the decision-maker for page
-> conversion and has all the necessary information to know which page is
-> shared/private. It also has the necessary knobs to allocate/free the
-> physical pages for guest memory. Definitely, we should make userspace
-> VMM more robust.
 
-Vishal and Sean did a better job to articulate the concern in their
-most recent replies.
+vim +/i +1542 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c
+
+  1537	
+  1538	static int kfd_dev_create_p2p_links(void)
+  1539	{
+  1540		struct kfd_topology_device *dev;
+  1541		struct kfd_topology_device *new_dev;
+> 1542		uint32_t i, k;
+  1543		int ret = 0;
+  1544	
+  1545		k = 0;
+  1546		list_for_each_entry(dev, &topology_device_list, list)
+  1547			k++;
+  1548		if (k < 2)
+  1549			return 0;
+  1550	
+  1551		new_dev = list_last_entry(&topology_device_list, struct kfd_topology_device, list);
+  1552		if (WARN_ON(!new_dev->gpu))
+  1553			return 0;
+  1554	
+  1555		k--;
+  1556		i = 0;
+  1557	
+  1558		/* create in-direct links */
+  1559		ret = kfd_create_indirect_link_prop(new_dev, k);
+  1560		if (ret < 0)
+  1561			goto out;
+  1562	
+  1563		/* create p2p links */
+  1564	#if defined(CONFIG_HSA_AMD_P2P)
+  1565		list_for_each_entry(dev, &topology_device_list, list) {
+  1566			if (dev == new_dev)
+  1567				break;
+  1568			if (!dev->gpu || !dev->gpu->adev ||
+  1569			    (dev->gpu->hive_id &&
+  1570			     dev->gpu->hive_id == new_dev->gpu->hive_id))
+  1571				goto next;
+  1572	
+  1573			/* check if node(s) is/are peer accessible in one direction or bi-direction */
+  1574			ret = kfd_add_peer_prop(new_dev, dev, i, k);
+  1575			if (ret < 0)
+  1576				goto out;
+  1577	
+  1578			ret = kfd_add_peer_prop(dev, new_dev, k, i);
+  1579			if (ret < 0)
+  1580				goto out;
+  1581	next:
+  1582			i++;
+  1583		}
+  1584	#endif
+  1585	
+  1586	out:
+  1587		return ret;
+  1588	}
+  1589	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

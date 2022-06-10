@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1070546BE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555C5546BE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350212AbiFJRvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 13:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
+        id S1349853AbiFJRyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 13:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244289AbiFJRvL (ORCPT
+        with ESMTP id S244289AbiFJRyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 13:51:11 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE7A23099D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:51:08 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id a9so44356qvt.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gbzkjjTxvQf4VVDFnHZw7tp+40yLDsNszIZC27jGgaA=;
-        b=ktDjDmimUdUaSLqq9VN1NgNId+TpNPROHpml/KlyG+F6S9rMMfY9ehr/CYwSyRILoF
-         MbRv1YlflAT+fgJqRWN/+D5Si2kxNKjtByj/8bzA1Tk8v3XRX4KzCCePL8tP8NdjsTRR
-         Y91XfkLqH1x4vzP7F+NHuI2a+MYEBSgmrEIGuhnAegKGzJsUOe2j8SIg90MYZetuRBLk
-         82Vql+9kAxtea9tQebI7xIrjBlWxXRQQXAjVthnbklOsDTGWHAk79q1+w99RiZBTG1vw
-         e1P6AmOFlUHKxUbC90Jm7OJGLMKuYknAHc/FJ3q+YtLs5mWbjI+p0KZgnB58wdeFIa4d
-         vfQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gbzkjjTxvQf4VVDFnHZw7tp+40yLDsNszIZC27jGgaA=;
-        b=cY6c7yuGsej/LEmjjwk8Se3TbKgg/yevG7ZN0FBrZBsRQWWffcgtaDv+3182hKjIHq
-         iwGqSma4A+OypezHOSY8SWG1AzxeI8v7UbIP5EV5WARIS+u/xtN3WFFKWt71dtcnkKnr
-         i2OpodZFoz24J35tV0p1V301UCXGszE9cyOBG6BgKh2uityuRkUiTeGCim1Rb5luJUk8
-         XujxICgVmYvD+DP7vY01OMGpAacLWKj6Ni/HBTzic46v6kXDSN5WPcM92W9bZ57P0Scg
-         38w8ruyMk/fp1jB7pWEhDy65EuVIYQfUMUVRXyy7gagQWplZd1L6imbQlqO8c3nwbUl2
-         9dOg==
-X-Gm-Message-State: AOAM531dj3Gol3kZAjx3c0L374WcNUohQHCRcvale1Z0oE6/1l2Ms77G
-        V2HK+JPurUdGKy8dIEpeEEM=
-X-Google-Smtp-Source: ABdhPJx4rDyDDK3vDJhZOpN5hYHq3TZkUJW/4cBBOD8ofuj01peRmrXhXVRJX7IRjj/8ykznevrgfw==
-X-Received: by 2002:a05:6214:2304:b0:438:458e:eafc with SMTP id gc4-20020a056214230400b00438458eeafcmr89193869qvb.118.1654883467506;
-        Fri, 10 Jun 2022 10:51:07 -0700 (PDT)
-Received: from Agam.hsd1.mi.comcast.net ([2601:402:4500:22e0::e952])
-        by smtp.gmail.com with ESMTPSA id s137-20020a37a98f000000b006a6c230f5e0sm51631qke.31.2022.06.10.10.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 10:51:06 -0700 (PDT)
-From:   Agam Kohli <agamkohli9@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, brauner@kernel.org, hridya@google.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        Agam Kohli <agamkohli9@gmail.com>
-Subject: [PATCH] drivers: android: binder_alloc: Fixed include warning
-Date:   Fri, 10 Jun 2022 13:50:48 -0400
-Message-Id: <20220610175048.79446-1-agamkohli9@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 10 Jun 2022 13:54:18 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF62F17FC1E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:54:17 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 17:54:09 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1654883653; x=1655142853;
+        bh=nxoTndTUQ2vonEkTmNIcxLEtrwo1HFnunt341zyx2GM=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:
+         Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID;
+        b=lQWp4mBy1fGSJ5VPzSTpIoso/bPCVN6uxsPe4rNR2LJ+Xzu3hcbvtxVYRW0ITiPp8
+         ypH0aXO9FAfL5nCp+sxQEDVPNLdozXGK/Sg6sFNiX3m3PIPB6pEewUwfl/MMpLgWGZ
+         92Ya4mSlHIKn6q1IQbf3t5rZwwvtUWECd8/iUepWegOMLblDiIn5KFqPwK6haH5N+X
+         RjPIzv0qkKH7o1H8a9JJF6zZv931kIAETj6ZLh6yi4U3Rt0uIbFYIV0rjjAsNxUA1F
+         tfUDQQEBA+KphbSQ2zkL0LvvSe+yDcnNBb1yUFN2di2fSr6yeGk2WjNgrfTcjANKLT
+         WTMkf2oyTcp3g==
+To:     devicetree@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Subject: [RESEND PATCH] arm64: dts: qcom: msm8916-samsung-a2015: Add touchscreen pinctrl
+Message-ID: <20220610175332.104154-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changed include from asm/ to linux/
+A3, A5 and most of the Samsung phones with MSM8916 SoC use GPIO pin 13 for
+touchscreen interrupts. Add touchscreen pinctrl to a2015 common dtsi.
 
-Signed-off-by: Agam Kohli <agamkohli9@gmail.com>
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 ---
- drivers/android/binder_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi | 8 ++++++++
+ arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts      | 8 --------
+ arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts      | 8 --------
+ 3 files changed, 8 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index 5649a0371a1f..4c10c4f9573a 100644
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -19,7 +19,7 @@
- #include <linux/sched.h>
- #include <linux/list_lru.h>
- #include <linux/ratelimit.h>
--#include <asm/cacheflush.h>
-+#include <linux/cacheflush.h>
- #include <linux/uaccess.h>
- #include <linux/highmem.h>
- #include <linux/sizes.h>
--- 
-2.36.1
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi b/a=
+rch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
+index 9b4b7de7cec2..9c19f257cc81 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
+@@ -460,6 +460,14 @@ tsp_en_default: tsp-en-default {
+ =09=09drive-strength =3D <2>;
+ =09=09bias-disable;
+ =09};
++
++=09ts_int_default: ts-int-default {
++=09=09pins =3D "gpio13";
++=09=09function =3D "gpio";
++
++=09=09drive-strength =3D <2>;
++=09=09bias-disable;
++=09};
+ };
+
+ &pm8916_gpios {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts b/arch/ar=
+m64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
+index 4ba11b020f9b..bc198a2eea25 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
+@@ -128,12 +128,4 @@ tkey_led_en_default: tkey-led-en-default {
+ =09=09drive-strength =3D <2>;
+ =09=09bias-disable;
+ =09};
+-
+-=09ts_int_default: ts-int-default {
+-=09=09pins =3D "gpio13";
+-=09=09function =3D "gpio";
+-
+-=09=09drive-strength =3D <2>;
+-=09=09bias-disable;
+-=09};
+ };
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts b/arch/ar=
+m64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
+index d978c9ac179d..7f2ab1891d91 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
+@@ -69,12 +69,4 @@ tkey_en_default: tkey-en-default {
+ =09=09drive-strength =3D <2>;
+ =09=09bias-disable;
+ =09};
+-
+-=09ts_int_default: ts-int-default {
+-=09=09pins =3D "gpio13";
+-=09=09function =3D "gpio";
+-
+-=09=09drive-strength =3D <2>;
+-=09=09bias-disable;
+-=09};
+ };
+--
+2.30.2
+
 

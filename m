@@ -2,187 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85925458E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 01:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA1E5458E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237871AbiFIX7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 19:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S238055AbiFJAB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiFIX7k (ORCPT
+        with ESMTP id S229924AbiFJAB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:59:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6DA0237943
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 16:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654819175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HZmJDZ9hQK0bNfmPnAorsPdU9x3OOxEaC2i3SyIrcpc=;
-        b=AQ6BpzplLkPCPtjRb/jpDfYmvcvsO5kmkGtchoueXPIITBBRIjFIWlMPo8DFxn0T8Qnf32
-        1sVc43YT4NPJF+zD2+euv1CPKS4cLpigPO0/uxDQMKqsyNRXm6gSvtR8DjasTs6m9pQ+OB
-        0Dv0VRATZa1RTZ0qcBfyoXptzphTHn0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-c-TqIG6yNmK9PlqI69ymhQ-1; Thu, 09 Jun 2022 19:59:32 -0400
-X-MC-Unique: c-TqIG6yNmK9PlqI69ymhQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D795E1C04B4F;
-        Thu,  9 Jun 2022 23:59:31 +0000 (UTC)
-Received: from rh (vpn2-54-75.bne.redhat.com [10.64.54.75])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 361B81121314;
-        Thu,  9 Jun 2022 23:59:31 +0000 (UTC)
-Received: from localhost ([::1] helo=rh)
-        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <dchinner@redhat.com>)
-        id 1nzS3k-00H7Qv-34; Fri, 10 Jun 2022 09:59:28 +1000
-Date:   Fri, 10 Jun 2022 09:59:25 +1000
-From:   Dave Chinner <dchinner@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] s390: disable -Warray-bounds
-Message-ID: <YqKJXf6dif2emugf@rh>
-References: <20220422134308.1613610-1-svens@linux.ibm.com>
- <202204221052.85D0C427@keescook>
- <CAHk-=wjahn2fZtMxmc4D9UOUGWVws1wZ=X46jrTV=_tEpzXeoA@mail.gmail.com>
- <202206081404.F98F5FC53E@keescook>
- <CAHk-=wiFn-_OaWKY=nXt3YSiy=obrNoQW_u7zKO7qoArez=GUw@mail.gmail.com>
- <AEEBCF5D-8402-441D-940B-105AA718C71F@chromium.org>
- <CAHk-=wh6+KUi+T8Ncn6BWTHDTJCzrJxgT47SWbq-ZWs1_vbvHA@mail.gmail.com>
- <4147483.1654784079@warthog.procyon.org.uk>
- <CAHk-=wj5hoE19YNniN+cquGT6H2z1BefbBo7UwE4-oySW86BxA@mail.gmail.com>
+        Thu, 9 Jun 2022 20:01:56 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD25B2358E9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:01:53 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id f65so13078401pgc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1O6AEKHlVD9Bngjug6xvCzo7n1uYfU+pNTujv/UlryM=;
+        b=gKODhx7XfIhwVIKz1he6ZDxvO/tY2AjUieoIgQuHMoThC0FJ4vzfaklHySIZt6r5WJ
+         1R8GaaFWN7nRXrevu/NSq1d8aV7Nu5/Sq5SLQHFVXwnEKGZJ5+q1zAkFZtFVBmGUCXpX
+         N/Qwo7oTj9TeHGHffxgpURt4vfLx88GxXrRySh/Sl3XSD2BJnZbEbVYT/3f9not46+ZI
+         NeJ4VyzzDhjO9WJnnxSD2Oi+D9cmk9rIflkNVFrOj/9R5e/oxmPlmHcCQcgxtU3MyvMw
+         Ny75uHCxqiIETZYnXUhrZqG3DvDjUFLb+/+sXo+YrKfswDw/6fHuk6llXVutFVIDRKdU
+         FAKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1O6AEKHlVD9Bngjug6xvCzo7n1uYfU+pNTujv/UlryM=;
+        b=CEpD4F48tpR4EWibvVtR1Avu7YdcZJNCzcgb4vhOxuIFaB7FRKG3+fmEh4il3V7mbl
+         taP7IIEIPX5AK8Gl1JgVxT0r2tHaR7pixtBAPIobmgCg64Ch7iv29yHnqPxY5P31ooTB
+         C8P5bzhMnO+qxbX6zR6Ura5IoTL3Y9hdzHy8lBIqSKc8eRoNdb3gZxvpOsKCdDmR1n+y
+         lc0zHPKmgcg/L3rISbzK7bpav6sWsjoqHK3KbdClvgq99ageTxLd7hNNaJm3Oyvmk9eb
+         7fo/MFNo6JOQZlti4BBc5aiEdzPQAQCIXcdbEvffBPlxlXeUDiM0zWo59Yb7X7tgodg2
+         UYgQ==
+X-Gm-Message-State: AOAM533VFyemkSg8n/5yvZzXcKNgFOlXDR07fJdDGIi5SIbTymkn8K/0
+        vrqYXVn6OL0zVgpJtSKXa/s5D2PSgJ0OdJ3+zNc=
+X-Google-Smtp-Source: ABdhPJzSTcuzVCQRZSa7XT1K3nxjYb6HDH+tN6bJ4JerIlwdo7OsNzX3wTowpisIFYReXy6Awud5rJq+I+eFfEF/O34=
+X-Received: by 2002:a05:6a02:184:b0:3fc:3b43:e5da with SMTP id
+ bj4-20020a056a02018400b003fc3b43e5damr36066679pgb.587.1654819312838; Thu, 09
+ Jun 2022 17:01:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj5hoE19YNniN+cquGT6H2z1BefbBo7UwE4-oySW86BxA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-4-shy828301@gmail.com>
+ <CAAa6QmRTt2EXJTudBf7DK6yPTr2DRDUbGZiHDC8pAmKRwoB4_A@mail.gmail.com>
+In-Reply-To: <CAAa6QmRTt2EXJTudBf7DK6yPTr2DRDUbGZiHDC8pAmKRwoB4_A@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 9 Jun 2022 17:01:40 -0700
+Message-ID: <CAHbLzkqhH5oJmQ6YMvBoAW17t03nqwJsrxfzw4gXtP_mTtnWAg@mail.gmail.com>
+Subject: Re: [v3 PATCH 3/7] mm: khugepaged: remove the redundant anon vma check
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 11:20:02AM -0700, Linus Torvalds wrote:
-> On Thu, Jun 9, 2022 at 7:14 AM David Howells <dhowells@redhat.com> wrote:
+On Thu, Jun 9, 2022 at 4:24 PM Zach O'Keefe <zokeefe@google.com> wrote:
+>
+> On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
 > >
-> > Note that Dave Chinner would rather I converted code like:
+> > The hugepage_vma_check() already checked it, so remove the redundant
+> > check.
 > >
-> >         struct myfs_inode *myfsinode = xyz;
-> >         myfsinode->netfs.inode.i_ino = 123;
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> >  mm/khugepaged.c | 3 ---
+> >  1 file changed, 3 deletions(-)
 > >
-> > to something like:
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index d0f8020164fc..7a5d1c1a1833 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -966,9 +966,6 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+> >                 return SCAN_ADDRESS_RANGE;
+> >         if (!hugepage_vma_check(vma, vma->vm_flags))
+> >                 return SCAN_VMA_CHECK;
+> > -       /* Anon VMA expected */
+> > -       if (!vma->anon_vma || !vma_is_anonymous(vma))
+> > -               return SCAN_VMA_CHECK;
+> >         return 0;
+> >  }
 > >
-> >         struct myfs_inode *myfsinode = xyz;
-> >         struct inode *inode = VFS_I(myfsinode);
-> >         inode->i_ino = 123;
+> > --
+> > 2.26.3
 > >
-> > where the translation is wrapped inside a VFS_I() macro in every filesystem
-> > and wants this across all filesystems.
-> 
-> What? No. That's absolutely disgusting.
-> 
-> Maybe I'm mis-undestanding.
+> >
+>
+> So, I don't know if this is possible, but I wonder if there is a race here:
+>
+> hugepage_vma_revalidate() is called in the anon path when mmap_lock
+> after dropped + reacquired, and we want to refind / revalidate the
+> vma, since it might have changed.
+>
+> There is the possibility that the memory was unmapped, then remapped
+> as file or shmem. If so, hugepage_vma_check() could return true
+> without actually checking vma->anon_vma || !vma_is_anonymous(vma) -
+> and we probably do want to (re)validate that this is indeed still an
+> anon vma.
 
-Perhaps, because I think what I said looks very different when taken
-out of context.
-
-I saw a heap of different implementations of the same thing with no
-consistency across them (i.e. inode container definitions) and a
-mess of a patch to convert them without solving the problem that
-there's no consistent convention for doing filesystem inode -> VFS
-inode container conversion
-
-> The usual way filesystems should handle this is that they have their
-> own inode information that contains a 'struct inode', and then they
-> have an inline function to go from that generic VFS inode to their one
-> using "container_of()".
-> 
-> And yeah, maybe they call that container_of() thing MYINODE() or
-> something, although I think an inline function without the ugly
-> all-uppercase is right.
-
-Right, BTRFS_I(), EXT4_I(), F2FS_I(), AFS_FS_I(), P9FS_I(), etc.
-
-It's a convention, it dates back to macro days (hence upper case
-even though most are static inlines these days), and it obvious no
-matter what filesystem code I read that when I see this XXX_I(inode)
-convention I know the code is accessing the filesystem inode in the
-container, not the VFS indoe.
-
-> But the way they go the other way is literally to just dereference the
-> inode that they have, ie they just use a
-> 
->         if (S_ISREG(inode->vfs_inode.i_mode)) ..
-
-The problem with this is that we have very similar names in both the
-VFS inode and the filesysetm inodes (e.g. i_flags), and without a
-clear demarcation of which inode is being referenced it can lead to
-confusion and bugs.
-
-> kind pattern. There's no reason or excuse to try to "wrap" that, and
-> it would be a big step backwards to introduce some kind of VFS_I()
-> macro.
-
-If the result of adding a helper convention is that every reverse
-inode container resolution looks identical across all filesystems,
-then we no longer have to know the details of the fs specific
-container to get the conversion right. All the code across all the
-filesystems would look the same, even though the wrapper would be
-different.
-
-We do helper conversions like this all the time to make the code
-easier to read, understand and maintain, so I really don't see why
-this would be considered a step backwards....
-
-> There's also no reason to make that generic. At no point should you
-> ever go from "random filesystem inode" to "actual generic VFS inode"
-> in some uncontrolled manner.
-
-We never do any conversions in an uncontrolled manner. We often need
-to go from fs inode to vfs inode because we are deep in filesystem
-implementation code passing around filesystem inodes, but the piece
-of information we need to access is stored in the VFS inode (e.g.
-uid, gid, etc). That's what this netfs inode container was requiring
-in the patchset...
-
-> But maybe Dave is talking about something else, and I'm missing the point.
-
-Perhaps - my comment was not about the VFS_I() name or implementation;
-I used it simply because I can point at code that uses it as an
-example of having a symmetric, easily recognisable convention.
-
-My point was that the fs inode to vfs inode conversion is a common
-operation performed across all filesystems that lacks any
-consistency in implementation. Some filesystems use a symmetric API
-for these container conversions and so I was simply suggesting that
-converting them all to use a common symmetric convention would
-simplify the maintenance of filesystem code in future and make it
-easier for other people to understand...
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-dchinner@redhat.com
-
+Nice catch! Totally possible. I did overlook this. I will drop this
+patch in the next version or maybe making the comment clearer is a
+better choice.

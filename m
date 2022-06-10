@@ -2,113 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6579B5463E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AA854638F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347770AbiFJKei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S245164AbiFJK3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348157AbiFJKdQ (ORCPT
+        with ESMTP id S245135AbiFJK3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:33:16 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A53345503;
-        Fri, 10 Jun 2022 03:31:11 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D069A10000B;
-        Fri, 10 Jun 2022 10:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654857069;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zRt35pPj+3tkqtSPRuzjG3w11kgz5cQ7+XUdqb18+J0=;
-        b=NBSxHFf0iNWJiEJ0xb+Uy3dYjfWQXcpMRVX/l8bgYPZK3hnu42qy97ZM2UPMlJZssEJXoZ
-        SesUZk9uOvhdUXFMVWqArYQIjIDvDxSpoNx4tYZfQeYx/hWhAxLZCXXlUcRtUYslsNDPg4
-        B9nflBUHwND+G22HSHg8F1eiBmofGdyDSmVK4yMEOj5cbguRVWMowxTHQRhq8rEi6nxx76
-        20LD8Nb9CXiUrZ6u29VzL48WIxnVtHtbVhZyjlSgjXo+YEPwwFzrU/ocn1Pea7HFMSNFxC
-        S7nLCw82s4BuHnGzAYheLWiqmWkosrJiTGp6ypy6sCzhTcmDNghJUdnftRRO3w==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v7 16/16] MAINTAINERS: add Renesas RZ/N1 switch related driver entry
-Date:   Fri, 10 Jun 2022 12:28:33 +0200
-Message-Id: <20220610102833.541098-17-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220610102833.541098-1-clement.leger@bootlin.com>
-References: <20220610102833.541098-1-clement.leger@bootlin.com>
+        Fri, 10 Jun 2022 06:29:12 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5058441635
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:29:10 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id v1so41916352ejg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tLO8M+bBtsFeLQBJeKorjii5kkChBo5ctWVAnJ9k72s=;
+        b=iWa9dQh1aY0vk7XC0r8UEikGjxDa0uCh5Wc2lvho+xKfJiDj6HkxfBcDbx9gQzhv8X
+         7k329I4+2op+Pu02VnxThT1bk9bLwv/jDU9ts6khNIgfmUHsPm0vNn0CVwPmMP/NH0CW
+         Y0tfDdFeqzdGpnrBs6SwDOQHHMyzcAPxtt8X13eKJexaya4MpHXRhHeWJVLERwA1O4em
+         KcVwzVVu0yiSJMK3WhtxOP6o5c6qiRpPodSPoj1/ewTrTmMB/y+8EBrbV25KnRM8IAbe
+         cXUiVQWQUZDMpCctn3rko0yzLSGpVG6XN16cGeqeAq3Klacrt3fgbpV/NXXKnSmX45/8
+         8ItA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tLO8M+bBtsFeLQBJeKorjii5kkChBo5ctWVAnJ9k72s=;
+        b=Tk3FRxvhK0X1G/qrO1dyw1xw3YC5F7/MqvnyngJSJSw/dF8RI931luB22e78RALyBT
+         5l75G/Qg5ZqqAfUdBUnPlcnKiqSbnwSbcCGQT69rePyeg/NUQL+thWNoelBQDpOrBPJQ
+         iEoSByVCi8cGIoLx6UI7CnQWH14KqFmbchw8PvV1W2kweALHPB+t5WxKkIGPSp3keC1y
+         7qtaYckQgxsyB6DXCw0J8NvDHDyVdzguO7xWYtanTMjpvYKkz2r0jpbodpayJsci9roh
+         A54oow0SzV2p+uIcm8h4VfKKuvvr+NEhRhzEV/zO0KDjT7rAWjcq+mIIl/23RrGVBSDo
+         azRg==
+X-Gm-Message-State: AOAM532KMaqQtJIYukBUkNH1Xa5Qe2bMh/fvFAIyJ35PiXR2j9KWS+lz
+        POQCBwkTcysfaxa8bQc66g4ZTQ==
+X-Google-Smtp-Source: ABdhPJzo4/uJou01xICnCHlFFG6i9dGDLudvClUxMGfQhm5qoPNHdvDugPnGWxs+wZCCnIrwagewCw==
+X-Received: by 2002:a17:907:9495:b0:6ff:14df:d2a with SMTP id dm21-20020a170907949500b006ff14df0d2amr39824681ejc.338.1654856948936;
+        Fri, 10 Jun 2022 03:29:08 -0700 (PDT)
+Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p21-20020aa7cc95000000b0042fb17da833sm12259010edt.60.2022.06.10.03.29.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 03:29:08 -0700 (PDT)
+Message-ID: <2edb2dbc-0f62-23cc-2f32-3d27d83a194e@linaro.org>
+Date:   Fri, 10 Jun 2022 12:29:07 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v9 2/2] dt-bindings:thermal: Add Sunplus schema
+Content-Language: en-US
+To:     =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>, rafael@kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "lh.kuo" <lh.kuo@sunplus.com>,
+        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>
+References: <CAGcXWkzSrEPPT2m=2trWN-BV-ix9TcHCvZYya5i54ei=EWGTZw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAGcXWkzSrEPPT2m=2trWN-BV-ix9TcHCvZYya5i54ei=EWGTZw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the drivers, volunteer for maintenance and add
-myself as the maintainer for Renesas RZ/N1 switch related drivers.
+On 10/06/2022 03:32, 郭力豪 wrote:
+> Add bindings for Sunplus thermal driver
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- MAINTAINERS | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Thank you for your patch. There is something to discuss/improve.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 749b26763760..dee6e73876c0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17044,6 +17044,19 @@ S:	Supported
- F:	Documentation/devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml
- F:	drivers/iio/adc/rzg2l_adc.c
- 
-+RENESAS RZ/N1 A5PSW SWITCH DRIVER
-+M:	Clément Léger <clement.leger@bootlin.com>
-+S:	Maintained
-+L:	linux-renesas-soc@vger.kernel.org
-+L:	netdev@vger.kernel.org
-+F:	Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-+F:	Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
-+F:	drivers/net/dsa/rzn1_a5psw*
-+F:	drivers/net/pcs/pcs-rzn1-miic.c
-+F:	include/dt-bindings/net/pcs-rzn1-miic.h
-+F:	include/linux/pcs-rzn1-miic.h
-+F:	net/dsa/tag_rzn1_a5psw.c
-+
- RENESAS RZ/N1 RTC CONTROLLER DRIVER
- M:	Miquel Raynal <miquel.raynal@bootlin.com>
- L:	linux-rtc@vger.kernel.org
--- 
-2.36.1
+> ---
+> Changes in v9:
+>  - Change the setting of compatible
+>  - Mosdify the setting of remove funciton.
 
+Your subject misses space after "dt-bindings:". Look at other patches
+how they are named. Please fix it.
+Normally I would give conditional review, but I am afraid it you won't
+fix it, based on our previous history here. :(
+
+So sorry, but for such small change, I expect v10.
+
+Best regards,
+Krzysztof

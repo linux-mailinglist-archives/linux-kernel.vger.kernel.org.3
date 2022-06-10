@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD818546EF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C8A546EF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350659AbiFJVEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S1350845AbiFJVFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348020AbiFJVEp (ORCPT
+        with ESMTP id S1350788AbiFJVFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:04:45 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0985624BDB
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:44 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id v143so646148oie.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:44 -0700 (PDT)
+        Fri, 10 Jun 2022 17:05:02 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBB630F7C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:05:01 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-30fa61b1a83so4348627b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:05:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=6BSSJ/rWsXUBg5MMoeJBHI5sh4Vg+Gf+Lk7kJ6t8nrM=;
-        b=ldlk36TEpLb8bKM9kbq6yMC+kG1oiGHmPqVQxcVdRKo79hJxr7pqzJPr/BfNqZZJlT
-         XSswpqq4c+gHIsrn8uVopdU6inApeuSxfIzbubd0SWZLVr1Q/SD6zdImR0WiqMGuATFR
-         8QB4g9Dvv645HlH5d+XtOqkStx++qXkKgy4II=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xJlKMK3HVq56WXfodTgOAOhNas0GRU8DHURRXkOK2dA=;
+        b=SxT0lhEd13pHhK1+KST3B6KvA8cFHhURWis09vfvF0B6ltmmLVBEjVXL91BgxJ+0SQ
+         d2e+LJxpycjGXiHOzxE3gXU0HWSXr7hTJ6Q3r2FmFOrlEfr2e0oxSuIep45tDQ3VOCJA
+         G+wiwJIF/pWLi8rl8XCfe5YIHlswiXbhQLezYwTEWCjmGCoo4gy2CmnfnEpzMfAbtzy7
+         AtsUxcz+GMHhuoNWaLk5OnHEP1r1N9b3ndFgHT0S1a3xZvgU24UN5qjTclxGHfzTWZgC
+         5TyT/bg5kK34oJWoFn7fKvf3lV3/3CeHCt99iNwrRNh6yVhciImWy8u/3uAINcKXUuaT
+         mZCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=6BSSJ/rWsXUBg5MMoeJBHI5sh4Vg+Gf+Lk7kJ6t8nrM=;
-        b=w6QQNzvMYCoRMXwjUMOZq+UN6Q0AzrAN9WFqXSKOUw64FpZJehmwLuFEo/wMnUcH5j
-         w4dvTp4yIuANloiAn6idWi/FqqEQbE/3WvdRDV4hzspQS+pjuW8JstetI19mlIQ0P9zg
-         W9qWZHRvioUI2YBGoel0XkbKypMNOGrWjR6J9GmWUUZBjFkba9y/+ngaC7iFtR42p2fc
-         fzgyHhEp2Vphi9XzYfI/EC7TW4zbRODPurIFf3hIHD7tgFpmJlZaqvF4dZ+vHQDbp2h3
-         I9MRhoJFMnrnDr+L2CwwGa5N78KA791/iFJeWZ8owyvec6Y6cu69Z8bV+PpyK5kiZZix
-         sMXg==
-X-Gm-Message-State: AOAM530R1b6MrYPDpacGPOl4DfJRHDgrhgwVYiI8UFD1RySZc46xuEXu
-        vFPkVTWDXfkJiZmdRnaEmDs4coIJqZR2yCd/o22Qxg==
-X-Google-Smtp-Source: ABdhPJzGn0kc0KitEDzC39ApVuo0Gabefuaw+3AKA6iKU3xzQfk8aDXBAJ2dQY9eYenZKctLFWTXf3x1wQcbiYQgVe8=
-X-Received: by 2002:a05:6808:1703:b0:32e:851e:7f81 with SMTP id
- bc3-20020a056808170300b0032e851e7f81mr924613oib.63.1654895083399; Fri, 10 Jun
- 2022 14:04:43 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 10 Jun 2022 14:04:42 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xJlKMK3HVq56WXfodTgOAOhNas0GRU8DHURRXkOK2dA=;
+        b=ixLdQD0zVKHFsUuYzYDuOwICoMCR7W8VMSCu836zaE18erX+ek2HZ3irv5HUdyrb4Z
+         6cqnXFA1H0Lf8G8p1Ln2MzBgTCJPBPIZl6cUWaz5iMScUo2CIc2TjrtRXz8MZ0Sl6RIZ
+         sGz2+TZXhLmhOub5wXC+S9+ys3qgeeHmYb7yAr/vIPARkXFI0S2S0f1gW3aQ9V6CRLeT
+         GDnQ43AeA/QTk9v6WMtKytEC8KWtdHiT3NfZgb0HNX2kgy4JJ9rdLofm9b0hP66Hdjfh
+         00CWiiZMPH0u+XylpuugaiqkIFrEgtRnVN+Py9Tc/eyZ/MDqOtrupei1I2sXYW+JKo48
+         jmgQ==
+X-Gm-Message-State: AOAM531DpsWF9qcOp3PGRCoRUQ50lavzYBkXpNXZJgrSe8DmTRtZ7ux1
+        7qRZ18jHgM6VI+5NLjuYa5CeaDajNGgWiPaI7qFTyA==
+X-Google-Smtp-Source: ABdhPJzkTaSGVJkh5pjJAIaIz4OU76YdvHXrdXNhim9IcSyDfVPY1QNmGVVh79xcWdhtLPsTCCXNpW1DtaDVmfHmNtc=
+X-Received: by 2002:a81:c54a:0:b0:2d6:435a:5875 with SMTP id
+ o10-20020a81c54a000000b002d6435a5875mr49234125ywj.181.1654895100356; Fri, 10
+ Jun 2022 14:05:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1653687133-32331-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1653687133-32331-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 10 Jun 2022 14:04:42 -0700
-Message-ID: <CAE-0n519jUEQK565OFVevvyoF49rgTazf4McjKmDS8mfDrWwyQ@mail.gmail.com>
-Subject: Re: [PATCH v4] drm/msm/dp: force link training for display resolution change
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dmitry.baryshkov@linaro.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <cover.1651774250.git.isaku.yamahata@intel.com> <9a45667060dd2f8634bf1ecba23b89567c7e46e7.1651774251.git.isaku.yamahata@intel.com>
+In-Reply-To: <9a45667060dd2f8634bf1ecba23b89567c7e46e7.1651774251.git.isaku.yamahata@intel.com>
+From:   Sagi Shahar <sagis@google.com>
+Date:   Fri, 10 Jun 2022 14:04:49 -0700
+Message-ID: <CAAhR5DE8FmzACXja1znjdR04HS_kOsJ4awWsU5AHm3__oqOx8g@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 095/104] KVM: TDX: Handle TDX PV rdmsr/wrmsr hypercall
+To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Sean Christopherson <seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,75 +69,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-05-27 14:32:13)
-> During display resolution changes display have to be disabled first
-> followed by display enabling with new resolution. Display disable
-> will turn off both pixel clock and main link clock so that main link
-> have to be re trained during display enable to have new video stream
-
-s/re/re-/
-
-> flow again. At current implementation, display enable function manually
-> kicks up irq_hpd_handle which will read panel link status and start link
-> training if link status is not in sync state. However, there is rare
-> case that a particular panel links status keep staying in sync for
-> some period of time after main link had been shut down previously at
-> display disabled. Main link retraining will not be executed by
-> irq_hdp_handle() if the link status read from pane shows it is in
-
-s/pane/panel/
-
-> sync state. If this was happen, then video stream of newer display
-> resolution will fail to be transmitted to panel due to main link is
-> not in sync between host and panel. This patch force main link always
-> be retrained during display enable procedure to prevent this rare
-> failed case from happening. Also this implementation are more
-> efficient than manual kicking off irq_hpd_handle function.
-
-The description makes it sound like the link status is not updated,
-sometimes. Isn't that the real issue here? Not that link training needs
-to be done again (which it always does apparently), but that disabling
-the display doesn't wait for the link to go down. Or disabling the link
-is causing some sort of glitch on the sink causing it to report the
-status as OK when it really isn't.
-
+On Thu, May 5, 2022 at 11:16 AM <isaku.yamahata@intel.com> wrote:
 >
-> Changes in v2:
-> -- set force_link_train flag on DP only (is_edp == false)
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 >
-> Changes in v3:
-> -- revise commit  text
-> -- add Fixes tag
+> Wire up TDX PV rdmsr/wrmsr hypercall to the KVM backend function.
 >
-> Changes in v4:
-> -- revise commit  text
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/tdx.c | 37 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
 >
-> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index f46825843a8b..1518a8c310d6 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -1169,6 +1169,39 @@ static int tdx_emulate_mmio(struct kvm_vcpu *vcpu)
+>         return 1;
+>  }
+>
+> +static int tdx_emulate_rdmsr(struct kvm_vcpu *vcpu)
+> +{
+> +       u32 index = tdvmcall_a0_read(vcpu);
+> +       u64 data;
+> +
+> +       if (kvm_get_msr(vcpu, index, &data)) {
 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index c388323..370348d 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1688,10 +1689,14 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->
->         state =  dp_display->hpd_state;
->
-> -       if (state == ST_DISPLAY_OFF)
-> +       if (state == ST_DISPLAY_OFF) {
->                 dp_display_host_phy_init(dp_display);
->
-> -       dp_display_enable(dp_display, 0);
-> +               if (!dp->is_edp)
+kvm_get_msr and kvm_set_msr used to check the MSR permissions using
+kvm_msr_allowed but that behaviour changed in "KVM: x86: Only do MSR
+filtering when access MSR by rdmsr/wrmsr".
 
-Does this assume eDP has one resolution? I don't understand why eDP is
-special here, especially if eDP has more than one resolution available
-it seems like we would want to retrain the link regardless.
+Now kvm_get_msr and kvm_set_msr skip these checks and will allow
+access regardless of the permissions in the msr_filter.
 
-> +                       force_link_train = true;
+These should be changed to kvm_get_msr_with_filter and
+kvm_set_msr_with_filter or something similar that checks permissions
+for MSR access.
+
+> +               trace_kvm_msr_read_ex(index);
+> +               tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
+> +               return 1;
+> +       }
+> +       trace_kvm_msr_read(index, data);
+> +
+> +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
+> +       tdvmcall_set_return_val(vcpu, data);
+> +       return 1;
+> +}
+> +
+> +static int tdx_emulate_wrmsr(struct kvm_vcpu *vcpu)
+> +{
+> +       u32 index = tdvmcall_a0_read(vcpu);
+> +       u64 data = tdvmcall_a1_read(vcpu);
+> +
+> +       if (kvm_set_msr(vcpu, index, data)) {
+> +               trace_kvm_msr_write_ex(index, data);
+> +               tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
+> +               return 1;
 > +       }
 > +
-> +       dp_display_enable(dp_display, force_link_train);
+> +       trace_kvm_msr_write(index, data);
+> +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
+> +       return 1;
+> +}
+> +
+>  static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>  {
+>         if (tdvmcall_exit_type(vcpu))
+> @@ -1183,6 +1216,10 @@ static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>                 return tdx_emulate_io(vcpu);
+>         case EXIT_REASON_EPT_VIOLATION:
+>                 return tdx_emulate_mmio(vcpu);
+> +       case EXIT_REASON_MSR_READ:
+> +               return tdx_emulate_rdmsr(vcpu);
+> +       case EXIT_REASON_MSR_WRITE:
+> +               return tdx_emulate_wrmsr(vcpu);
+>         default:
+>                 break;
+>         }
+> --
+> 2.25.1
 >
->         rc = dp_display_post_enable(dp);
->         if (rc) {
+
+Sagi

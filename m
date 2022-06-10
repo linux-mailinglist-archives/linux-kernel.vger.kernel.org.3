@@ -2,88 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3486254674E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1159C546757
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245088AbiFJN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S242456AbiFJN0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242456AbiFJN0N (ORCPT
+        with ESMTP id S237423AbiFJN0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:26:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60F41BE659;
-        Fri, 10 Jun 2022 06:26:11 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 74DF76601724;
-        Fri, 10 Jun 2022 14:26:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654867570;
-        bh=tT1jJ5a9K7KdBiLm8g0dOgTvRZsIIl3nYsCefhYiaKE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JtfphsybuNf9jwA62JOvrpW2KC2UX/VuEo7eJvFHDbDMDZ8+PS0O0oRXnNT+lEddW
-         xUJe48C/W2diI+BjpeBTTJs0m+JXTWQGpzPx0q5nH4+VtM6AIolI5F95UuwVD29Uqv
-         my99LRuc7hXy6LyBrgFglX+9HcT9bUoPE1NqOYvji8PkzuN7KXX4MoIVrXNB/k/Wx1
-         5ENAtraBwUS2yEZ4/hRQmA+npqJiZ/S53A/FUymrRKBZTxdPD3yvNRZrucGIILhbjK
-         OXVMY3hRBSTzW3PxgwT6paWSPWS1Kpace4Nn2vKieWsXDdSKLQFRMJ+dlu8Wlu2tfb
-         r7TpYKUWgVp4Q==
-Message-ID: <dabcc9ff-2fec-2f84-936e-3e0b71ad7ca3@collabora.com>
-Date:   Fri, 10 Jun 2022 16:26:06 +0300
+        Fri, 10 Jun 2022 09:26:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E165D1D92C7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:26:40 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nzeei-00034e-KG; Fri, 10 Jun 2022 15:26:28 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nzeeh-0008VP-8f; Fri, 10 Jun 2022 15:26:27 +0200
+Date:   Fri, 10 Jun 2022 15:26:27 +0200
+From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>
+Subject: Re: [PATCH v2 10/10] rtw88: disable powersave modes for USB devices
+Message-ID: <20220610132627.GO1615@pengutronix.de>
+References: <20220530135457.1104091-1-s.hauer@pengutronix.de>
+ <20220530135457.1104091-11-s.hauer@pengutronix.de>
+ <1493412d473614dfafd4c03832e71f86831fa43b.camel@realtek.com>
+ <20220531074244.GN1615@pengutronix.de>
+ <8443f8e51774a4f80fed494321fcc410e7174bf1.camel@realtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v1 1/5] media: rkvdec: Disable H.264 error detection
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     kernel@collabora.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
- <20220610125215.240539-2-nicolas.dufresne@collabora.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220610125215.240539-2-nicolas.dufresne@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8443f8e51774a4f80fed494321fcc410e7174bf1.camel@realtek.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/22 15:52, Nicolas Dufresne wrote:
-> Quite often, the HW get stuck in error condition if a stream error
-> was detected. As documented, the HW should stop immediately and self
-> reset. There is likely a problem or a miss-understanding of the self
-> self reset mechanism, as unless we make a long pause, the next command
-> will then report an error even if there is no error in it.
+On Thu, Jun 09, 2022 at 12:51:49PM +0000, Ping-Ke Shih wrote:
+> On Tue, 2022-05-31 at 09:42 +0200, s.hauer@pengutronix.de wrote:
+> > On Tue, May 31, 2022 at 01:07:36AM +0000, Ping-Ke Shih wrote:
+> > > On Mon, 2022-05-30 at 15:54 +0200, Sascha Hauer wrote:
+> > > > The powersave modes do not work with USB devices (tested with a
+> > > > RTW8822CU) properly. With powersave modes enabled the driver issues
+> > > > messages like:
+> > > > 
+> > > > rtw_8822cu 1-1:1.2: firmware failed to leave lps state
+> > > > rtw_8822cu 1-1:1.2: timed out to flush queue 3
+> > > 
+> > > Could you try module parameter rtw_disable_lps_deep_mode=1 to see
+> > > if it can work?
+> > 
+> > No, this module parameter doesn't seem to make any difference.
+> > 
+> > # cat /sys/module/rtw88_core/parameters/disable_lps_deep
+> > Y
+> > 
+> > Still "firmware failed to leave lps state" and poor performance.
+> > 
+> > Any other ideas what may go wrong here?
+> > 
 > 
-> Disabling error detection fixes the issue, and let the decoder continue
-> after an error. This patch is safe for backport into older kernels.
-> 
-> Fixes: cd33c830448b ("media: rkvdec: Add the rkvdec driver")
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> ---
+> Today, I borrow a 8822cu, and use your patchset but revert
+> patch 10/10 to reproduce this issue. With firmware 7.3.0,
+> it looks bad. After checking something about firmware, I
+> found the firmware is old, so upgrade to 9.9.11, and then
+> it works well for 10 minutes, no abnormal messages.
 
-Nit: won't hurt to add the explicit stable tag if you'll make the v2.
+I originally used firmware 5.0.0. Then I have tried 9.9.6 I have lying
+around here from my distro. That version behaves like the old 5.0.0
+version. Finally I switched to 9.9.11 from current linux-firmware
+repository. That doesn't work at all for me unfortunately:
 
-Cc: stable@vger.kernel.org
+[  221.076279] rtw_8822cu 2-1:1.2: Firmware version 9.9.11, H2C version 15
+[  221.078405] rtw_8822cu 2-1:1.2: Firmware version 9.9.4, H2C version 15
+[  239.783261] wlan0: authenticate with 76:83:c2:ce:83:0b
+[  242.398435] wlan0: send auth to 76:83:c2:ce:83:0b (try 1/3)
+[  242.402992] wlan0: authenticated
+[  242.420735] wlan0: associate with 76:83:c2:ce:83:0b (try 1/3)
+[  242.437094] wlan0: RX AssocResp from 76:83:c2:ce:83:0b (capab=0x1411 status=0 aid=4)
+[  242.485521] wlan0: associated
+[  242.564847] wlan0: Connection to AP 76:83:c2:ce:83:0b lost
+[  244.577617] wlan0: authenticate with 76:83:c2:cd:83:0b
+[  244.578257] wlan0: bad VHT capabilities, disabling VHT
+[  246.866182] wlan0: send auth to 76:83:c2:cd:83:0b (try 1/3)
+[  246.871830] wlan0: authenticated
+[  246.892754] wlan0: associate with 76:83:c2:cd:83:0b (try 1/3)
+[  246.911045] wlan0: RX AssocResp from 76:83:c2:cd:83:0b (capab=0x1431 status=0 aid=3)
+[  246.940608] wlan0: associated
+[  247.152308] wlan0: Connection to AP 76:83:c2:cd:83:0b lost
+[  248.912821] wlan0: Connection to AP 00:00:00:00:00:00 lost
+[  249.105517] wlan0: authenticate with 76:83:c2:ce:83:0b
+[  251.482183] wlan0: send auth to 76:83:c2:ce:83:0b (try 1/3)
+[  251.486765] wlan0: authenticated
+[  251.508731] wlan0: associate with 76:83:c2:ce:83:0b (try 1/3)
+[  251.521904] wlan0: RX AssocResp from 76:83:c2:ce:83:0b (capab=0x1411 status=0 aid=4)
+[  251.565233] wlan0: associated
+[  251.720602] wlan0: Connection to AP 76:83:c2:ce:83:0b lost
+[  253.527904] wlan0: Connection to AP 00:00:00:00:00:00 lost
+[  253.728243] wlan0: authenticate with 76:83:c2:cd:83:0b
+[  253.728921] wlan0: bad VHT capabilities, disabling VHT
+[  256.014184] wlan0: send auth to 76:83:c2:cd:83:0b (try 1/3)
+[  256.019608] wlan0: authenticated
+[  256.044702] wlan0: associate with 76:83:c2:cd:83:0b (try 1/3)
+[  256.062049] wlan0: RX AssocResp from 76:83:c2:cd:83:0b (capab=0x1431 status=0 aid=3)
+[  256.093117] wlan0: associated
+[  256.169071] wlan0: Connection to AP 76:83:c2:cd:83:0b lost
+[  258.145286] wlan0: authenticate with 76:83:c2:ce:83:0b
+[  260.626182] wlan0: send auth to 76:83:c2:ce:83:0b (try 1/3)
+[  260.630495] wlan0: authenticated
+[  260.652783] wlan0: associate with 76:83:c2:ce:83:0b (try 1/3)
+[  260.666201] wlan0: RX AssocResp from 76:83:c2:ce:83:0b (capab=0x1411 status=0 aid=4)
+[  260.708596] wlan0: associated
+[  260.769613] wlan0: Connection to AP 76:83:c2:ce:83:0b lost
+[  262.770668] wlan0: authenticate with 76:83:c2:cd:83:0b
+[  262.771272] wlan0: bad VHT capabilities, disabling VHT
+[  265.158184] wlan0: send auth to 76:83:c2:cd:83:0b (try 1/3)
+
+This goes on forever. I finally tried 9.9.10 and 9.9.9, they also behave
+like 9.9.11.
+
+No luck today :(
+
+Sascha
 
 -- 
-Best regards,
-Dmitry
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC86545A41
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3BE545A44
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346079AbiFJCzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 22:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S1346119AbiFJCzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 22:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345903AbiFJCzQ (ORCPT
+        with ESMTP id S1346089AbiFJCzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 22:55:16 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7DB4B1C3;
-        Thu,  9 Jun 2022 19:55:15 -0700 (PDT)
+        Thu, 9 Jun 2022 22:55:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95B24B86A;
+        Thu,  9 Jun 2022 19:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654829715; x=1686365715;
+  t=1654829728; x=1686365728;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BffFOdQMPEYvC7h1x1iCTPOeihZiP6YHL12WLtj2ijc=;
-  b=B2g3VikObh/dEJplh0yJTsdKoJW/lmijRrqiHPQVksAPYj4zurAAMtRD
-   RYMAch2NHRwSak8bljSnk4sat8d6suIMxHbkS5xEeVtZf+MILY0b69LbI
-   bdbRa5qUvLtaKC8BCx4aGeEK4rIr5hT1Kttau9iek/nH9xRcB97qIHxjl
-   MifSpOPdocoZ0ZFtEHtHl3LaUvgB1U7ggUAdm4IDzOf01jaa4Azq7eMes
-   HYeaAEkHywRigoIRzT9IUzgHc3JZOb/qmjm+wpm4JvcFN6/Z7esIPSs+N
-   M1cYaYNrfPC7Aagm3M0U4d6qLo+DFalFddyuj8NvQE96f+AzCa8BLTKrc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="339246127"
+  bh=dbAL2kogCiAQAVPubxcZrHFfRkttEU/wB74xBJLYppc=;
+  b=WG2SSx0jvHH7ppCtlF9C8n4KqYUEKJTsk9HUldb3M33oG0kRtivRg8bG
+   eHGyEOhTGnKiVIMgi5yNQQ7qw9mWLcTot9hz8VRT4rTjU82uhB7I+KQwA
+   f0AfMnC5nZzBifEFBGz3xYVTYWiOyiEmhdxirAhyWFyuwGH7ZxurVEaic
+   Wkv/KODfzq+CyPw9UG9SDne7e/h9AoHF6S+1uwkcpusNRvM0h4g7+rzQK
+   CRkQsX9E0K77rUATCP3cl1LFj5BG3TUoVQaAR38yuNA81j44lOixwY5RZ
+   i5ksobDvLLEl2g3/7Q3m4Y+1+6pjmZrjYF+VvqeyZ25rUacFpzeebOXIE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="257318955"
 X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="339246127"
+   d="scan'208";a="257318955"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 19:55:15 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 19:55:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="566670372"
+   d="scan'208";a="566670396"
 Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2022 19:55:11 -0700
+  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2022 19:55:19 -0700
 From:   zhengjun.xing@linux.intel.com
 To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
         alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
         zhengjun.xing@linux.intel.com
-Subject: [PATCH v3 2/5] perf evsel: Add arch_evsel__hw_name()
-Date:   Fri, 10 Jun 2022 10:54:46 +0800
-Message-Id: <20220610025449.2089232-3-zhengjun.xing@linux.intel.com>
+Subject: [PATCH v3 3/5] perf evlist: Always use arch_evlist__add_default_attrs()
+Date:   Fri, 10 Jun 2022 10:54:47 +0800
+Message-Id: <20220610025449.2089232-4-zhengjun.xing@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220610025449.2089232-1-zhengjun.xing@linux.intel.com>
 References: <20220610025449.2089232-1-zhengjun.xing@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,20 +64,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-The commit 55bcf6ef314a ("perf: Extend PERF_TYPE_HARDWARE and
-PERF_TYPE_HW_CACHE") extends the two types to become PMU aware types for
-a hybrid system. However, current evsel__hw_name doesn't take the PMU
-type into account. It mistakenly returns the "unknown-hardware" for the
-hardware event with a specific PMU type.
+Current perf stat uses the evlist__add_default_attrs() to add the
+generic default attrs, and uses arch_evlist__add_default_attrs()
+to add the Arch specific default attrs, e.g., Topdown for X86.
 
-Add an Arch specific arch_evsel__hw_name() to specially handle the PMU
-aware hardware event.
+It works well for the non-hybrid platforms. However, for a hybrid
+platform, the hard code generic default attrs don't work.
 
-Currently, the extend PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE is only
-supported by X86. Only implement the specific arch_evsel__hw_name() for
-X86 in the patch.
+Uses arch_evlist__add_default_attrs() to replace the
+evlist__add_default_attrs(). The arch_evlist__add_default_attrs() is
+modified to invoke the same __evlist__add_default_attrs() for the
+generic default attrs. No functional change.
 
-Nothing is changed for the other Archs.
+Add default_null_attrs[] to indicate the Arch specific attrs.
+No functional change for the Arch specific default attrs either.
 
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
@@ -86,71 +86,96 @@ Change log:
   v3:
     * no change since v1.
 
- tools/perf/arch/x86/util/evsel.c | 20 ++++++++++++++++++++
- tools/perf/util/evsel.c          |  7 ++++++-
- tools/perf/util/evsel.h          |  1 +
- 3 files changed, 27 insertions(+), 1 deletion(-)
+ tools/perf/arch/x86/util/evlist.c | 7 ++++++-
+ tools/perf/builtin-stat.c         | 6 +++++-
+ tools/perf/util/evlist.c          | 9 +++++++--
+ tools/perf/util/evlist.h          | 7 +++++--
+ 4 files changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/util/evsel.c
-index 3501399cef35..f6feb61d98a0 100644
---- a/tools/perf/arch/x86/util/evsel.c
-+++ b/tools/perf/arch/x86/util/evsel.c
-@@ -61,3 +61,23 @@ bool arch_evsel__must_be_in_group(const struct evsel *evsel)
- 		(strcasestr(evsel->name, "slots") ||
- 		 strcasestr(evsel->name, "topdown"));
- }
-+
-+int arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size)
-+{
-+	u64 event = evsel->core.attr.config & PERF_HW_EVENT_MASK;
-+	u64 pmu = evsel->core.attr.config >> PERF_PMU_TYPE_SHIFT;
-+	const char *event_name;
-+
-+	if (event < PERF_COUNT_HW_MAX && evsel__hw_names[event])
-+		event_name = evsel__hw_names[event];
-+	else
-+		event_name = "unknown-hardware";
-+
-+	/* The PMU type is not required for the non-hybrid platform. */
-+	if (!pmu)
-+		return  scnprintf(bf, size, "%s", event_name);
-+
-+	return scnprintf(bf, size, "%s/%s/",
-+			 evsel->pmu_name ? evsel->pmu_name : "cpu",
-+			 event_name);
-+}
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index ce499c5da8d7..782be377208f 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -593,9 +593,14 @@ static int evsel__add_modifiers(struct evsel *evsel, char *bf, size_t size)
- 	return r;
- }
+diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
+index 68f681ad54c1..777bdf182a58 100644
+--- a/tools/perf/arch/x86/util/evlist.c
++++ b/tools/perf/arch/x86/util/evlist.c
+@@ -8,8 +8,13 @@
+ #define TOPDOWN_L1_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
+ #define TOPDOWN_L2_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
  
-+int __weak arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size)
-+{
-+	return scnprintf(bf, size, "%s", __evsel__hw_name(evsel->core.attr.config));
-+}
-+
- static int evsel__hw_name(struct evsel *evsel, char *bf, size_t size)
+-int arch_evlist__add_default_attrs(struct evlist *evlist)
++int arch_evlist__add_default_attrs(struct evlist *evlist,
++				   struct perf_event_attr *attrs,
++				   size_t nr_attrs)
  {
--	int r = scnprintf(bf, size, "%s", __evsel__hw_name(evsel->core.attr.config));
-+	int r = arch_evsel__hw_name(evsel, bf, size);
- 	return r + evsel__add_modifiers(evsel, bf + r, size - r);
++	if (nr_attrs)
++		return __evlist__add_default_attrs(evlist, attrs, nr_attrs);
++
+ 	if (!pmu_have_event("cpu", "slots"))
+ 		return 0;
+ 
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 6ac79d95f3b5..837c3ca91af1 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1777,6 +1777,9 @@ static int add_default_attributes(void)
+ 	(PERF_COUNT_HW_CACHE_OP_PREFETCH	<<  8) |
+ 	(PERF_COUNT_HW_CACHE_RESULT_MISS	<< 16)				},
+ };
++
++	struct perf_event_attr default_null_attrs[] = {};
++
+ 	/* Set attrs if no event is selected and !null_run: */
+ 	if (stat_config.null_run)
+ 		return 0;
+@@ -1958,7 +1961,8 @@ static int add_default_attributes(void)
+ 			return -1;
+ 
+ 		stat_config.topdown_level = TOPDOWN_MAX_LEVEL;
+-		if (arch_evlist__add_default_attrs(evsel_list) < 0)
++		/* Platform specific attrs */
++		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
+ 			return -1;
+ 	}
+ 
+diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+index 48af7d379d82..efa5f006b5c6 100644
+--- a/tools/perf/util/evlist.c
++++ b/tools/perf/util/evlist.c
+@@ -342,9 +342,14 @@ int __evlist__add_default_attrs(struct evlist *evlist, struct perf_event_attr *a
+ 	return evlist__add_attrs(evlist, attrs, nr_attrs);
  }
  
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 73ea48e94079..8dd3f04a5bdb 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -271,6 +271,7 @@ extern const char *const evsel__hw_names[PERF_COUNT_HW_MAX];
- extern const char *const evsel__sw_names[PERF_COUNT_SW_MAX];
- extern char *evsel__bpf_counter_events;
- bool evsel__match_bpf_counter_events(const char *name);
-+int arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size);
+-__weak int arch_evlist__add_default_attrs(struct evlist *evlist __maybe_unused)
++__weak int arch_evlist__add_default_attrs(struct evlist *evlist,
++					  struct perf_event_attr *attrs,
++					  size_t nr_attrs)
+ {
+-	return 0;
++	if (!nr_attrs)
++		return 0;
++
++	return __evlist__add_default_attrs(evlist, attrs, nr_attrs);
+ }
  
- int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char *bf, size_t size);
- const char *evsel__name(struct evsel *evsel);
+ struct evsel *evlist__find_tracepoint_by_id(struct evlist *evlist, int id)
+diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+index 1bde9ccf4e7d..129095c0fe6d 100644
+--- a/tools/perf/util/evlist.h
++++ b/tools/perf/util/evlist.h
+@@ -107,10 +107,13 @@ static inline int evlist__add_default(struct evlist *evlist)
+ int __evlist__add_default_attrs(struct evlist *evlist,
+ 				     struct perf_event_attr *attrs, size_t nr_attrs);
+ 
++int arch_evlist__add_default_attrs(struct evlist *evlist,
++				   struct perf_event_attr *attrs,
++				   size_t nr_attrs);
++
+ #define evlist__add_default_attrs(evlist, array) \
+-	__evlist__add_default_attrs(evlist, array, ARRAY_SIZE(array))
++	arch_evlist__add_default_attrs(evlist, array, ARRAY_SIZE(array))
+ 
+-int arch_evlist__add_default_attrs(struct evlist *evlist);
+ struct evsel *arch_evlist__leader(struct list_head *list);
+ 
+ int evlist__add_dummy(struct evlist *evlist);
 -- 
 2.25.1
 

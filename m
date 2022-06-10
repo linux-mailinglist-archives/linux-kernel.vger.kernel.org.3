@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7873E546BD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B722546BE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350221AbiFJRrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 13:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S1347082AbiFJRrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 13:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347082AbiFJRrH (ORCPT
+        with ESMTP id S1349720AbiFJRrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 13:47:07 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E364756220;
-        Fri, 10 Jun 2022 10:47:04 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id p63so3226923qkd.10;
-        Fri, 10 Jun 2022 10:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YAz+bZr/g5TFMIU51PB2AOx+4yCjcc3R/7cvGuIRiyo=;
-        b=hqc887XUGL/83QS0tEfjOQ0/iBXuc7oDz8bl+SwNjlGXZf7i+yLGFlXB89q/8O8dDn
-         fgplske5d/lSDl8EtLJzmfPjLw8iV4RkYxsUJRBwU+CAvmpzkMFFDOlVYIj2Pf7FNCvI
-         OP9kzaZ3x1+T9/V6XaX3pXB8qvsTkE/hsIteiTJky1X5CJxGDnuB5iA7KMmLzTx3CxJ5
-         EfIRem8pbrvbwtdz+xZ6/avuhXvgyI5jvOJMkjFBuyHPqh6LDMbZVP1EovCbnDhMGm+y
-         uM3GqGPl33oVQVtYr/Im9sFcDxvdPLaDGUX72iq3uiTCI+f01BemCZJ+WQYokFKdi7Wu
-         IatQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YAz+bZr/g5TFMIU51PB2AOx+4yCjcc3R/7cvGuIRiyo=;
-        b=FW9mPrDLetNRI0z5HItoLL6NX1PAVNdpSIj0Fv6qviLWJCoxGYqp1tJJcr53TMRAFk
-         p31COZmgeDRX+MQYb7R33OaLqUM976FhjCrhMG+opAnDOYdzIT+2Pku7NF9XykGcJLmq
-         9a/r8OOmMXnetagv9u5W0YJIGhl4UuV0WyLhOtVbwuPxbuLQHpengw9g1wvorA+HGShu
-         X0H2VZET0UoL8tS5J2ktFPx6RKYTPW0l83iQ4WYJewcQ8EWHwYk70+TJ+ERSy7sxl+0Q
-         qbdvvYZ2V7RtRXXzDg6upBJWtGSnW+in2iMJ8wFXkDPcd9T3l9e6FtV/sUPVDm/IiLH5
-         K++g==
-X-Gm-Message-State: AOAM531z+urWO2Uovj4/FRiYbgJI60IO0XncoyyyUBnewFD+8c5soBW7
-        /KzAJFMBn1thi7apK8ag+w==
-X-Google-Smtp-Source: ABdhPJz7p+kepbcy956nMSgnmWWAmGzWLG9BfQ9DnHVidVR4QUb9A9T7+i9f2PROtx7QrKzhyumYNQ==
-X-Received: by 2002:a37:a781:0:b0:6a6:a8f5:d111 with SMTP id q123-20020a37a781000000b006a6a8f5d111mr24277439qke.676.1654883223907;
-        Fri, 10 Jun 2022 10:47:03 -0700 (PDT)
-Received: from [192.168.1.210] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id bz24-20020a05622a1e9800b0030522a969e0sm61264qtb.60.2022.06.10.10.47.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 10:47:03 -0700 (PDT)
-Message-ID: <c5f97e2f-8a48-2906-91a2-1d84629b3641@gmail.com>
-Date:   Fri, 10 Jun 2022 13:47:02 -0400
+        Fri, 10 Jun 2022 13:47:40 -0400
+Received: from 3.mo560.mail-out.ovh.net (3.mo560.mail-out.ovh.net [46.105.58.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8863256B05
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:47:38 -0700 (PDT)
+Received: from player760.ha.ovh.net (unknown [10.109.146.131])
+        by mo560.mail-out.ovh.net (Postfix) with ESMTP id A528524A4E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 17:47:36 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player760.ha.ovh.net (Postfix) with ESMTPSA id 4E6CB2B728F28;
+        Fri, 10 Jun 2022 17:47:27 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-103G00515216049-9e93-4894-aa40-e1df9efa6a35,
+                    3EA6D779A65D7DCBA15D92F127CD72011C01B2E3) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Fri, 10 Jun 2022 19:47:20 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 2/3] drm/panel: panel-dsi-cm: Use backlight helpers
+Message-ID: <20220610194720.485cf7be@heffalump.sk2.org>
+In-Reply-To: <20220609215236.ojxw6l2vkf652hgu@mercury.elektranox.org>
+References: <20220607182026.1121992-1-steve@sk2.org>
+        <20220607182026.1121992-3-steve@sk2.org>
+        <20220609215236.ojxw6l2vkf652hgu@mercury.elektranox.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
- accessed in filemap_read()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>, Yu Kuai <yukuai3@huawei.com>
-Cc:     akpm@linux-foundation.org, axboe@kernel.dk,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-References: <20220602082129.2805890-1-yukuai3@huawei.com>
- <YpkB1+PwIZ3AKUqg@casper.infradead.org>
- <c49af4f7-5005-7cf1-8b58-a398294472ab@huawei.com>
- <YqNWY46ZRoK6Cwbu@casper.infradead.org>
- <YqNW8cYn9gM7Txg6@casper.infradead.org>
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-In-Reply-To: <YqNW8cYn9gM7Txg6@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Fiv/6RAB4w3meaj/_BS+ruP";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 9491336218715915910
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduuddgudduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeeiheevvdeugeejffefteffvefhieegjeevhfekjeejvdelgfefkeehhfdufffhjeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejiedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/22 10:36, Matthew Wilcox wrote:
-> On Fri, Jun 10, 2022 at 03:34:11PM +0100, Matthew Wilcox wrote:
->> On Mon, Jun 06, 2022 at 09:10:03AM +0800, Yu Kuai wrote:
->>> On 2022/06/03 2:30, Matthew Wilcox wrote:
->>>> On Thu, Jun 02, 2022 at 04:21:29PM +0800, Yu Kuai wrote:
->>>>> In filemap_read(), 'ra->prev_pos' is set to 'iocb->ki_pos + copied',
->>>>> while it should be 'iocb->ki_ops'.
->>>>
->>>> Can you walk me through your reasoning which leads you to believe that
->>>> it should be ki_pos instead of ki_pos + copied?  As I understand it,
->>>> prev_pos is the end of the previous read, not the beginning of the
->>>> previous read.
->>>
->>> Hi, Matthew
->>>
->>> The main reason is the following judgement in flemap_read():
->>>
->>> if (iocb->ki_pos >> PAGE_SHIFT !=	-> current page
->>>      ra->prev_pos >> PAGE_SHIFT)		-> previous page
->>>          folio_mark_accessed(fbatch.folios[0]);
->>>
->>> Which means if current page is the same as previous page, don't mark
->>> page accessed. However, prev_pos is set to 'ki_pos + copied' during last
->>> read, which will cause 'prev_pos >> PAGE_SHIFT' to be current page
->>> instead of previous page.
->>>
->>> I was thinking that if prev_pos is set to the begining of the previous
->>> read, 'prev_pos >> PAGE_SHIFT' will be previous page as expected. Set to
->>> the end of previous read is ok, however, I think the caculation of
->>> previous page should be '(prev_pos - 1) >> PAGE_SHIFT' instead.
->>
->> OK, I think Kent broke this in 723ef24b9b37 ("mm/filemap/c: break
->> generic_file_buffered_read up into multiple functions").  Before:
->>
->> -       prev_index = ra->prev_pos >> PAGE_SHIFT;
->> -       prev_offset = ra->prev_pos & (PAGE_SIZE-1);
->> ...
->> -               if (prev_index != index || offset != prev_offset)
->> -                       mark_page_accessed(page);
->>
->> After:
->> +       if (iocb->ki_pos >> PAGE_SHIFT != ra->prev_pos >> PAGE_SHIFT)
->> +               mark_page_accessed(page);
->>
->> So surely this should have been:
->>
->> +       if (iocb->ki_pos != ra->prev_pos)
->> +               mark_page_accessed(page);
->>
->> Kent, do you recall why you changed it the way you did?
-> 
-> Oh, and if this is the right diagnosis, then this is the fix for the
-> current tree:
-> 
-> +++ b/mm/filemap.c
-> @@ -2673,8 +2673,7 @@ ssize_t filemap_read(struct kiocb *iocb, struct iov_iter *iter,
->                   * When a sequential read accesses a page several times, only
->                   * mark it as accessed the first time.
->                   */
-> -               if (iocb->ki_pos >> PAGE_SHIFT !=
-> -                   ra->prev_pos >> PAGE_SHIFT)
-> +               if (iocb->ki_pos != ra->prev_pos)
->                          folio_mark_accessed(fbatch.folios[0]);
-> 
->                  for (i = 0; i < folio_batch_count(&fbatch); i++) {
-> 
-> 
+--Sig_/Fiv/6RAB4w3meaj/_BS+ruP
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-I think this is the fix we want - I think Yu basically had the right 
-idea and had the off by one fix, this should be clearer though:
+Hi Sebastian,
 
-Yu, can you confirm the fix?
+On Thu, 9 Jun 2022 23:52:36 +0200, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+> On Tue, Jun 07, 2022 at 08:20:25PM +0200, Stephen Kitt wrote:
+> > diff --git a/drivers/gpu/drm/panel/panel-dsi-cm.c
+> > b/drivers/gpu/drm/panel/panel-dsi-cm.c index b58cb064975f..aa36dc6cedd3
+> > 100644 --- a/drivers/gpu/drm/panel/panel-dsi-cm.c
+> > +++ b/drivers/gpu/drm/panel/panel-dsi-cm.c
+> > @@ -86,16 +86,10 @@ static void dsicm_bl_power(struct panel_drv_data
+> > *ddata, bool enable) return;
+> > =20
+> >  	if (enable) {
+> > -		backlight->props.fb_blank =3D FB_BLANK_UNBLANK;
+> > -		backlight->props.state =3D ~(BL_CORE_FBBLANK |
+> > BL_CORE_SUSPENDED);
+> > -		backlight->props.power =3D FB_BLANK_UNBLANK;
+> > +		backlight_enable(backlight);
+> >  	} else {
+> > -		backlight->props.fb_blank =3D FB_BLANK_NORMAL;
+> > -		backlight->props.power =3D FB_BLANK_POWERDOWN;
+> > -		backlight->props.state |=3D BL_CORE_FBBLANK |
+> > BL_CORE_SUSPENDED;
+> > +		backlight_disable(backlight);
+> >  	} =20
+>=20
+> The brackets can be removed now. Otherwise:
 
--- >8 --
-Subject: [PATCH] filemap: Fix off by one error when marking folios accessed
+>=20
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-In filemap_read() we mark pages accessed as we read them - but we don't
-want to do so redundantly, if the previous read already did so.
+Thanks, I=E2=80=99ll wait a little more to see if there are any other revie=
+ws of the
+patches and then push a v2 with that fix.
 
-But there was an off by one error: we want to check if the current page
-was the same as the last page we read from, but the last page we read
-from was (ra->prev_pos - 1) >> PAGE_SHIFT.
+Regards,
 
-Reported-by: Yu Kuai <yukuai3@huawei.com>
-Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+Stephen
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 9daeaab360..8d5c8043cb 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2704,7 +2704,7 @@ ssize_t filemap_read(struct kiocb *iocb, struct 
-iov_iter *iter,
-                  * mark it as accessed the first time.
-                  */
-                 if (iocb->ki_pos >> PAGE_SHIFT !=
--                   ra->prev_pos >> PAGE_SHIFT)
-+                   (ra->prev_pos - 1) >> PAGE_SHIFT)
-                         folio_mark_accessed(fbatch.folios[0]);
+--Sig_/Fiv/6RAB4w3meaj/_BS+ruP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-                 for (i = 0; i < folio_batch_count(&fbatch); i++) {
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmKjg6gACgkQgNMC9Yht
+g5zfSw//WI01jNuYSP0lMjDjiVPi3dZknMK/1vgV6zHCgisK5W9RahwyjRdg9hWW
+veSzZA4xLOVHS1WpSEcsQWSRCTAoi22tZ/IhGVFTW9hpWkKUzndtuebMzQ5LuEwq
+gP/c6sU3O5qP2tjMyUwDs8zAEugZl6hlcZGtkYdZUk50gUsP2ajEJ2XjblIkikEn
+JskElLBZSpvBS06TzHphA7DZZW1B/GjkucvmM6vOVklRtkxbCYck7E2PCM1uPe6x
+8U7pacTwdvzdf0j255cSxb6xehc1wTDKCelVrp9VcXyI1PiZb6nzW4+xSE/JF+iZ
+Kyrrw8Iuom5Zwr0SlPszmdk8HiKpj+DLRugmH0fHksHAxb09L77zSZZ3krUefXrF
+2A7g0AAXxy7OEZtCJyLHPiSL3Q9EHQ3FtzLH+3xddratrbdzjnbq+kPA37GqfWTk
+qNo0zrCK4o2E2GFAzZf08Hg6FT5o/4LnYPZikTfmOiOYyBR5FGW2nl2AyoH3WdZC
+EfzICSO2fB0i3miIcpTOH+YRJU5G0Ih1acm8FK/1x8A/GSPG/wY0juQMS9Zzkq3Q
+FlsH13MKT+fqlTDwf2wl8hF5ESklSJ90CTKITJTxZiWHLkKeKIZ2l8ll5o4qg4jt
+O5Rj0KaoPq+pkrIwj0Y//PlpPOd8d/X4pYuct2ujiPXp7pkaHLM=
+=9bxl
+-----END PGP SIGNATURE-----
+
+--Sig_/Fiv/6RAB4w3meaj/_BS+ruP--

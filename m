@@ -2,269 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA1754612F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8508545FC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242671AbiFJJM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S1348222AbiFJIpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344194AbiFJJMA (ORCPT
+        with ESMTP id S1348143AbiFJIp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:12:00 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AF91285AAC;
-        Fri, 10 Jun 2022 02:09:49 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 8086416A4;
-        Fri, 10 Jun 2022 11:45:50 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 8086416A4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1654850750;
-        bh=EDILp+MFSSPr1gFjUysXLOPNDUyEdUcN69hK1tuUiXU=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=hMCXPZR0QoLoqdR9D145oHXPCIZszi18d+1KkOTaveudEfhPGKeGC0qa7YPALusMz
-         ipH8bO8kLkCwP2VQIUumsVRWWn/sFc09bx8yCbCGc6LKaqwboWsTLBFy9LYGBgvGcV
-         ARi2VGRT7yKb46D8ywYBfjOhFLkCmyGbpxC58PL0=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 11:44:57 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 15/15] PCI: dwc: Introduce dma-ranges property support for RC-host
-Date:   Fri, 10 Jun 2022 11:44:43 +0300
-Message-ID: <20220610084444.14549-16-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru>
+        Fri, 10 Jun 2022 04:45:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9054D205E3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:45:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654850722; x=1686386722;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/yYfrawkVGbOgRlKWVIoqzH50YPYBVY6W5/n3FLDMqU=;
+  b=AnV3ZcBwCbuoE7B/AkrqRVx5Tug642EuuBdErfa7qktpkiWd6bp5Bl2y
+   Pt6eKHp6Yb4QcJmnVCIfnN1JyM2Wi2L66SmBwvEceCBsKn8cUI6jp6iWr
+   AAgOZOShJNkeLYTPqu5CP8n6T9DUsIE9tpqFG1O1KvxhWffIm2+XmQZYh
+   KQ1k5zm5/5t2maKwBZDVgQe9ruEezMrGsjrgWGRyzLwI5HfP89nJbLjNE
+   IhAJO4p5F/xz/lx62kK6GragY9JnTZYp2yKxoSERE6TaKrM846SLRT1jv
+   bcIpm/XAb+wMDlvF7uU2Hl5uAxBUrh6p1gmBttSuuSaoLKpQS4V/jCC/N
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260684000"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="260684000"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 01:45:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="908805596"
+Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Jun 2022 01:45:21 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 10 Jun 2022 01:45:20 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 10 Jun 2022 01:45:19 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Fri, 10 Jun 2022 01:45:19 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Fri, 10 Jun 2022 01:45:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aAUPFHSYNlaXRDg2VS+E3TlxHKCh0vSFWbym1V0P3xXdfxyahWRjCWguZ42obl8vG9QgYNdZhPwJrsZ7Mu9wXxxBzWZAIV/bzYM/BO3BEhK3RbGhEvvDbhPhtcHeQ/Nnnne6Z/2OUbhKcb8fbQ/TMFJ9L0jCnTvDw5eeuS/3HhQ7Gwr1hhbbYK6JuhUJ6E3d9kWsZyi9d1eZ37bwTlAaKnyVog2/4Cbb+GiEwPwEHQWL7Z3yDBy7jysws/xTAnqDXaK2sbwrCyZXJorBxq80TjWNhIkGiA0DNlLWKTN4e7ZSqVY+sUY5uKkLgn9ZAwuABAXCHcqRI/r0TrEVFlg0VQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/yYfrawkVGbOgRlKWVIoqzH50YPYBVY6W5/n3FLDMqU=;
+ b=aUb3YFOcZMjKneTzrdcEsl7oiTC5rVcYBdnQY4aVi0wkIt7vDzZ94jYxC0l2C+3yQJ1O3pxBOsqD3mGwwI95Z6of7e3g6LDl2UCTtz5x2JnlpXjBVeJY5OG7lSJHhdde4DGcXxGyG8rGlPW4yRONjCPEUd4SyQMxKAj63UF8FTm38+TRMPGItBZ5fR34F/OgbIvdG6Wn9FzuxKs+MSnhiFPnyKLinPgkKqMUYmcL1+cBFukjmEzMIqj4ASLHDveJCGOZ8zdiYjngo2eUZE8Pf0sJPj65fC5EIIm9AJ/S6Z1JG2mUCSzvsLRJ5q0JV19U9dt9vK6v7B8SqJN8euC9FA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SN6PR11MB2541.namprd11.prod.outlook.com (2603:10b6:805:57::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.15; Fri, 10 Jun
+ 2022 08:45:18 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::3583:afc6:2732:74b8]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::3583:afc6:2732:74b8%4]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
+ 08:45:18 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>
+CC:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.org>
+Subject: RE: [PATCH v8 01/11] iommu: Add max_pasids field in struct
+ iommu_device
+Thread-Topic: [PATCH v8 01/11] iommu: Add max_pasids field in struct
+ iommu_device
+Thread-Index: AQHYehFyJFBi3KBV+06JxIgOSDIrRa1HV8AAgABsOoCAAIxfgA==
+Date:   Fri, 10 Jun 2022 08:45:18 +0000
+Message-ID: <BN9PR11MB5276A62408BC06F685C4A3B78CA69@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220607014942.3954894-1-baolu.lu@linux.intel.com>
+ <20220607014942.3954894-2-baolu.lu@linux.intel.com>
+ <20220609172542.GB33363@araj-dh-work> <20220609235303.GC1343366@nvidia.com>
+In-Reply-To: <20220609235303.GC1343366@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 40dd05d7-b33b-4cd1-f972-08da4abd8be6
+x-ms-traffictypediagnostic: SN6PR11MB2541:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR11MB254169D8772D144FC3F7FCCA8CA69@SN6PR11MB2541.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2WR6RbGBg2pWAwJakDFgrrx66PgHL8pexfM70n64vvxK4vraIsQGFbi3Eq58bWjFvAqvnV2/UL/GOj+s/h8Ebw/8jB7LE7+VXZhLn/ycADC/ZnwIgCd/eAm3F80dp4BdLHvszR0Rg+CZ3BgWSmENrg/JEJ1yF4xQQvZZJXCyu+qTua90CvBPND9nwSCVRnmfvuec6tfBMW59dam2Q1fwb/t4gg9HmrkE6v74BgSxZbszdO3CjoL4Y66EMLoTozWW8l8bdnHE5i9E8D95XemI3DP9qb6J5FaWij7xTFy7LTrMiiar3U2gaX2eaU4TAOnNh2Ewzs1fxnnP/JTNo7XzFjz3O9LN3OkjgOtujgTFEnXspgju+Wd2lu60BMAEuUQ/40Oz9IOuJjiFYHgagEbLEHz6nQ2oimWPoLVGojfXAHr52vK8GKp07xb05mUf0avHqlV+aAEVagmmN38pdY/THjGDKOcwDZrYogScMWFvIWdbezCBHuanS0+tvMZTs/+sVogiJZUUutdJL2m6/ef0T6jna+EosizmuK+uwrVa2u1WWYLui7TiI1InwA0pRa8mvF9V5V4d15ntMuD6asxHGs1pcEMz43uqjWBsqvHSqKN8qdsMhGlKQIMzvQCuGhpjoTcGIynf1CUilYpQlewdld4RKAR8MqNxuVlst600LF2cyK9p5ZFoq8ShE/gxp+Z4MxRzTHzaxhKy7261kP9NrQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(52536014)(2906002)(9686003)(26005)(6506007)(82960400001)(110136005)(71200400001)(86362001)(54906003)(508600001)(316002)(33656002)(38100700002)(6636002)(55016003)(122000001)(76116006)(66446008)(7696005)(66946007)(4326008)(66476007)(66556008)(8936002)(186003)(83380400001)(8676002)(64756008)(5660300002)(7416002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZlFPejJwmSsN4XBgWIHz943Q2Px2O5bPHk8BEVg/+AJQUSlZn4v2KX3EIGMu?=
+ =?us-ascii?Q?1ymTLKciXGO/XdlLK0VD+uvoCVKaRROGW0Jp5wbEGpgcN8NE9QiyGA5OI+P8?=
+ =?us-ascii?Q?zIEvAO5kAOqqV+gLASP4F4wdo98uSM6G4Fvm+ytexR90cGC4O70jTW2mrmIp?=
+ =?us-ascii?Q?DRQdjOmadtMO7z9ILjt1TrLN9tkIyDeCVQA5qL2VdpXPtfjU1dOLPwz8vcwl?=
+ =?us-ascii?Q?L2Gg8jA/hWQvel00MYl/L/Qb1Btl+dKc9qD7G2odG68teI5qP0kJmh9XEZB5?=
+ =?us-ascii?Q?F3OP/gY1NusSw7tf+ioSbdbrDvrZZlftSixna4UC0HWTShiFbkJl5RcFiEO7?=
+ =?us-ascii?Q?IPlEZbQudovvKPepq5Uhfnmw+lUH/LM3F5u7BN9F3FtXnNSIavRxrx+78t0C?=
+ =?us-ascii?Q?2kR8vuSvf38lmcs3yyVBvuqflhN0F/rYtkNAgJSs51bd0H6GDAI9isty+Ehh?=
+ =?us-ascii?Q?2Htzjc9ly4OEu5rTqzJ1yukwbuGKhHYOpnZTuxMdwmzbwBrBROXBUbwfHs9B?=
+ =?us-ascii?Q?ISIp9Cs6/du5aTk0ZOg3f19H+9/wX8GTyTwxBou/EiCiJw4lAvxb1YGI5Af5?=
+ =?us-ascii?Q?QLlME5L2rBBXFHY9L3hc3Tr+DJFFYkHbByjRBqnsB0gJTIPSDHrVNEFWmD1K?=
+ =?us-ascii?Q?aTuHpptbCOyxYl4N0smy++HcNme3M2UvOpOvu+V/EhhL6la75ePZ6vKMZzEx?=
+ =?us-ascii?Q?2/B/b8hfJu0hCSWTVeHGXrk9BoVWy+o2R/Fo2qAnrPS3Ptv5bF2RXWftFvu5?=
+ =?us-ascii?Q?VJTQWW3aqSq9LTpcAEvAhogKkD9mwRd4iZkuTo8+rY83QZZyYEttjDp1Wh9C?=
+ =?us-ascii?Q?GoZvXWr5iTs9ngTaVmJHF5IvgWKp/dG64TYTeEpT1RpekMJmt9nldgzUdXHv?=
+ =?us-ascii?Q?q5Itd2wf/UhkPGbx6sxgOH5whZiSK55H80Tj3UfgjDVomSocPK2E7B46qDSj?=
+ =?us-ascii?Q?AQa3khkQSz2ab/LBlFIKDZSfpXHk7cw/at86URjWaniqS2Obfwidnx/D63L6?=
+ =?us-ascii?Q?eIrzSeoZsN4DSxyWFGs7wQkAtsKZiwVIHMYAajn+rxB9+spXuv6NnD7YzHqp?=
+ =?us-ascii?Q?5syVo5nCHEW/o5l4eYrtqDEkwjtkcgsFWDG4B4CsUQoKrw/nBrZGw6jt4qIL?=
+ =?us-ascii?Q?nKQpkx4LOu9D8nYJutCssZkoj04p0X+g08HHUaZNo0bpbVIU+npD3Z2qlpZs?=
+ =?us-ascii?Q?Y/RDVULZwyzbBzwMs/UbxdzcRwAtnJiZKU7bcydzFvUuxJRCyMtwv26Q0I74?=
+ =?us-ascii?Q?r7CWrghT2TSdQcBTL0ZD937HL6RPfx0Bq9LODXWk734kZU+hnwihLchV/sCr?=
+ =?us-ascii?Q?tmoH88TE0g2S+4UkgrRXnMB3OEsfvg1VTNeLmmK+v/YijqmAa3nIjhAds6ek?=
+ =?us-ascii?Q?1Fb5jA40SyYCWolAMKF2TR+o8PwKb1Yy+2C2hcw4pd1u6X4ayuisQcLAkBpo?=
+ =?us-ascii?Q?MhgN7gatbmZVmTYJ+nrmK+bmnvOY7JZ7lHnu7c7HR/JYskg6DDg0IrgmgSD5?=
+ =?us-ascii?Q?2XQZDXqkzsdcoystWF0XA1+us8QgtletBjhyVjjFHUcqBUMaIrfpjufqsaev?=
+ =?us-ascii?Q?8297csszsQl9m8P9EbBJgdK1L9VytV3d9UOd9Fi5AOSS6YDFvvAvRio7Bi5u?=
+ =?us-ascii?Q?kc/Nx4i7Y6egbgAZmsrT53jWYapGFmSXLLrWkliyxmTqoOPAgTvk+doJDTbf?=
+ =?us-ascii?Q?iHa+xeln3HpS5I+RUbzXVU8uKqpDubqOR8OABOXUVhwEv0idcioiu4OuYm0v?=
+ =?us-ascii?Q?WzdHSOEWiw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40dd05d7-b33b-4cd1-f972-08da4abd8be6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2022 08:45:18.2166
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pyUMfj1CvfRK7AVPlBD+/iV9lMFv3tW0oafETuq9owZ9Rl43WWZgEThmzf6x5HLFNzv7zpFl9+I6Z3U9+Ovdzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2541
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
-property has the same format as the "ranges" property. The only difference
-is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
-memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
-property. Even though the DW PCIe controllers are normally equipped with
-the internal Address Translation Unit which inbound and outbound tables
-can be used to implement both properties semantics, it was surprising for
-me to discover that the host-related part of the DW PCIe driver currently
-supports the "ranges" property only while the "dma-ranges" windows are
-just ignored. Having the "dma-ranges" supported in the driver would be
-very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
-mapping and require a customized PCIe memory layout. So let's fix that by
-introducing the "dma-ranges" property support.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Friday, June 10, 2022 7:53 AM
+>=20
+> On Thu, Jun 09, 2022 at 05:25:42PM +0000, Raj, Ashok wrote:
+> >
+> > On Tue, Jun 07, 2022 at 09:49:32AM +0800, Lu Baolu wrote:
+> > > Use this field to keep the number of supported PASIDs that an IOMMU
+> > > hardware is able to support. This is a generic attribute of an IOMMU
+> > > and lifting it into the per-IOMMU device structure makes it possible
+> >
+> > There is also a per-device attribute that tells what width is supported=
+ on
+> > each device. When a device enables SVM, for simplicity we were proposin=
+g
+> to
+> > disable SVM on devices that don't support the full width, since it adds
+> > additional complexity on the allocation interface. Is that factored int=
+o
+> > this?
+>=20
+> I would like to see the concept of a 'global PASID' and this is the
+> only place we'd union all the per-device limits together. SVM can
+> optionally use a global PASID and ENQCMD requires it, but I don't want
+> to see the core code assuming everything is ENQCMD.
+>=20
 
-First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
-dw_pcie_prog_ep_inbound_atu() and create a new version of the
-dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for the
-RC and EP controllers respectively in the same way as it has been
-developed for the outbound ATU setup methods.
+Agree. and I think this is what this v8 is leaning toward. The core
+code simply populates the pasid entry of the target device w/o
+assuming the pasid is 'local' or 'global'. Then sva helpers actually
+decides how the pasid is allocated.
 
-Secondly aside with the memory window index and type the new
-dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
-and size as its arguments. These parameters define the PCIe and CPU memory
-ranges which will be used to setup the respective inbound ATU mapping. The
-passed parameters need to be verified against the ATU ranges constraints
-in the same way as it is done for the outbound ranges.
+Currently only global pasids are supported which is how sva works
+before. We don't plan to change it in this series.
 
-Finally the DMA-ranges detected for the PCIe controller need to be
-converted to the inbound ATU entries during the host controller
-initialization procedure. It will be done in the framework of the
-dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
-need to disable all the inbound ATU entries in order to prevent unexpected
-PCIe TLPs translations defined by some third party software like
-bootloaders.
+In parallel Jacob is working on per-device local pasids which will
+then be used by his DMA API pasid work and also iommufd.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
-
----
-
-Changelog v3:
-- Drop inbound iATU window size alignment constraint. (@Manivannan)
----
- .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
- .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
- drivers/pci/controller/dwc/pcie-designware.c  | 56 ++++++++++++++++++-
- drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
- 4 files changed, 89 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-index 627c4b69878c..441feff1917a 100644
---- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-@@ -167,8 +167,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
- 		return -EINVAL;
- 	}
- 
--	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
--				       cpu_addr, bar);
-+	ret = dw_pcie_prog_ep_inbound_atu(pci, func_no, free_win, type,
-+					  cpu_addr, bar);
- 	if (ret < 0) {
- 		dev_err(pci->dev, "Failed to program IB window\n");
- 		return ret;
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index b52f7f4db191..56a678abe828 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -580,12 +580,15 @@ static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
- 	}
- 
- 	/*
--	 * Ensure all outbound windows are disabled before proceeding with
--	 * the MEM/IO ranges setups.
-+	 * Ensure all out/inbound windows are disabled before proceeding with
-+	 * the MEM/IO (dma-)ranges setups.
- 	 */
- 	for (i = 0; i < pci->num_ob_windows; i++)
- 		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
- 
-+	for (i = 0; i < pci->num_ib_windows; i++)
-+		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
-+
- 	i = 0;
- 	resource_list_for_each_entry(entry, &pp->bridge->windows) {
- 		if (resource_type(entry->res) != IORESOURCE_MEM)
-@@ -622,9 +625,32 @@ static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
- 	}
- 
- 	if (pci->num_ob_windows <= i)
--		dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
-+		dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
- 			 pci->num_ob_windows);
- 
-+	i = 0;
-+	resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
-+		if (resource_type(entry->res) != IORESOURCE_MEM)
-+			continue;
-+
-+		if (pci->num_ib_windows <= i)
-+			break;
-+
-+		ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
-+					       entry->res->start,
-+					       entry->res->start - entry->offset,
-+					       resource_size(entry->res));
-+		if (ret) {
-+			dev_err(pci->dev, "Failed to set DMA range %pr\n",
-+				entry->res);
-+			return ret;
-+		}
-+	}
-+
-+	if (pci->num_ib_windows <= i)
-+		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
-+			 pci->num_ib_windows);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-index 9c622b635fdd..7a5be3c4f8e0 100644
---- a/drivers/pci/controller/dwc/pcie-designware.c
-+++ b/drivers/pci/controller/dwc/pcie-designware.c
-@@ -396,8 +396,60 @@ static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 index, u32 reg
- 	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, index, reg, val);
- }
- 
--int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
--			     int type, u64 cpu_addr, u8 bar)
-+int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-+			     u64 cpu_addr, u64 pci_addr, u64 size)
-+{
-+	u64 limit_addr = pci_addr + size - 1;
-+	u32 retries, val;
-+
-+	if ((limit_addr & ~pci->region_limit) != (pci_addr & ~pci->region_limit) ||
-+	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
-+	    !IS_ALIGNED(pci_addr, pci->region_align) || !size) {
-+		return -EINVAL;
-+	}
-+
-+	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_BASE,
-+			      lower_32_bits(pci_addr));
-+	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_BASE,
-+			      upper_32_bits(pci_addr));
-+
-+	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LIMIT,
-+			      lower_32_bits(limit_addr));
-+	if (dw_pcie_ver_is_ge(pci, 460A))
-+		dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_LIMIT,
-+				      upper_32_bits(limit_addr));
-+
-+	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_TARGET,
-+			      lower_32_bits(cpu_addr));
-+	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_TARGET,
-+			      upper_32_bits(cpu_addr));
-+
-+	val = type;
-+	if (upper_32_bits(limit_addr) > upper_32_bits(pci_addr) &&
-+	    dw_pcie_ver_is_ge(pci, 460A))
-+		val |= PCIE_ATU_INCREASE_REGION_SIZE;
-+	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL1, val);
-+	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2, PCIE_ATU_ENABLE);
-+
-+	/*
-+	 * Make sure ATU enable takes effect before any subsequent config
-+	 * and I/O accesses.
-+	 */
-+	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
-+		val = dw_pcie_readl_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2);
-+		if (val & PCIE_ATU_ENABLE)
-+			return 0;
-+
-+		mdelay(LINK_WAIT_IATU);
-+	}
-+
-+	dev_err(pci->dev, "Inbound iATU is not being enabled\n");
-+
-+	return -ETIMEDOUT;
-+}
-+
-+int dw_pcie_prog_ep_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-+				int type, u64 cpu_addr, u8 bar)
- {
- 	u32 retries, val;
- 
-diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index c3e73ed9aff5..5954e8cf9eec 100644
---- a/drivers/pci/controller/dwc/pcie-designware.h
-+++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -308,8 +308,10 @@ int dw_pcie_prog_outbound_atu(struct dw_pcie *pci, int index, int type,
- 			      u64 cpu_addr, u64 pci_addr, u64 size);
- int dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
- 				 int type, u64 cpu_addr, u64 pci_addr, u64 size);
--int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
--			     int type, u64 cpu_addr, u8 bar);
-+int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-+			     u64 cpu_addr, u64 pci_addr, u64 size);
-+int dw_pcie_prog_ep_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-+				int type, u64 cpu_addr, u8 bar);
- void dw_pcie_disable_atu(struct dw_pcie *pci, u32 dir, int index);
- void dw_pcie_setup(struct dw_pcie *pci);
- void dw_pcie_iatu_detect(struct dw_pcie *pci);
--- 
-2.35.1
-
+Thanks
+Kevin

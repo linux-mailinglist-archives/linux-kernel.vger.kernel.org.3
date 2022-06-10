@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DDE5462BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC50C5462B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347410AbiFJJr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
+        id S1347978AbiFJJsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347199AbiFJJrq (ORCPT
+        with ESMTP id S1347895AbiFJJsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:47:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E2CE2E9DE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654854464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Iej305ZrS3cI+u8eOot8avD0go/WsD4iT9qMHnSK6K8=;
-        b=SNP+yHWlj9ee7Kjz+rm2eMZ+cASbmxc/zaxI4Y55FOVtfCjK65qCjzfnDLxlv5x3uuso52
-        HCKgH2BsQI8DwGHp3mDSOlpR0wqU37zm5cl5evCKhULmRSvrYSvdfikKM7i9/asEhRJznp
-        5223/w6JJW/DkVVi8iR+1DZmpQeRkbI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-424-CD6ZHAqePD205X0fXSOnrQ-1; Fri, 10 Jun 2022 05:47:41 -0400
-X-MC-Unique: CD6ZHAqePD205X0fXSOnrQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 10 Jun 2022 05:48:02 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D6266FBE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:47:58 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4LKGNS1WL2z1sCJ8;
+        Fri, 10 Jun 2022 11:47:52 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4LKGNS0Y1xz1qqkC;
+        Fri, 10 Jun 2022 11:47:52 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id ZVrNQR93sT2h; Fri, 10 Jun 2022 11:47:50 +0200 (CEST)
+X-Auth-Info: 162ru3Q4VMnzLLQFOilR4v/i0ZvUQvOcexKpJLxzQGil3ncYElNin4Gd1Y9MaVVm
+Received: from igel.home (ppp-46-244-161-94.dynamic.mnet-online.de [46.244.161.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9E8D801E67;
-        Fri, 10 Jun 2022 09:47:40 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.213])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B05818EA7;
-        Fri, 10 Jun 2022 09:47:38 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     virtualization@lists.linux-foundation.org,
-        David Hildenbrand <david@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Gavin Shan <gshan@redhat.com>
-Subject: [PATCH v1] drivers/virtio: Clarify CONFIG_VIRTIO_MEM for unsupported architectures
-Date:   Fri, 10 Jun 2022 11:47:37 +0200
-Message-Id: <20220610094737.65254-1-david@redhat.com>
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 10 Jun 2022 11:47:50 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 411B52C3AC6; Fri, 10 Jun 2022 11:47:50 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Subject: Re: {standard input}:3978: Error: value 178 out of range
+References: <202206100855.uY63FJUH-lkp@intel.com>
+        <CAMuHMdVGdzkaT=SR2OWoN9S=Xr-2Ckki41P_p7t4WDgRLzfuGg@mail.gmail.com>
+X-Yow:  NANCY!!  Why is everything RED?!
+Date:   Fri, 10 Jun 2022 11:47:50 +0200
+In-Reply-To: <CAMuHMdVGdzkaT=SR2OWoN9S=Xr-2Ckki41P_p7t4WDgRLzfuGg@mail.gmail.com>
+        (Geert Uytterhoeven's message of "Fri, 10 Jun 2022 10:46:21 +0200")
+Message-ID: <87wndoalyx.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's make it clearer that simply unlocking CONFIG_VIRTIO_MEM on an
-architecture is most probably not sufficient to have it working as
-expected.
+On Jun 10 2022, Geert Uytterhoeven wrote:
 
-Cc: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: Gavin Shan <gshan@redhat.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- drivers/virtio/Kconfig | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+> The offending instruction is:
+>
+>     | drivers/scsi/mpi3mr/mpi3mr_fw.c:299:  switch (host_tag) {
+>             mvz.w %d2,%d0   | tmp160, host_tag
+>             mov3q.l #5,%d1  |,
+>             cmp.l %d0,%d1   | host_tag,
+>             jcs .L154               |
+>             tst.w %d6       | host_tag
+>             jeq .L133               |
+>             subq.l #2,%d2   |, tmp238
+>             mvz.w %d2,%d2   | tmp238, tmp240
+>             mov3q.l #3,%d0  |,
+>             cmp.l %d2,%d0   | tmp240,
+>             jcs .L140               |
+>             add.l %d2,%d2   | tmp244
+>>>>         move.w .L155(%pc,%d2.l),%d0     |, tmp245
+>             jra .L186               |
+>
+> And the table L155 is just too far from the above instruction, so
+> the displacement is too large, causing the failure.
+>
+> Looks like a compiler bug to me?
 
-diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-index b5adf6abd241..f86b6a988b63 100644
---- a/drivers/virtio/Kconfig
-+++ b/drivers/virtio/Kconfig
-@@ -115,9 +115,11 @@ config VIRTIO_MEM
- 	 This driver provides access to virtio-mem paravirtualized memory
- 	 devices, allowing to hotplug and hotunplug memory.
- 
--	 This driver was only tested under x86-64 and arm64, but should
--	 theoretically work on all architectures that support memory hotplug
--	 and hotremove.
-+	 This driver currently only supports x86-64 and arm64. Although it
-+	 should compile on other architectures that implement memory
-+	 hot(un)plug, architecture-specific and/or common
-+	 code changes may be required for virtio-mem, kdump and kexec to work as
-+	 expected.
- 
- 	 If unsure, say M.
- 
+Yes, it's https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104028.
+
 -- 
-2.35.3
-
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

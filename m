@@ -2,158 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DE5545DEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9AC545DEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346970AbiFJH5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S1347105AbiFJH6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347035AbiFJH5j (ORCPT
+        with ESMTP id S1347055AbiFJH5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:57:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 486BB1CB700
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654847854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPpYHnXIBZc98vfrpGPPeNO4G+nbrOWi/rqlDfKtk/c=;
-        b=YoEMvr7LBNPOAbkEUAIiEdC3paoJBH8lMNTORsdFXDF8pCjT2EkDOtjHcRI7H1Y8LpJ4hm
-        fqYU5VNFYFJ9Xu6B/8w3Uh7K4f+nJ4qDEZ99HP5kDxTsYQlm/ibnADJ5Z8fuu5bLJBeA/r
-        bObfXAtGS7hyVtXo6bnapjfbevVwYgo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-237-HY0a2PTXPvCLj_4vwjwxLQ-1; Fri, 10 Jun 2022 03:57:33 -0400
-X-MC-Unique: HY0a2PTXPvCLj_4vwjwxLQ-1
-Received: by mail-wm1-f71.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso964871wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:57:33 -0700 (PDT)
+        Fri, 10 Jun 2022 03:57:44 -0400
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C0C1CAD2C;
+        Fri, 10 Jun 2022 00:57:42 -0700 (PDT)
+Received: by mail-vs1-f52.google.com with SMTP id i186so24749692vsc.9;
+        Fri, 10 Jun 2022 00:57:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cPpYHnXIBZc98vfrpGPPeNO4G+nbrOWi/rqlDfKtk/c=;
-        b=TQTRgEXDCsgk2CFUc1tElrCVlvCAP9KBBQcPWYaTJQ2s9rEBYP0HtU+QJzovPrimpC
-         plL3YSYSjIkqPZIqIDIl5oKX2VPP+S/5qqmTFtluuUYZpuFhGYbR3kUdLHDhssbyyV5M
-         +Eja009bGsgaFSsUA9y6mREn1S+ObPYLATRoH1rd4S07HMb8lzFgzWOLSWvQrE2nC3P/
-         oN8qGHRqirNa7usuPrXu19hlsg7R5tt3kJCVjLRKgf6ZijcJjDKdI3i16lZ8BS6TEpcF
-         24eQsbtg0bGnf9aobmoWq1H8SmZBK3wIb3Hkzv+VmKYexgnmbt8B1f8v55TEO9GdZiw3
-         7/6A==
-X-Gm-Message-State: AOAM530xoSFu63T1yTnXH7+BXY/Q8n1TEEJXaz97sELozxyCly8Ie6Ft
-        y5nwMHhvScU+9fCfy1wkwY64dXvdiRwaG/prjV9fyxc8ce7zVnpOCsOS3rACYB/aVK4do88CtwS
-        ShzzUIJiyJvrsso00P9QyHjpYv98zE1tvaHSPoyEFpclEAIWpXBL13FW0r7DX8Ck9ZgAh+hbpyD
-        U=
-X-Received: by 2002:a05:600c:3495:b0:39c:6a72:f286 with SMTP id a21-20020a05600c349500b0039c6a72f286mr7524529wmq.116.1654847852114;
-        Fri, 10 Jun 2022 00:57:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwgWTcfEx07dyJt9OHzUm9JUAGAHTErpr/4wjbKLCjZlo56Z7ixSmHdUFl3hD1fJRT96/dN2w==
-X-Received: by 2002:a05:600c:3495:b0:39c:6a72:f286 with SMTP id a21-20020a05600c349500b0039c6a72f286mr7524493wmq.116.1654847851725;
-        Fri, 10 Jun 2022 00:57:31 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l6-20020a5d4bc6000000b0020e615bab7bsm26673363wrt.7.2022.06.10.00.57.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 00:57:31 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christian Kellner <ckellner@redhat.com>,
-        Alberto Ruiz <aruiz@redhat.com>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Peter Jones <pjones@redhat.com>,
-        Chung-Chiang Cheng <cccheng@synology.com>,
-        Carlos Maiolino <cmaiolin@redhat.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        Alexander Larsson <alexl@redhat.com>,
-        Colin Walters <walters@verbum.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: [PATCH v6 1/4] fat: add a vfat_rename2() and make existing .rename callback a helper
-Date:   Fri, 10 Jun 2022 09:57:18 +0200
-Message-Id: <20220610075721.1182745-2-javierm@redhat.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220610075721.1182745-1-javierm@redhat.com>
-References: <20220610075721.1182745-1-javierm@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rhFLG17+HSZFIUtjJ3pglwpyIrcDVcUBh/MHVe0DumU=;
+        b=sY+B+Vk3nEHM3jVdCGYB1HFl5A0SJV4gPxHsHVRKsrDWTNEzCfijgBTVDhOC/zGW85
+         HIDz9LFiwNmYTAKwp4cuCrKp7E8kaMPtOlKIp9lKPqS9w0UMYTmJ6UIkqhz+a75ODmqz
+         ewwDzrr7BYPRJOdaw9fYIFftYMQy/ZfYMjJPojeIw78WONFkgOe0ntfwyk4/defD+mtf
+         kuc+xcEKJ+1lZiHAMSYadiVo8iXvq7w0G3tr7++GTgVGsfILWLzbB8s7s73uSdz65VCj
+         eq+oO4JyMoMoXRO8MnFDy+VqWRmrYYOckSn9LyW+5Bf1sJVwFEcbVJDtNTYFH48aR4/4
+         9xCQ==
+X-Gm-Message-State: AOAM530s5kzeX79Di1g6I+bgliuYH3OkKrWEnDaOoDSNrgSi1BccAmZm
+        yCP3TsVV6uQFg7RkAR3Lgpk6GXOwDLcsvw==
+X-Google-Smtp-Source: ABdhPJx5OLkgVosgsi10qkThxp3GNADF4JBKRaEwg/zDa3CaUkT4XldFhyw3BA65RicH3NjlDY+utQ==
+X-Received: by 2002:a05:6102:3f0f:b0:32a:46dd:a908 with SMTP id k15-20020a0561023f0f00b0032a46dda908mr18912577vsv.48.1654847861764;
+        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id s20-20020a67efd4000000b003483282cf47sm2798674vsp.26.2022.06.10.00.57.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
+Received: by mail-ua1-f43.google.com with SMTP id r9so8800287uaf.13;
+        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
+X-Received: by 2002:a81:1dd2:0:b0:30f:a4fc:315e with SMTP id
+ d201-20020a811dd2000000b0030fa4fc315emr49092228ywd.383.1654847850764; Fri, 10
+ Jun 2022 00:57:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-19-tmaimon77@gmail.com>
+ <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org> <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
+In-Reply-To: <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Jun 2022 09:57:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
+Message-ID: <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
+Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device tree
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently vfat only supports the RENAME_NOREPLACE flag which is handled by
-the virtual file system layer but doesn't support the RENAME_EXCHANGE flag.
+Hi Tomer,
 
-Add a vfat_rename2() function to be used as the .rename callback and move
-the current vfat_rename() handler to a helper. This is in preparation for
-implementing the RENAME_NOREPLACE flag using a different helper function.
+On Fri, Jun 10, 2022 at 12:30 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> On Wed, 8 Jun 2022 at 13:21, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> > On 08/06/2022 11:56, Tomer Maimon wrote:
+> > > This adds initial device tree support for the
+> > > Nuvoton NPCM845 Board Management controller (BMC) SoC family.
+> > >
+> > > The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
+> > > have various peripheral IPs.
+> > >
+> > > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+> > > --- /dev/null
+> > > +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+> > > @@ -0,0 +1,197 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
+> > > +
+> > > +#include <dt-bindings/clock/nuvoton,npcm8xx-clock.h>
+> > > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +#include <dt-bindings/interrupt-controller/irq.h>
+> > > +
+> > > +/ {
+> > > +     #address-cells = <2>;
+> > > +     #size-cells = <2>;
+> > > +     interrupt-parent = <&gic>;
+> > > +
+> > > +     /* external reference clock */
+> > > +     clk_refclk: clk-refclk {
+> > > +             compatible = "fixed-clock";
+> > > +             #clock-cells = <0>;
+> > > +             clock-frequency = <25000000>;
+> >
+> > Ignored comment.
+> Could we use it as a default clock-frequency?
 
-(no changes since v1)
+If the oscillator is present on the board, and not an SoC builtin, its
+clock frequency should be described in the board DTS.
+Some clocks may be optional, and left unpopulated.
+Others clocks may be fed with different frequencies than the default.
 
- fs/fat/namei_vfat.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+> >
+> > > +             clock-output-names = "refclk";
+> > > +     };
+> > > +
+> > > +     /* external reference clock for cpu. float in normal operation */
+> > > +     clk_sysbypck: clk-sysbypck {
+> > > +             compatible = "fixed-clock";
+> > > +             #clock-cells = <0>;
+> > > +             clock-frequency = <1000000000>;
+> >
+> > Ignored comment.
+> same as above
+> >
+> > > +             clock-output-names = "sysbypck";
+> > > +     };
+> > > +
+> > > +     /* external reference clock for MC. float in normal operation */
+> > > +     clk_mcbypck: clk-mcbypck {
+> > > +             compatible = "fixed-clock";
+> > > +             #clock-cells = <0>;
+> > > +             clock-frequency = <1050000000>;
+> same as above
+> > > +             clock-output-names = "mcbypck";
+> > > +     };
 
-diff --git a/fs/fat/namei_vfat.c b/fs/fat/namei_vfat.c
-index c573314806cf..88ccb2ee3537 100644
---- a/fs/fat/namei_vfat.c
-+++ b/fs/fat/namei_vfat.c
-@@ -889,9 +889,8 @@ static int vfat_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	return err;
- }
- 
--static int vfat_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
--		       struct dentry *old_dentry, struct inode *new_dir,
--		       struct dentry *new_dentry, unsigned int flags)
-+static int vfat_rename(struct inode *old_dir, struct dentry *old_dentry,
-+		       struct inode *new_dir, struct dentry *new_dentry)
- {
- 	struct buffer_head *dotdot_bh;
- 	struct msdos_dir_entry *dotdot_de;
-@@ -902,9 +901,6 @@ static int vfat_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	int err, is_dir, update_dotdot, corrupt = 0;
- 	struct super_block *sb = old_dir->i_sb;
- 
--	if (flags & ~RENAME_NOREPLACE)
--		return -EINVAL;
--
- 	old_sinfo.bh = sinfo.bh = dotdot_bh = NULL;
- 	old_inode = d_inode(old_dentry);
- 	new_inode = d_inode(new_dentry);
-@@ -1021,13 +1017,24 @@ static int vfat_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	goto out;
- }
- 
-+static int vfat_rename2(struct user_namespace *mnt_userns, struct inode *old_dir,
-+			struct dentry *old_dentry, struct inode *new_dir,
-+			struct dentry *new_dentry, unsigned int flags)
-+{
-+	if (flags & ~RENAME_NOREPLACE)
-+		return -EINVAL;
-+
-+	/* VFS already handled RENAME_NOREPLACE, handle it as a normal rename */
-+	return vfat_rename(old_dir, old_dentry, new_dir, new_dentry);
-+}
-+
- static const struct inode_operations vfat_dir_inode_operations = {
- 	.create		= vfat_create,
- 	.lookup		= vfat_lookup,
- 	.unlink		= vfat_unlink,
- 	.mkdir		= vfat_mkdir,
- 	.rmdir		= vfat_rmdir,
--	.rename		= vfat_rename,
-+	.rename		= vfat_rename2,
- 	.setattr	= fat_setattr,
- 	.getattr	= fat_getattr,
- 	.update_time	= fat_update_time,
--- 
-2.36.1
+>  "+             cpu0: cpu@0 {
+>  +                     device_type = "cpu";
+>  +                     compatible = "arm,cortex-a35";
+>  +                     clocks = <&clk NPCM8XX_CLK_CPU>;
+>  +                     reg = <0x0 0x0>;
+> Why do you have two address cells? A bit more complicated and not
+> necessary, I think."
+> the arm,cortex-a35 is 64 Bit this is why we use  #address-cells = <2>;
+> and therefore reg = <0x0 0x0>;
 
+These addresses are not addresses on the main memory bus (which
+is indeed 64-bit), but on the logical CPU bus.
+Now, Documentation/devicetree/bindings/arm/cpus.yaml says you can
+have #address-cells = <2> if you have non-zero MPIDR_EL1 high bits.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

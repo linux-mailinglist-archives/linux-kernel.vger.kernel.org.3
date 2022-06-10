@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18CA546DB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E19C546DB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347929AbiFJTzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
+        id S1350507AbiFJT44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350506AbiFJTzu (ORCPT
+        with ESMTP id S1346733AbiFJT4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:55:50 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B589AB4B5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:55:48 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id h23so44326166ejj.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:55:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=un+lSY3X7YxGwu/r7FDzIT1K5N2rDGm8eR6DAEKLWI8=;
-        b=DTlJwrChV2ZxnBi9qNxUeHN+3nWNEObwhsUb7nrqwBjXjLYiSjfFg+U9eGFcvcYlzq
-         oNTo53JdL8b6SdBk9IPuQtHKcfbJ/6qqgYGbbFIBL6pirvKXwQnjv5ecGP93pZul8GOV
-         obKLA5Vj2oTreta7PXAzkR5F854ZpZ34W/nLY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=un+lSY3X7YxGwu/r7FDzIT1K5N2rDGm8eR6DAEKLWI8=;
-        b=2mfLmZtQHctK71ZR1DK4+4z5SQ8+s10O12dB0FIwxRvyrGhuLk6R1sA+A7IfvnD2Kp
-         dHHr9E8sCm7iJ3UfG/yR4+hxPTG8+Jn6MERKV9fCivvTiYcH7YxMfzUPnnPGS73kPUwP
-         u6vhhiE+nK729j3NFguPZDmusgQzO3YG2tMu0emgCPHEkMGdU0YeFQ3dvMnOVAuzusor
-         9XEfK1N2i61L+D994FzKUE4K8qUFDYbqPaheo9a2R4Zl4HSJsuWTFAE3UGDopuQimLPL
-         xwL7Tm+3joOCkYP4AbXnVQc6uyT1vJ82znPrGWVpMea1Rl3YzYPumUccfaqOTOUS7i23
-         4Lnw==
-X-Gm-Message-State: AOAM530R7/NXYg2tmjST/Mjx+nY9YZeuFclq0mlq3wCuGBu6PaXAZiVc
-        Xh6tAluNB5MKCRD+SxPUWEYoUr40uGWuSztL
-X-Google-Smtp-Source: ABdhPJxsOk0sBS0nkg+CcJ+k8fK+3gVVB22bMHR1gcxyB3NG3bxXxpdFIAyUEh6VnJOk06WYVZJYcQ==
-X-Received: by 2002:a17:906:6a23:b0:711:ea9b:89ba with SMTP id qw35-20020a1709066a2300b00711ea9b89bamr16350932ejc.740.1654890946956;
-        Fri, 10 Jun 2022 12:55:46 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id r18-20020a1709064d1200b007121295f08csm2197913eju.219.2022.06.10.12.55.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 12:55:46 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id o16so4093849wra.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:55:45 -0700 (PDT)
-X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
- p18-20020a5d68d2000000b0021031cc64a6mr44505394wrw.679.1654890945353; Fri, 10
- Jun 2022 12:55:45 -0700 (PDT)
+        Fri, 10 Jun 2022 15:56:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01377BE2A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654891012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=irp9I7bg5aP2EcRerJx9k5cqapFEVHVDaAOauS4ZbRQ=;
+        b=VJNJBdhzYCFcxIuKThO24ZMVpJ659fGcVC1xr/XgKlSNbR/hDZdqAwYtvjFNsoTokE4bpN
+        OiKqPMfUxs4WkIpaoCKGk/T3QoeR1NJJGNuiJNj3HHLJzdXfJ1UmA7Th0UKHu1dWvI3gWh
+        dfSC1xH7Vov3C/AEiAW22sCkPa+RU2E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-121----5JlC7Nga4prmah_EWXw-1; Fri, 10 Jun 2022 15:56:49 -0400
+X-MC-Unique: ---5JlC7Nga4prmah_EWXw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B090801756;
+        Fri, 10 Jun 2022 19:56:48 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B1B6F40CF8EF;
+        Fri, 10 Jun 2022 19:56:46 +0000 (UTC)
+Subject: [RFC][PATCH 0/3] netfs, afs: Cleanups
+From:   David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, linux-afs@lists.infradead.org,
+        Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, linux-erofs@lists.ozlabs.org,
+        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 10 Jun 2022 20:56:45 +0100
+Message-ID: <165489100590.703883.11054313979289027590.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-References: <20220609072722.3488207-1-hsinyi@chromium.org> <20220609072722.3488207-9-hsinyi@chromium.org>
-In-Reply-To: <20220609072722.3488207-9-hsinyi@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 10 Jun 2022 12:55:33 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X+9+a2EdkpvEneUfcCS=nr34+aGa_ZjvhidF_vfSiLzg@mail.gmail.com>
-Message-ID: <CAD=FV=X+9+a2EdkpvEneUfcCS=nr34+aGa_ZjvhidF_vfSiLzg@mail.gmail.com>
-Subject: Re: [PATCH v7 8/8] drm: Config orientation property if panel provides it
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Jun 9, 2022 at 12:28 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> Panel orientation property should be set before drm_dev_register().
-> Some drm driver calls drm_dev_register() in .bind(). However, most
-> panels sets orientation property relatively late, mostly in .get_modes()
-> callback, since this is when they are able to get the connector and
-> binds the orientation property to it, though the value should be known
-> when the panel is probed.
->
-> In drm_bridge_connector_init(), if a bridge is a panel bridge, use it to
-> set the connector's panel orientation property.
->
-> Suggested-by: Doug Anderson <dianders@chromium.org>
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> ---
-> v6->v7: remove redundant check and fix config issue.
-> ---
->  drivers/gpu/drm/bridge/panel.c         | 34 ++++++++++++++++++++++++++
->  drivers/gpu/drm/drm_bridge_connector.c |  8 +++++-
->  include/drm/drm_bridge.h               | 14 +++++++++++
->  3 files changed, 55 insertions(+), 1 deletion(-)
+Hi Linus,
 
-Reviewed-by: Doug Anderson <dianders@chromium.org>
+Here are some cleanups, one for afs and a couple for netfs:
+
+ (1) The afs patch cleans up a checker complaint.
+
+ (2) The first netfs patch is your netfs_inode changes plus the requisite
+     documentation changes.
+
+ (3) The second netfs patch replaces the ->cleanup op with a ->free_request
+     op.  This is possible as the I/O request is now always available at
+     the cleanup point as the stuff to be cleaned up is no longer passed
+     into the API functions, but rather obtained by ->init_request.
+
+I've run the patches through xfstests with -g quick on afs.
+
+The patches are on a branch here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-fixes
+
+David
+
+---
+David Howells (2):
+      afs: Fix some checker issues
+      netfs: Rename the netfs_io_request cleanup op and give it an op pointer
+
+Linus Torvalds (1):
+      netfs: Further cleanups after struct netfs_inode wrapper introduced
+
+
+ Documentation/filesystems/netfs_library.rst | 33 +++++++++++----------
+ fs/9p/v9fs.h                                |  2 +-
+ fs/9p/vfs_addr.c                            | 13 ++++----
+ fs/9p/vfs_inode.c                           |  3 +-
+ fs/afs/dynroot.c                            |  2 +-
+ fs/afs/file.c                               |  6 ++--
+ fs/afs/inode.c                              |  2 +-
+ fs/afs/internal.h                           |  2 +-
+ fs/afs/volume.c                             |  3 +-
+ fs/afs/write.c                              |  2 +-
+ fs/ceph/addr.c                              | 12 ++++----
+ fs/ceph/cache.h                             |  2 +-
+ fs/ceph/inode.c                             |  2 +-
+ fs/cifs/fscache.h                           |  2 +-
+ fs/netfs/buffered_read.c                    |  5 ++--
+ fs/netfs/objects.c                          |  6 ++--
+ include/linux/netfs.h                       | 25 +++++++---------
+ 17 files changed, 60 insertions(+), 62 deletions(-)
+
+

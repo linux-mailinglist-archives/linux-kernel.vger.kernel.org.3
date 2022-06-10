@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328F3546598
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE828546597
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349326AbiFJLdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S1349314AbiFJLdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbiFJLdj (ORCPT
+        with ESMTP id S1348119AbiFJLdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:33:39 -0400
+        Fri, 10 Jun 2022 07:33:42 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0BB6D4CC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:33:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7D86D4CC
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:33:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654860818; x=1686396818;
+  t=1654860820; x=1686396820;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NcnXb+DwGIBsEjgZbwiIKWIgHUj+IhZGk6fraGSrh4Y=;
-  b=lAgmnUyskujTvt6jzVUSiDnhgbmBx2mt4lWrn7zJYb8Mf/BcDdwl8hcO
-   Xbxb0/MG+cvAY5V8iDZzeq/eX7ANm84YuvKwnmBGYpChBN5jR/tEkzYFt
-   I1g4h4Ba2UGzBbUs2sP+dL6h3HB73OhnZKbBI4ovZQ4fT7I0TOkX0P991
-   iNfUJZiIK1Oo3wSfOHif39BZou5aunKDO6ba5+0BWWNLU8aFh61tEcm/X
-   47sShVKdPOIKpQSqFPOjBgsMJApBabaYwqHo/YJRyCcqwtO2iRq4gcyRY
-   ChDuUyZTh4pSFoFgFN44EcaYXRF/UYquOfh012hqlF/U8yQKqqhdczw9E
+  bh=e1vhPHLiSQValJAhw3CDZixau0Aa6PRtpiOeWk3R4o8=;
+  b=avtAGkNR/Q9JneoeB12FmzaWFY5837LbWmiLWvPeyRAHF8gKYa/Qvd5z
+   NwPcBSIdZAK/tAoUWoJVw393IZwiR4/UAAVjXNMRLkul8lcGR33548jhG
+   GccTdwAtkHnFb5bpG1eA6CQpf2/8UkkNi5z9GZI9GFXN2hHf55WM4W53A
+   ty5LcX+pfqBc/QWYGsYSV3ayLeUvQ9Rq2eps2pd323k89zzhSQUhbF1u/
+   Vm6lFLYtCGrBOOJekj72HdQEGxX9D7z5pYEnuYOHRMO7oo1N/gGWSrIcB
+   1nV0P2OxPICjJZCbv3/5fRiqtguBd7AYc2c0+xSWuI1XgFin4PGUcyrh8
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275134346"
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275134355"
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="275134346"
+   d="scan'208";a="275134355"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:33:38 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:33:40 -0700
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="616446316"
+   d="scan'208";a="616446327"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.56.178])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:33:36 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:33:38 -0700
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] perf record: Always record id index
-Date:   Fri, 10 Jun 2022 14:33:13 +0300
-Message-Id: <20220610113316.6682-3-adrian.hunter@intel.com>
+Subject: [PATCH 3/5] perf record: Add new option to sample identifier
+Date:   Fri, 10 Jun 2022 14:33:14 +0300
+Message-Id: <20220610113316.6682-4-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220610113316.6682-1-adrian.hunter@intel.com>
 References: <20220610113316.6682-1-adrian.hunter@intel.com>
@@ -64,61 +64,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 In preparation for recording sideband events in a virtual machine guest so
 that they can be injected into a host perf.data file.
 
-Adjust the logic so that if there are IDs then the id index is recorded.
+Add an option to always include sample type PERF_SAMPLE_IDENTIFIER.
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/builtin-record.c        | 12 +++++-------
- tools/perf/util/synthetic-events.c |  7 +++++--
- 2 files changed, 10 insertions(+), 9 deletions(-)
+ tools/perf/Documentation/perf-record.txt | 3 +++
+ tools/perf/builtin-record.c              | 2 ++
+ tools/perf/util/record.c                 | 2 +-
+ tools/perf/util/record.h                 | 1 +
+ 4 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index cf8ad50f3de1..8fcea74fe3c2 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -313,6 +313,9 @@ OPTIONS
+ --sample-cpu::
+ 	Record the sample cpu.
+ 
++--sample-identifier::
++	Record the sample identifier.
++
+ -n::
+ --no-samples::
+ 	Don't sample.
 diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 3959a1b86afb..00c2a6cdf1be 100644
+index 00c2a6cdf1be..40dca1fba4e3 100644
 --- a/tools/perf/builtin-record.c
 +++ b/tools/perf/builtin-record.c
-@@ -1834,13 +1834,11 @@ static int record__synthesize(struct record *rec, bool tail)
- 		goto out;
- 
- 	/* Synthesize id_index before auxtrace_info */
--	if (rec->opts.auxtrace_sample_mode || rec->opts.full_auxtrace) {
--		err = perf_event__synthesize_id_index(tool,
--						      process_synthesized_event,
--						      session->evlist, machine);
--		if (err)
--			goto out;
--	}
-+	err = perf_event__synthesize_id_index(tool,
-+					      process_synthesized_event,
-+					      session->evlist, machine);
-+	if (err)
-+		goto out;
- 
- 	if (rec->opts.full_auxtrace) {
- 		err = perf_event__synthesize_auxtrace_info(rec->itr, tool,
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index 27acdc5e5723..d75074486a55 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -1719,14 +1719,17 @@ int perf_event__synthesize_id_index(struct perf_tool *tool, perf_event__handler_
- 	size_t nr = 0, i = 0, sz, max_nr, n;
- 	int err;
- 
--	pr_debug2("Synthesizing id index\n");
--
- 	max_nr = (UINT16_MAX - sizeof(struct perf_record_id_index)) /
- 		 sizeof(struct id_index_entry);
- 
+@@ -3191,6 +3191,8 @@ static struct option __record_options[] = {
+ 	OPT_BOOLEAN(0, "code-page-size", &record.opts.sample_code_page_size,
+ 		    "Record the sampled code address (ip) page size"),
+ 	OPT_BOOLEAN(0, "sample-cpu", &record.opts.sample_cpu, "Record the sample cpu"),
++	OPT_BOOLEAN(0, "sample-identifier", &record.opts.sample_identifier,
++		    "Record the sample identifier"),
+ 	OPT_BOOLEAN_SET('T', "timestamp", &record.opts.sample_time,
+ 			&record.opts.sample_time_set,
+ 			"Record the sample timestamps"),
+diff --git a/tools/perf/util/record.c b/tools/perf/util/record.c
+index 5b09ecbb05dc..b529636ab3ea 100644
+--- a/tools/perf/util/record.c
++++ b/tools/perf/util/record.c
+@@ -121,7 +121,7 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
  	evlist__for_each_entry(evlist, evsel)
- 		nr += evsel->core.ids;
+ 		evsel__config_leader_sampling(evsel, evlist);
  
-+	if (!nr)
-+		return 0;
-+
-+	pr_debug2("Synthesizing id index\n");
-+
- 	n = nr > max_nr ? max_nr : nr;
- 	sz = sizeof(struct perf_record_id_index) + n * sizeof(struct id_index_entry);
- 	ev = zalloc(sz);
+-	if (opts->full_auxtrace) {
++	if (opts->full_auxtrace || opts->sample_identifier) {
+ 		/*
+ 		 * Need to be able to synthesize and parse selected events with
+ 		 * arbitrary sample types, which requires always being able to
+diff --git a/tools/perf/util/record.h b/tools/perf/util/record.h
+index be9a957501f4..4269e916f450 100644
+--- a/tools/perf/util/record.h
++++ b/tools/perf/util/record.h
+@@ -28,6 +28,7 @@ struct record_opts {
+ 	bool	      sample_time;
+ 	bool	      sample_time_set;
+ 	bool	      sample_cpu;
++	bool	      sample_identifier;
+ 	bool	      period;
+ 	bool	      period_set;
+ 	bool	      running_time;
 -- 
 2.25.1
 

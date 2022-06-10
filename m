@@ -2,410 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D0F546D90
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EAB546D95
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347759AbiFJTsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
+        id S233646AbiFJTtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233646AbiFJTr6 (ORCPT
+        with ESMTP id S1348190AbiFJTt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:47:58 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA66A122B68
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:47:55 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so3253655pjm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:47:55 -0700 (PDT)
+        Fri, 10 Jun 2022 15:49:26 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4193C0EA3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:49:24 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id o8so9965083wro.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qHVaOpIkikSJd4AS05K/7q+c6JWj3nFqBCEKcwv5cyw=;
-        b=jcvI3NTgmLB86zNnesqS6ZPSuyTCEjqOAZnyFMwc3fd1rkvlMUBQqb6XFS0wRnpmsf
-         dgDRQQTu97SJSM9pNnH5DzTr/bDByIjBCwyoj+dN7wDrweOIuVe1joqPmesN01ojB2QF
-         3HeaqpFEs1I/tVz3i99tQTpvVtPDLwX9DLv+s=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KdwZ/vUxOQWQkpuIaKHLX7u/kAU2F/0Z5D//aWshiaw=;
+        b=DK3zmA3Y7haqkUBhh+3+yCjdIUO5DMoJqNlZ35RjXPjmo+ybkTUvi2TW9NkM6C2CaC
+         DCsoxCEmFD/7wosp76WHlPibPHSEpxXST5r95JkllGypUS15xProP8CwEdtzGL0K0jgc
+         WJv1l0b+AatR5AVl3to0Q5vkt3HMIDdzzeK4MfoY3vwzXKzyKuH2vkkURu7Xe9ArCjgS
+         ekL+9xpCoJWkcAGiatqjoiqH8o9PSRxoSyYWPPTWEvs4nnD8+WplCJWgCPu9hrJwuqTg
+         n8Fh936C4qtmi3DWV+T+r5uhUHh5jH/HPkPPvsKR9SsW+H6g6BLaeUwz5Pw3ZiTmkG6l
+         3qAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qHVaOpIkikSJd4AS05K/7q+c6JWj3nFqBCEKcwv5cyw=;
-        b=J192ZcKIfVQNdvBn3A+mtsHDwqKcONcylIb04j/55+n1DlayoA84RwhCaDdVWTcTq4
-         3I3eaf5F2ZAM2sjiCPX41H4k25hX5nP1DRbB1vM6S+TV3PTXbPXRma6w7YbHx4hYLOmJ
-         JRSPIw5LYsJacbzM/qGNTkuhqw6met3YAZZFxzomgWd/e6vynnLQ0Vqtfb6skfzILW2+
-         GNPgbX5zc+rpld3bMMa/L7S8E2l2qPvy7a9/k5F42ZS7rL/nYMECuGX1FbBE9MYqGDul
-         FIYsH3tbvWpYbJL+ENc5Sz97pxBZiR9Vg9YQSjwN9SW1xcdH83oHnRKTDuGUL4SEE++C
-         5NiQ==
-X-Gm-Message-State: AOAM531tLcV+jXNL/JlBbdw2ozlDSgzSoMKxCZW7wUnf/35K2lRPCjPb
-        alYwq118j2vISFoR78iOYEMv7g==
-X-Google-Smtp-Source: ABdhPJzDeEFTcdUxMi/c1HhWGSsw2zKB7dTsWNa7e8T/4dXCXi5IEcexLUBcXU+ROnNldGn1KlsA9g==
-X-Received: by 2002:a17:903:44c:b0:164:113:a433 with SMTP id iw12-20020a170903044c00b001640113a433mr45844915plb.163.1654890475266;
-        Fri, 10 Jun 2022 12:47:55 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:2604:9b98:9e57:c870])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170903120400b001620db30cd6sm92864plh.201.2022.06.10.12.47.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 12:47:54 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eric Anholt <eric@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Sean Paul <sean@poorly.run>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] drm/msm: Avoid unclocked GMU register access in 6xx gpu_busy
-Date:   Fri, 10 Jun 2022 12:47:31 -0700
-Message-Id: <20220610124639.v4.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KdwZ/vUxOQWQkpuIaKHLX7u/kAU2F/0Z5D//aWshiaw=;
+        b=5DgY5RB0CmQkiYDOusiQgDc0A1/6P8aPwURjduK3RbO70qa43oKPU5AMYVpwpRR31s
+         oMAAEeMBtGogpvaIifqJfTYXFNdeZAycokr5PSz79TrGHdIC5WmUjZmqWzxDmzIDCQX1
+         Zjcfoj0ehF3IcO5rc/U5Rkait6usLTPCS2i8tS9W3ZemyCYTEdAG1i6h+FuMT3iqJG7W
+         K9O2unKvtIzAWYugXgPd9IGP0cuLXkDF2InJCQx8YphrF8sYfLhFATGo4vgyNF57CxA0
+         5VxIM+8G4d/ibQYA+YFKm14s7Zs9bBZhgq9QbiZ4tPRLKD4QdZPRrWM6zq1972pACDJk
+         N1iw==
+X-Gm-Message-State: AOAM530iphiQPaFZQGavjnzDP4qyFbUVKOUmIi9vpZhrJWnN+2YvVJ2B
+        QR5U51gYDxdLGT1/VIILgvwvyepG4q0ehEPYqj7J3A==
+X-Google-Smtp-Source: ABdhPJwCie0nWJ95ss+CBxOC3ACg+EZHqwlIoedubJgaPBqRw7d0OUDgynlT/Cwg7uegqRFXiWIKhKlKvqzzT1SKrOk=
+X-Received: by 2002:a05:6000:184b:b0:219:bee5:6b75 with SMTP id
+ c11-20020a056000184b00b00219bee56b75mr8032572wri.80.1654890561453; Fri, 10
+ Jun 2022 12:49:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610194435.2268290-1-yosryahmed@google.com>
+In-Reply-To: <20220610194435.2268290-1-yosryahmed@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 10 Jun 2022 12:48:44 -0700
+Message-ID: <CAJD7tkaMAnxsfyTc4iQibBzYt5-F68yKYqbdd9AM8_8Mh59+tw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/8] bpf: rstat: cgroup hierarchical stats
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@kernel.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From testing on sc7180-trogdor devices, reading the GMU registers
-needs the GMU clocks to be enabled. Those clocks get turned on in
-a6xx_gmu_resume(). Confusingly enough, that function is called as a
-result of the runtime_pm of the GPU "struct device", not the GMU
-"struct device". Unfortunately the current a6xx_gpu_busy() grabs a
-reference to the GMU's "struct device".
++cc Michal Koutn=C3=BD <mkoutny@suse.com>
 
-The fact that we were grabbing the wrong reference was easily seen to
-cause crashes that happen if we change the GPU's pm_runtime usage to
-not use autosuspend. It's also believed to cause some long tail GPU
-crashes even with autosuspend.
 
-We could look at changing it so that we do pm_runtime_get_if_in_use()
-on the GPU's "struct device", but then we run into a different
-problem. pm_runtime_get_if_in_use() will return 0 for the GPU's
-"struct device" the whole time when we're in the "autosuspend
-delay". That is, when we drop the last reference to the GPU but we're
-waiting a period before actually suspending then we'll think the GPU
-is off. One reason that's bad is that if the GPU didn't actually turn
-off then the cycle counter doesn't lose state and that throws off all
-of our calculations.
-
-Let's change the code to keep track of the suspend state of
-devfreq. msm_devfreq_suspend() is always called before we actually
-suspend the GPU and msm_devfreq_resume() after we resume it. This
-means we can use the suspended state to know if we're powered or not.
-
-NOTE: one might wonder when exactly our status function is called when
-devfreq is supposed to be disabled. The stack crawl I captured was:
-  msm_devfreq_get_dev_status
-  devfreq_simple_ondemand_func
-  devfreq_update_target
-  qos_notifier_call
-  qos_max_notifier_call
-  blocking_notifier_call_chain
-  pm_qos_update_target
-  freq_qos_apply
-  apply_constraint
-  __dev_pm_qos_update_request
-  dev_pm_qos_update_request
-  msm_devfreq_idle_work
-
-Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Rob Clark <robdclark@gmail.com>
----
-
-Changes in v4:
-- Add a comment that gpu_set_freq() / gpu_busy() assume pm resume
-
-Changes in v3:
-- Totally rewrote to not use the pm_runtime functions.
-- Moved the code to be common for all adreno GPUs.
-
-Changes in v2:
-- Move the set_freq runtime pm grab to the GPU file.
-- Use <= for the pm_runtime test, not ==.
-
- drivers/gpu/drm/msm/adreno/a5xx_gpu.c |  8 ------
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 13 ++++-----
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++------
- drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  3 ++-
- drivers/gpu/drm/msm/msm_gpu.h         | 11 +++++++-
- drivers/gpu/drm/msm/msm_gpu_devfreq.c | 39 +++++++++++++++++++++------
- 6 files changed, 53 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-index c424e9a37669..3dcec7acb384 100644
---- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-@@ -1666,18 +1666,10 @@ static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
- {
- 	u64 busy_cycles;
- 
--	/* Only read the gpu busy if the hardware is already active */
--	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
--		*out_sample_rate = 1;
--		return 0;
--	}
--
- 	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
- 			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
- 	*out_sample_rate = clk_get_rate(gpu->core_clk);
- 
--	pm_runtime_put(&gpu->pdev->dev);
--
- 	return busy_cycles;
- }
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 9f76f5b15759..dc715d88ff21 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -102,7 +102,8 @@ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu)
- 		A6XX_GMU_SPTPRAC_PWR_CLK_STATUS_GX_HM_CLK_OFF));
- }
- 
--void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-+void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+		       bool suspended)
- {
- 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-@@ -127,15 +128,16 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
- 
- 	/*
- 	 * This can get called from devfreq while the hardware is idle. Don't
--	 * bring up the power if it isn't already active
-+	 * bring up the power if it isn't already active. All we're doing here
-+	 * is updating the frequency so that when we come back online we're at
-+	 * the right rate.
- 	 */
--	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
-+	if (suspended)
- 		return;
- 
- 	if (!gmu->legacy) {
- 		a6xx_hfi_set_freq(gmu, perf_index);
- 		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
--		pm_runtime_put(gmu->dev);
- 		return;
- 	}
- 
-@@ -159,7 +161,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
- 		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
- 
- 	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
--	pm_runtime_put(gmu->dev);
- }
- 
- unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
-@@ -895,7 +896,7 @@ static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
- 		return;
- 
- 	gmu->freq = 0; /* so a6xx_gmu_set_freq() doesn't exit early */
--	a6xx_gmu_set_freq(gpu, gpu_opp);
-+	a6xx_gmu_set_freq(gpu, gpu_opp, false);
- 	dev_pm_opp_put(gpu_opp);
- }
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 42ed9a3c4905..8c02a67f29f2 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1658,27 +1658,21 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
- 	/* 19.2MHz */
- 	*out_sample_rate = 19200000;
- 
--	/* Only read the gpu busy if the hardware is already active */
--	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
--		return 0;
--
- 	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
- 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
- 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
- 
--
--	pm_runtime_put(a6xx_gpu->gmu.dev);
--
- 	return busy_cycles;
- }
- 
--static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-+static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+			      bool suspended)
- {
- 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
- 
- 	mutex_lock(&a6xx_gpu->gmu.lock);
--	a6xx_gmu_set_freq(gpu, opp);
-+	a6xx_gmu_set_freq(gpu, opp, suspended);
- 	mutex_unlock(&a6xx_gpu->gmu.lock);
- }
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-index 86e0a7c3fe6d..ab853f61db63 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-@@ -77,7 +77,8 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
- int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
- void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
- 
--void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-+void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+		       bool suspended);
- unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu);
- 
- void a6xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index 6def00883046..31269c1c896b 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -64,11 +64,14 @@ struct msm_gpu_funcs {
- 	/* for generation specific debugfs: */
- 	void (*debugfs_init)(struct msm_gpu *gpu, struct drm_minor *minor);
- #endif
-+	/* note: gpu_busy() can assume that we have been pm_resumed */
- 	u64 (*gpu_busy)(struct msm_gpu *gpu, unsigned long *out_sample_rate);
- 	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
- 	int (*gpu_state_put)(struct msm_gpu_state *state);
- 	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
--	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-+	/* note: gpu_set_freq() can assume that we have been pm_resumed */
-+	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+			     bool suspended);
- 	struct msm_gem_address_space *(*create_address_space)
- 		(struct msm_gpu *gpu, struct platform_device *pdev);
- 	struct msm_gem_address_space *(*create_private_address_space)
-@@ -92,6 +95,9 @@ struct msm_gpu_devfreq {
- 	/** devfreq: devfreq instance */
- 	struct devfreq *devfreq;
- 
-+	/** lock: lock for "suspended", "busy_cycles", and "time" */
-+	struct mutex lock;
-+
- 	/**
- 	 * idle_constraint:
- 	 *
-@@ -135,6 +141,9 @@ struct msm_gpu_devfreq {
- 	 * elapsed
- 	 */
- 	struct msm_hrtimer_work boost_work;
-+
-+	/** suspended: tracks if we're suspended */
-+	bool suspended;
- };
- 
- struct msm_gpu {
-diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-index d2539ca78c29..ea94bc18e72e 100644
---- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-+++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-@@ -20,6 +20,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
- 		u32 flags)
- {
- 	struct msm_gpu *gpu = dev_to_gpu(dev);
-+	struct msm_gpu_devfreq *df = &gpu->devfreq;
- 	struct dev_pm_opp *opp;
- 
- 	/*
-@@ -32,10 +33,13 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
- 
- 	trace_msm_gpu_freq_change(dev_pm_opp_get_freq(opp));
- 
--	if (gpu->funcs->gpu_set_freq)
--		gpu->funcs->gpu_set_freq(gpu, opp);
--	else
-+	if (gpu->funcs->gpu_set_freq) {
-+		mutex_lock(&df->lock);
-+		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
-+		mutex_unlock(&df->lock);
-+	} else {
- 		clk_set_rate(gpu->core_clk, *freq);
-+	}
- 
- 	dev_pm_opp_put(opp);
- 
-@@ -58,15 +62,24 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
- 	unsigned long sample_rate;
- 	ktime_t time;
- 
-+	mutex_lock(&df->lock);
-+
- 	status->current_frequency = get_freq(gpu);
--	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
- 	time = ktime_get();
--
--	busy_time = busy_cycles - df->busy_cycles;
- 	status->total_time = ktime_us_delta(time, df->time);
-+	df->time = time;
- 
-+	if (df->suspended) {
-+		mutex_unlock(&df->lock);
-+		status->busy_time = 0;
-+		return;
-+	}
-+
-+	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
-+	busy_time = busy_cycles - df->busy_cycles;
- 	df->busy_cycles = busy_cycles;
--	df->time = time;
-+
-+	mutex_unlock(&df->lock);
- 
- 	busy_time *= USEC_PER_SEC;
- 	do_div(busy_time, sample_rate);
-@@ -175,6 +188,8 @@ void msm_devfreq_init(struct msm_gpu *gpu)
- 	if (!gpu->funcs->gpu_busy)
- 		return;
- 
-+	mutex_init(&df->lock);
-+
- 	dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
- 			       DEV_PM_QOS_MAX_FREQUENCY,
- 			       PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-@@ -244,12 +259,16 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
- void msm_devfreq_resume(struct msm_gpu *gpu)
- {
- 	struct msm_gpu_devfreq *df = &gpu->devfreq;
-+	unsigned long sample_rate;
- 
- 	if (!has_devfreq(gpu))
- 		return;
- 
--	df->busy_cycles = 0;
-+	mutex_lock(&df->lock);
-+	df->busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
- 	df->time = ktime_get();
-+	df->suspended = false;
-+	mutex_unlock(&df->lock);
- 
- 	devfreq_resume_device(df->devfreq);
- }
-@@ -261,6 +280,10 @@ void msm_devfreq_suspend(struct msm_gpu *gpu)
- 	if (!has_devfreq(gpu))
- 		return;
- 
-+	mutex_lock(&df->lock);
-+	df->suspended = true;
-+	mutex_unlock(&df->lock);
-+
- 	devfreq_suspend_device(df->devfreq);
- 
- 	cancel_idle_work(df);
--- 
-2.36.1.476.g0c4daa206d-goog
-
+On Fri, Jun 10, 2022 at 12:44 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> This patch series allows for using bpf to collect hierarchical cgroup
+> stats efficiently by integrating with the rstat framework. The rstat
+> framework provides an efficient way to collect cgroup stats percpu and
+> propagate them through the cgroup hierarchy.
+>
+> The stats are exposed to userspace in textual form by reading files in
+> bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+> cgroup_iter is a type of bpf_iter. It walks over cgroups in two modes:
+>
+>  - walking a cgroup's descendants.
+>  - walking a cgroup's ancestors.
+>
+> When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+> created from attaching. This cgroup is passed as a file descriptor and
+> serves as the starting point of the walk.
+>
+> For walking descendants, one can specify the order: either pre-order or
+> post-order. For walking ancestors, the walk starts at the specified
+> cgroup and ends at the root.
+>
+> One can also terminate the walk early by returning 1 from the iter
+> program.
+>
+> Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> program is called with cgroup_mutex held.
+>
+> ** Background on rstat for stats collection **
+> (I am using a subscriber analogy that is not commonly used)
+>
+> The rstat framework maintains a tree of cgroups that have updates and
+> which cpus have updates. A subscriber to the rstat framework maintains
+> their own stats. The framework is used to tell the subscriber when
+> and what to flush, for the most efficient stats propagation. The
+> workflow is as follows:
+>
+> - When a subscriber updates a cgroup on a cpu, it informs the rstat
+>   framework by calling cgroup_rstat_updated(cgrp, cpu).
+>
+> - When a subscriber wants to read some stats for a cgroup, it asks
+>   the rstat framework to initiate a stats flush (propagation) by calling
+>   cgroup_rstat_flush(cgrp).
+>
+> - When the rstat framework initiates a flush, it makes callbacks to
+>   subscribers to aggregate stats on cpus that have updates, and
+>   propagate updates to their parent.
+>
+> Currently, the main subscribers to the rstat framework are cgroup
+> subsystems (e.g. memory, block). This patch series allow bpf programs to
+> become subscribers as well.
+>
+> Patches in this series are based off a patch in the mailing
+> list which adds a new kfunc set for sleepable functions:
+> "btf: Add a new kfunc set which allows to mark a function to be
+> sleepable" [1].
+>
+> Patches in this series are organized as follows:
+> * Patch 1 enables the use of cgroup_get_from_file() in cgroup1.
+>   This is useful because it enables cgroup_iter to work with cgroup1, and
+>   allows the entire stat collection workflow to be cgroup1-compatible.
+> * Patches 2-5 introduce cgroup_iter prog, and a selftest.
+> * Patches 6-8 allow bpf programs to integrate with rstat by adding the
+>   necessary hook points and kfunc. A comprehensive selftest that
+>   demonstrates the entire workflow for using bpf and rstat to
+>   efficiently collect and output cgroup stats is added.
+>
+> v1 -> v2:
+> - Redesign of cgroup_iter from v1, based on Alexei's idea [2]:
+>   - supports walking cgroup subtree.
+>   - supports walking ancestors of a cgroup. (Andrii)
+>   - supports terminating the walk early.
+>   - uses fd instead of cgroup_id as parameter for iter_link. Using fd is
+>     a convention in bpf.
+>   - gets cgroup's ref at attach time and deref at detach.
+>   - brought back cgroup1 support for cgroup_iter.
+> - Squashed the patches adding the rstat flush hook points and kfuncs
+>   (Tejun).
+> - Added a comment explaining why bpf_rstat_flush() needs to be weak
+>   (Tejun).
+> - Updated the final selftest with the new cgroup_iter design.
+> - Changed CHECKs in the selftest with ASSERTs (Yonghong, Andrii).
+> - Removed empty line at the end of the selftest (Yonghong).
+> - Renamed test files to cgroup_hierarchical_stats.c.
+> - Reordered CGROUP_PATH params order to match struct declaration
+>   in the selftest (Michal).
+> - Removed memory_subsys_enabled() and made sure memcg controller
+>   enablement checks make sense and are documented (Michal).
+>
+> RFC v2 -> v1:
+> - Instead of introducing a new program type for rstat flushing, add an
+>   empty hook point, bpf_rstat_flush(), and use fentry bpf programs to
+>   attach to it and flush bpf stats.
+> - Instead of using helpers, use kfuncs for rstat functions.
+> - These changes simplify the patchset greatly, with minimal changes to
+>   uapi.
+>
+> RFC v1 -> RFC v2:
+> - Instead of rstat flush programs attach to subsystems, they now attach
+>   to rstat (global flushers, not per-subsystem), based on discussions
+>   with Tejun. The first patch is entirely rewritten.
+> - Pass cgroup pointers to rstat flushers instead of cgroup ids. This is
+>   much more flexibility and less likely to need a uapi update later.
+> - rstat helpers are now only defined if CGROUP_CONFIG.
+> - Most of the code is now only defined if CGROUP_CONFIG and
+>   CONFIG_BPF_SYSCALL.
+> - Move rstat helper protos from bpf_base_func_proto() to
+>   tracing_prog_func_proto().
+> - rstat helpers argument (cgroup pointer) is now ARG_PTR_TO_BTF_ID, not
+>   ARG_ANYTHING.
+> - Rewrote the selftest to use the cgroup helpers.
+> - Dropped bpf_map_lookup_percpu_elem (already added by Feng).
+> - Dropped patch to support cgroup v1 for cgroup_iter.
+> - Dropped patch to define some cgroup_put() when !CONFIG_CGROUP. The
+>   code that calls it is no longer compiled when !CONFIG_CGROUP.
+>
+> cgroup_iter was originally introduced in a different patch series[3].
+> Hao and I agreed that it fits better as part of this series.
+> RFC v1 of this patch series had the following changes from [3]:
+> - Getting the cgroup's reference at the time at attaching, instead of
+>   at the time when iterating. (Yonghong)
+> - Remove .init_seq_private and .fini_seq_private callbacks for
+>   cgroup_iter. They are not needed now. (Yonghong)
+>
+> [1] https://lore.kernel.org/bpf/20220421140740.459558-5-benjamin.tissoire=
+s@redhat.com/
+> [2] https://lore.kernel.org/bpf/20220520221919.jnqgv52k4ajlgzcl@MBP-98dd6=
+07d3435.dhcp.thefacebook.com/
+> [3] https://lore.kernel.org/lkml/20220225234339.2386398-9-haoluo@google.c=
+om/
+>
+> Hao Luo (4):
+>   cgroup: Add cgroup_put() in !CONFIG_CGROUPS case
+>   bpf, iter: Fix the condition on p when calling stop.
+>   bpf: Introduce cgroup iter
+>   selftests/bpf: Test cgroup_iter.
+>
+> Yosry Ahmed (4):
+>   cgroup: enable cgroup_get_from_file() on cgroup1
+>   cgroup: bpf: enable bpf programs to integrate with rstat
+>   selftests/bpf: extend cgroup helpers
+>   bpf: add a selftest for cgroup hierarchical stats collection
+>
+>  include/linux/bpf.h                           |   8 +
+>  include/linux/cgroup.h                        |   3 +
+>  include/uapi/linux/bpf.h                      |  21 ++
+>  kernel/bpf/Makefile                           |   2 +-
+>  kernel/bpf/bpf_iter.c                         |   5 +
+>  kernel/bpf/cgroup_iter.c                      | 235 ++++++++++++
+>  kernel/cgroup/cgroup.c                        |   5 -
+>  kernel/cgroup/rstat.c                         |  46 +++
+>  tools/include/uapi/linux/bpf.h                |  21 ++
+>  tools/testing/selftests/bpf/cgroup_helpers.c  | 173 +++++++--
+>  tools/testing/selftests/bpf/cgroup_helpers.h  |  15 +-
+>  .../prog_tests/cgroup_hierarchical_stats.c    | 351 ++++++++++++++++++
+>  .../selftests/bpf/prog_tests/cgroup_iter.c    | 190 ++++++++++
+>  tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+>  .../bpf/progs/cgroup_hierarchical_stats.c     | 234 ++++++++++++
+>  .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++
+>  16 files changed, 1303 insertions(+), 52 deletions(-)
+>  create mode 100644 kernel/bpf/cgroup_iter.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarc=
+hical_stats.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical=
+_stats.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+>
+> --
+> 2.36.1.476.g0c4daa206d-goog
+>

@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261FF545E3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7F9545E39
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347175AbiFJILM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S1347075AbiFJIKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347159AbiFJILK (ORCPT
+        with ESMTP id S243411AbiFJIKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:11:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697F021E0EF;
-        Fri, 10 Jun 2022 01:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=w8J2KWjgjx9J/jKYFe8GjW3jNW9wYeGtv0q5FHV/ys4=; b=GB5aPyYFM6PkAx1k8v49cM2BwJ
-        WcHcAb9jUq2QalpM0aIhDr3+BATD+8EYM+eWrdcimaNJm2xzuBjssr8WpUOHCt60n94XAWc3FLON0
-        Ea9J0QBamM6uWTM+4HzYRBxWYDjskhw+JmLncWTsnFKFqxOWIxsmL4IFLm4L1tdnFjZSI0pPplO8o
-        9sJxX0TlKZO3aKYVSMxNIiHKcE1/kS+w9R9M0LWGRUAImkmbZyNxVDSII1uFSuj5x0bXfi1yfXOOK
-        c3DmI+O3f6cqKS1/lbJzaDxCojVk8Q1W7xF3ZeNStt9QC+dLwogmOOIHoLpghg/0Ij+XccRx5toAG
-        ilnXeRzQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nzZin-006gfR-MQ; Fri, 10 Jun 2022 08:10:21 +0000
-Date:   Fri, 10 Jun 2022 01:10:21 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Bill Wendling <morbo@google.com>
-Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 04/12] blk-cgroup: use correct format characters
-Message-ID: <YqL8bTQxrkQjlSBT@infradead.org>
-References: <20220609221702.347522-1-morbo@google.com>
- <20220609221702.347522-5-morbo@google.com>
+        Fri, 10 Jun 2022 04:10:41 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE4921E0EF
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:10:38 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id m14so2244895ybm.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7bdR1YHa7YgmZUPKy2qQkHy7vQLxG7NreiHak78/QtQ=;
+        b=QLCRkdqX5BuO5jjWVwqHoDAbZSlWUMtDF2QsKc+A92RKb2PVtFbOk6uKHrKtSZqHNS
+         +aXbr5c5hzZUgiGH863uiQ/c6qMPZubPbIPWbFIp5DHvL+vefBPJ0x9MCaWF+QmIvERF
+         Ssr6PMxqChyARcq7EE/uG3eyHTO/8glHxS5x9XIYN6sKyOl0QimoPrgptp5QL+T7PR9a
+         EY+QNF5hOX2awdkDeAGprTxkE6LXsiBIu+lFEB/QY8lABm8DeFQMZ2bh4cTM56z8E8Um
+         MldM9tYuVNi8FqSfqzTAVSxFETKxW9D6xvvhO21jEqVfyrq61uG4+lk2jfISh0uIbTNP
+         4ljw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7bdR1YHa7YgmZUPKy2qQkHy7vQLxG7NreiHak78/QtQ=;
+        b=tQ6RBuNhUR5DLE7XX7EPt3YHeb46jZJynQSv28s9LXE4ICo1bpf8k0FSLDdnJ8vxYT
+         YyADXhBDbLyiB82Q6bEcI9hV9pM27ZM75wyUokTy0Rx1Q/rv5BfdsjfQs3wVVRSA8MOK
+         9CCNsBWxVgwu0bRyaj5S8aS7h+4pFANgUCKsscGbTqe7isSJA/W6Maxfs2q+dUx2zA25
+         UFWX4T3rafbH5EpyiOni73ZJ7RoEZuY90+hLscNwDO0d+FK4sSeAbk1ZbuSZkpoOAQKR
+         DyDV+rGYBH/vRSa+p7qcvTBO7Ocehvm5hHKLCCFXi7HYd6qq+yJwZWpOEIHIYfhUjELx
+         w0cg==
+X-Gm-Message-State: AOAM533Z9pjsOi1XcqQxv47iGiqC7cWSrD44mn58krHX6ivVXqaHLmoz
+        bQW1Unh3R+A19cnM4sx0391cimkWnVHpZi7kAc3Gcg==
+X-Google-Smtp-Source: ABdhPJysH+Vm9q+hpcHBFM2HeB4FXcSewOA0rcUW+eRmA9ud8iu8C+9CiLURVvP28kGbmb1oyUnciJYtdwxDM9s6aP8=
+X-Received: by 2002:a25:24c1:0:b0:663:f537:2dc2 with SMTP id
+ k184-20020a2524c1000000b00663f5372dc2mr13426648ybk.241.1654848637915; Fri, 10
+ Jun 2022 01:10:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609221702.347522-5-morbo@google.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20220609025515.2086253-1-joshdon@google.com> <CAKfTPtCc4NZ51qruKX1zROFHqg-_MQBadaJfVbYPxT=7c4So=Q@mail.gmail.com>
+ <CABk29NtX7EZsAqrT8vXd6tgWe2HPRNPM=cWxFSSxBtW1MjFqOA@mail.gmail.com>
+In-Reply-To: <CABk29NtX7EZsAqrT8vXd6tgWe2HPRNPM=cWxFSSxBtW1MjFqOA@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 10 Jun 2022 10:10:25 +0200
+Message-ID: <CAKfTPtCZyig6MrdS7zAL=4mzhD5KBba74C0UCtvX+7N7BrzSig@mail.gmail.com>
+Subject: Re: [PATCH] sched: allow newidle balancing to bail out of load_balance
+To:     Josh Don <joshdon@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,11 +74,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 10:16:23PM +0000, Bill Wendling wrote:
->  	vsnprintf(bdi->dev_name, sizeof(bdi->dev_name), fmt, args);
-> -	dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, bdi->dev_name);
-> +	dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, "%s", bdi->dev_name);
+On Thu, 9 Jun 2022 at 21:40, Josh Don <joshdon@google.com> wrote:
+>
+> Thanks Vincent,
+>
+> On Thu, Jun 9, 2022 at 6:42 AM Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> >
+> > On Thu, 9 Jun 2022 at 04:55, Josh Don <joshdon@google.com> wrote:
+> > >
+> > > While doing newidle load balancing, it is possible for new tasks to
+> > > arrive, such as with pending wakeups. newidle_balance() already accounts
+> > > for this by exiting the sched_domain load_balance() iteration if it
+> > > detects these cases. This is very important for minimizing wakeup
+> > > latency.
+> > >
+> > > However, if we are already in load_balance(), we may stay there for a
+> > > while before returning back to newidle_balance(). This is most
+> > > exacerbated if we enter a 'goto redo' loop in the LBF_ALL_PINNED case. A
+> > > very straightforward workaround to this is to adjust should_we_balance()
+> > > to bail out if we're doing a CPU_NEWLY_IDLE balance and new tasks are
+> > > detected.
+> >
+> > This one is close to the other tests and I wonder if it should be
+> > better placed before taking the busiest rq lock and detaching some
+> > tasks.
+> >
+> > Beside your use case where all other threads can't move in local cpu
+> > and load_balance() loops and clears other cpus, most of the time is
+> > probably spent in fbg() and fbq() so there are more chance that a task
+> > woke in this meantime and I imagine that it becomes useless to take
+> > lock and move tasks from another cpu if the local cpu is no more newly
+> > idle.
+> >
+> > Have you tried other places in load_balance() and does this one
+> > provide the lowest wakeup latency ?
+> >
+> > That being said, the current patch makes sense.
+>
+> I tested with another check after fbg/fbq and there wasn't any
+> noticeable improvement to observed wakeup latency (not totally
+> unexpected, since it only helps for wakeups that come during fbg/fbq).
 
-Please avoid the overly long line.  But given that bdi names aren't user
-input this warning seems to shoot from the hip a bit.
+ok. so IIUC the wakeup has already happened when we start
+load_balance() in your case so the additional test is useless in your
+case
 
+> However, I don't think there's any harm in having that extra check in
+> the CPU_NEWLY_IDLE case; might as well avoid bouncing the rq lock if
+> we can. fbq+fbg are together taking ~3-4us per iteration in my repro.
+>
+> If there are no objections I can send a v2 with the added delta:
+
+Would be good to get figures that show some benefits of this
+additional check for some benchmarks
+
+So I think that we can stay with your current proposal for now
+
+>
+> @@ -9906,6 +9906,16 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+>                 goto out_balanced;
+>         }
+>
+> +       /*
+> +        * fbg/fbq can take a while. In the newly idle case, recheck whether
+> +        * we should continue with balancing, since it is possible that a
+> +        * task woke up in the interim.
+> +        */
+> +       if (env.idle == CPU_NEWLY_IDLE && !should_we_balance(&env)) {
+> +               *continue_balancing = 0;
+> +               goto out_balanced;
+> +       }
+> +
+>         BUG_ON(busiest == env.dst_rq);
+>
+>         schedstat_add(sd->lb_imbalance[idle], env.imbalance);

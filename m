@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99101545BA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021D7545BA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243650AbiFJFZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S244187AbiFJF0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiFJFZ3 (ORCPT
+        with ESMTP id S243795AbiFJF0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:25:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C23A29DC07
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:25:27 -0700 (PDT)
+        Fri, 10 Jun 2022 01:26:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C5F354471
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:26:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39F65B830F6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:25:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65137C34114;
-        Fri, 10 Jun 2022 05:25:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5005361E49
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE92C34114;
+        Fri, 10 Jun 2022 05:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654838724;
-        bh=I4f5JhTN7o6cdBtdV7WpYHM1lwzF1iBma58To0zMnS0=;
+        s=korg; t=1654838768;
+        bh=gwCK9uMfRUGm8E6XoELsFSqRflgNay8yFNDnSDJjIw8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0UkE3l5r3w+fPXvwvYCjmAlJQNoaa/1C+MQ4ByQB8xiqkwjaAmt5TLqaVRTjkd9gr
-         AC8um02sbNnQHFAz22iFLaL3/+YZzAzAgftqvJubBr6iflbmjfzF1XNTOv8RWi53YY
-         4PuvDEchYt73MBxiL9gMFGk2Y/uv5aZtmTfUG8to=
-Date:   Fri, 10 Jun 2022 07:25:22 +0200
+        b=GxdUSQ2YDkvS3Pl8dMqe65wnQRwTnSFBKsCTFUh8i9zW47JnZ11Tk/6J+WRSGBO38
+         soK+Wv94GzKlQGFUh4wJITycUkm7Z3Y3+PIGLMf7CB6jNTWPZyoCLuUp6r1JCVNaKt
+         X+drEUBA4JfjILQuvuKd7ictTayLxW0Qo5/IfZGE=
+Date:   Fri, 10 Jun 2022 07:26:06 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Bard Liao <yung-chuan.liao@linux.intel.com>
 Cc:     alsa-devel@alsa-project.org, vkoul@kernel.org,
@@ -37,15 +37,14 @@ Cc:     alsa-devel@alsa-project.org, vkoul@kernel.org,
         broonie@kernel.org, srinivas.kandagatla@linaro.org,
         pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
         bard.liao@intel.com
-Subject: Re: [PATCH 1/2] soundwire: intel: uniquify debug message
-Message-ID: <YqLVwqx9/Pos8T06@kroah.com>
+Subject: Re: [PATCH 2/2] soundwire: Intel: add trigger callback
+Message-ID: <YqLV7qexsdhCI7ZZ@kroah.com>
 References: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
- <20220610023537.27223-2-yung-chuan.liao@linux.intel.com>
+ <20220610023537.27223-3-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610023537.27223-2-yung-chuan.liao@linux.intel.com>
+In-Reply-To: <20220610023537.27223-3-yung-chuan.liao@linux.intel.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -56,63 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:35:36AM +0800, Bard Liao wrote:
-> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On Fri, Jun 10, 2022 at 10:35:37AM +0800, Bard Liao wrote:
+> When a pipeline is split into FE and BE parts, the BE pipeline may need to
+> be triggered separately in the BE trigger op. So add the trigger callback
+> in the link_res ops that will be invoked during BE DAI trigger.
 > 
-> The same debug message is replicated multiple time, add __func__ to
-> figure out what link is ignored.
-> 
-> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
 > Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> Reviewed-by: Rander Wang <rander.wang@intel.com>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 > ---
->  drivers/soundwire/intel.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
+>  drivers/soundwire/intel.c           | 8 ++++++++
+>  include/linux/soundwire/sdw_intel.h | 1 +
+>  2 files changed, 9 insertions(+)
 > 
 > diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-> index 505c5ef061e3..808e2f320052 100644
+> index 808e2f320052..3f3c2c99cb8e 100644
 > --- a/drivers/soundwire/intel.c
 > +++ b/drivers/soundwire/intel.c
-> @@ -1328,8 +1328,8 @@ int intel_link_startup(struct auxiliary_device *auxdev)
+> @@ -1004,9 +1004,17 @@ static int intel_trigger(struct snd_pcm_substream *substream, int cmd, struct sn
+>  {
+>  	struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
+>  	struct sdw_intel *sdw = cdns_to_intel(cdns);
+> +	struct sdw_intel_link_res *res = sdw->link_res;
+>  	struct sdw_cdns_dma_data *dma;
+>  	int ret = 0;
 >  
->  	if (bus->prop.hw_disabled) {
->  		dev_info(dev,
-> -			 "SoundWire master %d is disabled, ignoring\n",
-> -			 sdw->instance);
-> +			 "%s: SoundWire master %d is disabled, ignoring\n",
-> +			 __func__, sdw->instance);
+> +	/* The .trigger callback is used to send required IPC to audio
+> +	 * firmware. The .free_stream callback will still be called
+> +	 * by intel_free_stream() in the TRIGGER_SUSPEND case.
+> +	 */
+> +	if (res->ops && res->ops->trigger)
+> +		res->ops->trigger(dai, cmd, substream->stream);
+> +
+>  	dma = snd_soc_dai_get_dma_data(dai, substream);
+>  	if (!dma) {
+>  		dev_err(dai->dev, "failed to get dma data in %s\n",
+> diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
+> index 67e0d3e750b5..f638707fd712 100644
+> --- a/include/linux/soundwire/sdw_intel.h
+> +++ b/include/linux/soundwire/sdw_intel.h
+> @@ -119,6 +119,7 @@ struct sdw_intel_ops {
+>  			     struct sdw_intel_stream_params_data *params_data);
+>  	int (*free_stream)(struct device *dev,
+>  			   struct sdw_intel_stream_free_data *free_data);
+> +	int (*trigger)(struct snd_soc_dai *dai, int cmd, int stream);
+>  };
+>  
+>  /**
+> -- 
+> 2.17.1
+> 
 
-This is not a debug message, please make it such if you want to have
-__func__  And even then, it's not needed as you can get that from the
-kernel automatically.
+Where is the in-kernel user of this new callback?  Without that, there
+is no need for this, NOR is there a way to properly review this commit.
 
->  		return 0;
->  	}
->  
-> @@ -1489,8 +1489,8 @@ int intel_link_process_wakeen_event(struct auxiliary_device *auxdev)
->  	bus = &sdw->cdns.bus;
->  
->  	if (bus->prop.hw_disabled || !sdw->startup_done) {
-> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
-> -			bus->link_id);
-> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
-> +			__func__, bus->link_id);
->  		return 0;
->  	}
->  
-> @@ -1549,8 +1549,8 @@ static int __maybe_unused intel_pm_prepare(struct device *dev)
->  	int ret;
->  
->  	if (bus->prop.hw_disabled || !sdw->startup_done) {
-> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
-> -			bus->link_id);
-> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
-> +			__func__, bus->link_id);
-
-Not needed, it is provided automatically if you ask the kernel for this.
-Same for all other instances in this patch.
-
-thanks,
+sorry,
 
 greg k-h

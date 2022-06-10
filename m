@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3353C5467BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FF35467B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349087AbiFJNww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S244305AbiFJNwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348944AbiFJNwT (ORCPT
+        with ESMTP id S1348912AbiFJNv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:52:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED3DEA7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:52:13 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ADgfkE000541;
-        Fri, 10 Jun 2022 13:51:13 GMT
+        Fri, 10 Jun 2022 09:51:58 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246CC1F61C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:51:54 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ADY03B023553;
+        Fri, 10 Jun 2022 13:51:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=yPR26Ihb5In/eBRJL5MvPvXGtjwasSeSjglyfb726gs=;
- b=in5N8kr8AGgz/T9k30XV7pxXCfgjVsr01UdIEQVHOguc6hP8roOPPCeDQ+mcGicvmYe/
- u8kO19ZCy4e0nwmebIFpnAVepFVdf/Z+dERicbVlvURaOs4E24D/Eb3z4Sx90bbzrVAw
- odYhcaTU078VkbwnaT9BAUsXRFwYYq+OkZc+ttlDufYGM22sWXMYLkMgPfTC9e/heC5X
- Azi2517R9ilUanjl9RS+C8DPV+GsnHEpfxddcGvmJMMRyPQtXZx74VHIqzxR2qUpzqgF
- PzFEN1g8c+8kBN86py2a+LtGdVDl9ioRiEO7fdh+xhQEZ0e1fCzVHP+qT5GIdhg6+Ajt iQ== 
+ bh=cr7oU8eRYwQT2y9i+Jcicbl+Lj5x+BxH7cJX0SuAD4g=;
+ b=syH7V4S/iZEMbkFZs3xmPMRWLsf1gp18Nd/G4angnkG7N+Lmha1r+/Wi88Hq1o4BncsR
+ CcDcPljrrnZf3TY+t+mgn6sSM8YxZXGErsKIV7ITr3MfKMWcBNHOZ7I4+/Vlp/eUXRH4
+ h3Y+8X+t3WveVM+XAh6h1tv31opwpckmExK0+U8TU7WcKUnwQ5tkZ9YSiZe9HoxqOdAG
+ VueYKO1qsSEKP6VaVWB9avel6HbfATPAuWzdKSvhk2G2WQ5cnWi6aaTbtVM0xoezIm/E
+ qHmlvlERAj29dqQFVrMZ8ZsKlrvVRa1P+H+cxWVCqxqZdB9ne+BERzLtlPR8lfcAS6mP yQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm72vr517-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6y18b2s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:51:13 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25ADhK9S001912;
-        Fri, 10 Jun 2022 13:51:12 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm72vr50m-1
+        Fri, 10 Jun 2022 13:51:21 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25ADaxlp014169;
+        Fri, 10 Jun 2022 13:51:20 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6y18b2c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:51:12 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25ADZYfO004860;
-        Fri, 10 Jun 2022 13:51:10 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04wdc.us.ibm.com with ESMTP id 3gfy1a91m2-1
+        Fri, 10 Jun 2022 13:51:20 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25ADajHG022266;
+        Fri, 10 Jun 2022 13:51:19 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01dal.us.ibm.com with ESMTP id 3gfy1au6na-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:51:10 +0000
+        Fri, 10 Jun 2022 13:51:19 +0000
 Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25ADp9Pb33161638
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25ADpIFo36438478
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 13:51:09 GMT
+        Fri, 10 Jun 2022 13:51:18 GMT
 Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0A256A04F;
-        Fri, 10 Jun 2022 13:51:09 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 2D4B66A04F;
+        Fri, 10 Jun 2022 13:51:18 +0000 (GMT)
 Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D70816A047;
-        Fri, 10 Jun 2022 13:51:00 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 939716A04D;
+        Fri, 10 Jun 2022 13:51:10 +0000 (GMT)
 Received: from skywalker.ibmuc.com (unknown [9.43.90.151])
         by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jun 2022 13:51:00 +0000 (GMT)
+        Fri, 10 Jun 2022 13:51:10 +0000 (GMT)
 From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
 To:     linux-mm@kvack.org, akpm@linux-foundation.org
 Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
@@ -78,25 +78,25 @@ Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         David Rientjes <rientjes@google.com>,
         "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v6 03/13] mm/demotion: Return error on write to numa_demotion sysfs
-Date:   Fri, 10 Jun 2022 19:19:56 +0530
-Message-Id: <20220610135006.182507-4-aneesh.kumar@linux.ibm.com>
+Subject: [PATCH v6 04/13] mm/demotion/dax/kmem: Set node's memory tier to MEMORY_TIER_PMEM
+Date:   Fri, 10 Jun 2022 19:19:57 +0530
+Message-Id: <20220610135006.182507-5-aneesh.kumar@linux.ibm.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220610135006.182507-1-aneesh.kumar@linux.ibm.com>
 References: <20220610135006.182507-1-aneesh.kumar@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wsOflKyuQQ6kerx4rvuXMyB2h2OdWTpT
-X-Proofpoint-GUID: 1jmwotiMe_9hcyx1m5R317l0TvWtzFV6
+X-Proofpoint-ORIG-GUID: qD3EuedyV4bNoiHi_nhHJuRWSsv4JWZe
+X-Proofpoint-GUID: y6g-pohPIJgVF9HGnAiwMMXWvazOhSH7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-10_06,2022-06-09_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- malwarescore=0 bulkscore=0 impostorscore=0 clxscore=1015
- priorityscore=1501 mlxlogscore=999 mlxscore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2206100052
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ bulkscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=999 mlxscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206100052
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -106,27 +106,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_MIGRATION disabled return EINVAL on write.
+By default, all nodes are assigned to DEFAULT_MEMORY_TIER which
+is the memory tier designated for nodes with DRAM
 
+Set dax kmem device node's tier to MEMORY_TIER_PMEM. MEMORY_TIER_PMEM
+is assigned a default rank value of 100 and appears below DEFAULT_MEMORY_TIER
+in demotion order.
+
+Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
 Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 ---
- mm/memory-tiers.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/dax/kmem.c           |  4 ++
+ include/linux/memory-tiers.h |  1 +
+ mm/memory-tiers.c            | 78 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 83 insertions(+)
 
+diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+index a37622060fff..0cb3de3d138f 100644
+--- a/drivers/dax/kmem.c
++++ b/drivers/dax/kmem.c
+@@ -11,6 +11,7 @@
+ #include <linux/fs.h>
+ #include <linux/mm.h>
+ #include <linux/mman.h>
++#include <linux/memory-tiers.h>
+ #include "dax-private.h"
+ #include "bus.h"
+ 
+@@ -147,6 +148,9 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+ 
+ 	dev_set_drvdata(dev, data);
+ 
++#ifdef CONFIG_TIERED_MEMORY
++	node_create_and_set_memory_tier(numa_node, MEMORY_TIER_PMEM);
++#endif
+ 	return 0;
+ 
+ err_request_mem:
+diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+index 44c3c3b16a36..e102ec73ab80 100644
+--- a/include/linux/memory-tiers.h
++++ b/include/linux/memory-tiers.h
+@@ -18,6 +18,7 @@
+ #define MAX_MEMORY_TIERS  3
+ 
+ extern bool numa_demotion_enabled;
++int node_create_and_set_memory_tier(int node, int tier);
+ #else
+ #define numa_demotion_enabled	false
+ 
 diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index 9c6b40d7e0bf..c3123a457d90 100644
+index c3123a457d90..00d393a5a628 100644
 --- a/mm/memory-tiers.c
 +++ b/mm/memory-tiers.c
-@@ -105,6 +105,9 @@ static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
- {
- 	ssize_t ret;
+@@ -67,6 +67,84 @@ static struct memory_tier *register_memory_tier(unsigned int tier,
+ 	return memtier;
+ }
  
-+	if (!IS_ENABLED(CONFIG_MIGRATION))
-+		return -EINVAL;
++static struct memory_tier *__node_get_memory_tier(int node)
++{
++	struct memory_tier *memtier;
 +
- 	ret = kstrtobool(buf, &numa_demotion_enabled);
- 	if (ret)
- 		return ret;
++	list_for_each_entry(memtier, &memory_tiers, list) {
++		if (node_isset(node, memtier->nodelist))
++			return memtier;
++	}
++	return NULL;
++}
++
++static struct memory_tier *__get_memory_tier_from_id(int id)
++{
++	struct memory_tier *memtier;
++
++	list_for_each_entry(memtier, &memory_tiers, list) {
++		if (memtier->id == id)
++			return memtier;
++	}
++	return NULL;
++}
++
++static int __node_create_and_set_memory_tier(int node, int tier)
++{
++	int ret = 0;
++	struct memory_tier *memtier;
++
++	memtier = __get_memory_tier_from_id(tier);
++	if (!memtier) {
++		int rank;
++
++		rank = get_rank_from_tier(tier);
++		if (rank == -1) {
++			ret = -EINVAL;
++			goto out;
++		}
++		memtier = register_memory_tier(tier, rank);
++		if (!memtier) {
++			ret = -EINVAL;
++			goto out;
++		}
++	}
++	node_set(node, memtier->nodelist);
++out:
++	return ret;
++}
++
++int node_create_and_set_memory_tier(int node, int tier)
++{
++	struct memory_tier *current_tier;
++	int ret = 0;
++
++	mutex_lock(&memory_tier_lock);
++
++	current_tier = __node_get_memory_tier(node);
++	if (!current_tier) {
++		ret = __node_create_and_set_memory_tier(node, tier);
++		goto out;
++	}
++
++	if (current_tier->id == tier)
++		goto out;
++
++	node_clear(node, current_tier->nodelist);
++
++	ret = __node_create_and_set_memory_tier(node, tier);
++	if (ret) {
++		/* reset it back to older tier */
++		node_set(node, current_tier->nodelist);
++		goto out;
++	}
++out:
++	mutex_unlock(&memory_tier_lock);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(node_create_and_set_memory_tier);
++
+ static int __init memory_tier_init(void)
+ {
+ 	struct memory_tier *memtier;
 -- 
 2.36.1
 

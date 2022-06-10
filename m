@@ -2,167 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9859545911
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B7D545915
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237221AbiFJAQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S241369AbiFJARh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245520AbiFJAQU (ORCPT
+        with ESMTP id S233887AbiFJARf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:16:20 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5E7281852;
-        Thu,  9 Jun 2022 17:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654820172;
-        bh=/+ElgicZYLPAQqpAxpBc1K+pcplEGNPrxCUaHsk2cew=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=BJYg/2w6Z8G2uhwmKfw9zZr98K49tj7BuB8LbMVWcfXBFUJHYfOY2t+HqlYXoobL8
-         9aDgNEwUc+JR1WachioVryF+EQ+4F+VAw1T6OWGLgQtbOhfQcExwkK865PNQ+OZ1Hx
-         RNJ2Qg0NPfzNMyrpuZA4ekFcABFLPCIqrlNLloF4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MaJ7v-1oE9291sRR-00WDjj; Fri, 10
- Jun 2022 02:16:12 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-gpio@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] pinctrl: nuvoton: wpcm450: Convert irqchip to IRQCHIP_IMMUTABLE
-Date:   Fri, 10 Jun 2022 02:16:08 +0200
-Message-Id: <20220610001609.276220-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
+        Thu, 9 Jun 2022 20:17:35 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3FB2C11A;
+        Thu,  9 Jun 2022 17:17:29 -0700 (PDT)
+X-UUID: 55312f6602ac4c4082d6e10292fa5791-20220610
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:27768122-4a1c-41f1-88b8-956b6770a65d,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:105
+X-CID-INFO: VERSION:1.1.5,REQID:27768122-4a1c-41f1-88b8-956b6770a65d,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:105
+X-CID-META: VersionHash:2a19b09,CLOUDID:c542d97e-c8dc-403a-96e8-6237210dceee,C
+        OID:3132453bd665,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 55312f6602ac4c4082d6e10292fa5791-20220610
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 765861630; Fri, 10 Jun 2022 08:17:24 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 10 Jun 2022 08:17:18 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 10 Jun 2022 08:17:18 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
+CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
+        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
+        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
+        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
+        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
+        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
+        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
+        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
+        <jsiuda@google.com>, <frankgor@google.com>,
+        <abhishekpandit@google.com>, <michaelfsun@google.com>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Yake Yang <yake.yang@mediatek.com>
+Subject: [PATCH] Bluetooth: btmtksdio: Add in-band wakeup support
+Date:   Fri, 10 Jun 2022 08:17:17 +0800
+Message-ID: <742cdffcf110e1601257207fb2b0d3f426d4008c.1654819586.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FSg/4zZ4D0F39BbK/XSWt8pWWf49vgchHRlaMl0mvzDrD6ye5Pp
- zXkpvHSeK7qKzXQ+CBciZaT/TAlxhAwwkVnFeeRGiRkHCO3VhCi6T2MBYpyPSFvDHKmYejd
- ZzJdN4B9+yI882DH0PPT/nDkjsL5sfz/PuwGxjXWrs8k+rdT7v17Q9DYIvk7Uxw4iui6W48
- NpE9CffmSF7zuykKF+P7A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3ICSpxXLciI=:zfxksipzFdOubIlarRmUv+
- wBvnj59BPc+tMGRyfHnXo4NUUBp4cByr1y7nAAqYE+rvwSRseXWlqsi3z4bjjgub0ZB+r3rWn
- K/tEt2e+8dlHC2sowvyWHSPS0Pmps1fEKjcrv60ouwRsZznVlBjGTwI1TUUjB2qn6s1/suECL
- X9QnF71twyQjEvw6BRsOTnhXR8tWnkf6zqjDZgjWM07DsDFPT1K69tHGB1N3hehK/vsgddKZl
- etoeANexn+QUiVODUMB3zNefq1FgVTTWy4Yw906jujWKfNnxqtTW4DMZ0IkdHff6h3EXBZIvi
- 2UzUoWcOvwKFxXne60yp6SBq1CwHDg5lsBErQRzIyqtJCM40IlyMxuWv4pl67Lz+/G8WVBfqh
- ejV6fCH1tqYQV+GiduxeqJeqBwk8uLh02ohGOR3kCh76Dum9y8YPAjRD91ugC/CJbf6cvDllF
- 936HuKVMC2NLI74Mnw2npK3UjWoPMVV4mSOxMIgT+9S07hWXOscZStQuesQPu12I8+pqfqN4Y
- /v8awwWRQehzvmbumcXalnWcAVI3E0BuypHRBa0NoBLpKrwwg+R/5tRS6B9egl9L6rll9b4Te
- WGa4U0qxn+zaGcY74g2P4f/0TQ7LaraE1oJ+b2eW1WXeK0YjlQUzwVAOTGbX7Q0AVxYnH4tZz
- KhlQ7ji0kghdvMEWrvj0HHOCRI3UxWdofgBtDaeC7MC99a5gtJG1l4jLokTl2or0+lGjH4S8u
- 5GwqyHh/NVp/GQq1fwpiR4DbRGtU1jsxd8V1JMWkVTM3MHRJh95Hm47eRDttOQEFfHicH8HtO
- /C8Vg4ISpRfuQMPaIjFUW5EdQtN0T8+yGtMhctmPEBZ37J2+YpvXdH4Da2K6YGpgFSg839B3O
- 9zip4bNoffn8oTtLwB66wT/ArSD3tXPH0BGpItrUhImov+4L53mYSypymrRhBXPhxuZGr/S74
- LskHxQHWRZZruQlutBl61/2f21sUo06UbiBrYX96tIJpd4Lt1LuW8h4CZaFLVD2VJJyTzWUms
- nev2fv5SnYt23RXqL7d5nH48e5C5ZIuQ7Ak0XCz018BmebaV67tXSMSL5nZrZ39PkMh938aEk
- 6EetKqSw/FveVLnUiL0JxjjOXCxeXORP8F6QMYv6Cj4DvSSSSyxt6ECIQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6c846d026d490 ("gpio: Don't fiddle with irqchips marked as
-immutable") added a warning for irqchips that are not marked with
-IRQCHIP_IMMUTABLE.
+From: Sean Wang <sean.wang@mediatek.com>
 
-Convert the pinctrl-wpcm450 driver to an immutable irqchip.
+'ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")'
+have added the waken-on-bluetooth via dedicated GPIO.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+The patch extends the function to the waken-on-bluetooth via SDIO DAT1 pin
+(inband wakeup) when the SDIO host driver is able to support.
 
-v2:
-- Add missing gpiochip_*able_irq calls in mask/unmask methods
-- Remove unused instance of struct irq_chip in struct struct wpcm450_bank
+Co-developed-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+---
+ drivers/bluetooth/btmtksdio.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-v1:
-- https://lore.kernel.org/lkml/20220606214301.2061467-1-j.neuschaefer@gmx.=
-net/
-=2D--
- drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/n=
-uvoton/pinctrl-wpcm450.c
-index 0dbeb91f0bf27..d44639ede2ce6 100644
-=2D-- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-@@ -49,7 +49,6 @@ struct wpcm450_bank;
- struct wpcm450_gpio {
- 	struct gpio_chip	gc;
- 	struct wpcm450_pinctrl	*pctrl;
--	struct irq_chip		irqc;
- 	const struct wpcm450_bank *bank;
- };
-
-@@ -142,7 +141,8 @@ static void wpcm450_gpio_irq_ack(struct irq_data *d)
-
- static void wpcm450_gpio_irq_mask(struct irq_data *d)
- {
--	struct wpcm450_gpio *gpio =3D gpiochip_get_data(irq_data_get_irq_chip_da=
-ta(d));
-+	struct gpio_chip *gc =3D irq_data_get_irq_chip_data(d);
-+	struct wpcm450_gpio *gpio =3D gpiochip_get_data(gc);
- 	struct wpcm450_pinctrl *pctrl =3D gpio->pctrl;
- 	unsigned long flags;
- 	unsigned long even;
-@@ -157,11 +157,14 @@ static void wpcm450_gpio_irq_mask(struct irq_data *d=
-)
- 	__assign_bit(bit, &even, 0);
- 	iowrite32(even, pctrl->gpio_base + WPCM450_GPEVEN);
- 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index d6700efcfe8c..9ed3af4ba51a 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
+ #define BTMTKSDIO_FUNC_ENABLED		3
+ #define BTMTKSDIO_PATCH_ENABLED		4
+ #define BTMTKSDIO_HW_RESET_ACTIVE	5
++#define BTMTKSDIO_INBAND_WAKEUP		6
+ 
+ struct mtkbtsdio_hdr {
+ 	__le16	len;
+@@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
+ 		.wakeup_delay = cpu_to_le16(0x20),
+ 	};
+ 
++	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
++		return may_wakeup;
 +
-+	gpiochip_disable_irq(gc, d->hwirq);
- }
-
- static void wpcm450_gpio_irq_unmask(struct irq_data *d)
- {
--	struct wpcm450_gpio *gpio =3D gpiochip_get_data(irq_data_get_irq_chip_da=
-ta(d));
-+	struct gpio_chip *gc =3D irq_data_get_irq_chip_data(d);
-+	struct wpcm450_gpio *gpio =3D gpiochip_get_data(gc);
- 	struct wpcm450_pinctrl *pctrl =3D gpio->pctrl;
- 	unsigned long flags;
- 	unsigned long even;
-@@ -171,6 +174,8 @@ static void wpcm450_gpio_irq_unmask(struct irq_data *d=
-)
- 	if (bit < 0)
- 		return;
-
-+	gpiochip_enable_irq(gc, d->hwirq);
+ 	if (may_wakeup && bdev->data->chipid == 0x7921) {
+ 		struct sk_buff *skb;
+ 
+@@ -1384,6 +1388,10 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	 */
+ 	pm_runtime_put_noidle(bdev->dev);
+ 
++	/* Mark if the mmc host can support waken by SDIO */
++	if (device_can_wakeup(func->card->host->parent))
++		set_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state);
 +
- 	raw_spin_lock_irqsave(&pctrl->lock, flags);
- 	even =3D ioread32(pctrl->gpio_base + WPCM450_GPEVEN);
- 	__assign_bit(bit, &even, 1);
-@@ -293,6 +298,8 @@ static const struct irq_chip wpcm450_gpio_irqchip =3D =
-{
- 	.irq_unmask =3D wpcm450_gpio_irq_unmask,
- 	.irq_mask =3D wpcm450_gpio_irq_mask,
- 	.irq_set_type =3D wpcm450_gpio_set_irq_type,
-+	.flags =3D IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
-
- static void wpcm450_gpio_irqhandler(struct irq_desc *desc)
-@@ -1068,9 +1075,8 @@ static int wpcm450_gpio_register(struct platform_dev=
-ice *pdev,
- 		gpio->gc.fwnode =3D child;
- 		gpio->gc.add_pin_ranges =3D wpcm450_gpio_add_pin_ranges;
-
--		gpio->irqc =3D wpcm450_gpio_irqchip;
- 		girq =3D &gpio->gc.irq;
--		girq->chip =3D &gpio->irqc;
-+		gpio_irq_chip_set_chip(girq, &wpcm450_gpio_irqchip);
- 		girq->parent_handler =3D wpcm450_gpio_irqhandler;
- 		girq->parents =3D devm_kcalloc(dev, WPCM450_NUM_GPIO_IRQS,
- 					     sizeof(*girq->parents), GFP_KERNEL);
-=2D-
-2.35.1
+ 	err = device_init_wakeup(bdev->dev, true);
+ 	if (err)
+ 		bt_dev_err(hdev, "failed to initialize device wakeup");
+-- 
+2.25.1
 

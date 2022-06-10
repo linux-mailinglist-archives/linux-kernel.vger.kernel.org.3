@@ -2,160 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930D2546CBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AC4546CB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350327AbiFJStC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S1350197AbiFJSuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346510AbiFJSs7 (ORCPT
+        with ESMTP id S1346510AbiFJSuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:48:59 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428F140E6D;
-        Fri, 10 Jun 2022 11:48:57 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id hf10so19980652qtb.7;
-        Fri, 10 Jun 2022 11:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dsVz6sG+QhEZcNwTGOArZ/kX+5MgCaSwZcV401gNIGU=;
-        b=forey2c9tKFYXq7+kCogDAeaGLIWGBnkKKbMYYobPEeDX3BS5XdCWV1hZZgzGNpC4+
-         xsq2zslzZxpH9T+BoUnxmMcb1k83y+SgSJsHm6TqjL4gLQxT/2CeLZt8Gz9Fxa0W2TiN
-         TivTbubpJKebbJqSx8Eo3/9cPscaLMwtH/pHcMjORe8n3CL1P3PNBDKxr30amK7O9F91
-         MLTBYARLa0gG/j2CaS6t1lvKV8xTvi9ujz81bcP+60F10KQWjgcZxP9r+qBxasnqkhH4
-         IowChp6yN21zTOFhg3D3hriwEeoZlZ5TjwkVicqLvgUdCJkeIkeG3OPb2YZD6L3+QC/g
-         5nXw==
+        Fri, 10 Jun 2022 14:50:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A29AF1019
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654886998;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=McN09X0kZnrKky2bSb99+lsxadBPHvLQh0I13pP449s=;
+        b=RejczdnD7Ai9fvgj3S0pnUSVTGspxyIhvLNZDvsR6r06ET0TiEzTSwJBxomqMwjTkNvF2M
+        YgOyT6DqZccNk2+LC/piFw2HMfjOI6JYJ0Vyv+ub5TESy9uo+V4z0Tz3PzJgwyKJ1F5SJE
+        uguR3fX5eBmpbG1nu29ol7xur6U4tgA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-523-SEcRzAjMO9yoIfgOqZbyLw-1; Fri, 10 Jun 2022 14:49:57 -0400
+X-MC-Unique: SEcRzAjMO9yoIfgOqZbyLw-1
+Received: by mail-wm1-f72.google.com with SMTP id v8-20020a7bcb48000000b0039c62488f77so3812312wmj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:49:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dsVz6sG+QhEZcNwTGOArZ/kX+5MgCaSwZcV401gNIGU=;
-        b=eeDDkPuXp7yO/2heCqDyaGY0DfRBWIV4e6/Fkm/ZqLhr0U6CVDl87gs3oO24ALQ19j
-         zmxKyUJAReehGBo49ngE6/peWRIADMV+p1bhbq+z9brHGUSFjh8bO8Zw3m5glUPWsfnu
-         Wz1/UxD8lHWBRWEPQNkUMQ8VuOMYRhq2FLusELwg2/xERz2P+rPdf8Px/tyAezJUEh8O
-         TzJPEQNmTNK2rqQOQ059AADO0wG4l2O5m1A3lOrLt8I0qJDBSQkSazzQeTSUGwWpYp9W
-         EOayv6Kbo03a3kOjTSHbj96NSulnbcUQh0NjQLuzelC1WhkkH23WjoVBZww/EsHjbP5S
-         b9uQ==
-X-Gm-Message-State: AOAM533V+7m+mr9VoWuZvtP4J6E8+v9a61oEcBp3NLXe5MHgY1/FjJjW
-        Bv3x/xTd3HEY2M7S19Q8ow==
-X-Google-Smtp-Source: ABdhPJz6CSbXPIgAGNDAvAP3516sdviaGWfTyK404V3gkg/DvjOeZ7c5k3v/IEZFuvU9BBdyimVzqw==
-X-Received: by 2002:ac8:5e13:0:b0:304:b452:9ec8 with SMTP id h19-20020ac85e13000000b00304b4529ec8mr37967680qtx.356.1654886936265;
-        Fri, 10 Jun 2022 11:48:56 -0700 (PDT)
-Received: from [192.168.1.210] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id ew5-20020a05622a514500b0030503a897b1sm6020938qtb.42.2022.06.10.11.48.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 11:48:55 -0700 (PDT)
-Message-ID: <115fe76f-f5f2-338b-c4a6-d900ec151abe@gmail.com>
-Date:   Fri, 10 Jun 2022 14:48:54 -0400
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=McN09X0kZnrKky2bSb99+lsxadBPHvLQh0I13pP449s=;
+        b=X533v3BsAC02ekDWKITd3t94qedGSruudiG9pVWJC6hjpRnNO4b1n6ioBEigFo+W3e
+         kff3OJMydmWvtGrNfWg0x7teqDpjjqrRVqnWQlYt2HjASMVwFeL8cWQdJF/JK5A33gVk
+         vVzp9PtoGGf+E/q25dHPrbA7lZBvF1t+oIn402WV/dvp6zJ1P8m31Zp2TVaUjDoCH6uO
+         Rra4Qg35y2QY4sf6a2awwaUuSK1rowQQXtTojRPSFM7A7tGK7Y4gjW/WHJd9wOyujGyM
+         f8wioV/LzBn2w8t/odDjf/t2QXDSeW7g9UNHg2uFWD86AJ84dJppi9hMzSI7ky0V5/uM
+         sNzA==
+X-Gm-Message-State: AOAM5328bUAyITukp19OFWBYoKwor9H3q512LXBFb4Qo8/HZjW7kB4Dc
+        BdJfDCZZP3pvdys0eewUYPG+i8w5NmTbW/d7tjyymoHQ/cDKKMOF/j/XXY4rau2kKJPL1uKHNA8
+        rptmePu79ggiCA/F6lIr8aIhx
+X-Received: by 2002:a05:6000:1889:b0:218:4de1:25a3 with SMTP id a9-20020a056000188900b002184de125a3mr22629301wri.622.1654886996298;
+        Fri, 10 Jun 2022 11:49:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzws8zoHO4xGTwJMM2hAVJqUWeUoZlbhX323ueGFITxDpVfmDeGhYNvjQdf5iPWCNmtcIielw==
+X-Received: by 2002:a05:6000:1889:b0:218:4de1:25a3 with SMTP id a9-20020a056000188900b002184de125a3mr22629279wri.622.1654886996063;
+        Fri, 10 Jun 2022 11:49:56 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id f187-20020a1c38c4000000b003973ea7e725sm4702574wma.0.2022.06.10.11.49.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 11:49:55 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 20:49:53 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 144/144] KVM: selftests: Sanity check input to
+ ioctls() at build time
+Message-ID: <20220610184953.34yn2eq2mmm7cp4n@gator>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <20220603004331.1523888-145-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
- accessed in filemap_read()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Yu Kuai <yukuai3@huawei.com>, akpm@linux-foundation.org,
-        axboe@kernel.dk, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-References: <20220602082129.2805890-1-yukuai3@huawei.com>
- <YpkB1+PwIZ3AKUqg@casper.infradead.org>
- <c49af4f7-5005-7cf1-8b58-a398294472ab@huawei.com>
- <YqNWY46ZRoK6Cwbu@casper.infradead.org>
- <YqNW8cYn9gM7Txg6@casper.infradead.org>
- <c5f97e2f-8a48-2906-91a2-1d84629b3641@gmail.com>
- <YqOOsHecZUWlHEn/@casper.infradead.org>
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-In-Reply-To: <YqOOsHecZUWlHEn/@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603004331.1523888-145-seanjc@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/22 14:34, Matthew Wilcox wrote:
-> On Fri, Jun 10, 2022 at 01:47:02PM -0400, Kent Overstreet wrote:
->> I think this is the fix we want - I think Yu basically had the right idea
->> and had the off by one fix, this should be clearer though:
->>
->> Yu, can you confirm the fix?
->>
->> -- >8 --
->> Subject: [PATCH] filemap: Fix off by one error when marking folios accessed
->>
->> In filemap_read() we mark pages accessed as we read them - but we don't
->> want to do so redundantly, if the previous read already did so.
->>
->> But there was an off by one error: we want to check if the current page
->> was the same as the last page we read from, but the last page we read
->> from was (ra->prev_pos - 1) >> PAGE_SHIFT.
->>
->> Reported-by: Yu Kuai <yukuai3@huawei.com>
->> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
->>
->> diff --git a/mm/filemap.c b/mm/filemap.c
->> index 9daeaab360..8d5c8043cb 100644
->> --- a/mm/filemap.c
->> +++ b/mm/filemap.c
->> @@ -2704,7 +2704,7 @@ ssize_t filemap_read(struct kiocb *iocb, struct
->> iov_iter *iter,
->>                   * mark it as accessed the first time.
->>                   */
->>                  if (iocb->ki_pos >> PAGE_SHIFT !=
->> -                   ra->prev_pos >> PAGE_SHIFT)
->> +                   (ra->prev_pos - 1) >> PAGE_SHIFT)
->>                          folio_mark_accessed(fbatch.folios[0]);
->>
->>                  for (i = 0; i < folio_batch_count(&fbatch); i++) {
->>
+On Fri, Jun 03, 2022 at 12:43:31AM +0000, Sean Christopherson wrote:
+> Add a static assert to the KVM/VM/vCPU ioctl() helpers to verify that the
+> size of the argument provided matches the expected size of the IOCTL.
+> Because ioctl() ultimately takes a "void *", it's all too easy to pass in
+> garbage and not detect the error until runtime.  E.g. while working on a
+> CPUID rework, selftests happily compiled when vcpu_set_cpuid()
+> unintentionally passed the cpuid() function as the parameter to ioctl()
+> (a local "cpuid" parameter was removed, but its use was not replaced with
+> "vcpu->cpuid" as intended).
 > 
-> This is going to mark the folio as accessed multiple times if it's
-> a multi-page folio.  How about this one?
-
-I like that one - you can add my Reviewed-by
-
+> Tweak a variety of benign issues that aren't compatible with the sanity
+> check, e.g. passing a non-pointer for ioctls().
 > 
+> Note, static_assert() requires a string on older versions of GCC.  Feed
+> it an empty string to make the compiler happy.
 > 
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 5f227b5420d7..a30587f2e598 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -2599,6 +2599,13 @@ static int filemap_get_pages(struct kiocb *iocb, struct iov_iter *iter,
->   	return err;
->   }
->   
-> +static inline bool pos_same_folio(loff_t pos1, loff_t pos2, struct folio *folio)
-> +{
-> +	unsigned int shift = folio_shift(folio);
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     | 61 +++++++++++++------
+>  .../selftests/kvm/lib/aarch64/processor.c     |  2 +-
+>  tools/testing/selftests/kvm/lib/guest_modes.c |  2 +-
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +--------
+>  tools/testing/selftests/kvm/s390x/resets.c    |  6 +-
+>  .../selftests/kvm/x86_64/mmio_warning_test.c  |  2 +-
+>  .../kvm/x86_64/pmu_event_filter_test.c        |  2 +-
+>  .../selftests/kvm/x86_64/xen_shinfo_test.c    |  6 +-
+>  8 files changed, 56 insertions(+), 54 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 04ddab322b6b..0eaf0c9b7612 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -180,29 +180,56 @@ static inline bool kvm_has_cap(long cap)
+>  #define __KVM_IOCTL_ERROR(_name, _ret)	__KVM_SYSCALL_ERROR(_name, _ret)
+>  #define KVM_IOCTL_ERROR(_ioctl, _ret) __KVM_IOCTL_ERROR(#_ioctl, _ret)
+>  
+> -#define __kvm_ioctl(kvm_fd, cmd, arg) \
+> -	ioctl(kvm_fd, cmd, arg)
+> +#define kvm_do_ioctl(fd, cmd, arg)						\
+> +({										\
+> +	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd), "");	\
+> +	ioctl(fd, cmd, arg);							\
+> +})
+>  
+> -static inline void _kvm_ioctl(int kvm_fd, unsigned long cmd, const char *name,
+> -			      void *arg)
+> -{
+> -	int ret = __kvm_ioctl(kvm_fd, cmd, arg);
+> +#define __kvm_ioctl(kvm_fd, cmd, arg)						\
+> +	kvm_do_ioctl(kvm_fd, cmd, arg)
+>  
+> -	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));
+> -}
 > +
-> +	return (pos1 >> shift == pos2 >> shift);
-> +}
+
+While we've gained the static asserts we've also lost the type checking
+that the inline functions provided. Is there anyway we can bring them back
+with more macro tricks?
+
+> +#define _kvm_ioctl(kvm_fd, cmd, name, arg)					\
+> +({										\
+> +	int ret = __kvm_ioctl(kvm_fd, cmd, arg);				\
+> +										\
+> +	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));			\
+> +})
+>  
+>  #define kvm_ioctl(kvm_fd, cmd, arg) \
+>  	_kvm_ioctl(kvm_fd, cmd, #cmd, arg)
+>  
+> -int __vm_ioctl(struct kvm_vm *vm, unsigned long cmd, void *arg);
+> -void _vm_ioctl(struct kvm_vm *vm, unsigned long cmd, const char *name, void *arg);
+> -#define vm_ioctl(vm, cmd, arg) _vm_ioctl(vm, cmd, #cmd, arg)
+> -
+> -int __vcpu_ioctl(struct kvm_vcpu *vcpu, unsigned long cmd,
+> -		 void *arg);
+> -void _vcpu_ioctl(struct kvm_vcpu *vcpu, unsigned long cmd,
+> -		 const char *name, void *arg);
+> -#define vcpu_ioctl(vcpu, cmd, arg) \
+> +#define __vm_ioctl(vm, cmd, arg)						\
+> +({										\
+> +	static_assert(sizeof(*(vm)) == sizeof(struct kvm_vm), "");		\
+> +	kvm_do_ioctl((vm)->fd, cmd, arg);					\
+> +})
 > +
->   /**
->    * filemap_read - Read data from the page cache.
->    * @iocb: The iocb to read.
-> @@ -2670,11 +2677,11 @@ ssize_t filemap_read(struct kiocb *iocb, struct iov_iter *iter,
->   		writably_mapped = mapping_writably_mapped(mapping);
->   
->   		/*
-> -		 * When a sequential read accesses a page several times, only
-> +		 * When a read accesses the same folio several times, only
->   		 * mark it as accessed the first time.
->   		 */
-> -		if (iocb->ki_pos >> PAGE_SHIFT !=
-> -		    ra->prev_pos >> PAGE_SHIFT)
-> +		if (!pos_same_folio(iocb->ki_pos, ra->prev_pos - 1,
-> +							fbatch.folios[0]))
->   			folio_mark_accessed(fbatch.folios[0]);
->   
->   		for (i = 0; i < folio_batch_count(&fbatch); i++) {
+> +#define _vm_ioctl(vcpu, cmd, name, arg)						\
+> +({										\
+> +	int ret = __vm_ioctl(vcpu, cmd, arg);					\
+> +										\
+> +	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));			\
+> +})
+> +
+> +#define vm_ioctl(vm, cmd, arg)							\
+> +	_vm_ioctl(vm, cmd, #cmd, arg)
+> +
+> +#define __vcpu_ioctl(vcpu, cmd, arg)						\
+> +({										\
+> +	static_assert(sizeof(*(vcpu)) == sizeof(struct kvm_vcpu), "");		\
+> +	kvm_do_ioctl((vcpu)->fd, cmd, arg);					\
+> +})
+> +
+> +#define _vcpu_ioctl(vcpu, cmd, name, arg)					\
+> +({										\
+> +	int ret = __vcpu_ioctl(vcpu, cmd, arg);					\
+> +										\
+> +	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));			\
+> +})
+> +
+> +#define vcpu_ioctl(vcpu, cmd, arg)						\
+>  	_vcpu_ioctl(vcpu, cmd, #cmd, arg)
+>  
+>  /*
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 6bd27782f00c..6f5551368944 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -472,7 +472,7 @@ void aarch64_get_supported_page_sizes(uint32_t ipa,
+>  	};
+>  
+>  	kvm_fd = open_kvm_dev_path_or_exit();
+> -	vm_fd = __kvm_ioctl(kvm_fd, KVM_CREATE_VM, ipa);
+> +	vm_fd = __kvm_ioctl(kvm_fd, KVM_CREATE_VM, (void *)(unsigned long)ipa);
+>  	TEST_ASSERT(vm_fd >= 0, KVM_IOCTL_ERROR(KVM_CREATE_VM, vm_fd));
+>  
+>  	vcpu_fd = ioctl(vm_fd, KVM_CREATE_VCPU, 0);
+> diff --git a/tools/testing/selftests/kvm/lib/guest_modes.c b/tools/testing/selftests/kvm/lib/guest_modes.c
+> index 0be56c63aed6..99a575bbbc52 100644
+> --- a/tools/testing/selftests/kvm/lib/guest_modes.c
+> +++ b/tools/testing/selftests/kvm/lib/guest_modes.c
+> @@ -65,7 +65,7 @@ void guest_modes_append_default(void)
+>  		struct kvm_s390_vm_cpu_processor info;
+>  
+>  		kvm_fd = open_kvm_dev_path_or_exit();
+> -		vm_fd = __kvm_ioctl(kvm_fd, KVM_CREATE_VM, 0);
+> +		vm_fd = __kvm_ioctl(kvm_fd, KVM_CREATE_VM, NULL);
+>  		kvm_device_attr_get(vm_fd, KVM_S390_VM_CPU_MODEL,
+>  				    KVM_S390_VM_CPU_PROCESSOR, &info);
+>  		close(vm_fd);
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 603a6d529357..f0300767df16 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -72,7 +72,7 @@ unsigned int kvm_check_cap(long cap)
+>  	int kvm_fd;
+>  
+>  	kvm_fd = open_kvm_dev_path_or_exit();
+> -	ret = __kvm_ioctl(kvm_fd, KVM_CHECK_EXTENSION, cap);
+> +	ret = __kvm_ioctl(kvm_fd, KVM_CHECK_EXTENSION, (void *)cap);
+>  	TEST_ASSERT(ret >= 0, KVM_IOCTL_ERROR(KVM_CHECK_EXTENSION, ret));
+>  
+>  	close(kvm_fd);
+> @@ -92,7 +92,7 @@ static void vm_open(struct kvm_vm *vm)
+>  
+>  	TEST_REQUIRE(kvm_has_cap(KVM_CAP_IMMEDIATE_EXIT));
+>  
+> -	vm->fd = __kvm_ioctl(vm->kvm_fd, KVM_CREATE_VM, vm->type);
+> +	vm->fd = __kvm_ioctl(vm->kvm_fd, KVM_CREATE_VM, (void *)vm->type);
+>  	TEST_ASSERT(vm->fd >= 0, KVM_IOCTL_ERROR(KVM_CREATE_VM, vm->fd));
+>  }
+>  
+> @@ -1449,19 +1449,6 @@ struct kvm_reg_list *vcpu_get_reg_list(struct kvm_vcpu *vcpu)
+>  	return reg_list;
+>  }
+>  
+> -int __vcpu_ioctl(struct kvm_vcpu *vcpu, unsigned long cmd, void *arg)
+> -{
+> -	return ioctl(vcpu->fd, cmd, arg);
+> -}
+> -
+> -void _vcpu_ioctl(struct kvm_vcpu *vcpu, unsigned long cmd, const char *name,
+> -		 void *arg)
+> -{
+> -	int ret = __vcpu_ioctl(vcpu, cmd, arg);
+> -
+> -	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));
+> -}
+> -
+>  void *vcpu_map_dirty_ring(struct kvm_vcpu *vcpu)
+>  {
+>  	uint32_t page_size = vcpu->vm->page_size;
+> @@ -1491,18 +1478,6 @@ void *vcpu_map_dirty_ring(struct kvm_vcpu *vcpu)
+>  	return vcpu->dirty_gfns;
+>  }
+>  
+> -int __vm_ioctl(struct kvm_vm *vm, unsigned long cmd, void *arg)
+> -{
+> -	return ioctl(vm->fd, cmd, arg);
+> -}
+> -
+> -void _vm_ioctl(struct kvm_vm *vm, unsigned long cmd, const char *name, void *arg)
+> -{
+> -	int ret = __vm_ioctl(vm, cmd, arg);
+> -
+> -	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));
+> -}
+> -
+>  /*
+>   * Device Ioctl
+>   */
+> diff --git a/tools/testing/selftests/kvm/s390x/resets.c b/tools/testing/selftests/kvm/s390x/resets.c
+> index 4ba866047401..359fd18f473b 100644
+> --- a/tools/testing/selftests/kvm/s390x/resets.c
+> +++ b/tools/testing/selftests/kvm/s390x/resets.c
+> @@ -224,7 +224,7 @@ static void test_normal(void)
+>  
+>  	inject_irq(vcpu);
+>  
+> -	vcpu_ioctl(vcpu, KVM_S390_NORMAL_RESET, 0);
+> +	vcpu_ioctl(vcpu, KVM_S390_NORMAL_RESET, NULL);
+>  
+>  	/* must clears */
+>  	assert_normal(vcpu);
+> @@ -247,7 +247,7 @@ static void test_initial(void)
+>  
+>  	inject_irq(vcpu);
+>  
+> -	vcpu_ioctl(vcpu, KVM_S390_INITIAL_RESET, 0);
+> +	vcpu_ioctl(vcpu, KVM_S390_INITIAL_RESET, NULL);
+>  
+>  	/* must clears */
+>  	assert_normal(vcpu);
+> @@ -270,7 +270,7 @@ static void test_clear(void)
+>  
+>  	inject_irq(vcpu);
+>  
+> -	vcpu_ioctl(vcpu, KVM_S390_CLEAR_RESET, 0);
+> +	vcpu_ioctl(vcpu, KVM_S390_CLEAR_RESET, NULL);
+>  
+>  	/* must clears */
+>  	assert_normal(vcpu);
+> diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> index 0e4590afd0e1..fb02581953a3 100644
+> --- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> @@ -59,7 +59,7 @@ void test(void)
+>  
+>  	kvm = open("/dev/kvm", O_RDWR);
+>  	TEST_ASSERT(kvm != -1, "failed to open /dev/kvm");
+> -	kvmvm = __kvm_ioctl(kvm, KVM_CREATE_VM, 0);
+> +	kvmvm = __kvm_ioctl(kvm, KVM_CREATE_VM, NULL);
+>  	TEST_ASSERT(kvmvm > 0, KVM_IOCTL_ERROR(KVM_CREATE_VM, kvmvm));
+>  	kvmcpu = ioctl(kvmvm, KVM_CREATE_VCPU, 0);
+>  	TEST_ASSERT(kvmcpu != -1, KVM_IOCTL_ERROR(KVM_CREATE_VCPU, kvmcpu));
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> index de9ee00d84cf..66930384ef97 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> @@ -266,7 +266,7 @@ static void test_without_filter(struct kvm_vcpu *vcpu)
+>  static uint64_t test_with_filter(struct kvm_vcpu *vcpu,
+>  				 struct kvm_pmu_event_filter *f)
+>  {
+> -	vm_ioctl(vcpu->vm, KVM_SET_PMU_EVENT_FILTER, (void *)f);
+> +	vm_ioctl(vcpu->vm, KVM_SET_PMU_EVENT_FILTER, f);
+>  	return run_vcpu_to_sync(vcpu);
+>  }
+>  
+> diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+> index bdcb28186ccc..a4a78637c35a 100644
+> --- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+> @@ -472,7 +472,7 @@ int main(int argc, char *argv[])
+>  		irq_routes.entries[1].u.xen_evtchn.vcpu = vcpu->id;
+>  		irq_routes.entries[1].u.xen_evtchn.priority = KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL;
+>  
+> -		vm_ioctl(vm, KVM_SET_GSI_ROUTING, &irq_routes);
+> +		vm_ioctl(vm, KVM_SET_GSI_ROUTING, &irq_routes.info);
+>  
+>  		struct kvm_irqfd ifd = { };
+>  
+> @@ -716,7 +716,7 @@ int main(int argc, char *argv[])
+>  				if (verbose)
+>  					printf("Testing restored oneshot timer\n");
+>  
+> -				tmr.u.timer.expires_ns = rs->state_entry_time + 100000000,
+> +				tmr.u.timer.expires_ns = rs->state_entry_time + 100000000;
+>  				vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &tmr);
+>  				evtchn_irq_expected = true;
+>  				alarm(1);
+> @@ -743,7 +743,7 @@ int main(int argc, char *argv[])
+>  				if (verbose)
+>  					printf("Testing SCHEDOP_poll wake on masked event\n");
+>  
+> -				tmr.u.timer.expires_ns = rs->state_entry_time + 100000000,
+> +				tmr.u.timer.expires_ns = rs->state_entry_time + 100000000;
+>  				vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &tmr);
+>  				alarm(1);
+>  				break;
+> -- 
+> 2.36.1.255.ge46751e96f-goog
+>
+
+The last two changes don't really belong in this commit, but I won't tell
+anyway, if you don't.
+
+Thanks,
+drew
 

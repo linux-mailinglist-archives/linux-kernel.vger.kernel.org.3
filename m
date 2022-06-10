@@ -2,383 +2,551 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF73546534
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3BB54653A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348369AbiFJLL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S241437AbiFJLLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349375AbiFJLLK (ORCPT
+        with ESMTP id S1348925AbiFJLLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:11:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8950B14B677;
-        Fri, 10 Jun 2022 04:11:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 10 Jun 2022 07:11:44 -0400
+Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C226149165;
+        Fri, 10 Jun 2022 04:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1654859503; x=1686395503;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=y4sAvL9bJG7dtdTQ88ENmVfKo81NfwYwZNMPigByyJw=;
+  b=gbUn+dcQ0m3xgWM/Gm778ZxmKXheZFD9wK8I/RGxMIrab/ICyX2/7l0A
+   dm4/Zy7Ocij04wxqIUUATQNnc8F1EHQXANJdImbHZMpsP344KHxC1T+kb
+   LeNNVjexPtOBvop/R1puo2/5EckOaSVDFyEzRLRctrVpU5pz7xFtVCN57
+   I=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="183080217"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647298800"; 
+   d="scan'208";a="183080217"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 13:11:40 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17447620B1;
-        Fri, 10 Jun 2022 11:11:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 792C1C34114;
-        Fri, 10 Jun 2022 11:11:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="S0DzovZs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654859459;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oRj/+7smbG1FOgnq0Tjge69Y+2fcY5r/Y+qLp3C8rDg=;
-        b=S0DzovZs7THvwkja+B0j+0oHSy4ZTC5b2uZabpWeoi72ax/WzuezvyeOQkjKu3Z+jIz67u
-        qlq3+R3/XfA0n0LK6n9vzlQ3CZ+35tHSNt8nTijOthAb1HsNUDPZZgyrNsqhuX014vUfP+
-        Cu9Ns5DlZ+RfaA1YnPQEz5p1mLZWABE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c76d248e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 10 Jun 2022 11:10:58 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Ingo Franzki <ifranzki@linux.ibm.com>,
-        Juergen Christ <jchrist@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>
-Subject: [PATCH] s390/archrandom: simplify back to earlier design
-Date:   Fri, 10 Jun 2022 13:10:41 +0200
-Message-Id: <20220610111041.2709-1-Jason@zx2c4.com>
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Fri, 10 Jun 2022 13:11:40 +0200 (CEST)
+Received: from [10.165.32.34] (172.23.8.247) by MUCSE819.infineon.com
+ (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 10 Jun
+ 2022 13:11:40 +0200
+Message-ID: <7f525b6f-9957-6175-1cd8-6101093bd9d9@infineon.com>
+Date:   Fri, 10 Jun 2022 13:11:39 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 3/3] tpm: Add tpm_tis_i2c backend for tpm_tis_core
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Amir Mizinski <amirmizi6@gmail.com>
+References: <20220608173113.9232-1-Alexander.Steffen@infineon.com>
+ <20220608173113.9232-4-Alexander.Steffen@infineon.com>
+ <YqGFs9iO/+jJvFne@iki.fi>
+From:   Johannes Holland <johannes.holland@infineon.com>
+In-Reply-To: <YqGFs9iO/+jJvFne@iki.fi>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE819.infineon.com (172.23.29.45) To
+ MUCSE819.infineon.com (172.23.29.45)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s390x appears to present two RNG interfaces:
-- a "TRNG" that gathers entropy using some hardware function; and
-- a "DRBG" that takes in a seed and expands it.
+On 09.06.2022 07:31, Jarkko Sakkinen wrote> On Wed, Jun 08, 2022 at 07:31:13PM +0200, Alexander Steffen wrote:
+>> Implement the TCG I2C Interface driver, as specified in the TCG PC
+>> Client Platform TPM Profile (PTP) specification for TPM 2.0 v1.04
+>> revision 14, section 8, I2C Interface Definition.
+>>
+>> This driver supports Guard Times. That is, if required by the TPM, the
+>> driver has to wait by a vendor-specific time after each I2C read/write.
+>> The specific time is read from the TPM_I2C_INTERFACE_CAPABILITY register.
+>>
+>> Unfortunately, the TCG specified almost but not quite compatible
+>> register addresses. Therefore, the TIS register addresses need to be
+>> mapped to I2C ones. The locality is stripped because for now, only
+>> locality 0 is supported.
+>>
+>> Add a sanity check to I2C reads of e.g. TPM_ACCESS and TPM_STS. This is
+>> to detect communication errors and issues due to non-standard behaviour
+>> (E.g. the clock stretching quirk in the BCM2835, see 4dbfb5f4401f). In
+>> case the sanity check fails, attempt a retry.
+>>
+>> Co-developed-by: Johannes Holland <johannes.holland@infineon.com>
+>> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+>> Co-developed-by: Amir Mizinski <amirmizi6@gmail.com>
+>> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+>> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+>> ---
+>>  drivers/char/tpm/Kconfig       |  12 +
+>>  drivers/char/tpm/Makefile      |   1 +
+>>  drivers/char/tpm/tpm_tis_i2c.c | 391 +++++++++++++++++++++++++++++++++
+>>  3 files changed, 404 insertions(+)
+>>  create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
+>>
+>> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+>> index 4a5516406c22..927088b2c3d3 100644
+>> --- a/drivers/char/tpm/Kconfig
+>> +++ b/drivers/char/tpm/Kconfig
+>> @@ -74,6 +74,18 @@ config TCG_TIS_SPI_CR50
+>>         If you have a H1 secure module running Cr50 firmware on SPI bus,
+>>         say Yes and it will be accessible from within Linux.
+>>
+>> +config TCG_TIS_I2C
+>> +     tristate "TPM Interface Specification 1.3 Interface / TPM 2.0 FIFO Interface - (I2C - generic)"
+>> +     depends on I2C
+>> +     select CRC_CCITT
+>> +     select TCG_TIS_CORE
+>> +     help
+>> +       If you have a TPM security chip, compliant with the TCG TPM PTP
+>> +       (I2C interface) specification and connected to an I2C bus master,
+>> +       say Yes and it will be accessible from within Linux.
+>> +       To compile this driver as a module, choose M here;
+>> +       the module will be called tpm_tis_i2c.
+>> +
+>>  config TCG_TIS_SYNQUACER
+>>       tristate "TPM Interface Specification 1.2 Interface / TPM 2.0 FIFO Interface (MMIO - SynQuacer)"
+>>       depends on ARCH_SYNQUACER || COMPILE_TEST
+>> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+>> index 66d39ea6bd10..0222b1ddb310 100644
+>> --- a/drivers/char/tpm/Makefile
+>> +++ b/drivers/char/tpm/Makefile
+>> @@ -29,6 +29,7 @@ tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+>>
+>>  obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
+>>
+>> +obj-$(CONFIG_TCG_TIS_I2C) += tpm_tis_i2c.o
+>>  obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
+>>  obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
+>>  obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
+>> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+>> new file mode 100644
+>> index 000000000000..8e0686fe4eb1
+>> --- /dev/null
+>> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+>> @@ -0,0 +1,391 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2014-2021 Nuvoton Technology corporation
+>> + * Copyright (C) 2019-2022 Infineon Technologies AG
+>> + *
+>> + * This device driver implements the TPM interface as defined in the TCG PC
+>> + * Client Platform TPM Profile (PTP) Specification for TPM 2.0 v1.04
+>> + * Revision 14.
+>> + *
+>> + * It is based on the tpm_tis_spi device driver.
+>> + */
+>> +
+>> +#include <linux/i2c.h>
+>> +#include <linux/crc-ccitt.h>
+>> +#include "tpm_tis_core.h"
+>> +
+>> +/* TPM registers */
+>> +#define TPM_I2C_LOC_SEL 0x00
+>> +#define TPM_I2C_ACCESS 0x04
+>> +#define TPM_I2C_INTERFACE_CAPABILITY 0x30
+>> +#define TPM_I2C_DEVICE_ADDRESS 0x38
+>> +#define TPM_I2C_DATA_CSUM_ENABLE 0x40
+>> +#define TPM_DATA_CSUM 0x44
+>> +#define TPM_I2C_DID_VID 0x48
+>> +#define TPM_I2C_RID 0x4C
+>> +
+>> +/* TIS-compatible register address to avoid clash with TPM_ACCESS (0x00) */
+>> +#define TPM_LOC_SEL 0x0FFF
+>> +
+>> +/* Mask to extract the I2C register from TIS register addresses */
+>> +#define TPM_TIS_REGISTER_MASK 0x0FFF
+>> +
+>> +/* Default Guard Time of 250µs until interface capability register is read */
+>> +#define GUARD_TIME_DEFAULT_MIN 250
+>> +#define GUARD_TIME_DEFAULT_MAX 300
+>> +
+>> +/* Guard Time of 250µs after I2C slave NACK */
+>> +#define GUARD_TIME_ERR_MIN 250
+>> +#define GUARD_TIME_ERR_MAX 300
+>> +
+>> +/* Guard Time bit masks; SR is repeated start, RW is read then write, etc. */
+>> +#define TPM_GUARD_TIME_SR_MASK 0x40000000
+>> +#define TPM_GUARD_TIME_RR_MASK 0x00100000
+>> +#define TPM_GUARD_TIME_RW_MASK 0x00080000
+>> +#define TPM_GUARD_TIME_WR_MASK 0x00040000
+>> +#define TPM_GUARD_TIME_WW_MASK 0x00020000
+>> +#define TPM_GUARD_TIME_MIN_MASK 0x0001FE00
+>> +#define TPM_GUARD_TIME_MIN_SHIFT 9
+>> +
+>> +/* Masks with bits that must be read zero */
+>> +#define TPM_ACCESS_READ_ZERO 0x48
+>> +#define TPM_INT_ENABLE_ZERO 0x7FFFFF6
+>> +#define TPM_STS_READ_ZERO 0x23
+>> +#define TPM_INTF_CAPABILITY_ZERO 0x0FFFF000
+>> +#define TPM_I2C_INTERFACE_CAPABILITY_ZERO 0x80000000
+>> +
+>> +struct tpm_tis_i2c_phy {
+>> +     struct tpm_tis_data priv;
+>> +     struct i2c_client *i2c_client;
+>> +     bool guard_time_read;
+>> +     bool guard_time_write;
+>> +     u16 guard_time_min;
+>> +     u16 guard_time_max;
+>> +     u8 *io_buf;
+>> +};
+>> +
+>> +static inline struct tpm_tis_i2c_phy *
+>> +to_tpm_tis_i2c_phy(struct tpm_tis_data *data)
+>> +{
+>> +     return container_of(data, struct tpm_tis_i2c_phy, priv);
+>> +}
+>> +
+>> +/*
+>> + * tpm_tis_core uses the register addresses as defined in Table 19 "Allocation
+>> + * of Register Space for FIFO TPM Access" of the TCG PC Client PTP
+>> + * Specification. In order for this code to work together with tpm_tis_core,
+>> + * those addresses need to mapped to the registers defined for I2C TPMs in
+>> + * Table 51 "I2C-TPM Register Overview".
+>> + *
+>> + * For most addresses this can be done by simply stripping off the locality
+>> + * information from the address. A few addresses need to be mapped explicitly,
+>> + * since the corresponding I2C registers have been moved around. TPM_LOC_SEL is
+>> + * only defined for I2C TPMs and is also mapped explicitly here to distinguish
+>> + * it from TPM_ACCESS(0).
+>> + *
+>> + * Locality information is ignored, since this driver assumes exclusive access
+>> + * to the TPM and always uses locality 0.
+>> + */
+>> +static u8 tpm_tis_i2c_address_to_register(u32 addr)
+>> +{
+>> +     addr &= TPM_TIS_REGISTER_MASK;
+>> +
+>> +     switch (addr) {
+>> +     case TPM_ACCESS(0):
+>> +             return TPM_I2C_ACCESS;
+>> +     case TPM_LOC_SEL:
+>> +             return TPM_I2C_LOC_SEL;
+>> +     case TPM_DID_VID(0):
+>> +             return TPM_I2C_DID_VID;
+>> +     case TPM_RID(0):
+>> +             return TPM_I2C_RID;
+>> +     default:
+>> +             return addr;
+>> +     }
+>> +}
+>> +
+>> +static int tpm_tis_i2c_retry_transfer_until_ack(struct tpm_tis_data *data,
+>> +                                             struct i2c_msg *msg)
+>> +{
+>> +     struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
+>> +     bool guard_time;
+>> +     int i = 0;
+>> +     int ret;
+>> +
+>> +     if (msg->flags & I2C_M_RD)
+>> +             guard_time = phy->guard_time_read;
+>> +     else
+>> +             guard_time = phy->guard_time_write;
+>> +
+>> +     do {
+>> +             ret = i2c_transfer(phy->i2c_client->adapter, msg, 1);
+>> +             if (ret < 0)
+>> +                     usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
+>> +             else if (guard_time)
+>> +                     usleep_range(phy->guard_time_min, phy->guard_time_max);
+>> +             /* retry on TPM NACK */
+>> +     } while (ret < 0 && i++ < TPM_RETRY);
+>> +
+>> +     return ret;
+>> +}
+>> +
+>> +/* Check that bits which must be read zero are not set */
+>> +static int tpm_tis_i2c_sanity_check_read(u8 reg, u16 len, u8 *buf)
+>> +{
+>> +     u32 zero_mask;
+>> +     u32 value;
+>> +
+>> +     switch (len) {
+>> +     case sizeof(u8):
+>> +             value = buf[0];
+>> +             break;
+>> +     case sizeof(u16):
+>> +             value = le16_to_cpup((__le16 *)buf);
+>> +             break;
+>> +     case sizeof(u32):
+>> +             value = le32_to_cpup((__le32 *)buf);
+>> +             break;
+>> +     default:
+>> +             /* unknown length, skip check */
+>> +             return 0;
+>> +     }
+>> +
+>> +     switch (reg) {
+>> +     case TPM_I2C_ACCESS:
+>> +             zero_mask = TPM_ACCESS_READ_ZERO;
+>> +             break;
+>> +     case TPM_INT_ENABLE(0) & TPM_TIS_REGISTER_MASK:
+>> +             zero_mask = TPM_INT_ENABLE_ZERO;
+>> +             break;
+>> +     case TPM_STS(0) & TPM_TIS_REGISTER_MASK:
+>> +             zero_mask = TPM_STS_READ_ZERO;
+>> +             break;
+>> +     case TPM_INTF_CAPS(0) & TPM_TIS_REGISTER_MASK:
+>> +             zero_mask = TPM_INTF_CAPABILITY_ZERO;
+>> +             break;
+>> +     case TPM_I2C_INTERFACE_CAPABILITY:
+>> +             zero_mask = TPM_I2C_INTERFACE_CAPABILITY_ZERO;
+>> +             break;
+>> +     default:
+>> +             /* unknown register, skip check */
+>> +             return 0;
+>> +     }
+>> +
+>> +     if (unlikely((value & zero_mask) != 0x00)) {
+>> +             pr_debug("TPM I2C read of register 0x%02x failed sanity check: 0x%x\n", reg, value);
+>> +             return -EIO;
+>> +     }
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static int tpm_tis_i2c_read_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+>> +                               u8 *result, enum tpm_tis_io_mode io_mode)
+>> +{
+>> +     struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
+>> +     struct i2c_msg msg = { .addr = phy->i2c_client->addr };
+>> +     u8 reg = tpm_tis_i2c_address_to_register(addr);
+>> +     int i;
+>> +     int ret;
+>> +
+>> +     for (i = 0; i < TPM_RETRY; i++) {
+>> +             /* write register */
+>> +             msg.len = sizeof(reg);
+>> +             msg.buf = &reg;
+>> +             msg.flags = 0;
+>> +             ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+>> +             if (ret < 0)
+>> +                     return ret;
+>> +
+>> +             /* read data */
+>> +             msg.buf = result;
+>> +             msg.len = len;
+>> +             msg.flags = I2C_M_RD;
+>> +             ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+>> +             if (ret < 0)
+>> +                     return ret;
+>> +
+>> +             ret = tpm_tis_i2c_sanity_check_read(reg, len, result);
+>> +             if (ret == 0)
+>> +                     return 0;
+>> +
+>> +             usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
+>> +     }
+>> +
+>> +     return ret;
+>> +}
+>> +
+>> +static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+>> +                                const u8 *value,
+>> +                                enum tpm_tis_io_mode io_mode)
+>> +{
+>> +     struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
+>> +     struct i2c_msg msg = { .addr = phy->i2c_client->addr };
+>> +     u8 reg = tpm_tis_i2c_address_to_register(addr);
+>> +     int ret;
+>> +
+>> +     if (len > TPM_BUFSIZE - 1)
+>> +             return -EIO;
+>> +
+>> +     /* write register and data in one go */
+>> +     phy->io_buf[0] = reg;
+>> +     memcpy(phy->io_buf + sizeof(reg), value, len);
+>> +
+>> +     msg.len = sizeof(reg) + len;
+>> +     msg.buf = phy->io_buf;
+>> +     ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+>> +     if (ret < 0)
+>> +             return ret;
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static int tpm_tis_i2c_verify_crc(struct tpm_tis_data *data, size_t len,
+>> +                               const u8 *value)
+>> +{
+>> +     u16 crc_tpm, crc_host;
+>> +     int rc;
+>> +
+>> +     rc = tpm_tis_read16(data, TPM_DATA_CSUM, &crc_tpm);
+>> +     if (rc < 0)
+>> +             return rc;
+>> +
+>> +     /* reflect crc result, regardless of host endianness */
+>> +     crc_host = swab16(crc_ccitt(0, value, len));
+>> +     if (crc_tpm != crc_host)
+>> +             return -EIO;
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +/*
+>> + * Guard Time:
+>> + * After each I2C operation, the TPM might require the master to wait.
+>> + * The time period is vendor-specific and must be read from the
+>> + * TPM_I2C_INTERFACE_CAPABILITY register.
+>> + *
+>> + * Before the Guard Time is read (or after the TPM failed to send an I2C NACK),
+>> + * a Guard Time of 250µs applies.
+>> + *
+>> + * Various flags in the same register indicate if a guard time is needed:
+>> + *  - SR: <I2C read with repeated start> <guard time> <I2C read>
+>> + *  - RR: <I2C read> <guard time> <I2C read>
+>> + *  - RW: <I2C read> <guard time> <I2C write>
+>> + *  - WR: <I2C write> <guard time> <I2C read>
+>> + *  - WW: <I2C write> <guard time> <I2C write>
+>> + *
+>> + * See TCG PC Client PTP Specification v1.04, 8.1.10 GUARD_TIME
+>> + */
+>> +static int tpm_tis_i2c_init_guard_time(struct tpm_tis_i2c_phy *phy)
+>> +{
+>> +     u32 i2c_caps;
+>> +     int ret;
+>> +
+>> +     phy->guard_time_read = true;
+>> +     phy->guard_time_write = true;
+>> +     phy->guard_time_min = GUARD_TIME_DEFAULT_MIN;
+>> +     phy->guard_time_max = GUARD_TIME_DEFAULT_MAX;
+>> +
+>> +     ret = tpm_tis_i2c_read_bytes(&phy->priv, TPM_I2C_INTERFACE_CAPABILITY,
+>> +                                  sizeof(i2c_caps), (u8 *)&i2c_caps,
+>> +                                  TPM_TIS_PHYS_32);
+>> +     if (ret)
+>> +             return ret;
+>> +
+>> +     phy->guard_time_read = (i2c_caps & TPM_GUARD_TIME_RR_MASK) ||
+>> +                            (i2c_caps & TPM_GUARD_TIME_RW_MASK);
+>> +     phy->guard_time_write = (i2c_caps & TPM_GUARD_TIME_WR_MASK) ||
+>> +                             (i2c_caps & TPM_GUARD_TIME_WW_MASK);
+>> +     phy->guard_time_min = (i2c_caps & TPM_GUARD_TIME_MIN_MASK) >>
+>> +                           TPM_GUARD_TIME_MIN_SHIFT;
+>> +     /* guard_time_max = guard_time_min * 1.2 */
+>> +     phy->guard_time_max = phy->guard_time_min + phy->guard_time_min / 5;
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
+>> +
+>> +static const struct tpm_tis_phy_ops tpm_i2c_phy_ops = {
+>> +     .read_bytes = tpm_tis_i2c_read_bytes,
+>> +     .write_bytes = tpm_tis_i2c_write_bytes,
+>> +     .verify_crc = tpm_tis_i2c_verify_crc,
+>> +};
+>> +
+>> +static int tpm_tis_i2c_probe(struct i2c_client *dev,
+>> +                          const struct i2c_device_id *id)
+>> +{
+>> +     struct tpm_tis_i2c_phy *phy;
+>> +     const u8 crc_enable = 1;
+>> +     const u8 locality = 0;
+>> +     int ret;
+>> +
+>> +     phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_i2c_phy),
+>> +                        GFP_KERNEL);
+>> +     if (!phy)
+>> +             return -ENOMEM;
+>> +
+>> +     phy->io_buf = devm_kzalloc(&dev->dev, TPM_BUFSIZE, GFP_KERNEL);
+>> +     if (!phy->io_buf)
+>> +             return -ENOMEM;
+>> +
+>> +     phy->i2c_client = dev;
+>> +
+>> +     /* must precede all communication with the tpm */
+>> +     ret = tpm_tis_i2c_init_guard_time(phy);
+>> +     if (ret)
+>> +             return ret;
+>> +
+>> +     ret = tpm_tis_i2c_write_bytes(&phy->priv, TPM_LOC_SEL, sizeof(locality),
+>> +                                   &locality, TPM_TIS_PHYS_8);
+>> +     if (ret)
+>> +             return ret;
+>> +
+>> +     ret = tpm_tis_i2c_write_bytes(&phy->priv, TPM_I2C_DATA_CSUM_ENABLE,
+>> +                                   sizeof(crc_enable), &crc_enable,
+>> +                                   TPM_TIS_PHYS_8);
+>> +     if (ret)
+>> +             return ret;
+>> +
+>> +     return tpm_tis_core_init(&dev->dev, &phy->priv, -1, &tpm_i2c_phy_ops,
+>> +                              NULL);
+>> +}
+>> +
+>> +static int tpm_tis_i2c_remove(struct i2c_client *client)
+>> +{
+>> +     struct tpm_chip *chip = i2c_get_clientdata(client);
+>> +
+>> +     tpm_chip_unregister(chip);
+>> +     tpm_tis_remove(chip);
+>> +     return 0;
+>> +}
+>> +
+>> +static const struct i2c_device_id tpm_tis_i2c_id[] = {
+>> +     { "tpm_tis_i2c", 0 },
+>> +     {}
+>> +};
+>> +MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+>> +
+>> +#ifdef CONFIG_OF
+>> +static const struct of_device_id of_tis_i2c_match[] = {
+>> +     { .compatible = "infineon,slb9673", },
+>> +     {}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
+>> +#endif
+>> +
+>> +static struct i2c_driver tpm_tis_i2c_driver = {
+>> +     .driver = {
+>> +             .owner = THIS_MODULE,
+>> +             .name = "tpm_tis_i2c",
+>> +             .pm = &tpm_tis_pm,
+>> +             .of_match_table = of_match_ptr(of_tis_i2c_match),
+>> +     },
+>> +     .probe = tpm_tis_i2c_probe,
+>> +     .remove = tpm_tis_i2c_remove,
+>> +     .id_table = tpm_tis_i2c_id,
+>> +};
+>> +module_i2c_driver(tpm_tis_i2c_driver);
+>> +
+>> +MODULE_DESCRIPTION("TPM Driver for native I2C access");
+>> +MODULE_LICENSE("GPL");
+>> --
+>> 2.25.1
+>>
+> 
+> Looks decent, has anyone been able to test this?
+> 
+> BR, Jarkko
 
-Previously, the TRNG was wired up to arch_get_random_{long,int}(), but
-it was observed that this was being called really frequently, resulting
-in high overhead. So it was changed to be wired up to arch_get_random_
-seed_{long,int}(), which was a reasonable decision. Later on, the DRBG
-was then wired up to arch_get_random_{long,int}(), with a complicated
-buffer filling thread, to control overhead and rate.
+Yes, we ran kselftest and the TSS test suite. Additionally, we added/removed the
+module in a loop. All ran successfully and the line coverage for tpm_tis_i2c.c
+was 98.1%.
 
-Fortunately, none of the performance issues matter much now. The RNG
-always attempts to use arch_get_random_seed_{long,int}() first, which
-means a complicated implementation of arch_get_random_{long,int}() isn't
-really valuable or useful to have around. And it's only used when
-reseeding, which means it won't hit the high throughput complications
-that were faced before.
-
-So this commit returns to an earlier design of just calling the TRNG in
-arch_get_random_seed_{long,int}(), and returning false in arch_get_
-random_{long,int}().
-
-Cc: stable@vger.kernel.org
-Cc: Harald Freudenberger <freude@linux.ibm.com>
-Cc: Ingo Franzki <ifranzki@linux.ibm.com>
-Cc: Juergen Christ <jchrist@linux.ibm.com>
-Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Harald - please let me know if my assumptions about how the s390
-machinery works are correct. I might have misunderstood the history of
-these changes and their motivations. -Jason
-
- arch/s390/crypto/arch_random.c     | 211 +----------------------------
- arch/s390/include/asm/archrandom.h |  14 +-
- 2 files changed, 9 insertions(+), 216 deletions(-)
-
-diff --git a/arch/s390/crypto/arch_random.c b/arch/s390/crypto/arch_random.c
-index 56007c763902..55c35d4c03b2 100644
---- a/arch/s390/crypto/arch_random.c
-+++ b/arch/s390/crypto/arch_random.c
-@@ -4,36 +4,12 @@
-  *
-  * Copyright IBM Corp. 2017, 2020
-  * Author(s): Harald Freudenberger
-- *
-- * The s390_arch_random_generate() function may be called from random.c
-- * in interrupt context. So this implementation does the best to be very
-- * fast. There is a buffer of random data which is asynchronously checked
-- * and filled by a workqueue thread.
-- * If there are enough bytes in the buffer the s390_arch_random_generate()
-- * just delivers these bytes. Otherwise false is returned until the
-- * worker thread refills the buffer.
-- * The worker fills the rng buffer by pulling fresh entropy from the
-- * high quality (but slow) true hardware random generator. This entropy
-- * is then spread over the buffer with an pseudo random generator PRNG.
-- * As the arch_get_random_seed_long() fetches 8 bytes and the calling
-- * function add_interrupt_randomness() counts this as 1 bit entropy the
-- * distribution needs to make sure there is in fact 1 bit entropy contained
-- * in 8 bytes of the buffer. The current values pull 32 byte entropy
-- * and scatter this into a 2048 byte buffer. So 8 byte in the buffer
-- * will contain 1 bit of entropy.
-- * The worker thread is rescheduled based on the charge level of the
-- * buffer but at least with 500 ms delay to avoid too much CPU consumption.
-- * So the max. amount of rng data delivered via arch_get_random_seed is
-- * limited to 4k bytes per second.
-  */
- 
- #include <linux/kernel.h>
- #include <linux/atomic.h>
- #include <linux/random.h>
--#include <linux/slab.h>
- #include <linux/static_key.h>
--#include <linux/workqueue.h>
--#include <linux/moduleparam.h>
- #include <asm/cpacf.h>
- 
- DEFINE_STATIC_KEY_FALSE(s390_arch_random_available);
-@@ -41,194 +17,11 @@ DEFINE_STATIC_KEY_FALSE(s390_arch_random_available);
- atomic64_t s390_arch_random_counter = ATOMIC64_INIT(0);
- EXPORT_SYMBOL(s390_arch_random_counter);
- 
--#define ARCH_REFILL_TICKS (HZ/2)
--#define ARCH_PRNG_SEED_SIZE 32
--#define ARCH_RNG_BUF_SIZE 2048
--
--static DEFINE_SPINLOCK(arch_rng_lock);
--static u8 *arch_rng_buf;
--static unsigned int arch_rng_buf_idx;
--
--static void arch_rng_refill_buffer(struct work_struct *);
--static DECLARE_DELAYED_WORK(arch_rng_work, arch_rng_refill_buffer);
--
--bool s390_arch_random_generate(u8 *buf, unsigned int nbytes)
--{
--	/* max hunk is ARCH_RNG_BUF_SIZE */
--	if (nbytes > ARCH_RNG_BUF_SIZE)
--		return false;
--
--	/* lock rng buffer */
--	if (!spin_trylock(&arch_rng_lock))
--		return false;
--
--	/* try to resolve the requested amount of bytes from the buffer */
--	arch_rng_buf_idx -= nbytes;
--	if (arch_rng_buf_idx < ARCH_RNG_BUF_SIZE) {
--		memcpy(buf, arch_rng_buf + arch_rng_buf_idx, nbytes);
--		atomic64_add(nbytes, &s390_arch_random_counter);
--		spin_unlock(&arch_rng_lock);
--		return true;
--	}
--
--	/* not enough bytes in rng buffer, refill is done asynchronously */
--	spin_unlock(&arch_rng_lock);
--
--	return false;
--}
--EXPORT_SYMBOL(s390_arch_random_generate);
--
--static void arch_rng_refill_buffer(struct work_struct *unused)
--{
--	unsigned int delay = ARCH_REFILL_TICKS;
--
--	spin_lock(&arch_rng_lock);
--	if (arch_rng_buf_idx > ARCH_RNG_BUF_SIZE) {
--		/* buffer is exhausted and needs refill */
--		u8 seed[ARCH_PRNG_SEED_SIZE];
--		u8 prng_wa[240];
--		/* fetch ARCH_PRNG_SEED_SIZE bytes of entropy */
--		cpacf_trng(NULL, 0, seed, sizeof(seed));
--		/* blow this entropy up to ARCH_RNG_BUF_SIZE with PRNG */
--		memset(prng_wa, 0, sizeof(prng_wa));
--		cpacf_prno(CPACF_PRNO_SHA512_DRNG_SEED,
--			   &prng_wa, NULL, 0, seed, sizeof(seed));
--		cpacf_prno(CPACF_PRNO_SHA512_DRNG_GEN,
--			   &prng_wa, arch_rng_buf, ARCH_RNG_BUF_SIZE, NULL, 0);
--		arch_rng_buf_idx = ARCH_RNG_BUF_SIZE;
--	}
--	delay += (ARCH_REFILL_TICKS * arch_rng_buf_idx) / ARCH_RNG_BUF_SIZE;
--	spin_unlock(&arch_rng_lock);
--
--	/* kick next check */
--	queue_delayed_work(system_long_wq, &arch_rng_work, delay);
--}
--
--/*
-- * Here follows the implementation of s390_arch_get_random_long().
-- *
-- * The random longs to be pulled by arch_get_random_long() are
-- * prepared in an 4K buffer which is filled from the NIST 800-90
-- * compliant s390 drbg. By default the random long buffer is refilled
-- * 256 times before the drbg itself needs a reseed. The reseed of the
-- * drbg is done with 32 bytes fetched from the high quality (but slow)
-- * trng which is assumed to deliver 100% entropy. So the 32 * 8 = 256
-- * bits of entropy are spread over 256 * 4KB = 1MB serving 131072
-- * arch_get_random_long() invocations before reseeded.
-- *
-- * How often the 4K random long buffer is refilled with the drbg
-- * before the drbg is reseeded can be adjusted. There is a module
-- * parameter 's390_arch_rnd_long_drbg_reseed' accessible via
-- *   /sys/module/arch_random/parameters/rndlong_drbg_reseed
-- * or as kernel command line parameter
-- *   arch_random.rndlong_drbg_reseed=<value>
-- * This parameter tells how often the drbg fills the 4K buffer before
-- * it is re-seeded by fresh entropy from the trng.
-- * A value of 16 results in reseeding the drbg at every 16 * 4 KB = 64
-- * KB with 32 bytes of fresh entropy pulled from the trng. So a value
-- * of 16 would result in 256 bits entropy per 64 KB.
-- * A value of 256 results in 1MB of drbg output before a reseed of the
-- * drbg is done. So this would spread the 256 bits of entropy among 1MB.
-- * Setting this parameter to 0 forces the reseed to take place every
-- * time the 4K buffer is depleted, so the entropy rises to 256 bits
-- * entropy per 4K or 0.5 bit entropy per arch_get_random_long().  With
-- * setting this parameter to negative values all this effort is
-- * disabled, arch_get_random long() returns false and thus indicating
-- * that the arch_get_random_long() feature is disabled at all.
-- */
--
--static unsigned long rndlong_buf[512];
--static DEFINE_SPINLOCK(rndlong_lock);
--static int rndlong_buf_index;
--
--static int rndlong_drbg_reseed = 256;
--module_param_named(rndlong_drbg_reseed, rndlong_drbg_reseed, int, 0600);
--MODULE_PARM_DESC(rndlong_drbg_reseed, "s390 arch_get_random_long() drbg reseed");
--
--static inline void refill_rndlong_buf(void)
--{
--	static u8 prng_ws[240];
--	static int drbg_counter;
--
--	if (--drbg_counter < 0) {
--		/* need to re-seed the drbg */
--		u8 seed[32];
--
--		/* fetch seed from trng */
--		cpacf_trng(NULL, 0, seed, sizeof(seed));
--		/* seed drbg */
--		memset(prng_ws, 0, sizeof(prng_ws));
--		cpacf_prno(CPACF_PRNO_SHA512_DRNG_SEED,
--			   &prng_ws, NULL, 0, seed, sizeof(seed));
--		/* re-init counter for drbg */
--		drbg_counter = rndlong_drbg_reseed;
--	}
--
--	/* fill the arch_get_random_long buffer from drbg */
--	cpacf_prno(CPACF_PRNO_SHA512_DRNG_GEN, &prng_ws,
--		   (u8 *) rndlong_buf, sizeof(rndlong_buf),
--		   NULL, 0);
--}
--
--bool s390_arch_get_random_long(unsigned long *v)
--{
--	bool rc = false;
--	unsigned long flags;
--
--	/* arch_get_random_long() disabled ? */
--	if (rndlong_drbg_reseed < 0)
--		return false;
--
--	/* try to lock the random long lock */
--	if (!spin_trylock_irqsave(&rndlong_lock, flags))
--		return false;
--
--	if (--rndlong_buf_index >= 0) {
--		/* deliver next long value from the buffer */
--		*v = rndlong_buf[rndlong_buf_index];
--		rc = true;
--		goto out;
--	}
--
--	/* buffer is depleted and needs refill */
--	if (in_interrupt()) {
--		/* delay refill in interrupt context to next caller */
--		rndlong_buf_index = 0;
--		goto out;
--	}
--
--	/* refill random long buffer */
--	refill_rndlong_buf();
--	rndlong_buf_index = ARRAY_SIZE(rndlong_buf);
--
--	/* and provide one random long */
--	*v = rndlong_buf[--rndlong_buf_index];
--	rc = true;
--
--out:
--	spin_unlock_irqrestore(&rndlong_lock, flags);
--	return rc;
--}
--EXPORT_SYMBOL(s390_arch_get_random_long);
--
- static int __init s390_arch_random_init(void)
- {
--	/* all the needed PRNO subfunctions available ? */
--	if (cpacf_query_func(CPACF_PRNO, CPACF_PRNO_TRNG) &&
--	    cpacf_query_func(CPACF_PRNO, CPACF_PRNO_SHA512_DRNG_GEN)) {
--
--		/* alloc arch random working buffer */
--		arch_rng_buf = kmalloc(ARCH_RNG_BUF_SIZE, GFP_KERNEL);
--		if (!arch_rng_buf)
--			return -ENOMEM;
--
--		/* kick worker queue job to fill the random buffer */
--		queue_delayed_work(system_long_wq,
--				   &arch_rng_work, ARCH_REFILL_TICKS);
--
--		/* enable arch random to the outside world */
-+	/* check if subfunction CPACF_PRNO_TRNG is available */
-+	if (cpacf_query_func(CPACF_PRNO, CPACF_PRNO_TRNG))
- 		static_branch_enable(&s390_arch_random_available);
--	}
- 
- 	return 0;
- }
-diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
-index 5dc712fde3c7..2c6e1c6ecbe7 100644
---- a/arch/s390/include/asm/archrandom.h
-+++ b/arch/s390/include/asm/archrandom.h
-@@ -15,17 +15,13 @@
- 
- #include <linux/static_key.h>
- #include <linux/atomic.h>
-+#include <asm/cpacf.h>
- 
- DECLARE_STATIC_KEY_FALSE(s390_arch_random_available);
- extern atomic64_t s390_arch_random_counter;
- 
--bool s390_arch_get_random_long(unsigned long *v);
--bool s390_arch_random_generate(u8 *buf, unsigned int nbytes);
--
- static inline bool __must_check arch_get_random_long(unsigned long *v)
- {
--	if (static_branch_likely(&s390_arch_random_available))
--		return s390_arch_get_random_long(v);
- 	return false;
- }
- 
-@@ -37,7 +33,9 @@ static inline bool __must_check arch_get_random_int(unsigned int *v)
- static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
--		return s390_arch_random_generate((u8 *)v, sizeof(*v));
-+		cpacf_trng(NULL, 0, (u8 *)v, sizeof(*v));
-+		atomic64_add(sizeof(*v), &s390_arch_random_counter);
-+		return true;
- 	}
- 	return false;
- }
-@@ -45,7 +43,9 @@ static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
- static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
--		return s390_arch_random_generate((u8 *)v, sizeof(*v));
-+		cpacf_trng(NULL, 0, (u8 *)v, sizeof(*v));
-+		atomic64_add(sizeof(*v), &s390_arch_random_counter);
-+		return true;
- 	}
- 	return false;
- }
--- 
-2.35.1
-
+Best regards,
+Johannes

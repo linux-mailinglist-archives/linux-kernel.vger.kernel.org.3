@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B5A5469F9
+	by mail.lfdr.de (Postfix) with ESMTP id B161A5469FA
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349347AbiFJP7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 11:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S1349435AbiFJP7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 11:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236196AbiFJP66 (ORCPT
+        with ESMTP id S1349352AbiFJP7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:58:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25BC1EB423
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:58:57 -0700 (PDT)
+        Fri, 10 Jun 2022 11:59:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F102B1EBEFD;
+        Fri, 10 Jun 2022 08:59:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94B14B83630
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 15:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B3EC3411B;
-        Fri, 10 Jun 2022 15:58:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C1BF62002;
+        Fri, 10 Jun 2022 15:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EECDC34114;
+        Fri, 10 Jun 2022 15:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654876735;
-        bh=rzSH/RSyuG4CWrd4Hatex8pHH2v31xWjR6/WgpyRVyo=;
+        s=k20201202; t=1654876742;
+        bh=jI2yfO2X8nFkVbq8tQhcl36qrbDRJRICzwMQDeEzgPk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=mmYi3XaT24Whre/dR0dLpUupQD6pU/v/PsljYUiX3kxJm4RuLBVGO9425ULgs/lvi
-         sF9xoVJgx0Du1f/KtQcmudgSvlKTSMIDe/WvTRSqd5dgbU/5OBaQBpiS3C73/OKmbJ
-         FNMyVXsOf+8Ynfdp+hWvzIROrxLd1oMqdl3fU4yj1pcMouTpnvTJ7iXPfWd2xp7zF0
-         x6fvi+aAXiq1HuNxQiq2BL3EDMGJKfB8iGEzfAGtVdoVARKLUah0VGqV67c1UIbMOT
-         saKLuEor0td4Wm7g8xISabqCIZWWg8ojncPVsD1qO56eUaEZ0OiwglrCQk3k+ctM0D
-         W2hYHVLN3NYZg==
+        b=G/B4l5oDGx1fnGfoKuzs+vRiVvkTDQsN9Tp8t41q+oERC+RR8xKngn6fhhHjTVfPI
+         bl+zpu9j4uYI0kGrelgJqcHyZPwxhnaVv1eg6qCfWPi3+SXfvRBfjrK7Fjs2qmzncA
+         fjLq1niNhv4fb7vatwdilEJPbkMXK4GpJR8Zg+LVVFileoaDknA1YNcbL41D5YzWCc
+         JkY2nSAYTffDHFDTfF5hfAzQXwnSC1l+aH360ZoXjxWHPFGdZWV5RFqVYtmWyLTcuJ
+         yeWx2KuPqS0YEG4mI1Fkimz7zEERnp3hYqh0Zg3DnlSYmjOnGjsiqW+2P6Sr9dlB4P
+         h3LjosEv57Hew==
 From:   Mark Brown <broonie@kernel.org>
-To:     srinivas.kandagatla@linaro.org
-Cc:     tiwai@suse.com, lgirdwood@gmail.com, perex@perex.cz,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220609111901.318047-1-srinivas.kandagatla@linaro.org>
-References: <20220609111901.318047-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH 0/2] ASoC: codecs: qualcomm move gain to S8_TLV
-Message-Id: <165487673382.1755957.2629868931367227265.b4-ty@kernel.org>
-Date:   Fri, 10 Jun 2022 16:58:53 +0100
+To:     tudor.ambarus@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220609084246.1795419-1-claudiu.beznea@microchip.com>
+References: <20220609084246.1795419-1-claudiu.beznea@microchip.com>
+Subject: Re: [PATCH 0/3] spi: atmel-quadspi: add runtime pm support
+Message-Id: <165487674116.1756526.16695078743655371627.b4-ty@kernel.org>
+Date:   Fri, 10 Jun 2022 16:59:01 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,28 +55,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 12:18:59 +0100, Srinivas Kandagatla wrote:
-> Move all the digital and IIR gains form using SX_TLV to S8_TLV,
-> these gains are actually 8 bit gains with 7th signed bit and
-> ranges from -84dB to +40dB
+On Thu, 9 Jun 2022 11:42:43 +0300, Claudiu Beznea wrote:
+> The following series adds runtime PM support for atmel-quadspi driver.
+> clk_disable()/clk_enable() is called on proper
+> runtime_suspend()/runtime_resume() ops. Along with it 2 minor cleanups
+> were added (patches 2/3, 3/3).
 > 
-> Tested on DB410c with Headset playback
-> 
-> Thanks,
-> Srini
+> Thank you,
+> Claudiu Beznea
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/2] ASoC: codecs: msm8916-wcd-digital: move gains from SX_TLV to S8_TLV
-      commit: 5babb012c847beb6c8c7108fd78f650b7a2c6054
-[2/2] ASoC: codecs: wcd9335: move gains from SX_TLV to S8_TLV
-      commit: 2fbe0953732e06b471cdedbf6f615b84235580d8
+[1/3] spi: atmel-quadspi: add runtime pm support
+      commit: c349fad389c5916facead610d454250f67cfb20b
+[2/3] spi: atmel-quadspi: use pm_ptr()
+      commit: f11ec1cc46e38f0feac3721a03c21fa99167e329
+[3/3] spi: atmel-quadspi: align condition to parenthesis
+      commit: af7c2d4145b57c15d25a092cfb5a91708c72b541
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

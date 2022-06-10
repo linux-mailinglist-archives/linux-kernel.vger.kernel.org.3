@@ -2,103 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D67545DAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EBA545DAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346554AbiFJHho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
+        id S1346731AbiFJHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiFJHhm (ORCPT
+        with ESMTP id S242965AbiFJHjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:37:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F3512DBE0;
-        Fri, 10 Jun 2022 00:37:39 -0700 (PDT)
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LKCSZ0KYhzjXVp;
-        Fri, 10 Jun 2022 15:36:14 +0800 (CST)
-Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 10 Jun 2022 15:37:37 +0800
-Received: from dggpeml500011.china.huawei.com ([7.185.36.84]) by
- dggpeml500011.china.huawei.com ([7.185.36.84]) with mapi id 15.01.2375.024;
- Fri, 10 Jun 2022 15:37:36 +0800
-From:   "zhudi (E)" <zhudi2@huawei.com>
-To:     Eric Dumazet <edumazet@google.com>
-CC:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        David Miller <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Chenxiang (EulerOS)" <rose.chen@huawei.com>,
-        "syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com" 
-        <syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIGZxX2NvZGVsOiBEaXNjYXJkIHByb2JsZW1hdGlj?=
- =?utf-8?Q?_packets_with_pkt=5Flen_0?=
-Thread-Topic: [PATCH] fq_codel: Discard problematic packets with pkt_len 0
-Thread-Index: AQHYfJjG9k49X3aJiUuEmDHyLJhsLa1HuSCAgAAAxQCAAIZ4UA==
-Date:   Fri, 10 Jun 2022 07:37:36 +0000
-Message-ID: <6adad85fe8ae4c04a24c3c7ce3bc0628@huawei.com>
-References: <20220610070529.1623-1-zhudi2@huawei.com>
- <CANn89iKvXUbunP6UtNE1tNCH7FwCux22_rqwhGigvGn_64-6FA@mail.gmail.com>
- <CANn89i+PQ0Z5LHoTfBixJ9gzAcWD9_8dWccO80gSPx+uZ_wujA@mail.gmail.com>
-In-Reply-To: <CANn89i+PQ0Z5LHoTfBixJ9gzAcWD9_8dWccO80gSPx+uZ_wujA@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.136.114.155]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 10 Jun 2022 03:39:08 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0647F132A01
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:39:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654846746; x=1686382746;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tz2RL+HS4r32xIaJ/73nLWxu3dUh85wzrLbWf1YJ8Yw=;
+  b=CxkIfv1yZqCDKuX0WyyS9aFp3LHIyo8JBfyrhjhtYUe9E0EYrA54GdJe
+   TIuO1KSqlN6LNMxM2uhE6fy8Z8hPE93kmtsv+T+j+MVPRBIZbquEi7MWG
+   7OfeG+X95EJoIm0LYIxViEr6LsYNT0+zVa78SlawEjRz/Eq4H2eQJKLoM
+   bdSsFVga5URLjiINfTpiBQn9BAfbDGv3cdtJ+4g4rZC3aslNhD+GB8t22
+   WZI6047sYqVUnyIoUGSRJt/zWUXMuaOfMRlSY6jqyjrwGLZv37q7Qd5Z5
+   HWYO5xg/UhT6Mr8H7u8wpgo0E7QATpw2VJcL4v+5Zxf6JKTnPKIREydvl
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341611362"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="341611362"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 00:39:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="649690457"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jun 2022 00:39:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzZEW-000GnF-Ev;
+        Fri, 10 Jun 2022 07:39:04 +0000
+Date:   Fri, 10 Jun 2022 15:38:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [norov:fns 8/8] include/linux/export.h:57:43: error: redefinition of
+ '__ksymtab__find_first_bit'
+Message-ID: <202206101537.a5KuHQgw-lkp@intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIEVyaWMsIEknbGwgdGFrZSBhIGxvb2suDQoNCg0KPiBPbiBGcmksIEp1biAxMCwgMjAy
-MiBhdCAxMjozMiBBTSBFcmljIER1bWF6ZXQgPGVkdW1hemV0QGdvb2dsZS5jb20+IHdyb3RlOg0K
-PiA+DQo+ID4gT24gRnJpLCBKdW4gMTAsIDIwMjIgYXQgMTI6MDcgQU0gRGkgWmh1IDx6aHVkaTJA
-aHVhd2VpLmNvbT4gd3JvdGU6DQo+ID4gPg0KPiA+ID4gU3l6Ym90IGZvdW5kIGFuIGlzc3VlIFsx
-XTogZnFfY29kZWxfZHJvcCgpIHRyeSB0byBkcm9wIGEgZmxvdyB3aGl0b3V0IGFueQ0KPiA+ID4g
-c2ticywgdGhhdCBpcywgdGhlIGZsb3ctPmhlYWQgaXMgbnVsbC4NCj4gPiA+IFRoZSByb290IGNh
-dXNlIGlzIHRoYXQ6IHdoZW4gdGhlIGZpcnN0IHF1ZXVlZCBza2Igd2l0aCBwa3RfbGVuIDAsIGJh
-Y2tsb2dzDQo+ID4gPiBvZiB0aGUgZmxvdyB0aGF0IHRoaXMgc2tiIGVucXVldWVkIGlzIHN0aWxs
-IDAgYW5kIGlmIHNjaC0+bGltaXQgaXMgc2V0IHRvDQo+ID4gPiAwIHRoZW4gZnFfY29kZWxfZHJv
-cCgpIHdpbGwgYmUgY2FsbGVkLiBBdCB0aGlzIHBvaW50LCB0aGUgYmFja2xvZ3Mgb2YgYWxsDQo+
-ID4gPiBmbG93cyBhcmUgYWxsIDAsIHNvIGZsb3cgd2l0aCBpZHggMCBpcyBzZWxlY3RlZCB0byBk
-cm9wLCBidXQgdGhpcyBmbG93IGhhdmUNCj4gPiA+IG5vdCBhbnkgc2ticy4NCj4gPiA+IHNrYiB3
-aXRoIHBrdF9sZW4gMCBjYW4gYnJlYWsgZXhpc3RpbmcgcHJvY2Vzc2luZyBsb2dpYywgc28ganVz
-dCBkaXNjYXJkDQo+ID4gPiB0aGVzZSBpbnZhbGlkIHNrYnMuDQo+ID4gPg0KPiA+ID4gTElOSzog
-WzFdDQo+IGh0dHBzOi8vc3l6a2FsbGVyLmFwcHNwb3QuY29tL2J1Zz9pZD0wYjg0ZGE4MGMyOTE3
-NzU3OTE1YWZhODlmNzczOGE5ZDE2ZQ0KPiBjOTZjNQ0KPiA+ID4NCj4gPiA+IFJlcG9ydGVkLWJ5
-OiBzeXpib3QrN2ExMjkwOTQ4NWI5NDQyNmFjZWJAc3l6a2FsbGVyLmFwcHNwb3RtYWlsLmNvbQ0K
-PiA+ID4gU2lnbmVkLW9mZi1ieTogRGkgWmh1IDx6aHVkaTJAaHVhd2VpLmNvbT4NCj4gPiA+IC0t
-LQ0KPiA+ID4gIG5ldC9zY2hlZC9zY2hfZnFfY29kZWwuYyB8IDMgKysrDQo+ID4gPiAgMSBmaWxl
-IGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQ0KPiA+ID4NCj4gPiA+IGRpZmYgLS1naXQgYS9uZXQv
-c2NoZWQvc2NoX2ZxX2NvZGVsLmMgYi9uZXQvc2NoZWQvc2NoX2ZxX2NvZGVsLmMNCj4gPiA+IGlu
-ZGV4IDgzOWUxMjM1ZGIwNS4uYzBmODJiNzM1OGUxIDEwMDY0NA0KPiA+ID4gLS0tIGEvbmV0L3Nj
-aGVkL3NjaF9mcV9jb2RlbC5jDQo+ID4gPiArKysgYi9uZXQvc2NoZWQvc2NoX2ZxX2NvZGVsLmMN
-Cj4gPiA+IEBAIC0xOTEsNiArMTkxLDkgQEAgc3RhdGljIGludCBmcV9jb2RlbF9lbnF1ZXVlKHN0
-cnVjdCBza19idWZmICpza2IsDQo+IHN0cnVjdCBRZGlzYyAqc2NoLA0KPiA+ID4gICAgICAgICB1
-bnNpZ25lZCBpbnQgcGt0X2xlbjsNCj4gPiA+ICAgICAgICAgYm9vbCBtZW1vcnlfbGltaXRlZDsN
-Cj4gPiA+DQo+ID4gPiArICAgICAgIGlmICh1bmxpa2VseSghcWRpc2NfcGt0X2xlbihza2IpKSkN
-Cj4gPiA+ICsgICAgICAgICAgICAgICByZXR1cm4gcWRpc2NfZHJvcChza2IsIHNjaCwgdG9fZnJl
-ZSk7DQo+ID4gPiArDQo+ID4NCj4gPg0KPiA+IFRoaXMgaGFzIGJlZW4gZGlzY3Vzc2VkIGluIHRo
-ZSBwYXN0Lg0KPiA+DQo+IA0KPiBodHRwczovL3d3dy5zcGluaWNzLm5ldC9saXN0cy9uZXRkZXYv
-bXNnNzc3NTAzLmh0bWwNCj4gDQo+ID4gRmVlZGluZyBuZG9fc3RhcnRfeG1pdCgpIGluIGh1bmRy
-ZWRzIG9mIGRyaXZlcnMgd2l0aCB6ZXJvLWxlbmd0aA0KPiA+IHBhY2tldHMgd2lsbCBjcmFzaCBh
-bnl3YXkuDQo+ID4NCj4gPiBXZSBhcmUgbm90IGdvaW5nIHRvIGFkZCBzdWNoIHNpbGx5IHRlc3Rz
-IGluIGFsbCBxZGlzY3MsIGFuZCB0aGVuIGFsbA0KPiA+IG5kb19zdGFydF94bWl0KCksIHNpbmNl
-IHFkaXNjcyBhcmUgbm90IG1hbmRhdG9yeS4NCj4gPg0KPiA+IFBsZWFzZSBpbnN0ZWFkIGZpeCBC
-UEYgbGF5ZXIsIGluc3RlYWQgb2YgaHVuZHJlZHMgb2YgZHJpdmVycy9xZGlzY3MuDQo=
+tree:   https://github.com/norov/linux fns
+head:   785e34f40a6ad867ddc1fccf032a54bb41563865
+commit: 785e34f40a6ad867ddc1fccf032a54bb41563865 [8/8] fns
+config: arc-randconfig-r043-20220609 (https://download.01.org/0day-ci/archive/20220610/202206101537.a5KuHQgw-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/norov/linux/commit/785e34f40a6ad867ddc1fccf032a54bb41563865
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov fns
+        git checkout 785e34f40a6ad867ddc1fccf032a54bb41563865
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from lib/find_bit.c:17:
+>> include/linux/export.h:57:43: error: redefinition of '__ksymtab__find_first_bit'
+      57 |         static const struct kernel_symbol __ksymtab_##sym               \
+         |                                           ^~~~~~~~~~
+   include/linux/export.h:96:9: note: in expansion of macro '__KSYMTAB_ENTRY'
+      96 |         __KSYMTAB_ENTRY(sym, sec)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/export.h:140:41: note: in expansion of macro '___EXPORT_SYMBOL'
+     140 | #define __EXPORT_SYMBOL(sym, sec, ns)   ___EXPORT_SYMBOL(sym, sec, ns)
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/export.h:147:41: note: in expansion of macro '__EXPORT_SYMBOL'
+     147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "")
+         |                                         ^~~~~~~~~~~~~~~
+   include/linux/export.h:150:41: note: in expansion of macro '_EXPORT_SYMBOL'
+     150 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+         |                                         ^~~~~~~~~~~~~~
+   lib/find_bit.c:105:1: note: in expansion of macro 'EXPORT_SYMBOL'
+     105 | EXPORT_SYMBOL(_find_first_bit);
+         | ^~~~~~~~~~~~~
+   include/linux/export.h:57:43: note: previous definition of '__ksymtab__find_first_bit' with type 'const struct kernel_symbol'
+      57 |         static const struct kernel_symbol __ksymtab_##sym               \
+         |                                           ^~~~~~~~~~
+   include/linux/export.h:96:9: note: in expansion of macro '__KSYMTAB_ENTRY'
+      96 |         __KSYMTAB_ENTRY(sym, sec)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/export.h:140:41: note: in expansion of macro '___EXPORT_SYMBOL'
+     140 | #define __EXPORT_SYMBOL(sym, sec, ns)   ___EXPORT_SYMBOL(sym, sec, ns)
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/export.h:147:41: note: in expansion of macro '__EXPORT_SYMBOL'
+     147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "")
+         |                                         ^~~~~~~~~~~~~~~
+   include/linux/export.h:150:41: note: in expansion of macro '_EXPORT_SYMBOL'
+     150 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+         |                                         ^~~~~~~~~~~~~~
+   lib/find_bit.c:89:1: note: in expansion of macro 'EXPORT_SYMBOL'
+      89 | EXPORT_SYMBOL(_find_first_bit);
+         | ^~~~~~~~~~~~~
+
+
+vim +/__ksymtab__find_first_bit +57 include/linux/export.h
+
+f50169324df4ad Paul Gortmaker    2011-05-23  31  
+7290d58095712a Ard Biesheuvel    2018-08-21  32  #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+7290d58095712a Ard Biesheuvel    2018-08-21  33  #include <linux/compiler.h>
+7290d58095712a Ard Biesheuvel    2018-08-21  34  /*
+7290d58095712a Ard Biesheuvel    2018-08-21  35   * Emit the ksymtab entry as a pair of relative references: this reduces
+7290d58095712a Ard Biesheuvel    2018-08-21  36   * the size by half on 64-bit architectures, and eliminates the need for
+7290d58095712a Ard Biesheuvel    2018-08-21  37   * absolute relocations that require runtime processing on relocatable
+7290d58095712a Ard Biesheuvel    2018-08-21  38   * kernels.
+7290d58095712a Ard Biesheuvel    2018-08-21  39   */
+7290d58095712a Ard Biesheuvel    2018-08-21  40  #define __KSYMTAB_ENTRY(sym, sec)					\
+7290d58095712a Ard Biesheuvel    2018-08-21  41  	__ADDRESSABLE(sym)						\
+7290d58095712a Ard Biesheuvel    2018-08-21  42  	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+ed13fc33f76303 Matthias Maennich 2019-09-06  43  	    "	.balign	4					\n"	\
+7290d58095712a Ard Biesheuvel    2018-08-21  44  	    "__ksymtab_" #sym ":				\n"	\
+7290d58095712a Ard Biesheuvel    2018-08-21  45  	    "	.long	" #sym "- .				\n"	\
+7290d58095712a Ard Biesheuvel    2018-08-21  46  	    "	.long	__kstrtab_" #sym "- .			\n"	\
+c3a6cf19e695c8 Masahiro Yamada   2019-10-18  47  	    "	.long	__kstrtabns_" #sym "- .			\n"	\
+7290d58095712a Ard Biesheuvel    2018-08-21  48  	    "	.previous					\n")
+7290d58095712a Ard Biesheuvel    2018-08-21  49  
+7290d58095712a Ard Biesheuvel    2018-08-21  50  struct kernel_symbol {
+7290d58095712a Ard Biesheuvel    2018-08-21  51  	int value_offset;
+7290d58095712a Ard Biesheuvel    2018-08-21  52  	int name_offset;
+8651ec01daedad Matthias Maennich 2019-09-06  53  	int namespace_offset;
+7290d58095712a Ard Biesheuvel    2018-08-21  54  };
+7290d58095712a Ard Biesheuvel    2018-08-21  55  #else
+7290d58095712a Ard Biesheuvel    2018-08-21  56  #define __KSYMTAB_ENTRY(sym, sec)					\
+7290d58095712a Ard Biesheuvel    2018-08-21 @57  	static const struct kernel_symbol __ksymtab_##sym		\
+7290d58095712a Ard Biesheuvel    2018-08-21  58  	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
+ed13fc33f76303 Matthias Maennich 2019-09-06  59  	__aligned(sizeof(void *))					\
+c3a6cf19e695c8 Masahiro Yamada   2019-10-18  60  	= { (unsigned long)&sym, __kstrtab_##sym, __kstrtabns_##sym }
+7290d58095712a Ard Biesheuvel    2018-08-21  61  
+
+:::::: The code at line 57 was first introduced by commit
+:::::: 7290d58095712a89f845e1bca05334796dd49ed2 module: use relative references for __ksymtab entries
+
+:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

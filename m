@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5795F546DA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17396546DB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350486AbiFJTxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        id S1350495AbiFJTzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348870AbiFJTxA (ORCPT
+        with ESMTP id S1349009AbiFJTzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:53:00 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDA224E1F1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:52:59 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id o37-20020a05600c512500b0039c4ba4c64dso1620189wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:52:59 -0700 (PDT)
+        Fri, 10 Jun 2022 15:55:44 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F89111C00
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:55:43 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id x138so306856pfc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=/0seJj7vutXMisqi25YbC/BlVcmbiGDjG4jipxqxReo=;
-        b=VFre5QqFlIlGENzelDzmUJOiheZWLY1JoEfaXQVUp03TC5OyhQ0ntZuxLQEbTNb1nI
-         fZ77oE2MANgxD9i4a+OG/UMCw/nXPHHqaMOFIoC4TykgPW4PhLMOi5wWTtpljPBdjnpR
-         KXH7emFO02shqEjX2tYrQfNFiFlRCpPjXdioNwa/7QFfw2YdLuLjJEjyHKcYdy5bQPaY
-         Q74EgOC28ix3FxjkDeA/ZJFMW/F2ftQiTpB+up5jC65umBvutgiviDcZfXlWCHwd1wbp
-         Wu42XjbBl1rdm1jHloojb5ZtGu8ZXX0go2pD5gbMSQ5o2jHwKwraEy919Hq7I979v9E5
-         DoNA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QBy6NjH2ouB9J4AcBo7wTpbSKkOShDZoTHSArfldiUw=;
+        b=sklHbZakJDBBoAiTpjSD5q4HxK1etfA1WIC7E1GGXxranlMwDMPGy/uz2sJhGgVhFh
+         PsuwAc1Kvt+JrVxUxoIbUT41GO80lUj3bVmOMXx/EiCDoPrvSZTi5VA6KlhM0oySyOuR
+         +tYZA59GVkAhi7mk0TAsOWGswz98wriVH5TPC/c2Qf2YokWtgLtStUvjfTvamYaneEGH
+         bzvkFbDMtZuEKw/jnULBvxk8zwbsM2bB87HtefiubybLbL+H3NdXdw9PHE9MFa1uwCCh
+         tyZDjrUVtcAARyszAW1G5DhaCKiwkKolBeX5R2/hKBE7ytxWxLfuo/5GEb1KHAlQavBv
+         Z93A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/0seJj7vutXMisqi25YbC/BlVcmbiGDjG4jipxqxReo=;
-        b=MJzmEm/idnOxV7gyEiXGDjbSZsMv5HI0HJ7JeAJHTGTC516NMGYlNobwQB+49k/eDv
-         FR1JeHC6xF6VNFcuBVzZx/kDnpOPi7ZmSxtUOEFS/3Gw63TKimLQRR4rDaVO3mdzQegW
-         aTMcKNSosEw++zY4F0teLwthTYrwwEA0dF8pafR7j5D8q1hYIvvhlElh41pk64P4aqfV
-         X4V31WVoJDw7XB5tyjhCafvxFTQ/Fi6jlgGhqsi6Jis7NH0x1DOO64vpqR5YmFSnpHrQ
-         8+r4AqrNEiJt5ltbvLCQS+VS+YnQRjf6P9Nlc6dFaDfupypwm1tXdgsJwLuKBzSN0pVx
-         QlzA==
-X-Gm-Message-State: AOAM533v2z0b1QQH42zMcLO4F5izoFz4Cd2Aihzbd04ui1fE0dMRUUK/
-        h6BvoBGAXwfhw44La+qgCe+1mmtfoOOGqw==
-X-Google-Smtp-Source: ABdhPJwlVgYEJ4hq/w7bJ1jcGdQfLjStMZWUjC+0iWkoeA/KWncZxa3J5xGCX5dZ/sQBCQE9dWBZGQ==
-X-Received: by 2002:a05:600c:3516:b0:39c:8091:31b6 with SMTP id h22-20020a05600c351600b0039c809131b6mr1308386wmq.164.1654890778440;
-        Fri, 10 Jun 2022 12:52:58 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f2-20020adfb602000000b002185c6dc5b1sm273167wre.108.2022.06.10.12.52.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 12:52:57 -0700 (PDT)
-Message-ID: <bb4ab218-3461-9afb-ecba-5c9e87f6acfc@linaro.org>
-Date:   Fri, 10 Jun 2022 21:52:55 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QBy6NjH2ouB9J4AcBo7wTpbSKkOShDZoTHSArfldiUw=;
+        b=2/P9m6gVZzkqTvYOWE+ZK943P12RXavyS9C8O2r7XPMvpGyGhLNvqHEcz8yNPD4PIE
+         nUo2yCDEgzWtmNVIhtnG2JKUH2Va+0AFgidw0MZimrkSqpLWUNOmJbf1bd+6/YSFtJQF
+         JRvUgk39rcFbKNd4WpFqwzeNQrKQClxQ2exEkiPNB+WAtJfV8xqwPCnKyDUpKIdE82bj
+         cNJeLVB+QuITPMQhTC4olpqgKxW4wU4YpfssTZGrl9um0gkrk51G89tE3uVQQ4je5Fzv
+         FSEvgXHyMuBlcUyxjooVtqiFRaoX/xFVvcFEhx6DIZDp8xL2V+sVckokUz3WwRiff7g0
+         Gq+Q==
+X-Gm-Message-State: AOAM532UDhFU9GoMJNFKKD0LTePAScg/suNDXZZiTC8PYYTapwAnqr7M
+        UBwmDMvHUx25lxFHzZDDqvh/g1I0hp7h6nT7IzD4qw==
+X-Google-Smtp-Source: ABdhPJzEcSokF/zla93DIjSWei/mG/WMD+1gosW/4iq24fWu9VXSfgg5vd1o6/WI+TarUi1z/A31bQpqsNJXGPSmzwc=
+X-Received: by 2002:a05:6a00:a12:b0:51b:92d7:ec55 with SMTP id
+ p18-20020a056a000a1200b0051b92d7ec55mr55432987pfh.85.1654890942318; Fri, 10
+ Jun 2022 12:55:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ASoC: samsung: i2s: Check before clk_unregister() not
- needed
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yihao Han <hanyihao@vivo.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220527065412.3677-1-hanyihao@vivo.com>
- <2bcf706b-10d5-9369-ff8a-2a3263f9fa70@linaro.org>
- <d53ad0e2-e32d-1b46-b626-e82b44230704@wanadoo.fr>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d53ad0e2-e32d-1b46-b626-e82b44230704@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220606222058.86688-1-yosryahmed@google.com> <20220606222058.86688-2-yosryahmed@google.com>
+In-Reply-To: <20220606222058.86688-2-yosryahmed@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 10 Jun 2022 12:55:31 -0700
+Message-ID: <CALvZod4XtEfdSjq=Jq51tvwXkpv-TKr32G6aeyjzcwxvdPv9SQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Oliver Upton <oupton@google.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,34 +87,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/2022 18:15, Christophe JAILLET wrote:
-> Le 29/05/2022 à 10:06, Krzysztof Kozlowski a écrit :
->> On 27/05/2022 08:54, Yihao Han wrote:
->>> clk_unregister() already checks the clk ptr using
->>> !clk || WARN_ON_ONCE(IS_ERR(clk)) so there is no need to check it
->>> again before calling it.
->>>
->>
->> No, this explanation does not make sense. clk_unregister() warns and
->> this code is not equivalent.
->>
->>
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> Hi,
-> 
-> Moreover, as pointed out by greg in [1] on some plateform the assertion 
-> in the commit description is wrong. His message is about clk_disable() 
-> but, IIUC, it makes sense for clk_unregister() as well. See [2] on the 
-> sh plateform.
-> 
+On Mon, Jun 6, 2022 at 3:21 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> Add NR_SECONDARY_PAGETABLE stat to count secondary page table uses, e.g.
+> KVM mmu. This provides more insights on the kernel memory used
+> by a workload.
+>
+> This stat will be used by subsequent patches to count KVM mmu
+> memory usage.
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-Yes, this is true as well, although does not have the practical impact
-on this driver as it uses platforms with common clock framework.
-
-
-Best regards,
-Krzysztof
+Acked-by: Shakeel Butt <shakeelb@google.com>

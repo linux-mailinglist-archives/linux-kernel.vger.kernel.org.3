@@ -2,136 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA8F545BF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605CB545BF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346209AbiFJF4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S1346337AbiFJF5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbiFJF4Q (ORCPT
+        with ESMTP id S239380AbiFJF5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:56:16 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675C533344;
-        Thu,  9 Jun 2022 22:56:12 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 6394D67373; Fri, 10 Jun 2022 07:56:08 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 07:56:08 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
-        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
-        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
-        drew@beagleboard.org, Atish Patra <atish.patra@wdc.com>
-Subject: Re: [PATCH 2/3] riscv: Implement Zicbom-based cache management
- operations
-Message-ID: <20220610055608.GA24221@lst.de>
-References: <20220610004308.1903626-1-heiko@sntech.de> <20220610004308.1903626-3-heiko@sntech.de>
+        Fri, 10 Jun 2022 01:57:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65883968E;
+        Thu,  9 Jun 2022 22:56:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53A9C61E74;
+        Fri, 10 Jun 2022 05:56:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628A2C34114;
+        Fri, 10 Jun 2022 05:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654840618;
+        bh=tqa2qEghji7NeZCEwmQNGRGe3Peh47Szj8Wj0xWJipk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SA4yX79lC4gBdjrAJmZHSkoJIB6XmnYR9Dkv3xys+wkMOaqA3IcKBiN31i1Va8/QI
+         TNQJLAbLyJJl53jh8SU+ScDaJU8XZqikRq+2eVt2AvnvCUjIDhiNurQyZozib7oQo2
+         aGgfy0gdQb6tH/qGTzcXkz/MCMUS8woh/6U2uWvldKMGyL8jgIQCHYDGLhujXaLaTn
+         mUygU67M7OMfK9y2Eq+1csaf4HYwJrp+/EVuW9mnXATtPaHPAhnahTNVUFvob+/UbK
+         edv+auyUSAYYA7V6tXXK6gpBWq/chCkbGb62jDfPuVvAuHfmilS+PGxOnixl/Dv9hO
+         NBkn8KJOHsWOw==
+Date:   Thu, 9 Jun 2022 22:56:57 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, leonro@nvidia.com,
+        borisp@nvidia.com, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: adjust MELLANOX ETHERNET INNOVA DRIVERS to
+ TLS support removal
+Message-ID: <20220609225657.299278f7@kernel.org>
+In-Reply-To: <165483841435.4442.11942577289291510346.git-patchwork-notify@kernel.org>
+References: <20220601045738.19608-1-lukas.bulwahn@gmail.com>
+        <165483841435.4442.11942577289291510346.git-patchwork-notify@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610004308.1903626-3-heiko@sntech.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 02:43:07AM +0200, Heiko Stuebner wrote:
-> +config RISCV_ISA_ZICBOM
-> +	bool "Zicbom extension support for non-coherent dma operation"
-> +	select ARCH_HAS_DMA_PREP_COHERENT
-> +	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> +	select ARCH_HAS_SYNC_DMA_FOR_CPU
-> +	select ARCH_HAS_SETUP_DMA_OPS
-> +	select DMA_DIRECT_REMAP
-> +	select RISCV_ALTERNATIVE
-> +	default y
-> +	help
-> +	   Adds support to dynamically detect the presence of the ZICBOM extension
+On Fri, 10 Jun 2022 05:20:14 +0000 patchwork-bot+netdevbpf@kernel.org
+wrote:
+> Hello:
+> 
+> This patch was applied to netdev/net.git (master)
+> by Saeed Mahameed <saeedm@nvidia.com>:
+> 
+> On Wed,  1 Jun 2022 06:57:38 +0200 you wrote:
+> > Commit 40379a0084c2 ("net/mlx5_fpga: Drop INNOVA TLS support") removes all
+> > files in the directory drivers/net/ethernet/mellanox/mlx5/core/accel/, but
+> > misses to adjust its reference in MAINTAINERS.
+> > 
+> > Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> > broken reference.
+> > 
+> > [...]  
+> 
+> Here is the summary with links:
+>   - MAINTAINERS: adjust MELLANOX ETHERNET INNOVA DRIVERS to TLS support removal
+>     https://git.kernel.org/netdev/net/c/ed872f92fd09
 
-Overly long line here.
+What luck. I was trying to see if pw-bot will respond to the PR rather
+than the series if I mark the series as accepted first but apparently
+it found this random posting and replied to it instead :S
 
-> +	   (Cache Block Management Operations) and enable its usage.
-> +
-> +	   If you don't know what to do here, say Y.
-
-But more importantly I think the whole text here is not very helpful.
-What users care about is non-coherent DMA support.  What extension is
-used for that is rather secondary.  Also please capitalize DMA.
-
-> +void arch_sync_dma_for_device(phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-> +{
-> +	switch (dir) {
-> +	case DMA_TO_DEVICE:
-> +		ALT_CMO_OP(CLEAN, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> +		break;
-> +	case DMA_FROM_DEVICE:
-> +		ALT_CMO_OP(INVAL, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> +		break;
-> +	case DMA_BIDIRECTIONAL:
-> +		ALT_CMO_OP(FLUSH, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-
-Pleae avoid all these crazy long lines.  and use a logical variable
-for the virtual address.  And why do you pass that virtual address
-as an unsigned long to ALT_CMO_OP?  You're going to make your life
-much easier if you simply always pass a pointer.
-
-Last but not last, does in RISC-V clean mean writeback and flush mean
-writeback plus invalidate?  If so the code is correct, but the choice
-of names in the RISC-V spec is extremely unfortunate.
-
-> +void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-> +{
-> +	switch (dir) {
-> +	case DMA_TO_DEVICE:
-> +		break;
-> +	case DMA_FROM_DEVICE:
-> +	case DMA_BIDIRECTIONAL:
-> +		ALT_CMO_OP(INVAL, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-
-Same comment here and in few other places.
-
-> +
-> +void arch_dma_prep_coherent(struct page *page, size_t size)
-> +{
-> +	void *flush_addr = page_address(page);
-> +
-> +	memset(flush_addr, 0, size);
-> +	ALT_CMO_OP(FLUSH, (unsigned long)flush_addr, size, riscv_cbom_block_size);
-> +}
-
-arch_dma_prep_coherent should never zero the memory, that is left
-for the upper layers.`
-
-> +void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
-> +		const struct iommu_ops *iommu, bool coherent)
-> +{
-> +	/* If a specific device is dma-coherent, set it here */
-
-This comment isn't all that useful.
-
-> +	dev->dma_coherent = coherent;
-> +}
-
-But more importantly, this assums that once this code is built all
-devices are non-coherent by default.  I.e. with this patch applied
-and the config option enabled we'll now suddenly start doing cache
-management operations or setups that didn't do it before.
+That's a roundabout way of saying that I pulled "mlx5 fixes 2022-06-08",
+thanks!

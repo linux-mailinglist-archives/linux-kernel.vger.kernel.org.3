@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912F6546397
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1565463F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348580AbiFJKaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S1344288AbiFJKhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347450AbiFJKaO (ORCPT
+        with ESMTP id S1348034AbiFJKgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:30:14 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E357A3B2AD
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:30:12 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u12so52643930eja.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Q1gr3NrnB39CoRuCt8vX807hgcXw9Mek2bCnOsXpGQo=;
-        b=QSvTbaU77/wWFvrHNSjvh11fTizVqERqxJuaRgPrXbIgYWkB3CNmRbgVdVuKjtHqg3
-         EhSrgR3EDatDWGn50GSs7FLRqgSt7xMwyUPawjSnOhbxJydoSzj+Z5VWNx0tqz85MBMo
-         Vk1XUUH3JEvlwH6cKqlREF9eU8xDoGFMNMu5Nl/jmUm64Flgc2ocZwbJyXi3drtRY6Ce
-         OtC/dRTh7/xtSe2jqd0/wVwIMillp/6cVXMKcDPCOT+jHNM5BWJhsKtk2KgZCrb75QJt
-         eb/XTr0mcr6gpXFDyxvAmk7j805M3kAuK/PDlIPjgsoRIylJTb3LlTJmGIUjbAD05Lm2
-         PkjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Q1gr3NrnB39CoRuCt8vX807hgcXw9Mek2bCnOsXpGQo=;
-        b=GJidxNFFl6q8wYrMK758nQ7JQMTT2RuNT/ZHBSJStLqhGmsIsYMuBr1DJnEDCLDuSs
-         kaFQePIE4a+GQjesISBWSjB2F+dmKnh3CFvclZHpU9svKIlEr81Q+YWQTSfX46diXpQL
-         gEfMxbX2JGeVsuZrmv25uUh6N3qVv3n9XuLCWI7zC0CTOdZ5UhZtpT06i4pC0CRTj+m/
-         8B+QC0Y/w98teC+NTIm8pjC0g++CDbytOHLP6MeOiDyJHDvfPZ9pAnNtNsInAz+2+DpL
-         t4VW8dfYB2w4puCcqe3W4jWHaDf2AarxD+MS5QWbfg71Z9rE2OGifgc+eoryUP41W2m0
-         KCGg==
-X-Gm-Message-State: AOAM531xwmZW2iK+ntmbUM0ZHLCqAbhFNDkwaRGfAmlv8m92i5fJzQhc
-        dI2gUe5k9gjVdySwDBjUWHHPmw==
-X-Google-Smtp-Source: ABdhPJw7PvzVwnAjoaC8oJ5ApDXIoYkN0OCc5cmycobzyGZiBOEgvGwNWQ7HGD/AvnfFZNoUw76PJQ==
-X-Received: by 2002:a17:907:8195:b0:710:b40:95d2 with SMTP id iy21-20020a170907819500b007100b4095d2mr31029973ejc.604.1654857011476;
-        Fri, 10 Jun 2022 03:30:11 -0700 (PDT)
-Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e20-20020a056402149400b0042bd75c53casm16186593edv.83.2022.06.10.03.30.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 03:30:11 -0700 (PDT)
-Message-ID: <e68724b0-4a9f-f564-c833-befd6c3515fb@linaro.org>
-Date:   Fri, 10 Jun 2022 12:30:09 +0200
+        Fri, 10 Jun 2022 06:36:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B8749F19;
+        Fri, 10 Jun 2022 03:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654857206; x=1686393206;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GPbto6kWLD4KwhM5VBSRgAyWo2PjSu6DlokZQj9/3i4=;
+  b=m54mMxqC87gYi6IGgLS6bY8FwWE1HJOqkbvg6e7Y/+LXleQT5M/fmqDR
+   eoNtoXi1rXYq4EWTbkhEAQMDF963kVHpmBCkIDBhNWxNDF4XyBI5xTpBn
+   CGVRlophvuyLw9ejpxZKt/lyZ8AchCIWtjaqFocFqtrHRN/QlZuW3iZKF
+   ANK4I0uha1JA1+ke3dUMLfQGnTg56naa2FTmqawppXfMq1cB9X2rwmD0r
+   X1vV0znJcAtWEn5A4I8BYaieJUo/XADaVvKrr7MzmIoemgWBXydjxz+HN
+   B/JaLquye2UYO+Gk0ahFiJQMwDNahTskADPAnI6bGrTsT5/2WJR+AqxIa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="339342507"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="339342507"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 03:33:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="710884395"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 10 Jun 2022 03:33:22 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 0DAC0F8; Fri, 10 Jun 2022 13:33:25 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Zev Weiss <zev@bewilderbeest.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: [PATCH v1 1/1] hwmon: (nct6775) Drop duplicate NULL check in ->init() and ->exit()
+Date:   Fri, 10 Jun 2022 13:33:24 +0300
+Message-Id: <20220610103324.87483-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v9 1/2] thermal: Add thermal driver for Sunplus
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>,
-        rafael@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "lh.kuo" <lh.kuo@sunplus.com>,
-        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>
-References: <CAGcXWkzJwOPXfE6ESAtwBbe7W-UkApKosKUy=UBRh0kmi-Bc2Q@mail.gmail.com>
- <395072af-3349-cead-fe07-62d3d758d635@infradead.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <395072af-3349-cead-fe07-62d3d758d635@infradead.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/2022 05:19, Randy Dunlap wrote:
-> Hi--
-> 
-> On 6/9/22 18:32, 郭力豪 wrote:
->> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
->> index 0e5cc94..c85e668 100644
->> --- a/drivers/thermal/Kconfig
->> +++ b/drivers/thermal/Kconfig
->> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
->>     If you say yes here you get support for the FAN controlled
->>     by the Microcontroller found on the Khadas VIM boards.
->>
->> +config SUNPLUS_THERMAL
->> + tristate "Sunplus thermal drivers"
->> + depends on SOC_SP7021 || COMPILE_TEST
->> + help
->> +   This enable the Sunplus SP7021 thermal driver, which supports the primitive
->> +   temperature sensor embedded in Sunplus SP7021 SoC.
->> +
->> +   If you have a Sunplus SP7021 platform say Y here and enable this option
->> +   to have support for thermal management
-> 
-> End the sentence above with a period ('.').
-> 
-> And the indentation here is all messed up.
-> See Documentation/process/coding-style.rst:
-> 
+Since platform_device_unregister() is NULL-aware, we don't need to duplicate
+this check. Remove it and fold the rest of the code.
 
-It's not only this one. Entire file has wrong indentation.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/hwmon/nct6775-platform.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index 6d46c9401898..3a48627419ba 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1200,10 +1200,8 @@ static int __init sensors_nct6775_platform_init(void)
+ exit_device_put:
+ 	platform_device_put(pdev[i]);
+ exit_device_unregister:
+-	while (--i >= 0) {
+-		if (pdev[i])
+-			platform_device_unregister(pdev[i]);
+-	}
++	while (i--)
++		platform_device_unregister(pdev[i]);
+ exit_unregister:
+ 	platform_driver_unregister(&nct6775_driver);
+ 	return err;
+@@ -1213,10 +1211,8 @@ static void __exit sensors_nct6775_platform_exit(void)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(pdev); i++) {
+-		if (pdev[i])
+-			platform_device_unregister(pdev[i]);
+-	}
++	for (i = 0; i < ARRAY_SIZE(pdev); i++)
++		platform_device_unregister(pdev[i]);
+ 	platform_driver_unregister(&nct6775_driver);
+ }
+ 
+-- 
+2.35.1
+

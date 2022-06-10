@@ -2,143 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829805465EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4231B5465F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344530AbiFJLoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
+        id S242903AbiFJLo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346959AbiFJLnc (ORCPT
+        with ESMTP id S235263AbiFJLou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:43:32 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DB973564
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:43:26 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id x17so36170951wrg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/5YJpP3pdMDmTKMTFCWXXpZqW0H2SA7UK43ZKjPSKgc=;
-        b=yob+Rw2WWG/AgEEPq6tT3/t3XqlSfSQ3jvHLFr/TIpmuPbFwxlVia+GRePZuFJQrJX
-         VSVY3sx0GIuiw0VQKSguBpC5ELizScKoMI6TLuUBBTkjSsU45pbZvHSYN3QQIWwgEg/M
-         Sdp90ArObWOLFb85Y4xamML12ImzqmdetXCwF1L/JmeLXQO6fDpCUwN86tocl4I+84Ld
-         D/uy3tGwWG3Sc3Rh1gch3KlR/1km1l68hmLjwRDDHTBdodJNabY9Da/rGnjqmxQa9CVY
-         +1lCdOb+Dur+ByiRyWxTzbYIp2MeU5W48PpAStjmAqwydWyT1/5nto8G63yNBnC5dPyM
-         p2Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/5YJpP3pdMDmTKMTFCWXXpZqW0H2SA7UK43ZKjPSKgc=;
-        b=rXLSNBfa9AT3Z3ET2/0S6JHjNod4p+RlTutYIfERlvJxoqVGVoCszXhrIU4OvFgNu2
-         zNQOnHaj2GKCa5CJfHEi+EstlfNpkD8gMiszWpQBdEKj0+gfMbPlQllpL/HeMEHlOufY
-         ZAadZm4PIsySgvtSJb+qNxbKhs8vNFHn4SnINrO1GumzwYzlKXBYyxQVdtHzgyUnTAox
-         fk1E51SzRUMOxQ4cEe4id3Qf8JeGW6NuQZRKouMpz2g9zTzIwfxQULHoIj332FjoFEx3
-         Qaj90UkIqqgdgkZC6a8hP83vxqqKvs1tF8ktryor8uCDq0HmMBiwuQu67/JIAsvXpZpX
-         wstQ==
-X-Gm-Message-State: AOAM531NMC1zWNangy2iib+RNiCISFl81Jcgbsc8Cztyjs9cYm+aHrgB
-        olhquEPrKIE/x8+z9j4RK6EhLA==
-X-Google-Smtp-Source: ABdhPJwseanLf0i2ChgalXTWzdaG20s3fQfwYCNZ/3tWzUs4mQ/RBHTRdI5POW1Eg22PbtGPF+QDtQ==
-X-Received: by 2002:a5d:6141:0:b0:20f:c66b:209d with SMTP id y1-20020a5d6141000000b0020fc66b209dmr42129589wrt.27.1654861404895;
-        Fri, 10 Jun 2022 04:43:24 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:936e:a821:ac60:872f? ([2a05:6e02:1041:c10:936e:a821:ac60:872f])
-        by smtp.googlemail.com with ESMTPSA id c15-20020a7bc00f000000b0039c4e2ff7cfsm2609787wmb.43.2022.06.10.04.43.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 04:43:23 -0700 (PDT)
-Message-ID: <86edf34a-256d-9c30-9069-123aa1192c7e@linaro.org>
-Date:   Fri, 10 Jun 2022 13:43:22 +0200
+        Fri, 10 Jun 2022 07:44:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0634F703E7;
+        Fri, 10 Jun 2022 04:44:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B60B7220D8;
+        Fri, 10 Jun 2022 11:44:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654861484; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c2yNehDhwyQqo17iHRnrFd5b2B4xhq7rJYv9z6HMzWs=;
+        b=h+J12/+6dA8PdIqRIwQ/dq8CBxwmkTtmJN+f1WSXzGepjWfdRUp6+83ihl6g6uUh9msQ3L
+        qwEBdbkyLPmTrWlEDIIcEPJJpJ7gw2yT7LTS2tkfBcUYqvZX9r9bfGgNgjmvM1nTYHbhA6
+        iZFt0rZqsig307bTfbxENF96s0p7l0Q=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 48F442C141;
+        Fri, 10 Jun 2022 11:44:44 +0000 (UTC)
+Date:   Fri, 10 Jun 2022 13:44:43 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        alexander.deucher@amd.com, daniel@ffwll.ch,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        hughd@google.com, andrey.grodzovsky@amd.com
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Message-ID: <YqMuq/ZrV8loC3jE@dhcp22.suse.cz>
+References: <20220531100007.174649-1-christian.koenig@amd.com>
+ <20220531100007.174649-4-christian.koenig@amd.com>
+ <YqG67sox6L64E6wV@dhcp22.suse.cz>
+ <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
+ <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
+ <26d3e1c7-d73c-cc95-54ef-58b2c9055f0c@gmail.com>
+ <YqIB0bavUeU8Abwl@dhcp22.suse.cz>
+ <d4a19481-7a9f-19bf-c270-d89baa0970fc@amd.com>
+ <YqIMmK18mb/+s5de@dhcp22.suse.cz>
+ <3f7d3d96-0858-fb6d-07a3-4c18964f888e@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [CFP] Power Management and Thermal Control MC at LPC 2022
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
- <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
- <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3f7d3d96-0858-fb6d-07a3-4c18964f888e@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Rafael,
-
-done.
-
-Thanks for the reminder
-
-   -- Daniel
-
-ps: I noticed the dead line is not June 15th but June 13th
-
-
-On 09/06/2022 12:20, Rafael J. Wysocki wrote:
-> [I see I sent this from my personal e-mail address, sorry for the confusion.]
+On Fri 10-06-22 12:58:53, Christian Kˆnig wrote:
+> Am 09.06.22 um 17:07 schrieb Michal Hocko:
+> > On Thu 09-06-22 16:29:46, Christian Kˆnig wrote:
+> > [...]
+> > > Is that a show stopper? How should we address this?
+> > This is a hard problem to deal with and I am not sure this simple
+> > solution is really a good fit. Not only because of the memcg side of
+> > things. I have my doubts that sparse files handling is ok as well.
 > 
-> On Tue, Jun 7, 2022 at 5:30 PM Rafa≈Ç Wysocki <rjwysocki@gmail.com> wrote:
->>
->> Hi All,
->>
->> On Wed, May 25, 2022 at 7:48 PM Rafa≈Ç Wysocki <rjwysocki@gmail.com> wrote:
->>>
->>> Hi All,
->>>
->>> The Power Management and Thermal Control micro-conference:
->>>
->>> https://lpc.events/event/16/contributions/1158/
->>>
->>> has been accepted for the LPC 2022, so if you have a topic for
->>> discussion in that session, please submit it through the LPC web page:
->>>
->>> https://lpc.events/event/16/abstracts/
->>>
->>> (please choose Power Management and Thermal Control MC as the track).
->>> Please also submit topics already listed in the MC description.
->>>
->>> Please note that the LPC is mostly about discussing work in progress
->>> and development proposals, so make sure that your topic falls into
->>> this category.  In particular, please avoid submitting topics
->>> regarding work that has already been done.
->>>
->>> The LPC will be held in Dublin this year, but it should be possible to
->>> participate in the sessions remotely, so it should be fine to submit a
->>> topic even if you cannot go to Dublin in person.
->>>
->>> Looking forward to seeing you all at the LPC!
->>
->> The deadline for topic submissions is approaching (it appears to be June 15).
+> Well I didn't claimed that this would be easy, we juts need to start
+> somewhere.
 > 
-> There are 5 topics submitted ATM, 4 from Intel and 1 from AMD.  ARM is
-> obviously underrepresented.
+> Regarding the sparse file handling, how about using file->f_mapping->nrpages
+> as badness for shmem files?
+> 
+> That should give us the real number of pages allocated through this shmem
+> file and gracefully handles sparse files.
 
+Yes, this would be a better approximation.
 
+> > I do realize this is a long term problem and there is a demand for some
+> > solution at least. I am not sure how to deal with shared resources
+> > myself. The best approximation I can come up with is to limit the scope
+> > of the damage into a memcg context. One idea I was playing with (but
+> > never convinced myself it is really a worth) is to allow a new mode of
+> > the oom victim selection for the global oom event.
+
+And just for the clarity. I have mentioned global oom event here but the
+concept could be extended to per-memcg oom killer as well.
+
+> > It would be an opt in
+> > and the victim would be selected from the biggest leaf memcg (or kill
+> > the whole memcg if it has group_oom configured.
+> > 
+> > That would address at least some of the accounting issue because charges
+> > are better tracked than per process memory consumption. It is a crude
+> > and ugly hack and it doesn't solve the underlying problem as shared
+> > resources are not guaranteed to be freed when processes die but maybe it
+> > would be just slightly better than the existing scheme which is clearly
+> > lacking behind existing userspace.
+> 
+> Well, what is so bad at the approach of giving each process holding a
+> reference to some shared memory it's equal amount of badness even when the
+> processes belong to different memory control groups?
+
+I am not claiming this is wrong per se. It is just an approximation and
+it can surely be wrong in some cases (e.g. in those workloads where the
+share memory is mostly owned by one process while the shared content is
+consumed by many).
+
+The primary question is whether it actually helps much or what kind of
+scenarios it can help with and whether we can actually do better for
+those. Also do not forget that shared file memory is not the only thing
+to care about. What about the kernel memory used on behalf of processes?
+
+Just consider the above mentioned memcg driven model. It doesn't really
+require to chase specific files and do some arbitrary math to share the
+responsibility. It has a clear accounting and responsibility model.
+
+It shares the same underlying problem that the oom killing is not
+resource aware and therefore there is no guarantee that memory really
+gets freed.  But it allows sane configurations where shared resources do
+not cross memcg boundaries at least. With that in mind and oom_cgroup
+semantic you can get at least some semi-sane guarantees. Is it
+pefect? No, by any means. But I would expect it to be more predictable.
+
+Maybe we can come up with a saner model, but just going with per file
+stats sounds like a hard to predict and debug approach to me. OOM
+killing is a very disruptive operation and having random tasks killed
+just because they have mapped few pages from a shared resource sounds
+like a terrible thing to debug and explain to users.
+ 
+> If you really think that this would be a hard problem for upstreaming we
+> could as well keep the behavior for memcg as it is for now. We would just
+> need to adjust the paramters to oom_badness() a bit.
+
+Say we ignore the memcg side of things for now. How does it help long
+term? Special casing the global oom is not all that hard but any future
+change would very likely be disruptive with some semantic implications
+AFAICS.
 -- 
-<http://www.linaro.org/> Linaro.org ‚îÇ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Michal Hocko
+SUSE Labs

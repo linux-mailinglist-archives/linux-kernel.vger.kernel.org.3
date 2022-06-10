@@ -2,72 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CA2545AC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BB0545AD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346248AbiFJDpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 23:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
+        id S242392AbiFJDvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 23:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241354AbiFJDpW (ORCPT
+        with ESMTP id S234635AbiFJDvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 23:45:22 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A129387E3B;
-        Thu,  9 Jun 2022 20:45:21 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so1108252pju.1;
-        Thu, 09 Jun 2022 20:45:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/uH0Tg1zVcDlHNhyIIFBcnnUKdSwUfTJgB1DfUre/zI=;
-        b=m778EZofcp8jmVOVkAKDDP61gGR2HG8R0OXzo+MpDab171Mk1W3ub7xZw4Einp8RWe
-         patQ/hICpLAv7EnecP8O6G76Dp7U8HglbfIHajf8ihzzhSb2HJ5YIqyv1BsSxO7EdVgQ
-         R73K0wJbMVTQsOMKQEga30/qoSPzhwO6agjrNg6+vMYhMpu+Ib6vjmkE4eWNRtYUHsv+
-         ErXYDKR0nS1H6enG5kZR1VwXJfp0bDZRqP+KG51PuzLWOyOwgBPpIgJ+UDUqzJPPrbYa
-         1JR1sdY1hs2Qjdp7bQ4qrxey5RprDuLkyszvWKGcRQd60ckcKMJidKny6tEocO0oLDe6
-         wkGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/uH0Tg1zVcDlHNhyIIFBcnnUKdSwUfTJgB1DfUre/zI=;
-        b=vJwJOQd1QEDp8ukHaw7B5UObYP3SWlOvqQPDx5NJIG0u8O6pw66J/TZQ69tMDGtJna
-         zo5TRLBHQvVMHR/DtUuVUNTfoaMODaL3QW73cG4dvQ4r8qmTJtu19h/QCUk4hPkybNTu
-         nsJZsw9hiVCIzizSwBLh1jcuEb+vJnXwwZYCj2p65HWFqSd8X8dugQZ7Lt1zl8btjjhe
-         nRErNuhw0MIlUgRJfS6IabbCUNxaRa45wtuS+cH2raARdunpaN5EosGck4c4YGEotyYI
-         UCv3kxXR4vJRzzyRpaps+tHd5qKNUoQw3k35PjKEc4kRYj4YpL/+GX/91oaOkzXITeUi
-         +xww==
-X-Gm-Message-State: AOAM530Cts8ydRVCiE1PZ8OE6y/xgWWh/PiWBBPuW9iKNPRRPcRSKzSH
-        62GKiy+TsGR8IlS2e0f3EqY=
-X-Google-Smtp-Source: ABdhPJys1yEG2SHw3qwtRRUfFmmb0j8fT9xupsIS8suAMdra/9NzHar2iteHWtU2X9V9SJmCDJ0Paw==
-X-Received: by 2002:a17:902:d409:b0:167:7425:caa8 with SMTP id b9-20020a170902d40900b001677425caa8mr25625352ple.72.1654832720895;
-        Thu, 09 Jun 2022 20:45:20 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.27])
-        by smtp.gmail.com with ESMTPSA id u30-20020a63b55e000000b003fc136f9a7dsm5908368pgo.38.2022.06.09.20.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 20:45:20 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     edumazet@google.com
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, imagedong@tencent.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next v3 9/9] net: tcp: use LINUX_MIB_TCPABORTONLINGER in tcp_rcv_state_process()
-Date:   Fri, 10 Jun 2022 11:42:04 +0800
-Message-Id: <20220610034204.67901-10-imagedong@tencent.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220610034204.67901-1-imagedong@tencent.com>
-References: <20220610034204.67901-1-imagedong@tencent.com>
+        Thu, 9 Jun 2022 23:51:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F20AE38A280;
+        Thu,  9 Jun 2022 20:51:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B48B1063;
+        Thu,  9 Jun 2022 20:51:15 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.42.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E0CF93F766;
+        Thu,  9 Jun 2022 20:51:09 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, acme@kernel.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH V6 0/8] perf: Expand perf_branch_entry
+Date:   Fri, 10 Jun 2022 09:20:53 +0530
+Message-Id: <20220610035101.424112-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,29 +50,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Branch Record Buffer Extension (BRBE) implementation on arm64 captures more
+branch type classification which cannot be accommodated in the current perf
+branch record format via perf_branch_entry.type element (4 bit field). Also
+it captures privilege information which does not have a corresponding slot
+in perf_branch_entry. This series expands struct perf_branch_entry, to meet
+both these requirements without breaking the existing user space ABI for
+perf tools.
 
-The statistics for 'tp->linger2 < 0' in tcp_rcv_state_process() seems
-more accurate to be LINUX_MIB_TCPABORTONLINGER.
+All architecture specific branch types added via perf_branch_entry.new_type
+field in [PATCH 3/4] will be used in BRBE implementation on arm64 platform
+later on with the following map.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- net/ipv4/tcp_input.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+#ifdef CONFIG_ARM64
+#define PERF_BR_FIQ		PERF_BR_NEW_ARCH_1
+#define PERF_BR_DEBUG_HALT	PERF_BR_NEW_ARCH_2
+#define PERF_BR_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
+#define PERF_BR_DEBUG_INST	PERF_BR_NEW_ARCH_4
+#define PERF_BR_DEBUG_DATA	PERF_BR_NEW_ARCH_5
+#endif
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 9b9247b34a6c..07b06c12fe87 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -6592,7 +6592,7 @@ enum skb_drop_reason tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb)
- 
- 		if (tp->linger2 < 0) {
- 			tcp_done(sk);
--			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPABORTONDATA);
-+			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPABORTONLINGER);
- 			return SKB_DROP_REASON_TCP_LINGER;
- 		}
- 		if (TCP_SKB_CB(skb)->end_seq != TCP_SKB_CB(skb)->seq &&
+This series applies on v5.19-rc1
+
+perf API
+
+The series being applied
+
+- Clean : tools/perf/check-headers.sh
+- Clean : diff -u tools/include/uapi/linux/perf_event.h include/uapi/linux/perf_event.h
+
+References
+
+- BRBE captured branch record information
+
+https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers/BRBINF-n--EL1--Branch-Record-Buffer-Information-Register--n-?lang=en
+
+- BRBE based perf branch stack implementation on arm64 platform
+
+https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+
+Changes in V6:
+
+- Process PERF_BR_EXTEND_ABI in perf tools and fetch from perf_branch_entry.new_type
+- Modified the commit message for [PATCH 1/8]
+
+Changes in V5:
+
+https://lore.kernel.org/linux-arm-kernel/20220404045046.634522-1-anshuman.khandual@arm.com/
+
+- Dropped patches [PATCH 1/10] and [PATCH 6/10] related to PERF_BR_[RET|IRQ] - merged
+  via the commit cedd3614e5d9c809 ("perf: Add irq and exception return branch types")
+
+- Rebased series on v5.18-rc1
+
+Changes in V4:
+
+https://lore.kernel.org/all/20220315053516.431515-1-anshuman.khandual@arm.com/
+
+- Modified the struct branch_flags as required
+- Dropped CONFIG_ARM64 from perf header file to avoid build problem
+- Renamed PERF_BR_NEW_<BRANCH_TYPE> as PERF_BR_ARM64_<BRANCH_TYPE>
+
+Changes in V3:
+
+https://lore.kernel.org/all/20220314055857.125421-1-anshuman.khandual@arm.com/
+
+- Fixed small typo s/privillege/privilege in include/uapi/linux/perf_event.h
+- Added PRIV_SHIFT in __p_branch_sample_type()
+- Added arm64 platform override of the new arch specific branch types
+- Renamed s/PERF_BR_XXX/PERF_BR_PRIV_XXX/ for privilege level branch types
+- Added PERF_BR_PRIV_UNKNOWN as the starting value
+- Expanded perf_branch_entry.priv into a 3 bits field 
+
+Changes in V2:
+
+https://lore.kernel.org/all/20220309033642.144769-1-anshuman.khandual@arm.com/
+
+Cc: Robin Murphy <robin.murphy@arm.com> 
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: James Clark <james.clark@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (8):
+  perf: Add system error and not in transaction branch types
+  perf: Extend branch type classification
+  perf: Capture branch privilege information
+  perf: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
+  perf/tools: Add system error and not in transaction branch types
+  perf/tools: Extend branch type classification
+  perf/tools: Add branch privilege information request flag
+  perf/tools: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
+
+ arch/x86/events/intel/lbr.c               |  2 +-
+ include/uapi/linux/perf_event.h           | 36 +++++++++++-
+ tools/include/uapi/linux/perf_event.h     | 36 +++++++++++-
+ tools/perf/Documentation/perf-record.txt  |  1 +
+ tools/perf/builtin-script.c               |  2 +-
+ tools/perf/util/branch.c                  | 69 ++++++++++++++++++++++-
+ tools/perf/util/branch.h                  |  7 ++-
+ tools/perf/util/parse-branch-options.c    |  1 +
+ tools/perf/util/perf_event_attr_fprintf.c |  2 +-
+ tools/perf/util/session.c                 |  2 +-
+ 10 files changed, 149 insertions(+), 9 deletions(-)
+
 -- 
-2.36.1
+2.25.1
 

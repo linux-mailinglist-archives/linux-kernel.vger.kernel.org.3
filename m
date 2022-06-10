@@ -2,173 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CF5545F74
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F9D545F77
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347820AbiFJIk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
+        id S1347877AbiFJIkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347922AbiFJIkV (ORCPT
+        with ESMTP id S241270AbiFJIki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:40:21 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2055519038
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:40:20 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-30fdbe7467cso230266127b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:40:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Y9js5siYkXmTlCcqhnBttnSyxADQBz416pvWYIEpQLc=;
-        b=MWoSw9aN1k9ACFkxYohmtn6bcP8F/dnn2OkswCnt3jJJOGEEy3u2qjj3YR+DG5NUZ2
-         SlVaNtds1yBoe2csJdMH1A2luuJOQ6bGushZRQuEpa357R5UwpahmQdjvhTIaVo0TICK
-         HPE1VN2x0+HbMlDA5UrdYbiYS/IFDyncENyuZ+g/xziIpZE9HY3iTOkSpcbAi5hr6Yml
-         ZqL/cTZtyR3uJnypqKvu6OY812v8ibuEWo7nO8joVBnoyzZutYTuD5jX6KPT2arjGDif
-         aiLu5SFWq7WEpV2GHBUYEk03u1NMoHJgCh0SpA+taNN9pRCYcussMln4izassYh6nfG4
-         etVA==
+        Fri, 10 Jun 2022 04:40:38 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E341A5;
+        Fri, 10 Jun 2022 01:40:37 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so803940wmq.0;
+        Fri, 10 Jun 2022 01:40:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y9js5siYkXmTlCcqhnBttnSyxADQBz416pvWYIEpQLc=;
-        b=yQWmPpP0UmOkLf8d8csD3Mqu67i8PnkbI2kaB+26Htx8CIEoUi/H8J9sokBWSDq4ck
-         JZhCjm9eKYapMOZwFTQQlGgppN7ga8jl3dctXMKDJ0deF4EqVSgVCDLtG7ohbY+uRti0
-         UmbVctzO2Gy0j9AjoIFkj0lV9/sDJGaBw12WdrE4SXLHJWiDnut8xwVPtMt6UwP5M6PX
-         OxhyTXEUmmNycZNaeQr6fJvPqlyf3osFIoYm0FFQrZD1INW07p22f2R+0HX5skMpXqfT
-         rKOWJJpTsLjJGh0Z3ZoEzTUR9AAt0viRxN+OrJoW2RfYVv2IhrC7w4Peg7aBZetjYn11
-         w8Zw==
-X-Gm-Message-State: AOAM532A44CCHJVIpGtV3wWoqTeqq4z+b6HEY2ycg8a5x2puqxBSBk5B
-        U3w1LQGanmf+wrZyrjV4OjgiopwDFfvTHNsdrEr2gA==
-X-Google-Smtp-Source: ABdhPJzTeAzIrk04WGbwRnb/1rU3YjD+kBesukZkSgAMmy++D6UL2koc33Qw5/mwbF66PlaSovKzbvwOVn5rXLM6iJs=
-X-Received: by 2002:a81:4909:0:b0:30c:34d5:9f2c with SMTP id
- w9-20020a814909000000b0030c34d59f2cmr47467546ywa.489.1654850418987; Fri, 10
- Jun 2022 01:40:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ztq4k3KUPkKf4HUs/0KYVoq6RFzFscI/AU5d2/079VY=;
+        b=0Z/HATVtdJxGJ4Fd4/G/QwZILxgDvo86fBR/vnqIrUkKCki5H3ma+9nQPJxAks0OK5
+         WRy7yL3br6970z+NBFo+uYCsAGbY/ndtgWnNhwBTUalcE1M9mGqQhEBHH29XAOmP/qez
+         x8UJrtQ62zSgzRnSmZmnd0b+vkl5QX+FATScGm98RH3ncUEyA1z//EFzF08DtFeLwDdk
+         m6kE6HIUkJwvETF7Zz3IkJ9Zz4erLaLvyeKEK3S3tYDQhcgobAxSfHxH/67jGXhON+2s
+         +4oOuWPNxeb46X1o9cPcbC7jpYIr3Ge2wz4rpTQWshpo17HvMWReEyledcSnalbXhtWb
+         zq7g==
+X-Gm-Message-State: AOAM5335dW+en9sKVFy214ndBvMXvCGE1gLBk4t1mzuYQnD7+i+SpDTj
+        FH0zxHCP61LudLCkE5S48Fg=
+X-Google-Smtp-Source: ABdhPJyQtOeBG1bBmUjSZGZ8BW8JYMPPtMA6gpFagh2WNHrMfZnGM2P6qHsHBdknbAwB+oOQ/gdRFA==
+X-Received: by 2002:a05:600c:190b:b0:39c:7704:74a4 with SMTP id j11-20020a05600c190b00b0039c770474a4mr4333763wmq.92.1654850435757;
+        Fri, 10 Jun 2022 01:40:35 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id 123-20020a1c1981000000b003975c7058bfsm2172199wmz.12.2022.06.10.01.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 01:40:35 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 08:40:33 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: Re: [PATCH] Drivers: hv: vmbus: Release cpu lock in error case
+Message-ID: <20220610084033.r6llz4dadlw6gyoz@liuwe-devbox-debian-v2>
+References: <1654794996-13244-1-git-send-email-ssengar@linux.microsoft.com>
+ <PH0PR21MB30259484AB91D8EA2DEBD3E7D7A79@PH0PR21MB3025.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220610021445.2441579-1-jianhao_xu@smail.nju.edu.cn>
- <3f460707-e267-e749-07fc-c44604cd5713@iogearbox.net> <tencent_29981C021E6150B064C7DBA3@qq.com>
-In-Reply-To: <tencent_29981C021E6150B064C7DBA3@qq.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 10 Jun 2022 01:40:06 -0700
-Message-ID: <CANn89iKHfi=kQY1FC=07COJfVX4ROTnGkM_1uKvOfPfdhqt4Ow@mail.gmail.com>
-Subject: Re: [PATCH] net: sched: fix potential null pointer deref
-To:     Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, jhs <jhs@mojatatu.com>,
-        "xiyou.wangcong" <xiyou.wangcong@gmail.com>,
-        jiri <jiri@resnulli.us>, davem <davem@davemloft.net>,
-        kuba <kuba@kernel.org>, pabeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR21MB30259484AB91D8EA2DEBD3E7D7A79@PH0PR21MB3025.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 1:09 AM Jianhao Xu <jianhao_xu@smail.nju.edu.cn> wr=
-ote:
->
-> Hi,
->
-> TBH, We do not have a reproducer. This is found by our static analysis to=
-ol. We can not see any clue of the context here of mq_queue_get() to ensure=
- it never returns NULL.
->
-
-
-All netdev devices have their dev->_tx allocated in netif_alloc_netdev_queu=
-es()
-
-There is absolutely no way MQ qdisc could be attached to a device that
-has failed netif_alloc_netdev_queues() step.
-
-
-
-> I would appreciate it if you could tell me why when you found out it was =
-our false positive. It will be helpful for us to improve our tool.
-
-
-Please do not send patches before you can provide a detailed
-explanation of a real bug.
-
-If you need help, post instead a [RFC] with a message explaining how
-far you went into your analysis.
-
-A patch should be sent only once you are absolutely sure that there is
-a real bug to fix.
-
-Thank you.
-
-
->
-> Thanks.
-> ------------------ Original ------------------
-> From:  "Daniel Borkmann"<daniel@iogearbox.net>;
-> Date:  Fri, Jun 10, 2022 09:14 AM
-> To:  "Jianhao Xu"<jianhao_xu@smail.nju.edu.cn>; "jhs"<jhs@mojatatu.com>; =
-"xiyou.wangcong"<xiyou.wangcong@gmail.com>; "jiri"<jiri@resnulli.us>; "dave=
-m"<davem@davemloft.net>; "edumazet"<edumazet@google.com>; "kuba"<kuba@kerne=
-l.org>; "pabeni"<pabeni@redhat.com>;
-> Cc:  "netdev"<netdev@vger.kernel.org>; "linux-kernel"<linux-kernel@vger.k=
-ernel.org>;
-> Subject:  Re: [PATCH] net: sched: fix potential null pointer deref
->
-> Hi Jianhao,
->
-> On 6/10/22 4:14 AM, Jianhao Xu wrote:
-> > mq_queue_get() may return NULL, a check is needed to avoid using
-> > the NULL pointer.
-> >
-> > Signed-off-by: Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
->
-> Do you have a reproducer where this is triggered?
->
+On Thu, Jun 09, 2022 at 05:39:06PM +0000, Michael Kelley (LINUX) wrote:
+> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, June 9, 2022 10:17 AM
+> > 
+> > In case of invalid sub channel, release cpu lock before returning.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 > > ---
-> >   net/sched/sch_mq.c | 6 ++++++
-> >   1 file changed, 6 insertions(+)
-> >
-> > diff --git a/net/sched/sch_mq.c b/net/sched/sch_mq.c
-> > index 83d2e54bf303..9aca4ca82947 100644
-> > --- a/net/sched/sch_mq.c
-> > +++ b/net/sched/sch_mq.c
-> > @@ -201,6 +201,8 @@ static int mq_graft(struct Qdisc *sch, unsigned lon=
-g cl, struct Qdisc *new,
-> >   static struct Qdisc *mq_leaf(struct Qdisc *sch, unsigned long cl)
-> >   {
-> >  struct netdev_queue *dev_queue =3D mq_queue_get(sch, cl);
-> > + if (!dev_queue)
-> > +return NULL;
-> >
-> >  return dev_queue->qdisc_sleeping;
-> >   }
-> > @@ -218,6 +220,8 @@ static int mq_dump_class(struct Qdisc *sch, unsigne=
-d long cl,
-> >   struct sk_buff *skb, struct tcmsg *tcm)
-> >   {
-> >  struct netdev_queue *dev_queue =3D mq_queue_get(sch, cl);
-> > + if (!dev_queue)
-> > +return -1;
-> >
-> >  tcm->tcm_parent =3D TC_H_ROOT;
-> >  tcm->tcm_handle |=3D TC_H_MIN(cl);
-> > @@ -229,6 +233,8 @@ static int mq_dump_class_stats(struct Qdisc *sch, u=
-nsigned long cl,
-> >         struct gnet_dump *d)
-> >   {
-> >  struct netdev_queue *dev_queue =3D mq_queue_get(sch, cl);
-> > + if (!dev_queue)
-> > +return -1;
-> >
-> >  sch =3D dev_queue->qdisc_sleeping;
-> >  if (gnet_stats_copy_basic(d, sch->cpu_bstats, &sch->bstats, true) < 0 =
-||
-> >
->
+> >  drivers/hv/channel_mgmt.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
+> > index 280b529..5b12040 100644
+> > --- a/drivers/hv/channel_mgmt.c
+> > +++ b/drivers/hv/channel_mgmt.c
+> > @@ -639,6 +639,7 @@ static void vmbus_process_offer(struct vmbus_channel
+> > *newchannel)
+> >  		 */
+> >  		if (newchannel->offermsg.offer.sub_channel_index == 0) {
+> >  			mutex_unlock(&vmbus_connection.channel_mutex);
+> > +			cpus_read_unlock();
+> >  			/*
+> >  			 * Don't call free_channel(), because newchannel->kobj
+> >  			 * is not initialized yet.
+> > --
+> > 1.8.3.1
+> 
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> 
+
+The bug comes from a949e86c0d780.
+
+Added a Fixes tag and applied to hyperv-fixes. Thanks.

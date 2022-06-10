@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD022546346
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BAF546347
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348137AbiFJKMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S1347493AbiFJKNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348103AbiFJKMb (ORCPT
+        with ESMTP id S1347722AbiFJKNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:12:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60407F68A7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:12:28 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id v1so41839783ejg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=p/i2+crL1L43GiLXITg/vt3Q+0CXjjKGYscQg4ugrbw=;
-        b=m3xGe026GsgzFKujBkFBMFTkrEv5ifTPmlL1JL3mqH3lHNTdAOtZJhFSrHdfi59Mhn
-         Cp1pRHFfW4UfO9HOOz02ophvsooVXfRTrZcSj1TMpmtD+KKIfFjU5uLdIWfMJpEMtSTo
-         u30C92w2vqpO6VTxPdDGd/nHD8zIZF4E8WCsj5KhxGfpnFUhVhodhQuiO6H8WS1UlytO
-         l1JAP9X4Jb0hF2a1/U8nRhg76b27eKJ+L0R6o6xtEnUzSENi7jvrwLHgUMVPT4BKSMfZ
-         g0EOQ8Qq7KTbFLuyZpzNZq31vaoGMSKhgD51YNEnjVsOeIIej0NyZr8X610KaMPPOAyu
-         SYfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=p/i2+crL1L43GiLXITg/vt3Q+0CXjjKGYscQg4ugrbw=;
-        b=ZHlnKKqgJQxvsk0JqFYqvqtpyT9QuNsAc/YiPdoVO+FPWMmuWHd0viMQCHMYI0b8MF
-         ZVpocRLospKzaqG8N5sk8BkIHWMI3sVY6blrbuwXTRxtOYj003NG1tmOlhmuh/hrqErz
-         C4UZ+r+JgAm8YTx59K/8sPHI2DcF2+ElaoS1KLw2eI3GtTBe2/ALnk0F/092Zr81lghO
-         YUZqpY14jmZXF0eB4LuoiFDyn4s+UwQzhKxykF3JbAeZJV4zx9KgTpL+ZRMFRU0pLSnI
-         KlPGwhB9WNNlmJEie/RFSuwlaYsA6P4oXwZhKuZdoSj5Jhs3FqfFj0rIKiB1ZmVwEVXn
-         zpzQ==
-X-Gm-Message-State: AOAM531LYsf0lCLd6KNKfvsY2eR4PdCHz2GUiVo964TBis+Aw/+q/ZJO
-        kyYdpHu4YQWoi4myZNYGEOZrjA==
-X-Google-Smtp-Source: ABdhPJw0RDXtOcxvfPMtEiDAqOLDHPs1NI+Dt+TuY/tcMv7c9ex+vGJ+hFZbkNUXzQd0E/pMPrBTdg==
-X-Received: by 2002:a17:907:2d87:b0:711:dd41:1e72 with SMTP id gt7-20020a1709072d8700b00711dd411e72mr17399697ejc.742.1654855946970;
-        Fri, 10 Jun 2022 03:12:26 -0700 (PDT)
-Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id x25-20020a170906b09900b006f52dbc192bsm12048266ejy.37.2022.06.10.03.12.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 03:12:26 -0700 (PDT)
-Message-ID: <410c5c97-8ff7-2303-5e19-d6053d3779dd@linaro.org>
-Date:   Fri, 10 Jun 2022 12:12:25 +0200
+        Fri, 10 Jun 2022 06:13:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F15B10D31A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654855984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kei8NmzpOkUxB2dpHEcfp2PDkq3C/+cSDDIqUmwxvJk=;
+        b=iDz0yXivDrAeWGqKKUnvaUtGLWBk04vfgrTIhhNmZhHa5kPbx0cLQIm0Oy0a2UzCfisJkc
+        Ppp1GaeqQBOeNEWdRzRDeAW8ijQ2HSqVOI56s/j4+sAddDAzxd/+lrbJSYBDLWtX3gNHrK
+        kaHoAvXD4XF7dNpSED6x0U4rgD091nM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-bNOwocI5MvevCnMSLlxg3w-1; Fri, 10 Jun 2022 06:13:01 -0400
+X-MC-Unique: bNOwocI5MvevCnMSLlxg3w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2EFE101A54E;
+        Fri, 10 Jun 2022 10:13:00 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.193.213])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 64D691415102;
+        Fri, 10 Jun 2022 10:12:59 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v1] MAINTAINERS: add MEMORY HOT(UN)PLUG section and add myself as reviewer
+Date:   Fri, 10 Jun 2022 12:12:58 +0200
+Message-Id: <20220610101258.75738-1-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] dt-bindings: leds: skyworks,aat1290: convert to
- dtschema
-Content-Language: en-US
-To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220607085343.72414-1-krzysztof.kozlowski@linaro.org>
- <d6d1642c-26b4-e4a8-5ae7-c4b952ae6c62@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d6d1642c-26b4-e4a8-5ae7-c4b952ae6c62@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2022 22:28, Jacek Anaszewski wrote:
-> Hi Krzysztof,
-> 
-> On 6/7/22 10:53, Krzysztof Kozlowski wrote:
->> Convert the Skyworks Solutions, Inc. AAT1290 Current Regulator bindings
->> to DT Schema.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> [...]
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/gpio/gpio.h>
->> +    #include <dt-bindings/leds/common.h>
->> +
->> +    // Ct = 220 nF, Rset = 160 kOhm
->> +    led-controller {
->> +        compatible = "skyworks,aat1290";
->> +        flen-gpios = <&gpj1 1 GPIO_ACTIVE_HIGH>;
->> +        enset-gpios = <&gpj1 2 GPIO_ACTIVE_HIGH>;
->> +
->> +        pinctrl-names = "default", "host", "isp";
->> +        pinctrl-0 = <&camera_flash_host>;
->> +        pinctrl-1 = <&camera_flash_host>;
->> +        pinctrl-2 = <&camera_flash_isp>;
->> +
->> +        led {
->> +            label = "flash";
-> 
-> Why are you adding label? It is deprecated, 
+There are certainly a lot more files that partially fall into the memory
+hot(un)plug category, including parts of mm/sparse.c, mm/page_isolation.c
+and mm/page_alloc.c. Let's only add what's almost completely memory
+hot(un)plug related.
 
-Eh, so it should be marked as deprecated:true, not just mentioned in the
-description (common.yaml).
+Add myself as reviewer so it's easier for contributors to figure out
+whom to CC.
 
-> but has the precedence over
-> new function and color for backwards compatibility, so it would make
-> those unused by the driver now. Please drop the label from this example.
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ MAINTAINERS | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-I synced the example with DTS, but I can drop it. No problem.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a6d3bd9d2a8d..77aebce76288 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12848,6 +12848,18 @@ F:	include/linux/vmalloc.h
+ F:	mm/
+ F:	tools/testing/selftests/vm/
+ 
++MEMORY HOT(UN)PLUG
++M:	Andrew Morton <akpm@linux-foundation.org>
++R:	David Hildenbrand <david@redhat.com>
++L:	linux-mm@kvack.org
++S:	Maintained
++F:	Documentation/admin-guide/mm/memory-hotplug.rst
++F:	Documentation/core-api/memory-hotplug.rst
++F:	drivers/base/memory.c
++F:	include/linux/memory_hotplug.h
++F:	mm/memory_hotplug.c
++F:	tools/testing/selftests/memory-hotplug/
++
+ MEMORY TECHNOLOGY DEVICES (MTD)
+ M:	Miquel Raynal <miquel.raynal@bootlin.com>
+ M:	Richard Weinberger <richard@nod.at>
+-- 
+2.35.3
 
-
-Best regards,
-Krzysztof

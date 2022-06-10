@@ -2,73 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7908E545CFF
+	by mail.lfdr.de (Postfix) with ESMTP id E9761545D00
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346620AbiFJHQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S1346576AbiFJHQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346548AbiFJHQ3 (ORCPT
+        with ESMTP id S235299AbiFJHQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Jun 2022 03:16:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A78A21A557
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654845385; x=1686381385;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=y9gOk8nKuLvO9MuJM128hE/YVKafAr7qvgjxLQMoq2E=;
-  b=nFahWmGSDZHI0GbDka2UqcKJmRvpla0ZdSJ8bsftyecNJ72jma0LmIb0
-   92IBRBAsW248PBB1Yiktq1TL2Z4YL0ReZsIFB4lJaiMLSW64izl0lE9d4
-   WrAq1swaa/qCf5GVAn/bhLB61Gb9BMpPPc2TB5YAvMzOfumuKIfZXcoEZ
-   seoAUstbx0GYpXjMB2I2dVuuo9LwUxZ5QXqtr67tCc7BT6uf3j3fFWlZ8
-   ls9zGyj1YadWzGWPR2dDY5EnAUYgHgiYef4gKrpPya9jA/0SrRGMnWcX0
-   3LoB0dBRjqI+U32UAb1wTQVXuuQA1Zw/ZrdAnilXAgEH89Eq8NOpaKNzI
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="277574090"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="277574090"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 00:16:24 -0700
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="637988807"
-Received: from chengxu1-mobl2.ccr.corp.intel.com (HELO [10.249.169.148]) ([10.249.169.148])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 00:16:20 -0700
-Message-ID: <a78c5bd0-a9f2-2a6d-3099-8d03c123fa93@linux.intel.com>
-Date:   Fri, 10 Jun 2022 15:16:18 +0800
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCF02109C1;
+        Fri, 10 Jun 2022 00:16:24 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aeb3f.dynamic.kabel-deutschland.de [95.90.235.63])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D0BA161EA1923;
+        Fri, 10 Jun 2022 09:16:20 +0200 (CEST)
+Message-ID: <1472eccd-429b-0a18-565c-7de2e5ed44f2@molgen.mpg.de>
+Date:   Fri, 10 Jun 2022 09:16:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v8 04/11] iommu: Add sva iommu_domain support
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] Bluetooth: btmtksdio: Add in-band wakeup support
 Content-Language: en-US
-To:     "Raj, Ashok" <ashok.raj@intel.com>
-References: <20220607014942.3954894-1-baolu.lu@linux.intel.com>
- <20220607014942.3954894-5-baolu.lu@linux.intel.com>
- <20220609202540.GD33363@araj-dh-work>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220609202540.GD33363@araj-dh-work>
+To:     Sean Wang <sean.wang@mediatek.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
+        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
+        Deren.Wu@mediatek.com, km.lin@mediatek.com,
+        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
+        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yake Yang <yake.yang@mediatek.com>
+References: <742cdffcf110e1601257207fb2b0d3f426d4008c.1654819586.git.objelf@gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <742cdffcf110e1601257207fb2b0d3f426d4008c.1654819586.git.objelf@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,326 +57,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/10 04:25, Raj, Ashok wrote:
-> Hi Baolu
+Dear Sean,
 
-Hi Ashok,
 
+Thank you for the patch.
+
+Am 10.06.22 um 02:17 schrieb sean.wang@mediatek.com:
+> From: Sean Wang <sean.wang@mediatek.com>
 > 
-> some minor nits.
+> 'ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")'
+> have added the waken-on-bluetooth via dedicated GPIO.
 
-Thanks for your comments.
+Maybe:
 
+Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth") 
+adds the wake on bluethooth via a dedicated GPIO.
+
+> The patch extends the function to the waken-on-bluetooth via SDIO DAT1 pin
+> (inband wakeup) when the SDIO host driver is able to support.
+
+Maybe:
+
+Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup), 
+when supported by the SDIO host driver.
+
+How did you test this? In what datasheet is it documented?
+
+> Co-developed-by: Yake Yang <yake.yang@mediatek.com>
+> Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> ---
+>   drivers/bluetooth/btmtksdio.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 > 
-> On Tue, Jun 07, 2022 at 09:49:35AM +0800, Lu Baolu wrote:
->> The sva iommu_domain represents a hardware pagetable that the IOMMU
->> hardware could use for SVA translation. This adds some infrastructure
->> to support SVA domain in the iommu common layer. It includes:
->>
->> - Extend the iommu_domain to support a new IOMMU_DOMAIN_SVA domain
->>    type. The IOMMU drivers that support SVA should provide the sva
->>    domain specific iommu_domain_ops.
->> - Add a helper to allocate an SVA domain. The iommu_domain_free()
->>    is still used to free an SVA domain.
->> - Add helpers to attach an SVA domain to a device and the reverse
->>    operation.
->>
->> Some buses, like PCI, route packets without considering the PASID value.
->> Thus a DMA target address with PASID might be treated as P2P if the
->> address falls into the MMIO BAR of other devices in the group. To make
->> things simple, the attach/detach interfaces only apply to devices
->> belonging to the singleton groups, and the singleton is immutable in
->> fabric i.e. not affected by hotplug.
->>
->> The iommu_attach/detach_device_pasid() can be used for other purposes,
->> such as kernel DMA with pasid, mediation device, etc.
->>
->> Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
->> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
->> ---
->>   include/linux/iommu.h | 45 ++++++++++++++++++++-
->>   drivers/iommu/iommu.c | 93 +++++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 136 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
->> index 3fbad42c0bf8..9173c5741447 100644
->> --- a/include/linux/iommu.h
->> +++ b/include/linux/iommu.h
->> @@ -64,6 +64,9 @@ struct iommu_domain_geometry {
->>   #define __IOMMU_DOMAIN_PT	(1U << 2)  /* Domain is identity mapped   */
->>   #define __IOMMU_DOMAIN_DMA_FQ	(1U << 3)  /* DMA-API uses flush queue    */
->>   
->> +#define __IOMMU_DOMAIN_SHARED	(1U << 4)  /* Page table shared from CPU  */
-> 
-> s/from CPU/with CPU
+> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+> index d6700efcfe8c..9ed3af4ba51a 100644
+> --- a/drivers/bluetooth/btmtksdio.c
+> +++ b/drivers/bluetooth/btmtksdio.c
+> @@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
+>   #define BTMTKSDIO_FUNC_ENABLED		3
+>   #define BTMTKSDIO_PATCH_ENABLED		4
+>   #define BTMTKSDIO_HW_RESET_ACTIVE	5
+> +#define BTMTKSDIO_INBAND_WAKEUP		6
+>   
+>   struct mtkbtsdio_hdr {
+>   	__le16	len;
+> @@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
+>   		.wakeup_delay = cpu_to_le16(0x20),
+>   	};
+>   
+> +	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
+> +		return may_wakeup;
+> +
+>   	if (may_wakeup && bdev->data->chipid == 0x7921) {
+>   		struct sk_buff *skb;
+>   
+> @@ -1384,6 +1388,10 @@ static int btmtksdio_probe(struct sdio_func *func,
+>   	 */
+>   	pm_runtime_put_noidle(bdev->dev);
+>   
+> +	/* Mark if the mmc host can support waken by SDIO */
 
-Sure.
+Maybe:
 
-> 
->> +#define __IOMMU_DOMAIN_HOST_VA	(1U << 5)  /* Host CPU virtual address */
-> 
-> Do you mean general CPU VA? or Host CPU VA, I'm reading the latter as 2nd
-> stage?
+Mark if MMC host supports wake on bluetooth by SDIO
 
-Host CPU VA. In the near future, we will add another flag _GUEST_VA, so
-that the shared page table types are distiguished.
-
-> 
->> +
->>   /*
->>    * This are the possible domain-types
->>    *
->> @@ -86,15 +89,24 @@ struct iommu_domain_geometry {
->>   #define IOMMU_DOMAIN_DMA_FQ	(__IOMMU_DOMAIN_PAGING |	\
->>   				 __IOMMU_DOMAIN_DMA_API |	\
->>   				 __IOMMU_DOMAIN_DMA_FQ)
->> +#define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SHARED |	\
->> +				 __IOMMU_DOMAIN_HOST_VA)
-> 
-> Doesn't shared automatically mean CPU VA? Do we need another flag?
-
-Yes. Shared means CPU VA, but there're many types. Besides above two, we
-also see the shared KVM/EPT.
-
-> 
->>   
->>   struct iommu_domain {
->>   	unsigned type;
->>   	const struct iommu_domain_ops *ops;
->>   	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
->> -	iommu_fault_handler_t handler;
->> -	void *handler_token;
->>   	struct iommu_domain_geometry geometry;
->>   	struct iommu_dma_cookie *iova_cookie;
->> +	union {
->> +		struct {	/* IOMMU_DOMAIN_DMA */
->> +			iommu_fault_handler_t handler;
->> +			void *handler_token;
->> +		};
->> +		struct {	/* IOMMU_DOMAIN_SVA */
->> +			struct mm_struct *mm;
->> +		};
->> +	};
->>   };
->>   
->>   static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
->> @@ -262,6 +274,8 @@ struct iommu_ops {
->>    * struct iommu_domain_ops - domain specific operations
->>    * @attach_dev: attach an iommu domain to a device
->>    * @detach_dev: detach an iommu domain from a device
->> + * @set_dev_pasid: set an iommu domain to a pasid of device
->> + * @block_dev_pasid: block pasid of device from using iommu domain
->>    * @map: map a physically contiguous memory region to an iommu domain
->>    * @map_pages: map a physically contiguous set of pages of the same size to
->>    *             an iommu domain.
->> @@ -282,6 +296,10 @@ struct iommu_ops {
->>   struct iommu_domain_ops {
->>   	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
->>   	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
->> +	int (*set_dev_pasid)(struct iommu_domain *domain, struct device *dev,
->> +			     ioasid_t pasid);
->> +	void (*block_dev_pasid)(struct iommu_domain *domain, struct device *dev,
->> +				ioasid_t pasid);
->>   
->>   	int (*map)(struct iommu_domain *domain, unsigned long iova,
->>   		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
->> @@ -679,6 +697,12 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner);
->>   void iommu_group_release_dma_owner(struct iommu_group *group);
->>   bool iommu_group_dma_owner_claimed(struct iommu_group *group);
->>   
->> +struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
->> +					    struct mm_struct *mm);
->> +int iommu_attach_device_pasid(struct iommu_domain *domain, struct device *dev,
->> +			      ioasid_t pasid);
->> +void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
->> +			       ioasid_t pasid);
->>   #else /* CONFIG_IOMMU_API */
->>   
->>   struct iommu_ops {};
->> @@ -1052,6 +1076,23 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->>   {
->>   	return false;
->>   }
->> +
->> +static inline struct iommu_domain *
->> +iommu_sva_domain_alloc(struct device *dev, struct mm_struct *mm)
->> +{
->> +	return NULL;
->> +}
->> +
->> +static inline int iommu_attach_device_pasid(struct iommu_domain *domain,
->> +					    struct device *dev, ioasid_t pasid)
->> +{
->> +	return -ENODEV;
->> +}
->> +
->> +static inline void iommu_detach_device_pasid(struct iommu_domain *domain,
->> +					     struct device *dev, ioasid_t pasid)
->> +{
->> +}
->>   #endif /* CONFIG_IOMMU_API */
->>   
->>   /**
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index d1ec855b1f72..e92391dcce33 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -27,6 +27,7 @@
->>   #include <linux/module.h>
->>   #include <linux/cc_platform.h>
->>   #include <trace/events/iommu.h>
->> +#include <linux/sched/mm.h>
->>   
->>   static struct kset *iommu_group_kset;
->>   static DEFINE_IDA(iommu_group_ida);
->> @@ -39,6 +40,7 @@ struct iommu_group {
->>   	struct kobject kobj;
->>   	struct kobject *devices_kobj;
->>   	struct list_head devices;
->> +	struct xarray pasid_array;
->>   	struct mutex mutex;
->>   	void *iommu_data;
->>   	void (*iommu_data_release)(void *iommu_data);
->> @@ -666,6 +668,7 @@ struct iommu_group *iommu_group_alloc(void)
->>   	mutex_init(&group->mutex);
->>   	INIT_LIST_HEAD(&group->devices);
->>   	INIT_LIST_HEAD(&group->entry);
->> +	xa_init(&group->pasid_array);
->>   
->>   	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
->>   	if (ret < 0) {
->> @@ -1961,6 +1964,8 @@ EXPORT_SYMBOL_GPL(iommu_domain_alloc);
->>   
->>   void iommu_domain_free(struct iommu_domain *domain)
->>   {
->> +	if (domain->type == IOMMU_DOMAIN_SVA)
->> +		mmdrop(domain->mm);
->>   	iommu_put_dma_cookie(domain);
->>   	domain->ops->free(domain);
->>   }
->> @@ -3277,3 +3282,91 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->>   	return user;
->>   }
->>   EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
->> +
->> +struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
->> +					    struct mm_struct *mm)
->> +{
->> +	const struct iommu_ops *ops = dev_iommu_ops(dev);
->> +	struct iommu_domain *domain;
->> +
->> +	domain = ops->domain_alloc(IOMMU_DOMAIN_SVA);
->> +	if (!domain)
->> +		return NULL;
->> +
->> +	domain->type = IOMMU_DOMAIN_SVA;
->> +	mmgrab(mm);
->> +	domain->mm = mm;
->> +
->> +	return domain;
->> +}
->> +
->> +static bool iommu_group_immutable_singleton(struct iommu_group *group,
->> +					    struct device *dev)
->> +{
->> +	int count;
->> +
->> +	mutex_lock(&group->mutex);
->> +	count = iommu_group_device_count(group);
->> +	mutex_unlock(&group->mutex);
->> +
->> +	if (count != 1)
->> +		return false;
->> +
->> +	/*
->> +	 * The PCI device could be considered to be fully isolated if all
->> +	 * devices on the path from the device to the host-PCI bridge are
->> +	 * protected from peer-to-peer DMA by ACS.
->> +	 */
->> +	if (dev_is_pci(dev))
->> +		return pci_acs_path_enabled(to_pci_dev(dev), NULL,
->> +					    REQ_ACS_FLAGS);
-> 
-> Does this comprehend RCiEP devices? Since they are optional even if ACS is
-> lacking.
-
-Yes. It's already been covered by pci_acs_enabled().
-
-/**
-  * pci_acs_enabled - test ACS against required flags for a given device
-  * @pdev: device to test
-  * @acs_flags: required PCI ACS flags
-  *
-  * Return true if the device supports the provided flags.  Automatically
-  * filters out flags that are not implemented on multifunction devices.
-  *
-  * Note that this interface checks the effective ACS capabilities of the
-  * device rather than the actual capabilities.  For instance, most single
-  * function endpoints are not required to support ACS because they have no
-  * opportunity for peer-to-peer access.  We therefore return 'true'
-  * regardless of whether the device exposes an ACS capability.  This makes
-  * it much easier for callers of this function to ignore the actual type
-  * or topology of the device when testing ACS support.
-  */
-bool pci_acs_enabled(struct pci_dev *pdev, u16 acs_flags)
+> +	if (device_can_wakeup(func->card->host->parent))
+> +		set_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state);
+> +
+>   	err = device_init_wakeup(bdev->dev, true);
+>   	if (err)
+>   		bt_dev_err(hdev, "failed to initialize device wakeup");
 
 
-> 
->> +
->> +	/*
->> +	 * Otherwise, the device came from DT/ACPI, assume it is static and
->> +	 * then singleton can know from the device count in the group.
->> +	 */
->> +	return true;
->> +}
->> +
->> +int iommu_attach_device_pasid(struct iommu_domain *domain, struct device *dev,
->> +			      ioasid_t pasid)
->> +{
->> +	struct iommu_group *group;
->> +	int ret = -EBUSY;
->> +	void *curr;
->> +
->> +	if (!domain->ops->set_dev_pasid)
->> +		return -EOPNOTSUPP;
->> +
->> +	group = iommu_group_get(dev);
->> +	if (!group || !iommu_group_immutable_singleton(group, dev)) {
->> +		iommu_group_put(group);
->> +		return -EINVAL;
->> +	}
->> +
->> +	mutex_lock(&group->mutex);
->> +	curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, GFP_KERNEL);
->> +	if (curr)
->> +		goto out_unlock;
->> +	ret = domain->ops->set_dev_pasid(domain, dev, pasid);
->> +	if (ret)
->> +		xa_erase(&group->pasid_array, pasid);
->> +out_unlock:
->> +	mutex_unlock(&group->mutex);
->> +	iommu_group_put(group);
->> +
->> +	return ret;
->> +}
->> +
->> +void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
->> +			       ioasid_t pasid)
->> +{
->> +	struct iommu_group *group = iommu_group_get(dev);
->> +
->> +	mutex_lock(&group->mutex);
->> +	domain->ops->block_dev_pasid(domain, dev, pasid);
->> +	xa_erase(&group->pasid_array, pasid);
->> +	mutex_unlock(&group->mutex);
->> +
->> +	iommu_group_put(group);
->> +}
->> -- 
->> 2.25.1
->>
+Kind regards,
 
-Best regards,
-baolu
+Paul

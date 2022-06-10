@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC37545BBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2480E545BBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346133AbiFJFhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S1346199AbiFJFiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346185AbiFJFh1 (ORCPT
+        with ESMTP id S243950AbiFJFiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:37:27 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FB6387188
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:37:25 -0700 (PDT)
+        Fri, 10 Jun 2022 01:38:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7126D2584C2;
+        Thu,  9 Jun 2022 22:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654839445; x=1686375445;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6a8QudFS6MG+aPxhpladdSOsdGbNDj5qg8atPxMfEDg=;
-  b=KTQEOsFnQWBCrlt0hn38ofXps6N2upeidNgywiOqeha2eBhFEy945t+6
-   Tp6xdtYKIA9plbkGmKV3DkOzQqm4zP1oDpZEikRFeZctLyD68yZZ8yImp
-   IotSlCv0CkPBnqACC7WAnO/wJDYBT9vpJmvR2vrJmHaevRDSFfaUuXK2u
-   5qMkq8L+8yXqmvO8gU7qBUTi3PbPCpnqzKxUgamAez098yaV3LTvl4Kra
-   Kf95SAvBdmZ1JZvq6qk0dP7GW23DyJsZ9atkl0jcLjPEj6BgHo97JqtGN
-   xlxcTCp4Z431POU/tMcRPJmDEkbF2SJIQ1LuhcvbABD3TFtcF7WAIj79I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="276296029"
+  t=1654839499; x=1686375499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Mm671fARQkehGag+uwU37hxKBr75xWcEw+/mL45ZIZ4=;
+  b=nj8fJ9FHgGK5L6gQaJSgHpsiw2c5qhr+KB0zxXV3o31Lmp6rs3RQ4DkF
+   j9R9i6bYHrqPIKjq8bQsdev2m9zCkU0TqWkl5SuMDE7gOAMyYJ6IPsCvl
+   bOahgEi0oBkwSxGBloaNn5JD0ytkVvmw2Ll3fVjx/gg8iAngp5xbmomCw
+   lu7FZImkEzbihDaHyBbyD+YzulE6vf0nEHU3+jeTwHkuYIN97plNGiYKl
+   HnEzNqIU1ioPjtGADr7rOV2JH8LCD7M6Jw+NPOj1sDjSqHOLbPQmkZxim
+   SeiBpkhPQhc9Ih/7EMGaH7FNQDEbTCxMEjuxNkzDJzy924SgdgAFrca6e
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341586257"
 X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="276296029"
+   d="scan'208";a="341586257"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 22:37:25 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 22:38:18 -0700
 X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="637944554"
-Received: from chengxu1-mobl2.ccr.corp.intel.com (HELO [10.249.169.148]) ([10.249.169.148])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 22:37:22 -0700
-Message-ID: <bbada5b7-737f-03dd-7d42-2ebad442a2bb@linux.intel.com>
-Date:   Fri, 10 Jun 2022 13:37:20 +0800
+   d="scan'208";a="637944682"
+Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.143])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 22:38:16 -0700
+Date:   Fri, 10 Jun 2022 13:38:07 +0800
+From:   Oliver Sang <oliver.sang@intel.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Dave Chinner <dchinner@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-xfs@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+Subject: Re: [xfs]  1eb70f54c4: xfstests.xfs.348.fail
+Message-ID: <20220610053807.GA9136@xsang-OptiPlex-9020>
+References: <20220602090409.GD27190@xsang-OptiPlex-9020>
+ <20220602214436.GF1098723@dread.disaster.area>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCHES 1/2] iommu: Add RCU-protected page free support
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220609070811.902868-1-baolu.lu@linux.intel.com>
- <20220609124934.GZ1343366@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220609124934.GZ1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602214436.GF1098723@dread.disaster.area>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,27 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/9 20:49, Jason Gunthorpe wrote:
->> +void iommu_free_pgtbl_pages(struct iommu_domain *domain,
->> +			    struct list_head *pages)
->> +{
->> +	struct page *page, *next;
->> +
->> +	if (!domain->concurrent_traversal) {
->> +		put_pages_list(pages);
->> +		return;
->> +	}
->> +
->> +	list_for_each_entry_safe(page, next, pages, lru) {
->> +		list_del(&page->lru);
->> +		call_rcu(&page->rcu_head, pgtble_page_free_rcu);
->> +	}
-> It seems OK, but I wonder if there is benifit to using
-> put_pages_list() from the rcu callback
+Hi Dave,
 
-The price is that we need to allocate a "struct list_head" and free it
-in the rcu callback as well. Currently the list_head is sitting in the
-stack.
+On Fri, Jun 03, 2022 at 07:44:36AM +1000, Dave Chinner wrote:
+> >     ...
+> >     (Run 'diff -u /lkp/benchmarks/xfstests/tests/xfs/348.out /lkp/benchmarks/xfstests/results//xfs/348.out.bad'  to see the entire diff)
+> > xfs/349	[failed, exit status 1]- output mismatch (see /lkp/benchmarks/xfstests/results//xfs/349.out.bad)
+> >     --- tests/xfs/349.out	2022-05-16 16:42:32.000000000 +0000
+> >     +++ /lkp/benchmarks/xfstests/results//xfs/349.out.bad	2022-05-18 11:53:51.101272360 +0000
+> >     @@ -1,3 +1,2 @@
+> >      QA output created by 349
+> >      Format and populate
+> >     -Scrub
+> >     ...
+> >     (Run 'diff -u /lkp/benchmarks/xfstests/tests/xfs/349.out /lkp/benchmarks/xfstests/results//xfs/349.out.bad'  to see the entire diff)
+> 
+> You are running a test in the "dangerous_fuzzers" group that isn't
+> in the auto group. This is a test for developers to find error
+> detection issues and, as such, failure is kinda expected. It is not
+> regression test that can be used for pass/fail testing....
 
-Best regards,
-baolu
+Thanks a lot for guidance! we will disable auto tests in "dangerous_fuzzers"
+group.
+
+> 
+> Cheers,
+> 
+> Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com

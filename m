@@ -2,86 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21B654697D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DE5546983
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbiFJPiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 11:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S1344208AbiFJPit convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Jun 2022 11:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233903AbiFJPiD (ORCPT
+        with ESMTP id S1345163AbiFJPi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:38:03 -0400
+        Fri, 10 Jun 2022 11:38:29 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0938326562F;
-        Fri, 10 Jun 2022 08:37:58 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LKQ2n144hz689ML;
-        Fri, 10 Jun 2022 23:33:05 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 10 Jun 2022 17:37:56 +0200
-Received: from [10.47.88.201] (10.47.88.201) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 10 Jun
- 2022 16:37:55 +0100
-Message-ID: <f7872ebc-dfe5-d977-c51f-91b73e6d1fbb@huawei.com>
-Date:   Fri, 10 Jun 2022 16:37:54 +0100
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E70126D925;
+        Fri, 10 Jun 2022 08:38:27 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LKQ3K4K7hz67KPP;
+        Fri, 10 Jun 2022 23:33:33 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 17:38:24 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Fri, 10 Jun 2022 17:38:24 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        "Mimi Zohar" <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2QgAG+ywCAACILEA==
+Date:   Fri, 10 Jun 2022 15:38:24 +0000
+Message-ID: <4bc349a59e4042f7831b1190914851fe@huawei.com>
+References: <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
+ <541e9ea1-024f-5c22-0b58-f8692e6c1eb1@landley.net>
+ <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+ <20220610153336.GA8881@lxhi-065>
+In-Reply-To: <20220610153336.GA8881@lxhi-065>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.21]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 3/4] scsi: core: Cap shost max_sectors according to DMA
- optimum mapping limits
-To:     Bart Van Assche <bvanassche@acm.org>,
-        <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hch@lst.de>,
-        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <linux-scsi@vger.kernel.org>, <liyihang6@hisilicon.com>,
-        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>
-References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
- <1654507822-168026-4-git-send-email-john.garry@huawei.com>
- <fe365aa8-00d5-153d-ceb2-f887a71a6927@acm.org>
- <31417477-953d-283e-808e-cf8701e820a8@huawei.com>
- <bccbcc9b-4750-a1a7-130f-69eeea5dcb23@acm.org>
- <5b214e95-dd95-551a-496e-a2139a74e8eb@huawei.com>
- <a2585983-75d7-c627-13ba-38a464cf716e@acm.org>
- <9b1d155e-28cc-08dc-5a5a-8580132575e7@huawei.com>
- <23bf4427-41c3-bf1d-903a-75928bb47627@acm.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <23bf4427-41c3-bf1d-903a-75928bb47627@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.88.201]
-X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2022 21:34, Bart Van Assche wrote:
-> On 6/9/22 10:54, John Garry wrote:
->> ok, but do you have a system where the UFS host controller is behind 
->> an IOMMU? I had the impression that UFS controllers would be mostly 
->> found in embedded systems and IOMMUs are not as common on there.
+> From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
+> Sent: Friday, June 10, 2022 5:34 PM
+> Hello Roberto,
 > 
-> Modern phones have an IOMMU. Below one can find an example from a Pixel 
-> 6 phone. The UFS storage controller is not controller by the IOMMU as 
-> far as I can see but I wouldn't be surprised if the security team would 
-> ask us one day to enable the IOMMU for the UFS controller.
+> On Do, Jun 09, 2022 at 11:05:45 +0000, Roberto Sassu wrote:
+> > > From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
+> > > Sent: Thursday, June 9, 2022 12:26 PM
+> > > Dear Roberto,
+> > > Cc: Yamada-san, linux-kbuild
+> > >
+> > > On Mi, Jul 24, 2019 at 05:34:53 +0200, Roberto Sassu wrote:
+> > > > Is there anything I didn't address in this patch set, that is delaying
+> > > > the review? I would appreciate if you can give me a feedback, positive
+> > > > or negative.
+> > > >
+> > > > Thanks a lot!
+> > > >
+> > > > Roberto
+> > >
+> > > Some of our users have recently asked for this patch series.
+> >
+> > Hello
+> >
+> > thanks for your interest in this patch set.
+> >
+> > > Could you please feedback if this is the latest revision available or
+> > > maybe there is a newer one developed and potentially not shared on LKML?
+> >
+> > Yes, it is the latest revision available. There might have been few
+> > fixes in the final code. You may want to have a look at:
+> 
+> Many thanks for the links to the updated patch revisions. It looks
+> like the new versions added a couple of bugfixes and refinements.
+> 
+> With more users now using this feature, do you think there is a higher
+> chance for upstreaming, compared to 2019 (original submission date)?
 
-OK, then unfortunately it seems that you have no method to test. I might 
-be able to test USB MSC but I am not even sure if I can even get DMA 
-mappings who length exceeds the IOVA rcache limit there.
+Hello Eugeniu
 
-Thanks,
-John
+I would be happy to address the remaining concerns, or take more
+suggestions, and then develop a new version of the patch set.
+
+Thanks
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Yang Xi, Li He

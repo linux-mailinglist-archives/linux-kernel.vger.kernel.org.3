@@ -2,88 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A77E546F0F
+	by mail.lfdr.de (Postfix) with ESMTP id 236B4546F0E
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350865AbiFJVMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S1350849AbiFJVMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350839AbiFJVMe (ORCPT
+        with ESMTP id S1350848AbiFJVMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Jun 2022 17:12:34 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BCD49B50
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D0549B5A
         for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:12:32 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id q140so280120pgq.6
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-fe15832ce5so727052fac.8
         for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:12:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KLh8UWaxnG0XK4ejvWk5/7UEox62WuaIhi58ed8ZfqU=;
-        b=oOOlocAR4BVT+CnGqmu5nFRQMD1z12qGrPh1buMTIuQt0LNbf3DZw0xZbNVlhc2y8n
-         FYgbC30cstY+yvj2do6UDu46k7Vn5VFACCt0OQI1llYzuP3t8TKupeqiOl0mKnB7mEpx
-         GBoXMrfeGKfVaH95mQ0aAmGMQl6kRSoID0l58jpYnm3rtiS1dksHi2ylQ1VCEV4L44Kk
-         UDUm0pt38qW8TufTPezTvFPQNn59gduH4kJYvkmStSEnxU5vdWZHSf7q147zlIdmvwUs
-         QtRPWAHObALA+wYaEq6Hz5Sjniu8RYXrZmOBthtCEfkCX7c09rysGegcLy4dFk/63PZR
-         Ubxw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=eUw90MQM5SVuieh3UI6r6+Ffszit+OiITVtSMahiOlI=;
+        b=PxZoMFPohd1GKquX3Z0yebjsbyodzL6Sc1YYSADroQz8Hm2TevBoKncjyGg2shlJqe
+         Kt2jvBqIz83qvGPjgsU19YaG+D6Qom/vhBlROqhNcOjp5nqnRXCUN8z8ysEHYUNHZvP4
+         ZY+0oNzWQLIQsNhMs6YyFQqnji2XBG4+NKb/s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KLh8UWaxnG0XK4ejvWk5/7UEox62WuaIhi58ed8ZfqU=;
-        b=7hb9M2/16Ohn6BM4F/j90u8HUNHI/TmwkwlS07pKfNlSPyJwcfEJfa44vDq6pzj6aZ
-         85rtaPf+PRKbtNTjpzItjo9cc2CGqkbgGxfPsRfkQOp2sAaBn3i7HaVY4EiSuSGBcpFA
-         A/LnNoBj9kYE4dWd+I2UZfUISiHsV3gSZBDkR8bZowadtB5VYTV8XDSgv5jkteIIByWN
-         13CsBFEloJbiGqNQB9QYjyEGe8jvYhaAKJbUgdBGqOLvjK5pwyeV+1o2iDvkbLil7a1/
-         QlTqz0JUtm5gojIX9j5gHK2whXCgk21WMwFj1JMM/btZxKEmggynHv8euZT775MzK7Gh
-         Q9kw==
-X-Gm-Message-State: AOAM531Xx8aH2c+px7PnGjIk4vIaDdEv3vteIzEf4r3LgHiax0Oe5AU6
-        4MVvBITJiQCAFjHqZEJh5prkpfqwdfYqe2PUmewd
-X-Google-Smtp-Source: ABdhPJwOyrpg1AqxhhST810M59Pif6MyGpe2uAsQzlGWQ8QXwysQpCn4KgUWCSY2xql44klzbHEzPc92Valgmk5MxIw=
-X-Received: by 2002:a63:8449:0:b0:3fc:85a5:5b69 with SMTP id
- k70-20020a638449000000b003fc85a55b69mr40873314pgd.261.1654895552080; Fri, 10
- Jun 2022 14:12:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=eUw90MQM5SVuieh3UI6r6+Ffszit+OiITVtSMahiOlI=;
+        b=1vJQStNXWdJE4I0QRn29KQ1waPJ7d8hZhvTkbfZI2XRMtoOZCweBPpuumEub91N+y8
+         xGtKik1arzfHAFO4lnbMXbi9kJwge7wJgvMrueKn3FDhx9p1pFNSIjkdeFXXMtDK01sC
+         mSZeq01v8yKNeGncxZju/C1zR6hsNFsCyNxDIpWQdgiDDPaDkWsFRP4Gl2r8QBkJBMLq
+         ZE3ZGUc/wwYQyRvv6p09hK1Vuku859k0iWJ0WoJ/MRqG3NWsBoTc0NsUczh0h8S7CeqY
+         Zq1g9xnW3YYL/zpwW9apMqXvedKzNjXzUxE8tDRBTeGU+FdKOyhAZPMUlDkt5wPMMhxK
+         qKvg==
+X-Gm-Message-State: AOAM533KrxvW2FyPZJUOlZkJCCVejtjieKaQPh0Uj8AjRTiGq0xQEaUt
+        Vfmik+VpuYM8TyviblS7XSgWpmB3RiIQQH1BpKj//w==
+X-Google-Smtp-Source: ABdhPJxFZZJBT4zmQa9rbL6oi07IG1L075UxWAqyTprFlgGRMHH3fCtuJiv9mMe6loLyhtjcJqcBOdO2wSQrhVr5se8=
+X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
+ n13-20020a056870240d00b000f1b878e97cmr895829oap.193.1654895551998; Fri, 10
+ Jun 2022 14:12:31 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 10 Jun 2022 14:12:31 -0700
 MIME-Version: 1.0
-References: <20220609230146.319210-1-casey@schaufler-ca.com> <20220609230146.319210-31-casey@schaufler-ca.com>
-In-Reply-To: <20220609230146.319210-31-casey@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 10 Jun 2022 17:12:21 -0400
-Message-ID: <CAHC9VhTraB9D962b9j8J0HxUE9RPbAp6ATNFuvucdccTHx_xmQ@mail.gmail.com>
-Subject: Re: [PATCH v36 30/33] netlabel: Use a struct lsmblob in audit data
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
+In-Reply-To: <1654538139-7450-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1654538139-7450-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 10 Jun 2022 14:12:31 -0700
+Message-ID: <CAE-0n51hjNTcy5xpPknrtP3897qZkVqf9ksObxRF4v0Ej0=qag@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dp: check core_initialized before disable
+ interrupts at dp_display_unbind()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 7:18 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+Quoting Kuogee Hsieh (2022-06-06 10:55:39)
+> During msm initialize phase, dp_display_unbind() will be called to undo
+> initializations had been done by dp_display_bind() previously if there is
+> error happen at msm_drm_bind. In this case, core_initialized flag had to
+> be check to make sure clocks is on before update DP controller register
+> to disable HPD interrupts. Otherwise system will crash due to below NOC
+> fatal error.
 >
-> Remove scaffolding in netlabel audit by keeping subject
-> lsm information in an lsmblob structure instead of a secid.
+> QTISECLIB [01f01a7ad]CNOC2 ERROR: ERRLOG0_LOW = 0x00061007
+> QTISECLIB [01f01a7ad]GEM_NOC ERROR: ERRLOG0_LOW = 0x00001007
+> QTISECLIB [01f0371a0]CNOC2 ERROR: ERRLOG0_HIGH = 0x00000003
+> QTISECLIB [01f055297]GEM_NOC ERROR: ERRLOG0_HIGH = 0x00000003
+> QTISECLIB [01f072beb]CNOC2 ERROR: ERRLOG1_LOW = 0x00000024
+> QTISECLIB [01f0914b8]GEM_NOC ERROR: ERRLOG1_LOW = 0x00000042
+> QTISECLIB [01f0ae639]CNOC2 ERROR: ERRLOG1_HIGH = 0x00004002
+> QTISECLIB [01f0cc73f]GEM_NOC ERROR: ERRLOG1_HIGH = 0x00004002
+> QTISECLIB [01f0ea092]CNOC2 ERROR: ERRLOG2_LOW = 0x0009020c
+> QTISECLIB [01f10895f]GEM_NOC ERROR: ERRLOG2_LOW = 0x0ae9020c
+> QTISECLIB [01f125ae1]CNOC2 ERROR: ERRLOG2_HIGH = 0x00000000
+> QTISECLIB [01f143be7]GEM_NOC ERROR: ERRLOG2_HIGH = 0x00000000
+> QTISECLIB [01f16153a]CNOC2 ERROR: ERRLOG3_LOW = 0x00000000
+> QTISECLIB [01f17fe07]GEM_NOC ERROR: ERRLOG3_LOW = 0x00000000
+> QTISECLIB [01f19cf89]CNOC2 ERROR: ERRLOG3_HIGH = 0x00000000
+> QTISECLIB [01f1bb08e]GEM_NOC ERROR: ERRLOG3_HIGH = 0x00000000
+> QTISECLIB [01f1d8a31]CNOC2 ERROR: SBM1 FAULTINSTATUS0_LOW = 0x00000002
+> QTISECLIB [01f1f72a4]GEM_NOC ERROR: SBM0 FAULTINSTATUS0_LOW = 0x00000001
+> QTISECLIB [01f21a217]CNOC3 ERROR: ERRLOG0_LOW = 0x00000006
+> QTISECLIB [01f23dfd3]NOC error fatal
+
+Don't think this pile of lines really helps anyone, but OK.
+
 >
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> changes in v2:
+> -- drop the first patch (drm/msm: enable msm irq after all initializations are done successfully at msm_drm_init()) since the problem had been fixed by other patch
+>
+> Fixes: a65c95ff88f2 ("drm/msm/dp: stop event kernel thread when DP unbind")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 > ---
->  include/net/netlabel.h            | 2 +-
->  net/netlabel/netlabel_unlabeled.c | 4 +---
->  net/netlabel/netlabel_user.c      | 4 +---
->  net/netlabel/netlabel_user.h      | 6 +-----
->  security/smack/smackfs.c          | 2 +-
->  5 files changed, 5 insertions(+), 13 deletions(-)
 
-Acked-by: Paul Moore <paul@paul-moore.com>
-
--- 
-paul-moore.com
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

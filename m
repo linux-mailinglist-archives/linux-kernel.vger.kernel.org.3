@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD2D545EB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49B6545EBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347481AbiFJIUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S1347565AbiFJIUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347251AbiFJISl (ORCPT
+        with ESMTP id S1347244AbiFJISl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Jun 2022 04:18:41 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DB9D24539C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E99B2453AE;
         Fri, 10 Jun 2022 01:18:24 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 3FF7D16AD;
-        Fri, 10 Jun 2022 11:19:05 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 3FF7D16AD
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 389B816A1;
+        Fri, 10 Jun 2022 11:19:06 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 389B816A1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1654849145;
-        bh=9cZGgsj4+lc1EMshQEJ8HiTzi703y5AtV/oBoha9uFg=;
+        d=baikalelectronics.ru; s=mail; t=1654849146;
+        bh=rCo7ZHGnBDh7rOvYOigVWDBCADB9Ck2vksFAutZCEoY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=bH0P99WY1Uvrn24tYijxSleuymYQG4hzLHKQqjPIRW1D0OZzFETzwDNSB5ZUf5nfN
-         gaEzCnmJqiGxFRMF4qJMNMiDgH1w2cyPC8lGqOhQxhbFdpuB6MJCzLMbfo4MaJEOat
-         xFkb9iNQMMN6bVw3uc5b4mFSWv932mIiiNHm0j3w=
+        b=pSb9doOz4dZmuXFT2Lvw5s3Rwwsp74BJilW1IsdDAjFCb0b3hV9O67/YG9ci9ocvA
+         2alKC0qmx7E1P7f3s7Bm1nvQlO7McThNGMXKNhE6maviAa8DTF4DbgZl9/1W09SZj/
+         +yEXYuAPYYK0hO5vVsUkHtcNOJnvaTahVuE9vyzQ=
 Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 11:18:12 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 11:18:14 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -38,9 +38,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, <linux-ide@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v4 12/23] ata: libahci: Extend port-cmd flags set with port capabilities
-Date:   Fri, 10 Jun 2022 11:17:50 +0300
-Message-ID: <20220610081801.11854-13-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v4 13/23] ata: libahci: Discard redundant force_port_map parameter
+Date:   Fri, 10 Jun 2022 11:17:51 +0300
+Message-ID: <20220610081801.11854-14-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -57,65 +57,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently not all of the Port-specific capabilities listed in the
-PORT_CMD-enumeration. Let's extend that set with the Cold Presence
-Detection and Mechanical Presence Switch attached to the Port flags [1] so
-to closeup the set of the platform-specific port-capabilities flags.  Note
-these flags are supposed to be set by the platform firmware if there is
-one. Alternatively as we are about to do they can be set by means of the
-OF properties.
+Currently there are four port-map-related fields declared in the
+ahci_host_priv structure and used to setup the HBA ports mapping. First
+the ports-mapping is read from the PI register and immediately stored in
+the saved_port_map field. If forced_port_map is initialized with non-zero
+value then its value will have greater priority over the value read from
+PI, thus it will override the saved_port_map field. That value will be
+then masked by a non-zero mask_port_map field and after some sanity checks
+it will be stored in the ahci_host_priv.port_map field as a final port
+mapping.
 
-While at it replace PORT_IRQ_DEV_ILCK with PORT_IRQ_DMPS and fix the
-comment there. In accordance with [2] that IRQ flag is supposed to
-indicate the state of the signal coming from the Mechanical Presence
-Switch.
+As you can see the logic is a bit too complicated for such a simple task.
+We can freely get rid from at least one of the fields with no change to
+the implemented semantic. The force_port_map field can be replaced with
+taking non-zero saved_port_map value into account. So if saved_port_map is
+pre-initialized by the low level drivers (platform drivers) then it will
+have greater priority over the value read from PI register and will be
+used as actual HBA ports mapping later on. Thus the ports map forcing task
+will be just transferred from force_port_map to the saved_port_map field.
 
-[1] Serial ATA AHCI 1.3.1 Specification, p.27
-[2] Serial ATA AHCI 1.3.1 Specification, p.24, p.88
+This modification will perfectly fit into the feature of having OF-based
+initialization of the HW-init HBA CSR fields we are about to introduce in
+the next commit.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
-
 ---
+ drivers/ata/ahci.c             |  2 +-
+ drivers/ata/ahci.h             |  1 -
+ drivers/ata/libahci.c          | 10 ++++++----
+ drivers/ata/libahci_platform.c |  2 +-
+ 4 files changed, 8 insertions(+), 7 deletions(-)
 
-Changelog v4:
-- Fix the DMPS macros name in the patch log. (@Sergei Shtylyov)
----
- drivers/ata/ahci.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+index 397dfd27c90d..9bc8fa77e92f 100644
+--- a/drivers/ata/ahci.c
++++ b/drivers/ata/ahci.c
+@@ -656,7 +656,7 @@ static void ahci_pci_save_initial_config(struct pci_dev *pdev,
+ {
+ 	if (pdev->vendor == PCI_VENDOR_ID_JMICRON && pdev->device == 0x2361) {
+ 		dev_info(&pdev->dev, "JMB361 has only one port\n");
+-		hpriv->force_port_map = 1;
++		hpriv->saved_port_map = 1;
+ 	}
+ 
+ 	/*
 diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-index 7d834deefeb9..f501531bd1b3 100644
+index f501531bd1b3..0e66446a5883 100644
 --- a/drivers/ata/ahci.h
 +++ b/drivers/ata/ahci.h
-@@ -138,7 +138,7 @@ enum {
- 	PORT_IRQ_BAD_PMP	= (1 << 23), /* incorrect port multiplier */
+@@ -327,7 +327,6 @@ struct ahci_port_priv {
+ struct ahci_host_priv {
+ 	/* Input fields */
+ 	unsigned int		flags;		/* AHCI_HFLAG_* */
+-	u32			force_port_map;	/* force port map */
+ 	u32			mask_port_map;	/* mask out particular bits */
  
- 	PORT_IRQ_PHYRDY		= (1 << 22), /* PhyRdy changed */
--	PORT_IRQ_DEV_ILCK	= (1 << 7), /* device interlock */
-+	PORT_IRQ_DMPS		= (1 << 7), /* mechanical presence status */
- 	PORT_IRQ_CONNECT	= (1 << 6), /* port connect change status */
- 	PORT_IRQ_SG_DONE	= (1 << 5), /* descriptor processed */
- 	PORT_IRQ_UNK_FIS	= (1 << 4), /* unknown FIS rx'd */
-@@ -166,6 +166,8 @@ enum {
- 	PORT_CMD_ATAPI		= (1 << 24), /* Device is ATAPI */
- 	PORT_CMD_FBSCP		= (1 << 22), /* FBS Capable Port */
- 	PORT_CMD_ESP		= (1 << 21), /* External Sata Port */
-+	PORT_CMD_CPD		= (1 << 20), /* Cold Presence Detection */
-+	PORT_CMD_MPSP		= (1 << 19), /* Mechanical Presence Switch */
- 	PORT_CMD_HPCP		= (1 << 18), /* HotPlug Capable Port */
- 	PORT_CMD_PMP		= (1 << 17), /* PMP attached */
- 	PORT_CMD_LIST_ON	= (1 << 15), /* cmd list DMA engine running */
-@@ -181,6 +183,9 @@ enum {
- 	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
- 	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
+ 	void __iomem *		mmio;		/* bus-independent mem map */
+diff --git a/drivers/ata/libahci.c b/drivers/ata/libahci.c
+index cf8c7fd59ada..000a7072614f 100644
+--- a/drivers/ata/libahci.c
++++ b/drivers/ata/libahci.c
+@@ -453,7 +453,6 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
+ 	 * reset.  Values without are used for driver operation.
+ 	 */
+ 	hpriv->saved_cap = cap = readl(mmio + HOST_CAP);
+-	hpriv->saved_port_map = port_map = readl(mmio + HOST_PORTS_IMPL);
  
-+	PORT_CMD_CAP		= PORT_CMD_HPCP | PORT_CMD_MPSP |
-+				  PORT_CMD_CPD | PORT_CMD_ESP | PORT_CMD_FBSCP,
-+
- 	/* PORT_FBS bits */
- 	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
- 	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
+ 	/* CAP2 register is only defined for AHCI 1.2 and later */
+ 	vers = readl(mmio + HOST_VERSION);
+@@ -517,10 +516,13 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
+ 		cap &= ~HOST_CAP_SXS;
+ 	}
+ 
+-	if (hpriv->force_port_map && port_map != hpriv->force_port_map) {
++	/* Override the HBA ports mapping if the platform needs it */
++	port_map = readl(mmio + HOST_PORTS_IMPL);
++	if (hpriv->saved_port_map && port_map != hpriv->saved_port_map) {
+ 		dev_info(dev, "forcing port_map 0x%x -> 0x%x\n",
+-			 port_map, hpriv->force_port_map);
+-		port_map = hpriv->force_port_map;
++			 port_map, hpriv->saved_port_map);
++		port_map = hpriv->saved_port_map;
++	} else {
+ 		hpriv->saved_port_map = port_map;
+ 	}
+ 
+diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+index fcf00ffc7d12..efe640603f3f 100644
+--- a/drivers/ata/libahci_platform.c
++++ b/drivers/ata/libahci_platform.c
+@@ -524,7 +524,7 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+ 	}
+ 
+ 	of_property_read_u32(dev->of_node,
+-			     "ports-implemented", &hpriv->force_port_map);
++			     "ports-implemented", &hpriv->saved_port_map);
+ 
+ 	if (child_nodes) {
+ 		for_each_child_of_node(dev->of_node, child) {
 -- 
 2.35.1
 

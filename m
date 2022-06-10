@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA715465FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A040546621
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240440AbiFJLsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
+        id S1347199AbiFJLzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345490AbiFJLsR (ORCPT
+        with ESMTP id S1347183AbiFJLzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:48:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7159DC4EA3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:48:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35965B83125
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64432C34114;
-        Fri, 10 Jun 2022 11:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654861694;
-        bh=Oa42FrDX9SAL3GgVXXJClDSCVxDWXe2Bxa0EkqA/4Vg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I1xzeGYvoPCBu/ecVmTQwZn+lwurLiLyJmitLb7wERxfmympx7BU0Ur68VBWbAGku
-         Z3sWYZKggLE55kmjB+qCDbQTa6BOGbXuarpImfyKCqxCmMGxuBn4MMGm5JzEz+/uP8
-         Nhcpb1wpb4yvqTfdJuV5WCjnFnJNT3rAUfEfAAQXKt9O/Kfz5EgWz+VZ7VDDFTNly/
-         su+w4rjSUhkBYJWI+36Xx1iy2CWV9TQH5ANbb8Wq6J/fgbh1oBCUCyia6i0nfxvFgI
-         ijgNiFwmQmasZLBMK8aq05UlN1X79fTM7Z1xY07IVISG7W3USUubCfHqIhb8GBE0MR
-         4U4e35Rm9H8yQ==
-Date:   Fri, 10 Jun 2022 12:48:08 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
-Subject: Re: [PATCH 3/3] ASoC: wm8940: Mute also the speaker output
-Message-ID: <YqMveGXbwMhLeo4M@sirena.org.uk>
-References: <20220606154441.20848-1-lukma@denx.de>
- <20220606154441.20848-3-lukma@denx.de>
- <Yp4qb5jaGYf5qnxt@sirena.org.uk>
- <20220610112331.4dcc183b@ktm>
+        Fri, 10 Jun 2022 07:55:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EFD25E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:55:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654862140; x=1686398140;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1aFYvO3gKG91AJpe7s7pE6RHbODPsUTIADYEyMjTuHA=;
+  b=aPtsX7Z+zl7Ry5e6dwzotX6iXNWI2FPoYzXTr+g8DcrGnISzkWcDisjr
+   PjGqaLevagw9S+RDWNJJP+Bb7Bh9HM970aceTzhDU12PWFX0OAM/bqEfD
+   AK5WAzgS+sLNtqKnmTWs1wD4k/pWOkCTLfAO5kA7LEL4YtDcOBzCqs/aj
+   gl+0uezMdP4xDmXtfy/K/FYdLD75qTDVDFexVZpZK9w+CJCwqdFcY4vCq
+   eP3K3Xx3jcOAo2joTFrdGYkDjVl78IYiVZMpV+N3CBcpAqQfnSZSQf9ua
+   yEVavamNzQzYtKhjDdf6bmbM9Wt1GrtpdEsby+ALNmTAjF+SlcN3tiSb0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260725116"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="260725116"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:55:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="638101204"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2022 04:55:39 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzdEo-000Hvh-8Q;
+        Fri, 10 Jun 2022 11:55:38 +0000
+Date:   Fri, 10 Jun 2022 19:55:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kas:lam 6/8] arch/x86/kernel/process_64.c:745:5: warning: no
+ previous prototype for 'prctl_enable_tagged_addr'
+Message-ID: <202206101916.IklgUdbQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kPV9gyCZ3tfx091g"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610112331.4dcc183b@ktm>
-X-Cookie: Teachers have class.
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,91 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+head:   83ba389477b29461f0c926b69deca5eb6f3f5b6a
+commit: 91934401d053c31ea7851a9e88fa83b9fa5a7bc4 [6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and ARCH_ENABLE_TAGGED_ADDR
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220610/202206101916.IklgUdbQ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=91934401d053c31ea7851a9e88fa83b9fa5a7bc4
+        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
+        git fetch --no-tags kas lam
+        git checkout 91934401d053c31ea7851a9e88fa83b9fa5a7bc4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
---kPV9gyCZ3tfx091g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Fri, Jun 10, 2022 at 11:23:31AM +0200, Lukasz Majewski wrote:
-> > On Mon, Jun 06, 2022 at 05:44:41PM +0200, Lukasz Majewski wrote:
+All warnings (new ones prefixed by >>):
 
-> > > Without this change the BTL speaker produces some
-> > > "distortion" noise when test program
-> > > (speaker-test -t waw) is ended with ctrl+c. =20
+>> arch/x86/kernel/process_64.c:745:5: warning: no previous prototype for 'prctl_enable_tagged_addr' [-Wmissing-prototypes]
+     745 | int prctl_enable_tagged_addr(unsigned long nr_bits)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
 
-> > > As our design uses speaker outputs to drive BTL speaker,
-> > > it was necessary to also mute the speaker via the codec
-> > > internal WM8940_SPKVOL register with setting
-> > > WM8940_SPKMUTE bit. =20
 
-> > This will not interact well with both the user visible control of the
-> > speaker volume via the Speaker Playback Volume control and the analog
-> > bypass paths that the device has - it'll change the state of the
-> > control without generating any events, and cut off any bypassed audio
-> > that's mixed in.
+vim +/prctl_enable_tagged_addr +745 arch/x86/kernel/process_64.c
 
-> I'm wondering why it is safe to call DAI's .digital_mute()
-> callback, which explicitly changes state of the "DAC soft mute enable"
-> bit (DACMU) ?
+   744	
+ > 745	int prctl_enable_tagged_addr(unsigned long nr_bits)
+   746	{
+   747		struct mm_struct *mm = current->mm;
+   748	
+   749		/* Already enabled? */
+   750		if (mm->context.lam_cr3_mask)
+   751			return -EBUSY;
+   752	
+   753		/* LAM has to be enabled before spawning threads */
+   754		if (get_nr_threads(current) > 1)
+   755			return -EBUSY;
+   756	
+   757		if (!nr_bits) {
+   758			return -EINVAL;
+   759		} else if (nr_bits <= 6) {
+   760			mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
+   761			mm->context.untag_mask =  ~GENMASK(62, 57);
+   762		} else {
+   763			return -EINVAL;
+   764		}
+   765	
+   766		/* Update CR3 to get LAM active */
+   767		switch_mm(current->mm, current->mm, current);
+   768		return 0;
+   769	}
+   770	
 
-If there's a user visible control for the same register bit that's a
-bug.  If there's no user visible control for it then there's nothing to
-conflict with.
-
-> And on the other hand it is not correct to just mute the speakers?
-
-No, that's not what we're muting playback for - the digital mute is
-there specifically to deal with issues with host controllers outputing
-noise during startup/teardown.  If there are issues with the speaker
-output then they need to be addressed at that point, especially given
-that the device has bypass paths.
-
-> > You can probably achieve a similar effect by making the control an
-> > _AUTODISABLE one which will allow the core to mute the control when
-> > it's not being used in a way that's not visible to userspace.
-
-> The exact definition for the event, which I'm forcing above:
-
-> SOC_SINGLE("Speaker Playback Switch", WM8940_SPKVOL,  6, 1, 1),
-
-> And there is no SOC_SINGLE_AUTODISABLE() macro available.
-
-That seems solvable?  Though if the issue isn't triggered in connection
-with a DAPM event (which sounds like the case) then it's probably not
-going to help.
-
-> The issue I'm trying to fix:
-
-> - The mclk clock is stopped (after some time) by imx SOC when I end
->   'speaker-test' program with ctrl+c.
-
-> - When the clock is not provided (after ~1sec) I do hear a single short
->   noise from speakers.
-
-> - The other solution (which also works) would be to enable clock once
->   (during probe) and then do not disable it till system is powered
->   off (yes it is a hack :-) ).
-
-If the issue is triggered by the MCLK being disabled prematurely then
-the simplest fix is probably to wire up the CODEC MCLK to the clock API
-and manage it during set_bias_level() (probably on transition out of and
-into _STANDBY) - that should have a similar effect to leaving it enabled
-all the time.
-
---kPV9gyCZ3tfx091g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjL3cACgkQJNaLcl1U
-h9DwXgf9Eqq0qI5+Aw9AhO+y+X3Rc2s2lb059a1Ftb2g9zunZ5OEQQr5Cf8o4cDP
-N//WRbzdOsY6YWdCTFY0W+8U6ZIA43UZ/Ouce9NJhdBjqDEWgAXvN33Jr43/0umY
-1cQ8acjZEIC6S6DUPMCqpeF14pXIZwROgq/fUHfuO+nQA9t2sM2c2dbd8LsoUiJj
-tcU5CNuWbt1KVvSKmQv4H1tjcvEO+6M+8b28yGtPLPptniUGYxWCQkvbCeDGW5c/
-Bttcy6yX7JL8351r2XEsStUAQJlPFE93i9ljwCTrXgVmGky9cdrSfEchQHAJnh78
-mk18imjyrb1WLLMLHzBsgiGQpSH39A==
-=EJBV
------END PGP SIGNATURE-----
-
---kPV9gyCZ3tfx091g--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

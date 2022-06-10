@@ -2,50 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8125D545DCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8ED8545DEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244433AbiFJHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S1346589AbiFJH6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245744AbiFJHuR (ORCPT
+        with ESMTP id S1347142AbiFJH6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:50:17 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26F283B1703
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:50:11 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id A88E416A0;
-        Fri, 10 Jun 2022 10:51:02 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com A88E416A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1654847462;
-        bh=w5FH76gWEQ4AnYJI+MYraAyan6YWIE7deOEkKSQuq2o=;
-        h=From:To:CC:Subject:Date:From;
-        b=H95TjMygvgbqaHloc0Flrv+grJWgCD0R8QCe5N/LeD3gRi+To4peFsn6lD8Ee0Tsr
-         r/DbYO6QiPlXReDtLWImwzOfm268jt8RcBDZmUTJsEtijaaRMg6Es+aO/0zaFANOWH
-         4fHvWxvtH4atHevmM5wXjs2lHoa5hrM6fNoEc7TI=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 10:50:10 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] spi: dw: Add deferred DMA-channels setup support
-Date:   Fri, 10 Jun 2022 10:50:06 +0300
-Message-ID: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
+        Fri, 10 Jun 2022 03:58:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8C41CB735;
+        Fri, 10 Jun 2022 00:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654847906; x=1686383906;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r/paWOotQ/qnRPehSbFw0+oxQxYViWs5HZ+mD61abhY=;
+  b=e1DlcRieprPibld70R3E65vSOSzNUIwZvbzBvblZjJUFZ5d1C297TMHv
+   NZAVZXISGwMruieErZ/t6yFwZOuzdNrlKL9puiFtY1KOJClaBw/RZpL6I
+   Z2r9pEIfmG/t0QPmKTYfhwZgAXAFoYCtXohFXdaVcSCz9I9MJ/EX5AhTY
+   y6bGXFH913TtROYDs79F0ldMtClpy8Br1YcpYMhY4FwO/a5OYUi7S01fn
+   c8ZhwH/YKdzf6sY90jKnRduljYBi83WMGzsmx1eBq+GVLF/lBU6KiK9yr
+   lanXTe+mrASHdHfGHi1aW6+uO/gm//0TIs9zdiSNsAthyqBDqf9N7bhGP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278354839"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="278354839"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 00:58:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="828111664"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Jun 2022 00:58:23 -0700
+Date:   Fri, 10 Jun 2022 15:50:27 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Marco Pagani <marpagan@redhat.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Alan Tull <atull@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] fpga: altera-pr-ip: fix unsigned comparison with less
+ than zero
+Message-ID: <20220610075027.GA713676@yilunxu-OptiPlex-7050>
+References: <20220609140520.42662-1-marpagan@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609140520.42662-1-marpagan@redhat.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,92 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently if the source DMA device isn't ready to provide the channels
-capable of the SPI DMA transfers, the DW SSI controller will be registered
-with no DMA support. It isn't right since all what the driver needs to do
-is to postpone the probe procedure until the DMA device is ready. Let's
-fix that in the framework of the DWC SSI generic DMA implementation. First
-we need to use the dma_request_chan() method instead of the
-dma_request_slave_channel() function, because the later one is deprecated
-and most importantly doesn't return the failure cause but the
-NULL-pointer. Second we need to stop the DW SSI controller probe procedure
-if the -EPROBE_DEFER error is returned on the DMA initialization. The
-procedure will resume later when the channels are ready to be requested.
+On Thu, Jun 09, 2022 at 04:05:19PM +0200, Marco Pagani wrote:
+> Fix the "comparison with less than zero" warning reported by
+> cppcheck for the unsigned (size_t) parameter count of the
+> alt_pr_fpga_write() function.
+> 
+> Fixes: d201cc17a8a3 ("fpga pr ip: Core driver support for Altera Partial Reconfiguration IP")
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/spi/spi-dw-core.c |  5 ++++-
- drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
- 2 files changed, 22 insertions(+), 8 deletions(-)
+Applied to for-next
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index ecea471ff42c..911ea9bddbee 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 
- 	if (dws->dma_ops && dws->dma_ops->dma_init) {
- 		ret = dws->dma_ops->dma_init(dev, dws);
--		if (ret) {
-+		if (ret == -EPROBE_DEFER) {
-+			goto err_free_irq;
-+		} else if (ret) {
- 			dev_warn(dev, "DMA init failed\n");
- 		} else {
- 			master->can_dma = dws->dma_ops->can_dma;
-@@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 	if (dws->dma_ops && dws->dma_ops->dma_exit)
- 		dws->dma_ops->dma_exit(dws);
- 	dw_spi_enable_chip(dws, 0);
-+err_free_irq:
- 	free_irq(dws->irq, master);
- err_free_master:
- 	spi_controller_put(master);
-diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-index 63e5260100ec..1322b8cce5b7 100644
---- a/drivers/spi/spi-dw-dma.c
-+++ b/drivers/spi/spi-dw-dma.c
-@@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
- 
- static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
- {
--	dws->rxchan = dma_request_slave_channel(dev, "rx");
--	if (!dws->rxchan)
--		return -ENODEV;
-+	int ret;
- 
--	dws->txchan = dma_request_slave_channel(dev, "tx");
--	if (!dws->txchan) {
--		dma_release_channel(dws->rxchan);
-+	dws->rxchan = dma_request_chan(dev, "rx");
-+	if (IS_ERR(dws->rxchan)) {
-+		ret = PTR_ERR(dws->rxchan);
- 		dws->rxchan = NULL;
--		return -ENODEV;
-+		goto err_exit;
-+	}
-+
-+	dws->txchan = dma_request_chan(dev, "tx");
-+	if (IS_ERR(dws->txchan)) {
-+		ret = PTR_ERR(dws->txchan);
-+		dws->txchan = NULL;
-+		goto free_rxchan;
- 	}
- 
- 	dws->master->dma_rx = dws->rxchan;
-@@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
- 	dw_spi_dma_sg_burst_init(dws);
- 
- 	return 0;
-+
-+free_rxchan:
-+	dma_release_channel(dws->rxchan);
-+	dws->rxchan = NULL;
-+err_exit:
-+	return ret;
- }
- 
- static void dw_spi_dma_exit(struct dw_spi *dws)
--- 
-2.35.1
+Thanks,
+Yilun
 
+> ---
+> Changes v1 -> v2:
+> - Coding style fix
+> Changes v2 -> v3:
+> - Added Fixes tag
+> ---
+>  drivers/fpga/altera-pr-ip-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
+> index be0667968d33..df8671af4a92 100644
+> --- a/drivers/fpga/altera-pr-ip-core.c
+> +++ b/drivers/fpga/altera-pr-ip-core.c
+> @@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
+>  	u32 *buffer_32 = (u32 *)buf;
+>  	size_t i = 0;
+>  
+> -	if (count <= 0)
+> +	if (!count)
+>  		return -EINVAL;
+>  
+>  	/* Write out the complete 32-bit chunks */
+> -- 
+> 2.35.3

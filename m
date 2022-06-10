@@ -2,109 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB79B546BBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F9F546BCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350068AbiFJRii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 13:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S1346863AbiFJRon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 13:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346813AbiFJRid (ORCPT
+        with ESMTP id S1343805AbiFJRol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 13:38:33 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3F52253A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:38:31 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id y8-20020a25a088000000b0066465a3112dso1947830ybh.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=5fmQszK1Ftmw30V0gwN1AZaU6pQNh3b494ZogsrG54w=;
-        b=QGT7zos6PMA4nXZmokylnJRPrMcP3oyvrZKGohf5aZSXTn/UheG2FCg5yKy29JsjSN
-         eZSdktXiLVEzvErtwWSo7D3GPQedGFu1CySEfelpPuvGc5+kPlMy1F11sDFL7nveEsQt
-         HjdR6s3jW9l1P7m5y2fAIT8HR/vNIzTz4DnSiZ44GnKtm7drGyA2z/iJjfsvWlNCK1cM
-         Yz5pUQ1uhf0s95Yor3DODnYdVMmWKM1Ad1xVRkLz9bXhY84nxexLIitGVw7Gs2HyoVjZ
-         JyHN0C8XoIBPk0GlyHy+HKIEOTkjHLYujG5EH/8kZpHAw7vSTBubzvRVShRyUJAbYSiU
-         b/og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=5fmQszK1Ftmw30V0gwN1AZaU6pQNh3b494ZogsrG54w=;
-        b=hcKXYPXOzMEW13WJVg+Fm/5eIBmYlz1G78LdUlZIQtEl67S8uByEGBuv8XBnohB+CX
-         /kl2rxYpvk6O0kK+YgNu1Vgupn8y1dRt5UKr5k7zcZgr1KFS+lv2wTUUcKdEf2WLzFGR
-         0zGuNf4/yHL4g7sChsoxIJ4wowmApqL/JWYCV/MrPs/vwS1osuIS4w12ZwbZSJcBgLiT
-         Jq8ZUP2IRNu8Eib0doFFqRHjY4h4c77kvWaGKr57XLsly/cDP+7a5mgU2O34cNo8QRjU
-         nk0ryXV47Tk+e4fbBmGwq1Ei41P/0krLNR1bmBwL60CGT9YOH5zs4FJBPZnkqiZbvtRG
-         +7RQ==
-X-Gm-Message-State: AOAM5337MlRBXMl34+IvLmpryuv9MrJWqBBKROCTst9lpFGtA9XtrJoD
-        AxQoVFXP4xrNuNEYMGaFKKOP0wRnJSSsh2oCHZRl
-X-Google-Smtp-Source: ABdhPJzSqTsvnb1ZC/aD7CdAHop/d77Nuh2d8nZpHySjd4kmLswDFlqFdL1Bx2WtIJ/Tzlole4EE2ZwSXQwJGB8+JpE5
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:9a0c:4d31:bfe1:5abd])
- (user=axelrasmussen job=sendgmr) by 2002:a25:58f:0:b0:664:628a:374b with SMTP
- id 137-20020a25058f000000b00664628a374bmr4604612ybf.329.1654882711003; Fri,
- 10 Jun 2022 10:38:31 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 10:38:12 -0700
-Message-Id: <20220610173812.1768919-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2] mm: userfaultfd: fix UFFDIO_CONTINUE on fallocated shmem pages
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 10 Jun 2022 13:44:41 -0400
+Received: from 1.mo581.mail-out.ovh.net (1.mo581.mail-out.ovh.net [178.33.45.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD6855239
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:44:37 -0700 (PDT)
+Received: from player779.ha.ovh.net (unknown [10.109.146.175])
+        by mo581.mail-out.ovh.net (Postfix) with ESMTP id B901D23DE4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 17:44:35 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player779.ha.ovh.net (Postfix) with ESMTPSA id 94DBC2B5CF843;
+        Fri, 10 Jun 2022 17:44:23 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-96R00152449f80-6e6f-48d1-97fa-f963f6478a11,
+                    4E496447C43E4C7632BA90A0B7747719B130BEDF) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Fri, 10 Jun 2022 19:44:15 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, linux-fbdev@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Helge Deller <deller@gmx.de>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] fbdev: atmel_lcdfb: Rework backlight status updates
+Message-ID: <20220610194415.05e1ee95@heffalump.sk2.org>
+In-Reply-To: <20220610094955.cy53ujicaplr7aw7@ash.lan>
+References: <20220608205623.2106113-1-steve@sk2.org>
+        <20220609095412.fccofr2e2kpzhw4t@maple.lan>
+        <YqIuUYUXzxeSgZ/o@ravnborg.org>
+        <20220609194511.4e0bc3e6@heffalump.sk2.org>
+        <20220610094955.cy53ujicaplr7aw7@ash.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/lMq9K57Nv6KWvkGmMFl3QXs";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 9440389247221794438
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduuddgudduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeeiheevvdeugeejffefteffvefhieegjeevhfekjeejvdelgfefkeehhfdufffhjeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjeelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekud
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When fallocate() is used on a shmem file, the pages we allocate can end
-up with !PageUptodate.
+--Sig_/lMq9K57Nv6KWvkGmMFl3QXs
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Since UFFDIO_CONTINUE tries to find the existing page the user wants to
-map with SGP_READ, we would fail to find such a page, since
-shmem_getpage_gfp returns with a "NULL" pagep for SGP_READ if it
-discovers !PageUptodate. As a result, UFFDIO_CONTINUE returns -EFAULT,
-as it would do if the page wasn't found in the page cache at all.
+On Fri, 10 Jun 2022 10:49:55 +0100, Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
+> On Thu, Jun 09, 2022 at 07:45:11PM +0200, Stephen Kitt wrote:
+> > Hi Sam, Daniel,
+> >
+> > On Thu, 9 Jun 2022 19:30:57 +0200, Sam Ravnborg <sam@ravnborg.org> wrot=
+e:
+> > =20
+> > > thanks for taking care of all these backlight simplifications - this
+> > > really helps to make the code simpler and more readable. =20
+> >
+> > You=E2=80=99re welcome! I noticed fb_blank was deprecated and near enou=
+gh unused,
+> > and started digging... =20
+>=20
+> I saw Sam's comment and kinda wished I'd thought to say that... definitely
+> good to see these things being tidied up.
 
-This isn't the intended behavior. UFFDIO_CONTINUE is just trying to find
-if a page exists, and doesn't care whether it still needs to be cleared
-or not. So, instead of SGP_READ, pass in SGP_NOALLOC. This is the same,
-except for one critical difference: in the !PageUptodate case,
-SGP_NOALLOC will clear the page and then return it. With this change,
-UFFDIO_CONTINUE works properly (succeeds) on a shmem file which has been
-fallocated, but otherwise not modified.
+Thanks! I saw the nice wrapper functions in backlight.h and couldn=E2=80=99=
+t resist.
 
-Fixes: 153132571f02 ("userfaultfd/shmem: support UFFDIO_CONTINUE for shmem")
-Cc: stable@vger.kernel.org
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- mm/userfaultfd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Regards,
 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 4f4892a5f767..07d3befc80e4 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -246,7 +246,10 @@ static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
- 	struct page *page;
- 	int ret;
- 
--	ret = shmem_getpage(inode, pgoff, &page, SGP_READ);
-+	ret = shmem_getpage(inode, pgoff, &page, SGP_NOALLOC);
-+	/* Our caller expects us to return -EFAULT if we failed to find page. */
-+	if (ret == -ENOENT)
-+		ret = -EFAULT;
- 	if (ret)
- 		goto out;
- 	if (!page) {
--- 
-2.36.1.476.g0c4daa206d-goog
+Stephen
 
+--Sig_/lMq9K57Nv6KWvkGmMFl3QXs
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmKjgu8ACgkQgNMC9Yht
+g5y6fw/+KKVsNBW5fG/NXRxcpGQDkisyqwSf/FEeQxqGP1kAtLFQHHt7vT5BKZvt
+P/o0PaUun84je8XQfbRsdu4WvNqve0qPPVxl/aUZ35i64UJgNq3rJutIeDbmR2yl
+UsMZisIh8ZafXKmXpA88u7h5Hcdm9OkbplcM5Jhom8Amc70nDSU5nYJhk/eCPgz0
+5bgVGEedpfOVs2zXPv1NCz07g8xYzH2nx0i+TY5AkReY19QD/Wgabo5v555al41H
+uS5bTEdNESCcmroU2Gs5chc6DoDiPMhJgFYmRJpXUCHHcx+298fxvaBJKPZNhA65
+MnyknXePf7wh8IRwMZrm3DnWnUbG1J8wcsNnZEkZJda77hIzSDU+lKg9xgWuehki
+etT0e6MKqGyn5aJRMqzhJRVr3a7AIHAYpHmtvbZ+u7Snw+7ubMgrsks8Gxkq5Put
+4Px+0dQ3y+Cv/fMinzPqBfxIkjDBzs3A9TSkxVzHaSKFf3gCANL7g1FE4y9A2mdX
+DoBsGtEEsvLFT1VukhHvziTXd6mZoCQ7m6Yt0e0xTQ6a/lxesl+cA1HaGXAdThG+
+tCIFukMPzE6M6pRCS8YJtASaLjxKvMf3YhWgEKjJ4DjCgwu4+VSNnrpmii/jIrBI
+IeDCgyM0jv4Q9o90s2sPxc9MiDCgQf1j0KV0aagRKXrhMtExJU0=
+=cMaS
+-----END PGP SIGNATURE-----
+
+--Sig_/lMq9K57Nv6KWvkGmMFl3QXs--

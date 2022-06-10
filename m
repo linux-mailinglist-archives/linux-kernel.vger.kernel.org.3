@@ -2,150 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5C6546EEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994AF546EF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350751AbiFJVDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S1350801AbiFJVE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346839AbiFJVC6 (ORCPT
+        with ESMTP id S1350765AbiFJVEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:02:58 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC421008;
-        Fri, 10 Jun 2022 14:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654894977; x=1686430977;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ITqyNN6aMfLgWrZqGcYWjoDoxlzkxWNBkOIz9CdtswQ=;
-  b=WykKd0jY4dJx2z7tstMKwRCvWaRs5dcgAPMhCphYJR9nZV85v3REbSiy
-   gE0k5YcR+v7/wNm/pph4SzfYgUJyRvHgG2pEs9YWQ6aSt0Ip6quqJosxi
-   I3pOgFIqXYpGJ+fE3I1BorHtQ6TlC7zBE3Yw3Y4fypIdm948edWkNdKwi
-   WURk9j54gwnzFGs2K7KKM0hX/a84kEr8CzV5wcMNpYlYCzzxsWCP2fDMo
-   OVCcsiHqIwqD7shTovx0s7eMHqHI1mdo4n+uYHslQeCtDtrjzh+yNZeRK
-   eWWfzrHikKv5PbEj0QAmtIaivC67DYJj3ZHHfs7QHy79Hy2xYMtFZ2Tyt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="303128029"
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="303128029"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 14:02:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="725144484"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Jun 2022 14:02:52 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzlmN-000IHB-VP;
-        Fri, 10 Jun 2022 21:02:51 +0000
-Date:   Sat, 11 Jun 2022 05:02:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-ia64@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 1/2] Add CABA tree to task_struct
-Message-ID: <202206110409.b8UJYnuq-lkp@intel.com>
-References: <20220610163214.49974-2-ptikhomirov@virtuozzo.com>
+        Fri, 10 Jun 2022 17:04:52 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272D7245A0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:50 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g205so449719pfb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SiLCrAL53VdiLKOXfLPLunTsPwo2FINx12xxld+VcU4=;
+        b=bFQVTO6kUj6C9eZqt3ASwH3yDJCd8h4+qHqP1I+aPVsKQAS8QoEkX82JRGy9ooQDC2
+         MR8htAsandvUIN3h90FZvL04oRvRshPFFbdKJ1A29ojwxreeu/mqSzweWjeNRGmGx7xK
+         Vs/O8fPBaQaYpevC/OBloET2GC9ejXJDZpiNRsmSGIxlYWF9RIQEu1Gf6dmrhl7I17o0
+         RB5a0RHCLeFhu3WcZSBQtNm0A6dj5SnN2ZdpmFi2FYl4qCF/bRV7JG8Su4HSu+8+sCZH
+         2eeIIsuAeOG5yJwagorVIKfbV+8tCYLs/V4UtEdtzjxCBKK+8VbpEUb2vw187EbIm1YC
+         t1Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SiLCrAL53VdiLKOXfLPLunTsPwo2FINx12xxld+VcU4=;
+        b=NZCV2c6Kvr/c9e4unsL+fHcp2GaCWAehJ4eEbrspSWcLbyBFZb3s0zSSfazhDKhc5p
+         5GY7WhV9y5gwBY0PH4CAv2imPpa8SG+nFgBZLU0EY2zVHs1C7x8M7Si/yg76en2k/09+
+         qeJEn3FfKJCd+dZEiMDSrid8cSFi/iLJmYwzjONRlKd0N4i3iKYQZYlarFoaehp4+/+f
+         k7yvS11zIDFP8AXZ6kOWLxppMpT5DHedc06Qxmaog2MzxWZFpsYhWh1pRNPikJzwmYtE
+         dvDHjlfUheXwH7Eae3sUStLYGBLQIHkT2MbuyBLyAcskIA9piefMx+FRlGqGye0LVkk2
+         vPgg==
+X-Gm-Message-State: AOAM530ZkqZQ0Ard2GT8Aa7iqRJkPguk3t4Ec3vsQPLqm+Ygw4E8w+AQ
+        YdJ+/WiG4rmlmfPz8+uuELbXa76zNyiJaJjmV2kD
+X-Google-Smtp-Source: ABdhPJwNdRdVzr3QMEopSyl6AGpCfiZgxW6A683tU/g0pcw8EZpJjU6kRe3OUp1IJyJkmTxwo6rWP/C3gyWE88D/3OI=
+X-Received: by 2002:a62:868c:0:b0:51b:bd62:4c87 with SMTP id
+ x134-20020a62868c000000b0051bbd624c87mr47036124pfd.83.1654895089650; Fri, 10
+ Jun 2022 14:04:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610163214.49974-2-ptikhomirov@virtuozzo.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220609230146.319210-1-casey@schaufler-ca.com> <20220609230146.319210-27-casey@schaufler-ca.com>
+In-Reply-To: <20220609230146.319210-27-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 10 Jun 2022 17:04:38 -0400
+Message-ID: <CAHC9VhT-qo=N4k7fWvZNELNLTGDWuE4kDXEOYwMBgZGRQu8f7w@mail.gmail.com>
+Subject: Re: [PATCH v36 26/33] Audit: Allow multiple records in an audit_buffer
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+On Thu, Jun 9, 2022 at 7:15 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> Replace the single skb pointer in an audit_buffer with
+> a list of skb pointers. Add the audit_stamp information
+> to the audit_buffer as there's no guarantee that there
+> will be an audit_context containing the stamp associated
+> with the event. At audit_log_end() time create auxiliary
+> records (none are currently defined) as have been added
+> to the list. Functions are created to manage the skb list
+> in the audit_buffer.
+>
+> Suggested-by: Paul Moore <paul@paul-moore.com>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  kernel/audit.c | 113 +++++++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 90 insertions(+), 23 deletions(-)
 
-Thank you for the patch! Perhaps something to improve:
+...
 
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on kees/for-next/execve tip/sched/core linus/master v5.19-rc1 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 6b6c089512f7..987740374dfa 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -1784,8 +1789,12 @@ static struct audit_buffer *audit_buffer_alloc(struct audit_context *ctx,
+>         ab->skb = nlmsg_new(AUDIT_BUFSIZ, gfp_mask);
+>         if (!ab->skb)
+>                 goto err;
+> +
+> +       skb_queue_head_init(&ab->skb_list);
+> +       skb_queue_tail(&ab->skb_list, ab->skb);
+> +
+>         if (!nlmsg_put(ab->skb, 0, 0, type, 0, 0))
+> -               goto err;
+> +               kfree_skb(ab->skb);
+>
+>         ab->ctx = ctx;
+>         ab->gfp_mask = gfp_mask;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Tikhomirov/Introduce-CABA-helper-process-tree/20220611-003433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220611/202206110409.b8UJYnuq-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/0875a2bed5ff95643c487dfcc28a550db06ea418
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Pavel-Tikhomirov/Introduce-CABA-helper-process-tree/20220611-003433
-        git checkout 0875a2bed5ff95643c487dfcc28a550db06ea418
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/proc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   fs/proc/array.c: In function 'task_state':
->> fs/proc/array.c:157:15: warning: unused variable 'caba_pids' [-Wunused-variable]
-     157 |         pid_t caba_pids[MAX_PID_NS_LEVEL] = {};
-         |               ^~~~~~~~~
->> fs/proc/array.c:156:13: warning: unused variable 'caba_level' [-Wunused-variable]
-     156 |         int caba_level = 0;
-         |             ^~~~~~~~~~
->> fs/proc/array.c:155:21: warning: unused variable 'caba_pid' [-Wunused-variable]
-     155 |         struct pid *caba_pid;
-         |                     ^~~~~~~~
->> fs/proc/array.c:154:29: warning: unused variable 'caba' [-Wunused-variable]
-     154 |         struct task_struct *caba;
-         |                             ^~~~
-
-
-vim +/caba_pids +157 fs/proc/array.c
-
-   143	
-   144	static inline void task_state(struct seq_file *m, struct pid_namespace *ns,
-   145					struct pid *pid, struct task_struct *p)
-   146	{
-   147		struct user_namespace *user_ns = seq_user_ns(m);
-   148		struct group_info *group_info;
-   149		int g, umask = -1;
-   150		struct task_struct *tracer;
-   151		const struct cred *cred;
-   152		pid_t ppid, tpid = 0, tgid, ngid;
-   153		unsigned int max_fds = 0;
- > 154		struct task_struct *caba;
- > 155		struct pid *caba_pid;
- > 156		int caba_level = 0;
- > 157		pid_t caba_pids[MAX_PID_NS_LEVEL] = {};
-   158	
-   159		rcu_read_lock();
-   160		ppid = pid_alive(p) ?
-   161			task_tgid_nr_ns(rcu_dereference(p->real_parent), ns) : 0;
-   162	
+I didn't notice this in v35, but if the nlmsg_put() fails I think you
+need to preserve the 'goto err;' since the skb hasn't been properly
+initialized.  The good news is that I don't think you need to worry
+about the 'kfree_skb(ab->skb);' in the error handler as it's already
+been placed on the audit_buffer:skb_list list and will be freed when
+audit_buffer_alloc()'s error handling code calls audit_buffer_free().
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+paul-moore.com

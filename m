@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEB35467FF
+	by mail.lfdr.de (Postfix) with ESMTP id 6693A546800
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347334AbiFJOBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S244978AbiFJOB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344429AbiFJN7q (ORCPT
+        with ESMTP id S1349401AbiFJOBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:59:46 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F69B25FC68
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:59:42 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-30c143c41e5so273114767b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:59:42 -0700 (PDT)
+        Fri, 10 Jun 2022 10:01:46 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5757A2B72CB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OWEPC7SAufrCkjFU0SfT1ySX9jvLl/PM1GkMbPRUTlE=;
-        b=EVitkBKz9HTETcRAjD4jGW+cco0VlHX2iLKnRGHPQGm6CKoryiObuhFKTAHjd+LGLi
-         6zYOTYLEbsUluzdHJgAz9ZvvMk29rs749HjMBKdzGaPX9cgem3LHcsh2HMGSdaxXyRJn
-         5YuSeynELes+xuZW7GEs4pT8lndKHz81Wjepfu6WP0UvgZm89gNVRHe/9+00BCNqtxJy
-         ETi3leVwScGZNzvk/MJrdTAKM9ui19dbzxWDfS2KaWRhNOArXj3sqyJMln0aBNlmxCwH
-         iQBVpK3e0RfcWIOTE3ebm+YXYmyEWbN0WcotgIMyCtpJbrsoD5JWvelbGJQWnS6mCwe5
-         EGOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OWEPC7SAufrCkjFU0SfT1ySX9jvLl/PM1GkMbPRUTlE=;
-        b=bGRlHgtBfcQnpLUuvvOLxIkvmikspquB5P6/+Brb5e7k16XAlv324plqBF7u+hLegh
-         6Nen1B9nZFLj5p6k96k29Y32L+KGfhulEa8xPX3N9v2d3ujp8N4u9DPPTVJQNou34Lou
-         XFCQQ/uhOKqhzpGbHxb/0CFJQiAkHTPAJaEyRwWr6TNWAy1E3GTLmPgcXzZdPL2QZM2w
-         SZmIizvJlrUa+wGqvDgpLIWoDoOEYMoerrGre1mqQ4B0osTsoCJOaUre0m4WOkTdQdSh
-         Fk92zOtM0hK9MVaL3aUTBJX0gMU+bFf1n7pAm/qzVyVHVaJaTLyDy1x22HEPmgx8hHpe
-         A9TQ==
-X-Gm-Message-State: AOAM530Sl7hf7S4/v9VIk3+ZHVlSptXXtS3OLNPb75WR5OE2PwawZz/o
-        ih8WMsGrs7TFWenxAwmYNoeMrUg75KHY07JJ5AdVSA==
-X-Google-Smtp-Source: ABdhPJzpokt62wF8w51PGFxOhJ4bvWwLARVlE5z03nqvvSEUQRP60Ws5kIgElWNEyhTSKx+UNMTvrNFzYJ1PAxe6uqw=
-X-Received: by 2002:a81:7b86:0:b0:310:e75:3abb with SMTP id
- w128-20020a817b86000000b003100e753abbmr42924798ywc.332.1654869581103; Fri, 10
- Jun 2022 06:59:41 -0700 (PDT)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1654869704;
+  x=1686405704;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=d28BFi0/VBb4bixwduhrFurpMjara8WE4vvBx38KIlM=;
+  b=AdpReraq0AkSip49aWoRClfjN7eVD7yOg5a0Hs45GnA0QlTdmFoMtmpZ
+   QQXgUuFgSoWtlV7dtc7HRkESCGamdr4nd0sAl+rvLtfh04vYR1c0u41LW
+   yk1j81ly7OYyFENBoeOZiC2F3mrqujITE9nAwaYF69hcsHGSECLvSLmXg
+   mKMmPgx84uuNBCttj4dg339C94id9YMf2Oo4Mky8VVYiQJmoulN7GqyCh
+   lwy7sKQtMm7pmmbGkK/N7sa6V6kT9x50P4BBABQPrc3CrDmppi4pBc9EM
+   dkgxi36MLdrrlhrVEkh7ZiSK20aDPlYrkdKdjAs/eYKoTRpJuCcQqmH4D
+   w==;
+From:   =?UTF-8?q?Ludvig=20P=C3=A4rsson?= <ludvig.parsson@axis.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     <kernel@axis.com>,
+        =?UTF-8?q?Ludvig=20P=C3=A4rsson?= <ludvig.parsson@axis.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] firmware: arm_scmi: Fix incorrect error propagation
+Date:   Fri, 10 Jun 2022 16:00:55 +0200
+Message-ID: <20220610140055.31491-1-ludvig.parsson@axis.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220610110749.110881-1-soenke.huster@eknoes.de>
-In-Reply-To: <20220610110749.110881-1-soenke.huster@eknoes.de>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 10 Jun 2022 06:59:29 -0700
-Message-ID: <CANn89i+YHqMddY68Qk1rZexqhYYX9gah-==WGttFbp4urLS7Qg@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: RFCOMM: Use skb_trim to trim checksum
-To:     Soenke Huster <soenke.huster@eknoes.de>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 4:08 AM Soenke Huster <soenke.huster@eknoes.de> wrote:
->
-> As skb->tail might be zero, it can underflow. This leads to a page
-> fault: skb_tail_pointer simply adds skb->tail (which is now MAX_UINT)
-> to skb->head.
->
->     BUG: unable to handle page fault for address: ffffed1021de29ff
->     #PF: supervisor read access in kernel mode
->     #PF: error_code(0x0000) - not-present page
->     RIP: 0010:rfcomm_run+0x831/0x4040 (net/bluetooth/rfcomm/core.c:1751)
->
-> By using skb_trim instead of the direct manipulation, skb->tail
-> is reset. Thus, the correct pointer to the checksum is used.
->
-> Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
-> ---
-> v2: Clarified how the bug triggers, minimize code change
->
->  net/bluetooth/rfcomm/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
-> index 7324764384b6..443b55edb3ab 100644
-> --- a/net/bluetooth/rfcomm/core.c
-> +++ b/net/bluetooth/rfcomm/core.c
-> @@ -1747,7 +1747,7 @@ static struct rfcomm_session *rfcomm_recv_frame(struct rfcomm_session *s,
->         type = __get_type(hdr->ctrl);
->
->         /* Trim FCS */
-> -       skb->len--; skb->tail--;
-> +       skb_trim(skb, skb->len - 1);
->         fcs = *(u8 *)skb_tail_pointer(skb);
->
->         if (__check_fcs(skb->data, type, fcs)) {
-> --
-> 2.36.1
->
+scmi_voltage_descriptors_get() will incorrecly return an
+error code if the last iteration of the for loop that
+retrieves the descriptors is skipped due to an error.
+Skipping an iteration in the loop is not an error, but
+the `ret` value from the last iteration will be
+propagated when the function returns.
 
-Again, I do not see how skb->tail could possibly zero at this point.
+Fix by not saving return values that should not be
+propagated. This solution also minimizes the risk of
+future patches accidentally reintroducing this bug.
 
-If it was, skb with illegal layout has been queued in the first place,
-we need to fix the producer, not the consumer.
+Signed-off-by: Ludvig Pärsson <ludvig.parsson@axis.com>
+---
+ drivers/firmware/arm_scmi/voltage.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-A driver missed an skb_put() perhaps.
+diff --git a/drivers/firmware/arm_scmi/voltage.c b/drivers/firmware/arm_scmi/voltage.c
+index 9d195d8719ab..49b75375d3ff 100644
+--- a/drivers/firmware/arm_scmi/voltage.c
++++ b/drivers/firmware/arm_scmi/voltage.c
+@@ -225,9 +225,8 @@ static int scmi_voltage_descriptors_get(const struct scmi_protocol_handle *ph,
+ 
+ 		/* Retrieve domain attributes at first ... */
+ 		put_unaligned_le32(dom, td->tx.buf);
+-		ret = ph->xops->do_xfer(ph, td);
+ 		/* Skip domain on comms error */
+-		if (ret)
++		if (ph->xops->do_xfer(ph, td))
+ 			continue;
+ 
+ 		v = vinfo->domains + dom;
+@@ -249,9 +248,8 @@ static int scmi_voltage_descriptors_get(const struct scmi_protocol_handle *ph,
+ 				v->async_level_set = true;
+ 		}
+ 
+-		ret = scmi_voltage_levels_get(ph, v);
+ 		/* Skip invalid voltage descriptors */
+-		if (ret)
++		if (scmi_voltage_levels_get(ph, v))
+ 			continue;
+ 
+ 		ph->xops->reset_rx_to_maxsz(ph, td);
+-- 
+2.20.1
 
-Can you please dump the skb here  ?
-
-diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
-index 7324764384b6773074032ad671777bf86bd3360e..358ccb4fe7214aea0bb4084188c7658316fe0ff7
-100644
---- a/net/bluetooth/rfcomm/core.c
-+++ b/net/bluetooth/rfcomm/core.c
-@@ -1746,6 +1746,11 @@ static struct rfcomm_session
-*rfcomm_recv_frame(struct rfcomm_session *s,
-        dlci = __get_dlci(hdr->addr);
-        type = __get_type(hdr->ctrl);
-
-+       if (!skb->tail) {
-+               DO_ONCE_LITE(skb_dump(KERN_ERR, skb, false));
-+               kfree_skb(skb);
-+               return s;
-+       }
-        /* Trim FCS */
-        skb->len--; skb->tail--;
-        fcs = *(u8 *)skb_tail_pointer(skb);

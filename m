@@ -2,216 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A7C546E35
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C27546E47
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350465AbiFJUWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 16:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S1350626AbiFJUXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 16:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350145AbiFJUWY (ORCPT
+        with ESMTP id S240289AbiFJUXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 16:22:24 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856B63002C7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:22:22 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id f12so166795ilj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CMK9HHoC+CkaS7ESlgdwWQx56QlM6DUYZIowUim1ARU=;
-        b=ZLB1iJbyDobtzDI6Is5SV0nGWNdc2St9G6RlgjYVVGp0uVrZ6v4ZI92gVUwT0/BUmg
-         J1/JWP6jEh3acyYwnnlCKNfItePYtpwUoe4FsgljkRzHTiAD8WdXLlFypHP5c9KtpVT6
-         OVc61CGaDh4DF57LxzGE9s/A9/9Jq6BpcSWUXxunYSqP+/8OBDRgx34AFQV8gQtQVb3g
-         TJs4tFwoXAMtvtHU5s1KN/0NC9+7/vIBAv1VmSLm104PLcIWCxPocPztCu5rDgBE5O8v
-         HDOefH58ccSQ3qHiFcHoLvaXVgGb1gZxnK5xmyQvSOufs5BGfU+dJ3Efrt+8fZGNdIVA
-         R/ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CMK9HHoC+CkaS7ESlgdwWQx56QlM6DUYZIowUim1ARU=;
-        b=w2gJgIs/+tSdgogF+zf5fFVGDwDxJ2pQWrr0KzoIGHkYtFzO4YkyaEP5Reqg247eqA
-         FU70iwK9OedJoYKGYaRMYVr8Nd3DLYZ9gsElbt7BTpB4rQ2EbqLmYi12ICe2bBP2dxXg
-         g3fnp4xOe0aKHjXGqiTO1VRJH7NShke1EW85bbmWlNMvjinL7ivds5ApHHzQ79OEFeOY
-         qNGhHGVC05FtgkCYo9kzcQylZmwTSKvybCUxa0EbdVeZt+xXBLhUvZBUBPCXeNGHWDK8
-         /8/A5zO72KB0GzeiJZJj67nIhqdFRvIWDYTuJCtg6maUXLMxu9jyINij2r9jvU+9e4c4
-         r2eg==
-X-Gm-Message-State: AOAM533XC1Dskb7AfTpxkrheZpW5N2r43W9k5PnPrVxcyOYTEo+wM5dS
-        CWfgYOXfoZodq5FjiThTnFrAD0ahNtoqKMsWAL7/gQ==
-X-Google-Smtp-Source: ABdhPJx7aIDRy4/ea1YuQNAB9DPV8h6BLDUQFCm0oW5u78S9oIvdyHsF8T9YMmUUAdQ8H6gdA9z+fhfk2kTAUFocyQI=
-X-Received: by 2002:a92:c24c:0:b0:2d1:cdd0:1959 with SMTP id
- k12-20020a92c24c000000b002d1cdd01959mr25304794ilo.39.1654892541600; Fri, 10
- Jun 2022 13:22:21 -0700 (PDT)
+        Fri, 10 Jun 2022 16:23:05 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A02A97F;
+        Fri, 10 Jun 2022 13:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654892584; x=1686428584;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zoQP38bXu51zIjhijgSb38PIa89Sy1jQuBhhFQxrEkA=;
+  b=GPvkE6Ng2MSW6YUvrIfWCW4tgQ/pQmeuyuZpmkwH2K9oQ24TK6q4nQIy
+   Wf2huQqJ+83JE+4AToljJPEth3rqZoVi0i4aGq35lzyVKpSHnaszEkmmv
+   OUXZEVUYQPj3ghGdeJoz7XbrX4AqPTHbqDN1zt2v2rx/XmVcymdkvR5fb
+   MHXNevMgrS4Kvr2tOOfqadGy6jA+aD1n1kMSlCA5vtS2TvbVyG1fDg7ex
+   XFOEr4f+KiBTj6gw/j/g/s5ZAR0gRJbkihA6DhayDTHsDdoYIY3pGZBTC
+   W6ZxTgrGz0ezhfT30nap/uMvM9RiCp+vt5iTOBQRXC4/AeghKMV0pj/Rr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="275268536"
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="275268536"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 13:23:03 -0700
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="828422389"
+Received: from pleung-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.33.34])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 13:23:03 -0700
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH V11 0/8] CXL: Read CDAT and DSMAS data
+Date:   Fri, 10 Jun 2022 13:22:51 -0700
+Message-Id: <20220610202259.3544623-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
-From:   Kostya Serebryany <kcc@google.com>
-Date:   Fri, 10 Jun 2022 13:22:09 -0700
-Message-ID: <CAN=P9piM76o313X194oSB2mZC-4eVc9f38oy5fXEsjKFWaQgnw@mail.gmail.com>
-Subject: Re: [PATCHv3 0/8] Linear Address Masking enabling
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for working on this, please make LAM happen.
-It enables efficient memory safety testing that is already available on AAr=
-ch64.
-
-Memory error detectors, such as ASAN and Valgrind (or KASAN for the kernel)
-have limited applicability, primarily because of their run-time overheads
-(CPU, RAM, and code size). In many cases, the major obstacle to a wider
-deployment is the RAM overhead, which is typically 2x-3x. There is another =
-tool,
-HWASAN [1], which solves the same problem and has < 10% RAM overhead.
-This tool is available only on AArch64 because it relies on the
-top-byte-ignore (TBI)
-feature. Full support for that feature [2] has been added to the
-kernel in order to
-enable HWASAN. Adding support for LAM will enable HWASAN on x86_64.
-
-HWASAN is already the main memory safety tool for Android [3] - the reduced=
- RAM
-overhead allowed us to utilize this testing tool where ASAN=E2=80=99s RAM o=
-verhead was
-prohibitive. We have also prototyped the x86_64 variant of HWASAN, and we c=
-an
-observe that it is a major improvement over ASAN. The kernel support
-and hardware
-availability are the only missing parts.
-
-Making HWASAN available on x86_64 will enable developers of server and
-client software
-to scale up their memory safety testing, and thus improve the quality
-and security of their products.
+From: Ira Weiny <ira.weiny@intel.com>
 
 
-[1] https://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
-[2] https://www.kernel.org/doc/html/latest/arm64/tagged-address-abi.html
-[3] https://source.android.com/devices/tech/debug/hwasan
+Changes from V10:[7]
+	Address Ben Widawsky's comments
+		Protect against potentially malicious devices.
+		Fix ownership issue of cdat_mb
 
---kcc
+CXL drivers need various data which are provided through generic DOE mailboxes
+as defined in the PCIe 6.0 spec.[1]
+
+One such data is the Coherent Device Atribute Table (CDAT).  CDAT data provides
+coherent information about the various devices in the system.  It was developed
+because systems no longer have a priori knowledge of all coherent devices
+within a system.  CDAT describes the coherent characteristics of the
+components on the CXL bus separate from system configurations.  The OS can
+then, for example, use this information to form correct interleave sets.
+
+To begin reading the CDAT the OS must have support to access the DOE mailboxes
+provided by the CXL devices.
+
+Because DOE is not specific to DOE but is provided within the PCI spec, the
+series adds PCI DOE capability library functions.  These functions allow for
+the iteration of the DOE capabilities on a device as well as creating
+pci_doe_mb structures which can control the operation of the DOE state machine.
+
+For now the iteration of and storage of the DOE mailboxes is done on memdev
+objects within the CXL stack.  When this is needed in more generic code this
+can be lifted later.
+
+This work was tested using qemu.
+
+[0] https://lore.kernel.org/linux-cxl/20211105235056.3711389-1-ira.weiny@intel.com/
+[1] https://pcisig.com/specifications
+[2] https://lore.kernel.org/qemu-devel/20210202005948.241655-1-ben.widawsky@intel.com/
+[3] https://lore.kernel.org/linux-cxl/20220201071952.900068-1-ira.weiny@intel.com/
+[4] https://lore.kernel.org/linux-cxl/20220330235920.2800929-1-ira.weiny@intel.com/
+[5] https://lore.kernel.org/linux-cxl/20220414203237.2198665-1-ira.weiny@intel.com/
+[6] https://lore.kernel.org/linux-cxl/20220531152632.1397976-1-ira.weiny@intel.com/
+[7] https://lore.kernel.org/linux-cxl/20220605005049.2155874-1-ira.weiny@intel.com/
 
 
-On Fri, Jun 10, 2022 at 7:35 AM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> Linear Address Masking[1] (LAM) modifies the checking that is applied to
-> 64-bit linear addresses, allowing software to use of the untranslated
-> address bits for metadata.
->
-> The patchset brings support for LAM for userspace addresses.
->
-> LAM_U48 enabling is controversial since it competes for bits with
-> 5-level paging. Its enabling isolated into an optional last patch that
-> can be applied at maintainer's discretion.
->
-> Please review and consider applying.
->
-> v3:
->   - Rebased onto v5.19-rc1
->   - Per-process enabling;
->   - API overhaul (again);
->   - Avoid branches and costly computations in the fast path;
->   - LAM_U48 is in optional patch.
-> v2:
->   - Rebased onto v5.18-rc1
->   - New arch_prctl(2)-based API
->   - Expose status of LAM (or other thread features) in
->     /proc/$PID/arch_status
->
-> [1] ISE, Chapter 14.
-> https://software.intel.com/content/dam/develop/external/us/en/documents-t=
-ps/architecture-instruction-set-extensions-programming-reference.pdf
->
-> Kirill A. Shutemov (8):
->   x86/mm: Fix CR3_ADDR_MASK
->   x86: CPUID and CR3/CR4 flags for Linear Address Masking
->   mm: Pass down mm_struct to untagged_addr()
->   x86/mm: Handle LAM on context switch
->   x86/uaccess: Provide untagged_addr() and remove tags before address che=
-ck
->   x86/mm: Provide ARCH_GET_UNTAG_MASK and ARCH_ENABLE_TAGGED_ADDR
->   x86: Expose untagging mask in /proc/$PID/arch_status
->   x86/mm: Extend LAM to support to LAM_U48
->
->  arch/arm64/include/asm/memory.h               |  4 +-
->  arch/arm64/include/asm/signal.h               |  2 +-
->  arch/arm64/include/asm/uaccess.h              |  4 +-
->  arch/arm64/kernel/hw_breakpoint.c             |  2 +-
->  arch/arm64/kernel/traps.c                     |  4 +-
->  arch/arm64/mm/fault.c                         | 10 +--
->  arch/sparc/include/asm/pgtable_64.h           |  2 +-
->  arch/sparc/include/asm/uaccess_64.h           |  2 +
->  arch/x86/include/asm/cpufeatures.h            |  1 +
->  arch/x86/include/asm/elf.h                    |  3 +-
->  arch/x86/include/asm/mmu.h                    |  2 +
->  arch/x86/include/asm/mmu_context.h            | 58 +++++++++++++++++
->  arch/x86/include/asm/processor-flags.h        |  2 +-
->  arch/x86/include/asm/tlbflush.h               |  3 +
->  arch/x86/include/asm/uaccess.h                | 44 ++++++++++++-
->  arch/x86/include/uapi/asm/prctl.h             |  3 +
->  arch/x86/include/uapi/asm/processor-flags.h   |  6 ++
->  arch/x86/kernel/Makefile                      |  2 +
->  arch/x86/kernel/fpu/xstate.c                  | 47 --------------
->  arch/x86/kernel/proc.c                        | 50 +++++++++++++++
->  arch/x86/kernel/process.c                     |  3 +
->  arch/x86/kernel/process_64.c                  | 54 +++++++++++++++-
->  arch/x86/kernel/sys_x86_64.c                  |  5 +-
->  arch/x86/mm/hugetlbpage.c                     |  6 +-
->  arch/x86/mm/mmap.c                            |  9 ++-
->  arch/x86/mm/tlb.c                             | 62 ++++++++++++++-----
->  .../gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c  |  2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c       |  2 +-
->  drivers/gpu/drm/radeon/radeon_gem.c           |  2 +-
->  drivers/infiniband/hw/mlx4/mr.c               |  2 +-
->  drivers/media/common/videobuf2/frame_vector.c |  2 +-
->  drivers/media/v4l2-core/videobuf-dma-contig.c |  2 +-
->  .../staging/media/atomisp/pci/hmm/hmm_bo.c    |  2 +-
->  drivers/tee/tee_shm.c                         |  2 +-
->  drivers/vfio/vfio_iommu_type1.c               |  2 +-
->  fs/proc/task_mmu.c                            |  2 +-
->  include/linux/mm.h                            | 11 ----
->  include/linux/uaccess.h                       | 11 ++++
->  lib/strncpy_from_user.c                       |  2 +-
->  lib/strnlen_user.c                            |  2 +-
->  mm/gup.c                                      |  6 +-
->  mm/madvise.c                                  |  2 +-
->  mm/mempolicy.c                                |  6 +-
->  mm/migrate.c                                  |  2 +-
->  mm/mincore.c                                  |  2 +-
->  mm/mlock.c                                    |  4 +-
->  mm/mmap.c                                     |  2 +-
->  mm/mprotect.c                                 |  2 +-
->  mm/mremap.c                                   |  2 +-
->  mm/msync.c                                    |  2 +-
->  virt/kvm/kvm_main.c                           |  2 +-
->  51 files changed, 342 insertions(+), 126 deletions(-)
->  create mode 100644 arch/x86/kernel/proc.c
->
-> --
-> 2.35.1
->
+Previous changes
+================
+
+Changes from V9:[6]
+	Address feedback from
+		Lukas Wunner, Davidlohr Bueso, Jonathan Cameron,
+		Alison Schofield, and Ben Widawsky
+		Details in each individual patch.
+
+Changes from V8:[5]
+	For this version I've punted a bit to get it out and drop the auxiliary
+	bus functionality.  I like where Jonathan is going with the port driver
+	idea.  I think eventually the irq/mailbox creation will need to be more
+	generic in a PCI port driver.  I've modeled this version on such an
+	architecture but used the CXL port for the time being.
+
+	From Dan
+		Drop the auxiliary bus/device
+	From Jonathan
+		Cleanups
+	From Bjorn
+		Clean up commit messages
+		move pci-doe.c to doe.c
+		Clean up PCI spec references
+		Ensure all messages use pci_*()
+		Add offset to error messages to distinguish mailboxes
+			use hex for DOE offsets
+		Print 4 nibbles for Vendor ID and 2 for type.
+		s/irq/IRQ in comments
+		Fix long lines
+		Fix typos
+
+
+Changes from V7:[4]
+	Avoid code bloat by making pci-doe.c conditional on CONFIG_PCI_DOE
+		which is auto selected by the CXL_PCI config option.
+	Minor code clean ups
+	Fix bug in pci_doe_supports_prot()
+	Rebase to cxl-pending
+
+Changes from V6:[3]
+	The big change is the removal of the auxiliary bus code from the PCI
+	layer.  The auxiliary bus usage is now in the CXL layer.  The PCI layer
+	provides helpers for subsystems to utilize DOE mailboxes by creating a
+	pci_doe_mb object which controls a state machine for that mailbox
+	capability.  The CXL layer wraps this object in an auxiliary device and
+	driver which can then be used to determine if the kernel is controlling
+	the capability or it is available to be used by user space.  Reads from
+	user space via lspci are allowed.  Writes are allowed but flagged via a
+	tainting the kernel.
+
+	Feedback from Bjorn, Jonathan, and Dan
+		Details in each patch
+
+Changes from V5:[0]
+
+	Rework the patch set to split PCI vs CXL changes
+		Also make each change a bit more stand alone for easier review
+	Add cxl_cdat structure
+	Put CDAT related data structures in cdat.h
+	Clarify some device lifetimes with comments
+	Incorporate feedback from Jonathan, Bjorn and Dan
+		The bigest change is placing the DOE scanning code into the
+			pci_doe driver (part of the PCI codre).
+		Validate the CDAT when it is read rather than before DSMAS
+			parsing
+		Do not report DSMAS failure as an error, report a warning and
+			keep going.
+		Retry reading the table 1 time.
+	Update commit messages and this cover letter
+
+
+
+Ira Weiny (6):
+  PCI: Replace magic constant for PCI Sig Vendor ID
+  cxl/pci: Create PCI DOE mailbox's for memory devices
+  cxl/port: Read CDAT table
+  cxl/port: Introduce cxl_cdat_valid()
+  cxl/port: Retry reading CDAT on failure
+  cxl/port: Parse out DSMAS data from CDAT table
+
+Jonathan Cameron (2):
+  PCI: Add vendor ID for the PCI SIG
+  PCI: Create PCI library functions in support of DOE mailboxes.
+
+ drivers/cxl/Kconfig           |   1 +
+ drivers/cxl/cdat.h            | 125 ++++++
+ drivers/cxl/core/pci.c        | 302 +++++++++++++++
+ drivers/cxl/cxl.h             |   5 +
+ drivers/cxl/cxlmem.h          |  10 +
+ drivers/cxl/cxlpci.h          |   2 +
+ drivers/cxl/mem.c             |   1 +
+ drivers/cxl/pci.c             | 114 ++++++
+ drivers/cxl/port.c            |  51 +++
+ drivers/pci/Kconfig           |   3 +
+ drivers/pci/Makefile          |   1 +
+ drivers/pci/doe.c             | 693 ++++++++++++++++++++++++++++++++++
+ drivers/pci/probe.c           |   2 +-
+ include/linux/pci-doe.h       |  65 ++++
+ include/linux/pci_ids.h       |   1 +
+ include/uapi/linux/pci_regs.h |  29 +-
+ 16 files changed, 1403 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/cxl/cdat.h
+ create mode 100644 drivers/pci/doe.c
+ create mode 100644 include/linux/pci-doe.h
+
+-- 
+2.35.1
+

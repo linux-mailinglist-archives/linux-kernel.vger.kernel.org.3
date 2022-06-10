@@ -2,105 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86439545DFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00682545E05
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244113AbiFJIAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S1347126AbiFJIAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347084AbiFJIAL (ORCPT
+        with ESMTP id S1347149AbiFJIAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:00:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC972067AB;
-        Fri, 10 Jun 2022 01:00:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1ACE0B8083A;
-        Fri, 10 Jun 2022 08:00:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3F7EC34114;
-        Fri, 10 Jun 2022 08:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654848007;
-        bh=rIT5rAC8mwzXd9v1qd5sMTexcVFRTr1GesOWEmu8Wws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NlboDRo98OjDCefRGijDSqyZu7a2wKmNKeEnhW+cI+cMmkEE6RgZNNAnU5TOFmfIc
-         jwzf7MWHPPgDnaCdjFYYFeYAdLYk2v9rgR9Vn9lKvjtPQolynd4xvlcs0ZBjEf1H/o
-         VrEt0MefzpYq/3FUjrv4m8Caarr38QtaJAY4K8Bv28Oa2QecvGQQF4ZHETYzqZyZpK
-         2Mf5AzjRKPNrfSUidqV3ditTaEw2f3QeOKGBuAsJXrFxOx9rafaPRjZgQNjZgv1441
-         ojFokEBHAwMMClKbeEu/BwwQh805gIKgqojUjpfCk4i3F+QGlySpH/ErdwPmIGJTZA
-         dkgjoHtpzc3Xw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nzZYp-0004yN-83; Fri, 10 Jun 2022 10:00:03 +0200
-Date:   Fri, 10 Jun 2022 10:00:03 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jared Kangas <kangas.jd@gmail.com>
-Cc:     vaibhav.sr@gmail.com, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, linux-staging@lists.linux.dev,
-        mgreer@animalcreek.com, Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH v2] staging: greybus: audio: fix loop cursor use after
- iteration
-Message-ID: <YqL6A3pVC8LOqE4d@hovoldconsulting.com>
-References: <20220609214517.85661-1-kangas.jd@gmail.com>
+        Fri, 10 Jun 2022 04:00:44 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59A321D3DB;
+        Fri, 10 Jun 2022 01:00:38 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 133BA68AA6; Fri, 10 Jun 2022 10:00:33 +0200 (CEST)
+Date:   Fri, 10 Jun 2022 10:00:32 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.com>,
+        Dave Kleikamp <shaggy@kernel.org>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net
+Subject: Re: [PATCH 5/5] fs: remove the NULL get_block case in
+ mpage_writepages
+Message-ID: <20220610080032.GA29310@lst.de>
+References: <20220608150451.1432388-1-hch@lst.de> <20220608150451.1432388-6-hch@lst.de> <20220609172530.q7bzttn5v2orirre@quack3.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609214517.85661-1-kangas.jd@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609172530.q7bzttn5v2orirre@quack3.lan>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 02:45:18PM -0700, Jared Kangas wrote:
-> gbaudio_dapm_free_controls() iterates over widgets using the
-> list_for_each_entry*() family of macros from <linux/list.h>, which
-> leaves the loop cursor pointing to a meaningless structure if it
-> completes a traversal of the list. The cursor was set to NULL at the end
-> of the loop body, but would be overwritten by the final loop cursor
-> update.
+On Thu, Jun 09, 2022 at 07:25:30PM +0200, Jan Kara wrote:
+> On Wed 08-06-22 17:04:51, Christoph Hellwig wrote:
+> > No one calls mpage_writepages with a NULL get_block paramter, so remove
+> > support for that case.
+> > 
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > 
-> Because of this behavior, the widget could be non-null after the loop
-> even if the widget wasn't found, and the cleanup logic would treat the
-> pointer as a valid widget to free.
-> 
-> To fix this, introduce a temporary variable to act as the loop cursor
-> and copy it to a variable that can be accessed after the loop finishes.
-> Due to not removing any list elements, use list_for_each_entry() instead
-> of list_for_each_entry_safe() in the revised loop.
-> 
-> This was detected with the help of Coccinelle.
-> 
-> Fixes: 510e340efe0c ("staging: greybus: audio: Add helper APIs for dynamic audio modules")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Jared Kangas <kangas.jd@gmail.com>
-> ---
-> 
-> Changes since v1:
->  * Removed safe list iteration as suggested by Johan Hovold <johan@kernel.org>
->  * Updated patch changelog to explain the list iteration change
->  * Added tags to changelog based on feedback (Cc:, Fixes:, Reviewed-by:)
+> What about ntfs_writepages()? That seems to call mpage_writepages() with
+> NULL get_block() in one case...
 
-Apparently Greg applied this to staging-next before we had a change to
-look at it. You should have received a notification from Greg when he
-did so.
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-next&id=80c968a04a381dc0e690960c60ffd6b6aee7e157
-
-It seems unlikely that this would cause any issues in real life, but
-there's still a chance it will be picked up by the stable team despite
-the lack of a CC stable tag.
-
-I've just sent a follow-up patch to replace the list macro.
-
-Johan
+Oops, yeah.

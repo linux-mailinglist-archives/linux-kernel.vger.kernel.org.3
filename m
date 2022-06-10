@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4EC545E67
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70058545E6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347326AbiFJIRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        id S1347405AbiFJIRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347313AbiFJIRB (ORCPT
+        with ESMTP id S1347393AbiFJIRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:17:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EC422074B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:16:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nzZof-0004Tv-FI; Fri, 10 Jun 2022 10:16:25 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nzZof-007Xi9-8S; Fri, 10 Jun 2022 10:16:23 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nzZoc-002SEu-JU; Fri, 10 Jun 2022 10:16:22 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1] ARM: dts: at91: ksz9477_evb: fix port/phy validation
-Date:   Fri, 10 Jun 2022 10:16:21 +0200
-Message-Id: <20220610081621.584393-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Fri, 10 Jun 2022 04:17:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E40226557;
+        Fri, 10 Jun 2022 01:17:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B68AB83080;
+        Fri, 10 Jun 2022 08:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48450C3411B;
+        Fri, 10 Jun 2022 08:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654849023;
+        bh=IyeUl084OKLUA3ct/9HrNTTAqajQrjHZwP2dAxU/Z/w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kAuOpgXOymuZ6MpR8gpXyN5R+sRLj7kzoSs6Tk+e7j4RGG9QTecv8U/pkwbrxB3Yw
+         t+z8QnLOrI9U1WSiP//O5zDTH+Eb6QpAI86RLoCEn2ThvanCsBa+HrYPZcceRiOpiR
+         DAD1KU1I0xniSugVMM4UlGyhF3sAUENpH1c3p3XvymhVeecxNCU03/F2I3GXu8GLHd
+         Xj0Mh+zBwTHn1sFnTb86WmtbaQQsY4ERc+rz5QhKxWid+BfTtNlrt4ePyBpOyvqIde
+         SxGvKh2NMUTuuJ+spzZRvcnvdENNc74ORA+Ib/yZGmD+lyGN9MMhjFbdM4o1rqLqKB
+         oBeZrmTWvrDAQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nzZpC-0007NZ-Pc; Fri, 10 Jun 2022 10:16:58 +0200
+Date:   Fri, 10 Jun 2022 10:16:58 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Jared Kangas <kangas.jd@gmail.com>, elder@kernel.org,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [greybus-dev] Re: [PATCH v2] staging: greybus: audio: fix loop
+ cursor use after iteration
+Message-ID: <YqL9+sx15/rqLlSZ@hovoldconsulting.com>
+References: <20220609214517.85661-1-kangas.jd@gmail.com>
+ <YqL6A3pVC8LOqE4d@hovoldconsulting.com>
+ <20220610080627.GA2146@kadam>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610080627.GA2146@kadam>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,51 +61,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Latest drivers version requires phy-mode to be set. Otherwise we will
-use "NA" mode and the switch driver will invalidate this port mode.
+On Fri, Jun 10, 2022 at 11:06:27AM +0300, Dan Carpenter wrote:
+> On Fri, Jun 10, 2022 at 10:00:03AM +0200, Johan Hovold wrote:
+> > > Fixes: 510e340efe0c ("staging: greybus: audio: Add helper APIs for dynamic audio modules")
+> > > Cc: stable@vger.kernel.org
+> > > Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > Reviewed-by: Johan Hovold <johan@kernel.org>
+> > > Signed-off-by: Jared Kangas <kangas.jd@gmail.com>
+> > > ---
+> > > 
+> > > Changes since v1:
+> > >  * Removed safe list iteration as suggested by Johan Hovold <johan@kernel.org>
+> > >  * Updated patch changelog to explain the list iteration change
+> > >  * Added tags to changelog based on feedback (Cc:, Fixes:, Reviewed-by:)
+> > 
+> > Apparently Greg applied this to staging-next before we had a change to
+> > look at it. You should have received a notification from Greg when he
+> > did so.
+> > 
+> > 	https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-next&id=80c968a04a381dc0e690960c60ffd6b6aee7e157
+> > 
+> > It seems unlikely that this would cause any issues in real life, but
+> > there's still a chance it will be picked up by the stable team despite
+> > the lack of a CC stable tag.
+> 
+> If you want you can always email the stable team to pick up the patch.
 
-Fixes: 65ac79e18120 ("net: dsa: microchip: add the phylink get_caps")
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+Yes, of course. But it will be months before this fix hits mainline and
+I probably won't remember to do so then.
 
-diff --git a/arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dts b/arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dts
-index 443e8b022897..14af1fd6d247 100644
---- a/arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dts
-+++ b/arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dts
-@@ -120,26 +120,31 @@ ports {
- 			port@0 {
- 				reg = <0>;
- 				label = "lan1";
-+				phy-mode = "internal";
- 			};
- 
- 			port@1 {
- 				reg = <1>;
- 				label = "lan2";
-+				phy-mode = "internal";
- 			};
- 
- 			port@2 {
- 				reg = <2>;
- 				label = "lan3";
-+				phy-mode = "internal";
- 			};
- 
- 			port@3 {
- 				reg = <3>;
- 				label = "lan4";
-+				phy-mode = "internal";
- 			};
- 
- 			port@4 {
- 				reg = <4>;
- 				label = "lan5";
-+				phy-mode = "internal";
- 			};
- 
- 			port@5 {
--- 
-2.30.2
+I'm pretty sure Sasha's autosel tool will pick it up anyway, though.
 
+Johan

@@ -2,164 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99BD546E8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA417546E88
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350489AbiFJUkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 16:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S1350472AbiFJUig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 16:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348862AbiFJUkv (ORCPT
+        with ESMTP id S1350581AbiFJUi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 16:40:51 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198E5C8BC1;
-        Fri, 10 Jun 2022 13:40:49 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id y16so158827ili.13;
-        Fri, 10 Jun 2022 13:40:49 -0700 (PDT)
+        Fri, 10 Jun 2022 16:38:28 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC86B30E752
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:38:23 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-fdfe64231dso656713fac.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=OmNB8Tcgddvh+DStPNDRj/l3PH4AXfXE+UIaJzFaKDU=;
+        b=PeEQYbTqlBNmQVeOneHYbMQ2SNrnE9oRTTJBeeItlAIoqfZ+jTsaeM3pXbv4byuW2/
+         AfTroOiJeqAqHgr6g/W5/8NxXUIGHdQ7BxUq1EEr3ZV/U/uQjrGlxVpcIR3cc5hcxYdl
+         QtdINxF1F92WAg6BPLRNtQNPQFQiMlm1VhshM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nAvb3P2a4wY9hENy4s31EHxLoq20t7wJfzc0k0RgVzg=;
-        b=sXJd1rHeWaVGzvwuOH9aNHmQYAOFvL2Hg/R1lvsB/qjFndRFGiaIMCnNqiatzpMLrZ
-         G0oK1kkp5xtTV3u+lUyvWqk/vKAFiguYbFNcJZg3qGs0h6grinTBX63GrOPF6LcXFaMy
-         tp+Zv11R5hmuKAp61qGgDCTTUtXvB5L7vUpj5PjDHnjwBcl1S82+XuwWtemF8jNTNVVi
-         35TQT1WHAZpToY6AQKMUrCxHmRm9WlPY1wVWVY8zBsc4oLLIz/2rmXtkkVEVvgpYqani
-         /kh/iLb9CkhsobZCNyqEtk99d0BS9r7mosyPp8xPVI6k2REC04csDFD+eRrBN8Kp5w+I
-         PhHw==
-X-Gm-Message-State: AOAM5302H2UFlseDmqdWtM0WsoL97ErXnkVjVmIiYcDxce+gs7f/DE8U
-        lpI9fIicsnUTPcPqJWnD5lCxWO7SCw==
-X-Google-Smtp-Source: ABdhPJwZ9K+rp8XDD+tCC6aqdUSu0IC1lm7lUFxEz2sIOi9p74vhZUp78IrbD4m/aSzN6nklbR8iMw==
-X-Received: by 2002:a05:6e02:1c88:b0:2d1:87ea:18c with SMTP id w8-20020a056e021c8800b002d187ea018cmr26193110ill.321.1654893648351;
-        Fri, 10 Jun 2022 13:40:48 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.251])
-        by smtp.googlemail.com with ESMTPSA id x15-20020a02908f000000b0032e8c565e12sm23772jaf.109.2022.06.10.13.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 13:40:48 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: display: panel-simple: Add Arm virtual platforms display
-Date:   Fri, 10 Jun 2022 14:38:18 -0600
-Message-Id: <20220610203818.2193593-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=OmNB8Tcgddvh+DStPNDRj/l3PH4AXfXE+UIaJzFaKDU=;
+        b=TsT4sKPDWzVD8r6eCWgqo+Bt4HSBoli+c1QDqR+XfdAx1MnP7GNau4krYDsPfFqPKd
+         3udnOUQFA4h5WUkcWeV6zgWmbLbqocpoycV6b4s4NxT12RulGkbd4Ri997xDOk+NKdGv
+         Q+fooft2eXYfOkV+rrd0qPlKGQcX4g8cBHezCuJf0oZ+LYBt0fHpamwPaLEdS0Fy1yfM
+         RU5ehIiT0S0tU7ravuJONi7n2u5KN0z7a64KdQfd4xzUikV024fXMz6iCtTYivso0H9S
+         GxGDwKyj5aWM911D+5TcaB0kdcQzYOes+KJpiqQJmzn8f27GaT+jTz0wgN2QCUbLYhlC
+         axWA==
+X-Gm-Message-State: AOAM532wykGIKMwF/L7FqrZuKB1ymWKQihLA2PDwqYuolTTjStXRRLSr
+        VJzWWkS+dVmPAkFyQXd0fZ7Eakwv88JZ+zFNSPHOsW0fRBA=
+X-Google-Smtp-Source: ABdhPJxrnMCKEY4AraCYzAprPhmiQ1YNHjc36TBp1WRgX1iN4BwAyAiw6GjZRAmfjgdlO1edLxRj4Tmv7M7qh5o0Mgk=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr922317oap.63.1654893502377; Fri, 10 Jun
+ 2022 13:38:22 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 10 Jun 2022 13:38:21 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1654775566-21953-1-git-send-email-quic_dikshita@quicinc.com>
+References: <1654775566-21953-1-git-send-email-quic_dikshita@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 10 Jun 2022 13:38:21 -0700
+Message-ID: <CAE-0n50q5GJ_q9Pojjrh+34W+i6BXhxSDCS6M_6NLP0pyZYuQg@mail.gmail.com>
+Subject: Re: [PATCH] venus: Add support for SSR trigger using fault injection
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, stanimir.varbanov@linaro.org,
+        quic_vgarodia@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'arm,rtsm-display' is a panel for Arm, Ltd. virtual platforms (e.g. FVP).
-The binding has been in use for a long time, but was never documented.
+Quoting Dikshita Agarwal (2022-06-09 04:52:46)
+> diff --git a/drivers/media/platform/qcom/venus/dbgfs.c b/drivers/media/platform/qcom/venus/dbgfs.c
+> index 52de47f..a0bfb9e 100644
+> --- a/drivers/media/platform/qcom/venus/dbgfs.c
+> +++ b/drivers/media/platform/qcom/venus/dbgfs.c
+> @@ -4,13 +4,31 @@
+>   */
+>
+>  #include <linux/debugfs.h>
+> +#include <linux/fault-inject.h>
+>
+>  #include "core.h"
+>
+> +#ifdef CONFIG_FAULT_INJECTION
+> +static DECLARE_FAULT_ATTR(venus_ssr_attr);
+> +#endif
+> +
+> +bool venus_fault_inject_ssr(void)
+> +{
+> +#ifdef CONFIG_FAULT_INJECTION
+> +       return should_fail(&venus_ssr_attr, 1);
+> +#else
+> +       return false;
+> +#endif
+> +}
 
-Some users and an example have a 'panel-dpi' compatible, but that's not
-needed without a 'panel-timing' node which none of the users have since
-commit 928faf5e3e8d ("arm64: dts: fvp: Remove panel timings"). The
-example does have a 'panel-timing' node, but it should not for the
-same reasons the node was removed in the dts files. So update the
-example in arm,pl11x.yaml to match the schema.
+It would be better to remove the ifdef in this function and define a
+static inline version that returns false when CONFIG_FAULT_INJECTION is
+disabled so that the compiler doesn't have to insert a function call to
+venus_fault_inject_ssr() when the config is disabled. It may also be
+good to avoid the jump when enabled by exporting the attribute to the
+irq handler file.
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/display/arm,pl11x.yaml           | 15 +-------------
- .../bindings/display/panel/panel-simple.yaml  | 20 +++++++++++++------
- 2 files changed, 15 insertions(+), 20 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/display/arm,pl11x.yaml b/Documentation/devicetree/bindings/display/arm,pl11x.yaml
-index b545c6d20325..6cc9045e5c68 100644
---- a/Documentation/devicetree/bindings/display/arm,pl11x.yaml
-+++ b/Documentation/devicetree/bindings/display/arm,pl11x.yaml
-@@ -159,25 +159,12 @@ examples:
-     };
- 
-     panel {
--        compatible = "arm,rtsm-display", "panel-dpi";
--        power-supply = <&vcc_supply>;
-+        compatible = "arm,rtsm-display";
- 
-         port {
-             clcd_panel: endpoint {
-                 remote-endpoint = <&clcd_pads>;
-             };
-         };
--
--        panel-timing {
--            clock-frequency = <25175000>;
--            hactive = <640>;
--            hback-porch = <40>;
--            hfront-porch = <24>;
--            hsync-len = <96>;
--            vactive = <480>;
--            vback-porch = <32>;
--            vfront-porch = <11>;
--            vsync-len = <2>;
--        };
-     };
- ...
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-index 21ba90c9fe33..97afd276c54a 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-@@ -19,9 +19,6 @@ description: |
- 
-   If the panel is more advanced a dedicated binding file is required.
- 
--allOf:
--  - $ref: panel-common.yaml#
--
- properties:
- 
-   compatible:
-@@ -35,6 +32,8 @@ properties:
-       - ampire,am-480272h3tmqw-t01h
-         # Ampire AM-800480R3TMQW-A1H 7.0" WVGA TFT LCD panel
-       - ampire,am800480r3tmqwa1h
-+        # Arm, Ltd. Virtual Platforms Display
-+      - arm,rtsm-display
-         # AU Optronics Corporation 10.1" WSVGA TFT LCD panel
-       - auo,b101aw03
-         # AU Optronics Corporation 10.1" WSVGA TFT LCD panel
-@@ -340,9 +339,18 @@ properties:
- 
- additionalProperties: false
- 
--required:
--  - compatible
--  - power-supply
-+allOf:
-+  - $ref: panel-common.yaml#
-+  - if:
-+      # Most 'simple' panels must have a single supply, but a virtual display does not
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              const: arm,rtsm-display
-+    then:
-+      required:
-+        - power-supply
- 
- examples:
-   - |
--- 
-2.34.1
-
+> +
+>  void venus_dbgfs_init(struct venus_core *core)
+>  {
+>         core->root = debugfs_create_dir("venus", NULL);
+>         debugfs_create_x32("fw_level", 0644, core->root, &venus_fw_debug);
+> +
+> +#ifdef CONFIG_FAULT_INJECTION
+> +       fault_create_debugfs_attr("fail_ssr", core->root, &venus_ssr_attr);
+> +#endif
+>  }
+>
+>  void venus_dbgfs_deinit(struct venus_core *core)

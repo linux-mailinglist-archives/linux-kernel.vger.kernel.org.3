@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AD554675E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA73D546762
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243438AbiFJN3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        id S1348669AbiFJNbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242455AbiFJN3U (ORCPT
+        with ESMTP id S1343950AbiFJNbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:29:20 -0400
-Received: from linderud.pw (linderud.dev [163.172.10.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EEB401BCE;
-        Fri, 10 Jun 2022 06:29:17 -0700 (PDT)
-Received: from linderud.pw (localhost [127.0.0.1])
-        by linderud.pw (Postfix) with ESMTP id 54384C0267;
-        Fri, 10 Jun 2022 15:29:14 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        Fri, 10 Jun 2022 09:31:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C864822848B;
+        Fri, 10 Jun 2022 06:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654867882; x=1686403882;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+sipVNO53rbC/tmwAHMBsRjzosEnmg6fcQiYVVUappM=;
+  b=Rz5tyJexhHOMlIJkJLef2WpiqLI00jnKG+3u362wFbei2MsH2xg+EiJ4
+   eAAhSKKIh9Py7ZN+saeIRHRYjsxt1eMS0oYzDRI+ZF2bjaJklC6cZyNny
+   nGbXZvNgP7H61JzXAPhMpavz4woCCqw3w0dzWPcU7tcqEPBnWGRKJVfL0
+   ZpwluRLk1hObVNtBPx9dUcIhmBCDGElZ+rQbMQ8rop4ZkUCzVR6+yXycR
+   Q7DLf3L+W0TeBnStnD3ht1A1K+eqbHBPtqCDFdUfLiJuCtDiablcQ172/
+   vX1HkIz1nfaMdCqAAA4VjA2uY2x6jJlDl2//4HjaR/Nnxvo5CtXhC9RyW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266395316"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="266395316"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 06:31:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="616483978"
+Received: from mylly.fi.intel.com (HELO [10.237.72.181]) ([10.237.72.181])
+  by orsmga001.jf.intel.com with ESMTP; 10 Jun 2022 06:31:17 -0700
+Message-ID: <c4b34414-cc12-0d0f-49a1-f73c9d17611e@linux.intel.com>
+Date:   Fri, 10 Jun 2022 16:31:16 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.0
+Subject: Re: [PATCH] i2c: designware: Use standard optional ref clock
+ implementation
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220610074233.9748-1-Sergey.Semin@baikalelectronics.ru>
+ <YqMovttAaGBw796k@smile.fi.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <YqMovttAaGBw796k@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
-        s=linderud; t=1654867754;
-        bh=zSEFhvzDPXveY/kOQLgahETmEeSCHLhTHtpWFZ2Af7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=aYb99NTSxKFT4ok0wHTsIkpL0o7Jtm0peSXi1Oghrab1AgYwoHHOF3mkrJzRqyGT3
-         HwA8LPhrZqOpn3EV4TgXtIq6C41lF+B1hAQyHRHqLrT1L9DUO6D8lh+ePcenFpk9oh
-         Rwg1yw2coPTxZuvjpcoboD1kcvmXZpwQdEYaSl11+zdE/5PEFfPLvSLELw7NpjhXx1
-         kbnViyB7mcF+er7dDlqe2hjrPhp7TZ5aHN+VDcsoE9iORxMwGzGe+NScNJuZEoJ5/F
-         2crll7rH/pQtqny+QCjrtNG4TroTwh1B7FaZJhuZCrj36cakFNlWYhD74Lmu+aYd0w
-         yzeHptMX50BgtPqNORl95frhNPvMcGqG2xnuj6mXH1ogodcp+jdagyhOSNt8tZgxbx
-         VXkm58Ljl1P/iFZw52idGA4z4GPW86fjP2HGD99AkX6hKttkrgH433gXaBnSGIelJT
-         xXwb0MBKOajDjqAUv72/wbs4MYWZjUgTPzVQwynyYUN9ha1uVC3DeiXTrMPuE6viwh
-         U90MAGRW2hEf+UgoejNO23PgRoLVbsZVlUK9Tg37DeiALw2iW589lzorcSEzOmsd8T
-         qey3gmUh+ofoyIWuh1ZM83vwWA7H+Q2WNTjAdHDkBrmoO8GmTsTiS0S9Sn64NRxyDl
-         +bjbWysrG2pMgd8gRzmhe6wY=
-Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: morten)
-        by linderud.pw (Postfix) with ESMTPSA id 15BC1C024D;
-        Fri, 10 Jun 2022 15:29:14 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 15:29:12 +0200
-From:   Morten Linderud <morten@linderud.pw>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
- address
-Message-ID: <20220610132912.toovhhqtqr3vdepq@terminus>
-References: <20220608123109.678343-1-morten@linderud.pw>
- <YqF7NktlAJg26Bvd@iki.fi>
- <20220609081159.rjj7a3x63y7ag4ty@terminus>
- <YqHdwD/hJfVdSE94@iki.fi>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YqHdwD/hJfVdSE94@iki.fi>
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 02:47:12PM +0300, Jarkko Sakkinen wrote:
-> On Thu, Jun 09, 2022 at 10:11:59AM +0200, Morten Linderud wrote:
-> > On Thu, Jun 09, 2022 at 07:46:46AM +0300, Jarkko Sakkinen wrote:
-> >
-> > > What you are using this for? Without any actual bug report, this 
-> > > is an obvious NAK.
-> > 
-> > I have hardware with faulty ACPI values which prevents me from getting a
-> > eventlog. I can surely make a bugreport if it helps the case, but that seems
-> > like an arbiterary hurdle when I have already spent the time tracking down the
-> > issue and proposed a fix.
+On 6/10/22 14:19, Andy Shevchenko wrote:
+> On Fri, Jun 10, 2022 at 10:42:33AM +0300, Serge Semin wrote:
+>> Even though the DW I2C controller reference clock source is requested by
+>> the method devm_clk_get() with non-optional clock requirement the way the
+>> clock handler is used afterwards has a pure optional clock semantic
+>> (though in some circumstances we can get a warning about the clock missing
+>> printed in the system console). There is no point in reimplementing that
+>> functionality seeing the kernel clock framework already supports the
+>> optional interface from scratch. Thus let's convert the platform driver to
+>> using it.
+>>
+>> Note by providing this commit we get to fix two problems. The first one
+>> was introduced in commit c62ebb3d5f0d ("i2c: designware: Add support for
+>> an interface clock"). It causes not having the interface clock (pclk)
+>> enabled/disabled in case if the reference clock isn't provided. The second
+>> problem was first introduced in commit b33af11de236 ("i2c: designware: Do
+>> not require clock when SSCN and FFCN are provided"). Since that
+>> modification the deferred probe procedure has been unsupported in case if
+>> the interface clock isn't ready.
 > 
-> What is the hardware?
-
-I included it in the commit message with the listed ACPI table values.
-
-
-The following hardware was used to test this issue:
-    Framework Laptop (Pre-production)
-    BIOS: INSYDE Corp, Revision: 3.2
-    TPM Device: NTC, Firmware Revision: 7.2
-
-Dump of the faulty ACPI TPM2 table:
-    [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface Table]
-    [004h 0004   4]                 Table Length : 0000004C
-    [008h 0008   1]                     Revision : 04
-    [009h 0009   1]                     Checksum : 2B
-    [00Ah 0010   6]                       Oem ID : "INSYDE"
-    [010h 0016   8]                 Oem Table ID : "TGL-ULT"
-    [018h 0024   4]                 Oem Revision : 00000002
-    [01Ch 0028   4]              Asl Compiler ID : "ACPI"
-    [020h 0032   4]        Asl Compiler Revision : 00040000
-
-    [024h 0036   2]               Platform Class : 0000
-    [026h 0038   2]                     Reserved : 0000
-    [028h 0040   8]              Control Address : 0000000000000000
-    [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
-
-    [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
-    [040h 0064   4]           Minimum Log Length : 00010000
-    [044h 0068   8]                  Log Address : 000000004053D000
-
--- 
-Morten Linderud
-PGP: 9C02FF419FECBE16
+> Makes sense,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>

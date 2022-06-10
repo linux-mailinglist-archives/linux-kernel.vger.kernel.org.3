@@ -2,148 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A09E546A9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF835546AAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345589AbiFJQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S1349713AbiFJQh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349369AbiFJQhA (ORCPT
+        with ESMTP id S1344890AbiFJQhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:37:00 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843EA58E61;
-        Fri, 10 Jun 2022 09:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GU5EGVeTqN5+C1jzIs0AK4LYqqFPJgnxg1VAjCLxsuM=; b=VL/CuC9jG/VSJ4pukOpiQLXsjw
-        Duh8E9PDnQpKExZeAOfaEkvppZfvnJMxaGjA+3WIyKE3a5xgByLieyfRz0zTq7AvXaxXcBteTDt82
-        qmY2aKF1JlbXy0e3/eZ2hufOEk7o/FuoekMOwsbSDvRmT+48gnmKW1GoU2GAOlkXHc2M8wfL+xQMZ
-        XDSU0hW8kSEIPXglFdSKowBLCfnUtRr8esuufnnMB3KhmxdVOMV/hb1+rNdGu886nPwd8I7tW5Ghi
-        lcYzYo7Vn2wXrWfsfWwKXco3nnOZy7L8zdP1/WFYri7F9+CyTLSB2FgRcn+CwqDDXATNsNp5IWXHe
-        WIVw8gZg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32818)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nzhcp-0007ot-DT; Fri, 10 Jun 2022 17:36:43 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nzhcl-0003oO-Ib; Fri, 10 Jun 2022 17:36:39 +0100
-Date:   Fri, 10 Jun 2022 17:36:39 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     hauke@hauke-m.de, Linus Walleij <linus.walleij@linaro.org>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/5] net: dsa: realtek: rtl8365mb: handle PHY
- interface modes correctly
-Message-ID: <YqNzF7KbSI9h0tSQ@shell.armlinux.org.uk>
-References: <20220610153829.446516-1-alvin@pqrs.dk>
- <20220610153829.446516-6-alvin@pqrs.dk>
+        Fri, 10 Jun 2022 12:37:15 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94EFF56FB8;
+        Fri, 10 Jun 2022 09:37:14 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 57D1220BE67F; Fri, 10 Jun 2022 09:37:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 57D1220BE67F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1654879034;
+        bh=rcPTYQEFoo7Vpv208s+mxB/YH8/TY4Eoz0CP7fKKexY=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=QT0TtHGeWPhHDKEmXk4NtsdSizTmD2Ik/G9PK/mGF8lDnJnFWBlRLJtPnuenDTTeL
+         sNvg4ykbiwTTb4Fmm/F5sApOJKdWDpsB35YU8UphKatpWKBPqa2Gk+7kfOGZR4UgXc
+         U+oCAZLDuyzTmMfs4ZwzxPHNiJTBAjH+hX6HEF1g=
+Date:   Fri, 10 Jun 2022 09:37:14 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com,
+        linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Subject: Re: [PATCH] scsi: storvsc: Correct sysfs parameters as per Hyper-V
+ storvsc requirement
+Message-ID: <20220610163714.GA25982@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1654878824-25691-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610153829.446516-6-alvin@pqrs.dk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1654878824-25691-1-git-send-email-ssengar@linux.microsoft.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 05:38:29PM +0200, Alvin Šipraga wrote:
-> Finally, rtl8365mb_phylink_get_caps() is fixed up to return supported
-> capabilities based on the external interface properties described above.
-> This allows for ports with an external interface to be treated as DSA
-> user ports, and for ports with an internal PHY to be treated as DSA CPU
-> ports.
+CC : linux-scsi@vger.kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com
 
-I've needed to read that a few times... and I'm still not sure. You seem
-to be saying that:
-- ports with an internal PHY (which presumably provide baseT connections?)
-  are used as DSA CPU ports.
-- ports with an external interface supporting a range of RGMII, SGMII and
-  HSGMII interface modes are DSA user ports.
-
-With Marvell switches, it's the other way around - the ports with an
-internal PHY are normally DSA user ports. Other ports can be a user,
-inter-switch or CPU port.
-
-So, I'm slightly confused by your description.
-
-In any ase, looking at the get_caps() (and only that):
-
-> @@ -953,7 +1026,13 @@ static int rtl8365mb_ext_config_forcemode(struct realtek_priv *priv, int port,
->  static void rtl8365mb_phylink_get_caps(struct dsa_switch *ds, int port,
->  				       struct phylink_config *config)
->  {
-> -	if (dsa_is_user_port(ds, port)) {
-> +	const struct rtl8365mb_extint *extint =
-> +		rtl8365mb_get_port_extint(ds->priv, port);
-> +
-> +	config->mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
-> +				   MAC_10 | MAC_100 | MAC_1000FD;
-
-MAC capabilities are constant across all interfaces - okay.
-
-> +
-> +	if (!extint) {
->  		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
->  			  config->supported_interfaces);
+On Fri, Jun 10, 2022 at 09:33:44AM -0700, Saurabh Sengar wrote:
+> This patch corrects 3 parameters:
+> 1. Correct the sysfs entry for maximum hardware transfer limit of single
+>    transfer (max_hw_sectors_kb) by setting max_sectors, this was set to
+>    default value 512kb before.
+> 2. Correct SGL memory offset alignment as per Hyper-V page size.
+> 3. Correct sg_tablesize which accounts for max SGL segments entries in a
+>    single SGL.
+> 
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> ---
+>  drivers/scsi/storvsc_drv.c | 28 ++++++++++++++++++++++++----
+>  1 file changed, 24 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index ca3530982e52..3e032660ae36 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -1844,7 +1844,7 @@ static struct scsi_host_template scsi_driver = {
+>  	.cmd_per_lun =		2048,
+>  	.this_id =		-1,
+>  	/* Ensure there are no gaps in presented sgls */
+> -	.virt_boundary_mask =	PAGE_SIZE-1,
+> +	.virt_boundary_mask =	HV_HYP_PAGE_SIZE - 1,
+>  	.no_write_same =	1,
+>  	.track_queue_depth =	1,
+>  	.change_queue_depth =	storvsc_change_queue_depth,
+> @@ -1969,11 +1969,31 @@ static int storvsc_probe(struct hv_device *device,
+>  	/* max cmd length */
+>  	host->max_cmd_len = STORVSC_MAX_CMD_LEN;
 >  
-> @@ -962,12 +1041,16 @@ static void rtl8365mb_phylink_get_caps(struct dsa_switch *ds, int port,
->  		 */
->  		__set_bit(PHY_INTERFACE_MODE_GMII,
->  			  config->supported_interfaces);
-> -	} else if (dsa_is_cpu_port(ds, port)) {
-> -		phy_interface_set_rgmii(config->supported_interfaces);
-> +		return;
-
-Internal ports need to support phylib, so both internal and gmii
-interface modes - okay.
-
->  	}
->  
-> -	config->mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
-> -				   MAC_10 | MAC_100 | MAC_1000FD;
-> +	/* Populate according to the modes supported by _this driver_,
-> +	 * not necessarily the modes supported by the hardware, some of
-> +	 * which remain unimplemented.
-> +	 */
-> +
-> +	if (extint->supported_interfaces & RTL8365MB_PHY_INTERFACE_MODE_RGMII)
-> +		phy_interface_set_rgmii(config->supported_interfaces);
-
-External ports that support RGMII get all RGMII modes - also okay.
-
-So, for the get_cops() function, I'm fine with this new code, and for
-this alone:
-
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-
-I haven't looked at the remainder of the changes.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> +	/* max_hw_sectors_kb */
+> +	host->max_sectors = (stor_device->max_transfer_bytes) >> 9;
+>  	/*
+> -	 * set the table size based on the info we got
+> -	 * from the host.
+> +	 * There are 2 requirements for Hyper-V storvsc sgl segments,
+> +	 * based on which the below calculation for max segments is
+> +	 * done:
+> +	 *
+> +	 * 1. Except for the first and last sgl segment, all sgl segments
+> +	 *    should be align to HV_HYP_PAGE_SIZE, that also means the
+> +	 *    maximum number of segments in a sgl can be calculated by
+> +	 *    dividing the total max transfer length by HV_HYP_PAGE_SIZE.
+> +	 *
+> +	 * 2. Except for the first and last, each entry in the SGL must
+> +	 *    have an offset that is a multiple of HV_HYP_PAGE_SIZE,
+> +	 *    whereas the complete length of transfer may not be aligned
+> +	 *    to HV_HYP_PAGE_SIZE always. This can result in 2 cases:
+> +	 *    Example for unaligned case: Let's say the total transfer
+> +	 *    length is 6 KB, the max segments will be 3 (1,4,1).
+> +	 *    Example for aligned case: Let's say the total transfer length
+> +	 *    is 8KB, then max segments will still be 3(2,4,2) and not 4.
+> +	 *    4 (read next higher value) segments will only be required
+> +	 *    once the length is at least 2 bytes more then 8KB (read any
+> +	 *    HV_HYP_PAGE_SIZE aligned length).
+>  	 */
+> -	host->sg_tablesize = (stor_device->max_transfer_bytes >> PAGE_SHIFT);
+> +	host->sg_tablesize = ((stor_device->max_transfer_bytes - 2) >> HV_HYP_PAGE_SHIFT) + 2;
+>  	/*
+>  	 * For non-IDE disks, the host supports multiple channels.
+>  	 * Set the number of HW queues we are supporting.
+> -- 
+> 2.25.1

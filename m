@@ -2,367 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DD6545DC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8125D545DCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346985AbiFJHsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S244433AbiFJHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346981AbiFJHsp (ORCPT
+        with ESMTP id S245744AbiFJHuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:48:45 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B490172C3A;
-        Fri, 10 Jun 2022 00:48:42 -0700 (PDT)
-X-UUID: 06f756f6f8094475b4282699a82fb0bb-20220610
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:ab5965ad-6680-4090-9d30-0960fb50c71a,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:54
-X-CID-INFO: VERSION:1.1.5,REQID:ab5965ad-6680-4090-9d30-0960fb50c71a,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_HamU,ACT
-        ION:release,TS:54
-X-CID-META: VersionHash:2a19b09,CLOUDID:afbbea7e-c8dc-403a-96e8-6237210dceee,C
-        OID:3aea39eabcd7,Recheck:0,SF:28|16|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
-        URL:0,File:nil,QS:0,BEC:nil
-X-UUID: 06f756f6f8094475b4282699a82fb0bb-20220610
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <ed.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 502707340; Fri, 10 Jun 2022 15:48:37 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 10 Jun 2022 15:48:36 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 10 Jun 2022 15:48:36 +0800
-Message-ID: <07ad7d51d15c7ffc708b55066ded653a4b2c5c98.camel@mediatek.com>
-Subject: Re: [PATCH] [fuse] alloc_page nofs avoid deadlock
-From:   Ed Tsai <ed.tsai@mediatek.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        chenguanyou <chenguanyou9338@gmail.com>,
-        Stanley Chu =?UTF-8?Q?=28=E6=9C=B1=E5=8E=9F=E9=99=9E=29?= 
-        <stanley.chu@mediatek.com>,
-        Yong-xuan Wang =?UTF-8?Q?=28=E7=8E=8B=E8=A9=A0=E8=90=B1=29?= 
-        <Yong-xuan.Wang@mediatek.com>
-Date:   Fri, 10 Jun 2022 15:48:36 +0800
-In-Reply-To: <SI2PR03MB5545E0B76E54013678B9FEEC8BA99@SI2PR03MB5545.apcprd03.prod.outlook.com>
-References: <20210603125242.31699-1-chenguanyou@xiaomi.com>
-         <CAJfpegsEkRnU26Vvo4BTQUmx89Hahp6=RTuyEcPm=rqz8icwUQ@mail.gmail.com>
-         <1fabb91167a86990f4723e9036a0e006293518f4.camel@mediatek.com>
-         <CAJfpegsOSWZpKHqDNE_B489dGCzLr-RVAhimVOsFkxJwMYmj9A@mail.gmail.com>
-         <07c5f2f1e10671bc462f88717f84aae9ee1e4d2b.camel@mediatek.com>
-         <CAJfpegvAJS=An+hyAshkNcTS8A2TM28V2UP4SYycXUw3awOR+g@mail.gmail.com>
-         <YVMz8E1Lg/GZQcjw@miu.piliscsaba.redhat.com>
-         <SI2PR03MB5545E0B76E54013678B9FEEC8BA99@SI2PR03MB5545.apcprd03.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 10 Jun 2022 03:50:17 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26F283B1703
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:50:11 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id A88E416A0;
+        Fri, 10 Jun 2022 10:51:02 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com A88E416A0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1654847462;
+        bh=w5FH76gWEQ4AnYJI+MYraAyan6YWIE7deOEkKSQuq2o=;
+        h=From:To:CC:Subject:Date:From;
+        b=H95TjMygvgbqaHloc0Flrv+grJWgCD0R8QCe5N/LeD3gRi+To4peFsn6lD8Ee0Tsr
+         r/DbYO6QiPlXReDtLWImwzOfm268jt8RcBDZmUTJsEtijaaRMg6Es+aO/0zaFANOWH
+         4fHvWxvtH4atHevmM5wXjs2lHoa5hrM6fNoEc7TI=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 10:50:10 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] spi: dw: Add deferred DMA-channels setup support
+Date:   Fri, 10 Jun 2022 10:50:06 +0300
+Message-ID: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Sep 24, 2021 at 09:52:35AM +0200, Miklos Szeredi wrote:
-> > On Fri, 24 Sept 2021 at 05:52, Ed Tsai <ed.tsai@mediatek.com>
-> > wrote:
-> > > 
-> > > On Wed, 2021-08-18 at 17:24 +0800, Miklos Szeredi wrote:
-> > > > On Tue, 13 Jul 2021 at 04:42, Ed Tsai <ed.tsai@mediatek.com>
-> > > > wrote:
-> > > > > 
-> > > > > On Tue, 2021-06-08 at 17:30 +0200, Miklos Szeredi wrote:
-> > > > > > On Thu, 3 Jun 2021 at 14:52, chenguanyou < 
-> > > > > > chenguanyou9338@gmail.com>
-> > > > > > wrote:
-> > > > > > > 
-> > > > > > > ABA deadlock
-> > > > > > > 
-> > > > > > > PID: 17172 TASK: ffffffc0c162c000 CPU: 6 COMMAND:
-> > > > > > > "Thread-21"
-> > > > > > > 0 [ffffff802d16b400] __switch_to at ffffff8008086a4c
-> > > > > > > 1 [ffffff802d16b470] __schedule at ffffff80091ffe58
-> > > > > > > 2 [ffffff802d16b4d0] schedule at ffffff8009200348
-> > > > > > > 3 [ffffff802d16b4f0] bit_wait at ffffff8009201098
-> > > > > > > 4 [ffffff802d16b510] __wait_on_bit at ffffff8009200a34
-> > > > > > > 5 [ffffff802d16b5b0] inode_wait_for_writeback at
-> > > > > > > ffffff800830e1e8
-> > > > > > > 6 [ffffff802d16b5e0] evict at ffffff80082fb15c
-> > > > > > > 7 [ffffff802d16b620] iput at ffffff80082f9270
-> > > > > > > 8 [ffffff802d16b680] dentry_unlink_inode at
-> > > > > > > ffffff80082f4c90
-> > > > > > > 9 [ffffff802d16b6a0] __dentry_kill at ffffff80082f1710
-> > > > > > > 10 [ffffff802d16b6d0] shrink_dentry_list at
-> > > > > > > ffffff80082f1c34
-> > > > > > > 11 [ffffff802d16b750] prune_dcache_sb at ffffff80082f18a8
-> > > > > > > 12 [ffffff802d16b770] super_cache_scan at
-> > > > > > > ffffff80082d55ac
-> > > > > > > 13 [ffffff802d16b860] shrink_slab at ffffff8008266170
-> > > > > > > 14 [ffffff802d16b900] shrink_node at ffffff800826b420
-> > > > > > > 15 [ffffff802d16b980] do_try_to_free_pages at 
-> > > > > > > ffffff8008268460
-> > > > > > > 16 [ffffff802d16ba60] try_to_free_pages at
-> > > > > > > ffffff80082680d0
-> > > > > > > 17 [ffffff802d16bbe0] __alloc_pages_nodemask at
-> > > > > > > ffffff8008256514
-> > > > > > > 18 [ffffff802d16bc60] fuse_copy_fill at ffffff8008438268
-> > > > > > > 19 [ffffff802d16bd00] fuse_dev_do_read at
-> > > > > > > ffffff8008437654
-> > > > > > > 20 [ffffff802d16bdc0] fuse_dev_splice_read at 
-> > > > > > > ffffff8008436f40
-> > > > > > > 21 [ffffff802d16be60] sys_splice at ffffff8008315d18
-> > > > > > > 22 [ffffff802d16bff0] __sys_trace at ffffff8008084014
-> > > > > > > 
-> > > > > > > PID: 9652 TASK: ffffffc0c9ce0000 CPU: 4 COMMAND:
-> > > > > > > "kworker/u16:8"
-> > > > > > > 0 [ffffff802e793650] __switch_to at ffffff8008086a4c
-> > > > > > > 1 [ffffff802e7936c0] __schedule at ffffff80091ffe58
-> > > > > > > 2 [ffffff802e793720] schedule at ffffff8009200348
-> > > > > > > 3 [ffffff802e793770] __fuse_request_send at
-> > > > > > > ffffff8008435760
-> > > > > > > 4 [ffffff802e7937b0] fuse_simple_request at
-> > > > > > > ffffff8008435b14
-> > > > > > > 5 [ffffff802e793930] fuse_flush_times at ffffff800843a7a0
-> > > > > > > 6 [ffffff802e793950] fuse_write_inode at ffffff800843e4dc
-> > > > > > > 7 [ffffff802e793980] __writeback_single_inode at
-> > > > > > > ffffff8008312740
-> > > > > > > 8 [ffffff802e793aa0] writeback_sb_inodes at
-> > > > > > > ffffff80083117e4
-> > > > > > > 9 [ffffff802e793b00] __writeback_inodes_wb at 
-> > > > > > > ffffff8008311d98
-> > > > > > > 10 [ffffff802e793c00] wb_writeback at ffffff8008310cfc
-> > > > > > > 11 [ffffff802e793d00] wb_workfn at ffffff800830e4a8
-> > > > > > > 12 [ffffff802e793d90] process_one_work at
-> > > > > > > ffffff80080e4fac
-> > > > > > > 13 [ffffff802e793e00] worker_thread at ffffff80080e5670
-> > > > > > > 14 [ffffff802e793e60] kthread at ffffff80080eb650
-> > > > > > 
-> > > > > > The issue is real.
-> > > > > > 
-> > > > > > The fix, however, is not the right one.  The fundamental 
-> > > > > > problem is that fuse_write_inode() blocks on a request to 
-> > > > > > userspace.
-> > > > > > 
-> > > > > > This is the same issue that fuse_writepage/fuse_writepages 
-> > > > > > face.  In that case the solution was to copy the page
-> > > > > > contents 
-> > > > > > to a temporary buffer and return immediately as if the 
-> > > > > > writeback already completed.
-> > > > > > 
-> > > > > > Something similar needs to be done here: send the
-> > > > > > FUSE_SETATTR 
-> > > > > > request asynchronously and return immediately from 
-> > > > > > fuse_write_inode().  The tricky part is to make sure that 
-> > > > > > multiple time updates for the same inode aren't mixed up...
-> > > > > > 
-> > > > > > Thanks,
-> > > > > > Miklos
-> > > > > 
-> > > > > Dear Szeredi,
-> > > > > 
-> > > > > Writeback thread calls fuse_write_inode() and wait for user 
-> > > > > Daemon to complete this write inode request. The user daemon 
-> > > > > will
-> > > > > alloc_page()
-> > > > > after taking this request, and a deadlock could happen when
-> > > > > we 
-> > > > > try to shrink dentry list under memory pressure.
-> > > > > 
-> > > > > We (Mediatek) glad to work on this issue for mainline and
-> > > > > also LTS.
-> > > > > So
-> > > > > another problem is that we should not change the protocol or 
-> > > > > feature for stable kernel.
-> > > > > 
-> > > > > Use GFP_NOFS | __GFP_HIGHMEM can really avoid this by skip
-> > > > > the 
-> > > > > dentry shirnker. It works but degrade the alloc_page success 
-> > > > > rate. In a more fundamental way, we could cache the contents
-> > > > > and 
-> > > > > return immediately.
-> > > > > But how to ensure the request will be done successfully,
-> > > > > e.g., 
-> > > > > always retry if it fails from daemon.
-> > > > 
-> > > > Key is where the the dirty metadata is flushed.  To prevent 
-> > > > deadlock it must not be flushed from memory reclaim, so must
-> > > > make 
-> > > > sure that it is flushed on close(2) and munmap(2) and not
-> > > > dirtied after that.
-> > > > 
-> > > > I'm working on this currently and hope to get it ready for the 
-> > > > next merge window.
-> > > > 
-> > > > Thanks,
-> > > > Miklos
-> > > 
-> > > Hi Miklos,
-> > > 
-> > > I'm not sure whether it has already been resolved in mainline.
-> > > If it still WIP, please cc me on future emails.
-> > 
-> > Hi,
-> > 
-> > This is taking a bit longer, unfortunately, but I already have 
-> > something in testing and currently cleaning it up for review.  Hope
-> > to 
-> > post a series today or early next week.
-> 
-> 
-> Here's a minimal patch.  It's been through some iterations and some
-> testing, but more review and testing is definitely welcome.
-> 
-> Chenguanyou, can you please verify that it fixes the deadlock?
-> 
-> Thanks,
-> Miklos
-> 
-> ---
-> From: Miklos Szeredi <mszeredi@redhat.com>
-> Subject: fuse: make sure reclaim doesn't write the inode
-> 
-> In writeback cache mode mtime/ctime updates are cached, and flushed
-> to the server using the ->write_inode() callback.
-> 
-> Closing the file will result in a dirty inode being immediately
-> written, but in other cases the inode can remain dirty after all
-> references are dropped.  This result in the inode being written back
-> from reclaim, which can deadlock on a regular allocation while the
-> request is being served.
-> 
-> The usual mechanisms (GFP_NOFS/PF_MEMALLOC*) don't work for FUSE,
-> because serving a request involves unrelated userspace process(es).
-> 
-> Instead do the same as for dirty pages: make sure the inode is
-> written before the last reference is gone.
-> 
->  - fuse_vma_close(): flush times in addition to the dirty pages
-> 
->  - fallocate(2)/copy_file_range(2): these call file_update_time() or
->    file_modified(), so flush the inode before returning from the call
-> 
->  - unlink(2), link(2) and rename(2): these call fuse_update_ctime(),
-> so
->    flush the ctime directly from this helper
-> 
-> Reported-by: chenguanyou <chenguanyou@xiaomi.com>
-> Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
-> ---
->  fs/fuse/dir.c    |    8 ++++++++
->  fs/fuse/file.c   |   24 +++++++++++++++++++++---
->  fs/fuse/fuse_i.h |    1 +
->  3 files changed, 30 insertions(+), 3 deletions(-)
-> 
-> --- a/fs/fuse/dir.c
-> +++ b/fs/fuse/dir.c
-> @@ -738,12 +738,20 @@ static int fuse_symlink(struct user_name
->  	return create_new_entry(fm, &args, dir, entry, S_IFLNK);  }
->  
-> +void fuse_flush_time_update(struct inode *inode) {
-> +	int err = sync_inode_metadata(inode, 1);
-> +
-> +	mapping_set_error(inode->i_mapping, err); }
-> +
->  void fuse_update_ctime(struct inode *inode)  {
->  	fuse_invalidate_attr(inode);
->  	if (!IS_NOCMTIME(inode)) {
->  		inode->i_ctime = current_time(inode);
->  		mark_inode_dirty_sync(inode);
-> +		fuse_flush_time_update(inode);
->  	}
->  }
->  
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@ -1847,6 +1847,17 @@ int fuse_write_inode(struct inode *inode
->  	struct fuse_file *ff;
->  	int err;
->  
-> +	/*
-> +	 * Inode is always written before the last reference is dropped
-> and
-> +	 * hence this should not be reached from reclaim.
-> +	 *
-> +	 * Writing back the inode from reclaim can deadlock if the
-> request
-> +	 * processing itself needs an allocation.  Allocations
-> triggering
-> +	 * reclaim while serving a request can't be prevented, because
-> it can
-> +	 * involve any number of unrelated userspace processes.
-> +	 */
-> +	WARN_ON(wbc->for_reclaim);
-> +
->  	ff = __fuse_write_file_get(fi);
->  	err = fuse_flush_times(inode, ff);
->  	if (ff)
-> @@ -2339,12 +2350,15 @@ static int fuse_launder_page(struct page  }
->  
->  /*
-> - * Write back dirty pages now, because there may not be any suitable
-> - * open files later
-> + * Write back dirty data/metadata now (there may not be any suitable
-> + * open files later for data)
->   */
->  static void fuse_vma_close(struct vm_area_struct *vma)  {
-> -	filemap_write_and_wait(vma->vm_file->f_mapping);
-> +	int err;
-> +
-> +	err = write_inode_now(vma->vm_file->f_mapping->host, 1);
-> +	mapping_set_error(vma->vm_file->f_mapping, err);
->  }
->  
->  /*
-> @@ -3001,6 +3015,8 @@ static long fuse_file_fallocate(struct f
->  	if (lock_inode)
->  		inode_unlock(inode);
->  
-> +	fuse_flush_time_update(inode);
-> +
->  	return err;
->  }
->  
-> @@ -3110,6 +3126,8 @@ static ssize_t __fuse_copy_file_range(st
->  	inode_unlock(inode_out);
->  	file_accessed(file_in);
->  
-> +	fuse_flush_time_update(inode_out);
-> +
->  	return err;
->  }
->  
-> --- a/fs/fuse/fuse_i.h
-> +++ b/fs/fuse/fuse_i.h
-> @@ -1145,6 +1145,7 @@ int fuse_allow_current_process(struct fu
->  
->  u64 fuse_lock_owner_id(struct fuse_conn *fc, fl_owner_t id);
->  
-> +void fuse_flush_time_update(struct inode *inode);
->  void fuse_update_ctime(struct inode *inode);
->  
->  int fuse_update_attributes(struct inode *inode, struct file *file);
+Currently if the source DMA device isn't ready to provide the channels
+capable of the SPI DMA transfers, the DW SSI controller will be registered
+with no DMA support. It isn't right since all what the driver needs to do
+is to postpone the probe procedure until the DMA device is ready. Let's
+fix that in the framework of the DWC SSI generic DMA implementation. First
+we need to use the dma_request_chan() method instead of the
+dma_request_slave_channel() function, because the later one is deprecated
+and most importantly doesn't return the failure cause but the
+NULL-pointer. Second we need to stop the DW SSI controller probe procedure
+if the -EPROBE_DEFER error is returned on the DMA initialization. The
+procedure will resume later when the channels are ready to be requested.
 
-Hi Miklos,
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+---
+ drivers/spi/spi-dw-core.c |  5 ++++-
+ drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
+ 2 files changed, 22 insertions(+), 8 deletions(-)
 
-Recently, we get this deadlock issue again. fuse_flush_time_update()
-use sync_inode_metadata() and it only write the metadata, so the
-writeback worker could still be blocked becaused of file data.
-
-I try to use write_inode_now() instead of sync_inode_metadata() and the
-writeback thread will not be blocked anymore. I don't think this is a
-good solution, but this confirm that there is still a potential
-deadlock because of file data. WDYT.
-
-Best,
-Ed Tsai
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index ecea471ff42c..911ea9bddbee 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 
+ 	if (dws->dma_ops && dws->dma_ops->dma_init) {
+ 		ret = dws->dma_ops->dma_init(dev, dws);
+-		if (ret) {
++		if (ret == -EPROBE_DEFER) {
++			goto err_free_irq;
++		} else if (ret) {
+ 			dev_warn(dev, "DMA init failed\n");
+ 		} else {
+ 			master->can_dma = dws->dma_ops->can_dma;
+@@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	if (dws->dma_ops && dws->dma_ops->dma_exit)
+ 		dws->dma_ops->dma_exit(dws);
+ 	dw_spi_enable_chip(dws, 0);
++err_free_irq:
+ 	free_irq(dws->irq, master);
+ err_free_master:
+ 	spi_controller_put(master);
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index 63e5260100ec..1322b8cce5b7 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+ 
+ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ {
+-	dws->rxchan = dma_request_slave_channel(dev, "rx");
+-	if (!dws->rxchan)
+-		return -ENODEV;
++	int ret;
+ 
+-	dws->txchan = dma_request_slave_channel(dev, "tx");
+-	if (!dws->txchan) {
+-		dma_release_channel(dws->rxchan);
++	dws->rxchan = dma_request_chan(dev, "rx");
++	if (IS_ERR(dws->rxchan)) {
++		ret = PTR_ERR(dws->rxchan);
+ 		dws->rxchan = NULL;
+-		return -ENODEV;
++		goto err_exit;
++	}
++
++	dws->txchan = dma_request_chan(dev, "tx");
++	if (IS_ERR(dws->txchan)) {
++		ret = PTR_ERR(dws->txchan);
++		dws->txchan = NULL;
++		goto free_rxchan;
+ 	}
+ 
+ 	dws->master->dma_rx = dws->rxchan;
+@@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ 	dw_spi_dma_sg_burst_init(dws);
+ 
+ 	return 0;
++
++free_rxchan:
++	dma_release_channel(dws->rxchan);
++	dws->rxchan = NULL;
++err_exit:
++	return ret;
+ }
+ 
+ static void dw_spi_dma_exit(struct dw_spi *dws)
+-- 
+2.35.1
 

@@ -2,72 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E48E546835
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DE1546839
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345536AbiFJOWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S1345809AbiFJOXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiFJOWi (ORCPT
+        with ESMTP id S1349323AbiFJOXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:22:38 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC0F183142;
-        Fri, 10 Jun 2022 07:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=taDMUZIEgul2ITYIFLACg5Q+J8VqiWoHCll5z3PilY4=; b=Jz+h7b4O3ozdl6yfEml+x3bJ5H
-        9NirobyIj/c3ttimjSTbGxGqT+mcYiw5p2HXbL7SYwWksgYNnFLypeqy2AZFFGb6uN7utH4Wtmg/c
-        h4j+r074vP3xisV+ivq7zuCVeUpqQtd1bN+8924nhglINgJO4lvVAwUocsc7Nv6ufQLcoPjwWBLcl
-        X1v8EWSQCWNbVUa2BP8LJCkZJ82DWvdudLceZkoYUE7nUNnr21snjQaIv3nsi+V8qGtqbQbRd5Ju3
-        i/yYZLkrrfoBNKu+KTdzFirZdHTWLV/XDuDY/AgVrBCqDMHgZ8ATe8be7hJMeCumcURJxRja/1nBB
-        zW2t+Zpw==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nzfWG-006gV5-VO; Fri, 10 Jun 2022 14:21:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C9B2E30017D;
-        Fri, 10 Jun 2022 16:21:47 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 833F228405295; Fri, 10 Jun 2022 16:21:47 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 16:21:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Li kunyu <kunyu@nfschina.com>, chenhuacai@kernel.org,
-        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        mingo@redhat.com, bp@alien8.de, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] x86: Change the return type of acpi_map_cpu2node to void
-Message-ID: <YqNTewtUzizxovJO@hirez.programming.kicks-ass.net>
-References: <20220610104423.201739-1-kunyu@nfschina.com>
- <7eb4762e-723b-51e8-3d70-1c28568ac4f5@intel.com>
+        Fri, 10 Jun 2022 10:23:30 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56F170657
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:23:21 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id q15-20020a056e0220ef00b002d15dcd2750so19711958ilv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:23:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=XjrtYqNiT5vEa6+Vuf9aZLxSiV1HsY2+vhx3VyfeILM=;
+        b=Ns9KmqVqSvItt54e0r8gXwYBQtqSlh2GIBAdXP1zMhxlXeywoVTaW81cPORX42hXtE
+         Ug4H0e2HHIgRnqYiV/qjMvKY11YZDpS9iYyNaGeJA7XR5oTO//6sjEgnWhb+fJukPpeh
+         YZBJyRjTw/1ucfy2V6bLLcabkkFpuntsIeOGS/fUgziTXQf3DVVwPPfsiOwsfqXc4KlS
+         bnJPQ6+JRJMxOso7usJhyqSIojEVD0f2YFUCCBeoPVezD18hctZjbFEv/agbjx3GU28t
+         cUc4YYAhbl8DJtEwLY9R4CNcm+/UrY2QTZPb7ZToMCJaqeOZnvwWWYZ5+EUiCuGYa/jZ
+         vaXA==
+X-Gm-Message-State: AOAM531BJIrSZb0U1ik30PCrgS8hViM5kD8psTntYL6ibm9is7pnqCfi
+        +buklsiI5h63ah1xYxAS+J/Gn3gAY/8UrLSx48l2o+Nh8QN9
+X-Google-Smtp-Source: ABdhPJxdU7ph+1O6uNJ43i/VXnOf3VJRWymxSsZwPNYAarUi5cziesFNY651vf+6wPlOBYjUuUfeeiPPjH2vVsVR8oHmyxQcKU96
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7eb4762e-723b-51e8-3d70-1c28568ac4f5@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:12ce:b0:2d3:de67:9f96 with SMTP id
+ i14-20020a056e0212ce00b002d3de679f96mr26904551ilm.261.1654871001228; Fri, 10
+ Jun 2022 07:23:21 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 07:23:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002d6bc305e118ae24@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in sk_psock_stop
+From:   syzbot <syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
+        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, wangyufen@huawei.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 05:35:29AM -0700, Dave Hansen wrote:
-> On 6/10/22 03:44, Li kunyu wrote:
-> > Reduce eax register calls by removing unused return values.
-> 
-> Please stop sending these patches, at least with these repetitive,
-> inaccurate descriptions.
+Hello,
 
-Dave, just add them to the /dev/null mailbox.
+syzbot found the following issue on:
+
+HEAD commit:    ff539ac73ea5 Add linux-next specific files for 20220609
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=176c121bf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5002042f00a8bce
+dashboard link: https://syzkaller.appspot.com/bug?extid=140186ceba0c496183bc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13083353f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=173e67f0080000
+
+The issue was bisected to:
+
+commit d8616ee2affcff37c5d315310da557a694a3303d
+Author: Wang Yufen <wangyufen@huawei.com>
+Date:   Tue May 24 07:53:11 2022 +0000
+
+    bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1556d7cff00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1756d7cff00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1356d7cff00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com
+Fixes: d8616ee2affc ("bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues")
+
+BUG: sleeping function called from invalid context at kernel/workqueue.c:3010
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3612, name: syz-executor475
+preempt_count: 201, expected: 0
+RCU nest depth: 0, expected: 0
+3 locks held by syz-executor475/3612:
+ #0: ffff888072eb9410 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:740 [inline]
+ #0: ffff888072eb9410 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
+ #1: ffff888027259ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1691 [inline]
+ #1: ffff888027259ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: tcp_close+0x1e/0xc0 net/ipv4/tcp.c:2908
+ #2: ffff888027259a30 (slock-AF_INET6){+...}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
+ #2: ffff888027259a30 (slock-AF_INET6){+...}-{2:2}, at: __tcp_close+0x722/0x12b0 net/ipv4/tcp.c:2830
+Preemption disabled at:
+[<ffffffff87ddddca>] local_bh_disable include/linux/bottom_half.h:20 [inline]
+[<ffffffff87ddddca>] __tcp_close+0x71a/0x12b0 net/ipv4/tcp.c:2829
+CPU: 1 PID: 3612 Comm: syz-executor475 Not tainted 5.19.0-rc1-next-20220609-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+ start_flush_work kernel/workqueue.c:3010 [inline]
+ __flush_work+0x109/0xb10 kernel/workqueue.c:3074
+ __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3162
+ sk_psock_stop+0x4cb/0x630 net/core/skmsg.c:802
+ sock_map_destroy+0x333/0x760 net/core/sock_map.c:1581
+ inet_csk_destroy_sock+0x196/0x440 net/ipv4/inet_connection_sock.c:1130
+ __tcp_close+0xd5b/0x12b0 net/ipv4/tcp.c:2897
+ tcp_close+0x29/0xc0 net/ipv4/tcp.c:2909
+ sock_map_close+0x3b9/0x780 net/core/sock_map.c:1607
+ inet_release+0x12e/0x280 net/ipv4/af_inet.c:428
+ inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:481
+ __sock_release+0xcd/0x280 net/socket.c:650
+ sock_close+0x18/0x20 net/socket.c:1365
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ ptrace_notify+0x114/0x140 kernel/signal.c:2353
+ ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+ syscall_exit_work kernel/entry/common.c:249 [inline]
+ syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+ syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fe7b3b8b6a3
+Code: c7 c2 c0 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb ba 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+RSP: 002b:00007ffce5903258 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007fe7b3b8b6a3
+RDX: 0000000000000020 RSI: 0000000020000240 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 00007fe7b3c36e40 R09: 00007fe7b3c36e40
+R10: 00007fe7b3c36e40 R11: 0000000000000246 R12: 00007ffce5903290
+R13: 00007ffce5903280 R14: 00007ffce5903270 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,63 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B04545F2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E157545F1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344003AbiFJIbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S245098AbiFJIbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348231AbiFJI3Q (ORCPT
+        with ESMTP id S1348237AbiFJI3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Jun 2022 04:29:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A793980D;
-        Fri, 10 Jun 2022 01:28:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43313A5D6;
+        Fri, 10 Jun 2022 01:28:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53033B83080;
-        Fri, 10 Jun 2022 08:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880D8C34114;
-        Fri, 10 Jun 2022 08:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654849678;
-        bh=foK0D4ULnWRCvv6logofN4aQNPZNtCyPlXBvoBcdODA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jNBTC1yPEOXIQZ3Ij0+ZK0FFEsqB4TfIYCFzE6h3MwaoJwC00PJyIZU42nLgi02pU
-         OK+aHEyO0gqLCAjkkfLmbrg4B7c4CXMwlKbjd4F3vJ5PXsZGGerbtsAFFrpgZoN24w
-         wNw+zVT7nvLuTnTxBQtdR0WnRvJmSiZbciV4+VP8=
-Date:   Fri, 10 Jun 2022 10:27:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 5.19-rc2
-Message-ID: <YqMAiwKkISZbPZBS@kroah.com>
-References: <YqL81+c9KxC2y7tD@hovoldconsulting.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8EF8F1FE01;
+        Fri, 10 Jun 2022 08:28:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654849690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ddYCcILpWSFWSrGEhbpAMqUQH/naqY2EfCNkEOYWkgk=;
+        b=kHkds3xn6vO47MLbgyIskY+RCvg7FgvsR+U6gK+LvgXtil4Fr4wIYBF9HTbADct8Cx64bx
+        wU38fTAp6fmTm7Zl/d9SLeEtikgWessrBFWQxflsifhQqkuQ3fFW+QgTpv+QlZ+TKHnFDO
+        8AX5QnlR+FtNYWAlM6voIYmVSqI7vmA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654849690;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ddYCcILpWSFWSrGEhbpAMqUQH/naqY2EfCNkEOYWkgk=;
+        b=VwxlfRo0Eevi5kGT6e+cfg/dOQhyBrPSk7XWFXqsLlRviEJzE8rVszINhBA4QzOsDL+1+u
+        5GXrJk0jJnBMB4AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 46A7C13941;
+        Fri, 10 Jun 2022 08:28:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jxfkD5oAo2KkSQAAMHmgww
+        (envelope-from <vkarasulli@suse.de>); Fri, 10 Jun 2022 08:28:10 +0000
+Date:   Fri, 10 Jun 2022 10:28:08 +0200
+From:   Vasant Karasulli <vkarasulli@suse.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, jroedel@suse.de, kvm@vger.kernel.org,
+        bp@alien8.de, x86@kernel.org, thomas.lendacky@amd.com
+Subject: Re: [PATCH v6 2/4] x86/tests: Add tests for AMD SEV-ES #VC handling
+ Add KUnit based tests to validate Linux's VC handling for instructions cpuid
+ and wbinvd. These tests: 1. install a kretprobe on the #VC handler
+ (sev_es_ghcb_hv_call, to access GHCB before/after the resulting VMGEXIT). 2.
+ trigger an NAE by executing either cpuid or wbinvd. 3. check that the
+ kretprobe was hit with the right exit_code available in GHCB.
+Message-ID: <YqMAmBkeitMdeCTW@vasant-suse>
+References: <20220318094532.7023-1-vkarasulli@suse.de>
+ <20220318094532.7023-3-vkarasulli@suse.de>
+ <Ykzrb1uyPZ2AKWos@google.com>
+ <YqBivtMl74FGmz7r@vasant-suse>
+ <YqCzy5Kngj+OgD2h@google.com>
+ <YqDD/0IWnoMXEAWg@vasant-suse>
+ <YqD/ObG9ae9YQVNy@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqL81+c9KxC2y7tD@hovoldconsulting.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YqD/ObG9ae9YQVNy@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:12:07AM +0200, Johan Hovold wrote:
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-> 
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.19-rc2
+On Mi 08-06-22 19:57:45, Sean Christopherson wrote:
+> On Wed, Jun 08, 2022, Vasant Karasulli wrote:
+> > On Mi 08-06-22 14:35:55, Sean Christopherson wrote:
+> > > On Wed, Jun 08, 2022, Vasant Karasulli wrote:
+> > > > On Mi 06-04-22 01:22:55, Sean Christopherson wrote:
+> > > > > > +	if (ret) {
+> > > > > > +		kunit_info(test, "Could not register kretprobe. Skipping.");
+> > > > > > +		goto out;
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	test->priv = kunit_kzalloc(test, sizeof(u64), GFP_KERNEL);
+> > > > >
+> > > > > Allocating 8 bytes and storing the pointer an 8-byte field is rather pointless :-)
+> > > > >
+> > > >
+> > > > Actually it's necessary to allocate memory to test->priv before using according to
+> > > > https://www.kernel.org/doc/html/latest/dev-tools/kunit/tips.html
+> > >
+> > > If priv points at structure of some form, sure, but you're storing a simple value.
+> >
+> > Yes, I agree. The reason it was done this way I guess is that type of priv is a
+> > void pointer and storing a u64 value results in a compiler warning:
+> > cast from pointer to integer of different size [-Wpointer-to-int-cast].
+>
+> An intermediate cast to "unsigned long" should make that go away.
 
-Pulled and pushed out, thanks.
+Yes, intermediate cast satisfied the compiler. Thanks for the tip.
 
-greg k-h
+--
+Vasant Karasulli
+Kernel generalist
+www.suse.com<http://www.suse.com>
+[https://www.suse.com/assets/img/social-platforms-suse-logo.png]<http://www.suse.com/>
+SUSE - Open Source Solutions for Enterprise Servers & Cloud<http://www.suse.com/>
+Modernize your infrastructure with SUSE Linux Enterprise servers, cloud technology for IaaS, and SUSE's software-defined storage.
+www.suse.com
+

@@ -2,140 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00755459AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 03:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DFB5459BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 03:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238162AbiFJBwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 21:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S237495AbiFJBx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 21:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240849AbiFJBwL (ORCPT
+        with ESMTP id S242397AbiFJBxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 21:52:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8254220E03
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 18:52:09 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id w20so18978207lfa.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 18:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yu2uAtXe8nBXbsN8E9JnIvbhth+ppm+OC8YckFrwJFU=;
-        b=HCmGBSWPgP45n6XdrVXY5CMCAvRbHmyVdErIA9T37zYysJlb1nAi4d87VcQDcCL3UE
-         OCvomgdYmu3oMA+X8xc758db16srvSYw3C2hUYoAEFXE2XhuvzaDmvXyxj/X9+6aFbCt
-         d4VaV/MVp1HqBN3rh9hu4AKhxieZG2qkfo0dXhQ0RTmgHob4P9hb8Ub2T62yHCZ05imI
-         3PeehoARpYywYujtybHMF40k+Nbkbp6ZmxNID3ELad4x9yGgEGv4hIlZMqACPiI9Dv70
-         vTiLCP6Q9tnH1vqV798z+sr+jWX774U8pUT4zfOQqUKQjFb1gtEQUbqPP0RIB5LgZw88
-         p3xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yu2uAtXe8nBXbsN8E9JnIvbhth+ppm+OC8YckFrwJFU=;
-        b=p/y+yOhvZNTln1xTUMwiIwHYaB9MB7a1dFLfqJdZdTMCGTu5rumzHUsM7GEQ3Xqi3M
-         RE5vwZKKcl34nYSCv/UBKKHJ/1vvb+znGlXMa+Eg547mfgftN/LBD6ag5DWjtulPDU2m
-         5McidKYHijQeFfT4xWAHOgRSsKRyTsAqGKU/otqBAIlukldeyl5nzlT8bq+lnxYEaY06
-         iAEOLV27b/uht645hCiMMBPGdEj74wSU34Fr9M83AG5y2VS0uw86XAyDvYC+IrbnNQxT
-         kWrxQXuSLvvljQ2oPCwn7CvNOVVjQJxje9F1bZbwuQKmBK4wdJyhcrPFHiekgI3qj0xe
-         UFzQ==
-X-Gm-Message-State: AOAM5306gDWP1afPQIfkWRv06q2+P2+1FnaWrX/iJjaSgs4l9zLAbJr7
-        CwK1qhuw7c/DFCjVeFRqUznx/aPswYJq4O6FGunqzA==
-X-Google-Smtp-Source: ABdhPJz1iXApa41h6OoT4S9/ePZLU3tkr4a/jxLcacMUaS85w5vB+iDnMMfBeJfGgqDvngCXhzvDk5evr/E/+ti81h4=
-X-Received: by 2002:a05:6512:249:b0:479:a3c:de with SMTP id
- b9-20020a056512024900b004790a3c00demr26777518lfo.128.1654825927907; Thu, 09
- Jun 2022 18:52:07 -0700 (PDT)
+        Thu, 9 Jun 2022 21:53:24 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AED220FC1;
+        Thu,  9 Jun 2022 18:53:22 -0700 (PDT)
+X-UUID: 0fd3a86573ad4aac8628c509aec582fe-20220610
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:0901b385-18fd-4fde-ac37-18d5e8f46b05,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:963252e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 0fd3a86573ad4aac8628c509aec582fe-20220610
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 287709467; Fri, 10 Jun 2022 09:53:19 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 10 Jun 2022 09:53:18 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 10 Jun 2022 09:53:16 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2, 1/4] media: mediatek: vcodec: Fix decoder v4l2 bus_info not correctly
+Date:   Fri, 10 Jun 2022 09:53:12 +0800
+Message-ID: <20220610015315.25513-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-5-shy828301@gmail.com>
-In-Reply-To: <20220606214414.736109-5-shy828301@gmail.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Thu, 9 Jun 2022 18:51:31 -0700
-Message-ID: <CAAa6QmSCk+7HLtLOzbTYev7dAM0aff-f4USV3AXAQdSKu7_6HA@mail.gmail.com>
-Subject: Re: [v3 PATCH 4/7] mm: khugepaged: use transhuge_vma_suitable replace open-code
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
->
-> The hugepage_vma_revalidate() needs to check if the address is still in
-> the aligned HPAGE_PMD_SIZE area of the vma when reacquiring mmap_lock,
-> but it was open-coded, use transhuge_vma_suitable() to do the job.  And
-> add proper comments for transhuge_vma_suitable().
->
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> ---
->  include/linux/huge_mm.h | 6 ++++++
->  mm/khugepaged.c         | 5 +----
->  2 files changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index a8f61db47f2a..79d5919beb83 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -128,6 +128,12 @@ static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
->         return false;
->  }
->
-> +/*
-> + * Do the below checks:
-> + *   - For non-anon vma, check if the vm_pgoff is HPAGE_PMD_NR aligned.
-> + *   - For all vmas, check if the haddr is in an aligned HPAGE_PMD_SIZE
-> + *     area.
-> + */
+Fix v4l2 capability bus_info value with correct chip name according to compatible.
 
-AFAIK we aren't checking if vm_pgoff is HPAGE_PMD_NR aligned, but
-rather that linear_page_index(vma, round_up(vma->vm_start,
-HPAGE_PMD_SIZE)) is HPAGE_PMD_NR aligned within vma->vm_file. I was
-pretty confused about this (hopefully I have it right now - if not -
-case and point :) ), so it might be a good opportunity to add some
-extra commentary to help future travelers understand why this
-constraint exists.
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+changed with v1:
+- change bus_info from "platform:mt%d" to "platform:mt%d-dec"
+---
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 23 ++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-Also I wonder while we're at it if we can rename this to
-transhuge_addr_aligned() or transhuge_addr_suitable() or something.
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 52e5d36aa912..4bdb5ae4a116 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -185,11 +185,32 @@ static int vidioc_vdec_dqbuf(struct file *file, void *priv,
+ 	return v4l2_m2m_dqbuf(file, ctx->m2m_ctx, buf);
+ }
+ 
++static int mtk_vcodec_dec_get_chip_name(void *priv)
++{
++	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
++	struct device *dev = &ctx->dev->plat_dev->dev;
++
++	if (of_device_is_compatible(dev->of_node, "mediatek,mt8173-vcodec-dec"))
++		return 8173;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8183-vcodec-dec"))
++		return 8183;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-dec"))
++		return 8192;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-dec"))
++		return 8195;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8186-vcodec-dec"))
++		return 8186;
++	else
++		return 8173;
++}
++
+ static int vidioc_vdec_querycap(struct file *file, void *priv,
+ 				struct v4l2_capability *cap)
+ {
++	int platform_name = mtk_vcodec_dec_get_chip_name(priv);
++
+ 	strscpy(cap->driver, MTK_VCODEC_DEC_NAME, sizeof(cap->driver));
+-	strscpy(cap->bus_info, MTK_PLATFORM_STR, sizeof(cap->bus_info));
++	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:mt%d-dec", platform_name);
+ 	strscpy(cap->card, MTK_PLATFORM_STR, sizeof(cap->card));
+ 
+ 	return 0;
+-- 
+2.18.0
 
-Otherwise I think the change is a nice cleanup.
-
->  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
->                 unsigned long addr)
->  {
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 7a5d1c1a1833..ca1754d3a827 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -951,7 +951,6 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
->                 struct vm_area_struct **vmap)
->  {
->         struct vm_area_struct *vma;
-> -       unsigned long hstart, hend;
->
->         if (unlikely(khugepaged_test_exit(mm)))
->                 return SCAN_ANY_PROCESS;
-> @@ -960,9 +959,7 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
->         if (!vma)
->                 return SCAN_VMA_NULL;
->
-> -       hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
-> -       hend = vma->vm_end & HPAGE_PMD_MASK;
-> -       if (address < hstart || address + HPAGE_PMD_SIZE > hend)
-> +       if (!transhuge_vma_suitable(vma, address))
->                 return SCAN_ADDRESS_RANGE;
->         if (!hugepage_vma_check(vma, vma->vm_flags))
->                 return SCAN_VMA_CHECK;
-> --
-> 2.26.3
->
->

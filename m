@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FB55468D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A965468DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343527AbiFJOt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        id S231940AbiFJO4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344919AbiFJOtU (ORCPT
+        with ESMTP id S229553AbiFJO4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:49:20 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2193DE93;
-        Fri, 10 Jun 2022 07:48:48 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nzfwF-0000ZJ-IP; Fri, 10 Jun 2022 16:48:39 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nzfwF-000IXa-9T; Fri, 10 Jun 2022 16:48:39 +0200
-Subject: Re: [PATCH v3 1/2] bpf: Add bpf_verify_signature() helper
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        andrii@kernel.org, kpsingh@kernel.org
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>, john.fastabend@gmail.com
-References: <20220610135916.1285509-1-roberto.sassu@huawei.com>
- <20220610135916.1285509-2-roberto.sassu@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ce56c551-019f-9e10-885f-4e88001a8f6b@iogearbox.net>
-Date:   Fri, 10 Jun 2022 16:48:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 10 Jun 2022 10:56:16 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A76F55B3;
+        Fri, 10 Jun 2022 07:56:15 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id x138so2258994pfc.12;
+        Fri, 10 Jun 2022 07:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wJsCFQid4sHaK/ZKO+qfx/hNEBYaCAv7ipedUinRSCA=;
+        b=DmZwOB8yj183zZJrZAw1WK2vDFaNRohRqhiAivoZuMpBDx4rD75d9vSgogfoFOXTyA
+         oNOqJux67XmaerADpU2/fXwgugw/2QujGD062CGuRuRWOHGriavWeAyfSmRPjsXYrExA
+         3ktfE5K0SpyCx0x6WGvPki69v5wXWD2uEOYcLQXQ51qO1U6JAnvQUQyj5AVtLTsHfTcC
+         f0jjVb1O6MdrNnIDy2U1MtQ2xH+PfAOOU8byi6x2hmh1BfIFhx/OiVle9E1mT1zYBVEK
+         1ENBT1mwGJGRuiXSs5mRkHP6HEpH1/etrfnSjTlbECIay3MuEXfJUH9ooLD0ctao/0+y
+         I3JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wJsCFQid4sHaK/ZKO+qfx/hNEBYaCAv7ipedUinRSCA=;
+        b=M4BNAAhDCRwPVvtC1bI4ECvNWYiUhyEXYuNEXRH1ym4g6ZIDA761QohXw4NMDNhjCB
+         IKsJtL6sRVsnNLIy4bACmUIMOfcm7Hi77muraOAzknwshSc1FpFHVK3s2pZ7u0AOBFft
+         oiC+BR4974SPKa4JnUoYzgOi74TyaN8pXMaN5SmdBurGjxRveFx31/sEExyoFHdLpp6z
+         loHoeIrOrzfo5Lptd6NRGVPmWat3AIQZrflzAyFIT9V2N0SjqTGmiD7dvXUYZAooFySz
+         Z8Dt0UEoG0BjxWd7+5mSlL7LYrdLvRHRzJoPAGQMakfY6JKdc7Lypwpa76GXUH6t8Gdq
+         AAyA==
+X-Gm-Message-State: AOAM532Gh+RlXL76u+pQrDzjqcnpQ5PFeoU91JOEBjZmbgeNgHyEyarg
+        HLKcPPN4Pfheu0wGFc0jtkE+id2Uofijgj9Q
+X-Google-Smtp-Source: ABdhPJxBbi7wAzOxsxQJx2yKTE9EOjkYyRVB0nQ0HCXHa7+Kx6P3rlnHpDEIDoMVIAbd0oJoRk2/sw==
+X-Received: by 2002:a05:6a00:148f:b0:51c:70f9:b62e with SMTP id v15-20020a056a00148f00b0051c70f9b62emr13426346pfu.84.1654872974762;
+        Fri, 10 Jun 2022 07:56:14 -0700 (PDT)
+Received: from fedora ([2601:1c1:4202:28a0::ec2b])
+        by smtp.gmail.com with ESMTPSA id x17-20020a056a000bd100b0051be1b4cfb5sm15393657pfu.5.2022.06.10.07.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 07:56:14 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 07:56:12 -0700
+From:   Jared Kangas <kangas.jd@gmail.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     vaibhav.sr@gmail.com, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, linux-staging@lists.linux.dev,
+        mgreer@animalcreek.com, Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH v2] staging: greybus: audio: fix loop cursor use after
+ iteration
+Message-ID: <YqNbjINDaEBZktbS@fedora>
+References: <20220609214517.85661-1-kangas.jd@gmail.com>
+ <YqL6A3pVC8LOqE4d@hovoldconsulting.com>
 MIME-Version: 1.0
-In-Reply-To: <20220610135916.1285509-2-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26568/Fri Jun 10 10:06:23 2022)
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqL6A3pVC8LOqE4d@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,159 +74,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/22 3:59 PM, Roberto Sassu wrote:
-> Add the bpf_verify_signature() helper, to give eBPF security modules the
-> ability to check the validity of a signature against supplied data, by
-> using system-provided keys as trust anchor.
+On Fri, Jun 10, 2022 at 10:00:03AM +0200, Johan Hovold wrote:
+> On Thu, Jun 09, 2022 at 02:45:18PM -0700, Jared Kangas wrote:
+> > gbaudio_dapm_free_controls() iterates over widgets using the
+> > list_for_each_entry*() family of macros from <linux/list.h>, which
+> > leaves the loop cursor pointing to a meaningless structure if it
+> > completes a traversal of the list. The cursor was set to NULL at the end
+> > of the loop body, but would be overwritten by the final loop cursor
+> > update.
+> > 
+> > Because of this behavior, the widget could be non-null after the loop
+> > even if the widget wasn't found, and the cleanup logic would treat the
+> > pointer as a valid widget to free.
+> > 
+> > To fix this, introduce a temporary variable to act as the loop cursor
+> > and copy it to a variable that can be accessed after the loop finishes.
+> > Due to not removing any list elements, use list_for_each_entry() instead
+> > of list_for_each_entry_safe() in the revised loop.
+> > 
+> > This was detected with the help of Coccinelle.
+> > 
+> > Fixes: 510e340efe0c ("staging: greybus: audio: Add helper APIs for dynamic audio modules")
+> > Cc: stable@vger.kernel.org
+> > Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Reviewed-by: Johan Hovold <johan@kernel.org>
+> > Signed-off-by: Jared Kangas <kangas.jd@gmail.com>
+> > ---
+> > 
+> > Changes since v1:
+> >  * Removed safe list iteration as suggested by Johan Hovold <johan@kernel.org>
+> >  * Updated patch changelog to explain the list iteration change
+> >  * Added tags to changelog based on feedback (Cc:, Fixes:, Reviewed-by:)
 > 
-> The new helper makes it possible to enforce mandatory policies, as eBPF
-> programs might be allowed to make security decisions only based on data
-> sources the system administrator approves.
+> Apparently Greg applied this to staging-next before we had a change to
+> look at it. You should have received a notification from Greg when he
+> did so.
 > 
-> The caller should specify the identifier of the keyring containing the keys
-> for signature verification: 0 for the primary keyring (immutable keyring of
-> system keys); 1 for both the primary and secondary keyring (where keys can
-> be added only if they are vouched for by existing keys in those keyrings);
-> 2 for the platform keyring (primarily used by the integrity subsystem to
-> verify a kexec'ed kerned image and, possibly, the initramfs signature);
-> 0xffff for the session keyring (for testing purposes).
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-next&id=80c968a04a381dc0e690960c60ffd6b6aee7e157
 > 
-> The caller should also specify the type of signature. Currently only PKCS#7
-> is supported.
+> It seems unlikely that this would cause any issues in real life, but
+> there's still a chance it will be picked up by the stable team despite
+> the lack of a CC stable tag.
 > 
-> Since the maximum number of parameters of an eBPF helper is 5, the keyring
-> and signature types share one (keyring ID: low 16 bits, signature type:
-> high 16 bits).
+> I've just sent a follow-up patch to replace the list macro.
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reported-by: kernel test robot <lkp@intel.com> (cast warning)
-> ---
->   include/uapi/linux/bpf.h       | 17 +++++++++++++
->   kernel/bpf/bpf_lsm.c           | 46 ++++++++++++++++++++++++++++++++++
->   tools/include/uapi/linux/bpf.h | 17 +++++++++++++
->   3 files changed, 80 insertions(+)
-> 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index f4009dbdf62d..97521857e44a 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5249,6 +5249,22 @@ union bpf_attr {
->    *		Pointer to the underlying dynptr data, NULL if the dynptr is
->    *		read-only, if the dynptr is invalid, or if the offset and length
->    *		is out of bounds.
-> + *
-> + * long bpf_verify_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u32 info)
-> + *	Description
-> + *		Verify a signature of length *siglen* against the supplied data
-> + *		with length *datalen*. *info* contains the keyring identifier
-> + *		(low 16 bits) and the signature type (high 16 bits). The keyring
-> + *		identifier can have the following values (some defined in
-> + *		verification.h): 0 for the primary keyring (immutable keyring of
-> + *		system keys); 1 for both the primary and secondary keyring
-> + *		(where keys can be added only if they are vouched for by
-> + *		existing keys in those keyrings); 2 for the platform keyring
-> + *		(primarily used by the integrity subsystem to verify a kexec'ed
-> + *		kerned image and, possibly, the initramfs signature); 0xffff for
-> + *		the session keyring (for testing purposes).
-> + *	Return
-> + *		0 on success, a negative value on error.
->    */
->   #define __BPF_FUNC_MAPPER(FN)		\
->   	FN(unspec),			\
-> @@ -5455,6 +5471,7 @@ union bpf_attr {
->   	FN(dynptr_read),		\
->   	FN(dynptr_write),		\
->   	FN(dynptr_data),		\
-> +	FN(verify_signature),		\
->   	/* */
->   
->   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index c1351df9f7ee..20bd850ea3ee 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -16,6 +16,8 @@
->   #include <linux/bpf_local_storage.h>
->   #include <linux/btf_ids.h>
->   #include <linux/ima.h>
-> +#include <linux/verification.h>
-> +#include <linux/module_signature.h>
->   
->   /* For every LSM hook that allows attachment of BPF programs, declare a nop
->    * function where a BPF program can be attached.
-> @@ -132,6 +134,46 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
->   	.arg1_type	= ARG_PTR_TO_CTX,
->   };
->   
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +BPF_CALL_5(bpf_verify_signature, u8 *, data, u32, datalen, u8 *, sig,
-> +	   u32, siglen, u32, info)
-> +{
-> +	unsigned long keyring_id = info & U16_MAX;
-> +	enum pkey_id_type id_type = info >> 16;
-> +	const struct cred *cred = current_cred();
-> +	struct key *keyring;
-> +
-> +	if (keyring_id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING &&
-> +	    keyring_id != U16_MAX)
-> +		return -EINVAL;
-> +
-> +	keyring = (keyring_id == U16_MAX) ?
-> +		  cred->session_keyring : (struct key *)keyring_id;
-> +
-> +	switch (id_type) {
-> +	case PKEY_ID_PKCS7:
-> +		return verify_pkcs7_signature(data, datalen, sig, siglen,
-> +					      keyring,
-> +					      VERIFYING_UNSPECIFIED_SIGNATURE,
-> +					      NULL, NULL);
-> +	default:
-> +		return -EOPNOTSUPP;
+> Johan
 
-Question to you & KP:
+Sorry about that - I got a notification but thought it was still
+revisable. In hindsight, it makes sense that once it gets applied to
+a public branch, changes should be done in additional patches. Thanks to
+both you and Dan for taking the time to review and catch my mistakes.
 
- > Can we keep the helper generic so that it can be extended to more types of
- > signatures and pass the signature type as an enum?
-
-How many different signature types do we expect, say, in the next 6mo, to land
-here? Just thinking out loud whether it is better to keep it simple as with the
-last iteration where we have a helper specific to pkcs7, and if needed in future
-we add others. We only have the last reg as auxillary arg where we need to squeeze
-all info into it now. What if for other, future signature types this won't suffice?
-
-> +	}
-> +}
-> +
-> +static const struct bpf_func_proto bpf_verify_signature_proto = {
-> +	.func		= bpf_verify_signature,
-> +	.gpl_only	= false,
-> +	.ret_type	= RET_INTEGER,
-> +	.arg1_type	= ARG_PTR_TO_MEM,
-> +	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-
-Can verify_pkcs7_signature() handle null/0 len for data* args?
-
-> +	.arg3_type	= ARG_PTR_TO_MEM,
-> +	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
-
-Ditto for sig* args?
-
-> +	.arg5_type	= ARG_ANYTHING,
-> +	.allowed	= bpf_ima_inode_hash_allowed,
-> +};
-> +#endif
-> +
->   static const struct bpf_func_proto *
->   bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->   {
-> @@ -158,6 +200,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->   		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
->   	case BPF_FUNC_get_attach_cookie:
->   		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : NULL;
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +	case BPF_FUNC_verify_signature:
-> +		return prog->aux->sleepable ? &bpf_verify_signature_proto : NULL;
-> +#endif
->   	default:
->   		return tracing_prog_func_proto(func_id, prog);
->   	}
+Jared

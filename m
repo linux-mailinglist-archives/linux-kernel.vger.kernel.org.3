@@ -2,58 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19A2546400
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38128546413
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348241AbiFJKlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S1348300AbiFJKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245341AbiFJKks (ORCPT
+        with ESMTP id S1344113AbiFJKmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:40:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A001EA045;
-        Fri, 10 Jun 2022 03:36:21 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C57C660173C;
-        Fri, 10 Jun 2022 11:36:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654857373;
-        bh=Sl4XTI9fTeLYEGMYtkmUrZfpXPFc4NtB7yxUPzBz5P0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l3ooxUPnGPn7Wg1eAjlIfW0TigLrxkwaU37Ktz7fJpNpqghDtPC5QhreI3Y7iqTQ2
-         MQPMroHxVHkXOjRidl5LfRlIQzKyEM0XDKJON1ntm5FwoBIilEzans4bR3Exy8MQ+y
-         +2tpmDDVI7y+gBECo6irvnSAsmYvzMAlmiuJIlYQi+p6bAX6YBLmKDg1PDEM/M63Fu
-         ETynncpDInuWfW/lQqrW1AmR/Kqt4XLKUx0T4+OMk3zGEnSqaSZ/ZdeHJIQo2L4KJh
-         mMiyg5wqy3ZCrL4xZo3TpTPHxGgJnBmCWu8F28UOnlhH6tvyPzkH+zfnclsLfiohbh
-         ORITjCwV0iR7A==
-Message-ID: <63e171dc-e1f6-3487-66c4-a5cf36d2471b@collabora.com>
-Date:   Fri, 10 Jun 2022 12:36:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/3] usb: mtu3: sync interrupt before unbind the udc
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>
-References: <20220609074233.15532-1-chunfeng.yun@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220609074233.15532-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Fri, 10 Jun 2022 06:42:18 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD47F4B1DE;
+        Fri, 10 Jun 2022 03:37:32 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id C031A1E80D6E;
+        Fri, 10 Jun 2022 18:36:46 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id q_szG_0-xxXj; Fri, 10 Jun 2022 18:36:44 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id DD7271E80D24;
+        Fri, 10 Jun 2022 18:36:43 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     chenhuacai@kernel.org, kernel@xen0n.name, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com
+Cc:     linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] x86: Change the return type of acpi_map_cpu2node to void
+Date:   Fri, 10 Jun 2022 18:36:44 +0800
+Message-Id: <20220610103644.201245-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,12 +46,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/06/22 09:42, Chunfeng Yun ha scritto:
-> Register gadget irq to avoid the interrupt handler is occurred
-> or scheduled during the unbind flow, may happen when do android
-> function switch stress test.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Reduce eax register calls by removing unused return values.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ arch/ia64/kernel/acpi.c      | 3 +--
+ arch/loongarch/kernel/acpi.c | 3 +--
+ arch/x86/kernel/acpi/boot.c  | 3 +--
+ 3 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/arch/ia64/kernel/acpi.c b/arch/ia64/kernel/acpi.c
+index 96d13cb7c19f..2665cc873f0a 100644
+--- a/arch/ia64/kernel/acpi.c
++++ b/arch/ia64/kernel/acpi.c
+@@ -712,7 +712,7 @@ int acpi_isa_irq_to_gsi(unsigned isa_irq, u32 *gsi)
+  *  ACPI based hotplug CPU support
+  */
+ #ifdef CONFIG_ACPI_HOTPLUG_CPU
+-int acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
++void acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+ {
+ #ifdef CONFIG_ACPI_NUMA
+ 	/*
+@@ -725,7 +725,6 @@ int acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+ 	node_cpuid[cpu].phys_id = physid;
+ 	node_cpuid[cpu].nid = acpi_get_node(handle);
+ #endif
+-	return 0;
+ }
+ 
+ int additional_cpus __initdata = -1;
+diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+index b16c3dea5eeb..369b49343563 100644
+--- a/arch/loongarch/kernel/acpi.c
++++ b/arch/loongarch/kernel/acpi.c
+@@ -282,7 +282,7 @@ void __init arch_reserve_mem_area(acpi_physical_address addr, size_t size)
+ 
+ #include <acpi/processor.h>
+ 
+-static int __ref acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
++static void __ref acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+ {
+ #ifdef CONFIG_ACPI_NUMA
+ 	int nid;
+@@ -295,7 +295,6 @@ static int __ref acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+ 		cpumask_set_cpu(cpu, cpumask_of_node(nid));
+ 	}
+ #endif
+-	return 0;
+ }
+ 
+ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id, int *pcpu)
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 907cc98b1938..d63ec3ea3be3 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -799,7 +799,7 @@ static void __init acpi_set_irq_model_ioapic(void)
+ #ifdef CONFIG_ACPI_HOTPLUG_CPU
+ #include <acpi/processor.h>
+ 
+-static int acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
++static void acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+ {
+ #ifdef CONFIG_ACPI_NUMA
+ 	int nid;
+@@ -810,7 +810,6 @@ static int acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+ 		numa_set_node(cpu, nid);
+ 	}
+ #endif
+-	return 0;
+ }
+ 
+ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
+-- 
+2.18.2
 

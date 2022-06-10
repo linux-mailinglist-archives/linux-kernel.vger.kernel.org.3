@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A1E54637F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC5954638A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348122AbiFJKYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        id S1344973AbiFJK2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245446AbiFJKYp (ORCPT
+        with ESMTP id S1344629AbiFJK2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:24:45 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B528DFB7;
-        Fri, 10 Jun 2022 03:24:44 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id d19so16618899lji.10;
-        Fri, 10 Jun 2022 03:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mQkg5BFcWf589C+wuulEqAsCmR3RQXLtbhuR5v5QD+Q=;
-        b=l2+IJM229M3SPHh7e8DgjWAjrbApaXeUGaYU6B5FfKIRrgDeAvXZz+caPFdCePZGus
-         n3EBieDnYjrDEyRGGEJQbvZN3361ADG9TH8Iqc9aE6nntloE6GkBfJd3V4VFDIyQlVNq
-         u2gINhMYrP2b3WjmrU9JB2J7/aRQhnCccMo5YGL7+NfX/4uamau/Io1PLJIf5vrLKMbd
-         dXNNhY8WgG3z79hP/kXytEFUPY5uwrbjaa9Vy71yiRRBhhsmBsumQvQ2k+R1kZXIWMaS
-         MoGr8/iuiM92eAZ9i/zyVXKybD6gRV7dnxtIqEbNshK8dENbhQ8pcV9QsXih/cuXS+2c
-         OUAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mQkg5BFcWf589C+wuulEqAsCmR3RQXLtbhuR5v5QD+Q=;
-        b=NyXQMlobysz246+GiVNy0Y4p9FB3/Ak7fItUFTunlJW7WDMARviESTW1fk7xU0QAVS
-         ueZsrJkvsqBpJQfXp653Wo3qoU8Jao401rKSQAjg2RgcdXJzbdIH05iUB0xJDpzhKY8O
-         6aJb7+4CEuFDHJH1+M66UNR0Ud0bAfB2ey5g/H6xzy7Ycr1yU/0/Hf+eAfeH7eqjAofD
-         uQe8xVEQCnbP/slrrC8Q7RzL1mZxfi/H/8UT/jzpBltqwGJvznVAKa/W+0t9JLq0YuOj
-         kqxiMGDhdgJcr73c0+5eFU3R0ImglSXN53AmE84b4vRVvtQ4u13DWFhVW1oABUcvIRcL
-         +92Q==
-X-Gm-Message-State: AOAM533Ny1KoXeYgVkqoE3o8UpTwsns/XI0hdjPbjb2xCQyyZsj9PthX
-        nsRJuyKZJ4dYSIgbKqXFKIM=
-X-Google-Smtp-Source: ABdhPJxgxcCtlb5Z+Y7tZ/ZH2Zooff5ggN8+p1CIxsDICuK0H9aEHtzuS0DOVgFRxpWe3OivTBz9zg==
-X-Received: by 2002:a2e:b8c4:0:b0:258:f008:5b75 with SMTP id s4-20020a2eb8c4000000b00258f0085b75mr189727ljp.189.1654856682873;
-        Fri, 10 Jun 2022 03:24:42 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id d21-20020a05651c089500b0025567827117sm4064786ljq.13.2022.06.10.03.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 03:24:42 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 13:24:40 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@codeaurora.org>
-Subject: Re: [PATCH v4 2/8] clk: vc5: Fix 5P49V6901 outputs disabling when
- enabling FOD
-Message-ID: <20220610102440.ubejkcbkwb7wgah6@mobilestation>
-References: <20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru>
- <20220610072124.8714-3-Sergey.Semin@baikalelectronics.ru>
- <eb0cbc41-2868-4cbf-9fbf-eeabd25dda04@omp.ru>
+        Fri, 10 Jun 2022 06:28:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07A21DFB7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:27:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2B6E12FC;
+        Fri, 10 Jun 2022 03:27:58 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5DFF3F766;
+        Fri, 10 Jun 2022 03:27:56 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 11:27:53 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 15/16] arch_topology: Set cluster identifier in each
+ core/thread from /cpu-map
+Message-ID: <20220610102753.virkx47uyfsojol6@bogus>
+References: <20220525081416.3306043-10-sudeep.holla@arm.com>
+ <20220525081416.3306043-11-sudeep.holla@arm.com>
+ <20220525081416.3306043-12-sudeep.holla@arm.com>
+ <20220525081416.3306043-13-sudeep.holla@arm.com>
+ <20220525081416.3306043-14-sudeep.holla@arm.com>
+ <20220525081416.3306043-15-sudeep.holla@arm.com>
+ <20220525081416.3306043-16-sudeep.holla@arm.com>
+ <947470ba-35fc-3c72-d01b-c0a7337216a2@arm.com>
+ <20220606102159.dduxmvq4m2fm6gks@bogus>
+ <CAKfTPtB8iPzEXipsJqNtd9-aJMKx-FAaiGMzOg58HgRQuo39iA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eb0cbc41-2868-4cbf-9fbf-eeabd25dda04@omp.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAKfTPtB8iPzEXipsJqNtd9-aJMKx-FAaiGMzOg58HgRQuo39iA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:03:10PM +0300, Sergey Shtylyov wrote:
-> On 6/10/22 10:21 AM, Serge Semin wrote:
-> 
-> > We have discovered random glitches during the system boot up procedure.
-> > The problem investigation led us to the weird outcomes: when none of the
-> > Renesas 5P49V6901 ports are explicitly enabled by the kernel driver, the
-> > glitches disappeared. It was a mystery since the SoC external clock
-> > domains were fed with different 5P49V6901 outputs. The driver code didn't
-> > seem like bogus either. We almost despaired to find out a root cause when
-> > the solution was found for a more modern revision of the chip. It turned
-> > out the 5P49V6901 clock generator stopped its output for a short period of
-> > time during the VC5_OUT_DIV_CONTROL register writing. The same problem has
-> > was found for the 5P49V6965 revision of the chip and the was successfully
-> 
+On Fri, Jun 10, 2022 at 12:08:44PM +0200, Vincent Guittot wrote:
+> On Mon, 6 Jun 2022 at 12:22, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
 
->    s/was found/been found/, s/the was/that was/?
+[...]
 
-Right. Thanks.)
+> > Why ? Are you suggesting that we shouldn't present the hardware cluster
+> > to the topology because of the above reason ? If so, sorry that is not a
+> > valid reason. We could add login to return NULL or appropriate value
+> > needed in cpu_clustergroup_mask id it matches MC level mask if we can't
+> > deal that in generic scheduler code. But the topology code can't be
+> > compromised for that reason as it is user visible.
+> 
+> I tend to agree with Dietmar. The legacy use of cluster node in DT
+> refers to the dynamiQ or legacy b.L cluster which is also aligned to
+> the LLC and the MC scheduling level. The new cluster level that has
+> been introduced recently does not target this level but some
+> intermediate levels either inside like for the kupeng920 or the v9
+> complex or outside like for the ampere altra. So I would say that
+> there is one cluster node level in DT that refers to the same MC/LLC
+> level and only an additional child/parent cluster node should be used
+> to fill the clustergroup_mask.
+>
 
--Sergey
+Again I completely disagree. Let us look at the problems separately.
+The hardware topology that some of the tools like lscpu and lstopo expects
+what the hardware looks like and not the scheduler's view of the hardware.
+So the topology masks that gets exposed to the user-space needs fixing
+even today. I have reports from various tooling people about the same.
+E.g. Juno getting exposed as dual socket system is utter non-sense.
 
-> 
-> > fixed in commit fc336ae622df ("clk: vc5: fix output disabling when
-> > enabling a FOD") by enabling the "bypass_sync" flag hidden inside "Unused
-> > Factory Reserved Register". Even though the 5P49V6901 registers
-> > description and programming guide doesn't provide any intel regarding that
-> > flag, setting it up anyway in the officially unused register completely
-> > eliminated the denoted glitches. Thus let's activate the functionality
-> > submitted in commit fc336ae622df ("clk: vc5: fix output disabling when
-> > enabling a FOD") for the Renesas 5P49V6901 chip too in order to remove
-> > the ports implicit inter-dependency.
-> > 
-> > Fixes: dbf6b16f5683 ("clk: vc5: Add support for IDT VersaClock 5P49V6901")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> [...]
-> 
-> MBR, Sergey
+Yes scheduler uses most of the topology masks as is but that is not a must.
+There are these *group_mask functions that can implement what scheduler
+needs to be fed.
+
+I am not sure why the 2 issues are getting mixed up and that is the main
+reason why I jumped into this to make sure the topology masks are
+not tampered based on the way it needs to be used for scheduler.
+
+Both ACPI and DT on a platform must present exact same hardware topology
+to the user-space, there is no space for argument there.
+
+> IIUC, we don't describe the dynamiQ level in ACPI which  uses cache
+> topology instead to define cpu_coregroup_mask whereas DT described the
+> dynamiQ instead of using cache topology. If you use cache topology
+> now, then you should skip the dynamiQ
+>
+
+Yes, unless someone can work out a binding to represent that and convince
+DT maintainers ;).
+
+> Finally, even if CLS and MC have the same scheduling behavior for now,
+> they might ends up with different scheduling properties which would
+> mean that replacing MC level by CLS one for current SoC would become
+> wrong
+>
+
+Again as I mentioned to Dietmar, that is something we can and must deal with
+in those *group_mask and not expect topology mask to be altered to meet
+CLS/MC or whatever sched domains needs. Sorry, that is my strong opinion
+as the topology is already user-space visible and (tooling) people are
+complaining that DT systems are broken and doesn't match ACPI systems.
+
+So unless someone gives me non-scheduler and topology specific reasons
+to change that, sorry but my opinion on this matter is not going to change ;).
+
+You will get this view of topology, find a way to manage with all those
+*group_mask functions. By the way it is already handled for ACPI systems,
+so if you are not happy with that, then that needs fixing as this change
+set just aligns the behaviour on similar ACPI system. So the Juno example
+is incorrect for the reason that the behaviour of scheduler there is different
+with DT and ACPI.
+
+--
+Regards,
+Sudeep

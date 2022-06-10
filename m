@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B4E545B49
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA77545B59
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239219AbiFJEtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 00:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S243268AbiFJEuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 00:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243100AbiFJEtD (ORCPT
+        with ESMTP id S243344AbiFJEuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 00:49:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC48B5EBE9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 21:49:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Fri, 10 Jun 2022 00:50:11 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280CF31714C;
+        Thu,  9 Jun 2022 21:50:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BD6661FDA6;
-        Fri, 10 Jun 2022 04:48:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654836538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=ehPBDIeGo/IVyVU/00SU2xxg0fPE5snMj1Ycn6dtS/k=;
-        b=R9D4hN0hV9wkzyPOFBVw6H33koGOOe8nQL8by+vWmodVHt1cwdnqwKgJMvBPtpyMt2weuH
-        Tmrxam4DoC651QO5Z7jHZfyoqmIA+bd7iy5UW0w5FLz/awX12Toc5X3HC+ZZ37Gx2oBQ1u
-        zQ0ABu39T1ar2udtXkSd+2lSP7WX/2I=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96DBB139ED;
-        Fri, 10 Jun 2022 04:48:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KAqTIzrNomKDAgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 10 Jun 2022 04:48:58 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        sstabellini@kernel.org
-Subject: [GIT PULL] xen: branch for v5.19-rc2
-Date:   Fri, 10 Jun 2022 06:48:58 +0200
-Message-Id: <20220610044858.30822-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LK7mm43hfz4xZ0;
+        Fri, 10 Jun 2022 14:49:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654836603;
+        bh=GJecETtcF+CcFT0RpOLHBOEvWAWAoW0sqEUBxQmvil4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kK+oegz4PdthnZafBDVT2hO4TTcV+Q1P0A73sHA8uFYOUD3Xq26DqW1cMJ/wSnA9f
+         P+W1mSReFGR/5sKEtd9/y9LL7BvQTx+O3k9HPbwDDMntWJL08tDIDL/8YZfq6f67aX
+         HzZnv5rrrvRcH1OrayviX7VGpwcB18LMdPJUYq2P/nyAjl2o5Coev7jbVS0k8aqC70
+         ekaKCE43SdR/7jl6DuGkNG2SQSqDNMl1ke48usaidP2VxSja+NtCyQR9NKns8Zt2xI
+         /+TMQBaNT5EKI44JxkzUz1sPiydeyYZDrzN78pUrCKpCDyGmMZXEovAe1pUEm32Q/u
+         kAm67qmx9mKsg==
+Date:   Fri, 10 Jun 2022 14:49:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20220610144958.5b90e8d3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/trBsv9OQy7natagn_x.Q+.J";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+--Sig_/trBsv9OQy7natagn_x.Q+.J
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Please git pull the following tag:
+Hi all,
 
- git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-5.19a-rc2-tag
+After merging the drm-misc tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-xen: branch for v5.19-rc2
+drivers/firmware/efi/sysfb_efi.c:29:10: fatal error: asm/efi.h: No such fil=
+e or directory
+   29 | #include <asm/efi.h>
+      |          ^~~~~~~~~~~
 
-It contains:
-- a small cleanup removing "export" of an __init function
-- a small series adding a new infrastructure for platform flags
-- a series adding generic virtio support for Xen guests (frontend side)
+Caused by commit
 
-Thanks.
+  fa0e256450f2 ("fbdev: vesafb: Allow to be built if COMPILE_TEST is enable=
+d")
 
-Juergen
+$ find arch -name efi.h
+arch/arm/include/asm/efi.h
+arch/arm64/include/asm/efi.h
+arch/ia64/include/asm/efi.h
+arch/loongarch/include/asm/efi.h
+arch/riscv/include/asm/efi.h
+arch/x86/boot/compressed/efi.h
+arch/x86/include/asm/efi.h
 
- .../devicetree/bindings/iommu/xen,grant-dma.yaml   |  39 +++
- MAINTAINERS                                        |   8 +
- arch/arm/include/asm/xen/xen-ops.h                 |   2 +
- arch/arm/mm/dma-mapping.c                          |   7 +-
- arch/arm/xen/enlighten.c                           |   2 +
- arch/arm64/include/asm/xen/xen-ops.h               |   2 +
- arch/arm64/mm/dma-mapping.c                        |   7 +-
- arch/s390/Kconfig                                  |   1 -
- arch/s390/mm/init.c                                |  13 +-
- arch/x86/Kconfig                                   |   1 -
- arch/x86/mm/mem_encrypt.c                          |   7 -
- arch/x86/mm/mem_encrypt_amd.c                      |   4 +
- arch/x86/xen/enlighten_hvm.c                       |   2 +
- arch/x86/xen/enlighten_pv.c                        |   2 +
- drivers/virtio/Kconfig                             |   6 -
- drivers/virtio/virtio.c                            |   5 +-
- drivers/xen/Kconfig                                |  20 ++
- drivers/xen/Makefile                               |   2 +
- drivers/xen/grant-dma-iommu.c                      |  78 +++++
- drivers/xen/grant-dma-ops.c                        | 346 +++++++++++++++++++++
- drivers/xen/grant-table.c                          | 251 ++++++++++++---
- drivers/xen/xlate_mmu.c                            |   1 -
- include/asm-generic/Kbuild                         |   1 +
- include/asm-generic/platform-feature.h             |   8 +
- include/linux/platform-feature.h                   |  19 ++
- include/linux/virtio_config.h                      |   9 -
- include/xen/arm/xen-ops.h                          |  18 ++
- include/xen/grant_table.h                          |   4 +
- include/xen/xen-ops.h                              |  13 +
- include/xen/xen.h                                  |   8 +
- kernel/Makefile                                    |   2 +-
- kernel/platform-feature.c                          |  27 ++
- 32 files changed, 830 insertions(+), 85 deletions(-)
+I have reverted that commit for today.
 
-Juergen Gross (5):
-      kernel: add platform_has() infrastructure
-      virtio: replace arch_has_restricted_virtio_memory_access()
-      xen/grants: support allocating consecutive grants
-      xen/grant-dma-ops: Add option to restrict memory access under Xen
-      xen/virtio: Enable restricted memory access using Xen grant mappings
+--=20
+Cheers,
+Stephen Rothwell
 
-Masahiro Yamada (1):
-      xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
+--Sig_/trBsv9OQy7natagn_x.Q+.J
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Oleksandr Tyshchenko (5):
-      arm/xen: Introduce xen_setup_dma_ops()
-      dt-bindings: Add xen,grant-dma IOMMU description for xen-grant DMA ops
-      xen/grant-dma-iommu: Introduce stub IOMMU driver
-      xen/grant-dma-ops: Retrieve the ID of backend's domain for DT devices
-      arm/xen: Assign xen-grant DMA ops for xen-grant DMA devices
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKizXYACgkQAVBC80lX
+0GzJ9wf/UZfcCcfZFtOIxf69VSO/I4SoUQd7WHNFRrjiIh5fn9/7NyGCB8ZZE0aY
+aAkPVQ1/haanooNM18BoaKY3FNxqehU2jrI70VmZrU1L72eZt0r1uMvZajNgWp0L
+pD7BHFKysW/NxllpVMY5LiNVUrRIY2VMGWjpJx8GgBqxQTZwLDGZJq2aSzrLhiKS
+uWGWw/uN2Lxoa2RmMKk4yEUqhCNuf628IBqRjVu2Ik6wN35mLavYUo38bkJB9Qoc
+h/U55n6x7ELv6oOILIN6CoNPQ4c28gWIp9q41xya4muJpt51+oiu6+v4+pbPTXKM
+B0A++zMhKdBT+EPeyk34I3xfJHqCbA==
+=b1wL
+-----END PGP SIGNATURE-----
+
+--Sig_/trBsv9OQy7natagn_x.Q+.J--

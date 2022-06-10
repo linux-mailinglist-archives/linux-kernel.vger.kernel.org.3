@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14805466E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FC45466EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347391AbiFJMxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 08:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S1349058AbiFJMx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345266AbiFJMwr (ORCPT
+        with ESMTP id S1345437AbiFJMwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:52:47 -0400
+        Fri, 10 Jun 2022 08:52:49 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3F05639C;
-        Fri, 10 Jun 2022 05:52:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AD344A16;
+        Fri, 10 Jun 2022 05:52:47 -0700 (PDT)
 Received: from whitebuilder.lan (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A335D6601728;
-        Fri, 10 Jun 2022 13:52:43 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 326D8660172E;
+        Fri, 10 Jun 2022 13:52:45 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654865564;
-        bh=wWMofSJhxz35wCMoU0gFvStbDROWmB6gJh3rFolZ2b8=;
+        s=mail; t=1654865566;
+        bh=KEgYpRbmOg42RSvzgWzI7s0Dp0JPZPIQTRZtvkFaa8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sc39kUqXVm4NpX5ToqnvUXuwpqC5ysWHcXBhNGwEcuZ0ijPuZch7WdS5d+zyUfYmT
-         Z/PFJEJ6RCd1P2d0ABRqYmkU9fpa5Wv27TtRl8Mp5wr9FPZ4VnbHi570Q2NuhqyB1K
-         UHoijm+nq8uZxz84O21B1pMgEBrO2ZlU4gJcdKv6dyDpMDkqjnyjbCgb/OOliSUCl6
-         p0y3f4l7pMV7l26qQSDHjy3hAC6KRE8n/X7y7kC0M6BQwc9+UebCL9UtsbaKxabNuh
-         g6KaqdvHXfsX4/pjANaI+CeTlINqejMqVudTtAmQjhgDMMbMb8sfSi3pjOw/Pz2Sz/
-         op8PksAsAQC8Q==
+        b=kqDiqDXGwGHyu3h9CfdF6JAWg8pVEAp7cWWaAgc6izCdsLLvepxAjJouykKy43dWM
+         8QzWrjNMJWBEJDQDtLXEMHR2S7fWtChcPIGY0Dft4r5Z13Pkp9GiCrd0YyiHJ9gxZ6
+         Zc2LkjX+iNKmvSijbrah7q4Qmz+zYYIqDKlH0e6oOkYrXgHM5fODqxWWr1Np+0woBE
+         8yU2M/bvRcMfUcBYCGdtYWBWmZ2VnquGtq79hWTs1/vDB8ecz5l7aDPIMF7ukgg3mF
+         10lfCbPqtsUd+oQvNNmecDE2dF8fYo/ZJF+GKhbjJ5Cc0eRMpxHRIaHya6rqKhaiac
+         v1vAk0fBPNcbg==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     linux-media@vger.kernel.org,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
@@ -40,9 +40,9 @@ To:     linux-media@vger.kernel.org,
 Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         kernel@collabora.com, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/5] media: rkvdec: Re-enable H.264 error detection
-Date:   Fri, 10 Jun 2022 08:52:14 -0400
-Message-Id: <20220610125215.240539-5-nicolas.dufresne@collabora.com>
+Subject: [PATCH v1 5/5] media: rkvdec: Improve error handling
+Date:   Fri, 10 Jun 2022 08:52:15 -0400
+Message-Id: <20220610125215.240539-6-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
 References: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
@@ -58,69 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This re-enables H.264 error detection, but using the other error mode.
-In that mode, the decoder will skip over the error macro-block or
-slices and complete the decoding. As a side effect, the error status
-is not set in the interrupt status register, and instead errors are
-detected per format. Using this mode workaround the issue that the
-HW get stuck in error stated and allow reporting that some corruption
-may be present in the buffer returned to userland.
+There is two way decode errors can occur. In one case, the ready
+status is not set and nothing have been written into the destination,
+while in the other case, the buffer is written but may contain a
+certain amount of errors. In order to differentiate these, we set
+the payload for the first case to 0.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 23 +++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 55596ce6bb6e..60a89918e2c1 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -1175,14 +1175,15 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 7e76f8b72885..27f1f7276dd2 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -954,14 +954,32 @@ static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
+ 	enum vb2_buffer_state state;
+ 	u32 status;
  
- 	schedule_delayed_work(&rkvdec->watchdog_work, msecs_to_jiffies(2000));
- 
--	writel(0, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
--	writel(0, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
-+	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
-+	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
- 	writel(1, rkvdec->regs + RKVDEC_REG_PREF_LUMA_CACHE_COMMAND);
- 	writel(1, rkvdec->regs + RKVDEC_REG_PREF_CHR_CACHE_COMMAND);
- 
- 	/* Start decoding! */
- 	writel(RKVDEC_INTERRUPT_DEC_E | RKVDEC_CONFIG_DEC_CLK_GATE_E |
--	       RKVDEC_TIMEOUT_E | RKVDEC_BUF_EMPTY_E,
-+	       RKVDEC_TIMEOUT_E | RKVDEC_BUF_EMPTY_E |
-+	       RKVDEC_H264ORVP9_ERR_MODE,
- 	       rkvdec->regs + RKVDEC_REG_INTERRUPT);
- 
- 	return 0;
-@@ -1196,10 +1197,26 @@ static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
- 	return 0;
- }
- 
-+static int rkvdec_h264_check_error_info(struct rkvdec_ctx *ctx)
-+{
-+	struct rkvdec_dev *rkvdec = ctx->dev;
-+	int err;
++	ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
+ 	status = readl(rkvdec->regs + RKVDEC_REG_INTERRUPT);
+-	state = (status & RKVDEC_RDY_STA) ?
+-		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
 +
-+	err = readl(rkvdec->regs + RKVDEC_REG_H264_ERRINFO_NUM);
-+	if (err & RKVDEC_STRMD_DECT_ERR_FLAG) {
-+		pr_debug("Decoded picture have %i/%i slices with errors.\n",
-+			 RKVDEC_ERR_PKT_NUM(err), RKVDEC_SLICEDEC_NUM(err));
-+		return VB2_BUF_STATE_ERROR;
++	if (!(status & RKVDEC_RDY_STA)) {
++		struct vb2_v4l2_buffer *dst_buf = NULL;
++
++		if (status & RKVDEC_TIMEOUT_STA)
++			pr_debug("Decoder stopped due to internal timeout.");
++		else
++			pr_debug("Decoder stopped due to internal error.");
++
++		/*
++		 * When this happens, the buffer is left unmodified. As it
++		 * contains no meaningful data we mark is a empty.
++		 */
++		dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
++		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, 0);
++		state = VB2_BUF_STATE_ERROR;
++	} else {
++		state = VB2_BUF_STATE_DONE;
 +	}
-+
-+	return VB2_BUF_STATE_DONE;
-+}
-+
- const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops = {
- 	.adjust_fmt = rkvdec_h264_adjust_fmt,
- 	.start = rkvdec_h264_start,
- 	.stop = rkvdec_h264_stop,
- 	.run = rkvdec_h264_run,
- 	.try_ctrl = rkvdec_h264_try_ctrl,
-+	.check_error_info = rkvdec_h264_check_error_info,
- };
+ 
+ 	writel(0, rkvdec->regs + RKVDEC_REG_INTERRUPT);
+-	ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
+ 
+-	if (ctx->coded_fmt_desc->ops->check_error_info)
++	if (ctx->coded_fmt_desc->ops->check_error_info &&
++	    state == VB2_BUF_STATE_DONE)
+ 		state = ctx->coded_fmt_desc->ops->check_error_info(ctx);
+ 
+ 	if (cancel_delayed_work(&rkvdec->watchdog_work))
 -- 
 2.36.1
 

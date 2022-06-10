@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DD6545D03
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255E6545D08
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243281AbiFJHQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S245393AbiFJHTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346548AbiFJHQn (ORCPT
+        with ESMTP id S245441AbiFJHTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:16:43 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0238D289A24;
-        Fri, 10 Jun 2022 00:16:42 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id r71so24036632pgr.0;
-        Fri, 10 Jun 2022 00:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lgzEz9lRcUr2RYERuVGP5XDTC+Uf7I5b+LB1N9h1spE=;
-        b=q2PMJkfm1ETHt4f049NuUaYxAAuOMKlnAVBt+XRRdNfk/4+OAnk71WQ3bvywJqQvad
-         Kg0DkoqI41YFdFZH8kpEwBCiFajiRFgIYWhFxPfh94XSGwjjsNvXQitBK4wboCOkIO/U
-         zzMmc69MkBl6D5tv3bINw4tmr9CqYlknjrg/2fof8zwX4HKczpSipnVynBWknk0fE+3x
-         yFVNFEVC7sXYmS2XmYyu/Qj8JfDGwrTuYCqF7/MT/P9C9tx+Q04Fc9m62T4zU6e9xcwk
-         HHGXoETK9ka/0spK+Qv5Kq/kwV6jeZswaa3mDJrLjcO7X293zkVZMXYdq+3H/p3C6Uwk
-         ujGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lgzEz9lRcUr2RYERuVGP5XDTC+Uf7I5b+LB1N9h1spE=;
-        b=pJ6uJXiy0musQjbzgeSzT73k+79eH49ykOBF+U1h7NzHG5egsmYYTv7jlBxfEpuILw
-         wmbt6r2EEKMEN+JLUmgab4kppk7EXSbsRSa+fPcAyUv01TMB2m1lF+6HuMHZDmcOASf8
-         nXPcrSeW2Z/7hoSYG79dNKMviPBWYMNyIlNBXtE8RNlwp8qZfHD3jVsNsoxpS2E9V+z8
-         TTuU5Oe8aKsXm2NeJ4qL8MIGOubYIr/L8t6jsE+Xh5hXP7frf6xorLV1wGT+AWc2UIAr
-         cLGLgRFAcSgmhmaKTJ12+T9xGatAqHrqCQEi6FbIdkb8tVHvWbk4j8lAdh+iTSmQa5RG
-         io7A==
-X-Gm-Message-State: AOAM530jC013Y14dc9b5kA9eXBjWf4d0FxogL9c9BCf8ogMAiFDswq+/
-        7ARfMEjQYsDHoJxIe5SoL9Dete6S95Ga+EVliEM=
-X-Google-Smtp-Source: ABdhPJxbbscPEi1voRkLIcYVArvuegPD6owbBYbVKro6UuSK89jyGZ8rENgl+xpfcs7m9W+BumF+/w==
-X-Received: by 2002:a05:6a00:2cc:b0:51b:f1d3:e5f with SMTP id b12-20020a056a0002cc00b0051bf1d30e5fmr33514357pft.52.1654845401504;
-        Fri, 10 Jun 2022 00:16:41 -0700 (PDT)
-Received: from localhost.localdomain ([139.198.0.165])
-        by smtp.gmail.com with ESMTPSA id t4-20020a628104000000b0051829b1595dsm479937pfd.130.2022.06.10.00.16.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Jun 2022 00:16:40 -0700 (PDT)
-From:   Sun Feng <loyou85@gmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     loyou85@gmail.com
-Subject: [PATCH] block: fix attribute_group lost if set before add_disk
-Date:   Fri, 10 Jun 2022 15:16:29 +0800
-Message-Id: <1654845389-21741-1-git-send-email-loyou85@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 10 Jun 2022 03:19:46 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90972365507
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:19:42 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-265-E67PabsDNFybFXr5kYm1dQ-1; Fri, 10 Jun 2022 08:19:40 +0100
+X-MC-Unique: E67PabsDNFybFXr5kYm1dQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Fri, 10 Jun 2022 08:19:38 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Fri, 10 Jun 2022 08:19:38 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Nick Desaulniers' <ndesaulniers@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Justin Stitt <jstitt007@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Richard Smith <richardsmith@google.com>
+Subject: RE: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16
+ conditional
+Thread-Topic: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16
+ conditional
+Thread-Index: AQHYe27ya6wpBKIBkUONwhnsoYlXO61IPC9w
+Date:   Fri, 10 Jun 2022 07:19:38 +0000
+Message-ID: <ef8069e60f7a4e23a26dcbedd0bc77d7@AcuMS.aculab.com>
+References: <20220607222006.22719-1-jstitt007@gmail.com>
+ <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
+ <CAKwvOdmXeRbFjkHgFXps4pLH6Q6pGWRNOqA85=h2aFnR=uaggg@mail.gmail.com>
+ <20220607162128.b5d4aa70f4a8a7610ce29250@linux-foundation.org>
+ <YqArhaiEu+6YWZfg@zeniv-ca.linux.org.uk>
+ <CAKwvOdnSSY0jexXioDTZOWSTi0fkaudZbgSjigPr5uzTRmA_Rg@mail.gmail.com>
+In-Reply-To: <CAKwvOdnSSY0jexXioDTZOWSTi0fkaudZbgSjigPr5uzTRmA_Rg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-after commit 52b85909f85d("block: fold register_disk into device_add_disk")
-when set attribute_group with following code:
-
-  disk_to_dev(disk)->groups = attr_groups;
-  err = add_disk(disk);
-
-disk_to_dev(disk)->groups will set to NULL in device_add_disk,
-
-  static inline int __must_check add_disk(struct gendisk *disk)
-  {
-       	return device_add_disk(NULL, disk, NULL);
-  }
-  int __must_check device_add_disk(struct device *parent, ...
-                                 const struct attribute_group **groups)
-  {
-	…
-	ddev->groups = groups
-
-and it will lose attribute group set.
-
-Signed-off-by: Sun Feng <loyou85@gmail.com>
----
- block/genhd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/block/genhd.c b/block/genhd.c
-index 27205ae..6b76f67 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -459,7 +459,10 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
- 	dev_set_uevent_suppress(ddev, 1);
- 
- 	ddev->parent = parent;
--	ddev->groups = groups;
-+	if (groups) {
-+		WARN_ON(ddev->groups);
-+		ddev->groups = groups;
-+	}
- 	dev_set_name(ddev, "%s", disk->disk_name);
- 	if (!(disk->flags & GENHD_FL_HIDDEN))
- 		ddev->devt = MKDEV(disk->major, disk->first_minor);
--- 
-2.7.4
+RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAwOCBKdW5lIDIwMjIgMjA6MzUNCi4uLi4N
+Cj4gVGhlIGlzc3VlIHdlJ3JlIGZhY2luZyBpcyBtb3JlIHNvIHRoYXQgYG50b2hzYCBpcyBiZWlu
+ZyB1c2VkIGluDQo+IHByaW50Zi1saWtlIGV4cHJlc3Npb25zOyBjbGFuZydzIC1XZm9ybWF0IHdh
+cm5zIGFib3V0IGRlZmF1bHQgYXJndW1lbnQNCj4gcHJvbW90aW9uIHNvIHdlIG5lZWQgdG8gY2xl
+YW4gdXAgY2FzZXMgd2hlcmUgc21hbGxlci10aGFuLWludCBmb3JtYXQNCj4gZmxhZ3MgYXJlIGJl
+aW5nIHVzZWQgZm9yIHByb21vdGVkLXRvLWludCBwYXJhbXMuICBXaGlsZSBsb29raW5nIGF0DQo+
+IHRoYXQsIE5hdGhhbiBub3RpY2VkIHRoYXQgX19zd2FiMTYgd2lsbCByZXR1cm4gZWl0aGVyIGEg
+X191MTYgb3IgYW4NCj4gaW50IGJhc2VkIG9uIHdoZXRoZXIgX19IQVZFX0JVSUxUSU5fQlNXQVAx
+Nl9fIGlzIGRlZmluZWQsIHdoaWNoDQo+IGRlcGVuZHMgb24gQk9USCB0aGUgY29tcGlsZXIgYmVp
+bmcgdXNlZCBhbmQgdGFyZ2V0IGFyY2hpdGVjdHVyZS4gIFRoaXMNCj4gcGF0Y2ggZnJvbSBKdXN0
+aW4ganVzdCBjbGVhbnMgdGhhdCB1cC4NCg0KVGhlICdwcm9ibGVtJyBpcyB0aGF0IHRoZSAoX191
+MTYpIGNhc3QgaXMgbGlrZWx5IHRvIGFkZCBhbg0KZXh0cmEgJyYgMHhmZmZmJyBpbnN0cnVjdGlv
+biB0aGF0IGlzIGFsbW9zdCBjZXJ0YWlubHkgbm90DQpyZXF1aXJlZC4NCg0KT1RPSCB0aGUgbGFj
+ayBvZiB0aGlzIG1hc2tpbmcgaGFzIGFsd2F5cyBiZWVuIGEgZGlmZmVyZW5jZSBiZXR3ZWVuDQpo
+dG9ucygpIG9uIEJFIGFuZCBMRSBzeXN0ZW1zLg0KDQpCdXQgY2xhbmcgaXMgYWxzbyBiZWluZyBv
+dmVyLWVudGh1c2lhc3RpYyB3aXRoIGl0cyB3YXJuaW5ncy4NCklJUkMgdmFyYXJncyBwYXJhbWV0
+ZXJzIGFsd2F5cyBnZXQgaW50ZWdlciBwcm9tb3Rpb24uDQpTbyBpZiAlaGQgZXZlciBtYWtlcyBz
+ZW5zZSBmb3IgcHJpbnRmIHRoZW4gaXQgaW1wbGllcyBhDQptYXNrIGluc2lkZSBwcmludGYuDQoN
+CglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwg
+TW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzog
+MTM5NzM4NiAoV2FsZXMpDQo=
 

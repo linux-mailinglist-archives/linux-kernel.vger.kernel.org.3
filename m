@@ -2,211 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE8D5458FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A113F545900
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237831AbiFJAI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S238257AbiFJAKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiFJAIx (ORCPT
+        with ESMTP id S231631AbiFJAKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:08:53 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FC94C407
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:08:51 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id e66so23267495pgc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:08:51 -0700 (PDT)
+        Thu, 9 Jun 2022 20:10:19 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3077C6D97D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:10:18 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id f9so11045712plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:10:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MaS2sNIkZE7SaWHlKhH/YI3n6sfvjrj5m4CoiaX/33I=;
-        b=VpoCZvxU/FfqoAK+6u/q0PQaH8xPHq9aGSq3ibmyUFsV5U8maoYZCFhq2eV4QfMyj3
-         7zNBdEtEj7k69gpI3jPAWwyTOjYtHjPWC6AVSU4qXV3dImLX40u2PzYgG5/w68ba2ANM
-         UqjYjj1ohu/VRTi7j5u3gJW28L+zH9a+Eqf0+yrXS0yQExwAS5z+dJOo23doEUPm3NaG
-         s3682kXnrMx4PgecAn6QAU7Pi5pzYkGl5uSyPviRFBwmFBgrPYxdEbygFlbVVRrxumbo
-         zW5n0rC2AbeyHrIEkyRO5T5mZdA67mBNt02hI13DkEiHUYtRKw8OQ16ghDeyjUxm66TP
-         K2vw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=toj+A2N5AVFrqrL1/Vxl2lAeLAZTIqgD9K/xvEkZUTA=;
+        b=bj4cb3zOQN7YWyDrtemAMpKdCeidDBxj5uW7rn9I7qiCXlN7e0LBpr5GyFjnCIhGHL
+         eEi94dhebFtW/qvn07s8D7zDA87t7LsILMvAFrS5HciKff/9/RfZqjl+hdyJnEE4Fdzm
+         QtCTH31Os2tt09D4LTEJJE2SmzFDOPdANFfCk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MaS2sNIkZE7SaWHlKhH/YI3n6sfvjrj5m4CoiaX/33I=;
-        b=oy2WiBLJ6zEoxpoaf4iuAacZ6V8mOwru40b+ChAJEjV0kYMDV5zi60+NEGlS48heoz
-         m5IWLXBhhQJv/sZsg6z+Hnq8ImJmIWbwHDO5unPLYw3k/xpVDqegko8ft2xHT21qMANC
-         YgeidqcOdnpwM/KzrbpUEr2epPnYUId98VTPGedbkDgrkpIZHsjCPkDdSBRKueF3OHSw
-         Ml0vjBg2095qP+V7tJChRhViN5dGIj6oJbne92lcJqAubaK2l6RQYbBxbpPJhlMQtHj1
-         F8jU6dxCErHbHEppmGwl2XObqi9IaYFR4WsEwayQpSE/UF3L2/k0n47YcJRu4mngPh05
-         RjNg==
-X-Gm-Message-State: AOAM530L0b1Pplj315KMpTqOk1YYDsaZaS7QWhaPATBMLHXHGt7KvA6y
-        h+vykBWZRBGKKwU+Ztre8rItrAF34ywy18/NcPk=
-X-Google-Smtp-Source: ABdhPJxIojRHgT7HS/v4whlvd9vukX1WNLaaQ0yE6bYAALcB6/ML9ytrMw9rJPQoMc8E3DOA6UhAOPX/1WCKFt2izCs=
-X-Received: by 2002:a65:67c1:0:b0:3fd:ebd6:5dab with SMTP id
- b1-20020a6567c1000000b003fdebd65dabmr16367024pgs.75.1654819731056; Thu, 09
- Jun 2022 17:08:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=toj+A2N5AVFrqrL1/Vxl2lAeLAZTIqgD9K/xvEkZUTA=;
+        b=gN3w/Tn8V/xxjMlwjNig5bIWDsrzBJehQm1maNgi5/qSPvFIKHGYu8sMHdc1NeUQ2a
+         3M/MT5+owQhMvj1ba/YPNK0eDuD7KRAYmqNJ+vTdi0MPL61uAL75NjM1afNwYg/BwEBw
+         rLeo78Cy5wiNn0opXNWG4Jsq59Ur72NJaN7f+nCMxK8xQdydOgjwhlxt6p2mrwWsQXkB
+         FY70mfj883w3dzt55OCtL70SuBIiiG6l1AHBL5YJPWpTYJqQuplxVCvMcNn6auFEkhOn
+         QPlLZtMParZzg9PhbLzlqRtQ0sXgsVXhv+rUARvFxSiJEaJ99oSL3Y/fR6jDg4mv7Ahi
+         e0lw==
+X-Gm-Message-State: AOAM531vs4w+d88xiFRUYqZshvqW6HT7PfOAml7J2gOAXHyA4RLBxXI9
+        YjFHSkz4VBPOT1nQaJPoxwTaiA==
+X-Google-Smtp-Source: ABdhPJyNbf0SWOUtZad094XjSO7uUkrqyNCFQTH3dSK98kga6ApoMb+Nabdmt1o077+NLjvf2sgRIw==
+X-Received: by 2002:a17:902:ec92:b0:166:3502:ecb1 with SMTP id x18-20020a170902ec9200b001663502ecb1mr42079933plg.62.1654819817617;
+        Thu, 09 Jun 2022 17:10:17 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:4732:8bcf:1bc2:ec84])
+        by smtp.gmail.com with ESMTPSA id y15-20020a17090322cf00b0015e8d4eb2c5sm9508750plg.271.2022.06.09.17.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 17:10:17 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jordan Crouse <jordan@cosmicpenguin.net>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Eric Anholt <eric@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Sean Paul <sean@poorly.run>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] drm/msm: Avoid unclocked GMU register access in 6xx gpu_busy
+Date:   Thu,  9 Jun 2022 17:09:47 -0700
+Message-Id: <20220609170859.v3.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-3-shy828301@gmail.com>
- <CAAa6QmTYZQVf_U3dBnFpYGh3E8Qc4w8CKctMUC7jV_t=naGURQ@mail.gmail.com>
-In-Reply-To: <CAAa6QmTYZQVf_U3dBnFpYGh3E8Qc4w8CKctMUC7jV_t=naGURQ@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 9 Jun 2022 17:08:38 -0700
-Message-ID: <CAHbLzkr42VJhwj5EELw4oOXxm8bHzB7AEUBa0JqWYpvNXw6oNg@mail.gmail.com>
-Subject: Re: [v3 PATCH 2/7] mm: thp: introduce transhuge_vma_size_ok() helper
-To:     "Zach O'Keefe" <zokeefe@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 3:21 PM Zach O'Keefe <zokeefe@google.com> wrote:
->
-> On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
-> >
-> > There are couple of places that check whether the vma size is ok for
-> > THP or not, they are open coded and duplicate, introduce
-> > transhuge_vma_size_ok() helper to do the job.
-> >
-> > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > ---
-> >  include/linux/huge_mm.h | 17 +++++++++++++++++
-> >  mm/huge_memory.c        |  5 +----
-> >  mm/khugepaged.c         | 12 ++++++------
-> >  3 files changed, 24 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> > index 648cb3ce7099..a8f61db47f2a 100644
-> > --- a/include/linux/huge_mm.h
-> > +++ b/include/linux/huge_mm.h
-> > @@ -116,6 +116,18 @@ extern struct kobj_attribute shmem_enabled_attr;
-> >
-> >  extern unsigned long transparent_hugepage_flags;
-> >
-> > +/*
-> > + * The vma size has to be large enough to hold an aligned HPAGE_PMD_SIZE area.
-> > + */
-> > +static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
-> > +{
-> > +       if (round_up(vma->vm_start, HPAGE_PMD_SIZE) <
-> > +           (vma->vm_end & HPAGE_PMD_MASK))
-> > +               return true;
-> > +
-> > +       return false;
-> > +}
->
-> First time coming across round_up() - thanks for that - but for
-> symmetry, maybe also use round_down() for the end? No strong opinion -
-> just a suggestion given I've just discovered it.
+From testing on sc7180-trogdor devices, reading the GMU registers
+needs the GMU clocks to be enabled. Those clocks get turned on in
+a6xx_gmu_resume(). Confusingly enough, that function is called as a
+result of the runtime_pm of the GPU "struct device", not the GMU
+"struct device". Unfortunately the current a6xx_gpu_busy() grabs a
+reference to the GMU's "struct device".
 
-Yeah, round_down is fine too.
+The fact that we were grabbing the wrong reference was easily seen to
+cause crashes that happen if we change the GPU's pm_runtime usage to
+not use autosuspend. It's also believed to cause some long tail GPU
+crashes even with autosuspend.
 
->
-> >  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
-> >                 unsigned long addr)
-> >  {
-> > @@ -345,6 +357,11 @@ static inline bool transparent_hugepage_active(struct vm_area_struct *vma)
-> >         return false;
-> >  }
-> >
-> > +static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
-> > +{
-> > +       return false;
-> > +}
-> > +
-> >  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
-> >                 unsigned long addr)
-> >  {
-> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> > index 48182c8fe151..36ada544e494 100644
-> > --- a/mm/huge_memory.c
-> > +++ b/mm/huge_memory.c
-> > @@ -71,10 +71,7 @@ unsigned long huge_zero_pfn __read_mostly = ~0UL;
-> >
-> >  bool transparent_hugepage_active(struct vm_area_struct *vma)
-> >  {
-> > -       /* The addr is used to check if the vma size fits */
-> > -       unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
-> > -
-> > -       if (!transhuge_vma_suitable(vma, addr))
-> > +       if (!transhuge_vma_size_ok(vma))
-> >                 return false;
-> >         if (vma_is_anonymous(vma))
-> >                 return __transparent_hugepage_enabled(vma);
->
-> Do we need a check for vma->vm_pgoff alignment here, after
-> !vma_is_anonymous(), and now that we don't call
-> transhuge_vma_suitable()?
+We could look at changing it so that we do pm_runtime_get_if_in_use()
+on the GPU's "struct device", but then we run into a different
+problem. pm_runtime_get_if_in_use() will return 0 for the GPU's
+"struct device" the whole time when we're in the "autosuspend
+delay". That is, when we drop the last reference to the GPU but we're
+waiting a period before actually suspending then we'll think the GPU
+is off. One reason that's bad is that if the GPU didn't actually turn
+off then the cycle counter doesn't lose state and that throws off all
+of our calculations.
 
-Actually I was thinking about this too. But the THPeligible bit shown
-by smaps is a little bit ambiguous for file vma. The document says:
-"THPeligible" indicates whether the mapping is eligible for allocating
-THP pages - 1 if true, 0 otherwise.
+Let's change the code to keep track of the suspend state of
+devfreq. msm_devfreq_suspend() is always called before we actually
+suspend the GPU and msm_devfreq_resume() after we resume it. This
+means we can use the suspended state to know if we're powered or not.
 
-Even though it doesn't fulfill the alignment, it is still possible to
-get THP allocated, but just can't be PMD mapped. So the old behavior
-of THPeligible for file vma seems problematic, or at least doesn't
-match the document.
+NOTE: one might wonder when exactly our status function is called when
+devfreq is supposed to be disabled. The stack crawl I captured was:
+  msm_devfreq_get_dev_status
+  devfreq_simple_ondemand_func
+  devfreq_update_target
+  qos_notifier_call
+  qos_max_notifier_call
+  blocking_notifier_call_chain
+  pm_qos_update_target
+  freq_qos_apply
+  apply_constraint
+  __dev_pm_qos_update_request
+  dev_pm_qos_update_request
+  msm_devfreq_idle_work
 
-I should elaborate this in the commit log.
+Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
->
-> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > index 84b9cf4b9be9..d0f8020164fc 100644
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -454,6 +454,9 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
-> >                                 vma->vm_pgoff, HPAGE_PMD_NR))
-> >                 return false;
-> >
-> > +       if (!transhuge_vma_size_ok(vma))
-> > +               return false;
-> > +
-> >         /* Enabled via shmem mount options or sysfs settings. */
-> >         if (shmem_file(vma->vm_file))
-> >                 return shmem_huge_enabled(vma);
-> > @@ -512,9 +515,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
-> >                           unsigned long vm_flags)
-> >  {
-> >         if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
-> > -           khugepaged_enabled() &&
-> > -           (((vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK) <
-> > -            (vma->vm_end & HPAGE_PMD_MASK))) {
-> > +           khugepaged_enabled()) {
-> >                 if (hugepage_vma_check(vma, vm_flags))
-> >                         __khugepaged_enter(vma->vm_mm);
-> >         }
-> > @@ -2142,10 +2143,9 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
-> >                         progress++;
-> >                         continue;
-> >                 }
-> > -               hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
-> > +
-> > +               hstart = round_up(vma->vm_start, HPAGE_PMD_SIZE);
-> >                 hend = vma->vm_end & HPAGE_PMD_MASK;
-> > -               if (hstart >= hend)
-> > -                       goto skip;
-> >                 if (khugepaged_scan.address > hend)
-> >                         goto skip;
-> >                 if (khugepaged_scan.address < hstart)
->
-> Likewise, could do round_down() here (just a suggestion)
+Changes in v3:
+- Totally rewrote to not use the pm_runtime functions.
+- Moved the code to be common for all adreno GPUs.
 
-Fine to me.
+Changes in v2:
+- Move the set_freq runtime pm grab to the GPU file.
+- Use <= for the pm_runtime test, not ==.
 
->
-> > --
-> > 2.26.3
-> >
-> >
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c |  8 ------
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 13 ++++-----
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++------
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  3 ++-
+ drivers/gpu/drm/msm/msm_gpu.h         |  9 ++++++-
+ drivers/gpu/drm/msm/msm_gpu_devfreq.c | 39 +++++++++++++++++++++------
+ 6 files changed, 51 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+index c424e9a37669..3dcec7acb384 100644
+--- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+@@ -1666,18 +1666,10 @@ static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ {
+ 	u64 busy_cycles;
+ 
+-	/* Only read the gpu busy if the hardware is already active */
+-	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
+-		*out_sample_rate = 1;
+-		return 0;
+-	}
+-
+ 	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
+ 			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
+ 	*out_sample_rate = clk_get_rate(gpu->core_clk);
+ 
+-	pm_runtime_put(&gpu->pdev->dev);
+-
+ 	return busy_cycles;
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index 9f76f5b15759..dc715d88ff21 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -102,7 +102,8 @@ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu)
+ 		A6XX_GMU_SPTPRAC_PWR_CLK_STATUS_GX_HM_CLK_OFF));
+ }
+ 
+-void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
++void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++		       bool suspended)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+@@ -127,15 +128,16 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 
+ 	/*
+ 	 * This can get called from devfreq while the hardware is idle. Don't
+-	 * bring up the power if it isn't already active
++	 * bring up the power if it isn't already active. All we're doing here
++	 * is updating the frequency so that when we come back online we're at
++	 * the right rate.
+ 	 */
+-	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
++	if (suspended)
+ 		return;
+ 
+ 	if (!gmu->legacy) {
+ 		a6xx_hfi_set_freq(gmu, perf_index);
+ 		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+-		pm_runtime_put(gmu->dev);
+ 		return;
+ 	}
+ 
+@@ -159,7 +161,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
+ 
+ 	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+-	pm_runtime_put(gmu->dev);
+ }
+ 
+ unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
+@@ -895,7 +896,7 @@ static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
+ 		return;
+ 
+ 	gmu->freq = 0; /* so a6xx_gmu_set_freq() doesn't exit early */
+-	a6xx_gmu_set_freq(gpu, gpu_opp);
++	a6xx_gmu_set_freq(gpu, gpu_opp, false);
+ 	dev_pm_opp_put(gpu_opp);
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 42ed9a3c4905..8c02a67f29f2 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -1658,27 +1658,21 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ 	/* 19.2MHz */
+ 	*out_sample_rate = 19200000;
+ 
+-	/* Only read the gpu busy if the hardware is already active */
+-	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
+-		return 0;
+-
+ 	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
+ 
+-
+-	pm_runtime_put(a6xx_gpu->gmu.dev);
+-
+ 	return busy_cycles;
+ }
+ 
+-static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
++static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++			      bool suspended)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+ 
+ 	mutex_lock(&a6xx_gpu->gmu.lock);
+-	a6xx_gmu_set_freq(gpu, opp);
++	a6xx_gmu_set_freq(gpu, opp, suspended);
+ 	mutex_unlock(&a6xx_gpu->gmu.lock);
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+index 86e0a7c3fe6d..ab853f61db63 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+@@ -77,7 +77,8 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
+ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
+ void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
+ 
+-void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp);
++void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++		       bool suspended);
+ unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu);
+ 
+ void a6xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index 6def00883046..7ced1a30d4e8 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -68,7 +68,8 @@ struct msm_gpu_funcs {
+ 	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
+ 	int (*gpu_state_put)(struct msm_gpu_state *state);
+ 	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
+-	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp);
++	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++			     bool suspended);
+ 	struct msm_gem_address_space *(*create_address_space)
+ 		(struct msm_gpu *gpu, struct platform_device *pdev);
+ 	struct msm_gem_address_space *(*create_private_address_space)
+@@ -92,6 +93,9 @@ struct msm_gpu_devfreq {
+ 	/** devfreq: devfreq instance */
+ 	struct devfreq *devfreq;
+ 
++	/** lock: lock for "suspended", "busy_cycles", and "time" */
++	struct mutex lock;
++
+ 	/**
+ 	 * idle_constraint:
+ 	 *
+@@ -135,6 +139,9 @@ struct msm_gpu_devfreq {
+ 	 * elapsed
+ 	 */
+ 	struct msm_hrtimer_work boost_work;
++
++	/** suspended: tracks if we're suspended */
++	bool suspended;
+ };
+ 
+ struct msm_gpu {
+diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+index d2539ca78c29..ea94bc18e72e 100644
+--- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
++++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+@@ -20,6 +20,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+ 		u32 flags)
+ {
+ 	struct msm_gpu *gpu = dev_to_gpu(dev);
++	struct msm_gpu_devfreq *df = &gpu->devfreq;
+ 	struct dev_pm_opp *opp;
+ 
+ 	/*
+@@ -32,10 +33,13 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+ 
+ 	trace_msm_gpu_freq_change(dev_pm_opp_get_freq(opp));
+ 
+-	if (gpu->funcs->gpu_set_freq)
+-		gpu->funcs->gpu_set_freq(gpu, opp);
+-	else
++	if (gpu->funcs->gpu_set_freq) {
++		mutex_lock(&df->lock);
++		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
++		mutex_unlock(&df->lock);
++	} else {
+ 		clk_set_rate(gpu->core_clk, *freq);
++	}
+ 
+ 	dev_pm_opp_put(opp);
+ 
+@@ -58,15 +62,24 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
+ 	unsigned long sample_rate;
+ 	ktime_t time;
+ 
++	mutex_lock(&df->lock);
++
+ 	status->current_frequency = get_freq(gpu);
+-	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
+ 	time = ktime_get();
+-
+-	busy_time = busy_cycles - df->busy_cycles;
+ 	status->total_time = ktime_us_delta(time, df->time);
++	df->time = time;
+ 
++	if (df->suspended) {
++		mutex_unlock(&df->lock);
++		status->busy_time = 0;
++		return;
++	}
++
++	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
++	busy_time = busy_cycles - df->busy_cycles;
+ 	df->busy_cycles = busy_cycles;
+-	df->time = time;
++
++	mutex_unlock(&df->lock);
+ 
+ 	busy_time *= USEC_PER_SEC;
+ 	do_div(busy_time, sample_rate);
+@@ -175,6 +188,8 @@ void msm_devfreq_init(struct msm_gpu *gpu)
+ 	if (!gpu->funcs->gpu_busy)
+ 		return;
+ 
++	mutex_init(&df->lock);
++
+ 	dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
+ 			       DEV_PM_QOS_MAX_FREQUENCY,
+ 			       PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
+@@ -244,12 +259,16 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
+ void msm_devfreq_resume(struct msm_gpu *gpu)
+ {
+ 	struct msm_gpu_devfreq *df = &gpu->devfreq;
++	unsigned long sample_rate;
+ 
+ 	if (!has_devfreq(gpu))
+ 		return;
+ 
+-	df->busy_cycles = 0;
++	mutex_lock(&df->lock);
++	df->busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
+ 	df->time = ktime_get();
++	df->suspended = false;
++	mutex_unlock(&df->lock);
+ 
+ 	devfreq_resume_device(df->devfreq);
+ }
+@@ -261,6 +280,10 @@ void msm_devfreq_suspend(struct msm_gpu *gpu)
+ 	if (!has_devfreq(gpu))
+ 		return;
+ 
++	mutex_lock(&df->lock);
++	df->suspended = true;
++	mutex_unlock(&df->lock);
++
+ 	devfreq_suspend_device(df->devfreq);
+ 
+ 	cancel_idle_work(df);
+-- 
+2.36.1.476.g0c4daa206d-goog
+

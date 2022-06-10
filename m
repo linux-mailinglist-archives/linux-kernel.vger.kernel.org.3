@@ -2,144 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3379545F70
+	by mail.lfdr.de (Postfix) with ESMTP id AB29A545F6F
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347962AbiFJIjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
+        id S1347955AbiFJIjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348111AbiFJIib (ORCPT
+        with ESMTP id S1348150AbiFJIif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:38:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA533CFD7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:36:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFBDD60DD7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CCCC34114;
-        Fri, 10 Jun 2022 08:36:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654850194;
-        bh=8CLQrzdA+jFP6P5OBG66y3p/sqqVmwPEF7Q/2guufxU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MMjJZGrfefP2xJhWnbP/E7Js2pkTJTeQDzsznxcmX3o1PmR+g9yrDzt6x5oznH9Lm
-         mkq64HriJCAxQpplf70uLyvBG6cwTiYdG+ddWYhR+8XIqlqTm0zFwSU3sL5wjTYXaT
-         EtV2aBUDJG9UdWh5+5K5m4ZXj7Qi1lSL6BptihCO5NEZKVJgsIzA+y1TRS8Ps19fEF
-         rKw0NztXzE4mYbWMPyIbszqIfKPRDAEWztULG1ZT1m4S5chTmp1My2KRGRcRUGBnPl
-         pKh5aRxzgWbW5SjGZnN3CTzkLJ+r6hxak26WhXu/CfDZ9FMt2d+gIEmRLXqjxbI5f8
-         2GSMaiVby3sAg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nza87-00H5Gi-Og; Fri, 10 Jun 2022 09:36:31 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Jamie Iles <jamie@jamieiles.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: [GIT PULL] irqchip fixes for 5.19, take #1
-Date:   Fri, 10 Jun 2022 09:36:28 +0100
-Message-Id: <20220610083628.1205136-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 10 Jun 2022 04:38:35 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBE83D480
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:36:51 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a15so41716426lfb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Eicu7148pm/4x777cEThw3z5cRYIwfGOQ4/TvMVAHCg=;
+        b=VEsJD1EpHTtwZpiGwJunS27R9TD1UKBge1fJ8t2WtSv+quG309wZsJ/jAFZt90U9zJ
+         6jtvaPJI4Qt8txBzyMnqoXZP6aZkuo6pLQ9KtQW36Kqv8XQ5YgDc0aFr0R3EW7hcM38w
+         AXhCXfa5Bpp5Zw67Hud1ZT3XmWM0vc7cxghtMWUMM1RTQKfHX05sEMEVjvYzT9ooUAgz
+         GqU6L+dbRvjJ9LftnDpakXo7yAMHtMbQQFfWvlrFU9H0RTY2gLzerztouBO5ihHfS2XO
+         U+3R48tAdCFBp7ax1cB8r5f/Bl3dLlcv5SBKlAdl3x/tN32w6ncwdW99tZzZklZf3pkl
+         9yxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Eicu7148pm/4x777cEThw3z5cRYIwfGOQ4/TvMVAHCg=;
+        b=8CNJglJFCUAv49MZMST3mkT2LaMb3tNwuJECSPF8Xkz4J61aR3rAhPfJU2fczJB/IO
+         hgTKGovJXVIlSOS8Xu1UmuMZ1qlz8vOUsE5STZpAmG2lm0g8AeVa91zeOntiZnTrUsKx
+         Tu0ry3r2Xxw+6FGhGM962SdGchWdhcJT0963psXGfFgPca+CAZNYJED7ZbgZ9ccsyBNx
+         3BSuPYmSLF/OsHxSvRp3FoXB5o82zkArp+wt5Pzmkaurw6nWGfvVsYshtidxj106HYCK
+         dE+5cqnIJt7hkK/mk+yCtt9PVRJ0r1IWjFCYs2AcKrOQh3kNCuV8AjXI3Tq/yS9crT1W
+         o4Lg==
+X-Gm-Message-State: AOAM531GyZc8q8UDkXva4oVh8cS1lQxz3e6tUcJJ+zo6sdhXPnJCVzsO
+        PzmfGVaHopPyAbQHrFFHpNBLTAzdNFgoFUD2KXP/Dw==
+X-Google-Smtp-Source: ABdhPJyWO6tS8NeUxy/ypAEjfKWBR37YKuyIXcaEa64lgPxJzpyUGzNL2NS8qZc2GGHL2XozDYTxPfu30GvaJz5JpFs=
+X-Received: by 2002:a05:6512:48f:b0:479:1f1a:544d with SMTP id
+ v15-20020a056512048f00b004791f1a544dmr21465928lfq.206.1654850209333; Fri, 10
+ Jun 2022 01:36:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tglx@linutronix.de, jamie@jamieiles.com, jiaxun.yang@flygoat.com, hayashi.kunihiko@socionext.com, victor.liu@nxp.com, l.stach@pengutronix.de, linmq006@gmail.com, michal.simek@amd.com, robh@kernel.org, linux-kernel@vger.kernel.org, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <0000000000008ea7ac05e09b46a6@google.com>
+In-Reply-To: <0000000000008ea7ac05e09b46a6@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 10 Jun 2022 10:36:37 +0200
+Message-ID: <CACT4Y+Z8fdbQ9Kq1gHSha2q7a6RrOajbPKrSVCFyLNS95XkVgQ@mail.gmail.com>
+Subject: Re: [syzbot] upstream boot error: INFO: task hung in hwrng_register
+To:     syzbot <syzbot+6da75abeed821109137b@syzkaller.appspotmail.com>
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@dominikbrodowski.net,
+        llvm@lists.linux.dev, mpm@selenic.com,
+        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
+        Laurent Vivier <lvivier@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Sat, 4 Jun 2022 at 10:46, syzbot
+<syzbot+6da75abeed821109137b@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    032dcf09e2bf Merge tag 'gpio-fixes-for-v5.19-rc1' of git:/..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14409a93f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=99f457384a4fea79
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6da75abeed821109137b
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6da75abeed821109137b@syzkaller.appspotmail.com
 
-Here's a small set of fixes for 5.19.
++Jason, Laurent
 
-The only really notable change is a fix for chained interrupts, which
-were never calling into the runtime PM subsystem. Depending on the
-probing order, you could end-up with configuring an irqchip that
-wasn't switched on.
+This started appearing at the same time as 'task hung in
+add_early_randomness" bug reports:
+https://syzkaller.appspot.com/bug?id=256d08cc261a3c38832064a33df4c928b3cd0ef0
+https://syzkaller.appspot.com/bug?id=be1d99e09e499aed3939dc678718371984104e5c
+https://syzkaller.appspot.com/bug?id=1cd11df5d984c694e3e7fc9fe271389b2340bed0
+https://syzkaller.appspot.com/bug?id=35496bafab4c3f81f0b0d6d72c69787300629740
 
-The rest is a small stack of of_node refcounting fixes, config
-updates, fixing MIPS after the loongarch merge, and the obligaroty DT
-update for one irqchip.
+Is this also fixed by "virtio-rng: make device ready before making
+request" patch?
 
-Please pull,
 
-	M.
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-5.19-1
-
-for you to fetch changes up to 6fac824f40987a54a08dfbcc36145869d02e45b1:
-
-  irqchip/loongson-liointc: Use architecture register to get coreid (2022-06-10 08:57:19 +0100)
-
-----------------------------------------------------------------
-irqchip/genirq fixes for 5.19, take #1
-
-- Invoke runtime PM for chained interrupts, aligning the behaviour
-  with that of 'normal' interrupts
-
-- A flurry of of_node refcounting fixes
-
-- A fix for the recently merged loongarch that broke UP MIPS
-
-- A configuration fix for the Xilinx interrupt controller
-
-- Yet another new compat string for the Uniphier interrupt controller
-
-----------------------------------------------------------------
-Jamie Iles (1):
-      irqchip/xilinx: Remove microblaze+zynq dependency
-
-Jiaxun Yang (1):
-      irqchip/loongson-liointc: Use architecture register to get coreid
-
-Kunihiko Hayashi (2):
-      dt-bindings: interrupt-controller/uniphier-aidet: Add bindings for NX1 SoC
-      irqchip/uniphier-aidet: Add compatible string for NX1 SoC
-
-Marc Zyngier (1):
-      genirq: PM: Use runtime PM for chained interrupts
-
-Miaoqian Lin (6):
-      irqchip/gic/realview: Fix refcount leak in realview_gic_of_init
-      irqchip/apple-aic: Fix refcount leak in build_fiq_affinity
-      irqchip/apple-aic: Fix refcount leak in aic_of_ic_init
-      irqchip/gic-v3: Fix error handling in gic_populate_ppi_partitions
-      irqchip/gic-v3: Fix refcount leak in gic_populate_ppi_partitions
-      irqchip/realtek-rtl: Fix refcount leak in map_interrupts
-
- .../bindings/interrupt-controller/socionext,uniphier-aidet.yaml   | 1 +
- drivers/irqchip/Kconfig                                           | 2 +-
- drivers/irqchip/irq-apple-aic.c                                   | 2 ++
- drivers/irqchip/irq-gic-realview.c                                | 1 +
- drivers/irqchip/irq-gic-v3.c                                      | 7 +++++--
- drivers/irqchip/irq-loongson-liointc.c                            | 8 +++++++-
- drivers/irqchip/irq-realtek-rtl.c                                 | 2 +-
- drivers/irqchip/irq-uniphier-aidet.c                              | 1 +
- kernel/irq/chip.c                                                 | 5 ++++-
- 9 files changed, 23 insertions(+), 6 deletions(-)
+> INFO: task swapper/0:1 blocked for more than 143 seconds.
+>       Not tainted 5.18.0-syzkaller-13760-g032dcf09e2bf #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:swapper/0       state:D stack:21080 pid:    1 ppid:     0 flags:0x00004000
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5116 [inline]
+>  __schedule+0x957/0xec0 kernel/sched/core.c:6428
+>  schedule+0xeb/0x1b0 kernel/sched/core.c:6500
+>  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6559
+>  __mutex_lock_common+0xecf/0x26c0 kernel/locking/mutex.c:679
+>  __mutex_lock kernel/locking/mutex.c:747 [inline]
+>  mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+>  add_early_randomness drivers/char/hw_random/core.c:69 [inline]
+>  hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
+>  virtrng_scan+0x3e/0x90 drivers/char/hw_random/virtio-rng.c:205
+>  virtio_dev_probe+0xa03/0xba0 drivers/virtio/virtio.c:313
+>  call_driver_probe+0x96/0x250
+>  really_probe+0x220/0x940 drivers/base/dd.c:634
+>  __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:764
+>  driver_probe_device+0x50/0x240 drivers/base/dd.c:794
+>  __driver_attach+0x35f/0x5a0 drivers/base/dd.c:1163
+>  bus_for_each_dev+0x188/0x1f0 drivers/base/bus.c:301
+>  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
+>  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
+>  driver_register+0x2e9/0x3e0 drivers/base/driver.c:240
+>  do_one_initcall+0xbd/0x2b0 init/main.c:1295
+>  do_initcall_level+0x168/0x218 init/main.c:1368
+>  do_initcalls+0x4b/0x8c init/main.c:1384
+>  kernel_init_freeable+0x43a/0x5c3 init/main.c:1610
+>  kernel_init+0x19/0x2b0 init/main.c:1499
+>  ret_from_fork+0x1f/0x30
+>  </TASK>
+>
+> Showing all locks held in the system:
+> 2 locks held by swapper/0/1:
+>  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+>  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1054 [inline]
+>  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __driver_attach+0x353/0x5a0 drivers/base/dd.c:1162
+>  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: add_early_randomness drivers/char/hw_random/core.c:69 [inline]
+>  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
+> 2 locks held by pr/ttyS0/16:
+> 1 lock held by khungtaskd/29:
+>  #0: ffffffff8cb1eee0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+> 2 locks held by kworker/u4:4/56:
+>  #0: ffff888011c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
+>  #1: ffffc900013e7d00 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
+> 1 lock held by hwrng/755:
+>  #0: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_fillfn+0xec/0x470 drivers/char/hw_random/core.c:503
+>
+> =============================================
+>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000008ea7ac05e09b46a6%40google.com.

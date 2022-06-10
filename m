@@ -2,77 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB017546EEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5C6546EEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350549AbiFJVCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S1350751AbiFJVDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346839AbiFJVCK (ORCPT
+        with ESMTP id S1346839AbiFJVC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:02:10 -0400
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072674DF5F;
-        Fri, 10 Jun 2022 14:02:06 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1654894924; bh=nJ5MFlI7bZgvfzzBUZG0yDIB0cURw2j0N/Z0XV16DgM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ona/SbCQfx0pRd6c3vM6AB+M0QbCy3M9JMTMdO7aqXiEbNpmwTYGd77hskQc1PATt
-         MjrEuszx+mhwOQw0lj5br+mlKrCA5G9ik2v36JbE8u+dGNcSgmZ1kkexrzIFQpN393
-         zFeV3e0+oGAVmYTvmV3qbtjBjO/54H7VphjA9gsfvyoBwWOZIpfvUJYH/HNp0XZUx2
-         Ydj5MmxW7Cr1rPzBBWNc5wY3LvokXPmst0Bs54ctXNvAaT5sH7HyfdvRz3f/UuTOc2
-         aCk6QpEMyXxRZfbmaOOk/kc2QRu9LMe6IE7SuuM0MvfnVDKWhXVIELUPJsoV5a3LOZ
-         IdYwUTuN3C+xg==
-To:     Pavel Skripkin <paskripkin@gmail.com>, Takashi Iwai <tiwai@suse.de>
-Cc:     kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, senthilkumar@atheros.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
-        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-Subject: Re: [PATCH v5 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-In-Reply-To: <dabcbe61-5d77-7290-efd5-3fe71ca60640@gmail.com>
-References: <961b028f073d0d5541de66c00a517495431981f9.1653168225.git.paskripkin@gmail.com>
- <87bkv0vg2p.wl-tiwai@suse.de> <87r13w2wxq.fsf@toke.dk>
- <dabcbe61-5d77-7290-efd5-3fe71ca60640@gmail.com>
-Date:   Fri, 10 Jun 2022 23:02:04 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <878rq42pwz.fsf@toke.dk>
+        Fri, 10 Jun 2022 17:02:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC421008;
+        Fri, 10 Jun 2022 14:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654894977; x=1686430977;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ITqyNN6aMfLgWrZqGcYWjoDoxlzkxWNBkOIz9CdtswQ=;
+  b=WykKd0jY4dJx2z7tstMKwRCvWaRs5dcgAPMhCphYJR9nZV85v3REbSiy
+   gE0k5YcR+v7/wNm/pph4SzfYgUJyRvHgG2pEs9YWQ6aSt0Ip6quqJosxi
+   I3pOgFIqXYpGJ+fE3I1BorHtQ6TlC7zBE3Yw3Y4fypIdm948edWkNdKwi
+   WURk9j54gwnzFGs2K7KKM0hX/a84kEr8CzV5wcMNpYlYCzzxsWCP2fDMo
+   OVCcsiHqIwqD7shTovx0s7eMHqHI1mdo4n+uYHslQeCtDtrjzh+yNZeRK
+   eWWfzrHikKv5PbEj0QAmtIaivC67DYJj3ZHHfs7QHy79Hy2xYMtFZ2Tyt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="303128029"
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="303128029"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 14:02:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="725144484"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Jun 2022 14:02:52 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzlmN-000IHB-VP;
+        Fri, 10 Jun 2022 21:02:51 +0000
+Date:   Sat, 11 Jun 2022 05:02:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-ia64@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Add CABA tree to task_struct
+Message-ID: <202206110409.b8UJYnuq-lkp@intel.com>
+References: <20220610163214.49974-2-ptikhomirov@virtuozzo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610163214.49974-2-ptikhomirov@virtuozzo.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pavel Skripkin <paskripkin@gmail.com> writes:
+Hi Pavel,
 
-> Hi Toke,
->
-> On 6/10/22 21:30, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->>=20
->> In general, if a patch is marked as "changes requested", the right thing
->> to do is to bug the submitter to resubmit. Which I guess you just did,
->> so hopefully we'll get an update soon :)
->>=20
->
->
-> I agree here. The build fix is trivial, I just wanted to reply to
-> Hillf like 2 weeks ago, but an email got lost in my inbox.
->
-> So, i don't know what is correct thing to do rn: wait for Hillf's
-> reply or to quickly respin with build error addressed?
+Thank you for the patch! Perhaps something to improve:
 
-Up to you. If you respin it now we can just let it sit in patchwork over
-the weekend and see if it attracts any further comment; or you can wait
-and respin on Monday...
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on kees/for-next/execve tip/sched/core linus/master v5.19-rc1 next-20220610]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--Toke
+url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Tikhomirov/Introduce-CABA-helper-process-tree/20220611-003433
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220611/202206110409.b8UJYnuq-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/0875a2bed5ff95643c487dfcc28a550db06ea418
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pavel-Tikhomirov/Introduce-CABA-helper-process-tree/20220611-003433
+        git checkout 0875a2bed5ff95643c487dfcc28a550db06ea418
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/proc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/proc/array.c: In function 'task_state':
+>> fs/proc/array.c:157:15: warning: unused variable 'caba_pids' [-Wunused-variable]
+     157 |         pid_t caba_pids[MAX_PID_NS_LEVEL] = {};
+         |               ^~~~~~~~~
+>> fs/proc/array.c:156:13: warning: unused variable 'caba_level' [-Wunused-variable]
+     156 |         int caba_level = 0;
+         |             ^~~~~~~~~~
+>> fs/proc/array.c:155:21: warning: unused variable 'caba_pid' [-Wunused-variable]
+     155 |         struct pid *caba_pid;
+         |                     ^~~~~~~~
+>> fs/proc/array.c:154:29: warning: unused variable 'caba' [-Wunused-variable]
+     154 |         struct task_struct *caba;
+         |                             ^~~~
+
+
+vim +/caba_pids +157 fs/proc/array.c
+
+   143	
+   144	static inline void task_state(struct seq_file *m, struct pid_namespace *ns,
+   145					struct pid *pid, struct task_struct *p)
+   146	{
+   147		struct user_namespace *user_ns = seq_user_ns(m);
+   148		struct group_info *group_info;
+   149		int g, umask = -1;
+   150		struct task_struct *tracer;
+   151		const struct cred *cred;
+   152		pid_t ppid, tpid = 0, tgid, ngid;
+   153		unsigned int max_fds = 0;
+ > 154		struct task_struct *caba;
+ > 155		struct pid *caba_pid;
+ > 156		int caba_level = 0;
+ > 157		pid_t caba_pids[MAX_PID_NS_LEVEL] = {};
+   158	
+   159		rcu_read_lock();
+   160		ppid = pid_alive(p) ?
+   161			task_tgid_nr_ns(rcu_dereference(p->real_parent), ns) : 0;
+   162	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

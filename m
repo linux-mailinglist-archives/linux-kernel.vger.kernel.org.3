@@ -2,123 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3D3546BDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7873E546BD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350201AbiFJRqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 13:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
+        id S1350221AbiFJRrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 13:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349788AbiFJRqx (ORCPT
+        with ESMTP id S1347082AbiFJRrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 13:46:53 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B82F562EE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:46:51 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 17:46:40 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1654883207; x=1655142407;
-        bh=QufpaSI3FHp/11KdpTOr1o3pvr2wl7OD5zTBc5ErmDA=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:
-         Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID;
-        b=BsGipUK/6NVeglk+eg57RrwxO6H8v8CasloCswNXxf4J4pfKq1aI7lHfD8Au5eL5s
-         NKbdo0XAF3hZuvha5xnjVYH8j4JOl6Nx2AzSBTI8UkuC4pCQ8BzxxN+GPmzEYhuVvq
-         ojZtCj9H3kQaSyEMY6Ikgl38xwerdDGme0dJcp8TVfdlGxqP5bXZLYWkp8VTVnemSG
-         7fBy5Tz7qYPlQHToaDAIWA+T0uaOXE7V/14MA9iXs+b58hAyUGipxzr+QhE5E4ZE6Y
-         IWCUnJqmQZtr5cs4C9kMXnAu3jdWntf/kVjzvt61Jv0dmEuDmKjsUnkxSmVhRS4ZWW
-         yr0ak7xzIMR5A==
-To:     devicetree@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, stephan@gerhold.net,
-        nikita@trvn.ru
-Reply-To: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [PATCH] arm64: dts: qcom: msm8916-samsung-a2015: Add touchscreen pinctrl
-Message-ID: <20220610172018.101498-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Fri, 10 Jun 2022 13:47:07 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E364756220;
+        Fri, 10 Jun 2022 10:47:04 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id p63so3226923qkd.10;
+        Fri, 10 Jun 2022 10:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YAz+bZr/g5TFMIU51PB2AOx+4yCjcc3R/7cvGuIRiyo=;
+        b=hqc887XUGL/83QS0tEfjOQ0/iBXuc7oDz8bl+SwNjlGXZf7i+yLGFlXB89q/8O8dDn
+         fgplske5d/lSDl8EtLJzmfPjLw8iV4RkYxsUJRBwU+CAvmpzkMFFDOlVYIj2Pf7FNCvI
+         OP9kzaZ3x1+T9/V6XaX3pXB8qvsTkE/hsIteiTJky1X5CJxGDnuB5iA7KMmLzTx3CxJ5
+         EfIRem8pbrvbwtdz+xZ6/avuhXvgyI5jvOJMkjFBuyHPqh6LDMbZVP1EovCbnDhMGm+y
+         uM3GqGPl33oVQVtYr/Im9sFcDxvdPLaDGUX72iq3uiTCI+f01BemCZJ+WQYokFKdi7Wu
+         IatQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YAz+bZr/g5TFMIU51PB2AOx+4yCjcc3R/7cvGuIRiyo=;
+        b=FW9mPrDLetNRI0z5HItoLL6NX1PAVNdpSIj0Fv6qviLWJCoxGYqp1tJJcr53TMRAFk
+         p31COZmgeDRX+MQYb7R33OaLqUM976FhjCrhMG+opAnDOYdzIT+2Pku7NF9XykGcJLmq
+         9a/r8OOmMXnetagv9u5W0YJIGhl4UuV0WyLhOtVbwuPxbuLQHpengw9g1wvorA+HGShu
+         X0H2VZET0UoL8tS5J2ktFPx6RKYTPW0l83iQ4WYJewcQ8EWHwYk70+TJ+ERSy7sxl+0Q
+         qbdvvYZ2V7RtRXXzDg6upBJWtGSnW+in2iMJ8wFXkDPcd9T3l9e6FtV/sUPVDm/IiLH5
+         K++g==
+X-Gm-Message-State: AOAM531z+urWO2Uovj4/FRiYbgJI60IO0XncoyyyUBnewFD+8c5soBW7
+        /KzAJFMBn1thi7apK8ag+w==
+X-Google-Smtp-Source: ABdhPJz7p+kepbcy956nMSgnmWWAmGzWLG9BfQ9DnHVidVR4QUb9A9T7+i9f2PROtx7QrKzhyumYNQ==
+X-Received: by 2002:a37:a781:0:b0:6a6:a8f5:d111 with SMTP id q123-20020a37a781000000b006a6a8f5d111mr24277439qke.676.1654883223907;
+        Fri, 10 Jun 2022 10:47:03 -0700 (PDT)
+Received: from [192.168.1.210] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id bz24-20020a05622a1e9800b0030522a969e0sm61264qtb.60.2022.06.10.10.47.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 10:47:03 -0700 (PDT)
+Message-ID: <c5f97e2f-8a48-2906-91a2-1d84629b3641@gmail.com>
+Date:   Fri, 10 Jun 2022 13:47:02 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
+ accessed in filemap_read()
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>, Yu Kuai <yukuai3@huawei.com>
+Cc:     akpm@linux-foundation.org, axboe@kernel.dk,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+References: <20220602082129.2805890-1-yukuai3@huawei.com>
+ <YpkB1+PwIZ3AKUqg@casper.infradead.org>
+ <c49af4f7-5005-7cf1-8b58-a398294472ab@huawei.com>
+ <YqNWY46ZRoK6Cwbu@casper.infradead.org>
+ <YqNW8cYn9gM7Txg6@casper.infradead.org>
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+In-Reply-To: <YqNW8cYn9gM7Txg6@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A3, A5 and most of the MSM8916 Samsung uses GPIO pin 13 for touchscreen
-interrupts. Add it to common dtsi.
+On 6/10/22 10:36, Matthew Wilcox wrote:
+> On Fri, Jun 10, 2022 at 03:34:11PM +0100, Matthew Wilcox wrote:
+>> On Mon, Jun 06, 2022 at 09:10:03AM +0800, Yu Kuai wrote:
+>>> On 2022/06/03 2:30, Matthew Wilcox wrote:
+>>>> On Thu, Jun 02, 2022 at 04:21:29PM +0800, Yu Kuai wrote:
+>>>>> In filemap_read(), 'ra->prev_pos' is set to 'iocb->ki_pos + copied',
+>>>>> while it should be 'iocb->ki_ops'.
+>>>>
+>>>> Can you walk me through your reasoning which leads you to believe that
+>>>> it should be ki_pos instead of ki_pos + copied?  As I understand it,
+>>>> prev_pos is the end of the previous read, not the beginning of the
+>>>> previous read.
+>>>
+>>> Hi, Matthew
+>>>
+>>> The main reason is the following judgement in flemap_read():
+>>>
+>>> if (iocb->ki_pos >> PAGE_SHIFT !=	-> current page
+>>>      ra->prev_pos >> PAGE_SHIFT)		-> previous page
+>>>          folio_mark_accessed(fbatch.folios[0]);
+>>>
+>>> Which means if current page is the same as previous page, don't mark
+>>> page accessed. However, prev_pos is set to 'ki_pos + copied' during last
+>>> read, which will cause 'prev_pos >> PAGE_SHIFT' to be current page
+>>> instead of previous page.
+>>>
+>>> I was thinking that if prev_pos is set to the begining of the previous
+>>> read, 'prev_pos >> PAGE_SHIFT' will be previous page as expected. Set to
+>>> the end of previous read is ok, however, I think the caculation of
+>>> previous page should be '(prev_pos - 1) >> PAGE_SHIFT' instead.
+>>
+>> OK, I think Kent broke this in 723ef24b9b37 ("mm/filemap/c: break
+>> generic_file_buffered_read up into multiple functions").  Before:
+>>
+>> -       prev_index = ra->prev_pos >> PAGE_SHIFT;
+>> -       prev_offset = ra->prev_pos & (PAGE_SIZE-1);
+>> ...
+>> -               if (prev_index != index || offset != prev_offset)
+>> -                       mark_page_accessed(page);
+>>
+>> After:
+>> +       if (iocb->ki_pos >> PAGE_SHIFT != ra->prev_pos >> PAGE_SHIFT)
+>> +               mark_page_accessed(page);
+>>
+>> So surely this should have been:
+>>
+>> +       if (iocb->ki_pos != ra->prev_pos)
+>> +               mark_page_accessed(page);
+>>
+>> Kent, do you recall why you changed it the way you did?
+> 
+> Oh, and if this is the right diagnosis, then this is the fix for the
+> current tree:
+> 
+> +++ b/mm/filemap.c
+> @@ -2673,8 +2673,7 @@ ssize_t filemap_read(struct kiocb *iocb, struct iov_iter *iter,
+>                   * When a sequential read accesses a page several times, only
+>                   * mark it as accessed the first time.
+>                   */
+> -               if (iocb->ki_pos >> PAGE_SHIFT !=
+> -                   ra->prev_pos >> PAGE_SHIFT)
+> +               if (iocb->ki_pos != ra->prev_pos)
+>                          folio_mark_accessed(fbatch.folios[0]);
+> 
+>                  for (i = 0; i < folio_batch_count(&fbatch); i++) {
+> 
+> 
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
----
- .../arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi | 8 ++++++++
- arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts      | 8 --------
- arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts      | 8 --------
- 3 files changed, 8 insertions(+), 16 deletions(-)
+I think this is the fix we want - I think Yu basically had the right 
+idea and had the off by one fix, this should be clearer though:
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-index 9b4b7de7cec2..9c19f257cc81 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-@@ -460,6 +460,14 @@ tsp_en_default: tsp-en-default {
- =09=09drive-strength =3D <2>;
- =09=09bias-disable;
- =09};
-+
-+=09ts_int_default: ts-int-default {
-+=09=09pins =3D "gpio13";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
- };
+Yu, can you confirm the fix?
 
- &pm8916_gpios {
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts b/arch/ar=
-m64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-index 4ba11b020f9b..bc198a2eea25 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-@@ -128,12 +128,4 @@ tkey_led_en_default: tkey-led-en-default {
- =09=09drive-strength =3D <2>;
- =09=09bias-disable;
- =09};
--
--=09ts_int_default: ts-int-default {
--=09=09pins =3D "gpio13";
--=09=09function =3D "gpio";
--
--=09=09drive-strength =3D <2>;
--=09=09bias-disable;
--=09};
- };
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts b/arch/ar=
-m64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-index d978c9ac179d..7f2ab1891d91 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-@@ -69,12 +69,4 @@ tkey_en_default: tkey-en-default {
- =09=09drive-strength =3D <2>;
- =09=09bias-disable;
- =09};
--
--=09ts_int_default: ts-int-default {
--=09=09pins =3D "gpio13";
--=09=09function =3D "gpio";
--
--=09=09drive-strength =3D <2>;
--=09=09bias-disable;
--=09};
- };
---
-2.30.2
+-- >8 --
+Subject: [PATCH] filemap: Fix off by one error when marking folios accessed
 
+In filemap_read() we mark pages accessed as we read them - but we don't
+want to do so redundantly, if the previous read already did so.
 
+But there was an off by one error: we want to check if the current page
+was the same as the last page we read from, but the last page we read
+from was (ra->prev_pos - 1) >> PAGE_SHIFT.
+
+Reported-by: Yu Kuai <yukuai3@huawei.com>
+Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 9daeaab360..8d5c8043cb 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2704,7 +2704,7 @@ ssize_t filemap_read(struct kiocb *iocb, struct 
+iov_iter *iter,
+                  * mark it as accessed the first time.
+                  */
+                 if (iocb->ki_pos >> PAGE_SHIFT !=
+-                   ra->prev_pos >> PAGE_SHIFT)
++                   (ra->prev_pos - 1) >> PAGE_SHIFT)
+                         folio_mark_accessed(fbatch.folios[0]);
+
+                 for (i = 0; i < folio_batch_count(&fbatch); i++) {

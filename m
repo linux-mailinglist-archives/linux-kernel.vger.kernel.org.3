@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A477454701C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A24A547017
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350760AbiFJXgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 19:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S1349483AbiFJXke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 19:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350236AbiFJXgJ (ORCPT
+        with ESMTP id S1349266AbiFJXkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:36:09 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F583289F25;
-        Fri, 10 Jun 2022 16:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654904142; x=1686440142;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XfSsZjEZ1l0M6Je8ux0RlvZeHHKfZHKU8L8K8HX1yVc=;
-  b=KLIDghy+2mwQ4ZQ1m6ILXDXs+ttds2s6KsWK39jGuLDWkNl2IjGrBWNu
-   6or3H8zeWVHBcnrgo0J3OUcu8wObuDWE01Ms9E70jk6fTjkGgZ8nsJE5Z
-   eziUBFuY6oc4Gm1Zhu8BFSJDdAH9Anz7A4pb41PCtBIWF8ztJjdGuxmvN
-   BJbT7jIaAb+4JZquAsd+mSth/6HHZFBszgf/xbVcy+QYHoI8HxMBPf29k
-   jQtAFb/wn7WmuTiGi/8Yivi6fY+JFv9awj6fzZadP2Hglo8dfXd1B6XCt
-   UbF3q4Zw8ksqQ/nEsrA481oFn7Qcpp8hbqLwubT5bw8w1xcoOVhQa/dU5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="258214176"
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="258214176"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:35:41 -0700
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="760716868"
-Received: from pleung-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.33.34])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:35:41 -0700
-From:   ira.weiny@intel.com
-To:     linux-api@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 6/6] pkeys: Change mm_pkey_free() to void
-Date:   Fri, 10 Jun 2022 16:35:33 -0700
-Message-Id: <20220610233533.3649584-7-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220610233533.3649584-1-ira.weiny@intel.com>
-References: <20220610233533.3649584-1-ira.weiny@intel.com>
+        Fri, 10 Jun 2022 19:40:31 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD03FE12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:40:29 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id d19so655169lji.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TS2dWkXH8XlZd5sL60zfsL+sc90yCJgLJMyjv2lHnXE=;
+        b=oHik6Hczo89wBPZ/dDgD5TFhvpe+fyOMAOoTAMjJs65nr0gDLGEPoSsraJU0Q7oOtM
+         O2ukn6J/kan5d1pizuTACOyL4AJMqq0TFSLAp9Nt2lKgu3kqQZW9UxvT0qNjLOLxVo2L
+         VdOGNPR6TPWNd/CtXdpIJ7N2EBt48nIvTZG9aKik7rJCTjhAkUV4z93XCIDKCDjjb4xr
+         Eka0ieDZibKew3gntWlhI1epJPmtu91/TEYdSYVyLPLxmXVPx/Ud5NTxrwHMoq7M8LXI
+         Yay127WCX0aUnUu0ll1oXJYUbRIJB+uwqsk/wtall2ha0sXClujatVgr8lf3Ylw7R7On
+         8Sqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TS2dWkXH8XlZd5sL60zfsL+sc90yCJgLJMyjv2lHnXE=;
+        b=Hjxe5q+tPIohv5QyaRwUKfb7JDV4/HlwWBpl9d4Gh1oDmJ/yS6C+I6uV4Nd5TCSL53
+         v3nAXx8udVwaIq4A7GXeHPuSKkQ/v3QEJg1g/spZ2Z7QJiwAiC/UUAY39PRouXJs/cS1
+         ucdAVuINry/geopetc0dsxftDJM3Il6WFJh3Yg47w8sA6ZlSyRYpek1f/xmZxzWVlld4
+         Gm9KOXT6UcuYFBgaOVQbqFqJsro/OBzVtUrQmGhwBNAtrkdvcPmSKX5Fi4ofxbDUfojd
+         fMxlcxExF5KMLYlUMQYtpAsJvfMuezCmeYGcZzJU4KrcyMJhgl4xiT/oimUeoyichCLk
+         jbbQ==
+X-Gm-Message-State: AOAM532zPHT3+yA53HXrQaRoo+CIOEmpnCTnMQ4bUXyiD47hE79q8tzU
+        CL5dINu16OgNdQc/YvKY24OnoNpn77R+GX93houJkQ==
+X-Google-Smtp-Source: ABdhPJw86FbfqG8WmSA2UZEs9tshGtQTRPcCpdyUo1Eq8v8++ykofWmHBq3OGcBcqBQ711Hi3BEoaiAVfzLB2UfnGtw=
+X-Received: by 2002:a2e:7802:0:b0:258:e918:23f0 with SMTP id
+ t2-20020a2e7802000000b00258e91823f0mr2695378ljc.400.1654904427866; Fri, 10
+ Jun 2022 16:40:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220610233513.1798771-1-samitolvanen@google.com> <20220610233513.1798771-17-samitolvanen@google.com>
+In-Reply-To: <20220610233513.1798771-17-samitolvanen@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 10 Jun 2022 16:40:16 -0700
+Message-ID: <CAKwvOdm1Abmu+NQ82ZLgX3O5g4vYPni23A9c4FJ+xeSYVwPtJw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 16/20] kallsyms: Drop CONFIG_CFI_CLANG workarounds
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,91 +80,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Fri, Jun 10, 2022 at 4:35 PM Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> With -fsanitize=kcfi, the compiler no longer renames static
+> functions with CONFIG_CFI_CLANG + ThinLTO. Drop the code that cleans
+> up the ThinLTO hash from the function names.
 
-Now that the pkey arch support is no longer checked in mm_pkey_free()
-there is no reason to have it return int.
+Good riddance!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Change the return value to void.
+>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  kernel/kallsyms.c | 17 -----------------
+>  1 file changed, 17 deletions(-)
+>
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index fbdf8d3279ac..2fbb94817e02 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -179,7 +179,6 @@ static bool cleanup_symbol_name(char *s)
+>          * character in an identifier in C. Suffixes observed:
+>          * - foo.llvm.[0-9a-f]+
+>          * - foo.[0-9a-f]+
+> -        * - foo.[0-9a-f]+.cfi_jt
+>          */
+>         res = strchr(s, '.');
+>         if (res) {
+> @@ -187,22 +186,6 @@ static bool cleanup_symbol_name(char *s)
+>                 return true;
+>         }
+>
+> -       if (!IS_ENABLED(CONFIG_CFI_CLANG) ||
+> -           !IS_ENABLED(CONFIG_LTO_CLANG_THIN) ||
+> -           CONFIG_CLANG_VERSION >= 130000)
+> -               return false;
+> -
+> -       /*
+> -        * Prior to LLVM 13, the following suffixes were observed when thinLTO
+> -        * and CFI are both enabled:
+> -        * - foo$[0-9]+
+> -        */
+> -       res = strrchr(s, '$');
+> -       if (res) {
+> -               *res = '\0';
+> -               return true;
+> -       }
+> -
+>         return false;
+>  }
+>
+> --
+> 2.36.1.476.g0c4daa206d-goog
+>
 
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Suggested-by: Sohil Mehta <sohil.mehta@intel.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- arch/powerpc/include/asm/pkeys.h | 4 +---
- arch/x86/include/asm/pkeys.h     | 4 +---
- include/linux/pkeys.h            | 5 +----
- mm/mprotect.c                    | 6 ++++--
- 4 files changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/pkeys.h b/arch/powerpc/include/asm/pkeys.h
-index e96aa91f817b..4d01a48ab941 100644
---- a/arch/powerpc/include/asm/pkeys.h
-+++ b/arch/powerpc/include/asm/pkeys.h
-@@ -105,11 +105,9 @@ static inline int mm_pkey_alloc(struct mm_struct *mm)
- 	return ret;
- }
- 
--static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
-+static inline void mm_pkey_free(struct mm_struct *mm, int pkey)
- {
- 	__mm_pkey_free(mm, pkey);
--
--	return 0;
- }
- 
- /*
-diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
-index da02737cc4d1..1f408f46fa9a 100644
---- a/arch/x86/include/asm/pkeys.h
-+++ b/arch/x86/include/asm/pkeys.h
-@@ -105,11 +105,9 @@ int mm_pkey_alloc(struct mm_struct *mm)
- }
- 
- static inline
--int mm_pkey_free(struct mm_struct *mm, int pkey)
-+void mm_pkey_free(struct mm_struct *mm, int pkey)
- {
- 	mm_set_pkey_free(mm, pkey);
--
--	return 0;
- }
- 
- static inline int vma_pkey(struct vm_area_struct *vma)
-diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
-index 86be8bf27b41..bf98c50a3437 100644
---- a/include/linux/pkeys.h
-+++ b/include/linux/pkeys.h
-@@ -30,10 +30,7 @@ static inline int mm_pkey_alloc(struct mm_struct *mm)
- 	return -1;
- }
- 
--static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
--{
--	return -EINVAL;
--}
-+static inline void mm_pkey_free(struct mm_struct *mm, int pkey) { }
- 
- static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
- 			unsigned long init_val)
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 41458e729c27..e872bdd2e228 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -809,8 +809,10 @@ SYSCALL_DEFINE1(pkey_free, int, pkey)
- 		return ret;
- 
- 	mmap_write_lock(current->mm);
--	if (mm_pkey_is_allocated(current->mm, pkey))
--		ret = mm_pkey_free(current->mm, pkey);
-+	if (mm_pkey_is_allocated(current->mm, pkey)) {
-+		mm_pkey_free(current->mm, pkey);
-+		ret = 0;
-+	}
- 	mmap_write_unlock(current->mm);
- 
- 	/*
 -- 
-2.35.1
-
+Thanks,
+~Nick Desaulniers

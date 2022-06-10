@@ -2,176 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A0A545D47
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C291545D4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346885AbiFJHZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        id S1346902AbiFJHZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346914AbiFJHYc (ORCPT
+        with ESMTP id S1346792AbiFJHZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:24:32 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2057.outbound.protection.outlook.com [40.107.95.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1931B9A7A;
-        Fri, 10 Jun 2022 00:24:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RzB0rCFsgQxp1C1X8oiPhA7i17vnSflGF30SSrUDzp3/Jgi8j2T+YcGY+nZvAgolSAgMUv4RE6NSjcY/ouT87/MHyf8qSJCD6cUa9EsJDrQ5X+TQpzzGIbwPkd4CY/Qb8/3/3BJGjIGmHTqAIqAtOnhc2HD7w4/fM1LtUVZYi+kLHFdNBqT3G82BIoqcQGMWhhQ/9sKWYq1GlfrsbHDMUV+UwGqNOHAvS1IE28HLdPfy/+0TU/L5+6DIcTGuOuZVyFXni6J5iahkHQsVNyFqynlD2GzagKf57NXi/Edf5uBxM6O/kb4KyjSnFm1a58uawnJ+H5plIGXfASxNhz8x6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/LxTsjea6D5Hp/AQRsBDnDWiiCJ4WxEoD8x8UqArK2Q=;
- b=GTJ3ujuBe952LQSnVKyfAA4SRaJRYMMbplZxEU5m/3w69NRGch17lyksqqmPGhuNN8XVjpIu/lSL4RBmU8OhHiKEQSWU2kI90pVS09WKEwWCDbR2qxIIgWYXijBoRhbZsepfwOgOoTJq0qC8PswqaFnq4u2qNaV0zSqOZ5PQ3lTBf+WHsceCpy/FpR6ghHwdbzI0bIQ7p9YxipsEhZE5fvEJxHFfQTryrDRt5T2Phmplb/pSmVAo9D7eFP0bviAswvS916liLcPV7TLrRWzL+3/sL18jfdWLIxlEQahnSTHljdZ7KDTZG9gFFLF+1V6iBxuQdKwQtgpohhoJfGp8EA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/LxTsjea6D5Hp/AQRsBDnDWiiCJ4WxEoD8x8UqArK2Q=;
- b=hfLHMVXn8FfvKIJDj1GsxbnzGoYsirAALjTtGLNXtmxKR7aDJpZhTminqAKiUzFp6xqMby//gCzTNPqw0dfxNvpfNBj1N0uDj8Zw3gUTJwMnHdjd51VRRhax6lgz0w7pKdYK2OVF1Bjn9IVL6RZ4jvVroaYAOyDoFPjA9tarpmY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BL1PR12MB5189.namprd12.prod.outlook.com (2603:10b6:208:308::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Fri, 10 Jun
- 2022 07:24:26 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e0fd:45cf:c701:2731]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e0fd:45cf:c701:2731%6]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
- 07:24:25 +0000
-Message-ID: <c079243c-9084-b565-2320-20453815c79a@amd.com>
-Date:   Fri, 10 Jun 2022 09:24:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] dma-buf: Don't use typeof in va_arg
-Content-Language: en-US
-To:     Wan Jiabing <wanjiabing@vivo.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220610072019.3075023-1-wanjiabing@vivo.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220610072019.3075023-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR09CA0104.eurprd09.prod.outlook.com
- (2603:10a6:803:78::27) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Fri, 10 Jun 2022 03:25:21 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7851C6E8D0;
+        Fri, 10 Jun 2022 00:24:58 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id c14so23971997pgu.13;
+        Fri, 10 Jun 2022 00:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3aigFOkCpmv51DFi0dpqebq3lskx3Cehk3zrD0y0IOY=;
+        b=Nez9nv54F83ES0HYk5qP/t5wEz1saOqdW2mey5/xA1lkXPVO7cR+SPRPRO0wCjF19j
+         u8+QeHWoz9w87QmGoB12RHWy1jeFpEA5RgSSajpjNgr/h/vfOrolX+CEBesHQ9U1md9Y
+         H5muTPp90VBcqp2ydlzO+dRJEjxZobklXrGYN2wiNjz/YF2JNJDdXrY9Qc3DZcHoma1q
+         N8jHW0RBhs2+AEGNGsjxTLiGTWP22MZchCKBT126c29PP2REch0MxgBShS5ttsL0bi89
+         WmXOnrIsfvsZKnYM1LWGqVEfKISzGlluNM4DIANo6LFNNPi3vmHdYge5wsUXzyMp8PsG
+         3jjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3aigFOkCpmv51DFi0dpqebq3lskx3Cehk3zrD0y0IOY=;
+        b=sA9Zmf/X+5Xqdeb0MBjQ35igXZN+k172MSv44eXvRoHOnA8P6W+5c31lJdhiWSXjoJ
+         gTOelcOzuZrIKM7VKnDqUgkPPpgWGSY5smXEzNDmblKz5T5tjU/bad1xE3kpL4sG4jhK
+         wL1MBAdkp2EZV9T2dF4BbX7GpELcIgeRYjJ9rzT5iYMedSN90OycZafPzYPlinqpgiy4
+         ZxWArhWYTD7L5czBB0QUbzVt9b3NuTbRZdy3dJZ3vAwhRryKigFDlQ2cnzuae7cXPNZu
+         3JKFYkLC3FmLbRCy/8VBdKwbFpfq+LS/jqHGiUtimjoyscVNXMEX853Uil2LTKkoBT3r
+         1Xlw==
+X-Gm-Message-State: AOAM530JGW7gO7utwXXKLLIlz68CrGL6eRBiYMepCvovNourn7ydLWOP
+        wYK2iL/j3tN8xZkre0l44O8avJOLzNJgOhQrvjdsmn3KmIc3AQ==
+X-Google-Smtp-Source: ABdhPJwstK9dSBGauxN8rpbqB8qZ/D21SQu6G/3r3VKCc8S4EBWr/p8vKhSMa9U9RNHx0aghpKOcAwMRtUjYf5YV0NE=
+X-Received: by 2002:a63:6384:0:b0:3fc:68a8:b1ca with SMTP id
+ x126-20020a636384000000b003fc68a8b1camr38099319pgb.597.1654845897727; Fri, 10
+ Jun 2022 00:24:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 09589f81-332b-47df-a058-08da4ab23f7b
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5189:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5189D12321449B1FCB00048E83A69@BL1PR12MB5189.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Dic+jkue90w0Lkvgw+GEhd5R3x2KGeOXyKvdSgE78Mb6YGTp8XDawBiKGlLQkl90x1UbijZ41P77sJnLELU1eiNke6UjMpTwDIAacrJQ+RmtgtWps09J5VJlAVh+P0Xfs/bmm+CMaQmqSAG+3xmaI0v15LMscIIVgCljY2qgkZ7PYEXhEj1vj33G/Q0OFBb77gtkjzPTXvBqb+Pvw6jEpMyhQqUzo3iWJ2H0yLb3TpPIWDNWTqRttTwrF4Y/NhRu2leRJQVcJbiYoI6azAHuHdJXhkOKv/TSJMMBlIEi1PSsgnh3n/E+JIaSu87uNMROS6MRhNWt1il7n5Tm5D264UWmC8B0Xm8PbYBIwSKhPL/DM/jp+f0YpxL+95afGL7WqLDYkU20rz3oshX9QJ7Kvxj54a8JxFIIWrvo4rsmDfZJzzkTrp75NICUw/PJ1mHofHYxuQ/7cWDj/v2gShfAOwmk/ROv9kA05tj7QuJq9wRlIxrn16qmrVfvKOLBn8MzGRt5JvmF+ib/MlO7Ngi75C8mWvQGLmRd4fmMRrrsMmh74MD/Tqz8V0Q5bOcZFTd/ppCVCSnmWTpNYbQFouAl3Kyw61IQtGJP0zFcaNKEQF2WehR703GJIeQvkjmlakhpwRd0vJeGRZ1I2rp82zYV8QysaMy3Htb6yb5D3nqkyKdsETjTiU98sFsWvBp6s+k7IjSSMzvmUj1Fb3KBqnylAtjkJ94qzI+muyjfpw/aPIJl5qogjRBl26e44Vdksbwn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(86362001)(83380400001)(31696002)(110136005)(6506007)(6486002)(36756003)(5660300002)(316002)(8936002)(31686004)(66946007)(6512007)(2906002)(508600001)(38100700002)(186003)(26005)(8676002)(66556008)(66476007)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2k1WGZSakM0aGRBQWRPY0x2MDlNdnp4M0NLUDVkNFV6YU1RN0pyTnJISDBv?=
- =?utf-8?B?aDYvYVB1S2pRTWZKQWI3N1ZPeFJ6aUcrWVh2UjBEYmsybU4zdDJWVitvZ2FT?=
- =?utf-8?B?STZnT1FHd0ZlVmY4YXRreVRrcUgxUTY4eG9EcFJIQ2thcHUxVnYvVTZBMTVj?=
- =?utf-8?B?WGVDdGhhK2U0Zm1DZ2lUM25wUXkyTnBtMWttL056K0NPb0FHMFRTbGx2TkhS?=
- =?utf-8?B?bVBCQzQ1WXMvd0JNRWRRbWJFdEFHL2Y3MDFFcEFJWVYyc0t1UGNjUHRHcGdn?=
- =?utf-8?B?dEx3R29XeTVnZXF4MGdFSGZHckpZQzFUdHJhckRIcHhpSENYWllkZ1ptbzlL?=
- =?utf-8?B?N3k0M3dwVTFSRVREQW8vOVc0QmlRem1vS3NDTVQ1YllEcjlETEtjWDgvd3VQ?=
- =?utf-8?B?bjk4UlRiNi84N3pDRWN5dzhueFJjMzFqc21ITy9yOFhzZUNxZTdGUktHZ3pj?=
- =?utf-8?B?SmZkaURveEJjVWh1V0JmeFlTcmVycGRDVzNEdlB1Z1puMzZwaDJQZFpsUmhO?=
- =?utf-8?B?VzdtRWV3d1lOcFlyM0xBNXlUUHVSeWw2a1pDNTkyZDVmWG9vdTF4WWtaclZn?=
- =?utf-8?B?a2xMV0x2SFl5d1RHWElWbnFTRTdCVVRWcFROYnNKMGlFOXY5V0pIRnBLUjc2?=
- =?utf-8?B?aW5GanYrUUtQM2tvSGRoNk9uYUovTnBrbjcvdDRHQzVaRHBRUGYvUDRSbkZ6?=
- =?utf-8?B?MXlHVlUrbmNJUE1WaS9LdmI2TnZQYVlHZjJNZFNPbG5YeU9MTHJxRVVKSnVa?=
- =?utf-8?B?ZXU5S2tMU1JIYXBtcE5zVWJGWUZNR1FqdWlyQzREN2YrN0ZIaWJXZlIxL2VG?=
- =?utf-8?B?Z3VqKzIxMThXTjFGV0hPYUcwMkxGUDFjU0htdldMaE80UzRGSTVkUWthUnRq?=
- =?utf-8?B?UkM3SlJFaTVHNUZPZzRmL0ZOelkzN1ZDN1pxQ0t0c3NscERlSUkzQ0xRenRn?=
- =?utf-8?B?RCt5UVdMc1RXM2FHQkdWamhPbWp6dHhEQmdNTzVHTkdXMkdJOTZqemdQeGkr?=
- =?utf-8?B?UlAyNDNxTGw0MFhTZ3JoMWIrSkRkYkhQZ1Q5VzJGbHlCaVlYUTEwcHJveW1R?=
- =?utf-8?B?OUxpUXI4ZU4rdUJOT3VFdEpYUXB4MExWSlhwRFhOL2x3UlFKdzB3VXVKU2hL?=
- =?utf-8?B?RG5HOFhFNkpTK1duSFQxaVUyZEZQRDhoYXpzVGRWSDFTVEZReVU5VnJzL2Ri?=
- =?utf-8?B?QjgyL29SRkE4NGJhY25NYmplZ3R6RWQyUmMwNWpENk9sUXZKVTR4bmRyNUhU?=
- =?utf-8?B?dkpFZXNXOHBNTkZKVlAyZEZMck9LdjNLd0h1akl6VWIxN29RZHhhMjlyeW02?=
- =?utf-8?B?VU8rTy91NldOKyt5eE1UQXpOL25NVklKRm1EaWRQOGdhcmFJc3hOZDZWK1RH?=
- =?utf-8?B?b1FGRzFCOTZUeXUyWHhoUUtaNWtGR1NKbzRKUFVWaERlTTBuYVBZbDY1QWhG?=
- =?utf-8?B?ejVXRmxidmV2dnRqeXNUZ1dIRTVtWm9jVE82MzkvdVpoV0ZjeHhOeUV0RSs0?=
- =?utf-8?B?MFlVQ3Y3c0J0ZWtuV3JhZHNHVmdLbnkvUkZramhNVy9NKzFZOE1CUDFnK1NO?=
- =?utf-8?B?MnNxK1NYZTJqaHU1NlpOUWdhTzBjeTEzbElYZGszc0NVaGdiU09XYUJOTTl3?=
- =?utf-8?B?VUkzZ3NxdklNelVoVDFRa0hvdDEycmc1eTZZMmFEaTZFdGpBaSs3aTFWclpU?=
- =?utf-8?B?RTVkNkVmeUZnVUVtc2ZOVjNuKzFCUHlNUktEdkcyL0FtUkF2OGFyRkxCSGNm?=
- =?utf-8?B?azcrUUY0NDNaVnhUNno2V2JIMHEwTlQwVGdNa2JuVElONmJuVmpxRGJOYnhB?=
- =?utf-8?B?cHB5REhud2p0N2lidWVnZVVYQUxsbnNEYzRicG0vL2hSUEMrTCsvT21CTUpu?=
- =?utf-8?B?SGlRakZydXIyY1BIaEhtRTBBYUR4Vm1ZVURwTmpHN3JPbjdESkQ1NXRkdU9i?=
- =?utf-8?B?cVJ1cW1kUDFBUDN3Q0VaKzNrRG5Rem9JbDI0b20rK0U1aE9MUkxtandiem9u?=
- =?utf-8?B?TVUvZnlXWGk5eU0rRHlJclkrQk96b1F2WTZ2RDhLZm50QzFFUzNaL1llczZD?=
- =?utf-8?B?MGMxNDZDRHI5akZTby9KVGxWOTd1am9ENHY4M0kyMzRVMkhQTm5RWDRIRURV?=
- =?utf-8?B?QnQ1RGxSdlJoMDRncXQzY1J0a1FmY1RVQmZ1R2Fha1VIaWoremJsaXZuSU1l?=
- =?utf-8?B?QkJ0YVVxZS9Da2VTN0h4clZlb1lNSkVWRGxZbEswRlZseHo0YkxuTUhCRUtj?=
- =?utf-8?B?WWdEYWtoaWt2ZG1mN2w5VzQwMXEzUDVnYzZHT1RuZjN6RmtGQUxack9DUzRH?=
- =?utf-8?B?OTlXdWZ6cDlQSDBHa0dWNEZodWNJbTdOWUhrbytGUWlsOGZqOFVzZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09589f81-332b-47df-a058-08da4ab23f7b
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 07:24:25.8234
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PcooZvNhIYs3zT25cJ4Q9WkUGRuTsCGCjT3oOpnxi18eqrdvgXIuZAlX26iW/xgy
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5189
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220605072201.9237-1-dharamhans87@gmail.com> <20220605072201.9237-2-dharamhans87@gmail.com>
+ <Yp/CYjONZHoekSVA@redhat.com> <34dd96b3-e253-de4e-d5d3-a49bc1990e6f@ddn.com>
+ <Yp/KnF0oSIsk0SYd@redhat.com> <3d189ccc-437e-d9c0-e9f1-b4e0d2012e3c@ddn.com> <YqH7PO7KtoiXkmVH@redhat.com>
+In-Reply-To: <YqH7PO7KtoiXkmVH@redhat.com>
+From:   Dharmendra Hans <dharamhans87@gmail.com>
+Date:   Fri, 10 Jun 2022 12:54:46 +0530
+Message-ID: <CACUYsyFBRR9yH3=cQFDmMRSPt45Tf1+Z+y-tL54AzEPpQTC4uA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/1] Allow non-extending parallel direct writes on the
+ same file.
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Bernd Schubert <bschubert@ddn.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 10.06.22 um 09:20 schrieb Wan Jiabing:
-> Fix following coccicheck warning:
-> ./drivers/dma-buf/st-dma-fence-unwrap.c:75:39-45: ERROR: reference preceded by free on line 70
+On Thu, Jun 9, 2022 at 7:23 PM Vivek Goyal <vgoyal@redhat.com> wrote:
 >
-> Use 'struct dma_fence *' instead of 'typeof(*fences)' to avoid this
-> warning and also fix other 'typeof(*fences)' to make them consistent.
-
-Well that doesn't looks correct to me.
-
-*fence should be valid at this point, why does coccicheck things it is 
-freed?
-
-Regards,
-Christian.
-
+> On Wed, Jun 08, 2022 at 12:42:20AM +0200, Bernd Schubert wrote:
+> >
+> >
+> > On 6/8/22 00:01, Vivek Goyal wrote:
+> > > On Tue, Jun 07, 2022 at 11:42:16PM +0200, Bernd Schubert wrote:
+> > > >
+> > > >
+> > > > On 6/7/22 23:25, Vivek Goyal wrote:
+> > > > > On Sun, Jun 05, 2022 at 12:52:00PM +0530, Dharmendra Singh wrote:
+> > > > > > From: Dharmendra Singh <dsingh@ddn.com>
+> > > > > >
+> > > > > > In general, as of now, in FUSE, direct writes on the same file are
+> > > > > > serialized over inode lock i.e we hold inode lock for the full duration
+> > > > > > of the write request. I could not found in fuse code a comment which
+> > > > > > clearly explains why this exclusive lock is taken for direct writes.
+> > > > > >
+> > > > > > Following might be the reasons for acquiring exclusive lock but not
+> > > > > > limited to
+> > > > > > 1) Our guess is some USER space fuse implementations might be relying
+> > > > > >      on this lock for seralization.
+> > > > >
+> > > > > Hi Dharmendra,
+> > > > >
+> > > > > I will just try to be devil's advocate. So if this is server side
+> > > > > limitation, then it is possible that fuse client's isize data in
+> > > > > cache is stale. For example, filesystem is shared between two
+> > > > > clients.
+> > > > >
+> > > > > - File size is 4G as seen by client A.
+> > > > > - Client B truncates the file to 2G.
+> > > > > - Two processes in client A, try to do parallel direct writes and will
+> > > > >     be able to proceed and server will get two parallel writes both
+> > > > >     extending file size.
+> > > > >
+> > > > > I can see that this can happen with virtiofs with cache=auto policy.
+> > > > >
+> > > > > IOW, if this is a fuse server side limitation, then how do you ensure
+> > > > > that fuse kernel's i_size definition is not stale.
+> > > >
+> > > > Hi Vivek,
+> > > >
+> > > > I'm sorry, to be sure, can you explain where exactly a client is located for
+> > > > you? For us these are multiple daemons linked to libufse - which you seem to
+> > > > call 'server' Typically these clients are on different machines. And servers
+> > > > are for us on the other side of the network - like an NFS server.
+> > >
+> > > Hi Bernd,
+> > >
+> > > Agreed, terminology is little confusing. I am calling "fuse kernel" as
+> > > client and fuse daemon (user space) as server. This server in turn might
+> > > be the client to another network filesystem and real files might be
+> > > served by that server on network.
+> > >
+> > > So for simple virtiofs case, There can be two fuse daemons (virtiofsd
+> > > instances) sharing same directory (either on local filesystem or on
+> > > a network filesystem).
+> >
+> > So the combination of fuse-kernel + fuse-daemon == vfs mount.
 >
-> Fixes: 0c5064fa8d5a ("dma-buf: cleanup dma_fence_unwrap selftest v2")
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->   drivers/dma-buf/st-dma-fence-unwrap.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> This is fine for regular fuse file systems. For virtiofs fuse-kernel is
+> running in a VM and fuse-daemon is running outside the VM on host.
+> >
+> > >
+> > > >
+> > > > So now while I'm not sure what you mean with 'client', I'm wondering about
+> > > > two generic questions
+> > > >
+> > > > a) I need to double check, but we were under the assumption the code in
+> > > > question is a direct-io code path. I assume cache=auto would use the page
+> > > > cache and should not be effected?
+> > >
+> > > By default cache=auto use page cache but if application initiates a
+> > > direct I/O, it should use direct I/O path.
+> >
+> > Ok, so we are on the same page regarding direct-io.
+> >
+> > >
+> > > >
+> > > > b) How would the current lock help for distributed clients? Or multiple fuse
+> > > > daemons (what you seem to call server) per local machine?
+> > >
+> > > I thought that current lock is trying to protect fuse kernel side and
+> > > assumed fuse server (daemon linked to libfuse) can handle multiple
+> > > parallel writes. Atleast that's how I thought about the things. I might
+> > > be wrong. I am not sure.
+> > >
+> > > >
+> > > > For a single vfs mount point served by fuse, truncate should take the
+> > > > exclusive lock and parallel writes the shared lock - I don't see a problem
+> > > > here either.
+> > >
+> > > Agreed that this does not seem like a problem from fuse kernel side. I was
+> > > just questioning that where parallel direct writes become a problem. And
+> > > answer I heard was that it probably is fuse server (daemon linked with
+> > > libfuse) which is expecting the locking. And if that's the case, this
+> > > patch is not fool proof. It is possible that file got truncated from
+> > > a different client (from a different fuse daemon linked with libfuse).
+> > >
+> > > So say A is first fuse daemon and B is another fuse daemon. Both are
+> > > clients to some network file system as NFS.
+> > >
+> > > - Fuse kernel for A, sees file size as 4G.
+> > > - fuse daemon B truncates the file to size 2G.
+> > > - Fuse kernel for A, has stale cache, and can send two parallel writes
+> > >    say at 3G and 3.5G offset.
+> >
+> > I guess you mean inode cache, not data cache, as this is direct-io.
 >
-> diff --git a/drivers/dma-buf/st-dma-fence-unwrap.c b/drivers/dma-buf/st-dma-fence-unwrap.c
-> index 4105d5ea8dde..1137a6d90b32 100644
-> --- a/drivers/dma-buf/st-dma-fence-unwrap.c
-> +++ b/drivers/dma-buf/st-dma-fence-unwrap.c
-> @@ -56,7 +56,7 @@ static struct dma_fence *mock_array(unsigned int num_fences, ...)
->   
->   	va_start(valist, num_fences);
->   	for (i = 0; i < num_fences; ++i)
-> -		fences[i] = va_arg(valist, typeof(*fences));
-> +		fences[i] = va_arg(valist, struct dma_fence *);
->   	va_end(valist);
->   
->   	array = dma_fence_array_create(num_fences, fences,
-> @@ -72,7 +72,7 @@ static struct dma_fence *mock_array(unsigned int num_fences, ...)
->   error_put:
->   	va_start(valist, num_fences);
->   	for (i = 0; i < num_fences; ++i)
-> -		dma_fence_put(va_arg(valist, typeof(*fences)));
-> +		dma_fence_put(va_arg(valist, struct dma_fence *));
->   	va_end(valist);
->   	return NULL;
->   }
+> Yes inode cache and cached ->i_size might be an issue. These patches
+> used cached ->i_size to determine if parallel direct I/O should be
+> allowed or not.
+>
+>
+> > But now
+> > why would we need to worry about any cache here, if this is direct-io - the
+> > application writes without going into any cache and at the same time a
+> > truncate happens? The current kernel side lock would not help here, but a
+> > distrubuted lock is needed to handle this correctly?
+> >
+> > int fd = open(path, O_WRONLY | O_DIRECT);
+> >
+> > clientA: pwrite(fd, buf, 100G, 0) -> takes a long time
+> > clientB: ftruncate(fd, 0)
+> >
+> > I guess on a local file system that will result in a zero size file. On
+> > different fuse mounts (without a DLM) or NFS, undefined behavior.
+> >
+> >
+> > > - Fuser daemon A might not like it.(Assuming this is fuse daemon/user
+> > >    space side limitation).
+> >
+> > I think there are two cases for the fuser daemons:
+> >
+> > a) does not have a distributed lock - just needs to handle the writes, the
+> > local kernel lock does not protect against distributed races.
+>
+> Exactly. This is the point I am trying to raise. "Local kernel lock does
+> not protect against distributed races".
+>
+> So in this case local kernel has ->i_size cached and this might be an
+> old value and checking i_size does not guarantee that fuse daemon
+> will not get parallel extending writes.
+>
+> > I guess most
+> > of these file systems can enable parallel writes, unless the kernel lock is
+> > used to handle userspace thread synchronization.
+>
+> Right. If user space is relying on kernel lock for thread synchronization,
+> it can not enable parallel writes.
+>
+> But if it is not relying on this, it should be able to enable parallel
+> writes. Just keep in mind that ->i_size check is not sufficient to
+> guarantee that you will not get "two extnding parallel writes". If
+> another client on a different machine truncated the file, it is
+> possible this client has old cached ->i_size and it will can
+> get multiple file extending parallel writes.
+>
+> So if fuse daemon enables parallel extending writes, it should be
+> prepared to deal with multiple extending parallel writes.
+>
+> And if this is correct assumption, I am wondering why to even try
+> to do ->i_size check and try to avoid parallel extending writes
+> in fuse kernel. May be there is something I am not aware of. And
+> that's why I am just raising questions.
 
+Let's consider couple of cases:
+1) Fuse daemon is  file server itself(local file system):
+   Here we need to make sure few things in fuse kernel
+     a) Appending writes are handled. This requires serialized access
+to inode in fuse kernel as we generate off from i_size(as i_size is
+updated after write         returns).
+     b) If we allow concurrent writes then we can have following cases
+        - All writes coming under i_size, it's overwrite.
+           If any of the write fails(though it is expected all
+following writes would fail on that file),  usually on a single
+daemon, all following writes on the same
+           file would be aborted. Since fuse upates i_size after write
+returns successfully, we have no worry in this case, no action is
+required from fuse like
+           truncate etc as we are not using page cache here.
+
+       - All writes are extending writes
+         These writes are extending current i_size.  Let's assume, as
+of now, i_size is 1 mb.  Now, wr1 extends i_size from 1mb to 2mb, and
+wr2 extends i_size
+         from 2mb  to 3mb. Let's assume wr1 succeeds, and wr2 fails,
+in this case wr1 would update i_size to 2mb and
+         wr2 would not update i_size, so we are good, nothing required here.
+         In just reverse case, where wr1 fails and wr2 succeeds, then
+wr2 must be updating i_size to 3mb(wr1 would not update i_size). Here
+we are required
+        to create hole in the file from offset 1mb to 2mb otherwise
+gargabe would be provided to the reader as it is fresh write and no
+old data exists yet at that offset.
+
+2) Fuse daemon forwards req to actual file server(i.e fuse daemon is
+client here)
+    Please note that this fuse daemon is forwarding data to actual
+servers(and we can have single or multple servers consuming data)
+therefore it can send
+    wr1 to srv1 and wr2 to srv2 and so on.
+    Here we need to make sure few things again
+    a) Appending writes as pointed out in 1), every fuse daemon should
+generate correct offset(local to itself) at which data is written. We
+need exclusive lock for this.
+    b) Allowing concurrent writes:
+         -  All writes coming under i_size, it's overwrite.
+            Here it can happen that some write went to srv1 and
+succeeded and some went to srv2 and failed(due to space issue on this
+node or something else
+           like network problems). In this case we are not required to
+do anything as usual.
+         - All writes are extending writes
+           Let's assume as done in 1), as of now, i_size is 1 mb.
+Now, wr1 extends i_size from 1mb to 2mb and goes to srv1, and wr2
+extends i_size
+         from 2mb  to 3mb and goes to srv2. Let's assume wr1 succeeds,
+and wr2 fails, in this case wr1 would update i_size to 2mb and
+         wr2 would not update i_size, so we are good, nothing required here.
+         In just reverse case, where wr1 fails and wr2 succeeds, then
+wr2 must be updating i_size to 3mb(wr1 would not update i_size). Here
+we are required
+        to create hole in the file from offset 1mb to 2mb otherwise
+gargabe would be provided to the reader as it is fresh write and no
+old data exists yet at that offset.
+
+It can happen that holes are not supported by all file server types.
+In that case also, I don't think we can allow extending writes.
+My understanding is that each fuse daemon is supposed to maintain
+consistency related to offset/i_size on its own end when we do not
+have DLM.
+
+> >
+> > b) has a distributed lock - needs a callback to fuse kernel to inform the
+> > kernel to invalidate all data.
+> >
+> > At DDN we have both of them, a) is in production, the successor b) is being
+> > worked on. We might come back with more patches for more callbacks for the
+> > DLM - I'm not sure yet.
+> >
+> >
+> > >
+> > > I hope I am able to explain my concern. I am not saying that this patch
+> > > is not good. All I am saying that fuse daemon (user space) can not rely
+> > > on that it will never get two parallel direct writes which can be beyond
+> > > the file size. If fuse kernel cache is stale, it can happen. Just trying
+> > > to set the expectations right.
+> >
+> >
+> > I don't see an issue yet. Regarding virtiofs, does it have a distributed
+> > lock manager (DLM)? I guess not?
+>
+> Nope. virtiofs does not have any DLM.
+>
+> Vivek
+> >
+> >
+> > Thanks,
+> > Bernd
+> >
+>

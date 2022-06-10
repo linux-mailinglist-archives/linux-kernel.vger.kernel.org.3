@@ -2,205 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A311D545E5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B073545E57
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347292AbiFJIQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S1347256AbiFJIQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347258AbiFJIQf (ORCPT
+        with ESMTP id S1347240AbiFJIQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:16:35 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6509B21F992;
-        Fri, 10 Jun 2022 01:16:33 -0700 (PDT)
-X-UUID: 32c04f247ec44bc9a0663952ea7b68bd-20220610
+        Fri, 10 Jun 2022 04:16:22 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0800520BE38;
+        Fri, 10 Jun 2022 01:16:20 -0700 (PDT)
+X-UUID: 27dbc41a7ef04a39ab7536496f27eeda-20220610
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:9ce30446-ea2d-4c4b-881a-24324bd05b7d,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:0d9e61e5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 32c04f247ec44bc9a0663952ea7b68bd-20220610
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
+X-CID-O-INFO: VERSION:1.1.5,REQID:614c2f41-da2e-468e-b0ae-436387fea7c1,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:51
+X-CID-INFO: VERSION:1.1.5,REQID:614c2f41-da2e-468e-b0ae-436387fea7c1,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:51
+X-CID-META: VersionHash:2a19b09,CLOUDID:c09a61e5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:76bb7d13e64c,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
+        URL:0,File:nil,QS:0,BEC:nil
+X-UUID: 27dbc41a7ef04a39ab7536496f27eeda-20220610
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 504504300; Fri, 10 Jun 2022 16:16:29 +0800
+        with ESMTP id 120229064; Fri, 10 Jun 2022 16:16:11 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
  mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
- Fri, 10 Jun 2022 08:15:41 +0000
+ Fri, 10 Jun 2022 08:15:39 +0000
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 10 Jun 2022 14:34:26 +0800
+ Fri, 10 Jun 2022 14:36:22 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 10 Jun 2022 14:34:26 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+ 15.2.792.3 via Frontend Transport; Fri, 10 Jun 2022 14:36:22 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <will@kernel.org>, <stable@vger.kernel.org>
+CC:     <alexandru.elisei@arm.com>, <catalin.marinas@arm.com>,
+        <jean-philippe.brucker@arm.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        <river.cheng@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <cellopoint.kai@gmail.com>
-Subject: [PATCH v20 6/6] soc: mediatek: mutex: add functions that operate registers by CMDQ
-Date:   Fri, 10 Jun 2022 14:34:23 +0800
-Message-ID: <20220610063424.7800-7-moudy.ho@mediatek.com>
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <mark-pk.tsai@mediatek.com>,
+        <matthias.bgg@gmail.com>, <maz@kernel.org>,
+        <yj.chiang@mediatek.com>
+Subject: Re: [PATCH] arm64: Clear OS lock in enable_debug_monitors
+Date:   Fri, 10 Jun 2022 14:36:19 +0800
+Message-ID: <20220610063619.7921-1-mark-pk.tsai@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220610063424.7800-1-moudy.ho@mediatek.com>
-References: <20220610063424.7800-1-moudy.ho@mediatek.com>
+In-Reply-To: <20220609115716.GA2427@willie-the-truck>
+References: <20220609115716.GA2427@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to HW limitations, MDP3 is necessary to enable MUTEX in each frame
-for SOF triggering and cooperate with CMDQ control to reduce the amount
-of interrupts generated(also, reduce frame latency).
+> On Thu, Jun 09, 2022 at 11:33:18AM +0800, Mark-PK Tsai wrote:
+> > Always clear OS lock before enable debug event.
+> > 
+> > The OS lock is clear in cpuhp ops in recent kernel,
+> > but when the debug exception happened before it
+> > kernel might crash because debug event enable didn't
+> > take effect when OS lock is hold.
+> > 
+> > Below is the use case that having this problem:
+> > 
+> > Register kprobe in console_unlock and kernel will
+> > panic at secondary_start_kernel on secondary core.
+> > 
+> > CPU: 1 PID: 0 Comm: swapper/1 Tainted: P
+> > ...
+> > pstate: 004001c5 (nzcv dAIF +PAN -UAO)
+> > pc : do_undefinstr+0x5c/0x60
+> > lr : do_undefinstr+0x2c/0x60
+> > sp : ffffffc01338bc50
+> > pmr_save: 000000f0
+> > x29: ffffffc01338bc50 x28: ffffff8115e95a00 T
+> > x27: ffffffc01258e000 x26: ffffff8115e95a00
+> > x25: 00000000ffffffff x24: 0000000000000000
+> > x23: 00000000604001c5 x22: ffffffc014015008
+> > x21: 000000002232f000 x20: 00000000000000f0 j
+> > x19: ffffffc01338bc70 x18: ffffffc0132ed040
+> > x17: ffffffc01258eb48 x16: 0000000000000403 L&
+> > x15: 0000000000016480 x14: ffffffc01258e000 i/
+> > x13: 0000000000000006 x12: 0000000000006985
+> > x11: 00000000d5300000 x10: 0000000000000000
+> > x9 : 9f6c79217a8a0400 x8 : 00000000000000c5
+> > x7 : 0000000000000000 x6 : ffffffc01338bc08 2T
+> > x5 : ffffffc01338bc08 x4 : 0000000000000002
+> > x3 : 0000000000000000 x2 : 0000000000000004
+> > x1 : 0000000000000000 x0 : 0000000000000001 *q
+> > Call trace:
+> >  do_undefinstr+0x5c/0x60
+> >  el1_undef+0x10/0xb4
+> >  0xffffffc014015008
+> >  vprintk_func+0x210/0x290
+> >  printk+0x64/0x90
+> >  cpuinfo_detect_icache_policy+0x80/0xe0
+> >  __cpuinfo_store_cpu+0x150/0x160
+> >  secondary_start_kernel+0x154/0x440
+> > 
+> > The root cause is that OS_LSR_EL1.OSLK is reset
+> > to 1 on a cold reset[1] and the firmware didn't
+> > unlock it by default.
+> > So the core didn't go to el1_dbg as expected after
+> > kernel_enable_single_step and eret.
+> 
+> Hmm, I thought we didn't use hardware single-step for kprobes after
+> 7ee31a3aa8f4 ("arm64: kprobes: Use BRK instead of single-step when executing
+> instructions out-of-line"). What is triggering this exception?
+> 
+> Will
 
-In response to the above situation, a new interface
-"mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
+You're right.
+Actually this issue happend in 5.4 LTS, and the commit you mentioned
+can avoid the kernel panic by not using hardware single-step.
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
----
- drivers/soc/mediatek/mtk-mutex.c       | 45 +++++++++++++++++++++++++-
- include/linux/soc/mediatek/mtk-mutex.h |  2 ++
- 2 files changed, 46 insertions(+), 1 deletion(-)
+I think 5.4 LTS should apply this commit.
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index f8ea09a8bb5d..85fa7df7066d 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -7,10 +7,12 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
- #include <linux/soc/mediatek/mtk-mutex.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
- 
- #define MT2701_MUTEX0_MOD0			0x2c
- #define MT2701_MUTEX0_SOF0			0x30
-@@ -204,6 +206,8 @@ struct mtk_mutex_ctx {
- 	void __iomem			*regs;
- 	struct mtk_mutex		mutex[10];
- 	const struct mtk_mutex_data	*data;
-+	phys_addr_t			addr;
-+	struct cmdq_client_reg		cmdq_reg;
- };
- 
- static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-@@ -594,6 +598,30 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_enable);
- 
-+int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	struct cmdq_pkt *cmdq_pkt = (struct cmdq_pkt *)pkt;
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	if (!mtx->cmdq_reg.size) {
-+		dev_err(mtx->dev, "mediatek,gce-client-reg hasn't been set");
-+		return -EINVAL;
-+	}
-+
-+	cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys,
-+		       mtx->addr + DISP_REG_MUTEX_EN(mutex->id), 1);
-+	return 0;
-+#else
-+	dev_err(mtx->dev, "Not support for enable MUTEX by CMDQ");
-+	return -ENODEV;
-+#endif
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-+
- void mtk_mutex_disable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -684,8 +712,11 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mutex_ctx *mtx;
--	struct resource *regs;
-+	struct resource *regs, addr;
- 	int i;
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	int ret;
-+#endif
- 
- 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
- 	if (!mtx)
-@@ -705,6 +736,18 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (of_address_to_resource(dev->of_node, 0, &addr) < 0) {
-+		dev_err(dev, "Failed to get addr\n");
-+		return -EINVAL;
-+	}
-+	mtx->addr = addr.start;
-+
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	ret = cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0);
-+	if (ret)
-+		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
-+#endif
-+
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	mtx->regs = devm_ioremap_resource(dev, regs);
- 	if (IS_ERR(mtx->regs)) {
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index 2ddab9d2b85d..a0f4f51a3b45 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -35,6 +35,8 @@ int mtk_mutex_prepare(struct mtk_mutex *mutex);
- void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- 			enum mtk_ddp_comp_id id);
- void mtk_mutex_enable(struct mtk_mutex *mutex);
-+int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			     void *pkt);
- void mtk_mutex_disable(struct mtk_mutex *mutex);
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id);
--- 
-2.18.0
+7ee31a3aa8f4 ("arm64: kprobes: Use BRK instead of single-step when executing instructions out-of-line")
+
+Cc: stable@vger.kernel.org
+
+
+
+And I'm not sure if there is other use case may have problem if the
+kernel don't clear OS lock in enable_debug_monitors everytime.
+So should we do this to prevent someone face the similar issue?
 

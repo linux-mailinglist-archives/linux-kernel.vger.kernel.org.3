@@ -2,143 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BA65458F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE8D5458FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbiFJAEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S237831AbiFJAI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiFJAEi (ORCPT
+        with ESMTP id S232136AbiFJAIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:04:38 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200B52E93E7;
-        Thu,  9 Jun 2022 17:04:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RWw8qmAIQV8n4SLR+cTBch8sFHDZ7ONliENFZIaYSQv4wx9NkqaBmR8bMK/aF+EWfowcRaaj8JAzffRJZUM4T+Ba5zOaWlmfDQQfPMAFoRZ4kYj4j8czdM0mJiuwwsgYWlgxVQ3sxT6GFbFtBwpKwxO3k7LzG64HoPqXRfo+SEdHP2XJ2eZkiyGBbOYTu4aLNDOrGCZGIm4tBD5eE6UyEtFOrAoBFqR24UGNABy3E6WRbeY+lWef2N6tVKyrTUogmSTboNjd/30Kn0bFt2jTNEAGlH0sofX+mcYdkD9UKOKKs6SIBaCS9vn74nSXgYjQut547hYjLszw0E1/FS3Whw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BkJSpoqJIZ+uhN6zMr35XHimir9RM5KTDo8T0C1uJWg=;
- b=Gmeygob0T8EQRyHBjTNWGQS+ApV6G4B0EEtcumW+5eYAqVIv33Zn7jqWJwQAPf0tkDAyiDE6Z/+MUzDjnaIWXtCFZVS8U9AG/1PESYlvt5EeJsJhkuF/ttvuTxqWG0j2mkRp0ojZHRMzWpoqBy3qpaAUzlaA8fWrt3CFLzo5azX27qMC1FMz1vWic2cH74j1M/A8KfyxJk9lUSs433J/7IisuGOTcqutVJ+P5PZcLYiw6EZA/atpo2Bx/XwBUtd84JTvbUcBbVAJxGPZZ5UinmAtxS4WF4nXZMgt7Bkmwv8T3e65lgnmuMZmyeQGKObzsNAWXzJnS0LujjyMun0ymg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BkJSpoqJIZ+uhN6zMr35XHimir9RM5KTDo8T0C1uJWg=;
- b=q9Lpk4gf533toSPgrEjBEbgkc7mGPF+7Uvs+ttzLOtT4u1MC08cLaEs2+0KJYmH+NKpqZQbzJBLnYORLEmdQV4qE8Zh1lizBtuPEuddVUFaxlO7hSo7N9UusMF7sfWbHdmAOmeFJKXE8Imm3w85W+T+8e2qLMrVW37KVDzuL2CN9a+J5e+22/qpRvJhghQm9M7dO0q5Rsz6XZD5WNpA8jm+/IGGiiajizUEAurZagMIIzbfTPmx9hlJGktEtd+ndeHX9c8zSq1b0dDrI7xVefJv6JweIXOFXdXVBwsgB6Z+s7Ykv3ArD5Hem+BrAQJCiOEf2sRAxaFxzTuO03j4Cxw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CY4PR12MB1768.namprd12.prod.outlook.com (2603:10b6:903:11c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17; Fri, 10 Jun
- 2022 00:04:35 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
- 00:04:35 +0000
-Date:   Thu, 9 Jun 2022 21:04:34 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     kwankhede@nvidia.com, farman@linux.ibm.com, mjrosato@linux.ibm.com,
-        pasic@linux.ibm.com, diana.craciun@oss.nxp.com, cohuck@redhat.com,
-        eric.auger@redhat.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, yishaih@nvidia.com, hch@lst.de
-Subject: Re: [PATCH] vfio: de-extern-ify function prototypes
-Message-ID: <20220610000434.GE1343366@nvidia.com>
-References: <165471414407.203056.474032786990662279.stgit@omen>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <165471414407.203056.474032786990662279.stgit@omen>
-X-ClientProxiedBy: MN2PR16CA0042.namprd16.prod.outlook.com
- (2603:10b6:208:234::11) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 9 Jun 2022 20:08:53 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FC94C407
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:08:51 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id e66so23267495pgc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MaS2sNIkZE7SaWHlKhH/YI3n6sfvjrj5m4CoiaX/33I=;
+        b=VpoCZvxU/FfqoAK+6u/q0PQaH8xPHq9aGSq3ibmyUFsV5U8maoYZCFhq2eV4QfMyj3
+         7zNBdEtEj7k69gpI3jPAWwyTOjYtHjPWC6AVSU4qXV3dImLX40u2PzYgG5/w68ba2ANM
+         UqjYjj1ohu/VRTi7j5u3gJW28L+zH9a+Eqf0+yrXS0yQExwAS5z+dJOo23doEUPm3NaG
+         s3682kXnrMx4PgecAn6QAU7Pi5pzYkGl5uSyPviRFBwmFBgrPYxdEbygFlbVVRrxumbo
+         zW5n0rC2AbeyHrIEkyRO5T5mZdA67mBNt02hI13DkEiHUYtRKw8OQ16ghDeyjUxm66TP
+         K2vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MaS2sNIkZE7SaWHlKhH/YI3n6sfvjrj5m4CoiaX/33I=;
+        b=oy2WiBLJ6zEoxpoaf4iuAacZ6V8mOwru40b+ChAJEjV0kYMDV5zi60+NEGlS48heoz
+         m5IWLXBhhQJv/sZsg6z+Hnq8ImJmIWbwHDO5unPLYw3k/xpVDqegko8ft2xHT21qMANC
+         YgeidqcOdnpwM/KzrbpUEr2epPnYUId98VTPGedbkDgrkpIZHsjCPkDdSBRKueF3OHSw
+         Ml0vjBg2095qP+V7tJChRhViN5dGIj6oJbne92lcJqAubaK2l6RQYbBxbpPJhlMQtHj1
+         F8jU6dxCErHbHEppmGwl2XObqi9IaYFR4WsEwayQpSE/UF3L2/k0n47YcJRu4mngPh05
+         RjNg==
+X-Gm-Message-State: AOAM530L0b1Pplj315KMpTqOk1YYDsaZaS7QWhaPATBMLHXHGt7KvA6y
+        h+vykBWZRBGKKwU+Ztre8rItrAF34ywy18/NcPk=
+X-Google-Smtp-Source: ABdhPJxIojRHgT7HS/v4whlvd9vukX1WNLaaQ0yE6bYAALcB6/ML9ytrMw9rJPQoMc8E3DOA6UhAOPX/1WCKFt2izCs=
+X-Received: by 2002:a65:67c1:0:b0:3fd:ebd6:5dab with SMTP id
+ b1-20020a6567c1000000b003fdebd65dabmr16367024pgs.75.1654819731056; Thu, 09
+ Jun 2022 17:08:51 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a54be9f8-45fe-4684-df7e-08da4a74cdbe
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1768:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB1768D2513F9569138FA509B5C2A69@CY4PR12MB1768.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7InaZMIrXuv9s253r6D/zEYbk2FZ1fZclqCwT+QwR/Pel/3hhUSrf9Xd6Y/TuwfYIc6OJtXvbIm8C/wkQAP3Og+45311F+oVAL1m3QobgNlnh/2ITeBid0zHcM27UMq8iFOECEOR/Fl+1gOjW53OnlNLyCzVoDXyvfqX6yjS+QNrXtiZiv7oniiV+9JvqUO3UcLhtk8XEbGHoUWgnN6g73YLyFvtG/9Jt3BgrnTUvtXwLCg2+fk9vW7At2DhHo2vMskurIaRpdGxDbGv20xhC18VDqDcjnsDJKiWosxUyboABIX2WFDmRPEUa8xFp+Xn6Vk/XHg+mt/YmWwTROkme6YVrWBjv7R9/koSPm3fay/JPBr+Iu2gldsqFmcJIYiCP0VvKNWxFqKe+8XLXArE/yzdBYQJWi6QmyT78KSb9CVFYVLGQSfzAbFPKSKns/MKXCSILL+UCCmbiAF71lMMtxFuGRseF2RpW32J8W+RqeD7pHQb+obAN+t3/Y53Zo+O5zdomg6byXXpkLh03M/9FGRPfTtPy4CZkZTdBgDJpA4WMtNMxYqo1QHeKL3TYIz0p0UZZuSa1JcUL3NuAYGKoADExfVRRcE/5fMM32QN5aYRr0egz5fAWCjtbl63qNWTyizJbTeKaHB8WYro3gyHog==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(186003)(5660300002)(6916009)(4326008)(66946007)(8936002)(8676002)(66556008)(66476007)(4744005)(508600001)(316002)(7416002)(6486002)(33656002)(6506007)(86362001)(26005)(36756003)(2906002)(2616005)(6512007)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fbatCssn4GawTpeCIlXO4P+V9btiSQaWnecQzFFkF7ZXBJe73V5uPx2dOk2q?=
- =?us-ascii?Q?NKG5XCeoIc7wSxUG2gwmn5xpOmHMfWVP70gFSFNW7FcfWKoiBlC99HFBO+kd?=
- =?us-ascii?Q?ccp8CrcBTGgBcpZa7uggl9XTfwWQMFw2t57mvxmx1C4LpTXpRhvObW4VM3WO?=
- =?us-ascii?Q?kiZIhYJXQCdbcoezDGAsAt2PUH7JrQiWB2MBvnMvA9IWBwkudFMN1lJ+DUtr?=
- =?us-ascii?Q?1lNBaiaUZreizhHWphDUMTACansJSQesfewED79BVt0kMx5OvXKmgykhvW8g?=
- =?us-ascii?Q?y8NUoTh3bdUfimMlrW3FJ7ldVEcZWKicLvxxor1H+3Y6y67dQt2JvzpVw0CB?=
- =?us-ascii?Q?u9gFsL8zuBSS+LdQTP5yzeCiVJ9W+8GyP25dD5SedHRqDWn6WHo5Ct54WRU0?=
- =?us-ascii?Q?DXWVTYP1HMnlp2wW7nSTR2bMfhePBgMtGNCohUJ2KVeGIPofsw8a7hRyPICh?=
- =?us-ascii?Q?r7UraBQ45UV0nOe15/8kt5NyYKlMaUV2AlLcWOCeJAB/y7Z1qPvMkPwYLt0I?=
- =?us-ascii?Q?fER7GcHc4NPFB2T8dgCAK5y7n7VGjSW3ftadkFT81EHE2vgnsCI3Pj2ZdNam?=
- =?us-ascii?Q?BTPZSJU6wTW/SeP7y+QeEY/rkUwg9rwul0RK3yWO36CLErfuVB/IQ6T3bbas?=
- =?us-ascii?Q?ufI+JqweuzqIbQuePAIS0QKnJwGJuse3Yd3IjEC8JxnzWdblpBZUP8lAKZZq?=
- =?us-ascii?Q?7rAFGkBGw2SObjmXcrbZltQ4xNUWAInpy9aemWuNgx3Mm+qDujMEmIiJ1+q1?=
- =?us-ascii?Q?yjrTjgpBj3zaDpixU3uQOx2q5XHmjhTJ5lOXTJ3l3S18eWTuiyjg98mL07kL?=
- =?us-ascii?Q?XzBs1Tvsfni8dQmIx02WMvjLqzGOEcYCOPvCbpDKFgMQRJGtvvDjF12LBvx0?=
- =?us-ascii?Q?3mAWI2ni2xSHcfW3TWRmvFhbQ8ZJ102v8F8llcGGuzv6iN/hZ/xAGd0Y7l9D?=
- =?us-ascii?Q?tTQL3WSevWtvOksfrCZTUgx82DrxJ+ciDXqnunj+FSLIkkH51gI9Kd9k+eF2?=
- =?us-ascii?Q?vQqSJ+QzoTHuaDEDODAkXVNka6HA7RiXDVpQ/HDh3FCAhD62KY2KTsKDvWvg?=
- =?us-ascii?Q?zkgmmqUlfPOm0LtYmeN426Ck4jpGH8OxlNTpp1vWlU5M+pJMSsOv3sMV4zyE?=
- =?us-ascii?Q?BfbKY0LnfnQ4ISMc6Z249Xc/bDREScMI6jHAfhMQi4O0ovR+db7hfryepBfw?=
- =?us-ascii?Q?U2ArKnmZv1gCTMCuJRjUGvOYKUhYRxLnZVoZHlEfziibOOlxEv/Zyc5wsLjS?=
- =?us-ascii?Q?88GjvpkenX0xnzoFPo4upkQiuegpgO9UZstyeVViAmq5XFqriDJOrsesryFs?=
- =?us-ascii?Q?0JUIegerxK8k/8lDX3lUJmkSDvdbPHOHvtX9lSLqghL7A8N9in5LQbYHwgq+?=
- =?us-ascii?Q?laJzqzzQdHAqReLYnN9VQDrxrs+2j6tRhjlG9ODYl9k4qbDkdvj4P+jg176i?=
- =?us-ascii?Q?wfgQOXyzIRtwl0IrqMeZMuv0QF62LUtkHNAR75GYUBiszvgLCysI1qqEPNQ7?=
- =?us-ascii?Q?JNyKDK8zZuNmIEBaIyRU0WECGoNMCZ5B04BbwhT2QIEFkiHR7DYzV1BvFQnc?=
- =?us-ascii?Q?eBcXAQ25Xiw6ewnqKkIUuxoO0KJJd5gB7n6/sYUfyiWwlFzmuPKl8ibrUmgi?=
- =?us-ascii?Q?OE5Ebp0paROITbWFybTZKKvmWTnWpTbxk3cZtHoaIXKlBDoBpuVfDBXnHFHa?=
- =?us-ascii?Q?/eAJh7e/ywCKCWN0F2UiLbDLr5qwoHW59dSeptlrLjA8BldWspFsBi0zoREc?=
- =?us-ascii?Q?uIvnQUfhJQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a54be9f8-45fe-4684-df7e-08da4a74cdbe
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 00:04:35.6565
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7rIPBbajZ9g25y1MrwWXPxrj+W01nrWfCnwVLe2nXhbGAhHXqKdUgJE5o0U0vUkN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1768
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-3-shy828301@gmail.com>
+ <CAAa6QmTYZQVf_U3dBnFpYGh3E8Qc4w8CKctMUC7jV_t=naGURQ@mail.gmail.com>
+In-Reply-To: <CAAa6QmTYZQVf_U3dBnFpYGh3E8Qc4w8CKctMUC7jV_t=naGURQ@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 9 Jun 2022 17:08:38 -0700
+Message-ID: <CAHbLzkr42VJhwj5EELw4oOXxm8bHzB7AEUBa0JqWYpvNXw6oNg@mail.gmail.com>
+Subject: Re: [v3 PATCH 2/7] mm: thp: introduce transhuge_vma_size_ok() helper
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 12:55:13PM -0600, Alex Williamson wrote:
-> The use of 'extern' in function prototypes has been disrecommended in
-> the kernel coding style for several years now, remove them from all vfio
-> related files so contributors no longer need to decide between style and
-> consistency.
-> 
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-> ---
-> 
-> A patch in the same vein was proposed about a year ago, but tied to an ill
-> fated series and forgotten.  Now that we're at the beginning of a new
-> development cycle, I'd like to propose kicking off the v5.20 vfio next
-> branch with this patch and would kindly ask anyone with pending respins or
-> significant conflicts to rebase on top of this patch.  Thanks!
+On Thu, Jun 9, 2022 at 3:21 PM Zach O'Keefe <zokeefe@google.com> wrote:
+>
+> On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
+> >
+> > There are couple of places that check whether the vma size is ok for
+> > THP or not, they are open coded and duplicate, introduce
+> > transhuge_vma_size_ok() helper to do the job.
+> >
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> >  include/linux/huge_mm.h | 17 +++++++++++++++++
+> >  mm/huge_memory.c        |  5 +----
+> >  mm/khugepaged.c         | 12 ++++++------
+> >  3 files changed, 24 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> > index 648cb3ce7099..a8f61db47f2a 100644
+> > --- a/include/linux/huge_mm.h
+> > +++ b/include/linux/huge_mm.h
+> > @@ -116,6 +116,18 @@ extern struct kobj_attribute shmem_enabled_attr;
+> >
+> >  extern unsigned long transparent_hugepage_flags;
+> >
+> > +/*
+> > + * The vma size has to be large enough to hold an aligned HPAGE_PMD_SIZE area.
+> > + */
+> > +static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
+> > +{
+> > +       if (round_up(vma->vm_start, HPAGE_PMD_SIZE) <
+> > +           (vma->vm_end & HPAGE_PMD_MASK))
+> > +               return true;
+> > +
+> > +       return false;
+> > +}
+>
+> First time coming across round_up() - thanks for that - but for
+> symmetry, maybe also use round_down() for the end? No strong opinion -
+> just a suggestion given I've just discovered it.
 
-Can you stick it in your branch please?
+Yeah, round_down is fine too.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>
+> >  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> >                 unsigned long addr)
+> >  {
+> > @@ -345,6 +357,11 @@ static inline bool transparent_hugepage_active(struct vm_area_struct *vma)
+> >         return false;
+> >  }
+> >
+> > +static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> >  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> >                 unsigned long addr)
+> >  {
+> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > index 48182c8fe151..36ada544e494 100644
+> > --- a/mm/huge_memory.c
+> > +++ b/mm/huge_memory.c
+> > @@ -71,10 +71,7 @@ unsigned long huge_zero_pfn __read_mostly = ~0UL;
+> >
+> >  bool transparent_hugepage_active(struct vm_area_struct *vma)
+> >  {
+> > -       /* The addr is used to check if the vma size fits */
+> > -       unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
+> > -
+> > -       if (!transhuge_vma_suitable(vma, addr))
+> > +       if (!transhuge_vma_size_ok(vma))
+> >                 return false;
+> >         if (vma_is_anonymous(vma))
+> >                 return __transparent_hugepage_enabled(vma);
+>
+> Do we need a check for vma->vm_pgoff alignment here, after
+> !vma_is_anonymous(), and now that we don't call
+> transhuge_vma_suitable()?
 
-Thanks
-Jason
+Actually I was thinking about this too. But the THPeligible bit shown
+by smaps is a little bit ambiguous for file vma. The document says:
+"THPeligible" indicates whether the mapping is eligible for allocating
+THP pages - 1 if true, 0 otherwise.
+
+Even though it doesn't fulfill the alignment, it is still possible to
+get THP allocated, but just can't be PMD mapped. So the old behavior
+of THPeligible for file vma seems problematic, or at least doesn't
+match the document.
+
+I should elaborate this in the commit log.
+
+>
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 84b9cf4b9be9..d0f8020164fc 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -454,6 +454,9 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
+> >                                 vma->vm_pgoff, HPAGE_PMD_NR))
+> >                 return false;
+> >
+> > +       if (!transhuge_vma_size_ok(vma))
+> > +               return false;
+> > +
+> >         /* Enabled via shmem mount options or sysfs settings. */
+> >         if (shmem_file(vma->vm_file))
+> >                 return shmem_huge_enabled(vma);
+> > @@ -512,9 +515,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
+> >                           unsigned long vm_flags)
+> >  {
+> >         if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
+> > -           khugepaged_enabled() &&
+> > -           (((vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK) <
+> > -            (vma->vm_end & HPAGE_PMD_MASK))) {
+> > +           khugepaged_enabled()) {
+> >                 if (hugepage_vma_check(vma, vm_flags))
+> >                         __khugepaged_enter(vma->vm_mm);
+> >         }
+> > @@ -2142,10 +2143,9 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
+> >                         progress++;
+> >                         continue;
+> >                 }
+> > -               hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+> > +
+> > +               hstart = round_up(vma->vm_start, HPAGE_PMD_SIZE);
+> >                 hend = vma->vm_end & HPAGE_PMD_MASK;
+> > -               if (hstart >= hend)
+> > -                       goto skip;
+> >                 if (khugepaged_scan.address > hend)
+> >                         goto skip;
+> >                 if (khugepaged_scan.address < hstart)
+>
+> Likewise, could do round_down() here (just a suggestion)
+
+Fine to me.
+
+>
+> > --
+> > 2.26.3
+> >
+> >

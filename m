@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FA3545DA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D67545DAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346809AbiFJHgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        id S1346554AbiFJHho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346731AbiFJHgD (ORCPT
+        with ESMTP id S229590AbiFJHhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:36:03 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D4F532C1;
-        Fri, 10 Jun 2022 00:35:59 -0700 (PDT)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id DC1E31F714;
-        Fri, 10 Jun 2022 09:35:54 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 09:35:47 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v2 04/11] drm/msm/dsi/phy: Reindent and reflow multiline
- function calls
-Message-ID: <20220610073547.meftbrcxk274kxhq@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220601220747.1145095-1-marijn.suijten@somainline.org>
- <20220601220747.1145095-5-marijn.suijten@somainline.org>
- <CAA8EJpqU6y3YKfZpgKORCfns-LN81NhqOetQbBC_Z4gVdMQakg@mail.gmail.com>
+        Fri, 10 Jun 2022 03:37:42 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F3512DBE0;
+        Fri, 10 Jun 2022 00:37:39 -0700 (PDT)
+Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LKCSZ0KYhzjXVp;
+        Fri, 10 Jun 2022 15:36:14 +0800 (CST)
+Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
+ kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 15:37:37 +0800
+Received: from dggpeml500011.china.huawei.com ([7.185.36.84]) by
+ dggpeml500011.china.huawei.com ([7.185.36.84]) with mapi id 15.01.2375.024;
+ Fri, 10 Jun 2022 15:37:36 +0800
+From:   "zhudi (E)" <zhudi2@huawei.com>
+To:     Eric Dumazet <edumazet@google.com>
+CC:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        David Miller <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Chenxiang (EulerOS)" <rose.chen@huawei.com>,
+        "syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com" 
+        <syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIGZxX2NvZGVsOiBEaXNjYXJkIHByb2JsZW1hdGlj?=
+ =?utf-8?Q?_packets_with_pkt=5Flen_0?=
+Thread-Topic: [PATCH] fq_codel: Discard problematic packets with pkt_len 0
+Thread-Index: AQHYfJjG9k49X3aJiUuEmDHyLJhsLa1HuSCAgAAAxQCAAIZ4UA==
+Date:   Fri, 10 Jun 2022 07:37:36 +0000
+Message-ID: <6adad85fe8ae4c04a24c3c7ce3bc0628@huawei.com>
+References: <20220610070529.1623-1-zhudi2@huawei.com>
+ <CANn89iKvXUbunP6UtNE1tNCH7FwCux22_rqwhGigvGn_64-6FA@mail.gmail.com>
+ <CANn89i+PQ0Z5LHoTfBixJ9gzAcWD9_8dWccO80gSPx+uZ_wujA@mail.gmail.com>
+In-Reply-To: <CANn89i+PQ0Z5LHoTfBixJ9gzAcWD9_8dWccO80gSPx+uZ_wujA@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.136.114.155]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpqU6y3YKfZpgKORCfns-LN81NhqOetQbBC_Z4gVdMQakg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-02 13:14:26, Dmitry Baryshkov wrote:
-> On Thu, 2 Jun 2022 at 01:07, Marijn Suijten
-> <marijn.suijten@somainline.org> wrote:
-> >
-> > Patch 613cbd1da3c9 ("drm/msm/dsi: use devm_clk_*register to registe DSI
-> > PHY clocks") introduced the devm_ prefix to clk_hw registration calls,
-> > without updating the indentation of the arguments on the following
-> > lines.
-> >
-> > Similarly e55b3fbbbbc8 ("drm/msm/dsi: drop PLL accessor functions")
-> > moved from pll_write to dsi_phy_write without updating the indentation
-> > of followup arguments either.
-> >
-> > Preparing for a series that heavily touches the clk calls, reflow and
-> > reindent function calls that are adhering to an 80-char column limit by
-> > spanning multiple lines.  Where function names are very long the
-> > arguments are indented with a fixed number of two tab characters instead
-> > of aligning with the opening parenthesis of the function call.
-> >
-> 
-> I'm not a fan of reindenting the code, but let's do it.
-
-I don't like it either, but it's better than trying to figure out how to
-add and flow new arguments into the call-site while also leaving the
-indentation in the same broken state.  At the same time it seems more
-consistent to fix up most faults rather than only touching clk calls.
-
-It's unfortunate that there's no proper autoformatter for C, that is
-consistently used across the kernel tree.  Makes for a lot of mundane,
-error-prone, manual work.  But alas.
-
-- Marijn
+VGhhbmtzIEVyaWMsIEknbGwgdGFrZSBhIGxvb2suDQoNCg0KPiBPbiBGcmksIEp1biAxMCwgMjAy
+MiBhdCAxMjozMiBBTSBFcmljIER1bWF6ZXQgPGVkdW1hemV0QGdvb2dsZS5jb20+IHdyb3RlOg0K
+PiA+DQo+ID4gT24gRnJpLCBKdW4gMTAsIDIwMjIgYXQgMTI6MDcgQU0gRGkgWmh1IDx6aHVkaTJA
+aHVhd2VpLmNvbT4gd3JvdGU6DQo+ID4gPg0KPiA+ID4gU3l6Ym90IGZvdW5kIGFuIGlzc3VlIFsx
+XTogZnFfY29kZWxfZHJvcCgpIHRyeSB0byBkcm9wIGEgZmxvdyB3aGl0b3V0IGFueQ0KPiA+ID4g
+c2ticywgdGhhdCBpcywgdGhlIGZsb3ctPmhlYWQgaXMgbnVsbC4NCj4gPiA+IFRoZSByb290IGNh
+dXNlIGlzIHRoYXQ6IHdoZW4gdGhlIGZpcnN0IHF1ZXVlZCBza2Igd2l0aCBwa3RfbGVuIDAsIGJh
+Y2tsb2dzDQo+ID4gPiBvZiB0aGUgZmxvdyB0aGF0IHRoaXMgc2tiIGVucXVldWVkIGlzIHN0aWxs
+IDAgYW5kIGlmIHNjaC0+bGltaXQgaXMgc2V0IHRvDQo+ID4gPiAwIHRoZW4gZnFfY29kZWxfZHJv
+cCgpIHdpbGwgYmUgY2FsbGVkLiBBdCB0aGlzIHBvaW50LCB0aGUgYmFja2xvZ3Mgb2YgYWxsDQo+
+ID4gPiBmbG93cyBhcmUgYWxsIDAsIHNvIGZsb3cgd2l0aCBpZHggMCBpcyBzZWxlY3RlZCB0byBk
+cm9wLCBidXQgdGhpcyBmbG93IGhhdmUNCj4gPiA+IG5vdCBhbnkgc2ticy4NCj4gPiA+IHNrYiB3
+aXRoIHBrdF9sZW4gMCBjYW4gYnJlYWsgZXhpc3RpbmcgcHJvY2Vzc2luZyBsb2dpYywgc28ganVz
+dCBkaXNjYXJkDQo+ID4gPiB0aGVzZSBpbnZhbGlkIHNrYnMuDQo+ID4gPg0KPiA+ID4gTElOSzog
+WzFdDQo+IGh0dHBzOi8vc3l6a2FsbGVyLmFwcHNwb3QuY29tL2J1Zz9pZD0wYjg0ZGE4MGMyOTE3
+NzU3OTE1YWZhODlmNzczOGE5ZDE2ZQ0KPiBjOTZjNQ0KPiA+ID4NCj4gPiA+IFJlcG9ydGVkLWJ5
+OiBzeXpib3QrN2ExMjkwOTQ4NWI5NDQyNmFjZWJAc3l6a2FsbGVyLmFwcHNwb3RtYWlsLmNvbQ0K
+PiA+ID4gU2lnbmVkLW9mZi1ieTogRGkgWmh1IDx6aHVkaTJAaHVhd2VpLmNvbT4NCj4gPiA+IC0t
+LQ0KPiA+ID4gIG5ldC9zY2hlZC9zY2hfZnFfY29kZWwuYyB8IDMgKysrDQo+ID4gPiAgMSBmaWxl
+IGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQ0KPiA+ID4NCj4gPiA+IGRpZmYgLS1naXQgYS9uZXQv
+c2NoZWQvc2NoX2ZxX2NvZGVsLmMgYi9uZXQvc2NoZWQvc2NoX2ZxX2NvZGVsLmMNCj4gPiA+IGlu
+ZGV4IDgzOWUxMjM1ZGIwNS4uYzBmODJiNzM1OGUxIDEwMDY0NA0KPiA+ID4gLS0tIGEvbmV0L3Nj
+aGVkL3NjaF9mcV9jb2RlbC5jDQo+ID4gPiArKysgYi9uZXQvc2NoZWQvc2NoX2ZxX2NvZGVsLmMN
+Cj4gPiA+IEBAIC0xOTEsNiArMTkxLDkgQEAgc3RhdGljIGludCBmcV9jb2RlbF9lbnF1ZXVlKHN0
+cnVjdCBza19idWZmICpza2IsDQo+IHN0cnVjdCBRZGlzYyAqc2NoLA0KPiA+ID4gICAgICAgICB1
+bnNpZ25lZCBpbnQgcGt0X2xlbjsNCj4gPiA+ICAgICAgICAgYm9vbCBtZW1vcnlfbGltaXRlZDsN
+Cj4gPiA+DQo+ID4gPiArICAgICAgIGlmICh1bmxpa2VseSghcWRpc2NfcGt0X2xlbihza2IpKSkN
+Cj4gPiA+ICsgICAgICAgICAgICAgICByZXR1cm4gcWRpc2NfZHJvcChza2IsIHNjaCwgdG9fZnJl
+ZSk7DQo+ID4gPiArDQo+ID4NCj4gPg0KPiA+IFRoaXMgaGFzIGJlZW4gZGlzY3Vzc2VkIGluIHRo
+ZSBwYXN0Lg0KPiA+DQo+IA0KPiBodHRwczovL3d3dy5zcGluaWNzLm5ldC9saXN0cy9uZXRkZXYv
+bXNnNzc3NTAzLmh0bWwNCj4gDQo+ID4gRmVlZGluZyBuZG9fc3RhcnRfeG1pdCgpIGluIGh1bmRy
+ZWRzIG9mIGRyaXZlcnMgd2l0aCB6ZXJvLWxlbmd0aA0KPiA+IHBhY2tldHMgd2lsbCBjcmFzaCBh
+bnl3YXkuDQo+ID4NCj4gPiBXZSBhcmUgbm90IGdvaW5nIHRvIGFkZCBzdWNoIHNpbGx5IHRlc3Rz
+IGluIGFsbCBxZGlzY3MsIGFuZCB0aGVuIGFsbA0KPiA+IG5kb19zdGFydF94bWl0KCksIHNpbmNl
+IHFkaXNjcyBhcmUgbm90IG1hbmRhdG9yeS4NCj4gPg0KPiA+IFBsZWFzZSBpbnN0ZWFkIGZpeCBC
+UEYgbGF5ZXIsIGluc3RlYWQgb2YgaHVuZHJlZHMgb2YgZHJpdmVycy9xZGlzY3MuDQo=

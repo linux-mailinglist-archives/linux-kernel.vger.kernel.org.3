@@ -2,159 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0046545B47
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B4E545B49
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243097AbiFJEsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 00:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
+        id S239219AbiFJEtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 00:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243195AbiFJEs1 (ORCPT
+        with ESMTP id S243100AbiFJEtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 00:48:27 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7F3464A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 21:48:24 -0700 (PDT)
-Received: from fsav312.sakura.ne.jp (fsav312.sakura.ne.jp [153.120.85.143])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25A4mHXp068524;
-        Fri, 10 Jun 2022 13:48:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav312.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp);
- Fri, 10 Jun 2022 13:48:17 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 25A4mGB9068501
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 10 Jun 2022 13:48:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <ad924306-d15c-9f1e-13dc-eaf674878022@I-love.SAKURA.ne.jp>
-Date:   Fri, 10 Jun 2022 13:48:12 +0900
+        Fri, 10 Jun 2022 00:49:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC48B5EBE9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 21:49:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BD6661FDA6;
+        Fri, 10 Jun 2022 04:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654836538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ehPBDIeGo/IVyVU/00SU2xxg0fPE5snMj1Ycn6dtS/k=;
+        b=R9D4hN0hV9wkzyPOFBVw6H33koGOOe8nQL8by+vWmodVHt1cwdnqwKgJMvBPtpyMt2weuH
+        Tmrxam4DoC651QO5Z7jHZfyoqmIA+bd7iy5UW0w5FLz/awX12Toc5X3HC+ZZ37Gx2oBQ1u
+        zQ0ABu39T1ar2udtXkSd+2lSP7WX/2I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96DBB139ED;
+        Fri, 10 Jun 2022 04:48:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KAqTIzrNomKDAgAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 10 Jun 2022 04:48:58 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        sstabellini@kernel.org
+Subject: [GIT PULL] xen: branch for v5.19-rc2
+Date:   Fri, 10 Jun 2022 06:48:58 +0200
+Message-Id: <20220610044858.30822-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH] rapidio/tsi721: avoid flush_scheduled_work() usage
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use local wq in order to avoid flush_scheduled_work() usage.
+Linus,
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
-using a macro") for background.
+Please git pull the following tag:
 
-Is allocating one workqueue for each "struct tsi721_device" too much,
-given that "struct tsi721_device" has only pw_work and idb_work? If yes,
-we could use module_init()/module_exit() for creating/destroying per a
-module workqueue.
+ git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-5.19a-rc2-tag
 
- drivers/rapidio/devices/tsi721.c | 19 ++++++++++++++-----
- drivers/rapidio/devices/tsi721.h |  3 +++
- 2 files changed, 17 insertions(+), 5 deletions(-)
+xen: branch for v5.19-rc2
 
-diff --git a/drivers/rapidio/devices/tsi721.c b/drivers/rapidio/devices/tsi721.c
-index b3134744fb55..a2e4969e2122 100644
---- a/drivers/rapidio/devices/tsi721.c
-+++ b/drivers/rapidio/devices/tsi721.c
-@@ -282,7 +282,7 @@ tsi721_pw_handler(struct tsi721_device *priv)
- 	iowrite32(TSI721_RIO_PW_RX_STAT_PW_DISC | TSI721_RIO_PW_RX_STAT_PW_VAL,
- 		  priv->regs + TSI721_RIO_PW_RX_STAT);
- 
--	schedule_work(&priv->pw_work);
-+	queue_work(priv->wq, &priv->pw_work);
- 
- 	return 0;
- }
-@@ -373,7 +373,7 @@ tsi721_dbell_handler(struct tsi721_device *priv)
- 	iowrite32(regval,
- 		priv->regs + TSI721_SR_CHINTE(IDB_QUEUE));
- 
--	schedule_work(&priv->idb_work);
-+	queue_work(priv->wq, &priv->idb_work);
- 
- 	return 0;
- }
-@@ -443,7 +443,7 @@ static void tsi721_db_dpc(struct work_struct *work)
- 
- 	wr_ptr = ioread32(priv->regs + TSI721_IDQ_WP(IDB_QUEUE)) % IDB_QSIZE;
- 	if (wr_ptr != rd_ptr)
--		schedule_work(&priv->idb_work);
-+		queue_work(priv->wq, &priv->idb_work);
- }
- 
- /**
-@@ -2743,10 +2743,16 @@ static int tsi721_probe(struct pci_dev *pdev,
- 		goto err_exit;
- 	}
- 
-+	priv->wq = alloc_workqueue("tsi721_wq", 0, 0);
-+	if (!priv->wq) {
-+		err = -ENOMEM;
-+		goto err_clean;
-+	}
-+
- 	err = pci_enable_device(pdev);
- 	if (err) {
- 		tsi_err(&pdev->dev, "Failed to enable PCI device");
--		goto err_clean;
-+		goto err_free_wq;
- 	}
- 
- 	priv->pdev = pdev;
-@@ -2927,6 +2933,8 @@ static int tsi721_probe(struct pci_dev *pdev,
- 	pci_clear_master(pdev);
- err_disable_pdev:
- 	pci_disable_device(pdev);
-+err_free_wq:
-+	destroy_workqueue(priv->wq);
- err_clean:
- 	kfree(priv);
- err_exit:
-@@ -2941,7 +2949,7 @@ static void tsi721_remove(struct pci_dev *pdev)
- 
- 	tsi721_disable_ints(priv);
- 	tsi721_free_irq(priv);
--	flush_scheduled_work();
-+	flush_workqueue(priv->wq);
- 	rio_unregister_mport(&priv->mport);
- 
- 	tsi721_unregister_dma(priv);
-@@ -2964,6 +2972,7 @@ static void tsi721_remove(struct pci_dev *pdev)
- 	pci_clear_master(pdev);
- 	pci_disable_device(pdev);
- 	pci_set_drvdata(pdev, NULL);
-+	destroy_workqueue(priv->wq);
- 	kfree(priv);
- 	tsi_debug(EXIT, &pdev->dev, "exit");
- }
-diff --git a/drivers/rapidio/devices/tsi721.h b/drivers/rapidio/devices/tsi721.h
-index 4f996ce62725..57a38d24ed8f 100644
---- a/drivers/rapidio/devices/tsi721.h
-+++ b/drivers/rapidio/devices/tsi721.h
-@@ -908,6 +908,9 @@ struct tsi721_device {
- 	struct tsi721_obw_bar p2r_bar[2];
- 	struct tsi721_ob_win  ob_win[TSI721_OBWIN_NUM];
- 	int		obwin_cnt;
-+
-+	/* Workqueue for processing works in this struct. */
-+	struct workqueue_struct *wq;
- };
- 
- #ifdef CONFIG_RAPIDIO_DMA_ENGINE
--- 
-2.18.4
+It contains:
+- a small cleanup removing "export" of an __init function
+- a small series adding a new infrastructure for platform flags
+- a series adding generic virtio support for Xen guests (frontend side)
+
+Thanks.
+
+Juergen
+
+ .../devicetree/bindings/iommu/xen,grant-dma.yaml   |  39 +++
+ MAINTAINERS                                        |   8 +
+ arch/arm/include/asm/xen/xen-ops.h                 |   2 +
+ arch/arm/mm/dma-mapping.c                          |   7 +-
+ arch/arm/xen/enlighten.c                           |   2 +
+ arch/arm64/include/asm/xen/xen-ops.h               |   2 +
+ arch/arm64/mm/dma-mapping.c                        |   7 +-
+ arch/s390/Kconfig                                  |   1 -
+ arch/s390/mm/init.c                                |  13 +-
+ arch/x86/Kconfig                                   |   1 -
+ arch/x86/mm/mem_encrypt.c                          |   7 -
+ arch/x86/mm/mem_encrypt_amd.c                      |   4 +
+ arch/x86/xen/enlighten_hvm.c                       |   2 +
+ arch/x86/xen/enlighten_pv.c                        |   2 +
+ drivers/virtio/Kconfig                             |   6 -
+ drivers/virtio/virtio.c                            |   5 +-
+ drivers/xen/Kconfig                                |  20 ++
+ drivers/xen/Makefile                               |   2 +
+ drivers/xen/grant-dma-iommu.c                      |  78 +++++
+ drivers/xen/grant-dma-ops.c                        | 346 +++++++++++++++++++++
+ drivers/xen/grant-table.c                          | 251 ++++++++++++---
+ drivers/xen/xlate_mmu.c                            |   1 -
+ include/asm-generic/Kbuild                         |   1 +
+ include/asm-generic/platform-feature.h             |   8 +
+ include/linux/platform-feature.h                   |  19 ++
+ include/linux/virtio_config.h                      |   9 -
+ include/xen/arm/xen-ops.h                          |  18 ++
+ include/xen/grant_table.h                          |   4 +
+ include/xen/xen-ops.h                              |  13 +
+ include/xen/xen.h                                  |   8 +
+ kernel/Makefile                                    |   2 +-
+ kernel/platform-feature.c                          |  27 ++
+ 32 files changed, 830 insertions(+), 85 deletions(-)
+
+Juergen Gross (5):
+      kernel: add platform_has() infrastructure
+      virtio: replace arch_has_restricted_virtio_memory_access()
+      xen/grants: support allocating consecutive grants
+      xen/grant-dma-ops: Add option to restrict memory access under Xen
+      xen/virtio: Enable restricted memory access using Xen grant mappings
+
+Masahiro Yamada (1):
+      xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
+
+Oleksandr Tyshchenko (5):
+      arm/xen: Introduce xen_setup_dma_ops()
+      dt-bindings: Add xen,grant-dma IOMMU description for xen-grant DMA ops
+      xen/grant-dma-iommu: Introduce stub IOMMU driver
+      xen/grant-dma-ops: Retrieve the ID of backend's domain for DT devices
+      arm/xen: Assign xen-grant DMA ops for xen-grant DMA devices

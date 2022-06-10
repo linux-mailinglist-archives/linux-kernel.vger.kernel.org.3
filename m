@@ -2,85 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD16545C03
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 08:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569A9545BE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346361AbiFJGBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 02:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S1346320AbiFJFv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243665AbiFJGBS (ORCPT
+        with ESMTP id S233755AbiFJFv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 02:01:18 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923F81312A8;
-        Thu,  9 Jun 2022 23:01:17 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3EE3F1A00BF;
-        Fri, 10 Jun 2022 08:01:16 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id EB9501A005B;
-        Fri, 10 Jun 2022 08:01:15 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 8217D1802202;
-        Fri, 10 Jun 2022 14:01:14 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ASoC: fsl_mqs: Add support for i.MX93 platform
-Date:   Fri, 10 Jun 2022 13:47:22 +0800
-Message-Id: <1654840042-7069-2-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654840042-7069-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1654840042-7069-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 10 Jun 2022 01:51:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4969E12B028
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:51:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EE1CC220BF;
+        Fri, 10 Jun 2022 05:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654840282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i1CE2gqZBO3aHwj3VKwM4ZfmOqqHUeaIHIP+GD1WsrY=;
+        b=FUUKGiWMV5dEvnqpKkNHQrBHmnQWISLLqTPhw0GAgfxoyW/5Dezd4JpfrOWdjzY7v+rra0
+        daj5KvJPsZUauo20vduZQEPVGDvl5FL8sQy0sOD1zuHLVJX0PbAO7xYRHP3fHc7U1ULUuS
+        B5Epp+Mbq3VG6cYeVah/vv3ck7qJVOU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654840282;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i1CE2gqZBO3aHwj3VKwM4ZfmOqqHUeaIHIP+GD1WsrY=;
+        b=tQIxqyGYv5jOA7PSNs60+oy6IpiqbYl03Wcpf5OfVyuyyUEaZlLZ2LVL5/8+lclCXrNDPp
+        HTPNzd1JmxeG19Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB206132F1;
+        Fri, 10 Jun 2022 05:51:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id B+SeLNrbomKvEwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 10 Jun 2022 05:51:22 +0000
+Message-ID: <97ef8e74-5d5d-2f6d-1be0-e566099e2853@suse.de>
+Date:   Fri, 10 Jun 2022 07:51:22 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] staging: olpc_dcon: mark driver as broken
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jerry Lin <wahahab11@gmail.com>, Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        linux-staging@lists.linux.dev
+References: <20220609223424.907174-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220609223424.907174-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------fCcYL6yVIILU5fq9llbNbYPZ"
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX93 compatible string and specific soc data
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------fCcYL6yVIILU5fq9llbNbYPZ
+Content-Type: multipart/mixed; boundary="------------uoErhsz0fH0XzfW7ZOt7uJrc";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, dri-devel@lists.freedesktop.org,
+ Sam Ravnborg <sam@ravnborg.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Jerry Lin <wahahab11@gmail.com>, Helge Deller <deller@gmx.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jens Frederich <jfrederich@gmail.com>,
+ Jon Nettleton <jon.nettleton@gmail.com>, linux-staging@lists.linux.dev
+Message-ID: <97ef8e74-5d5d-2f6d-1be0-e566099e2853@suse.de>
+Subject: Re: [PATCH] staging: olpc_dcon: mark driver as broken
+References: <20220609223424.907174-1-javierm@redhat.com>
+In-Reply-To: <20220609223424.907174-1-javierm@redhat.com>
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- sound/soc/fsl/fsl_mqs.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+--------------uoErhsz0fH0XzfW7ZOt7uJrc
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/sound/soc/fsl/fsl_mqs.c b/sound/soc/fsl/fsl_mqs.c
-index 8a8d727319d6..aefb73cab59c 100644
---- a/sound/soc/fsl/fsl_mqs.c
-+++ b/sound/soc/fsl/fsl_mqs.c
-@@ -338,9 +338,23 @@ static const struct fsl_mqs_soc_data fsl_mqs_imx6sx_data = {
- 	.div_shift = IMX6SX_GPR2_MQS_CLK_DIV_SHIFT,
- };
- 
-+static const struct fsl_mqs_soc_data fsl_mqs_imx93_data = {
-+	.use_gpr = true,
-+	.ctrl_off = 0x20,
-+	.en_mask  = BIT(1),
-+	.en_shift = 1,
-+	.rst_mask = BIT(2),
-+	.rst_shift = 2,
-+	.osr_mask = BIT(3),
-+	.osr_shift = 3,
-+	.div_mask = GENMASK(15, 8),
-+	.div_shift = 8,
-+};
-+
- static const struct of_device_id fsl_mqs_dt_ids[] = {
- 	{ .compatible = "fsl,imx8qm-mqs", .data = &fsl_mqs_imx8qm_data },
- 	{ .compatible = "fsl,imx6sx-mqs", .data = &fsl_mqs_imx6sx_data },
-+	{ .compatible = "fsl,imx93-mqs", .data = &fsl_mqs_imx93_data },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, fsl_mqs_dt_ids);
--- 
-2.17.1
+DQoNCkFtIDEwLjA2LjIyIHVtIDAwOjM0IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
+bGFzOg0KPiBUaGUgY29tbWl0IGVlY2IzZTRlNWQ5ZCAoInN0YWdpbmc6IG9scGNfZGNvbjog
+YWRkIE9MUEMgZGlzcGxheSBjb250cm9sbGVyDQo+IChEQ09OKSBzdXBwb3J0IikgYWRkZWQg
+dGhpcyBkcml2ZXIgaW4gMjAxMCwgYW5kIGhhcyBiZWVuIGluIHN0YWdpbmcgc2luY2UNCj4g
+dGhlbi4gSXQgd2FzIG1hcmtlZCBhcyBicm9rZW4gYXQgc29tZSBwb2ludCBiZWNhdXNlIGl0
+IGRpZG4ndCBldmVuIGJ1aWxkDQo+IGJ1dCB0aGF0IGdvdCByZW1vdmVkIG9uY2UgdGhlIGJ1
+aWxkIGlzc3VlcyB3ZXJlIGFkZHJlc3NlZC4NCj4gDQo+IEJ1dCBpdCBzZWVtcyB0aGF0IHRo
+ZSB3b3JrIHRvIG1vdmUgdGhpcyBkcml2ZXIgb3V0IG9mIHN0YWdpbmcgaGFzIHN0YWxsZWQs
+DQo+IHRoZSBsYXN0IG5vbi10cml2aWFsIGNoYW5nZSB0byBmaXggb25lIG9mIHRoZSBpdGVt
+cyBtZW50aW9uZWQgaW4gaXRzIHRvZG8NCj4gZmlsZSB3YXMgY29tbWl0IGU0MDIxOWQ1ZTRi
+MiAoInN0YWdpbmc6IG9scGNfZGNvbjogYWxsb3cgc2ltdWx0YW5lb3VzIFhPLTENCj4gYW5k
+IFhPLTEuNSBzdXBwb3J0IikgaW4gMjAxOS4NCj4gDQo+IEFuZCBldmVuIGlmIHdvcmsgdG8g
+ZGVzdGFnZSB0aGUgZHJpdmVyIGlzIHJlc3VtZWQsIHRoZSBmYmRldiBzdWJzeXN0ZW0gaGFz
+DQo+IGJlZW4gZGVwcmVjYXRlZCBmb3IgYSBsb25nIHRpbWUgYW5kIGluc3RlYWQgaXQgc2hv
+dWxkIGJlIHBvcnRlZCB0byBEUk0uDQo+IA0KPiBOb3cgdGhpcyBkcml2ZXIgaXMgcHJldmVu
+dGluZyB0byBsYW5kIGEga2VybmVsIHdpZGUgY2hhbmdlLCB0aGF0IG1ha2VzIHRoZQ0KPiBu
+dW1fcmVnaXN0ZXJlZF9mYiBzeW1ib2wgdG8gYmUgcHJpdmF0ZSB0byB0aGUgZmJtZW0uYyBm
+aWxlLg0KPiANCj4gU28gbGV0J3MganVzdCBtYXJrIHRoZSBkcml2ZXIgYXMgYnJva2VuLiBT
+b21lb25lIGNhbiB0aGVuIHdvcmsgb24gbWFraW5nDQo+IGl0IG5vdCBkZXBlbmQgb24gdGhl
+IG51bV9yZWdpc3RlcmVkX2ZiIHN5bWJvbCwgYWxsb3dpbmcgdG8gZHJvcCB0aGUgYnJva2Vu
+DQo+IGRlcGVuZGVuY3kgYWdhaW4uDQo+IA0KPiBTdWdnZXN0ZWQtYnk6IFNhbSBSYXZuYm9y
+ZyA8c2FtQHJhdm5ib3JnLm9yZz4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6
+IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQoNCkFja2VkLWJ5OiBUaG9tYXMgWmlt
+bWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVy
+cy9zdGFnaW5nL29scGNfZGNvbi9LY29uZmlnIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2Vk
+LCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvc3RhZ2luZy9vbHBjX2Rjb24vS2NvbmZpZyBiL2RyaXZlcnMvc3RhZ2luZy9vbHBj
+X2Rjb24vS2NvbmZpZw0KPiBpbmRleCBkMWEwZGVhMDllZjAuLmQwYmEzNGNjMzJmNyAxMDA2
+NDQNCj4gLS0tIGEvZHJpdmVycy9zdGFnaW5nL29scGNfZGNvbi9LY29uZmlnDQo+ICsrKyBi
+L2RyaXZlcnMvc3RhZ2luZy9vbHBjX2Rjb24vS2NvbmZpZw0KPiBAQCAtMSw3ICsxLDcgQEAN
+Cj4gICAjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICAgY29uZmlnIEZC
+X09MUENfRENPTg0KPiAgIAl0cmlzdGF0ZSAiT25lIExhcHRvcCBQZXIgQ2hpbGQgRGlzcGxh
+eSBDT050cm9sbGVyIHN1cHBvcnQiDQo+IC0JZGVwZW5kcyBvbiBPTFBDICYmIEZCDQo+ICsJ
+ZGVwZW5kcyBvbiBPTFBDICYmIEZCICYmIEJST0tFTg0KPiAgIAlkZXBlbmRzIG9uIEkyQw0K
+PiAgIAlkZXBlbmRzIG9uIEdQSU9fQ1M1NTM1ICYmIEFDUEkNCj4gICAJc2VsZWN0IEJBQ0tM
+SUdIVF9DTEFTU19ERVZJQ0UNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
+IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
+--------------uoErhsz0fH0XzfW7ZOt7uJrc--
+
+--------------fCcYL6yVIILU5fq9llbNbYPZ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKi29oFAwAAAAAACgkQlh/E3EQov+Dn
+ww//ZknGsqmIS/vMyC8OrM7AevAEYaiH4dsdI1FFONjUGV7fnL0XtS0T+raH2zM9Wxa9W2iV+bfx
+8dPMXynHw9gEZEKfOvxi0uNT0Lor8T5y1qqEajrQ3j4bFqLVumhaaA99aex8UyHlbw1+S0fp8zSe
+0cGo6PeGqR+8j7+lHrf9Q1vyQIWAqDrKLSXTcbPTGAtjA1WjHc04rm8Thh4+Xx8q4Arc2qE5KxzJ
+du+QENFVEaIpOXoGoMPsw/F/CacSQs51LfDkj/5JL7C002baEK95/cpl1nUh1kgUxtT8XrCc7bqp
+qCk6RSKJmKM7ZUb6ThaQ7SRjRoer1+c6UNSbgllg/Z5m+WB1fWF7cNdE7SVe78SL0RTLiTgbelvy
+iOu7Q/FsQByc6jUWk1X6gSd6p7LlVilL+Uf2EBudU2QokoTnXofQINkz/qYhH+9oZKnzgwAcl0K3
+SQuxkLTwVnVgJtw2VGOdFGgT/gZ3iwrIhOcXicGDhabAkupatvniE2gYL7ZIDlMhnZ2dnNjvW/bW
+GYucBrsAqVjSdvaPImAEuPK29imoKOCKLZnouqx75V2nvCxHuyG/e76DkVEy3N+uAe+57vf4EIyC
+sBU93Et8jYI9byGiFeRErZZloJmOeippt0NwEhSYGO8YNlUzPsImurPpj1neWGpHP+AbmhJ0z648
+fus=
+=oIn+
+-----END PGP SIGNATURE-----
+
+--------------fCcYL6yVIILU5fq9llbNbYPZ--

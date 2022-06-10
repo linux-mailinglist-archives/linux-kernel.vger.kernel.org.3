@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5C3547022
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612DE547038
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349408AbiFJXhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 19:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
+        id S1351064AbiFJXhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 19:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350784AbiFJXgK (ORCPT
+        with ESMTP id S1350812AbiFJXgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:36:10 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C62290BCF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:47 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so6014197b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:47 -0700 (PDT)
+        Fri, 10 Jun 2022 19:36:11 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381C82914F3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:50 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id n8-20020a170902d2c800b001663868e2c2so262945plc.21
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=c2CIP9lJW3Vwk5QL6viVMvuyWt16DF+L+Hkpp3NHFPU=;
-        b=bZ0OwARdGc3yu8CswzfT+1uQ6TcGmp1AR/m1+MAFrKy37VbeoHqWN4ZXuy7LkPp7D+
-         FDmJFl/mZmgSREzzUNarX0PhaWe0cRxh46RzI9WvN5gFuTRWabOKhtlGV3v1xePxwNU+
-         qWf5OkYVxmYyHD7fbiyxlqaTuhls0/3Xvims4ZjiTf649xL9NryzLpQLw96MAtUzmzgd
-         /VweRNmEe08BkfrTtgryJL56gtCVFt2xeCCJvTTmrHe62eKfSPtMacqwEFncv9tJeWAR
-         f33zRw8XryiGdqTxGisO1fsoa99c+RLTNe/z8Z9/SmjulnrcdevMsW/NHF8oe4AkLXlj
-         ZCbQ==
+        bh=BpFfLPfj9HB+nDPTA+ic1GSTJwOiZRxRXxANj94F+og=;
+        b=VIU2E8VBEnuRL6J8kKKaBjD8BXhxK52WDkoibzeklJoaWsAsTBFYw0i7vQgUm7b/Rr
+         CVcqs0MvSHUk2z1wQJmqYl6LRD9a7E6wR1Yiww5vjlBnbmzidFl4KduEMSd701kZbufQ
+         Hh6DelVz1NQ6J0VlRD43p0xM7oA/p4+Yx6+B2LeVTU9d0AhKd6iKDiADWvarXpp+MCbo
+         T4NH8wPtIoXO3e4155dGRYGkbTWdP4RXnQYt+eDydIia6wTuMsUKDrnafWkf40OpVFYY
+         oWLQbQ+sCUG0yaRW5J3UHrRXATwL5WpwCbHR/7fz6cjuJd46ZeqwwSCsJJ82BGByu5ZD
+         9Lxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=c2CIP9lJW3Vwk5QL6viVMvuyWt16DF+L+Hkpp3NHFPU=;
-        b=47SyO3bKx1NvjQv10he7Qsx/ktnqzpoRVHmXoYrQTRPWffuRycmFuOJ/J72yw/B220
-         4ahs28d568E1lsvvdQ1HCLgbtQJodEnSRas/AhAPnsUw1JPEx2ioMo5C60t7QtM3U2mY
-         /1kRtE4WrU3a+whxfSwHSHWbyym3wYF6ugxP+1MSchrWi97sHil66scrEaSpYk22fOQe
-         7S9anZEsqDQKl9VCsuN9QXcY515o/Qsb1uVq4o7wRS1a+xpo2UdPKVpxy0sqqK5Mr4iQ
-         d0NBiMy4xA5jfoh2/qSP3iDNym3b6+lEM78rnKg3vKpywdHfBd/tVvC2M56Re8MjUB1Y
-         Aufw==
-X-Gm-Message-State: AOAM531GizgEhupbkI+lHYLxsEejROkorIpDYDv7U/nYBgPZ4Y1eCHEe
-        Vy8mHzYCDcRkGqdVlqI/VYdeoNVKLS4RBKL4+Vc4qX6OyGYXrPav39gw6+TBaNQYNNHLidXs4+c
-        bPxaDAvPuPB0NNf8QuB8iG6Y20kQW95NWf2sbYHzkHbdcwNZFmP1fat1YFI4y7NGVmz5VexTaiG
-        4xXhvJHNexDQ==
-X-Google-Smtp-Source: ABdhPJzbLjbgBkiT7ukd1d/Nm2vzD579Psp0PgoL3wD0GPfrTh6ciaa1jHBKL7NVGhlMo4aiyWjAedJH7pKBZesYTqU=
+        bh=BpFfLPfj9HB+nDPTA+ic1GSTJwOiZRxRXxANj94F+og=;
+        b=0lCFRqJhlm2m7u9dAKYcdIEBRw4IDIqyCisffKMlQzNVB0wRcZgsm9COfGhSJQfaLh
+         VnU/VYNYR5R4wnt8FDd4lwmX+HHr2MKzTkAAjYoXYBFk19aeXBMVcnkbcS8GqzvMGyJz
+         bP3/toTJkj8RS/uM8/fTdgMFFcPgDsM7aNldtiI0daC8tw6UYFtDk6WnsGfZU4nqFqvY
+         rDSsOV3dWJp0srYN0lUVowLB9AP4Xr9X0DpULTmOPft65L20MRTpwPwMQTM6RpkJqwfB
+         1yST6TMjuwusk5Ol/ijSsqSTHan0lLzG9tWCCLCjzncIgu4W/UbFMyjKeUSVGyUbiqPr
+         p0pA==
+X-Gm-Message-State: AOAM531stSGiCt3EDTtFFpFTJy2zuQz1QhVSvEFqMN+8dYwhwflHL6rL
+        7krprv1R11HS1yg/neEvPp/jeGuTECVYJ19mVVl9Kv2/yZe0CVKGHZuT5/aYqri+WaCqEHOMHvP
+        CNHMQ+tA9R39JsPAn/tmlkft7a4OX4pjt5d0k2MqdoJBZfxl33ybHgkaRakue8GXLrRc9if9tYV
+        97VaRdbm6fgQ==
+X-Google-Smtp-Source: ABdhPJzQj4Y8DD4Bqc8j25Xa6AUeKTnmqV8QeG2OCwDZhwNosr/6RBjo4qVYPKtN34nX09gCNWTcfEMVnXZ0DBxfwpI=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f464:6db6:3d47:ed14])
- (user=samitolvanen job=sendgmr) by 2002:a5b:982:0:b0:63e:7d7e:e2f2 with SMTP
- id c2-20020a5b0982000000b0063e7d7ee2f2mr44757278ybq.549.1654904146897; Fri,
- 10 Jun 2022 16:35:46 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 16:35:06 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a17:90b:4a8c:b0:1e2:f378:631d with
+ SMTP id lp12-20020a17090b4a8c00b001e2f378631dmr2195230pjb.58.1654904149509;
+ Fri, 10 Jun 2022 16:35:49 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 16:35:07 -0700
 In-Reply-To: <20220610233513.1798771-1-samitolvanen@google.com>
-Message-Id: <20220610233513.1798771-14-samitolvanen@google.com>
+Message-Id: <20220610233513.1798771-15-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20220610233513.1798771-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2540; h=from:subject;
- bh=wkxTracRlh48gJXB/sqV6igwxwar57UIoToIvjngLK8=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9UuxPblg4Uoded/YFk1E0wzoSbYH57F/K8/DM+S
- r1qJ8O6JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLgAKCRBMtfaEi7xW7rY/C/
- 4m/NOSBpwS0Czw/rZryoUepjdULMbzlVZDXNI27hhZMA63z8eMpozt3+ZW/D0tiuzcAUVGcaodI08b
- S6UpbNtPb+dQ1HWqeDj5jIEVXUt5IytXnHQfT8ygUin8anKc0V79P4Tzz4dyM1lOs8NgXH/OziIhbK
- LxQZFid9wKx35uD/iVHVtVMzjB8Y6xOUMH3R9x2iKBFoHtzuicfledhljWW7RVSsnuL3+9OD7jOmkl
- JCeTQ2IyZMOvaP9A+oXOxAbLf79bs1+a/IFWldHwUMPFSHkOPRPlaRRC4PD89HDhYumL9sJvsS70rZ
- MK5OWPrVCi4qfhYXQU8hi0F54skmllftnoDVL79ukfhZAksebFSxjPLrCGfBAEMfwmC6hrc+nJ9MPQ
- oFY8wvdD6Zo2R7bmBMYQVY55UyE1VvdU5S/UY237DWflo1b/Q/pa1Zp+gbKLMYaP0Q8I7cjsoK3DIy
- B//tJN9fdzFinWYpnVwZLbolnTKtnXMh6uck7H3DDeukM=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2195; h=from:subject;
+ bh=h/mWD/4PnVCDH1rjLuqLphSlmeevUzDBu9m4dTUTNtM=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9Uu2/m+W1W7sfPCsrXSMcJKHxwY9rswgwh30C4e
+ Ca56uB6JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLgAKCRBMtfaEi7xW7lZyC/
+ 9LLlNqKUqkKdC5hqQA9zDyOBQJJzzdZElwz4yG1TM7N8FBp01GGa8IX21msOvtY45pBbK9IcxQ6+A8
+ Iggu25/NIDILzcNrfYsIg/KWP57X5PYBPPJnWz5OWGrfASn6jaqvKjum7FzyMLnkt715o3vSnZeW26
+ KKCI7vgs2WMWrW9677XdM8fPvUdDColtKqMM/yvwiy8yOFjD12LDICUjN3KMG0rdBojzVYG9wa1u1d
+ FIEgEHQ6kfLt+lfR4rilXSnWMkGEEZO8KyMpGeN7m77akc+rSAWGNEQRZu5KFYWFImKu+rtbP/BaPc
+ ttVafKDvdQNCWUVzwvapTVbV4+6WPdbF9RG23M+omQIfUtn+VanK58JCAqh3hbadTb3nLyFquz9lnc
+ AdsLelsSYkpSrCVG76d0NP7md/9zob+oXkWExKc4d4IAERbZ6cT17XWy5q5p7CFKdlw+eWans9qe0L
+ byIHDyMZ4GBbUlvCoEexRHFhhnSH3Vz7i4RWXRK/+ilO4=
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [RFC PATCH v3 13/20] treewide: Drop WARN_ON_FUNCTION_MISMATCH
+Subject: [RFC PATCH v3 14/20] treewide: Drop __cficanonical
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -93,72 +93,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_CFI_CLANG no longer breaks cross-module function address
-equality, which makes WARN_ON_FUNCTION_MISMATCH unnecessary. Remove
-the definition and switch back to WARN_ON_ONCE.
+CONFIG_CFI_CLANG doesn't use a jump table anymore and therefore,
+won't change function references to point elsewhere. Remove the
+__cficanonical attribute and all uses of it.
+
+Note that the Clang definition of the attribute was removed earlier,
+just clean up the no-op definition and users.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- include/asm-generic/bug.h | 16 ----------------
- kernel/kthread.c          |  3 +--
- kernel/workqueue.c        |  2 +-
- 3 files changed, 2 insertions(+), 19 deletions(-)
+ include/linux/compiler_types.h | 4 ----
+ include/linux/init.h           | 4 ++--
+ include/linux/pci.h            | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index ba1f860af38b..4050b191e1a9 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -220,22 +220,6 @@ extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
- # define WARN_ON_SMP(x)			({0;})
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index d08dfcb0ac68..2957edd29252 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -263,10 +263,6 @@ struct ftrace_likely_data {
+ # define __nocfi
  #endif
  
--/*
-- * WARN_ON_FUNCTION_MISMATCH() warns if a value doesn't match a
-- * function address, and can be useful for catching issues with
-- * callback functions, for example.
-- *
-- * With CONFIG_CFI_CLANG, the warning is disabled because the
-- * compiler replaces function addresses taken in C code with
-- * local jump table addresses, which breaks cross-module function
-- * address equality.
-- */
--#if defined(CONFIG_CFI_CLANG) && defined(CONFIG_MODULES)
--# define WARN_ON_FUNCTION_MISMATCH(x, fn) ({ 0; })
--#else
--# define WARN_ON_FUNCTION_MISMATCH(x, fn) WARN_ON_ONCE((x) != (fn))
+-#ifndef __cficanonical
+-# define __cficanonical
 -#endif
 -
- #endif /* __ASSEMBLY__ */
+ /*
+  * Any place that could be marked with the "alloc_size" attribute is also
+  * a place to be marked with the "malloc" attribute. Do this as part of the
+diff --git a/include/linux/init.h b/include/linux/init.h
+index 88f2964097f5..a0a90cd73ebe 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -220,8 +220,8 @@ extern bool initcall_debug;
+ 	__initcall_name(initstub, __iid, id)
  
- #endif
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 544fd4097406..19d446f4e3a9 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -1050,8 +1050,7 @@ static void __kthread_queue_delayed_work(struct kthread_worker *worker,
- 	struct timer_list *timer = &dwork->timer;
- 	struct kthread_work *work = &dwork->work;
- 
--	WARN_ON_FUNCTION_MISMATCH(timer->function,
--				  kthread_delayed_work_timer_fn);
-+	WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
- 
- 	/*
- 	 * If @delay is 0, queue @dwork->work immediately.  This is for
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 4056f2a3f9d5..2fed7bb018a7 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1651,7 +1651,7 @@ static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
- 	struct work_struct *work = &dwork->work;
- 
- 	WARN_ON_ONCE(!wq);
--	WARN_ON_FUNCTION_MISMATCH(timer->function, delayed_work_timer_fn);
-+	WARN_ON_ONCE(timer->function != delayed_work_timer_fn);
- 	WARN_ON_ONCE(timer_pending(timer));
- 	WARN_ON_ONCE(!list_empty(&work->entry));
- 
+ #define __define_initcall_stub(__stub, fn)			\
+-	int __init __cficanonical __stub(void);			\
+-	int __init __cficanonical __stub(void)			\
++	int __init __stub(void);				\
++	int __init __stub(void)					\
+ 	{ 							\
+ 		return fn();					\
+ 	}							\
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 81a57b498f22..c36c52933c8c 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2029,8 +2029,8 @@ enum pci_fixup_pass {
+ #ifdef CONFIG_LTO_CLANG
+ #define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+ 				  class_shift, hook, stub)		\
+-	void __cficanonical stub(struct pci_dev *dev);			\
+-	void __cficanonical stub(struct pci_dev *dev)			\
++	void stub(struct pci_dev *dev);					\
++	void stub(struct pci_dev *dev)					\
+ 	{ 								\
+ 		hook(dev); 						\
+ 	}								\
 -- 
 2.36.1.476.g0c4daa206d-goog
 

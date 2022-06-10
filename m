@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B25546D27
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6E7546D26
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349677AbiFJTTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S1350097AbiFJTUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346372AbiFJTTv (ORCPT
+        with ESMTP id S1349774AbiFJTTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:19:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F8C1C92E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:19:50 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id k73-20020a25244c000000b0065ca88b381aso137922ybk.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:19:50 -0700 (PDT)
+        Fri, 10 Jun 2022 15:19:55 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE6027149
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:19:54 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id k92-20020a17090a4ce500b001e69e8a98a4so78047pjh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:19:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=M9u2uZrITY2ZmiHjCgQwdtv5Ky15VkyjtQ04bHL3Xio=;
-        b=Jw3Ysj1F41dQlsGZWhUSX3Obz+Hib2iEiW0hh7Mijv3UwtrOyaCWrIIlSyAwUDSuos
-         QtJuRKjf8bcVJGqnp/cfidbUkVLVhGWUPyepZYlwljByyeosI+xTQbv6S5qRsQE1kkjB
-         4g6O3P1k53JC3+z8MSkBnQ+tMlk8IKnhgBqJjq9wIph9VR1oWmUmRqAapif8fhobzgtp
-         NjALOtVVeS7QJBxHZoXGBg7u3jRXuCJbg8GnrMAcnCx1Ws4QiEAZ86bBc6y4iWbRftjK
-         Hj8+vTVFtkfWGc1IAklfE0cn6e19Q/jTuGUyBhm5cY+ojFPvzxc7hI3RW6aDW66GvSD/
-         MfbQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=+dbqcGyic4c3zYFWxW8WIDheVsDHS+XGvESBEzG7d5k=;
+        b=VJWfSHAO2Je3tlWHbkl6eBf3JQors99nQSoFMQw5AngSQ7uNthpdVTVVO6if8U823B
+         Wu1S8b2rx3Ak6ZkOk6+AwA9gGBNOOThMx8xQHTEW6s7PY/nUBi2uIclkac9x4cTHvxmo
+         y/AJXy2aaupC/ITuM+2EZT3d4ceiyjYVlx4GC0SwtlZuKBtjFcy8EeMDNXQjTjgKmwiO
+         YMx+HsIRaSR+hgiXac40qw+UTiQ5bhIIl843JQc3xND8j8ThTL2i79J9eJ9I2kPOTUhP
+         l8UN1bhL572rWtU7JWt1Y+XqSDy0cbu4e8aGAxD0ZcWNoS6OGV3QWf79o7u/NVh09cqV
+         5qng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=M9u2uZrITY2ZmiHjCgQwdtv5Ky15VkyjtQ04bHL3Xio=;
-        b=cF3CWk36q4eDR4jtmwFGY+ZyGwHwMTxorVw6pQPgPHUaC/TnNQ+e/mzjMmdecqclE0
-         l9SUpzXro69TYRs6+KPWnDquk5zj479DLIIbU6gD67nVB2oPZgankp0Q7q6D78YjUI1P
-         YKQMOrQlBN3a4UMsbUs22almO5SGQhQmTqq4N5ifNW6o4FTsUqHu1FzlAf0IBZYmXRYd
-         4tt/DNgdx1+RXILzIOWLAKaNQ8WtTiwKA+8Y6gm3ckPcMR3Yuy/Ol7dL6qu27Rc/DpJy
-         DmifbIjHYs/8Oh7ZWgx0XF56lf5pKi8sVZNz+x5iT1GzkpuyRnukVMBZ0uPnZ8zWON7+
-         UjPQ==
-X-Gm-Message-State: AOAM530RoZ5Pjyt4sy/9GluFdjCnizkug1308oZxTOtGEXJ1NNZpnkiZ
-        JeU/Qch5wQv9jwCCqgpbtYwxKF+NqGny
-X-Google-Smtp-Source: ABdhPJz10BJgI6Y5N6hUkaEeF9P58vCfexIRfPBz3ftn2TOWtVsMcosQC2GyO1ymsmhprR40j0sGd0CvFxr0
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=+dbqcGyic4c3zYFWxW8WIDheVsDHS+XGvESBEzG7d5k=;
+        b=M2ivQ6Vwsz6UEE+LjnQJc2gAuRO2Z4BppNsWvqRVuxoY3tD7xohzDQ6vchTZcWEZTa
+         U9wf+y2fdcXkHMGWzaDWzcER4nM/5MXsZsfoMK5mKVkAnFLulCy3rXHb3xtOP/Z7Lqg6
+         WPmK9QWwPbR8cZQlSs8UUEwP8StrYnIVbPvWwOBvpy5VQ1fzYzGtbDehc9b97xi6KMKr
+         VrcDpi7PMmp0QjbRmMCTDSf25MMZdVxeDEg3/+ArUYl8xxk9rBNKPbYzpATEP+i7H9Lz
+         hi305OJCoRKwc+BGLQwyUKFOxB1jBTSK4lQI8XC2QeAYagUdw2eeJ3JAovlBYSyZg+6K
+         KY7w==
+X-Gm-Message-State: AOAM5302Wo+bDDN9c+nQvZKQAAFU3o9Z+7ywhK8Y23J52ACb396LiaTD
+        p27gehQFxdo5jOIwHkUQTvtOcmm2r8Hi
+X-Google-Smtp-Source: ABdhPJyMdoK0Z7VltgUeKks6E5rfObRdmAL0gzme9n9MCpzTKMf4h5EvoDtvJMEi3EHvOfGfzYtIGm3btkTn
 X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
- m10-20020a81260a000000b002f4ca82a42fmr50470972ywm.149.1654888789821; Fri, 10
- Jun 2022 12:19:49 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 12:19:33 -0700
-Message-Id: <20220610191934.2723772-1-jiangzp@google.com>
+ (user=jiangzp job=sendgmr) by 2002:a17:902:6bc6:b0:166:3c39:50a1 with SMTP id
+ m6-20020a1709026bc600b001663c3950a1mr46022372plt.36.1654888794338; Fri, 10
+ Jun 2022 12:19:54 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 12:19:34 -0700
+In-Reply-To: <20220610191934.2723772-1-jiangzp@google.com>
+Message-Id: <20220610121915.kernel.v1.1.Ia621daca5b03278ee09314c59659b64c901408cf@changeid>
 Mime-Version: 1.0
+References: <20220610191934.2723772-1-jiangzp@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [kernel PATCH v1 0/1] Fix refresh cached connection info
+Subject: [kernel PATCH v1 1/1] Bluetooth: mgmt: Fix refresh cached connection info
 From:   Zhengping Jiang <jiangzp@google.com>
 To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org
 Cc:     chromeos-bluetooth-upstreaming@chromium.org,
@@ -72,21 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Set the connection data before calling get_conn_info_sync, so it can be
+verified the connection is still connected, before refreshing cached
+values.
 
-Get connection info will return error when using synchronous hci_sync
-call to refresh the cached information when the data times out. This is
-because the cmd->user_data was not set before the call, so it will fail
-checking connection is still connected.
+Fixes: 47db6b42991e6 ("Bluetooth: hci_sync: Convert MGMT_OP_GET_CONN_INFO")
+Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+---
 
 Changes in v1:
 - Set connection data before calling hci_cmd_sync_queue
 
-Zhengping Jiang (1):
-  Bluetooth: mgmt: Fix refresh cached connection info
-
  net/bluetooth/mgmt.c | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index 74937a8346488..cfbea6fa04335 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -6828,11 +6828,14 @@ static int get_conn_info(struct sock *sk, struct hci_dev *hdev, void *data,
+ 
+ 		cmd = mgmt_pending_new(sk, MGMT_OP_GET_CONN_INFO, hdev, data,
+ 				       len);
+-		if (!cmd)
++		if (!cmd) {
+ 			err = -ENOMEM;
+-		else
++		} else {
++			hci_conn_hold(conn);
++			cmd->user_data = hci_conn_get(conn);
+ 			err = hci_cmd_sync_queue(hdev, get_conn_info_sync,
+ 						 cmd, get_conn_info_complete);
++		}
+ 
+ 		if (err < 0) {
+ 			mgmt_cmd_complete(sk, hdev->id, MGMT_OP_GET_CONN_INFO,
+@@ -6844,9 +6847,6 @@ static int get_conn_info(struct sock *sk, struct hci_dev *hdev, void *data,
+ 			goto unlock;
+ 		}
+ 
+-		hci_conn_hold(conn);
+-		cmd->user_data = hci_conn_get(conn);
+-
+ 		conn->conn_info_timestamp = jiffies;
+ 	} else {
+ 		/* Cache is valid, just reply with values cached in hci_conn */
 -- 
 2.36.1.476.g0c4daa206d-goog
 

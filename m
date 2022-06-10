@@ -2,120 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54816546D1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF81546D1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347061AbiFJTQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S1347488AbiFJTSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiFJTQy (ORCPT
+        with ESMTP id S229571AbiFJTSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:16:54 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 12:16:53 PDT
-Received: from alln-iport-8.cisco.com (alln-iport-8.cisco.com [173.37.142.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E679EE0A;
-        Fri, 10 Jun 2022 12:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=2055; q=dns/txt; s=iport;
-  t=1654888613; x=1656098213;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=u72bLTf2B+c8SBz+AstWagpFwrtX94lEUqCSNIL9kHo=;
-  b=d1jkO5u3qGS/m0jkcW0iJL9yFO63TChd1ZI4SSMA3/loFmBj1qUyF0LE
-   IQgPwCggPk04Ez8kUP4TqKYXytu8NXVUWSxaFQV9DzAs5bwIsif2IQDpk
-   1wlvbCCo9xWfwA5sQFqvFnnjQpHlPzG9jyiydWDIgdwA19Y1U/RmUMKjz
-   k=;
-X-IronPort-AV: E=Sophos;i="5.91,291,1647302400"; 
-   d="scan'208";a="886185543"
-Received: from alln-core-10.cisco.com ([173.36.13.132])
-  by alln-iport-8.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 10 Jun 2022 19:15:49 +0000
-Received: from sjc-ads-3421.cisco.com (sjc-ads-3421.cisco.com [171.68.249.119])
-        by alln-core-10.cisco.com (8.15.2/8.15.2) with ESMTP id 25AJFmaB012979;
-        Fri, 10 Jun 2022 19:15:48 GMT
-From:   Oleksandr Ocheretnyi <oocheret@cisco.com>
-To:     mika.westerberg@linux.intel.com, tudor.ambarus@microchip.com,
-        miquel.raynal@bootlin.com, p.yadav@ti.com, michael@walle.cc,
-        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Cc:     mauro.lima@eclypsium.com, lee.jones@linaro.org,
-        linux-kernel@vger.kernel.org, oocheret@cisco.com,
-        xe-linux-external@cisco.com
-Subject: [PATCH] mtd: spi-nor: handle unsupported FSR opcodes properly
-Date:   Fri, 10 Jun 2022 12:15:48 -0700
-Message-Id: <20220610191548.3626218-1-oocheret@cisco.com>
-X-Mailer: git-send-email 2.26.2.Cisco
-In-Reply-To: <YmZUCIE/ND82BlNh@lahna>
-References: <YmZUCIE/ND82BlNh@lahna>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 171.68.249.119, sjc-ads-3421.cisco.com
-X-Outbound-Node: alln-core-10.cisco.com
-X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 10 Jun 2022 15:18:17 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813A4167DF
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:18:16 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id ob5-20020a17090b390500b001e2f03294a7so1862301pjb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=y1EZXvSmEPvb6mcUcqNnwAea2ZEKw13g9a15hObG/5M=;
+        b=j5Ol8gvjwBqhz1FCGnzOa9I7myBdajprl0eYTZ+G6kUBS6rutkN9NY3k/9rtRye1bq
+         5rhky7E5n4gcRy8RojPyZxnwIQ8q1ptSi1dzy3Y/i20I4s/b+JMGnT55rvp16jPNuo1J
+         qpI7gjpVmiB7Ra9W4owVS05GYZ+Xj7IdUvRKyoCHKD9hnkdaCv4MVdzDNyCy5KqTphQU
+         1W9At+Oo2woTSGCE0NLVNGMlxiGBNcz6geY1r0gg1MKxg+YJyWY+xr7QC5G3KYaPkQN1
+         dtb9K90++nmjmu7WdBfIRuoK745VE4EENDEXbSpZTZ/RlSLnEJNrjx6O2PqMrqBhRJtR
+         GPPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc:content-transfer-encoding;
+        bh=y1EZXvSmEPvb6mcUcqNnwAea2ZEKw13g9a15hObG/5M=;
+        b=l7/AKWf8ZZB1JYVjUxCxvi55CMakQ6mtJPycLftQR6sZ9V3/Ro+SD1ZqQBGxSKci1A
+         p3BphzQGG6x5v4SGActpBW5yHBlXg9kklDfZUu4hSjd6fnggpJTi/EAlHb7LyEJOOQIm
+         o8J6aeT8suDZy5MpoBQEEli8NMzJlyzc3j5BWBCR2CQvrnetODmhZLgvoYYwTfyYsMJ9
+         zpULD/0QLXsyz56eR/1mvfiIMkAg8ApSoMQ5CJEH0dACcWCI6kGW8s4Kd/rHW6l1Hu5V
+         MMGz1VN8+wc1wluZ1Yfx2TKkpT735mGh++RoE+VMxhsPlkRfld3zo6ugfYLyIo4wC7+Z
+         RB9g==
+X-Gm-Message-State: AOAM533hbMRiMVXnCZ1I7xn+UyxYrqXmvGmPY+reJZs3KSFzumjy0yoT
+        +1O7DnBPYd9Qy0Alt6FM52sEBENUXdg=
+X-Google-Smtp-Source: ABdhPJyMSmx7IVBsg90eGIeP4sJzAfrDgpQtiK6YO/BOyTkm6qK/b/c2N1oKuSC58vea5TL9kCTYgM2xFis=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr2350pje.0.1654888695567; Fri, 10 Jun
+ 2022 12:18:15 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 10 Jun 2022 19:18:13 +0000
+Message-Id: <20220610191813.371682-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH] KVM: SVM: Fix a misplaced paranthesis in APICV inhibit mask generation
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for n25q* entries")
-and following one 8f93826 ("mtd: spi-nor: micron-st: convert USE_FSR
-to a manufacturer flag") enables SPINOR_OP_RDFSR opcode handling ability,
-however some controller drivers still cannot handle it properly in
-the micron_st_nor_ready() call what breaks some mtd callbacks with
-next error logs:
+Relocate a ")" to its proper place at the end of a BIT usage, the intent
+is most definitely not to have a feedback loop of BITs in the mask.
 
-mtdblock: erase of region [address1, size1] on "BIOS" failed
-mtdblock: erase of region [address2, size2] on "BIOS" failed
+arch/x86/kvm/svm/avic.c: In function =E2=80=98avic_check_apicv_inhibit_reas=
+ons=E2=80=99:
+include/vdso/bits.h:7:40: error: left shift count >=3D width of type [-Werr=
+or=3Dshift-count-overflow]
+    7 | #define BIT(nr)                 (UL(1) << (nr))
+      |                                        ^~
+arch/x86/kvm/svm/avic.c:911:27: note: in expansion of macro =E2=80=98BIT=E2=
+=80=99
+  911 |                           BIT(APICV_INHIBIT_REASON_SEV      |
+      |                           ^~~
 
-Just skip subsequent processing of the SPINOR_OP_RDFSR opcode's results
-because of -ENOTSUPP return value of the micron_st_nor_read_fsr()
-if there is no proper handling of that opcode as it's been before
-commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for n25q* entries")
-
-Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
+Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or=
+ APIC base")
+Cc: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- drivers/mtd/spi-nor/micron-st.c | 6 +++++-
- drivers/spi/spi-intel.c         | 3 ++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ arch/x86/kvm/svm/avic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index a96f74e0f568..507e675d81e0 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -399,8 +399,12 @@ static int micron_st_nor_ready(struct spi_nor *nor)
- 		return sr_ready;
- 
- 	ret = micron_st_nor_read_fsr(nor, nor->bouncebuf);
--	if (ret)
-+	if (ret < 0) {
-+		/* Check if read FSR is supported. If not, skip it. */
-+		if (ret == -ENOTSUPP)
-+			return sr_ready;
- 		return ret;
-+	}
- 
- 	if (nor->bouncebuf[0] & (FSR_E_ERR | FSR_P_ERR)) {
- 		if (nor->bouncebuf[0] & FSR_E_ERR)
-diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
-index 50f42983b950..f0313a718d1b 100644
---- a/drivers/spi/spi-intel.c
-+++ b/drivers/spi/spi-intel.c
-@@ -352,7 +352,8 @@ static int intel_spi_hw_cycle(struct intel_spi *ispi, u8 opcode, size_t len)
- 		val |= HSFSTS_CTL_FCYCLE_RDSR;
- 		break;
- 	default:
--		return -EINVAL;
-+		dev_dbg(ispi->dev, "%#x not supported\n", opcode);
-+		return -ENOTSUPP;
- 	}
- 
- 	if (len > INTEL_SPI_FIFO_SZ)
--- 
-2.28.0
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index 5542d8959e11..d1bc5820ea46 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -908,9 +908,9 @@ bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_in=
+hibit reason)
+ 			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
+ 			  BIT(APICV_INHIBIT_REASON_X2APIC) |
+ 			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
+-			  BIT(APICV_INHIBIT_REASON_SEV      |
++			  BIT(APICV_INHIBIT_REASON_SEV)      |
+ 			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
+-			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED));
++			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED);
+=20
+ 	return supported & BIT(reason);
+ }
+
+base-commit: b23f8810c46978bc05252db03055a61fcadc07d5
+--=20
+2.36.1.476.g0c4daa206d-goog
 

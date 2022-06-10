@@ -2,100 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60CB5462B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64555462B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244209AbiFJJpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
+        id S1346747AbiFJJpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245750AbiFJJpg (ORCPT
+        with ESMTP id S245750AbiFJJpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:45:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF32A276238
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:45:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nzbCi-00058b-HA; Fri, 10 Jun 2022 11:45:20 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nzbCi-007YFI-8S; Fri, 10 Jun 2022 11:45:18 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nzbCg-005Rka-B3; Fri, 10 Jun 2022 11:45:18 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v1 1/1] net: macb: fix negative max_mtu size for sama5d3
-Date:   Fri, 10 Jun 2022 11:45:17 +0200
-Message-Id: <20220610094517.1298261-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Fri, 10 Jun 2022 05:45:45 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50883151E7;
+        Fri, 10 Jun 2022 02:45:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VFypZVW_1654854332;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VFypZVW_1654854332)
+          by smtp.aliyun-inc.com;
+          Fri, 10 Jun 2022 17:45:41 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     jgg@ziepe.ca
+Cc:     leon@kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] RDMA/cm: fix cond_no_effect.cocci warnings
+Date:   Fri, 10 Jun 2022 17:45:30 +0800
+Message-Id: <20220610094530.28950-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Microchip SAMA5D3 the JML will return null. So, after header and FCS length
-subtraction we will get negative max_mtu size. This issue was directly
-affecting DSA drivers with MTU support (for example KSZ9477).
+This was found by coccicheck:
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+./drivers/infiniband/core/cm.c:685:7-9: WARNING: possible condition with no effect (if == else).
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ drivers/infiniband/core/cm.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index d89098f4ede8..c7e1c9ac9809 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4913,10 +4913,24 @@ static int macb_probe(struct platform_device *pdev)
- 
- 	/* MTU range: 68 - 1500 or 10240 */
- 	dev->min_mtu = GEM_MTU_MIN_SIZE;
--	if (bp->caps & MACB_CAPS_JUMBO)
--		dev->max_mtu = gem_readl(bp, JML) - ETH_HLEN - ETH_FCS_LEN;
--	else
-+	if (bp->caps & MACB_CAPS_JUMBO) {
-+		u32 val;
-+
-+		if (bp->jumbo_max_len)
-+			val = bp->jumbo_max_len;
-+		else
-+			val = gem_readl(bp, JML);
-+
-+		if (val < ETH_DATA_LEN) {
-+			dev_warn(&pdev->dev, "Suspicious max MTU size (%u), overwriting to %u\n",
-+				 val, ETH_DATA_LEN);
-+			dev->max_mtu = ETH_DATA_LEN;
-+		} else {
-+			dev->max_mtu = val - ETH_HLEN - ETH_FCS_LEN;
-+		}
-+	} else {
- 		dev->max_mtu = ETH_DATA_LEN;
-+	}
- 
- 	if (bp->caps & MACB_CAPS_BD_RD_PREFETCH) {
- 		val = GEM_BFEXT(RXBD_RDBUFF, gem_readl(bp, DCFG10));
+diff --git a/drivers/infiniband/core/cm.c b/drivers/infiniband/core/cm.c
+index 1c107d6d03b9..bb6a2b6b9657 100644
+--- a/drivers/infiniband/core/cm.c
++++ b/drivers/infiniband/core/cm.c
+@@ -676,14 +676,9 @@ static struct cm_id_private *cm_find_listen(struct ib_device *device,
+ 			refcount_inc(&cm_id_priv->refcount);
+ 			return cm_id_priv;
+ 		}
+-		if (device < cm_id_priv->id.device)
++		if (device < cm_id_priv->id.device ||
++		    be64_lt(service_id, cm_id_priv->id.service_id))
+ 			node = node->rb_left;
+-		else if (device > cm_id_priv->id.device)
+-			node = node->rb_right;
+-		else if (be64_lt(service_id, cm_id_priv->id.service_id))
+-			node = node->rb_left;
+-		else if (be64_gt(service_id, cm_id_priv->id.service_id))
+-			node = node->rb_right;
+ 		else
+ 			node = node->rb_right;
+ 	}
 -- 
-2.30.2
+2.20.1.7.g153144c
 

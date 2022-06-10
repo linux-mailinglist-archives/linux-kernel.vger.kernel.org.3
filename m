@@ -2,58 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD8E545A52
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7068C545A59
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241068AbiFJDGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 23:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S240598AbiFJDNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 23:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiFJDGC (ORCPT
+        with ESMTP id S229833AbiFJDNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 23:06:02 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D843D6808
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 20:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654830361; x=1686366361;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z3yrDucY7h8X3nhyVMdwU4T0YsGseG9NZ3ZOmoOS/S0=;
-  b=ABcBgAxFBKWiVRHaAzWa9KKl4doTyYNjhaacy5JnO5WZqD5xpCOYavq2
-   jcSq33Wkij176wem282UzY5+SzlLEYyqRNoMnbaUD8BiVsBfEMfGid4W8
-   fh0CDtSGjuCdNcFySpw5AnfwZb3hweBwRBkNcmGUnZiYliO6ysIr3ID7i
-   WAp6nPpDjS9hkubRUiXIeMz/GiSVHNRUZBwF0R2bgc4KL1o4W/0uEDGjX
-   OOYcphxKNCkRhbbBagNBvNbEttk8+EoZtm962vI2cHXy1yHBwVL95IKKx
-   acirmxs38gjGPVxyfx3LTugcTtaIeMepnyt3REga+UeFCOcnpyo3RXl02
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341559505"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="341559505"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 20:06:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="684304675"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Jun 2022 20:05:59 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzUyE-000Ge1-Es;
-        Fri, 10 Jun 2022 03:05:58 +0000
-Date:   Fri, 10 Jun 2022 11:05:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jlayton:ceph-netfs-llist 4/4] fs/ceph/addr.c:433:37: warning:
- unused variable 'subreq'
-Message-ID: <202206101021.BVwn2jkt-lkp@intel.com>
+        Thu, 9 Jun 2022 23:13:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7385930AB5B;
+        Thu,  9 Jun 2022 20:13:41 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LK5dC0qjDzDqjc;
+        Fri, 10 Jun 2022 11:13:19 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 11:13:39 +0800
+Subject: Re: [PATCH -next] Revert "evm: Fix memleak in init_desc"
+From:   xiujianfeng <xiujianfeng@huawei.com>
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220527111726.195825-1-xiujianfeng@huawei.com>
+Message-ID: <c34789ad-0a3e-c534-8a74-28c3068602a1@huawei.com>
+Date:   Fri, 10 Jun 2022 11:13:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20220527111726.195825-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,41 +51,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-netfs-llist
-head:   949c104f62d7b02839584a8cce853d4164f861ac
-commit: 949c104f62d7b02839584a8cce853d4164f861ac [4/4] ceph: convert to netfs write helpers
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220610/202206101021.BVwn2jkt-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=949c104f62d7b02839584a8cce853d4164f861ac
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton ceph-netfs-llist
-        git checkout 949c104f62d7b02839584a8cce853d4164f861ac
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ceph/
+Hi, ping....
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   fs/ceph/addr.c: In function 'ceph_upload_to_server_worker':
->> fs/ceph/addr.c:433:37: warning: unused variable 'subreq' [-Wunused-variable]
-     433 |         struct netfs_io_subrequest *subreq =
-         |                                     ^~~~~~
-
-
-vim +/subreq +433 fs/ceph/addr.c
-
-   430	
-   431	static void ceph_upload_to_server_worker(struct work_struct *work)
-   432	{
- > 433		struct netfs_io_subrequest *subreq =
-   434			container_of(work, struct netfs_io_subrequest, work);
-   435	}
-   436	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ÔÚ 2022/5/27 19:17, Xiu Jianfeng Ð´µÀ:
+> This reverts commit ccf11dbaa07b328fa469415c362d33459c140a37.
+>
+> Commit ccf11dbaa07b ("evm: Fix memleak in init_desc") said there is
+> memleak in init_desc. That may be incorrect, as we can see, tmp_tfm is
+> saved in one of the two global variables hmac_tfm or evm_tfm[hash_algo],
+> then if init_desc is called next time, there is no need to alloc tfm
+> again, so in the error path of kmalloc desc or crypto_shash_init(desc),
+> It is not a problem without freeing tmp_tfm.
+>
+> And also that commit did not reset the global variable to NULL after
+> freeing tmp_tfm and this makes *tfm a dangling pointer which may cause a
+> UAF issue.
+>
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>   security/integrity/evm/evm_crypto.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> index a733aff02006..708de9656bbd 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -75,7 +75,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+>   {
+>   	long rc;
+>   	const char *algo;
+> -	struct crypto_shash **tfm, *tmp_tfm = NULL;
+> +	struct crypto_shash **tfm, *tmp_tfm;
+>   	struct shash_desc *desc;
+>   
+>   	if (type == EVM_XATTR_HMAC) {
+> @@ -120,16 +120,13 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+>   alloc:
+>   	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+>   			GFP_KERNEL);
+> -	if (!desc) {
+> -		crypto_free_shash(tmp_tfm);
+> +	if (!desc)
+>   		return ERR_PTR(-ENOMEM);
+> -	}
+>   
+>   	desc->tfm = *tfm;
+>   
+>   	rc = crypto_shash_init(desc);
+>   	if (rc) {
+> -		crypto_free_shash(tmp_tfm);
+>   		kfree(desc);
+>   		return ERR_PTR(rc);
+>   	}

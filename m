@@ -2,173 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47B3545C60
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 08:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3977545C67
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 08:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244539AbiFJGha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 02:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
+        id S1346317AbiFJGjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 02:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243967AbiFJGh0 (ORCPT
+        with ESMTP id S242949AbiFJGjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 02:37:26 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F711A815
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 23:37:22 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r187-20020a1c44c4000000b0039c76434147so644447wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 23:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Qxlw/2GeYPhBz4i8FzCqobc8aHph2WQJ2uzH+wlAQPM=;
-        b=YvKD/lnZFHPf9Bklm5hR2t0kTgFB1/rXSkgOKvxFTago0OfV/XXVBnr65QfdQ0sIbE
-         X56d5w92lO93EaOJsDJ8oCNGyjZkcJXPRSg9xTkOKhWDw62K7tpcO84Az2vOBRZU/r3+
-         YIHnLV0yk1ox4ibJDxo/xtHUE91KPK5nhGt24yQglgyRLlAN46Y1Z1t0+GvzN7M+MEou
-         tOdQLaDCWTLurM3ng8g7elKpPBlMcfWMNnTz6GEuMIGKZgA7WgUpL2gOP6VsKo5/EHPb
-         626ZTuTKw9tktPSgibPC7QlWbKT0XcsOV4TdzYgmUmuC1ODYErjWurNuno/msyBC5MwG
-         9u4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Qxlw/2GeYPhBz4i8FzCqobc8aHph2WQJ2uzH+wlAQPM=;
-        b=0+KDH6+zbTQop/UGw7Rz3ykGI0bgguMIQGKaDRTUbpokQ6qV+bkRK6e9LSqo6q8KTI
-         Sg/LHGXKePqBEEQH/iD9wa7chCLrrQre7X6qbscQvFya7UFl6bpmy4NcfnN9bEoX5SJ4
-         suSASXM4qamTXFNc+T88w1XL7ev40K1IM0xoeZqMBn6iHfv/G9f+W0SSMo3hBu2vgd8M
-         NIeAQBM6nMyRPqB/x2n9xy9MGFCw7Ij+LWGJbvk3yhMrOGo1MrJkj3jNCMXZfqlMplmO
-         SEIm49/4zBxSu31NngtNUDR8PeZoeq1/TiQ/OHavOoWGcQWgGiupZhN2+R72HR7BzLWp
-         mJbA==
-X-Gm-Message-State: AOAM531aSXJ67a7FOXqZty0a23TufZimi140c7hwKpRsD3Hz3AxTAv0X
-        v9lnsdnfSBvGIPb5X5d61Nh1+A==
-X-Google-Smtp-Source: ABdhPJw4Hge4NDaRn0TL71ijVSQhRo1MhCaO3HbTb1tYRGHCORKkku8fnKoEAx9FGxDoG3CaWVnJNw==
-X-Received: by 2002:a1c:4e03:0:b0:39c:5bbc:e0d2 with SMTP id g3-20020a1c4e03000000b0039c5bbce0d2mr7034980wmh.184.1654843041123;
-        Thu, 09 Jun 2022 23:37:21 -0700 (PDT)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:27b0:82d9:d0c6:702a])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05600c228200b0039482d95ab7sm1729030wmf.24.2022.06.09.23.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 23:37:20 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, arm@kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-tegra@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-omap@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-gpio@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Nishanth Menon <nm@ti.com>,
-        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        Andrew Jeffery <andrew@aj.id.au>, linux-input@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Rosin <peda@axentia.se>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andy Gross <agross@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-sunxi@lists.linux.dev,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Li Yang <leoyang.li@nxp.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        linux-rockchip@lists.infradead.org
-Subject: Re: (subset) [PATCH v2 00/48] dt-bindings: input: gpio-keys: rework matching children
-Date:   Fri, 10 Jun 2022 08:37:18 +0200
-Message-Id: <165484301356.1384204.15957178175784526690.b4-ty@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
-References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
+        Fri, 10 Jun 2022 02:39:44 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BB74B413
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 23:39:40 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LKB973Zxmz1K97w;
+        Fri, 10 Jun 2022 14:37:47 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 14:39:38 +0800
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
+        <john.garry@huawei.com>, <shenyang39@huawei.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: Re: [PATCH v4 2/2] sched/fair: Scan cluster before scanning LLC in
+ wake-up path
+To:     Tim Chen <tim.c.chen@linux.intel.com>,
+        Yicong Yang <yangyicong@hisilicon.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <gautham.shenoy@amd.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220609120622.47724-1-yangyicong@hisilicon.com>
+ <20220609120622.47724-3-yangyicong@hisilicon.com>
+ <c3fa2b4f5884e5ad4efda48b1bb2ab4f7a2e532a.camel@linux.intel.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <4ab2c422-04ae-3199-ae2a-357c3270cd05@huawei.com>
+Date:   Fri, 10 Jun 2022 14:39:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
+In-Reply-To: <c3fa2b4f5884e5ad4efda48b1bb2ab4f7a2e532a.camel@linux.intel.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, 9 Jun 2022 13:37:21 +0200, Krzysztof Kozlowski wrote:
-> Merging
-> =======
-> 1. dt-bindings: rebased on top of Rob's:
->    https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/
+On 2022/6/10 6:47, Tim Chen wrote:
+> On Thu, 2022-06-09 at 20:06 +0800, Yicong Yang wrote:
+>> From: Barry Song <song.bao.hua@hisilicon.com>
+>>
+>> For platforms having clusters like Kunpeng920, CPUs within the same cluster
+>> have lower latency when synchronizing and accessing shared resources like
+>> cache. Thus, this patch tries to find an idle cpu within the cluster of the
+>> target CPU before scanning the whole LLC to gain lower latency.
+>>
+>> Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this patch
+>> doesn't consider SMT for this moment.
+>>
+>> Testing has been done on Kunpeng920 by pinning tasks to one numa and two
+>> numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
+>>
+>> With this patch, We noticed enhancement on tbench within one numa or cross
+>> two numa.
+>>
+>> On numa 0:
+>>                             5.19-rc1                patched
+>> Hmean     1        350.27 (   0.00%)      406.88 *  16.16%*
+>> Hmean     2        702.01 (   0.00%)      808.22 *  15.13%*
+>> Hmean     4       1405.14 (   0.00%)     1614.34 *  14.89%*
+>> Hmean     8       2830.53 (   0.00%)     3169.02 *  11.96%*
+>> Hmean     16      5597.95 (   0.00%)     6224.20 *  11.19%*
+>> Hmean     32     10537.38 (   0.00%)    10524.97 *  -0.12%*
+>> Hmean     64      8366.04 (   0.00%)     8437.41 *   0.85%*
+>> Hmean     128     7060.87 (   0.00%)     7150.25 *   1.27%*
+>>
+>> On numa 0-1:
+>>                             5.19-rc1                patched
+>> Hmean     1        346.11 (   0.00%)      408.47 *  18.02%*
+>> Hmean     2        693.34 (   0.00%)      805.78 *  16.22%*
+>> Hmean     4       1384.96 (   0.00%)     1602.49 *  15.71%*
+>> Hmean     8       2699.45 (   0.00%)     3069.98 *  13.73%*
+>> Hmean     16      5327.11 (   0.00%)     5688.19 *   6.78%*
+>> Hmean     32     10019.10 (   0.00%)    11862.56 *  18.40%*
+>> Hmean     64     13850.57 (   0.00%)    17748.54 *  28.14%*
+>> Hmean     128    12498.25 (   0.00%)    15541.59 *  24.35%*
+>> Hmean     256    11195.77 (   0.00%)    13854.06 *  23.74%*
 > 
-> 2. DTS patches are independent. They can be picked up directly by sub-arch
->    maintainers, by Arnd or Olof, or eventually by me (if you wish).
+> Yicong,
 > 
-> [...]
+> Have you tried any workload where tasks don't share data
+> with each other but have sleep/wakeup?  That's the case
+> where we actually want to spread the tasks out among the clusters
+> to void contention for L2 cache.
+> 
+> Will be nice to make sure there's no regression there for
+> such workload.
+> 
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.20/arm64-dt)
+Any certain workload you'd like me test? I'm willing to do :)
 
-[07/48] arm64: dts: amlogic: correct gpio-keys properties
-        https://git.kernel.org/amlogic/c/4956be9944d1fb23107f27bad8a2cca0fa167443
-[08/48] arm64: dts: amlogic: align gpio-key node names with dtschema
-        https://git.kernel.org/amlogic/c/4fd9afd894ebe5831dbd737e6ca7b6de14da7fda
+I've tested this patch with MySQL as well (like in v2). This won't hurt
+the MySQL case with SIS_PROP but observed some improvement with SIS_UTIL
+posted in [1]. We leverage the nr to suppress redundant scanning in the
+current approach and seems SIS_UTIL is more efficient in this case.
 
-These changes has been applied on the intermediate git tree [1].
+			 5.19-rc1		   patched	 patched+SIS_UTIL[1]
+TPS-16threads		  6215.11	  6172.74 (-0.68%)	  6217.33 (0.04%)
+QPS-16threads		124302.21	123454.68 (-0.68%)	124346.52 (0.04%)
+avg-lat-16threads	     2.57	     2.59 (-0.65%)	     2.57 (0.00%)
+TPS-24threads		  8726.40	  8690.87 (-0.41%)	  8833.08 (1.22%)
+QPS-24threads		174527.88	173817.42 (-0.41%)	176661.54 (1.21%)
+avg-lat-24threads	     2.75	     2.76 (-0.36%)	     2.71 (1.33%)
+TPS-32threads		  9555.42	  9514.86 (-0.42%)	 10010.87 (4.77%)
+QPS-32threads		191108.37	190297.28 (-0.42%)	200217.35 (4.55%)
+avg-lat-32threads	     3.35	     3.36 (-0.30%)	     3.20 (4.58%)
+TPS-64threads		 10290.10	 10324.75 (0.34%)	 10819.77 (5.15%)
+QPS-64threads		205802.05	206494.95 (0.34%)	216395.40 (4.90%)
+avg-lat-64threads	     6.22	     6.20 (0.38%)	     5.92 (4.88%)
 
-The v5.20/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
 
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
+> Code itself looks good.
+> 
+> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+> 
 
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
+Thanks.
 
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
+[1] https://lore.kernel.org/lkml/20220428182442.659294-1-yu.c.chen@intel.com/
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
+>>
+>> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+>> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> ---
+>>  kernel/sched/fair.c | 44 +++++++++++++++++++++++++++++++++++++++++---
+>>  1 file changed, 41 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 77b2048a9326..6d173e196ad3 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -6327,6 +6327,40 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
+>>  
+>>  #endif /* CONFIG_SCHED_SMT */
+>>  
+>> +#ifdef CONFIG_SCHED_CLUSTER
+>> +/*
+>> + * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
+>> + */
+>> +static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
+>> +			       int target, int *nr)
+>> +{
+>> +	struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
+>> +	int cpu, idle_cpu;
+>> +
+>> +	/* TODO: Support SMT system with cluster topology */
+>> +	if (!sched_smt_active() && sd) {
+>> +		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
+>> +			if (!--*nr)
+>> +				break;
+>> +
+>> +			idle_cpu = __select_idle_cpu(cpu, p);
+>> +			if ((unsigned int)idle_cpu < nr_cpumask_bits)
+>> +				return idle_cpu;
+>> +		}
+>> +
+>> +		cpumask_andnot(cpus, cpus, sched_domain_span(sd));
+>> +	}
+>> +
+>> +	return -1;
+>> +}
+>> +#else
+>> +static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
+>> +			       int target, int *nr)
+>> +{
+>> +	return -1;
+>> +}
+>> +#endif
+>> +
+>>  /*
+>>   * Scan the LLC domain for idle CPUs; this is dynamically regulated by
+>>   * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
+>> @@ -6375,6 +6409,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>  		time = cpu_clock(this);
+>>  	}
+>>  
+>> +	idle_cpu = scan_cluster(p, cpus, target, &nr);
+>> +	if ((unsigned int)idle_cpu < nr_cpumask_bits)
+>> +		return idle_cpu;
+>> +
+>>  	for_each_cpu_wrap(cpu, cpus, target + 1) {
+>>  		if (has_idle_core) {
+>>  			i = select_idle_core(p, cpu, cpus, &idle_cpu);
+>> @@ -6382,7 +6420,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>  				return i;
+>>  
+>>  		} else {
+>> -			if (!--nr)
+>> +			if (--nr <= 0)
+>>  				return -1;
+>>  			idle_cpu = __select_idle_cpu(cpu, p);
+>>  			if ((unsigned int)idle_cpu < nr_cpumask_bits)
+>> @@ -6481,7 +6519,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>>  	/*
+>>  	 * If the previous CPU is cache affine and idle, don't be stupid:
+>>  	 */
+>> -	if (prev != target && cpus_share_cache(prev, target) &&
+>> +	if (prev != target && cpus_share_resources(prev, target) &&
+>>  	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
+>>  	    asym_fits_capacity(task_util, prev))
+>>  		return prev;
+>> @@ -6507,7 +6545,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>>  	p->recent_used_cpu = prev;
+>>  	if (recent_used_cpu != prev &&
+>>  	    recent_used_cpu != target &&
+>> -	    cpus_share_cache(recent_used_cpu, target) &&
+>> +	    cpus_share_resources(recent_used_cpu, target) &&
+>>  	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
+>>  	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
+>>  	    asym_fits_capacity(task_util, recent_used_cpu)) {
+> 
+> 
+> .
+> 

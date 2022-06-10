@@ -2,200 +2,420 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58040546A30
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10331546A36
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346328AbiFJQQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S1346405AbiFJQRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239746AbiFJQQH (ORCPT
+        with ESMTP id S229866AbiFJQRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:16:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D82731DF3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654877766; x=1686413766;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=MoCnpa5Eog9R8DG45kC2D86zSBmqjVHJekzRRT9wvh8=;
-  b=Ad6qNE7OHYhnaa7pJAi+iZ4vPoEfmFXV7QX9AR0hxm9HWr+3afDw6WNL
-   SrBhU4fbvNJfUC4TQitb/lI8sUIJmOneBffx8Fh+L8jP8MdFjGeCJt+iu
-   Dc51u4uzSdwQ+SAWQ+L4VEsAiFy7H273E9r4W11d2cn+3qSams7D2tAMF
-   ufDO4kWWd6H+HUNvhIudq+keUp8s4w/wJ+w13REHBFvzHLUg+T7ria2rN
-   uG/l152L8kG2vde1vVxk6fqQbhi09Puiw0+u2CtkoamoGF++D7bieLXSP
-   uYVaqRxn3yScwNJvpdHy+FI4Hz0qEaqUwRTiT/nkeLgubia9xnmc/2hrQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="278470974"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="278470974"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 09:16:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="638199471"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2022 09:16:05 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 10 Jun 2022 09:16:04 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 10 Jun 2022 09:16:04 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 10 Jun 2022 09:16:04 -0700
+        Fri, 10 Jun 2022 12:17:42 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2044.outbound.protection.outlook.com [40.107.244.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B39F19006;
+        Fri, 10 Jun 2022 09:17:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LkQ7mafOIFcsxYNpAE1Y6sIvDbrtvt/o6G1Pzvq8QAgINOwc97KDCpIp/jeL7nWV54CNXg16JEquLEH4pXMN6SV5NYFmVVCleOfZCoX7HNDg0Qkf/mNMZhzq4Wz3EBm1SQdXbOC1Dd0Vlv6q6/dGCRSm9wN4KkuJ5ZPirUh2i7ZVPjx4g6RMjfSnkg4VZARE3WalUVIbRk/bR/1IqJi5jQBxCBX9fVgSMpusQCKx4yyyPgrAWYTYtFPHJhi7Hd14v/bPYhpze0usQzJIoW7iMBudv8xJREYixWVOOCmDyiEgRXKZI6+2qexYCopMDbIhqt9jnFVWA0ZtEzdUkxlnmw==
+ b=Tf87ffSpovYTr6cb9CBj3lrxXkvYYGWu6636ulITG8t+rhgdiXl1X59ig7c0J9bcxFmoR8zdg4q6hcBc9VGK0OHzydMjOWX/bG0/SkFm5BtmzizRi06z4vmauitCN9KGiyVxBP8b3QRnbvS7qlUGtKEGZGxCyPMitxCPzl7aov+rIrnnnfcE5rjwUU7eoV0V3GrONdhUdp0Bh+34vBuGJ4tqM7hGGlmGyiK8MLhJuwq/zHN7VjtbrXIOw+caziEWhjDm+p0LrX/EyB6zH21ashy7RsAPFQVCtcnGIV0vJDiC56MxgAPUVSydQgvXCO41bcMedO6wC8wkhoyMvjyRtA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MoCnpa5Eog9R8DG45kC2D86zSBmqjVHJekzRRT9wvh8=;
- b=LuXNrPpn6JiDwDSRnkhhp9JJ1944HsubNQ+JsFabGVVXod/Qu0AarmAlh5alhrG7euc3wSkRkw2ehuHkARIoh7oqy02figSdCKn7E+SPRkE8pPWkme8Ee/R1buNSYbq3IetXrbcx4DnOSWDFkCmt3TyXcCMSaiIIR5TBTqQnu1lu6WsoA4PKHMVsRHl7nEQ/Y8+kf0MvQHa2UwOJySDWu6rGeEbEKRhd4TKAhz1BeqVg8uGyrf65u77NGpG0FPBH9V3upu5Mqso9FQoEp5iqSnroMAD8Giue2eemkXC/NS9w7xDSVc5OM7fU7sjzY98v2npxtyoPKXMYp8dEwrJlSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MN0PR11MB6035.namprd11.prod.outlook.com (2603:10b6:208:376::13) with
+ bh=H/0AOYXkFleQgIYFNysS/DrOD7RWiMwsjYoI2xSul48=;
+ b=enRrXZCLMF68NkwnERqUPNtmxvpMB7vza30nPKq+uE1/czIjm4ECOc5E2s3ipVVzpv5Ms8+iZ1Evn2Q9eVLXZWVuOLlKFA1J7xj4X/UtGGto9AgeOp8nhL+b8atYV5PYpx5UqepKKvoORCvJoiUVqI7NuFR0kHCA483Xg2a6odefZuBkF7ivW6/GppSUuOza+6l7T9atscb7kkbcbyHEByofS/Xh1GNj86Z27sX5QvYJ4WVAqYjIVLnsNZ8qkxfGdUn0/gyipymh9zYoy1D4B7EHfU21YgGadeyCG10TNW3rox05RR4Mwk3nPX1rEqNtg6bo2WKoWAxQOWOGsx7z4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H/0AOYXkFleQgIYFNysS/DrOD7RWiMwsjYoI2xSul48=;
+ b=Wp22rGp15sWtjzksOugCII1I8GPLT18BAENpv9axfze8wujv/PIKQMNqlUtMYVRKs/kYX6Eg6/EQdGpMumgmDuoLFtvCrqjYFYB5Ol+bqV9vJbXwrrzayCOo/8ndnI5OjL2vqKxm+zIxgshE7UsVc6Q08k6IP4qsMPJqyB7oTKA=
+Received: from SN7P220CA0009.NAMP220.PROD.OUTLOOK.COM (2603:10b6:806:123::14)
+ by MWHPR02MB2542.namprd02.prod.outlook.com (2603:10b6:300:44::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Fri, 10 Jun
- 2022 16:16:01 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::6463:8e61:8405:30f4]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::6463:8e61:8405:30f4%11]) with mapi id 15.20.5314.019; Fri, 10 Jun
- 2022 16:16:01 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Thread-Topic: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Thread-Index: AQHYfNjBqEEvHjFqM0aC2BTrZ5Vx5a1I0Q0A
-Date:   Fri, 10 Jun 2022 16:16:01 +0000
-Message-ID: <c3b4f3ccf8ee547a588bf8a971064e4d62b6a44c.camel@intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
-         <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2b66c551-2b3b-4397-b5b4-08da4afc82c6
-x-ms-traffictypediagnostic: MN0PR11MB6035:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MN0PR11MB603568986D68E7E607D79326C9A69@MN0PR11MB6035.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2XEvwhzG9TpDxpUSb/bU3W2J+a5mJu4rYcDnm3YOQqach4IonMeaQiFLMxvw6WoehDm/U2UjiTzNnnLdKuDIOndHA7Anddx7gjFReCi430xhojIe8fMsUGVkyd3sjD3JLAFUOnMkhtmiwQOCYzCcK/tFaQCrXTnsXo1eyE7/Tdq8EMtJoB/0/DCbn3WC9aDAEC8nHILw3nlfVjFX/67hxCioonv41ikCJSU2IQI609Wg72Qr66xK/DTbI5vdFo79zCD++nL4pdtvI1kdXDvpkk8U3DQQzXoB7CLIonhiHpI3gYbRHICyjgGEhmISIeJ9gYWQSDmJGPr3bn1jK7h4VVCxAOeP0xguOVtDbwtw07xqqw+aW/5a3PzE735BOgX9BPyhcZLayhymrxZOCDqWHcnEQ007OsRdrh4/bKK/lHFAFfeOjgkxWc+swMC5hlNuAWLcQwPtiEszxmyEdpDxZF4xZxSEZplH2wBUsPWisEaTAvtWYfKQcvx31U4e3U/rFnWR8FZJQXdLo+cfX54f5nOvpcbtKNssXfDSZC4GNdboH/DL5HaEzhkf+8rDmIJb0RHrleFB9k1sFMtP6Y7IXNd1v5EHQqRN7+qkBoiGoqZ1zaoakXL23OhE/KLkrO9gNO2zYMdb0Rnm7ZgFXVVrrchYwAl0zgeSe6eY+sUEFGdTMt53KXXBe3WTFNqW6x6BE2D5l2V/zsJBqhh3zjCIQQnSh/ecY28JleN+4c52gZU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(122000001)(26005)(82960400001)(6506007)(8676002)(66946007)(66446008)(66556008)(5660300002)(4744005)(4326008)(66476007)(64756008)(7416002)(38100700002)(186003)(8936002)(36756003)(2616005)(76116006)(71200400001)(508600001)(2906002)(316002)(6486002)(83380400001)(6512007)(38070700005)(86362001)(54906003)(110136005)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MWI4WEFnUHlYVk5RekFFSVJ2V1Y5MUVjNm1vZ3Iwb3NvV0NDN21uMHhmRjdt?=
- =?utf-8?B?VXJISDRsK29lbFhXUVVWb2p5YllmUURlMzJsYjFqcDhmdm9MOHNQVzVRNTRt?=
- =?utf-8?B?KzBNNXZpYkJVWDdXR3R0OHNXOE15ek1mSVhqSGpCUUlHSFY0bnhRdVBVY1Ay?=
- =?utf-8?B?R1lhbW1raVlleVRSeUFWT2g3aXN6SGFERlFlUmRvWVNOd0wyTTJQbXo2V0NB?=
- =?utf-8?B?L2ZSa1RpdEh6aXBEUlFyNnVsS3hrdzhHcjBwS3ZzZmhKdlJPNUNSWnN1enFP?=
- =?utf-8?B?cEQ4SzZpcjJnK1Y5S3BqSUdwZHQ4VExnQk0yYlZrRWZIZHNjNTZKN04rd1Rx?=
- =?utf-8?B?OEVqbWQ5NDl6bWZNREIrdzFjRVUwREZrZG1XcGZVZFUzTlpEQ0hKa09TWGJk?=
- =?utf-8?B?KzJwM2hOMXpwRkFLVVNiREVtZDE4Wk44bkhKTFk1c3RxdlJFaG5iUGxuQ3d4?=
- =?utf-8?B?bU4vMElaL3JPU0JxUEpuejQrL0tuajFTOGQrWktPN2JycUxIUmNmRUs2Z0tS?=
- =?utf-8?B?K1ZpK2FENEVhMFhpenBMbTZObldvMlMzV01PNjVUNjU0V3R4d01QNjkvQ3VM?=
- =?utf-8?B?OE1ieWRTZDViQ0tVNkprNHdrYTZvUTMrS1J5UTc5cDREcGNKNW5ZWDdPNS8y?=
- =?utf-8?B?TDFqaVpiTzVLMFZITHFaYnRtajQ3T0VjMVdsUEw2QXVlNjZodjZnTENHMW1R?=
- =?utf-8?B?dnhsTjJsNTRhczEwQTdQaU9Ra3EwYzlIM2hST1RSbURzdWVmY2hNendRYi83?=
- =?utf-8?B?Z2kwMUNJVHplMjhRZnUwUVg2N2Z3SUhBZTR0SVMxUVpvNWV4dEkwWG9WZUFG?=
- =?utf-8?B?UEtacEt2bjl2N3hLMW9Dc0hqUmlnYVg1V0xEVEZHUHZweGcvWVdEZ2J6ZzdW?=
- =?utf-8?B?TjlhWmFGdllERldWaSsxNGFrUzhSMW5hZW5GSWZIL3gybmhwbmcwZ3JkNklJ?=
- =?utf-8?B?VE05cENZUlFXaUtMdVdqemhCamNyaURjeFpXaG5oNmU4SGpmREdUNmRjUVBh?=
- =?utf-8?B?dkNoV0RwZEF4YnlZcWhudTFTVGpUSkxzL3FiU0Zra0hNYzk3STRWUTdGUEln?=
- =?utf-8?B?T3JMdEJLWTBUbG5IQWJXMGhNWXRHSHJnN0NlaHpralBoWkt6RGZoeElYZ1Fi?=
- =?utf-8?B?bW0vLzE4eCtCcDNJb2pKNG5TUEtxTmYzdnpZNUprcTNYbTBGbHVMK3lPTGtK?=
- =?utf-8?B?U3pMbTZUZEo1cGpXQkR4WG5LemxIZEVPTTlDODVtZFNTNHhkcXNOY0F2aVRD?=
- =?utf-8?B?NXcwMUR6WXZPR0M1SDAzRXVmVWVQZDh3dytCL0hoWFMxTjNvcFNnaU5rd0sr?=
- =?utf-8?B?SzA3elNnMEE1T3o5cDNpSHYzbDBtTVZVTEEzT1ZSQXRBbmc5N2xWKzdtVit6?=
- =?utf-8?B?c0ppL2Z5QVU5WjcvVGpOMGpZeUxwTnN6Z2NDUmJlSUdQRzd5MGphWThmd1JW?=
- =?utf-8?B?ZUdCRHFCQnVUWWQ3UjF4U1ZrTmtLb3YwYXZVSHBWVWZHTURGOVdnZEcvSTN4?=
- =?utf-8?B?Z0FTYXBxWnd4K2Mvd2JCWkhjUDYwZTBuZHhWT0p0QVBKd05PdkluczR0MVBB?=
- =?utf-8?B?bldtNWZZTE9TZkl5YmZiUkFteC8wMENaYUFBSDIzQzlGUWI5dWcxMWdtWE8z?=
- =?utf-8?B?a3Z6cFNQNnZhc0xtYWc5NzA1V2VodnZncWxDTGhUa0JpT3ZaTWY5MlVxOXJz?=
- =?utf-8?B?azhOYUY5bnpSTmtMZDZOWmZXS1NnOU13M1BJK0FwcE9VUzhIRXp5cEovSVlW?=
- =?utf-8?B?aFJBRFpTSHVGaTJ3UDU5NmJpMjVDZkkrWjR4bG5xeFd3TldaVHF0SWltNEE4?=
- =?utf-8?B?L1BLa2Q1Vmo0RjdPdSt1UVFQb2REbmc2bmNBenhIb3ZzZEtsTVZEd0gyYWhO?=
- =?utf-8?B?Tis1Y0lHQytndjIzZVlWdVhGWE5ublU2bU5SS2c2MEVpTFZPeEVlOVhPNlhF?=
- =?utf-8?B?TDYxOWhTSmZIeXdHbjZQTmVGQk5QNG5Kdk5VY3FNM1JNQmJGQWFGUjdVdXIy?=
- =?utf-8?B?eHozOXRFVHNIU0J6VEc5UVM4UllnZVhBWTFnWEdWN2xoMzJseENrLzFtZUxX?=
- =?utf-8?B?WlJpQndEbkJpTjZyWVNKa1FXeXFMK20yZGRLN0ZCZ0tlNHQvLzZlMTA5VnFx?=
- =?utf-8?B?SDdGYmJmeitsTXB5c2YxTlhQVmNXQjRHQXJPZ1JCUjhPdWFZNFovV1k1elRK?=
- =?utf-8?B?UXkwZ0s0NEZtN1JFN2tFZmhvdW4ybVVDZXRuZXM1ZlJYSUMxOThBOGQ1WFZx?=
- =?utf-8?B?bldjK0FqeExGdTZHQW1uSWRIdVVEUyt4d1d1WXF6Nk9BaDBQODdEeVpCbW80?=
- =?utf-8?B?YkVFSHJQamppd3ptYXl4RE4zc3NTbzFFc1N2ZjNZYU1PUGtubEtENWtOMUJY?=
- =?utf-8?Q?YwPgwEqJQkpSnmPiJ6kfjAfZN3/Y0OryumwO5?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9566B821C66E1144B6DD65CFF4D8F77B@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 2022 16:17:37 +0000
+Received: from SN1NAM02FT0038.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:123:cafe::55) by SN7P220CA0009.outlook.office365.com
+ (2603:10b6:806:123::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13 via Frontend
+ Transport; Fri, 10 Jun 2022 16:17:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0038.mail.protection.outlook.com (10.97.5.7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Fri, 10 Jun 2022 16:17:37 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 10 Jun 2022 09:17:32 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 10 Jun 2022 09:17:32 -0700
+Envelope-to: robh@kernel.org,
+ peter@korsgaard.com,
+ bjorn.andersson@linaro.org,
+ mathieu.poirier@linaro.org,
+ krzk+dt@kernel.org,
+ linux-remoteproc@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ openamp-system-reference@lists.openampproject.org
+Received: from [10.23.123.85] (port=54243)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <tanmay.shah@xilinx.com>)
+        id 1nzhKG-000Dfg-BT; Fri, 10 Jun 2022 09:17:32 -0700
+Message-ID: <21ecaa2a-7675-86fe-3838-472c74bc5890@xilinx.com>
+Date:   Fri, 10 Jun 2022 09:17:31 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b66c551-2b3b-4397-b5b4-08da4afc82c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2022 16:16:01.1996
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
+ bindings
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Peter Korsgaard <peter@korsgaard.com>
+CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <krzk+dt@kernel.org>, <michal.simek@xilinx.com>,
+        <ben.levinsky@xilinx.com>, <linux-remoteproc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <openamp-system-reference@lists.openampproject.org>
+References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
+ <20220602203834.3675160-2-tanmay.shah@xilinx.com>
+ <87tu921ck6.fsf@dell.be.48ers.dk> <20220609174108.GB3996953-robh@kernel.org>
+From:   Tanmay Shah <tanmay.shah@xilinx.com>
+In-Reply-To: <20220609174108.GB3996953-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8bb77887-53cc-4cbe-b569-08da4afcbbf3
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2542:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR02MB2542B85C6DC9D9A61DA3FDEACAA69@MWHPR02MB2542.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XQhtld/BhhVdAlmloVNKQqzh9RRGN5ufs9dnp/X5eUtS4gnsPCx/keUgPllk1TRUKt3VaBIdy35fh6f6CMG5S8IyYeu7sCw/WaAwg61cJftta1mJwlmlXHSthjNiEOJTRWvfSiXJicxboPjjM2VyvXYcXlWaNb/OSW755DC89hOvDzFU1CVsftyVfas57wsePl/JWYuFYrjKJOAmIGSmYu1FeKyU1ZL1uV8l2wopNL+kvtE0fZkyV3z8LFP+1PdYaPzkoOyjD6vlwQ8HGJQazOHTrmxOfXyqvYBWRFW43WAWvU26+4bfaAwq+OA0b0e8AiJO4BqE6EzDJEc7LY60rpwFJMW7B72QRPAp35Y2tJa2bLAd5y0b6s5GJGCl9IJM9qgV+TQKFgJKUGyRoeoRX+B93KaHHTGgI8l0+6bl1fBGoafxqDB6jHYebQHu04h6++NLipHAZjEWf5AHMHfgTBa8YpF8sw5xqnAvwSS7dcB3w2N7ro+wR8k76SZ+WY9IP+K7I6BuQviQJFQ5fL5MWG4L7jgGw97/FYb8wLw/i63iUwP3fc6sqKazagjDzMyEgiL1E1rBAAzKJVU/LDWvDTZThtMHRC8KVm92bslwQU19ZPzkGT/nvf6Z8EKPgw7xvtWMAYBR/Gdqdqyu9T73Lg9FGvOBRovo+I4yIfCV/m31Kekf741ukV5pf8dG6rollhmktTNgzgNBE/rL4zpyT79zB692HIuTSXMl1EgErBs1+A3FegAn3u8znoFEEmcZ5MozN3CsZKIep1zV3dirx4snUpTy8fAmFtQ2rZ7a/yJOtj667in5ZLmBvf5pG/VRv+T4A0bAxDOJmmmosUniBXuoleBTSeUwaLbLk7PCen8=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(2616005)(966005)(356005)(5660300002)(186003)(9786002)(7416002)(36860700001)(31696002)(53546011)(83380400001)(8936002)(508600001)(4326008)(8676002)(70586007)(70206006)(82310400005)(40460700003)(26005)(44832011)(336012)(47076005)(36756003)(31686004)(110136005)(426003)(54906003)(7636003)(316002)(2906002)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 16:17:37.0934
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LoZdQ+jEMchpYnt1Ixx2fvWRhRMv88B4DuCrLmtwHEYDOr+1/GHtctFNllKxbf1vEGAWut3isQnH/V6axs2yPhKB5VPsIS55gL1fPOmHXck=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6035
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb77887-53cc-4cbe-b569-08da4afcbbf3
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0038.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2542
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA2LTEwIGF0IDE3OjM1ICswMzAwLCBLaXJpbGwgQS4gU2h1dGVtb3Ygd3Jv
-dGU6DQo+ICtzdGF0aWMgaW50IHByY3RsX2VuYWJsZV90YWdnZWRfYWRkcih1bnNpZ25lZCBsb25n
-IG5yX2JpdHMpDQo+ICt7DQo+ICsgICAgICAgc3RydWN0IG1tX3N0cnVjdCAqbW0gPSBjdXJyZW50
-LT5tbTsNCj4gKw0KPiArICAgICAgIC8qIEFscmVhZHkgZW5hYmxlZD8gKi8NCj4gKyAgICAgICBp
-ZiAobW0tPmNvbnRleHQubGFtX2NyM19tYXNrKQ0KPiArICAgICAgICAgICAgICAgcmV0dXJuIC1F
-QlVTWTsNCj4gKw0KPiArICAgICAgIC8qIExBTSBoYXMgdG8gYmUgZW5hYmxlZCBiZWZvcmUgc3Bh
-d25pbmcgdGhyZWFkcyAqLw0KPiArICAgICAgIGlmIChnZXRfbnJfdGhyZWFkcyhjdXJyZW50KSA+
-IDEpDQo+ICsgICAgICAgICAgICAgICByZXR1cm4gLUVCVVNZOw0KDQpEb2VzIHRoaXMgd29yayBm
-b3IgdmZvcmsoKT8gSSBndWVzcyB0aGUgaWRlYSBpcyB0aGF0IGxvY2tpbmcgaXMgbm90DQpuZWVk
-ZWQgYmVsb3cgYmVjYXVzZSB0aGVyZSBpcyBvbmx5IG9uZSB0aHJlYWQgd2l0aCB0aGUgTU0sIGJ1
-dCB3aXRoDQp2Zm9yaygpIGFub3RoZXIgdGFzayBjb3VsZCBvcGVyYXRlIG9uIHRoZSBNTSwgY2Fs
-bCBmb3JrKCksIGV0Yy4gSSdtIG5vdA0Kc3VyZS4uLg0KDQo+ICsNCj4gKyAgICAgICBpZiAoIW5y
-X2JpdHMpIHsNCj4gKyAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiArICAgICAgIH0g
-ZWxzZSBpZiAobnJfYml0cyA8PSA2KSB7DQo+ICsgICAgICAgICAgICAgICBtbS0+Y29udGV4dC5s
-YW1fY3IzX21hc2sgPSBYODZfQ1IzX0xBTV9VNTc7DQo+ICsgICAgICAgICAgICAgICBtbS0+Y29u
-dGV4dC51bnRhZ19tYXNrID0gIH5HRU5NQVNLKDYyLCA1Nyk7DQo+ICsgICAgICAgfSBlbHNlIHsN
-Cj4gKyAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiArICAgICAgIH0NCj4gKw0KPiAr
-ICAgICAgIC8qIFVwZGF0ZSBDUjMgdG8gZ2V0IExBTSBhY3RpdmUgKi8NCj4gKyAgICAgICBzd2l0
-Y2hfbW0oY3VycmVudC0+bW0sIGN1cnJlbnQtPm1tLCBjdXJyZW50KTsNCj4gKyAgICAgICByZXR1
-cm4gMDsNCj4gK30NCg==
+HI Rob,
+
+Thanks for reviews. Please find my comments below.
+
+
+On 6/9/22 10:41 AM, Rob Herring wrote:
+> On Fri, Jun 03, 2022 at 08:33:13AM +0200, Peter Korsgaard wrote:
+>>>>>>> "Tanmay" == Tanmay Shah <tanmay.shah@xilinx.com> writes:
+>> Hi,
+>>
+>>   > Xilinx ZynqMP platform has dual-core ARM Cortex R5 Realtime Processing
+>>   > Unit(RPU) subsystem. This patch adds dt-bindings for RPU subsystem
+>>   > (cluster).
+>>
+>>   > Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+>>   > ---
+>>
+>>   > Changes in v8:
+>>   >   - Add 'items:' for sram property
+>>
+>>   > Changes in v7:
+>>   >   - Add minItems in sram property
+>>
+>>   > Changes in v6:
+>>   >   - Add maxItems to sram and memory-region property
+>>
+>>   > Changes in v5:
+>>   > - Add constraints of the possible values of xlnx,cluster-mode property
+>>   > - fix description of power-domains property for r5 core
+>>   > - Remove reg, address-cells and size-cells properties as it is not required
+>>   > - Fix description of mboxes property
+>>   > - Add description of each memory-region and remove old .txt binding link
+>>   >   reference in the description
+>>
+>>   > Changes in v4:
+>>   >   - Add memory-region, mboxes and mbox-names properties in example
+>>
+>>   > Changes in v3:
+>>   >   - None
+>>
+>>   >  .../bindings/remoteproc/xlnx,r5f-rproc.yaml   | 130 ++++++++++++++++++
+>>   >  include/dt-bindings/power/xlnx-zynqmp-power.h |   6 +
+>>   >  2 files changed, 138 insertions(+)
+>>   >  create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+>>
+>>   > diff --git a/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+>>   > new file mode 100644
+>>   > index 000000000000..adfe05ff157a
+>>   > --- /dev/null
+>>   > +++ b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+>>   > @@ -0,0 +1,132 @@
+>>   > +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>>   > +%YAML 1.2
+>>   > +---
+>>   > +$id: http://devicetree.org/schemas/remoteproc/xlnx,r5f-rproc.yaml#
+>>   > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>   > +
+>>   > +title: Xilinx R5F processor subsystem
+>>   > +
+>>   > +maintainers:
+>>   > +  - Ben Levinsky <ben.levinsky@xilinx.com>
+>>   > +  - Tanmay Shah <tanmay.shah@xilinx.com>
+>>   > +
+>>   > +description: |
+>>   > +  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
+>>   > +  real-time processing based on the Cortex-R5F processor core from ARM.
+>>   > +  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
+>>   > +  floating-point unit that implements the Arm VFPv3 instruction set.
+>>   > +
+>>   > +properties:
+>>   > +  compatible:
+>>   > +    const: xlnx,zynqmp-r5fss
+>>   > +
+>>   > +  xlnx,cluster-mode:
+>>   > +    $ref: /schemas/types.yaml#/definitions/uint32
+>>   > +    enum: [0, 1, 2]
+>>
+>> A textual mode ("dual", "lock-step", "single") would be more readable.
+>>
+>>
+>>   > +    description: |
+>>   > +      The RPU MPCore can operate in split mode(Dual-processor performance), Safety
+>>
+>> space missing before "(Dual-processor"
+>>
+>>
+>>   > +      lock-step mode(Both RPU cores execute the same code in lock-step,
+>>   > +      clock-for-clock) or Single CPU mode (RPU core 0 can be held in reset while
+>>
+>> "can be" sounds a bit weak, perhaps "is"
+>>
+>>
+>>   > +      core 1 runs normally). The processor does not support dynamic configuration.
+>>   > +      Switching between modes is only permitted immediately after a processor reset.
+>>   > +      If set to  1 then lockstep mode and if 0 then split mode.
+>>   > +      If set to  2 then single CPU mode. When not defined, default will be lockstep mode.
+>>
+>> This looks a bit confusing. If you decide to stick to the numerical
+>> modes, then at least list them in numerical order, E.G.:
+>>
+>>   0: split
+>>   1: lockstep
+>>   2: single
+
+I think the description is fine. for readability I can just add 
+numerical order as above.
+
+
+> The bigger issue has been multiple Cortex-R5 bindings all doing their
+> own thing for this feature which is not vendor specific (except TI has
+> their own extra mode or something). How TCMs are described is the
+> other issue. I've just stopped caring because no one listens.
+Values used for cluster-mode property for xlnx platform is same as ti's 
+cluster mode property.
+
+0: split, 1: lockstep and 2: single-cpu mode. It is matching with 
+ti,k3-r5 bindings.
+
+However, default value for some of the ti platforms are different.
+
+xlnx platforms have single-cpu mode as well.
+
+It will take some time to design system-dt spec for TCM.
+
+So, for now I use hard-code values of TCM from driver.
+
+TCM bindings for linux will be posted once system-dt spec is accepted.
+
+Meanwhile we would like to upstream rest of the bindings and driver.
+
+
+>
+>>> +
+>>   > +patternProperties:
+>>   > +  "^r5f-[a-f0-9]+$":
+>>   > +    type: object
+>>   > +    description: |
+>>   > +      The RPU is located in the Low Power Domain of the Processor Subsystem.
+>>   > +      Each processor includes separate L1 instruction and data caches and
+>>   > +      tightly coupled memories (TCM). System memory is cacheable, but the TCM
+>>   > +      memory space is non-cacheable.
+>>   > +
+>>   > +      Each RPU contains one 64KB memory and two 32KB memories that
+>>   > +      are accessed via the TCM A and B port interfaces, for a total of 128KB
+>>   > +      per processor. In lock-step mode, the processor has access to 256KB of
+>>   > +      TCM memory.
+>>   > +
+>>   > +    properties:
+>>   > +      compatible:
+>>   > +        const: xlnx,zynqmp-r5f
+>>   > +
+>>   > +      power-domains:
+>>   > +        description: RPU core PM domain specifier
+>>   > +        maxItems: 1
+>>
+>> A bit more detail would be good, E.G. something like arm/cpus.yaml does:
+>>
+>>        List of phandles and PM domain specifiers, as defined by bindings of the
+>>        PM domain provider (see also ../power_domain.txt).
+>>
+>> And the phandle-array ref.
+> Both suggestions are wrong. We don't need common properties re-described
+> by every user. They already have a type definition too, so we don't need
+> to repeat phandle-array ref either.
+>
+> The existing description is not needed either as it doesn't provide any
+> information specific to this binding. You only need to describe each
+> entry when there is more than 1 entry because we need to know what each
+> entry is and the order.
+
+I will remove current description as well.
+
+Thanks.
+
+>
+>>> +
+>>   > +      mboxes:
+>>   > +        minItems: 1
+>>   > +        items:
+>>   > +          - description: mailbox channel to send data to RPU
+>>   > +          - description: mailbox channel to receive data from RPU
+>>   > +
+>>   > +      mbox-names:
+>>   > +        minItems: 1
+>>   > +        items:
+>>   > +          - const: tx
+>>   > +          - const: rx
+>>
+>> And here as well for mailbox/mailbox.txt
+> Nope!
+>
+>>
+>>   > +
+>>   > +      sram:
+>>   > +        $ref: /schemas/types.yaml#/definitions/phandle-array
+>>   > +        minItems: 1
+>>   > +        maxItems: 8
+>>   > +        items:
+>>   > +          maxItems: 1
+>>   > +        description: |
+>>   > +          phandles to one or more reserved on-chip SRAM regions. Other than TCM,
+>>   > +          the RPU can execute instructions and access data from, the OCM memory,
+>>   > +          the main DDR memory, and other system memories.
+>>
+>> Drop the comma after "from"
+>>
+>>
+>>   > +
+>>   > +          The regions should be defined as child nodes of the respective SRAM
+>>   > +          node, and should be defined as per the generic bindings in,
+>>
+>> Drop the comma after "in"
+>>
+>>
+>>   > +          Documentation/devicetree/bindings/sram/sram.yaml
+>>   > +
+>>   > +      memory-region:
+>>   > +        description: |
+>>   > +          List of phandles to the reserved memory regions associated with the
+>>   > +          remoteproc device. This is variable and describes the memories shared with
+>>   > +          the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
+>>   > +          vrings, ...). This reserved memory region will be allocated on DDR memory.
+>>
+>> s/on DDR/in DDR/
+>>
+>>   > +        minItems: 1
+>>   > +        maxItems: 8
+>>   > +        items:
+>>   > +          - description: region used for RPU firmware image section
+>>   > +          - description: vdev buffer
+>>   > +          - description: vring0
+>>   > +          - description: vring1
+>>   > +        additionalItems: true
+>>   > +
+>>   > +    required:
+>>   > +      - compatible
+>>   > +      - power-domains
+>>   > +
+>>   > +    unevaluatedProperties: false
+>>   > +
+>>   > +required:
+>>   > +  - compatible
+>>   > +
+>>   > +additionalProperties: false
+>>   > +
+>>   > +examples:
+>>   > +  - |
+>>   > +    r5fss: r5fss {
+>>   > +        compatible = "xlnx,zynqmp-r5fss";
+>>   > +        xlnx,cluster-mode = <1>;
+>>   > +
+>>   > +        r5f-0 {
+>>   > +            compatible = "xlnx,zynqmp-r5f";
+>>   > +            power-domains = <&zynqmp_firmware 0x7>;
+>>   > +            memory-region = <&rproc_0_fw_image>, <&rpu0vdev0buffer>, <&rpu0vdev0vring0>, <&rpu0vdev0vring1>;
+>>   > +            mboxes = <&ipi_mailbox_rpu0 0>, <&ipi_mailbox_rpu0 1>;
+>>   > +            mbox-names = "tx", "rx";
+>>   > +        };
+>>   > +
+>>   > +        r5f-1 {
+>>   > +            compatible = "xlnx,zynqmp-r5f";
+>>   > +            power-domains = <&zynqmp_firmware 0x8>;
+>>   > +            memory-region = <&rproc_1_fw_image>, <&rpu1vdev0buffer>, <&rpu1vdev0vring0>, <&rpu1vdev0vring1>;
+>>   > +            mboxes = <&ipi_mailbox_rpu1 0>, <&ipi_mailbox_rpu1 1>;
+>>   > +            mbox-names = "tx", "rx";
+>>   > +        };
+>>   > +    };
+>>   > +...
+>>   > diff --git a/include/dt-bindings/power/xlnx-zynqmp-power.h b/include/dt-bindings/power/xlnx-zynqmp-power.h
+>>   > index 0d9a412fd5e0..618024cbb20d 100644
+>>   > --- a/include/dt-bindings/power/xlnx-zynqmp-power.h
+>>   > +++ b/include/dt-bindings/power/xlnx-zynqmp-power.h
+>>   > @@ -6,6 +6,12 @@
+>>   >  #ifndef _DT_BINDINGS_ZYNQMP_POWER_H
+>>   >  #define _DT_BINDINGS_ZYNQMP_POWER_H
+>>   
+>>   > +#define		PD_RPU_0	7
+>>   > +#define		PD_RPU_1	8
+>>   > +#define		PD_R5_0_ATCM	15
+>>   > +#define		PD_R5_0_BTCM	16
+>>   > +#define		PD_R5_1_ATCM	17
+>>   > +#define		PD_R5_1_BTCM	18
+>>   >  #define		PD_USB_0	22
+>>   >  #define		PD_USB_1	23
+>>   >  #define		PD_TTC_0	24
+>>   > --
+>>
+>>   > 2.25.1
+>>
+>>
+>> -- 
+>> Bye, Peter Korsgaard
+>>

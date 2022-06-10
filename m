@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605CB545BF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20384545BF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346337AbiFJF5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S235925AbiFJF7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbiFJF5A (ORCPT
+        with ESMTP id S239380AbiFJF67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:57:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65883968E;
-        Thu,  9 Jun 2022 22:56:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53A9C61E74;
-        Fri, 10 Jun 2022 05:56:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628A2C34114;
-        Fri, 10 Jun 2022 05:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654840618;
-        bh=tqa2qEghji7NeZCEwmQNGRGe3Peh47Szj8Wj0xWJipk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SA4yX79lC4gBdjrAJmZHSkoJIB6XmnYR9Dkv3xys+wkMOaqA3IcKBiN31i1Va8/QI
-         TNQJLAbLyJJl53jh8SU+ScDaJU8XZqikRq+2eVt2AvnvCUjIDhiNurQyZozib7oQo2
-         aGgfy0gdQb6tH/qGTzcXkz/MCMUS8woh/6U2uWvldKMGyL8jgIQCHYDGLhujXaLaTn
-         mUygU67M7OMfK9y2Eq+1csaf4HYwJrp+/EVuW9mnXATtPaHPAhnahTNVUFvob+/UbK
-         edv+auyUSAYYA7V6tXXK6gpBWq/chCkbGb62jDfPuVvAuHfmilS+PGxOnixl/Dv9hO
-         NBkn8KJOHsWOw==
-Date:   Thu, 9 Jun 2022 22:56:57 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, leonro@nvidia.com,
-        borisp@nvidia.com, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: adjust MELLANOX ETHERNET INNOVA DRIVERS to
- TLS support removal
-Message-ID: <20220609225657.299278f7@kernel.org>
-In-Reply-To: <165483841435.4442.11942577289291510346.git-patchwork-notify@kernel.org>
-References: <20220601045738.19608-1-lukas.bulwahn@gmail.com>
-        <165483841435.4442.11942577289291510346.git-patchwork-notify@kernel.org>
+        Fri, 10 Jun 2022 01:58:59 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9164C2A969;
+        Thu,  9 Jun 2022 22:58:58 -0700 (PDT)
+X-UUID: 638fde6925f34af99e37ca71494fad01-20220610
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:6c41e09b-5126-4fea-97ce-0bc7c472f62c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:8213e67e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 638fde6925f34af99e37ca71494fad01-20220610
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <james.lo@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1314194369; Fri, 10 Jun 2022 13:58:53 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 10 Jun 2022 13:58:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 10 Jun 2022 13:58:44 +0800
+Message-ID: <34c4b4ba35054baa0f969936a4ca7252c5bd7629.camel@mediatek.com>
+Subject: Re: [v10 1/1] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+From:   James Lo <james.lo@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-pm@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Louis Yu <louis.yu@mediatek.com>,
+        Michael Kao <michael.kao@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Ben Tseng <ben.tseng@mediatek.com>
+Date:   Fri, 10 Jun 2022 13:58:44 +0800
+In-Reply-To: <aed584c0-f097-fdef-8078-a7c457d1cb1a@collabora.com>
+References: <20220519101044.16765-1-james.lo@mediatek.com>
+         <aed584c0-f097-fdef-8078-a7c457d1cb1a@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,30 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Jun 2022 05:20:14 +0000 patchwork-bot+netdevbpf@kernel.org
-wrote:
-> Hello:
-> 
-> This patch was applied to netdev/net.git (master)
-> by Saeed Mahameed <saeedm@nvidia.com>:
-> 
-> On Wed,  1 Jun 2022 06:57:38 +0200 you wrote:
-> > Commit 40379a0084c2 ("net/mlx5_fpga: Drop INNOVA TLS support") removes all
-> > files in the directory drivers/net/ethernet/mellanox/mlx5/core/accel/, but
-> > misses to adjust its reference in MAINTAINERS.
+On Thu, 2022-05-19 at 13:12 +0200, AngeloGioacchino Del Regno wrote:
+> Il 19/05/22 12:10, James Lo ha scritto:
+> > Provide thermal zone to read thermal sensor
+> > in the SoC. We can read all the thermal sensors
+> > value in the SoC by the node /sys/class/thermal/
 > > 
-> > Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> > broken reference.
+> > In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+> > on the first read of sensor that often are bogus values.
+> > This can avoid following warning on boot:
 > > 
-> > [...]  
+> >    thermal thermal_zone6: failed to read out thermal zone (-13)
+> > 
+> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> > Signed-off-by: James Lo <james.lo@mediatek.com>
 > 
-> Here is the summary with links:
->   - MAINTAINERS: adjust MELLANOX ETHERNET INNOVA DRIVERS to TLS support removal
->     https://git.kernel.org/netdev/net/c/ed872f92fd09
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> 
 
-What luck. I was trying to see if pw-bot will respond to the PR rather
-than the series if I mark the series as accepted first but apparently
-it found this random posting and replied to it instead :S
+Hello Rafael, Daniel and Matthias,
 
-That's a roundabout way of saying that I pulled "mlx5 fixes 2022-06-08",
-thanks!
+Can you give us some suggestions for this patch?
+Thanks!
+
+BRs,
+James
+

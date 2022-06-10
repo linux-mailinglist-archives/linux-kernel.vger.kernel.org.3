@@ -2,167 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569A9545BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7399D545BE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346320AbiFJFv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S1346322AbiFJFwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233755AbiFJFv0 (ORCPT
+        with ESMTP id S242654AbiFJFwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:51:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4969E12B028
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:51:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 10 Jun 2022 01:52:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C786F0;
+        Thu,  9 Jun 2022 22:52:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EE1CC220BF;
-        Fri, 10 Jun 2022 05:51:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1654840282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i1CE2gqZBO3aHwj3VKwM4ZfmOqqHUeaIHIP+GD1WsrY=;
-        b=FUUKGiWMV5dEvnqpKkNHQrBHmnQWISLLqTPhw0GAgfxoyW/5Dezd4JpfrOWdjzY7v+rra0
-        daj5KvJPsZUauo20vduZQEPVGDvl5FL8sQy0sOD1zuHLVJX0PbAO7xYRHP3fHc7U1ULUuS
-        B5Epp+Mbq3VG6cYeVah/vv3ck7qJVOU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1654840282;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i1CE2gqZBO3aHwj3VKwM4ZfmOqqHUeaIHIP+GD1WsrY=;
-        b=tQIxqyGYv5jOA7PSNs60+oy6IpiqbYl03Wcpf5OfVyuyyUEaZlLZ2LVL5/8+lclCXrNDPp
-        HTPNzd1JmxeG19Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB206132F1;
-        Fri, 10 Jun 2022 05:51:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id B+SeLNrbomKvEwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 10 Jun 2022 05:51:22 +0000
-Message-ID: <97ef8e74-5d5d-2f6d-1be0-e566099e2853@suse.de>
-Date:   Fri, 10 Jun 2022 07:51:22 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id B983EB830A8;
+        Fri, 10 Jun 2022 05:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97ABC3411B;
+        Fri, 10 Jun 2022 05:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654840357;
+        bh=9zkxBIOVn1jqpEIn3oRNOtYHxAz8CrVcwvYLEOX+hUQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hdh7bWVg2Kn+IOmG8VDaHsYzXzO5C8DP99mi7sI/gyXTsydvAp7Rp1ScECqRxQFMR
+         3jv4cwtrL13VLFj8F9i4WpZCMcqsE4jC/1lIMMQAi1Mm4ewszyg/CflVwHsmX99B/W
+         2NxwXQruv3/CCnZYo2LoujCOhCGHUJ3P15x74TlXbn4VfbarmvG6ShTWuG8EXBGjUA
+         egeV837WAYF588soBoZtSrFrJj5y6xlQe/AYip5rTPmqHITwGB4E3PLhDJAjRiNU8J
+         VctdO0qOhBgUJ0ZaXiFeSTBuBu4We+xzTSPr0HlTk/lWs5wgcdeO6T8z5H8L07edNo
+         KRFFZPln4bsvg==
+Date:   Thu, 9 Jun 2022 22:52:35 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ong Boon Leong <boon.leong.ong@intel.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Emilio Riva <emilio.riva@ericsson.com>
+Subject: Re: [PATCH net-next v3 0/7] pcs-xpcs, stmmac: add 1000BASE-X AN for
+ network switch
+Message-ID: <20220609225235.4904ea56@kernel.org>
+In-Reply-To: <20220610033610.114084-1-boon.leong.ong@intel.com>
+References: <20220610033610.114084-1-boon.leong.ong@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] staging: olpc_dcon: mark driver as broken
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jerry Lin <wahahab11@gmail.com>, Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        linux-staging@lists.linux.dev
-References: <20220609223424.907174-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220609223424.907174-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------fCcYL6yVIILU5fq9llbNbYPZ"
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------fCcYL6yVIILU5fq9llbNbYPZ
-Content-Type: multipart/mixed; boundary="------------uoErhsz0fH0XzfW7ZOt7uJrc";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, dri-devel@lists.freedesktop.org,
- Sam Ravnborg <sam@ravnborg.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
- Jerry Lin <wahahab11@gmail.com>, Helge Deller <deller@gmx.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jens Frederich <jfrederich@gmail.com>,
- Jon Nettleton <jon.nettleton@gmail.com>, linux-staging@lists.linux.dev
-Message-ID: <97ef8e74-5d5d-2f6d-1be0-e566099e2853@suse.de>
-Subject: Re: [PATCH] staging: olpc_dcon: mark driver as broken
-References: <20220609223424.907174-1-javierm@redhat.com>
-In-Reply-To: <20220609223424.907174-1-javierm@redhat.com>
+On Fri, 10 Jun 2022 11:36:03 +0800 Ong Boon Leong wrote:
+> Thanks Russell King [1] and Andrew Lunn [2] for v1 review and suggestion.
+> Since then, I have worked on refactoring the implementation as follow:
+> 
+> My apology in sending v2 patch series that miss 1/7 patch, please ignore.
 
---------------uoErhsz0fH0XzfW7ZOt7uJrc
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Please wait 24h before posting v3, as is documented to be our process:
 
-DQoNCkFtIDEwLjA2LjIyIHVtIDAwOjM0IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGUgY29tbWl0IGVlY2IzZTRlNWQ5ZCAoInN0YWdpbmc6IG9scGNfZGNvbjog
-YWRkIE9MUEMgZGlzcGxheSBjb250cm9sbGVyDQo+IChEQ09OKSBzdXBwb3J0IikgYWRkZWQg
-dGhpcyBkcml2ZXIgaW4gMjAxMCwgYW5kIGhhcyBiZWVuIGluIHN0YWdpbmcgc2luY2UNCj4g
-dGhlbi4gSXQgd2FzIG1hcmtlZCBhcyBicm9rZW4gYXQgc29tZSBwb2ludCBiZWNhdXNlIGl0
-IGRpZG4ndCBldmVuIGJ1aWxkDQo+IGJ1dCB0aGF0IGdvdCByZW1vdmVkIG9uY2UgdGhlIGJ1
-aWxkIGlzc3VlcyB3ZXJlIGFkZHJlc3NlZC4NCj4gDQo+IEJ1dCBpdCBzZWVtcyB0aGF0IHRo
-ZSB3b3JrIHRvIG1vdmUgdGhpcyBkcml2ZXIgb3V0IG9mIHN0YWdpbmcgaGFzIHN0YWxsZWQs
-DQo+IHRoZSBsYXN0IG5vbi10cml2aWFsIGNoYW5nZSB0byBmaXggb25lIG9mIHRoZSBpdGVt
-cyBtZW50aW9uZWQgaW4gaXRzIHRvZG8NCj4gZmlsZSB3YXMgY29tbWl0IGU0MDIxOWQ1ZTRi
-MiAoInN0YWdpbmc6IG9scGNfZGNvbjogYWxsb3cgc2ltdWx0YW5lb3VzIFhPLTENCj4gYW5k
-IFhPLTEuNSBzdXBwb3J0IikgaW4gMjAxOS4NCj4gDQo+IEFuZCBldmVuIGlmIHdvcmsgdG8g
-ZGVzdGFnZSB0aGUgZHJpdmVyIGlzIHJlc3VtZWQsIHRoZSBmYmRldiBzdWJzeXN0ZW0gaGFz
-DQo+IGJlZW4gZGVwcmVjYXRlZCBmb3IgYSBsb25nIHRpbWUgYW5kIGluc3RlYWQgaXQgc2hv
-dWxkIGJlIHBvcnRlZCB0byBEUk0uDQo+IA0KPiBOb3cgdGhpcyBkcml2ZXIgaXMgcHJldmVu
-dGluZyB0byBsYW5kIGEga2VybmVsIHdpZGUgY2hhbmdlLCB0aGF0IG1ha2VzIHRoZQ0KPiBu
-dW1fcmVnaXN0ZXJlZF9mYiBzeW1ib2wgdG8gYmUgcHJpdmF0ZSB0byB0aGUgZmJtZW0uYyBm
-aWxlLg0KPiANCj4gU28gbGV0J3MganVzdCBtYXJrIHRoZSBkcml2ZXIgYXMgYnJva2VuLiBT
-b21lb25lIGNhbiB0aGVuIHdvcmsgb24gbWFraW5nDQo+IGl0IG5vdCBkZXBlbmQgb24gdGhl
-IG51bV9yZWdpc3RlcmVkX2ZiIHN5bWJvbCwgYWxsb3dpbmcgdG8gZHJvcCB0aGUgYnJva2Vu
-DQo+IGRlcGVuZGVuY3kgYWdhaW4uDQo+IA0KPiBTdWdnZXN0ZWQtYnk6IFNhbSBSYXZuYm9y
-ZyA8c2FtQHJhdm5ib3JnLm9yZz4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6
-IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQoNCkFja2VkLWJ5OiBUaG9tYXMgWmlt
-bWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVy
-cy9zdGFnaW5nL29scGNfZGNvbi9LY29uZmlnIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2Vk
-LCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvc3RhZ2luZy9vbHBjX2Rjb24vS2NvbmZpZyBiL2RyaXZlcnMvc3RhZ2luZy9vbHBj
-X2Rjb24vS2NvbmZpZw0KPiBpbmRleCBkMWEwZGVhMDllZjAuLmQwYmEzNGNjMzJmNyAxMDA2
-NDQNCj4gLS0tIGEvZHJpdmVycy9zdGFnaW5nL29scGNfZGNvbi9LY29uZmlnDQo+ICsrKyBi
-L2RyaXZlcnMvc3RhZ2luZy9vbHBjX2Rjb24vS2NvbmZpZw0KPiBAQCAtMSw3ICsxLDcgQEAN
-Cj4gICAjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICAgY29uZmlnIEZC
-X09MUENfRENPTg0KPiAgIAl0cmlzdGF0ZSAiT25lIExhcHRvcCBQZXIgQ2hpbGQgRGlzcGxh
-eSBDT050cm9sbGVyIHN1cHBvcnQiDQo+IC0JZGVwZW5kcyBvbiBPTFBDICYmIEZCDQo+ICsJ
-ZGVwZW5kcyBvbiBPTFBDICYmIEZCICYmIEJST0tFTg0KPiAgIAlkZXBlbmRzIG9uIEkyQw0K
-PiAgIAlkZXBlbmRzIG9uIEdQSU9fQ1M1NTM1ICYmIEFDUEkNCj4gICAJc2VsZWN0IEJBQ0tM
-SUdIVF9DTEFTU19ERVZJQ0UNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
-RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
-DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
-IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#i-have-received-review-feedback-when-should-i-post-a-revised-version-of-the-patches
 
---------------uoErhsz0fH0XzfW7ZOt7uJrc--
+In the meantime try to build each patch with W=1 C=1 flags set and fix
+the build errors and warnings you're introducing. 
 
---------------fCcYL6yVIILU5fq9llbNbYPZ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKi29oFAwAAAAAACgkQlh/E3EQov+Dn
-ww//ZknGsqmIS/vMyC8OrM7AevAEYaiH4dsdI1FFONjUGV7fnL0XtS0T+raH2zM9Wxa9W2iV+bfx
-8dPMXynHw9gEZEKfOvxi0uNT0Lor8T5y1qqEajrQ3j4bFqLVumhaaA99aex8UyHlbw1+S0fp8zSe
-0cGo6PeGqR+8j7+lHrf9Q1vyQIWAqDrKLSXTcbPTGAtjA1WjHc04rm8Thh4+Xx8q4Arc2qE5KxzJ
-du+QENFVEaIpOXoGoMPsw/F/CacSQs51LfDkj/5JL7C002baEK95/cpl1nUh1kgUxtT8XrCc7bqp
-qCk6RSKJmKM7ZUb6ThaQ7SRjRoer1+c6UNSbgllg/Z5m+WB1fWF7cNdE7SVe78SL0RTLiTgbelvy
-iOu7Q/FsQByc6jUWk1X6gSd6p7LlVilL+Uf2EBudU2QokoTnXofQINkz/qYhH+9oZKnzgwAcl0K3
-SQuxkLTwVnVgJtw2VGOdFGgT/gZ3iwrIhOcXicGDhabAkupatvniE2gYL7ZIDlMhnZ2dnNjvW/bW
-GYucBrsAqVjSdvaPImAEuPK29imoKOCKLZnouqx75V2nvCxHuyG/e76DkVEy3N+uAe+57vf4EIyC
-sBU93Et8jYI9byGiFeRErZZloJmOeippt0NwEhSYGO8YNlUzPsImurPpj1neWGpHP+AbmhJ0z648
-fus=
-=oIn+
------END PGP SIGNATURE-----
-
---------------fCcYL6yVIILU5fq9llbNbYPZ--
+Thanks!

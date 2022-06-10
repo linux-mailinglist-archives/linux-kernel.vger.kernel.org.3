@@ -2,169 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF1D546A2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B07546A2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238720AbiFJQOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S1345891AbiFJQPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237375AbiFJQO2 (ORCPT
+        with ESMTP id S244605AbiFJQPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:14:28 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E301BEB9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:14:27 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id e66so25183061pgc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sqYpRJpV7hTVkJzWeySC/55ywPreerEYyAHVK7rq9LA=;
-        b=ZehwwLYuij7pbQaghWD2GrdTIOfQ1XgasEUmVI+nhvd82X4ZEWGF79XBvheRliFM+8
-         LQlrxByJVokCQ/gINBsFhOZhZjHXcpmAir492TXOaXI7iC/F7Bwi4ptRQtYUbYGyY5SQ
-         TxK5qW/wV8CCV8YqQLV5jWM8YEEm92a1WCcQVxigUczBkLKzhwgrSGPjDy4yzeckQMEl
-         k23GcmLFp8s0aWbczjuNfnjBEB9gzzj7nGZZJi5rfah1FRb/8MQ3Cd99incf77459IOk
-         fmV8msfIleb4V2r4FMWvWw0fr1RX3bQCUO2JP23SfG2qby97FTF15ddfD8Y7n8su8tG3
-         h2BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sqYpRJpV7hTVkJzWeySC/55ywPreerEYyAHVK7rq9LA=;
-        b=26aUmJbBfeJ5oAzoN9m0myJZY1IQt9X18fsC7MTlf0gVkfZSmAlGCRNIANqqCFCrfU
-         KPXPf7iD9UXcPnZlvhGhIqeEMuQSZM5D4OrXddLlifBpqC10f+wNNMlvlHeA6+KWpDc2
-         bgtNyjoBZ8Jvt03h/tAaAfPp3jmIvJC10Bi2+ojw4NnOekJkBiv6NADJ5DaZ4THTANhH
-         GXgd02LdvEyEMO3xNV0tq/v/oMHYc+eCm387Km3U/C5abX3AbPlIPrwQCGQsHNEBVt+v
-         lKXdiAPUQBRdcr93f+Pnr0ktMwtb1CMbhVwb28aeLXL2dKFtUhPSq4rmb2+NzGTOBARY
-         QuVw==
-X-Gm-Message-State: AOAM533IgBS2r5Sz88RChYmmlIqqs8l3Wfj8CjP2suZYHwLyysNyHWOO
-        llNEDzUO4QF+PeiCSkMh4bSx+A==
-X-Google-Smtp-Source: ABdhPJzxrryZznx/9GnvIIDqh+c23V5/Xt5ZsJHD0N8PohIbtiXWvM06mGWU66DmH3LeRvNyTftAHA==
-X-Received: by 2002:a63:5:0:b0:3fe:2558:677 with SMTP id 5-20020a630005000000b003fe25580677mr14572323pga.113.1654877666234;
-        Fri, 10 Jun 2022 09:14:26 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r11-20020a170902e3cb00b0015e8d4eb28csm18669442ple.214.2022.06.10.09.14.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 09:14:25 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 16:14:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <YqNt3Sgzge5Rph/R@google.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-5-chao.p.peng@linux.intel.com>
- <8840b360-cdb2-244c-bfb6-9a0e7306c188@kernel.org>
- <YofeZps9YXgtP3f1@google.com>
- <20220523132154.GA947536@chaop.bj.intel.com>
- <YoumuHUmgM6TH20S@google.com>
- <20220530132613.GA1200843@chaop.bj.intel.com>
+        Fri, 10 Jun 2022 12:15:34 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2336531DF3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:15:31 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id zhIDnDopVE80KzhIDn3fuF; Fri, 10 Jun 2022 18:15:30 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 10 Jun 2022 18:15:30 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <d53ad0e2-e32d-1b46-b626-e82b44230704@wanadoo.fr>
+Date:   Fri, 10 Jun 2022 18:15:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530132613.GA1200843@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] ASoC: samsung: i2s: Check before clk_unregister() not
+ needed
+Content-Language: fr
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yihao Han <hanyihao@vivo.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220527065412.3677-1-hanyihao@vivo.com>
+ <2bcf706b-10d5-9369-ff8a-2a3263f9fa70@linaro.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <2bcf706b-10d5-9369-ff8a-2a3263f9fa70@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022, Chao Peng wrote:
-> On Mon, May 23, 2022 at 03:22:32PM +0000, Sean Christopherson wrote:
-> > Actually, if the semantics are that userspace declares memory as private, then we
-> > can reuse KVM_MEMORY_ENCRYPT_REG_REGION and KVM_MEMORY_ENCRYPT_UNREG_REGION.  It'd
-> > be a little gross because we'd need to slightly redefine the semantics for TDX, SNP,
-> > and software-protected VM types, e.g. the ioctls() currently require a pre-exisitng
-> > memslot.  But I think it'd work...
+Le 29/05/2022 à 10:06, Krzysztof Kozlowski a écrit :
+> On 27/05/2022 08:54, Yihao Han wrote:
+>> clk_unregister() already checks the clk ptr using
+>> !clk || WARN_ON_ONCE(IS_ERR(clk)) so there is no need to check it
+>> again before calling it.
+>>
 > 
-> These existing ioctls looks good for TDX and probably SNP as well. For
-> softrware-protected VM types, it may not be enough. Maybe for the first
-> step we can reuse this for all hardware based solutions and invent new
-> interface when software-protected solution gets really supported.
+> No, this explanation does not make sense. clk_unregister() warns and
+> this code is not equivalent.
 > 
-> There is semantics difference for fd-based private memory. Current above
-> two ioctls() use userspace addreess(hva) while for fd-based it should be
-> fd+offset, and probably it's better to use gpa in this case. Then we
-> will need change existing semantics and break backward-compatibility.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
-My thought was to keep the existing semantics for VMs with type==0, i.e. SEV and
-SEV-ES VMs.  It's a bit gross, but the pinning behavior is a dead end for SNP and
-TDX, so it effectively needs to be deprecated anyways.  I'm definitely not opposed
-to a new ioctl if Paolo or others think this is too awful, but burning an ioctl
-for this seems wasteful.
+Hi,
 
-Then generic KVM can do something like:
+Moreover, as pointed out by greg in [1] on some plateform the assertion 
+in the commit description is wrong. His message is about clk_disable() 
+but, IIUC, it makes sense for clk_unregister() as well. See [2] on the 
+sh plateform.
 
-	case KVM_MEMORY_ENCRYPT_REG_REGION:
-	case KVM_MEMORY_ENCRYPT_UNREG_REGION:
-		struct kvm_enc_region region;
+CJ
 
-		if (!kvm_arch_vm_supports_private_memslots(kvm))
-			goto arch_vm_ioctl;
-
-		r = -EFAULT;
-		if (copy_from_user(&region, argp, sizeof(region)))
-			goto out;
-
-		r = kvm_set_encrypted_region(ioctl, &region);
-		break;
-	default:
-arch_vm_ioctl:
-		r = kvm_arch_vm_ioctl(filp, ioctl, arg);
-
-
-where common KVM provides
-
-  __weak void kvm_arch_vm_supports_private_memslots(struct kvm *kvm)
-  {
-	return false;
-  }
-
-and x86 overrides that to
-
-  bool kvm_arch_vm_supports_private_memslots(struct kvm *kvm)
-  {
-  	/* I can't remember what we decided on calling type '0' VMs. */
-	return !!kvm->vm_type;
-  }
-
-and if someone ever wants to enable private memslot for SEV/SEV-ES guests we can
-always add a capability or even a new VM type.
-
-pKVM on arm can then obviously implement kvm_arch_vm_supports_private_memslots()
-to grab whatever identifies a pKVM VM.
+[1]: https://lore.kernel.org/all/YqMIUOTU%2Fk5XpW3I@kroah.com/
+[2]: 
+https://elixir.bootlin.com/linux/v5.18.3/source/drivers/sh/clk/core.c#L452

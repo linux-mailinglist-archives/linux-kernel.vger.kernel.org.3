@@ -2,400 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A113F545900
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9646545906
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238257AbiFJAKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S239155AbiFJALm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiFJAKT (ORCPT
+        with ESMTP id S231631AbiFJALh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:10:19 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3077C6D97D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:10:18 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id f9so11045712plg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:10:18 -0700 (PDT)
+        Thu, 9 Jun 2022 20:11:37 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBB34BBAC
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:11:35 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-fb1ae0cd9cso1369668fac.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=toj+A2N5AVFrqrL1/Vxl2lAeLAZTIqgD9K/xvEkZUTA=;
-        b=bj4cb3zOQN7YWyDrtemAMpKdCeidDBxj5uW7rn9I7qiCXlN7e0LBpr5GyFjnCIhGHL
-         eEi94dhebFtW/qvn07s8D7zDA87t7LsILMvAFrS5HciKff/9/RfZqjl+hdyJnEE4Fdzm
-         QtCTH31Os2tt09D4LTEJJE2SmzFDOPdANFfCk=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lN+fOqwv9bBcDqIpukqHItG5mOqsK9h2lCdbXTf1cPM=;
+        b=DayT0SdBt1ymTKyry+8RI8dWvFXfKXAgjmO8VhNnB1yoDZK63YuzcCUTHD3X1Z3+t5
+         KxmGEbccYszaa9LA1rH+uPvXkUot/k7y+eYJ5dVw1vcNDUZMV9ll/y/F+7N08dr0Wzcn
+         baBzETzPA15Z2tn9QgoF5S7+WOA0j8RJa/fH3l+HKIsIdEIRN75ENG6RuJQTaJE4f7s+
+         tdQ6ePOMDHk+W48X2uZ7KmmqPYEcwu7pMK65fJXjpYRLWoV5X97j/IkcgrkGUpYpxwIB
+         E5LIO66muSm/XASIShQU2K4+YUS/ejVNHYtSotPk8eFHXkkvvETkJhzMm8POKoBM9Wup
+         sSZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=toj+A2N5AVFrqrL1/Vxl2lAeLAZTIqgD9K/xvEkZUTA=;
-        b=gN3w/Tn8V/xxjMlwjNig5bIWDsrzBJehQm1maNgi5/qSPvFIKHGYu8sMHdc1NeUQ2a
-         3M/MT5+owQhMvj1ba/YPNK0eDuD7KRAYmqNJ+vTdi0MPL61uAL75NjM1afNwYg/BwEBw
-         rLeo78Cy5wiNn0opXNWG4Jsq59Ur72NJaN7f+nCMxK8xQdydOgjwhlxt6p2mrwWsQXkB
-         FY70mfj883w3dzt55OCtL70SuBIiiG6l1AHBL5YJPWpTYJqQuplxVCvMcNn6auFEkhOn
-         QPlLZtMParZzg9PhbLzlqRtQ0sXgsVXhv+rUARvFxSiJEaJ99oSL3Y/fR6jDg4mv7Ahi
-         e0lw==
-X-Gm-Message-State: AOAM531vs4w+d88xiFRUYqZshvqW6HT7PfOAml7J2gOAXHyA4RLBxXI9
-        YjFHSkz4VBPOT1nQaJPoxwTaiA==
-X-Google-Smtp-Source: ABdhPJyNbf0SWOUtZad094XjSO7uUkrqyNCFQTH3dSK98kga6ApoMb+Nabdmt1o077+NLjvf2sgRIw==
-X-Received: by 2002:a17:902:ec92:b0:166:3502:ecb1 with SMTP id x18-20020a170902ec9200b001663502ecb1mr42079933plg.62.1654819817617;
-        Thu, 09 Jun 2022 17:10:17 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:4732:8bcf:1bc2:ec84])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090322cf00b0015e8d4eb2c5sm9508750plg.271.2022.06.09.17.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 17:10:17 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Eric Anholt <eric@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Sean Paul <sean@poorly.run>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] drm/msm: Avoid unclocked GMU register access in 6xx gpu_busy
-Date:   Thu,  9 Jun 2022 17:09:47 -0700
-Message-Id: <20220609170859.v3.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lN+fOqwv9bBcDqIpukqHItG5mOqsK9h2lCdbXTf1cPM=;
+        b=vtxgtmUoZfVTSCeldghlXolDnJgNr8xAsr2aEJ6tETVxQ/EnwdP5VRZ/gqp9RhjO4K
+         DTniRANfuVn4bUV0UXOuGh1l0J2FxFbU59M/fa1pLZYlYZEDbzjYXQPKvvdwQs4GXb0D
+         hJU+0zkJBYNIz0/m/pOvuWWozKIsPmL4qGLo4P/e6jgTTBY7ipjCRxFp5skVW5uWgptP
+         SMBwsWlD69alLTlKfd00+QABgJi+Pw1ae3cfJs1lNM3TDVwcgDwYHPivZ1E6V9Zr+Thn
+         pfqbIBpCKRFC6PyVZ4eCDMfn1BJiGqAl1g02zdtbNm8IxizjbLtF1wiyfO478Md3B+YZ
+         iXCQ==
+X-Gm-Message-State: AOAM531YWjPfqXGUA6jBLnpiZy4+X2Lzt0rF0Y4AXVAIIs4CErvTPdL3
+        JYNVTF9rJtoH8mlz3rgolEiQDpDTA9KGwRcjEUDqTA==
+X-Google-Smtp-Source: ABdhPJzdaT0C30mX9Im9rqGsL6x1Rmi0294lLn68XE92+pqgxWwSN0AqB6f3CMYnEGDUJ7ZH1btvuZX8xfTHzXelZbU=
+X-Received: by 2002:a05:6870:b616:b0:e2:f8bb:5eb with SMTP id
+ cm22-20020a056870b61600b000e2f8bb05ebmr3338490oab.218.1654819893261; Thu, 09
+ Jun 2022 17:11:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
+ <20220607065749.GA1513445@chaop.bj.intel.com> <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
+ <20220608021820.GA1548172@chaop.bj.intel.com>
+In-Reply-To: <20220608021820.GA1548172@chaop.bj.intel.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Thu, 9 Jun 2022 17:11:21 -0700
+Message-ID: <CAA03e5GmJw8u83=OG2wYrhdO81Sx5Jme-jkUnoTMQ7cc_o7u=w@mail.gmail.com>
+Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From testing on sc7180-trogdor devices, reading the GMU registers
-needs the GMU clocks to be enabled. Those clocks get turned on in
-a6xx_gmu_resume(). Confusingly enough, that function is called as a
-result of the runtime_pm of the GPU "struct device", not the GMU
-"struct device". Unfortunately the current a6xx_gpu_busy() grabs a
-reference to the GMU's "struct device".
+On Tue, Jun 7, 2022 at 7:22 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+>
+> On Tue, Jun 07, 2022 at 05:55:46PM -0700, Marc Orr wrote:
+> > On Tue, Jun 7, 2022 at 12:01 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > >
+> > > On Mon, Jun 06, 2022 at 01:09:50PM -0700, Vishal Annapurve wrote:
+> > > > >
+> > > > > Private memory map/unmap and conversion
+> > > > > ---------------------------------------
+> > > > > Userspace's map/unmap operations are done by fallocate() ioctl on the
+> > > > > backing store fd.
+> > > > >   - map: default fallocate() with mode=0.
+> > > > >   - unmap: fallocate() with FALLOC_FL_PUNCH_HOLE.
+> > > > > The map/unmap will trigger above memfile_notifier_ops to let KVM map/unmap
+> > > > > secondary MMU page tables.
+> > > > >
+> > > > ....
+> > > > >    QEMU: https://github.com/chao-p/qemu/tree/privmem-v6
+> > > > >
+> > > > > An example QEMU command line for TDX test:
+> > > > > -object tdx-guest,id=tdx \
+> > > > > -object memory-backend-memfd-private,id=ram1,size=2G \
+> > > > > -machine q35,kvm-type=tdx,pic=no,kernel_irqchip=split,memory-encryption=tdx,memory-backend=ram1
+> > > > >
+> > > >
+> > > > There should be more discussion around double allocation scenarios
+> > > > when using the private fd approach. A malicious guest or buggy
+> > > > userspace VMM can cause physical memory getting allocated for both
+> > > > shared (memory accessible from host) and private fds backing the guest
+> > > > memory.
+> > > > Userspace VMM will need to unback the shared guest memory while
+> > > > handling the conversion from shared to private in order to prevent
+> > > > double allocation even with malicious guests or bugs in userspace VMM.
+> > >
+> > > I don't know how malicious guest can cause that. The initial design of
+> > > this serie is to put the private/shared memory into two different
+> > > address spaces and gives usersapce VMM the flexibility to convert
+> > > between the two. It can choose respect the guest conversion request or
+> > > not.
+> >
+> > For example, the guest could maliciously give a device driver a
+> > private page so that a host-side virtual device will blindly write the
+> > private page.
+>
+> With this patch series, it's actually even not possible for userspace VMM
+> to allocate private page by a direct write, it's basically unmapped from
+> there. If it really wants to, it should so something special, by intention,
+> that's basically the conversion, which we should allow.
 
-The fact that we were grabbing the wrong reference was easily seen to
-cause crashes that happen if we change the GPU's pm_runtime usage to
-not use autosuspend. It's also believed to cause some long tail GPU
-crashes even with autosuspend.
+I think Vishal did a better job to explain this scenario in his last
+reply than I did.
 
-We could look at changing it so that we do pm_runtime_get_if_in_use()
-on the GPU's "struct device", but then we run into a different
-problem. pm_runtime_get_if_in_use() will return 0 for the GPU's
-"struct device" the whole time when we're in the "autosuspend
-delay". That is, when we drop the last reference to the GPU but we're
-waiting a period before actually suspending then we'll think the GPU
-is off. One reason that's bad is that if the GPU didn't actually turn
-off then the cycle counter doesn't lose state and that throws off all
-of our calculations.
+> > > It's possible for a usrspace VMM to cause double allocation if it fails
+> > > to call the unback operation during the conversion, this may be a bug
+> > > or not. Double allocation may not be a wrong thing, even in conception.
+> > > At least TDX allows you to use half shared half private in guest, means
+> > > both shared/private can be effective. Unbacking the memory is just the
+> > > current QEMU implementation choice.
+> >
+> > Right. But the idea is that this patch series should accommodate all
+> > of the CVM architectures. Or at least that's what I know was
+> > envisioned last time we discussed this topic for SNP [*].
+>
+> AFAICS, this series should work for both TDX and SNP, and other CVM
+> architectures. I don't see where TDX can work but SNP cannot, or I
+> missed something here?
 
-Let's change the code to keep track of the suspend state of
-devfreq. msm_devfreq_suspend() is always called before we actually
-suspend the GPU and msm_devfreq_resume() after we resume it. This
-means we can use the suspended state to know if we're powered or not.
+Agreed. I was just responding to the "At least TDX..." bit. Sorry for
+any confusion.
 
-NOTE: one might wonder when exactly our status function is called when
-devfreq is supposed to be disabled. The stack crawl I captured was:
-  msm_devfreq_get_dev_status
-  devfreq_simple_ondemand_func
-  devfreq_update_target
-  qos_notifier_call
-  qos_max_notifier_call
-  blocking_notifier_call_chain
-  pm_qos_update_target
-  freq_qos_apply
-  apply_constraint
-  __dev_pm_qos_update_request
-  dev_pm_qos_update_request
-  msm_devfreq_idle_work
+> >
+> > Regardless, it's important to ensure that the VM respects its memory
+> > budget. For example, within Google, we run VMs inside of containers.
+> > So if we double allocate we're going to OOM. This seems acceptable for
+> > an early version of CVMs. But ultimately, I think we need a more
+> > robust way to ensure that the VM operates within its memory container.
+> > Otherwise, the OOM is going to be hard to diagnose and distinguish
+> > from a real OOM.
+>
+> Thanks for bringing this up. But in my mind I still think userspace VMM
+> can do and it's its responsibility to guarantee that, if that is hard
+> required. By design, userspace VMM is the decision-maker for page
+> conversion and has all the necessary information to know which page is
+> shared/private. It also has the necessary knobs to allocate/free the
+> physical pages for guest memory. Definitely, we should make userspace
+> VMM more robust.
 
-Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
-Changes in v3:
-- Totally rewrote to not use the pm_runtime functions.
-- Moved the code to be common for all adreno GPUs.
-
-Changes in v2:
-- Move the set_freq runtime pm grab to the GPU file.
-- Use <= for the pm_runtime test, not ==.
-
- drivers/gpu/drm/msm/adreno/a5xx_gpu.c |  8 ------
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 13 ++++-----
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++------
- drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  3 ++-
- drivers/gpu/drm/msm/msm_gpu.h         |  9 ++++++-
- drivers/gpu/drm/msm/msm_gpu_devfreq.c | 39 +++++++++++++++++++++------
- 6 files changed, 51 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-index c424e9a37669..3dcec7acb384 100644
---- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-@@ -1666,18 +1666,10 @@ static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
- {
- 	u64 busy_cycles;
- 
--	/* Only read the gpu busy if the hardware is already active */
--	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
--		*out_sample_rate = 1;
--		return 0;
--	}
--
- 	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
- 			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
- 	*out_sample_rate = clk_get_rate(gpu->core_clk);
- 
--	pm_runtime_put(&gpu->pdev->dev);
--
- 	return busy_cycles;
- }
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 9f76f5b15759..dc715d88ff21 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -102,7 +102,8 @@ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu)
- 		A6XX_GMU_SPTPRAC_PWR_CLK_STATUS_GX_HM_CLK_OFF));
- }
- 
--void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-+void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+		       bool suspended)
- {
- 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-@@ -127,15 +128,16 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
- 
- 	/*
- 	 * This can get called from devfreq while the hardware is idle. Don't
--	 * bring up the power if it isn't already active
-+	 * bring up the power if it isn't already active. All we're doing here
-+	 * is updating the frequency so that when we come back online we're at
-+	 * the right rate.
- 	 */
--	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
-+	if (suspended)
- 		return;
- 
- 	if (!gmu->legacy) {
- 		a6xx_hfi_set_freq(gmu, perf_index);
- 		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
--		pm_runtime_put(gmu->dev);
- 		return;
- 	}
- 
-@@ -159,7 +161,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
- 		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
- 
- 	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
--	pm_runtime_put(gmu->dev);
- }
- 
- unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
-@@ -895,7 +896,7 @@ static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
- 		return;
- 
- 	gmu->freq = 0; /* so a6xx_gmu_set_freq() doesn't exit early */
--	a6xx_gmu_set_freq(gpu, gpu_opp);
-+	a6xx_gmu_set_freq(gpu, gpu_opp, false);
- 	dev_pm_opp_put(gpu_opp);
- }
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 42ed9a3c4905..8c02a67f29f2 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1658,27 +1658,21 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
- 	/* 19.2MHz */
- 	*out_sample_rate = 19200000;
- 
--	/* Only read the gpu busy if the hardware is already active */
--	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
--		return 0;
--
- 	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
- 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
- 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
- 
--
--	pm_runtime_put(a6xx_gpu->gmu.dev);
--
- 	return busy_cycles;
- }
- 
--static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-+static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+			      bool suspended)
- {
- 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
- 
- 	mutex_lock(&a6xx_gpu->gmu.lock);
--	a6xx_gmu_set_freq(gpu, opp);
-+	a6xx_gmu_set_freq(gpu, opp, suspended);
- 	mutex_unlock(&a6xx_gpu->gmu.lock);
- }
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-index 86e0a7c3fe6d..ab853f61db63 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-@@ -77,7 +77,8 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
- int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
- void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
- 
--void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-+void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+		       bool suspended);
- unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu);
- 
- void a6xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index 6def00883046..7ced1a30d4e8 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -68,7 +68,8 @@ struct msm_gpu_funcs {
- 	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
- 	int (*gpu_state_put)(struct msm_gpu_state *state);
- 	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
--	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-+	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-+			     bool suspended);
- 	struct msm_gem_address_space *(*create_address_space)
- 		(struct msm_gpu *gpu, struct platform_device *pdev);
- 	struct msm_gem_address_space *(*create_private_address_space)
-@@ -92,6 +93,9 @@ struct msm_gpu_devfreq {
- 	/** devfreq: devfreq instance */
- 	struct devfreq *devfreq;
- 
-+	/** lock: lock for "suspended", "busy_cycles", and "time" */
-+	struct mutex lock;
-+
- 	/**
- 	 * idle_constraint:
- 	 *
-@@ -135,6 +139,9 @@ struct msm_gpu_devfreq {
- 	 * elapsed
- 	 */
- 	struct msm_hrtimer_work boost_work;
-+
-+	/** suspended: tracks if we're suspended */
-+	bool suspended;
- };
- 
- struct msm_gpu {
-diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-index d2539ca78c29..ea94bc18e72e 100644
---- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-+++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-@@ -20,6 +20,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
- 		u32 flags)
- {
- 	struct msm_gpu *gpu = dev_to_gpu(dev);
-+	struct msm_gpu_devfreq *df = &gpu->devfreq;
- 	struct dev_pm_opp *opp;
- 
- 	/*
-@@ -32,10 +33,13 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
- 
- 	trace_msm_gpu_freq_change(dev_pm_opp_get_freq(opp));
- 
--	if (gpu->funcs->gpu_set_freq)
--		gpu->funcs->gpu_set_freq(gpu, opp);
--	else
-+	if (gpu->funcs->gpu_set_freq) {
-+		mutex_lock(&df->lock);
-+		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
-+		mutex_unlock(&df->lock);
-+	} else {
- 		clk_set_rate(gpu->core_clk, *freq);
-+	}
- 
- 	dev_pm_opp_put(opp);
- 
-@@ -58,15 +62,24 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
- 	unsigned long sample_rate;
- 	ktime_t time;
- 
-+	mutex_lock(&df->lock);
-+
- 	status->current_frequency = get_freq(gpu);
--	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
- 	time = ktime_get();
--
--	busy_time = busy_cycles - df->busy_cycles;
- 	status->total_time = ktime_us_delta(time, df->time);
-+	df->time = time;
- 
-+	if (df->suspended) {
-+		mutex_unlock(&df->lock);
-+		status->busy_time = 0;
-+		return;
-+	}
-+
-+	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
-+	busy_time = busy_cycles - df->busy_cycles;
- 	df->busy_cycles = busy_cycles;
--	df->time = time;
-+
-+	mutex_unlock(&df->lock);
- 
- 	busy_time *= USEC_PER_SEC;
- 	do_div(busy_time, sample_rate);
-@@ -175,6 +188,8 @@ void msm_devfreq_init(struct msm_gpu *gpu)
- 	if (!gpu->funcs->gpu_busy)
- 		return;
- 
-+	mutex_init(&df->lock);
-+
- 	dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
- 			       DEV_PM_QOS_MAX_FREQUENCY,
- 			       PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-@@ -244,12 +259,16 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
- void msm_devfreq_resume(struct msm_gpu *gpu)
- {
- 	struct msm_gpu_devfreq *df = &gpu->devfreq;
-+	unsigned long sample_rate;
- 
- 	if (!has_devfreq(gpu))
- 		return;
- 
--	df->busy_cycles = 0;
-+	mutex_lock(&df->lock);
-+	df->busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
- 	df->time = ktime_get();
-+	df->suspended = false;
-+	mutex_unlock(&df->lock);
- 
- 	devfreq_resume_device(df->devfreq);
- }
-@@ -261,6 +280,10 @@ void msm_devfreq_suspend(struct msm_gpu *gpu)
- 	if (!has_devfreq(gpu))
- 		return;
- 
-+	mutex_lock(&df->lock);
-+	df->suspended = true;
-+	mutex_unlock(&df->lock);
-+
- 	devfreq_suspend_device(df->devfreq);
- 
- 	cancel_idle_work(df);
--- 
-2.36.1.476.g0c4daa206d-goog
-
+Vishal and Sean did a better job to articulate the concern in their
+most recent replies.

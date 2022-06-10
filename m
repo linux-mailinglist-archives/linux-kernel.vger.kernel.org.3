@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9761545D00
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DD6545D03
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346576AbiFJHQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S243281AbiFJHQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235299AbiFJHQ3 (ORCPT
+        with ESMTP id S1346548AbiFJHQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:16:29 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCF02109C1;
-        Fri, 10 Jun 2022 00:16:24 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aeb3f.dynamic.kabel-deutschland.de [95.90.235.63])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D0BA161EA1923;
-        Fri, 10 Jun 2022 09:16:20 +0200 (CEST)
-Message-ID: <1472eccd-429b-0a18-565c-7de2e5ed44f2@molgen.mpg.de>
-Date:   Fri, 10 Jun 2022 09:16:20 +0200
+        Fri, 10 Jun 2022 03:16:43 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0238D289A24;
+        Fri, 10 Jun 2022 00:16:42 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id r71so24036632pgr.0;
+        Fri, 10 Jun 2022 00:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lgzEz9lRcUr2RYERuVGP5XDTC+Uf7I5b+LB1N9h1spE=;
+        b=q2PMJkfm1ETHt4f049NuUaYxAAuOMKlnAVBt+XRRdNfk/4+OAnk71WQ3bvywJqQvad
+         Kg0DkoqI41YFdFZH8kpEwBCiFajiRFgIYWhFxPfh94XSGwjjsNvXQitBK4wboCOkIO/U
+         zzMmc69MkBl6D5tv3bINw4tmr9CqYlknjrg/2fof8zwX4HKczpSipnVynBWknk0fE+3x
+         yFVNFEVC7sXYmS2XmYyu/Qj8JfDGwrTuYCqF7/MT/P9C9tx+Q04Fc9m62T4zU6e9xcwk
+         HHGXoETK9ka/0spK+Qv5Kq/kwV6jeZswaa3mDJrLjcO7X293zkVZMXYdq+3H/p3C6Uwk
+         ujGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lgzEz9lRcUr2RYERuVGP5XDTC+Uf7I5b+LB1N9h1spE=;
+        b=pJ6uJXiy0musQjbzgeSzT73k+79eH49ykOBF+U1h7NzHG5egsmYYTv7jlBxfEpuILw
+         wmbt6r2EEKMEN+JLUmgab4kppk7EXSbsRSa+fPcAyUv01TMB2m1lF+6HuMHZDmcOASf8
+         nXPcrSeW2Z/7hoSYG79dNKMviPBWYMNyIlNBXtE8RNlwp8qZfHD3jVsNsoxpS2E9V+z8
+         TTuU5Oe8aKsXm2NeJ4qL8MIGOubYIr/L8t6jsE+Xh5hXP7frf6xorLV1wGT+AWc2UIAr
+         cLGLgRFAcSgmhmaKTJ12+T9xGatAqHrqCQEi6FbIdkb8tVHvWbk4j8lAdh+iTSmQa5RG
+         io7A==
+X-Gm-Message-State: AOAM530jC013Y14dc9b5kA9eXBjWf4d0FxogL9c9BCf8ogMAiFDswq+/
+        7ARfMEjQYsDHoJxIe5SoL9Dete6S95Ga+EVliEM=
+X-Google-Smtp-Source: ABdhPJxbbscPEi1voRkLIcYVArvuegPD6owbBYbVKro6UuSK89jyGZ8rENgl+xpfcs7m9W+BumF+/w==
+X-Received: by 2002:a05:6a00:2cc:b0:51b:f1d3:e5f with SMTP id b12-20020a056a0002cc00b0051bf1d30e5fmr33514357pft.52.1654845401504;
+        Fri, 10 Jun 2022 00:16:41 -0700 (PDT)
+Received: from localhost.localdomain ([139.198.0.165])
+        by smtp.gmail.com with ESMTPSA id t4-20020a628104000000b0051829b1595dsm479937pfd.130.2022.06.10.00.16.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 Jun 2022 00:16:40 -0700 (PDT)
+From:   Sun Feng <loyou85@gmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     loyou85@gmail.com
+Subject: [PATCH] block: fix attribute_group lost if set before add_disk
+Date:   Fri, 10 Jun 2022 15:16:29 +0800
+Message-Id: <1654845389-21741-1-git-send-email-loyou85@gmail.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Bluetooth: btmtksdio: Add in-band wakeup support
-Content-Language: en-US
-To:     Sean Wang <sean.wang@mediatek.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yake Yang <yake.yang@mediatek.com>
-References: <742cdffcf110e1601257207fb2b0d3f426d4008c.1654819586.git.objelf@gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <742cdffcf110e1601257207fb2b0d3f426d4008c.1654819586.git.objelf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sean,
+after commit 52b85909f85d("block: fold register_disk into device_add_disk")
+when set attribute_group with following code:
 
+  disk_to_dev(disk)->groups = attr_groups;
+  err = add_disk(disk);
 
-Thank you for the patch.
+disk_to_dev(disk)->groups will set to NULL in device_add_disk,
 
-Am 10.06.22 um 02:17 schrieb sean.wang@mediatek.com:
-> From: Sean Wang <sean.wang@mediatek.com>
-> 
-> 'ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")'
-> have added the waken-on-bluetooth via dedicated GPIO.
+  static inline int __must_check add_disk(struct gendisk *disk)
+  {
+       	return device_add_disk(NULL, disk, NULL);
+  }
+  int __must_check device_add_disk(struct device *parent, ...
+                                 const struct attribute_group **groups)
+  {
+	…
+	ddev->groups = groups
 
-Maybe:
+and it will lose attribute group set.
 
-Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth") 
-adds the wake on bluethooth via a dedicated GPIO.
+Signed-off-by: Sun Feng <loyou85@gmail.com>
+---
+ block/genhd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> The patch extends the function to the waken-on-bluetooth via SDIO DAT1 pin
-> (inband wakeup) when the SDIO host driver is able to support.
+diff --git a/block/genhd.c b/block/genhd.c
+index 27205ae..6b76f67 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -459,7 +459,10 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
+ 	dev_set_uevent_suppress(ddev, 1);
+ 
+ 	ddev->parent = parent;
+-	ddev->groups = groups;
++	if (groups) {
++		WARN_ON(ddev->groups);
++		ddev->groups = groups;
++	}
+ 	dev_set_name(ddev, "%s", disk->disk_name);
+ 	if (!(disk->flags & GENHD_FL_HIDDEN))
+ 		ddev->devt = MKDEV(disk->major, disk->first_minor);
+-- 
+2.7.4
 
-Maybe:
-
-Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup), 
-when supported by the SDIO host driver.
-
-How did you test this? In what datasheet is it documented?
-
-> Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-> Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> ---
->   drivers/bluetooth/btmtksdio.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-> index d6700efcfe8c..9ed3af4ba51a 100644
-> --- a/drivers/bluetooth/btmtksdio.c
-> +++ b/drivers/bluetooth/btmtksdio.c
-> @@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
->   #define BTMTKSDIO_FUNC_ENABLED		3
->   #define BTMTKSDIO_PATCH_ENABLED		4
->   #define BTMTKSDIO_HW_RESET_ACTIVE	5
-> +#define BTMTKSDIO_INBAND_WAKEUP		6
->   
->   struct mtkbtsdio_hdr {
->   	__le16	len;
-> @@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
->   		.wakeup_delay = cpu_to_le16(0x20),
->   	};
->   
-> +	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
-> +		return may_wakeup;
-> +
->   	if (may_wakeup && bdev->data->chipid == 0x7921) {
->   		struct sk_buff *skb;
->   
-> @@ -1384,6 +1388,10 @@ static int btmtksdio_probe(struct sdio_func *func,
->   	 */
->   	pm_runtime_put_noidle(bdev->dev);
->   
-> +	/* Mark if the mmc host can support waken by SDIO */
-
-Maybe:
-
-Mark if MMC host supports wake on bluetooth by SDIO
-
-> +	if (device_can_wakeup(func->card->host->parent))
-> +		set_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state);
-> +
->   	err = device_init_wakeup(bdev->dev, true);
->   	if (err)
->   		bt_dev_err(hdev, "failed to initialize device wakeup");
-
-
-Kind regards,
-
-Paul

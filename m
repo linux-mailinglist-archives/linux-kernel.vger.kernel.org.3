@@ -2,97 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B123546642
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A3D546646
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347758AbiFJMGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 08:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
+        id S243556AbiFJMFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240885AbiFJMGl (ORCPT
+        with ESMTP id S245550AbiFJMFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:06:41 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E433EF18
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654862800; x=1686398800;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K1k+oIO+VBXWvrUqhojZiI+4Uhrj8EJsXUfooupVGdk=;
-  b=isXcptkfyiD5+jn8C0KpGl4t/Ml24v8MeuLT3Mm2JGcGrIn+irgyqPg6
-   bQH15yRbIDb0/PogITJn6/6rbi6drU2PUWIxFeNi8IXp9ptVeCoEzLvH0
-   2UtpxIzMBgFJ53GliHT4zHljsBFagSOO+AMNOlZL/wih01Tg/g/XU39Fy
-   j/58EihWuC+38Z4VoF54guTkUOwzAsivHutkWymjgHUNlWJbU8qmkLOAM
-   GsOneoFwT580nJnzOf8MXQIly81/2i69y59hgx1Pa4yU61UEuLaKKPC9J
-   cwWWaEjYzebibk4JSe0DN9CbY1eq0S7XoT55dpuSo216qbsNPW4VMQx1z
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275142446"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="275142446"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:06:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="828225455"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Jun 2022 05:06:39 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzdPS-000Hvx-De;
-        Fri, 10 Jun 2022 12:06:38 +0000
-Date:   Fri, 10 Jun 2022 20:05:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [chrome-platform:for-next 13/34]
- drivers/platform/chrome/cros_kbd_led_backlight.c:192:42: warning:
- 'keyboard_led_drvdata_ec_pwm' defined but not used
-Message-ID: <202206102051.ZaCPUVE8-lkp@intel.com>
+        Fri, 10 Jun 2022 08:05:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339CF3F322;
+        Fri, 10 Jun 2022 05:05:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C179B834DC;
+        Fri, 10 Jun 2022 12:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2574C3411E;
+        Fri, 10 Jun 2022 12:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654862745;
+        bh=f9tCZ3dUGujHwZtgBBhgrGaWaeeMtU5w+k7egcKNfkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jR8trHrWTHYG7Z9ccS+GVbKyAVHH9oRp5ckreKkEj0zGsQL+sdaLJz/xs+JTOXidt
+         +oEYLXGUcHLwrC8KnvQ8Ua2sMCxlC3qTniMSMxVVgVjRTH0AsnjchsRcXwmbvjNMLz
+         6k5SvVcwPRHnbw4bOV+Cyi3FNXjJzno+2ilZJU82Mi6tLJZ7CJcdxpM9WSTTdsvJF/
+         atC1RjwAyHrMA0l6ivT7fsoo9rVhuSvkHzKZJezQmPZOerlkPNxgfzcBehEnHmg7oA
+         KDOe0t1Q1hhwJIJsWdeJpD8YbiA4r/r7fPAj63FCX/fbs14+yBZi3RIWXjTSHo7JeG
+         hBYCeFocezpLQ==
+Date:   Fri, 10 Jun 2022 14:05:42 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rcu/nocb: Avoid polling when myrdp->nocb_head_rdp
+ list is empty
+Message-ID: <20220610120542.GA1811980@lothringen>
+References: <20220607075057.909070-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220607075057.909070-1-qiang1.zhang@intel.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
-head:   cfed691b80dce32b62634b1d7f92a661a3b03e4f
-commit: 40f58143745eaabc68ef44b068642ca3b38d23a6 [13/34] platform/chrome: cros_kbd_led_backlight: support EC PWM backend
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220610/202206102051.ZaCPUVE8-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/commit/?id=40f58143745eaabc68ef44b068642ca3b38d23a6
-        git remote add chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
-        git fetch --no-tags chrome-platform for-next
-        git checkout 40f58143745eaabc68ef44b068642ca3b38d23a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/chrome/
+On Tue, Jun 07, 2022 at 03:50:57PM +0800, Zqiang wrote:
+> Currently, If the 'rcu_nocb_poll' bootargs is enable, all rcuog kthreads
+> enter polling mode. however, due to only insert CPU's rdp which belong to
+> rcu_nocb_mask to 'nocb_head_rdp' list or all CPU's rdp served by rcuog
+> kthread have been de-offloaded, these cause the 'nocb_head_rdp' list
+> served by rcuog kthread is empty, when the 'nocb_head_rdp' is empty,
+> the rcuog kthread in polling mode not actually do anything. fix it by
+> exiting polling mode when the 'nocb_head_rdp'list is empty, otherwise
+> entering polling mode.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  v1->v2:
+>  Move rcu_nocb_poll flags check from rdp_offload_toggle() to
+>  rcu_nocb_rdp_offload/deoffload(), avoid unnecessary setting of
+>  rdp_gp->nocb_gp_sleep flags, because when rcu_nocb_poll is set
+>  the rdp_gp->nocb_gp_sleep is not used.
+> 
+>  kernel/rcu/tree_nocb.h | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index fa8e4f82e60c..2a52c9abc681 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -698,10 +698,14 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>  				   TPS("WakeBypassIsDeferred"));
+>  	}
+>  	if (rcu_nocb_poll) {
+> -		/* Polling, so trace if first poll in the series. */
+> -		if (gotcbs)
+> -			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
+> -		schedule_timeout_idle(1);
+> +		if (list_empty(&my_rdp->nocb_head_rdp)) {
+> +			rcu_wait(READ_ONCE(my_rdp->nocb_toggling_rdp));
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I suspect you have based your patch on upstream tree which doesn't seem
+to have this one yet:
 
-All warnings (new ones prefixed by >>):
+   "rcu/nocb: Add/del rdp to iterate from rcuog itself"
 
->> drivers/platform/chrome/cros_kbd_led_backlight.c:192:42: warning: 'keyboard_led_drvdata_ec_pwm' defined but not used [-Wunused-const-variable=]
-     192 | static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {};
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+With this patch you can't wait on changes to my_rdp->nocb_toggling_rdp because
+nocb_gp_wait() now performs the list_add/list_del itself.
 
+Please rebase your patch on top of latest rcu:dev from Paul's tree. Then
+all you need to do is to change the wait side, something like this (untested):
 
-vim +/keyboard_led_drvdata_ec_pwm +192 drivers/platform/chrome/cros_kbd_led_backlight.c
-
-   191	
- > 192	static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {};
-   193	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index fa8e4f82e60c..f36d6be4f372 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -584,6 +584,15 @@ static int nocb_gp_toggle_rdp(struct rcu_data *rdp,
+ 	return ret;
+ }
+ 
++static void nocb_gp_sleep(struct rdp *my_rdp, int cpu)
++{
++	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
++	swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
++					    !READ_ONCE(my_rdp->nocb_gp_sleep));
++	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
++}
++
++
+ /*
+  * No-CBs GP kthreads come here to wait for additional callbacks to show up
+  * or for grace periods to end.
+@@ -701,13 +710,19 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+ 		/* Polling, so trace if first poll in the series. */
+ 		if (gotcbs)
+ 			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
+-		schedule_timeout_idle(1);
++		if (list_empty(&my_rdp->nocb_head_rdp)) {
++			raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
++			if (!my_rdp->nocb_toggling_rdp)
++				WRITE_ONCE(my_rdp->nocb_gp_sleep, true);
++			raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
++			/* Wait for any offloading rdp */
++			rdp_gp_sleep(my_rdp, cpu);
++		} else {
++			schedule_timeout_idle(1);
++		}
+ 	} else if (!needwait_gp) {
+ 		/* Wait for callbacks to appear. */
+-		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
+-		swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
+-				!READ_ONCE(my_rdp->nocb_gp_sleep));
+-		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
++		rdp_gp_sleep(my_rdp, cpu);
+ 	} else {
+ 		rnp = my_rdp->mynode;
+ 		trace_rcu_this_gp(rnp, my_rdp, wait_gp_seq, TPS("StartWait"));

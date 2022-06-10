@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43C6546E2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB55546E33
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350619AbiFJUR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 16:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S1350528AbiFJUVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 16:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350576AbiFJURV (ORCPT
+        with ESMTP id S1344532AbiFJUVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 16:17:21 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33549263E8B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=k1; bh=e
-        ta8dtU2rO2nv3AvWtWxiqiF668N5cDYxBtyB21CX/0=; b=Jo2HIGAziZse900i+
-        6UKgDhrpwCIAmI+MLqa12vWmd6PZJIt6TBajZa1gQlY8ZNSGbBG+zDvP/NU1hvip
-        qNHNg+DC/6/pMcOz+Eshyw4V4W/0EaYoO8rrUDzPAOtL7lCRTVOSkbBJ/T+GPQ54
-        2sgQusZJH/RwjQb5NNhMSq/pE4=
-Received: (qmail 365634 invoked from network); 10 Jun 2022 22:17:11 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jun 2022 22:17:11 +0200
-X-UD-Smtp-Session: l3s3148p1@W1qKnx3hGiFZD+3R
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
-Date:   Fri, 10 Jun 2022 22:17:01 +0200
-Message-Id: <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
-References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
+        Fri, 10 Jun 2022 16:21:44 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8122FEB96
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:21:41 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id s124so628029oia.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=v6z8gULTHIEXJFyVfHn/zYRZEQ/mq5kGz4DwMssZmiM=;
+        b=Yas5LCbeDxcOPo3MtUKZPoVtjGz2N7nWVFhOKmjgn5RnpUF00Uq4gIqlVy09L363kc
+         gdafOTbPwf1O8ium0rvj7YV7d7ulOBtUIuJlR3T0KBIQJpQn9u1liHa411It6wWWEuN5
+         FJVF4ZMWGGE2AhisPOXQ1h6NI1U6P69ujwl/c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=v6z8gULTHIEXJFyVfHn/zYRZEQ/mq5kGz4DwMssZmiM=;
+        b=NVaj6njTwBvf8yVrdkn6xHYC/Kxyf5GufLhwrikg9AnvYD7xRAroRNjACnrFc7jl4I
+         KLhskP2Z+iglmb7xNfEp4KJ8WN6EeWXQM5Ty8Ul5V5/iBtX7hGUCgHQYdd4VkSV7oZfh
+         NIcOlHxOAR8T5OsvhGHx/zV4PodPeiIPGLdtaho+IXcAeq1USH1Vm0HH8vXDtZmnFrHd
+         c05SrBqVC2ev9HIItG6javeISCqDs/OlGEfRcNJRQVDhZ+u7otPJb/uEE9Jx4UF0ixXD
+         NRZRJywXGqzYitQx1aeTqySgn39za3fI/ujQsabd6IrfGIFvLkB54r6eu2uTI5H8BQIj
+         Xgeg==
+X-Gm-Message-State: AOAM533MTwo1rIbbDot6ur9pDPMUyT2ZYoAy8ys0pCrgQinnz5yuCF0L
+        adgCO1ownDIlLovBqbajPUK1+B2KTydCED8i1cjerQ==
+X-Google-Smtp-Source: ABdhPJwZSfk+gNJ3MxdQNfb3bKMEr+pEObaXeEJqxZl5sl6oW8U5vvDxSDnaFP1z3ZStaQR+bR5RyDX3py/JnYaYMbI=
+X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id
+ k7-20020a0568080e8700b0032e47890d2cmr774448oil.193.1654892500954; Fri, 10 Jun
+ 2022 13:21:40 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 10 Jun 2022 13:21:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220609072722.3488207-9-hsinyi@chromium.org>
+References: <20220609072722.3488207-1-hsinyi@chromium.org> <20220609072722.3488207-9-hsinyi@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 10 Jun 2022 13:21:40 -0700
+Message-ID: <CAE-0n51UTDJ1zkhrwcxrYL7X9_MrhAeodiTJ30k+3Zef3zP2=Q@mail.gmail.com>
+Subject: Re: [PATCH v7 8/8] drm: Config orientation property if panel provides it
+To:     Douglas Anderson <dianders@chromium.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for R-Car S4. The S4 IP differs a bit from its siblings in
-such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
-are not routed to the INTC-AP but to the ECM.
+Quoting Hsin-Yi Wang (2022-06-09 00:27:23)
+> Panel orientation property should be set before drm_dev_register().
+> Some drm driver calls drm_dev_register() in .bind(). However, most
+> panels sets orientation property relatively late, mostly in .get_modes()
+> callback, since this is when they are able to get the connector and
+> binds the orientation property to it, though the value should be known
+> when the panel is probed.
+>
+> In drm_bridge_connector_init(), if a bridge is a panel bridge, use it to
+> set the connector's panel orientation property.
+>
+> Suggested-by: Doug Anderson <dianders@chromium.org>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-
-Change since V2:
-* make interrupts not required for this SoC
-
-Tested with:
-make dtbs_check DT_SCHEMA_FILES=thermal/rcar-gen3-thermal.yaml
-
- .../bindings/thermal/rcar-gen3-thermal.yaml   | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-index 72dc7eb27f8d..0f05f5c886c5 100644
---- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-@@ -8,9 +8,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Renesas R-Car Gen3 Thermal Sensor
- 
- description:
--  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
--  sensors (THS) which are the analog circuits for measuring temperature (Tj)
--  inside the LSI.
-+  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
-+  control the thermal sensors (THS) which are the analog circuits for
-+  measuring temperature (Tj) inside the LSI.
- 
- maintainers:
-   - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-@@ -27,6 +27,7 @@ properties:
-       - renesas,r8a77965-thermal # R-Car M3-N
-       - renesas,r8a77980-thermal # R-Car V3H
-       - renesas,r8a779a0-thermal # R-Car V3U
-+      - renesas,r8a779f0-thermal # R-Car S4-8
- 
-   reg: true
- 
-@@ -79,8 +80,16 @@ else:
-         - description: TSC1 registers
-         - description: TSC2 registers
-         - description: TSC3 registers
--  required:
--    - interrupts
-+  if:
-+    not:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,r8a779f0-thermal
-+  then:
-+    required:
-+      - interrupts
- 
- additionalProperties: false
- 
--- 
-2.35.1
-
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

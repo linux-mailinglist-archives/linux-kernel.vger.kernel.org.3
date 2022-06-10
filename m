@@ -2,132 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4CD546A76
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7CE546A68
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349744AbiFJQd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        id S1349620AbiFJQcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349255AbiFJQde (ORCPT
+        with ESMTP id S1345920AbiFJQct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:33:34 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779D457111
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:33:15 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id p13so47865327ybm.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:33:15 -0700 (PDT)
+        Fri, 10 Jun 2022 12:32:49 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731BB56B17
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:32:46 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id r82so47813420ybc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:32:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bhv02q67MOioDvIeN4y+a/ybeIh94RUFpBdk0EW721Q=;
-        b=gTSqAdTJjftykkKV3LvI3BgIEdnFPO1tIX2Ja3yrYtQNH7qkYO5md+ofkXUFp0r5AW
-         G6gcWOkM0lg+gYk1xVlJLK69IVjiD2uEY/paaLVpsJSAUJr3ix3CnTM3jTjnVHIGrITZ
-         8qOTeStSyYFo4Xt1uIWq/JcAZJafn7HdU8yhoSTqaMMSwSE/odkOqaPLeyUKWL5sO4fY
-         YvCEOzFgGYsioj0kFMpYKr9Y6KDxyzq/x30hfjgDctRhz4XpICUW+ZTe11KlQpTSKF0Q
-         MmwpTmp6Vj4zz6mr/A1YZvGF2iMEYWObj9GWEHshf9njpmcmcbzr60kAblJRSOIE1DnE
-         +7SA==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=0XYuJwlWcPhF5wKwZj6AX0M1ehVlcZ8wjqHIDg46ZGY=;
+        b=YGb7T13IJ8UiqfUJsmv02nu9YXnSJcbAUt/Mw1b+6ond6Dc2qqxiyORhyo3av0M89s
+         9OcHBOtfbbrRc9cquT7RcjEQpvQa8VVX8YZOZj7QBiGS2dsajxO5Y/+BsgU+M7MgPMiM
+         pKT7ohn/HbmAeM6/yxR+dSbQSZEx3cImo7f4ikdZC0NhAAKeGRRcvpe5I6I5qjkdYfjp
+         ALRdVMVwT08KL5DBr4wUVfSvPEv4IIladqD1EdLJ+Iy9c7POvAZJwvM29n4D6Zxx7iMg
+         WRafBNmnTTDXsUKpZ+d+XQOE55IB1JLiIrAoQ1+Tt6YxeDtP/dG/SdhUVnHCwkkKT+Tm
+         Fm0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bhv02q67MOioDvIeN4y+a/ybeIh94RUFpBdk0EW721Q=;
-        b=5m0ZPBFOOvm0kvvlxU1ke/DOKs3/461Md8zuKkTdwmegoGmXxGUJr934rph1m9gwb/
-         wQ+99wkbOBoHB+S6bmjBbkiuP2TzlJIJq3ySzoOZa0VoF01Qw8d6mxvwgey9/3ITqs3Z
-         42b6JxJMNjuncj3BbTv1xm9FpMKIqy86f12HjgHOWO4x6tb63al7rUwO0wbolqJkmOWn
-         doYivLSYN5uMorewWqGFX3dRVJ1jj7fZsQtdD9kwNZD/WkwBbipQ/nvMB7PSdIGDUct1
-         hVfC6GesD279UnVZFnrgFjOoQJMzgFA4e/KHfSCEi8KQfThnkvTab9D/NyLv8aiModX3
-         uDoQ==
-X-Gm-Message-State: AOAM530+Ey80ujXWhiTaoIMPgvib/HMCp61/SePF5MzKqhjulExnT18U
-        +FdyljuGCKTixrbYJTjt20DESZyqad52TgLHgi3bZQ==
-X-Google-Smtp-Source: ABdhPJyJqY4ELta1f6MtdpBF9FmmN+1Swnl8abwrpU7Envy5QN/0+FxiY8CXqHJVU09kzIn9KX5saZ7waQDwoeJx/U8=
-X-Received: by 2002:a05:6902:102c:b0:663:32b8:4b24 with SMTP id
- x12-20020a056902102c00b0066332b84b24mr37019234ybt.1.1654878793763; Fri, 10
- Jun 2022 09:33:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=0XYuJwlWcPhF5wKwZj6AX0M1ehVlcZ8wjqHIDg46ZGY=;
+        b=nqd1znwGTgbjnjfCTga5AcSLm9+2hqh/wDRjkcNKKJur532JoqlhwBlPjSq1i+XksB
+         wv/wn/MJq2Vq/F0iFyGGycwbfwH2OBFIHPQH35J6//2N7hbpsVNVU2JmpKYJU0VM4D8W
+         KxHXn7eUCBy/ukWP0v/dDp5Q2sN7F7hT6QAsGGXKaqR9nG0D+OVWZV/us+9nUGKezc5J
+         8kDK3YUmWxsH1PLpx2gim+Siw/P5gzldLKeHeo9hNbhBURuGrr6lUaYoG855eYifWPLk
+         HtsVba4wRPw5yEoKJfJtuHmQe/b7gCjTFDBLIPon6vLQMLcsvpWl/3Dc1It9ZTkLCO4A
+         nGBA==
+X-Gm-Message-State: AOAM532yy8z9pSvxwHilZgqfDrZls98fpCmLmmyNPjW+rBP/I7fm9WVW
+        s6muUMcSNiVPwmkzBW2iuNeKT6xV3APJPw48Dts=
+X-Google-Smtp-Source: ABdhPJwax1n8gVqAuKV+ceFuVHBEqDyXMZ25+fmnz7g3HqM17F6VLNri5lzclLDgJw8R7/qGGvkPhTKWnw5QPNso4k4=
+X-Received: by 2002:a5b:b:0:b0:663:f6b5:e66b with SMTP id a11-20020a5b000b000000b00663f6b5e66bmr14723467ybp.400.1654878765503;
+ Fri, 10 Jun 2022 09:32:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
- <20220610113427.908751-3-alexandr.lobakin@intel.com> <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
- <22042c14bc6a437d9c6b235fbfa32c8a@intel.com>
-In-Reply-To: <22042c14bc6a437d9c6b235fbfa32c8a@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 10 Jun 2022 18:32:36 +0200
-Message-ID: <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] bitops: always define asm-generic non-atomic bitops
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Sender: adonald323@gmail.com
+Received: by 2002:a05:7000:8b10:0:0:0:0 with HTTP; Fri, 10 Jun 2022 09:32:45
+ -0700 (PDT)
+From:   Dina Mckenna <dinamckenna1894@gmail.com>
+Date:   Fri, 10 Jun 2022 16:32:45 +0000
+X-Google-Sender-Auth: 7HtA3KAngftg8fKmIq7ATJwMLxs
+Message-ID: <CANHbP4O3ktPBLC5xwxvY+_Si8KuoUkpzj-spjV6P6JZeHKWDEw@mail.gmail.com>
+Subject: Please need your urgent assistance,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b32 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9293]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [adonald323[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [adonald323[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Jun 2022 at 18:02, Luck, Tony <tony.luck@intel.com> wrote:
->
-> > > +/**
-> > > + * generic_test_bit - Determine whether a bit is set
-> > > + * @nr: bit number to test
-> > > + * @addr: Address to start counting from
-> > > + */
-> >
-> > Shouldn't we add in this or in separate patch a big NOTE to explain that this
-> > is actually atomic and must be kept as a such?
->
-> "atomic" isn't really the right word. The volatile access makes sure that the
-> compiler does the test at the point that the source code asked, and doesn't
-> move it before/after other operations.
+Hello my dear,
 
-It's listed in Documentation/atomic_bitops.txt.
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you.. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina Howley. Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-It is as "atomic" as READ_ONCE() or atomic_read() is. Though you are
-right that the "atomicity" of reading one bit is almost a given,
-because we can't really read half a bit.
-The main thing is that the compiler keeps it "atomic" and e.g. doesn't
-fuse the load with another or elide it completely, and then transforms
-the code in concurrency-unfriendly ways.
+I'm waiting for your immediate reply.
 
-Like READ_ONCE() and friends, test_bit(), unlike non-atomic bitops,
-may also be used to dependency-order some subsequent marked (viz.
-atomic) operations.
-
-> But there is no such thing as an atomic test_bit() operation:
->
->         if (test_bit(5, addr)) {
->                 /* some other CPU nukes bit 5 */
->
->                 /* I know it was set when I looked, but now, could be anything */
-
-The operation itself is atomic, because reading half a bit is
-impossible. Whether or not that bit is modified concurrently is a
-different problem.
-
-Thanks,
--- Marco
+May God Bless you,
+Mrs. Dina Howley. Mckenna.

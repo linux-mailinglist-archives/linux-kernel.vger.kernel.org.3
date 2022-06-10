@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C54546FE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9010546FF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348245AbiFJXPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 19:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S1348401AbiFJXTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 19:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343938AbiFJXO6 (ORCPT
+        with ESMTP id S1343526AbiFJXTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:14:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5E518344
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654902897; x=1686438897;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RsqeCXqH+5B1saV90Gbx918B8s9eAPKiAy9H93CA0+s=;
-  b=Qjk9yuxJtodBItQ0NPrJoscnjuiIgPW8157XSN/B1FyDeJfFu4ejNlG3
-   qT55KI75uHMzo60PYiZkkUg27PSIAvouw/RgBrJsbVTDX9RIk/PkOM3Ky
-   rVq4P9JA1Hu3Q/zcXS10dA49kKpK/cjQDLrGnfIWhropn5aEY6/2mxovq
-   X/uH5sinmONU7U/Zzhc2Xy8D03XP60yZWfcvKkzE/APJPovc0eCKHm3ta
-   Az11NNWtVt5oH/YGpPTP/AuO1RXNqOXL0/VhSq9GUl1J8f0eOWOuhGkG6
-   +SrWOy5TIUI/wEO5xvhB39Hb6PbYdQmNwXb1hwgvELg6ct3X8AdTmNEwU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="364104282"
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="364104282"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:14:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="650066990"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Jun 2022 16:14:55 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nznqB-000IM5-34;
-        Fri, 10 Jun 2022 23:14:55 +0000
-Date:   Sat, 11 Jun 2022 07:14:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jarkko Sakkinen <jarkko@profian.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jarkko-tpmdd:kprobes 3/3] arch/arm/kernel/module_alloc.c:24:7:
- warning: no previous prototype for 'module_alloc'
-Message-ID: <202206110736.sXofukqb-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Jun 2022 19:19:12 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEC8659D;
+        Fri, 10 Jun 2022 16:19:10 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id s23so516630iog.13;
+        Fri, 10 Jun 2022 16:19:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=I85nzJQvpanBbnKRqJtMLn+dRbMroiljIODt3AC3sUA=;
+        b=d1V9VTvOTdB5PSzJQEQAfX0wnk/OEf5LT+s+vwUFh5DhoAToEtec3va884DEiaUnAN
+         hy4sCgVbGOslJKfdlcMCN29/vYWGZXh0X79zANDDJbtpu+mCW1qoyhUHvvo2FnQYcRFc
+         cV58KrDg6r93skqeLnaDRqOXbB/dNIqMu6d/+6wCW+k3Pl4CdH77hzeUPu3VO2W6XVqn
+         hxJSizLZ9YBOr/+NWQKw3jj9B6rER7gJYxLDlGKR5ye7zqr4hKPwmljcVQ04MFtPMpXM
+         lxR7GcO5kxP9R+RRhdtBZQUwKgvSDcCgzVl6XrRP2knDofjU50BAtNaZGyXGOi6depc6
+         RyJQ==
+X-Gm-Message-State: AOAM531MaITuOvpt25T/qzmMZf7C7XduXpdR0F0MhNwtFOO8ReNj4CwK
+        KvZJ2T72RlGr6r5exkwTXw==
+X-Google-Smtp-Source: ABdhPJyek+/IffazigJpKri07/SwvYOlBtivddM8UGvJatPh3EPESw3a8N+6KkBOSBAS1qj4+6zFxg==
+X-Received: by 2002:a6b:2c87:0:b0:669:c37b:342b with SMTP id s129-20020a6b2c87000000b00669c37b342bmr1736787ios.158.1654903149861;
+        Fri, 10 Jun 2022 16:19:09 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y21-20020a027315000000b00331c06bf620sm176633jab.154.2022.06.10.16.19.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 16:19:09 -0700 (PDT)
+Received: (nullmailer pid 2450359 invoked by uid 1000);
+        Fri, 10 Jun 2022 23:19:06 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>
+In-Reply-To: <20220610203746.2191518-1-robh@kernel.org>
+References: <20220610203746.2191518-1-robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: mtd/partitions: Convert arm-firmware-suite to DT schema
+Date:   Fri, 10 Jun 2022 17:19:06 -0600
+Message-Id: <1654903146.326838.2450358.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git kprobes
-head:   8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-commit: 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3 [3/3] kprobes: Enable tracing for mololithic kernel images
-config: arm-trizeps4_defconfig (https://download.01.org/0day-ci/archive/20220611/202206110736.sXofukqb-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd kprobes
-        git checkout 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
+On Fri, 10 Jun 2022 14:37:44 -0600, Rob Herring wrote:
+> Convert the arm,arm-firmware-suite partition binding to DT schema
+> format. Simple conversion as there's only a compatible property.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../mtd/partitions/arm,arm-firmware-suite.txt | 17 -----------
+>  .../partitions/arm,arm-firmware-suite.yaml    | 30 +++++++++++++++++++
+>  2 files changed, 30 insertions(+), 17 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/partitions/arm,arm-firmware-suite.txt
+>  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/arm,arm-firmware-suite.yaml
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-All warnings (new ones prefixed by >>):
+yamllint warnings/errors:
 
->> arch/arm/kernel/module_alloc.c:24:7: warning: no previous prototype for 'module_alloc' [-Wmissing-prototypes]
-      24 | void *module_alloc(unsigned long size)
-         |       ^~~~~~~~~~~~
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/mtd/partitions/arm,arm-firmware-suite.example.dts:18.17-22.11: Warning (unit_address_vs_reg): /example-0/flash@0: node has a unit name, but no reg or ranges property
 
+doc reference errors (make refcheckdocs):
 
-vim +/module_alloc +24 arch/arm/kernel/module_alloc.c
+See https://patchwork.ozlabs.org/patch/
 
-    22	
-    23	#ifdef CONFIG_MMU
-  > 24	void *module_alloc(unsigned long size)
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

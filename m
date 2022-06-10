@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF417545ADE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755C1545AE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbiFJD5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 23:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
+        id S242917AbiFJD7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 23:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbiFJD5t (ORCPT
+        with ESMTP id S1346587AbiFJD6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 23:57:49 -0400
+        Thu, 9 Jun 2022 23:58:48 -0400
 Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013BB3B284
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 20:57:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VFxf77o_1654833464;
-Received: from 30.0.143.52(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VFxf77o_1654833464)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD0245792;
+        Thu,  9 Jun 2022 20:58:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VFxazjx_1654833523;
+Received: from 30.0.143.52(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VFxazjx_1654833523)
           by smtp.aliyun-inc.com;
-          Fri, 10 Jun 2022 11:57:45 +0800
-Message-ID: <927ab454-f25d-06d2-5861-a57033f28e00@linux.alibaba.com>
-Date:   Fri, 10 Jun 2022 11:57:54 +0800
+          Fri, 10 Jun 2022 11:58:44 +0800
+Message-ID: <6351ead6-b4b8-dc43-2c1d-c099094cadc9@linux.alibaba.com>
+Date:   Fri, 10 Jun 2022 11:58:54 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH] arm64/hugetlb: Simplify the huge_ptep_set_access_flags()
-To:     Will Deacon <will@kernel.org>
-Cc:     catalin.marinas@arm.com, mike.kravetz@oracle.com,
-        songmuchun@bytedance.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <d81f1c3215000d0f238900dbfa0a0976d8d00cd3.1653470369.git.baolin.wang@linux.alibaba.com>
- <20220609154438.GA3444@willie-the-truck>
+Subject: Re: [mm] 9b12e49e9b: BUG:Bad_page_state_in_process
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-arch@vger.kernel.org,
+        lkp@lists.01.org, akpm@linux-foundation.org, linux-mm@kvack.org
+References: <20220608143819.GA31193@xsang-OptiPlex-9020>
+ <d64da0da-9f71-3ae9-4d72-00b0c42fce5e@linux.alibaba.com>
+ <YqHlKj5LbmtYGWUy@casper.infradead.org>
 From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220609154438.GA3444@willie-the-truck>
+In-Reply-To: <YqHlKj5LbmtYGWUy@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
@@ -48,70 +50,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/9/2022 11:44 PM, Will Deacon wrote:
-> On Wed, May 25, 2022 at 06:31:09PM +0800, Baolin Wang wrote:
->> After commit bc5dfb4fd7bd ("arm64/hugetlb: Implement arm64 specific
->> huge_ptep_get()"), the arm64 specific huge_ptep_get() will always
->> consider the subpages' dirty and young state for CONT-PTE/PMD hugetlb,
->> so there is no need to check them again when setting the access flags
->> for CONT-PTE/PMD hugetlb in huge_ptep_set_access_flags().
+On 6/9/2022 8:18 PM, Matthew Wilcox wrote:
+> On Thu, Jun 09, 2022 at 12:42:16PM +0800, Baolin Wang wrote:
+>> diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+>> index 6cccf52e156a..cae74e972426 100644
+>> --- a/arch/x86/mm/pgtable.c
+>> +++ b/arch/x86/mm/pgtable.c
+>> @@ -858,6 +858,7 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
+>>          /* INVLPG to clear all paging-structure caches */
+>>          flush_tlb_kernel_range(addr, addr + PAGE_SIZE-1);
 >>
->> Meanwhile this also fixes an issue when users want to make the CONT-PTE/PMD
->> hugetlb's pte entry old, which will be failed to make the pte entry old
->> since the original code will always consider the subpages' young state
->> if the subpages' young state is set. For example, we will make the
->> CONT-PTE/PMD hugetlb pte entry old in DAMON to monitoring the accesses,
->> but we'll failed to monitoring the actual accesses of the CONT-PTE/PMD
->> hugetlb page, due to we can not make its pte old.
+>> +       pgtable_clear_and_dec(virt_to_page(pte));
+>>          free_page((unsigned long)pte);
 >>
->> Thus remove the code considering the subpages' dirty and young state in
->> huge_ptep_set_access_flags() to fix this issue and simplify the function.
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->>   arch/arm64/mm/hugetlbpage.c | 10 +---------
->>   1 file changed, 1 insertion(+), 9 deletions(-)
->>
->> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
->> index e2a5ec9..5c703aa 100644
->> --- a/arch/arm64/mm/hugetlbpage.c
->> +++ b/arch/arm64/mm/hugetlbpage.c
->> @@ -448,7 +448,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
->>   	size_t pgsize = 0;
->>   	unsigned long pfn = pte_pfn(pte), dpfn;
->>   	pgprot_t hugeprot;
->> -	pte_t orig_pte;
->>   
->>   	if (!pte_cont(pte))
->>   		return ptep_set_access_flags(vma, addr, ptep, pte, dirty);
->> @@ -459,14 +458,7 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
->>   	if (!__cont_access_flags_changed(ptep, pte, ncontig))
->>   		return 0;
->>   
->> -	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
->> -
->> -	/* Make sure we don't lose the dirty or young state */
->> -	if (pte_dirty(orig_pte))
->> -		pte = pte_mkdirty(pte);
->> -
->> -	if (pte_young(orig_pte))
->> -		pte = pte_mkyoung(pte);
->> +	clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+>>          return 1;
 > 
-> I don't understand what this clear_flush() call is doing here; notably, it
-> includes TLB invalidation which we don't have for the non-cont case.
+> If you're going to call virt_to_page() here, you may as well cache the
+> result and call __free_page(page) to avoid calling virt_to_page() twice.
 
-OK. I can just call a loop of pte_clear() to clear cont-pte to avoid TLB 
-flush.
-
-> 
-> Why isn't huge_ptep_set_access_flags() just a loop around
-> ptep_set_access_flags() if huge_ptep_get() is taking care of collapsing the
-> dirty/young state?
-
-IIUC, according to the comments "Changing some bits of contiguous 
-entries requires us to follow a Break-Before-Make approach, breaking the 
-whole contiguous set before we can change any entries". So we should 
-clear the cont-ptes firstly, then re-set them. Then a loop of 
-ptep_set_access_flags() is not suitable for the cont-pte case, right? 
-Please correct me if I missed something else. Thanks.
+Right, will do in next version. Thanks.

@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41175467C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A325467DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349481AbiFJNzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S239949AbiFJN5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349396AbiFJNy2 (ORCPT
+        with ESMTP id S1349546AbiFJN5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:54:28 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510AA53E19;
-        Fri, 10 Jun 2022 06:54:26 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 435505C01B5;
-        Fri, 10 Jun 2022 09:54:23 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 10 Jun 2022 09:54:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1654869263; x=
-        1654955663; bh=gFK/HQH8p53JQi+NMpZBU5/teK5gD22vCfFoZtEMGWY=; b=l
-        hjlFSZGo1QV32MYM6OA2gTInVFxds4H+FZhyZ6kmsadhbTBpsz3OEMSpw7yoYg4L
-        CRRCaMJdPjDV0sk/C28EFZF73i42kngswxEMPSnHQZU0xU9HGntzU2QX3FVl8Q6A
-        bBQ1YlNGBUm1/AteVlrxkyrcqah3+Xg7pc/T2U2jIo2FO0DrsAD7I7E9Fm38COEP
-        SZiu3p3VXV7ExHSoNLSEkKvxgp0YZUPxWSeNrMNX1vo9nNmM8SwWP4sHrOOron4n
-        YyK6SQ8qnzZNs0Ds55UPD/88dolkmBUyMgZA9tU4CoAK4i/SGwdcYCEJcVF14Q00
-        BpvPay/My7WiZ4gp2q/KQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1654869263; x=
-        1654955663; bh=gFK/HQH8p53JQi+NMpZBU5/teK5gD22vCfFoZtEMGWY=; b=W
-        xnD0qhX9oS5RCKGLsOaYVvoYcjcL1q3LEOYU8HrfO2kMRs+dwAvm+/SP7hgSVjEa
-        UX+IKAXsg6q9L3/T1Rha3uhBgGvZvtsYygxt9Jm79PaA39s1gul+WU3Xx4GtwpbQ
-        iYCtmzhfgHO5tO8JKC5dHOmrbZs1i2ppFO9D56TsfktN2DXlazcBCcS2XLz9OdFz
-        QHDT0K6JxOujSjLfO4p22i7/4AH6VFxGEj0dTgFYDHiAGrKOGTcE8KvsKu7jRyDI
-        cWo82M4QeJ1oAfbFgXnFb8LFydIHn8zH2GCxM8oskMk2LEtaRrfVue4Bv800FaSo
-        LCDcLLDZCSAKkN/GDUeLA==
-X-ME-Sender: <xms:Dk2jYkYXNqLQj16Lh7eiqeMOReBrD8MPBgQfXGtfeTUAJgOX-cEeAw>
-    <xme:Dk2jYvbobhpuOsmvsyMgBZ6WJ0jJgsTgBmpNv665ZqcBRYvIHO9IFheFVwcKLXXC_
-    9RGNNymBhnBSD_erQQ>
-X-ME-Received: <xmr:Dk2jYu-MrvRzBYuoKwznpSarHSSE7JMc4KLcEoZrK7rwBJjYgqUPMffqO3xbWzKFHAYAGNDRcY_5aNwHwi1dKtjw9AeUMyQsBvhP6KHKRcz2>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudduuddgieekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepffeltdeggfdufffhfeetleevueduuefghfelveeukeejleeu
-    heevgfevieeiudfhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:Dk2jYuonKHTrEI3XjaSRSekBqDQdfceeH4Q2p2UZ_QALEmDQZRY53g>
-    <xmx:Dk2jYvr-8HxMMVNepX_vo3Oki7psr7i4WAbX8iBrGoHmmNDfUqN84g>
-    <xmx:Dk2jYsTIDxNK0PNrvfbepsTaHIeKUKjGexQFu-1bMcmZzXMTr2F1uw>
-    <xmx:D02jYgA15cAch015OI-yy9n3WL_PzPJ1B8tDeNDWGof5qio2jLs8OA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 10 Jun 2022 09:54:21 -0400 (EDT)
-Message-ID: <b094a60a-dd11-6202-631b-4b5b254b9a81@flygoat.com>
-Date:   Fri, 10 Jun 2022 14:54:21 +0100
+        Fri, 10 Jun 2022 09:57:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00D6100B24;
+        Fri, 10 Jun 2022 06:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654869398; x=1686405398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rgp4lTJLX0ot2IhjAJHLXWfwVn1Hf1envZh9HGJ8MuU=;
+  b=LL9TDN8rw3ofnJ0/yz8QuWpf4lPwstD6t+nWUuEoX0+cGassHsh0A1qw
+   5x5FBh65NaEm9+peLkqTbvr4HE56LRqfrqeND5JtKXJ2VQl8kuKZYi48y
+   49LbDsI+VvVbqmKxWXzpk7Di6fnQqxUml/piRmWOqbnNejQfjdHGeqNle
+   h1MNEK7YwpuXhkVKh1ixtlHt+10YSeU4yVRD3T7a6zqdMIv8mWya9RYWg
+   HWBRMS3emvcMWhASbaxIqgsJ8Lyp9V5zVyQ9Rz3t3kX/TkhQcY+ZUuV4E
+   7mWdg1B5c3qpFuWeAJNKNkUp/w3PcKsKNrszHVM30xXg91/6FBmvRUR2r
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="258072404"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="258072404"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 06:56:38 -0700
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="556386807"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 06:56:32 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nzf7k-000Ypb-8i;
+        Fri, 10 Jun 2022 16:56:28 +0300
+Date:   Fri, 10 Jun 2022 16:56:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] bitops: define const_*() versions of the
+ non-atomics
+Message-ID: <YqNNjKRja7KelljA@smile.fi.intel.com>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-5-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/1] irqchip/loongson-liointc: Guard uses of
- cpu_logical_map
-Content-Language: en-GB
-To:     =?UTF-8?B?5p2O5a6H6bmP?= <liyupeng@zbhlos.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, caizp2008@163.com
-References: <AEEAewAYFO3qveOnRj7or4ox.3.1654844307199.Hmail.liyupeng@zbhlos.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <AEEAewAYFO3qveOnRj7or4ox.3.1654844307199.Hmail.liyupeng@zbhlos.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610113427.908751-5-alexandr.lobakin@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/6/10 7:58, 李宇鹏 写道:
-> thanks!
-Hi,
+On Fri, Jun 10, 2022 at 01:34:25PM +0200, Alexander Lobakin wrote:
+> Define const_*() variants of the non-atomic bitops to be used when
+> the input arguments are compile-time constants, so that the compiler
+> will be always to resolve those to compile-time constants as well.
+> Those are mostly direct aliases for generic_*() with one exception
+> for const_test_bit(): the original one is declared atomic-safe and
+> thus doesn't discard the `volatile` qualifier, so in order to let
+> optimize the code, define it separately disregarding the qualifier.
+> Add them to the compile-time type checks as well just in case.
 
-Could you please correct your email client configuration[1] for proper 
-inline
-reply?
+...
 
-Thanks.
-[1]: https://www.kernel.org/doc/html/latest/process/email-clients.html
-- Jiaxun
+>  /* Check that the bitops prototypes are sane */
+>  #define __check_bitop_pr(name)						\
+> -	static_assert(__same_type(arch_##name, generic_##name) &&	\
+> +	static_assert(__same_type(const_##name, generic_##name) &&	\
+> +		      __same_type(arch_##name, generic_##name) &&	\
+>  		      __same_type(name, generic_##name))
 
-[...]
+Can't it be a one line change and actually keeping ordering at the same time?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

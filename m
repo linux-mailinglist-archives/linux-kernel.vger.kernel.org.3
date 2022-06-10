@@ -2,197 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD8654614A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D1954613D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348437AbiFJJP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S1348498AbiFJJPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348738AbiFJJNc (ORCPT
+        with ESMTP id S1344597AbiFJJOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:13:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796AD2EE10D;
-        Fri, 10 Jun 2022 02:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654852283; x=1686388283;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=3P92TjbxgWWzR31wO/9qZunS2kkje5uPblM6lB8tw0A=;
-  b=Pu5K8oppfXrSX7Dv7zuk/6/hXCEpjmTVOfvYD5gUG0kDFvudrPhRZqcN
-   CMbZVhbxDT7Kxt+B6lnwO/TWCrEem9OH4eYDzkBD8NIuiAuUTc3FK18t6
-   M7pFUDPskzpEk2+M4rjuBmE4k2IXEqBEVpYOvSnnlczDPsGS8A7SH6WEQ
-   Dr3iVODVQ3bhi1PkxNo4g8troKvk8OMulkGEAmZtVn/m0ZraOesk8STJP
-   oUSF0FHxAkgde6G7WBGTAGxsRAxdRbVjqlasvY1uszNJlsfbsxBe3/P1Y
-   2RKM7j4DQawkZZ9kBeJTcTaU/dwowGStZedTUq2gBn49gpPBZmYQUrUjn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="258004016"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="258004016"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 02:11:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="586110091"
-Received: from vrao2-mobl1.gar.corp.intel.com (HELO localhost) ([10.252.58.80])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 02:11:18 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [RFC PATCH 3/5] docs/doc-guide: Update guidelines for title
- adornments
-In-Reply-To: <732154bc-aa35-2326-2b64-87b6c4dd02e7@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
- <732154bc-aa35-2326-2b64-87b6c4dd02e7@gmail.com>
-Date:   Fri, 10 Jun 2022 12:11:15 +0300
-Message-ID: <871qvw2898.fsf@intel.com>
+        Fri, 10 Jun 2022 05:14:49 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114032347E7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:13:49 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a2so35737291lfg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6VipGKvXmUzgI6wJOysxL1F9dkG1/NuBz0MgOH/2bwo=;
+        b=NI1xIb4p+Kuo4svIALZlUuUWPvEId3obWV5uxmZXp3br8+icFzeYMXjlPsoFDcgK6b
+         vkhTj4w+X88o5OJeoH9Yu7vc1p7hd2OAxUtTA3PVMs4NJ+3JQOIulMowXJRV/PsYKv8t
+         UkvSpJOIv1p5Ow6buIr3w52zIFsBqjrZUzhxh0CgxDrhYOm9NOlbBMTVLPIqQhtDojOL
+         06EHHKKktqCCS9AFI6BcZO4LHorX+nulCIZyQg0GCisNWT4VXjJlfiyTkwSoIZc+Ckyl
+         kQTc0orWtxWGWMcBX/bL6Pg5trJh9QsLP3ePW/S8jsR3TMni8x4isVGgCYmB5XW+jUzz
+         7I0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6VipGKvXmUzgI6wJOysxL1F9dkG1/NuBz0MgOH/2bwo=;
+        b=m/TOyvHr0DyJhTYnrJJPlybcbNoPGsksGZzdYkQHcKq2llmrk5i9nJqHTFQUE3Z3MB
+         pRPdnIKydaIlFbR312i7WEV1aWgMqpiHDPTB+sOEnjAfaEMAcBx3aFf/cswuJ9u8ylZi
+         eiqp0MufozA2h5Mc6bVjFAwDNxkcEdeRdEucU7GDN4tnXPAqvHzLd4dp90BN0RffU0o6
+         QV8jFBfT61hjBCaw2ONaGrIrZwcQOy2dNW7ho2SI7rZ3DSi5+Lhxzsl9fu4fAeiUGzMF
+         qROENXnBZaovKsncSE1/nlUCaTCsFlbxisPu/OWJp8JGIICydUVE8c2VR6zzj+VzIpdB
+         Z2lw==
+X-Gm-Message-State: AOAM5327OWvTCmHrtnjXGV9ilf+Otzloo60JSZggUeeIJxnbU1HrW66R
+        YoZ9CL7nTaBvPBJUjrPPCue91g/11tlFkeIFw2lpdA==
+X-Google-Smtp-Source: ABdhPJwlJie0xOQwkJFFI0BY/K9Wo2joeS73jBLG246kddoVd2AGfBb3all9yD8VgJC9MfW6Q420dakMuiCWd4mzrTo=
+X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id
+ bp8-20020a056512158800b00477a5564ab2mr27214759lfb.376.1654852426922; Fri, 10
+ Jun 2022 02:13:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220609113046.780504-1-elver@google.com> <20220609113046.780504-8-elver@google.com>
+ <CACT4Y+bGPLampPm7JHJeXeK_CwQ2_=3mRktPCh7T9r3y8r02hw@mail.gmail.com> <CANpmjNNwOOYxOXLixrUD25YoszYcy7SRwXMMfrj5zZvrETkp0g@mail.gmail.com>
+In-Reply-To: <CANpmjNNwOOYxOXLixrUD25YoszYcy7SRwXMMfrj5zZvrETkp0g@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 10 Jun 2022 11:13:35 +0200
+Message-ID: <CACT4Y+aJkk6BPYTT6abbem5Fx+9REuWDh8vjqg2HMSLr0MwAVg@mail.gmail.com>
+Subject: Re: [PATCH 7/8] perf/hw_breakpoint: Optimize task_bp_pinned() if CPU-independent
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, x86@kernel.org,
+        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Jun 2022, Akira Yokosawa <akiyks@gmail.com> wrote:
-> Existing guidelines predate the sub-directory wise document
-> management.
+On Fri, 10 Jun 2022 at 10:25, Marco Elver <elver@google.com> wrote:
 >
-> Update the guidelines to reflect the current state of affairs.
+> On Thu, 9 Jun 2022 at 17:00, 'Dmitry Vyukov' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+> >
+> > On Thu, 9 Jun 2022 at 13:31, Marco Elver <elver@google.com> wrote:
+> > >
+> > > Running the perf benchmark with (note: more aggressive parameters vs.
+> > > preceding changes, but same host with 256 CPUs):
+> > >
+> > >  | $> perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512
+> > >  | # Running 'breakpoint/thread' benchmark:
+> > >  | # Created/joined 100 threads with 4 breakpoints and 128 parallelism
+> > >  |      Total time: 1.953 [sec]
+> > >  |
+> > >  |       38.146289 usecs/op
+> > >  |     4882.725000 usecs/op/cpu
+> > >
+> > >     16.29%  [kernel]       [k] rhashtable_jhash2
+> > >     16.19%  [kernel]       [k] osq_lock
+> > >     14.22%  [kernel]       [k] queued_spin_lock_slowpath
+> > >      8.58%  [kernel]       [k] task_bp_pinned
+> > >      8.30%  [kernel]       [k] mutex_spin_on_owner
+> > >      4.03%  [kernel]       [k] smp_cfm_core_cond
+> > >      2.97%  [kernel]       [k] toggle_bp_slot
+> > >      2.94%  [kernel]       [k] bcmp
+> > >
+> > > We can see that a majority of the time is now spent hashing task
+> > > pointers to index into task_bps_ht in task_bp_pinned().
+> > >
+> > > However, if task_bp_pinned()'s computation is independent of any CPU,
+> > > i.e. always `iter->cpu < 0`, the result for each invocation will be
+> > > identical. With increasing CPU-count, this problem worsens.
+> > >
+> > > Instead, identify if every call to task_bp_pinned() is CPU-independent,
+> > > and cache the result. Use the cached result instead of a call to
+> > > task_bp_pinned(), now __task_bp_pinned(), with task_bp_pinned() deciding
+> > > if the cached result can be used.
+> > >
+> > > After this optimization:
+> > >
+> > >     21.96%  [kernel]       [k] queued_spin_lock_slowpath
+> > >     16.39%  [kernel]       [k] osq_lock
+> > >      9.82%  [kernel]       [k] toggle_bp_slot
+> > >      9.81%  [kernel]       [k] find_next_bit
+> > >      4.93%  [kernel]       [k] mutex_spin_on_owner
+> > >      4.71%  [kernel]       [k] smp_cfm_core_cond
+> > >      4.30%  [kernel]       [k] __reserve_bp_slot
+> > >      2.65%  [kernel]       [k] cpumask_next
+> > >
+> > > Showing that the time spent hashing keys has become insignificant.
+> > >
+> > > With the given benchmark parameters, however, we see no statistically
+> > > significant improvement in performance on the test system with 256 CPUs.
+> > > This is very likely due to the benchmark parameters being too aggressive
+> > > and contention elsewhere becoming dominant.
+> > >
+> > > Indeed, when using the less aggressive parameters from the preceding
+> > > changes, we now observe:
+> > >
+> > >  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
+> > >  | # Running 'breakpoint/thread' benchmark:
+> > >  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
+> > >  |      Total time: 0.071 [sec]
+> > >  |
+> > >  |       37.134896 usecs/op
+> > >  |     2376.633333 usecs/op/cpu
+> > >
+> > > Which is an improvement of 12% compared to without this optimization
+> > > (baseline is 42 usecs/op). This is now only 5% slower than the
+> > > theoretical ideal (constraints disabled), and 18% slower than no
+> > > breakpoints at all.
+> > >
+> > > [ While we're here, swap task_bp_pinned()'s bp and cpu arguments to be
+> > >   more consistent with other functions (which have bp first, before the
+> > >   cpu argument). ]
+> >
+> > There are 3 main cases:
+> > 1. Per-cpu bp.
 >
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  Documentation/doc-guide/sphinx.rst | 66 +++++++++++++++++++++++-------
->  1 file changed, 52 insertions(+), 14 deletions(-)
+> Yes, CPU-target breakpoint on just 1 CPU.
 >
-> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-> index efcccab68286..f257c4785607 100644
-> --- a/Documentation/doc-guide/sphinx.rst
-> +++ b/Documentation/doc-guide/sphinx.rst
-> @@ -202,34 +202,72 @@ Here are some specific guidelines for the kernel documentation:
->  * Also update the content, not just the formatting, when converting
->    documentation.
->  
-> -* Please stick to this order of heading adornments:
-> +* Please stick to this relative order of section title adornments:
->  
-> -  1. ``=`` with overline for document title::
-> +  1. ``=`` with overline for 1st level titles::
->  
-> -       ==============
-> -       Document title
-> -       ==============
-> +       ===============
-> +       1st level title
-> +       ===============
->  
-> -  2. ``=`` for chapters::
-> +  2. ``=`` for 2nd level titles::
->  
-> -       Chapters
-> -       ========
-> +       2nd level title
-> +       ===============
->  
-> -  3. ``-`` for sections::
-> +  3. ``-`` for 3rd level titles::
->  
-> -       Section
-> -       -------
-> +       3rd level title
-> +       ---------------
->  
-> -  4. ``~`` for subsections::
-> +  4. ``~`` for 4th level titles::
->  
-> -       Subsection
-> -       ~~~~~~~~~~
-> +       4th level title
-> +       ~~~~~~~~~~~~~~~
->  
->    Although RST doesn't mandate a specific order ("Rather than imposing a fixed
->    number and order of section title adornment styles, the order enforced will be
->    the order as encountered."), having the higher levels the same overall makes
->    it easier to follow the documents.
->  
-> +  .. note::
-> +    - It is not easy to tell the levels (chapter, section, etc.) of title
-> +      adornments in a particular .rst file.  A title that appears first in
-> +      a .rst file can be at any level of document, chapter, section, or
-> +      subsection (or deeper) depending on the file's inclusion depth.
-> +
-> +    - The RST language does not have an explicit means to specify a "document
-> +      title".  Quote from the RST documentation\ [#rstdoc]_ with minor edit:
-> +
-> +	*Specifically, there is no way to indicate a document title and
-> +	subtitle explicitly in reStructuredText.  Instead, a lone top-level
-> +	section title can be treated as the document title.*
-> +
-> +      In the kernel documentation processing, the first title in a top-level
-> +      ``index.rst`` can be considered the document title.  In HTML, as each
-> +      .html output has its source .rst file, the title which happens to come
-> +      first is used as the title of the resulting HTML page.
-> +      Alternatively, it is possible to specify a page title by using the
-> +      directive "title".\ [#rstdirtitle]_
-> +
-> +    - There may be a 2nd or 3rd level adornment at the first title in a .rst
-> +      file.  This usage is often seen in .rst files that are derived and
-> +      split from a larger .rst file.  It is sufficient if relative order is
-> +      preserved.
-> +
-> +    .. [#rstdoc] https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#document
-> +    .. [#rstdirtitle] https://docutils.sourceforge.io/docs/ref/rst/directives.html#metadata-document-title
-> +
-> +  .. warning::
-> +    For existing documents, manually updating title adornments just to meet
-> +    these guidelines is not recommended.  Such changes can be error-prone and
-> +    may break section hierarchy without being caught by reviewers.  They may
-> +    be justified if done in conjunction with a section reorganization or
-> +    similar.
-> +
-> +    It would be appreciated if adjustment of those adornments could be
-> +    automated in some way.
-> +
+> > 2. Per-task and per-cpu bp.
+>
+> Task-target breakpoint but pinned to 1 CPU.
+>
+> > 3. Per-task bp (on all cpus)
+>
+> Task-target breakpoint that can run on all CPUs.
+>
+> > right?
+> >
+> > For case 1 we still seem to do lots of unnecessary work in
+> > fetch_bp_busy_slots() by iterating over all CPUs. We are going to bump
+> > only the CPU's cpu_pinned, so that's the only CPU we need to
+> > fetch/check.
+>
+> It'll just do 1 iteration, because cpumask_of_bp() will return a mask
+> with just the event's target CPU in it.
 
-When I wrote the original guidelines, it was my subjective decision to
-steer towards using the same title adornment styles and ordering across
-the kernel documentation. I intentionally left out all the
-reStructuredText details about this, because the definitive
-documentation is the reStructuredText documentation we can refer to.
+You are right. I missed the use of cpumask_of_bp().
 
-While the "Nth level title" is a more precise description, I'm not sure
-it's actually helpful without describing how these levels should map to
-kernel documentation structure. (Not saying the original did that
-either, but then there wasn't much structure to speak of.)
+> > For case 2 we also do lots of unnecessary work, again we also need to
+> > check only 1 CPU (don't need cached_tbp_pinned). Also don't need to do
+> > atomic_dec/inc on all other CPUs (they dec/inc the same variable).
+>
+> Same as above, just 1 iteration because cpumask_of_bp() does the right
+> thing. cached_tbp_pinned may still be used if all existing task
+> breakpoints are CPU-independent (i.e. cpu==-1; granted, doing
+> task_bp_pinned() once or twice probably is irrelevant in this case).
+>
+> > Case 3 is the only one when we need to check all CPUs and
+> > cached_tbp_pinned may be useful.
+> > But I wonder if we could instead add a per-task
+> > has_per_cpu_breakpoints flag. Then if the flag is set, we check all
+> > CPUs as we do now (don't need cached_tbp_pinned). And if it's not set,
+> > then we could optimize the code even more by making it O(1) instead of
+> > O(N).
+>
+> > Namely, we add global tsk_pinned for tasks that don't have
+> > per-cpu breakpoints, and we update only that tsk_pinned instead of
+> > iterating over all CPUs.
+>
+> That seems reasonable.
+>
+> > I think this will require adding cpu_pinned as well (similar to
+> > tsk_pinned but aggregated over all CPUs).
+>
+> > Then the fast path capacity check can become just:
+> >
+> > if (bp->hw.target && !bp->hw.target->has_per_cpu_breakpoints && bp->cpu < 0) {
+> >   if (max_cpu_bp_pinned(type) + task_bp_pinned(-1 /*cpu*/, bp, type) +
+> > hw_breakpoint_weight(bp) > nr_slots[type])
+> >     return -ENOSPC;
+> > }
+> >
+> > Does it make any sense?
+>
+> Yes, I think this might work. I'll see if I can make it work.
 
-Improving the documentation on documentation is great, but I think it's
-a bad sign when length of the notes and warnings on something far exceed
-the length of the thing being documented. The bulk of the text should be
-helpful enough for people to DTRT, while leaving out exhaustive
-descriptions of all the details that should just be references to
-reStructuredText documentation.
-
-
-BR,
-Jani.
-
-
-
-
->  * For inserting fixed width text blocks (for code examples, use case
->    examples, etc.), use ``::`` for anything that doesn't really benefit
->    from syntax highlighting, especially short snippets. Use
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Actually!
+This is somewhat orthogonal to the optimizations you are doing, but
+the most interesting case for us is inherited events. And it seems
+that an inherited event can't possibly overflow the capacity.
+Inherited events are a subset of the parent events and all parent
+events have already passed validation and the child can't have its own
+new events when inherited events are created.
+So couldn't we somehow detect that reserve_bp_slot() is called from
+inherit_event() and skip fetch_bp_busy_slots() altogether? Maybe that
+can be detected by looking at bp->attr.inherit and presence of parent
+context? Capacity validation may be kept as a debug-only check.

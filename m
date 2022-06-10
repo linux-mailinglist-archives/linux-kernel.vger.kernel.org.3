@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80526545910
+	by mail.lfdr.de (Postfix) with ESMTP id C9859545911
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239291AbiFJAQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S237221AbiFJAQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241470AbiFJAQH (ORCPT
+        with ESMTP id S245520AbiFJAQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:16:07 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5C6280F18
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:16:06 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso785259pjg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=CwwzWeVt/78w6d1ffL6XyCLvimxW8UxnchkjAHWAJEo=;
-        b=NGPrRAuixooA8MA8mgxA9SaPEwvdVHIytzpITAQ+FLbIJ2vQu+m85OIHRDjnikjn3g
-         eEdSu/b3bq/XbqMYg71zX/qaD9ODATe/G8cX3UHUoYA7JsDwiMi53bm16+QuILNWPZMc
-         5uWpvq8pOhILuWFtH2crbjI6Le7zolPC1B3FI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=CwwzWeVt/78w6d1ffL6XyCLvimxW8UxnchkjAHWAJEo=;
-        b=S6XwnQNGPCcDHoHTSaKRpwcu6pQI+j8RU5QpUI5nmxgIlkKnU6rFsLB7aausGEcGbl
-         yr3h1y3AEyCm7t3FR3Hapy3tKEdz4JziKHtp1Tjkv3pflj7+h7K+h/47WQogNjMacmVZ
-         nW7Nkbz/8TpwyJFqm/rPoWaAlx8DEM/Dcw6ao4Ob9iJ4CKnVtA59zSz2pen120JnRgqA
-         jBo7ALfpjmp3WFngtXdXYqkZcYbHuInGFxdKHVWNCmA0CaEMPu/93LQX9Pjb5jej4U28
-         7Hzz1WunUntvbeCf7aPM9z6Ca7subqGoBHld4a+8zTsIWeqB6Fwz6xnNhAwqwiXowmtr
-         rYLw==
-X-Gm-Message-State: AOAM531VFxAtz3DOc0Y6MkQXbpt20lE8SX5Xc7/k/3yzVG47vky9IybE
-        wKhSazb3EaZg4Ts2NDcKNLYRzw==
-X-Google-Smtp-Source: ABdhPJwCfNBOHVPJili5Pv6SrB1R6ySPGitAPY5moShiy2nUK+ADxxHS5YWddhPfpXF9SniitMq8bA==
-X-Received: by 2002:a17:902:f690:b0:163:f8eb:3741 with SMTP id l16-20020a170902f69000b00163f8eb3741mr41847981plg.112.1654820166006;
-        Thu, 09 Jun 2022 17:16:06 -0700 (PDT)
-Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id gw24-20020a17090b0a5800b001e0d197898dsm3702073pjb.3.2022.06.09.17.16.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 17:16:04 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     anand.gore@broadcom.com, f.fainelli@gmail.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        samyon.furman@broadcom.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        kursad.oney@broadcom.com, philippe.reynes@softathome.com,
-        tomer.yacoby@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] MAINTAINERS: Add BCM6813 to bcmbca arch entry
-Date:   Thu,  9 Jun 2022 17:15:34 -0700
-Message-Id: <20220610001534.14275-4-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220610001534.14275-1-william.zhang@broadcom.com>
-References: <20220610001534.14275-1-william.zhang@broadcom.com>
+        Thu, 9 Jun 2022 20:16:20 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5E7281852;
+        Thu,  9 Jun 2022 17:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654820172;
+        bh=/+ElgicZYLPAQqpAxpBc1K+pcplEGNPrxCUaHsk2cew=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=BJYg/2w6Z8G2uhwmKfw9zZr98K49tj7BuB8LbMVWcfXBFUJHYfOY2t+HqlYXoobL8
+         9aDgNEwUc+JR1WachioVryF+EQ+4F+VAw1T6OWGLgQtbOhfQcExwkK865PNQ+OZ1Hx
+         RNJ2Qg0NPfzNMyrpuZA4ekFcABFLPCIqrlNLloF4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MaJ7v-1oE9291sRR-00WDjj; Fri, 10
+ Jun 2022 02:16:12 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-gpio@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] pinctrl: nuvoton: wpcm450: Convert irqchip to IRQCHIP_IMMUTABLE
+Date:   Fri, 10 Jun 2022 02:16:08 +0200
+Message-Id: <20220610001609.276220-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002e356f05e10cd8f5"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FSg/4zZ4D0F39BbK/XSWt8pWWf49vgchHRlaMl0mvzDrD6ye5Pp
+ zXkpvHSeK7qKzXQ+CBciZaT/TAlxhAwwkVnFeeRGiRkHCO3VhCi6T2MBYpyPSFvDHKmYejd
+ ZzJdN4B9+yI882DH0PPT/nDkjsL5sfz/PuwGxjXWrs8k+rdT7v17Q9DYIvk7Uxw4iui6W48
+ NpE9CffmSF7zuykKF+P7A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3ICSpxXLciI=:zfxksipzFdOubIlarRmUv+
+ wBvnj59BPc+tMGRyfHnXo4NUUBp4cByr1y7nAAqYE+rvwSRseXWlqsi3z4bjjgub0ZB+r3rWn
+ K/tEt2e+8dlHC2sowvyWHSPS0Pmps1fEKjcrv60ouwRsZznVlBjGTwI1TUUjB2qn6s1/suECL
+ X9QnF71twyQjEvw6BRsOTnhXR8tWnkf6zqjDZgjWM07DsDFPT1K69tHGB1N3hehK/vsgddKZl
+ etoeANexn+QUiVODUMB3zNefq1FgVTTWy4Yw906jujWKfNnxqtTW4DMZ0IkdHff6h3EXBZIvi
+ 2UzUoWcOvwKFxXne60yp6SBq1CwHDg5lsBErQRzIyqtJCM40IlyMxuWv4pl67Lz+/G8WVBfqh
+ ejV6fCH1tqYQV+GiduxeqJeqBwk8uLh02ohGOR3kCh76Dum9y8YPAjRD91ugC/CJbf6cvDllF
+ 936HuKVMC2NLI74Mnw2npK3UjWoPMVV4mSOxMIgT+9S07hWXOscZStQuesQPu12I8+pqfqN4Y
+ /v8awwWRQehzvmbumcXalnWcAVI3E0BuypHRBa0NoBLpKrwwg+R/5tRS6B9egl9L6rll9b4Te
+ WGa4U0qxn+zaGcY74g2P4f/0TQ7LaraE1oJ+b2eW1WXeK0YjlQUzwVAOTGbX7Q0AVxYnH4tZz
+ KhlQ7ji0kghdvMEWrvj0HHOCRI3UxWdofgBtDaeC7MC99a5gtJG1l4jLokTl2or0+lGjH4S8u
+ 5GwqyHh/NVp/GQq1fwpiR4DbRGtU1jsxd8V1JMWkVTM3MHRJh95Hm47eRDttOQEFfHicH8HtO
+ /C8Vg4ISpRfuQMPaIjFUW5EdQtN0T8+yGtMhctmPEBZ37J2+YpvXdH4Da2K6YGpgFSg839B3O
+ 9zip4bNoffn8oTtLwB66wT/ArSD3tXPH0BGpItrUhImov+4L53mYSypymrRhBXPhxuZGr/S74
+ LskHxQHWRZZruQlutBl61/2f21sUo06UbiBrYX96tIJpd4Lt1LuW8h4CZaFLVD2VJJyTzWUms
+ nev2fv5SnYt23RXqL7d5nH48e5C5ZIuQ7Ak0XCz018BmebaV67tXSMSL5nZrZ39PkMh938aEk
+ 6EetKqSw/FveVLnUiL0JxjjOXCxeXORP8F6QMYv6Cj4DvSSSSyxt6ECIQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,112 +69,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002e356f05e10cd8f5
-Content-Transfer-Encoding: 8bit
+Commit 6c846d026d490 ("gpio: Don't fiddle with irqchips marked as
+immutable") added a warning for irqchips that are not marked with
+IRQCHIP_IMMUTABLE.
 
-Add BCM6813 related files to BCMBCA ARCH maintainer list entry
+Convert the pinctrl-wpcm450 driver to an immutable irqchip.
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
 
----
+v2:
+- Add missing gpiochip_*able_irq calls in mask/unmask methods
+- Remove unused instance of struct irq_chip in struct struct wpcm450_bank
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+v1:
+- https://lore.kernel.org/lkml/20220606214301.2061467-1-j.neuschaefer@gmx.=
+net/
+=2D--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 83f886fed140..5b225e3f11a0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3782,6 +3782,7 @@ N:	bcm[9]?63146
- N:	bcm[9]?63158
- N:	bcm[9]?63178
- N:	bcm[9]?6756
-+N:	bcm[9]?6813
- N:	bcm[9]?6846
- N:	bcm[9]?6855
- N:	bcm[9]?6856
--- 
-2.36.1
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/n=
+uvoton/pinctrl-wpcm450.c
+index 0dbeb91f0bf27..d44639ede2ce6 100644
+=2D-- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+@@ -49,7 +49,6 @@ struct wpcm450_bank;
+ struct wpcm450_gpio {
+ 	struct gpio_chip	gc;
+ 	struct wpcm450_pinctrl	*pctrl;
+-	struct irq_chip		irqc;
+ 	const struct wpcm450_bank *bank;
+ };
 
+@@ -142,7 +141,8 @@ static void wpcm450_gpio_irq_ack(struct irq_data *d)
 
---0000000000002e356f05e10cd8f5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+ static void wpcm450_gpio_irq_mask(struct irq_data *d)
+ {
+-	struct wpcm450_gpio *gpio =3D gpiochip_get_data(irq_data_get_irq_chip_da=
+ta(d));
++	struct gpio_chip *gc =3D irq_data_get_irq_chip_data(d);
++	struct wpcm450_gpio *gpio =3D gpiochip_get_data(gc);
+ 	struct wpcm450_pinctrl *pctrl =3D gpio->pctrl;
+ 	unsigned long flags;
+ 	unsigned long even;
+@@ -157,11 +157,14 @@ static void wpcm450_gpio_irq_mask(struct irq_data *d=
+)
+ 	__assign_bit(bit, &even, 0);
+ 	iowrite32(even, pctrl->gpio_base + WPCM450_GPEVEN);
+ 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
++
++	gpiochip_disable_irq(gc, d->hwirq);
+ }
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPfOGO2TRHCoUVIta6BLtkwH6YN1
-Bgqp37bjc3CaSY5+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDYxMDAwMTYwNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCL6geXEUVhnQC3Yi/EY8JMySFcX7tK1e7Gq1EtLbHQUDmY
-Qh54QQinx5FK+EomKn3iZxaG+W6VByPRW9bmIwXZoQB1K2XgJ54AItMgRvoV5/nJXUZsI5RkxR6r
-21cATd1UEBNbrSgS1TO5oSoSAbTiIE0ykcVbhKdzyywk32/UXBh/BmyJlcx3sAO+OFnUVIkLcz50
-JSTUP5q0mcmRhWraFTxLr8+o98ZgtHCjl76pAMMOXSvYyqeVwrHJI4Cwhc07oM7VTfnXg2OS30gY
-O8SHbchUOgDU8DwETIeDaXqCZdrONkIfEnYHPgaOSZ5cLstoaryFkDRfHbwsquk0b2t2
---0000000000002e356f05e10cd8f5--
+ static void wpcm450_gpio_irq_unmask(struct irq_data *d)
+ {
+-	struct wpcm450_gpio *gpio =3D gpiochip_get_data(irq_data_get_irq_chip_da=
+ta(d));
++	struct gpio_chip *gc =3D irq_data_get_irq_chip_data(d);
++	struct wpcm450_gpio *gpio =3D gpiochip_get_data(gc);
+ 	struct wpcm450_pinctrl *pctrl =3D gpio->pctrl;
+ 	unsigned long flags;
+ 	unsigned long even;
+@@ -171,6 +174,8 @@ static void wpcm450_gpio_irq_unmask(struct irq_data *d=
+)
+ 	if (bit < 0)
+ 		return;
+
++	gpiochip_enable_irq(gc, d->hwirq);
++
+ 	raw_spin_lock_irqsave(&pctrl->lock, flags);
+ 	even =3D ioread32(pctrl->gpio_base + WPCM450_GPEVEN);
+ 	__assign_bit(bit, &even, 1);
+@@ -293,6 +298,8 @@ static const struct irq_chip wpcm450_gpio_irqchip =3D =
+{
+ 	.irq_unmask =3D wpcm450_gpio_irq_unmask,
+ 	.irq_mask =3D wpcm450_gpio_irq_mask,
+ 	.irq_set_type =3D wpcm450_gpio_set_irq_type,
++	.flags =3D IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+
+ static void wpcm450_gpio_irqhandler(struct irq_desc *desc)
+@@ -1068,9 +1075,8 @@ static int wpcm450_gpio_register(struct platform_dev=
+ice *pdev,
+ 		gpio->gc.fwnode =3D child;
+ 		gpio->gc.add_pin_ranges =3D wpcm450_gpio_add_pin_ranges;
+
+-		gpio->irqc =3D wpcm450_gpio_irqchip;
+ 		girq =3D &gpio->gc.irq;
+-		girq->chip =3D &gpio->irqc;
++		gpio_irq_chip_set_chip(girq, &wpcm450_gpio_irqchip);
+ 		girq->parent_handler =3D wpcm450_gpio_irqhandler;
+ 		girq->parents =3D devm_kcalloc(dev, WPCM450_NUM_GPIO_IRQS,
+ 					     sizeof(*girq->parents), GFP_KERNEL);
+=2D-
+2.35.1
+

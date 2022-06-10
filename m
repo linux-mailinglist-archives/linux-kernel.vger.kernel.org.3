@@ -2,96 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B882546291
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E86D54629E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238741AbiFJJfq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Jun 2022 05:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
+        id S1347078AbiFJJgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348183AbiFJJfm (ORCPT
+        with ESMTP id S1348886AbiFJJf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:35:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAFD215
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:35:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nzb3K-0003RD-Dz; Fri, 10 Jun 2022 11:35:38 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nzb3K-007YER-UU; Fri, 10 Jun 2022 11:35:37 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nzb3I-00047z-Tl; Fri, 10 Jun 2022 11:35:36 +0200
-Message-ID: <103fdfb5287a29fc229a734a40c3bcd3b373037f.camel@pengutronix.de>
-Subject: Re: [PATCH 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        soc@kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 10 Jun 2022 11:35:36 +0200
-In-Reply-To: <20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Fri, 10 Jun 2022 05:35:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EAF215;
+        Fri, 10 Jun 2022 02:35:56 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LKG4W0dLlzdZvG;
+        Fri, 10 Jun 2022 17:34:03 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 17:35:54 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 17:35:53 +0800
+Message-ID: <be81558c-286d-3620-bd9f-014c7861d9d1@huawei.com>
+Date:   Fri, 10 Jun 2022 17:35:52 +0800
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 4/6] mm: Demote warning message in vmemmap_verify() to
+ debug level
+Content-Language: en-US
+To:     mawupeng <mawupeng1@huawei.com>, <anshuman.khandual@arm.com>,
+        <david@redhat.com>, <corbet@lwn.net>, <will@kernel.org>,
+        <ardb@kernel.org>, <catalin.marinas@arm.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <dvhart@infradead.org>, <andy@infradead.org>, <rppt@kernel.org>,
+        <akpm@linux-foundation.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <paulmck@kernel.org>, <keescook@chromium.org>,
+        <songmuchun@bytedance.com>, <rdunlap@infradead.org>,
+        <damien.lemoal@opensource.wdc.com>, <swboyd@chromium.org>,
+        <wei.liu@kernel.org>, <robin.murphy@arm.com>,
+        <thunder.leizhen@huawei.com>, <gpiccoli@igalia.com>,
+        <chenhuacai@kernel.org>, <geert@linux-m68k.org>,
+        <vijayb@linux.microsoft.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>
+References: <20220607093805.1354256-1-mawupeng1@huawei.com>
+ <20220607093805.1354256-5-mawupeng1@huawei.com>
+ <b1975f44-2552-a03c-bb6f-1452f1fd99c0@redhat.com>
+ <a820f287-e879-6183-a917-6a577b6160ab@huawei.com>
+ <1f2a76d5-7c4e-46bc-ce66-20a962eac73c@arm.com>
+ <8d5e867f-e51a-d763-5ac3-6dfc4e67a376@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <8d5e867f-e51a-d763-5ac3-6dfc4e67a376@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Serge,
 
-On Fr, 2022-06-10 at 11:01 +0300, Serge Semin wrote:
-> The Baikal-T1 APB bus driver correctly handles the deferred probe
-> situation, but still pollutes the system log with a misleading error
-> message. Let's fix that by using the dev_err_probe() method to print the
-> log message in case of the clocks/resets request errors.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/bus/bt1-apb.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
-> index b25ff941e7c7..ac13b5b97107 100644
-> --- a/drivers/bus/bt1-apb.c
-> +++ b/drivers/bus/bt1-apb.c
-> @@ -176,7 +176,8 @@ static int bt1_apb_request_rst(struct bt1_apb *apb)
->  
-> 
-> 
-> 
->  	apb->prst = devm_reset_control_get_optional_exclusive(apb->dev, "prst");
->  	if (IS_ERR(apb->prst)) {
-> -		dev_warn(apb->dev, "Couldn't get reset control line\n");
-> +		dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-> +			      "Couldn't get reset control line\n");
->  		return PTR_ERR(apb->prst);
+On 2022/6/9 16:13, mawupeng wrote:
+>
+>
+> 在 2022/6/8 18:00, Anshuman Khandual 写道:
+>>
+>>
+>> On 6/8/22 06:56, mawupeng wrote:
+>>>
+>>>
+>>> 在 2022/6/7 20:25, David Hildenbrand 写道:
+>>>> On 07.06.22 11:38, Wupeng Ma wrote:
+>>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>>>
+>>>>> For a system only have limited mirrored memory or some numa node 
+>>>>> without
+>>>>> mirrored memory, the per node vmemmap page_structs prefer to allocate
+>>>>> memory from mirrored region, which will lead to vmemmap_verify() in
+>>>>> vmemmap_populate_basepages() report lots of warning message.
+>>>>>
+>>>>> This patch demote the "potential offnode page_structs" warning 
+>>>>> messages
+>>>>> to debug level to avoid a very long print during bootup.
+>>>>>
+>>>>> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+>>>>> ---
+>>>>>    mm/sparse-vmemmap.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+>>>>> index f4fa61dbbee3..78debdb89eb1 100644
+>>>>> --- a/mm/sparse-vmemmap.c
+>>>>> +++ b/mm/sparse-vmemmap.c
+>>>>> @@ -528,7 +528,7 @@ void __meminit vmemmap_verify(pte_t *pte, int 
+>>>>> node,
+>>>>>        int actual_node = early_pfn_to_nid(pfn);
+>>>>>          if (node_distance(actual_node, node) > LOCAL_DISTANCE)
+>>>>> -        pr_warn("[%lx-%lx] potential offnode page_structs\n",
+>>>>> +        pr_debug("[%lx-%lx] potential offnode page_structs\n",
+>>>>>                start, end - 1);
+>>>>>    }
+>>>>
+>>>> This will possibly hide it in environments where this might indeed
+>>>> indicate performance issues.
+>>>>
+>>>> What about a pr_warn_once()?
+>>>>
+>>>
+>>> Sure.
+>>>
+>>> This will works. We can certainly use a pr_warn_once().
+>>
+>> Why not pr_warn_ratelimited() like in the previous patch ?
+>
+> Function vmemmap_populate_basepages() is used to populate base pages.
+> System with huge memory will produce lots lots of warning message
+> during this populate process even with ratelimited. This may lead to slow
+> startup.
 
-This could be shortened to
+I think pr_warn_once is better, the memblock_alloc fallback is not frequent,
 
--		dev_warn(apb->dev, "Couldn't get reset control line\n");
-+		return dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-+				     "Couldn't get reset control line\n");
--		return PTR_ERR(apb->prst);
+but vmemmap_verify will verify each memory and print a lot.
 
-regards
-Philipp
-
+>
+> Thanks for reviewing.
+>
+>> .
+> .

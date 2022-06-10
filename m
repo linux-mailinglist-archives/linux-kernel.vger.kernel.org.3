@@ -2,148 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A3D546646
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFE2546644
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243556AbiFJMFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 08:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S1347660AbiFJMGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245550AbiFJMFu (ORCPT
+        with ESMTP id S1347121AbiFJMGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:05:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339CF3F322;
-        Fri, 10 Jun 2022 05:05:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C179B834DC;
-        Fri, 10 Jun 2022 12:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2574C3411E;
-        Fri, 10 Jun 2022 12:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654862745;
-        bh=f9tCZ3dUGujHwZtgBBhgrGaWaeeMtU5w+k7egcKNfkU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jR8trHrWTHYG7Z9ccS+GVbKyAVHH9oRp5ckreKkEj0zGsQL+sdaLJz/xs+JTOXidt
-         +oEYLXGUcHLwrC8KnvQ8Ua2sMCxlC3qTniMSMxVVgVjRTH0AsnjchsRcXwmbvjNMLz
-         6k5SvVcwPRHnbw4bOV+Cyi3FNXjJzno+2ilZJU82Mi6tLJZ7CJcdxpM9WSTTdsvJF/
-         atC1RjwAyHrMA0l6ivT7fsoo9rVhuSvkHzKZJezQmPZOerlkPNxgfzcBehEnHmg7oA
-         KDOe0t1Q1hhwJIJsWdeJpD8YbiA4r/r7fPAj63FCX/fbs14+yBZi3RIWXjTSHo7JeG
-         hBYCeFocezpLQ==
-Date:   Fri, 10 Jun 2022 14:05:42 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     paulmck@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu/nocb: Avoid polling when myrdp->nocb_head_rdp
- list is empty
-Message-ID: <20220610120542.GA1811980@lothringen>
-References: <20220607075057.909070-1-qiang1.zhang@intel.com>
+        Fri, 10 Jun 2022 08:06:00 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27483F32C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:05:57 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id c4so10457642lfj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=130B3kkD/RZIkOCrcmz351BczRa1xYiEzwjuOf+BIgM=;
+        b=E7/lo+IHcf40eLTK2hdrDgSXpWYiZZx33aHPtjRfBkJ5+KwfnypczseU/evZGlMKHS
+         wdTE0F34tV97mzUPq5NeVhXM8MGKNDBzKJRqNxzmLH5Fkefsa11QkIiGc5mF9mPxTCOx
+         C+ak6qQvMLINN6c9cGRExCq3uqQv/bk7BG7ngLnSjX07nA8OvXGW0m3CSXJ8zZP8TsSo
+         K4Cd7JXgGA4jLI008NOD7MlPfKROGzPol5DFWMQSdInu6sh3kh7V2Mr1SqJB4KvCZPHo
+         eTmor6XZKpk+inF5sIf5xfDX5iOeAUVxRn58Y2TR0+bXwQLBc3itmURO3u+UJk7JFdWg
+         NlMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=130B3kkD/RZIkOCrcmz351BczRa1xYiEzwjuOf+BIgM=;
+        b=BjK/FGisGNw8jPSvvc3aay9sLHh6cozSXIxYQj1Ch3PLDd6DVwa5pT8pCljS6nkuUd
+         w0td2nX5KVSugUJi8dLYCr1aOIg13jgRw81Is4TBL7QFzE1bI/CxNB2RoOg77qdJLxxa
+         OEcptzkOfm+fnyCsK++Ga2vFxM9sutF9uLI+q5MR915FfRcRUVbcTs0ALPuovL7YBcsu
+         NpEv6kgAnUWa46i6D5VCgQU26mqJogTpcbhR7NTO9wPT5J4TjLTbg0JDpCvIPZKpqYUa
+         Bdg0ZN57C3uZc4Z+MAvGxhobLPdqRxXYjAtqWR540KHwKfEZJKIn/W/PDp0s59odB3vW
+         M5Kw==
+X-Gm-Message-State: AOAM533NCPD4C0npOPPYXtayDHN8bAkbY60xGpZytTb2gnNhf5KTPvue
+        kuwPyA254gmiNe6Elgxo4lY=
+X-Google-Smtp-Source: ABdhPJyewHpKPtRT9Pz2gZdCnPyd60KQ0mno5fKFPbEcrCwStmYLat3hyEHndZKfU4T/we0GvsOTMQ==
+X-Received: by 2002:a05:6512:3183:b0:479:3e62:2cb with SMTP id i3-20020a056512318300b004793e6202cbmr16934264lfe.459.1654862756109;
+        Fri, 10 Jun 2022 05:05:56 -0700 (PDT)
+Received: from localhost (87-49-45-7-mobile.dk.customer.tdc.net. [87.49.45.7])
+        by smtp.gmail.com with ESMTPSA id o18-20020ac25e32000000b00478fc1eca9bsm4690143lfg.131.2022.06.10.05.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 05:05:55 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 14:05:54 +0200
+From:   Pankaj Raghav <pankydev8@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "R, Monish Kumar" <monish.kumar.r@intel.com>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "alan.adamson@oracle.com" <alan.adamson@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yi Zhang <yi.zhang@redhat.com>,
+        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "Rao, Abhijeet" <abhijeet.rao@intel.com>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Javier =?utf-8?B?R29uesOhbGV6?= <javier.gonz@samsung.com>
+Subject: Re: 2 second nvme initialization delay regression in 5.18 [Was: Re:
+ [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR
+ observed during blktests]
+Message-ID: <20220610120554.ry7w37jbf3g6w3p3@quentin>
+References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
+ <Ykyf5Zuz1W8yHhNY@zx2c4.com>
+ <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
+ <CAHmME9o-orF52HzkT80054e3Op5fLOcTHb-KHpvvU7H3FpAJ7A@mail.gmail.com>
+ <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
+ <YqG/pybFg0P5yQ9a@zx2c4.com>
+ <20220610061449.GD24331@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607075057.909070-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220610061449.GD24331@lst.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 03:50:57PM +0800, Zqiang wrote:
-> Currently, If the 'rcu_nocb_poll' bootargs is enable, all rcuog kthreads
-> enter polling mode. however, due to only insert CPU's rdp which belong to
-> rcu_nocb_mask to 'nocb_head_rdp' list or all CPU's rdp served by rcuog
-> kthread have been de-offloaded, these cause the 'nocb_head_rdp' list
-> served by rcuog kthread is empty, when the 'nocb_head_rdp' is empty,
-> the rcuog kthread in polling mode not actually do anything. fix it by
-> exiting polling mode when the 'nocb_head_rdp'list is empty, otherwise
-> entering polling mode.
+On Fri, Jun 10, 2022 at 08:14:49AM +0200, Christoph Hellwig wrote:
+> The 970 seems to actually be very slightly newer than the X5.  What
+> I suspect is that they actually are the same m.2 SSD or at least a
+> very similar one and Samsung decided to ship it in the thunderbolt
+> attached versions first.  Maybe one of the Samsung folks here can
+> confirm.
 > 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  v1->v2:
->  Move rcu_nocb_poll flags check from rdp_offload_toggle() to
->  rcu_nocb_rdp_offload/deoffload(), avoid unnecessary setting of
->  rdp_gp->nocb_gp_sleep flags, because when rcu_nocb_poll is set
->  the rdp_gp->nocb_gp_sleep is not used.
+> That leaves us with two plausible theories:
 > 
->  kernel/rcu/tree_nocb.h | 16 ++++++++++------
->  1 file changed, 10 insertions(+), 6 deletions(-)
+>  - the problems could be due to an earlier firmware version or
+>    ASIC stepping
+>  - the problems are due to the thunderbolt attachment
 > 
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index fa8e4f82e60c..2a52c9abc681 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -698,10 +698,14 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
->  				   TPS("WakeBypassIsDeferred"));
->  	}
->  	if (rcu_nocb_poll) {
-> -		/* Polling, so trace if first poll in the series. */
-> -		if (gotcbs)
-> -			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
-> -		schedule_timeout_idle(1);
-> +		if (list_empty(&my_rdp->nocb_head_rdp)) {
-> +			rcu_wait(READ_ONCE(my_rdp->nocb_toggling_rdp));
+I have forwarded this report internally within Samsung and I will post an
+update once I have more information about this issue.
 
-I suspect you have based your patch on upstream tree which doesn't seem
-to have this one yet:
-
-   "rcu/nocb: Add/del rdp to iterate from rcuog itself"
-
-With this patch you can't wait on changes to my_rdp->nocb_toggling_rdp because
-nocb_gp_wait() now performs the list_add/list_del itself.
-
-Please rebase your patch on top of latest rcu:dev from Paul's tree. Then
-all you need to do is to change the wait side, something like this (untested):
-
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index fa8e4f82e60c..f36d6be4f372 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -584,6 +584,15 @@ static int nocb_gp_toggle_rdp(struct rcu_data *rdp,
- 	return ret;
- }
- 
-+static void nocb_gp_sleep(struct rdp *my_rdp, int cpu)
-+{
-+	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
-+	swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
-+					    !READ_ONCE(my_rdp->nocb_gp_sleep));
-+	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
-+}
-+
-+
- /*
-  * No-CBs GP kthreads come here to wait for additional callbacks to show up
-  * or for grace periods to end.
-@@ -701,13 +710,19 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
- 		/* Polling, so trace if first poll in the series. */
- 		if (gotcbs)
- 			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
--		schedule_timeout_idle(1);
-+		if (list_empty(&my_rdp->nocb_head_rdp)) {
-+			raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
-+			if (!my_rdp->nocb_toggling_rdp)
-+				WRITE_ONCE(my_rdp->nocb_gp_sleep, true);
-+			raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
-+			/* Wait for any offloading rdp */
-+			rdp_gp_sleep(my_rdp, cpu);
-+		} else {
-+			schedule_timeout_idle(1);
-+		}
- 	} else if (!needwait_gp) {
- 		/* Wait for callbacks to appear. */
--		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
--		swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
--				!READ_ONCE(my_rdp->nocb_gp_sleep));
--		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
-+		rdp_gp_sleep(my_rdp, cpu);
- 	} else {
- 		rnp = my_rdp->mynode;
- 		trace_rcu_this_gp(rnp, my_rdp, wait_gp_seq, TPS("StartWait"));
+Cheers,
+Pankaj

@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726DB545A01
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DD95459E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237266AbiFJCQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 22:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S1345997AbiFJCE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 22:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiFJCQ0 (ORCPT
+        with ESMTP id S1346110AbiFJCEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 22:16:26 -0400
-Received: from qq.com (smtpbg465.qq.com [59.36.132.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76162CD3;
-        Thu,  9 Jun 2022 19:16:22 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1654827294t2xerqow
-Received: from jianhao-PC.epfl.ch ( [128.178.122.135])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 10 Jun 2022 10:14:49 +0800 (CST)
-X-QQ-SSF: 01400000000000D0K000000A0000000
-X-QQ-FEAT: 0Eq+cbWb7RweksxJbjIcBPlRoOn9zEogU0m1O4YgteBGLYlCdBB51N97DA011
-        YtCajeqiDMvwTC8UtxMVEv8n5kGYejWx+h8FKN975awu0jX3HYMMiopGXxz0NbDcBg+o3VZ
-        dpkyvE9RwUy5KT1vLOnu5O0uPqE810kc4G1HUmukpjIs278MGWDtWZI4YWlWxykVRtTMbzF
-        zPFGbeO/sNTvzejZ+K/DCfYlSP5Lxc2E1j2chSSZ6OX5fB1TThCE+7hMWytpdKm0Opw62oq
-        S4Ffc8U+ONPcxkESA36VBk8oISXNUxdAeII9UraqpjUHEEAAqzkLEb247CLPRrLWrS2KTuz
-        YA3zf9uhw9jpQ2AURw=
-X-QQ-GoodBg: 1
-From:   Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
-To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
-Subject: [PATCH] net: sched: fix potential null pointer deref
-Date:   Fri, 10 Jun 2022 04:14:45 +0200
-Message-Id: <20220610021445.2441579-1-jianhao_xu@smail.nju.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Jun 2022 22:04:14 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79616D942;
+        Thu,  9 Jun 2022 19:03:51 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LK44d49t1zDqjd;
+        Fri, 10 Jun 2022 10:03:29 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 10:03:49 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 10 Jun
+ 2022 10:03:48 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <paolo.valente@linaro.org>, <jack@suse.cz>,
+        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
+Subject: [PATCH -next v10 0/4] support concurrent sync io for bfq on a specail occasion
+Date:   Fri, 10 Jun 2022 10:16:57 +0800
+Message-ID: <20220610021701.2347602-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:smail.nju.edu.cn:qybgforeign:qybgforeign4
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,47 +51,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mq_queue_get() may return NULL, a check is needed to avoid using
-the NULL pointer.
+There are some problem in our mail server, resend v9 because Paolo seems
+didn't receive them(hopefully v10 will be fine).
 
-Signed-off-by: Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
----
- net/sched/sch_mq.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Changes in v10:
+ - Add reviewed-tag for patch 2
 
-diff --git a/net/sched/sch_mq.c b/net/sched/sch_mq.c
-index 83d2e54bf303..9aca4ca82947 100644
---- a/net/sched/sch_mq.c
-+++ b/net/sched/sch_mq.c
-@@ -201,6 +201,8 @@ static int mq_graft(struct Qdisc *sch, unsigned long cl, struct Qdisc *new,
- static struct Qdisc *mq_leaf(struct Qdisc *sch, unsigned long cl)
- {
- 	struct netdev_queue *dev_queue = mq_queue_get(sch, cl);
-+	if (!dev_queue)
-+		return NULL;
- 
- 	return dev_queue->qdisc_sleeping;
- }
-@@ -218,6 +220,8 @@ static int mq_dump_class(struct Qdisc *sch, unsigned long cl,
- 			 struct sk_buff *skb, struct tcmsg *tcm)
- {
- 	struct netdev_queue *dev_queue = mq_queue_get(sch, cl);
-+	if (!dev_queue)
-+		return -1;
- 
- 	tcm->tcm_parent = TC_H_ROOT;
- 	tcm->tcm_handle |= TC_H_MIN(cl);
-@@ -229,6 +233,8 @@ static int mq_dump_class_stats(struct Qdisc *sch, unsigned long cl,
- 			       struct gnet_dump *d)
- {
- 	struct netdev_queue *dev_queue = mq_queue_get(sch, cl);
-+	if (!dev_queue)
-+		return -1;
- 
- 	sch = dev_queue->qdisc_sleeping;
- 	if (gnet_stats_copy_basic(d, sch->cpu_bstats, &sch->bstats, true) < 0 ||
+Changes in v9:
+ - also update how many bfqqs have pending_reqs bfq_bfqq_move().
+ - fix one language in patch 4
+ - Add reviewed-tag for patch 1,3,4
+
+Changes in v8:
+ - Instead of using whether bfqq is busy, using whether bfqq has pending
+ requests. As Paolo pointed out the former way is problematic.
+
+Changes in v7:
+ - fix mismatch bfq_inc/del_busy_queues() and bfqq_add/del_bfqq_busy(),
+ also retest this patchset on v5.18 to make sure functionality is
+ correct.
+ - move the updating of 'bfqd->busy_queues' into new apis
+
+Changes in v6:
+ - add reviewed-by tag for patch 1
+
+Changes in v5:
+ - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
+ - fix wrong definition in patch 1
+ - fix spelling mistake in patch 2: leaset -> least
+ - update comments in patch 3
+ - add reviewed-by tag in patch 2,3
+
+Changes in v4:
+ - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
+   suggested by Jan Kara.
+ - remove unused 'in_groups_with_pending_reqs',
+
+Changes in v3:
+ - remove the cleanup patch that is irrelevant now(I'll post it
+   separately).
+ - instead of hacking wr queues and using weights tree insertion/removal,
+   using bfq_add/del_bfqq_busy() to count the number of groups
+   (suggested by Jan Kara).
+
+Changes in v2:
+ - Use a different approch to count root group, which is much simple.
+
+Currently, bfq can't handle sync io concurrently as long as they
+are not issued from root group. This is because
+'bfqd->num_groups_with_pending_reqs > 0' is always true in
+bfq_asymmetric_scenario().
+
+The way that bfqg is counted into 'num_groups_with_pending_reqs':
+
+Before this patchset:
+ 1) root group will never be counted.
+ 2) Count if bfqg or it's child bfqgs have pending requests.
+ 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+
+After this patchset:
+ 1) root group is counted.
+ 2) Count if bfqg has pending requests.
+ 3) Don't count if bfqg complete all the requests.
+
+With the above changes, concurrent sync io can be supported if only
+one group is activated.
+
+fio test script(startdelay is used to avoid queue merging):
+[global]
+filename=/dev/sda
+allow_mounted_write=0
+ioengine=psync
+direct=1
+ioscheduler=bfq
+offset_increment=10g
+group_reporting
+rw=randwrite
+bs=4k
+
+[test1]
+numjobs=1
+
+[test2]
+startdelay=1
+numjobs=1
+
+[test3]
+startdelay=2
+numjobs=1
+
+[test4]
+startdelay=3
+numjobs=1
+
+[test5]
+startdelay=4
+numjobs=1
+
+[test6]
+startdelay=5
+numjobs=1
+
+[test7]
+startdelay=6
+numjobs=1
+
+[test8]
+startdelay=7
+numjobs=1
+
+test result:
+running fio on root cgroup
+v5.18:	   112 Mib/s
+v5.18-patched: 112 Mib/s
+
+running fio on non-root cgroup
+v5.18:	   51.2 Mib/s
+v5.18-patched: 112 Mib/s
+
+Note that I also test null_blk with "irqmode=2
+completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+that service guarantees are still preserved.
+
+Previous versions:
+RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
+v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
+v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
+v3: https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
+v4: https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
+v5: https://lore.kernel.org/all/20220428120837.3737765-1-yukuai3@huawei.com/
+v6: https://lore.kernel.org/all/20220523131818.2798712-1-yukuai3@huawei.com/
+v7: https://lore.kernel.org/all/20220528095020.186970-1-yukuai3@huawei.com/
+
+
+Yu Kuai (4):
+  block, bfq: support to track if bfqq has pending requests
+  block, bfq: record how many queues have pending requests
+  block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+  block, bfq: do not idle if only one group is activated
+
+ block/bfq-cgroup.c  | 10 ++++++++++
+ block/bfq-iosched.c | 47 +++------------------------------------------
+ block/bfq-iosched.h | 21 +++++++++++---------
+ block/bfq-wf2q.c    | 47 ++++++++++++++++++++++++++++++---------------
+ 4 files changed, 57 insertions(+), 68 deletions(-)
+
 -- 
-2.25.1
-
-
+2.31.1
 

@@ -2,104 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB30546846
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F1954684B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237912AbiFJOaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S1349175AbiFJOay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238667AbiFJOaV (ORCPT
+        with ESMTP id S243981AbiFJOau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:30:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E789B5EBCD
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:30:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4A78B835E2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4AAC34114;
-        Fri, 10 Jun 2022 14:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654871413;
-        bh=4R7G5Bva8GD1Rzpj+x9E8Jwv4C/y2r3xH49G6sWMIsg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Clqtt5HQ5vkazJfFx9KHW5lsJMbawWQEsUBtVBWgSOga3lXGaNNVF6Rvjjb0JNKMx
-         Fj3i3ecQBVw58T4n7dAUmoR0LXm3iJptYouf7arq/dI1yIntxQxLV1i7Y0M5JK/ULE
-         YcF/PyPovfIap8aRz4/mz1qwgOOzYVHzAE93dZ2Q=
-Date:   Fri, 10 Jun 2022 16:30:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shreenidhi Shedi <yesshedi@gmail.com>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        Shreenidhi Shedi <sshedi@vmware.com>
-Subject: Re: [PATCH 1/2] char: lp: ensure that index has not exceeded LP_NO
-Message-ID: <YqNVcppyBXU8mQ/Z@kroah.com>
-References: <20220603130040.601673-1-sshedi@vmware.com>
- <YqNG5H+JbNJMeOWq@kroah.com>
- <a7fea025-1919-b2d7-e69e-136983c2e386@gmail.com>
+        Fri, 10 Jun 2022 10:30:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AA7BAB0EB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654871440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g/ATkA29NC2oD/Jp54XfWVa6EbDzgeGcRbqECMdYNQQ=;
+        b=jJawV6V17jN+4Baj+0GOF0VlCJiumcDu95kndkYiX/rrkws39ublNHXrES7oj+wQrNZWwc
+        7QYYBf7sFL+Zmws62SAUte1YtebfyVhEevZJVsJRhnFgvyGoTz7MNILK6b1KvbeaVqUXTz
+        ozZTKUQitij0aaysMrva7JH3Mq9IE3Q=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-79-ENfPYMbxOqCPOKQzviavtQ-1; Fri, 10 Jun 2022 10:30:38 -0400
+X-MC-Unique: ENfPYMbxOqCPOKQzviavtQ-1
+Received: by mail-io1-f69.google.com with SMTP id l7-20020a6b7007000000b00669b2a0d497so2518972ioc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:30:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=g/ATkA29NC2oD/Jp54XfWVa6EbDzgeGcRbqECMdYNQQ=;
+        b=6lWCqWhJlGrOjTUnbjyNGhvyeTTLQRQgshvCr3aJCQAvyIq3IpGufLFZB9yHVPV2PB
+         eff8FGCPzn+j0V3+aM6pZKV+PpC4xlx7f04VyAKZ+sWM6sn2FAJdROSjCZGcTBzPqzIE
+         xM5epBaDHBIH7+d4wB6hrIfkdEFFlckvHnDIHCCchogwW9kk/1krvj6kT67E6hYKG39g
+         RS+Cvs/UrETbZ0/fQ2ARXg3YFu0MqbfW3dr3ngEyc5tYlpqf5iNEVCGjtxeB9uKAjJhd
+         lw++tTMaPMSwf6ytPsJnBitriLezZmLc1foUvhe9w9Uv7PG0HDM6tFUacWnpu4q8lPuA
+         yi4Q==
+X-Gm-Message-State: AOAM533J3vgn7QZmtXl1QHiMs/8vKG4+0Ywok+zIyTOOxLb6Mhvkz+sW
+        +oa5hUoRdx78oKOvG4jyZ+mb6x0b+RltYMIhKuoAWr62alp7VLde6RTYxxP3+/TJBGYu/29Khai
+        t4vRLIC7evZlYOzHNROK5TBF1
+X-Received: by 2002:a02:9f14:0:b0:331:9195:dd3e with SMTP id z20-20020a029f14000000b003319195dd3emr16642781jal.0.1654871438187;
+        Fri, 10 Jun 2022 07:30:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxuksuRngDSTwfthGPHYoV3J/PiHhBjlEWnHC4GjZIaz8XTqKR8K8VGTwh5fbuBCpB4djwCgg==
+X-Received: by 2002:a02:9f14:0:b0:331:9195:dd3e with SMTP id z20-20020a029f14000000b003319195dd3emr16642758jal.0.1654871437955;
+        Fri, 10 Jun 2022 07:30:37 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id w15-20020a056e0213ef00b002d65eedd403sm4127189ilj.71.2022.06.10.07.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 07:30:37 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 08:30:33 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     kvm@vger.kernel.org, airlied@linux.ie,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Laszlo Ersek <lersek@redhat.com>
+Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
+Message-ID: <20220610083033.3f98beae.alex.williamson@redhat.com>
+In-Reply-To: <b13d6d73-6290-92b6-d2b3-62af6efef3dc@suse.de>
+References: <165453797543.3592816.6381793341352595461.stgit@omen>
+        <165453800875.3592816.12944011921352366695.stgit@omen>
+        <0c45183c-cdb8-4578-e346-bc4855be038f@suse.de>
+        <20220608080432.45282f0b.alex.williamson@redhat.com>
+        <01c74525-38b7-1e00-51ba-7cd793439f03@suse.de>
+        <20220609154102.5cb1d3ca.alex.williamson@redhat.com>
+        <20220609154416.676b1068.alex.williamson@redhat.com>
+        <b13d6d73-6290-92b6-d2b3-62af6efef3dc@suse.de>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7fea025-1919-b2d7-e69e-136983c2e386@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 07:12:02PM +0530, Shreenidhi Shedi wrote:
-> On 10/06/22 6:58 pm, Greg KH wrote:
-> > On Fri, Jun 03, 2022 at 06:30:39PM +0530, Shreenidhi Shedi wrote:
-> >> From: Shreenidhi Shedi <sshedi@vmware.com>
-> >>
-> >> After finishing the loop, index value can be equal to LP_NO and lp_table
-> >> array is of size LP_NO, so this can end up in accessing an out of bound
-> >> address in lp_register function.
-> >>
-> >> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
-> >> ---
-> >>  drivers/char/lp.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/char/lp.c b/drivers/char/lp.c
-> >> index 0e22e3b0a..d474d02b6 100644
-> >> --- a/drivers/char/lp.c
-> >> +++ b/drivers/char/lp.c
-> >> @@ -972,7 +972,7 @@ static void lp_attach(struct parport *port)
-> >>  			if (port_num[i] == -1)
-> >>  				break;
-> >>
-> >> -		if (!lp_register(i, port))
-> >> +		if (i < LP_NO && !lp_register(i, port))
-> >>  			lp_count++;
-> > 
-> > How can this ever be needed?  Look at the check further up for the check
-> > of lp_count which prevents this from every going too large.
-> > 
-> > So how can an address be accessed out of bound here?
-> > 
-> > thanks,
-> > 
-> > greg k-h
+On Fri, 10 Jun 2022 09:03:15 +0200
+Thomas Zimmermann <tzimmermann@suse.de> wrote:
+
+> Hi
 > 
-> Thanks for the review. Assume lp_count is less than LP_NO now and we enter the for loop
-> and for some reason for loop exits after i reaching the value LP_NO
+> Am 09.06.22 um 23:44 schrieb Alex Williamson:
+> > On Thu, 9 Jun 2022 15:41:02 -0600
+> > Alex Williamson <alex.williamson@redhat.com> wrote:
+> >   
+> >> On Thu, 9 Jun 2022 11:13:22 +0200
+> >> Thomas Zimmermann <tzimmermann@suse.de> wrote:  
+> >>>
+> >>> Please have a look at the attached patch. It moves the aperture helpers
+> >>> to a location common to the various possible users (DRM, fbdev, vfio).
+> >>> The DRM interfaces remain untouched for now.  The patch should provide
+> >>> what you need in vfio and also serve our future use cases for graphics
+> >>> drivers. If possible, please create your patch on top of it.  
+> >>
+> >> Looks good to me, this of course makes the vfio change quite trivial.
+> >> One change I'd request:
+> >>
+> >> diff --git a/drivers/video/console/Kconfig b/drivers/video/console/Kconfig
+> >> index 40c50fa2dd70..7f3c44e1538b 100644
+> >> --- a/drivers/video/console/Kconfig
+> >> +++ b/drivers/video/console/Kconfig
+> >> @@ -10,6 +10,7 @@ config VGA_CONSOLE
+> >>   	depends on !4xx && !PPC_8xx && !SPARC && !M68K && !PARISC &&  !SUPERH && \
+> >>   		(!ARM || ARCH_FOOTBRIDGE || ARCH_INTEGRATOR || ARCH_NETWINDER) && \
+> >>   		!ARM64 && !ARC && !MICROBLAZE && !OPENRISC && !S390 && !UML
+> >> +	select APERTURE_HELPERS if (DRM || FB || VFIO_PCI)
+> >>   	default y
+> >>   	help
+> >>   	  Saying Y here will allow you to use Linux in text mode through a
+> >>
+> >> This should be VFIO_PCI_CORE.  Thanks,  
+> 
+> I attached an updated patch to this email.
+> 
+> > 
+> > Also, whatever tree this lands in, I'd appreciate a topic branch being
+> > made available so I can more easily get the vfio change in on the same
+> > release.  Thanks,  
+> 
+> You can add my patch to your series and merge it through vfio. You'd 
+> only have to cc dri-devel for the patch's review. I guess it's more 
+> important for vfio than DRM. We have no hurry on the DRM side, but v5.20 
+> would be nice.
 
-Wait, how can that happen?  That's what I am saying, the loop will never
-reach that value from what I can tell.
+Ok, I didn't realize you were offering the patch for me to post and
+merge.  I'll do that.  Thanks!
 
-Yes, this whole thing should be moved to something more sane like an
-idr structure, but as-is, it seems correct to me.
+Alex
 
-Have you tested the code with that many devices to see if it really can
-overflow?
-
-thanks,
-
-greg k-h

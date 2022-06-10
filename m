@@ -2,136 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CDB545C56
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 08:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47B3545C60
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 08:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243640AbiFJGga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 02:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S244539AbiFJGha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 02:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235797AbiFJGg2 (ORCPT
+        with ESMTP id S243967AbiFJGh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 02:36:28 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8963B3ED23;
-        Thu,  9 Jun 2022 23:36:27 -0700 (PDT)
-X-UUID: 3f9cb46d5c784297a34e686183a61f57-20220610
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:3e581a6c-a06b-402a-afc6-2f198b03e587,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:d3635de5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:-5,EDM:-3,IP:nil,URL:0,File:ni
-        l,QS:0,BEC:nil
-X-UUID: 3f9cb46d5c784297a34e686183a61f57-20220610
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 515166308; Fri, 10 Jun 2022 14:36:23 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 10 Jun 2022 14:36:22 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 10 Jun 2022 14:36:22 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <will@kernel.org>, <stable@vger.kernel.org>
-CC:     <alexandru.elisei@arm.com>, <catalin.marinas@arm.com>,
-        <jean-philippe.brucker@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <mark-pk.tsai@mediatek.com>,
-        <matthias.bgg@gmail.com>, <maz@kernel.org>,
-        <yj.chiang@mediatek.com>
-Subject: Re: [PATCH] arm64: Clear OS lock in enable_debug_monitors
-Date:   Fri, 10 Jun 2022 14:36:19 +0800
-Message-ID: <20220610063619.7921-1-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220609115716.GA2427@willie-the-truck>
-References: <20220609115716.GA2427@willie-the-truck>
+        Fri, 10 Jun 2022 02:37:26 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F711A815
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 23:37:22 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id r187-20020a1c44c4000000b0039c76434147so644447wma.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 23:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Qxlw/2GeYPhBz4i8FzCqobc8aHph2WQJ2uzH+wlAQPM=;
+        b=YvKD/lnZFHPf9Bklm5hR2t0kTgFB1/rXSkgOKvxFTago0OfV/XXVBnr65QfdQ0sIbE
+         X56d5w92lO93EaOJsDJ8oCNGyjZkcJXPRSg9xTkOKhWDw62K7tpcO84Az2vOBRZU/r3+
+         YIHnLV0yk1ox4ibJDxo/xtHUE91KPK5nhGt24yQglgyRLlAN46Y1Z1t0+GvzN7M+MEou
+         tOdQLaDCWTLurM3ng8g7elKpPBlMcfWMNnTz6GEuMIGKZgA7WgUpL2gOP6VsKo5/EHPb
+         626ZTuTKw9tktPSgibPC7QlWbKT0XcsOV4TdzYgmUmuC1ODYErjWurNuno/msyBC5MwG
+         9u4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Qxlw/2GeYPhBz4i8FzCqobc8aHph2WQJ2uzH+wlAQPM=;
+        b=0+KDH6+zbTQop/UGw7Rz3ykGI0bgguMIQGKaDRTUbpokQ6qV+bkRK6e9LSqo6q8KTI
+         Sg/LHGXKePqBEEQH/iD9wa7chCLrrQre7X6qbscQvFya7UFl6bpmy4NcfnN9bEoX5SJ4
+         suSASXM4qamTXFNc+T88w1XL7ev40K1IM0xoeZqMBn6iHfv/G9f+W0SSMo3hBu2vgd8M
+         NIeAQBM6nMyRPqB/x2n9xy9MGFCw7Ij+LWGJbvk3yhMrOGo1MrJkj3jNCMXZfqlMplmO
+         SEIm49/4zBxSu31NngtNUDR8PeZoeq1/TiQ/OHavOoWGcQWgGiupZhN2+R72HR7BzLWp
+         mJbA==
+X-Gm-Message-State: AOAM531aSXJ67a7FOXqZty0a23TufZimi140c7hwKpRsD3Hz3AxTAv0X
+        v9lnsdnfSBvGIPb5X5d61Nh1+A==
+X-Google-Smtp-Source: ABdhPJw4Hge4NDaRn0TL71ijVSQhRo1MhCaO3HbTb1tYRGHCORKkku8fnKoEAx9FGxDoG3CaWVnJNw==
+X-Received: by 2002:a1c:4e03:0:b0:39c:5bbc:e0d2 with SMTP id g3-20020a1c4e03000000b0039c5bbce0d2mr7034980wmh.184.1654843041123;
+        Thu, 09 Jun 2022 23:37:21 -0700 (PDT)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:27b0:82d9:d0c6:702a])
+        by smtp.gmail.com with ESMTPSA id 2-20020a05600c228200b0039482d95ab7sm1729030wmf.24.2022.06.09.23.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 23:37:20 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, arm@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-tegra@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-omap@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-gpio@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Nishanth Menon <nm@ti.com>,
+        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        Andrew Jeffery <andrew@aj.id.au>, linux-input@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peter Rosin <peda@axentia.se>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andy Gross <agross@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-sunxi@lists.linux.dev,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Li Yang <leoyang.li@nxp.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        linux-rockchip@lists.infradead.org
+Subject: Re: (subset) [PATCH v2 00/48] dt-bindings: input: gpio-keys: rework matching children
+Date:   Fri, 10 Jun 2022 08:37:18 +0200
+Message-Id: <165484301356.1384204.15957178175784526690.b4-ty@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, Jun 09, 2022 at 11:33:18AM +0800, Mark-PK Tsai wrote:
-> > Always clear OS lock before enable debug event.
-> > 
-> > The OS lock is clear in cpuhp ops in recent kernel,
-> > but when the debug exception happened before it
-> > kernel might crash because debug event enable didn't
-> > take effect when OS lock is hold.
-> > 
-> > Below is the use case that having this problem:
-> > 
-> > Register kprobe in console_unlock and kernel will
-> > panic at secondary_start_kernel on secondary core.
-> > 
-> > CPU: 1 PID: 0 Comm: swapper/1 Tainted: P
-> > ...
-> > pstate: 004001c5 (nzcv dAIF +PAN -UAO)
-> > pc : do_undefinstr+0x5c/0x60
-> > lr : do_undefinstr+0x2c/0x60
-> > sp : ffffffc01338bc50
-> > pmr_save: 000000f0
-> > x29: ffffffc01338bc50 x28: ffffff8115e95a00 T
-> > x27: ffffffc01258e000 x26: ffffff8115e95a00
-> > x25: 00000000ffffffff x24: 0000000000000000
-> > x23: 00000000604001c5 x22: ffffffc014015008
-> > x21: 000000002232f000 x20: 00000000000000f0 j
-> > x19: ffffffc01338bc70 x18: ffffffc0132ed040
-> > x17: ffffffc01258eb48 x16: 0000000000000403 L&
-> > x15: 0000000000016480 x14: ffffffc01258e000 i/
-> > x13: 0000000000000006 x12: 0000000000006985
-> > x11: 00000000d5300000 x10: 0000000000000000
-> > x9 : 9f6c79217a8a0400 x8 : 00000000000000c5
-> > x7 : 0000000000000000 x6 : ffffffc01338bc08 2T
-> > x5 : ffffffc01338bc08 x4 : 0000000000000002
-> > x3 : 0000000000000000 x2 : 0000000000000004
-> > x1 : 0000000000000000 x0 : 0000000000000001 *q
-> > Call trace:
-> >  do_undefinstr+0x5c/0x60
-> >  el1_undef+0x10/0xb4
-> >  0xffffffc014015008
-> >  vprintk_func+0x210/0x290
-> >  printk+0x64/0x90
-> >  cpuinfo_detect_icache_policy+0x80/0xe0
-> >  __cpuinfo_store_cpu+0x150/0x160
-> >  secondary_start_kernel+0x154/0x440
-> > 
-> > The root cause is that OS_LSR_EL1.OSLK is reset
-> > to 1 on a cold reset[1] and the firmware didn't
-> > unlock it by default.
-> > So the core didn't go to el1_dbg as expected after
-> > kernel_enable_single_step and eret.
+Hi,
+
+On Thu, 9 Jun 2022 13:37:21 +0200, Krzysztof Kozlowski wrote:
+> Merging
+> =======
+> 1. dt-bindings: rebased on top of Rob's:
+>    https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/
 > 
-> Hmm, I thought we didn't use hardware single-step for kprobes after
-> 7ee31a3aa8f4 ("arm64: kprobes: Use BRK instead of single-step when executing
-> instructions out-of-line"). What is triggering this exception?
+> 2. DTS patches are independent. They can be picked up directly by sub-arch
+>    maintainers, by Arnd or Olof, or eventually by me (if you wish).
 > 
-> Will
+> [...]
 
-You're right.
-Actually this issue happend in 5.4 LTS, and the commit you mentioned
-can avoid the kernel panic by not using hardware single-step.
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.20/arm64-dt)
 
-I think 5.4 LTS should apply this commit.
+[07/48] arm64: dts: amlogic: correct gpio-keys properties
+        https://git.kernel.org/amlogic/c/4956be9944d1fb23107f27bad8a2cca0fa167443
+[08/48] arm64: dts: amlogic: align gpio-key node names with dtschema
+        https://git.kernel.org/amlogic/c/4fd9afd894ebe5831dbd737e6ca7b6de14da7fda
 
-7ee31a3aa8f4 ("arm64: kprobes: Use BRK instead of single-step when executing instructions out-of-line")
+These changes has been applied on the intermediate git tree [1].
 
-Cc: stable@vger.kernel.org
+The v5.20/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
 
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
 
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
 
-And I'm not sure if there is other use case may have problem if the
-kernel don't clear OS lock in enable_debug_monitors everytime.
-So should we do this to prevent someone face the similar issue?
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil

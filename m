@@ -2,77 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3606B5464F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A705464F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349263AbiFJK7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        id S1347639AbiFJLAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349288AbiFJK6R (ORCPT
+        with ESMTP id S1349033AbiFJK7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:58:17 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D080F2DCB2B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:56:29 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id x38so532460ybd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:56:29 -0700 (PDT)
+        Fri, 10 Jun 2022 06:59:54 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB227370E40;
+        Fri, 10 Jun 2022 03:58:58 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id d14so9207019eda.12;
+        Fri, 10 Jun 2022 03:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UVWDkivKH1r0YSSFaw6OjTiC/YFmD6ezZssjPD8j23w=;
-        b=RXvlY48vrnprsPhlzCN84oVM35sDdA8yC03DQqkStEKvLu2TPLb4+GXHZs42yE1HQx
-         ttOCe8rdEkjLlqM3l9WDtsBCXfF4s+ChMyYv8Rr+fnyZ3LeVOcdMg6nEcEEKhCDER0yr
-         fJTIw9qxUsAPtehkIPwv0SyUlxvDgwGcMmXAwiiBSv9/Zl7En+0nWztnAMnMDurZDcZY
-         api97837F1HNyG80jX0Pe+SJ1JI7N7lMGqY67LErpq+TZ7CiRQ+ruwaymVLbslc02zZl
-         XSlXazfrWTPWCpkIL90Vp8CX52j6WIsUEJ/9kUyf+tpm9WQnID+ZJjebzkTlpXQUnTgH
-         lxFg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=w6F5upqNbqcjOOBJM+5BezuuZ8DymaMUCrQuFA3GOnA=;
+        b=YZZv8NAd4bFAUuTNFuwIlDcmKTp86LFMvcog24DagojMbNLE5Se1DmFMVmJ87uRvVn
+         DHg3DsyZl5P8aCUmB2QRs6OBqSILElVCVRD7bc68R64iLg9kYb342KPpCwWXWO184NBc
+         HQcHyAdUhV8Q0WhynDc+yQ4/sZ7PQcZevq6VBL5SzqV6KYGeklmIRe38n9bvYY5Q1+JK
+         WhZSTnmlqR3Jo6PN7avr1sSEwFMtRIB63k6sjGq6yDCPtUFoSFNusdQKAtNJh/AlfSLS
+         +4BnHWFH5oLHuBp1MpFR5IFuUXStqITHPSeYQd5mB00paW4tZfj70WmiPHpMoU2dylt+
+         VQsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UVWDkivKH1r0YSSFaw6OjTiC/YFmD6ezZssjPD8j23w=;
-        b=2Z++5Udj0kOIpa70hzGf4pAHCnlAipPgf3SmgsTFuexkskwdWe1D5W7O1wAWpDWtpJ
-         1qTyxNiTzqch/UK7UQQhzhCt5sB5Ah6wEJ/MeaE6BS2wfnjnjhsD/q73QwGNNuAS9qyv
-         Q9ddUBYfJvn2P+2hAt4hEw+ouAXgHir59C73DuEWlfVHDYNLVnCdf49x8g15QZEeIeTi
-         VPAH+NiPn2xS8mxZYnJ3cQhzNXF6yhaY1VUXr5UKMAWRmOUYjh4yLTskSHH47U3+h4eK
-         QNFfAqagZuRgzLBfv5lK2yAMbknUhr7yZ2br6tOnddxN/yW5RrcS4zZT18NjkoR0hEG0
-         Kodw==
-X-Gm-Message-State: AOAM532zSvJ/mPPq8YPhaL1DR3x675XmLTWcm5eexVeLAFkL1ApMIfAx
-        2rynKPV79a2rFw8KH5ogl5rpA+fEn1puAEAJ4Tlh2w==
-X-Google-Smtp-Source: ABdhPJwm7RORsPVX9EpA+f/rpyV/bm7dA/SQ01EzbzV1yVf+JvmxjuyQHKmWdjTOtYg6usHy7cw6J444+7/JlR3E6Mo=
-X-Received: by 2002:a25:6546:0:b0:660:2a80:d6b6 with SMTP id
- z67-20020a256546000000b006602a80d6b6mr42004476ybb.617.1654858588911; Fri, 10
- Jun 2022 03:56:28 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=w6F5upqNbqcjOOBJM+5BezuuZ8DymaMUCrQuFA3GOnA=;
+        b=Pr96j6qLhdcjOQnVJtW2daiDWogbgZXr4/x22m0Qe9SSsQlL7Yldinwk8MAAnoJl/E
+         Jj1ZVFmAW3P8rujEEip0YvMH9QwJNzUSmK4PutV3l1SP3SCzTIwyLSVXWoPsrEqZ7HUc
+         cUD6+jmO6xRvHG7Ux6fUP+vVuBs/OhhORuaEobmFRQe0LjI2mC1dgzuO+2yuIvUAZkmv
+         yu5Q9eBwmRcqltArE24BE79cJnXKMPVa7KPeArBFFwJPW8FKEU2uIs+AZZqCuqHntc6j
+         PG2kiNXAlu3Do8buTym0BQiRvFexNxsP0K91rFerlnRbSxJ1jd/BcLm+N7dCZfoB7MUU
+         nd/A==
+X-Gm-Message-State: AOAM532nUG4L7R9cMKY+lh0n4tkJfAk5USljJQjwQi5Mkn0ImomEvkAt
+        SrITSVsdaqPrquQdAuXCIuc=
+X-Google-Smtp-Source: ABdhPJwRYA/7eDJK0xNPvbtH+OzO5lQ4tB0JbSJQSmwOmyloSbsX0o7RtK6TGGmCWnVQA/XG1FkVRA==
+X-Received: by 2002:a05:6402:368a:b0:42d:ef42:f727 with SMTP id ej10-20020a056402368a00b0042def42f727mr50676107edb.204.1654858736837;
+        Fri, 10 Jun 2022 03:58:56 -0700 (PDT)
+Received: from [192.168.178.21] (p5b0ea02f.dip0.t-ipconnect.de. [91.14.160.47])
+        by smtp.gmail.com with ESMTPSA id fi20-20020a1709073ad400b006fec8e8eff6sm12055062ejc.176.2022.06.10.03.58.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 03:58:55 -0700 (PDT)
+Message-ID: <3f7d3d96-0858-fb6d-07a3-4c18964f888e@gmail.com>
+Date:   Fri, 10 Jun 2022 12:58:53 +0200
 MIME-Version: 1.0
-References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
- <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com> <YqItYKEIvsw4Yzjx@carbon>
-In-Reply-To: <YqItYKEIvsw4Yzjx@carbon>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 10 Jun 2022 16:26:17 +0530
-Message-ID: <CA+G9fYuLNjq0hc6T4sZcq7g4YoWgBwa1H7x21otED7QoLaTYXw@mail.gmail.com>
-Subject: Re: [next] arm64: boot failed - next-20220606
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Averin <vvs@openvz.org>,
-        Qian Cai <quic_qiancai@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        alexander.deucher@amd.com, daniel@ffwll.ch,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        hughd@google.com, andrey.grodzovsky@amd.com
+References: <20220531100007.174649-1-christian.koenig@amd.com>
+ <20220531100007.174649-4-christian.koenig@amd.com>
+ <YqG67sox6L64E6wV@dhcp22.suse.cz>
+ <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
+ <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
+ <26d3e1c7-d73c-cc95-54ef-58b2c9055f0c@gmail.com>
+ <YqIB0bavUeU8Abwl@dhcp22.suse.cz>
+ <d4a19481-7a9f-19bf-c270-d89baa0970fc@amd.com>
+ <YqIMmK18mb/+s5de@dhcp22.suse.cz>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YqIMmK18mb/+s5de@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,205 +88,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roman,
+Am 09.06.22 um 17:07 schrieb Michal Hocko:
+> On Thu 09-06-22 16:29:46, Christian König wrote:
+> [...]
+>> Is that a show stopper? How should we address this?
+> This is a hard problem to deal with and I am not sure this simple
+> solution is really a good fit. Not only because of the memcg side of
+> things. I have my doubts that sparse files handling is ok as well.
 
-On Thu, 9 Jun 2022 at 22:57, Roman Gushchin <roman.gushchin@linux.dev> wrote:
->
-> On Tue, Jun 07, 2022 at 11:00:39AM +0530, Naresh Kamboju wrote:
-> > On Mon, 6 Jun 2022 at 17:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > Linux next-20220606 arm64 boot failed. The kernel boot log is empty.
-> > > I am bisecting this problem.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > The initial investigation show that,
-> > >
-> > > GOOD: next-20220603
-> > > BAD:  next-20220606
-> > >
-> > > Boot log:
-> > > Starting kernel ...
-> >
-> > Linux next-20220606 and next-20220607 arm64 boot failed.
-> > The kernel panic log showing after earlycon.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Naresh, can you, please, check if the following patch resolves the issue?
-> (completely untested except for building)
+Well I didn't claimed that this would be easy, we juts need to start 
+somewhere.
 
-I have tested this patch on top of next-20220606 and boot successfully [1].
+Regarding the sparse file handling, how about using 
+file->f_mapping->nrpages as badness for shmem files?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+That should give us the real number of pages allocated through this 
+shmem file and gracefully handles sparse files.
 
-> --
+> I do realize this is a long term problem and there is a demand for some
+> solution at least. I am not sure how to deal with shared resources
+> myself. The best approximation I can come up with is to limit the scope
+> of the damage into a memcg context. One idea I was playing with (but
+> never convinced myself it is really a worth) is to allow a new mode of
+> the oom victim selection for the global oom event. It would be an opt in
+> and the victim would be selected from the biggest leaf memcg (or kill
+> the whole memcg if it has group_oom configured.
 >
-> From 6a454876c9a1886e3cf8e9b66dae19b326f8901a Mon Sep 17 00:00:00 2001
-> From: Roman Gushchin <roman.gushchin@linux.dev>
-> Date: Thu, 9 Jun 2022 10:03:20 -0700
-> Subject: [PATCH] mm: kmem: make mem_cgroup_from_obj() vmalloc()-safe
->
-> Currently mem_cgroup_from_obj() is not working properly with objects
-> allocated using vmalloc(). It creates problems in some cases, when
-> it's called for static objects belonging to  modules or generally
-> allocated using vmalloc().
->
-> This patch makes mem_cgroup_from_obj() safe to be called on objects
-> allocated using vmalloc().
->
-> It also introduces mem_cgroup_from_slab_obj(), which is a faster
-> version to use in places when we know the object is either a slab
-> object or a generic slab page (e.g. when adding an object to a lru
-> list).
->
-> Suggested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  include/linux/memcontrol.h |  6 ++++
->  mm/list_lru.c              |  2 +-
->  mm/memcontrol.c            | 71 +++++++++++++++++++++++++++-----------
->  3 files changed, 57 insertions(+), 22 deletions(-)
->
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index 0d7584e2f335..4d31ce55b1c0 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -1761,6 +1761,7 @@ static inline int memcg_kmem_id(struct mem_cgroup *memcg)
->  }
->
->  struct mem_cgroup *mem_cgroup_from_obj(void *p);
-> +struct mem_cgroup *mem_cgroup_from_slab_obj(void *p);
->
->  static inline void count_objcg_event(struct obj_cgroup *objcg,
->                                      enum vm_event_item idx)
-> @@ -1858,6 +1859,11 @@ static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
->         return NULL;
->  }
->
-> +static inline struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
-> +{
-> +       return NULL;
-> +}
-> +
->  static inline void count_objcg_event(struct obj_cgroup *objcg,
->                                      enum vm_event_item idx)
->  {
-> diff --git a/mm/list_lru.c b/mm/list_lru.c
-> index ba76428ceece..a05e5bef3b40 100644
-> --- a/mm/list_lru.c
-> +++ b/mm/list_lru.c
-> @@ -71,7 +71,7 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
->         if (!list_lru_memcg_aware(lru))
->                 goto out;
->
-> -       memcg = mem_cgroup_from_obj(ptr);
-> +       memcg = mem_cgroup_from_slab_obj(ptr);
->         if (!memcg)
->                 goto out;
->
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 4093062c5c9b..8c408d681377 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -783,7 +783,7 @@ void __mod_lruvec_kmem_state(void *p, enum node_stat_item idx, int val)
->         struct lruvec *lruvec;
->
->         rcu_read_lock();
-> -       memcg = mem_cgroup_from_obj(p);
-> +       memcg = mem_cgroup_from_slab_obj(p);
->
->         /*
->          * Untracked pages have no memcg, no lruvec. Update only the
-> @@ -2833,27 +2833,9 @@ int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
->         return 0;
->  }
->
-> -/*
-> - * Returns a pointer to the memory cgroup to which the kernel object is charged.
-> - *
-> - * A passed kernel object can be a slab object or a generic kernel page, so
-> - * different mechanisms for getting the memory cgroup pointer should be used.
-> - * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
-> - * can not know for sure how the kernel object is implemented.
-> - * mem_cgroup_from_obj() can be safely used in such cases.
-> - *
-> - * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
-> - * cgroup_mutex, etc.
-> - */
-> -struct mem_cgroup *mem_cgroup_from_obj(void *p)
-> +static __always_inline
-> +struct mem_cgroup *mem_cgroup_from_obj_folio(struct folio *folio, void *p)
->  {
-> -       struct folio *folio;
-> -
-> -       if (mem_cgroup_disabled())
-> -               return NULL;
-> -
-> -       folio = virt_to_folio(p);
-> -
->         /*
->          * Slab objects are accounted individually, not per-page.
->          * Memcg membership data for each individual object is saved in
-> @@ -2886,6 +2868,53 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
->         return page_memcg_check(folio_page(folio, 0));
->  }
->
-> +/*
-> + * Returns a pointer to the memory cgroup to which the kernel object is charged.
-> + *
-> + * A passed kernel object can be a slab object, vmalloc object or a generic
-> + * kernel page, so different mechanisms for getting the memory cgroup pointer
-> + * should be used.
-> + *
-> + * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
-> + * can not know for sure how the kernel object is implemented.
-> + * mem_cgroup_from_obj() can be safely used in such cases.
-> + *
-> + * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
-> + * cgroup_mutex, etc.
-> + */
-> +struct mem_cgroup *mem_cgroup_from_obj(void *p)
-> +{
-> +       struct folio *folio;
-> +
-> +       if (mem_cgroup_disabled())
-> +               return NULL;
-> +
-> +       if (unlikely(is_vmalloc_addr(p)))
-> +               folio = page_folio(vmalloc_to_page(p));
-> +       else
-> +               folio = virt_to_folio(p);
-> +
-> +       return mem_cgroup_from_obj_folio(folio, p);
-> +}
-> +
-> +/*
-> + * Returns a pointer to the memory cgroup to which the kernel object is charged.
-> + * Similar to mem_cgroup_from_obj(), but faster and not suitable for objects,
-> + * allocated using vmalloc().
-> + *
-> + * A passed kernel object must be a slab object or a generic kernel page.
-> + *
-> + * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
-> + * cgroup_mutex, etc.
-> + */
-> +struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
-> +{
-> +       if (mem_cgroup_disabled())
-> +               return NULL;
-> +
-> +       return mem_cgroup_from_obj_folio(virt_to_folio(p), p);
-> +}
-> +
->  static struct obj_cgroup *__get_obj_cgroup_from_memcg(struct mem_cgroup *memcg)
->  {
->         struct obj_cgroup *objcg = NULL;
-> --
-> 2.35.3
+> That would address at least some of the accounting issue because charges
+> are better tracked than per process memory consumption. It is a crude
+> and ugly hack and it doesn't solve the underlying problem as shared
+> resources are not guaranteed to be freed when processes die but maybe it
+> would be just slightly better than the existing scheme which is clearly
+> lacking behind existing userspace.
 
-[1] https://lkft.validation.linaro.org/scheduler/job/5156201
+Well, what is so bad at the approach of giving each process holding a 
+reference to some shared memory it's equal amount of badness even when 
+the processes belong to different memory control groups?
 
---
-Linaro LKFT
-https://lkft.linaro.org
+If you really think that this would be a hard problem for upstreaming we 
+could as well keep the behavior for memcg as it is for now. We would 
+just need to adjust the paramters to oom_badness() a bit.
+
+Regards,
+Christian.

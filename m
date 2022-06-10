@@ -2,300 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD955467C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9AE5467A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349346AbiFJNyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S1343918AbiFJNuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349128AbiFJNxU (ORCPT
+        with ESMTP id S245503AbiFJNu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:53:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619E83BA48
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:53:11 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ADInhN023728;
-        Fri, 10 Jun 2022 13:51:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=dDKqIfopwnXr6PuIPbN3tqtguXFEUdVD0LR6XZqxlbc=;
- b=BBYEhv3lPpfS/FdP/vIgP9XMmW3yjWm6fxB9nQKdPre03eeF0OdoYeLRnDDdMKHiD+Lk
- UN5GCJTqYWQEgVg/CRQLcCKdabaQrHOt8BTOR8uSAgY7AZQ9FYMM+tbrM3WlxjshuIzd
- ti8r9APLXCZ5nz3hIopchZ/RInf9tSXREYZ3qwecnEcrVRUcO/A2/1tXgCU4QnknALM6
- GZY4XnYcyrh9plKenwICGtRWSb+TzVGNw60GPsSYO4Kq9/kvS+S462GcRq+QhLyp1W4/
- LxVYAeFMgS7pPNBHYVf3UXR6+kW7GXARoZ1+mqonLd53ufxSlTGqH8RsD5RhR6fBYolg kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6qurppw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:51:38 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25ADmfNE017844;
-        Fri, 10 Jun 2022 13:51:38 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6qurppj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:51:38 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25ADasNU031681;
-        Fri, 10 Jun 2022 13:51:36 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01wdc.us.ibm.com with ESMTP id 3gfy1a919u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 13:51:36 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25ADpZRG42795324
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 13:51:35 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AA9046A04D;
-        Fri, 10 Jun 2022 13:51:35 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 491926A057;
-        Fri, 10 Jun 2022 13:51:27 +0000 (GMT)
-Received: from skywalker.ibmuc.com (unknown [9.43.90.151])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jun 2022 13:51:26 +0000 (GMT)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v6 06/13] mm/demotion: Expose memory tier details via sysfs
-Date:   Fri, 10 Jun 2022 19:19:59 +0530
-Message-Id: <20220610135006.182507-7-aneesh.kumar@linux.ibm.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220610135006.182507-1-aneesh.kumar@linux.ibm.com>
-References: <20220610135006.182507-1-aneesh.kumar@linux.ibm.com>
+        Fri, 10 Jun 2022 09:50:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B127E3B560
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:50:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67750B83528
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE05C3411D;
+        Fri, 10 Jun 2022 13:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654869021;
+        bh=laTvEZD9DA2zNh987KZtMGrDWbd2vtytBDlD61v/1K4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G3kHAGd6bsE5oc60UMNQn6GydFcdPUDBFsOt3lUfahKAnMf9kqtDyrZ+SEvT6FcrX
+         aHmcZkJXL5SyqYaBVCaTaFr8NIfnwEz2M9ocT2JhBMT44c0RUDdTEmtk40pTfVpYs8
+         C1ItzJ5LCed34pMGFccRhfk1ZRE7NoYqncnYd8Rs=
+Date:   Fri, 10 Jun 2022 15:50:18 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pascal Terjan <pterjan@google.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vboxguest: add missing devm_free_irq
+Message-ID: <YqNMGgwsjhB7TNzk@kroah.com>
+References: <20220609134057.2485190-1-pterjan@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gDU27QRiSx_R1KIVd-F5W2iknnEld0EG
-X-Proofpoint-ORIG-GUID: nXhSiGoHHGkrNFZeEjphZaBgDUEXvizA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-10_06,2022-06-09_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 suspectscore=0 malwarescore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206100056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609134057.2485190-1-pterjan@google.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds /sys/devices/system/memtier/ where all memory tier
-related details can be found. All created memory tiers will be
-listed there as /sys/devices/system/memtier/memtierN/
+On Thu, Jun 09, 2022 at 02:40:57PM +0100, Pascal Terjan wrote:
+> This fixes the following warning when unloading the module:
+> 
+> [249348.837181] remove_proc_entry: removing non-empty directory 'irq/20', leaking at least 'vboxguest'
+> [249348.837219] WARNING: CPU: 0 PID: 6708 at fs/proc/generic.c:715 remove_proc_entry+0x119/0x140
+> 
+> [249348.837379] Call Trace:
+> [249348.837385]  unregister_irq_proc+0xbd/0xe0
+> [249348.837392]  free_desc+0x23/0x60
+> [249348.837396]  irq_free_descs+0x4a/0x70
+> [249348.837401]  irq_domain_free_irqs+0x160/0x1a0
+> [249348.837452]  mp_unmap_irq+0x5c/0x60
+> [249348.837458]  acpi_unregister_gsi_ioapic+0x29/0x40
+> [249348.837463]  acpi_unregister_gsi+0x17/0x30
+> [249348.837467]  acpi_pci_irq_disable+0xbf/0xe0
+> [249348.837473]  pcibios_disable_device+0x20/0x30
+> [249348.837478]  pci_disable_device+0xef/0x120
+> [249348.837482]  vbg_pci_remove+0x6c/0x70 [vboxguest]
+> 
+> Signed-off-by: Pascal Terjan <pterjan@google.com>
+> ---
+>  drivers/virt/vboxguest/vboxguest_linux.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
+> index 6e8c0f1c1056..faa4bc9f625c 100644
+> --- a/drivers/virt/vboxguest/vboxguest_linux.c
+> +++ b/drivers/virt/vboxguest/vboxguest_linux.c
+> @@ -423,6 +423,7 @@ static void vbg_pci_remove(struct pci_dev *pci)
+>  	vbg_gdev = NULL;
+>  	mutex_unlock(&vbg_gdev_mutex);
+>  
+> +	devm_free_irq(gdev->dev, pci->irq, gdev);
 
-The nodes which are part of a specific memory tier can be listed
-via /sys/devices/system/memtier/memtierN/nodelist
+The whope point of using devm_* calls is so you don't have to do stuff
+like this.  Perhaps this should not be using devm_() for the irq at all?
 
-The rank value of a memory tier can be listed via
-via /sys/devices/system/memtier/memtierN/rank
+thanks,
 
-/sys/devices/system/memtier/max_tier shows the maximum number of memory
-tiers that can be created.
-
-/sys/devices/system/memtier/default_tier shows the memory tier to which
-NUMA nodes get added by default if not assigned a specific memory tier.
-
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
----
- mm/memory-tiers.c | 99 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 95 insertions(+), 4 deletions(-)
-
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index 2f116912de43..51210f5efc1f 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -11,8 +11,8 @@
- 
- struct memory_tier {
- 	struct list_head list;
-+	struct device dev;
- 	nodemask_t nodelist;
--	int id;
- 	int rank;
- };
- 
-@@ -20,6 +20,7 @@ struct demotion_nodes {
- 	nodemask_t preferred;
- };
- 
-+#define to_memory_tier(device) container_of(device, struct memory_tier, dev)
- static void establish_migration_targets(void);
- static DEFINE_MUTEX(memory_tier_lock);
- static LIST_HEAD(memory_tiers);
-@@ -86,6 +87,52 @@ static LIST_HEAD(memory_tiers);
-  */
- static struct demotion_nodes *node_demotion __read_mostly;
- 
-+static struct bus_type memory_tier_subsys = {
-+	.name = "memtier",
-+	.dev_name = "memtier",
-+};
-+
-+static ssize_t nodelist_show(struct device *dev,
-+			     struct device_attribute *attr, char *buf)
-+{
-+	struct memory_tier *memtier = to_memory_tier(dev);
-+
-+	return sysfs_emit(buf, "%*pbl\n",
-+			  nodemask_pr_args(&memtier->nodelist));
-+}
-+static DEVICE_ATTR_RO(nodelist);
-+
-+static ssize_t rank_show(struct device *dev,
-+			 struct device_attribute *attr, char *buf)
-+{
-+	struct memory_tier *memtier = to_memory_tier(dev);
-+
-+	return sysfs_emit(buf, "%d\n", memtier->rank);
-+}
-+static DEVICE_ATTR_RO(rank);
-+
-+static struct attribute *memory_tier_dev_attrs[] = {
-+	&dev_attr_nodelist.attr,
-+	&dev_attr_rank.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group memory_tier_dev_group = {
-+	.attrs = memory_tier_dev_attrs,
-+};
-+
-+static const struct attribute_group *memory_tier_dev_groups[] = {
-+	&memory_tier_dev_group,
-+	NULL
-+};
-+
-+static void memory_tier_device_release(struct device *dev)
-+{
-+	struct memory_tier *tier = to_memory_tier(dev);
-+
-+	kfree(tier);
-+}
-+
- /*
-  * Keep it simple by having  direct mapping between
-  * tier index and rank value.
-@@ -121,6 +168,7 @@ static void insert_memory_tier(struct memory_tier *memtier)
- static struct memory_tier *register_memory_tier(unsigned int tier,
- 						unsigned int rank)
- {
-+	int error;
- 	struct memory_tier *memtier;
- 
- 	if (tier >= MAX_MEMORY_TIERS)
-@@ -130,11 +178,20 @@ static struct memory_tier *register_memory_tier(unsigned int tier,
- 	if (!memtier)
- 		return ERR_PTR(-ENOMEM);
- 
--	memtier->id   = tier;
-+	memtier->dev.id = tier;
- 	memtier->rank = rank;
-+	memtier->dev.bus = &memory_tier_subsys;
-+	memtier->dev.release = memory_tier_device_release;
-+	memtier->dev.groups = memory_tier_dev_groups;
- 
- 	insert_memory_tier(memtier);
- 
-+	error = device_register(&memtier->dev);
-+	if (error) {
-+		list_del(&memtier->list);
-+		put_device(&memtier->dev);
-+		return ERR_PTR(error);
-+	}
- 	return memtier;
- }
- 
-@@ -154,7 +211,7 @@ static struct memory_tier *__get_memory_tier_from_id(int id)
- 	struct memory_tier *memtier;
- 
- 	list_for_each_entry(memtier, &memory_tiers, list) {
--		if (memtier->id == id)
-+		if (memtier->dev.id == id)
- 			return memtier;
- 	}
- 	return NULL;
-@@ -199,7 +256,7 @@ int node_create_and_set_memory_tier(int node, int tier)
- 		goto out;
- 	}
- 
--	if (current_tier->id == tier)
-+	if (current_tier->dev.id == tier)
- 		goto out;
- 
- 	node_clear(node, current_tier->nodelist);
-@@ -435,10 +492,44 @@ static void __init migrate_on_reclaim_init(void)
- 	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
- }
- 
-+static ssize_t
-+max_tier_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", MAX_MEMORY_TIERS);
-+}
-+static DEVICE_ATTR_RO(max_tier);
-+
-+static ssize_t
-+default_tier_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "memtier%d\n", DEFAULT_MEMORY_TIER);
-+}
-+static DEVICE_ATTR_RO(default_tier);
-+
-+static struct attribute *memory_tier_attrs[] = {
-+	&dev_attr_max_tier.attr,
-+	&dev_attr_default_tier.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group memory_tier_attr_group = {
-+	.attrs = memory_tier_attrs,
-+};
-+
-+static const struct attribute_group *memory_tier_attr_groups[] = {
-+	&memory_tier_attr_group,
-+	NULL,
-+};
-+
- static int __init memory_tier_init(void)
- {
-+	int ret;
- 	struct memory_tier *memtier;
- 
-+	ret = subsys_system_register(&memory_tier_subsys, memory_tier_attr_groups);
-+	if (ret)
-+		pr_err("%s() failed to register subsystem: %d\n", __func__, ret);
-+
- 	/*
- 	 * Register only default memory tier to hide all empty
- 	 * memory tier from sysfs.
--- 
-2.36.1
-
+greg k-h

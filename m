@@ -2,198 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFEA5468A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60445468A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344204AbiFJOoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        id S245270AbiFJOoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349710AbiFJOnw (ORCPT
+        with ESMTP id S234213AbiFJOo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:43:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF7D1D5182;
-        Fri, 10 Jun 2022 07:43:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0672361F08;
-        Fri, 10 Jun 2022 14:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2990DC34114;
-        Fri, 10 Jun 2022 14:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654872230;
-        bh=ECJYoM+HpBA74A7MH8CfZXrhqApacRnZb+zOBnW0CNk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Vd/gBeofU3RArtn+8b5DQL0LE9Y3N57CFiteF51JsbSPGCh/gQjj+4D2kcnQbRNuk
-         7e2qPLgHdr+fRHB5+gEi7jLME6cEdjInmVjYHVKw2FEP7BzwkhGp6WmzA9tiwB8wIp
-         ZSm//wYv0WpINGmPAbbgBM5cZJqxGsMvbYm+NznYj89k1s/rN24s/JtegbNmMeg+wK
-         41tXw7OMfDTdODsl638xuJL6haBPdrO++9n9PjpkDumMFUQMVAgLSqTWqK7Jcs/oqH
-         miz5tie15AP2FsgE9J5tw/fl+Q0QSO4L5snja66FjdcarWPL6rpm1bnr8o9BIyni2D
-         tOLHFrRh2jsHQ==
-Date:   Fri, 10 Jun 2022 09:43:48 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Wang Wenhu <lonehugo@hotmail.com>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, hao.wu@intel.com,
-        linux-fpga@vger.kernel.org, mdf@kernel.org, trix@redhat.com,
-        yilun.xu@intel.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pci@vger.kernel.org,
-        wenhu.wang@hotmail.com
-Subject: Re: [PATCH v2] mm: eliminate ifdef of HAVE_IOREMAP_PROT in .c files
-Message-ID: <20220610144348.GA595923@bhelgaas>
+        Fri, 10 Jun 2022 10:44:27 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DBE1E6F8A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:44:22 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id bo5so24045807pfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gGXmxiPiq/H1UclMpVPv5/Qgfv06wSp3ksL9v9oLJgc=;
+        b=bZRdzxBN7gMLZi4+/x+OVWdO8Cd8DRvRKJ3ZFBiiUVqxmiW3fmbankCJjLDq9LfF+8
+         ci0xANErpGOXSnk7DpMOACO5MlDA+/N5gtJshZaSvKD2YStHViDZli1vrxT4b/uhcXgf
+         Ml3wTvLKSptzRQEr442XA36K95P8i+p2i1EAw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gGXmxiPiq/H1UclMpVPv5/Qgfv06wSp3ksL9v9oLJgc=;
+        b=m7nRg+CSQMrsnFQPHw8wC4NfYJzQA+egLZMG5U4/BPvhGVIXyJK6hx4pZPCvwmL51A
+         1eH5+O/8nwEd3Dh39CcxAvvPatOiGcFuZaXE2wmlffJnrEc3OsumN0IXwtRrk8bV1Nj8
+         lwyUO1U9pW0+fUKJuANDLuGY3uzMeBb5sxt5fgShCyPsHa6HfFVM75r/mWyP67lzKaN7
+         2KfMHRbcNahpLcwzdMTKBpX6CrOdT2eL0Ebflf3aohqtn9jpTDDMjhrdDS4XkJ5DaNzL
+         zsl2piZjHGrFg0U24eSj6+/33U8cufXzYkHBWxbeMHeJCuSuKRImG+njM5hV1A+Dtt1Z
+         HeFA==
+X-Gm-Message-State: AOAM530Ddt077U3NYPz64PtcMofnMxKRd6C1/T39vHh9BASjNIYDxZhX
+        t8miMgSZs4M8ei7rkz9DxA8eYcbmJ/SM6hEt9HvjtA==
+X-Google-Smtp-Source: ABdhPJw4wcjZSOMWeVevnGECplKcQZYTs22PVBsIbmPSyjOHqhMtqvvKvcsYCz1Wm3UM/2xfLr8+s/JQ/74QhCOoSgU=
+X-Received: by 2002:a05:6a00:2402:b0:4e1:3df2:5373 with SMTP id
+ z2-20020a056a00240200b004e13df25373mr113238475pfh.40.1654872262293; Fri, 10
+ Jun 2022 07:44:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PN3PR01MB7725A0E10A2460E52EB7EBF1D2A69@PN3PR01MB7725.INDPRD01.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220607095829.1035903-1-dario.binacchi@amarulasolutions.com>
+ <YqGJnORzbp2xiEU3@matsya> <CAOf5uwkxit8kAAmwWGgTqR57m_SRmAxere10rCucOuBHU5+8fw@mail.gmail.com>
+ <YqGODNACHfKKHBOf@matsya> <CAOf5uw=8j1F3tLE9fLAjFGhVt4WXsU7GJdCkEhPtAAxvzM2fyg@mail.gmail.com>
+ <YqNLmixdb3fv7Cgs@matsya>
+In-Reply-To: <YqNLmixdb3fv7Cgs@matsya>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Fri, 10 Jun 2022 16:44:10 +0200
+Message-ID: <CAOf5uwmYCi0EfOL7M5yKpN8U5Hidn8uTpGwh_dZMHu8ZNioGEw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v2] dmaengine: mxs: fix driver registering
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 06:41:54AM -0700, Wang Wenhu wrote:
-> It is recommended in the "Conditional Compilation" chapter of kernel
-> coding-style documentation that preprocessor conditionals should not
-> be used in .c files wherever possible.
-> 
-> As for the micro CONFIG_HAVE_IOREMAP_PROT, now it's a proper chance
-> to eliminate it in .c files as we add a no-op function defination
-> in the header file if the micro is not enabled.
+HI
 
-s/micro/macro/ (twice)
-s/defination/definition/
+On Fri, Jun 10, 2022 at 3:48 PM Vinod Koul <vkoul@kernel.org> wrote:
+>
+> On 09-06-22, 08:18, Michael Nazzareno Trimarchi wrote:
+> > Hi Vinod
+> >
+> > On Thu, Jun 9, 2022 at 8:07 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > >
+> > > On 09-06-22, 08:01, Michael Nazzareno Trimarchi wrote:
+> > > > Hi
+> > > >
+> > > > On Thu, Jun 9, 2022 at 7:48 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > > > >
+> > > > > On 07-06-22, 11:58, Dario Binacchi wrote:
+> > > > > > Driver registration fails on SOC imx8mn as its supplier, the clock
+> > > > > > control module, is not ready. Since platform_driver_probe(), as
+> > > > > > reported by its description, is incompatible with deferred probing,
+> > > > > > we have to use platform_driver_register().
+> > > > > >
+> > > > > > Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
+> > > > > > Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > > > > > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > > > > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> > > > > > Cc: stable@vger.kernel.org
+> > > > > >
+> > > > > > ---
+> > > > > >
+> > > > > > Changes in v2:
+> > > > > > - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
+> > > > > >
+> > > > > >  drivers/dma/mxs-dma.c | 11 ++++-------
+> > > > > >  1 file changed, 4 insertions(+), 7 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+> > > > > > index 994fc4d2aca4..b8a3e692330d 100644
+> > > > > > --- a/drivers/dma/mxs-dma.c
+> > > > > > +++ b/drivers/dma/mxs-dma.c
+> > > > > > @@ -670,7 +670,7 @@ static enum dma_status mxs_dma_tx_status(struct dma_chan *chan,
+> > > > > >       return mxs_chan->status;
+> > > > > >  }
+> > > > > >
+> > > > > > -static int __init mxs_dma_init(struct mxs_dma_engine *mxs_dma)
+> > > > > > +static int mxs_dma_init(struct mxs_dma_engine *mxs_dma)
+> > > > >
+> > > > > why drop __init for these...?
+> > > > >
+> > > >
+> > > > I think that you refer to the fact that it can not be compiled as a
+> > > > module, am I right?
+> > >
+> > > It is still declared as a module_platform_driver... From changelog I can
+> > > understand that you are changing init level from subsys to module (in
+> > > fact clocks should be moved up as arch level and dmaengine users as
+> > > module) ...
+> >
+> > The way the driver was using to register was:
+> > platform_driver_probe(&driver, driver_probe);
+> >
+> > The function try to register the driver, one time and if the
+> > dependences is not satisfied,
+> > then there will not a next try, so the driver initialized that way can
+> > not depends to anything
+> > apart himself, or all the dependencies should be ready at the time the
+> > driver_probe is called
+>
+> There are two ways to solve this, you lowered the init level of this
+> driver but your consumers are going to have same issue...
+>
 
-> The main trigger for this patch is an UIO driver series and as Greg
-> commented we'd better not use such preprocessor contionals.
+Consumers are platform drivers that support -EPROBE_DEFER. Is a problem
+this approach?
 
-s/contionals/conditionals/
+> >
+> > >
+> > > But why remove __init declaration from these? Whatever purpose that may
+> > > solve needs to be documented in changelog and perhaps a different patch
+> > >
+> >
+> > I was thinking that driver can be compiled as module as other driver
+> > but is bool and not tristate
+>
+> Ok, but why drop __init()
 
-> See: https://lore.kernel.org/lkml/YqHy1uXwCLlJmftr@kroah.com/
-> For there is little work to do with the UIO driver, I try to push
-> this commit independently.
-> 
-> Signed-off-by: Wang Wenhu <lonehugo@hotmail.com>
+Was a mistake. Things marked as __init are dropped in the init
+section. As I said this driver
+can not be a .ko and must be in the kernel image, the __init can stay
+there. Now I don't remember
+how init section are used when a part of the kernel is compiled as
+module, but anyway this driver
+as only one initialization time
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>	# drivers/pci/
+Sorry Vinod, but if you are not happy with the answer, I have the
+feeling that you need to give more large
+lesson on this topic
 
-Thanks for cleaning this up!
+Michael
 
-> ---
-> v2: specify no-op function definition with static inline
-> ---
->  drivers/char/mem.c          | 2 --
->  drivers/fpga/dfl-afu-main.c | 2 --
->  drivers/pci/mmap.c          | 2 --
->  drivers/uio/uio.c           | 2 --
->  include/linux/mm.h          | 8 ++++++++
->  mm/memory.c                 | 4 ----
->  6 files changed, 8 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-> index 84ca98ed1dad..40186a441e38 100644
-> --- a/drivers/char/mem.c
-> +++ b/drivers/char/mem.c
-> @@ -354,9 +354,7 @@ static inline int private_mapping_ok(struct vm_area_struct *vma)
->  #endif
->  
->  static const struct vm_operations_struct mmap_mem_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys
-> -#endif
->  };
->  
->  static int mmap_mem(struct file *file, struct vm_area_struct *vma)
-> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index 7f621e96d3b8..833e14806c7a 100644
-> --- a/drivers/fpga/dfl-afu-main.c
-> +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -797,9 +797,7 @@ static long afu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->  }
->  
->  static const struct vm_operations_struct afu_vma_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys,
-> -#endif
->  };
->  
->  static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
-> diff --git a/drivers/pci/mmap.c b/drivers/pci/mmap.c
-> index b8c9011987f4..1dcfabf80453 100644
-> --- a/drivers/pci/mmap.c
-> +++ b/drivers/pci/mmap.c
-> @@ -35,9 +35,7 @@ int pci_mmap_page_range(struct pci_dev *pdev, int bar,
->  #endif
->  
->  static const struct vm_operations_struct pci_phys_vm_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys,
-> -#endif
->  };
->  
->  int pci_mmap_resource_range(struct pci_dev *pdev, int bar,
-> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
-> index 43afbb7c5ab9..c9205a121007 100644
-> --- a/drivers/uio/uio.c
-> +++ b/drivers/uio/uio.c
-> @@ -719,9 +719,7 @@ static int uio_mmap_logical(struct vm_area_struct *vma)
->  }
->  
->  static const struct vm_operations_struct uio_physical_vm_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys,
-> -#endif
->  };
->  
->  static int uio_mmap_physical(struct vm_area_struct *vma)
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index bc8f326be0ce..60c183dce5ea 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1857,8 +1857,16 @@ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
->  	unsigned long *pfn);
->  int follow_phys(struct vm_area_struct *vma, unsigned long address,
->  		unsigned int flags, unsigned long *prot, resource_size_t *phys);
-> +#ifdef CONFIG_HAVE_IOREMAP_PROT
->  int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
->  			void *buf, int len, int write);
-> +#else
-> +static inline int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
-> +			void *buf, int len, int write)
-> +{
-> +	return 0;
-> +}
-> +#endif
->  
->  extern void truncate_pagecache(struct inode *inode, loff_t new);
->  extern void truncate_setsize(struct inode *inode, loff_t newsize);
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 7a089145cad4..79b94db1bd5e 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -5437,9 +5437,6 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  		ret = get_user_pages_remote(mm, addr, 1,
->  				gup_flags, &page, &vma, NULL);
->  		if (ret <= 0) {
-> -#ifndef CONFIG_HAVE_IOREMAP_PROT
-> -			break;
-> -#else
->  			/*
->  			 * Check if this is a VM_IO | VM_PFNMAP VMA, which
->  			 * we can access using slightly different code.
-> @@ -5453,7 +5450,6 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  			if (ret <= 0)
->  				break;
->  			bytes = ret;
-> -#endif
->  		} else {
->  			bytes = len;
->  			offset = addr & (PAGE_SIZE-1);
-> -- 
-> 2.25.1
-> 
+
+>
+> --
+> ~Vinod
+
+
+
+-- 
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com

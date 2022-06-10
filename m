@@ -2,45 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5844546942
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA719546958
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241334AbiFJPR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 11:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S242177AbiFJPYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 11:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238346AbiFJPRV (ORCPT
+        with ESMTP id S234100AbiFJPYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:17:21 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B36A3190A;
-        Fri, 10 Jun 2022 08:17:17 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id D63741E80D6E;
-        Fri, 10 Jun 2022 23:16:29 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qUBS2U_TeEmX; Fri, 10 Jun 2022 23:16:27 +0800 (CST)
-Received: from localhost.localdomain (unknown [111.193.129.231])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 207871E80D24;
-        Fri, 10 Jun 2022 23:16:27 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     dave.hansen@intel.com
-Cc:     bp@alien8.de, chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        hpa@zytor.com, kunyu@nfschina.com, len.brown@intel.com,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, mingo@redhat.com, pavel@ucw.cz,
-        rafael@kernel.org, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [PATCH] x86: Change the return type of acpi_map_cpu2node to void
-Date:   Fri, 10 Jun 2022 23:17:04 +0800
-Message-Id: <20220610151705.8383-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-In-Reply-To: <7eb4762e-723b-51e8-3d70-1c28568ac4f5@intel.com>
-References: <7eb4762e-723b-51e8-3d70-1c28568ac4f5@intel.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        Fri, 10 Jun 2022 11:24:40 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7015213D23
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654874679; x=1686410679;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZmN9F24xfWub7ZpgfngTxQnTs9AUGNWnHWe661GnoRc=;
+  b=EUtSgflbWRWV5N/1YhU/UBtRPvSPC94sydprxvErCOhiPF8jxXr15CmP
+   J3JoXInzL13th2zOOs61RYHTcV0bZcNHsS5rO1ddDXGmUn1K+jlBijd6T
+   saCClYtOGY1lLEd1kIHnedSK3POM/EGPZbwsvyEhkDfxerHy3B6xdJDos
+   FmiVatJcNl5QTfMyMLv1rWu49M/+MIoa9FVVK4GxiZn4SouxoW322g5Rf
+   5by6uEQbR0IALU8q+8IfDYBdzNjmmazO+o4AVPb3cSHaVb4y5WH06V0iF
+   743w6UL6znO1BXlbf8op7N0azRGXqu2D5XbDIObhJhW3Fb44gbHz8ByuK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="278457627"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="278457627"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 08:24:39 -0700
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="710980278"
+Received: from cpatrick-mobl.amr.corp.intel.com (HELO [10.209.109.10]) ([10.209.109.10])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 08:24:38 -0700
+Message-ID: <144af1ab-1e7e-b75c-331c-d9c2e55b9062@intel.com>
+Date:   Fri, 10 Jun 2022 08:24:38 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv3 7/8] x86: Expose untagging mask in
+ /proc/$PID/arch_status
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-8-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220610143527.22974-8-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,10 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/10/22 07:35, Kirill A. Shutemov wrote:
+> +/*
+> + * Report architecture specific information
+> + */
+> +int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
+> +			struct pid *pid, struct task_struct *task)
+> +{
+> +	/*
+> +	 * Report AVX512 state if the processor and build option supported.
+> +	 */
+> +	if (cpu_feature_enabled(X86_FEATURE_AVX512F))
+> +		avx512_status(m, task);
+> +
+> +	seq_printf(m, "untag_mask:\t%#lx\n", mm_untag_mask(task->mm));
+> +
+> +	return 0;
+> +}
 
-I'm really sorry, Dave. My email prompted abnormal sending (when I sent patch before), so I sent it three times, but there was no abnormal message for the third time.
+Arch-specific gunk is great for, well, arch-specific stuff.  AVX-512 and
+its, um, "quirks", really won't show up anywhere else.  But x86 isn't
+even the first to be doing this address tagging business.
 
-Static functions are called from the current source file, and their basic functions are similar to global functions (perhaps I don't fully understand).
-
-In addition, the x86 architecture is EAX in the IA64 architecture did not pay much attention, which is my oversight.
-
+Shouldn't we be talking to the ARM folks about a common way to do this?

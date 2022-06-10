@@ -2,169 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A900546AD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49737546ABF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349859AbiFJQsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+        id S1345608AbiFJQqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349815AbiFJQsG (ORCPT
+        with ESMTP id S231317AbiFJQqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:48:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE462B2EB6;
-        Fri, 10 Jun 2022 09:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654879674; x=1686415674;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dTbJGn1wT4KOCMCBcHh3vCtqTv4ul5foDXW+RuzFICU=;
-  b=LhhTH24iqh+l/4hFBcayLgBPEEqtNq/KcYS23TFGO6OjTY5ApSX9MEFe
-   y4pxEkynT6ZRNcbj1OmVQtGfBW51UOKh2uYJik5tizVhhnO3fLYqLdY4D
-   e83sPvlPZkTEkAZQwx2cW3AGtHsWYOgfPKs/lGD3zaxQfeksmbQpWpojY
-   gfC3+w534za4VrvAt2v5d3aVzD4qgp3xK7ovuu9IGaok9uan3ekVni+La
-   +kegdEeAMUDv478cb91aH+WlfzWuA5mZPhj+ATnv0I6QVXMu/jRgoHdjk
-   Aqg5TbrKr1Qh4hRvL9ZwnlnlyRN2mDa++4V1XKyd0jgwOmDDPam1b1wKT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="275209640"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="275209640"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 09:47:54 -0700
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="638211067"
-Received: from unknown (HELO jiaqingz-server.sh.intel.com) ([10.239.48.171])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 09:47:53 -0700
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-To:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Subject: [PATCH 6/6] net/ncsi: Support VLAN mode configuration
-Date:   Sat, 11 Jun 2022 00:45:55 +0800
-Message-Id: <20220610164555.2322930-7-jiaqing.zhao@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220610164555.2322930-1-jiaqing.zhao@linux.intel.com>
-References: <20220610164555.2322930-1-jiaqing.zhao@linux.intel.com>
+        Fri, 10 Jun 2022 12:46:11 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E883CEED0;
+        Fri, 10 Jun 2022 09:46:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LmcemmiB3/AFcWRsdXDvqmZDT4XgFao1sOf+Gm3nyNMIMVD9aEoI6e4m6qyLkciwEWi39GyLF7d27wzViCFp7dw1pnpgwKneRcO5teaDCVJqkGmVjn5Jao6ndPZEqd9JfRs0FbMHcXN+ChUFZ4J40Cy70NC2Js/2ZlECt/X/wvE4Y66OjDxrik9/g+WXGGpdDPkjMHeGQquNiJBGj8UwderI3Xz3TCDCJnRbcvN9ro3StNHwHaB2trESsa5RK1Bh/sr40qPYWcxb0YDFxSZJckhUzNviqO0I2oAGrn+R+hEJpxgk1sDnueiht3TGEHDhYZM3i+56J22dnikfpE5JYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T7NCsAvoDyVeqCF9razdFlAvyiiL7zr73Cy49T7EEKg=;
+ b=VzXrebODerFx2B91UrwCwgYqG9gff1dmw2JL7DxBZOZugcpWEbUMitnleXv7YtnrOoShnF8fdRpKOEfVfMXEvZx2nvwZ90vRFT1meYd2c0QnGeeZsM93Bz6PE3Z1RIRPalhI5moULjSmbu/S0SjDnzb9Q74RJVVbi11h2NEJeAK9DqRE0Pyf78mBS+K/zdOOBkFilTTPJDSyJpDk1pGE/cl1fj6vViTi1MhxS4IPv/t0CccXhOftQCrUUaXLjmczgx/f6YjitX8WMgxillcq6QHU1KOO0U3YF7GHu9e8lrW4VOnK5ILp3LnrALeyEDOBO8uHkAsbfIrqNF2SS3I4lg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T7NCsAvoDyVeqCF9razdFlAvyiiL7zr73Cy49T7EEKg=;
+ b=iJiVA8KoUNB1DiEMRVT7raU7iS23NAdVzNFgYG21zFzOOO3A9/pd2WmIaYeXxkJ+VufDGb18MfCAfXMtL6p0jJTzjoVh3ATXy1vKHeZ7Ms8JEmd7FO9YUlGUCT20CY5iZXOXM2dMilMvyzz5+aADQU8Dr+J0F+jQg8eLwN0qWbY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by CH0PR12MB5170.namprd12.prod.outlook.com (2603:10b6:610:b9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Fri, 10 Jun
+ 2022 16:46:06 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::9dfa:d871:2068:662f]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::9dfa:d871:2068:662f%7]) with mapi id 15.20.5332.014; Fri, 10 Jun 2022
+ 16:46:06 +0000
+Date:   Fri, 10 Jun 2022 16:46:02 +0000
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Clemens Ladisch <clemens@ladisch.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Babu Moger <babu.moger@amd.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] x86/amd_nb: Add Family 19h model 70h-7Fh IDs
+Message-ID: <YqN1Skf2eBr093IZ@yaz-fattaah>
+References: <20220602201137.1415-1-mario.limonciello@amd.com>
+ <20220602201137.1415-3-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602201137.1415-3-mario.limonciello@amd.com>
+X-ClientProxiedBy: BL1PR13CA0008.namprd13.prod.outlook.com
+ (2603:10b6:208:256::13) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 44160e53-d69a-46ff-1a85-08da4b00b66d
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5170:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB517050482820DCC311DADA6BF8A69@CH0PR12MB5170.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aX+TIHmxwaCufJ2LTgEssCsPENV813o1okR194epzFLcUxjjQV/W8I3RElsPPMudstZYM2T9gVK5mEr07J9PqpEeauAZkmKXiTSYUpRwmykRZS8H2JhRdBeBl3+r8rDT5QAys+/BpmYKPzwOSf+WxR920patfjIGS8TBbSVCX2+8eZKaYfBEDXqzF2d1oDfXb9Xds3oNhys/fFQNWvSPuzX/UOspQoWdD86zImhdzECJIIQ2EVTG6rafBtEMO/BCuLbjZJhyoqhIHW9jCWqWrKJlmlZoJeU6qZ1r7IAzJnFNEvjkImJd2eGkaiEgayx8KC3SdxAo1UzJxyZqxbk0hNCmdRlprkE4gqUIQJ4u4kAOMqnWY/Y7cSFSwoBTRY7DDeYv7PtJ5q/W6lQT2yztflrqCMsezBuixTSJb8h7lBT25KP4ufdgpzGi2qC3UggodpHtbtxCToXW/eNnw0V/Ujd3+HpVeI1ZHoR/yCKQJ5eQO0xPkmuj4I3SHwbPiGy26JcIVxcUGBSktkY//9GV8iaFN8c2rJcWDRRyPubGO/eqXZN2wmUNP3mloYXKLvie6DeTD4fbJ8PzDwZ6Un2REoA6gYV1PVunxm/kqen4rUdRPQ3ZeL5OjIRTFlbV9HP3iuLaOKssBcE/b6S1R/Wnuw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(316002)(6862004)(6636002)(66946007)(5660300002)(8936002)(7416002)(4744005)(66476007)(6506007)(2906002)(44832011)(6486002)(508600001)(54906003)(6666004)(33716001)(9686003)(6512007)(26005)(86362001)(66556008)(8676002)(4326008)(38100700002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lo/dwV9o5DsPJ0EFlF3GjsSxdgeHquOerhIGQtIG9fhSwk/dDHLEVaEBvqQW?=
+ =?us-ascii?Q?M4mW2mG96T3mNhzIO/yD70Z1eyqTWHJoZZq9Enhmbt4Wha/e0w/wrAm78NyB?=
+ =?us-ascii?Q?e4A8DDUv1sRBADi6kJh873DH6lJesPTlNTpXOa1uGYJcgUS94jCZCBBX69tG?=
+ =?us-ascii?Q?+tbPGLjVhFoElZmsBcQAKC8EEb6Mt2mpkJ5R4w9RAXl7h8dArvU7VCvMMHsR?=
+ =?us-ascii?Q?9laDvz7fVC8tfiNpIHSAhow7yVEB1qyRwLb+ADQkftetOVEa6kK8l2pEzA4D?=
+ =?us-ascii?Q?CAQTEDT4tuWNsRz7QCap9Xeyxp6CONprRvfL7ESi/n3morXa/GGVSr6altdX?=
+ =?us-ascii?Q?U6r5KKh8/yw91e+vRWBQLAnkoUnzBvUiZkIfrrM8Ch96R0jMFVylW2nC46Ib?=
+ =?us-ascii?Q?PbuR6iPsz8oJB6dMp/MrN+MHOTQRJSlWmCokI9X1tksfDqEJ4hUeS4U5vbp8?=
+ =?us-ascii?Q?sTak7RmfmNZgXf0QN5iXvJYJRkHP0UCUVgDYGkYZOxiECBeKw7Q1vtScJcIy?=
+ =?us-ascii?Q?E3p4cl7r4QPhpqQbL+lm6qvhTBvYRRP0ZGVNGRtqJpxpSGZA7ZHqLlpSrJnO?=
+ =?us-ascii?Q?fkA4U09ZkYQFTSoq64bZEco8dVEtSzZp4v3K4MIZuMBc1ltSwMMOCtuB+s02?=
+ =?us-ascii?Q?suX2eEhoL6saYfiMuoOYTRPGiz8Ov1FxD5za/MFUJZPJw/sRmpbJc46EKwdQ?=
+ =?us-ascii?Q?PcMV8orezBWqoZRaooK03ws3iFE1rcVARsMR5IFuELnNmqpH9xK+bEcz63x4?=
+ =?us-ascii?Q?ST85HS94kAvazHQvNkHKeCQVFAfqpOSRJfFFCCAS/nIuQGpXWFhYoqVHc4S3?=
+ =?us-ascii?Q?oVHQuxlRin4TuD+7OwTz1CSS9QyOwMtEgkuVTVZz6wSxbG8EYDUAf3mTRLqX?=
+ =?us-ascii?Q?TnP1zJ3o+CBPMdQMs9qJa3qyQ9aeIibKZ8jXepzPZb2pOjOLzzMUqYS2S1bT?=
+ =?us-ascii?Q?Aq1YEkQ13gZONq/BPKuIsZ7Q9iG2e0NPH9BtTGpAY/CiR30Olg/uL1lgC5iI?=
+ =?us-ascii?Q?LyRD2qru3L9RI4FLZgkLVA7v1g12BYrHPtWWAB6QuyRQ/h2mjGYZpu7gaFRn?=
+ =?us-ascii?Q?sSPeYp4cMiqE+2/bjBL7V9iZCjdGVvGJl01pAgT1susofD1BOatsQs8RitYB?=
+ =?us-ascii?Q?87++0f03k9a2DstLdQBh+RvFCzgjWthUitXxkVRGjfGcoSy4OLpgV+ApLTUD?=
+ =?us-ascii?Q?IK7InD2NtvtS5VQVjMNoNRkhz1mJMsTn9BwcCktRAmVoTB5A6TLnCRvPDj1j?=
+ =?us-ascii?Q?lNis0xZiYFnnyx5gT66I8uflrU4QhhZ6WamnBf4iaX5SmV9I2I2a6IZKhtYR?=
+ =?us-ascii?Q?WbEiW131ONqlE9NkVMjJYld77j4q/gCLxwMxrvN7Ku1meN1NgI1YlDVhJne3?=
+ =?us-ascii?Q?1b0RN3Wc1GFQl6qTqYF97JR+h3JFaqJ9d7MxyGkljH5xPMe2vy7oITT8Xedz?=
+ =?us-ascii?Q?9919WXehBPxFYvTQu9yZVLd0jrH3xcMq8vplgyTUyw/nI5nblO65tP/BCkuA?=
+ =?us-ascii?Q?mWh6USfkZY4podMXqamCno/+MwgE7O8Ecu/q/2HZpyRL5oRv+TVLHnW2D4an?=
+ =?us-ascii?Q?5An7UuX60xJMkq8QdNK3zlpfuG1zN41WzZzXXC/1fUKtxEVi0yRF8tuxXzqn?=
+ =?us-ascii?Q?oj9lkKYs1IGUEkx5yb4h7NSsxKTDYYpM7371u//jSEf/gGqDTs0f6zUWPxz5?=
+ =?us-ascii?Q?A7ROXhLZm/LRk6+soB2LIQBySZV60wx5vb+GYaQrjJR32daoPtwA7zRRJoue?=
+ =?us-ascii?Q?1HGkDTCV9A=3D=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44160e53-d69a-46ff-1a85-08da4b00b66d
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 16:46:06.0439
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oBFwXPGclLO31WcSfa8gsznEGIgQf57SeE8XLH1x4+JB3Y4wutxIeRBnqVXwfO/zGnt1Aktts3PReKkdmhbJvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5170
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NCSI specification defines 4 VLAN modes, currently kernel NCSI driver
-only supports the "VLAN + non-VLAN" mode (Mode #2), and there is no
-way to detect which modes are supported by the device. This patch adds
-support for configuring VLAN mode via the "ncsi,vlan-mode" devicetree
-node.
+On Thu, Jun 02, 2022 at 03:11:33PM -0500, Mario Limonciello wrote:
+> Add support for SMN communication on Family 19h Model 70h.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  arch/x86/kernel/amd_nb.c | 4 ++++
+>  include/linux/pci_ids.h  | 1 +
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index 60c7bd525237..15295f5d9aca 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -32,6 +32,8 @@
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
+>  #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
+> +#define PCI_DEVICE_ID_AMD_19H_M70H_ROOT	0x14e8
+> +#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F4 0x14f4
+>
 
-Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
----
- net/ncsi/internal.h    |  1 +
- net/ncsi/ncsi-manage.c | 41 ++++++++++++++++++++++++++++++++++-------
- 2 files changed, 35 insertions(+), 7 deletions(-)
+The IDs are correct. But can you please group the "ROOT" IDs together
+including PCI_DEVICE_ID_AMD_19H_M40H_ROOT? Otherwise, looks good to me.
 
-diff --git a/net/ncsi/internal.h b/net/ncsi/internal.h
-index 7f384f841019..b868e07f7ffd 100644
---- a/net/ncsi/internal.h
-+++ b/net/ncsi/internal.h
-@@ -334,6 +334,7 @@ struct ncsi_dev_priv {
- 	struct work_struct  work;            /* For channel management     */
- 	struct packet_type  ptype;           /* NCSI packet Rx handler     */
- 	struct list_head    node;            /* Form NCSI device list      */
-+	u32                  vlan_mode;      /* VLAN mode                  */
- #define NCSI_MAX_VLAN_VIDS	15
- 	struct list_head    vlan_vids;       /* List of active VLAN IDs */
- 
-diff --git a/net/ncsi/ncsi-manage.c b/net/ncsi/ncsi-manage.c
-index 3fb95f29e3e2..a398b0eb72b2 100644
---- a/net/ncsi/ncsi-manage.c
-+++ b/net/ncsi/ncsi-manage.c
-@@ -10,6 +10,7 @@
- #include <linux/skbuff.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <dt-bindings/net/ncsi.h>
- 
- #include <net/ncsi.h>
- #include <net/net_namespace.h>
-@@ -1042,7 +1043,11 @@ static void ncsi_configure_channel(struct ncsi_dev_priv *ndp)
- 		nd->state = ncsi_dev_state_config_oem_gma;
- 		break;
- 	case ncsi_dev_state_config_oem_gma:
--		nd->state = ncsi_dev_state_config_clear_vids;
-+		/* Only set up hardware VLAN filters in filtered mode */
-+		if (ndp->vlan_mode == NCSI_VLAN_MODE_FILTERED)
-+			nd->state = ncsi_dev_state_config_clear_vids;
-+		else
-+			nd->state = ncsi_dev_state_config_ev;
- 		ret = -1;
- 
- #if IS_ENABLED(CONFIG_NCSI_OEM_CMD_GET_MAC)
-@@ -1094,11 +1099,15 @@ static void ncsi_configure_channel(struct ncsi_dev_priv *ndp)
- 			nd->state = ncsi_dev_state_config_svf;
- 		/* Enable/Disable the VLAN filter */
- 		} else if (nd->state == ncsi_dev_state_config_ev) {
--			if (list_empty(&ndp->vlan_vids)) {
--				nca.type = NCSI_PKT_CMD_DV;
--			} else {
-+			if (ndp->vlan_mode == NCSI_VLAN_MODE_FILTERED &&
-+			    !list_empty(&ndp->vlan_vids)) {
- 				nca.type = NCSI_PKT_CMD_EV;
- 				nca.bytes[3] = NCSI_CAP_VLAN_FILTERED;
-+			} else if (ndp->vlan_mode == NCSI_VLAN_MODE_ANY) {
-+				nca.type = NCSI_PKT_CMD_EV;
-+				nca.bytes[3] = NCSI_CAP_VLAN_ANY;
-+			} else {
-+				nca.type = NCSI_PKT_CMD_DV;
- 			}
- 			nd->state = ncsi_dev_state_config_sma;
- 		} else if (nd->state == ncsi_dev_state_config_sma) {
-@@ -1800,15 +1809,33 @@ struct ncsi_dev *ncsi_register_dev(struct net_device *dev,
- 	ndp->ptype.dev = dev;
- 	dev_add_pack(&ndp->ptype);
- 
-+	/* Set default VLAN mode (filtered) */
-+	ndp->vlan_mode = NCSI_VLAN_MODE_FILTERED;
-+
- 	pdev = to_platform_device(dev->dev.parent);
- 	if (pdev) {
- 		np = pdev->dev.of_node;
--		if (np && of_get_property(np, "mlx,multi-host", NULL))
--			ndp->mlx_multi_host = true;
-+		if (np) {
-+			u32 vlan_mode;
-+
-+			if (!of_property_read_u32(np, "ncsi,vlan-mode", &vlan_mode)) {
-+				if (vlan_mode > NCSI_VLAN_MODE_ANY ||
-+				    vlan_mode == NCSI_VLAN_MODE_ONLY)
-+					dev_warn(&pdev->dev, "NCSI: Unsupported VLAN mode %u",
-+						 vlan_mode);
-+				else
-+					ndp->vlan_mode = vlan_mode;
-+				dev_info(&pdev->dev, "NCSI: Configured VLAN mode %u",
-+					 ndp->vlan_mode);
-+			}
-+			if (of_get_property(np, "mlx,multi-host", NULL))
-+				ndp->mlx_multi_host = true;
-+		}
- 	}
- 
- 	/* Enable hardware VLAN filtering */
--	if (dev->netdev_ops->ndo_vlan_rx_add_vid == ncsi_vlan_rx_add_vid &&
-+	if (ndp->vlan_mode == NCSI_VLAN_MODE_FILTERED &&
-+	    dev->netdev_ops->ndo_vlan_rx_add_vid == ncsi_vlan_rx_add_vid &&
- 	    dev->netdev_ops->ndo_vlan_rx_kill_vid == ncsi_vlan_rx_kill_vid)
- 		dev->hw_features |= NETIF_F_HW_VLAN_CTAG_FILTER;
- 
--- 
-2.34.1
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
+Thanks,
+Yazen

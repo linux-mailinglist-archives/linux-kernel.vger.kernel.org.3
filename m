@@ -2,113 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35AE546095
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8492A546100
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347819AbiFJI4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S1348630AbiFJJHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237484AbiFJI4i (ORCPT
+        with ESMTP id S1348478AbiFJJGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:56:38 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28181271A8B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:56:38 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id y188so16459439ybe.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:56:38 -0700 (PDT)
+        Fri, 10 Jun 2022 05:06:02 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 089F3274D78;
+        Fri, 10 Jun 2022 02:05:11 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 7BFD316A1;
+        Fri, 10 Jun 2022 11:57:59 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 7BFD316A1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XH02qxttNt5dNPWDoERvNepSgpr1P+EkVPWfaAbgETY=;
-        b=tUWPVWhq26Egy5stSWqG3nEuB6M2CjvgLS+AKR9dzCYugVMqezBhPBxFLanSli7hDQ
-         OBDQZKOAkEby39w28pgo3gEKoFaEXzTSSYTfRJwcX7X5VNm2C0tL7oEyDq0uYv2m8zFd
-         4lJo/wQHp0u5uthqP5rAcYh6HcIZ2j2ng4yqM2mQ+tSNaCy3JZmIbQ/mp4sBh/qTgJxm
-         MKiD7nrswDfsUllIyFu7rQ3ZCgUWduTFSLyfB0q6FU1fLWo58Tw86uWCeR6SuY3yMF2q
-         YTc+1gvKyUybI9brhua6UnGYNzicYj/VVBrgG0EkmzxunuLqnsqf/vKo3lhs0afxWRAP
-         7FwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XH02qxttNt5dNPWDoERvNepSgpr1P+EkVPWfaAbgETY=;
-        b=57keHqgpq6+aV1N0Ca6GVa4l1ZnLYt94yyWlfQfCmGakOvnlG2s/Y5k4FhVJw/kjT0
-         +hbemFPnQiSSHFnCszYaILXuabo5FPb2adkR5+0KbaPPKQeV5fwBqaPe/G2IRhU4gY05
-         EmsWrwoUrORNPCFIJ8++hYMroe1mjAjpxX9h3JunqfT+hEPns84QQ75ftd49h6eq0I7z
-         /CQ9ItsbMDRn9xZeAWHmNBnX0/wzcyBx/ufoVOnegJclK/RdmEEh6byDnLHo9MfA4tvq
-         m7oNO1Ka3XG6KuBorHc18mYzN83S8hXrtY4tGZX7uYwQjuUYkh1KPAPa6lVsW9tbvcwd
-         K+zA==
-X-Gm-Message-State: AOAM531hz1FCZQDRc01zwhwQy29o4UODhoqjxvcpg8ib/1BgtNmNwNAN
-        EAKX1SRd/7hpwcnTX+WYhheqQuqOEXHHDvZr1iPd7Q==
-X-Google-Smtp-Source: ABdhPJy8G7dOXekHHRngvCtxNNuKXgXcLUmdDaUiLmGJoOQQfZfP8sloC2J6L/K2DIkJFw4PqxjoLhrYRMIvmUPSSg0=
-X-Received: by 2002:a25:aa32:0:b0:65c:af6a:3502 with SMTP id
- s47-20020a25aa32000000b0065caf6a3502mr43818525ybi.598.1654851397036; Fri, 10
- Jun 2022 01:56:37 -0700 (PDT)
+        d=baikalelectronics.ru; s=mail; t=1654851480;
+        bh=UjzkV3hyR9eVfFMCrVRPxlaF8VE0L1vTIAeO1mk31v4=;
+        h=From:To:CC:Subject:Date:From;
+        b=P8dpbexMNsYCSo5VvEjHOG49YCz4sEVGZJB2Xh/3JsCpeGMA8YKsiUM0yCClqsrjR
+         UTasD3aMKyiZEPSISrIY3zs88iEhJjwE2cXaeW/so71TZBGjJdKZb1HwKFvEUh2muo
+         fL/KPWK/GmEm1GYBIeM0cqdmX+FTQUoeIVGO1GSo=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 11:57:07 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 00/17] PCI: dwc: Add generic resources and Baikal-T1 support
+Date:   Fri, 10 Jun 2022 11:56:48 +0300
+Message-ID: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220610034204.67901-1-imagedong@tencent.com> <20220610034204.67901-6-imagedong@tencent.com>
-In-Reply-To: <20220610034204.67901-6-imagedong@tencent.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 10 Jun 2022 01:56:25 -0700
-Message-ID: <CANn89i+NV1DgxaQbqPu2o0Du-94gDkM8DUrX_DK7=AGqvvPKdg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 5/9] net: tcp: make tcp_rcv_state_process()
- return drop reason
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 8:45 PM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> For now, the return value of tcp_rcv_state_process() is treated as bool.
-> Therefore, we can make it return the reasons of the skb drops.
->
-> Meanwhile, the return value of tcp_child_process() comes from
-> tcp_rcv_state_process(), make it drop reasons by the way.
->
-> The new drop reason SKB_DROP_REASON_TCP_LINGER is added for skb dropping
-> out of TCP linger.
->
-> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> v3:
-> - instead SKB_DROP_REASON_TCP_ABORTONDATA with SKB_DROP_REASON_TCP_LINGER
-> ---
->  include/net/dropreason.h |  6 ++++++
->  include/net/tcp.h        |  8 +++++---
->  net/ipv4/tcp_input.c     | 36 ++++++++++++++++++++----------------
->  net/ipv4/tcp_ipv4.c      | 20 +++++++++++++-------
->  net/ipv4/tcp_minisocks.c | 11 ++++++-----
->  net/ipv6/tcp_ipv6.c      | 19 ++++++++++++-------
->  6 files changed, 62 insertions(+), 38 deletions(-)
->
+This patchset is a third one in the series created in the framework of
+my Baikal-T1 PCIe/eDMA-related work:
 
-I am sorry, this patch is too invasive, and will make future bug fix
-backports a real nightmare.
+[1: In-progress v4] PCI: dwc: Various fixes and cleanups
+Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
+[2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
+Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
+[3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
+Link: ---you are looking at it---
+[4: In-progress v2] dmaengine: dw-edma: Add RP/EP local DMA support
+Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
+
+Note it is very recommended to merge the patchsets in the same order as
+they are listed in the set above in order to have them applied smoothly.
+Nothing prevents them from being reviewed synchronously though.
+
+Originally the patches submitted in this patchset were a part of the series:
+Link: https://lore.kernel.org/linux-pci/20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru/
+but due to the reviewers requests the series was expanded to about 30
+patches which made it too bulky for a comfortable review. So I decided to
+split it up into two patchsets: 2. and 3. in the table above.
+
+Regarding the series content. This patchset is mainly about adding new DW
+PCIe platform support - Baikal-T1 PCIe of DW PCIe v4.60a IP-core. But a
+set of feature-reach preparations are done first. It starts from
+converting the currently available DT-schema into a more flexible schemas
+hierarchy with separately defined regs, clocks, resets and interrupts
+properties. As a result the common schema can be easily re-used by all the
+currently available platforms while the named properties above can be
+either re-defined or used as is if the platforms support they. In the
+framework of that modification we also suggest to add a set of generic
+regs, clocks, resets and interrupts resource names in accordance with what
+the DW PCIe hardware reference manual describes and what the DW PCIe core
+driver already expects to be specified. Thus the new platform driver will
+be able to re-use the common resources infrastructure.
+
+Link: https://lore.kernel.org/linux-pci/20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Rename 'syscon' property to 'baikal,bt1-syscon'. (@Rob)
+- Move the iATU region selection procedure into a helper function (@Rob).
+- Rebase from kernel v5.17 onto v5.18-rc3 since the later kernel has
+  already DT bindings converted. (@Rob)
+- Use 'definitions' property instead of the '$defs' one. It fixes the
+  dt-validate error: 'X is not of type array.'
+- Drop 'interrupts' and 'interrupt-names' property from being required
+  for the native DW PCIe host.
+- Evaluate the 'snps,dw-pcie-common.yaml' schema in the
+  'socionext,uniphier-pcie-ep.yaml' DT-bindings since the later has
+  platform-specific names defined.
+
+Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru
+Changelog v3:
+- Split up the patch "dt-bindings: PCI: dwc: Define common and native DT
+  bindings" into a series of modifications. (@Rob)
+- Detach this series of the patches into a dedicated patchset.
+- Add a new feature patch: "PCI: dwc: Introduce generic controller
+  capabilities interface".
+- Add a new feature patch: "PCI: dwc: Introduce generic resources getter".
+- Add a new cleanup patch: "PCI: dwc: Combine iATU detection procedures".
+- Add a method to at least request the generic clocks and resets. (@Rob)
+- Add GPIO-based PERST# signal support to the core module.
+- Redefine Baikal-T1 PCIe host bridge config space accessors with the
+  pci_generic_config_read32() and pci_generic_config_write32() methods.
+  (@Rob)
+- Drop synonymous from the names list in the common DT-schema since the
+  device sub-schemas create their own enumerations anyway.
+- Rebase onto kernel v5.18.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: Frank Li <Frank.Li@nxp.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-pci@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (17):
+  dt-bindings: PCI: dwc: Detach common RP/EP DT bindings
+  dt-bindings: PCI: dwc: Remove bus node from the examples
+  dt-bindings: PCI: dwc: Add phys/phy-names common properties
+  dt-bindings: PCI: dwc: Add max-link-speed common property
+  dt-bindings: PCI: dwc: Stop selecting generic bindings by default
+  dt-bindings: PCI: dwc: Add max-functions EP property
+  dt-bindings: PCI: dwc: Add interrupts/interrupt-names common
+    properties
+  dt-bindings: PCI: dwc: Add reg/reg-names common properties
+  dt-bindings: PCI: dwc: Add clocks/resets common properties
+  dt-bindings: PCI: dwc: Add dma-coherent property
+  dt-bindings: PCI: dwc: Apply common schema to Rockchip DW PCIe nodes
+  dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root Port bindings
+  PCI: dwc: Introduce generic controller capabilities interface
+  PCI: dwc: Introduce generic resources getter
+  PCI: dwc: Combine iATU detection procedures
+  PCI: dwc: Introduce generic platform clocks and resets
+  PCI: dwc: Add Baikal-T1 PCIe controller support
+
+ .../bindings/pci/baikal,bt1-pcie.yaml         | 154 +++++
+ .../bindings/pci/fsl,imx6q-pcie.yaml          |   3 +-
+ .../bindings/pci/hisilicon,kirin-pcie.yaml    |   3 +-
+ .../bindings/pci/rockchip-dw-pcie.yaml        |   3 +-
+ .../bindings/pci/samsung,exynos-pcie.yaml     |   3 +-
+ .../bindings/pci/sifive,fu740-pcie.yaml       |   3 +-
+ .../bindings/pci/snps,dw-pcie-common.yaml     | 323 +++++++++
+ .../bindings/pci/snps,dw-pcie-ep.yaml         | 153 +++--
+ .../devicetree/bindings/pci/snps,dw-pcie.yaml | 202 ++++--
+ .../pci/socionext,uniphier-pcie-ep.yaml       |  12 +-
+ .../bindings/pci/toshiba,visconti-pcie.yaml   |   3 +-
+ drivers/pci/controller/dwc/Kconfig            |   9 +
+ drivers/pci/controller/dwc/Makefile           |   1 +
+ drivers/pci/controller/dwc/pcie-bt1.c         | 649 ++++++++++++++++++
+ .../pci/controller/dwc/pcie-designware-ep.c   |  26 +-
+ .../pci/controller/dwc/pcie-designware-host.c |  15 +-
+ drivers/pci/controller/dwc/pcie-designware.c  | 206 ++++--
+ drivers/pci/controller/dwc/pcie-designware.h  |  57 +-
+ 18 files changed, 1622 insertions(+), 203 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+ create mode 100644 Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+ create mode 100644 drivers/pci/controller/dwc/pcie-bt1.c
+
+-- 
+2.35.1
+

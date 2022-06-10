@@ -2,520 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C089545DCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025DA545DBA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346998AbiFJHvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        id S1346947AbiFJHp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245164AbiFJHvR (ORCPT
+        with ESMTP id S243289AbiFJHpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:51:17 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6DA2E4362;
-        Fri, 10 Jun 2022 00:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654847474; x=1686383474;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X52U5H/3g78v/lDOCRGU6VMETY7DF6sJutStjqWpP6M=;
-  b=O/GvjFD6j3I+8ldBEukvwdnFxRnpGnta89Qkf8eJpQ/T9VjN/o8H+CY7
-   We5qvoH3E32bJFA/INVGHajOO/+YgQNKDrLC+nRhiTUibfXy0mkIyXwJq
-   nF9e/jDMBC8osE65ZbBcv9Orhxv0hopzKsHrAAJ2H7DRCkptOyU0Z6bhn
-   K9DZ+7y2kTn74BZrsvPLRxHuia1JvEYdS3lL5WxmN0Oq/0rJShflYCSkB
-   uU9xi/hmlGCZIiBIAyfVqT5RxspkOfsuN6LqG8KI740LYRdBhgQngD03q
-   swACOt30XyfDhjmfdsuBeiKiKmDxXDXANcAsBY6B8e9eehEy7QaWWDN/q
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266319616"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="266319616"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 00:51:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="586084129"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jun 2022 00:51:08 -0700
-Date:   Fri, 10 Jun 2022 15:43:11 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
-        Ivan Bornyakov <brnkv.i1@gmail.com>,
-        Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v17 1/4] fpga: fpga-mgr: support bitstream offset in
- image buffer
-Message-ID: <20220610074311.GA693376@yilunxu-OptiPlex-7050>
-References: <20220609154752.20781-1-i.bornyakov@metrotek.ru>
- <20220609154752.20781-2-i.bornyakov@metrotek.ru>
+        Fri, 10 Jun 2022 03:45:54 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2128.outbound.protection.outlook.com [40.107.215.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6732F13B2D0;
+        Fri, 10 Jun 2022 00:45:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=blfTEa4TGEnUzIIiOEAbUTbuHq9g2Gk302j55SW0eEWocCIJ0rQdBqKssZPn0vCJ9IK8GwYHUqn/MtnEMJuAWOYhrt9ikeP8XfNReLY9AOrOu5ssvPNNhHGWqzgx2hSwBBiuKRYLI/uiH6A9S8YEKhgFuKKZwlk6lea0RYTjv3entX1X60J8zM+TZiOaHXX6dRVsI+g+nZ2LNq8I/NptygSJPIrvIHKYfZ2jaDN+9uUmSlH2Gd/BiOwuFLQdyfMF1u2q/q5lPE/eTsWxtBH/EBPs6gW+88SSIMuKf9wYcIe9A2KJitcp3ayTiiQIY1hiMXjkeyzG06xYTGz83ouYEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I4uz2/UIA41xN68VnrLzYJnUAIEZ320BI9HcEDIaiX4=;
+ b=jICD0FQqtufIHkcSPAz8HNXiG93StWBvPjotO661udxstCu0xKUC9ysa7FN+0KLtyfdSo6W21XFiAQk4fiLgqTcyS7vFhK3MpQKj958bHni2gD78CtGDzSyjqg6rz8kB3VUiyE7IZa5TmA6475OLts/TkniBUErd5KyDNQCJiBKuhHXY4neVYlCCyuk2EnzvZ0AMtm/mjuuQDxswGngETT8HDBp4uZrd0nXzomzzemXPr7almO8I6XMGoDq3wHQ3fwTdTOTfKkV+QEVcedR3XqElg8zAo600c9WHFiLFQLBoOsb6QzKhxpSFmz8UaIvAUuVLXEDOejTlGh8CvDY0yA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I4uz2/UIA41xN68VnrLzYJnUAIEZ320BI9HcEDIaiX4=;
+ b=P3RMe7buOCOLbkEF/915s8809UB82M5NoIjsBPD7k/INSQnSjDTTlHUeU6A3TAfmoFyugq4cLK2N48qeU5oMjckj4RZgMZKaqQL6LINNICsMjO9DHfmylNSEe4QWpZ7YTpyr+9xETEpGDNB5qdPXuUkOjSoSrCtb2sdHQWzKS3Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SI2PR06MB4171.apcprd06.prod.outlook.com (2603:1096:4:ea::12) by
+ PS2PR06MB3285.apcprd06.prod.outlook.com (2603:1096:300:6c::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5332.13; Fri, 10 Jun 2022 07:45:44 +0000
+Received: from SI2PR06MB4171.apcprd06.prod.outlook.com
+ ([fe80::a501:12f:a492:29a5]) by SI2PR06MB4171.apcprd06.prod.outlook.com
+ ([fe80::a501:12f:a492:29a5%7]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
+ 07:45:44 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] usb: phy: tahvo: Check before clk_disable() not needed
+Date:   Fri, 10 Jun 2022 00:45:25 -0700
+Message-Id: <20220610074525.69453-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SL2P216CA0151.KORP216.PROD.OUTLOOK.COM
+ (2603:1096:101:35::6) To SI2PR06MB4171.apcprd06.prod.outlook.com
+ (2603:1096:4:ea::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609154752.20781-2-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b61a0354-903f-4f9b-ad95-08da4ab53981
+X-MS-TrafficTypeDiagnostic: PS2PR06MB3285:EE_
+X-Microsoft-Antispam-PRVS: <PS2PR06MB32853EDB48FC650FA1EF7D9BA2A69@PS2PR06MB3285.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aOcMEKRlkkGJHTK8bJ3y81l4P2BlqtPMmY+iR2WUicXrTiePmFvVkITONp9eglOvuwSBYWxSCLT1OKyuVAWo3F/Imtih3buSzG0QgpW85WXWpXlHWMbpy7SLuxXSlBuyEQWXnbddQn+TbYpCHT4QmXpSNUIzvePqb+pNxjSNLbZNehE2y1Yvsr0yIzXYMdB/dUUZBnYk3q9vj8Nasm6hH3q/F0Ao0KbV15cryd0B5UmKfiD0t1DvAJaABBXfVyj/6zBbMFucPAPT25jK0hjX9YEP5O1OVMmYREAHbPFe/mVbg+dje86yoJwbvA58j8Ql8Hy9FGpYplAsywkJQ8WXF+HXtZrnL6Ugg6P06qanmpGqJ8BfTv04Ezv7T3jS8MLss2xgcR2bJHuUQuyCYKLGwXiPyFuyXP8IFM65QTX5XKq8T2LOtwvkBMTTEWggL0oXX6rsA8k3QKg/uOOyO+uxdtg2PPagdzOxtI86oQ5UsDSMFmADE5HmCLvcnvjAtM3nvqJTVHbhkn5suWL+4GzQbOzjs/lX2CU0UVj1mAlxeP/yTL3PvILjFbYo2LaK3RArEsJa6CWBAvtai3U63cV3lwE3jgLpmUuKfaiidkBzDDgllB2FruPM8bG3r2z6uwkv3pBKaPSXeXsJugcCfXD7Ek9KW5TY5+PQF+gesEE1WYKWYAm+J/GLY4b2PZ2dSBqwGxwtyV9YwC/0yv1ezpRzpw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB4171.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(6486002)(2906002)(508600001)(6506007)(6666004)(6512007)(52116002)(26005)(86362001)(1076003)(107886003)(186003)(83380400001)(4744005)(5660300002)(8936002)(66556008)(36756003)(316002)(38350700002)(110136005)(38100700002)(4326008)(8676002)(66946007)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ijK4UKeFlqHjwUbYYebbK5Ad7tQvotdZIOQOLdRrVPaNp1B8e2Y4czfcTXmj?=
+ =?us-ascii?Q?FTekHZ1ZFrHjeJdexhcfCeE632zkcrFM1BpiNPVxGHtkg29rlRMFcr2nEwRs?=
+ =?us-ascii?Q?chrxCKoOqzylNfBd2Ml0qwefV4BenoK1b3iW9rFcgeKbvICfsaT4gtISO13q?=
+ =?us-ascii?Q?//fWvNdixqIXQ/DGADuqDedWQuv6GE6mTh7jIZP/Y0umm4YIQjI06w65rp5J?=
+ =?us-ascii?Q?A4KNcujx1VoxqS8CDNXfCPXHqcdh6SUnY63l41t5QkM2bZZZKtSWQ1mhoRhA?=
+ =?us-ascii?Q?MIFkkozbtP5ZEKZQZYYO0suDasqrKEjs4mtOmf9g2gpsES6WmvXCK0Twub9C?=
+ =?us-ascii?Q?zP1/MpD4Kon3RGjDxeFaLZYSHFJ9PGEptRYbc/6668dvkPFtKbb9ZNK670mx?=
+ =?us-ascii?Q?wxNxR01upSnftctyDnkqvaP19cHMbAhAQYsztDCMe/+EMOVNU63IgCgFh7tA?=
+ =?us-ascii?Q?IH7B3hjVoW5qHfIMwKRm8wPWZW/osRVv1EcxRKCAB0V77+HoBpDqOCI1KTiC?=
+ =?us-ascii?Q?R9hxst4hsB3PqMiuPdlkI7Aa8mrRBYqR8NpGn6P6Siha2Ky2xT2kJ4zLRazc?=
+ =?us-ascii?Q?UhX36ykRF56MQCIgeMEXEzUWar4ixN86MdK5MAB7zU7KELZow4v+N8JE9caT?=
+ =?us-ascii?Q?U2UaQGquGPPEU4V5QAq8cqSN2Ie0+zXP3O5bvUjw9hwuluUoMn8iNHpOsSlJ?=
+ =?us-ascii?Q?YFoffA9PyjIRJkefy0A0jcWyxEvmKywlTS5lVdxbn6f6vmKJnnbe8FLUk7tL?=
+ =?us-ascii?Q?Zp/aHucn2kXOcWCbC0wNrmFN7OKJxkifma6yRafPAhuXMqBB5EBsJh6YX9+v?=
+ =?us-ascii?Q?4RKlfwhtYRNQADSddGIeh9wOn2zk6hgI7T4WpdCLKENTz2poIJS1Fr6Twihu?=
+ =?us-ascii?Q?PaoHegEXVXeF6I5l4fYNiObKmkO3ZgNrdIWh7RuSwYz72jXeimZDLl3dHfZK?=
+ =?us-ascii?Q?dWWiSDy1DznsZer2P241y+tlkyfGdKQ7k1f/OVFUo9KUwMjbJQp+hcnzjPoP?=
+ =?us-ascii?Q?wPSD8NvDv3H7/BfOsbi3FAetsBJjLyBCkGHqGRhGUSqlHt+jVoTiK/gPN/XE?=
+ =?us-ascii?Q?jMPCirmE8mY3GdXNMgISslPWmO4KLQ2WUsSKigQxPvxOpczMNv9d7TqMnqhF?=
+ =?us-ascii?Q?7yRzG/RhK5wY3A49qO8tWxxw/zAJVmV7oVsQ2/8Mrwxs7X9mb6mV4Md/8ZI6?=
+ =?us-ascii?Q?O4UKQ6ZZo1Oa2mpqETmV2xFVASBQtsn6PTDfU01pWJ7m6AytWQs9BlRghxu/?=
+ =?us-ascii?Q?TZkMFHeYP3p100YEeWO9dpe1D5JgrJrWwPmaEqTWZOvnwUf7rVnH9Ugz1c6q?=
+ =?us-ascii?Q?BeC6Dwqk5pisI4prwpFbWjZMHMgXGUFZ8BlWYOa6WJA8DqSYlTOXB5km0AEm?=
+ =?us-ascii?Q?yWILMWUrzr9LYseFIniXk0rvBFYZlO5wAdIA53qTC/9dmY+L1f0NDPZmXyZG?=
+ =?us-ascii?Q?qqU7cYuQzCbGmOJ3pZ6Bce3845DBk1fcmK57biWt6zXfcgAUAyk9XbFgOPBa?=
+ =?us-ascii?Q?HIAv6HCjToMj9zcJfvmazD3j5qhJUKA7TtCh2o4e+LkFYSHJdv7NgxAi5aD0?=
+ =?us-ascii?Q?l2CvFEpntlh2521EgahQ6VCaJBna3+MvuXlFtBZfsYN39E2YVw/wy8ipQ/us?=
+ =?us-ascii?Q?bKOq2pCtYiQJv7INesq3CY4YXocodnchfb5YzSnAu5OKrf9Y9y/5hP78YiKg?=
+ =?us-ascii?Q?6pe5EiVEYSkbxsO6jfnKNOMIU1bIfryqjqnOmaOtg1Jd8xbyMWCbFwN96uHU?=
+ =?us-ascii?Q?LHQq2omS2A=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b61a0354-903f-4f9b-ad95-08da4ab53981
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB4171.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 07:45:44.3025
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jeMY68QxouBOGhtNeeKLhUPOE+S1b68lT5IsKdO3zhjmfnO/jS0Q0ULJgfdQdAdOOraFhjX6furqbnGQy9SuCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS2PR06MB3285
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 06:47:49PM +0300, Ivan Bornyakov wrote:
-> At the moment FPGA manager core loads to the device entire image
-> provided to fpga_mgr_load(). But it is not always whole FPGA image
-> buffer meant to be written to the device. In particular, .dat formatted
-> image for Microchip MPF contains meta info in the header that is not
-> meant to be written to the device. This is issue for those low level
-> drivers that loads data to the device with write() fpga_manager_ops
-> callback, since write() can be called in iterator over scatter-gather
-> table, not only linear image buffer. On the other hand, write_sg()
-> callback is provided with whole image in scatter-gather form and can
-> decide itself which part should be sent to the device.
-> 
-> Add header_size and data_size to the fpga_image_info struct and adjust
-> fpga_mgr_write() callers with respect to them.
-> 
->   * info->header_size indicates part at the beginning of image buffer
->     that is *not* meant to be written to the device. It is optional and
->     can be 0.
-> 
->   * info->data_size is the size of actual bitstream data that *is* meant
->     to be written to the device, starting at info->header_size from the
->     beginning of image buffer. It is also optional and can be 0, which
->     means bitstream data is up to the end of image buffer.
-> 
-> Also add parse_header() callback to fpga_manager_ops, which purpose is
-> to set info->header_size and info->data_size. At least
-> initial_header_size bytes of image buffer will be passed into
-> parse_header() first time. If it is not enough, parse_header() should
-> set desired size into info->header_size and return -EAGAIN, then it will
-> be called again with greater part of image buffer on the input.
-> 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
->  drivers/fpga/fpga-mgr.c       | 243 +++++++++++++++++++++++++++++-----
->  include/linux/fpga/fpga-mgr.h |  17 ++-
->  2 files changed, 229 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index 08dc85fcd511..0854fbc8f11e 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
+clk_disable() already checks the clk ptr using IS_ERR_OR_NULL(clk)
+so there is no need to check it again before calling it.
 
-Should we check in fpga_mgr_create, that initial_header_size must not be
-0 if parse_header() is defined. If we pass no data to parse_header(),
-does it make any sense?
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ drivers/usb/phy/phy-tahvo.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> @@ -74,6 +74,15 @@ static inline int fpga_mgr_write_complete(struct fpga_manager *mgr,
->  	return 0;
->  }
->  
-> +static inline int fpga_mgr_parse_header(struct fpga_manager *mgr,
-> +					struct fpga_image_info *info,
-> +					const char *buf, size_t count)
-> +{
-> +	if (mgr->mops->parse_header)
-> +		return mgr->mops->parse_header(mgr, info, buf, count);
-> +	return 0;
-> +}
-> +
->  static inline int fpga_mgr_write_init(struct fpga_manager *mgr,
->  				      struct fpga_image_info *info,
->  				      const char *buf, size_t count)
-> @@ -136,24 +145,145 @@ void fpga_image_info_free(struct fpga_image_info *info)
->  EXPORT_SYMBOL_GPL(fpga_image_info_free);
->  
->  /*
-> - * Call the low level driver's write_init function.  This will do the
-> + * Call the low level driver's parse_header function with entire FPGA image
-> + * buffer on the input. This will set info->header_size and info->data_size.
-> + */
-> +static int fpga_mgr_parse_header_mapped(struct fpga_manager *mgr,
-> +					struct fpga_image_info *info,
-> +					const char *buf, size_t count)
-> +{
-> +	int ret;
-> +
-> +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
-> +	ret = fpga_mgr_parse_header(mgr, info, buf, count);
-> +
-> +	if (info->header_size + info->data_size > count) {
-> +		dev_err(&mgr->dev, "Bitsream data outruns FPGA image\n");
-> +		ret = -EINVAL;
-> +	}
-> +
-> +	if (ret) {
-> +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Call the low level driver's parse_header function with first fragment of
-> + * scattered FPGA image on the input. If header fits first fragment,
-> + * parse_header will set info->header_size and info->data_size. If it is not,
-> + * parse_header will set desired size to info->header_size and -EAGAIN will be
-> + * returned.
-> + */
-> +static int fpga_mgr_parse_header_sg_first(struct fpga_manager *mgr,
-> +					  struct fpga_image_info *info,
-> +					  struct sg_table *sgt)
-> +{
-> +	size_t header_size = mgr->mops->initial_header_size;
-> +	struct sg_mapping_iter miter;
-> +	int ret;
-> +
-> +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
-> +
-> +	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> +	if (sg_miter_next(&miter) &&
-> +	    miter.length >= header_size)
-> +		ret = fpga_mgr_parse_header(mgr, info, miter.addr, miter.length);
-> +	else
-> +		ret = -EAGAIN;
-> +	sg_miter_stop(&miter);
-> +
-> +	if (ret && ret != -EAGAIN) {
-> +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Copy scattered FPGA image fragments to temporary buffer and call the
-> + * low level driver's parse_header function. This should be called after
-> + * fpga_mgr_parse_header_sg_first() returned -EAGAIN. In case of success,
-> + * pointer to the newly allocated image header copy will be set into *ret_buf
-> + * and its size will be returned. *ret_buf needs to be freed by caller.
-> + */
-> +static ssize_t fpga_mgr_parse_header_sg(struct fpga_manager *mgr,
-> +					struct fpga_image_info *info,
-> +					struct sg_table *sgt, char **ret_buf)
+diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
+index f2d2cc586c5b..9cecc5444515 100644
+--- a/drivers/usb/phy/phy-tahvo.c
++++ b/drivers/usb/phy/phy-tahvo.c
+@@ -406,8 +406,7 @@ static int tahvo_usb_probe(struct platform_device *pdev)
+ err_remove_phy:
+ 	usb_remove_phy(&tu->phy);
+ err_disable_clk:
+-	if (!IS_ERR(tu->ick))
+-		clk_disable(tu->ick);
++	clk_disable(tu->ick);
+ 
+ 	return ret;
+ }
+@@ -418,8 +417,7 @@ static int tahvo_usb_remove(struct platform_device *pdev)
+ 
+ 	free_irq(tu->irq, tu);
+ 	usb_remove_phy(&tu->phy);
+-	if (!IS_ERR(tu->ick))
+-		clk_disable(tu->ick);
++	clk_disable(tu->ick);
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
 
-Since the function allocs buffer for the user, I suggest it still returns
-the buffer pointer. The buffer size could be an output parameter.
-
-> +{
-> +	size_t len, header_size = mgr->mops->initial_header_size;
-> +	char *buf = NULL;
-> +	int ret;
-> +
-> +	do {
-> +		if (info->header_size)
-> +			header_size = info->header_size;
-> +
-> +		buf = krealloc(buf, header_size, GFP_KERNEL);
-> +		if (!buf) {
-> +			ret = -ENOMEM;
-
-If you need to return ERROR value, ERR_PTR() could be used.
-
-
-BTW: Have you tried to test your FPGA programming using sg buffers? I want
-to ensure these changes are actually tested?
-
-Thanks,
-Yilun
-
-> +			break;
-> +		}
-> +
-> +		len = sg_copy_to_buffer(sgt->sgl, sgt->nents, buf, header_size);
-> +		if (len != header_size) {
-> +			ret = -EFAULT;
-> +			break;
-> +		}
-> +
-> +		ret = fpga_mgr_parse_header(mgr, info, buf, header_size);
-> +		if (ret == -EAGAIN && info->header_size <= header_size) {
-> +			dev_err(&mgr->dev, "Requested invalid header size\n");
-> +			ret = -EFAULT;
-> +		}
-> +	} while (ret == -EAGAIN);
-> +
-> +	if (ret) {
-> +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
-> +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
-> +		kfree(buf);
-> +		buf = NULL;
-> +	} else {
-> +		ret = header_size;
-> +	}
-> +
-> +	*ret_buf = buf;
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Call the low level driver's write_init function. This will do the
->   * device-specific things to get the FPGA into the state where it is ready to
-> - * receive an FPGA image. The low level driver only gets to see the first
-> - * initial_header_size bytes in the buffer.
-> + * receive an FPGA image. If info->header_size is defined, the low level
-> + * driver gets to see at least first info->header_size bytes in the buffer,
-> + * mgr->mops->initial_header_size otherwise. If neither initial_header_size
-> + * nor header_size are not set, write_init will not get any bytes of image
-> + * buffer.
->   */
->  static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
->  				   struct fpga_image_info *info,
->  				   const char *buf, size_t count)
->  {
-> +	size_t header_size;
->  	int ret;
->  
->  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
-> -	if (!mgr->mops->initial_header_size) {
-> +
-> +	if (info->header_size)
-> +		header_size = info->header_size;
-> +	else
-> +		header_size = mgr->mops->initial_header_size;
-> +
-> +	if (header_size > count)
-> +		ret = -EINVAL;
-> +	else if (!header_size)
->  		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
-> -	} else {
-> -		count = min(mgr->mops->initial_header_size, count);
-> +	else
->  		ret = fpga_mgr_write_init(mgr, info, buf, count);
-> -	}
->  
->  	if (ret) {
->  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
-> @@ -164,13 +294,13 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
->  	return 0;
->  }
->  
-> -static int fpga_mgr_write_init_sg(struct fpga_manager *mgr,
-> -				  struct fpga_image_info *info,
-> -				  struct sg_table *sgt)
-> +static int fpga_mgr_prepare_sg(struct fpga_manager *mgr,
-> +			       struct fpga_image_info *info,
-> +			       struct sg_table *sgt)
->  {
->  	struct sg_mapping_iter miter;
-> -	size_t len;
-> -	char *buf;
-> +	ssize_t header_size;
-> +	char *header_buf;
->  	int ret;
->  
->  	if (!mgr->mops->initial_header_size)
-> @@ -180,26 +310,35 @@ static int fpga_mgr_write_init_sg(struct fpga_manager *mgr,
->  	 * First try to use miter to map the first fragment to access the
->  	 * header, this is the typical path.
->  	 */
-> -	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> -	if (sg_miter_next(&miter) &&
-> -	    miter.length >= mgr->mops->initial_header_size) {
-> -		ret = fpga_mgr_write_init_buf(mgr, info, miter.addr,
-> -					      miter.length);
-> +	ret = fpga_mgr_parse_header_sg_first(mgr, info, sgt);
-> +	/* If 0, header fits first fragment, call write_init on it */
-> +	if (!ret) {
-> +		sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> +		if (sg_miter_next(&miter)) {
-> +			ret = fpga_mgr_write_init_buf(mgr, info, miter.addr,
-> +						      miter.length);
-> +			sg_miter_stop(&miter);
-> +			return ret;
-> +		}
->  		sg_miter_stop(&miter);
-> +	/*
-> +	 * If -EAGAIN, more sg buffer is needed,
-> +	 * otherwise an error has occurred.
-> +	 */
-> +	} else if (ret != -EAGAIN)
->  		return ret;
-> -	}
-> -	sg_miter_stop(&miter);
->  
-> -	/* Otherwise copy the fragments into temporary memory. */
-> -	buf = kmalloc(mgr->mops->initial_header_size, GFP_KERNEL);
-> -	if (!buf)
-> -		return -ENOMEM;
-> +	/*
-> +	 * Otherwise copy the fragments into temporary memory.
-> +	 * Copying is done inside fpga_mgr_parse_header_sg()
-> +	 */
-> +	header_size = fpga_mgr_parse_header_sg(mgr, info, sgt, &header_buf);
-> +	if (header_size < 0)
-> +		return header_size;
->  
-> -	len = sg_copy_to_buffer(sgt->sgl, sgt->nents, buf,
-> -				mgr->mops->initial_header_size);
-> -	ret = fpga_mgr_write_init_buf(mgr, info, buf, len);
-> +	ret = fpga_mgr_write_init_buf(mgr, info, header_buf, header_size);
->  
-> -	kfree(buf);
-> +	kfree(header_buf);
->  
->  	return ret;
->  }
-> @@ -227,7 +366,7 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
->  {
->  	int ret;
->  
-> -	ret = fpga_mgr_write_init_sg(mgr, info, sgt);
-> +	ret = fpga_mgr_prepare_sg(mgr, info, sgt);
->  	if (ret)
->  		return ret;
->  
-> @@ -237,11 +376,40 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
->  		ret = fpga_mgr_write_sg(mgr, sgt);
->  	} else {
->  		struct sg_mapping_iter miter;
-> +		size_t length, data_size;
-> +		bool last = false;
-> +		ssize_t count;
-> +		char *addr;
-> +
-> +		data_size = info->data_size;
-> +		count = -info->header_size;
->  
->  		sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
->  		while (sg_miter_next(&miter)) {
-> -			ret = fpga_mgr_write(mgr, miter.addr, miter.length);
-> -			if (ret)
-> +			count += miter.length;
-> +
-> +			/* sg block contains only header, no data */
-> +			if (count <= 0)
-> +				continue;
-> +
-> +			if (count < miter.length) {
-> +				/* sg block contains both header and data */
-> +				addr = miter.addr + miter.length - count;
-> +				length = count;
-> +			} else {
-> +				/* sg block contains pure data */
-> +				addr = miter.addr;
-> +				length = miter.length;
-> +			}
-> +
-> +			/* truncate last block to data_size, if needed */
-> +			if (data_size && count > data_size) {
-> +				length -= count - data_size;
-> +				last = true;
-> +			}
-> +
-> +			ret = fpga_mgr_write(mgr, addr, length);
-> +			if (ret || last)
->  				break;
->  		}
->  		sg_miter_stop(&miter);
-> @@ -262,10 +430,21 @@ static int fpga_mgr_buf_load_mapped(struct fpga_manager *mgr,
->  {
->  	int ret;
->  
-> +	ret = fpga_mgr_parse_header_mapped(mgr, info, buf, count);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = fpga_mgr_write_init_buf(mgr, info, buf, count);
->  	if (ret)
->  		return ret;
->  
-> +	if (info->data_size)
-> +		count = info->data_size;
-> +	else
-> +		count -= info->header_size;
-> +
-> +	buf += info->header_size;
-> +
->  	/*
->  	 * Write the FPGA image to the FPGA.
->  	 */
-> @@ -424,6 +603,10 @@ static const char * const state_str[] = {
->  	[FPGA_MGR_STATE_FIRMWARE_REQ] =		"firmware request",
->  	[FPGA_MGR_STATE_FIRMWARE_REQ_ERR] =	"firmware request error",
->  
-> +	/* Parse FPGA image header */
-> +	[FPGA_MGR_STATE_PARSE_HEADER] =		"parse header",
-> +	[FPGA_MGR_STATE_PARSE_HEADER_ERR] =	"parse header error",
-> +
->  	/* Preparing FPGA to receive image */
->  	[FPGA_MGR_STATE_WRITE_INIT] =		"write init",
->  	[FPGA_MGR_STATE_WRITE_INIT_ERR] =	"write init error",
-> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
-> index 0f9468771bb9..cba8bb7827a5 100644
-> --- a/include/linux/fpga/fpga-mgr.h
-> +++ b/include/linux/fpga/fpga-mgr.h
-> @@ -22,6 +22,8 @@ struct sg_table;
->   * @FPGA_MGR_STATE_RESET: FPGA in reset state
->   * @FPGA_MGR_STATE_FIRMWARE_REQ: firmware request in progress
->   * @FPGA_MGR_STATE_FIRMWARE_REQ_ERR: firmware request failed
-> + * @FPGA_MGR_STATE_PARSE_HEADER: parse FPGA image header
-> + * @FPGA_MGR_STATE_PARSE_HEADER_ERR: Error during PARSE_HEADER stage
->   * @FPGA_MGR_STATE_WRITE_INIT: preparing FPGA for programming
->   * @FPGA_MGR_STATE_WRITE_INIT_ERR: Error during WRITE_INIT stage
->   * @FPGA_MGR_STATE_WRITE: writing image to FPGA
-> @@ -42,6 +44,8 @@ enum fpga_mgr_states {
->  	FPGA_MGR_STATE_FIRMWARE_REQ_ERR,
->  
->  	/* write sequence: init, write, complete */
-> +	FPGA_MGR_STATE_PARSE_HEADER,
-> +	FPGA_MGR_STATE_PARSE_HEADER_ERR,
->  	FPGA_MGR_STATE_WRITE_INIT,
->  	FPGA_MGR_STATE_WRITE_INIT_ERR,
->  	FPGA_MGR_STATE_WRITE,
-> @@ -85,6 +89,8 @@ enum fpga_mgr_states {
->   * @sgt: scatter/gather table containing FPGA image
->   * @buf: contiguous buffer containing FPGA image
->   * @count: size of buf
-> + * @header_size: offset in image buffer where bitstream data starts
-> + * @data_size: size of bitstream. If 0, (count - header_size) will be used.
->   * @region_id: id of target region
->   * @dev: device that owns this
->   * @overlay: Device Tree overlay
-> @@ -98,6 +104,8 @@ struct fpga_image_info {
->  	struct sg_table *sgt;
->  	const char *buf;
->  	size_t count;
-> +	size_t header_size;
-> +	size_t data_size;
->  	int region_id;
->  	struct device *dev;
->  #ifdef CONFIG_OF
-> @@ -137,9 +145,13 @@ struct fpga_manager_info {
->  
->  /**
->   * struct fpga_manager_ops - ops for low level fpga manager drivers
-> - * @initial_header_size: Maximum number of bytes that should be passed into write_init
-> + * @initial_header_size: minimum number of bytes that should be passed into
-> + *	parse_header and write_init.
->   * @state: returns an enum value of the FPGA's state
->   * @status: returns status of the FPGA, including reconfiguration error code
-> + * @parse_header: parse FPGA image header to set info->header_size and
-> + *	info->data_size. In case the input buffer is not large enough, set
-> + *	required size to info->header_size and return -EAGAIN.
->   * @write_init: prepare the FPGA to receive configuration data
->   * @write: write count bytes of configuration data to the FPGA
->   * @write_sg: write the scatter list of configuration data to the FPGA
-> @@ -155,6 +167,9 @@ struct fpga_manager_ops {
->  	size_t initial_header_size;
->  	enum fpga_mgr_states (*state)(struct fpga_manager *mgr);
->  	u64 (*status)(struct fpga_manager *mgr);
-> +	int (*parse_header)(struct fpga_manager *mgr,
-> +			    struct fpga_image_info *info,
-> +			    const char *buf, size_t count);
->  	int (*write_init)(struct fpga_manager *mgr,
->  			  struct fpga_image_info *info,
->  			  const char *buf, size_t count);
-> -- 
-> 2.35.1
-> 

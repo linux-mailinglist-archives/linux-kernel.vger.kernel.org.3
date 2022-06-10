@@ -2,122 +2,426 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B7D545915
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11F554591D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241369AbiFJARh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S239696AbiFJAUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233887AbiFJARf (ORCPT
+        with ESMTP id S230371AbiFJAUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:17:35 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3FB2C11A;
-        Thu,  9 Jun 2022 17:17:29 -0700 (PDT)
-X-UUID: 55312f6602ac4c4082d6e10292fa5791-20220610
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:27768122-4a1c-41f1-88b8-956b6770a65d,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:105
-X-CID-INFO: VERSION:1.1.5,REQID:27768122-4a1c-41f1-88b8-956b6770a65d,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:105
-X-CID-META: VersionHash:2a19b09,CLOUDID:c542d97e-c8dc-403a-96e8-6237210dceee,C
-        OID:3132453bd665,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: 55312f6602ac4c4082d6e10292fa5791-20220610
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 765861630; Fri, 10 Jun 2022 08:17:24 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 10 Jun 2022 08:17:18 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 10 Jun 2022 08:17:18 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
-        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
-        <jsiuda@google.com>, <frankgor@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Yake Yang <yake.yang@mediatek.com>
-Subject: [PATCH] Bluetooth: btmtksdio: Add in-band wakeup support
-Date:   Fri, 10 Jun 2022 08:17:17 +0800
-Message-ID: <742cdffcf110e1601257207fb2b0d3f426d4008c.1654819586.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Thu, 9 Jun 2022 20:20:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C4AF2983F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654820450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sm1YrHRBQ1QJZPUgeEFq2SDAcSXhEPRjCPtrFv/MFMc=;
+        b=WY2o04GCAKf3NmvVSJhZoDseNHEVVncAMtRWY1PjqiwM+9ZXpM8V0B6Mq+gdryjCqFDpCK
+        3eKtEs4KiUSYn8XpcymRxLQBTmftaIGuUnib44gV9OTrA7Wcn1Xc7kk+NHnAYRgy7iEDjV
+        e12PwF78ZlPDG8IgWEw7xfBm4UhBuEQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-bKEvQTA8Op-aVCL4Gk9-KA-1; Thu, 09 Jun 2022 20:20:49 -0400
+X-MC-Unique: bKEvQTA8Op-aVCL4Gk9-KA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1289E3C0ED47;
+        Fri, 10 Jun 2022 00:20:49 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.11.108])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B536B1415100;
+        Fri, 10 Jun 2022 00:20:48 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, Nico Pache <npache@redhat.com>
+Subject: [RFC PATCH] selftests/vm: enable running select groups of tests
+Date:   Thu,  9 Jun 2022 20:20:46 -0400
+Message-Id: <20220610002046.3243874-1-jsavitz@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+Add the ability to run one or more groups of vm tests (specified
+by the environment variable TEST_ITEMS). Preserve existing default
+behavior of running all tests when TEST_ITEMS is empty or "default".
 
-'ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")'
-have added the waken-on-bluetooth via dedicated GPIO.
+Documentation of test groups is included in the patch as follows:
 
-The patch extends the function to the waken-on-bluetooth via SDIO DAT1 pin
-(inband wakeup) when the SDIO host driver is able to support.
+    # ./run_vmtests.sh [ -h || --help ]
 
-Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+    usage: ./tools/testing/selftests/vm/run_vmtests.sh [ -h ]
+      -h: display this message
+
+    The default behavior is to run all tests.
+
+    Alternatively, specific groups tests can be run by defining
+    the TEST_ITEMS shell variable with a space-separated string
+    of one or more of the following:
+    - mmap
+	    tests for mmap(2)
+    - gup_test
+	    tests for gup using gup_test interface
+    - userfaultfd
+	    tests for  userfaultfd(2)
+    - compaction
+	    a test for the patch "Allow compaction of unevictable pages"
+    - mlock
+	    tests for mlock(2)
+    - mremap
+	    tests for mremap(2)
+    - hugevm
+	    tests for very large virtual address space
+    - vmalloc
+	    vmalloc smoke tests
+    - hmm
+	    hmm smoke tests
+    - madv_populate
+	    test memadvise(2) MADV_POPULATE_{READ,WRITE} options
+    - memfd_secret
+	    test memfd_secret(2)
+    - process_mrelease
+	    test process_mrelease(2)
+    - ksm
+	    ksm tests that do not require >=2 NUMA nodes
+    - ksm_numa
+	    ksm tests that require >=2 NUMA nodes
+    example: TEST_ITEMS="hmm mmap ksm" ./run_vmtests.sh
+
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
 ---
- drivers/bluetooth/btmtksdio.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/testing/selftests/vm/run_vmtests.sh | 224 +++++++++++++++-------
+ 1 file changed, 150 insertions(+), 74 deletions(-)
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index d6700efcfe8c..9ed3af4ba51a 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
- #define BTMTKSDIO_FUNC_ENABLED		3
- #define BTMTKSDIO_PATCH_ENABLED		4
- #define BTMTKSDIO_HW_RESET_ACTIVE	5
-+#define BTMTKSDIO_INBAND_WAKEUP		6
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index 41fce8bea929..d31fc66205f8 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -1,22 +1,74 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+-#please run as root
++# Please run as root
  
- struct mtkbtsdio_hdr {
- 	__le16	len;
-@@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
- 		.wakeup_delay = cpu_to_le16(0x20),
- 	};
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
  
-+	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
-+		return may_wakeup;
+ mnt=./huge
+ exitcode=0
+-
+-#get huge pagesize and freepages from /proc/meminfo
+-while read -r name size unit; do
+-	if [ "$name" = "HugePages_Free:" ]; then
+-		freepgs="$size"
+-	fi
+-	if [ "$name" = "Hugepagesize:" ]; then
+-		hpgsize_KB="$size"
++nr_tests_ran=0
 +
- 	if (may_wakeup && bdev->data->chipid == 0x7921) {
- 		struct sk_buff *skb;
- 
-@@ -1384,6 +1388,10 @@ static int btmtksdio_probe(struct sdio_func *func,
- 	 */
- 	pm_runtime_put_noidle(bdev->dev);
- 
-+	/* Mark if the mmc host can support waken by SDIO */
-+	if (device_can_wakeup(func->card->host->parent))
-+		set_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state);
++if [ ${1:-0} == "-h" ] || [ ${1:-0} == "--help" ]
++then
++	cat <<EOF
++usage: ${BASH_SOURCE[0]:-$0} [ -h ]
++  -h: display this message
 +
- 	err = device_init_wakeup(bdev->dev, true);
- 	if (err)
- 		bt_dev_err(hdev, "failed to initialize device wakeup");
++The default behavior is to run all tests.
++
++Alternatively, specific groups tests can be run by defining
++the TEST_ITEMS shell variable with a space-separated string
++of one or more of the following:
++- mmap
++	tests for mmap(2)
++- gup_test
++	tests for gup using gup_test interface
++- userfaultfd
++	tests for  userfaultfd(2)
++- compaction
++	a test for the patch "Allow compaction of unevictable pages"
++- mlock
++	tests for mlock(2)
++- mremap
++	tests for mremap(2)
++- hugevm
++	tests for very large virtual address space
++- vmalloc
++	vmalloc smoke tests
++- hmm
++	hmm smoke tests
++- madv_populate
++	test memadvise(2) MADV_POPULATE_{READ,WRITE} options
++- memfd_secret
++	test memfd_secret(2)
++- process_mrelease
++	test process_mrelease(2)
++- ksm
++	ksm tests that do not require >=2 NUMA nodes
++- ksm_numa
++	ksm tests that require >=2 NUMA nodes
++example: TEST_ITEMS="hmm mmap ksm" ./run_vmtests.sh
++EOF
++	exit 0
++fi # $1 == -h || $1 == --help
++
++# default behavior: run all tests
++TEST_ITEMS=${TEST_ITEMS:-default}
++
++echo "Selected test items: ${TEST_ITEMS}"
++
++test_selected() {
++	if [ "$TEST_ITEMS" == "default" ]; then
++		# If no TEST_ITEMS are specified, run all tests
++		return 0
+ 	fi
+-done < /proc/meminfo
++	echo ${TEST_ITEMS} | grep ${1} 2>&1 >/dev/null
++	return ${?}
++}
++
++# Hugepage setup only needed for hugetlb tests
++if test_selected "hugetlb"; then
+ 
+ # Simple hugetlbfs tests have a hardcoded minimum requirement of
+ # huge pages totaling 256MB (262144KB) in size.  The userfaultfd
+@@ -28,7 +80,17 @@ hpgsize_MB=$((hpgsize_KB / 1024))
+ half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
+ needmem_KB=$((half_ufd_size_MB * 2 * 1024))
+ 
+-#set proper nr_hugepages
++# get huge pagesize and freepages from /proc/meminfo
++while read -r name size unit; do
++	if [ "$name" = "HugePages_Free:" ]; then
++		freepgs="$size"
++	fi
++	if [ "$name" = "Hugepagesize:" ]; then
++		hpgsize_KB="$size"
++	fi
++done < /proc/meminfo
++
++# set proper nr_hugepages
+ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+ 	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
+ 	needpgs=$((needmem_KB / hpgsize_KB))
+@@ -57,126 +119,140 @@ else
+ 	exit 1
+ fi
+ 
+-#filter 64bit architectures
++fi # test_selected "hugetlb"
++
++# filter 64bit architectures
+ ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
+ if [ -z "$ARCH" ]; then
+ 	ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
+ fi
+ VADDR64=0
+-echo "$ARCH64STR" | grep "$ARCH" && VADDR64=1
++echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
+ 
+ # Usage: run_test [test binary] [arbitrary test arguments...]
+ run_test() {
+-	local title="running $*"
+-	local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+-	printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
+-
+-	"$@"
+-	local ret=$?
+-	if [ $ret -eq 0 ]; then
+-		echo "[PASS]"
+-	elif [ $ret -eq $ksft_skip ]; then
+-		echo "[SKIP]"
+-		exitcode=$ksft_skip
+-	else
+-		echo "[FAIL]"
+-		exitcode=1
+-	fi
++	if test_selected ${CATEGORY}; then
++		local title="running $*"
++		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
++		printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
++
++		"$@"
++		local ret=$?
++		if [ $ret -eq 0 ]; then
++			echo "[PASS]"
++		elif [ $ret -eq $ksft_skip ]; then
++			echo "[SKIP]"
++			exitcode=$ksft_skip
++		else
++			echo "[FAIL]"
++			exitcode=1
++		fi
++		nr_tests_ran=$((nr_tests_ran + 1))
++	fi # test_selected
+ }
+ 
+-mkdir "$mnt"
+-mount -t hugetlbfs none "$mnt"
++# setup only needed for hugetlb tests
++if test_selected "hugetlb"; then
++	mkdir "$mnt"
++	mount -t hugetlbfs none "$mnt"
++fi
+ 
+-run_test ./hugepage-mmap
++CATEGORY="hugetlb" run_test ./hugepage-mmap
+ 
+ shmmax=$(cat /proc/sys/kernel/shmmax)
+ shmall=$(cat /proc/sys/kernel/shmall)
+ echo 268435456 > /proc/sys/kernel/shmmax
+ echo 4194304 > /proc/sys/kernel/shmall
+-run_test ./hugepage-shm
++CATEGORY="hugetlb" run_test ./hugepage-shm
+ echo "$shmmax" > /proc/sys/kernel/shmmax
+ echo "$shmall" > /proc/sys/kernel/shmall
+ 
+-run_test ./map_hugetlb
++CATEGORY="hugetlb" run_test ./map_hugetlb
+ 
+-run_test ./hugepage-mremap "$mnt"/huge_mremap
+-rm -f "$mnt"/huge_mremap
++CATEGORY="hugetlb" run_test ./hugepage-mremap "$mnt"/huge_mremap
++test_selected "hugetlb" && rm -f "$mnt"/huge_mremap
+ 
+-run_test ./hugepage-vmemmap
++CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+ 
+-run_test ./hugetlb-madvise "$mnt"/madvise-test
+-rm -f "$mnt"/madvise-test
++CATEGORY="hugetlb" run_test ./hugetlb-madvise "$mnt"/madvise-test
++test_selected "hugetlb" && rm -f "$mnt"/madvise-test
+ 
+-echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
+-echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
+-echo "      hugetlb regression testing."
++if test_selected "hugetlb"; then
++	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
++	echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
++	echo "      hugetlb regression testing."
++fi
+ 
+-run_test ./map_fixed_noreplace
++CATEGORY="mmap" run_test ./map_fixed_noreplace
+ 
+ # get_user_pages_fast() benchmark
+-run_test ./gup_test -u
++CATEGORY="gup_test" run_test ./gup_test -u
+ # pin_user_pages_fast() benchmark
+-run_test ./gup_test -a
++CATEGORY="gup_test" run_test ./gup_test -a
+ # Dump pages 0, 19, and 4096, using pin_user_pages:
+-run_test ./gup_test -ct -F 0x1 0 19 0x1000
++CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
+ 
+-run_test ./userfaultfd anon 20 16
++CATEGORY="userfaultfd" run_test ./userfaultfd anon 20 16
+ # Test requires source and destination huge pages.  Size of source
+ # (half_ufd_size_MB) is passed as argument to test.
+-run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+-run_test ./userfaultfd shmem 20 16
+-
+-#cleanup
+-umount "$mnt"
+-rm -rf "$mnt"
+-echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
++CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
++CATEGORY="userfaultfd" run_test ./userfaultfd shmem 20 16
++
++# cleanup (only needed when running hugetlb tests)
++if test_selected "hugetlb"; then
++	umount "$mnt"
++	rm -rf "$mnt"
++	echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
++fi
+ 
+-run_test ./compaction_test
++CATEGORY="compaction" run_test ./compaction_test
+ 
+-run_test sudo -u nobody ./on-fault-limit
++CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
+ 
+-run_test ./map_populate
++CATEGORY="mmap" run_test ./map_populate
+ 
+-run_test ./mlock-random-test
++CATEGORY="mlock" run_test ./mlock-random-test
+ 
+-run_test ./mlock2-tests
++CATEGORY="mlock" run_test ./mlock2-tests
+ 
+-run_test ./mrelease_test
++CATEGORY="process_mrelease" run_test ./mrelease_test
+ 
+-run_test ./mremap_test
++CATEGORY="mremap" run_test ./mremap_test
+ 
+-run_test ./thuge-gen
++CATEGORY="hugetlb" run_test ./thuge-gen
+ 
+ if [ $VADDR64 -ne 0 ]; then
+-	run_test ./virtual_address_range
++	CATEGORY="hugevm" run_test ./virtual_address_range
+ 
+ 	# virtual address 128TB switch test
+-	run_test ./va_128TBswitch
++	CATEGORY="hugevm" run_test ./va_128TBswitch
+ fi # VADDR64
+ 
+ # vmalloc stability smoke test
+-run_test ./test_vmalloc.sh smoke
++CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
+ 
+-run_test ./mremap_dontunmap
++CATEGORY="mremap" run_test ./mremap_dontunmap
+ 
+-run_test ./test_hmm.sh smoke
++CATEGORY="hmm" run_test ./test_hmm.sh smoke
+ 
+ # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+-run_test ./madv_populate
++CATEGORY="madv_populate" run_test ./madv_populate
+ 
+-run_test ./memfd_secret
++CATEGORY="memfd_secret" run_test ./memfd_secret
+ 
+ # KSM MADV_MERGEABLE test with 10 identical pages
+-run_test ./ksm_tests -M -p 10
++CATEGORY="ksm" run_test ./ksm_tests -M -p 10
+ # KSM unmerge test
+-run_test ./ksm_tests -U
++CATEGORY="ksm" run_test ./ksm_tests -U
+ # KSM test with 10 zero pages and use_zero_pages = 0
+-run_test ./ksm_tests -Z -p 10 -z 0
++CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 0
+ # KSM test with 10 zero pages and use_zero_pages = 1
+-run_test ./ksm_tests -Z -p 10 -z 1
++CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 1
+-run_test ./ksm_tests -N -m 1
++CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+-run_test ./ksm_tests -N -m 0
++CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
++
++echo "Ran $nr_tests_ran tests"
+ 
+ exit $exitcode
 -- 
-2.25.1
+2.31.1
 

@@ -2,140 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113DE546545
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBBC546547
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346701AbiFJLOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S1348321AbiFJLO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344989AbiFJLOO (ORCPT
+        with ESMTP id S245507AbiFJLOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:14:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1FCA6A402
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654859651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w51nJtA+PEQulTzssZ7Zqb9+Ta6ksQQtTLDRht+NgLE=;
-        b=Y1YJ1iGfk9TQ1szzQuAfbvT1fNDzwZcLYSYal9w54ZDs7pHJdQ978rZS087TVNFu1JsOlV
-        6LEiKUjXkIo+GqXBkJEwmuTIGfbd8/yu7SDrgCGae+i387pFiipu6ddgpntFO+2cE1IroW
-        NQs7zH9AWFsW/jXFsKwasHrqntuHQOs=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-QF-22dnYNOitOLOP90iM-g-1; Fri, 10 Jun 2022 07:14:10 -0400
-X-MC-Unique: QF-22dnYNOitOLOP90iM-g-1
-Received: by mail-ej1-f71.google.com with SMTP id k7-20020a1709062a4700b006fe92440164so12421179eje.23
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:14:10 -0700 (PDT)
+        Fri, 10 Jun 2022 07:14:53 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A3214915C;
+        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id j6so23563723pfe.13;
+        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jwvPtBJlHjffDNQx8lPTiOlFv8Yml0X3QqZ5RFqKFOM=;
+        b=Ck0Q29cZZuM/Kh2xhbfXUt+BhMt9IcSGn615Yl6vJacDxaA8lIZEXPvkqrGnXquu7v
+         KdSyN5BDhsueBwizGiuCJ132pXWz2C/jkofBT7tUzu14Y4ZTy3QvbJBVleaVK5G6YI16
+         RiUyJQ1c9U+T/im7q2d8oN9uQuYy8SyivKExVFT2vqBQ4Z13ul0ujKl+PRyjPaaYYOaq
+         TY7Q5oQemfJR8PMRAKj4QF4COhGPi32as6lDCXc7zzNUx6FFb8Z7TWv1WAMyytAg9gMA
+         xvxQSKnzcaUeA5oJxtfBuhO8krjkPlTZYD3FWnEes5vTljA0X4BK7uW15yxRuNX+tBQy
+         4SrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w51nJtA+PEQulTzssZ7Zqb9+Ta6ksQQtTLDRht+NgLE=;
-        b=qbi+gX07p9Nc+qTn1jk+pBnde9kKpZ3DJ+OpmQJSsDHXKL/hS8IYhMB7sdFyW4GV28
-         Iq/6jhBioy18Ovvb0k2lfXAIVfv/VqXM6fFJUzaCc4K2GGWgkTrRmYnCscFi60ZTrYcO
-         6yTqM9jT1UtcdI26lj7Ec7oQYaMT+MMEHhBH4zyRS2hcssvUrNtb7cvcTJAzTkoueivU
-         HQuf8BxdJJHJbPqbUkqF+Ue86pvw0LmyXjzWlJgvMuSFI0sAeC5f7U8dAAZCTheZxhZc
-         pf2yUhQ32zDNBlOC+VJ5lYWO7qCpso+uRoTdNuqqM6yZ69QAh9azP7VtxM1bj6jGDwT6
-         OE9w==
-X-Gm-Message-State: AOAM531a5yMZzmDCzZeztbxI3Ls3fLvnkRtEFiQFoJbUuTG3BIuLoLzo
-        1RF+Z0AvnU3wq7bOtDUSg1v/zRHZ2yJSLuy4L6CQy1H77JZG6jwoyDWSyknConOt8ik16tpw/+a
-        KCWPNOtDx4Gjidsrbgfvj10db
-X-Received: by 2002:a05:6402:51d4:b0:42f:b38d:dbb9 with SMTP id r20-20020a05640251d400b0042fb38ddbb9mr39351378edd.255.1654859649461;
-        Fri, 10 Jun 2022 04:14:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyrrmyaZEw0oRtI29tcTzt8FyPnbqcDOdKb5aOJSDIKllrLhDC3D72FyTSmusXp1CMT1Z5YZQ==
-X-Received: by 2002:a05:6402:51d4:b0:42f:b38d:dbb9 with SMTP id r20-20020a05640251d400b0042fb38ddbb9mr39351362edd.255.1654859649221;
-        Fri, 10 Jun 2022 04:14:09 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id jo13-20020a170906f6cd00b006febc86b8besm11856829ejb.117.2022.06.10.04.14.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 04:14:08 -0700 (PDT)
-Message-ID: <2f3b38fa-8180-a749-a590-2f758f3a479a@redhat.com>
-Date:   Fri, 10 Jun 2022 13:14:07 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jwvPtBJlHjffDNQx8lPTiOlFv8Yml0X3QqZ5RFqKFOM=;
+        b=bAnaZAOi0V/kMNPs8LANFWOO9xHP/Q2pTyN87CqNtzQN8/jvR32z19QsFjczlul0NH
+         vCLk/6UcDGOQWfDpGesU03XRBNZY8M/L7qE3MqeNW5fuWj+LvS1iLHF7Deyv9e6/AOkY
+         4Fke1f23eWDiqBwOpE3LBgZAlR1Do3xahr2ZQWPGitaoxnJK5X4uhccRVxY/oGG0OaRh
+         VjWtLSeLWKah44m7DhXD6mjZU14WFOOcljt08aieHr10wrRJrnpaUe+cnuT5IEVhauib
+         a31Sw3ygJd85X7sB4fYjtSWlGWLUhN7bmm7g5/fQQ+kn4wUAgfg+QbCJrQbk5mCnn8gL
+         hFtw==
+X-Gm-Message-State: AOAM5332pHnF7dZ9kHLQ468K161BF33Sl3bF9GzHpOtliGwjKU5jzUXS
+        A44TEAh7kNuRAGPQ3mb/P2g=
+X-Google-Smtp-Source: ABdhPJzBtL3PAEY3N/qiHUGqDpGAp+B0oH8SxkTt89cp2LNCw8a9iUYpnbFmz1kHBGKLl4F/nVPuEg==
+X-Received: by 2002:a63:1b53:0:b0:3fd:168e:d9a with SMTP id b19-20020a631b53000000b003fd168e0d9amr34794019pgm.617.1654859690303;
+        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
+Received: from localhost.localdomain ([209.146.108.140])
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709028c8600b001636c0b98a7sm18497487plo.226.2022.06.10.04.14.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 04:14:49 -0700 (PDT)
+From:   Genjian Zhang <zhanggenjian123@gmail.com>
+X-Google-Original-From: Genjian Zhang <zhanggenjian@kylinos.cn>
+To:     tsbogend@alpha.franken.de, linus.walleij@linaro.org, brgl@bgdev.pl,
+        f.fainelli@gmail.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, huhai <huhai@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>,
+        Genjian Zhang <zhanggenjian@kylinos.cn>
+Subject: [PATCH v4] MIPS: Remove repetitive increase irq_err_count
+Date:   Fri, 10 Jun 2022 19:14:20 +0800
+Message-Id: <20220610111420.1520410-1-zhanggenjian@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220525043916.584850-1-zhanggenjian@kylinos.cn>
+References: <20220525043916.584850-1-zhanggenjian@kylinos.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [bugzilla-daemon@kernel.org: [Bug 216109] New: Steam Deck fails
- to boot when E820 entries clipped out of _CRS]
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org
-References: <20220609224339.GA543225@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220609224339.GA543225@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: huhai <huhai@kylinos.cn>
 
-On 6/10/22 00:43, Bjorn Helgaas wrote:
-> New regression in v5.19-rc1.
-> 
-> ----- Forwarded message from bugzilla-daemon@kernel.org -----
-> 
-> Subject: [Bug 216109] New: Steam Deck fails to boot when E820 entries clipped
-> 	out of _CRS
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=216109
-> 
->            Summary: Steam Deck fails to boot when E820 entries clipped out
->                     of _CRS
->     Kernel Version: v5.19
-> 
-> Guilherme G. Piccoli reported that v5.18 boots fine on Steam Deck, but
-> v5.19-rc1 does not.  He bisected it to 4c5e242d3e93 ("x86/PCI: Clip only host
-> bridge windows for E820 regions") [1].
-> 
-> A quirk similar to [2] that disables E820 clipping makes v5.19-rc1 work again.
-> 
-> The reason why v5.18 (which always does E820 clipping by default) works, while
-> v5.19-rc1 (which also does E820 clipping on this platform) does not has not
-> been explained yet.
-> 
-> [1] https://git.kernel.org/linus/4c5e242d3e93
-> [2] https://git.kernel.org/linus/d341838d776a
-> 
-> ----- End forwarded message -----
+commit 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx") added
+a function irq_dispatch, and it'll increase irq_err_count when the get_irq
+callback returns a negative value, but increase irq_err_count in get_irq
+was not removed.
 
-I've added some analysis of the logs to the bug. Summary: I think we may
-need to revert 4c5e242d3e93, this will be a non trivial revert moving
-the pci_use_e820 check added in later commits to arch_remove_reservations().
+And also, modpost complains once gpio-vr41xx drivers become modules.
+  ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
 
-See the bug for details and lets discuss this further in the bug.
+So it would be a good idea to remove repetitive increase irq_err_count in
+get_irq callback.
 
-In case we do eventually decide to go with a revert, I'll prepare
-a revert later today and push it to:
+Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
+Fixes: 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx")
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: huhai <huhai@kylinos.cn>
+Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+---
+ arch/mips/vr41xx/common/icu.c | 2 --
+ drivers/gpio/gpio-vr41xx.c    | 2 --
+ 2 files changed, 4 deletions(-)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note I do NOT plan to merge this through the pdx86 tree, the reason
-to put it there is to get the builders to play with it, since in the
-past: https://lore.kernel.org/linux-pci/20211014183943.27717-2-hdegoede@redhat.com/
-we had some build issues with the check inside arch_remove_reservations().
-
-Regards,
-
-Hans
-
-
-
-
-
+diff --git a/arch/mips/vr41xx/common/icu.c b/arch/mips/vr41xx/common/icu.c
+index 7b7f25b4b057..9240bcdbe74e 100644
+--- a/arch/mips/vr41xx/common/icu.c
++++ b/arch/mips/vr41xx/common/icu.c
+@@ -640,8 +640,6 @@ static int icu_get_irq(unsigned int irq)
+ 
+ 	printk(KERN_ERR "spurious ICU interrupt: %04x,%04x\n", pend1, pend2);
+ 
+-	atomic_inc(&irq_err_count);
+-
+ 	return -1;
+ }
+ 
+diff --git a/drivers/gpio/gpio-vr41xx.c b/drivers/gpio/gpio-vr41xx.c
+index 98cd715ccc33..8d09b619c166 100644
+--- a/drivers/gpio/gpio-vr41xx.c
++++ b/drivers/gpio/gpio-vr41xx.c
+@@ -217,8 +217,6 @@ static int giu_get_irq(unsigned int irq)
+ 	printk(KERN_ERR "spurious GIU interrupt: %04x(%04x),%04x(%04x)\n",
+ 	       maskl, pendl, maskh, pendh);
+ 
+-	atomic_inc(&irq_err_count);
+-
+ 	return -EINVAL;
+ }
+ 
+-- 
+2.25.1
 

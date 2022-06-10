@@ -2,162 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B8E546844
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25740546849
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbiFJOaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S239461AbiFJOaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiFJOaH (ORCPT
+        with ESMTP id S238857AbiFJOag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:30:07 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B408A19C38
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:30:02 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s135so9295568pgs.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:30:02 -0700 (PDT)
+        Fri, 10 Jun 2022 10:30:36 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D2B62E0;
+        Fri, 10 Jun 2022 07:30:35 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id r1so5668056plo.10;
+        Fri, 10 Jun 2022 07:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=iZkxFrCdz5HGHbN5AvcrMQrT1OxBg7CaPmIJCaX17lQ=;
-        b=KP4HYvtz1/r9i95F1wjVEcLG8E0YRVrsbrMUEtJAGlXCThtn4I+AwBI020BZ8QkENk
-         VkYJUza7vjx9KRxYxYn1blwfJ4DmHGeHYEfXLV2JLucPyU1CcT6RyAiFEGz5xNB1qNs3
-         /H8oz5Osobi0eyKYL6Jxc/SkFRW8e6Rmy5hPD/ePq+GzeBSEpX/JtBIT336CQfQT3h78
-         bJKW+VdriFLI+sUb13QBvbPpKxYpaG4Rm0NEHazp3sA5OclNymsh1q+DI3F/mUVofBjx
-         5cE40h+i7ZQvqjZzKy99OzoR963rVw88+d7oUzCl+YjMBsKs03AJB7Mm5xf283OcfSp5
-         whAQ==
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/mjtA9MLjpbHOH3mFEMMpFyEg+q0nrj1i3jXYc4/cy0=;
+        b=kf552z2RLbozvVb/HnIWAXj5mQ9L2bbOg50xc+8aPxezVhZNWNBw9+UxJdgFzAClpj
+         8p6T5frqptElPXLuTR8l+B9OLDiXxGp6vVd643oVrW7A3ssSN6mB6UXaZxkvV29a+ok4
+         R56+OGTCRaI1nkA3piurWJMAIre+LqHMWc4mHNge4/UxnV58rcLvLKlqETMLntPbDHHL
+         Kl9j8YSEn10OZAlKZONuLmvsIB222DKcg1fh6ZgdDmlZlAps5cfEgjXjQduAaQr+KhJ8
+         59bbhR0kmT8TYQEOHMIi6ebV1FAi2L5ty/lUE7VlkEOqlvjhOCyYMZgQUtdUUWaELN0g
+         +CcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=iZkxFrCdz5HGHbN5AvcrMQrT1OxBg7CaPmIJCaX17lQ=;
-        b=0vXXW4PDr6YLceYNMoR8swLAICZcH5IT3AONwEhiEGemMVt7UMqnfIKzBO5wqjpuOe
-         wkfSng+twOyA8ZI598g+zRP9dmZhHegFdRpCF+LGrXOkvmqE5rq4zNc8MFuIMF3+3I78
-         l5wwq3QJA9pBGm4fBk5ruQSBzMz2KgZFHpGwHaCYD4vlojUzhz9x9T2Jzo9egmXCAhwF
-         Y6Pvj6z27K63JzYwvDftuH1M9fhv5CaAQCKWTLWsEV4Za7cS0SMCXD9uAUyuZjnJv7SQ
-         VD82HXho0Sao9DWsQ2o0HwnOtciGVnNfU3LOYyfsgvW4j1mRS+OSus8/BPDz7sEWwMuV
-         rH4A==
-X-Gm-Message-State: AOAM530GZggj8AihPQkEhnPSwMw0A8wm2OZHV5hABqM86QqqfJUN0ukS
-        qGlHQM34s4KUeZjbw3ugNWLPrA==
-X-Google-Smtp-Source: ABdhPJy9lH+YdGeVgxW6k3OvjfR+G0rlnFgBcN96oP7+X/9Ctfac88M6IIzXUkvNd0dbwRRp3m0BqA==
-X-Received: by 2002:a63:8241:0:b0:3fe:2e64:95f0 with SMTP id w62-20020a638241000000b003fe2e6495f0mr13325930pgd.190.1654871401611;
-        Fri, 10 Jun 2022 07:30:01 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h11-20020a62830b000000b0050dc7628150sm19477473pfe.42.2022.06.10.07.29.59
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=/mjtA9MLjpbHOH3mFEMMpFyEg+q0nrj1i3jXYc4/cy0=;
+        b=vIVRBgD6fHdGwnJ3fdLrPMHqFBWB6D1+gy9ptZ/4vvtYzSAztMynHGQuk1hmlhPN3H
+         sUO18ckX5API5ZFK6q1dXdalQ/sW+l0yhuaHlAUIyVal3zKHlqx+JrLCz9YvYM1gZw+A
+         e44CfBJzGavw8eQqL7VxTGiIpc65xyXV9j6TjNiAamy2LRMIlVMGqdnHeGAFdGwBRQ1F
+         NrFzJzQt7IaCcyq26tE5rSP0sm1Yd6fdGzvp6hOBjnHZuygRDD6xdQAxjqYjhoLJSVEN
+         B/huxpz+2ZA6n4HLJCL04Qf+AMqVsypXgqeLQKKj65j4VY7qn1pE4mwfaGmzvkloKP1Y
+         O3BQ==
+X-Gm-Message-State: AOAM533xT7uiQyvR4fV7gTgAp3F8toCQtt+XReHH/9RWYruPgpDR/+S6
+        Qbl3bCef7iAFuUQ+EnXNcs5N+R/03qhJ+A==
+X-Google-Smtp-Source: ABdhPJzjuYHAMdTge3IJvoeI8We4lcS6sC8AyHf6aJj1MLj/WyEiFyb+lJ1luGQkCn/Dz9l01ADGwg==
+X-Received: by 2002:a17:90a:a096:b0:1df:58d7:5b20 with SMTP id r22-20020a17090aa09600b001df58d75b20mr54234pjp.212.1654871434516;
+        Fri, 10 Jun 2022 07:30:34 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b0016232dbd01fsm18851339plg.292.2022.06.10.07.30.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 07:29:59 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 14:29:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Dunn <daviddunn@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>, dbehr@google.com, dtor@google.com
-Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle
- state
-Message-ID: <YqNVYz4+yVbWnmNv@google.com>
-References: <20220609110337.1238762-1-jaz@semihalf.com>
- <20220609110337.1238762-2-jaz@semihalf.com>
- <YqIJ8HtdqnoVzfQD@google.com>
- <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
+        Fri, 10 Jun 2022 07:30:33 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v6 0/7] can: refactoring of can-dev module and of Kbuild
+Date:   Fri, 10 Jun 2022 23:30:02 +0900
+Message-Id: <20220610143009.323579-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022, Grzegorz Jaszczyk wrote:
-> czw., 9 cze 2022 o 16:55 Sean Christopherson <seanjc@google.com> napisał(a):
-> Above could be actually prevented if the VMM had control over the
-> guest resumption. E.g. after VMM receives notification about guest
-> entering s2idle state, it would park the vCPU actually preventing it
-> from exiting s2idle without VMM intervention.
+Aside of calc_bittiming.o which can be configured with
+CAN_CALC_BITTIMING, all objects from drivers/net/can/dev/ get linked
+unconditionally to can-dev.o even if not needed by the user.
 
-Ah, so you avoid races by assuming the VM wakes itself from s2idle any time a vCPU
-is run, even if the vCPU doesn't actually have a wake event.  That would be very
-useful info to put in the changelog.
+This series first goal it to split the can-dev modules so that the
+only the needed features get built in during compilation.
+Additionally, the CAN Device Drivers menu is moved from the
+"Networking support" category to the "Device Drivers" category (where
+all drivers are supposed to be).
 
-> > > +static void s2idle_hypervisor_notify(void)
-> > > +{
-> > > +     if (static_cpu_has(X86_FEATURE_HYPERVISOR))
-> > > +             kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
-> >
-> > Checking the HYPERVISOR flag is not remotely sufficient.  The hypervisor may not
-> > be KVM, and if it is KVM, it may be an older version of KVM that doesn't support
-> > the hypercall.  The latter scenario won't be fatal unless KVM has been modified,
-> > but blindly doing a hypercall for a different hypervisor could have disastrous
-> > results, e.g. the registers ABIs are different, so the above will make a random
-> > request depending on what is in other GPRs.
-> 
-> Good point: we've actually thought about not confusing/breaking VMMs
-> so I've introduced KVM_CAP_X86_SYSTEM_S2IDLE VM capability in the
-> second patch, but not breaking different hypervisors is another story.
-> Would hiding it under new 's2idle_notify_kvm' module parameter work
-> for upstream?:
 
-No, enumerating support via KVM_CPUID_FEATURES is the correct way to do something
-like this, e.g. see KVM_FEATURE_CLOCKSOURCE2.  But honestly I wouldn't spend too
-much time understanding how all of that works, because I still feel quite strongly
-that getting KVM involved is completely unnecessary.  A solution that isn't KVM
-specific is preferable as it can then be implemented by any VMM that enumerates
-s2idle support to the guest.
+* menu before this series *
 
-> > The bigger question is, why is KVM involved at all?  KVM is just a dumb pipe out
-> > to userspace, and not a very good one at that.  There are multiple well established
-> > ways to communicate with the VMM without custom hypercalls.
-> 
-> Could you please kindly advise about the recommended way of
-> communication with VMM, taking into account that we want to send this
-> notification just before entering s2idle state (please see also answer
-> to next comment), which is at a very late stage of the suspend process
-> with a lot of functionality already suspended?
+CAN bus subsystem support
+  symbol: CONFIG_CAN
+  |
+  +-> CAN Device Drivers
+      (no symbol)
+      |
+      +-> software/virtual CAN device drivers
+      |   (at time of writing: slcan, vcan, vxcan)
+      |
+      +-> Platform CAN drivers with Netlink support
+          symbol: CONFIG_CAN_DEV
+          |
+          +-> CAN bit-timing calculation  (optional for hardware drivers)
+          |   symbol: CONFIG_CAN_CALC_BITTIMING
+          |
+          +-> All other CAN devices drivers
 
-MMIO or PIO for the actual exit, there's nothing special about hypercalls.  As for
-enumerating to the guest that it should do something, why not add a new ACPI_LPS0_*
-function?  E.g. something like
+* menu after this series *
 
-static void s2idle_hypervisor_notify(void)
-{
-	if (lps0_dsm_func_mask > 0)
-		acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT_HYPERVISOR_NOTIFY
-					lps0_dsm_func_mask, lps0_dsm_guid);
-}
+Network device support
+  symbol: CONFIG_NETDEVICES
+  |
+  +-> CAN Device Drivers
+      symbol: CONFIG_CAN_DEV
+      |
+      +-> software/virtual CAN device drivers
+      |   (at time of writing: slcan, vcan, vxcan)
+      |
+      +-> CAN device drivers with Netlink support
+          symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+          |
+          +-> CAN bit-timing calculation (optional for all drivers)
+          |   symbol: CONFIG_CAN_CALC_BITTIMING
+          |
+          +-> All other CAN devices drivers
+              (some may select CONFIG_CAN_RX_OFFLOAD)
+              |
+              +-> CAN rx offload (automatically selected by some drivers)
+                  (hidden symbol: CONFIG_CAN_RX_OFFLOAD)
+
+Patches 1 to 5 of this series do above modification.
+
+The last two patches add a check toward CAN_CTRLMODE_LISTENONLY in
+can_dropped_invalid_skb() to discard tx skb (such skb can potentially
+reach the driver if injected via the packet socket). In more details,
+patch 6 moves can_dropped_invalid_skb() from skb.h to skb.o and patch
+7 is the actual change.
+
+Those last two patches are actually connected to the first five ones:
+because slcan and v(x)can requires can_dropped_invalid_skb(), it was
+necessary to add those three devices to the scope of can-dev before
+moving the function to skb.o.
+
+This design results from the lengthy discussion in [1].
+
+[1] https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vincent@wanadoo.fr/
+
+
+** Changelog **
+
+v5 -> v6:
+
+  * fix typo in patch #1's title: Kbuild -> Kconfig.
+
+  * make CONFIG_RX_CAN an hidden config symbol and modify the diagram
+    in the cover letter accordingly.
+
+    @Oliver, with CONFIG_CAN_RX_OFFLOAD now being an hidden config,
+    that option fully depends on the drivers. So contrary to your
+    suggestion, I put CONFIG_CAN_RX_OFFLOAD below the device drivers
+    in the diagram.
+
+  * fix typo in cover letter: CONFIG_CAN_BITTIMING -> CONFIG_CAN_CALC_BITTIMING.
+
+v4 -> v5:
+
+  * m_can is also requires RX offload. Add the "select CAN_RX_OFFLOAD"
+    to its Makefile.
+
+  * Reorder the lines of drivers/net/can/dev/Makefile.
+
+  * Remove duplicated rx-offload.o target in drivers/net/can/dev/Makefile
+
+  * Remove the Nota Bene in the cover letter.
+
+
+v3 -> v4:
+
+  * Five additional patches added to split can-dev module and refactor
+    Kbuild. c.f. below (lengthy) thread:
+    https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vincent@wanadoo.fr/
+
+
+v2 -> v3:
+
+  * Apply can_dropped_invalid_skb() to slcan.
+
+  * Make vcan, vxcan and slcan dependent of CONFIG_CAN_DEV by
+    modifying Kbuild.
+
+  * fix small typos.
+
+v1 -> v2:
+
+  * move can_dropped_invalid_skb() to skb.c instead of dev.h
+
+  * also move can_skb_headroom_valid() to skb.c
+
+Vincent Mailhol (7):
+  can: Kconfig: rename config symbol CAN_DEV into CAN_NETLINK
+  can: Kconfig: turn menu "CAN Device Drivers" into a menuconfig using
+    CAN_DEV
+  can: bittiming: move bittiming calculation functions to
+    calc_bittiming.c
+  can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+  net: Kconfig: move the CAN device menu to the "Device Drivers" section
+  can: skb: move can_dropped_invalid_skb() and can_skb_headroom_valid()
+    to skb.c
+  can: skb: drop tx skb if in listen only mode
+
+ drivers/net/Kconfig                   |   2 +
+ drivers/net/can/Kconfig               |  55 +++++--
+ drivers/net/can/dev/Makefile          |  17 ++-
+ drivers/net/can/dev/bittiming.c       | 197 -------------------------
+ drivers/net/can/dev/calc_bittiming.c  | 202 ++++++++++++++++++++++++++
+ drivers/net/can/dev/dev.c             |   9 +-
+ drivers/net/can/dev/skb.c             |  72 +++++++++
+ drivers/net/can/m_can/Kconfig         |   1 +
+ drivers/net/can/spi/mcp251xfd/Kconfig |   1 +
+ include/linux/can/skb.h               |  59 +-------
+ net/can/Kconfig                       |   5 +-
+ 11 files changed, 338 insertions(+), 282 deletions(-)
+ create mode 100644 drivers/net/can/dev/calc_bittiming.c
+
+-- 
+2.35.1
+

@@ -2,172 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E407254635E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A50546364
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348479AbiFJKRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S1348724AbiFJKSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244420AbiFJKRo (ORCPT
+        with ESMTP id S244420AbiFJKSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:17:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E706CDED4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654856257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ekvjf5YPr7Sjtvmnh5pMqvNXgm63w4q321GSzdMpiws=;
-        b=R422DQNibOldKWlgmARWqJj/jnBflxYGCJ34dPCeAmqGiPs+R8ZIsaALOJs26KSF7i5shV
-        8c4iGAzs36ZifLrsLUUvTTYBlEKMNjAuWAXnLpu9z/IiIszg0EPqkub8BmaIO/xtiimXrM
-        E/8YUE26JcZOBvyiHFzLj8IJXPCzQcQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-kXjefRkbPDWoe6snt-pbTw-1; Fri, 10 Jun 2022 06:17:36 -0400
-X-MC-Unique: kXjefRkbPDWoe6snt-pbTw-1
-Received: by mail-wm1-f72.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso1121511wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:17:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Ekvjf5YPr7Sjtvmnh5pMqvNXgm63w4q321GSzdMpiws=;
-        b=SPclZkDB2GEnJdYVkw9FA69e8zA1CF8T3WS/tKIeuK6246OYju8D/C6OE2MJYYtQXQ
-         SEH7WfiPfi/Brb+JOzaB6kuEMICcDYT91VZQNzGEjo/dhyYc34gNSugA4BDlrOlx1P01
-         Gs60maHWy1bPP2zVjvFgBDktRa/KIqR80Wthe8oGSvQDcxJf/s06lqPDfkcSUv1vmegV
-         xi47D+2A8sYRbtIaXZiRWl6LdjXUyAlW5f5psk5UUVKVvUdzGLKpfeyZRidtEoyncba0
-         aiHKuUCI+AIMcIswOAXnuQXNVUtsllfqFu39dONCR51oM1JY/RXc/S8BDfJ0FxNsuEn7
-         0GLg==
-X-Gm-Message-State: AOAM530cnJ5Fdh5aaPfFDHXblLGnlvaJ2HqmbqvarJoyBor5zjcktY7l
-        BXjLOptdvFMpcJqe+pf5V7ILoN/MEaNs8WZus9EN8c3Akb+9nAFonZ0l4nAYgWJvSzAXCXbIPE8
-        K5ThhfVAD1YVhWOIskil944R3
-X-Received: by 2002:a05:6000:91:b0:217:8efc:f572 with SMTP id m17-20020a056000009100b002178efcf572mr29122720wrx.186.1654856255657;
-        Fri, 10 Jun 2022 03:17:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzMoCknlizO69Nl0wuEIzBALIZP/2+KDolU3ne+3dmHgzec6LJk/2XhtTIsrJ35XnXVn7hgfw==
-X-Received: by 2002:a05:6000:91:b0:217:8efc:f572 with SMTP id m17-20020a056000009100b002178efcf572mr29122693wrx.186.1654856255339;
-        Fri, 10 Jun 2022 03:17:35 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:1f00:4727:6420:1d4d:ca23? (p200300cbc7051f00472764201d4dca23.dip0.t-ipconnect.de. [2003:cb:c705:1f00:4727:6420:1d4d:ca23])
-        by smtp.gmail.com with ESMTPSA id m17-20020a05600c4f5100b0039c4f53c4fdsm3105741wmq.45.2022.06.10.03.17.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 03:17:34 -0700 (PDT)
-Message-ID: <e287a12d-29d9-da69-9315-52414341cbd1@redhat.com>
-Date:   Fri, 10 Jun 2022 12:17:33 +0200
+        Fri, 10 Jun 2022 06:18:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3203E5D6;
+        Fri, 10 Jun 2022 03:18:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F4A61F93;
+        Fri, 10 Jun 2022 10:18:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81020C3411E;
+        Fri, 10 Jun 2022 10:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654856282;
+        bh=Mgof106cR39tCNt2/D1vN1oOa5Rp+UIYZiiD80oMBuY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OgpKivqT9cZqXAgrW/tfIVrc5r8vOzX/GEqwOLFyBG2EaoIOyj128iD8Gi9w0U5MZ
+         Gr/rM4W9g8rimCzQAq6pifSKCrHsQm22eg0Gkzrb14KZKep8f174nubAuG3Pem6HnX
+         dhD2abwlHXkE+xhfVXWHQGjR+2/Sfz7fXjhbgmw8=
+Date:   Fri, 10 Jun 2022 12:17:54 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v9 1/3] usb: typec: tcpci: move tcpci.h to
+ include/linux/usb/
+Message-ID: <YqMaUroS87rjnCny@kroah.com>
+References: <20220309023404.1221453-1-xji@analogixsemi.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 03/19] fs: Add aops->migrate_folio
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-aio@kvack.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ocfs2-devel@oss.oracle.com, linux-mtd@lists.infradead.org,
-        virtualization@lists.linux-foundation.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20220608150249.3033815-1-willy@infradead.org>
- <20220608150249.3033815-4-willy@infradead.org>
- <b2a81248-03fc-afb3-1041-d8206e95e08a@redhat.com>
- <YqIFHPJZNMrmtXlh@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YqIFHPJZNMrmtXlh@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309023404.1221453-1-xji@analogixsemi.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.06.22 16:35, Matthew Wilcox wrote:
-> On Thu, Jun 09, 2022 at 02:50:20PM +0200, David Hildenbrand wrote:
->> On 08.06.22 17:02, Matthew Wilcox (Oracle) wrote:
->>> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
->>> index c0fe711f14d3..3d28b23676bd 100644
->>> --- a/Documentation/filesystems/locking.rst
->>> +++ b/Documentation/filesystems/locking.rst
->>> @@ -253,7 +253,8 @@ prototypes::
->>>  	void (*free_folio)(struct folio *);
->>>  	int (*direct_IO)(struct kiocb *, struct iov_iter *iter);
->>>  	bool (*isolate_page) (struct page *, isolate_mode_t);
->>> -	int (*migratepage)(struct address_space *, struct page *, struct page *);
->>> +	int (*migrate_folio)(struct address_space *, struct folio *dst,
->>> +			struct folio *src, enum migrate_mode);
->>>  	void (*putback_page) (struct page *);
->>
->> isolate_page/putback_page are leftovers from the previous patch, no?
+On Wed, Mar 09, 2022 at 10:34:01AM +0800, Xin Ji wrote:
+> USB PD controllers which consisting of a microcontroller (acting as the TCPM)
+> and a port controller (TCPC) - may require that the driver for the PD
+> controller accesses directly also the on-chip port controller in some cases.
 > 
-> Argh, right, I completely forgot I needed to update the documentation in
-> that patch.
+> Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
 > 
->>> +++ b/Documentation/vm/page_migration.rst
->>> @@ -181,22 +181,23 @@ which are function pointers of struct address_space_operations.
->>>     Once page is successfully isolated, VM uses page.lru fields so driver
->>>     shouldn't expect to preserve values in those fields.
->>>  
->>> -2. ``int (*migratepage) (struct address_space *mapping,``
->>> -|	``struct page *newpage, struct page *oldpage, enum migrate_mode);``
->>> -
->>> -   After isolation, VM calls migratepage() of driver with the isolated page.
->>> -   The function of migratepage() is to move the contents of the old page to the
->>> -   new page
->>> -   and set up fields of struct page newpage. Keep in mind that you should
->>> -   indicate to the VM the oldpage is no longer movable via __ClearPageMovable()
->>> -   under page_lock if you migrated the oldpage successfully and returned
->>> -   MIGRATEPAGE_SUCCESS. If driver cannot migrate the page at the moment, driver
->>> -   can return -EAGAIN. On -EAGAIN, VM will retry page migration in a short time
->>> -   because VM interprets -EAGAIN as "temporary migration failure". On returning
->>> -   any error except -EAGAIN, VM will give up the page migration without
->>> -   retrying.
->>> -
->>> -   Driver shouldn't touch the page.lru field while in the migratepage() function.
->>> +2. ``int (*migrate_folio) (struct address_space *mapping,``
->>> +|	``struct folio *dst, struct folio *src, enum migrate_mode);``
->>> +
->>> +   After isolation, VM calls the driver's migrate_folio() with the
->>> +   isolated folio.  The purpose of migrate_folio() is to move the contents
->>> +   of the source folio to the destination folio and set up the fields
->>> +   of destination folio.  Keep in mind that you should indicate to the
->>> +   VM the source folio is no longer movable via __ClearPageMovable()
->>> +   under folio if you migrated the source successfully and returned
->>> +   MIGRATEPAGE_SUCCESS.  If driver cannot migrate the folio at the
->>> +   moment, driver can return -EAGAIN. On -EAGAIN, VM will retry folio
->>> +   migration in a short time because VM interprets -EAGAIN as "temporary
->>> +   migration failure".  On returning any error except -EAGAIN, VM will
->>> +   give up the folio migration without retrying.
->>> +
->>> +   Driver shouldn't touch the folio.lru field while in the migrate_folio()
->>> +   function.
->>>  
->>>  3. ``void (*putback_page)(struct page *);``
->>
->> Hmm, here it's a bit more complicated now, because we essentially have
->> two paths: LRU+migrate_folio or !LRU+movable_ops
->> (isolate/migrate/putback page)
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
 > 
-> Oh ... actually, this is just documenting the driver side of things.
-> I don't really like how it's written.  Here, have some rewritten
-> documentation (which is now part of the previous patch):
+> ---
+> V8 -> V9: Add more commit message
+> V7 -> V8: Fix Guanter's comment, remove unnecessary explain
 > 
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+>  drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+>  drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+>  {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+>  5 files changed, 5 insertions(+), 7 deletions(-)
+>  rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
 
-LGTM, thanks.
+I need an ack by the typec maintainers/developers before I can take this
+(hint...)
 
+thanks,
 
--- 
-Thanks,
-
-David / dhildenb
-
+greg k-h

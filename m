@@ -2,329 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981BE547000
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2F3547020
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348857AbiFJXUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 19:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
+        id S1344005AbiFJX1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 19:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236029AbiFJXUk (ORCPT
+        with ESMTP id S231666AbiFJX1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:20:40 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADBF132753
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:20:35 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id d19so622573lji.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:20:35 -0700 (PDT)
+        Fri, 10 Jun 2022 19:27:47 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A483289707
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:27:43 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id v19so747302edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:27:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+1KGEkwWLM43iC+5lY7oAILbV9nPk+PkPYaUeBPSvSU=;
-        b=OZ5TGaBWVxQM1BG7nUmMRhWQAL0bYjQvzCHtYv6pljRCEtdbqyzh2WSR8NfirAf1BE
-         0PowjHzxVk9/i33L8CiF/ZufMvQOtZSalpnddvGcmybO/ujen0XQ2iYowO7K2O1H+F1p
-         pOEn7Fw7aSEY+3lVQsSfEYbuf6K0bl8jWQ8dQavVd/Q2BVLvT1FG7KfTFyheVpZHLQPC
-         lHJswhn4ESNUIGF2TqbmWTGjYoEc4xQQEzxM4tTF4m57D6wcSYdD0P7DNwmXqXX9Gktm
-         4Bc7LOdaT/wFPBcXkeQCwWXdSdOyUp07/y3Ya52DTEezPPov3bL8fcPpZr9PhfWVJjkj
-         BDHQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GZoJzsRoNjoiccDOrK94bxpJ3hfAz32yrlvd2dEbdCc=;
+        b=aLZKbkpPIDUtm14Pxye+efBZEkBYhaccf/7S7anQyCDaVOTMTbCHrjAXLEyx0JZ9oa
+         rimx2FbptEmJpu4UBqIupfULzJT0n+9BDzC6Tpis2hVCNTS/XYH8TK8ADU4za2z3OWUs
+         ybuPc8IqO7x9sgmL1xCFOSnxFrXkQ6mQGZ9jI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+1KGEkwWLM43iC+5lY7oAILbV9nPk+PkPYaUeBPSvSU=;
-        b=QYfO2R7+9eXXCY1nqAuRQZQlz0m+gpIb0Y5aVJTHWL9cZmiqGrNry6ha9csfl1bvxc
-         qDn+hEAQQaiP4J2VCw45BVScxx02Ezlh8cEpXgcxfYTaQrJ68xfITXDI1pSXj1UpmBxh
-         Yvt7ccEb6IxcGyL7ghg8O+57CIrprv2XXeAv6IS+yA3aRr6+ap0MdV4eVe5l3q5/Tx5g
-         xLMinLhT6TgsOGB6ZFVL+NuF96I8QWFxKRWn2uttKHbywYAtG4bjIJwsBVz2OrQRnEu+
-         bSOUa1sSHzRpjuebbKGCfXRMSwiq3vAC0tRLv+AIe5NfHEtIDfgevL4Ubwrb5THD1gDE
-         giRw==
-X-Gm-Message-State: AOAM533Ewj8d67RaZStkHF1T2Ivw1BR+B3cOKrlHUUsM26c+h3l6VjzB
-        5WgiagDUGKOcYCSUoB97u/4ZCw==
-X-Google-Smtp-Source: ABdhPJz9HqxCw3RkPKOT33MrJqEv4Egm/i22eg8F0ELVG+l7eXyL6eq7p9b0mPQsY6A9+1k0yXttRw==
-X-Received: by 2002:a05:651c:1543:b0:255:92f8:6e8b with SMTP id y3-20020a05651c154300b0025592f86e8bmr16098939ljp.489.1654903234104;
-        Fri, 10 Jun 2022 16:20:34 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v27-20020ac2559b000000b00478d4df81f6sm35031lfg.85.2022.06.10.16.20.31
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GZoJzsRoNjoiccDOrK94bxpJ3hfAz32yrlvd2dEbdCc=;
+        b=KHPXl5ZUTBhcqM9LPhyPSFgi5ttCyFHCE5MUzSYnFcFTf4y+G7BQZwno6+VDy6Y6tk
+         OMH8sXPTCdwe8tmDfpHB9CLKXjoeUSMWjOWy6AGSZsZYOyQQhSFPkJc/z/BiJLPL/sI1
+         Ty7cN8yLGCQCsVmxb8lP5UqUfcn5gC0nl8ztcNNr+BP11c/Bo1eXd0DE/F71I5gU0YTA
+         7MyqTCiWlHWR0ffp4xOBNaH3fN6DhNCDXaVJY4fTUyUkNz17YkQc4lABz7lgSYsQJOux
+         D5mu8Cy6UL0eqRLiG25+jvrA0Vzzw/hpHizAgjwwtiEcA6JsqSAoxthxZTQgG8IZtmWi
+         LOGw==
+X-Gm-Message-State: AOAM532BBu8dsfu/uD+tRowT+Eg1RhQnJuet9h1+YyrB+vgRX79/FKcr
+        4M4cmZF36W1gSZgj3RFe43YKLTQ07iz+78bn
+X-Google-Smtp-Source: ABdhPJxyVuCdg1FOIEoi8d1I4trYkr39drBu1+Bku9diiFoqXPiAi2pohsKGkUOVk40YeAHXbHJtjg==
+X-Received: by 2002:aa7:ca1a:0:b0:42d:e1b0:2dd2 with SMTP id y26-20020aa7ca1a000000b0042de1b02dd2mr54019387eds.157.1654903661427;
+        Fri, 10 Jun 2022 16:27:41 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id ha21-20020a170906a89500b00704fa2748ffsm208882ejb.99.2022.06.10.16.27.40
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 16:20:32 -0700 (PDT)
-Message-ID: <c7ac47e0-20a2-3972-e760-61276964445c@linaro.org>
-Date:   Sat, 11 Jun 2022 02:20:31 +0300
+        Fri, 10 Jun 2022 16:27:40 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id h5so442997wrb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:27:40 -0700 (PDT)
+X-Received: by 2002:a5d:414d:0:b0:213:be00:a35 with SMTP id
+ c13-20020a5d414d000000b00213be000a35mr39200261wrq.97.1654903660246; Fri, 10
+ Jun 2022 16:27:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8953: add MDSS
-Content-Language: en-GB
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220610225304.267508-1-luca@z3ntu.xyz>
- <20220610225304.267508-2-luca@z3ntu.xyz>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220610225304.267508-2-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YqOZ3v68HrM9LI//@casper.infradead.org> <CAHk-=wiyexxiFw5N+TtE5kUk4iF4LaNoY3Pzj7aZcj6Msp+tOg@mail.gmail.com>
+ <YqO6FaO0/I9Ateze@casper.infradead.org>
+In-Reply-To: <YqO6FaO0/I9Ateze@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 Jun 2022 16:27:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgzenicjKjXJnbmh7Nf-Y2aX=Kc46OsskSrKcpuozjFsg@mail.gmail.com>
+Message-ID: <CAHk-=wgzenicjKjXJnbmh7Nf-Y2aX=Kc46OsskSrKcpuozjFsg@mail.gmail.com>
+Subject: Re: [GIT PULL] Folio fixes for 5.19
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/06/2022 01:53, Luca Weiss wrote:
-> From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> 
-> Add the MDSS, MDP and DSI nodes that are found on msm8953 SoC.
-> 
-> IOMMU is not added because support for it isn't yet upstream and MDSS
-> works fine without IOMMU on 8953.
-> 
-> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+On Fri, Jun 10, 2022 at 2:40 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> But I don't want to change the refcounting rules on a method without
+> changing something else about the method, because trying to find a
+> missing refcount change is misery.  Anyway, my cunning thought was
+> that if I bundle the change to the refcount rule with the change
+> from readahead_page() to readahead_folio(), once all filesystems
+> are converted to readahead_folio(), I can pull the refcount game out
+> of readahead_folio() and do it in the caller where it belongs, all
+> transparent to the filesystems.
 
-Looks good, few minor nits below.
+Hmm. Any reason why that can't be done right now? Aren't we basically
+converted already?
 
-> ---
->   arch/arm64/boot/dts/qcom/msm8953.dtsi | 202 ++++++++++++++++++++++++++
->   1 file changed, 202 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> index ffc3ec2cd3bc..a2aca3d05899 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> @@ -726,6 +726,208 @@ tcsr_phy_clk_scheme_sel: syscon@193f044 {
->   			reg = <0x193f044 0x4>;
->   		};
->   
-> +		mdss: mdss@1a00000 {
-> +			compatible = "qcom,mdss";
-> +
-> +			reg = <0x1a00000 0x1000>,
-> +			      <0x1ab0000 0x1040>;
-> +			reg-names = "mdss_phys",
-> +				    "vbif_phys";
-> +
-> +			power-domains = <&gcc MDSS_GDSC>;
-> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +
-> +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> +				 <&gcc GCC_MDSS_AXI_CLK>,
-> +				 <&gcc GCC_MDSS_VSYNC_CLK>;
+Yeah, yeah, there's a couple of users of readahead_page() left, but if
+cleaning up the folio case requires some fixup to those, then that
+sounds better than the current "folio interface is very messy".
 
-Please also add GCC_MDSS_MDP_CLK at the end of this array. It might be 
-required to read HW_REV register.
+> (I don't think the erofs code has a bug because it doesn't remove
+> the folio from the pagecache while holding the lock -- the folio lock
+> prevents anyone _else_ from removing the folio from the pagecache,
+> so there must be a reference on the folio up until erofs calls
+> folio_unlock()).
 
-> +			clock-names = "iface",
-> +				      "bus",
-> +				      "vsync";
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
+Ahh. Ugh. And I guess the whole "clearing the lock bit is the last
+time we touch the page flags" and "folio_wake_bit() is very careful to
+only touch the external waitqueue" so that there can be no nasty races
+with somebody coming in *exactly* as the folio is unlocked.
 
-status = "disabled";
+This has been subtle before, but I think we did allow it exactly for
+this kind of reason. I've swapped out the details.
 
-> +
-> +			mdp: mdp@1a01000 {
-> +				compatible = "qcom,mdp5";
-> +				reg = <0x1a01000 0x89000>;
-> +				reg-names = "mdp_phys";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <0>;
-> +
-> +				power-domains = <&gcc MDSS_GDSC>;
-> +
-> +				clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> +					 <&gcc GCC_MDSS_AXI_CLK>,
-> +					 <&gcc GCC_MDSS_MDP_CLK>,
-> +					 <&gcc GCC_MDSS_VSYNC_CLK>;
-> +				clock-names = "iface",
-> +					      "bus",
-> +					      "core",
-> +					      "vsync";
-> +
-> +				// iommus = <&apps_iommu 0xc00 0>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						mdp5_intf1_out: endpoint {
-> +							remote-endpoint = <&dsi0_in>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						mdp5_intf2_out: endpoint {
-> +							remote-endpoint = <&dsi1_in>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi0: dsi@1a94000 {
-> +				compatible = "qcom,mdss-dsi-ctrl";
-> +				reg = <0x1a94000 0x400>;
-> +				reg-names = "dsi_ctrl";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <4>;
-> +
-> +				assigned-clocks = <&gcc BYTE0_CLK_SRC>,
-> +						  <&gcc PCLK0_CLK_SRC>;
-> +				assigned-clock-parents = <&dsi0_phy 0>,
-> +							 <&dsi0_phy 1>;
-> +
-> +				clocks = <&gcc GCC_MDSS_MDP_CLK>,
-> +					 <&gcc GCC_MDSS_AHB_CLK>,
-> +					 <&gcc GCC_MDSS_AXI_CLK>,
-> +					 <&gcc GCC_MDSS_BYTE0_CLK>,
-> +					 <&gcc GCC_MDSS_PCLK0_CLK>,
-> +					 <&gcc GCC_MDSS_ESC0_CLK>;
-> +				clock-names = "mdp_core",
-> +					      "iface",
-> +					      "bus",
-> +					      "byte",
-> +					      "pixel",
-> +					      "core";
-> +
-> +				phys = <&dsi0_phy>;
-> +				phy-names = "dsi";
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-
-status = "disabled";
-
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						dsi0_in: endpoint {
-> +							remote-endpoint = <&mdp5_intf1_out>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						dsi0_out: endpoint {
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi0_phy: dsi-phy@1a94400 {
-> +				compatible = "qcom,dsi-phy-14nm-8953";
-> +				reg = <0x1a94400 0x100>,
-> +				      <0x1a94500 0x300>,
-> +				      <0x1a94800 0x188>;
-> +				reg-names = "dsi_phy",
-> +					    "dsi_phy_lane",
-> +					    "dsi_pll";
-> +
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-
-status = "disabled";
-
-> +
-> +				clocks = <&gcc GCC_MDSS_AHB_CLK>, <&xo_board>;
-> +				clock-names = "iface", "ref";
-> +			};
-> +
-> +			dsi1: dsi@1a96000 {
-> +				compatible = "qcom,mdss-dsi-ctrl";
-> +				reg = <0x1a96000 0x400>;
-> +				reg-names = "dsi_ctrl";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <5>;
-> +
-> +				assigned-clocks = <&gcc BYTE1_CLK_SRC>,
-> +						  <&gcc PCLK1_CLK_SRC>;
-> +				assigned-clock-parents = <&dsi1_phy 0>,
-> +							 <&dsi1_phy 1>;
-> +
-> +				clocks = <&gcc GCC_MDSS_MDP_CLK>,
-> +					 <&gcc GCC_MDSS_AHB_CLK>,
-> +					 <&gcc GCC_MDSS_AXI_CLK>,
-> +					 <&gcc GCC_MDSS_BYTE1_CLK>,
-> +					 <&gcc GCC_MDSS_PCLK1_CLK>,
-> +					 <&gcc GCC_MDSS_ESC1_CLK>;
-> +				clock-names = "mdp_core",
-> +					      "iface",
-> +					      "bus",
-> +					      "byte",
-> +					      "pixel",
-> +					      "core";
-> +
-> +				phys = <&dsi1_phy>;
-> +				phy-names = "dsi";
-> +
-> +				status = "disabled";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						dsi1_in: endpoint {
-> +							remote-endpoint = <&mdp5_intf2_out>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						dsi1_out: endpoint {
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi1_phy: dsi-phy@1a96400 {
-> +				compatible = "qcom,dsi-phy-14nm-8953";
-> +				reg = <0x1a96400 0x100>,
-> +				      <0x1a96500 0x300>,
-> +				      <0x1a96800 0x188>;
-> +				reg-names = "dsi_phy",
-> +					    "dsi_phy_lane",
-> +					    "dsi_pll";
-> +
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +
-> +				clocks = <&gcc GCC_MDSS_AHB_CLK>, <&xo_board>;
-> +				clock-names = "iface", "ref";
-> +
-> +				status = "disabled";
-> +			};
-> +		};
-> +
->   		spmi_bus: spmi@200f000 {
->   			compatible = "qcom,spmi-pmic-arb";
->   			reg = <0x200f000 0x1000>,
-
-
--- 
-With best wishes
-Dmitry
+            Linus

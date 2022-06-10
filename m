@@ -2,125 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6E7546D26
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F74B546D2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350097AbiFJTUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S1348235AbiFJTWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349774AbiFJTTz (ORCPT
+        with ESMTP id S233646AbiFJTWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:19:55 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE6027149
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:19:54 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id k92-20020a17090a4ce500b001e69e8a98a4so78047pjh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=+dbqcGyic4c3zYFWxW8WIDheVsDHS+XGvESBEzG7d5k=;
-        b=VJWfSHAO2Je3tlWHbkl6eBf3JQors99nQSoFMQw5AngSQ7uNthpdVTVVO6if8U823B
-         Wu1S8b2rx3Ak6ZkOk6+AwA9gGBNOOThMx8xQHTEW6s7PY/nUBi2uIclkac9x4cTHvxmo
-         y/AJXy2aaupC/ITuM+2EZT3d4ceiyjYVlx4GC0SwtlZuKBtjFcy8EeMDNXQjTjgKmwiO
-         YMx+HsIRaSR+hgiXac40qw+UTiQ5bhIIl843JQc3xND8j8ThTL2i79J9eJ9I2kPOTUhP
-         l8UN1bhL572rWtU7JWt1Y+XqSDy0cbu4e8aGAxD0ZcWNoS6OGV3QWf79o7u/NVh09cqV
-         5qng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+dbqcGyic4c3zYFWxW8WIDheVsDHS+XGvESBEzG7d5k=;
-        b=M2ivQ6Vwsz6UEE+LjnQJc2gAuRO2Z4BppNsWvqRVuxoY3tD7xohzDQ6vchTZcWEZTa
-         U9wf+y2fdcXkHMGWzaDWzcER4nM/5MXsZsfoMK5mKVkAnFLulCy3rXHb3xtOP/Z7Lqg6
-         WPmK9QWwPbR8cZQlSs8UUEwP8StrYnIVbPvWwOBvpy5VQ1fzYzGtbDehc9b97xi6KMKr
-         VrcDpi7PMmp0QjbRmMCTDSf25MMZdVxeDEg3/+ArUYl8xxk9rBNKPbYzpATEP+i7H9Lz
-         hi305OJCoRKwc+BGLQwyUKFOxB1jBTSK4lQI8XC2QeAYagUdw2eeJ3JAovlBYSyZg+6K
-         KY7w==
-X-Gm-Message-State: AOAM5302Wo+bDDN9c+nQvZKQAAFU3o9Z+7ywhK8Y23J52ACb396LiaTD
-        p27gehQFxdo5jOIwHkUQTvtOcmm2r8Hi
-X-Google-Smtp-Source: ABdhPJyMdoK0Z7VltgUeKks6E5rfObRdmAL0gzme9n9MCpzTKMf4h5EvoDtvJMEi3EHvOfGfzYtIGm3btkTn
-X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a17:902:6bc6:b0:166:3c39:50a1 with SMTP id
- m6-20020a1709026bc600b001663c3950a1mr46022372plt.36.1654888794338; Fri, 10
- Jun 2022 12:19:54 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 12:19:34 -0700
-In-Reply-To: <20220610191934.2723772-1-jiangzp@google.com>
-Message-Id: <20220610121915.kernel.v1.1.Ia621daca5b03278ee09314c59659b64c901408cf@changeid>
-Mime-Version: 1.0
-References: <20220610191934.2723772-1-jiangzp@google.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [kernel PATCH v1 1/1] Bluetooth: mgmt: Fix refresh cached connection info
-From:   Zhengping Jiang <jiangzp@google.com>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Zhengping Jiang <jiangzp@google.com>,
-        Brian Gix <brian.gix@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Jun 2022 15:22:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A2C56386;
+        Fri, 10 Jun 2022 12:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=jA3sc+sxCh5X1xWeDF8wDNwVEiGJ6rJJEWh12pIvuxI=; b=Uk6dDHgnw3eeMD+Hx0HE4ERTdj
+        3J671Dlfqeh3yUD3AlvOHXNojsh7uNNR7gGoak/yDn0TKVupOAC2dXUjqiHJe88N8j5UeM832Ms0h
+        ofthDJ04lWZ8EmBN2fcTKBk5oadgxfz+JuZfsC16xon1S4r1UHFGTGMFaivOY5IsGWnry65vOPpxt
+        DVibjguWJCJv9gi71yLltabKE7UdPu+hkkhOtBwWPaGDeymLf2ymDJef9z8n99RV/SNhS9zflUAQO
+        tjVltUfnkbzNbGmW6Jz38DixusUSkIOIRIveo1PR1KfFJiJrJxINLCDg8a48AB398o7/OaTH2Eu+S
+        CszfIp5g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nzkCs-00Eght-8S; Fri, 10 Jun 2022 19:22:06 +0000
+Date:   Fri, 10 Jun 2022 20:22:06 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Folio fixes for 5.19
+Message-ID: <YqOZ3v68HrM9LI//@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the connection data before calling get_conn_info_sync, so it can be
-verified the connection is still connected, before refreshing cached
-values.
+The following changes since commit 3d9f55c57bc3659f986acc421eac431ff6edcc83:
 
-Fixes: 47db6b42991e6 ("Bluetooth: hci_sync: Convert MGMT_OP_GET_CONN_INFO")
-Signed-off-by: Zhengping Jiang <jiangzp@google.com>
----
+  Merge tag 'fs_for_v5.19-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs (2022-06-09 12:26:05 -0700)
 
-Changes in v1:
-- Set connection data before calling hci_cmd_sync_queue
+are available in the Git repository at:
 
- net/bluetooth/mgmt.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+  git://git.infradead.org/users/willy/pagecache.git tags/folio-5.19a
 
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 74937a8346488..cfbea6fa04335 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -6828,11 +6828,14 @@ static int get_conn_info(struct sock *sk, struct hci_dev *hdev, void *data,
- 
- 		cmd = mgmt_pending_new(sk, MGMT_OP_GET_CONN_INFO, hdev, data,
- 				       len);
--		if (!cmd)
-+		if (!cmd) {
- 			err = -ENOMEM;
--		else
-+		} else {
-+			hci_conn_hold(conn);
-+			cmd->user_data = hci_conn_get(conn);
- 			err = hci_cmd_sync_queue(hdev, get_conn_info_sync,
- 						 cmd, get_conn_info_complete);
-+		}
- 
- 		if (err < 0) {
- 			mgmt_cmd_complete(sk, hdev->id, MGMT_OP_GET_CONN_INFO,
-@@ -6844,9 +6847,6 @@ static int get_conn_info(struct sock *sk, struct hci_dev *hdev, void *data,
- 			goto unlock;
- 		}
- 
--		hci_conn_hold(conn);
--		cmd->user_data = hci_conn_get(conn);
--
- 		conn->conn_info_timestamp = jiffies;
- 	} else {
- 		/* Cache is valid, just reply with values cached in hci_conn */
--- 
-2.36.1.476.g0c4daa206d-goog
+for you to fetch changes up to 334f6f53abcf57782bd2fe81da1cbd893e4ef05c:
+
+  mm: Add kernel-doc for folio->mlock_count (2022-06-09 16:24:25 -0400)
+
+----------------------------------------------------------------
+Four folio-related fixes for 5.19:
+
+ - Don't release a folio while it's still locked
+
+ - Fix a use-after-free after dropping the mmap_lock
+
+ - Fix a memory leak when splitting a page
+
+ - Fix a kernel-doc warning for struct folio
+
+----------------------------------------------------------------
+Matthew Wilcox (Oracle) (4):
+      filemap: Don't release a locked folio
+      filemap: Cache the value of vm_flags
+      mm/huge_memory: Fix xarray node memory leak
+      mm: Add kernel-doc for folio->mlock_count
+
+ include/linux/mm_types.h | 5 +++++
+ include/linux/xarray.h   | 1 +
+ lib/xarray.c             | 5 +++--
+ mm/filemap.c             | 9 +++++----
+ mm/huge_memory.c         | 3 +--
+ mm/readahead.c           | 2 ++
+ 6 files changed, 17 insertions(+), 8 deletions(-)
 

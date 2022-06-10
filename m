@@ -2,98 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0AE545CFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D00545D44
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346603AbiFJHPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S1346924AbiFJHYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244941AbiFJHPL (ORCPT
+        with ESMTP id S1346795AbiFJHXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:15:11 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1192194BDE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:15:09 -0700 (PDT)
-X-UUID: c7881e8812cf4e198c58810b993b162f-20220610
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:2713b238-328a-4f95-b3a8-ba94f5fe33ea,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:6c035fe5-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: c7881e8812cf4e198c58810b993b162f-20220610
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <kuan-ying.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 556457494; Fri, 10 Jun 2022 15:15:05 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 10 Jun 2022 15:15:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 10 Jun 2022 15:15:04 +0800
-From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     <chinwen.chang@mediatek.com>, <nicholas.tang@mediatek.com>,
-        <casper.li@mediatek.com>, <andrew.yang@mediatek.com>,
-        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH] scripts/gdb: change kernel config dumping method
-Date:   Fri, 10 Jun 2022 15:14:57 +0800
-Message-ID: <20220610071500.9656-1-Kuan-Ying.Lee@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Fri, 10 Jun 2022 03:23:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B9321C3B3;
+        Fri, 10 Jun 2022 00:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654845830; x=1686381830;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=POm9JCNG8hbNwtmENSOZ9MbIkytxsFpCygdTnLttjFA=;
+  b=Qp0RU2LzOuzhubuY+egvd67s4UG2dJVeEIbXUyr6WJuWfiNhlAD7+Os1
+   /Wu0cPP+nNOUe1TWI6tuF1NQ/2b8PZCGlhw10i+Yzh+9QDbk1EYxUKIY5
+   WvTj73lM2NH67rxuJAjrcIcFr3u6Y/ufa53GmgOe9jhOE2+75uhyAMfkE
+   WOiDfSdbqVYSmyirMd6ShPK1X/iqQBwMZf8OjjQgniYUT5F7ZlACHi6fH
+   AkZFH2Hc7shOUbWW654F+wBv2UUVrwNt48q9ppgmKNmylaBUQiQrG+PIN
+   xGIj1O45crCZ94sGKxXxnwscTel0VOTuxpKrcCr7633dLaPVOpphQMkVb
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="302918958"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="302918958"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 00:23:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="649685430"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jun 2022 00:23:44 -0700
+Date:   Fri, 10 Jun 2022 15:15:47 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
+        Ivan Bornyakov <brnkv.i1@gmail.com>,
+        Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v17 2/4] docs: fpga: mgr: document parse_header() callback
+Message-ID: <20220610071547.GA655812@yilunxu-OptiPlex-7050>
+References: <20220609154752.20781-1-i.bornyakov@metrotek.ru>
+ <20220609154752.20781-3-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609154752.20781-3-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAGIC_START("IKCFG_ST") and MAGIC_END("IKCFG_ED") are moved out
-from the kernel_config_data variable [1].
+On Thu, Jun 09, 2022 at 06:47:50PM +0300, Ivan Bornyakov wrote:
+> Document newly introduced fpga_manager_ops callback parse_header() along
+> with header_size and data_size fields of struct fpga_image_info.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  Documentation/driver-api/fpga/fpga-mgr.rst | 31 ++++++++++++++++------
+>  1 file changed, 23 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/fpga/fpga-mgr.rst b/Documentation/driver-api/fpga/fpga-mgr.rst
+> index 42c01f396dce..db0852bd3ddc 100644
+> --- a/Documentation/driver-api/fpga/fpga-mgr.rst
+> +++ b/Documentation/driver-api/fpga/fpga-mgr.rst
+> @@ -79,14 +79,29 @@ do the programming sequence for this particular FPGA.  These ops return 0 for
+>  success or negative error codes otherwise.
+>  
+>  The programming sequence is::
+> - 1. .write_init
+> - 2. .write or .write_sg (may be called once or multiple times)
+> - 3. .write_complete
+> -
+> -The .write_init function will prepare the FPGA to receive the image data.  The
+> -buffer passed into .write_init will be at most .initial_header_size bytes long;
+> -if the whole bitstream is not immediately available then the core code will
+> -buffer up at least this much before starting.
+> + 1. .parse_header
 
-Thus, we parse kernel_config_data directly instead of considering
-offset of MAGIC_START and MAGIC_END.
+    1. .parse_header (optional, may be called once or multiple times)
 
-[1] https://lore.kernel.org/lkml/1550108893-21226-1-git-send-email-yamada.masahiro@socionext.com/
+> + 2. .write_init
+> + 3. .write or .write_sg (may be called once or multiple times)
+> + 4. .write_complete
+> +
+> +The .parse_header function will set header_size and data_size to
+> +struct fpga_image_info. If header_size is set, .write function will get image
+> +buffer starting at header_size offset from the beginning. If data_size is set,
+> +.write function will get data_size bytes of the image buffer, otherwise .write
+> +will get data up to the end of image buffer. This will not affect .write_sg,
+> +.write_sg will still get whole image in sg_table form. If FPGA image is a
 
-Fixes: 13610aa908dc ("kernel/configs: use .incbin directive to embed config_data.gz")
-Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
----
- scripts/gdb/linux/config.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+							  If FPGA image is already mapped as a 
 
-diff --git a/scripts/gdb/linux/config.py b/scripts/gdb/linux/config.py
-index 90e1565b1967..8843ab3cbadd 100644
---- a/scripts/gdb/linux/config.py
-+++ b/scripts/gdb/linux/config.py
-@@ -24,9 +24,9 @@ class LxConfigDump(gdb.Command):
-             filename = arg
- 
-         try:
--            py_config_ptr = gdb.parse_and_eval("kernel_config_data + 8")
--            py_config_size = gdb.parse_and_eval(
--                    "sizeof(kernel_config_data) - 1 - 8 * 2")
-+            py_config_ptr = gdb.parse_and_eval("&kernel_config_data")
-+            py_config_ptr_end = gdb.parse_and_eval("&kernel_config_data_end")
-+            py_config_size = py_config_ptr_end - py_config_ptr
-         except gdb.error as e:
-             raise gdb.GdbError("Can't find config, enable CONFIG_IKCONFIG?")
- 
--- 
-2.18.0
+Others look good to me.
 
+Thanks,
+Yilun
+
+> +single contiguous buffer, whole buffer will be passed into .parse_header.
+> +If image is in scatter-gather form, core code will buffer up at least
+> +.initial_header_size before the first call of .parse_header, if it is not
+> +enough, .parse_header should set desired size into info->header_size and
+> +return -EAGAIN, then it will be called again with greater part of image buffer
+> +on the input.
+> +
+> +The .write_init function will prepare the FPGA to receive the image data. The
+> +buffer passed into .write_init will be at least info->header_size bytes long,
+> +if it's defined, otherwise .initial_header_size; if the whole bitstream is not
+> +immediately available then the core code will buffer up at least this much
+> +before starting.
+>  
+>  The .write function writes a buffer to the FPGA. The buffer may be contain the
+>  whole FPGA image or may be a smaller chunk of an FPGA image.  In the latter
+> -- 
+> 2.35.1
+> 

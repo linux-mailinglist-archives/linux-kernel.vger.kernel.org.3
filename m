@@ -2,185 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811295460C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180925460DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347034AbiFJJEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S1348435AbiFJJFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245306AbiFJJEs (ORCPT
+        with ESMTP id S1348378AbiFJJFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:04:48 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B181DFC4D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:04:46 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id h23so2261143ljl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:04:46 -0700 (PDT)
+        Fri, 10 Jun 2022 05:05:06 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC74A11AFCA
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:04:56 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id t32so1468135ybt.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fGZRSNtjYVE5/AFVVZNo9Q/VK/BnWz0MKKsJwglLOK0=;
-        b=JB1ke9QQ37tIXtvgm8KNnMmw3d4Y6vdy9bzJXoIBOhgleWP/iGl3OTEbLI6GU/gYpm
-         AU/LO4HCsZeHme5w24TDDZ8kr3BC8DMzDuOyyghqIO5/N2wwqc1LLV0+4dRKLvUNLXcf
-         QK1VgFwBMG6cRJIYH2YS2XN+2uKoWixg+Cy3CCH/P4EygwtTswMUvkw2vNn3V8zu3Dvc
-         GOXyzCqMDpOV08m4qeqrKKU1vYr9pxauMPWEnBkKZqXMVHRU6sPy0ydUFQySkp24Z/sU
-         kIMiOU0r16EdThemeIrBV/NtL53OfiFlC0fpo7qNtDhf312cR7uTlleytA1mwOyHV97g
-         EGWQ==
+        bh=7uB1w+EHB+1oiiNaBoyt/7ePUBWKmmz4CDXK/RldunU=;
+        b=ZkIKDUKm1FfyCk0BzsMMxjctP8p0SCNWlPcsJlkrfto0C31zsmM/CSuFWCo+zIri0w
+         I+3nzHy6jNMKs+ME8HxPo9UbOo27lr4F+0Z7D0NwmW4JaXkQdgOAMZHMUU0IoVneTicV
+         M5s+qqwRE3mWK385reWOK1Z3wjyzG302oE0isNZZ2cDazd8wtBoT1NLl8OUG6B94L4LY
+         rL3AurtNr35FE+IQLJ0woneglUJs/C3NXUDedvYaxnGrFrO9Vr+SDX8SH+1RAD+kc/XY
+         N1Qb6ouQELIfmigNuX67AFW3AEnETRZjXvRuK07+kZ6NnRK4bvxCoT1y4niUDfTwEHou
+         n/vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fGZRSNtjYVE5/AFVVZNo9Q/VK/BnWz0MKKsJwglLOK0=;
-        b=tfN+jZ1BKjxARteBA7riGhBa1RP9pxcP89hcyuQxQL0JvKDq1v5J3WBhXFncv5fUUm
-         CsFFfpZUVSXywHqAHHN1aRzzCMZbGn572SVL1GYhX/3Gm69kY7z+io4xds5W+EYdbRef
-         wTVK7HZFRql2KPhqZIhJAxBmvxnRK7nZYq7qqZ+DGBOQrLwRozm3eSRReqF1xADggdhP
-         pukbT7Jb22JdCox1bk1v8/gXlSAAzR0Kf9zfNciKYgTsx2zdYAoCwCSwxmfbToJFNYMS
-         VouedHvxf7DeKP55zzLCo6UTmnVbLBe4gub9itd1TnCnNTk61pqpm6iQtWjdcpOaqOMI
-         SxNQ==
-X-Gm-Message-State: AOAM531tNyvR4XVqlJXu47/Z/NicHejm38Ee2gPG84whdPcZ5k3/CJo3
-        6rwMtvTkBu8/bWxQEeygeOqKp8JZxH/x2+wFEH1WuA==
-X-Google-Smtp-Source: ABdhPJwD2l653RZrx8dohQdBBRtUUY2leiZSGxDuyMkaUkBk2qTZjEaXXYgrM+r7K4JuLnekL19Pl0MSVUaNBqWqWFU=
-X-Received: by 2002:a05:651c:1612:b0:253:d535:d7c0 with SMTP id
- f18-20020a05651c161200b00253d535d7c0mr59255207ljq.33.1654851884560; Fri, 10
- Jun 2022 02:04:44 -0700 (PDT)
+        bh=7uB1w+EHB+1oiiNaBoyt/7ePUBWKmmz4CDXK/RldunU=;
+        b=Gl9xuSbx3FWtuk4QFxZEqYArr7TfOk6xF9DBWUPdqOpM+Fvx7kR1ILmT2fM+gEbSSF
+         DCDgM5YvDBJfj9ilyiQmDMrz9Ajjj6AoFyRXua+BLbdasJOasMgoup4mI/gNufMX7Gy2
+         SV2CFpmgxpBKbDV6l11MhUf0UOzxhdFtXZtHtsyj/NCHdWdHVZc4cDO19qws74vo0OjE
+         IS28FppCCfmmDA7SGpHd+oyCXBZ5VWsRjLzocRE7YRYbJQn20+DJOHUg2eamShf0Gha0
+         /nv3vOkCBDdOgVxCoMzOIb9RVXcMU85DezXd/KTy3WKiW7C68n2E+ROl0pqEYMe1kets
+         B7Ew==
+X-Gm-Message-State: AOAM533z9oCA5zNJD49wQHvzqgrTGLvlF7EqqV61ChRzE3IcpseRhajS
+        zn6PRgzyGS46jzVH5/MyvmdFFtShHEC+nIsZLbWVOw==
+X-Google-Smtp-Source: ABdhPJx6BmZBTxtCBFF7gCGfkwCyIC5biVe3vQgEMC5S10IJg23kflvqfXaK5QvD32PtUeOhKXgMQ4rhKHYH+9DlZ2Q=
+X-Received: by 2002:a05:6902:c9:b0:641:1998:9764 with SMTP id
+ i9-20020a05690200c900b0064119989764mr42933991ybs.427.1654851895121; Fri, 10
+ Jun 2022 02:04:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609113046.780504-1-elver@google.com> <20220609113046.780504-2-elver@google.com>
- <CACT4Y+bOFmCyqfSgWS0b5xuwnPqP4V9v2ooJRmFCn0YAtOPmhQ@mail.gmail.com>
- <CANpmjNNtV_6kgoLv=VX3z_oM6ZEvWJNAOj9z4ADcymqmhc+crw@mail.gmail.com>
- <CACT4Y+Zq-1nczM2JH7Sr4mZo84gsCRd83RAwwnHwmap-wCOLTQ@mail.gmail.com> <CANpmjNNC7ry59OXsJrPMf56Xi63chexaDfnP4t8_4MG7S5ZgCg@mail.gmail.com>
-In-Reply-To: <CANpmjNNC7ry59OXsJrPMf56Xi63chexaDfnP4t8_4MG7S5ZgCg@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 10 Jun 2022 11:04:33 +0200
-Message-ID: <CACT4Y+ZyrWuZxqpO_fKBjdXbTY-GJu6M7GARVk7YQnyv790mFw@mail.gmail.com>
-Subject: Re: [PATCH 1/8] perf/hw_breakpoint: Optimize list of per-task breakpoints
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org,
-        linux-sh@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+References: <20220610034204.67901-1-imagedong@tencent.com> <20220610034204.67901-8-imagedong@tencent.com>
+In-Reply-To: <20220610034204.67901-8-imagedong@tencent.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 10 Jun 2022 02:04:44 -0700
+Message-ID: <CANn89iKV63NRJ4om+_+JB+MCe6MKRVX3qS=0LwCUJ5z86jyrDA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 7/9] net: tcp: add skb drop reasons to tcp tw
+ code path
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Hao Peng <flyingpeng@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 at 20:37, Marco Elver <elver@google.com> wrote:
-> > /On Thu, 9 Jun 2022 at 16:56, Marco Elver <elver@google.com> wrote:
-> > > > > On a machine with 256 CPUs, running the recently added perf breakpoint
-> > > > > benchmark results in:
-> > > > >
-> > > > >  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
-> > > > >  | # Running 'breakpoint/thread' benchmark:
-> > > > >  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
-> > > > >  |      Total time: 236.418 [sec]
-> > > > >  |
-> > > > >  |   123134.794271 usecs/op
-> > > > >  |  7880626.833333 usecs/op/cpu
-> > > > >
-> > > > > The benchmark tests inherited breakpoint perf events across many
-> > > > > threads.
-> > > > >
-> > > > > Looking at a perf profile, we can see that the majority of the time is
-> > > > > spent in various hw_breakpoint.c functions, which execute within the
-> > > > > 'nr_bp_mutex' critical sections which then results in contention on that
-> > > > > mutex as well:
-> > > > >
-> > > > >     37.27%  [kernel]       [k] osq_lock
-> > > > >     34.92%  [kernel]       [k] mutex_spin_on_owner
-> > > > >     12.15%  [kernel]       [k] toggle_bp_slot
-> > > > >     11.90%  [kernel]       [k] __reserve_bp_slot
-> > > > >
-> > > > > The culprit here is task_bp_pinned(), which has a runtime complexity of
-> > > > > O(#tasks) due to storing all task breakpoints in the same list and
-> > > > > iterating through that list looking for a matching task. Clearly, this
-> > > > > does not scale to thousands of tasks.
-> > > > >
-> > > > > While one option would be to make task_struct a breakpoint list node,
-> > > > > this would only further bloat task_struct for infrequently used data.
-> > > >
-> > > > task_struct already has:
-> > > >
-> > > > #ifdef CONFIG_PERF_EVENTS
-> > > >   struct perf_event_context *perf_event_ctxp[perf_nr_task_contexts];
-> > > >   struct mutex perf_event_mutex;
-> > > >   struct list_head perf_event_list;
-> > > > #endif
-> > > >
-> > > > Wonder if it's possible to use perf_event_mutex instead of the task_sharded_mtx?
-> > > > And possibly perf_event_list instead of task_bps_ht? It will contain
-> > > > other perf_event types, so we will need to test type as well, but on
-> > > > the positive side, we don't need any management of the separate
-> > > > container.
-> > >
-> > > Hmm, yes, I looked at that but then decided against messing the
-> > > perf/core internals. The main issue I have with using perf_event_mutex
-> > > is that we might interfere with perf/core's locking rules as well as
-> > > interfere with other concurrent perf event additions. Using
-> > > perf_event_list is very likely a no-go because it requires reworking
-> > > perf/core as well.
-> > >
-> > > I can already hear Peter shouting, but maybe I'm wrong. :-)
-> >
-> > Let's wait for Peter to shout then :)
-> > A significant part of this change is having per-task data w/o having
-> > per-task data.
-> >
-> > The current perf-related data in task_struct is already multiple words
-> > and it's also not used in lots of production cases.
-> > Maybe we could have something like:
-> >
-> >   struct perf_task_data* lazily_allocated_perf_data;
-> >
-> > that's lazily allocated on first use instead of the current
-> > perf_event_ctxp/perf_event_mutex/perf_event_list.
-> > This way we could both reduce task_size when perf is not used and have
-> > more perf-related data (incl breakpoints) when it's used.
+On Thu, Jun 9, 2022 at 8:45 PM <menglong8.dong@gmail.com> wrote:
 >
-> I don't mind either option, so keeping task_struct bloat in mind, we have:
+> From: Menglong Dong <imagedong@tencent.com>
 >
->   1. rhashtable option, no changes to task_struct.
+> In order to get the reasons of skb drops, add a function argument of
+> type 'enum skb_drop_reason *reason' to tcp_timewait_state_process().
 >
->   2. add the breakpoint mutex + list to task_struct.
+> In the origin code, all packets to time-wait socket are treated as
+> dropping with kfree_skb(), which can make users confused. Therefore,
+> we use consume_skb() for the skbs that are 'good'. We can check the
+> value of 'reason' to decide use kfree_skb() or consume_skb().
 >
->   3. add something like hw_breakpoint_task_data* and allocate lazily.
+> The new reason 'TIMEWAIT' is added for the case that the skb is dropped
+> as the socket in time-wait state.
 >
->   4. (your proposal) move all of perf data into a new struct (+add
-> hw_breakpoint things in there) that is lazily allocated.
->
-> I don't think perf is that infrequently used, and I can't estimate
-> performance impact, so I don't like #4 too much personally. My
-> preferred compromise would be #3, but at the same time I'd rather not
-> bloat task_struct even with 8 extra infrequently used bytes. Am I too
-> paranoid?
->
-> Preferences?
+> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> Reported-by: Eric Dumazet <edumazet@google.com>
 
+I have suggested that consume_skb() could be an alias of
+kfree_skb_reason(skb, SKB_NOT_DROPPED),
+or something like that.
 
-There is also this "could eventually get its own" comment:
+In order to avoid silly constructs all over the places :
 
-static struct pmu perf_breakpoint = {
-  .task_ctx_nr = perf_sw_context, /* could eventually get its own */
-https://elixir.bootlin.com/linux/v5.19-rc1/source/kernel/events/hw_breakpoint.c#L669
+if (reason)
+   kfree_skb_reason(skb, reason);
+else
+  consume_skb(skb);
 
-If it gets its own, then it also gets a perf_event_context pointer in
-task_struct:
-https://elixir.bootlin.com/linux/v5.19-rc1/source/include/linux/sched.h#L1229
-And perf_event_context has its own mutex and lots of other stuff.
-But I don't know what other implications it has.
+->
+
+kfree_skb_reason(skb, reason);
+
+> ---
+> v2:
+> - skb is not freed on TCP_TW_ACK and 'ret' is not initizalized, fix
+>   it (Eric Dumazet)
+> ---
+>  include/net/dropreason.h |  6 ++++++
+>  include/net/tcp.h        |  7 ++++---
+>  net/ipv4/tcp_ipv4.c      |  9 ++++++++-
+>  net/ipv4/tcp_minisocks.c | 24 ++++++++++++++++++++----
+>  net/ipv6/tcp_ipv6.c      |  8 +++++++-
+>  5 files changed, 45 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/net/dropreason.h b/include/net/dropreason.h
+> index 86e89d3022b5..3c6f8e0f7f16 100644
+> --- a/include/net/dropreason.h
+> +++ b/include/net/dropreason.h
+> @@ -258,6 +258,12 @@ enum skb_drop_reason {
+>          * socket is full, corresponding to LINUX_MIB_TCPREQQFULLDROP
+>          */
+>         SKB_DROP_REASON_TCP_REQQFULLDROP,
+> +       /**
+> +        * @SKB_DROP_REASON_TIMEWAIT: socket is in time-wait state and all
+> +        * packet that received will be treated as 'drop', except a good
+> +        * 'SYN' packet
+> +        */
+> +       SKB_DROP_REASON_TIMEWAIT,
+>         /**
+>          * @SKB_DROP_REASON_MAX: the maximum of drop reason, which shouldn't be
+>          * used as a real 'reason'
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 082dd0627e2e..88217b8d95ac 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -380,9 +380,10 @@ enum tcp_tw_status {
+>  };
+>
+>
+> -enum tcp_tw_status tcp_timewait_state_process(struct inet_timewait_sock *tw,
+> -                                             struct sk_buff *skb,
+> -                                             const struct tcphdr *th);
+> +enum tcp_tw_status
+> +tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+> +                          const struct tcphdr *th,
+> +                          enum skb_drop_reason *reason);
+>  struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
+>                            struct request_sock *req, bool fastopen,
+>                            bool *lost_race);
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index 804fc5e0203e..e7bd2f410a4a 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -2134,7 +2134,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
+>                 inet_twsk_put(inet_twsk(sk));
+>                 goto csum_error;
+>         }
+> -       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th)) {
+> +       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th,
+> +                                          &drop_reason)) {
+>         case TCP_TW_SYN: {
+>                 struct sock *sk2 = inet_lookup_listener(dev_net(skb->dev),
+>                                                         &tcp_hashinfo, skb,
+> @@ -2150,11 +2151,17 @@ int tcp_v4_rcv(struct sk_buff *skb)
+>                         refcounted = false;
+>                         goto process;
+>                 }
+> +               /* TCP_FLAGS or NO_SOCKET? */
+> +               SKB_DR_SET(drop_reason, TCP_FLAGS);
+>         }
+>                 /* to ACK */
+>                 fallthrough;
+>         case TCP_TW_ACK:
+>                 tcp_v4_timewait_ack(sk, skb);
+> +               if (!drop_reason) {
+> +                       consume_skb(skb);
+> +                       return 0;
+> +               }
+
+Sorry, this is the kind of change which makes the whole exercise
+source of numerous problems later
+when backports are needed.
+
+You are sending patches today, but we are not sure you will be willing
+to spend days of work and tests to validate
+future backports with conflicts.
+
+>                 break;
+>         case TCP_TW_RST:
+>                 tcp_v4_send_reset(sk, skb);
+> diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+> index 1a21018f6f64..329724118b7f 100644
+> --- a/net/ipv4/tcp_minisocks.c
+> +++ b/net/ipv4/tcp_minisocks.c
+> @@ -83,13 +83,15 @@ tcp_timewait_check_oow_rate_limit(struct inet_timewait_sock *tw,
+>   */
+>  enum tcp_tw_status
+>  tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+> -                          const struct tcphdr *th)
+> +                          const struct tcphdr *th,
+> +                          enum skb_drop_reason *reason)
+>  {
+>         struct tcp_options_received tmp_opt;
+>         struct tcp_timewait_sock *tcptw = tcp_twsk((struct sock *)tw);
+>         bool paws_reject = false;
+>
+>         tmp_opt.saw_tstamp = 0;
+> +       *reason = SKB_DROP_REASON_NOT_SPECIFIED;
+>         if (th->doff > (sizeof(*th) >> 2) && tcptw->tw_ts_recent_stamp) {
+>                 tcp_parse_options(twsk_net(tw), skb, &tmp_opt, 0, NULL);
+>
+> @@ -113,11 +115,16 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                         return tcp_timewait_check_oow_rate_limit(
+>                                 tw, skb, LINUX_MIB_TCPACKSKIPPEDFINWAIT2);
+>
+> -               if (th->rst)
+> +               if (th->rst) {
+> +                       SKB_DR_SET(*reason, TCP_RESET);
+>                         goto kill;
+> +               }
+>
+> -               if (th->syn && !before(TCP_SKB_CB(skb)->seq, tcptw->tw_rcv_nxt))
+> +               if (th->syn && !before(TCP_SKB_CB(skb)->seq,
+> +                                      tcptw->tw_rcv_nxt)) {
+> +                       SKB_DR_SET(*reason, TCP_FLAGS);
+>                         return TCP_TW_RST;
+> +               }
+>
+>                 /* Dup ACK? */
+>                 if (!th->ack ||
+> @@ -143,6 +150,9 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                 }
+>
+>                 inet_twsk_reschedule(tw, TCP_TIMEWAIT_LEN);
+> +
+> +               /* skb should be free normally on this case. */
+> +               *reason = SKB_NOT_DROPPED_YET;
+>                 return TCP_TW_ACK;
+>         }
+>
+> @@ -174,6 +184,7 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                          * protocol bug yet.
+>                          */
+>                         if (twsk_net(tw)->ipv4.sysctl_tcp_rfc1337 == 0) {
+> +                               SKB_DR_SET(*reason, TCP_RESET);
+>  kill:
+>                                 inet_twsk_deschedule_put(tw);
+>                                 return TCP_TW_SUCCESS;
+> @@ -216,11 +227,14 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                 if (isn == 0)
+>                         isn++;
+>                 TCP_SKB_CB(skb)->tcp_tw_isn = isn;
+> +               *reason = SKB_NOT_DROPPED_YET;
+>                 return TCP_TW_SYN;
+>         }
+>
+> -       if (paws_reject)
+> +       if (paws_reject) {
+> +               SKB_DR_SET(*reason, TCP_RFC7323_PAWS);
+>                 __NET_INC_STATS(twsk_net(tw), LINUX_MIB_PAWSESTABREJECTED);
+> +       }
+>
+>         if (!th->rst) {
+>                 /* In this case we must reset the TIMEWAIT timer.
+> @@ -232,9 +246,11 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                 if (paws_reject || th->ack)
+>                         inet_twsk_reschedule(tw, TCP_TIMEWAIT_LEN);
+>
+> +               SKB_DR_OR(*reason, TIMEWAIT);
+>                 return tcp_timewait_check_oow_rate_limit(
+>                         tw, skb, LINUX_MIB_TCPACKSKIPPEDTIMEWAIT);
+>         }
+> +       SKB_DR_SET(*reason, TCP_RESET);
+>         inet_twsk_put(tw);
+>         return TCP_TW_SUCCESS;
+>  }
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> index 0d2ba9d90529..41551a3b679b 100644
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -1795,7 +1795,8 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
+>                 goto csum_error;
+>         }
+>
+> -       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th)) {
+> +       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th,
+> +                                          &drop_reason)) {
+>         case TCP_TW_SYN:
+>         {
+>                 struct sock *sk2;
+> @@ -1815,11 +1816,16 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
+>                         refcounted = false;
+>                         goto process;
+>                 }
+> +               SKB_DR_SET(drop_reason, TCP_FLAGS);
+>         }
+>                 /* to ACK */
+>                 fallthrough;
+>         case TCP_TW_ACK:
+>                 tcp_v6_timewait_ack(sk, skb);
+> +               if (!drop_reason) {
+> +                       consume_skb(skb);
+> +                       return 0;
+> +               }
+>                 break;
+>         case TCP_TW_RST:
+>                 tcp_v6_send_reset(sk, skb);
+> --
+> 2.36.1
+>

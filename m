@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB74D546EC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74218546ED5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350647AbiFJUxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 16:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S1350762AbiFJUye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 16:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245369AbiFJUxH (ORCPT
+        with ESMTP id S1350721AbiFJUy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 16:53:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF1F248;
-        Fri, 10 Jun 2022 13:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654894381; x=1686430381;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IloPOG6rb4/h3WwQsyZ0qK0FPygA1mR4l8uI6GNZRZY=;
-  b=P51CVVWh57qs6sBC+S2TyW3xqiK1o4y3zHDqtdbVktb8+si0OR1jpud8
-   3yo7z5LG7EB3WVBuT7KBNfTxlo9ulrzSaN9IXelOeYGmv8wxqvTA/W0hw
-   09+a/1vWHS5FxKXjUM3Q94Ea11VcZnNd1zOz9zEsFBM1trLi+WEAQw9FA
-   QfW58oy1dQMp8pXrzpFpJ3cDEENxwggLYidndfwcsR2FOCPGUr0Ir5eP6
-   ytUKBDyFDOXZk0DYU5m5zfWiJ2tUNd4q2v8En+B65mkb9ibaXPSaFwWzg
-   +xvGafOzeqMS9UPtT8/7TtUnHJ0T9mGB73ybA/06R/ZVjhLX6cnlxEJ9x
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="278545377"
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="278545377"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 13:52:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="586384948"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jun 2022 13:52:52 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzlch-000IGv-Pd;
-        Fri, 10 Jun 2022 20:52:51 +0000
-Date:   Sat, 11 Jun 2022 04:52:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Michal Hocko <mhocko@kernel.org>
-Cc:     kbuild-all@lists.01.org, Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH bpf-next v2 6/8] cgroup: bpf: enable bpf programs to
- integrate with rstat
-Message-ID: <202206110457.uD5lLvbh-lkp@intel.com>
-References: <20220610194435.2268290-7-yosryahmed@google.com>
+        Fri, 10 Jun 2022 16:54:28 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1D9403CC;
+        Fri, 10 Jun 2022 13:54:27 -0700 (PDT)
+Received: from g550jk.localnet (31-151-115-246.dynamic.upc.nl [31.151.115.246])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id AE467CD398;
+        Fri, 10 Jun 2022 20:53:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1654894435; bh=mtnnRXfEvyS5PCWjmATdGdb1H0kGP9ygAVEp9Lld9AI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=e1YgONubjsg9FKxawsYB/EUQBLF6hTjYLC83dblsiKhSrT5kfsUnTuGM6TlhLHzgx
+         xVrT5giK0zK/TV7PjQROqlmG8QCFAXSv7XX0YLUvYX1LCwkjH6zH9Jmqfx31GjIq46
+         aemaIcjeXjI5/FR32sBTPlFVNYHUN8AQLXH9wAIE=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 03/14] ARM: dts: qcom: use generic sram as name for imem and ocmem nodes
+Date:   Fri, 10 Jun 2022 22:53:55 +0200
+Message-ID: <2632793.mvXUDI8C0e@g550jk>
+In-Reply-To: <20220607171848.535128-3-krzysztof.kozlowski@linaro.org>
+References: <20220607171848.535128-1-krzysztof.kozlowski@linaro.org> <20220607171848.535128-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610194435.2268290-7-yosryahmed@google.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yosry,
+Hi Krzysztof,
 
-Thank you for the patch! Perhaps something to improve:
+On Dienstag, 7. Juni 2022 19:18:37 CEST Krzysztof Kozlowski wrote:
+> According to Devicetree specification, the device nodes should be
+> generic, reflecting the function of the device.  The typical name for
+> memory regions is "sram".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[auto build test WARNING on bpf-next/master]
+Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220611-034720
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220611/202206110457.uD5lLvbh-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/83f297e2b47dc41b511f071b9eadf38339387b41
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220611-034720
-        git checkout 83f297e2b47dc41b511f071b9eadf38339387b41
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash kernel/cgroup/
+Regards
+Luca
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts | 2 +-
+>  arch/arm/boot/dts/qcom-msm8974.dtsi                | 4 ++--
+>  arch/arm/boot/dts/qcom-sdx55.dtsi                  | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+> b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts index
+> ca9f73528196..de01e34409f2 100644
+> --- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+> +++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+> @@ -341,7 +341,7 @@ mmc@12400000 {
+>  			};
+>  		};
+> 
+> -		imem@2a03f000 {
+> +		sram@2a03f000 {
+>  			compatible = "syscon", "simple-mfd";
+>  			reg = <0x2a03f000 0x1000>;
+> 
+> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> b/arch/arm/boot/dts/qcom-msm8974.dtsi index 814ad0b46232..09b181bb5365
+> 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> @@ -1603,7 +1603,7 @@ opp-27000000 {
+>  			};
+>  		};
+> 
+> -		ocmem@fdd00000 {
+> +		sram@fdd00000 {
+>  			compatible = "qcom,msm8974-ocmem";
+>  			reg = <0xfdd00000 0x2000>,
+>  			      <0xfec00000 0x180000>;
+> @@ -1650,7 +1650,7 @@ smd-edge {
+>  			};
+>  		};
+> 
+> -		imem: imem@fe805000 {
+> +		imem: sram@fe805000 {
+>  			compatible = "syscon", "simple-mfd";
+>  			reg = <0xfe805000 0x1000>;
+> 
+> diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi
+> b/arch/arm/boot/dts/qcom-sdx55.dtsi index 1c2b208a5670..710c7f772d42 100644
+> --- a/arch/arm/boot/dts/qcom-sdx55.dtsi
+> +++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
+> @@ -561,7 +561,7 @@ tlmm: pinctrl@f100000 {
+>  			#interrupt-cells = <2>;
+>  		};
+> 
+> -		imem@1468f000 {
+> +		sram@1468f000 {
+>  			compatible = "simple-mfd";
+>  			reg = <0x1468f000 0x1000>;
 
-All warnings (new ones prefixed by >>):
-
->> kernel/cgroup/rstat.c:161:22: warning: no previous prototype for 'bpf_rstat_flush' [-Wmissing-prototypes]
-     161 | __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
-         |                      ^~~~~~~~~~~~~~~
-   kernel/cgroup/rstat.c:509:10: error: 'const struct btf_kfunc_id_set' has no member named 'sleepable_set'; did you mean 'release_set'?
-     509 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
-         |          ^~~~~~~~~~~~~
-         |          release_set
->> kernel/cgroup/rstat.c:509:27: warning: excess elements in struct initializer
-     509 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
-         |                           ^
-   kernel/cgroup/rstat.c:509:27: note: (near initialization for 'bpf_rstat_kfunc_set')
 
 
-vim +/bpf_rstat_flush +161 kernel/cgroup/rstat.c
 
-   148	
-   149	/*
-   150	 * A hook for bpf stat collectors to attach to and flush their stats.
-   151	 * Together with providing bpf kfuncs for cgroup_rstat_updated() and
-   152	 * cgroup_rstat_flush(), this enables a complete workflow where bpf progs that
-   153	 * collect cgroup stats can integrate with rstat for efficient flushing.
-   154	 *
-   155	 * A static noinline declaration here could cause the compiler to optimize away
-   156	 * the function. A global noinline declaration will keep the definition, but may
-   157	 * optimize away the callsite. Therefore, __weak is needed to ensure that the
-   158	 * call is still emitted, by telling the compiler that we don't know what the
-   159	 * function might eventually be.
-   160	 */
- > 161	__weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
-   162					     struct cgroup *parent, int cpu)
-   163	{
-   164	}
-   165	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

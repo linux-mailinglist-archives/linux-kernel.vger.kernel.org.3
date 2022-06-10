@@ -2,89 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1310B546DDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD7C546E0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350586AbiFJT7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        id S1350503AbiFJUId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 16:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234379AbiFJT67 (ORCPT
+        with ESMTP id S1350528AbiFJUIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:58:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C8A4ECE5;
-        Fri, 10 Jun 2022 12:58:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 412CE611E2;
-        Fri, 10 Jun 2022 19:58:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D7EC3411C;
-        Fri, 10 Jun 2022 19:58:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654891136;
-        bh=WWXrwEFko5hYfaIMqNjo1K4YUAKrZpIONasUIUWJCb4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=glT70v/MYLZtzjPQoFUsEGIgn0Jaq/mrwjh79pbvuVlIPcjm4R5jl826fnHlugvHh
-         AH2Kq8mIFz/cORgwcVEi5wnwcTytQ4GvxKjK+4G4Xw6VvIkFQwNEWJdVVF++xg7GJT
-         Qk/3rdYWHxyK6Tdz95N7xBy1X5EPy9F443kd4ZgVur6Yuyh5R/KnxAo4W/OBbjWfjm
-         GiaW3WuAVRYuGoncnA1agkTujLOlWJyEWDQIV5mfTMDTSsMsyfyc9gX2HkryIGQkJ5
-         1i24pVz1SOU5PNbzzn+KYJ/a9hxYpgEXIqVSbs3KsMre24vFdw6kOG5dxLzCRpHu8t
-         czlsR4Cd0e5Mw==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 10 Jun 2022 16:08:24 -0400
+X-Greylist: delayed 93714 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 13:08:22 PDT
+Received: from 7.mo584.mail-out.ovh.net (7.mo584.mail-out.ovh.net [178.33.253.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D8D23D9A2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:08:21 -0700 (PDT)
+Received: from player787.ha.ovh.net (unknown [10.110.115.3])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 6AEBD2398B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:52:51 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player787.ha.ovh.net (Postfix) with ESMTPSA id C17712BA6FB0A;
+        Fri, 10 Jun 2022 19:52:43 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-104R00590c0b8eb-a28d-41b2-a5b9-2a9d9c025f35,
+                    3EA6D779A65D7DCBA15D92F127CD72011C01B2E3) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Fri, 10 Jun 2022 21:52:36 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH 2/3] drm/panel: panel-dsi-cm: Use backlight helpers
+Message-ID: <20220610215236.0d5d47b7@heffalump.sk2.org>
+In-Reply-To: <YqObYPttYuRDikrO@ravnborg.org>
+References: <20220607182026.1121992-1-steve@sk2.org>
+        <20220607182026.1121992-3-steve@sk2.org>
+        <20220609215236.ojxw6l2vkf652hgu@mercury.elektranox.org>
+        <20220610194720.485cf7be@heffalump.sk2.org>
+        <YqObYPttYuRDikrO@ravnborg.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220531094539.252642-1-lizhengyu3@huawei.com>
-References: <20220531094539.252642-1-lizhengyu3@huawei.com>
-Subject: Re: [PATCH] clk: qcom: clk-rpmh: Fix if statement to match comment
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Li Zhengyu <lizhengyu3@huawei.com>, quic_tdas@quicinc.com
-Date:   Fri, 10 Jun 2022 12:58:54 -0700
-User-Agent: alot/0.10
-Message-Id: <20220610195856.A2D7EC3411C@smtp.kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/h3C.i8DgeSuOC0V+IcexQeD";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 11606620668290696838
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduuddgudegtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeeiheevvdeugeejffefteffvefhieegjeevhfekjeejvdelgfefkeehhfdufffhjeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekge
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Li Zhengyu (2022-05-31 02:45:39)
-> (c->state) is u32, (enable) is bool. It returns false when
-> (c->state) > 1 and (enable) is true. Convert (c->state) to bool.
+--Sig_/h3C.i8DgeSuOC0V+IcexQeD
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, 10 Jun 2022 21:28:32 +0200, Sam Ravnborg <sam@ravnborg.org> wrote:
+> Hi Stephen.
+> On Fri, Jun 10, 2022 at 07:47:20PM +0200, Stephen Kitt wrote:
+> > Hi Sebastian,
+> >=20
+> > On Thu, 9 Jun 2022 23:52:36 +0200, Sebastian Reichel
+> > <sebastian.reichel@collabora.com> wrote: =20
+> > > On Tue, Jun 07, 2022 at 08:20:25PM +0200, Stephen Kitt wrote: =20
+> > > > diff --git a/drivers/gpu/drm/panel/panel-dsi-cm.c
+> > > > b/drivers/gpu/drm/panel/panel-dsi-cm.c index
+> > > > b58cb064975f..aa36dc6cedd3 100644 ---
+> > > > a/drivers/gpu/drm/panel/panel-dsi-cm.c +++
+> > > > b/drivers/gpu/drm/panel/panel-dsi-cm.c @@ -86,16 +86,10 @@ static
+> > > > void dsicm_bl_power(struct panel_drv_data *ddata, bool enable) retu=
+rn;
+> > > > =20
+> > > >  	if (enable) {
+> > > > -		backlight->props.fb_blank =3D FB_BLANK_UNBLANK;
+> > > > -		backlight->props.state =3D ~(BL_CORE_FBBLANK |
+> > > > BL_CORE_SUSPENDED);
+> > > > -		backlight->props.power =3D FB_BLANK_UNBLANK;
+> > > > +		backlight_enable(backlight);
+> > > >  	} else {
+> > > > -		backlight->props.fb_blank =3D FB_BLANK_NORMAL;
+> > > > -		backlight->props.power =3D FB_BLANK_POWERDOWN;
+> > > > -		backlight->props.state |=3D BL_CORE_FBBLANK |
+> > > > BL_CORE_SUSPENDED;
+> > > > +		backlight_disable(backlight);
+> > > >  	}   =20
+> > >=20
+> > > The brackets can be removed now. Otherwise: =20
+> >  =20
+> > >=20
+> > > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com> =20
+> >=20
+> > Thanks, I=E2=80=99ll wait a little more to see if there are any other r=
+eviews of
+> > the patches and then push a v2 with that fix. =20
+> It would be very nice if you could kill all uses of FB_BLANK in the
+> drivers/gpu/drm/panel/* drivers, and post them as one series.
+> This is long overdue to introduce the backlight helpers.
 >=20
-> Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
+> The three you posted is already a nice step forward, and there may be
+> more panel drivers I have missed.
 
-Nice catch! It looks like it fixes an optimization, where we don't want
-to run through and check has_state_changed() if this clk is already
-enabled or disabled. But how does this ever happen? The clk framework
-already reference counts prepare/unprepare, so how can we get into this
-function when the condition would be true, after this patch?
+With this series on top of 5.19-rc1, the only remaining .fb_blank reference=
+ is
+in acx565akm_backlight_init() in panel-sony-acx565akm.c; I was planning on
+nuking that along with the other .fb_blank initialisers in a series removing
+.fb_blank entirely from backlight_properties. I=E2=80=99ll add it as a four=
+th patch
+for drm/panel if that makes things easier!
 
-I think we can simply remove the if condition entirely. Do you agree?
+There will still be references to FB_BLANK constants since they=E2=80=99re =
+used for
+backlight_properties.power values. Would it make sense to rename those?
 
-> ---
->  drivers/clk/qcom/clk-rpmh.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index aed907982344..851e127432a9 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -196,7 +196,7 @@ static int clk_rpmh_aggregate_state_send_command(stru=
-ct clk_rpmh *c,
->         int ret;
-> =20
->         /* Nothing required to be done if already off or on */
-> -       if (enable =3D=3D c->state)
-> +       if (enable =3D=3D !!c->state)
->                 return 0;
-> =20
->         c->state =3D enable ? c->valid_state_mask : 0;
+Regards,
+
+Stephen
+
+--Sig_/h3C.i8DgeSuOC0V+IcexQeD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmKjoQQACgkQgNMC9Yht
+g5w1wA/+LN0+/CDVxZV49N+eebrd08Wh2wSZNW/GHE4YOp6TbzDidFX2NCp7PDG3
+huw6ptYSS5zwufLv/oLE4HlshS6+5fVyvZyungOSpwfto4Ay5KR211xsCbxpdFk/
+QDNRR6pn81hWzRxmdLle79HO1oWx1f2k1rVGSIYwt5LyxImdn3qS3CmNxYTR8ful
+H8Yu2CJ+udrhSxflQW74mpYzVTs7elnXL5MIhJ9noG1QJ9Ymn2fFth33sHNd6sWV
+S/SR0K1UUobBXVP37CyjldxTdxGYiu50kKrdiBEecp9RmE9fM3Gayzqep62mtBX4
+0SZncfWuiR5rB/+nvXgpvrjl+4Acas1lgfr+YwyXGnXNINUWcQBhZBPXx45dcFPP
+dosuSR+mkegJTcWjJgDarBAHNuYZfQ+3q0IB+M33D+oAkcgFhDZrgKJSK7peVi8n
+3i32dooNuMa6ljSStEkVW1N6ixNI2uhBcUydD3aB4SiDDGgfc5C1wTMTaVEFbkqT
+CUOZ1uTauftmBUyVIOEQ8Zij0p9+6AznP1kXfAA/qRm+xg1NDdkBo0198ToPnCDz
+Y5ykpmQ8wdj9IH/xlAwXNEdX1NtyuLPbx/GnpLx7m5g6m+f77DueJcXQhzz4WMDd
+Cy9/Jm5zVEw49ziokdLjhgYGx+qnQLm2hx+F/fzZAjF8fLDtzKg=
+=qbaU
+-----END PGP SIGNATURE-----
+
+--Sig_/h3C.i8DgeSuOC0V+IcexQeD--

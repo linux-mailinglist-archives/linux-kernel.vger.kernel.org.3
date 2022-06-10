@@ -2,115 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83AA545BF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE37545BFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 08:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346344AbiFJF7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S1346338AbiFJGAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 02:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbiFJF7h (ORCPT
+        with ESMTP id S245306AbiFJGAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:59:37 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668E012F0F7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654840775; x=1686376775;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bi5/vUaFBJ5/BUicsPXQdGCHavfxj1TbsC4ptkwormA=;
-  b=S627IlGxk6ixXFyKFQ6n531Znf/MdOOAuZqLk4wb32LlOSXM/fbeC6Uy
-   +63b4fSKjNin3KV5Jarff35k1M1tu8hn7k6mHfyvVzDiU8RAz0zm8dK4U
-   kH7yHF7+4MzFSCPhx0uEUbxlMIqdAupgkhq5ukVMNdpAkenH3RBTM9wNo
-   ax2h7bd4WEuUDpiQTS5gGw563jcd0SZMI/oR0mGA01fQIZNCxo6a56pBN
-   fYa36oWpLiSjvcU1jMTZ4SvICK9DpmMWrJHMY0xhCTZ6ffFTY0pd9fpqY
-   sij5MABMzfMxNKQec8HCfmFOJfo+Nyc9GRqMl5myoJ/E9OlLcdaL8vumn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="277557868"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="277557868"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 22:59:34 -0700
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="637952801"
-Received: from chengxu1-mobl2.ccr.corp.intel.com (HELO [10.249.169.148]) ([10.249.169.148])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 22:59:32 -0700
-Message-ID: <df138613-c098-031f-e906-6599ed1076f9@linux.intel.com>
-Date:   Fri, 10 Jun 2022 13:59:30 +0800
+        Fri, 10 Jun 2022 02:00:39 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A620512FB20
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 23:00:37 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z7so33838809edm.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 23:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=PMkR1TDRfzwZTrqwlKw4viO8iYqHY8UAxF3PGDlzvcM=;
+        b=BaSd3vCJYVXthq5kdEbHnNRury313tthTX1z6CJyxDoHrLGrwdoBY5ubG1A2GYsGzP
+         BtSJcpQuaQAavr55W8cndMenJJSWIcyXtIDcqzrmssByTikeSw4+9L7oZNM2I6eAIER3
+         9cgzQ03cEgPPHbKBJmswWpfpJTeVyFEEN1NmYj9RQK9sz0tTQ8nWOHLeQqBSiYhbpSOR
+         R0RIsaD/rNZV3CK2f/SG8h3Y3+FUthaGTVtddaF+ft1o6cNIjtNC6kGIhuzn/F8E08sV
+         F9IPulbHcE9CauTfAziW39SuRED2jG49cemjWbCvQNOXs6nWoFMn5BC6OGW0eH1X7274
+         yggg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=PMkR1TDRfzwZTrqwlKw4viO8iYqHY8UAxF3PGDlzvcM=;
+        b=3R8RPBiOQLscwm7/GOCUpu1ZIa2ukOUn1ZZXGvw/8ZOfKzSzGi62CgzAtzpgjqJXqE
+         sbWwbFfVA/BL9pQcBYzs2eO799odWugz1tNP6usrCQIRpMn74PKvwOyB/8iq6/VjFfWq
+         1pEJKCUBvmRvNoQp4OPHHI9ke67vmhCq4KV039NEowHOoLq0xIw+vyUM5Q3DbCF0eq2y
+         Z8fAPHhfkL+efE0g8v11Vg1duB+s/rwwlnrogiYhWGB10z68+7kGIxcg3Dwt9DBK+F4H
+         bXuacvN650x+mriuguXmBRZ/LVhFTtkCsCxdqfdVyB1qlkR/sITjb+uc4a+S1U5+YWHd
+         QQcg==
+X-Gm-Message-State: AOAM530wDbMuMiC1L9QcJBX0qz1tdS7jpuswpdwdJC0NnKdLZTSURX7D
+        LMaLFnvvclwJBD29ksAVW98MlQGtk6JzLLzbjJw=
+X-Google-Smtp-Source: ABdhPJws2TnOFnOyy2onanxmORhFQ87OJqoGfH9JTxJD4h5uXHVlULdX04/Rgk8+RSAtypECi2eEEMc8q1rg/QIHf6k=
+X-Received: by 2002:aa7:d6d5:0:b0:431:b7c0:50c9 with SMTP id
+ x21-20020aa7d6d5000000b00431b7c050c9mr14986258edr.62.1654840836027; Thu, 09
+ Jun 2022 23:00:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCHES 1/2] iommu: Add RCU-protected page free support
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20220609070811.902868-1-baolu.lu@linux.intel.com>
- <20220609124934.GZ1343366@nvidia.com>
- <9a339b42-2993-f7e2-3122-764a486e796f@arm.com>
- <20220609133234.GA1343366@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220609133234.GA1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 10 Jun 2022 16:00:24 +1000
+Message-ID: <CAPM=9txaEX1q3FxV3nZQemunXKsbtNhmW9BKGh4UNs3uaCmz_Q@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.19-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/9 21:32, Jason Gunthorpe wrote:
-> On Thu, Jun 09, 2022 at 02:19:06PM +0100, Robin Murphy wrote:
-> 
->> Is there a significant benefit to keeping both paths, or could we get away
->> with just always using RCU? Realistically, pagetable pages aren't likely to
->> be freed all that frequently, except perhaps at domain teardown, but that
->> shouldn't really be performance-critical, and I guess we could stick an RCU
->> sync point in iommu_domain_free() if we're really worried about releasing
->> larger quantities of pages back to the allocator ASAP?
-> 
-> I think you are right, anything that uses the iommu_iotlb_gather may
-> as well use RCU too.
-> 
-> IIRC the allocators already know that RCU is often sitting on
-> freed-memory and have some contigency to flush it out before OOMing,
-> so nothing special should be needed.
+Hi Linus,
 
-Fair enough. How about below code?
+Not a huge amount here, mainly a bunch of scattered amdgpu fixes, and
+then some misc panfrost, bridge/panel ones, and one ast fix for
+multi-monitors. Probably pick up a bit more next week like rc3 often
+does.
 
-static void pgtble_page_free_rcu(struct rcu_head *rcu)
-{
-         struct page *page = container_of(rcu, struct page, rcu_head);
+Dave.
 
-         __free_pages(page, 0);
-}
+drm-fixes-2022-06-10:
+drm fixes for 5.19-rc2
 
-/*
-  * Free pages gathered in the freelist of iommu_iotlb_gather. Use RCU free
-  * way so that it's safe for lock-free page table walk.
-  */
-void iommu_free_iotlb_gather_pages(struct iommu_iotlb_gather *iotlb_gather)
-{
-         struct page *page, *next;
+amdgpu:
+- DCN 3.1 golden settings fix
+- eDP fixes
+- DMCUB fixes
+- GFX11 fixes and cleanups
+- VCN fix for yellow carp
+- GMC11 fixes
+- RAS fixes
+- GPUVM TLB flush fixes
+- SMU13 fixes
+- VCN3 AV1 regression fix
+- VCN2 JPEG fix
+- Other misc fixes
 
-         list_for_each_entry_safe(page, next, &iotlb_gather->freelist, 
-lru) {
-                 list_del(&page->lru);
-                 call_rcu(&page->rcu_head, pgtble_page_free_rcu);
-         }
-}
+amdkfd:
+- MMU notifier fix
+- Support for more GC 10.3.x families
+- Pinned BO handling fix
+- Partial migration bug fix
 
-Best regards,
-baolu
+panfrost:
+- fix a use after free
+
+ti-sn65dsi83:
+- fix invalid DT configuration
+
+panel:
+- two self refresh fixes
+
+ast:
+- multiple output fix
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56=
+:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-06-10
+
+for you to fetch changes up to 1f192b9e8d8a5c619b33a868fb1af063af65ce5d:
+
+  Merge tag 'drm-misc-fixes-2022-06-09' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-06-10
+13:29:22 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.19-rc2
+
+amdgpu:
+- DCN 3.1 golden settings fix
+- eDP fixes
+- DMCUB fixes
+- GFX11 fixes and cleanups
+- VCN fix for yellow carp
+- GMC11 fixes
+- RAS fixes
+- GPUVM TLB flush fixes
+- SMU13 fixes
+- VCN3 AV1 regression fix
+- VCN2 JPEG fix
+- Other misc fixes
+
+amdkfd:
+- MMU notifier fix
+- Support for more GC 10.3.x families
+- Pinned BO handling fix
+- Partial migration bug fix
+
+panfrost:
+- fix a use after free
+
+ti-sn65dsi83:
+- fix invalid DT configuration
+
+panel:
+- two self refresh fixes
+
+ast:
+- multiple output fix
+
+----------------------------------------------------------------
+Alex Deucher (1):
+      drm/amdgpu: update VCN codec support for Yellow Carp
+
+Alvin (1):
+      drm/amd/display: Don't clear ref_dtbclk value
+
+Aric Cyr (1):
+      drm/amd/display: 3.2.187
+
+Aurabindo Pillai (1):
+      drm/amd/display: remove stale config guards
+
+Brian Norris (2):
+      drm/bridge: analogix_dp: Support PSR-exit to disable transition
+      drm/atomic: Force bridge self-refresh-exit on CRTC switch
+
+Candice Li (1):
+      drm/amdgpu: Resolve RAS GFX error count issue after cold boot on Arct=
+urus
+
+Christian K=C3=B6nig (2):
+      drm/amdgpu: fix limiting AV1 to the first instance on VCN3
+      drm/amdgpu: always flush the TLB on gfx8
+
+Dave Airlie (3):
+      Merge tag 'amd-drm-fixes-5.19-2022-06-08' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-05-26' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-06-09' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+
+Evan Quan (2):
+      drm/amd/pm: suppress compile warnings about possible unaligned access=
+es
+      drm/amdgpu: suppress the compile warning about 64 bit type
+
+Guchun Chen (1):
+      Revert "drm/amdgpu: Ensure the DMA engine is deactivated during set u=
+ps"
+
+Hung, Cruise (1):
+      drm/amd/display: Fix DMUB outbox trace in S4 (#4465)
+
+Ilya (1):
+      drm/amd/display: Fix possible infinite loop in DP LT fallback
+
+Jesse Zhang (1):
+      drm/amdkfd:Fix fw version for 10.3.6
+
+Jiapeng Chong (1):
+      drm/amdgpu: make program_imu_rlc_ram static
+
+Joseph Greathouse (1):
+      drm/amdgpu: Add MODE register to wave debug info in gfx11
+
+Lang Yu (1):
+      drm/amdkfd: add pinned BOs to kfd_bo_list
+
+Leung, Martin (1):
+      drm/amd/display: revert Blank eDP on disable/enable drv
+
+Marek Vasut (1):
+      drm/bridge: ti-sn65dsi83: Handle dsi_lanes =3D=3D 0 as invalid
+
+Mario Limonciello (1):
+      drm/amdkfd: Add GC 10.3.6 and 10.3.7 KFD definitions
+
+Maxime Ripard (1):
+      Merge v5.19-rc1 into drm-misc-fixes
+
+Mohammad Zafar Ziya (1):
+      drm/amdgpu/jpeg2: Add jpeg vmid update under IB submit
+
+Nicholas Kazlauskas (2):
+      drm/amd/display: Pass the new context into disable OTG WA
+      Revert "drm/amd/display: Pass the new context into disable OTG WA"
+
+Philip Yang (3):
+      drm/amdkfd: Use mmget_not_zero in MMU notifier
+      drm/amdgpu: Update PDEs flush TLB if PTB/PDB moved
+      drm/amdkfd: Fix partial migration bugs
+
+Roman Li (1):
+      drm/amdgpu: fix aper_base for APU
+
+Sherry Wang (1):
+      drm/amd/display: Read Golden Settings Table from VBIOS
+
+Stanley.Yang (1):
+      drm/amdgpu: fix ras supported check
+
+Steven Price (1):
+      drm/panfrost: Job should reference MMU not file_priv
+
+Sunil Khatri (1):
+      drm/amdgpu: enable tmz by default for GC 10.3.7
+
+Thomas Zimmermann (1):
+      drm/ast: Support multiple outputs
+
+Yifan Zhang (1):
+      drm/amdgpu/mes: only invalid/prime icache when finish loading
+both pipe MES FWs.
+
+hengzhou (1):
+      drm/amd/display: Wait DMCUB to idle state before reset.
+
+sunliming (2):
+      drm/amdgpu: fix a missing break in gfx_v11_0_handle_priv_fault
+      drm/amdgpu: make gfx_v11_0_rlc_stop static
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c   |  13 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c            |   9 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gmc.c            |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            |  32 ++++--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c             |  13 ++-
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c             |   6 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c             |   6 ++
+ drivers/gpu/drm/amd/amdgpu/imu_v11_0.c             |   2 +-
+ drivers/gpu/drm/amd/amdgpu/jpeg_v2_0.c             |   6 +-
+ drivers/gpu/drm/amd/amdgpu/jpeg_v2_0.h             |   1 +
+ drivers/gpu/drm/amd/amdgpu/mes_v11_0.c             |  36 ++++---
+ drivers/gpu/drm/amd/amdgpu/nv.c                    |   1 +
+ drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c             | 109 +++++++++--------=
+----
+ drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c              |  17 ++--
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c              |   2 +
+ drivers/gpu/drm/amd/amdkfd/kfd_device.c            |  18 +++-
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.c           |   6 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c               |   5 +-
+ .../amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c   |  11 ++-
+ .../amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.h   |   2 +
+ .../amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c |   7 +-
+ .../amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c |   3 +-
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c   | 106 +++++++++--------=
+---
+ drivers/gpu/drm/amd/display/dc/dc.h                |   5 +-
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_dccg.c  |  68 ++++++-------
+ .../amd/display/dc/dcn31/dcn31_dio_link_encoder.c  |   4 +-
+ drivers/gpu/drm/amd/display/dc/dml/dml_wrapper.c   |   2 -
+ drivers/gpu/drm/amd/display/dc/inc/hw/clk_mgr.h    |   1 +
+ drivers/gpu/drm/amd/display/dc/inc/hw/dccg.h       |  18 ++--
+ .../gpu/drm/amd/display/dc/link/link_hwss_hpo_dp.c |  19 +++-
+ drivers/gpu/drm/amd/display/dmub/src/dmub_dcn31.c  |  11 ++-
+ drivers/gpu/drm/amd/display/dmub/src/dmub_dcn31.h  |   3 +-
+ .../drm/amd/display/include/ddc_service_types.h    |   2 +
+ .../gpu/drm/amd/pm/swsmu/inc/smu_v11_0_7_pptable.h |   9 +-
+ .../gpu/drm/amd/pm/swsmu/inc/smu_v11_0_pptable.h   |   9 +-
+ .../gpu/drm/amd/pm/swsmu/inc/smu_v13_0_7_pptable.h |   5 +-
+ .../gpu/drm/amd/pm/swsmu/inc/smu_v13_0_pptable.h   |  10 +-
+ drivers/gpu/drm/ast/ast_dp.c                       |   5 +-
+ drivers/gpu/drm/ast/ast_dp501.c                    |   2 +-
+ drivers/gpu/drm/ast/ast_drv.h                      |   9 +-
+ drivers/gpu/drm/ast/ast_main.c                     |  21 ++--
+ drivers/gpu/drm/ast/ast_mode.c                     |  38 +++----
+ drivers/gpu/drm/ast/ast_post.c                     |   2 +-
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c |  42 +++++++-
+ drivers/gpu/drm/bridge/ti-sn65dsi83.c              |   2 +-
+ drivers/gpu/drm/drm_atomic_helper.c                |  16 ++-
+ drivers/gpu/drm/panfrost/panfrost_drv.c            |   5 +-
+ drivers/gpu/drm/panfrost/panfrost_job.c            |   6 +-
+ drivers/gpu/drm/panfrost/panfrost_job.h            |   2 +-
+ 49 files changed, 430 insertions(+), 301 deletions(-)

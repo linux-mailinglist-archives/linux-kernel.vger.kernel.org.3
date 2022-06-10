@@ -2,117 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F857545B42
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0046545B47
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242143AbiFJEot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 00:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S243097AbiFJEsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 00:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiFJEop (ORCPT
+        with ESMTP id S243195AbiFJEs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 00:44:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C7222ABEE;
-        Thu,  9 Jun 2022 21:44:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61C6AB830F5;
-        Fri, 10 Jun 2022 04:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A7EC385A9;
-        Fri, 10 Jun 2022 04:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654836279;
-        bh=6g8FeECka/KS2OLX1kxuu5yztPOwSYzNR43hULG6+8Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E3wNbIM4qlOnhH5R9OAfUinrtC77k/72ABLwvZGgUA3Re9CWAXoP332lZlxjeRePm
-         /ZTNnWx2KC5UGLglD+QnvPKnhUrc1lMctnmAPgPlkrNXMcy+8bplePqGlhaEeMt2Gl
-         b4X1VWTEPm3/svMjAWhVp+Yzam3CFRy3riM5c5o179W/z1jGYBwLy8Bdw4rkhgHDC1
-         jrZAti5votTEtRGUfHycsBpw4E3zzgecUMhGu9YPTwe6QUqKhClmPJ3cVguY8qUSG6
-         ldKV73X5m/V5XGL4OPgn8eJ35MqME/ZrIKRNjB2RlFozaiGCIsCumj6J0pu8Z1sT4v
-         5xE1b3Z3OaY4Q==
-Received: by mail-lj1-f172.google.com with SMTP id b7so15806510ljr.6;
-        Thu, 09 Jun 2022 21:44:38 -0700 (PDT)
-X-Gm-Message-State: AOAM530/hIk6uyBooC8NfYJDFKAnY4SvXVMt6XMglXeiAL5lTJBBRgnL
-        5iCXiTzTz39Ltkh6m6iBLRM93C07Izvpz7j+tmY=
-X-Google-Smtp-Source: ABdhPJy5/YxRiE2j7JzJj5kNHWQCd1L9sjVAS061CWCsWWdXO/0bRtO7RJBYvN8z2BbzNpYDOyZk8RnoIs3UB2Vxfeg=
-X-Received: by 2002:a2e:9695:0:b0:255:6eb1:469c with SMTP id
- q21-20020a2e9695000000b002556eb1469cmr24151525lji.188.1654836276984; Thu, 09
- Jun 2022 21:44:36 -0700 (PDT)
+        Fri, 10 Jun 2022 00:48:27 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7F3464A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 21:48:24 -0700 (PDT)
+Received: from fsav312.sakura.ne.jp (fsav312.sakura.ne.jp [153.120.85.143])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25A4mHXp068524;
+        Fri, 10 Jun 2022 13:48:17 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav312.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp);
+ Fri, 10 Jun 2022 13:48:17 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 25A4mGB9068501
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 10 Jun 2022 13:48:17 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <ad924306-d15c-9f1e-13dc-eaf674878022@I-love.SAKURA.ne.jp>
+Date:   Fri, 10 Jun 2022 13:48:12 +0900
 MIME-Version: 1.0
-References: <20220610011958.3263650-1-liyupeng@zbhlos.com>
-In-Reply-To: <20220610011958.3263650-1-liyupeng@zbhlos.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 10 Jun 2022 12:44:26 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7HY=vT5Z2d2WEt75LYSxEgrf+TSKebt0hjc7qUNhKd9g@mail.gmail.com>
-Message-ID: <CAAhV-H7HY=vT5Z2d2WEt75LYSxEgrf+TSKebt0hjc7qUNhKd9g@mail.gmail.com>
-Subject: Re: [PATCH 1/1] irqchip/loongson-liointc: Guard uses of cpu_logical_map
-To:     Yupeng Li <liyupeng@zbhlos.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, caizp2008@163.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Content-Language: en-US
+To:     Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH] rapidio/tsi721: avoid flush_scheduled_work() usage
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yupeng,
+Use local wq in order to avoid flush_scheduled_work() usage.
 
-On Fri, Jun 10, 2022 at 9:20 AM Yupeng Li <liyupeng@zbhlos.com> wrote:
->
->   cpu_logical_map is only defined for CONFIG_SMP builds, when we are in an
->   UP configuration, the boot CPU is 0. Some kernel compilation error
->   information is as follows:
->
->   CALL    scripts/atomic/check-atomics.sh
->   CALL    scripts/checksyscalls.sh
->   CHK     include/generated/compile.h
->   CC      drivers/irqchip/irq-loongson-liointc.o
-> drivers/irqchip/irq-loongson-liointc.c: In function 'liointc_chained_handle_irq':
-> drivers/irqchip/irq-loongson-liointc.c:60:13: error: implicit declaration of function 'cpu_logical_map' [-Werror=implicit-function-declaration]
->   int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
->              ^~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
-> make[2]: *** [scripts/Makefile.build:249:drivers/irqchip/irq-loongson-liointc.o] error 1
-> make[1]: *** [scripts/Makefile.build:466:drivers/irqchip] error 2
-This has been fixed by Jiaxun:
-https://lore.kernel.org/lkml/20220609175242.977-1-jiaxun.yang@flygoat.com/T/#t
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+---
+Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
+using a macro") for background.
 
+Is allocating one workqueue for each "struct tsi721_device" too much,
+given that "struct tsi721_device" has only pw_work and idb_work? If yes,
+we could use module_init()/module_exit() for creating/destroying per a
+module workqueue.
 
-Huacai
+ drivers/rapidio/devices/tsi721.c | 19 ++++++++++++++-----
+ drivers/rapidio/devices/tsi721.h |  3 +++
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
->
-> Acked-by: Caicai <caizp2008@163.com>
-> Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-> ---
->  drivers/irqchip/irq-loongson-liointc.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index aed88857d90f..927e236bf18e 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -57,7 +57,11 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
->         struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
->         struct irq_chip *chip = irq_desc_get_chip(desc);
->         struct irq_chip_generic *gc = handler->priv->gc;
-> +#ifdef CONFIG_SMP
->         int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
-> +#else
-> +       int core = 0;
-> +#endif
->         u32 pending;
->
->         chained_irq_enter(chip, desc);
-> --
-> 2.34.1
->
+diff --git a/drivers/rapidio/devices/tsi721.c b/drivers/rapidio/devices/tsi721.c
+index b3134744fb55..a2e4969e2122 100644
+--- a/drivers/rapidio/devices/tsi721.c
++++ b/drivers/rapidio/devices/tsi721.c
+@@ -282,7 +282,7 @@ tsi721_pw_handler(struct tsi721_device *priv)
+ 	iowrite32(TSI721_RIO_PW_RX_STAT_PW_DISC | TSI721_RIO_PW_RX_STAT_PW_VAL,
+ 		  priv->regs + TSI721_RIO_PW_RX_STAT);
+ 
+-	schedule_work(&priv->pw_work);
++	queue_work(priv->wq, &priv->pw_work);
+ 
+ 	return 0;
+ }
+@@ -373,7 +373,7 @@ tsi721_dbell_handler(struct tsi721_device *priv)
+ 	iowrite32(regval,
+ 		priv->regs + TSI721_SR_CHINTE(IDB_QUEUE));
+ 
+-	schedule_work(&priv->idb_work);
++	queue_work(priv->wq, &priv->idb_work);
+ 
+ 	return 0;
+ }
+@@ -443,7 +443,7 @@ static void tsi721_db_dpc(struct work_struct *work)
+ 
+ 	wr_ptr = ioread32(priv->regs + TSI721_IDQ_WP(IDB_QUEUE)) % IDB_QSIZE;
+ 	if (wr_ptr != rd_ptr)
+-		schedule_work(&priv->idb_work);
++		queue_work(priv->wq, &priv->idb_work);
+ }
+ 
+ /**
+@@ -2743,10 +2743,16 @@ static int tsi721_probe(struct pci_dev *pdev,
+ 		goto err_exit;
+ 	}
+ 
++	priv->wq = alloc_workqueue("tsi721_wq", 0, 0);
++	if (!priv->wq) {
++		err = -ENOMEM;
++		goto err_clean;
++	}
++
+ 	err = pci_enable_device(pdev);
+ 	if (err) {
+ 		tsi_err(&pdev->dev, "Failed to enable PCI device");
+-		goto err_clean;
++		goto err_free_wq;
+ 	}
+ 
+ 	priv->pdev = pdev;
+@@ -2927,6 +2933,8 @@ static int tsi721_probe(struct pci_dev *pdev,
+ 	pci_clear_master(pdev);
+ err_disable_pdev:
+ 	pci_disable_device(pdev);
++err_free_wq:
++	destroy_workqueue(priv->wq);
+ err_clean:
+ 	kfree(priv);
+ err_exit:
+@@ -2941,7 +2949,7 @@ static void tsi721_remove(struct pci_dev *pdev)
+ 
+ 	tsi721_disable_ints(priv);
+ 	tsi721_free_irq(priv);
+-	flush_scheduled_work();
++	flush_workqueue(priv->wq);
+ 	rio_unregister_mport(&priv->mport);
+ 
+ 	tsi721_unregister_dma(priv);
+@@ -2964,6 +2972,7 @@ static void tsi721_remove(struct pci_dev *pdev)
+ 	pci_clear_master(pdev);
+ 	pci_disable_device(pdev);
+ 	pci_set_drvdata(pdev, NULL);
++	destroy_workqueue(priv->wq);
+ 	kfree(priv);
+ 	tsi_debug(EXIT, &pdev->dev, "exit");
+ }
+diff --git a/drivers/rapidio/devices/tsi721.h b/drivers/rapidio/devices/tsi721.h
+index 4f996ce62725..57a38d24ed8f 100644
+--- a/drivers/rapidio/devices/tsi721.h
++++ b/drivers/rapidio/devices/tsi721.h
+@@ -908,6 +908,9 @@ struct tsi721_device {
+ 	struct tsi721_obw_bar p2r_bar[2];
+ 	struct tsi721_ob_win  ob_win[TSI721_OBWIN_NUM];
+ 	int		obwin_cnt;
++
++	/* Workqueue for processing works in this struct. */
++	struct workqueue_struct *wq;
+ };
+ 
+ #ifdef CONFIG_RAPIDIO_DMA_ENGINE
+-- 
+2.18.4

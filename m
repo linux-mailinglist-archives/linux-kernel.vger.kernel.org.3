@@ -2,49 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE1A545CFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0AE545CFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346599AbiFJHOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S1346603AbiFJHPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346543AbiFJHO0 (ORCPT
+        with ESMTP id S244941AbiFJHPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:14:26 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504FF2DA9F;
-        Fri, 10 Jun 2022 00:14:25 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nzYqW-000848-PU; Fri, 10 Jun 2022 09:14:16 +0200
-Received: from [85.1.206.226] (helo=linux-3.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nzYqW-000UfC-Et; Fri, 10 Jun 2022 09:14:16 +0200
-Subject: Re: [PATCH] net: sched: fix potential null pointer deref
-To:     Jianhao Xu <jianhao_xu@smail.nju.edu.cn>, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220610021445.2441579-1-jianhao_xu@smail.nju.edu.cn>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <3f460707-e267-e749-07fc-c44604cd5713@iogearbox.net>
-Date:   Fri, 10 Jun 2022 09:14:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 10 Jun 2022 03:15:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1192194BDE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:15:09 -0700 (PDT)
+X-UUID: c7881e8812cf4e198c58810b993b162f-20220610
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:2713b238-328a-4f95-b3a8-ba94f5fe33ea,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:6c035fe5-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: c7881e8812cf4e198c58810b993b162f-20220610
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <kuan-ying.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 556457494; Fri, 10 Jun 2022 15:15:05 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 10 Jun 2022 15:15:04 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 10 Jun 2022 15:15:04 +0800
+From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+To:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <chinwen.chang@mediatek.com>, <nicholas.tang@mediatek.com>,
+        <casper.li@mediatek.com>, <andrew.yang@mediatek.com>,
+        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] scripts/gdb: change kernel config dumping method
+Date:   Fri, 10 Jun 2022 15:14:57 +0800
+Message-ID: <20220610071500.9656-1-Kuan-Ying.Lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <20220610021445.2441579-1-jianhao_xu@smail.nju.edu.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26567/Thu Jun  9 10:06:06 2022)
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,50 +63,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianhao,
+MAGIC_START("IKCFG_ST") and MAGIC_END("IKCFG_ED") are moved out
+from the kernel_config_data variable [1].
 
-On 6/10/22 4:14 AM, Jianhao Xu wrote:
-> mq_queue_get() may return NULL, a check is needed to avoid using
-> the NULL pointer.
-> 
-> Signed-off-by: Jianhao Xu <jianhao_xu@smail.nju.edu.cn>
+Thus, we parse kernel_config_data directly instead of considering
+offset of MAGIC_START and MAGIC_END.
 
-Do you have a reproducer where this is triggered?
+[1] https://lore.kernel.org/lkml/1550108893-21226-1-git-send-email-yamada.masahiro@socionext.com/
 
-> ---
->   net/sched/sch_mq.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/net/sched/sch_mq.c b/net/sched/sch_mq.c
-> index 83d2e54bf303..9aca4ca82947 100644
-> --- a/net/sched/sch_mq.c
-> +++ b/net/sched/sch_mq.c
-> @@ -201,6 +201,8 @@ static int mq_graft(struct Qdisc *sch, unsigned long cl, struct Qdisc *new,
->   static struct Qdisc *mq_leaf(struct Qdisc *sch, unsigned long cl)
->   {
->   	struct netdev_queue *dev_queue = mq_queue_get(sch, cl);
-> +	if (!dev_queue)
-> +		return NULL;
->   
->   	return dev_queue->qdisc_sleeping;
->   }
-> @@ -218,6 +220,8 @@ static int mq_dump_class(struct Qdisc *sch, unsigned long cl,
->   			 struct sk_buff *skb, struct tcmsg *tcm)
->   {
->   	struct netdev_queue *dev_queue = mq_queue_get(sch, cl);
-> +	if (!dev_queue)
-> +		return -1;
->   
->   	tcm->tcm_parent = TC_H_ROOT;
->   	tcm->tcm_handle |= TC_H_MIN(cl);
-> @@ -229,6 +233,8 @@ static int mq_dump_class_stats(struct Qdisc *sch, unsigned long cl,
->   			       struct gnet_dump *d)
->   {
->   	struct netdev_queue *dev_queue = mq_queue_get(sch, cl);
-> +	if (!dev_queue)
-> +		return -1;
->   
->   	sch = dev_queue->qdisc_sleeping;
->   	if (gnet_stats_copy_basic(d, sch->cpu_bstats, &sch->bstats, true) < 0 ||
-> 
+Fixes: 13610aa908dc ("kernel/configs: use .incbin directive to embed config_data.gz")
+Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+---
+ scripts/gdb/linux/config.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/gdb/linux/config.py b/scripts/gdb/linux/config.py
+index 90e1565b1967..8843ab3cbadd 100644
+--- a/scripts/gdb/linux/config.py
++++ b/scripts/gdb/linux/config.py
+@@ -24,9 +24,9 @@ class LxConfigDump(gdb.Command):
+             filename = arg
+ 
+         try:
+-            py_config_ptr = gdb.parse_and_eval("kernel_config_data + 8")
+-            py_config_size = gdb.parse_and_eval(
+-                    "sizeof(kernel_config_data) - 1 - 8 * 2")
++            py_config_ptr = gdb.parse_and_eval("&kernel_config_data")
++            py_config_ptr_end = gdb.parse_and_eval("&kernel_config_data_end")
++            py_config_size = py_config_ptr_end - py_config_ptr
+         except gdb.error as e:
+             raise gdb.GdbError("Can't find config, enable CONFIG_IKCONFIG?")
+ 
+-- 
+2.18.0
 

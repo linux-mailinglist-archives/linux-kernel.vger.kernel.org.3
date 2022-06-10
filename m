@@ -2,59 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA67545B87
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3871B545B8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244089AbiFJFSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S239983AbiFJFTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243933AbiFJFSE (ORCPT
+        with ESMTP id S243933AbiFJFS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:18:04 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C66F3527E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:18:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654838283; x=1686374283;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2uppYKBlCkbOS4RaY9vH3basVDJnUK0ivIxfR8Xn/j4=;
-  b=iUAfCSzAmA0ClbL8auw35/WVqJIH+dltTWilALVrGOQN7n6gA7xmaFeE
-   dLDZYdOeTuh+xEbHZqrlTyz6aurPtVHh53jX/QtXGDY+dFb1upWMpfOw9
-   TPx24+wCTXr0GkjLlTG1p+lr31aOvPA3JWnyjoitd0NukePy/Kc8gTqgo
-   DqBHIVaxkOTVX4QDH4dqKFbJtufkOjdNyThb1BIzplnMTAfpES6+Sk2UZ
-   jDcywMPcJ/M7Gix80dwELvsC7UmOaZ4L/K9AhY5Ot/MTOygtV4WItwUNx
-   d/8NCAv1mk7VlFA+9mC6jW6v83R7plIEpRbuK19wAvIxdjD0DCwNF0dxh
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="276290456"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="276290456"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 22:18:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="586017018"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2022 22:18:01 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzX21-000Gj3-7Y;
-        Fri, 10 Jun 2022 05:18:01 +0000
-Date:   Fri, 10 Jun 2022 13:17:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Anup Patel <anup@brainfault.org>
-Subject: [avpatel:virtio_rpmsg_bus_fix_v1 45/52]
- arch/riscv/kernel/setup.c:268: undefined reference to `riscv_tlbflush_init'
-Message-ID: <202206101303.u6fcumYC-lkp@intel.com>
+        Fri, 10 Jun 2022 01:18:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58B935A8A;
+        Thu,  9 Jun 2022 22:18:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F7F161E2B;
+        Fri, 10 Jun 2022 05:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C60CC34114;
+        Fri, 10 Jun 2022 05:18:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654838336;
+        bh=2yFCZugsiNQZN0gkgMSO/PLnnK4cDobzksJyDLjp9Ts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rh1PySG6mRmieZPY8cY0A1hPrIcbkuP807V49e98ihkLxbZ06HxYRwIuVMf+wTLDn
+         X/yCYKI3C60vy05a003Jfa/l8d0up/cE/3SCBy/NuCOYNPxYpirlNBYrpXNy/Wd9yS
+         jlJr0CyMDaP1q3f/tt8/VcfJ3YUsM+y3ifSXc9V4=
+Date:   Fri, 10 Jun 2022 07:18:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bill Wendling <morbo@google.com>
+Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jan Kara <jack@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 07/12] driver/char: use correct format characters
+Message-ID: <YqLUORmZQgG1D6lc@kroah.com>
+References: <20220609221702.347522-1-morbo@google.com>
+ <20220609221702.347522-8-morbo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20220609221702.347522-8-morbo@google.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,71 +80,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git virtio_rpmsg_bus_fix_v1
-head:   390aaf641ff2f8919268d611e864227265c3f3f2
-commit: 3485f5450237db107c3601d2b726458fb98027a6 [45/52] riscv: Implement Zicbom-based cache management operations
-config: riscv-randconfig-r025-20220608 (https://download.01.org/0day-ci/archive/20220610/202206101303.u6fcumYC-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/avpatel/linux/commit/3485f5450237db107c3601d2b726458fb98027a6
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel virtio_rpmsg_bus_fix_v1
-        git checkout 3485f5450237db107c3601d2b726458fb98027a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Thu, Jun 09, 2022 at 10:16:26PM +0000, Bill Wendling wrote:
+> From: Bill Wendling <isanbard@gmail.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Why isn't that matching your From: line in the email?
 
-All error/warnings (new ones prefixed by >>):
+> 
+> When compiling with -Wformat, clang emits the following warnings:
 
-   riscv64-linux-ld: arch/riscv/kernel/setup.o: in function `setup_arch':
->> arch/riscv/kernel/setup.c:268: undefined reference to `riscv_tlbflush_init'
---
->> arch/riscv/mm/dma-noncoherent.c:65:6: warning: no previous prototype for 'riscv_init_cbom_blocksize' [-Wmissing-prototypes]
-      65 | void riscv_init_cbom_blocksize(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+Is that ever a default build option for the kernel?
 
+> 
+> drivers/char/mem.c:775:16: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+>                               NULL, devlist[minor].name);
+>                                     ^~~~~~~~~~~~~~~~~~~
+> 
+> Use a string literal for the format string.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Bill Wendling <isanbard@gmail.com>
+> ---
+>  drivers/char/mem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+> index 84ca98ed1dad..32d821ba9e4d 100644
+> --- a/drivers/char/mem.c
+> +++ b/drivers/char/mem.c
+> @@ -772,7 +772,7 @@ static int __init chr_dev_init(void)
+>  			continue;
+>  
+>  		device_create(mem_class, NULL, MKDEV(MEM_MAJOR, minor),
+> -			      NULL, devlist[minor].name);
+> +			      NULL, "%s", devlist[minor].name);
 
-vim +268 arch/riscv/kernel/setup.c
+Please explain how this static string can ever be user controlled.
 
-76d2a0493a17d4 Palmer Dabbelt  2017-07-10  264  
-76d2a0493a17d4 Palmer Dabbelt  2017-07-10  265  void __init setup_arch(char **cmdline_p)
-76d2a0493a17d4 Palmer Dabbelt  2017-07-10  266  {
-8f3a2b4a96dc01 Anup Patel      2020-09-17  267  	parse_dtb();
-723a42f4f6b2e0 Kefeng Wang     2021-07-07 @268  	setup_initial_init_mm(_stext, _etext, _edata, _end);
-76d2a0493a17d4 Palmer Dabbelt  2017-07-10  269  
-680f9b8e6c5641 Anup Patel      2019-01-07  270  	*cmdline_p = boot_command_line;
-680f9b8e6c5641 Anup Patel      2019-01-07  271  
-6262f661ff5d7d Atish Patra     2020-09-17  272  	early_ioremap_setup();
-6134b110f97178 Anup Patel      2020-11-06  273  	jump_label_init();
-680f9b8e6c5641 Anup Patel      2019-01-07  274  	parse_early_param();
-680f9b8e6c5641 Anup Patel      2019-01-07  275  
-b91540d52a08b6 Atish Patra     2020-09-17  276  	efi_init();
-76d2a0493a17d4 Palmer Dabbelt  2017-07-10  277  	paging_init();
-2d2682512f0faf Palmer Dabbelt  2020-04-14  278  #if IS_ENABLED(CONFIG_BUILTIN_DTB)
-2d2682512f0faf Palmer Dabbelt  2020-04-14  279  	unflatten_and_copy_device_tree();
-2d2682512f0faf Palmer Dabbelt  2020-04-14  280  #else
-44c922572952d8 Vitaly Wool     2021-04-13  281  	if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
-76d2a0493a17d4 Palmer Dabbelt  2017-07-10  282  		unflatten_device_tree();
-8f3a2b4a96dc01 Anup Patel      2020-09-17  283  	else
-8f3a2b4a96dc01 Anup Patel      2020-09-17  284  		pr_err("No DTB found in kernel mappings\n");
-2d2682512f0faf Palmer Dabbelt  2020-04-14  285  #endif
-cbd34f4bb37d62 Atish Patra     2020-11-18  286  	misc_mem_init();
-51858aaf9bea3d Zong Li         2018-10-02  287  
-e53d28180d4d0f Nick Kossifidis 2021-04-19  288  	init_resources();
-62149f3564c5a5 Atish Patra     2020-11-04  289  	sbi_init();
-62149f3564c5a5 Atish Patra     2020-11-04  290  
+thanks,
 
-:::::: The code at line 268 was first introduced by commit
-:::::: 723a42f4f6b2e032910885d389c6d9bdb0ef6eeb riscv: convert to setup_initial_init_mm()
-
-:::::: TO: Kefeng Wang <wangkefeng.wang@huawei.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

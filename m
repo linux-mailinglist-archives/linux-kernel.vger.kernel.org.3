@@ -2,166 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CFF5466B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019695466BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbiFJMem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 08:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S1343869AbiFJMfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiFJMej (ORCPT
+        with ESMTP id S234848AbiFJMfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:34:39 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894F337B7D3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:34:38 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id q140so9584714pgq.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fTnCXFuyCstJMPBhMqFKxxK2N1Yz6X1NLjBKTceklwM=;
-        b=vur4KePcrSZwfP7+Gdvgv0bt/L+tZYdakOo7NYRMZrInzrC3kXcg9wHBqc9MWv59Gj
-         fi3P0bGnYTLmFOCZOY87UWoPPXuY7QJc+kIO6+6PEhjv/QoGHk5E8Xl1QDeHaoxjM925
-         7xHg3+imavV8cUH2qIm005hgrV6avSWy6ajROWVEsYy7wiHGbBStoGiNN9f9L+gfFgpZ
-         0hM+Bhq6E/tbkoP6LyawPOMZPovEbkWNCktkNCzVL5E8bPvYCQx+Fa/+mN4cjMn9Ikdx
-         ZCD5YqgYZsorAql4dSYI3nUD28lL5b4p/v+pdAwut8e7y3TlwPgakW7CIcLmmASc46Jo
-         k8nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fTnCXFuyCstJMPBhMqFKxxK2N1Yz6X1NLjBKTceklwM=;
-        b=WbYHDbxl0ErSAauupmSBfxF/0TBpt2NGLMLu0Nb6HAdtj0gVTLRGeXLAM3UdaoJoJ/
-         JIIE2SjZO34iHBNatZbJK1J9R0GT2vYrtF6mbryFx8st1iqlKvm0OSO2tL7T7cWjLmXm
-         Q8tMjaCXcnhri8ZKv6byf4ythFE5i+l24B3fpC1FTlD+p8C/uuLS/QGeJKbYiIpA2i1/
-         BvvOypTUmpa0Xbt2H5AiP+WpyozQP0E7AK8NtAPx9yN/1seBAWbilRjWA/Ny+wFYaDhQ
-         yacBBA2XCXlkDeTKOOI1gi38En0obXLN5xQ9jojpELsfOw0E07nRTS4/+hI3AZ5OJB5j
-         ltbQ==
-X-Gm-Message-State: AOAM533rGOW4j335Bcw81nri+By2tjgIklQ3G9syYanKaGT70Iv9eGpk
-        sdYKvoYSuhflMKqkXhsfrWPhdg==
-X-Google-Smtp-Source: ABdhPJye0lkqFNoSURlpFSaRubFAyvZ7H6pZUjfbwhCtArda1i/1Oz2vnL3TD6wFmZ1x8rh776n3gQ==
-X-Received: by 2002:a63:2160:0:b0:3fc:b8ac:1976 with SMTP id s32-20020a632160000000b003fcb8ac1976mr40229774pgm.453.1654864478105;
-        Fri, 10 Jun 2022 05:34:38 -0700 (PDT)
-Received: from localhost.localdomain ([94.177.118.5])
-        by smtp.gmail.com with ESMTPSA id a14-20020a1709027e4e00b0016892555955sm5867860pln.179.2022.06.10.05.34.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Jun 2022 05:34:37 -0700 (PDT)
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        jean-philippe <jean-philippe@linaro.org>,
-        Wangzhou <wangzhou1@hisilicon.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Yang Shen <shenyang39@huawei.com>
-Subject: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
-Date:   Fri, 10 Jun 2022 20:34:23 +0800
-Message-Id: <20220610123423.27496-1-zhangfei.gao@linaro.org>
-X-Mailer: git-send-email 2.36.1
+        Fri, 10 Jun 2022 08:35:52 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25BB1AAD8B;
+        Fri, 10 Jun 2022 05:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654864549; x=1686400549;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vm6FvkmJGVU3kZjFvEVLAroyVBFPXI97WRUP2X3VzsY=;
+  b=cVGaJpaHYhitGAAD7kIxPUwNTmRmhG3ceCTYqw1+CsMAp0Xg5BW18uml
+   QKsOlHilwV6qt0EfvRELmCc0XMcLD9qmsr0XcocW/sB+/fW3B4HLbv61i
+   aD+a4YVa3s4P5gbNXfKtUNY/3aGwHOOUAdsa9/T7KFLL5EFXsxnjHk0JC
+   nknyQCq+QUeN2jSJqmHZsohvYPR0uVwkGx8CCHyOZ0ACmO6g1P1YZaeCw
+   B96YvZcfVnaUm8rd/WbIXX274t3KtO7odR2R0u5Hv4WYII+q0RwY+T6pg
+   iBaz5YJyLlAPHEIQArzVCoY5ycnMvtP8eeKlkqkhRrG01p5PtkJ3Ln0Kg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="277651079"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="277651079"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:35:30 -0700
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="684520680"
+Received: from elmerred-mobl2.amr.corp.intel.com (HELO [10.251.8.219]) ([10.251.8.219])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:35:29 -0700
+Message-ID: <7eb4762e-723b-51e8-3d70-1c28568ac4f5@intel.com>
+Date:   Fri, 10 Jun 2022 05:35:29 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] x86: Change the return type of acpi_map_cpu2node to void
+Content-Language: en-US
+To:     Li kunyu <kunyu@nfschina.com>, chenhuacai@kernel.org,
+        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        mingo@redhat.com, bp@alien8.de
+Cc:     tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220610104423.201739-1-kunyu@nfschina.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220610104423.201739-1-kunyu@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The uacce parent's module can be removed when uacce is working,
-which may cause troubles.
+On 6/10/22 03:44, Li kunyu wrote:
+> Reduce eax register calls by removing unused return values.
 
-If rmmod/uacce_remove happens just after fops_open: bind_queue,
-the uacce_remove can not remove the bound queue since it is not
-added to the queue list yet, which blocks the uacce_disable_sva.
+Please stop sending these patches, at least with these repetitive,
+inaccurate descriptions.
 
-Change queues_lock area to make sure the bound queue is added to
-the list thereby can be searched in uacce_remove.
+This patch has *ZERO* to do with EAX.  For one, it's patching two
+architectures that might not even have an EAX.  (I'm blissfully unaware
+of what the ia64 calling conventions are and I want to keep it that way.)
 
-And uacce->parent->driver is checked immediately in case rmmod is
-just happening.
+Second, (and this is important), look carefully at the function in question:
 
-Also the parent driver must always stop DMA before calling
-uacce_remove.
+static int acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
 
-Signed-off-by: Yang Shen <shenyang39@huawei.com>
-Signed-off-by: Zhangfei Gao <zhangfei.gao@linaro.org>
----
- drivers/misc/uacce/uacce.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+See the "static"?  That tells the compiler that acpi_map_cpu2node() is
+only used locally.  It lets the compiler do all kinds of fancy things,
+like inline the function which allows the compiler to do all kinds of
+fun optimizations.  Now, armed with that knowledge, please take a look
+at what effect your patch has in practice.
 
-diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-index 281c54003edc..b6219c6bfb48 100644
---- a/drivers/misc/uacce/uacce.c
-+++ b/drivers/misc/uacce/uacce.c
-@@ -136,9 +136,16 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
- 	if (!q)
- 		return -ENOMEM;
- 
-+	mutex_lock(&uacce->queues_lock);
-+
-+	if (!uacce->parent->driver) {
-+		ret = -ENODEV;
-+		goto out_with_lock;
-+	}
-+
- 	ret = uacce_bind_queue(uacce, q);
- 	if (ret)
--		goto out_with_mem;
-+		goto out_with_lock;
- 
- 	q->uacce = uacce;
- 
-@@ -153,7 +160,6 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
- 	uacce->inode = inode;
- 	q->state = UACCE_Q_INIT;
- 
--	mutex_lock(&uacce->queues_lock);
- 	list_add(&q->list, &uacce->queues);
- 	mutex_unlock(&uacce->queues_lock);
- 
-@@ -161,7 +167,8 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
- 
- out_with_bond:
- 	uacce_unbind_queue(q);
--out_with_mem:
-+out_with_lock:
-+	mutex_unlock(&uacce->queues_lock);
- 	kfree(q);
- 	return ret;
- }
-@@ -171,10 +178,10 @@ static int uacce_fops_release(struct inode *inode, struct file *filep)
- 	struct uacce_queue *q = filep->private_data;
- 
- 	mutex_lock(&q->uacce->queues_lock);
--	list_del(&q->list);
--	mutex_unlock(&q->uacce->queues_lock);
- 	uacce_put_queue(q);
- 	uacce_unbind_queue(q);
-+	list_del(&q->list);
-+	mutex_unlock(&q->uacce->queues_lock);
- 	kfree(q);
- 
- 	return 0;
-@@ -513,10 +520,10 @@ void uacce_remove(struct uacce_device *uacce)
- 		uacce_put_queue(q);
- 		uacce_unbind_queue(q);
- 	}
--	mutex_unlock(&uacce->queues_lock);
- 
- 	/* disable sva now since no opened queues */
- 	uacce_disable_sva(uacce);
-+	mutex_unlock(&uacce->queues_lock);
- 
- 	if (uacce->cdev)
- 		cdev_device_del(uacce->cdev, &uacce->dev);
--- 
-2.36.1
+Take your patch, and disassemble acpi_map_cpu() before and after
+applying it.  First of all, even before your patch, do you see a:
 
+	call ffffffff81d0000d <acpi_map_cpu2node>
+
+?
+
+Do you see a call to numa_set_node()?  That's odd considering that
+acpi_map_cpu() doesn't directly call numa_set_node().  Right?  Do you
+see unnecessary manipulation of EAX?  Now, apply your patch.
+Disassemble the function again.  What changed?
+
+Now, armed with the knowledge of what your patch actually does to the
+code, would you like to try and write a better changelog?  Or, better
+yet, maybe it will dissuade you from sending this again.

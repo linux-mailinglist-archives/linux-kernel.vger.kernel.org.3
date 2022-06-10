@@ -2,153 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DE1546839
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B8E546844
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345809AbiFJOXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S235254AbiFJOaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349323AbiFJOXa (ORCPT
+        with ESMTP id S232554AbiFJOaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:23:30 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56F170657
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:23:21 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id q15-20020a056e0220ef00b002d15dcd2750so19711958ilv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:23:21 -0700 (PDT)
+        Fri, 10 Jun 2022 10:30:07 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B408A19C38
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:30:02 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s135so9295568pgs.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=iZkxFrCdz5HGHbN5AvcrMQrT1OxBg7CaPmIJCaX17lQ=;
+        b=KP4HYvtz1/r9i95F1wjVEcLG8E0YRVrsbrMUEtJAGlXCThtn4I+AwBI020BZ8QkENk
+         VkYJUza7vjx9KRxYxYn1blwfJ4DmHGeHYEfXLV2JLucPyU1CcT6RyAiFEGz5xNB1qNs3
+         /H8oz5Osobi0eyKYL6Jxc/SkFRW8e6Rmy5hPD/ePq+GzeBSEpX/JtBIT336CQfQT3h78
+         bJKW+VdriFLI+sUb13QBvbPpKxYpaG4Rm0NEHazp3sA5OclNymsh1q+DI3F/mUVofBjx
+         5cE40h+i7ZQvqjZzKy99OzoR963rVw88+d7oUzCl+YjMBsKs03AJB7Mm5xf283OcfSp5
+         whAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=XjrtYqNiT5vEa6+Vuf9aZLxSiV1HsY2+vhx3VyfeILM=;
-        b=Ns9KmqVqSvItt54e0r8gXwYBQtqSlh2GIBAdXP1zMhxlXeywoVTaW81cPORX42hXtE
-         Ug4H0e2HHIgRnqYiV/qjMvKY11YZDpS9iYyNaGeJA7XR5oTO//6sjEgnWhb+fJukPpeh
-         YZBJyRjTw/1ucfy2V6bLLcabkkFpuntsIeOGS/fUgziTXQf3DVVwPPfsiOwsfqXc4KlS
-         bnJPQ6+JRJMxOso7usJhyqSIojEVD0f2YFUCCBeoPVezD18hctZjbFEv/agbjx3GU28t
-         cUc4YYAhbl8DJtEwLY9R4CNcm+/UrY2QTZPb7ZToMCJaqeOZnvwWWYZ5+EUiCuGYa/jZ
-         vaXA==
-X-Gm-Message-State: AOAM531BJIrSZb0U1ik30PCrgS8hViM5kD8psTntYL6ibm9is7pnqCfi
-        +buklsiI5h63ah1xYxAS+J/Gn3gAY/8UrLSx48l2o+Nh8QN9
-X-Google-Smtp-Source: ABdhPJxdU7ph+1O6uNJ43i/VXnOf3VJRWymxSsZwPNYAarUi5cziesFNY651vf+6wPlOBYjUuUfeeiPPjH2vVsVR8oHmyxQcKU96
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=iZkxFrCdz5HGHbN5AvcrMQrT1OxBg7CaPmIJCaX17lQ=;
+        b=0vXXW4PDr6YLceYNMoR8swLAICZcH5IT3AONwEhiEGemMVt7UMqnfIKzBO5wqjpuOe
+         wkfSng+twOyA8ZI598g+zRP9dmZhHegFdRpCF+LGrXOkvmqE5rq4zNc8MFuIMF3+3I78
+         l5wwq3QJA9pBGm4fBk5ruQSBzMz2KgZFHpGwHaCYD4vlojUzhz9x9T2Jzo9egmXCAhwF
+         Y6Pvj6z27K63JzYwvDftuH1M9fhv5CaAQCKWTLWsEV4Za7cS0SMCXD9uAUyuZjnJv7SQ
+         VD82HXho0Sao9DWsQ2o0HwnOtciGVnNfU3LOYyfsgvW4j1mRS+OSus8/BPDz7sEWwMuV
+         rH4A==
+X-Gm-Message-State: AOAM530GZggj8AihPQkEhnPSwMw0A8wm2OZHV5hABqM86QqqfJUN0ukS
+        qGlHQM34s4KUeZjbw3ugNWLPrA==
+X-Google-Smtp-Source: ABdhPJy9lH+YdGeVgxW6k3OvjfR+G0rlnFgBcN96oP7+X/9Ctfac88M6IIzXUkvNd0dbwRRp3m0BqA==
+X-Received: by 2002:a63:8241:0:b0:3fe:2e64:95f0 with SMTP id w62-20020a638241000000b003fe2e6495f0mr13325930pgd.190.1654871401611;
+        Fri, 10 Jun 2022 07:30:01 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h11-20020a62830b000000b0050dc7628150sm19477473pfe.42.2022.06.10.07.29.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 07:29:59 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 14:29:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>, dbehr@google.com, dtor@google.com
+Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle
+ state
+Message-ID: <YqNVYz4+yVbWnmNv@google.com>
+References: <20220609110337.1238762-1-jaz@semihalf.com>
+ <20220609110337.1238762-2-jaz@semihalf.com>
+ <YqIJ8HtdqnoVzfQD@google.com>
+ <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12ce:b0:2d3:de67:9f96 with SMTP id
- i14-20020a056e0212ce00b002d3de679f96mr26904551ilm.261.1654871001228; Fri, 10
- Jun 2022 07:23:21 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 07:23:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002d6bc305e118ae24@google.com>
-Subject: [syzbot] BUG: sleeping function called from invalid context in sk_psock_stop
-From:   syzbot <syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, wangyufen@huawei.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jun 10, 2022, Grzegorz Jaszczyk wrote:
+> czw., 9 cze 2022 o 16:55 Sean Christopherson <seanjc@google.com> napisał(a):
+> Above could be actually prevented if the VMM had control over the
+> guest resumption. E.g. after VMM receives notification about guest
+> entering s2idle state, it would park the vCPU actually preventing it
+> from exiting s2idle without VMM intervention.
 
-syzbot found the following issue on:
+Ah, so you avoid races by assuming the VM wakes itself from s2idle any time a vCPU
+is run, even if the vCPU doesn't actually have a wake event.  That would be very
+useful info to put in the changelog.
 
-HEAD commit:    ff539ac73ea5 Add linux-next specific files for 20220609
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=176c121bf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5002042f00a8bce
-dashboard link: https://syzkaller.appspot.com/bug?extid=140186ceba0c496183bc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13083353f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=173e67f0080000
+> > > +static void s2idle_hypervisor_notify(void)
+> > > +{
+> > > +     if (static_cpu_has(X86_FEATURE_HYPERVISOR))
+> > > +             kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
+> >
+> > Checking the HYPERVISOR flag is not remotely sufficient.  The hypervisor may not
+> > be KVM, and if it is KVM, it may be an older version of KVM that doesn't support
+> > the hypercall.  The latter scenario won't be fatal unless KVM has been modified,
+> > but blindly doing a hypercall for a different hypervisor could have disastrous
+> > results, e.g. the registers ABIs are different, so the above will make a random
+> > request depending on what is in other GPRs.
+> 
+> Good point: we've actually thought about not confusing/breaking VMMs
+> so I've introduced KVM_CAP_X86_SYSTEM_S2IDLE VM capability in the
+> second patch, but not breaking different hypervisors is another story.
+> Would hiding it under new 's2idle_notify_kvm' module parameter work
+> for upstream?:
 
-The issue was bisected to:
+No, enumerating support via KVM_CPUID_FEATURES is the correct way to do something
+like this, e.g. see KVM_FEATURE_CLOCKSOURCE2.  But honestly I wouldn't spend too
+much time understanding how all of that works, because I still feel quite strongly
+that getting KVM involved is completely unnecessary.  A solution that isn't KVM
+specific is preferable as it can then be implemented by any VMM that enumerates
+s2idle support to the guest.
 
-commit d8616ee2affcff37c5d315310da557a694a3303d
-Author: Wang Yufen <wangyufen@huawei.com>
-Date:   Tue May 24 07:53:11 2022 +0000
+> > The bigger question is, why is KVM involved at all?  KVM is just a dumb pipe out
+> > to userspace, and not a very good one at that.  There are multiple well established
+> > ways to communicate with the VMM without custom hypercalls.
+> 
+> Could you please kindly advise about the recommended way of
+> communication with VMM, taking into account that we want to send this
+> notification just before entering s2idle state (please see also answer
+> to next comment), which is at a very late stage of the suspend process
+> with a lot of functionality already suspended?
 
-    bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues
+MMIO or PIO for the actual exit, there's nothing special about hypercalls.  As for
+enumerating to the guest that it should do something, why not add a new ACPI_LPS0_*
+function?  E.g. something like
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1556d7cff00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1756d7cff00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1356d7cff00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com
-Fixes: d8616ee2affc ("bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues")
-
-BUG: sleeping function called from invalid context at kernel/workqueue.c:3010
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3612, name: syz-executor475
-preempt_count: 201, expected: 0
-RCU nest depth: 0, expected: 0
-3 locks held by syz-executor475/3612:
- #0: ffff888072eb9410 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:740 [inline]
- #0: ffff888072eb9410 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
- #1: ffff888027259ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1691 [inline]
- #1: ffff888027259ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: tcp_close+0x1e/0xc0 net/ipv4/tcp.c:2908
- #2: ffff888027259a30 (slock-AF_INET6){+...}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
- #2: ffff888027259a30 (slock-AF_INET6){+...}-{2:2}, at: __tcp_close+0x722/0x12b0 net/ipv4/tcp.c:2830
-Preemption disabled at:
-[<ffffffff87ddddca>] local_bh_disable include/linux/bottom_half.h:20 [inline]
-[<ffffffff87ddddca>] __tcp_close+0x71a/0x12b0 net/ipv4/tcp.c:2829
-CPU: 1 PID: 3612 Comm: syz-executor475 Not tainted 5.19.0-rc1-next-20220609-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
- start_flush_work kernel/workqueue.c:3010 [inline]
- __flush_work+0x109/0xb10 kernel/workqueue.c:3074
- __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3162
- sk_psock_stop+0x4cb/0x630 net/core/skmsg.c:802
- sock_map_destroy+0x333/0x760 net/core/sock_map.c:1581
- inet_csk_destroy_sock+0x196/0x440 net/ipv4/inet_connection_sock.c:1130
- __tcp_close+0xd5b/0x12b0 net/ipv4/tcp.c:2897
- tcp_close+0x29/0xc0 net/ipv4/tcp.c:2909
- sock_map_close+0x3b9/0x780 net/core/sock_map.c:1607
- inet_release+0x12e/0x280 net/ipv4/af_inet.c:428
- inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:481
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1365
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- ptrace_notify+0x114/0x140 kernel/signal.c:2353
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:249 [inline]
- syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
- __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fe7b3b8b6a3
-Code: c7 c2 c0 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb ba 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
-RSP: 002b:00007ffce5903258 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007fe7b3b8b6a3
-RDX: 0000000000000020 RSI: 0000000020000240 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007fe7b3c36e40 R09: 00007fe7b3c36e40
-R10: 00007fe7b3c36e40 R11: 0000000000000246 R12: 00007ffce5903290
-R13: 00007ffce5903280 R14: 00007ffce5903270 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+static void s2idle_hypervisor_notify(void)
+{
+	if (lps0_dsm_func_mask > 0)
+		acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT_HYPERVISOR_NOTIFY
+					lps0_dsm_func_mask, lps0_dsm_guid);
+}

@@ -2,155 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF885464B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A275464AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349259AbiFJKwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
+        id S1349143AbiFJKxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345195AbiFJKwU (ORCPT
+        with ESMTP id S1348875AbiFJKxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:52:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F10A30545B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654858138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CWkh+WwrOXy+lr72hI3IJZ1D1qWbN8stgCGKeJESz34=;
-        b=ArAw1ADEIS8vebxKZ93YBIuwm2Sh8/zcPv3q+hardnrDKcQiCLh2gsUQCv+0wTNuqkM6Rk
-        4Gmu68NQeyC5TDDxOIqn+i+VAnRKRGtTaO6UziZ8MQJ636ngBSD9Yzxeq16tUyzNyD8/Zq
-        +ipcwsUUOjdrd5I7xZU4MCKMOJ2Ryx4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558-kdLxpJK5MLutOl0n-5KCYA-1; Fri, 10 Jun 2022 06:48:55 -0400
-X-MC-Unique: kdLxpJK5MLutOl0n-5KCYA-1
-Received: by mail-wm1-f71.google.com with SMTP id k32-20020a05600c1ca000b0039c4cf75023so1122223wms.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:48:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CWkh+WwrOXy+lr72hI3IJZ1D1qWbN8stgCGKeJESz34=;
-        b=V4uNiw9dRHwK18kopoAeRIqw0Lv+R3nQ3Atz7d9QNcnaZxwZkRQgKRdC0STXLdk4fa
-         WgmfvvVD4W/EIRM5/6nhiRrQK3VK/b7J26MDTzfy28DV2UaIlN1oAbFg/U6hbLWB20N2
-         0mYLDYHCrKLBiwQ60GH5IoBssXnPalc9n2ltKRf3ju2uMvEF8w6zwtx/vyQSxjVhFqM7
-         Y2e63ZX/qY5NMG5QJL3bfo9mDfoK8WUQo/7QG4X2BkL+zPh0RCkk9rnPaxOiGgc8fbka
-         srHYBprcleWr1Y3bpQt6pZprrmi/jFuC0yl5ghFgYEpNg5SQkm3NUKHn/isXu36jhxOJ
-         CFzw==
-X-Gm-Message-State: AOAM531bFO6EUxuhMqi5MiKesBbkrkyLoP8xqq0LNJV4hLVDi1QUDJov
-        FrPMjJKdD7rt+Wt5HboxuMs8U5jQStJeYgHiQteDSYJYGyn96Czolzusjev8X8bj86FdBXqXd17
-        hmzwI92cUmtsiQ/ntLGV6f+/J
-X-Received: by 2002:a7b:c310:0:b0:38c:f07a:e10d with SMTP id k16-20020a7bc310000000b0038cf07ae10dmr8284536wmj.110.1654858134639;
-        Fri, 10 Jun 2022 03:48:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy0W/iRnqZGok+Dtln1QGHn4dkyrs5LOr4eKgyWhEe1ws2y4/hUtrhhuo/t9QkujNnxNRICuw==
-X-Received: by 2002:a7b:c310:0:b0:38c:f07a:e10d with SMTP id k16-20020a7bc310000000b0038cf07ae10dmr8284516wmj.110.1654858134365;
-        Fri, 10 Jun 2022 03:48:54 -0700 (PDT)
-Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id d12-20020adff2cc000000b00215859413f3sm20414628wrp.107.2022.06.10.03.48.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 03:48:53 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 12:48:51 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 126/144] KVM: selftests: Convert kvm_binary_stats_test
- away from vCPU IDs
-Message-ID: <20220610104851.g2r6yzd6j22xod6m@gator>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <20220603004331.1523888-127-seanjc@google.com>
+        Fri, 10 Jun 2022 06:53:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 209F7313349
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:49:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA99D12FC;
+        Fri, 10 Jun 2022 03:49:30 -0700 (PDT)
+Received: from [10.5.48.228] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3E0023F766;
+        Fri, 10 Jun 2022 03:49:26 -0700 (PDT)
+Message-ID: <67c7e9ea-1d3b-39f0-c1b6-4940ed45844d@arm.com>
+Date:   Fri, 10 Jun 2022 12:49:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603004331.1523888-127-seanjc@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] sched/fair: combine detach into dequeue when migrating
+ task
+Content-Language: en-US
+To:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com
+References: <20220609035326.91544-1-zhouchengming@bytedance.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20220609035326.91544-1-zhouchengming@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:43:13AM +0000, Sean Christopherson wrote:
-> Track vCPUs by their 'struct kvm_vcpu' object in kvm_binary_stats_test,
-> not by their ID.  The per-vCPU helpers will soon take a vCPU instead of a
-> VM+vcpu_id pair.
+On 09/06/2022 05:53, Chengming Zhou wrote:
+> When we are migrating task out of the CPU, we can combine detach
+> into dequeue_entity() to save the independent detach_entity_cfs_rq()
+> in migrate_task_rq_fair().
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  tools/testing/selftests/kvm/kvm_binary_stats_test.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
+> This optimization is like combining DO_ATTACH in the enqueue_entity()
+> when migrating task to the CPU.
 > 
-> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> index 407e9ea8e6f3..dfc3cf531ced 100644
-> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> @@ -172,9 +172,9 @@ static void vm_stats_test(struct kvm_vm *vm)
->  	TEST_ASSERT(fcntl(stats_fd, F_GETFD) == -1, "Stats fd not freed");
->  }
->  
-> -static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-> +static void vcpu_stats_test(struct kvm_vcpu *vcpu)
->  {
-> -	int stats_fd = vcpu_get_stats_fd(vm, vcpu_id);
-> +	int stats_fd = vcpu_get_stats_fd(vcpu->vm, vcpu->id);
->  
->  	stats_test(stats_fd);
->  	close(stats_fd);
-> @@ -195,6 +195,7 @@ static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
->  int main(int argc, char *argv[])
->  {
->  	int i, j;
-> +	struct kvm_vcpu **vcpus;
->  	struct kvm_vm **vms;
->  	int max_vm = DEFAULT_NUM_VM;
->  	int max_vcpu = DEFAULT_NUM_VCPU;
-> @@ -220,17 +221,21 @@ int main(int argc, char *argv[])
->  	/* Create VMs and VCPUs */
->  	vms = malloc(sizeof(vms[0]) * max_vm);
->  	TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
-> +
-> +	vcpus = malloc(sizeof(struct kvm_vcpu *) * max_vm * max_vcpu);
-> +	TEST_ASSERT(vcpus, "Allocate memory for storing vCPU pointers");
-> +
->  	for (i = 0; i < max_vm; ++i) {
->  		vms[i] = vm_create_barebones();
->  		for (j = 0; j < max_vcpu; ++j)
-> -			__vm_vcpu_add(vms[i], j);
-> +			vcpus[j * max_vcpu + i] = __vm_vcpu_add(vms[i], j);
+> So we don't have to traverse the CFS tree twice to do these load
+> detach and propagation.
 
-The expression for the index should be 'i * max_vcpu + j'. The swapped
-i,j usage isn't causing problems now because
-DEFAULT_NUM_VM == DEFAULT_NUM_VCPU, but that could change.
+By `propagation` you refer to the detach_entity_cfs_rq() ->
+propagate_entity_cfs_rq() call?
+This one wouldn't be called anymore with your change.
 
+[...]
+
+> @@ -4426,6 +4435,14 @@ static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
+>  static void
+>  dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>  {
+> +	int action = UPDATE_TG;
+> +
+> +	/*
+> +	 * If we are migrating task from the CPU, detach load_avg when dequeue.
+> +	 */
+> +	if (entity_is_task(se) && task_of(se)->on_rq == TASK_ON_RQ_MIGRATING)
+
+- if (entity_is_task(se) && task_of(se)->on_rq == TASK_ON_RQ_MIGRATING)
++ if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
+
+> +		action |= DO_DETACH;
+
+With the `entity_is_task(se)` you make sure we only call
+detach_entity_load_avg() and update_tg_load_avg() for the se
+representing the task itself (and not taskgroups the task might run in).
+So IMHO this looks good.
+
+You save the propagate_entity_cfs_rq(&p->se) call from (2) by doing the
+detach_entity_load_avg(), update_tg_load_avg() for a migrating task
+inside (1) (the task being the first se in the loop )
+
+detach_task()
+  deactivate_task()
+    dequeue_task_fair()
+      for_each_sched_entity(se)
+        dequeue_entity()
+          update_load_avg() /* (1) */
+
+  set_task_cpu()
+    migrate_task_rq_fair()
+      /* called detach_entity_cfs_rq() before the patch (2) */
+
+[...]
+
+> @@ -6940,15 +6957,10 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>  		se->vruntime -= min_vruntime;
 >  	}
 >  
->  	/* Check stats read for every VM and VCPU */
->  	for (i = 0; i < max_vm; ++i) {
->  		vm_stats_test(vms[i]);
->  		for (j = 0; j < max_vcpu; ++j)
-> -			vcpu_stats_test(vms[i], j);
-> +			vcpu_stats_test(vcpus[j * max_vcpu + i]);
+> -	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+> -		/*
+> -		 * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
+> -		 * rq->lock and can modify state directly.
+> -		 */
+> -		lockdep_assert_rq_held(task_rq(p));
+> -		detach_entity_cfs_rq(&p->se);
+> -
+> -	} else {
+> +	/*
+> +	 * In case of TASK_ON_RQ_MIGRATING we already detach in dequeue_entity.
+> +	 */
+> +	if (p->on_rq != TASK_ON_RQ_MIGRATING) {
 
-Same comment as above.
+- if (p->on_rq != TASK_ON_RQ_MIGRATING) {
++ if (!task_on_rq_migrating(p)) {
 
-Thanks,
-drew
-
->  	}
->  
->  	for (i = 0; i < max_vm; ++i)
-> -- 
-> 2.36.1.255.ge46751e96f-goog
-> 
-
+[...]

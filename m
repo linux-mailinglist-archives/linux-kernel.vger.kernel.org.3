@@ -2,125 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB59F546F5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10718546F5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350930AbiFJVls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
+        id S1350936AbiFJVmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348091AbiFJVlp (ORCPT
+        with ESMTP id S1350951AbiFJVmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:41:45 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA9627155
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:41:43 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id i17-20020a259d11000000b0064cd3084085so384623ybp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:41:43 -0700 (PDT)
+        Fri, 10 Jun 2022 17:42:07 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0A37C172
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:42:06 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id c2so518748lfk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=QRwkxD449IEvVBU53Os0OsTpTWGeUKY9nEsyApnDNxM=;
-        b=nG+8NxDyG19Tn+MrYth0pBt/LayA+JxKX+6WS3zpT+O+3YAMOvWuawWbEYrhk13k5C
-         58Pi/we6J/OQ/TxF5WaXH1dL99nO/kdd90JJMPgqyvNy9Dv9geElEaa6r+QNrk9hwY19
-         HqkZz5y+0i8GB+m3uYAUaBj0DjvBGe9/Xu8uUu7nRkhkVqM8R/dNI3L7tOatAs7OHr8G
-         j4EC6PI6OtfU7mg5fqw1NQZD3jZ+Zi/Hw+qv6pTP7J+2VYBupMtKkzxCthX1HtFKvyI2
-         D+rj/Z7le29/zpPhdPcn/MFBNHvpWMd7tl/EME0oszHoRmb1qq3G3/+nHgzOSMORco+m
-         6s3A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hTuTxAMjCajC/1vYQQYpCYbbAjPzudqNWU9h993rD9s=;
+        b=tis3vvo11BQYB2E6Oe6sgEpUUdvySDAEHAmTA5sN8t8hLwD8OrV0zl1LSRWVLNGBQD
+         2ms4/NuoNN8d7c85d6BAhws1lHMrlYszE0croUX07GJTqn+1kEsE/MKQ8NRGOEC9B1PV
+         m6a4SCGWXQVDnFFDBEr9nV9FQ+1UbkIfonwAUumofP4MtAje4cDnmK7yjpDxLZ0XF0tJ
+         0JkV3WnWO8LGE195rkgmfWcx6Xa9h82pJLsfQVRvRv3RBXhnylIhWF2YmSIMbz681N/R
+         m09Hy+6t9JbACCnW3S4Low0Bs9RnwmtHhc0NKxR/oemYeRCskBMbpxduBdBsHGiPt0yX
+         4B7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=QRwkxD449IEvVBU53Os0OsTpTWGeUKY9nEsyApnDNxM=;
-        b=Os+jPdFh8GEs3k6vGh3qgwbve3VIKhcJFQd00CiHl8QxR1jVpJdnMAkqbYZm4Reho4
-         H6RtVxcT4iBidz2gq1hmgB1kfJg7AtKoTIkXDSyOdex4bXUX9rpm4UTszOrYLGaS9OHw
-         G6T9HicBLqIdgop9z90n2CMFZ5YF2U9/oLayrl7KWoAGycfjJo88xIqLv04nFVnxetm3
-         1QzEpEE2YTedhmJY1iyifnIoRrsNDLAcazsDvIWaY4uUJSfw6HbxlvdEu7z2F1jAoX7r
-         ZzhfhCziGAUCTGiIWdAndQl/DARl/nA73fR0e+UwmiP+es+YNEoJWfXDN5m7Bwl3NtIX
-         ls6Q==
-X-Gm-Message-State: AOAM533K22zym1slKMqcqI1/rACqBK7nfoSVWw5YKA7cawPDwd2xftN9
-        MqJ9WQW+z695pu6IFnFZnT6JxJ3JsAU=
-X-Google-Smtp-Source: ABdhPJzLIGA/VY1p3SL4QfQ3gCm4vTKkKl9Vj/IqUInmjiEG02PjbI7nYTb8eVmDLxi5oZoZApEfHcaYC5U=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a81:21d7:0:b0:313:76ac:4aa6 with SMTP id
- h206-20020a8121d7000000b0031376ac4aa6mr16296719ywh.423.1654897302541; Fri, 10
- Jun 2022 14:41:42 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Jun 2022 21:41:40 +0000
-Message-Id: <20220610214140.612025-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] KVM: VMX: Skip filter updates for MSRs that KVM is already intercepting
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Aaron Lewis <aaronlewis@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hTuTxAMjCajC/1vYQQYpCYbbAjPzudqNWU9h993rD9s=;
+        b=ai5Fc7uGy4UfL8bvOO7pnyoTGu+AgWfd8UZYWcgqLU6ZH403nikbrO1aiDGUEVPNKs
+         Qn7RxUxCq62wMnzj3/1FNlMrblukaOPkYXdHoP6Z4OEI9QDbgGT9bVUrJ4j887rdWIQk
+         Fmoo+aFx/FdJZvR9IAqwx+RN61ytEwGwFjUWoaWjrNnRuo/Q7oCEFnXzQUxdeQlVI/Hy
+         NRFpoWBqRn2khCY38Vm4h+V82PIUG6zJ6K45uUU1cwuAM/R1giimzyXrVoLqyHdyxPo/
+         mE8meMw4fQwPxPeQjzZX1c2WhX+pDxhBuixtVmk7MRDLS7ACPG1+2F+EnN+rA3/+QRxf
+         NY0A==
+X-Gm-Message-State: AOAM532jC91IgGJML/Kh1YJ2SRUCWtp+v2GYWifldoa/HvkAOYaQYryp
+        JggAwx+sYMNseI+Dv+Fr9tkHZ+98j0C/sfw75e8GSA==
+X-Google-Smtp-Source: ABdhPJwU+oIxHw35O4RStA/C+Kb3V+Ogfc+yp0teH8QGDM6HLjVR4XKGUpms34V5zg5NaaQcgcd4YD0Z5qjPR/Ppdns=
+X-Received: by 2002:ac2:5c44:0:b0:479:11e1:36f7 with SMTP id
+ s4-20020ac25c44000000b0047911e136f7mr26779320lfp.432.1654897324408; Fri, 10
+ Jun 2022 14:42:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-3-masahiroy@kernel.org>
+In-Reply-To: <20220610183236.1272216-3-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 10 Jun 2022 14:41:52 -0700
+Message-ID: <CAKwvOdn+fYiiU=x7tqxp68Zkb3E88suEg6oNNucom3AehqayJA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] modpost: put get_secindex() call inside sec_name()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When handling userspace MSR filter updates, recompute interception for
-possible passthrough MSRs if and only if KVM wants to disabled
-interception.  If KVM wants to intercept accesses, i.e. the associated
-bit is set in vmx->shadow_msr_intercept, then there's no need to set the
-intercept again as KVM will intercept the MSR regardless of userspace's
-wants.
+On Fri, Jun 10, 2022 at 11:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> There are 5 callsites of sec_name(). In all the places, sec_name() is
+> used together with get_secindex().
+>
+> So, it is simpler to merge two function calls
+>
+>     sec_name(elf, get_secindex(elf, sym))
+>
+> into one call:
+>
+>     sec_name_of_symbol(elf, sym)
+>
+> While I was here, I also inserted this array range check:
+>
+>     if (secindex >= info->num_sections)
+>             return "";
+>
+> This will make the code robust against info->sechdrs[] overrun.
+>
+> sym->st_shndx is 2 bytes (for both 32 and 64 bit systems), and the
+> range 0xff00..0xffff is reserved for special sections.
+>
+> For example, a symbol specifies an absolute value, sym->st_shndx==0xfff1.
+> get_secindex() remaps it to 0xfffffff1.
+>
+> There is no corresponding section header for such special sections.
+>
+> The existing code does not hit this issue, but it is better to check
+> the array range.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-No functional change intended, the call to vmx_enable_intercept_for_msr()
-really is just a gigantic nop.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Suggested-by: Aaron Lewis <aaronlewis@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+> ---
+>
+>  scripts/mod/modpost.c | 23 +++++++++++++++++------
+>  1 file changed, 17 insertions(+), 6 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 620dc8c4c814..b9f2a040f185 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -339,8 +339,19 @@ static const char *sech_name(const struct elf_info *info, Elf_Shdr *sechdr)
+>                                       sechdr->sh_name);
+>  }
+>
+> -static const char *sec_name(const struct elf_info *info, int secindex)
+> +static const char *sec_name_of_symbol(const struct elf_info *info,
+> +                                     const Elf_Sym *sym)
+>  {
+> +       unsigned int secindex = get_secindex(info, sym);
+> +
+> +       /*
+> +        * If sym->st_shndx is within the special section range, get_secindex()
+> +        * will remapit to a big number.
+> +        * Bail out here, otherwise info->sechdrs[secindex] would overrun.
+> +        */
+> +       if (secindex >= info->num_sections)
+> +               return "";
+> +
+>         return sech_name(info, &info->sechdrs[secindex]);
+>  }
+>
+> @@ -649,7 +660,7 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+>                         const char *name, *secname;
+>
+>                         name = symname + strlen("__ksymtab_");
+> -                       secname = sec_name(info, get_secindex(info, sym));
+> +                       secname = sec_name_of_symbol(info, sym);
+>
+>                         if (strstarts(secname, "___ksymtab_gpl+"))
+>                                 sym_add_exported(name, mod, true);
+> @@ -1217,7 +1228,7 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
+>
+>                 if (is_shndx_special(sym->st_shndx))
+>                         continue;
+> -               symsec = sec_name(elf, get_secindex(elf, sym));
+> +               symsec = sec_name_of_symbol(elf, sym);
+>                 if (strcmp(symsec, sec) != 0)
+>                         continue;
+>                 if (!is_valid_name(elf, sym))
+> @@ -1457,7 +1468,7 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+>         if (strstarts(fromsym, "reference___initcall"))
+>                 return;
+>
+> -       tosec = sec_name(elf, get_secindex(elf, sym));
+> +       tosec = sec_name_of_symbol(elf, sym);
+>         to = find_elf_symbol(elf, r->r_addend, sym);
+>         tosym = sym_name(elf, to);
+>
+> @@ -1559,7 +1570,7 @@ static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
+>                                      Elf_Rela* r, Elf_Sym* sym,
+>                                      const char *fromsec)
+>  {
+> -       const char* tosec = sec_name(elf, get_secindex(elf, sym));
+> +       const char *tosec = sec_name_of_symbol(elf, sym);
+>
+>         sec_mismatch_count++;
+>
+> @@ -1593,7 +1604,7 @@ static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
+>  static void check_section_mismatch(const char *modname, struct elf_info *elf,
+>                                    Elf_Rela *r, Elf_Sym *sym, const char *fromsec)
+>  {
+> -       const char *tosec = sec_name(elf, get_secindex(elf, sym));
+> +       const char *tosec = sec_name_of_symbol(elf, sym);
+>         const struct sectioncheck *mismatch = section_mismatch(fromsec, tosec);
+>
+>         if (mismatch) {
+> --
+> 2.32.0
+>
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 5e14e4c40007..61962f3c4b28 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3981,17 +3981,21 @@ static void vmx_msr_filter_changed(struct kvm_vcpu *vcpu)
- 	u32 i;
- 
- 	/*
--	 * Set intercept permissions for all potentially passed through MSRs
--	 * again. They will automatically get filtered through the MSR filter,
--	 * so we are back in sync after this.
-+	 * Redo intercept permissions for MSRs that KVM is passing through to
-+	 * the guest.  Disabling interception will check the new MSR filter and
-+	 * ensure that KVM enables interception if usersepace wants to filter
-+	 * the MSR.  MSRs that KVM is already intercepting don't need to be
-+	 * refreshed since KVM is going to intercept them regardless of what
-+	 * userspace wants.
- 	 */
- 	for (i = 0; i < ARRAY_SIZE(vmx_possible_passthrough_msrs); i++) {
- 		u32 msr = vmx_possible_passthrough_msrs[i];
--		bool read = test_bit(i, vmx->shadow_msr_intercept.read);
--		bool write = test_bit(i, vmx->shadow_msr_intercept.write);
- 
--		vmx_set_intercept_for_msr(vcpu, msr, MSR_TYPE_R, read);
--		vmx_set_intercept_for_msr(vcpu, msr, MSR_TYPE_W, write);
-+		if (!test_bit(i, vmx->shadow_msr_intercept.read))
-+			vmx_disable_intercept_for_msr(vcpu, msr, MSR_TYPE_R);
-+
-+		if (!test_bit(i, vmx->shadow_msr_intercept.write))
-+			vmx_disable_intercept_for_msr(vcpu, msr, MSR_TYPE_W);
- 	}
- 
- 	pt_update_intercept_for_msr(vcpu);
 
-base-commit: f38fdc2d315b8876ea2faa50cfb3481262e15abf
 -- 
-2.36.1.476.g0c4daa206d-goog
-
+Thanks,
+~Nick Desaulniers

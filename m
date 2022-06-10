@@ -2,111 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7A7545E21
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51025545E22
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347113AbiFJIE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S1347114AbiFJIFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346525AbiFJIEz (ORCPT
+        with ESMTP id S1347082AbiFJIFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:04:55 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E66633F;
-        Fri, 10 Jun 2022 01:04:52 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id i25so689081qtq.0;
-        Fri, 10 Jun 2022 01:04:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rfQ6+6RXDzdhBSxFYL22382fD6+9vWq5XpLo77tRV5s=;
-        b=KKgnB0aw3wPaLB9jNcWz1aoTIswa/9UFRANbq651X6a13JW4kBoUx8EDzhsCdfYolt
-         BYpzVzwn0lEML5J98j+jEcl2o2m9PdQTKvuunm1kvQn+tmcL/u8Ztypky7MTpjoI9asi
-         cqkofyC1LbWRSJBAi8SEV3tuqgBuThBc5kQKTOaGbrMBvNfxDqgAfGovkBaPbo6qAYEW
-         U/lOfYYbFzfYlGlbVNYoPmbY14xeKOg9R/vLr/8BAt19r60IlFQrpGeRYuujVGsEvy2M
-         OWv+u1I4D7BkA5ANOU7BtQOrDddQ9DucuO1KLxQ+6trmAdRbZDTmUmDpY7Jvg6mT6Tc5
-         2MTw==
-X-Gm-Message-State: AOAM531tc88HpgxWO/9kf8irM9gEp2FNXkkG2gMtEr6h0GcbsUghAAEM
-        XcT6KZ0ZEvGQFpFVkPqAK0EQU/jqidZrkw==
-X-Google-Smtp-Source: ABdhPJw3cPFK4IBmJ5EmAWsFjoKeSOaweaDZWsEgAcXl6aka4cE3wwHbrZYXSGQ2wrDlDY5Br9yqkQ==
-X-Received: by 2002:ac8:5856:0:b0:304:da79:e117 with SMTP id h22-20020ac85856000000b00304da79e117mr32243128qth.379.1654848291909;
-        Fri, 10 Jun 2022 01:04:51 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id x14-20020a05620a448e00b006a6f8d26b35sm8041803qkp.63.2022.06.10.01.04.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 01:04:51 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id r82so45689700ybc.13;
-        Fri, 10 Jun 2022 01:04:50 -0700 (PDT)
-X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
- l10-20020a056902000a00b0065cb38e6d9fmr44746879ybh.36.1654848290710; Fri, 10
- Jun 2022 01:04:50 -0700 (PDT)
+        Fri, 10 Jun 2022 04:05:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C3C2B199
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 01:05:00 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 08:04:57 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1654848298;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0N8DC9YiixUnBDUbCMkl/hkU2FVaOtBGL3Vg0n8cwds=;
+        b=Vj5FPN5FKVWRZPwXxXfhOvf3uHWERgZexwxayMb2/dVAIuJ+hGSUAO3PE641wave9OCFG/
+        eLN1vZHRiSPHoDICcWmgwzwiqhi9g1ZVrp1lBJ0d3HOCWNJwsNE4FjG0HVllx47nKhunny
+        NHbeX8uDC6Qzn4Pc5qI3kyN98q3YZgI/agx9ESpq8JqD43iQRxY9nElx9S7rifMCLCt0MW
+        7e2jA+fm8YIuZkRUKamLHf4srCaVq+vPIDtBGQCC7Uchq+z8e3simuq/2ZgfL4y8WWFDhv
+        KGE9sJooxMqH/EmhzYtOtfB/+ztWDmA7ElJ0+0ZU39BJXQ+27ZpxBlRhv1jBdw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1654848298;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0N8DC9YiixUnBDUbCMkl/hkU2FVaOtBGL3Vg0n8cwds=;
+        b=VQ/ikr4TkOALtDvUGSO7VtK8fGg7/TPQZ+mM96GlPiH6xHKmbhE41JZILhxjSi/GPBgFMp
+        Bv8PJkLSTl1GSFDA==
+From:   "irqchip-bot for Jiaxun Yang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irqchip/loongson-liointc: Use
+ architecture register to get coreid
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220609175242.977-1-jiaxun.yang@flygoat.com>
+References: <20220609175242.977-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-References: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 10 Jun 2022 10:04:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWbq+AUq6LoT3+b0NqjqyNtS3BKvonzt2PLuTAPv-GwQg@mail.gmail.com>
-Message-ID: <CAMuHMdWbq+AUq6LoT3+b0NqjqyNtS3BKvonzt2PLuTAPv-GwQg@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: rcar_gen3_thermal: improve logging during probe
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Message-ID: <165484829710.4207.11924416657167515441.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-On Thu, Jun 9, 2022 at 10:23 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> When setting up a new board, a plain "Can't register thermal zone"
-> didn't help me much because the thermal zones in DT were all fine. I
-> just had a sensor entry too much in the parent TSC node. Reword the
-> failure/success messages to contain the sensor number to make it easier
-> to understand which sensor is affected. Example output now:
->
-> rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip point
-> rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip point
-> rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip point
-> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> Change from v1: reword the dev_info string to be more like the original
-> one. Added a check to add the plural-'s' only when needed.
+Commit-ID:     6fac824f40987a54a08dfbcc36145869d02e45b1
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/6fac824f40987a54a08dfbcc36145869d02e45b1
+Author:        Jiaxun Yang <jiaxun.yang@flygoat.com>
+AuthorDate:    Thu, 09 Jun 2022 18:52:41 +01:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Fri, 10 Jun 2022 08:57:19 +01:00
 
-Thanks for the update!
+irqchip/loongson-liointc: Use architecture register to get coreid
 
-> Geert: is this better now?
+fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for
+LoongArch") replaced get_ebase_cpunum with physical processor
+id from SMP facilities. However that breaks MIPS non-SMP build
+and makes booting from other cores inpossible on non-SMP kernel.
 
-Much better!
+Thus we revert get_ebase_cpunum back and use get_csr_cpuid for
+LoongArch.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixes: fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for LoongArch")
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220609175242.977-1-jiaxun.yang@flygoat.com
+---
+ drivers/irqchip/irq-loongson-liointc.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index aed8885..8d05d8b 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -39,6 +39,12 @@
+ 
+ #define LIOINTC_ERRATA_IRQ	10
+ 
++#if defined(CONFIG_MIPS)
++#define liointc_core_id get_ebase_cpunum()
++#else
++#define liointc_core_id get_csr_cpuid()
++#endif
++
+ struct liointc_handler_data {
+ 	struct liointc_priv	*priv;
+ 	u32			parent_int_map;
+@@ -57,7 +63,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+ 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct irq_chip_generic *gc = handler->priv->gc;
+-	int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
++	int core = liointc_core_id % LIOINTC_NUM_CORES;
+ 	u32 pending;
+ 
+ 	chained_irq_enter(chip, desc);

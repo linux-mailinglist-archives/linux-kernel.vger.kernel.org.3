@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837D0546F2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EFD546F32
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348726AbiFJVUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S1347206AbiFJVXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244326AbiFJVUN (ORCPT
+        with ESMTP id S244326AbiFJVXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:20:13 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB913FDAB
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:20:11 -0700 (PDT)
+        Fri, 10 Jun 2022 17:23:04 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518C6517EF;
+        Fri, 10 Jun 2022 14:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654896011; x=1686432011;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pqG+Qg/ylT4j8GOZY6J5PxKZ3poP9l+qi4+yhxajZUU=;
-  b=m/Y49UuJp0usoWDXzLgbuK7fecf0SxP/mzc+zVYu3WkhvHAxL+2hyKhj
-   VFFpUJmt5zvNf091kusgP9TnRPeW9sGDr+U60yJDrkwwJhdpKTU+OaldC
-   BTbYNJCEz38wZpA+IptmLciTly95reWLXRq9/L79a9kppTAjiB/JR9I5H
-   Z3A/zkkJjPvlQVUu/ocsR2jlu5Z+ycmZ4szMy7hZ2ePtpfMwFmfNaLa7F
-   U52ofuTdA/WHxhpmapHu1P7ReIBjWGN27n4i4tFcZ8OzoArQe2qDYVMLW
-   fWQQnfk7+MBMHNGPebXe4WeDjZiz8L15HK+eNWDLsBmQrg+ArZMd8b6ib
+  t=1654896179; x=1686432179;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Fnfy4WtP9NWPenQZd12tioUwaC4f7ruohnjtYS/f3Q=;
+  b=gMNVufcWr0NsKdGfIlVHsJGQWHmNQ55lPzmgwiZ1xgH+y26zNBhsDMPk
+   r/ZfbdGDU8u4PtmshPjqt0JLXyuInqJJi7Wv1wa2MQQruYQLJhEdE23TD
+   wOeU602XWeyx8vEVgOZ0z5QuFdxBXJDIAzLJcwWXkUt7gOBC2QpaKjcbF
+   e1nmWW37vHY7qgTha398jLJC5wFVILvDh1WIcTx5IW/kEoimaVZkDMhqL
+   9tf6VsP5mxRDrgiOZwfWmSV6cqEo956+eIiV9XpJ/dZAwekk69gIu/j2W
+   8FoQyRpQug4v9xlVcSXZjrk4vnlufw3g6LhKAboIjoh3A7rMXDVC6olZa
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="364079608"
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="260868821"
 X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="364079608"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 14:20:10 -0700
+   d="scan'208";a="260868821"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 14:22:58 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="610887491"
-Received: from schen9-mobl.amr.corp.intel.com ([10.252.137.228])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 14:19:58 -0700
-Message-ID: <f7a0d098ac635c9596d739515efd4f1bc383c73e.camel@linux.intel.com>
-Subject: Re: [PATCH v4 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Yicong Yang <yangyicong@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>, peterz@infradead.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, gautham.shenoy@amd.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, prime.zeng@huawei.com,
-        jonathan.cameron@huawei.com, ego@linux.vnet.ibm.com,
-        srikar@linux.vnet.ibm.com, linuxarm@huawei.com, 21cnbao@gmail.com,
-        guodong.xu@linaro.org, hesham.almatary@huawei.com,
-        john.garry@huawei.com, shenyang39@huawei.com,
-        Chen Yu <yu.c.chen@intel.com>
-Date:   Fri, 10 Jun 2022 14:19:57 -0700
-In-Reply-To: <4ab2c422-04ae-3199-ae2a-357c3270cd05@huawei.com>
-References: <20220609120622.47724-1-yangyicong@hisilicon.com>
-         <20220609120622.47724-3-yangyicong@hisilicon.com>
-         <c3fa2b4f5884e5ad4efda48b1bb2ab4f7a2e532a.camel@linux.intel.com>
-         <4ab2c422-04ae-3199-ae2a-357c3270cd05@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+   d="scan'208";a="760671333"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jun 2022 14:22:53 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzm5k-000II1-E0;
+        Fri, 10 Jun 2022 21:22:52 +0000
+Date:   Sat, 11 Jun 2022 05:22:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Michal Hocko <mhocko@kernel.org>
+Cc:     kbuild-all@lists.01.org, Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH bpf-next v2 6/8] cgroup: bpf: enable bpf programs to
+ integrate with rstat
+Message-ID: <202206110544.D5cTU0WQ-lkp@intel.com>
+References: <20220610194435.2268290-7-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610194435.2268290-7-yosryahmed@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,34 +82,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-10 at 14:39 +0800, Yicong Yang wrote:
-> 
-> 
-> I've tested this patch with MySQL as well (like in v2). This won't hurt
-> the MySQL case with SIS_PROP but observed some improvement with SIS_UTIL
-> posted in [1]. We leverage the nr to suppress redundant scanning in the
-> current approach and seems SIS_UTIL is more efficient in this case.
-> 
-> 			 5.19-rc1		   patched	 patched+SIS_UTIL[1]
-> TPS-16threads		  6215.11	  6172.74 (-0.68%)	  6217.33 (0.04%)
-> QPS-16threads		124302.21	123454.68 (-0.68%)	124346.52 (0.04%)
-> avg-lat-16threads	     2.57	     2.59 (-0.65%)	     2.57 (0.00%)
-> TPS-24threads		  8726.40	  8690.87 (-0.41%)	  8833.08 (1.22%)
-> QPS-24threads		174527.88	173817.42 (-0.41%)	176661.54 (1.21%)
-> avg-lat-24threads	     2.75	     2.76 (-0.36%)	     2.71 (1.33%)
-> TPS-32threads		  9555.42	  9514.86 (-0.42%)	 10010.87 (4.77%)
-> QPS-32threads		191108.37	190297.28 (-0.42%)	200217.35 (4.55%)
-> avg-lat-32threads	     3.35	     3.36 (-0.30%)	     3.20 (4.58%)
-> TPS-64threads		 10290.10	 10324.75 (0.34%)	 10819.77 (5.15%)
-> QPS-64threads		205802.05	206494.95 (0.34%)	216395.40 (4.90%)
-> avg-lat-64threads	     6.22	     6.20 (0.38%)	     5.92 (4.88%)
-> 
+Hi Yosry,
 
-Thanks for the numbers. SIS_UTIL will keep off migrations off the cluster
-that doesn't really improve overall utilization.  We have higher chance that
-L2 cache is warm.  So it makes sense that we see a bit
-better performance there.
+Thank you for the patch! Yet something to improve:
 
-Tim
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220611-034720
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220611/202206110544.D5cTU0WQ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/83f297e2b47dc41b511f071b9eadf38339387b41
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220611-034720
+        git checkout 83f297e2b47dc41b511f071b9eadf38339387b41
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   kernel/cgroup/rstat.c:161:22: warning: no previous prototype for 'bpf_rstat_flush' [-Wmissing-prototypes]
+     161 | __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+         |                      ^~~~~~~~~~~~~~~
+>> kernel/cgroup/rstat.c:509:10: error: 'const struct btf_kfunc_id_set' has no member named 'sleepable_set'; did you mean 'release_set'?
+     509 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
+         |          ^~~~~~~~~~~~~
+         |          release_set
+   kernel/cgroup/rstat.c:509:27: warning: excess elements in struct initializer
+     509 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
+         |                           ^
+   kernel/cgroup/rstat.c:509:27: note: (near initialization for 'bpf_rstat_kfunc_set')
 
 
+vim +509 kernel/cgroup/rstat.c
+
+   505	
+   506	static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
+   507		.owner		= THIS_MODULE,
+   508		.check_set	= &bpf_rstat_check_kfunc_ids,
+ > 509		.sleepable_set	= &bpf_rstat_sleepable_kfunc_ids,
+   510	};
+   511	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

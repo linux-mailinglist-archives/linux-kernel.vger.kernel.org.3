@@ -2,140 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7CE546A68
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E452D546A77
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349620AbiFJQcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
+        id S1349793AbiFJQej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345920AbiFJQct (ORCPT
+        with ESMTP id S1349732AbiFJQdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:32:49 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731BB56B17
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:32:46 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id r82so47813420ybc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=0XYuJwlWcPhF5wKwZj6AX0M1ehVlcZ8wjqHIDg46ZGY=;
-        b=YGb7T13IJ8UiqfUJsmv02nu9YXnSJcbAUt/Mw1b+6ond6Dc2qqxiyORhyo3av0M89s
-         9OcHBOtfbbrRc9cquT7RcjEQpvQa8VVX8YZOZj7QBiGS2dsajxO5Y/+BsgU+M7MgPMiM
-         pKT7ohn/HbmAeM6/yxR+dSbQSZEx3cImo7f4ikdZC0NhAAKeGRRcvpe5I6I5qjkdYfjp
-         ALRdVMVwT08KL5DBr4wUVfSvPEv4IIladqD1EdLJ+Iy9c7POvAZJwvM29n4D6Zxx7iMg
-         WRafBNmnTTDXsUKpZ+d+XQOE55IB1JLiIrAoQ1+Tt6YxeDtP/dG/SdhUVnHCwkkKT+Tm
-         Fm0A==
+        Fri, 10 Jun 2022 12:33:54 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BB258E45;
+        Fri, 10 Jun 2022 09:33:47 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id h7so13715267ila.10;
+        Fri, 10 Jun 2022 09:33:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=0XYuJwlWcPhF5wKwZj6AX0M1ehVlcZ8wjqHIDg46ZGY=;
-        b=nqd1znwGTgbjnjfCTga5AcSLm9+2hqh/wDRjkcNKKJur532JoqlhwBlPjSq1i+XksB
-         wv/wn/MJq2Vq/F0iFyGGycwbfwH2OBFIHPQH35J6//2N7hbpsVNVU2JmpKYJU0VM4D8W
-         KxHXn7eUCBy/ukWP0v/dDp5Q2sN7F7hT6QAsGGXKaqR9nG0D+OVWZV/us+9nUGKezc5J
-         8kDK3YUmWxsH1PLpx2gim+Siw/P5gzldLKeHeo9hNbhBURuGrr6lUaYoG855eYifWPLk
-         HtsVba4wRPw5yEoKJfJtuHmQe/b7gCjTFDBLIPon6vLQMLcsvpWl/3Dc1It9ZTkLCO4A
-         nGBA==
-X-Gm-Message-State: AOAM532yy8z9pSvxwHilZgqfDrZls98fpCmLmmyNPjW+rBP/I7fm9WVW
-        s6muUMcSNiVPwmkzBW2iuNeKT6xV3APJPw48Dts=
-X-Google-Smtp-Source: ABdhPJwax1n8gVqAuKV+ceFuVHBEqDyXMZ25+fmnz7g3HqM17F6VLNri5lzclLDgJw8R7/qGGvkPhTKWnw5QPNso4k4=
-X-Received: by 2002:a5b:b:0:b0:663:f6b5:e66b with SMTP id a11-20020a5b000b000000b00663f6b5e66bmr14723467ybp.400.1654878765503;
- Fri, 10 Jun 2022 09:32:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0SJRA8bZv4EkDoSWAX6IXj5FOkwecFc6bH5o9u3WQVA=;
+        b=IHSzsE8by4zmzO3B5AJXWY4sPBQCbPhRndCIYoJXp7P4O6h8QIcMyGl+dG12jmlCWB
+         3bzdR55Eb1X3GChRwUJCM1+IBDZ/RO0Zvk/LG2voGmk9/PawpnLzs0bJ7ynFvoncSQWg
+         x/D0o5HDMR8K4CUfICvAS5M8cHGMc2msMLERJKG7i9HWFrEqsXSkZpqQuxlDZOb4qa8s
+         +M0KOtLaIEc0AZbJ3D4lzMtg8/XtOeEH8NOWF/XKRj/IP64Qg7mYqSXf33I+qnj5aB1R
+         gEMofIS+7vH9Dt9DLNJPclgdkjfzzOnogP0KaRmbHu0iMAkMm8jME5sa1Q9p31f1OzcK
+         oYsg==
+X-Gm-Message-State: AOAM532K7HSUI4OBWASfbEOaCNpa93tbcjum1jD/KHmbw6hJCeE/oPkW
+        pHxnvnUo14539f2FJ9fRPQ==
+X-Google-Smtp-Source: ABdhPJxR45UYGkioPDHY+f3C0XLliQgvW0kq5KZai959ccAbBSK7UnS3cbZLCMdNKsbKfJnyQy6f3g==
+X-Received: by 2002:a05:6e02:1c02:b0:2d3:ccfe:6551 with SMTP id l2-20020a056e021c0200b002d3ccfe6551mr26493589ilh.134.1654878826477;
+        Fri, 10 Jun 2022 09:33:46 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y15-20020a02bb0f000000b0032e21876ea8sm10348748jan.72.2022.06.10.09.33.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 09:33:46 -0700 (PDT)
+Received: (nullmailer pid 1794568 invoked by uid 1000);
+        Fri, 10 Jun 2022 16:33:43 -0000
+Date:   Fri, 10 Jun 2022 10:33:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Kumar Gala <galak@codeaurora.org>
+Subject: Re: [PATCH 1/4] dt-bindings: arm: qcom: document qcom,msm-id and
+ qcom,board-id
+Message-ID: <20220610163343.GA1787330-robh@kernel.org>
+References: <20220529202629.47588-1-krzysztof.kozlowski@linaro.org>
+ <20220529202629.47588-2-krzysztof.kozlowski@linaro.org>
+ <20220605150747.GA3465286-robh@kernel.org>
+ <54015d41-d4eb-12ae-5bd1-00d2c3cf7814@linaro.org>
 MIME-Version: 1.0
-Sender: adonald323@gmail.com
-Received: by 2002:a05:7000:8b10:0:0:0:0 with HTTP; Fri, 10 Jun 2022 09:32:45
- -0700 (PDT)
-From:   Dina Mckenna <dinamckenna1894@gmail.com>
-Date:   Fri, 10 Jun 2022 16:32:45 +0000
-X-Google-Sender-Auth: 7HtA3KAngftg8fKmIq7ATJwMLxs
-Message-ID: <CANHbP4O3ktPBLC5xwxvY+_Si8KuoUkpzj-spjV6P6JZeHKWDEw@mail.gmail.com>
-Subject: Please need your urgent assistance,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b32 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.9293]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [adonald323[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [adonald323[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54015d41-d4eb-12ae-5bd1-00d2c3cf7814@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello my dear,
+On Tue, Jun 07, 2022 at 01:15:51PM +0200, Krzysztof Kozlowski wrote:
+> On 05/06/2022 17:07, Rob Herring wrote:
+> > On Sun, May 29, 2022 at 10:26:26PM +0200, Krzysztof Kozlowski wrote:
+> >> The top level qcom,msm-id and qcom,board-id properties are utilized by
+> >> bootloaders on Qualcomm MSM platforms to determine which device tree
+> >> should be used and passed to the kernel.
+> >>
+> >> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
+> >> compatible format") from 2015 was a consensus during discussion about
+> >> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
+> >> problems with that consensus:
+> >> 1. It was reached 7 years ago but it turned out its implementation did
+> >>    not reach all possible products.
+> >>
+> >> 2. Initially additional tool (dtbTool) was needed for parsing these
+> >>    fields to create a QCDT image consisting of multiple DTBs, later the
+> >>    bootloaders were improved and they use these qcom,msm-id and
+> >>    qcom,board-id properties directly.
+> >>
+> >> 3. Extracting relevant information from the board compatible requires
+> >>    this additional tool (dtbTool), which makes the build process more
+> >>    complicated and not easily reproducible (DTBs are modified after the
+> >>    kernel build).
+> >>
+> >> 4. Some versions of Qualcomm bootloaders expect these properties even
+> >>    when booting with a single DTB.  The community is stuck with these
+> >>    bootloaders thus they require properties in the DTBs.
+> >>
+> >> Since several upstreamed Qualcomm SoC-based boards require these
+> >> properties to properly boot and the properties are reportedly used by
+> >> bootloaders, document them.
+> > 
+> > My primary issue here is accepting this will be an endorsement for 
+> > other vendors doing something similar. I'm not against an ID 
+> > property(ies) in the root node, but would rather see something common 
+> > if we do anything.
+> 
+> Hi Rob,
+> 
+> A more common approach was merged back in 2015 - encoding this ID
+> information in the board compatibles. If I understood previous
+> discussion correctly, this common method was later used by Qualcomm DTB
+> post-processing tool. At least for some of the cases.
+> 
+> Other cases (several Qualcomm boards from different vendors) still use
+> these ID properties. It even turns out they use it differently between
+> vendors (e.g. Xiaomi vs OnePlus).
+> 
+> Important arguments for documenting these properties:
+> 1. These ID properties are already on released boards where changing
+> bootloader is non-trivial or even not possible. It will not be possible
+> to remove these properties, without seriously affecting the community
+> working with them.
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you.. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs. Dina Howley. Mckenna, a widow. I am
-suffering from a long time brain tumor, It has defiled all forms of
-medical treatment, and right now I have about a few months to leave,
-according to medical experts. The situation has gotten complicated
-recently with my inability to hear proper, am communicating with you
-with the help of the chief nurse herein the hospital, from all
-indication my conditions is really deteriorating and it is quite
-obvious that, according to my doctors they have advised me that I may
-not live too long, Because this illness has gotten to a very bad
-stage. I plead that you will not expose or betray this trust and
-confidence that I am about to repose on you for the mutual benefit of
-the orphans and the less privilege. I have some funds I inherited from
-my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
-Having known my condition, I decided to donate this fund to you
-believing that you will utilize it the way i am going to instruct
-herein. I need you to assist me and reclaim this money and use it for
-Charity works therein your country  for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of God
-and the effort that the house of God is maintained. I do not want a
-situation where this money will be used in an ungodly manner. That's
-why I'm taking this decision. I'm not afraid of death, so I know where
-I'm going. I accept this decision because I do not have any child who
-will inherit this money after I die.. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
+Accepting things because they are already in use is also not a path we 
+want to go down. If it's the color of the bike shed, then fine.
 
-I'm waiting for your immediate reply.
+> 2. According to Konrad [1] (second paragraph), newer chipsets (starting
+> with sm8350 released in 2021) do not use these properties. These newer
+> DTS do not have them.
+> 
+> Considering 1+2 above, maybe let's document these properties as
+> compatible? Would that solve your point of "endorsement for other vendors"?
 
-May God Bless you,
-Mrs. Dina Howley. Mckenna.
+What do you mean? Only allow them for certain root compatible strings? I 
+suppose that would be okay by me. It would also be useful documentation 
+of where they are needed.
+
+Rob

@@ -2,80 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CECE5461F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA8154620B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346935AbiFJJYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S1349142AbiFJJZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349237AbiFJJXT (ORCPT
+        with ESMTP id S1349695AbiFJJYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:23:19 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BAA66CB0;
-        Fri, 10 Jun 2022 02:21:37 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id g25so28894948ljm.2;
-        Fri, 10 Jun 2022 02:21:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UR+RqvdxNC/6O7vnxiLh6+/xafLghKRExkkKTPqRGok=;
-        b=Lemye8FYmKBZkgHBMFKit5bSNWAlRuFMQ5mtgZ2v9GLhUs3YUE/FrhbmX/mqVhKCc8
-         q+GbXGYpY2vWhrQL58jcWNfW4BqcADEuovdSXRXifLvHXnI/ymUoIRY4JoS/iKf5QUr+
-         7CQ4XurcYfzrKHHkcxLw1016rmTmFvvhaDUV/4Cj88hBFAar8p6LROdOK4ZGRqRgXPrE
-         y3DG3/0z5qPeqYthiSHt5FTVeoq7CQre0iGfWR7/wOkKT8kjcOE1gJiIogFj+EaWjFdb
-         L8OT7Ult70n63foxo7E6OChcUKy0utmxL9j3Hh4t/tiun61dtUTctX7J6W07ae8lA/4I
-         GVAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UR+RqvdxNC/6O7vnxiLh6+/xafLghKRExkkKTPqRGok=;
-        b=RBWM8AgYKMfcZHK4Wgmyrz9Y9srWbeWi7IafChHg+Vl9T3L8pdkZ+5UOCeddXBZ7ij
-         q6mTseHwG1LHS5uk4ELVlVq1Ko0f0OMh6eSnraDtd6+OztWwwHHtqdOIh+I6nrkvJxpG
-         9rK/Jkm6WLvUacnv7NM1JJXKnFRavOy4T6LdmvSHNE9mmFHCsl56+YuCB4lwMmmNnXKZ
-         ZBhlVMKc7WjXahW+0rZ+DFrYNqkA78daKMEc/Fa2DJKZeRggNDgnJifzE17sY4f29Ga6
-         QsdD52EjLuJerqmUyO8L1QI1y7LexTwhrOMdb04cyDllu+7zPLh00f/3kobAEhN/HNIk
-         Hl8g==
-X-Gm-Message-State: AOAM533JPu0pdliNDD4zQrywKpjXko9hi7+i41J3xnfOVug+k13cdlBe
-        F38mYhFPvxXXTnZNrnmASVg=
-X-Google-Smtp-Source: ABdhPJw3MKJdThzbGUpdJQ///v3bRel6K997WxVQzU+PBQkLl/kRHZlA0iKYR52uOu+eW7ysimhHqw==
-X-Received: by 2002:a2e:9b58:0:b0:255:95c0:c610 with SMTP id o24-20020a2e9b58000000b0025595c0c610mr14363089ljj.311.1654852895817;
-        Fri, 10 Jun 2022 02:21:35 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id q17-20020ac246f1000000b004790105d0cfsm4654552lfo.16.2022.06.10.02.21.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 02:21:35 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 12:21:33 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/24] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220610092133.uhsu5gphhvjhe2jm@mobilestation>
-References: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Fri, 10 Jun 2022 05:24:13 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2026.outbound.protection.outlook.com [40.92.99.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03B0144BDE;
+        Fri, 10 Jun 2022 02:22:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XEV3MhWXCTOSQ3XH5Dy+TG5wE5eV8m3SGBgOp/aJKbmfmiXq5o1xksVciuVPYRS3gyqLO9R5KsUjxnA/Dk+GnfiSjTGq057v5Sj85kSNWu+It8KoHPxkiCckin0Gsj7J0Qa3CtO4E9eBNF60Vvds5pOu9hRYhqz9buzQ/FifRVXKWj0IvVuIkcVLKvANRI00gmHWm8Rl1d65JokPRrzi0r/Y8w9HnIDjbk4DCyqi2s8eyjrbMcRGW+YXxrrCl/d6xrx1QuG7xpPibshx2ML1jnHHZNGUzK3+6Qa+mZNgSgzvPPGZdqNv6Ev53P90vWfTLSpJQUcoWCic69y3J0fouw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n5Gndf3R9jznFS2JrOJtn/j19XkA5i2rvR3FDaQRvOM=;
+ b=FbxE9NWTNRRpH2s7T1kcDogYbkQDy8LHv2uJJaLk0vhBXbwNiuzUjvK6Rm9NUjwaMm3lYpSsIUUK8hBj51CVMBw/s5zs+jNuPNwKgXvVMcKw0vdCdRRCpmd5U1Pwuy8Qt1FHG55ryg3JelrTDSN2TXuN3bLxHwGDCGJRSvRqNk1i4VCyUS5O1UxhyYYzgELXlfHCJJMvx+7ts5cr608vzvUU/bnx0+ZFjBLC+JyeRR8rg/RorYCv5i8N8du4Pv41KQDCKuxfomU20NQb62mtvapkB7yt5063cP/yv89iwMInEzdjeXgHEjSMySOKjP1p5x4d+ba4gDO6DUbd5iCeCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n5Gndf3R9jznFS2JrOJtn/j19XkA5i2rvR3FDaQRvOM=;
+ b=R48ZKTyxxdveTAPCqCSa0CsThSGSuRZmSU1+Ul6iG2B0N0oTfQRQJjsSYpJ3r4172ObC7bQwfZeoK4v8pxSeOHYPNePe3lnG51ptF0mNvAyUjXRESD6iS1QW8/qQdw3wDvnXj1gwOhr6xU+WxsLYNAHUVl/WSCsy2uNlyRUtutNnqqVmPVJ2h89KoeHPK+Ti+IaPrNHFBCfwck+h3ElVCyUsUWJXvnf8hsgBZ6VR8DrqkKlGVl83TlNzqHfqY5QZPIkX2D5jpHldesIjLzL+tRb+Z0DHkba1vnu0O6fpMuK7Sb0tmeQhDRmeNwLPtJUNUD5aI4uRJ27qPJMNRXQ4tA==
+Received: from TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:248::14)
+ by OS0P286MB0548.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:cf::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Fri, 10 Jun
+ 2022 09:22:32 +0000
+Received: from TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9cb3:323f:e99e:39c1]) by TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9cb3:323f:e99e:39c1%9]) with mapi id 15.20.5332.014; Fri, 10 Jun 2022
+ 09:22:32 +0000
+From:   Riwen Lu <luriwen@hotmail.com>
+To:     rafael@kernel.org, lenb@kernel.org, rui.zhang@intel.com,
+        robert.moore@intel.com
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Riwen Lu <luriwen@kylinos.cn>
+Subject: [PATCH v2] ACPI: Split out processor thermal register from ACPI PSS
+Date:   Fri, 10 Jun 2022 17:22:05 +0800
+Message-ID: <TYWP286MB2601DDBB0F472C876D36FBCCB1A69@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain
+X-TMN:  [hJH9DDkDDkbr6d0vQhTB1TpIckErRADeexymWBJ5vVQ=]
+X-ClientProxiedBy: SG2PR02CA0133.apcprd02.prod.outlook.com
+ (2603:1096:4:188::18) To TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:248::14)
+X-Microsoft-Original-Message-ID: <20220610092205.2078989-1-luriwen@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c556db5f-cedc-475e-7833-08da4ac2bf3a
+X-MS-TrafficTypeDiagnostic: OS0P286MB0548:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CuxNgBSAjKhYvnChFEkXzLgCHd0bjKDESGx2HctlZRJX3hakFsetc3MhHl5ZBoXf8jDAK9YxRyzu3M0rXBUi6mxpPPu+3AxpO/3xvN9hhpxAHOzv0t+66icHkamq7fKJTxVA505K+jchcu2qNWhtmGa7x/az0r7Ju9DA0SzxTW0hIoA5VjfccGB8RHRf3qN3qI1153kdb12F2scacty07PR7DgCdsNxU2lldEIWa4Kqh7W19Q/UaOSykXjKC8hq/6hlU9QwX3Z1kLcq9JGo3mXE/jVuoTjNDOr3+nUAnCRNZjGbTzieJKebnpLliZMkmKKhwbEyL6JEkp/gWdEnUBWrwAMV6mtkRBUZQujhdhwryLXwZ54PTcrolME9DfazEGpJcNkUS0+KMtaWvIVlb7R8yr/pKoNp3xSde81/KHG+0UTjDfKB7msjb+7ovqu5rOX5UgYUsm1Xtyt0zZ/cHkn26IVkccN0weLH/Uvc8oewg9skkuyq8hVCb7nnvixQ+He5AMwqxBeJyiNWjpeb5vo2PaU5TDPYRfQFjDqtGvx4dB9775+QgoMyV14dOb0ZZtmWH6/Qmfb3F7akjPHRiPA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mr2Y6bVTf2dj2c5gOTxIngmjt/p2RFqKA8RWLjpYSdVktDU5pffDW+kCOsqI?=
+ =?us-ascii?Q?Ampe416dLNp2YYFgqzod2j93lFrBkwkZOJnNsD/FNqG0UqZHeiBsuE2hvHY5?=
+ =?us-ascii?Q?LG7JZth5BrV7N2gZEQkBJjU4dfwFieQQ+FVCRM+QHeky/XDC/02DcjzJ0cZz?=
+ =?us-ascii?Q?CL3HM3bbh83CbYGVEVyPMfyDbDZXxTHrqTG1IiXraeISQC4DtjRY+oJDlqYB?=
+ =?us-ascii?Q?d54GLRYsMKo1bF5oPbSXp7w189v5BzFMA/lNxetzBex6tlwxz4avgldJJ/rw?=
+ =?us-ascii?Q?cZ+seCOmNzRNTq9fD5IZbyT+A5fMqHeq+GDV3iSN9X2DTGJsLAAZE7Tq3pqi?=
+ =?us-ascii?Q?qKpvmEzfl/2IIt4Pu4CgOK6lOwPnLrgbe6GwitjguDY7kfyZ0Sp3SGGwQhtB?=
+ =?us-ascii?Q?CqX4RVXfw2IWdWrnDdpSt5tV3opBlWHw17LJekiwa3OJB2mY7fDDOLJcaTBY?=
+ =?us-ascii?Q?tWk93PikA9qkZnnxx0xk4KaKdh4AgenlcIFJMoYgu3lGqAEr36+lv4OZSRnp?=
+ =?us-ascii?Q?v/Ph3Cwn8a4iScc1SBC9PVOKS4QOlAEmSqIClwz+Hu6+DYNrszKrkkYp7QPa?=
+ =?us-ascii?Q?vTkA9GIyUfzpyA86M351ltWkj+BD/PS4ZtZRThQEaEP4ft4o4/6gnx8B8z80?=
+ =?us-ascii?Q?7uuaROaXmV9fVKq2QCRChFW+VJx1jYGoDNZO1YkkrKIijCc+MUkLYnuNFAkx?=
+ =?us-ascii?Q?7ZSVe+BnN5AeMDOMd43u85qJRrsaPzy3bt3Y3OF906N3cuAs+6MBkAbiNh6q?=
+ =?us-ascii?Q?XV5bF3A/IyYy3kZq1TsJc8VNjS+bhYudsuWOXhSrkmXRjN0n6haXeO8TM0zJ?=
+ =?us-ascii?Q?yITGOt6sfWsfJLujU8q8k38RNSezRRFIFoRSdq40Hpba/M35c4Q+JM8DbtpF?=
+ =?us-ascii?Q?Ifb/x71e2dzJpyglH4r4z1Y8m3vf5OQcLylSrxikca9eo7edNqx9w1tzkb0E?=
+ =?us-ascii?Q?a09b8+qfgwMuoOg+Dy5eUBSxkOjASqj3gqVQm4S1ZMriGMuUDlAYsd5U3ECn?=
+ =?us-ascii?Q?zzKiJG4bwnBBV2cwJcywJgA80JH9DaJX6B1j3HPxeSoVYTrOdCNlWCrgLr7s?=
+ =?us-ascii?Q?mczp8k/CV8TaR+eIcI74WTYNLQdqm+nRal6s/KQIJ6EBKd7dzku5R1R77UKQ?=
+ =?us-ascii?Q?jZOO9tl3l9ZyggpcfojqSNtAjzs3abKTHZ7xxZt6FMFFnWskEPAh8J7ynnnn?=
+ =?us-ascii?Q?YHCLPh/SpZ8Pl4sQXcWQdUZ96ic4Cp5wuLpeS+v8vxfxRCU/xovuhljaNiXO?=
+ =?us-ascii?Q?mdHMxQ9x8HWWWpnxf67pbt3Ip/CqVup2phc7ddmL2BQLfVOLmLtYJiXblCGB?=
+ =?us-ascii?Q?z1VBhf+0599zpGVQj5x+tMIw8I7hV7AHo8a1zpFQcqpNtDrZVhXEMJimNtsD?=
+ =?us-ascii?Q?7u7oiNL42tLBJ9Zt+9NaJSGaHXZnmQXLCa1hSNilSdNSnooBhC3tsC5IVS5O?=
+ =?us-ascii?Q?nNwcx4TYlX4=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: c556db5f-cedc-475e-7833-08da4ac2bf3a
+X-MS-Exchange-CrossTenant-AuthSource: TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 09:22:32.1392
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0P286MB0548
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,156 +107,279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:14:35PM +0300, Serge Semin wrote:
-> This is a final patchset in the series created in the framework of
-> my Baikal-T1 PCIe/eDMA-related work:
-> 
-> [1: In-progress v4] PCI: dwc: Various fixes and cleanups
-> Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
-> [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
-> Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
-> [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
-> Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
-> [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
-> Link: ---you are looking at it---
-> 
-> Note it is very recommended to merge the patchsets in the same order as
-> they are listed in the set above in order to have them applied smoothly.
-> Nothing prevents them from being reviewed synchronously though.
-> 
-> Please note originally this series was self content, but due to Frank
-> being a bit faster in his work submission I had to rebase my patchset onto
-> his one. So now this patchset turns to be dependent on the Frank' work:
-> 
-> Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
-> 
-> So please merge Frank' series first before applying this one.
-> 
-> Here is a short summary regarding this patchset. The series starts with
-> fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
-> initializes the LL/DT base addresses for the platforms with not matching
-> CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
-> method to get a correct base address. After that you can find a series of
-> the interleaved xfers fixes. It turned out the interleaved transfers
-> implementation didn't work quite correctly from the very beginning for
-> instance missing src/dst addresses initialization, etc. In the framework
-> of the next two patches we suggest to add a new platform-specific
-> callback - pci_address() and use it to convert the CPU address to the PCIe
-> space address. It is at least required for the DW eDMA remote End-point
-> setup on the platforms with not-matching CPU/PCIe address spaces. In case
-> of the DW eDMA local RP/EP setup the conversion will be done automatically
-> by the outbound iATU (if no DMA-bypass flag is specified for the
-> corresponding iATU window). Then we introduce a set of the patches to make
-> the DebugFS part of the code supporting the multi-eDMA controllers
-> platforms. It starts with several cleanup patches and is closed joining
-> the Read/Write channels into a single DMA-device as they originally should
-> have been. After that you can find the patches with adding the non-atomic
-> io-64 methods usage, dropping DT-region descriptors allocation, replacing
-> chip IDs with the device name. In addition to that in order to have the
-> eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
-> dma-ranges-based memory ranges mapping since in case of the root port DT
-> node it's applicable for the peripheral PCIe devices only. Finally at the
-> series closure we introduce a generic DW eDMA controller support being
-> available in the DW PCIe Root Port/Endpoint driver.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Drop the patches:
->   [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
->   [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
->   since they are going to be merged in in the framework of the
->   Frank's patchset.
-> - Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
->   failure."
-> - Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
->   definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
-> - Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
->   'dent'." (@Manivannan)
-> - Slightly extend the eDMA name array size. (@Manivannan)
-> - Change the specific DMA mapping comment a bit to being
->   clearer. (@Manivannan)
-> - Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
->   method."
-> - Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
->   device. That happens if the driver is disabled. (@Manivannan)
-> - Add "dma" registers resource mapping procedure. (@Manivannan)
-> - Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
-> - Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
-> - Remove eDMA in the dw_pcie_ep_exit() method.
-> - Move the dw_pcie_edma_detect() method execution to the tail of the
->   dw_pcie_ep_init() function.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v3:
+From: Riwen Lu <luriwen@kylinos.cn>
 
-> - Conditionally set dchan->dev->device.dma_coherent field since it can
->   be missing on some platforms. (@Manivannan)
-> - Drop the patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
->   method". A similar modification has been done in another patchset.
-> - Add more comprehensive and less regression prune eDMA block detection
->   procedure.
-> - Drop the patch: "dma-direct: take dma-ranges/offsets into account in
->   resource mapping". It will be separately reviewed.
-> - Remove Manivannan tb tag from the modified patches.
+Commit 239708a3af44 ("ACPI: Split out ACPI PSS from ACPI Processor
+driver"), moves processor thermal registration to acpi_pss_perf_init(),
+which doesn't get executed if ACPI_CPU_FREQ_PSS is not enabled.
 
-@Mani, several patches have been changed. Could you have a look at the
-series one more time?
+As ARM64 supports P-states using CPPC, it should be possible to also
+support processor passive cooling even if PSS is not enabled. Split
+out the processor thermal cooling register from ACPI PSS to support
+this, and move it into a separate function in processor_thermal.c.
 
--Sergey
+Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+---
+ drivers/acpi/Kconfig             |  2 +-
+ drivers/acpi/Makefile            |  5 +--
+ drivers/acpi/processor_driver.c  | 72 ++++----------------------------
+ drivers/acpi/processor_thermal.c | 69 ++++++++++++++++++++++++++++++
+ include/acpi/processor.h         |  6 ++-
+ 5 files changed, 84 insertions(+), 70 deletions(-)
 
-> - Rebase onto the kernel v5.18.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> Cc: linux-pci@vger.kernel.org
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (24):
->   dmaengine: Fix dma_slave_config.dst_addr description
->   dmaengine: dw-edma: Release requested IRQs on failure
->   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
->   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
->     xfers
->   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
->   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
->   dmaengine: dw-edma: Add CPU to PCIe bus address translation
->   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
->     glue-driver
->   dmaengine: dw-edma: Drop chancnt initialization
->   dmaengine: dw-edma: Fix DebugFS reg entry type
->   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
->   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
->   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
->   dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
->   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
->   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
->   dmaengine: dw-edma: Join Write/Read channels into a single device
->   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
->   dmaengine: dw-edma: Use non-atomic io-64 methods
->   dmaengine: dw-edma: Drop DT-region allocation
->   dmaengine: dw-edma: Replace chip ID number with device name
->   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
->   dmaengine: dw-edma: Skip cleanup procedure if no private data found
->   PCI: dwc: Add DW eDMA engine support
-> 
->  drivers/dma/dw-edma/dw-edma-core.c            | 216 +++++-----
->  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
->  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
->  drivers/dma/dw-edma/dw-edma-v0-core.c         |  76 ++--
->  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
->  .../pci/controller/dwc/pcie-designware-ep.c   |  12 +-
->  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
->  drivers/pci/controller/dwc/pcie-designware.c  | 186 +++++++++
->  drivers/pci/controller/dwc/pcie-designware.h  |  20 +
->  include/linux/dma/edma.h                      |  18 +-
->  include/linux/dmaengine.h                     |   2 +-
->  13 files changed, 589 insertions(+), 366 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+index 1e34f846508f..2457ade3f82d 100644
+--- a/drivers/acpi/Kconfig
++++ b/drivers/acpi/Kconfig
+@@ -255,7 +255,6 @@ config ACPI_DOCK
+ 
+ config ACPI_CPU_FREQ_PSS
+ 	bool
+-	select THERMAL
+ 
+ config ACPI_PROCESSOR_CSTATE
+ 	def_bool y
+@@ -287,6 +286,7 @@ config ACPI_PROCESSOR
+ 	depends on X86 || IA64 || ARM64 || LOONGARCH
+ 	select ACPI_PROCESSOR_IDLE
+ 	select ACPI_CPU_FREQ_PSS if X86 || IA64 || LOONGARCH
++	select THERMAL
+ 	default y
+ 	help
+ 	  This driver adds support for the ACPI Processor package. It is required
+diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+index b5a8d3e00a52..0002eecbf870 100644
+--- a/drivers/acpi/Makefile
++++ b/drivers/acpi/Makefile
+@@ -109,10 +109,9 @@ obj-$(CONFIG_ACPI_PPTT) 	+= pptt.o
+ obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o pfr_telemetry.o
+ 
+ # processor has its own "processor." module_param namespace
+-processor-y			:= processor_driver.o
++processor-y			:= processor_driver.o processor_thermal.o
+ processor-$(CONFIG_ACPI_PROCESSOR_IDLE) += processor_idle.o
+-processor-$(CONFIG_ACPI_CPU_FREQ_PSS)	+= processor_throttling.o	\
+-	processor_thermal.o
++processor-$(CONFIG_ACPI_CPU_FREQ_PSS)	+= processor_throttling.o
+ processor-$(CONFIG_CPU_FREQ)	+= processor_perflib.o
+ 
+ obj-$(CONFIG_ACPI_PROCESSOR_AGGREGATOR) += acpi_pad.o
+diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
+index 368a9edefd0c..a99ff1634665 100644
+--- a/drivers/acpi/processor_driver.c
++++ b/drivers/acpi/processor_driver.c
+@@ -139,75 +139,17 @@ static int acpi_soft_cpu_dead(unsigned int cpu)
+ }
+ 
+ #ifdef CONFIG_ACPI_CPU_FREQ_PSS
+-static int acpi_pss_perf_init(struct acpi_processor *pr,
+-		struct acpi_device *device)
++static void acpi_pss_perf_init(struct acpi_processor *pr)
+ {
+-	int result = 0;
+-
+ 	acpi_processor_ppc_has_changed(pr, 0);
+ 
+ 	acpi_processor_get_throttling_info(pr);
+ 
+ 	if (pr->flags.throttling)
+ 		pr->flags.limit = 1;
+-
+-	pr->cdev = thermal_cooling_device_register("Processor", device,
+-						   &processor_cooling_ops);
+-	if (IS_ERR(pr->cdev)) {
+-		result = PTR_ERR(pr->cdev);
+-		return result;
+-	}
+-
+-	dev_dbg(&device->dev, "registered as cooling_device%d\n",
+-		pr->cdev->id);
+-
+-	result = sysfs_create_link(&device->dev.kobj,
+-				   &pr->cdev->device.kobj,
+-				   "thermal_cooling");
+-	if (result) {
+-		dev_err(&device->dev,
+-			"Failed to create sysfs link 'thermal_cooling'\n");
+-		goto err_thermal_unregister;
+-	}
+-
+-	result = sysfs_create_link(&pr->cdev->device.kobj,
+-				   &device->dev.kobj,
+-				   "device");
+-	if (result) {
+-		dev_err(&pr->cdev->device,
+-			"Failed to create sysfs link 'device'\n");
+-		goto err_remove_sysfs_thermal;
+-	}
+-
+-	return 0;
+-
+- err_remove_sysfs_thermal:
+-	sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+- err_thermal_unregister:
+-	thermal_cooling_device_unregister(pr->cdev);
+-
+-	return result;
+-}
+-
+-static void acpi_pss_perf_exit(struct acpi_processor *pr,
+-		struct acpi_device *device)
+-{
+-	if (pr->cdev) {
+-		sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+-		sysfs_remove_link(&pr->cdev->device.kobj, "device");
+-		thermal_cooling_device_unregister(pr->cdev);
+-		pr->cdev = NULL;
+-	}
+ }
+ #else
+-static inline int acpi_pss_perf_init(struct acpi_processor *pr,
+-		struct acpi_device *device)
+-{
+-	return 0;
+-}
+-
+-static inline void acpi_pss_perf_exit(struct acpi_processor *pr,
+-		struct acpi_device *device) {}
++static inline void acpi_pss_perf_init(struct acpi_processor *pr) {}
+ #endif /* CONFIG_ACPI_CPU_FREQ_PSS */
+ 
+ static int __acpi_processor_start(struct acpi_device *device)
+@@ -229,7 +171,9 @@ static int __acpi_processor_start(struct acpi_device *device)
+ 	if (!cpuidle_get_driver() || cpuidle_get_driver() == &acpi_idle_driver)
+ 		acpi_processor_power_init(pr);
+ 
+-	result = acpi_pss_perf_init(pr, device);
++	acpi_pss_perf_init(pr);
++
++	result = acpi_processor_thermal_init(pr);
+ 	if (result)
+ 		goto err_power_exit;
+ 
+@@ -239,7 +183,7 @@ static int __acpi_processor_start(struct acpi_device *device)
+ 		return 0;
+ 
+ 	result = -ENODEV;
+-	acpi_pss_perf_exit(pr, device);
++	acpi_processor_thermal_exit(pr);
+ 
+ err_power_exit:
+ 	acpi_processor_power_exit(pr);
+@@ -277,10 +221,10 @@ static int acpi_processor_stop(struct device *dev)
+ 		return 0;
+ 	acpi_processor_power_exit(pr);
+ 
+-	acpi_pss_perf_exit(pr, device);
+-
+ 	acpi_cppc_processor_exit(pr);
+ 
++	acpi_processor_thermal_exit(pr);
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
+index d8b2dfcd59b5..93928db2ae5f 100644
+--- a/drivers/acpi/processor_thermal.c
++++ b/drivers/acpi/processor_thermal.c
+@@ -266,3 +266,72 @@ const struct thermal_cooling_device_ops processor_cooling_ops = {
+ 	.get_cur_state = processor_get_cur_state,
+ 	.set_cur_state = processor_set_cur_state,
+ };
++
++int acpi_processor_thermal_init(struct acpi_processor *pr)
++{
++	struct acpi_device *device;
++	int result = 0;
++
++	if (!pr)
++		return -ENODEV;
++
++	device = acpi_fetch_acpi_dev(pr->handle);
++	if (!device)
++		return -ENODEV;
++
++	pr->cdev = thermal_cooling_device_register("Processor", device,
++						   &processor_cooling_ops);
++	if (IS_ERR(pr->cdev)) {
++		result = PTR_ERR(pr->cdev);
++		return result;
++	}
++
++	dev_dbg(&device->dev, "registered as cooling_device%d\n",
++		pr->cdev->id);
++
++	result = sysfs_create_link(&device->dev.kobj,
++				   &pr->cdev->device.kobj,
++				   "thermal_cooling");
++	if (result) {
++		dev_err(&device->dev,
++			"Failed to create sysfs link 'thermal_cooling'\n");
++		goto err_thermal_unregister;
++	}
++
++	result = sysfs_create_link(&pr->cdev->device.kobj,
++				   &device->dev.kobj,
++				   "device");
++	if (result) {
++		dev_err(&pr->cdev->device,
++			"Failed to create sysfs link 'device'\n");
++		goto err_remove_sysfs_thermal;
++	}
++
++	return 0;
++
++err_remove_sysfs_thermal:
++	sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
++err_thermal_unregister:
++	thermal_cooling_device_unregister(pr->cdev);
++
++	return result;
++}
++
++void acpi_processor_thermal_exit(struct acpi_processor *pr)
++{
++	struct acpi_device *device;
++
++	if (!pr)
++		return;
++
++	device = acpi_fetch_acpi_dev(pr->handle);
++	if (!device)
++		return;
++
++	if (pr->cdev) {
++		sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
++		sysfs_remove_link(&pr->cdev->device.kobj, "device");
++		thermal_cooling_device_unregister(pr->cdev);
++		pr->cdev = NULL;
++	}
++}
+diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+index 194027371928..5746ac206219 100644
+--- a/include/acpi/processor.h
++++ b/include/acpi/processor.h
+@@ -442,8 +442,10 @@ static inline int acpi_processor_hotplug(struct acpi_processor *pr)
+ 
+ /* in processor_thermal.c */
+ int acpi_processor_get_limit_info(struct acpi_processor *pr);
++int acpi_processor_thermal_init(struct acpi_processor *pr);
++void acpi_processor_thermal_exit(struct acpi_processor *pr);
+ extern const struct thermal_cooling_device_ops processor_cooling_ops;
+-#if defined(CONFIG_ACPI_CPU_FREQ_PSS) & defined(CONFIG_CPU_FREQ)
++#ifdef CONFIG_CPU_FREQ
+ void acpi_thermal_cpufreq_init(struct cpufreq_policy *policy);
+ void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy);
+ #else
+@@ -455,6 +457,6 @@ static inline void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy)
+ {
+ 	return;
+ }
+-#endif	/* CONFIG_ACPI_CPU_FREQ_PSS */
++#endif	/* CONFIG_CPU_FREQ */
+ 
+ #endif
+-- 
+2.25.1
+

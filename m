@@ -2,86 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7469C546FE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C54546FE2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347277AbiFJXNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 19:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        id S1348245AbiFJXPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 19:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343938AbiFJXNo (ORCPT
+        with ESMTP id S1343938AbiFJXO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:13:44 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE7611A25;
-        Fri, 10 Jun 2022 16:13:42 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 16:13:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654902820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TrSEiM07rzBXOnvoC0Ky3MYG75s35r1Z3atOF4M4Vgo=;
-        b=AMOxHK6N2JOosdOfl0+XPzd/eYTQapToCZY4I1JYebewZncs47nQy7E5QzcCHFfBbNnr1d
-        ZZ43ny9GLnosRlHAAJIxP9VYN6T0mUCdJ2T5H+/4VrFnQApaZzyHxS7RtXV/3nGaJue2Wn
-        YZOOFxIk562TyU5GacNnmu6acEjlYkk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, longman@redhat.com
-Subject: Re: [PATCH v5 03/11] mm: memcontrol: prepare objcg API for non-kmem
- usage
-Message-ID: <YqPQGrtp9v0Ly9SG@carbon>
-References: <20220530074919.46352-1-songmuchun@bytedance.com>
- <20220530074919.46352-4-songmuchun@bytedance.com>
+        Fri, 10 Jun 2022 19:14:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5E518344
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654902897; x=1686438897;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RsqeCXqH+5B1saV90Gbx918B8s9eAPKiAy9H93CA0+s=;
+  b=Qjk9yuxJtodBItQ0NPrJoscnjuiIgPW8157XSN/B1FyDeJfFu4ejNlG3
+   qT55KI75uHMzo60PYiZkkUg27PSIAvouw/RgBrJsbVTDX9RIk/PkOM3Ky
+   rVq4P9JA1Hu3Q/zcXS10dA49kKpK/cjQDLrGnfIWhropn5aEY6/2mxovq
+   X/uH5sinmONU7U/Zzhc2Xy8D03XP60yZWfcvKkzE/APJPovc0eCKHm3ta
+   Az11NNWtVt5oH/YGpPTP/AuO1RXNqOXL0/VhSq9GUl1J8f0eOWOuhGkG6
+   +SrWOy5TIUI/wEO5xvhB39Hb6PbYdQmNwXb1hwgvELg6ct3X8AdTmNEwU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="364104282"
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="364104282"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:14:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="650066990"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jun 2022 16:14:55 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nznqB-000IM5-34;
+        Fri, 10 Jun 2022 23:14:55 +0000
+Date:   Sat, 11 Jun 2022 07:14:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jarkko Sakkinen <jarkko@profian.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jarkko-tpmdd:kprobes 3/3] arch/arm/kernel/module_alloc.c:24:7:
+ warning: no previous prototype for 'module_alloc'
+Message-ID: <202206110736.sXofukqb-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220530074919.46352-4-songmuchun@bytedance.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 03:49:11PM +0800, Muchun Song wrote:
-> Pagecache pages are charged at the allocation time and holding a
-> reference to the original memory cgroup until being reclaimed.
-> Depending on the memory pressure, specific patterns of the page
-> sharing between different cgroups and the cgroup creation and
-> destruction rates, a large number of dying memory cgroups can be
-> pinned by pagecache pages. It makes the page reclaim less efficient
-> and wastes memory.
-> 
-> We can convert LRU pages and most other raw memcg pins to the objcg
-> direction to fix this problem, and then the page->memcg will always
-> point to an object cgroup pointer.
-> 
-> Therefore, the infrastructure of objcg no longer only serves
-> CONFIG_MEMCG_KMEM. In this patch, we move the infrastructure of the
-> objcg out of the scope of the CONFIG_MEMCG_KMEM so that the LRU pages
-> can reuse it to charge pages.
-> 
-> We know that the LRU pages are not accounted at the root level. But
-> the page->memcg_data points to the root_mem_cgroup. So the
-> page->memcg_data of the LRU pages always points to a valid pointer.
-> But the root_mem_cgroup dose not have an object cgroup. If we use
-> obj_cgroup APIs to charge the LRU pages, we should set the
-> page->memcg_data to a root object cgroup. So we also allocate an
-> object cgroup for the root_mem_cgroup.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git kprobes
+head:   8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
+commit: 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3 [3/3] kprobes: Enable tracing for mololithic kernel images
+config: arm-trizeps4_defconfig (https://download.01.org/0day-ci/archive/20220611/202206110736.sXofukqb-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
+        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+        git fetch --no-tags jarkko-tpmdd kprobes
+        git checkout 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
 
-LGTM
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/kernel/module_alloc.c:24:7: warning: no previous prototype for 'module_alloc' [-Wmissing-prototypes]
+      24 | void *module_alloc(unsigned long size)
+         |       ^~~~~~~~~~~~
+
+
+vim +/module_alloc +24 arch/arm/kernel/module_alloc.c
+
+    22	
+    23	#ifdef CONFIG_MMU
+  > 24	void *module_alloc(unsigned long size)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

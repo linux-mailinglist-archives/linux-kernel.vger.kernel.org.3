@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9C5545BDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD16545C03
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 08:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346312AbiFJFuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S1346361AbiFJGBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 02:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244606AbiFJFuN (ORCPT
+        with ESMTP id S243665AbiFJGBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:50:13 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C3EFDF;
-        Thu,  9 Jun 2022 22:50:12 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id r1so4736978plo.10;
-        Thu, 09 Jun 2022 22:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vxvhQQF+LpnzG0OPsmcVTfh7ByjAVce/l+wkGfbGArM=;
-        b=NFhMzn0s/mJDv488GyWPSpoax0GndAHUQ1lTrr53AfkaSRRVfSB19b1pQe9qZcGlph
-         HISGTAlCzuB5ypUwqn9PXtK6bTIjTkIjj8i6gajhvoEsZ20bIoe4EqHQTAhXB4Xva4x5
-         Y0To4bWkuYWyDB4wg2Bm9x8IaltNwBIO4C54IP6rRFCFvnQ7sCHNm3d51rLmcv29GGK6
-         /kORDTpu2OX/aG9DhftPTvXJwRVPffZrotk+qKkUJA83yqx5Qtabw+inyY914l0UbhCU
-         L2fLXbOQqlWrlaTfnNOGSQFqf1VyiN2UKVOxJsTYw3i31eV2ZLf5OxWzLaYNboxtsIZV
-         ILUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=vxvhQQF+LpnzG0OPsmcVTfh7ByjAVce/l+wkGfbGArM=;
-        b=BjPa20Rm9JK42prGCVZJYqHjOcJDMCFyphkFHqdMnr10nQZ/iw/IN3EyuQT0CfrH3S
-         CyLVwuCIL1/x8Vq1+epsg9ZG7A2xqKL4kCOXE4waNLHUxtElLATUx3SRKKZaxhPKLSEe
-         KfppoRNZzWlbVTygHq9KLfor44qa3UrWU0bdC1eEShzrCInaOMKCmH41QovnTPj74J54
-         S7UECE14xAJZhz8szrnSwA1FhQuGR4WJ/0s/peGYSDH95HacwR86qKAxW8ewQ/pzEagK
-         KWbp4YCaU4vK7oNt7Lz9QOs5XuerphqQwAsIbB6hCqD7gRfQMM21Xxkhms2jKoCiYiA/
-         mZHg==
-X-Gm-Message-State: AOAM532wXF1g+BJ12gvEoe4wkZR0Me9mF5YN3I9RW0bnXRZ8gDDmLdn6
-        cu+gr32BSk1yoCns0cw3xUA=
-X-Google-Smtp-Source: ABdhPJzBLjFomAJHOI1wYcMswzoSAaZrTfsNtpQw5h6hCKVRFVtrsXsNryoAb7uiNieoVMJhTXserw==
-X-Received: by 2002:a17:903:2452:b0:166:4b6c:affb with SMTP id l18-20020a170903245200b001664b6caffbmr38070654pls.68.1654840212476;
-        Thu, 09 Jun 2022 22:50:12 -0700 (PDT)
-Received: from potin-quanta.dhcpserver.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id f11-20020aa7968b000000b0051b90ac6c15sm18553977pfk.125.2022.06.09.22.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 22:50:12 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rayn Chen <rayn_chen@aspeedtech.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH v4 2/2] dt-bindings: aspeed-i2c: add properties for setting i2c clock duty cycle
+        Fri, 10 Jun 2022 02:01:18 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923F81312A8;
+        Thu,  9 Jun 2022 23:01:17 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3EE3F1A00BF;
+        Fri, 10 Jun 2022 08:01:16 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id EB9501A005B;
+        Fri, 10 Jun 2022 08:01:15 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 8217D1802202;
+        Fri, 10 Jun 2022 14:01:14 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] ASoC: fsl_mqs: Add support for i.MX93 platform
 Date:   Fri, 10 Jun 2022 13:47:22 +0800
-Message-Id: <20220610054722.32229-3-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220610054722.32229-1-potin.lai.pt@gmail.com>
-References: <20220610054722.32229-1-potin.lai.pt@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1654840042-7069-2-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1654840042-7069-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1654840042-7069-1-git-send-email-shengjiu.wang@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a new property for setting a minimum duty cycle for clock high.
+Add i.MX93 compatible string and specific soc data
 
-* i2c-clk-high-min-percent: a minimum percentage of clock high
-
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 ---
- Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ sound/soc/fsl/fsl_mqs.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-index ea643e6c3ef5..4ea6a112f299 100644
---- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-@@ -49,6 +49,13 @@ properties:
-     description:
-       states that there is another master active on this bus
+diff --git a/sound/soc/fsl/fsl_mqs.c b/sound/soc/fsl/fsl_mqs.c
+index 8a8d727319d6..aefb73cab59c 100644
+--- a/sound/soc/fsl/fsl_mqs.c
++++ b/sound/soc/fsl/fsl_mqs.c
+@@ -338,9 +338,23 @@ static const struct fsl_mqs_soc_data fsl_mqs_imx6sx_data = {
+ 	.div_shift = IMX6SX_GPR2_MQS_CLK_DIV_SHIFT,
+ };
  
-+  i2c-clk-high-min-percent:
-+    minimum: 1
-+    maximum: 100
-+    default: 50
-+    description:
-+      a minimum percentage of clock high
++static const struct fsl_mqs_soc_data fsl_mqs_imx93_data = {
++	.use_gpr = true,
++	.ctrl_off = 0x20,
++	.en_mask  = BIT(1),
++	.en_shift = 1,
++	.rst_mask = BIT(2),
++	.rst_shift = 2,
++	.osr_mask = BIT(3),
++	.osr_shift = 3,
++	.div_mask = GENMASK(15, 8),
++	.div_shift = 8,
++};
 +
- required:
-   - reg
-   - compatible
+ static const struct of_device_id fsl_mqs_dt_ids[] = {
+ 	{ .compatible = "fsl,imx8qm-mqs", .data = &fsl_mqs_imx8qm_data },
+ 	{ .compatible = "fsl,imx6sx-mqs", .data = &fsl_mqs_imx6sx_data },
++	{ .compatible = "fsl,imx93-mqs", .data = &fsl_mqs_imx93_data },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, fsl_mqs_dt_ids);
 -- 
 2.17.1
 

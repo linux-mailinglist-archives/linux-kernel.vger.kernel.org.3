@@ -2,168 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDF5546BB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8823546BB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349558AbiFJReB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 13:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        id S1349826AbiFJReh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 13:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244325AbiFJRd6 (ORCPT
+        with ESMTP id S244325AbiFJRe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 13:33:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED55F382361;
-        Fri, 10 Jun 2022 10:33:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85D8861F72;
-        Fri, 10 Jun 2022 17:33:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8C25C34114;
-        Fri, 10 Jun 2022 17:33:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654882433;
-        bh=fogOehLSgwGzLrjb684lhw/HagvOmGCddUPmSp9tEq8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=MdzUPjf2IAe0ieDjYkDVV5d1oZm6mX4ov9mFSxE7IT8kLFquOvsYEzdgdNJLhXByD
-         s7eG1hAh/CY00zos2eyHm3MK6Iu2TZaBUZp2XEylLbLNjxEFYrew0TyQySvnTGWdg3
-         wFxSPCZy2KWJyyH25BB6gaQeW3dN3nhiYReZIVfWYCFRa0OTZqFUkeVHbr5RAFnh9C
-         CSgstyy255/xMT88ep8z9yTc3xcvMTEmq5TN4tx2HQtFrMnhkoS6cZIJ+vd4na3+Js
-         3hiN+uXcUQ3uV4HG4QAbZ1g7hUj/UAYRJC5vVjgeedW8A8YTr1dUkU6osffzKobXba
-         ru2QYxJ0l3oaQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7F0395C05ED; Fri, 10 Jun 2022 10:33:53 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 10:33:53 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH] rcutorture: Fix ksoftirqd boosting timing and iteration
-Message-ID: <20220610173353.GI1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220610130357.1813926-1-frederic@kernel.org>
+        Fri, 10 Jun 2022 13:34:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 514F818628A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654882463;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5td43/LE7xUx34b6knP7m4z1v8nG7U8TzU1aeN6kGX8=;
+        b=XfQw+j0q3AO5YFYVySM44rn3DfhfJc/f4VwUnMhAIVe28h5pG0IrIwJoVqoh0hk47pnkEd
+        HnrFZuQn7qsbApQtP5XzIqoBmgdzxQ6KVEV2oJD7SIyhITXTrVTGGrQUIgjU4/vQp1LteF
+        awFakr4siDMPMFD7J4jTTSsAGR0rMus=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-475-tYR9nyF3NEON76vtap6aEQ-1; Fri, 10 Jun 2022 13:34:22 -0400
+X-MC-Unique: tYR9nyF3NEON76vtap6aEQ-1
+Received: by mail-wm1-f72.google.com with SMTP id u12-20020a05600c19cc00b0038ec265155fso1607924wmq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:34:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5td43/LE7xUx34b6knP7m4z1v8nG7U8TzU1aeN6kGX8=;
+        b=CHuGITgqjgRhNDkQaYqP3bsrnrNJqziu8QbNPy9IuJKsR3ASR7vPMsZhAEpJ6YhN+x
+         YsXK48YrPadK87aLdqjJCUs892voajUDBmC9QalocHHGjDpuOYjNYwQnaw5Y14Z+NPOi
+         a8MJJed6eGbZslw9b5M5Lt86FAAju1J6ulPAfBwt/+S6GPS1pkl0SyiiOuLaN+T3tOv2
+         n+iyDpZ8WHCWYP6F9RXxmPVnCO6V9Bjx2iyMA3Xnen3V48+bSmKpKYGJeE9U+t/Ed03t
+         DakH5lMr5f0hnp73bX53EkJoQmB/YVzOBtJyVGosFwPJr4ezb0wKyryUsLVATmxqWZLi
+         LRGQ==
+X-Gm-Message-State: AOAM530Vfk9bpt9tQuxVSAfkXnm8y1SlUsrKtrR6KQiktVcxN+In0pj0
+        r5OoxFofYYX4anFPC3GqHsHssQAg22Zpba7ysjpXGLkYXWO2hU+hAjZww1Lf/w8ubG2I6J6IofN
+        44+nGL/jAUb3TzimwB9jj4AxT
+X-Received: by 2002:a05:600c:2105:b0:39c:37d0:6f5e with SMTP id u5-20020a05600c210500b0039c37d06f5emr837030wml.44.1654882461162;
+        Fri, 10 Jun 2022 10:34:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwNxWAymFfGq+xgRBf813ZSMKMnC0rxF6WBwH2jNBliFQpVDzELR70MCyXDJhFsIeRROEM3fw==
+X-Received: by 2002:a05:600c:2105:b0:39c:37d0:6f5e with SMTP id u5-20020a05600c210500b0039c37d06f5emr837013wml.44.1654882460984;
+        Fri, 10 Jun 2022 10:34:20 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id n123-20020a1c2781000000b0039c63f4bce0sm3787780wmn.12.2022.06.10.10.34.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 10:34:20 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 19:34:18 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 132/144] KVM: selftests: Purge vm+vcpu_id == vcpu
+ silliness
+Message-ID: <20220610173418.mfwhk5ou5gco6v5x@gator>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <20220603004331.1523888-133-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610130357.1813926-1-frederic@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220603004331.1523888-133-seanjc@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 03:03:57PM +0200, Frederic Weisbecker wrote:
-> The RCU priority boosting can fail on two situations:
-> 
-> 1) If (nr_cpus= > maxcpus=), which means if the total number of CPUs
-> if higher than those brought online on boot, then torture_onoff() may
-> later bring up CPUs that weren't online on boot. Now since rcutorture
-> initialization only boosts the ksoftirqds of the CPUs that have been
-> set online on boot, the CPUs later set online by torture_onoff won't
-> benefit from the boost, making RCU priority boosting fail.
-> 
-> 2) Ksoftirqds kthreads are boosted after the creation of
-> rcu_torture_boost() kthreads, which opens a window large enough for them
-> to stutter in low FIFO mode while waiting for ksoftirqds that are still
-> in SCHED_NORMAL mode.
-> 
-> The issues can trigger for example with:
-> 
-> 	./kvm.sh --configs TREE01 --kconfig "CONFIG_RCU_BOOST=y"
-> 
-> 	[   34.968561] rcu-torture: !!!
-> 	[   34.968627] ------------[ cut here ]------------
-> 	[   35.014054] WARNING: CPU: 4 PID: 114 at kernel/rcu/rcutorture.c:1979 rcu_torture_stats_print+0x5ad/0x610
-> 	[   35.052043] Modules linked in:
-> 	[   35.069138] CPU: 4 PID: 114 Comm: rcu_torture_sta Not tainted 5.18.0-rc1 #1
-> 	[   35.096424] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.14.0-0-g155821a-rebuilt.opensuse.org 04/01/2014
-> 	[   35.154570] RIP: 0010:rcu_torture_stats_print+0x5ad/0x610
-> 	[   35.198527] Code: 63 1b 02 00 74 02 0f 0b 48 83 3d 35 63 1b 02 00 74 02 0f 0b 48 83 3d 21 63 1b 02 00 74 02 0f 0b 48 83 3d 0d 63 1b 02 00 74 02 <0f> 0b 83 eb 01 0f 8e ba fc ff ff 0f 0b e9 b3 fc ff f82
-> 	[   37.251049] RSP: 0000:ffffa92a0050bdf8 EFLAGS: 00010202
-> 	[   37.277320] rcu: De-offloading 8
-> 	[   37.290367] RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000001
-> 	[   37.290387] RDX: 0000000000000000 RSI: 00000000ffffbfff RDI: 00000000ffffffff
-> 	[   37.290398] RBP: 000000000000007b R08: 0000000000000000 R09: c0000000ffffbfff
-> 	[   37.290407] R10: 000000000000002a R11: ffffa92a0050bc18 R12: ffffa92a0050be20
-> 	[   37.290417] R13: ffffa92a0050be78 R14: 0000000000000000 R15: 000000000001bea0
-> 	[   37.290427] FS:  0000000000000000(0000) GS:ffff96045eb00000(0000) knlGS:0000000000000000
-> 	[   37.290448] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> 	[   37.290460] CR2: 0000000000000000 CR3: 000000001dc0c000 CR4: 00000000000006e0
-> 	[   37.290470] Call Trace:
-> 	[   37.295049]  <TASK>
-> 	[   37.295065]  ? preempt_count_add+0x63/0x90
-> 	[   37.295095]  ? _raw_spin_lock_irqsave+0x12/0x40
-> 	[   37.295125]  ? rcu_torture_stats_print+0x610/0x610
-> 	[   37.295143]  rcu_torture_stats+0x29/0x70
-> 	[   37.295160]  kthread+0xe3/0x110
-> 	[   37.295176]  ? kthread_complete_and_exit+0x20/0x20
-> 	[   37.295193]  ret_from_fork+0x22/0x30
-> 	[   37.295218]  </TASK>
-> 
-> Fix this with boosting the ksoftirqds kthreads from the boosting
-> hotplug callback itself and before the boosting kthreads are created.
-> 
-> Fixes: ea6d962e80b6 ("rcutorture: Judge RCU priority boosting on grace periods, not callbacks")
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-
-Good catch!  Queued for testing and review, thank you!
-
-							Thanx, Paul
-
-> ---
->  kernel/rcu/rcutorture.c | 28 +++++++++++++---------------
->  1 file changed, 13 insertions(+), 15 deletions(-)
-> 
-> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-> index abb3f6d720f1..21470ebb15eb 100644
-> --- a/kernel/rcu/rcutorture.c
-> +++ b/kernel/rcu/rcutorture.c
-> @@ -2136,6 +2136,19 @@ static int rcutorture_booster_init(unsigned int cpu)
->  	if (boost_tasks[cpu] != NULL)
->  		return 0;  /* Already created, nothing more to do. */
+...
+> @@ -1485,73 +1446,57 @@ void vcpu_run_complete_io(struct kvm_vm *vm, uint32_t vcpuid)
+>  }
 >  
-> +	// Testing RCU priority boosting requires rcutorture do
-> +	// some serious abuse.  Counter this by running ksoftirqd
-> +	// at higher priority.
-> +	if (IS_BUILTIN(CONFIG_RCU_TORTURE_TEST)) {
-> +		struct sched_param sp;
-> +		struct task_struct *t;
-> +
-> +		t = per_cpu(ksoftirqd, cpu);
-> +		WARN_ON_ONCE(!t);
-> +		sp.sched_priority = 2;
-> +		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-> +	}
-> +
->  	/* Don't allow time recalculation while creating a new task. */
->  	mutex_lock(&boost_mutex);
->  	rcu_torture_disable_rt_throttle();
-> @@ -3384,21 +3397,6 @@ rcu_torture_init(void)
->  		rcutor_hp = firsterr;
->  		if (torture_init_error(firsterr))
->  			goto unwind;
-> -
-> -		// Testing RCU priority boosting requires rcutorture do
-> -		// some serious abuse.  Counter this by running ksoftirqd
-> -		// at higher priority.
-> -		if (IS_BUILTIN(CONFIG_RCU_TORTURE_TEST)) {
-> -			for_each_online_cpu(cpu) {
-> -				struct sched_param sp;
-> -				struct task_struct *t;
-> -
-> -				t = per_cpu(ksoftirqd, cpu);
-> -				WARN_ON_ONCE(!t);
-> -				sp.sched_priority = 2;
-> -				sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-> -			}
-> -		}
->  	}
->  	shutdown_jiffies = jiffies + shutdown_secs * HZ;
->  	firsterr = torture_shutdown_init(shutdown_secs, rcu_torture_cleanup);
-> -- 
-> 2.25.1
-> 
+>  /*
+> - * VM VCPU Get Reg List
+> - *
+> - * Input Args:
+> - *   vm - Virtual Machine
+> - *   vcpuid - VCPU ID
+> - *
+> - * Output Args:
+> - *   None
+> - *
+> - * Return:
+> - *   A pointer to an allocated struct kvm_reg_list
+> - *
+>   * Get the list of guest registers which are supported for
+> - * KVM_GET_ONE_REG/KVM_SET_ONE_REG calls
+> + * KVM_GET_ONE_REG/KVM_SET_ONE_REG ioctls.  Returns a kvm_reg_list pointer,
+> + * it is the callers responsibility to free the list.
+
+nit: caller's or callers'
+
+Thanks,
+drew
+

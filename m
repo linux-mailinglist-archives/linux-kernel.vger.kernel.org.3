@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9247654703C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FA2547046
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 01:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351023AbiFJXgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 19:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S1350814AbiFJXhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 19:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350724AbiFJXgI (ORCPT
+        with ESMTP id S1350385AbiFJXgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:36:08 -0400
+        Fri, 10 Jun 2022 19:36:09 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5FA289F3A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:41 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b6-20020a252e46000000b0065d5168f3f0so517610ybn.21
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E8D28DC34
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:43 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id q200-20020a252ad1000000b006632baa38deso542802ybq.15
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:35:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=XQzoa9Hbm2J1FC5lebup2zdYvg5ee8G3jglBmtbWdMA=;
-        b=US507XUeqVBOul77B/VFOWIwS4pd3nIRPg+pGiozRhuxzzq2ZnTjYUWOH5Wd6LLiYe
-         odE9mwv9yV9x0+KlQ/9R+5gEDSTkmcRlkll00lTsC6yUBgkIjuT+tFphrdbUGExqAKFz
-         WzP1Qu5a+FDuRY847PYNDCZS4fzfn4KJZ9dadgjIE7gN0eya/Z/TI5ux/cASDbBX2TWf
-         rNsdxf4qMXc8dQh7Ya7uf8Jznp8DQsF8asaWuv4VvhY46bn853FzwbM3IHpR3/Au+skp
-         GQNKqDqu7sOBaiy0hkdkdtF0+Ertcwcm0ztyAe1iJkbSCGIXyeh8AvXFl6Q4XZmo/a3f
-         4jqQ==
+        bh=eypUC8nmG3YT8q5C7uTFJ2I4wzdimzIgtd5eniK3Szg=;
+        b=NT94rukK/ENqT6F0xPM3Aj1DW37YL8idTohVFW7YlP6QY7NC9NtuMIKvSSbuklXeE8
+         H3FRqhFXc3q9MsQZPtgnLsY8DyD6LJv9BPNASoXwJ8+0pRkqBXzTeWozo2Y8/iM3z+3z
+         FSjZIqivcQd8gXXi90mLqnt+9zbzSocGJBB4YxcLPtXwXpY8SkqnsaVmPtckRjwn831V
+         EDzZuqEkuiekO9OhcgWqjN5jhG9hM79osNspGRqQ4j5CKysV0QuLSzBoMIFRtsx7GtMj
+         bANF9OiYpNqij4DFKYZh0Ocq9NRV3o5FkeP4Rosggd8ZUAy9hGzOvU5dtlsBU9cFLM5A
+         ZgDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=XQzoa9Hbm2J1FC5lebup2zdYvg5ee8G3jglBmtbWdMA=;
-        b=IAyRSuQZ14veLKlgKtOarXDd3Do8+4Ljw6i64ay4OFkKmms9q2pyHrCNYcnMlG6WbV
-         dHea23wRBnCZaOUSpY/Aa0uj5Bj3oa0FvC+s4wKgLMl6Kv0RnbZ/Gp2sOIcgHam6cLHe
-         7HSfiyxjoqautsHlZnMQxC09A6MgZ9OnPf/OpTvDoLYPCGqUmIL5iYjd1GdLJSfu11Gk
-         qAUJ0zzHIUkwP/IYN209aXSkuP62kCMKwexFY3GdJ7HwGXUjygYH+or5okIesk9YXWCg
-         bwf8E1b0QUd+9DbLmY9lGaIHXJ2YEHAIYKApf78dXJm5UpyEGtJGoPCRkHCcsr/Deqkx
-         d/ew==
-X-Gm-Message-State: AOAM532hxi5euIhWObWotbAhKv27WWHw4j/C6kDW8BdMv1ll9JkNOtMe
-        NxYbjYaRFnrICjUAOc9JRVk+IVPH8dx2yUxJsmFqwQgOPDbU4xSbEXu6riAzuhz3IHrGn8cjG4m
-        CEd2r4fug0lD5wl3tTgZKz23mpT/Ks9wdn3YOvUMcfdMYF1HsrL9LP3wUdN9m7LXEv4dRScB9nX
-        uyaA/75B8BmQ==
-X-Google-Smtp-Source: ABdhPJxOnfCH6DmxniOqq2LkeH9gEZ3RgiYPiLFCUyVjRAHWiCSIASDSQFq5utQqSEA9eUYUOU+8UPE87gxIjEN26Og=
+        bh=eypUC8nmG3YT8q5C7uTFJ2I4wzdimzIgtd5eniK3Szg=;
+        b=WbgfbpAYfgo5GNvwJy1ZNvrmtyf56R5i3CvpXLNR4X/P+Hg76c32Gmi5KDWmkJfW+h
+         /dsI8exnykcOM4aQACWFgRqNFfq4Taio6a7IsxLcYxQ/NZbSNwNbry6zN36DnleERz8p
+         ZhZ1H3TY6ME7QoLsILWCzzENcvXanMxnj+38PwkfTds5dU21XB0lB2nTrCyXZqGO/0C6
+         Z3is1dbPx4e8ksQWb/TrNL7De84DqSADpmNbMBbCte+r/XCWQWdVU2lJi1Wk+xr3MVFu
+         S2Ck4kzb5VI4zP4Opa6mrggtEJbZh40sw6xM3tQegL8SB9F3ltMQM1qSJn/F8Yo1Cdu7
+         xnxA==
+X-Gm-Message-State: AOAM532oeFAWbON3avNVTJoNqxFKtZsHqs9PCAZMgxogBxhfUMWqpGEc
+        CWSBSNODhCfEsg6zfkHhCq14I04LvH/87YyloDcDXgynBS+ZLmwgy+GLDClVdHZU3vpWIgvSirg
+        GcpMX2nwrxaBS57/KlIkR4sauVRItctopbeMNUN4klUb6nkzrS5xU2OoRORvrtE6AONFc4uAViW
+        iou/9NdvW0cg==
+X-Google-Smtp-Source: ABdhPJwM0tA/zVLO12nfnNiPTkE4uUPlt9GHEk6ulsl8fMRqcqwcHxe5VhdB2L6duf5RpopnDg5B/Oks+ImOLQE8jlk=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f464:6db6:3d47:ed14])
- (user=samitolvanen job=sendgmr) by 2002:a05:6902:1109:b0:663:62f6:7f3e with
- SMTP id o9-20020a056902110900b0066362f67f3emr32789459ybu.516.1654904140205;
- Fri, 10 Jun 2022 16:35:40 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 16:35:03 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a05:6902:1209:b0:65f:fe1f:ccc5 with
+ SMTP id s9-20020a056902120900b0065ffe1fccc5mr50987109ybu.470.1654904142601;
+ Fri, 10 Jun 2022 16:35:42 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 16:35:04 -0700
 In-Reply-To: <20220610233513.1798771-1-samitolvanen@google.com>
-Message-Id: <20220610233513.1798771-11-samitolvanen@google.com>
+Message-Id: <20220610233513.1798771-12-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20220610233513.1798771-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2383; h=from:subject;
- bh=gUQdQPsX7uTYFsHphyP8RuFjJc28btkAaQrsu/mKELw=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9UuEWWSmMhEikQU/hTXdinKYos9UVVSPfvxrQiP
- ClWVaKeJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLgAKCRBMtfaEi7xW7kZGDA
- COpVnTMk0wBQa7hTfdzIF4Ot91or7ZDsSbiPCq1+UcotRG/hvz9f7vHFLNSiP89hfxEvavNqjwV4Jm
- OTY0iPVk4K3Wa6znkh1BopxAj6JlwZHgreOk4ErPvm+Siw78HaVMI/mSFQY9F1fkAHM7oq0p45Buge
- qTxH3b+yIsdrzk4Ezns5qRjuQR6NneX+YLOECH/JyNvebJnc+EhShXdBdM9Pk+DgYRv7w4cdf7XhDz
- q/W5n5pxD3JcmG1ubc5OZzs576mGicLLcjJo4Uy1eG00c7ve5/wGx/1oFlUvz71kJXKKBybjDyLFyH
- pU2Wrrmx9Zss3VzZeghtF8OgIiP5KD9g1YZ3xdLTlQqqWZbkDesd9KJND9PbD/jGz7jtkfvWfuCvJN
- YFNG8BeeUs9Qv1lNWXyXsDnr/tS2tkgoNrEqXPLMzBDC87C4siR44Xvtl59iNhmdnk2vwNmfw1wnTt
- KzcKq5PR5AGUDfbwTKrDzWvZZdTjeuETSpGdZ15XGWrE0=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=933; h=from:subject;
+ bh=yTF7mBzTmEEqMjI8Eaby9TrzTnV5t5mkewPsQ9aMhDM=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9UubPFBxpUPffLvY8XGo6RcYbE+L/kncexxBV2G
+ Tm2YZi6JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLgAKCRBMtfaEi7xW7qSmC/
+ 4pdjbQn0xIP+w0uxO/LVcNtQi8bbX18SxoBTEsodTMM+qtBOKgl67Hl7st0lgjrIVIJLZfKtdfrFCM
+ AqYp5GNXQItjH7Dz4LxFQnN/xEM0/f7SQmc/aTvDUhr9dAKTLrFdWofqL/dWg5CrQtsqQxflGjA5kn
+ qbysQ4DmUpQ74U+Ag1IYvBxskA6a9lz/U5CiKP8GFQdTLbgS84SAc3XHmcX5d/jTTSJDO+1+7i+s0J
+ tEBxH93Rw7SA6pqbca1/a/xiYsN8Dx5NlR1C6x63HsBoMTLfmEOKYQ8y8C8YgQ3/EwQJgVxPPe8weF
+ LjvitSkAvesDpMBt3id6LheIMVrkH5dr7yNKpMH1hwT6QltjQEmhL/bsqm0lGMyHoV7CobVJZv69dH
+ aocun1+0o0S2ZnRAZDj0wgJ+7H+Tu7Il7konkB4CnmUg5FUHbcIDLfcj8VI3heqFhovdc0dVZhLENV
+ BZYygkr+dc+1FXb5JFcBeRQOX7/PgclKahJNc4JlMrD8M=
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [RFC PATCH v3 10/20] arm64: Drop unneeded __nocfi attributes
+Subject: [RFC PATCH v3 11/20] init: Drop __nocfi from __init
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -86,66 +86,35 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With -fsanitize=kcfi, CONFIG_CFI_CLANG no longer has issues
-with address space confusion in functions that switch to linear
-mapping. Now that the indirectly called assembly functions have
-type annotations, drop the __nocfi attributes.
+It's no longer necessary to disable CFI checking for all __init
+functions. Drop the __nocfi attribute from __init.
 
-Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/arm64/include/asm/mmu_context.h | 2 +-
- arch/arm64/kernel/alternative.c      | 2 +-
- arch/arm64/kernel/cpufeature.c       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ include/linux/init.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
-index 6770667b34a3..ca0140d0b8cf 100644
---- a/arch/arm64/include/asm/mmu_context.h
-+++ b/arch/arm64/include/asm/mmu_context.h
-@@ -143,7 +143,7 @@ static inline void cpu_install_ttbr0(phys_addr_t ttbr0, unsigned long t0sz)
-  * Atomically replaces the active TTBR1_EL1 PGD with a new VA-compatible PGD,
-  * avoiding the possibility of conflicting TLB entries being allocated.
-  */
--static inline void __nocfi cpu_replace_ttbr1(pgd_t *pgdp)
-+static inline void cpu_replace_ttbr1(pgd_t *pgdp)
- {
- 	typedef void (ttbr_replace_func)(phys_addr_t);
- 	extern ttbr_replace_func idmap_cpu_replace_ttbr1;
-diff --git a/arch/arm64/kernel/alternative.c b/arch/arm64/kernel/alternative.c
-index 7bbf5104b7b7..e98466bab633 100644
---- a/arch/arm64/kernel/alternative.c
-+++ b/arch/arm64/kernel/alternative.c
-@@ -133,7 +133,7 @@ static void clean_dcache_range_nopatch(u64 start, u64 end)
- 	} while (cur += d_size, cur < end);
- }
+diff --git a/include/linux/init.h b/include/linux/init.h
+index baf0b29a7010..88f2964097f5 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -47,7 +47,7 @@
  
--static void __nocfi __apply_alternatives(struct alt_region *region, bool is_module,
-+static void __apply_alternatives(struct alt_region *region, bool is_module,
- 				 unsigned long *feature_mask)
- {
- 	struct alt_instr *alt;
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 42ea2bd856c6..f6f9694d0448 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -1645,7 +1645,7 @@ static bool unmap_kernel_at_el0(const struct arm64_cpu_capabilities *entry,
- }
- 
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
--static void __nocfi
-+static void
- kpti_install_ng_mappings(const struct arm64_cpu_capabilities *__unused)
- {
- 	typedef void (kpti_remap_fn)(int, int, phys_addr_t);
+ /* These are for everybody (although not all archs will actually
+    discard it in modules) */
+-#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline __nocfi
++#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline
+ #define __initdata	__section(".init.data")
+ #define __initconst	__section(".init.rodata")
+ #define __exitdata	__section(".exit.data")
 -- 
 2.36.1.476.g0c4daa206d-goog
 

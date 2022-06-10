@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BFE546F05
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A77E546F0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350835AbiFJVLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S1350865AbiFJVMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345137AbiFJVLK (ORCPT
+        with ESMTP id S1350839AbiFJVMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:11:10 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E619E4926B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:11:09 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id w21so532945pfc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:11:09 -0700 (PDT)
+        Fri, 10 Jun 2022 17:12:34 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BCD49B50
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:12:32 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q140so280120pgq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:12:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mAlhHjicxdibTZDY5HOZ3HLGftkcyfsPbsuBXvhev58=;
-        b=rZoLQeeoRRIJfdLUJHE4dnrv8nvOAt9iOR0vH2qVCqvRI5W3AZ+mv8x+IW7fCeK6ba
-         OVKZBg+dmXyW9W+XodkUKv8lx+avXiEFgpHK17IIYAWUXvzSmlWwi9ZgEJByV24JtQVO
-         yqMzskfHsVeIjFMHcrNFCLiOvBVonmGQq2DEtnnHc9yOLy++SvJkgef5FG4G+cG43fEd
-         /Fvg5ax3RpWb3XiCYQeuzl/1lH4B3XataJDDAwrYOiiTIg3FxWNSp0B+/gxNwomFI++O
-         03qLVVKkULvOYqTllPPH4HMOJPK4F6Da8bvMMDw6+uMoPLYmWDrfFLEGDTdRsqCouOQ6
-         n14w==
+        bh=KLh8UWaxnG0XK4ejvWk5/7UEox62WuaIhi58ed8ZfqU=;
+        b=oOOlocAR4BVT+CnGqmu5nFRQMD1z12qGrPh1buMTIuQt0LNbf3DZw0xZbNVlhc2y8n
+         FYgbC30cstY+yvj2do6UDu46k7Vn5VFACCt0OQI1llYzuP3t8TKupeqiOl0mKnB7mEpx
+         GBoXMrfeGKfVaH95mQ0aAmGMQl6kRSoID0l58jpYnm3rtiS1dksHi2ylQ1VCEV4L44Kk
+         UDUm0pt38qW8TufTPezTvFPQNn59gduH4kJYvkmStSEnxU5vdWZHSf7q147zlIdmvwUs
+         QtRPWAHObALA+wYaEq6Hz5Sjniu8RYXrZmOBthtCEfkCX7c09rysGegcLy4dFk/63PZR
+         Ubxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mAlhHjicxdibTZDY5HOZ3HLGftkcyfsPbsuBXvhev58=;
-        b=gRy9OBJYFxftSQxeJX2FTp+VkFEiGwaU2WorObEwjE5ivtMSe0fox3J9GXEX7WJoep
-         cevtxCHbEY5v3r8IHu2F2BQRBPabuRPmWjLk8PtVqdhtLUCjJ0ufPj4gv2bEzc4aDgRQ
-         npojwiCCEtmU3huSufVHGJkgNEwL7QggqAb6iApIktEDPKSKOzCqRmHBQQPOdssZgrJ5
-         FqanoebUrqZ+1zxtPnUNFstG1onVaKwlnjdvS0jgAkApCjQAni9PGHTyTYvj5+AbOAwn
-         FSEm6h9GEjdlkD1od4AQq9P3p4vdckU2kW6l0pQ30kFNlz5c7i75sq5UH1NSCtOcaDOx
-         bX1A==
-X-Gm-Message-State: AOAM533JDwoBplLEJ0E+PruFMyYH0nzp5qEDFWbgYFROFHFWwwUIXoZJ
-        FVEFUtDUHDmJ6VkSdlyumPIIl/fMfn+B3wbHk7pt
-X-Google-Smtp-Source: ABdhPJwx7n3musHGFyiyfqvl/EdH710RryS6Xm5TNC7u0DL6j33BjBGOdeGMogcoVPAETgbUEuZ93EmDm/ToHyuQPv0=
-X-Received: by 2002:a63:31d0:0:b0:3fc:5770:e779 with SMTP id
- x199-20020a6331d0000000b003fc5770e779mr40782512pgx.376.1654895469427; Fri, 10
- Jun 2022 14:11:09 -0700 (PDT)
+        bh=KLh8UWaxnG0XK4ejvWk5/7UEox62WuaIhi58ed8ZfqU=;
+        b=7hb9M2/16Ohn6BM4F/j90u8HUNHI/TmwkwlS07pKfNlSPyJwcfEJfa44vDq6pzj6aZ
+         85rtaPf+PRKbtNTjpzItjo9cc2CGqkbgGxfPsRfkQOp2sAaBn3i7HaVY4EiSuSGBcpFA
+         A/LnNoBj9kYE4dWd+I2UZfUISiHsV3gSZBDkR8bZowadtB5VYTV8XDSgv5jkteIIByWN
+         13CsBFEloJbiGqNQB9QYjyEGe8jvYhaAKJbUgdBGqOLvjK5pwyeV+1o2iDvkbLil7a1/
+         QlTqz0JUtm5gojIX9j5gHK2whXCgk21WMwFj1JMM/btZxKEmggynHv8euZT775MzK7Gh
+         Q9kw==
+X-Gm-Message-State: AOAM531Xx8aH2c+px7PnGjIk4vIaDdEv3vteIzEf4r3LgHiax0Oe5AU6
+        4MVvBITJiQCAFjHqZEJh5prkpfqwdfYqe2PUmewd
+X-Google-Smtp-Source: ABdhPJwOyrpg1AqxhhST810M59Pif6MyGpe2uAsQzlGWQ8QXwysQpCn4KgUWCSY2xql44klzbHEzPc92Valgmk5MxIw=
+X-Received: by 2002:a63:8449:0:b0:3fc:85a5:5b69 with SMTP id
+ k70-20020a638449000000b003fc85a55b69mr40873314pgd.261.1654895552080; Fri, 10
+ Jun 2022 14:12:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609230146.319210-1-casey@schaufler-ca.com> <20220609230146.319210-29-casey@schaufler-ca.com>
-In-Reply-To: <20220609230146.319210-29-casey@schaufler-ca.com>
+References: <20220609230146.319210-1-casey@schaufler-ca.com> <20220609230146.319210-31-casey@schaufler-ca.com>
+In-Reply-To: <20220609230146.319210-31-casey@schaufler-ca.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 10 Jun 2022 17:10:58 -0400
-Message-ID: <CAHC9VhSTdZVVAbSS_kT-Qtk6iy7w+GdAx7-F=aPQLtG5Ncb_ZA@mail.gmail.com>
-Subject: Re: [PATCH v36 28/33] audit: multiple subject lsm values for netlabel
+Date:   Fri, 10 Jun 2022 17:12:21 -0400
+Message-ID: <CAHC9VhTraB9D962b9j8J0HxUE9RPbAp6ATNFuvucdccTHx_xmQ@mail.gmail.com>
+Subject: Re: [PATCH v36 30/33] netlabel: Use a struct lsmblob in audit data
 To:     Casey Schaufler <casey@schaufler-ca.com>
 Cc:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
@@ -61,26 +61,27 @@ Cc:     casey.schaufler@intel.com, jmorris@namei.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 7:16 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+On Thu, Jun 9, 2022 at 7:18 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
 >
-> Refactor audit_log_task_context(), creating a new
-> audit_log_subject_context(). This is used in netlabel auditing
-> to provide multiple subject security contexts as necessary.
+> Remove scaffolding in netlabel audit by keeping subject
+> lsm information in an lsmblob structure instead of a secid.
 >
 > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 > ---
->  include/linux/audit.h        |  7 +++++++
->  kernel/audit.c               | 26 ++++++++++++++++----------
->  net/netlabel/netlabel_user.c |  7 +------
->  3 files changed, 24 insertions(+), 16 deletions(-)
+>  include/net/netlabel.h            | 2 +-
+>  net/netlabel/netlabel_unlabeled.c | 4 +---
+>  net/netlabel/netlabel_user.c      | 4 +---
+>  net/netlabel/netlabel_user.h      | 6 +-----
+>  security/smack/smackfs.c          | 2 +-
+>  5 files changed, 5 insertions(+), 13 deletions(-)
 
 Acked-by: Paul Moore <paul@paul-moore.com>
 

@@ -2,95 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC50C5462B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A165462C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347978AbiFJJsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
+        id S1343733AbiFJJuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347895AbiFJJsC (ORCPT
+        with ESMTP id S1347046AbiFJJuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:48:02 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D6266FBE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:47:58 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4LKGNS1WL2z1sCJ8;
-        Fri, 10 Jun 2022 11:47:52 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4LKGNS0Y1xz1qqkC;
-        Fri, 10 Jun 2022 11:47:52 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id ZVrNQR93sT2h; Fri, 10 Jun 2022 11:47:50 +0200 (CEST)
-X-Auth-Info: 162ru3Q4VMnzLLQFOilR4v/i0ZvUQvOcexKpJLxzQGil3ncYElNin4Gd1Y9MaVVm
-Received: from igel.home (ppp-46-244-161-94.dynamic.mnet-online.de [46.244.161.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 10 Jun 2022 11:47:50 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id 411B52C3AC6; Fri, 10 Jun 2022 11:47:50 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Subject: Re: {standard input}:3978: Error: value 178 out of range
-References: <202206100855.uY63FJUH-lkp@intel.com>
-        <CAMuHMdVGdzkaT=SR2OWoN9S=Xr-2Ckki41P_p7t4WDgRLzfuGg@mail.gmail.com>
-X-Yow:  NANCY!!  Why is everything RED?!
-Date:   Fri, 10 Jun 2022 11:47:50 +0200
-In-Reply-To: <CAMuHMdVGdzkaT=SR2OWoN9S=Xr-2Ckki41P_p7t4WDgRLzfuGg@mail.gmail.com>
-        (Geert Uytterhoeven's message of "Fri, 10 Jun 2022 10:46:21 +0200")
-Message-ID: <87wndoalyx.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Fri, 10 Jun 2022 05:50:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4860D6F493
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:50:00 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id v1so41734291ejg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:50:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GM7d3E0tduZqRYf2e+s3dbuLzIr4Mw1YJSMLDAOVaMI=;
+        b=mPsDPC8Jc7T4BUqovcJHh9X9aOrAhrclaAa/mhdil1CMSWhn30imVTqNFRV+0HRuZR
+         9clubq9kS7nPcWWq0+jUK/ZXeKuiFGzZDvtFDwXEp2uxKkZ+j2tw+p6oTgwkJY+ubiyC
+         fNpq3+oeKLsbInyhxMt0RU7rnoLmgsm+qFbiG6K8ZL9ftfWRVogRMaCLYG0PEmOcWyxi
+         Ej/gBPv4wGEs//8C5AqndzktP0qrzc314Ie0fAKrmlRueinVOKmVaBBtnVyEHYDDTkgY
+         p8yH/z6bfp1mBhN+ixEyIEW0HoPZyP6dMU1cLXojoX9F8XKV/BwCrjhvbDch3r8LG4uz
+         wQww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GM7d3E0tduZqRYf2e+s3dbuLzIr4Mw1YJSMLDAOVaMI=;
+        b=70Rxl24CxuPXejr2QFHmcdTb5zO8l1UzIEHyCBIasAhYUJaHAoaymHCiN/w9j6a+el
+         qtm1dtse0ppMkw3Yf9qgFpktCQKJlsF+/W1bSOz2G+yCqgPPSM73o5cOhWUyOrSEKGhm
+         pNnGs00WiqelemboNGzhhGfXVLVJWFiGOUbTztsFVoCqHi/rVrTFgzN/oljiLZmPTRle
+         Lf1ZAz4l7uWeLE5mEEErOSglIXrBRtfd7BrPl2wUB6G/zzXxIoJ92R8eBabVw6vbvMPw
+         tjbX40fD1Z48wJ36+joSO6uQ+60jfTMHJma61o2Qsg9+OTHDRRxVOa38ped3oj2e4vct
+         jKDw==
+X-Gm-Message-State: AOAM530+NOEyX9L7ICxnWcFlDOppy8FCBTAQ7AwKbVheqTgf1QbljOfq
+        Hd94D23qDViehgUkZlzOcgOYxe4Pt9CENw==
+X-Google-Smtp-Source: ABdhPJyCD/klApB8VX8jrzmpF60V4CVF43i+O2miGAxeX9trvWXvTRU8uZ81PMBn+YHe3kzoGb0iXQ==
+X-Received: by 2002:a17:907:3f08:b0:711:d61d:e10 with SMTP id hq8-20020a1709073f0800b00711d61d0e10mr21666615ejc.11.1654854598989;
+        Fri, 10 Jun 2022 02:49:58 -0700 (PDT)
+Received: from ash.lan (82-132-215-210.dab.02.net. [82.132.215.210])
+        by smtp.gmail.com with ESMTPSA id o13-20020a17090608cd00b006fedcb78854sm11931009eje.164.2022.06.10.02.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 02:49:58 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 10:49:55 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, linux-fbdev@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Helge Deller <deller@gmx.de>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] fbdev: atmel_lcdfb: Rework backlight status updates
+Message-ID: <20220610094955.cy53ujicaplr7aw7@ash.lan>
+References: <20220608205623.2106113-1-steve@sk2.org>
+ <20220609095412.fccofr2e2kpzhw4t@maple.lan>
+ <YqIuUYUXzxeSgZ/o@ravnborg.org>
+ <20220609194511.4e0bc3e6@heffalump.sk2.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220609194511.4e0bc3e6@heffalump.sk2.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jun 10 2022, Geert Uytterhoeven wrote:
-
-> The offending instruction is:
+On Thu, Jun 09, 2022 at 07:45:11PM +0200, Stephen Kitt wrote:
+> Hi Sam, Daniel,
 >
->     | drivers/scsi/mpi3mr/mpi3mr_fw.c:299:  switch (host_tag) {
->             mvz.w %d2,%d0   | tmp160, host_tag
->             mov3q.l #5,%d1  |,
->             cmp.l %d0,%d1   | host_tag,
->             jcs .L154               |
->             tst.w %d6       | host_tag
->             jeq .L133               |
->             subq.l #2,%d2   |, tmp238
->             mvz.w %d2,%d2   | tmp238, tmp240
->             mov3q.l #3,%d0  |,
->             cmp.l %d2,%d0   | tmp240,
->             jcs .L140               |
->             add.l %d2,%d2   | tmp244
->>>>         move.w .L155(%pc,%d2.l),%d0     |, tmp245
->             jra .L186               |
+> On Thu, 9 Jun 2022 19:30:57 +0200, Sam Ravnborg <sam@ravnborg.org> wrote:
+> > thanks for taking care of all these backlight simplifications - this
+> > really helps to make the code simpler and more readable.
 >
-> And the table L155 is just too far from the above instruction, so
-> the displacement is too large, causing the failure.
->
-> Looks like a compiler bug to me?
+> You’re welcome! I noticed fb_blank was deprecated and near enough unused, and
+> started digging...
 
-Yes, it's https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104028.
+I saw Sam's comment and kinda wished I'd thought to say that... definitely
+good to see these things being tidied up.
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+
+Daniel.

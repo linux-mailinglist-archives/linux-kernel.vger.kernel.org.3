@@ -2,73 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71045462A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73685462A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245131AbiFJJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S245028AbiFJJlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240143AbiFJJjf (ORCPT
+        with ESMTP id S1343985AbiFJJlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:39:35 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577AD2DD45
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:39:30 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id w20so20294332lfa.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=nV43jtmwHVhNIUIwHqbPqyXT6AOAMyWo/9t3uutR0Qo=;
-        b=PAtECZypcteP9uwJWi2omhMCe2W0JP5ojEDBSMhWtPUuUP/W5gFWYqDgst1QrGIzrZ
-         Oes9uDu6/m5HC6eqRgievAxVNYETDEdTAtXk6RP1ts2F5VWj9RVslkuah88dkD1mrsy9
-         tjbWGNBxmjO9v0voDhV0bUBdcO8Tj8kvJ2slrW8onbIRu0VrhWBc8yRr0ghCEeriZ/NN
-         veXTvGvDdaULdMdqMh4pzHkGz6ZnoIUneq5Vvf1VcNJPKRPXPlwte59hT3n3KS/XBa5c
-         GGAzX4GUcTtOAbkwKIGpAXUMq9rT8Z+VThb6/X4UKr97n4BJovWcczY1JX60zRQTE47J
-         9iYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nV43jtmwHVhNIUIwHqbPqyXT6AOAMyWo/9t3uutR0Qo=;
-        b=jIONh74p327DYAZItKrog7ORIM1JPxyQIF+A0e6fBhxOWpQ7LEKeJ4M54n4dMHwar2
-         OANv78Qu7T3kWIWx16Fz+oVk54P3m+J/0aSOuAjwitT/zPJj9oVQKcpXa0AtkXG6IPiu
-         2T1uzKddy+7H7mgZBXqI/2EcaTHPYYsMf2WqK5K6iMItuXbOxVine9E/SnmRaU9bzclP
-         EpBnf7fcyDn0f0+t2mdoMlu3jaPLPARuYGLZ64rlVoG5zppGJXOQOUeAhZfHHsLAHbGw
-         CbqZ/sFuI+iH8r5sKKjT7w0/2r1+OZg/FKa/yBjq9+/8EpodIHxCn98I8wdU3vyMDcPt
-         f/RQ==
-X-Gm-Message-State: AOAM5315GL2qqZskiFWRrG5yHQX8vRV8eXtWEvPMfV/BFVJOgURvT4sU
-        HsQYVn2JYu9N1eD5K5iIF3o=
-X-Google-Smtp-Source: ABdhPJzhfuW5XdHCCRPubLqs1LoFsN2HHa+bDTgi7nPzDkZ8jaCdbntBg6Vboo4kR3OSwudczJn+0Q==
-X-Received: by 2002:ac2:4c48:0:b0:479:4fdc:2c70 with SMTP id o8-20020ac24c48000000b004794fdc2c70mr13827925lfk.295.1654853968748;
-        Fri, 10 Jun 2022 02:39:28 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id n8-20020a056512310800b0047906bad093sm2387841lfb.173.2022.06.10.02.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 02:39:28 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 12:39:26 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        soc@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
-Message-ID: <20220610093926.xgy5pd5wep3hrakl@mobilestation>
-References: <20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru>
- <103fdfb5287a29fc229a734a40c3bcd3b373037f.camel@pengutronix.de>
+        Fri, 10 Jun 2022 05:41:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF381915DB;
+        Fri, 10 Jun 2022 02:41:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B37D1CE3433;
+        Fri, 10 Jun 2022 09:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBF3C34114;
+        Fri, 10 Jun 2022 09:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654854072;
+        bh=RFUzyhUSwzSu4iiHMiqKtHk3uhYnFdDUQekeZLUrGmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WAJdh4OPIfIrsMMSyYq0pYDhh9+9rJgP2K/4RZHv6EPvUgWlk8QHEHDAGvr2rJK3V
+         YGiwI6CK3/M+WgZBsTIFlfYQJfXnRpJBu0NXcSFJS4xBjPIs8OQ1HWYsy9coEJWm/c
+         bihiPgSDbzv8rsP8yPuyzSCUHQqqr+jrY0fSFG1o=
+Date:   Fri, 10 Jun 2022 11:41:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Wang Wenhu <lonehugo@hotmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:FPGA DFL DRIVERS" <linux-fpga@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        wenhu.wang@hotmail.com
+Subject: Re: [PATCH] mm: eliminate ifdef of HAVE_IOREMAP_PROT in .c files
+Message-ID: <YqMRtWAH5fIWsLQB@kroah.com>
+References: <PN3PR01MB7725BD573E8D63C1CB978AD8D2A69@PN3PR01MB7725.INDPRD01.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <103fdfb5287a29fc229a734a40c3bcd3b373037f.camel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <PN3PR01MB7725BD573E8D63C1CB978AD8D2A69@PN3PR01MB7725.INDPRD01.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +59,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:35:36AM +0200, Philipp Zabel wrote:
-> Hi Serge,
+On Fri, Jun 10, 2022 at 02:25:18AM -0700, Wang Wenhu wrote:
+> It is recommended in the "Conditional Compilation" chapter of kernel
+> coding-style documentation that preprocessor conditionals should not
+> be used in .c files wherever possible.
 > 
-> On Fr, 2022-06-10 at 11:01 +0300, Serge Semin wrote:
-> > The Baikal-T1 APB bus driver correctly handles the deferred probe
-> > situation, but still pollutes the system log with a misleading error
-> > message. Let's fix that by using the dev_err_probe() method to print the
-> > log message in case of the clocks/resets request errors.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/bus/bt1-apb.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
-> > index b25ff941e7c7..ac13b5b97107 100644
-> > --- a/drivers/bus/bt1-apb.c
-> > +++ b/drivers/bus/bt1-apb.c
-> > @@ -176,7 +176,8 @@ static int bt1_apb_request_rst(struct bt1_apb *apb)
-> >  
-> > 
-> > 
-> > 
-> >  	apb->prst = devm_reset_control_get_optional_exclusive(apb->dev, "prst");
-> >  	if (IS_ERR(apb->prst)) {
-> > -		dev_warn(apb->dev, "Couldn't get reset control line\n");
-> > +		dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-> > +			      "Couldn't get reset control line\n");
-> >  		return PTR_ERR(apb->prst);
+> As for the micro CONFIG_HAVE_IOREMAP_PROT, now it's a proper chance
+> to eliminate it in .c files as we add a no-op function defination
+> in the header file if the micro is not enabled.
 > 
+> The main trigger for this patch is an UIO driver series and as Greg
+> commented we'd better not use such preprocessor contionals.
+> See: https://lore.kernel.org/lkml/YqHy1uXwCLlJmftr@kroah.com/
+> For there is little work to do with the UIO driver, I try to push
+> this commit independently.
+> 
+> Signed-off-by: Wang Wenhu <lonehugo@hotmail.com>
+> ---
+>  drivers/char/mem.c          | 2 --
+>  drivers/fpga/dfl-afu-main.c | 2 --
+>  drivers/pci/mmap.c          | 2 --
+>  drivers/uio/uio.c           | 2 --
+>  include/linux/mm.h          | 8 ++++++++
+>  mm/memory.c                 | 4 ----
+>  6 files changed, 8 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+> index 84ca98ed1dad..40186a441e38 100644
+> --- a/drivers/char/mem.c
+> +++ b/drivers/char/mem.c
+> @@ -354,9 +354,7 @@ static inline int private_mapping_ok(struct vm_area_struct *vma)
+>  #endif
+>  
+>  static const struct vm_operations_struct mmap_mem_ops = {
+> -#ifdef CONFIG_HAVE_IOREMAP_PROT
+>  	.access = generic_access_phys
+> -#endif
+>  };
+>  
+>  static int mmap_mem(struct file *file, struct vm_area_struct *vma)
+> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
+> index 7f621e96d3b8..833e14806c7a 100644
+> --- a/drivers/fpga/dfl-afu-main.c
+> +++ b/drivers/fpga/dfl-afu-main.c
+> @@ -797,9 +797,7 @@ static long afu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  }
+>  
+>  static const struct vm_operations_struct afu_vma_ops = {
+> -#ifdef CONFIG_HAVE_IOREMAP_PROT
+>  	.access = generic_access_phys,
+> -#endif
+>  };
+>  
+>  static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
+> diff --git a/drivers/pci/mmap.c b/drivers/pci/mmap.c
+> index b8c9011987f4..1dcfabf80453 100644
+> --- a/drivers/pci/mmap.c
+> +++ b/drivers/pci/mmap.c
+> @@ -35,9 +35,7 @@ int pci_mmap_page_range(struct pci_dev *pdev, int bar,
+>  #endif
+>  
+>  static const struct vm_operations_struct pci_phys_vm_ops = {
+> -#ifdef CONFIG_HAVE_IOREMAP_PROT
+>  	.access = generic_access_phys,
+> -#endif
+>  };
+>  
+>  int pci_mmap_resource_range(struct pci_dev *pdev, int bar,
+> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+> index 43afbb7c5ab9..c9205a121007 100644
+> --- a/drivers/uio/uio.c
+> +++ b/drivers/uio/uio.c
+> @@ -719,9 +719,7 @@ static int uio_mmap_logical(struct vm_area_struct *vma)
+>  }
+>  
+>  static const struct vm_operations_struct uio_physical_vm_ops = {
+> -#ifdef CONFIG_HAVE_IOREMAP_PROT
+>  	.access = generic_access_phys,
+> -#endif
+>  };
+>  
+>  static int uio_mmap_physical(struct vm_area_struct *vma)
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index bc8f326be0ce..66d0cff6054e 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1857,8 +1857,16 @@ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
+>  	unsigned long *pfn);
+>  int follow_phys(struct vm_area_struct *vma, unsigned long address,
+>  		unsigned int flags, unsigned long *prot, resource_size_t *phys);
+> +#ifdef CONFIG_HAVE_IOREMAP_PROT
+>  int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
+>  			void *buf, int len, int write);
+> +#else
+> +int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
+> +			void *buf, int len, int write)
 
-> This could be shortened to
-> 
-> -		dev_warn(apb->dev, "Couldn't get reset control line\n");
-> +		return dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-> +				     "Couldn't get reset control line\n");
-> -		return PTR_ERR(apb->prst);
+This needs to be an inline function, right?
 
-You are absolutely right. Thanks. I'll fix it in the v2 in both
-patches.
+Did you test build this?
 
--Sergey
+thanks,
 
-> 
-> regards
-> Philipp
-> 
+greg k-h

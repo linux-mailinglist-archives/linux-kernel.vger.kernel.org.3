@@ -2,731 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F28B546D86
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D0F546D90
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350551AbiFJTpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        id S1347759AbiFJTsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350488AbiFJTpH (ORCPT
+        with ESMTP id S233646AbiFJTr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:45:07 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C6D4B863
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:44:57 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id g129-20020a636b87000000b00401b8392ac8so38161pgc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:44:57 -0700 (PDT)
+        Fri, 10 Jun 2022 15:47:58 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA66A122B68
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:47:55 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so3253655pjm.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:47:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=KbC0X46hVkP2Aymvw4+td8Fli/k3NItWmz1VnlYQjNw=;
-        b=cFc7G65g17J1qsVq4XuwdXsAwEkyBvPQfnm+oZdh1vv1mzKNdONAIGKQKZSHZbIJiU
-         v8DHsC6mUuWRi552EmF9U9U833ySNQZ47Tn5iJdX4GxouI4TvZTAg764CW17uNvk635E
-         NhxRRwd4LfHJutrSqQX0u1D7ok93k1QTTqRtKxFqcKZ6+73EJTVOexT42RqoGZJVBxzY
-         JFPSRw6WuA5m9m672mtArFAE2FA65OQsNs529we7imAQ0EDUsnuBSyjPZWlKGJHLWTfH
-         f3AWvGmp9giTB6PcWzusKXjzT7jsEv+2ifBI2pc9IGUkC/a67/ljr8axnmdMykl865L9
-         qzfQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qHVaOpIkikSJd4AS05K/7q+c6JWj3nFqBCEKcwv5cyw=;
+        b=jcvI3NTgmLB86zNnesqS6ZPSuyTCEjqOAZnyFMwc3fd1rkvlMUBQqb6XFS0wRnpmsf
+         dgDRQQTu97SJSM9pNnH5DzTr/bDByIjBCwyoj+dN7wDrweOIuVe1joqPmesN01ojB2QF
+         3HeaqpFEs1I/tVz3i99tQTpvVtPDLwX9DLv+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=KbC0X46hVkP2Aymvw4+td8Fli/k3NItWmz1VnlYQjNw=;
-        b=Iq8YgxF98PywueRKaSEYp6pRTScivskFfFnM0K4iII6RTFHigsNuU4ha0JtprPaJpH
-         pfHIjErEjWxKLvgIqXvnVaYuF16/z+zKJhFi9oFo4FNnfh9uPo/SBNE61tkvxr6Lo3JU
-         fVssaPt9RlpGPibiGRVz2t/2Nh1hPKcknV9edLvKg9Hw8hSh9V4Vm1atWto6RYNtnNso
-         wl9Wrnpr11U5pVxku18+AOc2fILZJEod6Duqmf6Vz9Be03pMbKusb+2jE6KRqlmxGsFC
-         r4qv2qVR+DRblUARn1qUXjzqQxWjA1nkYqIQ3FJLIG09e9Y01RZQlE5qUobi/O8P3LAV
-         7mWA==
-X-Gm-Message-State: AOAM532CKqpPiXw/9tMFVGTFUWEhJ019tNGzBWoUF/wD7EkGdej+xdgt
-        Imot2Revs2Bnpq/eSHRJFgLh6A+grXfzGeg8
-X-Google-Smtp-Source: ABdhPJyjJ7zJWXPp3v5REZjT3OvBcA0CPPbIuMx+cxAZucKwmGy9wBwH3pqi6VWiJ2aqphSyXZqSjWgsnuYPK7jb
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a05:6a00:1350:b0:51c:26d2:9ce5 with
- SMTP id k16-20020a056a00135000b0051c26d29ce5mr26479904pfu.69.1654890296722;
- Fri, 10 Jun 2022 12:44:56 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 19:44:35 +0000
-In-Reply-To: <20220610194435.2268290-1-yosryahmed@google.com>
-Message-Id: <20220610194435.2268290-9-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20220610194435.2268290-1-yosryahmed@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qHVaOpIkikSJd4AS05K/7q+c6JWj3nFqBCEKcwv5cyw=;
+        b=J192ZcKIfVQNdvBn3A+mtsHDwqKcONcylIb04j/55+n1DlayoA84RwhCaDdVWTcTq4
+         3I3eaf5F2ZAM2sjiCPX41H4k25hX5nP1DRbB1vM6S+TV3PTXbPXRma6w7YbHx4hYLOmJ
+         JRSPIw5LYsJacbzM/qGNTkuhqw6met3YAZZFxzomgWd/e6vynnLQ0Vqtfb6skfzILW2+
+         GNPgbX5zc+rpld3bMMa/L7S8E2l2qPvy7a9/k5F42ZS7rL/nYMECuGX1FbBE9MYqGDul
+         FIYsH3tbvWpYbJL+ENc5Sz97pxBZiR9Vg9YQSjwN9SW1xcdH83oHnRKTDuGUL4SEE++C
+         5NiQ==
+X-Gm-Message-State: AOAM531tLcV+jXNL/JlBbdw2ozlDSgzSoMKxCZW7wUnf/35K2lRPCjPb
+        alYwq118j2vISFoR78iOYEMv7g==
+X-Google-Smtp-Source: ABdhPJzDeEFTcdUxMi/c1HhWGSsw2zKB7dTsWNa7e8T/4dXCXi5IEcexLUBcXU+ROnNldGn1KlsA9g==
+X-Received: by 2002:a17:903:44c:b0:164:113:a433 with SMTP id iw12-20020a170903044c00b001640113a433mr45844915plb.163.1654890475266;
+        Fri, 10 Jun 2022 12:47:55 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:2604:9b98:9e57:c870])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170903120400b001620db30cd6sm92864plh.201.2022.06.10.12.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 12:47:54 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jordan Crouse <jordan@cosmicpenguin.net>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eric Anholt <eric@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Sean Paul <sean@poorly.run>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] drm/msm: Avoid unclocked GMU register access in 6xx gpu_busy
+Date:   Fri, 10 Jun 2022 12:47:31 -0700
+Message-Id: <20220610124639.v4.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH bpf-next v2 8/8] bpf: add a selftest for cgroup hierarchical
- stats collection
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@kernel.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a selftest that tests the whole workflow for collecting,
-aggregating (flushing), and displaying cgroup hierarchical stats.
+From testing on sc7180-trogdor devices, reading the GMU registers
+needs the GMU clocks to be enabled. Those clocks get turned on in
+a6xx_gmu_resume(). Confusingly enough, that function is called as a
+result of the runtime_pm of the GPU "struct device", not the GMU
+"struct device". Unfortunately the current a6xx_gpu_busy() grabs a
+reference to the GMU's "struct device".
 
-TL;DR:
-- Whenever reclaim happens, vmscan_start and vmscan_end update
-  per-cgroup percpu readings, and tell rstat which (cgroup, cpu) pairs
-  have updates.
-- When userspace tries to read the stats, vmscan_dump calls rstat to flush
-  the stats, and outputs the stats in text format to userspace (similar
-  to cgroupfs stats).
-- rstat calls vmscan_flush once for every (cgroup, cpu) pair that has
-  updates, vmscan_flush aggregates cpu readings and propagates updates
-  to parents.
+The fact that we were grabbing the wrong reference was easily seen to
+cause crashes that happen if we change the GPU's pm_runtime usage to
+not use autosuspend. It's also believed to cause some long tail GPU
+crashes even with autosuspend.
 
-Detailed explanation:
-- The test loads tracing bpf programs, vmscan_start and vmscan_end, to
-  measure the latency of cgroup reclaim. Per-cgroup ratings are stored in
-  percpu maps for efficiency. When a cgroup reading is updated on a cpu,
-  cgroup_rstat_updated(cgroup, cpu) is called to add the cgroup to the
-  rstat updated tree on that cpu.
+We could look at changing it so that we do pm_runtime_get_if_in_use()
+on the GPU's "struct device", but then we run into a different
+problem. pm_runtime_get_if_in_use() will return 0 for the GPU's
+"struct device" the whole time when we're in the "autosuspend
+delay". That is, when we drop the last reference to the GPU but we're
+waiting a period before actually suspending then we'll think the GPU
+is off. One reason that's bad is that if the GPU didn't actually turn
+off then the cycle counter doesn't lose state and that throws off all
+of our calculations.
 
-- A cgroup_iter program, vmscan_dump, is loaded and pinned to a file, for
-  each cgroup. Reading this file invokes the program, which calls
-  cgroup_rstat_flush(cgroup) to ask rstat to propagate the updates for all
-  cpus and cgroups that have updates in this cgroup's subtree. Afterwards,
-  the stats are exposed to the user. vmscan_dump returns 1 to terminate
-  iteration early, so that we only expose stats for one cgroup per read.
+Let's change the code to keep track of the suspend state of
+devfreq. msm_devfreq_suspend() is always called before we actually
+suspend the GPU and msm_devfreq_resume() after we resume it. This
+means we can use the suspended state to know if we're powered or not.
 
-- An ftrace program, vmscan_flush, is also loaded and attached to
-  bpf_rstat_flush. When rstat flushing is ongoing, vmscan_flush is invoked
-  once for each (cgroup, cpu) pair that has updates. cgroups are popped
-  from the rstat tree in a bottom-up fashion, so calls will always be
-  made for cgroups that have updates before their parents. The program
-  aggregates percpu readings to a total per-cgroup reading, and also
-  propagates them to the parent cgroup. After rstat flushing is over, all
-  cgroups will have correct updated hierarchical readings (including all
-  cpus and all their descendants).
+NOTE: one might wonder when exactly our status function is called when
+devfreq is supposed to be disabled. The stack crawl I captured was:
+  msm_devfreq_get_dev_status
+  devfreq_simple_ondemand_func
+  devfreq_update_target
+  qos_notifier_call
+  qos_max_notifier_call
+  blocking_notifier_call_chain
+  pm_qos_update_target
+  freq_qos_apply
+  apply_constraint
+  __dev_pm_qos_update_request
+  dev_pm_qos_update_request
+  msm_devfreq_idle_work
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Rob Clark <robdclark@gmail.com>
 ---
- .../prog_tests/cgroup_hierarchical_stats.c    | 351 ++++++++++++++++++
- .../bpf/progs/cgroup_hierarchical_stats.c     | 234 ++++++++++++
- 2 files changed, 585 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-new file mode 100644
-index 0000000000000..b78a4043da49a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-@@ -0,0 +1,351 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Functions to manage eBPF programs attached to cgroup subsystems
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+#include <errno.h>
-+#include <sys/types.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
+Changes in v4:
+- Add a comment that gpu_set_freq() / gpu_busy() assume pm resume
+
+Changes in v3:
+- Totally rewrote to not use the pm_runtime functions.
+- Moved the code to be common for all adreno GPUs.
+
+Changes in v2:
+- Move the set_freq runtime pm grab to the GPU file.
+- Use <= for the pm_runtime test, not ==.
+
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c |  8 ------
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 13 ++++-----
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++------
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  3 ++-
+ drivers/gpu/drm/msm/msm_gpu.h         | 11 +++++++-
+ drivers/gpu/drm/msm/msm_gpu_devfreq.c | 39 +++++++++++++++++++++------
+ 6 files changed, 53 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+index c424e9a37669..3dcec7acb384 100644
+--- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+@@ -1666,18 +1666,10 @@ static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ {
+ 	u64 busy_cycles;
+ 
+-	/* Only read the gpu busy if the hardware is already active */
+-	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
+-		*out_sample_rate = 1;
+-		return 0;
+-	}
+-
+ 	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
+ 			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
+ 	*out_sample_rate = clk_get_rate(gpu->core_clk);
+ 
+-	pm_runtime_put(&gpu->pdev->dev);
+-
+ 	return busy_cycles;
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index 9f76f5b15759..dc715d88ff21 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -102,7 +102,8 @@ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu)
+ 		A6XX_GMU_SPTPRAC_PWR_CLK_STATUS_GX_HM_CLK_OFF));
+ }
+ 
+-void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
++void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++		       bool suspended)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+@@ -127,15 +128,16 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 
+ 	/*
+ 	 * This can get called from devfreq while the hardware is idle. Don't
+-	 * bring up the power if it isn't already active
++	 * bring up the power if it isn't already active. All we're doing here
++	 * is updating the frequency so that when we come back online we're at
++	 * the right rate.
+ 	 */
+-	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
++	if (suspended)
+ 		return;
+ 
+ 	if (!gmu->legacy) {
+ 		a6xx_hfi_set_freq(gmu, perf_index);
+ 		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+-		pm_runtime_put(gmu->dev);
+ 		return;
+ 	}
+ 
+@@ -159,7 +161,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
+ 
+ 	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+-	pm_runtime_put(gmu->dev);
+ }
+ 
+ unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
+@@ -895,7 +896,7 @@ static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
+ 		return;
+ 
+ 	gmu->freq = 0; /* so a6xx_gmu_set_freq() doesn't exit early */
+-	a6xx_gmu_set_freq(gpu, gpu_opp);
++	a6xx_gmu_set_freq(gpu, gpu_opp, false);
+ 	dev_pm_opp_put(gpu_opp);
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 42ed9a3c4905..8c02a67f29f2 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -1658,27 +1658,21 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ 	/* 19.2MHz */
+ 	*out_sample_rate = 19200000;
+ 
+-	/* Only read the gpu busy if the hardware is already active */
+-	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
+-		return 0;
+-
+ 	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
+ 
+-
+-	pm_runtime_put(a6xx_gpu->gmu.dev);
+-
+ 	return busy_cycles;
+ }
+ 
+-static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
++static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++			      bool suspended)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+ 
+ 	mutex_lock(&a6xx_gpu->gmu.lock);
+-	a6xx_gmu_set_freq(gpu, opp);
++	a6xx_gmu_set_freq(gpu, opp, suspended);
+ 	mutex_unlock(&a6xx_gpu->gmu.lock);
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+index 86e0a7c3fe6d..ab853f61db63 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+@@ -77,7 +77,8 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
+ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
+ void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
+ 
+-void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp);
++void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++		       bool suspended);
+ unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu);
+ 
+ void a6xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index 6def00883046..31269c1c896b 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -64,11 +64,14 @@ struct msm_gpu_funcs {
+ 	/* for generation specific debugfs: */
+ 	void (*debugfs_init)(struct msm_gpu *gpu, struct drm_minor *minor);
+ #endif
++	/* note: gpu_busy() can assume that we have been pm_resumed */
+ 	u64 (*gpu_busy)(struct msm_gpu *gpu, unsigned long *out_sample_rate);
+ 	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
+ 	int (*gpu_state_put)(struct msm_gpu_state *state);
+ 	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
+-	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp);
++	/* note: gpu_set_freq() can assume that we have been pm_resumed */
++	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++			     bool suspended);
+ 	struct msm_gem_address_space *(*create_address_space)
+ 		(struct msm_gpu *gpu, struct platform_device *pdev);
+ 	struct msm_gem_address_space *(*create_private_address_space)
+@@ -92,6 +95,9 @@ struct msm_gpu_devfreq {
+ 	/** devfreq: devfreq instance */
+ 	struct devfreq *devfreq;
+ 
++	/** lock: lock for "suspended", "busy_cycles", and "time" */
++	struct mutex lock;
 +
-+#include <test_progs.h>
-+#include <bpf/libbpf.h>
-+#include <bpf/bpf.h>
+ 	/**
+ 	 * idle_constraint:
+ 	 *
+@@ -135,6 +141,9 @@ struct msm_gpu_devfreq {
+ 	 * elapsed
+ 	 */
+ 	struct msm_hrtimer_work boost_work;
 +
-+#include "cgroup_helpers.h"
-+#include "cgroup_hierarchical_stats.skel.h"
-+
-+#define PAGE_SIZE 4096
-+#define MB(x) (x << 20)
-+
-+#define BPFFS_ROOT "/sys/fs/bpf/"
-+#define BPFFS_VMSCAN BPFFS_ROOT"vmscan/"
-+
-+#define CG_ROOT_NAME "root"
-+#define CG_ROOT_ID 1
-+
-+#define CGROUP_PATH(p, n) {.path = #p"/"#n, .name = #n}
-+
-+static struct {
-+	const char *path, *name;
-+	unsigned long long id;
-+	int fd;
-+} cgroups[] = {
-+	CGROUP_PATH(/, test),
-+	CGROUP_PATH(/test, child1),
-+	CGROUP_PATH(/test, child2),
-+	CGROUP_PATH(/test/child1, child1_1),
-+	CGROUP_PATH(/test/child1, child1_2),
-+	CGROUP_PATH(/test/child2, child2_1),
-+	CGROUP_PATH(/test/child2, child2_2),
-+};
-+
-+#define N_CGROUPS ARRAY_SIZE(cgroups)
-+#define N_NON_LEAF_CGROUPS 3
-+
-+int root_cgroup_fd;
-+bool mounted_bpffs;
-+
-+static int read_from_file(const char *path, char *buf, size_t size)
-+{
-+	int fd, len;
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0) {
-+		log_err("Open %s", path);
-+		return -errno;
++	/** suspended: tracks if we're suspended */
++	bool suspended;
+ };
+ 
+ struct msm_gpu {
+diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+index d2539ca78c29..ea94bc18e72e 100644
+--- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
++++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+@@ -20,6 +20,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+ 		u32 flags)
+ {
+ 	struct msm_gpu *gpu = dev_to_gpu(dev);
++	struct msm_gpu_devfreq *df = &gpu->devfreq;
+ 	struct dev_pm_opp *opp;
+ 
+ 	/*
+@@ -32,10 +33,13 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+ 
+ 	trace_msm_gpu_freq_change(dev_pm_opp_get_freq(opp));
+ 
+-	if (gpu->funcs->gpu_set_freq)
+-		gpu->funcs->gpu_set_freq(gpu, opp);
+-	else
++	if (gpu->funcs->gpu_set_freq) {
++		mutex_lock(&df->lock);
++		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
++		mutex_unlock(&df->lock);
++	} else {
+ 		clk_set_rate(gpu->core_clk, *freq);
 +	}
-+	len = read(fd, buf, size);
-+	if (len < 0)
-+		log_err("Read %s", path);
-+	else
-+		buf[len] = 0;
-+	close(fd);
-+	return len < 0 ? -errno : 0;
-+}
+ 
+ 	dev_pm_opp_put(opp);
+ 
+@@ -58,15 +62,24 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
+ 	unsigned long sample_rate;
+ 	ktime_t time;
+ 
++	mutex_lock(&df->lock);
 +
-+static int setup_bpffs(void)
-+{
-+	int err;
-+
-+	/* Mount bpffs */
-+	err = mount("bpf", BPFFS_ROOT, "bpf", 0, NULL);
-+	mounted_bpffs = !err;
-+	if (!ASSERT_OK(err && errno != EBUSY, "mount bpffs"))
-+		return err;
-+
-+	/* Create a directory to contain stat files in bpffs */
-+	err = mkdir(BPFFS_VMSCAN, 0755);
-+	ASSERT_OK(err, "mkdir bpffs");
-+	return err;
-+}
-+
-+static void cleanup_bpffs(void)
-+{
-+	/* Remove created directory in bpffs */
-+	ASSERT_OK(rmdir(BPFFS_VMSCAN), "rmdir "BPFFS_VMSCAN);
-+
-+	/* Unmount bpffs, if it wasn't already mounted when we started */
-+	if (mounted_bpffs)
+ 	status->current_frequency = get_freq(gpu);
+-	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
+ 	time = ktime_get();
+-
+-	busy_time = busy_cycles - df->busy_cycles;
+ 	status->total_time = ktime_us_delta(time, df->time);
++	df->time = time;
+ 
++	if (df->suspended) {
++		mutex_unlock(&df->lock);
++		status->busy_time = 0;
 +		return;
-+	ASSERT_OK(umount(BPFFS_ROOT), "unmount bpffs");
-+}
-+
-+static int setup_cgroups(void)
-+{
-+	int i, fd, err;
-+
-+	err = setup_cgroup_environment();
-+	if (!ASSERT_OK(err, "setup_cgroup_environment"))
-+		return err;
-+
-+	root_cgroup_fd = get_root_cgroup();
-+	if (!ASSERT_GE(root_cgroup_fd, 0, "get_root_cgroup"))
-+		return root_cgroup_fd;
-+
-+	for (i = 0; i < N_CGROUPS; i++) {
-+		fd = create_and_get_cgroup(cgroups[i].path);
-+		if (!ASSERT_GE(fd, 0, "create_and_get_cgroup"))
-+			return fd;
-+
-+		cgroups[i].fd = fd;
-+		cgroups[i].id = get_cgroup_id(cgroups[i].path);
-+
-+		/*
-+		 * Enable memcg controller for the entire hierarchy.
-+		 * Note that stats are collected for all cgroups in a hierarchy
-+		 * with memcg enabled anyway, but are only exposed for cgroups
-+		 * that have memcg enabled.
-+		 */
-+		if (i < N_NON_LEAF_CGROUPS) {
-+			err = enable_controllers(cgroups[i].path, "memory");
-+			if (!ASSERT_OK(err, "enable_controllers"))
-+				return err;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static void cleanup_cgroups(void)
-+{
-+	close(root_cgroup_fd);
-+	for (int i = 0; i < N_CGROUPS; i++)
-+		close(cgroups[i].fd);
-+	cleanup_cgroup_environment();
-+}
-+
-+
-+static int setup_hierarchy(void)
-+{
-+	return setup_bpffs() || setup_cgroups();
-+}
-+
-+static void destroy_hierarchy(void)
-+{
-+	cleanup_cgroups();
-+	cleanup_bpffs();
-+}
-+
-+static void alloc_anon(size_t size)
-+{
-+	char *buf, *ptr;
-+
-+	buf = malloc(size);
-+	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
-+		*ptr = 0;
-+	free(buf);
-+}
-+
-+static int induce_vmscan(void)
-+{
-+	char size[128];
-+	int i, err;
-+
-+	/*
-+	 * Set memory.high for test parent cgroup to 1 MB to throttle
-+	 * allocations and invoke reclaim in children.
-+	 */
-+	snprintf(size, 128, "%d", MB(1));
-+	err = write_cgroup_file(cgroups[0].path, "memory.high",	size);
-+	if (!ASSERT_OK(err, "write memory.high"))
-+		return err;
-+	/*
-+	 * In every leaf cgroup, run a memory hog for a few seconds to induce
-+	 * reclaim then kill it.
-+	 */
-+	for (i = N_NON_LEAF_CGROUPS; i < N_CGROUPS; i++) {
-+		pid_t pid = fork();
-+
-+		if (pid == 0) {
-+			/* Join cgroup in the parent process workdir */
-+			join_parent_cgroup(cgroups[i].path);
-+
-+			/* Allocate more memory than memory.high */
-+			alloc_anon(MB(2));
-+			exit(0);
-+		} else {
-+			/* Wait for child to cause reclaim then kill it */
-+			if (!ASSERT_GT(pid, 0, "fork"))
-+				return pid;
-+			sleep(2);
-+			kill(pid, SIGKILL);
-+			waitpid(pid, NULL, 0);
-+		}
-+	}
-+	return 0;
-+}
-+
-+static unsigned long long get_cgroup_vmscan_delay(unsigned long long cgroup_id,
-+						  const char *file_name)
-+{
-+	char buf[128], path[128];
-+	unsigned long long vmscan = 0, id = 0;
-+	int err;
-+
-+	/* For every cgroup, read the file generated by cgroup_iter */
-+	snprintf(path, 128, "%s%s", BPFFS_VMSCAN, file_name);
-+	err = read_from_file(path, buf, 128);
-+	if (!ASSERT_OK(err, "read cgroup_iter"))
-+		return 0;
-+
-+	/* Check the output file formatting */
-+	ASSERT_EQ(sscanf(buf, "cg_id: %llu, total_vmscan_delay: %llu\n",
-+			 &id, &vmscan), 2, "output format");
-+
-+	/* Check that the cgroup_id is displayed correctly */
-+	ASSERT_EQ(id, cgroup_id, "cgroup_id");
-+	/* Check that the vmscan reading is non-zero */
-+	ASSERT_GT(vmscan, 0, "vmscan_reading");
-+	return vmscan;
-+}
-+
-+static void check_vmscan_stats(void)
-+{
-+	int i;
-+	unsigned long long vmscan_readings[N_CGROUPS], vmscan_root;
-+
-+	for (i = 0; i < N_CGROUPS; i++)
-+		vmscan_readings[i] = get_cgroup_vmscan_delay(cgroups[i].id,
-+							     cgroups[i].name);
-+
-+	/* Read stats for root too */
-+	vmscan_root = get_cgroup_vmscan_delay(CG_ROOT_ID, CG_ROOT_NAME);
-+
-+	/* Check that child1 == child1_1 + child1_2 */
-+	ASSERT_EQ(vmscan_readings[1], vmscan_readings[3] + vmscan_readings[4],
-+		  "child1_vmscan");
-+	/* Check that child2 == child2_1 + child2_2 */
-+	ASSERT_EQ(vmscan_readings[2], vmscan_readings[5] + vmscan_readings[6],
-+		  "child2_vmscan");
-+	/* Check that test == child1 + child2 */
-+	ASSERT_EQ(vmscan_readings[0], vmscan_readings[1] + vmscan_readings[2],
-+		  "test_vmscan");
-+	/* Check that root >= test */
-+	ASSERT_GE(vmscan_root, vmscan_readings[1], "root_vmscan");
-+}
-+
-+static int setup_cgroup_iter(struct cgroup_hierarchical_stats *obj, int cgroup_fd,
-+			     const char *file_name)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link;
-+	char path[128];
-+	int err;
-+
-+	/*
-+	 * Create an iter link, parameterized by cgroup_fd.
-+	 * We only want to traverse one cgroup, so set the traversal order to
-+	 * "pre", and return 1 from dump_vmscan to stop iteration after the
-+	 * first cgroup.
-+	 */
-+	linfo.cgroup.cgroup_fd = cgroup_fd;
-+	linfo.cgroup.traversal_order = BPF_ITER_CGROUP_PRE;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(obj->progs.dump_vmscan, &opts);
-+	if (!ASSERT_OK_PTR(link, "attach iter"))
-+		return libbpf_get_error(link);
-+
-+	/* Pin the link to a bpffs file */
-+	snprintf(path, 128, "%s%s", BPFFS_VMSCAN, file_name);
-+	err = bpf_link__pin(link, path);
-+	ASSERT_OK(err, "pin cgroup_iter");
-+	return err;
-+}
-+
-+static int setup_progs(struct cgroup_hierarchical_stats **skel)
-+{
-+	int i, err;
-+	struct bpf_link *link;
-+	struct cgroup_hierarchical_stats *obj;
-+
-+	obj = cgroup_hierarchical_stats__open_and_load();
-+	if (!ASSERT_OK_PTR(obj, "open_and_load"))
-+		return libbpf_get_error(obj);
-+
-+	/* Attach cgroup_iter program that will dump the stats to cgroups */
-+	for (i = 0; i < N_CGROUPS; i++) {
-+		err = setup_cgroup_iter(obj, cgroups[i].fd, cgroups[i].name);
-+		if (!ASSERT_OK(err, "setup_cgroup_iter"))
-+			return err;
-+	}
-+	/* Also dump stats for root */
-+	err = setup_cgroup_iter(obj, root_cgroup_fd, CG_ROOT_NAME);
-+	if (!ASSERT_OK(err, "setup_cgroup_iter"))
-+		return err;
-+
-+	/* Attach rstat flusher */
-+	link = bpf_program__attach(obj->progs.vmscan_flush);
-+	if (!ASSERT_OK_PTR(link, "attach rstat"))
-+		return libbpf_get_error(link);
-+
-+	/* Attach tracing programs that will calculate vmscan delays */
-+	link = bpf_program__attach(obj->progs.vmscan_start);
-+	if (!ASSERT_OK_PTR(obj, "attach raw_tracepoint"))
-+		return libbpf_get_error(obj);
-+
-+	link = bpf_program__attach(obj->progs.vmscan_end);
-+	if (!ASSERT_OK_PTR(obj, "attach raw_tracepoint"))
-+		return libbpf_get_error(obj);
-+
-+	*skel = obj;
-+	return 0;
-+}
-+
-+void destroy_progs(struct cgroup_hierarchical_stats *skel)
-+{
-+	char path[128];
-+	int i;
-+
-+	for (i = 0; i < N_CGROUPS; i++) {
-+		/* Delete files in bpffs that cgroup_iters are pinned in */
-+		snprintf(path, 128, "%s%s", BPFFS_VMSCAN,
-+			 cgroups[i].name);
-+		ASSERT_OK(remove(path), "remove cgroup_iter pin");
 +	}
 +
-+	/* Delete root file in bpffs */
-+	snprintf(path, 128, "%s%s", BPFFS_VMSCAN, CG_ROOT_NAME);
-+	ASSERT_OK(remove(path), "remove cgroup_iter root pin");
-+	cgroup_hierarchical_stats__destroy(skel);
-+}
++	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
++	busy_time = busy_cycles - df->busy_cycles;
+ 	df->busy_cycles = busy_cycles;
+-	df->time = time;
 +
-+void test_cgroup_hierarchical_stats(void)
-+{
-+	struct cgroup_hierarchical_stats *skel = NULL;
++	mutex_unlock(&df->lock);
+ 
+ 	busy_time *= USEC_PER_SEC;
+ 	do_div(busy_time, sample_rate);
+@@ -175,6 +188,8 @@ void msm_devfreq_init(struct msm_gpu *gpu)
+ 	if (!gpu->funcs->gpu_busy)
+ 		return;
+ 
++	mutex_init(&df->lock);
 +
-+	if (setup_hierarchy())
-+		goto hierarchy_cleanup;
-+	if (setup_progs(&skel))
-+		goto cleanup;
-+	if (induce_vmscan())
-+		goto cleanup;
-+	check_vmscan_stats();
-+cleanup:
-+	destroy_progs(skel);
-+hierarchy_cleanup:
-+	destroy_hierarchy();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-new file mode 100644
-index 0000000000000..fd2028f1ed70b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-@@ -0,0 +1,234 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Functions to manage eBPF programs attached to cgroup subsystems
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
+ 	dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
+ 			       DEV_PM_QOS_MAX_FREQUENCY,
+ 			       PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
+@@ -244,12 +259,16 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
+ void msm_devfreq_resume(struct msm_gpu *gpu)
+ {
+ 	struct msm_gpu_devfreq *df = &gpu->devfreq;
++	unsigned long sample_rate;
+ 
+ 	if (!has_devfreq(gpu))
+ 		return;
+ 
+-	df->busy_cycles = 0;
++	mutex_lock(&df->lock);
++	df->busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
+ 	df->time = ktime_get();
++	df->suspended = false;
++	mutex_unlock(&df->lock);
+ 
+ 	devfreq_resume_device(df->devfreq);
+ }
+@@ -261,6 +280,10 @@ void msm_devfreq_suspend(struct msm_gpu *gpu)
+ 	if (!has_devfreq(gpu))
+ 		return;
+ 
++	mutex_lock(&df->lock);
++	df->suspended = true;
++	mutex_unlock(&df->lock);
 +
-+char _license[] SEC("license") = "GPL";
-+
-+/*
-+ * Start times are stored per-task, not per-cgroup, as multiple tasks in one
-+ * cgroup can perform reclain concurrently.
-+ */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, __u64);
-+} vmscan_start_time SEC(".maps");
-+
-+struct vmscan_percpu {
-+	/* Previous percpu state, to figure out if we have new updates */
-+	__u64 prev;
-+	/* Current percpu state */
-+	__u64 state;
-+};
-+
-+struct vmscan {
-+	/* State propagated through children, pending aggregation */
-+	__u64 pending;
-+	/* Total state, including all cpus and all children */
-+	__u64 state;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_HASH);
-+	__uint(max_entries, 10);
-+	__type(key, __u64);
-+	__type(value, struct vmscan_percpu);
-+} pcpu_cgroup_vmscan_elapsed SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 10);
-+	__type(key, __u64);
-+	__type(value, struct vmscan);
-+} cgroup_vmscan_elapsed SEC(".maps");
-+
-+extern void cgroup_rstat_updated(struct cgroup *cgrp, int cpu) __ksym;
-+extern void cgroup_rstat_flush(struct cgroup *cgrp) __ksym;
-+
-+static inline struct cgroup *task_memcg(struct task_struct *task)
-+{
-+	return task->cgroups->subsys[memory_cgrp_id]->cgroup;
-+}
-+
-+static inline uint64_t cgroup_id(struct cgroup *cgrp)
-+{
-+	return cgrp->kn->id;
-+}
-+
-+static inline int create_vmscan_percpu_elem(__u64 cg_id, __u64 state)
-+{
-+	struct vmscan_percpu pcpu_init = {.state = state, .prev = 0};
-+
-+	if (bpf_map_update_elem(&pcpu_cgroup_vmscan_elapsed, &cg_id,
-+				&pcpu_init, BPF_NOEXIST)) {
-+		bpf_printk("failed to create pcpu entry for cgroup %llu\n"
-+			   , cg_id);
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+static inline int create_vmscan_elem(__u64 cg_id, __u64 state, __u64 pending)
-+{
-+	struct vmscan init = {.state = state, .pending = pending};
-+
-+	if (bpf_map_update_elem(&cgroup_vmscan_elapsed, &cg_id,
-+				&init, BPF_NOEXIST)) {
-+		bpf_printk("failed to create entry for cgroup %llu\n"
-+			   , cg_id);
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
-+int BPF_PROG(vmscan_start, struct lruvec *lruvec, struct scan_control *sc)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+	__u64 *start_time_ptr;
-+
-+	start_time_ptr = bpf_task_storage_get(&vmscan_start_time, task, 0,
-+					  BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!start_time_ptr) {
-+		bpf_printk("error retrieving storage\n");
-+		return 0;
-+	}
-+
-+	*start_time_ptr = bpf_ktime_get_ns();
-+	return 0;
-+}
-+
-+SEC("tp_btf/mm_vmscan_memcg_reclaim_end")
-+int BPF_PROG(vmscan_end, struct lruvec *lruvec, struct scan_control *sc)
-+{
-+	struct vmscan_percpu *pcpu_stat;
-+	struct task_struct *current = bpf_get_current_task_btf();
-+	struct cgroup *cgrp;
-+	__u64 *start_time_ptr;
-+	__u64 current_elapsed, cg_id;
-+	__u64 end_time = bpf_ktime_get_ns();
-+
-+	/*
-+	 * cgrp is the first parent cgroup of current that has memcg enabled in
-+	 * its subtree_control, or NULL if memcg is disabled in the entire tree.
-+	 * In a cgroup hierarchy like this:
-+	 *                               a
-+	 *                              / \
-+	 *                             b   c
-+	 *  If "a" has memcg enabled, while "b" doesn't, then processes in "b"
-+	 *  will accumulate their stats directly to "a". This makes sure that no
-+	 *  stats are lost from processes in leaf cgroups that don't have memcg
-+	 *  enabled, but only exposes stats for cgroups that have memcg enabled.
-+	 */
-+	cgrp = task_memcg(current);
-+	if (!cgrp)
-+		return 0;
-+
-+	cg_id = cgroup_id(cgrp);
-+	start_time_ptr = bpf_task_storage_get(&vmscan_start_time, current, 0,
-+					      BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!start_time_ptr) {
-+		bpf_printk("error retrieving storage local storage\n");
-+		return 0;
-+	}
-+
-+	current_elapsed = end_time - *start_time_ptr;
-+	pcpu_stat = bpf_map_lookup_elem(&pcpu_cgroup_vmscan_elapsed,
-+					&cg_id);
-+	if (pcpu_stat)
-+		__sync_fetch_and_add(&pcpu_stat->state, current_elapsed);
-+	else
-+		create_vmscan_percpu_elem(cg_id, current_elapsed);
-+
-+	cgroup_rstat_updated(cgrp, bpf_get_smp_processor_id());
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_rstat_flush")
-+int BPF_PROG(vmscan_flush, struct cgroup *cgrp, struct cgroup *parent, int cpu)
-+{
-+	struct vmscan_percpu *pcpu_stat;
-+	struct vmscan *total_stat, *parent_stat;
-+	__u64 cg_id = cgroup_id(cgrp);
-+	__u64 parent_cg_id = parent ? cgroup_id(parent) : 0;
-+	__u64 *pcpu_vmscan;
-+	__u64 state;
-+	__u64 delta = 0;
-+
-+	/* Add CPU changes on this level since the last flush */
-+	pcpu_stat = bpf_map_lookup_percpu_elem(&pcpu_cgroup_vmscan_elapsed,
-+					       &cg_id, cpu);
-+	if (pcpu_stat) {
-+		state = pcpu_stat->state;
-+		delta += state - pcpu_stat->prev;
-+		pcpu_stat->prev = state;
-+	}
-+
-+	total_stat = bpf_map_lookup_elem(&cgroup_vmscan_elapsed, &cg_id);
-+	if (!total_stat) {
-+		create_vmscan_elem(cg_id, delta, 0);
-+		goto update_parent;
-+	}
-+
-+	/* Collect pending stats from subtree */
-+	if (total_stat->pending) {
-+		delta += total_stat->pending;
-+		total_stat->pending = 0;
-+	}
-+
-+	/* Propagate changes to this cgroup's total */
-+	total_stat->state += delta;
-+
-+update_parent:
-+	/* Skip if there are no changes to propagate, or no parent */
-+	if (!delta || !parent_cg_id)
-+		return 0;
-+
-+	/* Propagate changes to cgroup's parent */
-+	parent_stat = bpf_map_lookup_elem(&cgroup_vmscan_elapsed,
-+					  &parent_cg_id);
-+	if (parent_stat)
-+		parent_stat->pending += delta;
-+	else
-+		create_vmscan_elem(parent_cg_id, 0, delta);
-+
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(dump_vmscan, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct seq_file *seq = meta->seq;
-+	struct vmscan *total_stat;
-+	__u64 cg_id = cgroup_id(cgrp);
-+
-+	/* Do nothing for the terminal call */
-+	if (!cgrp)
-+		return 1;
-+
-+	/* Flush the stats to make sure we get the most updated numbers */
-+	cgroup_rstat_flush(cgrp);
-+
-+	total_stat = bpf_map_lookup_elem(&cgroup_vmscan_elapsed, &cg_id);
-+	if (!total_stat) {
-+		bpf_printk("error finding stats for cgroup %llu\n", cg_id);
-+		BPF_SEQ_PRINTF(seq, "cg_id: %llu, total_vmscan_delay: -1\n",
-+			       cg_id);
-+		return 1;
-+	}
-+	BPF_SEQ_PRINTF(seq, "cg_id: %llu, total_vmscan_delay: %llu\n",
-+		       cg_id, total_stat->state);
-+
-+	/*
-+	 * We only dump stats for one cgroup here, so return 1 to stop
-+	 * iteration after the first cgroup.
-+	 */
-+	return 1;
-+}
+ 	devfreq_suspend_device(df->devfreq);
+ 
+ 	cancel_idle_work(df);
 -- 
 2.36.1.476.g0c4daa206d-goog
 

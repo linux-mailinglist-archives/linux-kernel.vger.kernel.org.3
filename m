@@ -2,145 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6177B5466FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181265466FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235252AbiFJNAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
+        id S235903AbiFJNBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiFJNAU (ORCPT
+        with ESMTP id S230211AbiFJNBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:00:20 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3762B3CBE24
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:00:17 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id w20so21051132lfa.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:00:17 -0700 (PDT)
+        Fri, 10 Jun 2022 09:01:13 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CE7A868F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:01:11 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id d18so1129665ljc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:01:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1WVlkN+j9O2yrmJYHu/e/RTX9FG4N3bxp7VZVWMImKA=;
-        b=fUG79jG7lhF37awsbk/sDeiVyV0xag+XKVjBfgMCygEIc3wM7n7+k6yssEy6qHmEsy
-         Cygvc+bNCJnT0melbOcs06zikHZuTznd2o/3dMitJKAJNMmG6mdsgV44a7iRjTX7twsq
-         bqEL27kq0DU1driC3wb2a3XEcNrr/mXB8ng8zDfWEaqSdHOk3f2bzc1PQL1NXpA1Xgf8
-         p3+QwiwCCRPwPCX/6BWKgG98X+JAlluSolQFHfxye7IEfOAxkCgE0nlLtNcgXIj3vq3A
-         hM0VTCEzaIHeyeSEgQtDPbbHy2ryMwaiwjgsIcTTP5P3zslhvWHKJZ3/EtgEWiIzPJCh
-         fYug==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=JgJmFQ1BbdQmytnpz2iACzkWEtXpChCcsCIr5cGBRFc=;
+        b=XBCn4NFLO5ByQWK/r7OTZ9MpLK5JMwCLHwQn4TnQqcVhs0HUZHgmTaK2nFwlDONGQH
+         9D2Lj15nQArj95XvVsgqHrvEOtMm7N0I4HawU5sX5xVnUtd2Zk5xJZSRvpVR4pyoxbOh
+         92FLfRhucc5ngHNYZW/G9tHiUSRjUiq/6xygn5qwzQzFQTjfE38UPp7R1FKp2fpjLDEn
+         dtR7pMb1bV85NjOgMQx+ld6dcuZfE+FLO0oorXMF4m7ZJTfq0D1wSDBtKmiQZebpSmgw
+         VKHLokis50te8nAmoECBer51PyhNQUsjX8LI1SMudA0gvqoyn6HMX7dXFMPPmZglCNYW
+         aXDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1WVlkN+j9O2yrmJYHu/e/RTX9FG4N3bxp7VZVWMImKA=;
-        b=e5uaqvxX0buOZthcmXL4eyCq+UWeIVYJKfcElDB9xjI/IedC795P0oU+JUa4LKnlf/
-         cSW7CXYBDnU/6tZ9MMf8ywUomGxrPJOC2Sre5q3AVFLeh+/EMclMbEcYjCQHqUQF4koT
-         kFTwiTyS4x3A9j+KwzvRyo/E+oOXaWP3BLk76tFHIoRRJntPOpDldKgfDisUGGKdfrPC
-         TrRPQg3VdiN/8IQ8/85wnxnz3DWJ/0di4LK1XWrRh1jTikkH8HyWR5fqMJRWdasOuTPS
-         lfDn9rFVBKOaWwWnqC5B58w7YhUok+Y3sLdDdG4V5OhdziNLrNTVzUeCKzdxKJ/HYkf2
-         Bpaw==
-X-Gm-Message-State: AOAM5313qlBfwFyCB3qP1UJHYcFk8fKR4iRVorqnWLe9pvcDOjewWeFZ
-        2yFfbInZsHtfW3ce2+ffRWGuww==
-X-Google-Smtp-Source: ABdhPJzIuovLMBrYREHuC6TbDDdse6irHhXThv7vAOYtB+Kyc5bKxI76QDfNtgdaxQvva9tMX0c5ZA==
-X-Received: by 2002:ac2:4e0a:0:b0:479:5311:52e8 with SMTP id e10-20020ac24e0a000000b00479531152e8mr14189486lfr.115.1654866015480;
-        Fri, 10 Jun 2022 06:00:15 -0700 (PDT)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id d21-20020a05651c089500b0025567827117sm4117163ljq.13.2022.06.10.06.00.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 06:00:14 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 15:00:14 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] thermal: rcar_gen3_thermal: improve logging during
- probe
-Message-ID: <YqNAXofRPsDasXi4@oden.dyn.berto.se>
-References: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=JgJmFQ1BbdQmytnpz2iACzkWEtXpChCcsCIr5cGBRFc=;
+        b=CY5P6eE/kZEiykVdULmIalOO14kg/fH+wDaxW34DRStT9Iv8vtmtyhv6UEPMS/YYbS
+         4bmOr6e54H2gvq3SrZ81jsgy0NqA4m3Ax15E5ejqf6R6bgbgy3fvdi4VGA7o7iRUfiva
+         suWkH5is+5hiffivRuv/UlP16bslo3/wBbHDn86uFsAc6vj1vPGQ4Rnxm4zjs8MxnXw2
+         +gB58n22ayEYcpiPlmqiV+vzkA18E+EJfrT9jpWPaHKuzTLJXLdY/7aHnQWB8yiqwce3
+         /2CpTegzcbyOYd6t64gMFrMry2zxhZYUrtv8YjlKvvJQkaokd2nQJiIIW1Px9nLoTjBr
+         75RQ==
+X-Gm-Message-State: AOAM532DIziTKZk5R4WF4d6ZoqeXvTtGJfLXk9Clr+s7C8lo64d0A7Jd
+        tCh8sGVXw3WpPa8eA1nRGqI=
+X-Google-Smtp-Source: ABdhPJywdUD8C8uJlVBglmZRKACYf8SnrA4KpX0fypfncj+57v1ib2kVTLe/r87TUeYne7WDsL8ulA==
+X-Received: by 2002:a2e:5745:0:b0:255:7ae4:c7da with SMTP id r5-20020a2e5745000000b002557ae4c7damr20783468ljd.70.1654866068947;
+        Fri, 10 Jun 2022 06:01:08 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.229.27])
+        by smtp.gmail.com with ESMTPSA id w20-20020a2e9994000000b0024f3d1dae9csm4136493lji.36.2022.06.10.06.01.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 06:01:08 -0700 (PDT)
+Message-ID: <2ee8f6fc-aec1-39a6-e8db-56e5e449ee8e@gmail.com>
+Date:   Fri, 10 Jun 2022 16:01:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v5 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     toke@toke.dk, linux-kernel@vger.kernel.org,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+References: <20220522041542.2911-1-hdanton@sina.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220522041542.2911-1-hdanton@sina.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------JNgkFVSzrWFbeL04HYjxLKaB"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------JNgkFVSzrWFbeL04HYjxLKaB
+Content-Type: multipart/mixed; boundary="------------KVyCCa8ljfLSQdKBabUVtuy5";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: Hillf Danton <hdanton@sina.com>
+Cc: toke@toke.dk, linux-kernel@vger.kernel.org,
+ syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Message-ID: <2ee8f6fc-aec1-39a6-e8db-56e5e449ee8e@gmail.com>
+Subject: Re: [PATCH v5 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+References: <20220522041542.2911-1-hdanton@sina.com>
+In-Reply-To: <20220522041542.2911-1-hdanton@sina.com>
 
-Thanks for your work.
+--------------KVyCCa8ljfLSQdKBabUVtuy5
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 2022-06-09 22:07:09 +0200, Wolfram Sang wrote:
-> When setting up a new board, a plain "Can't register thermal zone"
-> didn't help me much because the thermal zones in DT were all fine. I
-> just had a sensor entry too much in the parent TSC node. Reword the
-> failure/success messages to contain the sensor number to make it easier
-> to understand which sensor is affected. Example output now:
-> 
-> rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip point
-> rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip point
-> rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip point
-> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Change from v1: reword the dev_info string to be more like the original
-> one. Added a check to add the plural-'s' only when needed.
-> 
-> Geert: is this better now?
-> 
->  drivers/thermal/rcar_gen3_thermal.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index ccdf8a24ddc7..f7357b5bd506 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -511,7 +511,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
->  							    &rcar_gen3_tz_of_ops);
->  		if (IS_ERR(zone)) {
-> -			dev_err(dev, "Can't register thermal zone\n");
-> +			dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
->  			ret = PTR_ERR(zone);
->  			goto error_unregister;
->  		}
-> @@ -533,7 +533,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  		if (ret < 0)
->  			goto error_unregister;
->  
-> -		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
-> +		dev_info(dev, "Sensor %u: Loaded %u trip point%s\n", i, ret,
-> +			 ret == 1 ? "" : "s");
+SGkgSGlsbGYsDQoNCk9uIDUvMjIvMjIgMDc6MTUsIEhpbGxmIERhbnRvbiB3cm90ZToNCj4g
+DQo+IEluIHRoZSBjYWxsIGNoYWluIGJlbG93DQo+IA0KPiAJYXRoOWtfaGlmX3VzYl9maXJt
+d2FyZV9jYigpDQo+IAkgIGF0aDlrX2h0Y19od19hbGxvYygpDQo+IAkgIGF0aDlrX2hpZl91
+c2JfZGV2X2luaXQoKQ0KPiAJICByZXQgPSBhdGg5a19odGNfaHdfaW5pdCgpDQo+IAkgICAg
+ICAgICAgYXRoOWtfaHRjX3Byb2JlX2RldmljZSgpDQo+IAkJICAgIGh0Y19oYW5kbGUtPmRy
+dl9wcml2ID0gcHJpdjsNCj4gCQkgICAgcmV0ID0gYXRoOWtfaHRjX3dhaXRfZm9yX3Rhcmdl
+dChwcml2KTsNCj4gCQkgICAgaWYgKHJldCkNCj4gCQkJZ290byBlcnJfZnJlZTsNCj4gCSAg
+aWYgKHJldCkNCj4gCQlnb3RvIGVycl9odGNfaHdfaW5pdDsNCj4gDQo+IGVycl9mcmVlOg0K
+PiAJaWVlZTgwMjExX2ZyZWVfaHcoaHcpOw0KPiANCj4gDQo+IGVycl9odGNfaHdfaW5pdDoN
+Cj4gCWF0aDlrX2hpZl91c2JfZGV2X2RlaW5pdChoaWZfZGV2KTsNCj4gCSAgYXRoOWtfaGlm
+X3VzYl9kZWFsbG9jX3VyYnMoKQ0KPiBlcnJfZGV2X2luaXQ6DQo+IAlhdGg5a19odGNfaHdf
+ZnJlZShoaWZfZGV2LT5odGNfaGFuZGxlKTsNCj4gZXJyX2Rldl9hbGxvYzoNCj4gCXJlbGVh
+c2VfZmlybXdhcmUoZncpOw0KPiBlcnJfZnc6DQo+IAlhdGg5a19oaWZfdXNiX2Zpcm13YXJl
+X2ZhaWwoaGlmX2Rldik7DQo+IA0KPiANCj4gaHcgc2hvdWxkIHN1cnZpdmUgZGVhbGxvY2F0
+aW5nIHVyYnMsIGFuZCBjaGFuZ2VzIHNob3VsZCBiZSBhZGRlZCBpbnN0ZWFkIHRvDQo+IHRo
+ZSByb2xsYmFjayBpbiBhdGg5a19odGNfcHJvYmVfZGV2aWNlKCkgYnkgZGVmZXJyaW5nIGNs
+ZWFudXAgb2YgaHcgdG8gaXRzDQo+IGNhbGxzaXRlIGluIGFkZGl0aW9uIHRvIHVyYnMuDQo+
+IA0KDQpEb24ndCBnZXQgaXQsIHNvcnJ5LiBJIGFtIG5vdCBjaGFuZ2luZyB0aGUgbGlmZSB0
+aW1lIG9mIGBod2AsIEkgYW0ganVzdCANCmRlZmVycmluZyBodGNfaGFuZGxlLT5kcnZfcHJp
+diBpbml0aWFsaXphdGlvbi4NCg0KDQoNCg0KV2l0aCByZWdhcmRzLA0KUGF2ZWwgU2tyaXBr
+aW4NCg==
 
-Bikeshedding, I'm not keen on this style as it makes it harder IMHO to 
-grep for log strings in the code. But I don't dislike it enough to ask 
-you to change it ;-) So if you and Geert are happy with this style,
+--------------KVyCCa8ljfLSQdKBabUVtuy5--
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+--------------JNgkFVSzrWFbeL04HYjxLKaB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Do feel free to keep the tag if you send a version without the plural 
-special case.
+-----BEGIN PGP SIGNATURE-----
 
->  	}
->  
->  	if (!priv->num_tscs) {
-> -- 
-> 2.35.1
-> 
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmKjQJIFAwAAAAAACgkQbk1w61LbBA1k
+xw/+Ifb/UBils+iRORLckbyzbaSm/hs/ANdrGJJgnf6f9KR818T9IThhG3MpOXkKOK9CHuiA4nYp
+La46Rnu8I6SYGYEd76cgiSTbJdjkw4LTq3hDByTXx2Y8uQfcI4y8urrTCQClpo9/p17X9pCyIEfd
+CLZhLE4vFg/2fJXptGwoVBAbA8O1RW+1NUFgeCKmOiImkc+kdnzNsKcE3BnY2iJOF7rgvAZwo6l8
+lQiVdUoyKfRF1PtDuhzBfnj3IbXtEG1BSG3bejELAuycIUVJMmund3YoV/kCy3hP34+GDAKFYTLn
+gwZSzjciYbFyU1lVfbjWWzKbWfDSYlFznJwAWzVH79GCoOx0OWZmGvzIWHkFiqK6u9v0tddHOPvX
+gMqj1ab6S80UHppqMu7R+YHbytZ5Sjmxr/ZP3BOzZ7kcQP2M8sJU34vQD2nJEqwf86P1t3Z0LXVk
+oLI6X9rISjniMQAiAzXFL1J/IVeJHqf98TRFKmc5AL8ADozt1wfzuaVSeElLE4ujdszcJZoyQCwF
+Lux42Lel5i2nyfN6/H9iZmlgbk0jCM6DLzGxSohx32NVkIYtv8WX5qAlmf88Zz+XUP3L4ym7wgzx
+cX5Sewl0EUo+OKTP4waClw+jZDC2Shs5mUMPNfTepYmeCnml03wIimkK0aWqeuxC7KYgYdYhaLez
+MAo=
+=vm+1
+-----END PGP SIGNATURE-----
 
--- 
-Kind Regards,
-Niklas Söderlund
+--------------JNgkFVSzrWFbeL04HYjxLKaB--

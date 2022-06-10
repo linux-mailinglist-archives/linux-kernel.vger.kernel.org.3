@@ -2,143 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55192545B1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C749545B38
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 06:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238333AbiFJE1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 00:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S242900AbiFJEnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 00:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234813AbiFJE1D (ORCPT
+        with ESMTP id S232425AbiFJEm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 00:27:03 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B29C21D491
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 21:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654835223; x=1686371223;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uazHZwevntjsAVAjIl+HPS16ETFIYtI7hPDAFNU6USc=;
-  b=KsnTw5YKaH3lPdthtNvDtnLu4vJBadBoRmZElINPQLQuNb8bJ3GDDDBg
-   Y1eXa7WVhMs+he/DwxtZKJRRuyASFFWDZ4KJ942wB0DLVfsJkXiB2rRTq
-   kcV/vYZhctYIZGjNvZUjAbS5Kb6btW+cKgdmkru2eJ8TpyZlYA0UBWgZk
-   qesiPy5t3abhvSyxQXtqWId8rztR9R3hJ5AsfN0BsKvFwhbq9UOIkCd65
-   5aKiF65Wx6GZB3NmBRS13fOBrkk9wFD/88+nHHx5RhS2yGIIfSEcN0cim
-   I3cGYViMfYsBAFhe46bWsCBEDGnoMpFB8h8Xk9zsrCvtMdMmXI6QElH5C
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278313611"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="278313611"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 21:27:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="585993201"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2022 21:27:01 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzWEe-000Ghh-Ha;
-        Fri, 10 Jun 2022 04:27:00 +0000
-Date:   Fri, 10 Jun 2022 12:26:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mayuresh Chitale <mchitale@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Anup Patel <anup@brainfault.org>
-Subject: [avpatel:virtio_rpmsg_bus_fix_v1 35/52]
- arch/riscv/include/asm/tlbflush.h:33:1: error: type defaults to 'int' in
- declaration of 'DECLARE_STATIC_KEY_FALSE'
-Message-ID: <202206101257.TRD6p5sy-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 10 Jun 2022 00:42:58 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2021D01CA;
+        Thu,  9 Jun 2022 21:42:57 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E4C551A0A73;
+        Fri, 10 Jun 2022 06:42:55 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 613ED1A0A6F;
+        Fri, 10 Jun 2022 06:42:55 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id ADC901802201;
+        Fri, 10 Jun 2022 12:42:53 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     vkoul@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, shengjiu.wang@gmail.com,
+        joy.zou@nxp.com, linux-imx@nxp.com, dmaengine@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dmaengine: imx-sdma: Add FIFO stride support for multi FIFO script
+Date:   Fri, 10 Jun 2022 12:29:16 +0800
+Message-Id: <1654835356-6825-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git virtio_rpmsg_bus_fix_v1
-head:   390aaf641ff2f8919268d611e864227265c3f3f2
-commit: efaaec7bcbaf3346e07955be46d5e3c2bd662167 [35/52] riscv: mm: use svinval instructions instead of sfence.vma
-config: riscv-randconfig-r002-20220609 (https://download.01.org/0day-ci/archive/20220610/202206101257.TRD6p5sy-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/avpatel/linux/commit/efaaec7bcbaf3346e07955be46d5e3c2bd662167
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel virtio_rpmsg_bus_fix_v1
-        git checkout efaaec7bcbaf3346e07955be46d5e3c2bd662167
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/ipv4/
+The peripheral may have several FIFOs, but some case just select
+some FIFOs from them for data transfer, which means FIFO0 and FIFO2
+may be selected. So add FIFO address stride support, 0 means all FIFOs
+are continuous, 1 means 1 word stride between FIFOs. All stride between
+FIFOs should be same.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Another option words_per_fifo means how many audio channel data copied
+to one FIFO one time, 1 means one channel per FIFO, 2 means 2 channels
+per FIFO.
 
-All error/warnings (new ones prefixed by >>):
+If 'n_fifos_src =  4' and 'words_per_fifo = 2', it means the first two
+words(channels) fetch from FIFO0 and then jump to FIFO1 for next two words,
+and so on after the last FIFO3 fetched, roll back to FIFO0.
 
-   In file included from arch/riscv/include/asm/pgtable.h:108,
-                    from arch/riscv/include/asm/uaccess.h:12,
-                    from include/linux/uaccess.h:11,
-                    from include/linux/sched/task.h:11,
-                    from include/linux/sched/signal.h:9,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/percpu-rwsem.h:7,
-                    from include/linux/fs.h:33,
-                    from include/linux/compat.h:17,
-                    from arch/riscv/include/asm/elf.h:12,
-                    from include/linux/elf.h:6,
-                    from include/linux/module.h:19,
-                    from net/ipv4/route.c:63:
->> arch/riscv/include/asm/tlbflush.h:33:1: warning: data definition has no type or storage class
-      33 | DECLARE_STATIC_KEY_FALSE(riscv_flush_tlb_svinval);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/include/asm/tlbflush.h:33:1: error: type defaults to 'int' in declaration of 'DECLARE_STATIC_KEY_FALSE' [-Werror=implicit-int]
->> arch/riscv/include/asm/tlbflush.h:33:1: warning: parameter names (without types) in function declaration
-   net/ipv4/route.c: In function 'ip_rt_send_redirect':
-   net/ipv4/route.c:880:13: warning: variable 'log_martians' set but not used [-Wunused-but-set-variable]
-     880 |         int log_martians;
-         |             ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   In file included from arch/riscv/include/asm/pgtable.h:108,
-                    from arch/riscv/include/asm/uaccess.h:12,
-                    from include/linux/uaccess.h:11,
-                    from include/linux/sched/task.h:11,
-                    from include/linux/sched/signal.h:9,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/percpu-rwsem.h:7,
-                    from include/linux/fs.h:33,
-                    from include/linux/compat.h:17,
-                    from arch/riscv/include/asm/elf.h:12,
-                    from include/linux/elf.h:6,
-                    from include/linux/module.h:19,
-                    from net/ipv4/inetpeer.c:10:
->> arch/riscv/include/asm/tlbflush.h:33:1: warning: data definition has no type or storage class
-      33 | DECLARE_STATIC_KEY_FALSE(riscv_flush_tlb_svinval);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/include/asm/tlbflush.h:33:1: error: type defaults to 'int' in declaration of 'DECLARE_STATIC_KEY_FALSE' [-Werror=implicit-int]
->> arch/riscv/include/asm/tlbflush.h:33:1: warning: parameter names (without types) in function declaration
-   cc1: some warnings being treated as errors
+Signed-off-by: Joy Zou <joy.zou@nxp.com>
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+changes in v2
+- change offset to stride for naming and description
+- fix description for words_per_fifo
+- update subsystem tag to be dmaengine
 
 
-vim +33 arch/riscv/include/asm/tlbflush.h
+ drivers/dma/imx-sdma.c      | 26 ++++++++++++++++++++++++--
+ include/linux/dma/imx-dma.h | 13 +++++++++++++
+ 2 files changed, 37 insertions(+), 2 deletions(-)
 
-    31	
-    32	/* Check if we can use sinval for tlb flush */
-  > 33	DECLARE_STATIC_KEY_FALSE(riscv_flush_tlb_svinval);
-    34	#define riscv_use_flush_tlb_svinval() \
-    35		static_branch_unlikely(&riscv_flush_tlb_svinval)
-    36	
-
+diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+index 39d70ef1caf0..d3c478131824 100644
+--- a/drivers/dma/imx-sdma.c
++++ b/drivers/dma/imx-sdma.c
+@@ -183,6 +183,8 @@
+ 				 BIT(DMA_DEV_TO_DEV))
+ 
+ #define SDMA_WATERMARK_LEVEL_N_FIFOS	GENMASK(15, 12)
++#define SDMA_WATERMARK_LEVEL_OFF_FIFOS  GENMASK(19, 16)
++#define SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO   GENMASK(31, 28)
+ #define SDMA_WATERMARK_LEVEL_SW_DONE	BIT(23)
+ 
+ #define SDMA_DONE0_CONFIG_DONE_SEL	BIT(7)
+@@ -429,6 +431,9 @@ struct sdma_desc {
+  * @n_fifos_src:	number of source device fifos
+  * @n_fifos_dst:	number of destination device fifos
+  * @sw_done:		software done flag
++ * @stride_fifos_src:	stride for source device FIFOs
++ * @stride_fifos_dst:	stride for destination device FIFOs
++ * @words_per_fifo:	copy number of words one time for one FIFO
+  */
+ struct sdma_channel {
+ 	struct virt_dma_chan		vc;
+@@ -456,6 +461,9 @@ struct sdma_channel {
+ 	bool				is_ram_script;
+ 	unsigned int			n_fifos_src;
+ 	unsigned int			n_fifos_dst;
++	unsigned int			stride_fifos_src;
++	unsigned int			stride_fifos_dst;
++	unsigned int			words_per_fifo;
+ 	bool				sw_done;
+ };
+ 
+@@ -1245,17 +1253,28 @@ static void sdma_set_watermarklevel_for_p2p(struct sdma_channel *sdmac)
+ static void sdma_set_watermarklevel_for_sais(struct sdma_channel *sdmac)
+ {
+ 	unsigned int n_fifos;
++	unsigned int stride_fifos;
++	unsigned int words_per_fifo;
+ 
+ 	if (sdmac->sw_done)
+ 		sdmac->watermark_level |= SDMA_WATERMARK_LEVEL_SW_DONE;
+ 
+-	if (sdmac->direction == DMA_DEV_TO_MEM)
++	if (sdmac->direction == DMA_DEV_TO_MEM) {
+ 		n_fifos = sdmac->n_fifos_src;
+-	else
++		stride_fifos = sdmac->stride_fifos_src;
++	} else {
+ 		n_fifos = sdmac->n_fifos_dst;
++		stride_fifos = sdmac->stride_fifos_dst;
++	}
++
++	words_per_fifo = sdmac->words_per_fifo;
+ 
+ 	sdmac->watermark_level |=
+ 			FIELD_PREP(SDMA_WATERMARK_LEVEL_N_FIFOS, n_fifos);
++	sdmac->watermark_level |=
++			FIELD_PREP(SDMA_WATERMARK_LEVEL_OFF_FIFOS, stride_fifos);
++	sdmac->watermark_level |=
++			FIELD_PREP(SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO, (words_per_fifo - 1));
+ }
+ 
+ static int sdma_config_channel(struct dma_chan *chan)
+@@ -1769,6 +1788,9 @@ static int sdma_config(struct dma_chan *chan,
+ 		}
+ 		sdmac->n_fifos_src = sdmacfg->n_fifos_src;
+ 		sdmac->n_fifos_dst = sdmacfg->n_fifos_dst;
++		sdmac->stride_fifos_src = sdmacfg->stride_fifos_src;
++		sdmac->stride_fifos_dst = sdmacfg->stride_fifos_dst;
++		sdmac->words_per_fifo = sdmacfg->words_per_fifo;
+ 		sdmac->sw_done = sdmacfg->sw_done;
+ 	}
+ 
+diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
+index 8887762360d4..f487a4fa103a 100644
+--- a/include/linux/dma/imx-dma.h
++++ b/include/linux/dma/imx-dma.h
+@@ -70,6 +70,16 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
+  * struct sdma_peripheral_config - SDMA config for audio
+  * @n_fifos_src: Number of FIFOs for recording
+  * @n_fifos_dst: Number of FIFOs for playback
++ * @stride_fifos_src: FIFO address stride for recording, 0 means all FIFOs are
++ *                    continuous, 1 means 1 word stride between FIFOs. All stride
++ *                    between FIFOs should be same.
++ * @stride_fifos_dst: FIFO address stride for playback
++ * @words_per_fifo: numbers of words per FIFO fetch/fill, 1 means
++ *                  one channel per FIFO, 2 means 2 channels per FIFO..
++ *                  If 'n_fifos_src =  4' and 'words_per_fifo = 2', it
++ *                  means the first two words(channels) fetch from FIFO0
++ *                  and then jump to FIFO1 for next two words, and so on
++ *                  after the last FIFO3 fetched, roll back to FIFO0.
+  * @sw_done: Use software done. Needed for PDM (micfil)
+  *
+  * Some i.MX Audio devices (SAI, micfil) have multiple successive FIFO
+@@ -82,6 +92,9 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
+ struct sdma_peripheral_config {
+ 	int n_fifos_src;
+ 	int n_fifos_dst;
++	int stride_fifos_src;
++	int stride_fifos_dst;
++	int words_per_fifo;
+ 	bool sw_done;
+ };
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

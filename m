@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C91546C9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A550546C9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347907AbiFJSjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S1347530AbiFJSlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347017AbiFJSjp (ORCPT
+        with ESMTP id S1347017AbiFJSlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:39:45 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CBD2E9D4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=UU5YjojlQCeCu9qlG2U4gDtMpva3
-        cln2VaeHsGNEyGs=; b=CQbK9ijqe4r2UR1IviVxCEjgV8Zkq+S0aZIbbUPhO1mo
-        rJSVajB1cDtUtJBuiTHDpV9iRHvNUKeQYAWLx/RXNp4ix870jRwybTJ5O+hBecPM
-        3F2wMESvrrDFKBTjFKfgVNeV3kcwrPMg3DGsw4zgAQ0D+CjjTQK0/s2fZMMuFGA=
-Received: (qmail 344059 invoked from network); 10 Jun 2022 20:39:36 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jun 2022 20:39:36 +0200
-X-UD-Smtp-Session: l3s3148p1@tXaWQhzhzGxZD+3R
-Date:   Fri, 10 Jun 2022 20:39:35 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0
- support
-Message-ID: <YqOP51pNPTtXQTMQ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220609194154.12829-1-wsa+renesas@sang-engineering.com>
- <CAMuHMdXg3rC++RBp+aZM1Q_EkYyTxot-9LZnMfJFRz7cp0NLoQ@mail.gmail.com>
+        Fri, 10 Jun 2022 14:41:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272233ED37;
+        Fri, 10 Jun 2022 11:41:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C208CB83306;
+        Fri, 10 Jun 2022 18:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD19C34114;
+        Fri, 10 Jun 2022 18:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654886470;
+        bh=8OzaaS+ZSMPsh31JB7Ah5CaSRa2016oEc+BQxWbwMfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c75X+wXAL5ajJev5A/S5OVvUwVqCjyv2Cfzrrf8ptQHUjc98XbeKpoA1kapS27sx9
+         HokPACvaZrYWSD+JHRmSUFhCJj6G6wRUOmHr5zbdCPuIiizzF7DlAvgfI7uwucv17D
+         1GUxh8tE3PDiJmfglVWnmEo3rFnwkkiCRNQz5W2vmyvoS2Tzdw2m4G1aNRE0r3Isz0
+         Jyz8qwSpd/bmEcXf+L7SzRPAWC2CAz8heOGVeqyYsqFu+32G1zETb7+MobtEHYis7C
+         05ysCbOJfVuH1siY6lmQ0W38gDIP9xcWi1/JZ0PW63DULfWuuWx2S0dezLi1rT3kUL
+         Q9uw1YGQi8yPw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2EBB24096F; Fri, 10 Jun 2022 15:41:08 -0300 (-03)
+Date:   Fri, 10 Jun 2022 15:41:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf test: Fix undefined behavior in bp_account
+Message-ID: <YqOQRD62FIDNBkcH@kernel.org>
+References: <20220610180247.444798-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CN9TMHG+L/SSyQsL"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdXg3rC++RBp+aZM1Q_EkYyTxot-9LZnMfJFRz7cp0NLoQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220610180247.444798-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Fri, Jun 10, 2022 at 11:02:47AM -0700, Ian Rogers escreveu:
+> Fix:
+> tests/bp_account.c:154:9: runtime error: variable length array bound evaluates to non-positive value 0
+> by switching from a variable length to an allocated array.
 
---CN9TMHG+L/SSyQsL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks, applied.
 
+- Arnaldo
 
-> Unfortunately not:
->=20
-> arch/arm64/boot/dts/renesas/r8a779f0-spider.dtb: thermal@e6198000:
-> reg: [[0, 3860430848, 0, 512], [0, 3860463616, 0, 512], [0,
-> 3860496384, 0, 512]] is too short
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/tests/bp_account.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/tests/bp_account.c b/tools/perf/tests/bp_account.c
+> index d1ebb5561e5b..6f921db33cf9 100644
+> --- a/tools/perf/tests/bp_account.c
+> +++ b/tools/perf/tests/bp_account.c
+> @@ -151,11 +151,21 @@ static int detect_ioctl(void)
+>  static int detect_share(int wp_cnt, int bp_cnt)
+>  {
+>  	struct perf_event_attr attr;
+> -	int i, fd[wp_cnt + bp_cnt], ret;
+> +	int i, *fd = NULL, ret = -1;
+> +
+> +	if (wp_cnt + bp_cnt == 0)
+> +		return 0;
+> +
+> +	fd = malloc(sizeof(int) * (wp_cnt + bp_cnt));
+> +	if (!fd)
+> +		return -1;
+>  
+>  	for (i = 0; i < wp_cnt; i++) {
+>  		fd[i] = wp_event((void *)&the_var, &attr);
+> -		TEST_ASSERT_VAL("failed to create wp\n", fd[i] != -1);
+> +		if (fd[i] == -1) {
+> +			pr_err("failed to create wp\n");
+> +			goto out;
+> +		}
+>  	}
+>  
+>  	for (; i < (bp_cnt + wp_cnt); i++) {
+> @@ -166,9 +176,11 @@ static int detect_share(int wp_cnt, int bp_cnt)
+>  
+>  	ret = i != (bp_cnt + wp_cnt);
+>  
+> +out:
+>  	while (i--)
+>  		close(fd[i]);
+>  
+> +	free(fd);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
 
-Okay, I managed to find the missing dependency to finally update my
-dtschema. I'll send a new version which I then tested myself.
+-- 
 
-
---CN9TMHG+L/SSyQsL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKjj+MACgkQFA3kzBSg
-Kbb3CRAAjhxA1Oulpxyo+WFjBsKSfz1oGJ+Y/Scd3X0Q9obSO7qA2aMyYoi/gCSa
-bjvhdz68XgfJQi96qu4v/dWUL2Z+5OhE4tFcfFx1aoxKD8Ovgnc3e/sJtpb+qEER
-IYO20H5V9GHLxL9daX6Jvgr7YXo+Nk7Q2HAv8v9NTuj1rorksto2TiUriAWhOFqo
-BdTae1Vaa/3uL+EXfqH5sKmGM9QNdkV+vh17VIifVMxQpuzXRVqZpetv66fP/uRK
-olWyAQ9anMTkazCqW854YoQFt9+CNOrOu8nXrP5lD3ypUfIgfGkanqOBrOG0KR7N
-yazpd7v6aO+ql00ek4QkzZS4GnOfXQVOxJZWA33hH+a4c4q5RZgXx4MqxT5b+IO3
-i9G7EBu735qxkmY/HQW+p0GFNQ+Wel6mzqVOhEymCqxldmVqoe3EZWtJD7q8JlXV
-v+hjLyjh6YsQqdFp4hfhgcLBNiTgzuAxeVEsJyRedvGMIqPR6Hwrcf9VT0SVBEBS
-3p+Ct5qS/JyQxLfxbTePwbwvnz2fi23KflkvQ17a9+5MM3Zth70kQFmiC2t0zmnU
-AOHcnik0WkmlbGSlpdmWf+yKZQluwWwkPs3EpVBJcC0P9xtCuk0Y4EhNrt+AInQm
-gkcqsYNJAmkGVD6OrY5wJU8oMh3FYgjxbizi/tmbihIojPTefcY=
-=h7HU
------END PGP SIGNATURE-----
-
---CN9TMHG+L/SSyQsL--
+- Arnaldo

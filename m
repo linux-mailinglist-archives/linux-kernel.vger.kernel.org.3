@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C52C546C1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C2E546C1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347127AbiFJSEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S1347503AbiFJSEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346245AbiFJSEG (ORCPT
+        with ESMTP id S1347141AbiFJSEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:04:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 282D5B4B0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654884245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uZZMSYsxNi00mISt/w3TR5/PXiZxHkemYMMPWE5iiPc=;
-        b=Mnee0qtMvzb7FKqTSZfbZ9PFSqnMsnqkR5yo71n3hWxijtlDgtirMy+ApiaGxHohlIU7ln
-        OD6Sq7SRhVV5QHm8BhbTjG9hHcdGekTmBeF+4pITQLOXkDuEFL8aQNoM5zyf7ZuyOSOAnl
-        Fdm/YXxRjXMDn7RwOWtNNQ3tpcREC88=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-509-N3MnL7AcObeNw9IZQQV2GA-1; Fri, 10 Jun 2022 14:04:04 -0400
-X-MC-Unique: N3MnL7AcObeNw9IZQQV2GA-1
-Received: by mail-wm1-f69.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so27618wmj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:04:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uZZMSYsxNi00mISt/w3TR5/PXiZxHkemYMMPWE5iiPc=;
-        b=6cHQc7fnmegha8enM0siAH+wauSmHgqtJOPRmGXOYXCcC+t+oA04ERYsDo0ahSgygK
-         Rf5feuxfGT/m+4QoTbg69NXBBFux8rIDHzFTHvPzjek8aucgfse/oRtISiCRzh7IWT3D
-         x/NVRdNVsLXZ7a1wLf3tdsCX5GLUouSHxMvto0R52sKVSV7Yw05WgLhZxcAXSh2qPdLt
-         hK48tVVdLeBtaRVi6e+UgN9CWl4l0lKUgy5cw0moHIFBNkHGr2RA0wAqn/Q7BXL26AlG
-         m7ofweP3qu3ZGZaxqxhvKU/74mOnmxd4+MPw3EQ5QiWXevP0fiN1efgUSCd6MMVWhiF7
-         wPPA==
-X-Gm-Message-State: AOAM530oCm4r7e2ussvjZmIatWb1DpULkK0edvfs/myddRM3nsfh1K3f
-        qtdmWqKJYPRljWgwjd3Y4YqTZslsb79eGW+XzY2U/18R3pGnW81v++u+7wpYe4W2QsT6/LWdU/6
-        lcqJQX/qBlLGzFZwsAcgs79Uv
-X-Received: by 2002:a1c:5444:0:b0:39c:3761:ac37 with SMTP id p4-20020a1c5444000000b0039c3761ac37mr943461wmi.144.1654884242952;
-        Fri, 10 Jun 2022 11:04:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKlTK8/3tGwSukWS1t2M37Kp0CZ0Kvfx/vbiurZ+tsKe1uz2FzmudIzWkwYCQatu+kCzj7aA==
-X-Received: by 2002:a1c:5444:0:b0:39c:3761:ac37 with SMTP id p4-20020a1c5444000000b0039c3761ac37mr943440wmi.144.1654884242685;
-        Fri, 10 Jun 2022 11:04:02 -0700 (PDT)
-Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id u2-20020a056000038200b0020ff3a2a925sm68257wrf.63.2022.06.10.11.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 11:04:02 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 20:03:59 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 142/144] KVM: selftests: Add kvm_has_cap() to provide
- syntactic sugar
-Message-ID: <20220610180359.sx3yiunvpu56stm5@gator>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <20220603004331.1523888-143-seanjc@google.com>
+        Fri, 10 Jun 2022 14:04:47 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E81DF5E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654884286; x=1686420286;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8eNvZWqD4YWYW659R4S17U2jKOE9xtXav0016+fJ7Ug=;
+  b=U5QF+Hi9EIFZ1uPrSCZmNb/MLvGQGNknviN+ZzxT0/0m3YcrLy59UaYC
+   q0j1UPE5S0111YWwfdlrAmrOTCWoOorFs/Us+q1g9ZXv7Neo9cakgVEZz
+   4+Li2uhhPPqVjqSlRqeBT7Gx6dXuuKmhp/PELtGoWmOf3xzPercCmaYgc
+   hfqEK8JNmT0FbJHBdiRad2wwavrOur7/0MWWbTZxkercssgw1CgoB5+5j
+   ufq4I1TTpGZkW5scKuZ2PwMHJBx1I2fYyKG1BU/nmH2ZWujG4dAq1kY9w
+   whRuH2ctNy342qxmnbpizNtaxFTk+YTSg+fkG/9xqFUuqhlVDltY63WaQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="275231581"
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="275231581"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 11:04:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="760612018"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jun 2022 11:04:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id E1A0AF8; Fri, 10 Jun 2022 21:04:45 +0300 (EEST)
+Date:   Fri, 10 Jun 2022 21:04:45 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220610180445.fmzgrobscwrblxud@black.fi.intel.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
+ <eb22968d0691760f579b90cd4bf75bfc4be0edeb.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220603004331.1523888-143-seanjc@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <eb22968d0691760f579b90cd4bf75bfc4be0edeb.camel@intel.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,22 +76,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:43:29AM +0000, Sean Christopherson wrote:
-...
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 8f7ee9cb551c..12b7c40542df 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -80,7 +80,7 @@ unsigned int kvm_check_cap(long cap)
->  
->  	close(kvm_fd);
->  
-> -	return ret;
-> +	return (unsigned int)ret;
->  }
+On Fri, Jun 10, 2022 at 03:25:02PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2022-06-10 at 17:35 +0300, Kirill A. Shutemov wrote:
+> > +static int prctl_enable_tagged_addr(unsigned long nr_bits)
+> > +{
+> > +       struct mm_struct *mm = current->mm;
+> 
+> do_arch_prctl_64() can be called via ptrace. I think you need to
+> operate on the mm of 'task', or just block the operation if task !=
+> current.
 
-This belongs in the last patch.
+Hm. True. Let's see if the interface in general good enough.
 
-Thanks,
-drew
+Ouch. I just noticied that I missed check for LAM feature :/
 
+-- 
+ Kirill A. Shutemov

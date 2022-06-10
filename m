@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0A0546C6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD33546C6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346778AbiFJSdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S1346558AbiFJSeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346477AbiFJSdv (ORCPT
+        with ESMTP id S241313AbiFJSeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:33:51 -0400
+        Fri, 10 Jun 2022 14:34:17 -0400
 Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ACD39141;
-        Fri, 10 Jun 2022 11:33:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9A039141;
+        Fri, 10 Jun 2022 11:34:10 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 25AIX5TP020882;
-        Sat, 11 Jun 2022 03:33:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 25AIX5TP020882
+        by conuserg-12.nifty.com with ESMTP id 25AIX5TQ020882;
+        Sat, 11 Jun 2022 03:33:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 25AIX5TQ020882
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654885990;
-        bh=ebV4+gRnFFeyUFcz5wz1eB/flTewuR25JCfy/TcRt2U=;
+        s=dec2015msa; t=1654885991;
+        bh=lUG0NgnACAHHS74el4oK5OBZvnr8gUW/ueE3VkEfAzE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lg+lHyyBfli8Rd6bqhWTKnNmE1mIhzuyPRYKkjtgHHTLnFwO0jzJL3wggaX8iu0t5
-         rFhUYu9IfjG0mmDQl1SPIleRHAAAlqWiziwvhRg7GMGApx+DjsGNhOlJCcyYhrSdii
-         5o9RJT7YK0E0Vp+BtKQ8ocHJYr8FXy8Q97zIin/xHK1CyF57hoEfJi5UmvBfZC0pI4
-         CNyfwPAiV2dztxbYqq5ohhm79uIIZfGaA6JCLj/BLrgf7mWuOaB8Ey0F7COoVJd8gw
-         6YdMudxvmCwisssEIbxpM/AjxfQpDnes5smSSKPZplDvlrIrO8up/gpJdl6H4PwN1r
-         +WzkKXrVjBW9Q==
+        b=TVkm43y1fPNy7bHuIMWG7DrGnrIceHzV6X1lU6v4ZL9E8/NLc7HBlXBUmeLQSrcTf
+         O4tu6f8AtUkuDszRKWhXvE0+QRT6oE0/veGNGFRrDsUZYuV6Lr7pmYLf/Wqn2HVRO9
+         /uLwGVNVsIKmT6fFuBQYzixM4f7RTMTIOfJNPDpVRIDtmNUddZISqgXF3Rb2Zro+0S
+         KgX2+FF1wYwZg1gcIs8+lU+S9Ogy8K1keaZFccyqirv+3YTgnx1yvi9KiMC3oB1xRP
+         on3+vNDPgO4kDl5oexNjxh1Ct/6vJSvmFKERWW6G5SrufMm+6fcg+kF8C3InAgdmXL
+         xBLUSPmhkWKNw==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -37,11 +37,14 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/7] ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
-Date:   Sat, 11 Jun 2022 03:32:33 +0900
-Message-Id: <20220610183236.1272216-5-masahiroy@kernel.org>
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 5/7] checkpatch: warn if <asm/export.h> is included
+Date:   Sat, 11 Jun 2022 03:32:34 +0900
+Message-Id: <20220610183236.1272216-6-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220610183236.1272216-1-masahiroy@kernel.org>
 References: <20220610183236.1272216-1-masahiroy@kernel.org>
@@ -57,57 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the previous refactoring, you no longer need to know whether the
-exported symbol is a function or a data.
+With the previous refactoring,
 
-Replace two instances in ia64, then remove EXPORT_DATA_SYMBOL*.
+ - <asm/export.h> is a wrapper of <asm-generic/export.h>
+ - <asm-generic/export.h> is a wrapper of <linux/export.h>
+
+My hope is to replace
+
+   #include <asm/export.h>  -->  #include <linux/export.h>
+
+for all *.S files.
+
+For now, adding a warning in the checkpatch.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- arch/ia64/kernel/head.S      | 2 +-
- arch/ia64/kernel/ivt.S       | 2 +-
- include/asm-generic/export.h | 3 ---
- 3 files changed, 2 insertions(+), 5 deletions(-)
+ scripts/checkpatch.pl | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/ia64/kernel/head.S b/arch/ia64/kernel/head.S
-index f22469f1c1fc..c096500590e9 100644
---- a/arch/ia64/kernel/head.S
-+++ b/arch/ia64/kernel/head.S
-@@ -170,7 +170,7 @@ RestRR:											\
- 	__PAGE_ALIGNED_DATA
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 503e8abbb2c1..f824d690a565 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3753,6 +3753,13 @@ sub process {
+ 			     "Avoid using '.L' prefixed local symbol names for denoting a range of code via 'SYM_*_START/END' annotations; see Documentation/asm-annotations.rst\n" . $herecurr);
+ 		}
  
- 	.global empty_zero_page
--EXPORT_DATA_SYMBOL_GPL(empty_zero_page)
-+EXPORT_SYMBOL_GPL(empty_zero_page)
- empty_zero_page:
- 	.skip PAGE_SIZE
++# warn if <asm/export.h> is included.
++# <asm/export.h> is a wrapper of <linux/export.h>. Please include <linux/export.h> directly.
++		if ($tree && $rawline =~ m{^.\s*\#\s*include\s*\<asm\/export\.h\>}) {
++			WARN("INCLUDE_LINUX_EXPORT",
++			    "Please include <linux/export.h> instead of <asm/export.h>\n" . $herecurr);
++		}
++
+ # check we are in a valid source file C or perl if not then ignore this hunk
+ 		next if ($realfile !~ /\.(h|c|pl|dtsi|dts)$/);
  
-diff --git a/arch/ia64/kernel/ivt.S b/arch/ia64/kernel/ivt.S
-index d6d4229b28db..7a418e324d30 100644
---- a/arch/ia64/kernel/ivt.S
-+++ b/arch/ia64/kernel/ivt.S
-@@ -87,7 +87,7 @@
- 
- 	.align 32768	// align on 32KB boundary
- 	.global ia64_ivt
--	EXPORT_DATA_SYMBOL(ia64_ivt)
-+	EXPORT_SYMBOL(ia64_ivt)
- ia64_ivt:
- /////////////////////////////////////////////////////////////////////////////////////////
- // 0x0000 Entry 0 (size 64 bundles) VHPT Translation (8,20,47)
-diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
-index 0ae9f38a904c..570cd4da7210 100644
---- a/include/asm-generic/export.h
-+++ b/include/asm-generic/export.h
-@@ -8,7 +8,4 @@
-  */
- #include <linux/export.h>
- 
--#define EXPORT_DATA_SYMBOL(name)	EXPORT_SYMBOL(name)
--#define EXPORT_DATA_SYMBOL_GPL(name)	EXPORT_SYMBOL_GPL(name)
--
- #endif
 -- 
 2.32.0
 

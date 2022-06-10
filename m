@@ -2,182 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BA0545923
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF3254592A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345529AbiFJAWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S238174AbiFJAa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345236AbiFJAWB (ORCPT
+        with ESMTP id S230371AbiFJAa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:22:01 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DE62A702
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:22:01 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d13so5864114plh.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:22:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=Jj7x7Y0EnNmuStr7EeRfU3Kuq05kprcEFE45l941NI0=;
-        b=Zzq3i73yIhp25Mt/sqKivfamWw8wPcy49rifvrdgnFzjPH/eiFCzPLK1rzZelPnPLT
-         FkXIRAOGPB8zPad9wj6tvmURZUYFMF/GCS4WTe80MVfLtSdy6kWKQXzR5dWKcRuvMCp3
-         xMS84FykI6WdXruvVFMreXe2txUpEgwmQoW8A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=Jj7x7Y0EnNmuStr7EeRfU3Kuq05kprcEFE45l941NI0=;
-        b=oFpDqTWdxVj5gXR1IMgmVYsji7q/eJG9nlQnssLvcw8EG/xF1mBrfncYIOS2rk2OAu
-         0R3EJOcVNnQG9t1l6iuYDRJczM0pZcgCzhjVSDaOvOTn/D2edmsV82NBgCwFk8sdGB1u
-         DQMKq+ylG9JlBdrmmeOacaVUiKEyl6gmWp045oH9d6STZZF5cw3F+NzRkIa/qjfinxIz
-         VyYn5Z8nBI+sFH7BWh/ri5rHQYknvPrKf2uIuF4daoRCgGxi0aLkMgbUHWSaeUSOoBVk
-         NnR2+/+jobwrFSwIswJIDYphcqc1EYIOvPVQ8aI5ZxlycT/JYnPLG4se+C1tjUJZCZWe
-         1a6A==
-X-Gm-Message-State: AOAM532nWN1E0Hrmmqy2EDGm5yQWG4Evo4hSleBd2HvuBB5O2m1s9Far
-        rJ1mM8Ze9TaR0gnZEeA+9z0hSQ==
-X-Google-Smtp-Source: ABdhPJy6HJstBJG9b+bN5DJytjjn7dX0WwGXunpr5FaUx6p3DeQ/tX1SzlP0VDEHrHwBL/1846Fbng==
-X-Received: by 2002:a17:903:41d0:b0:167:68a7:c2f with SMTP id u16-20020a17090341d000b0016768a70c2fmr29262403ple.148.1654820520646;
-        Thu, 09 Jun 2022 17:22:00 -0700 (PDT)
-Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id lx9-20020a17090b4b0900b001e292e30129sm288877pjb.22.2022.06.09.17.21.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 17:21:58 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        samyon.furman@broadcom.com, philippe.reynes@softathome.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        tomer.yacoby@broadcom.com, f.fainelli@gmail.com,
-        kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] MAINTAINERS: Add BCM63148 to bcmbca arch entry
-Date:   Thu,  9 Jun 2022 17:21:13 -0700
-Message-Id: <20220610002113.14483-4-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220610002113.14483-1-william.zhang@broadcom.com>
-References: <20220610002113.14483-1-william.zhang@broadcom.com>
+        Thu, 9 Jun 2022 20:30:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08222C12E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654821052; x=1686357052;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ElC5/vrGK81B1vG9DhjSFK/X+qtdP0hbu7/JdDZXK94=;
+  b=YhzIx4zXh5Irlq0EAzO2QV94kga0kTWt8HKOyz/0Hpk+opvvn9PvpH8K
+   xoYdYzleho7bzPXwd1RyuNhwFNiirpk+OczTzXTHn+P3Ag7Po+zMjmrVC
+   V8dEdDy4EjMQnke+BwX+RdTccBp2P4FoPKwc6CRuM7GnhpPawpYknI4zx
+   vXxgFykNQDoh75yiDG7jml/0tQe2ri/8m/qelHl9j/6GuQTL9JG7qW03S
+   oBB9C39nSb33acjrcmtyXqD0Xxl9SXFriBi90gcz7/45WYYm8A0uaV0V2
+   6SjcsMUdXCkRgf/cx4dFhuy+t2BcXft988ORetIv8rIkd3Z8iCUNPPx0g
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341533770"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="341533770"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:30:52 -0700
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="827901500"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:30:51 -0700
+Date:   Thu, 9 Jun 2022 17:30:43 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Mark Brown <broonie@kernel.org>
+cc:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "Weight, Russell H" <russell.h.weight@intel.com>
+Subject: Re: [PATCH v1] regmap: add generic indirect regmap support
+In-Reply-To: <YqHH+oX/90KXv8dN@sirena.org.uk>
+Message-ID: <alpine.DEB.2.22.394.2206091655490.1640209@rhweight-WRK1>
+References: <20220607013755.594554-1-tianfei.zhang@intel.com> <Yp9PdZn2Xu/oqiA8@sirena.org.uk> <alpine.DEB.2.22.394.2206071714420.3001206@rhweight-WRK1> <YqB9O8HhZV2tXo8g@sirena.org.uk> <BN9PR11MB548315C03B09D841B6392E63E3A49@BN9PR11MB5483.namprd11.prod.outlook.com>
+ <YqHH+oX/90KXv8dN@sirena.org.uk>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000051972905e10ced28"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000051972905e10ced28
-Content-Transfer-Encoding: 8bit
-
-Add BCM63148 related files to BCMBCA ARCH maintainer list entry
-
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
----
-
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5b225e3f11a0..45cc0487a754 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3779,6 +3779,7 @@ N:	bcmbca
- N:	bcm[9]?47622
- N:	bcm[9]?4912
- N:	bcm[9]?63146
-+N:	bcm[9]?63148
- N:	bcm[9]?63158
- N:	bcm[9]?63178
- N:	bcm[9]?6756
--- 
-2.36.1
 
 
---00000000000051972905e10ced28
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+On Thu, 9 Jun 2022, Mark Brown wrote:
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIiE1ekv3GpZRHfOY05Fdn4fYEXk
-CU0Mro36B5fAo6EfMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDYxMDAwMjIwMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBGn/U1MDc3mMZZsY9aRqvM1wuBdEdDZ6bEMcqkTBMQUMhS
-esempFKp4za9v6VQHmKLvdd2hOJ9ddxqFZHDFBPZDJPX64Gn80IlNefX527HOTYtUDjLZuffRP8B
-hMLF9XvTHO5CQFxN2g4Ps65qA67Fx8VpdCqfZT8x5TIk4MiLeMVQ+7q4P0Ojmbw9VIsmi5ZGIuS/
-q++HcHMvPyIJhDj9GYegc9DH3/gJQkjHkHqUjt9lTCwZGIw/vcPrRb7vnQCrV3v+xzAQJ9UXxzw9
-FtYT0mCO6dHZAW1yLwDuK2Vu8b97dTpkhgewUW5RwvBobB3rRh/thAaf2CeHOXFEXaC5
---00000000000051972905e10ced28--
+> On Wed, Jun 08, 2022 at 11:54:26PM +0000, Zhang, Tianfei wrote:
+>
+>>>> Would a different name help?
+>>>
+>>> This wouldn't address the major problem which is...
+>>>
+>>>>>> +	writel(0, ctx->base + INDIRECT_CMD_OFF);
+>>>>>> +	ret = readl_poll_timeout((ctx->base + INDIRECT_CMD_OFF), cmd,
+>>>>>> +				 (!cmd), INDIRECT_INT_US,
+>>> INDIRECT_TIMEOUT_US);
+>>>>>> +	if (ret)
+>>>>>> +		dev_err(ctx->dev, "%s timed out on clearing cmd 0x%xn",
+>>>>>> +__func__, cmd);
+>>>
+>>>>> ...and this doesn't look particularly generic, it looks like it's
+>>>>> for some particular controller/bridge?
+>>>
+>>> ...that this appears to be entirely specific to some particular device, it's got
+>>> things like hard coded register addresses and timeouts which mean it can't be
+>>> reused.
+>>
+>> Yet, this is a register access hardware controller/bridge widely used in FPGA IP blocks, like PMCI, HSSI.
+>> How about we change the patch title like this:
+>
+>> regmap: add indirect register controller support
+>
+> No, please enage with my feedback above.
+>
+
+Hi Mark,
+
+I think part of the confusion is that this patch should have been included 
+in a patch set that actually uses this regmap.  This patch really should 
+be included with the following:
+
+https://lore.kernel.org/all/20220607032833.3482-1-tianfei.zhang@intel.com
+
+The hard coded register definitions are offsets to the passed in void 
+__iomem base address.  This set of registers provides the semantics of 
+indirect register read/write to whatever the register set is connected 
+to on the back end.  Conceptually this could be considered a specific type 
+indirect register access controller, but currently we have very different 
+backend implementations in RTL.  Part of our intent is to have consistent 
+register interfaces for our FPGA IP so multiple drivers can reuse this 
+regmap.
+
+I totally agree the hardcoded timeout values used for polling should be 
+parameterized.
+
+We would like to submit a v2 patch set that combines this patch with the 
+first consumer of the regmap, PMCI.  We would also parameterize the 
+timeout values, but most importantly the name must be better.  It is a 
+long name, but how about something like "Intel FPGA Indirect Register 
+Interface"?
+
+Matthew Gerlach

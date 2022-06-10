@@ -2,278 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6648546877
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1B0546873
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 16:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349519AbiFJOf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 10:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        id S1349573AbiFJOgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 10:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343951AbiFJOfg (ORCPT
+        with ESMTP id S1349510AbiFJOf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:35:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAED2C1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654871735; x=1686407735;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SLeKdC6y/U4fh0m2jEjZ1c9srr58qmePqYiQtZ1ypvU=;
-  b=I2nNPAJRNPEkYBJGYI9N5b5ZczMgwNVwD/DZrDerVmoK6ZkGzvYJ0NYD
-   A8SxJiJ5eSFGImbrGEtcWpuwJdogf81RIvJwjnH9cma+NIsrOoYZSzQ94
-   qbkcSUSMx9LnHyH3JYZLSicOU3D9A6FakAhlUh8sf0Ncks9K4Kwo5y+su
-   oddLftZn+AGe4Z3x0d5Qm0+BrdQkrMdsUrNbrkGg4uDGxFEBBnaKql5il
-   gZqWbIUL1Eu02oLoKgCo3yhCUCgQnccE+6TYiUeLxVxT1mhMfWLYkxa/I
-   Hwhk+MzCm+jw2OyljomDN9TxogaB6jHP+D6S/sZdUvVS6CESBS2Q18UNV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="339397518"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="339397518"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 07:35:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="586237208"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jun 2022 07:35:31 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 6D52C710; Fri, 10 Jun 2022 17:35:30 +0300 (EEST)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv3 OPTIONAL 8/8] x86/mm: Extend LAM to support to LAM_U48
-Date:   Fri, 10 Jun 2022 17:35:27 +0300
-Message-Id: <20220610143527.22974-9-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+        Fri, 10 Jun 2022 10:35:59 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5189713C4FF;
+        Fri, 10 Jun 2022 07:35:58 -0700 (PDT)
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nzfju-000GLT-1Y; Fri, 10 Jun 2022 16:35:54 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nzfjt-0004Rp-K8; Fri, 10 Jun 2022 16:35:53 +0200
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ sk_psock_stop
+To:     syzbot <syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, jakub@cloudflare.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, wangyufen@huawei.com, yhs@fb.com
+References: <0000000000002d6bc305e118ae24@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c9adfe67-9424-2d58-7b3e-c457ac604ef0@iogearbox.net>
+Date:   Fri, 10 Jun 2022 16:35:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000002d6bc305e118ae24@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26568/Fri Jun 10 10:06:23 2022)
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LAM_U48 allows to encode 15 bits of tags into address.
+On 6/10/22 4:23 PM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    ff539ac73ea5 Add linux-next specific files for 20220609
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=176c121bf00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a5002042f00a8bce
+> dashboard link: https://syzkaller.appspot.com/bug?extid=140186ceba0c496183bc
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13083353f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=173e67f0080000
+> 
+> The issue was bisected to:
+> 
+> commit d8616ee2affcff37c5d315310da557a694a3303d
+> Author: Wang Yufen <wangyufen@huawei.com>
+> Date:   Tue May 24 07:53:11 2022 +0000
+> 
+>      bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues
 
-LAM_U48 steals bits above 47-bit for tags and makes it impossible for
-userspace to use full address space on 5-level paging machine.
+Same ping to Wang: Please take a look, otherwise we might need to revert if it stays unfixed.
 
-Make these features mutually exclusive: whichever gets enabled first
-blocks the other one.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/include/asm/elf.h         |  3 ++-
- arch/x86/include/asm/mmu_context.h | 13 +++++++++++++
- arch/x86/kernel/process_64.c       | 22 ++++++++++++++++++++++
- arch/x86/kernel/sys_x86_64.c       |  5 +++--
- arch/x86/mm/hugetlbpage.c          |  6 ++++--
- arch/x86/mm/mmap.c                 |  9 ++++++++-
- 6 files changed, 52 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index cb0ff1055ab1..4df13497a770 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -317,7 +317,8 @@ static inline int mmap_is_ia32(void)
- extern unsigned long task_size_32bit(void);
- extern unsigned long task_size_64bit(int full_addr_space);
- extern unsigned long get_mmap_base(int is_legacy);
--extern bool mmap_address_hint_valid(unsigned long addr, unsigned long len);
-+extern bool mmap_address_hint_valid(struct mm_struct *mm,
-+				    unsigned long addr, unsigned long len);
- extern unsigned long get_sigframe_size(void);
- 
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index a6cded0f5e64..17d31988edd6 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -263,6 +263,19 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
- 
- unsigned long __get_current_cr3_fast(void);
- 
-+#ifdef CONFIG_X86_5LEVEL
-+static inline bool full_va_allowed(struct mm_struct *mm)
-+{
-+	/* LAM_U48 steals VA bits above 47-bit for tags */
-+	return mm->context.lam_cr3_mask != X86_CR3_LAM_U48;
-+}
-+#else
-+static inline bool full_va_allowed(struct mm_struct *mm)
-+{
-+	return false;
-+}
-+#endif
-+
- #include <asm-generic/mmu_context.h>
- 
- #endif /* _ASM_X86_MMU_CONTEXT_H */
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 93c8eba1a66d..56822d313b96 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -742,6 +742,16 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
- }
- #endif
- 
-+static bool lam_u48_allowed(void)
-+{
-+	struct mm_struct *mm = current->mm;
-+
-+	if (!full_va_allowed(mm))
-+		return true;
-+
-+	return find_vma(mm, DEFAULT_MAP_WINDOW) == NULL;
-+}
-+
- static int prctl_enable_tagged_addr(unsigned long nr_bits)
- {
- 	struct mm_struct *mm = current->mm;
-@@ -759,6 +769,18 @@ static int prctl_enable_tagged_addr(unsigned long nr_bits)
- 	} else if (nr_bits <= 6) {
- 		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
- 		mm->context.untag_mask =  ~GENMASK(62, 57);
-+	} else if (nr_bits <= 15) {
-+		if (mmap_write_lock_killable(mm))
-+			return -EINTR;
-+
-+		if (!lam_u48_allowed()) {
-+			mmap_write_unlock(mm);
-+			return -EBUSY;
-+		}
-+
-+		mm->context.lam_cr3_mask = X86_CR3_LAM_U48;
-+		mm->context.untag_mask =  ~GENMASK(62, 48);
-+		mmap_write_unlock(mm);
- 	} else {
- 		return -EINVAL;
- 	}
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index 8cc653ffdccd..5ea6aaed89ba 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -21,6 +21,7 @@
- 
- #include <asm/elf.h>
- #include <asm/ia32.h>
-+#include <asm/mmu_context.h>
- 
- /*
-  * Align a virtual address to avoid aliasing in the I$ on AMD F15h.
-@@ -182,7 +183,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	/* requesting a specific address */
- 	if (addr) {
- 		addr &= PAGE_MASK;
--		if (!mmap_address_hint_valid(addr, len))
-+		if (!mmap_address_hint_valid(mm, addr, len))
- 			goto get_unmapped_area;
- 
- 		vma = find_vma(mm, addr);
-@@ -203,7 +204,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	 * !in_32bit_syscall() check to avoid high addresses for x32
- 	 * (and make it no op on native i386).
- 	 */
--	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
-+	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
- 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
- 
- 	info.align_mask = 0;
-diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-index a0d023cb4292..9fdc8db42365 100644
---- a/arch/x86/mm/hugetlbpage.c
-+++ b/arch/x86/mm/hugetlbpage.c
-@@ -18,6 +18,7 @@
- #include <asm/tlb.h>
- #include <asm/tlbflush.h>
- #include <asm/elf.h>
-+#include <asm/mmu_context.h>
- 
- #if 0	/* This is just for testing */
- struct page *
-@@ -103,6 +104,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 		unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
-+	struct mm_struct *mm = current->mm;
- 	struct vm_unmapped_area_info info;
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
-@@ -114,7 +116,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 	 * If hint address is above DEFAULT_MAP_WINDOW, look for unmapped area
- 	 * in the full address space.
- 	 */
--	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
-+	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
- 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
- 
- 	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
-@@ -161,7 +163,7 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
- 
- 	if (addr) {
- 		addr &= huge_page_mask(h);
--		if (!mmap_address_hint_valid(addr, len))
-+		if (!mmap_address_hint_valid(mm, addr, len))
- 			goto get_unmapped_area;
- 
- 		vma = find_vma(mm, addr);
-diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
-index c90c20904a60..f9ca824729de 100644
---- a/arch/x86/mm/mmap.c
-+++ b/arch/x86/mm/mmap.c
-@@ -21,6 +21,7 @@
- #include <linux/elf-randomize.h>
- #include <asm/elf.h>
- #include <asm/io.h>
-+#include <asm/mmu_context.h>
- 
- #include "physaddr.h"
- 
-@@ -35,6 +36,8 @@ unsigned long task_size_32bit(void)
- 
- unsigned long task_size_64bit(int full_addr_space)
- {
-+	if (!full_va_allowed(current->mm))
-+		return DEFAULT_MAP_WINDOW;
- 	return full_addr_space ? TASK_SIZE_MAX : DEFAULT_MAP_WINDOW;
- }
- 
-@@ -206,11 +209,15 @@ const char *arch_vma_name(struct vm_area_struct *vma)
-  * the failure of such a fixed mapping request, so the restriction is not
-  * applied.
-  */
--bool mmap_address_hint_valid(unsigned long addr, unsigned long len)
-+bool mmap_address_hint_valid(struct mm_struct *mm,
-+			     unsigned long addr, unsigned long len)
- {
- 	if (TASK_SIZE - len < addr)
- 		return false;
- 
-+	if (addr + len > DEFAULT_MAP_WINDOW && !full_va_allowed(mm))
-+		return false;
-+
- 	return (addr > DEFAULT_MAP_WINDOW) == (addr + len > DEFAULT_MAP_WINDOW);
- }
- 
--- 
-2.35.1
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1556d7cff00000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1756d7cff00000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1356d7cff00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com
+> Fixes: d8616ee2affc ("bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues")
+> 
+> BUG: sleeping function called from invalid context at kernel/workqueue.c:3010
+> in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3612, name: syz-executor475
+> preempt_count: 201, expected: 0
+> RCU nest depth: 0, expected: 0
+> 3 locks held by syz-executor475/3612:
+>   #0: ffff888072eb9410 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:740 [inline]
+>   #0: ffff888072eb9410 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
+>   #1: ffff888027259ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1691 [inline]
+>   #1: ffff888027259ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: tcp_close+0x1e/0xc0 net/ipv4/tcp.c:2908
+>   #2: ffff888027259a30 (slock-AF_INET6){+...}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
+>   #2: ffff888027259a30 (slock-AF_INET6){+...}-{2:2}, at: __tcp_close+0x722/0x12b0 net/ipv4/tcp.c:2830
+> Preemption disabled at:
+> [<ffffffff87ddddca>] local_bh_disable include/linux/bottom_half.h:20 [inline]
+> [<ffffffff87ddddca>] __tcp_close+0x71a/0x12b0 net/ipv4/tcp.c:2829
+> CPU: 1 PID: 3612 Comm: syz-executor475 Not tainted 5.19.0-rc1-next-20220609-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>   __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+>   start_flush_work kernel/workqueue.c:3010 [inline]
+>   __flush_work+0x109/0xb10 kernel/workqueue.c:3074
+>   __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3162
+>   sk_psock_stop+0x4cb/0x630 net/core/skmsg.c:802
+>   sock_map_destroy+0x333/0x760 net/core/sock_map.c:1581
+>   inet_csk_destroy_sock+0x196/0x440 net/ipv4/inet_connection_sock.c:1130
+>   __tcp_close+0xd5b/0x12b0 net/ipv4/tcp.c:2897
+>   tcp_close+0x29/0xc0 net/ipv4/tcp.c:2909
+>   sock_map_close+0x3b9/0x780 net/core/sock_map.c:1607
+>   inet_release+0x12e/0x280 net/ipv4/af_inet.c:428
+>   inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:481
+>   __sock_release+0xcd/0x280 net/socket.c:650
+>   sock_close+0x18/0x20 net/socket.c:1365
+>   __fput+0x277/0x9d0 fs/file_table.c:317
+>   task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+>   ptrace_notify+0x114/0x140 kernel/signal.c:2353
+>   ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+>   ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+>   syscall_exit_work kernel/entry/common.c:249 [inline]
+>   syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
+>   __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+>   syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
+>   do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7fe7b3b8b6a3
+> Code: c7 c2 c0 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb ba 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+> RSP: 002b:00007ffce5903258 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+> RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007fe7b3b8b6a3
+> RDX: 0000000000000020 RSI: 0000000020000240 RDI: 0000000000000004
+> RBP: 0000000000000000 R08: 00007fe7b3c36e40 R09: 00007fe7b3c36e40
+> R10: 00007fe7b3c36e40 R11: 0000000000000246 R12: 00007ffce5903290
+> R13: 00007ffce5903280 R14: 00007ffce5903270 R15: 0000000000000000
+>   </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
+> 
 

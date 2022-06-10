@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B722546BE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC374546BE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347082AbiFJRrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 13:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S1349983AbiFJRti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 13:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349720AbiFJRrk (ORCPT
+        with ESMTP id S1347177AbiFJRtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 13:47:40 -0400
-Received: from 3.mo560.mail-out.ovh.net (3.mo560.mail-out.ovh.net [46.105.58.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8863256B05
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:47:38 -0700 (PDT)
-Received: from player760.ha.ovh.net (unknown [10.109.146.131])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id A528524A4E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 17:47:36 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player760.ha.ovh.net (Postfix) with ESMTPSA id 4E6CB2B728F28;
-        Fri, 10 Jun 2022 17:47:27 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-103G00515216049-9e93-4894-aa40-e1df9efa6a35,
-                    3EA6D779A65D7DCBA15D92F127CD72011C01B2E3) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-Date:   Fri, 10 Jun 2022 19:47:20 +0200
-From:   Stephen Kitt <steve@sk2.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/3] drm/panel: panel-dsi-cm: Use backlight helpers
-Message-ID: <20220610194720.485cf7be@heffalump.sk2.org>
-In-Reply-To: <20220609215236.ojxw6l2vkf652hgu@mercury.elektranox.org>
-References: <20220607182026.1121992-1-steve@sk2.org>
-        <20220607182026.1121992-3-steve@sk2.org>
-        <20220609215236.ojxw6l2vkf652hgu@mercury.elektranox.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Jun 2022 13:49:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B083D56B19
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 10:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654883373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=UCQMUFGSKwZqO7cHnFbbmrpMB5ua/08zA/e8+K92F5c=;
+        b=BQZ6AdRyQ4Y7Keh0JS6H3UBYf46OueyD5eO+FNqBRzvUy5Ssy8nYd2FIhFdBUYg2aWoryl
+        TKfIMn8X7ds7O1ljcwVVl2JMdFiu8pyjaav/KRpVH0ediAj5o7CQTNNSIYnou6nS1Cli2C
+        h7dDsbiPgzNrcI3DAchdfSPP5dCFLtc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-262-Urgkwr8-NNOvUxYnkSW-Sg-1; Fri, 10 Jun 2022 13:49:30 -0400
+X-MC-Unique: Urgkwr8-NNOvUxYnkSW-Sg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A76A4811E75;
+        Fri, 10 Jun 2022 17:49:29 +0000 (UTC)
+Received: from localhost (unknown [10.22.8.60])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DD5CB404E4B5;
+        Fri, 10 Jun 2022 17:49:28 +0000 (UTC)
+Date:   Fri, 10 Jun 2022 14:49:27 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 5.10.120-rt70
+Message-ID: <YqOEJ86n0m/Xmkea@uudg.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Fiv/6RAB4w3meaj/_BS+ruP";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Ovh-Tracer-Id: 9491336218715915910
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduuddgudduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeeiheevvdeugeejffefteffvefhieegjeevhfekjeejvdelgfefkeehhfdufffhjeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejiedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitd
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Fiv/6RAB4w3meaj/_BS+ruP
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hello RT-list!
 
-Hi Sebastian,
+I'm pleased to announce the 5.10.120-rt70 stable release.
 
-On Thu, 9 Jun 2022 23:52:36 +0200, Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
-> On Tue, Jun 07, 2022 at 08:20:25PM +0200, Stephen Kitt wrote:
-> > diff --git a/drivers/gpu/drm/panel/panel-dsi-cm.c
-> > b/drivers/gpu/drm/panel/panel-dsi-cm.c index b58cb064975f..aa36dc6cedd3
-> > 100644 --- a/drivers/gpu/drm/panel/panel-dsi-cm.c
-> > +++ b/drivers/gpu/drm/panel/panel-dsi-cm.c
-> > @@ -86,16 +86,10 @@ static void dsicm_bl_power(struct panel_drv_data
-> > *ddata, bool enable) return;
-> > =20
-> >  	if (enable) {
-> > -		backlight->props.fb_blank =3D FB_BLANK_UNBLANK;
-> > -		backlight->props.state =3D ~(BL_CORE_FBBLANK |
-> > BL_CORE_SUSPENDED);
-> > -		backlight->props.power =3D FB_BLANK_UNBLANK;
-> > +		backlight_enable(backlight);
-> >  	} else {
-> > -		backlight->props.fb_blank =3D FB_BLANK_NORMAL;
-> > -		backlight->props.power =3D FB_BLANK_POWERDOWN;
-> > -		backlight->props.state |=3D BL_CORE_FBBLANK |
-> > BL_CORE_SUSPENDED;
-> > +		backlight_disable(backlight);
-> >  	} =20
->=20
-> The brackets can be removed now. Otherwise:
+Even though there are no RT-specific changes, the updates to the random code
+merged in from v5.10.119 completely replaced the code from commit c19a1b9dff1a
+("random: Make it work on rt").
 
->=20
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+You can get this release via the git tree at:
 
-Thanks, I=E2=80=99ll wait a little more to see if there are any other revie=
-ws of the
-patches and then push a v2 with that fix.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Regards,
+  branch: v5.10-rt
+  Head SHA1: 00d0d912f74b1dbed51561b7e8515e870581c593
 
-Stephen
+Or to build 5.10.120-rt70 directly, the following patches should be applied:
 
---Sig_/Fiv/6RAB4w3meaj/_BS+ruP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
 
------BEGIN PGP SIGNATURE-----
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.120.xz
 
-iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmKjg6gACgkQgNMC9Yht
-g5zfSw//WI01jNuYSP0lMjDjiVPi3dZknMK/1vgV6zHCgisK5W9RahwyjRdg9hWW
-veSzZA4xLOVHS1WpSEcsQWSRCTAoi22tZ/IhGVFTW9hpWkKUzndtuebMzQ5LuEwq
-gP/c6sU3O5qP2tjMyUwDs8zAEugZl6hlcZGtkYdZUk50gUsP2ajEJ2XjblIkikEn
-JskElLBZSpvBS06TzHphA7DZZW1B/GjkucvmM6vOVklRtkxbCYck7E2PCM1uPe6x
-8U7pacTwdvzdf0j255cSxb6xehc1wTDKCelVrp9VcXyI1PiZb6nzW4+xSE/JF+iZ
-Kyrrw8Iuom5Zwr0SlPszmdk8HiKpj+DLRugmH0fHksHAxb09L77zSZZ3krUefXrF
-2A7g0AAXxy7OEZtCJyLHPiSL3Q9EHQ3FtzLH+3xddratrbdzjnbq+kPA37GqfWTk
-qNo0zrCK4o2E2GFAzZf08Hg6FT5o/4LnYPZikTfmOiOYyBR5FGW2nl2AyoH3WdZC
-EfzICSO2fB0i3miIcpTOH+YRJU5G0Ih1acm8FK/1x8A/GSPG/wY0juQMS9Zzkq3Q
-FlsH13MKT+fqlTDwf2wl8hF5ESklSJ90CTKITJTxZiWHLkKeKIZ2l8ll5o4qg4jt
-O5Rj0KaoPq+pkrIwj0Y//PlpPOd8d/X4pYuct2ujiPXp7pkaHLM=
-=9bxl
------END PGP SIGNATURE-----
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.120-rt70.patch.xz
 
---Sig_/Fiv/6RAB4w3meaj/_BS+ruP--
+Signing key fingerprint:
+
+  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Luis
+

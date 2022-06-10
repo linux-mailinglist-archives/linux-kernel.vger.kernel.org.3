@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730B5545AD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF417545ADE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 05:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346314AbiFJDwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 23:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S238394AbiFJD5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 23:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346310AbiFJDwA (ORCPT
+        with ESMTP id S231288AbiFJD5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 23:52:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EDFF38C084;
-        Thu,  9 Jun 2022 20:51:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85D841692;
-        Thu,  9 Jun 2022 20:51:59 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.42.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8DD283F766;
-        Thu,  9 Jun 2022 20:51:54 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, acme@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH V6 8/8] perf/tools: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
-Date:   Fri, 10 Jun 2022 09:21:01 +0530
-Message-Id: <20220610035101.424112-9-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220610035101.424112-1-anshuman.khandual@arm.com>
-References: <20220610035101.424112-1-anshuman.khandual@arm.com>
+        Thu, 9 Jun 2022 23:57:49 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013BB3B284
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 20:57:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VFxf77o_1654833464;
+Received: from 30.0.143.52(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VFxf77o_1654833464)
+          by smtp.aliyun-inc.com;
+          Fri, 10 Jun 2022 11:57:45 +0800
+Message-ID: <927ab454-f25d-06d2-5861-a57033f28e00@linux.alibaba.com>
+Date:   Fri, 10 Jun 2022 11:57:54 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] arm64/hugetlb: Simplify the huge_ptep_set_access_flags()
+To:     Will Deacon <will@kernel.org>
+Cc:     catalin.marinas@arm.com, mike.kravetz@oracle.com,
+        songmuchun@bytedance.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <d81f1c3215000d0f238900dbfa0a0976d8d00cd3.1653470369.git.baolin.wang@linux.alibaba.com>
+ <20220609154438.GA3444@willie-the-truck>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220609154438.GA3444@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This updates the perf tool with arch specific branch type classification
-used for BRBE on arm64 platform as added in the kernel earlier.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- tools/include/uapi/linux/perf_event.h |  6 ++++++
- tools/perf/util/branch.c              | 13 +++++++++++++
- 2 files changed, 19 insertions(+)
 
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 193dba2ecdc1..4cf1c8e22cab 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -282,6 +282,12 @@ enum {
- 	PERF_BR_PRIV_HV		= 3,
- };
- 
-+#define PERF_BR_ARM64_FIQ		PERF_BR_NEW_ARCH_1
-+#define PERF_BR_ARM64_DEBUG_HALT	PERF_BR_NEW_ARCH_2
-+#define PERF_BR_ARM64_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
-+#define PERF_BR_ARM64_DEBUG_INST	PERF_BR_NEW_ARCH_4
-+#define PERF_BR_ARM64_DEBUG_DATA	PERF_BR_NEW_ARCH_5
-+
- #define PERF_SAMPLE_BRANCH_PLM_ALL \
- 	(PERF_SAMPLE_BRANCH_USER|\
- 	 PERF_SAMPLE_BRANCH_KERNEL|\
-diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-index 6d962b0a4532..d40776c44b06 100644
---- a/tools/perf/util/branch.c
-+++ b/tools/perf/util/branch.c
-@@ -45,11 +45,24 @@ const char *branch_new_type_name(int new_type)
- 		"FAULT_ALGN",
- 		"FAULT_DATA",
- 		"FAULT_INST",
-+/*
-+ * TODO: This switch should happen on 'session->header.env.arch'
-+ * instead, because an arm64 platform perf recording could be
-+ * opened for analysis on other platforms as well.
-+ */
-+#ifdef __aarch64__
-+		"ARM64_FIQ",
-+		"ARM64_DEBUG_HALT",
-+		"ARM64_DEBUG_EXIT",
-+		"ARM64_DEBUG_INST",
-+		"ARM64_DEBUG_DATA"
-+#else
- 		"ARCH_1",
- 		"ARCH_2",
- 		"ARCH_3",
- 		"ARCH_4",
- 		"ARCH_5"
-+#endif
- 	};
- 
- 	if (new_type >= 0 && new_type < PERF_BR_NEW_MAX)
--- 
-2.25.1
+On 6/9/2022 11:44 PM, Will Deacon wrote:
+> On Wed, May 25, 2022 at 06:31:09PM +0800, Baolin Wang wrote:
+>> After commit bc5dfb4fd7bd ("arm64/hugetlb: Implement arm64 specific
+>> huge_ptep_get()"), the arm64 specific huge_ptep_get() will always
+>> consider the subpages' dirty and young state for CONT-PTE/PMD hugetlb,
+>> so there is no need to check them again when setting the access flags
+>> for CONT-PTE/PMD hugetlb in huge_ptep_set_access_flags().
+>>
+>> Meanwhile this also fixes an issue when users want to make the CONT-PTE/PMD
+>> hugetlb's pte entry old, which will be failed to make the pte entry old
+>> since the original code will always consider the subpages' young state
+>> if the subpages' young state is set. For example, we will make the
+>> CONT-PTE/PMD hugetlb pte entry old in DAMON to monitoring the accesses,
+>> but we'll failed to monitoring the actual accesses of the CONT-PTE/PMD
+>> hugetlb page, due to we can not make its pte old.
+>>
+>> Thus remove the code considering the subpages' dirty and young state in
+>> huge_ptep_set_access_flags() to fix this issue and simplify the function.
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   arch/arm64/mm/hugetlbpage.c | 10 +---------
+>>   1 file changed, 1 insertion(+), 9 deletions(-)
+>>
+>> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+>> index e2a5ec9..5c703aa 100644
+>> --- a/arch/arm64/mm/hugetlbpage.c
+>> +++ b/arch/arm64/mm/hugetlbpage.c
+>> @@ -448,7 +448,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
+>>   	size_t pgsize = 0;
+>>   	unsigned long pfn = pte_pfn(pte), dpfn;
+>>   	pgprot_t hugeprot;
+>> -	pte_t orig_pte;
+>>   
+>>   	if (!pte_cont(pte))
+>>   		return ptep_set_access_flags(vma, addr, ptep, pte, dirty);
+>> @@ -459,14 +458,7 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
+>>   	if (!__cont_access_flags_changed(ptep, pte, ncontig))
+>>   		return 0;
+>>   
+>> -	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+>> -
+>> -	/* Make sure we don't lose the dirty or young state */
+>> -	if (pte_dirty(orig_pte))
+>> -		pte = pte_mkdirty(pte);
+>> -
+>> -	if (pte_young(orig_pte))
+>> -		pte = pte_mkyoung(pte);
+>> +	clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> 
+> I don't understand what this clear_flush() call is doing here; notably, it
+> includes TLB invalidation which we don't have for the non-cont case.
 
+OK. I can just call a loop of pte_clear() to clear cont-pte to avoid TLB 
+flush.
+
+> 
+> Why isn't huge_ptep_set_access_flags() just a loop around
+> ptep_set_access_flags() if huge_ptep_get() is taking care of collapsing the
+> dirty/young state?
+
+IIUC, according to the comments "Changing some bits of contiguous 
+entries requires us to follow a Break-Before-Make approach, breaking the 
+whole contiguous set before we can change any entries". So we should 
+clear the cont-ptes firstly, then re-set them. Then a loop of 
+ptep_set_access_flags() is not suitable for the cont-pte case, right? 
+Please correct me if I missed something else. Thanks.

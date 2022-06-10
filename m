@@ -2,138 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D65C546A93
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF5A546A12
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346588AbiFJQgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S1349532AbiFJQCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245530AbiFJQgv (ORCPT
+        with ESMTP id S1349045AbiFJQC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:36:51 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30B656FB1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:36:47 -0700 (PDT)
+        Fri, 10 Jun 2022 12:02:27 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB87B157E91;
+        Fri, 10 Jun 2022 09:02:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654879007; x=1686415007;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qhb3ue3jkx0OzNd+SAkFQAItwZgBg+sANmqWbb2tG7A=;
-  b=OIoKsXBRkqhODBGZURW1VSU+WWYjvGdVy2KjM/UwwWW2KJKjAwhBo7qm
-   FJtVEEt1ofIklMR9DwsrGdUpHf9JbrXxk9FsHoPcH5Zrle28HtR50kid9
-   SmIbiqLiq0T3ocs6aehIFUUV4lk5Q2Zdkg2YL4ffuGIrcfCGIdq6Ga6Jv
-   4jxEHqRXiFMGNVXbMRfvSq8KGmmApMt+wUbm8CVdhI45fFxKOp9Grwhta
-   XePzalWM4PgQ9hLZhAwpn12DNnHja/c6ll0B0gLwjXwWzA10xflJ2ZatU
-   xrIKdYBvjj4MhJvknfE78nvTW83bSjiapJ+RcpD6cecqZN2bUmg/oFSbF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="341737251"
+  t=1654876947; x=1686412947;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=kNcm+gjJO6fKHMBCmtNxq9Lkb0xQ0Nu8YYmwRSNqM/Q=;
+  b=nmBM1UgWsxrS2x1LGFbAhJwJnWxkL44hBIoJoANrkQQJZXYnxP2obmPe
+   3eCDYPk5ogoze8c5W3fuAZFuEj5bmeF79wx8bjM94ryGWxS4LsAIOtARH
+   bpRjJwdqPap+foTRPS5ieO3ZIs1483Xk8WFltADZgqCTlcWhSVDSBoF1/
+   5uf/7s8n1laxw/QPu5rep9rYE+NIZHHpAwHq8N/L4Ae2VwlDFKPd4oAVv
+   QkKssk2oRMwhQgckqE4W/oFUNk5FlcGZNu+W98d6q3lGoEA8Ml4OvGNbE
+   NKJobX0s6C5qZ6GYjlMYA35CjAKkeOc6XmtFJbsELbjXW56vpYEjQtVSk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="276447153"
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="341737251"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 09:36:47 -0700
+   d="scan'208";a="276447153"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 09:02:05 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="725032963"
-Received: from pljackso-mobl.amr.corp.intel.com (HELO [10.213.190.122]) ([10.213.190.122])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 09:36:46 -0700
-Message-ID: <b86e6cbd-3488-a239-d765-cf01bf0d4f70@linux.intel.com>
-Date:   Fri, 10 Jun 2022 10:06:58 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] soundwire: intel: uniquify debug message
+   d="scan'208";a="760569390"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jun 2022 09:02:04 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 10 Jun 2022 09:02:04 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 10 Jun 2022 09:02:03 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Fri, 10 Jun 2022 09:02:03 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
+ bitops
+Thread-Topic: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
+ bitops
+Thread-Index: AQHYfL4xWJEoq3eTcEeKREBjFjjrHK1JHg2A//+t5kA=
+Date:   Fri, 10 Jun 2022 16:02:03 +0000
+Message-ID: <22042c14bc6a437d9c6b235fbfa32c8a@intel.com>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-3-alexandr.lobakin@intel.com>
+ <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
+In-Reply-To: <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, vkoul@kernel.org,
-        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
-        broonie@kernel.org, srinivas.kandagatla@linaro.org,
-        sanyog.r.kale@intel.com, bard.liao@intel.com
-References: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
- <20220610023537.27223-2-yung-chuan.liao@linux.intel.com>
- <YqLVwqx9/Pos8T06@kroah.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <YqLVwqx9/Pos8T06@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > +/**
+> > + * generic_test_bit - Determine whether a bit is set
+> > + * @nr: bit number to test
+> > + * @addr: Address to start counting from
+> > + */
+>
+> Shouldn't we add in this or in separate patch a big NOTE to explain that =
+this
+> is actually atomic and must be kept as a such?
 
+"atomic" isn't really the right word. The volatile access makes sure that t=
+he
+compiler does the test at the point that the source code asked, and doesn't
+move it before/after other operations.
 
-On 6/10/22 00:25, Greg KH wrote:
-> On Fri, Jun 10, 2022 at 10:35:36AM +0800, Bard Liao wrote:
->> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
->>
->> The same debug message is replicated multiple time, add __func__ to
->> figure out what link is ignored.
->>
->> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
->> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
->> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
->> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
->> ---
->>  drivers/soundwire/intel.c | 28 ++++++++++++++--------------
->>  1 file changed, 14 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
->> index 505c5ef061e3..808e2f320052 100644
->> --- a/drivers/soundwire/intel.c
->> +++ b/drivers/soundwire/intel.c
->> @@ -1328,8 +1328,8 @@ int intel_link_startup(struct auxiliary_device *auxdev)
->>  
->>  	if (bus->prop.hw_disabled) {
->>  		dev_info(dev,
->> -			 "SoundWire master %d is disabled, ignoring\n",
->> -			 sdw->instance);
->> +			 "%s: SoundWire master %d is disabled, ignoring\n",
->> +			 __func__, sdw->instance);
-> 
-> This is not a debug message, please make it such if you want to have
-> __func__  And even then, it's not needed as you can get that from the
-> kernel automatically.
+But there is no such thing as an atomic test_bit() operation:
 
-Sorry, I don't understand the feedback at all.
+	if (test_bit(5, addr)) {
+		/* some other CPU nukes bit 5 */
 
-This message was added precisely to figure out why the expected
-programming sequence was not followed, only to discover that we have
-devices with spurious PCI wakes handled below. Without this added
-difference with __func__, we wouldn't know if the issue happened during
-the expected/regular programming sequence or not.
+		/* I know it was set when I looked, but now, could be anything */
 
-> 
->>  		return 0;
->>  	}
->>  
->> @@ -1489,8 +1489,8 @@ int intel_link_process_wakeen_event(struct auxiliary_device *auxdev)
->>  	bus = &sdw->cdns.bus;
->>  
->>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
->> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
->> -			bus->link_id);
->> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
->> +			__func__, bus->link_id);
->>  		return 0;
->>  	}
->>  
->> @@ -1549,8 +1549,8 @@ static int __maybe_unused intel_pm_prepare(struct device *dev)
->>  	int ret;
->>  
->>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
->> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
->> -			bus->link_id);
->> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
->> +			__func__, bus->link_id);
-> 
-> Not needed, it is provided automatically if you ask the kernel for this.
-> Same for all other instances in this patch.
+		...
+	}
 
-provided how? Your comment is a bit cryptic here.
+-Tony

@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA28F54593B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA28C545940
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239915AbiFJAnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
+        id S1345758AbiFJAnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiFJAm6 (ORCPT
+        with ESMTP id S239961AbiFJAnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:42:58 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184BB16A257
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654821777; x=1686357777;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rWhfylLhTdHfECz+Smvw4/j6KhgdNpNaJiiJ/Dah9kw=;
-  b=kuUxfNPCNY2jLkxwBn3/iCxik24V44HFh2Mx1Q6tHWev96YJKFTKjUMN
-   wDp83XYNpKqc9e9yBbnlhqfrFH2UG44lEoKADVeYkyz3o+6Pgb0bcjDEI
-   Sc8MS+VT13yndRqDaUm/4PbGYItqu3KsFop0bGBH1TLFR3zDhNnI4VpAl
-   PMhnzp19FVRlkl8F+PUeLbanmVUo7W5Te4a0UFNCH41eC7JckRyyHEcyf
-   l05b1jh03Azbn6XTzPrQDJo/SqqFTRTlOwwZyibOmSrQjVW5xUjEHJtD4
-   p72/roSLJVzGWksZR19DNLmZmsOTzOIu6AuFQJ1ubjvoMVsyXIA8Z6Awj
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="302841480"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="302841480"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:42:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="684256660"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Jun 2022 17:42:54 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzSjl-000GX3-R0;
-        Fri, 10 Jun 2022 00:42:53 +0000
-Date:   Fri, 10 Jun 2022 08:42:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sumit Saxena <sumit.saxena@broadcom.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>
-Subject: {standard input}:3978: Error: value 178 out of range
-Message-ID: <202206100855.uY63FJUH-lkp@intel.com>
+        Thu, 9 Jun 2022 20:43:33 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FDE3BE137;
+        Thu,  9 Jun 2022 17:43:28 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1nzSk6-0001oS-NK; Fri, 10 Jun 2022 02:43:14 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
+        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        drew@beagleboard.org, Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v3 0/3] riscv: implement Zicbom-based CMO instructions + the t-head variant
+Date:   Fri, 10 Jun 2022 02:43:05 +0200
+Message-Id: <20220610004308.1903626-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
-commit: 43ca110050988c7a0e581d24ce212ef34a4cdf29 scsi: mpi3mr: Add support for PEL commands
-date:   5 weeks ago
-config: m68k-randconfig-r036-20220608 (https://download.01.org/0day-ci/archive/20220610/202206100855.uY63FJUH-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=43ca110050988c7a0e581d24ce212ef34a4cdf29
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 43ca110050988c7a0e581d24ce212ef34a4cdf29
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+This series is based on the alternatives changes done in my svpbmt series
+and thus also depends on Atish's isa-extension parsing series.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+It implements using the cache-management instructions from the  Zicbom-
+extension to handle cache flush, etc actions on platforms needing them.
 
-All errors (new ones prefixed by >>):
+SoCs using cpu cores from T-Head like the Allwinne D1 implement a
+different set of cache instructions. But while they are different,
+instructions they provide the same functionality, so a variant can
+easly hook into the existing alternatives mechanism on those.
 
-   {standard input}: Assembler messages:
->> {standard input}:3978: Error: value 178 out of range
->> {standard input}:3978: Error: value of 178 too large for field of 1 byte at 00000fdb
+
+An ongoing discussion is about the currently used pre-coded
+instructions. Palmer's current thinking is that we should wait
+until the relevant instructions have landed in binutils.
+
+On the other hand this would result in massive waiting times
+for all new instructions in the future as well, as it isn't only
+the time till a binutils patch is accepted but also then the
+wait for the next release and _after_ that the wait until these
+new releases are available in regular distributions.
+
+So ideally it would be nice to find some sort of compromise
+in the middle somewhere.
+
+
+The series sits on top of my svpbmt fixup series, which
+for example includes the conversion away from function pointers
+for the check-functions. And also uses my nops-series.
+
+
+changes in v3:
+- rebase onto 5.19-rc1 + svpbmt-fixup-series
+- adapt wording for block-size binding
+- include asm/cacheflush.h into dma-noncoherent to fix the
+  no-prototype error clang seems to generate
+- use __nops macro for readability
+- add some received tags
+- add a0 to the clobber list
+
+changes in v2:
+- cbom-block-size is hardware-specific and comes from firmware
+- update Kconfig name to use the ISA extension name
+- select the ALTERNATIVES symbol when enabled
+- shorten the line lengths of the errata-assembly
+
+Heiko Stuebner (3):
+  dt-bindings: riscv: document cbom-block-size
+  riscv: Implement Zicbom-based cache management operations
+  riscv: implement cache-management errata for T-Head SoCs
+
+ .../devicetree/bindings/riscv/cpus.yaml       |  5 +
+ arch/riscv/Kconfig                            | 15 +++
+ arch/riscv/Kconfig.erratas                    | 10 ++
+ arch/riscv/errata/thead/errata.c              | 15 +++
+ arch/riscv/include/asm/cacheflush.h           |  6 ++
+ arch/riscv/include/asm/errata_list.h          | 76 ++++++++++++++-
+ arch/riscv/include/asm/hwcap.h                |  1 +
+ arch/riscv/kernel/cpu.c                       |  1 +
+ arch/riscv/kernel/cpufeature.c                | 18 ++++
+ arch/riscv/kernel/setup.c                     |  2 +
+ arch/riscv/mm/Makefile                        |  1 +
+ arch/riscv/mm/dma-noncoherent.c               | 93 +++++++++++++++++++
+ 12 files changed, 241 insertions(+), 2 deletions(-)
+ create mode 100644 arch/riscv/mm/dma-noncoherent.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

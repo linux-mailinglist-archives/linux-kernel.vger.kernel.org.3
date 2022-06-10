@@ -2,114 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021D7545BA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE5E545BAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 07:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244187AbiFJF0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 01:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S244584AbiFJFaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 01:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243795AbiFJF0K (ORCPT
+        with ESMTP id S241539AbiFJFa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 01:26:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C5F354471
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 22:26:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5005361E49
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE92C34114;
-        Fri, 10 Jun 2022 05:26:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654838768;
-        bh=gwCK9uMfRUGm8E6XoELsFSqRflgNay8yFNDnSDJjIw8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GxdUSQ2YDkvS3Pl8dMqe65wnQRwTnSFBKsCTFUh8i9zW47JnZ11Tk/6J+WRSGBO38
-         soK+Wv94GzKlQGFUh4wJITycUkm7Z3Y3+PIGLMf7CB6jNTWPZyoCLuUp6r1JCVNaKt
-         X+drEUBA4JfjILQuvuKd7ictTayLxW0Qo5/IfZGE=
-Date:   Fri, 10 Jun 2022 07:26:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, vkoul@kernel.org,
-        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
-        broonie@kernel.org, srinivas.kandagatla@linaro.org,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        bard.liao@intel.com
-Subject: Re: [PATCH 2/2] soundwire: Intel: add trigger callback
-Message-ID: <YqLV7qexsdhCI7ZZ@kroah.com>
-References: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
- <20220610023537.27223-3-yung-chuan.liao@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610023537.27223-3-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Jun 2022 01:30:29 -0400
+Received: from smtp.ruc.edu.cn (m177126.mail.qiye.163.com [123.58.177.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E34114A80;
+        Thu,  9 Jun 2022 22:30:25 -0700 (PDT)
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp.ruc.edu.cn (Hmail) with ESMTPSA id 2D63E800A3;
+        Fri, 10 Jun 2022 13:30:19 +0800 (CST)
+From:   Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jongpil Jung <jongpil19.jung@samsung.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] iio:proximity:sx9360: Fix hardware gain read/write
+Date:   Fri, 10 Jun 2022 13:30:12 +0800
+Message-Id: <20220610053012.27279-1-xiaohuizhang@ruc.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUMeSUxWQh0fSEhNGh9PS0
+        MaVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSUtDTk1VS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nww6Hgw4Oj0zFwoeEAFOLQgT
+        KgxPFD9VSlVKTU5PQ0hCS0lKSUtLVTMWGhIXVQMSGhQTDhIBExoVHDsJDhhVHh8OVRgVRVlXWRIL
+        WUFZSUtJVUpKSVVKSkhVSUpJWVdZCAFZQU9IQ0k3Bg++
+X-HM-Tid: 0a814c178baa2c20kusn2d63e800a3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:35:37AM +0800, Bard Liao wrote:
-> When a pipeline is split into FE and BE parts, the BE pipeline may need to
-> be triggered separately in the BE trigger op. So add the trigger callback
-> in the link_res ops that will be invoked during BE DAI trigger.
-> 
-> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Reviewed-by: Rander Wang <rander.wang@intel.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> ---
->  drivers/soundwire/intel.c           | 8 ++++++++
->  include/linux/soundwire/sdw_intel.h | 1 +
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-> index 808e2f320052..3f3c2c99cb8e 100644
-> --- a/drivers/soundwire/intel.c
-> +++ b/drivers/soundwire/intel.c
-> @@ -1004,9 +1004,17 @@ static int intel_trigger(struct snd_pcm_substream *substream, int cmd, struct sn
->  {
->  	struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
->  	struct sdw_intel *sdw = cdns_to_intel(cdns);
-> +	struct sdw_intel_link_res *res = sdw->link_res;
->  	struct sdw_cdns_dma_data *dma;
->  	int ret = 0;
->  
-> +	/* The .trigger callback is used to send required IPC to audio
-> +	 * firmware. The .free_stream callback will still be called
-> +	 * by intel_free_stream() in the TRIGGER_SUSPEND case.
-> +	 */
-> +	if (res->ops && res->ops->trigger)
-> +		res->ops->trigger(dai, cmd, substream->stream);
-> +
->  	dma = snd_soc_dai_get_dma_data(dai, substream);
->  	if (!dma) {
->  		dev_err(dai->dev, "failed to get dma data in %s\n",
-> diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
-> index 67e0d3e750b5..f638707fd712 100644
-> --- a/include/linux/soundwire/sdw_intel.h
-> +++ b/include/linux/soundwire/sdw_intel.h
-> @@ -119,6 +119,7 @@ struct sdw_intel_ops {
->  			     struct sdw_intel_stream_params_data *params_data);
->  	int (*free_stream)(struct device *dev,
->  			   struct sdw_intel_stream_free_data *free_data);
-> +	int (*trigger)(struct snd_soc_dai *dai, int cmd, int stream);
->  };
->  
->  /**
-> -- 
-> 2.17.1
-> 
+Similar to the handling of read/write in commit 108e4d4de2b5
+("iio:proximity:sx9324: Fix hardware gain read/write"), we thought
+a patch might be needed here as well.
 
-Where is the in-kernel user of this new callback?  Without that, there
-is no need for this, NOR is there a way to properly review this commit.
+There are four possible gain values according to 'sx9360_gain_vals[]':
 
-sorry,
+	1, 2, 4, and 8
 
-greg k-h
+The values are off by one when writing and reading the register. The
+bits should be set according to this equation:
+
+	ilog2(<gain>) + 1
+
+so that a gain of 8 is 0x4 in the register field and a gain of 4 is 0x3
+in the register field, etc. Note that a gain of 0 is reserved per the
+datasheet. The default gain (SX9360_REG_PROX_CTRL0_GAIN_1) is also
+wrong. It should be 0x1 << 3, i.e. 0x8, not 0x80 which is setting the
+reserved bit 7.
+
+Fix this all up to properly handle the hardware gain and return errors
+for invalid settings.
+
+Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+---
+ drivers/iio/proximity/sx9360.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/iio/proximity/sx9360.c b/drivers/iio/proximity/sx9360.c
+index 3ebb30c8a4f6..f231929debb7 100644
+--- a/drivers/iio/proximity/sx9360.c
++++ b/drivers/iio/proximity/sx9360.c
+@@ -64,7 +64,10 @@
+ #define SX9360_REG_PROX_CTRL0_PHR	0x40
+ #define SX9360_REG_PROX_CTRL0_PHM	0x41
+ #define SX9360_REG_PROX_CTRL0_GAIN_MASK	GENMASK(5, 3)
+-#define SX9360_REG_PROX_CTRL0_GAIN_1		0x80
++#define SX9360_REG_PROX_CTRL0_GAIN_SHIFT	3
++#define SX9360_REG_PROX_CTRL0_GAIN_RSVD	0x0
++#define SX9360_REG_PROX_CTRL0_GAIN_1	0x1
++#define SX9360_REG_PROX_CTRL0_GAIN_8	0x4
+ #define SX9360_REG_PROX_CTRL0_RAWFILT_MASK	GENMASK(2, 0)
+ #define SX9360_REG_PROX_CTRL0_RAWFILT_1P50	0x01
+ #define SX9360_REG_PROX_CTRL1		0x42
+@@ -288,7 +291,14 @@ static int sx9360_read_gain(struct sx_common_data *data,
+ 	if (ret)
+ 		return ret;
+ 
+-	*val = 1 << FIELD_GET(SX9360_REG_PROX_CTRL0_GAIN_MASK, regval);
++	regval = FIELD_GET(SX9360_REG_PROX_CTRL0_GAIN_MASK, regval);
++	if (regval)
++		regval--;
++	else if (regval == SX9360_REG_PROX_CTRL0_GAIN_RSVD ||
++		 regval > SX9360_REG_PROX_CTRL0_GAIN_8)
++		return -EINVAL;
++
++	*val = 1 << regval;
+ 
+ 	return IIO_VAL_INT;
+ }
+@@ -630,8 +640,12 @@ static int sx9360_write_gain(struct sx_common_data *data,
+ 	unsigned int gain, reg;
+ 	int ret;
+ 
+-	gain = ilog2(val);
+ 	reg = SX9360_REG_PROX_CTRL0_PHR + chan->channel;
++
++	gain = ilog2(val) + 1;
++	if (val <= 0 || gain > SX9360_REG_PROX_CTRL0_GAIN_8)
++		return -EINVAL;
++
+ 	gain = FIELD_PREP(SX9360_REG_PROX_CTRL0_GAIN_MASK, gain);
+ 
+ 	mutex_lock(&data->mutex);
+@@ -681,9 +695,11 @@ static const struct sx_common_reg_default sx9360_default_regs[] = {
+ 	{ SX9360_REG_AFE_PARAM1_PHM, SX9360_REG_AFE_PARAM1_AGAIN_PHM_6PF |
+ 		SX9360_REG_AFE_PARAM1_FREQ_83_33HZ },
+ 
+-	{ SX9360_REG_PROX_CTRL0_PHR, SX9360_REG_PROX_CTRL0_GAIN_1 |
++	{ SX9360_REG_PROX_CTRL0_PHR,
++		SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
+ 		SX9360_REG_PROX_CTRL0_RAWFILT_1P50 },
+-	{ SX9360_REG_PROX_CTRL0_PHM, SX9360_REG_PROX_CTRL0_GAIN_1 |
++	{ SX9360_REG_PROX_CTRL0_PHM,
++		SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
+ 		SX9360_REG_PROX_CTRL0_RAWFILT_1P50 },
+ 	{ SX9360_REG_PROX_CTRL1, SX9360_REG_PROX_CTRL1_AVGNEG_THRESH_16K },
+ 	{ SX9360_REG_PROX_CTRL2, SX9360_REG_PROX_CTRL2_AVGDEB_2SAMPLES |
+-- 
+2.17.1
+

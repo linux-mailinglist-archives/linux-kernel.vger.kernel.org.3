@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADA4546C28
+	by mail.lfdr.de (Postfix) with ESMTP id A266A546C27
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349969AbiFJSG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S1347559AbiFJSGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350127AbiFJSGx (ORCPT
+        with ESMTP id S1347484AbiFJSGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:06:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39A5413E86
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654884405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PMsjmdghjftZcHJYxe23lhIe8tlheZvEV884DJ3XaMQ=;
-        b=Mu9ASyNvBvMozbFKnn1JmpX35cHunemJiXfq1HysSSXhT1htDMWmFSuF6WMWJF56nVLg8v
-        kt2EhML+QMwFVMC7raDa9XHp4pooJqLoP+fFl+pKRndzIpB0lZ+YbyjE8uI00F4Yxf4qt5
-        qSeDH7fhtVBURXgR121p1gv7X4lQYDw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-RurBROcsP7ulDRyRjKQieg-1; Fri, 10 Jun 2022 14:06:40 -0400
-X-MC-Unique: RurBROcsP7ulDRyRjKQieg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 055FD1C01B20;
-        Fri, 10 Jun 2022 18:06:39 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A360018EA7;
-        Fri, 10 Jun 2022 18:06:35 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wgkwKyNmNdKpQkqZ6DnmUL-x9hp0YBnUGjaPFEAdxDTbw@mail.gmail.com>
-References: <CAHk-=wgkwKyNmNdKpQkqZ6DnmUL-x9hp0YBnUGjaPFEAdxDTbw@mail.gmail.com> <40676.1654807564@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Jeff Layton <jlayton@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical@lists.samba.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] netfs: Fix gcc-12 warning by embedding vfs inode in netfs_i_context
+        Fri, 10 Jun 2022 14:06:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD7EC5F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654884396; x=1686420396;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IFRrzvN2oP18xaw+PepMuRmspRZRLwDxgXN4BczW7yk=;
+  b=hgm8ufY7LFGJRQwF9LidnHhqbTyaDitslzYkem3a2oggGeivwEBgGcEb
+   j458DbuMY58M+XOtswukuGt1iGcJb2HTUDegQN+gX+2op25al2YeVpevl
+   ndnNc1eLCm/ErHi9ukbVzB//2pf+JA2GDi4d6ybNBHogtoROHFvscITFV
+   vCUk/jgEyq+IZvukqZjsHkHAamvqFAu6lS78xYX60GBF03KLaXpunsx2O
+   TJiSI1xesfJzNJEg2To2/q2qQz+JNSN0RaWC1MuP1S39Axz3c6JAB8zXI
+   lTy3Sb6/TLllbfbND6Rr18XB3H+yo9U6hTtVJLGhLx0402l1NjVsQlhUT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="278837355"
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="278837355"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 11:06:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
+   d="scan'208";a="760612596"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jun 2022 11:06:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id B4787F8; Fri, 10 Jun 2022 21:06:35 +0300 (EEST)
+Date:   Fri, 10 Jun 2022 21:06:35 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220610180635.l44opq2votd3gxpl@black.fi.intel.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
+ <c3b4f3ccf8ee547a588bf8a971064e4d62b6a44c.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <652127.1654884394.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 10 Jun 2022 19:06:34 +0100
-Message-ID: <652128.1654884394@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3b4f3ccf8ee547a588bf8a971064e4d62b6a44c.camel@intel.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,60 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Fri, Jun 10, 2022 at 04:16:01PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2022-06-10 at 17:35 +0300, Kirill A. Shutemov wrote:
+> > +static int prctl_enable_tagged_addr(unsigned long nr_bits)
+> > +{
+> > +       struct mm_struct *mm = current->mm;
+> > +
+> > +       /* Already enabled? */
+> > +       if (mm->context.lam_cr3_mask)
+> > +               return -EBUSY;
+> > +
+> > +       /* LAM has to be enabled before spawning threads */
+> > +       if (get_nr_threads(current) > 1)
+> > +               return -EBUSY;
+> 
+> Does this work for vfork()? I guess the idea is that locking is not
+> needed below because there is only one thread with the MM, but with
+> vfork() another task could operate on the MM, call fork(), etc. I'm not
+> sure...
 
-> Side note: I think this could have been done with an unnamed union as
-> =
+I'm not sure I follow. vfork() blocks parent process until child exit or
+execve(). I don't see how it is a problem.
 
->         struct my_inode {
->                 union {
->                         struct inode            vfs_inode;
->                         struct netfs_inode netfs_inode;
->                 };
->         [...]
-> =
-
-> instead, with the rule that 'netfs_inode' always starts with a 'struct i=
-node'.
-
-I'm slightly wary of that, lest struct netfs_inode gets randomised.  I'm n=
-ot
-sure how likely that would be without netfs_inode getting explicitly marke=
-d.
-
-> But in a lot of cases you really could do so much better: you *have* a
-> "struct netfs_inode" to begin with, but you converted it to just
-> "struct inode *", and now you're converting it back.
-> =
-
-> Look at that AFS code, for example, where we have afs_vnode_cache() doin=
-g
-> =
-
->         return netfs_i_cookie(&vnode->netfs.inode);
-> =
-
-> and look how it *had* a netfs structure, and it was passing it to a
-> netfs function, but it explicitly passed the WRONG TYPE, so now we've
-> lost the type information and it is using that cast to fake it all
-> back.
-
-Yeah, I didn't look at those as they didn't cause warnings, but you're rig=
-ht -
-those should take struct netfs_inode pointers in some cases, rather than
-struct inode.
-
-Note that some functions, such as netfs_readpage() and netfs_readpages() d=
-o
-need to take struct inode pointers as I'm trying to get the VFS ops to jum=
-p
-into netfslib and get all the VM interface stuff out of the network
-filesystems - the idea being that the network filesystem will provide netf=
-slib
-primarily with two functions: do a read op and do a write op.
-
-I'll have a look at your patch in a bit.
-
-Thanks,
-David
-
+-- 
+ Kirill A. Shutemov

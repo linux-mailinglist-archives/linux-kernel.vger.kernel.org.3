@@ -2,171 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05556546B75
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AB2546B1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 19:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350125AbiFJREY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 13:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S235814AbiFJRAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 13:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350072AbiFJREL (ORCPT
+        with ESMTP id S1350052AbiFJRAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 13:04:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3F737010;
-        Fri, 10 Jun 2022 10:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654880647; x=1686416647;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cedDuWJ1o5WzrQ7/mFOQkYqmkZRy7tIGsqftIplAouU=;
-  b=VpcUxeLQ5LpYj62E60WzafhOsHpdVhP1SBOU7eEAR1hhS64I+eTE8KY+
-   DOU/4Nbp5dn5l5t1kQ5PKlKPADs0pMmFeBVJzHivo2MakAYeAqUZ+0pTJ
-   P3KIuuFCedeXlTNgVz418QO/qhHMzUZ3tt14Mns4BC6UuZZm65YBXrt3s
-   37KaN9geptjbbtRP/DCd9iQ2B36tF3TVkv2k3VI0hOvjVBJGiAfcV/ytn
-   Cru+gDYkPqFXJPR5ApGqD0EiScb0QulEUybapVA7G+fRlA3DcBmuQ4HsF
-   +xNaKlA5T0w1XoO47zXMzf+D7W2koQD9+BuzuPmcdrVmRzcYgLna5wpNi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="266452815"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="266452815"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 10:04:07 -0700
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="638218818"
-Received: from unknown (HELO jiaqingz-server.sh.intel.com) ([10.239.48.171])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 10:04:05 -0700
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-To:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Cc:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Subject: [PATCH v2 6/6] net/ncsi: Support VLAN mode configuration
-Date:   Sat, 11 Jun 2022 00:59:40 +0800
-Message-Id: <20220610165940.2326777-7-jiaqing.zhao@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220610165940.2326777-1-jiaqing.zhao@linux.intel.com>
-References: <20220610165940.2326777-1-jiaqing.zhao@linux.intel.com>
+        Fri, 10 Jun 2022 13:00:13 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1073C35DCD
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:59:55 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id bo5so24348259pfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6oCcDIZ6NGhYZEWuS6OCQMXStNToq7DhXXPf8Kj6NnM=;
+        b=lqwHwachZToOTY0r4VOrPBCa9KDksfoApvbwKgbLY+suB80QAt8umn8vGvW+QEukSW
+         LblDrLCNzXMd2b1CmCs3yz/dI1aaF4NrVPFp6PcRQ8AQE/XZTRgMno2XEHZxphYoRg8T
+         1JlmC8VcEMX4XDOPH+H96h4sNCwEs+4176TqWTU9s2SPjma9fU66Zz+Wl/PBja3Uyd5P
+         WJ7oD/oj3AmaLxt1hb006hoT0zOoTZDE8sF+zIoh0/PVGNPQINGFXw1srlaWU5JxJEOJ
+         baUNTtfO6Yib7Nb3sPt0mJqpDFK5h9XisT9dhxgTNKUNXcdI1TRUqXnG+jEDDFu3Nz70
+         //lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6oCcDIZ6NGhYZEWuS6OCQMXStNToq7DhXXPf8Kj6NnM=;
+        b=LWztMgUhNj+CfqSjvfuTmmBc2L3fUQscmEWGrt0FPA6JuAR7rPg1ICzAz89NyytbMu
+         QUQ+cJOl02+jm4n5u2J2OxVj7aWB8M98X4aRe4pBWbxUJoXEWsMsGN7pu+Ccqx5cPCkP
+         DZdcaT1BiRVtPMZMB43nQsg++j8t+IhW7F0/iLu1T5xHG4tNEb1UdA00RRfxO/7rhO7d
+         EDXXYg7EfDt+1ogEYoqnDYdC6OkNgF9nUbUGohNP1JiSYSQbA+G0Pe3WwaXunPTWMGLx
+         w7EuVstenkIX/k1GOe0/Vao+v3DfzpzFnsSXVSdhu4R2+6FLIPgHloadFPWc9zbktQar
+         qGQg==
+X-Gm-Message-State: AOAM532+hH/Vmg46bxk3fghzpFrMtKANBKTmIWZpyRZdVn0w+TV+1YJ7
+        82rxbM/ZAj4b+0xcpvi+Ky7thvIBp4T7hrrSeAI=
+X-Google-Smtp-Source: ABdhPJzMBiEm8zrvGbTlX9qa+i0h9sXKsCpBKTDzTQuKy07ZPreksZEXuIWBSZq77t+mJL9tWSnnejTLC3B+jUhTrJs=
+X-Received: by 2002:a05:6a02:184:b0:3fc:3b43:e5da with SMTP id
+ bj4-20020a056a02018400b003fc3b43e5damr39487679pgb.587.1654880394631; Fri, 10
+ Jun 2022 09:59:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-5-shy828301@gmail.com>
+ <CAAa6QmSCk+7HLtLOzbTYev7dAM0aff-f4USV3AXAQdSKu7_6HA@mail.gmail.com>
+In-Reply-To: <CAAa6QmSCk+7HLtLOzbTYev7dAM0aff-f4USV3AXAQdSKu7_6HA@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 10 Jun 2022 09:59:41 -0700
+Message-ID: <CAHbLzkpJWSiBX0fYWXjagA-19mJb6hwXZ=_Sk-qJHxMD_3sdYw@mail.gmail.com>
+Subject: Re: [v3 PATCH 4/7] mm: khugepaged: use transhuge_vma_suitable replace open-code
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NCSI specification defines 4 VLAN modes, currently kernel NCSI driver
-only supports the "VLAN + non-VLAN" mode (Mode #2), and there is no
-way to detect which modes are supported by the device. This patch adds
-support for configuring VLAN mode via the "ncsi,vlan-mode" devicetree
-node.
+On Thu, Jun 9, 2022 at 6:52 PM Zach O'Keefe <zokeefe@google.com> wrote:
+>
+> On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
+> >
+> > The hugepage_vma_revalidate() needs to check if the address is still in
+> > the aligned HPAGE_PMD_SIZE area of the vma when reacquiring mmap_lock,
+> > but it was open-coded, use transhuge_vma_suitable() to do the job.  And
+> > add proper comments for transhuge_vma_suitable().
+> >
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> >  include/linux/huge_mm.h | 6 ++++++
+> >  mm/khugepaged.c         | 5 +----
+> >  2 files changed, 7 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> > index a8f61db47f2a..79d5919beb83 100644
+> > --- a/include/linux/huge_mm.h
+> > +++ b/include/linux/huge_mm.h
+> > @@ -128,6 +128,12 @@ static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
+> >         return false;
+> >  }
+> >
+> > +/*
+> > + * Do the below checks:
+> > + *   - For non-anon vma, check if the vm_pgoff is HPAGE_PMD_NR aligned.
+> > + *   - For all vmas, check if the haddr is in an aligned HPAGE_PMD_SIZE
+> > + *     area.
+> > + */
+>
+> AFAIK we aren't checking if vm_pgoff is HPAGE_PMD_NR aligned, but
+> rather that linear_page_index(vma, round_up(vma->vm_start,
+> HPAGE_PMD_SIZE)) is HPAGE_PMD_NR aligned within vma->vm_file. I was
 
-Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
----
- net/ncsi/internal.h    |  1 +
- net/ncsi/ncsi-manage.c | 41 ++++++++++++++++++++++++++++++++++-------
- 2 files changed, 35 insertions(+), 7 deletions(-)
+Yeah, you are right.
 
-diff --git a/net/ncsi/internal.h b/net/ncsi/internal.h
-index 7f384f841019..6a988c898a8d 100644
---- a/net/ncsi/internal.h
-+++ b/net/ncsi/internal.h
-@@ -334,6 +334,7 @@ struct ncsi_dev_priv {
- 	struct work_struct  work;            /* For channel management     */
- 	struct packet_type  ptype;           /* NCSI packet Rx handler     */
- 	struct list_head    node;            /* Form NCSI device list      */
-+	u32                 vlan_mode;       /* VLAN mode                  */
- #define NCSI_MAX_VLAN_VIDS	15
- 	struct list_head    vlan_vids;       /* List of active VLAN IDs */
- 
-diff --git a/net/ncsi/ncsi-manage.c b/net/ncsi/ncsi-manage.c
-index 3fb95f29e3e2..a398b0eb72b2 100644
---- a/net/ncsi/ncsi-manage.c
-+++ b/net/ncsi/ncsi-manage.c
-@@ -10,6 +10,7 @@
- #include <linux/skbuff.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <dt-bindings/net/ncsi.h>
- 
- #include <net/ncsi.h>
- #include <net/net_namespace.h>
-@@ -1042,7 +1043,11 @@ static void ncsi_configure_channel(struct ncsi_dev_priv *ndp)
- 		nd->state = ncsi_dev_state_config_oem_gma;
- 		break;
- 	case ncsi_dev_state_config_oem_gma:
--		nd->state = ncsi_dev_state_config_clear_vids;
-+		/* Only set up hardware VLAN filters in filtered mode */
-+		if (ndp->vlan_mode == NCSI_VLAN_MODE_FILTERED)
-+			nd->state = ncsi_dev_state_config_clear_vids;
-+		else
-+			nd->state = ncsi_dev_state_config_ev;
- 		ret = -1;
- 
- #if IS_ENABLED(CONFIG_NCSI_OEM_CMD_GET_MAC)
-@@ -1094,11 +1099,15 @@ static void ncsi_configure_channel(struct ncsi_dev_priv *ndp)
- 			nd->state = ncsi_dev_state_config_svf;
- 		/* Enable/Disable the VLAN filter */
- 		} else if (nd->state == ncsi_dev_state_config_ev) {
--			if (list_empty(&ndp->vlan_vids)) {
--				nca.type = NCSI_PKT_CMD_DV;
--			} else {
-+			if (ndp->vlan_mode == NCSI_VLAN_MODE_FILTERED &&
-+			    !list_empty(&ndp->vlan_vids)) {
- 				nca.type = NCSI_PKT_CMD_EV;
- 				nca.bytes[3] = NCSI_CAP_VLAN_FILTERED;
-+			} else if (ndp->vlan_mode == NCSI_VLAN_MODE_ANY) {
-+				nca.type = NCSI_PKT_CMD_EV;
-+				nca.bytes[3] = NCSI_CAP_VLAN_ANY;
-+			} else {
-+				nca.type = NCSI_PKT_CMD_DV;
- 			}
- 			nd->state = ncsi_dev_state_config_sma;
- 		} else if (nd->state == ncsi_dev_state_config_sma) {
-@@ -1800,15 +1809,33 @@ struct ncsi_dev *ncsi_register_dev(struct net_device *dev,
- 	ndp->ptype.dev = dev;
- 	dev_add_pack(&ndp->ptype);
- 
-+	/* Set default VLAN mode (filtered) */
-+	ndp->vlan_mode = NCSI_VLAN_MODE_FILTERED;
-+
- 	pdev = to_platform_device(dev->dev.parent);
- 	if (pdev) {
- 		np = pdev->dev.of_node;
--		if (np && of_get_property(np, "mlx,multi-host", NULL))
--			ndp->mlx_multi_host = true;
-+		if (np) {
-+			u32 vlan_mode;
-+
-+			if (!of_property_read_u32(np, "ncsi,vlan-mode", &vlan_mode)) {
-+				if (vlan_mode > NCSI_VLAN_MODE_ANY ||
-+				    vlan_mode == NCSI_VLAN_MODE_ONLY)
-+					dev_warn(&pdev->dev, "NCSI: Unsupported VLAN mode %u",
-+						 vlan_mode);
-+				else
-+					ndp->vlan_mode = vlan_mode;
-+				dev_info(&pdev->dev, "NCSI: Configured VLAN mode %u",
-+					 ndp->vlan_mode);
-+			}
-+			if (of_get_property(np, "mlx,multi-host", NULL))
-+				ndp->mlx_multi_host = true;
-+		}
- 	}
- 
- 	/* Enable hardware VLAN filtering */
--	if (dev->netdev_ops->ndo_vlan_rx_add_vid == ncsi_vlan_rx_add_vid &&
-+	if (ndp->vlan_mode == NCSI_VLAN_MODE_FILTERED &&
-+	    dev->netdev_ops->ndo_vlan_rx_add_vid == ncsi_vlan_rx_add_vid &&
- 	    dev->netdev_ops->ndo_vlan_rx_kill_vid == ncsi_vlan_rx_kill_vid)
- 		dev->hw_features |= NETIF_F_HW_VLAN_CTAG_FILTER;
- 
--- 
-2.34.1
+> pretty confused about this (hopefully I have it right now - if not -
+> case and point :) ), so it might be a good opportunity to add some
+> extra commentary to help future travelers understand why this
+> constraint exists.
 
+I'm not fully sure I understand this 100%. I think this is related to
+how page cache is structured. I will try to add more comments.
+
+>
+> Also I wonder while we're at it if we can rename this to
+> transhuge_addr_aligned() or transhuge_addr_suitable() or something.
+
+I think it is still actually used to check vma.
+
+>
+> Otherwise I think the change is a nice cleanup.
+>
+> >  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> >                 unsigned long addr)
+> >  {
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 7a5d1c1a1833..ca1754d3a827 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -951,7 +951,6 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+> >                 struct vm_area_struct **vmap)
+> >  {
+> >         struct vm_area_struct *vma;
+> > -       unsigned long hstart, hend;
+> >
+> >         if (unlikely(khugepaged_test_exit(mm)))
+> >                 return SCAN_ANY_PROCESS;
+> > @@ -960,9 +959,7 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+> >         if (!vma)
+> >                 return SCAN_VMA_NULL;
+> >
+> > -       hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+> > -       hend = vma->vm_end & HPAGE_PMD_MASK;
+> > -       if (address < hstart || address + HPAGE_PMD_SIZE > hend)
+> > +       if (!transhuge_vma_suitable(vma, address))
+> >                 return SCAN_ADDRESS_RANGE;
+> >         if (!hugepage_vma_check(vma, vma->vm_flags))
+> >                 return SCAN_VMA_CHECK;
+> > --
+> > 2.26.3
+> >
+> >

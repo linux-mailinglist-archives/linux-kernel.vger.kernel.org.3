@@ -2,154 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C8A546EF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8419E546EFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350845AbiFJVFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
+        id S1350805AbiFJVGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350788AbiFJVFC (ORCPT
+        with ESMTP id S1347554AbiFJVG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:05:02 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBB630F7C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:05:01 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-30fa61b1a83so4348627b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:05:01 -0700 (PDT)
+        Fri, 10 Jun 2022 17:06:26 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E0F289B0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:06:24 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so492402pjg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:06:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xJlKMK3HVq56WXfodTgOAOhNas0GRU8DHURRXkOK2dA=;
-        b=SxT0lhEd13pHhK1+KST3B6KvA8cFHhURWis09vfvF0B6ltmmLVBEjVXL91BgxJ+0SQ
-         d2e+LJxpycjGXiHOzxE3gXU0HWSXr7hTJ6Q3r2FmFOrlEfr2e0oxSuIep45tDQ3VOCJA
-         G+wiwJIF/pWLi8rl8XCfe5YIHlswiXbhQLezYwTEWCjmGCoo4gy2CmnfnEpzMfAbtzy7
-         AtsUxcz+GMHhuoNWaLk5OnHEP1r1N9b3ndFgHT0S1a3xZvgU24UN5qjTclxGHfzTWZgC
-         5TyT/bg5kK34oJWoFn7fKvf3lV3/3CeHCt99iNwrRNh6yVhciImWy8u/3uAINcKXUuaT
-         mZCg==
+        bh=AVhfbIukOKEVFvNF87H3xskC9Oa1vruUMas0TKGSYm0=;
+        b=nUaBKVT5J8mwmiDpTKFhYMr5X6B97KvxMCWwwWjCo69v2K9ZvUkTEC5pE8DyMQG1mU
+         JNFVAkbelc/drapO000q+0h0xtP5KanI5Z1wF+j0iYcWFcmL66vgbkyZsfMb0xV14Wrz
+         n9YCGn9EmO0MoppPxe9cAtWTqQpvKEf9rTAcXycm8s/y2L5sMuXmXX9WI7n5pMD2V9DL
+         pOw5uJ6CSSBSiiZKbwLOvzafe3tnkgR9ohmxQ/04zaTeiGXbFUxahNfU9xiBU7tQHqhv
+         eR6ZN6RiS0RuxU8DIaPHvmJE/3xCM9nDZN4SQuRvqmMCezf/4MOxVabPuhq4m477txoq
+         h3OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xJlKMK3HVq56WXfodTgOAOhNas0GRU8DHURRXkOK2dA=;
-        b=ixLdQD0zVKHFsUuYzYDuOwICoMCR7W8VMSCu836zaE18erX+ek2HZ3irv5HUdyrb4Z
-         6cqnXFA1H0Lf8G8p1Ln2MzBgTCJPBPIZl6cUWaz5iMScUo2CIc2TjrtRXz8MZ0Sl6RIZ
-         sGz2+TZXhLmhOub5wXC+S9+ys3qgeeHmYb7yAr/vIPARkXFI0S2S0f1gW3aQ9V6CRLeT
-         GDnQ43AeA/QTk9v6WMtKytEC8KWtdHiT3NfZgb0HNX2kgy4JJ9rdLofm9b0hP66Hdjfh
-         00CWiiZMPH0u+XylpuugaiqkIFrEgtRnVN+Py9Tc/eyZ/MDqOtrupei1I2sXYW+JKo48
-         jmgQ==
-X-Gm-Message-State: AOAM531DpsWF9qcOp3PGRCoRUQ50lavzYBkXpNXZJgrSe8DmTRtZ7ux1
-        7qRZ18jHgM6VI+5NLjuYa5CeaDajNGgWiPaI7qFTyA==
-X-Google-Smtp-Source: ABdhPJzkTaSGVJkh5pjJAIaIz4OU76YdvHXrdXNhim9IcSyDfVPY1QNmGVVh79xcWdhtLPsTCCXNpW1DtaDVmfHmNtc=
-X-Received: by 2002:a81:c54a:0:b0:2d6:435a:5875 with SMTP id
- o10-20020a81c54a000000b002d6435a5875mr49234125ywj.181.1654895100356; Fri, 10
- Jun 2022 14:05:00 -0700 (PDT)
+        bh=AVhfbIukOKEVFvNF87H3xskC9Oa1vruUMas0TKGSYm0=;
+        b=fgr3I6MU0zS+1XFqSvM9YiPVd8LEMHjIOx7kHUTvJ4upw52VYagZyhin0mKmY5/dE9
+         RXMpl9+tiqYgPnwWbmCOjTSC5olC5zApQSlbSJzM5dUYu7va3N9T9r5sBAx16DQsfCZa
+         Ux9Iujnh0/pu8Ic3KaOI+eWg3AQh5m1gHDD3/RjFyqjmB/AFCGiBR9KsnZL8ZG6Ou341
+         Y24uJtGFM5mWVLOuj/vrxN8+aPlJA+W0cgTxxcKtbjE2QNb768iLfFOQtiUiv8CMAwFc
+         n21Va+W5GhuDJXItnOuC6GSAM2kXX1omyrYAbgkt2lAEXLDWVLUAEjSEo4Y/uaunUZoF
+         lAXw==
+X-Gm-Message-State: AOAM53140sqlHVoYFDmkKS5WNGrpF2rrDpyllxc+XCOj+e+oJFIvgqKF
+        OBVCMAb5MGDKKobsiIlXF+lqTVJMT55MN25VKbaB
+X-Google-Smtp-Source: ABdhPJzIMHgsZ4tZhpk9aRuapm/Sl7e4TCz9bkJJUYRDpM0VclwMSgMCBCsHtkFgTHE9/eqfYCAPhNwufAxTaQy/2io=
+X-Received: by 2002:a17:902:f54b:b0:163:e2fd:10a5 with SMTP id
+ h11-20020a170902f54b00b00163e2fd10a5mr47483065plf.28.1654895184250; Fri, 10
+ Jun 2022 14:06:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1651774250.git.isaku.yamahata@intel.com> <9a45667060dd2f8634bf1ecba23b89567c7e46e7.1651774251.git.isaku.yamahata@intel.com>
-In-Reply-To: <9a45667060dd2f8634bf1ecba23b89567c7e46e7.1651774251.git.isaku.yamahata@intel.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Fri, 10 Jun 2022 14:04:49 -0700
-Message-ID: <CAAhR5DE8FmzACXja1znjdR04HS_kOsJ4awWsU5AHm3__oqOx8g@mail.gmail.com>
-Subject: Re: [RFC PATCH v6 095/104] KVM: TDX: Handle TDX PV rdmsr/wrmsr hypercall
-To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Sean Christopherson <seanjc@google.com>
+References: <20220609230146.319210-1-casey@schaufler-ca.com> <20220609230146.319210-28-casey@schaufler-ca.com>
+In-Reply-To: <20220609230146.319210-28-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 10 Jun 2022 17:06:13 -0400
+Message-ID: <CAHC9VhR4xUpe4fQrUqvUfH_zaBSzfCS2yZ62XHN2+ugKg=Kd4g@mail.gmail.com>
+Subject: Re: [PATCH v36 27/33] Audit: Add record for multiple task security contexts
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 11:16 AM <isaku.yamahata@intel.com> wrote:
+On Thu, Jun 9, 2022 at 7:16 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
 >
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> Create a new audit record AUDIT_MAC_TASK_CONTEXTS.
+> An example of the MAC_TASK_CONTEXTS (1420) record is:
 >
-> Wire up TDX PV rdmsr/wrmsr hypercall to the KVM backend function.
+>     type=MAC_TASK_CONTEXTS[1420]
+>     msg=audit(1600880931.832:113)
+>     subj_apparmor=unconfined
+>     subj_smack=_
 >
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> When an audit event includes a AUDIT_MAC_TASK_CONTEXTS record
+> the "subj=" field in other records in the event will be "subj=?".
+> An AUDIT_MAC_TASK_CONTEXTS record is supplied when the system has
+> multiple security modules that may make access decisions based
+> on a subject security context.
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 > ---
->  arch/x86/kvm/vmx/tdx.c | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index f46825843a8b..1518a8c310d6 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -1169,6 +1169,39 @@ static int tdx_emulate_mmio(struct kvm_vcpu *vcpu)
->         return 1;
->  }
->
-> +static int tdx_emulate_rdmsr(struct kvm_vcpu *vcpu)
-> +{
-> +       u32 index = tdvmcall_a0_read(vcpu);
-> +       u64 data;
-> +
-> +       if (kvm_get_msr(vcpu, index, &data)) {
+>  include/uapi/linux/audit.h |  1 +
+>  kernel/audit.c             | 42 +++++++++++++++++++++++++++++++-------
+>  2 files changed, 36 insertions(+), 7 deletions(-)
 
-kvm_get_msr and kvm_set_msr used to check the MSR permissions using
-kvm_msr_allowed but that behaviour changed in "KVM: x86: Only do MSR
-filtering when access MSR by rdmsr/wrmsr".
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-Now kvm_get_msr and kvm_set_msr skip these checks and will allow
-access regardless of the permissions in the msr_filter.
-
-These should be changed to kvm_get_msr_with_filter and
-kvm_set_msr_with_filter or something similar that checks permissions
-for MSR access.
-
-> +               trace_kvm_msr_read_ex(index);
-> +               tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
-> +               return 1;
-> +       }
-> +       trace_kvm_msr_read(index, data);
-> +
-> +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
-> +       tdvmcall_set_return_val(vcpu, data);
-> +       return 1;
-> +}
-> +
-> +static int tdx_emulate_wrmsr(struct kvm_vcpu *vcpu)
-> +{
-> +       u32 index = tdvmcall_a0_read(vcpu);
-> +       u64 data = tdvmcall_a1_read(vcpu);
-> +
-> +       if (kvm_set_msr(vcpu, index, data)) {
-> +               trace_kvm_msr_write_ex(index, data);
-> +               tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
-> +               return 1;
-> +       }
-> +
-> +       trace_kvm_msr_write(index, data);
-> +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
-> +       return 1;
-> +}
-> +
->  static int handle_tdvmcall(struct kvm_vcpu *vcpu)
->  {
->         if (tdvmcall_exit_type(vcpu))
-> @@ -1183,6 +1216,10 @@ static int handle_tdvmcall(struct kvm_vcpu *vcpu)
->                 return tdx_emulate_io(vcpu);
->         case EXIT_REASON_EPT_VIOLATION:
->                 return tdx_emulate_mmio(vcpu);
-> +       case EXIT_REASON_MSR_READ:
-> +               return tdx_emulate_rdmsr(vcpu);
-> +       case EXIT_REASON_MSR_WRITE:
-> +               return tdx_emulate_wrmsr(vcpu);
->         default:
->                 break;
->         }
-> --
-> 2.25.1
->
-
-Sagi
+-- 
+paul-moore.com

@@ -2,242 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FDB546F33
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760A8546F37
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350698AbiFJVYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S1350907AbiFJVZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244326AbiFJVYs (ORCPT
+        with ESMTP id S1348721AbiFJVZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:24:48 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6981E4BDC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:24:47 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id t2so279457pld.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hcHzsQVZ+PTFSV9X4stAy+tj1JmFLmJSZcQbEdxANTg=;
-        b=ArwMa9bZf+r8xebzbmSfcJnbMlpoqRyzcSgvj7aIl8Q4FjIUw7aXaf38oXRlRSn7nR
-         Jz898ErOjc0pJrCZEZMVBKGoR3C1AdzLDeXHhUZh86b24KW7czKHTssyDKE8LjkoujJU
-         gaZxcgqe82On1qlRiuM4PNX+9W2XHJ/eIi3YMMoliaWGZXaLn8b6x4IhHMDyo+esBaNM
-         l9XuoowBf0U8oJM+I0zVZGYfezI0mMNz3uT6LemGDhOZwVWLNVbH3Mm/cQs8kHcGJXtm
-         V/HLKcHwguRzsTFMvHpaT4XobPXwc57PkkUzh8A88+pMeLItBkhOueNsP/exglZXyPQS
-         IDeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hcHzsQVZ+PTFSV9X4stAy+tj1JmFLmJSZcQbEdxANTg=;
-        b=6+o5kQZWEPRblNKz5U3ZCIjuVIk8pJR1h8ZXQVRjHLliQEuMvoKDv+1VqFNjWW/rpd
-         Hxiilq3VdNc4Qm0z8mTwX967m6RmY50GQVhvTBkDu9MAiqaMiJ6JRWRSaU+bBxD/gDHi
-         AJtbxuRIG370s0QX7bPMXerkar0CCXqtTk+Ct1uDg0xwQdo3AZ2bPDgUBW8pvIv0Eo1f
-         t88kZOR+06FmImb/Viv3EcOzKl8qeQoEhUhhyy0PsUTSkCXlgs5BZoQJf4Y7HeLDRPet
-         82JEm9UpXSeMfOj8YnAKPNgmIwW9uUNKVSJqDk1Ig/ZVgw70vJtn1GA6hTnN8KVK3HLZ
-         zAjw==
-X-Gm-Message-State: AOAM533H0qux4EwjaWtDSIY50ZZXkIn7e5vKFRm1ewb3p95tRSFmKP1l
-        4E23b6bKg/CHqaVxCO9AMTgyc7YVXlkhTOlrokM=
-X-Google-Smtp-Source: ABdhPJzzagpZPkwig2/NpWC77DWNNuvXz/zd67odgxEz2hdg1cuYtctz2IVGfqEqz7OatcqOxiO3RK25CjEEXEb6jqk=
-X-Received: by 2002:a17:90a:de15:b0:1df:63dd:9cfc with SMTP id
- m21-20020a17090ade1500b001df63dd9cfcmr1703274pjv.200.1654896286440; Fri, 10
- Jun 2022 14:24:46 -0700 (PDT)
+        Fri, 10 Jun 2022 17:25:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263DD1F89B1;
+        Fri, 10 Jun 2022 14:25:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB12CB837C6;
+        Fri, 10 Jun 2022 21:25:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBEBC341C4;
+        Fri, 10 Jun 2022 21:25:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654896317;
+        bh=+yOYQf/molwfJfp3mc62IB7uUe79xlOHDuVNNoHLbxQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PWDDxD/MTpJXCcqo8cDBRdQPlRHGDZEVW2HsxMG6PD/E53sbqsEaK+/jfvyqUHr/3
+         d95HuTziadxlfer9hgoZqy8qNANzuuoh525MaZVb5XwHabSscUQGsSp/4SDTl4KBQ4
+         Me8KJ/vVhuT1g2hiSW3cxrCYndp09x0BoR+MrGr+//GqYr4CT02mIazMC0E8bMZG16
+         EhW5gIAFqKUoIuRFqzaGHREtqlFDpyFQLMyZXT71GUDfzH+Jx1wEWSD0ILinNbwOsM
+         Vg93mTsRJGCs9qrMTbuaqR9L2FSsK5nFbY5XX3NSPCnamLaVHxYzLc9daW48g7B4we
+         iiP9TIje/5R4A==
+Received: by mail-vk1-f173.google.com with SMTP id q186so85641vkh.8;
+        Fri, 10 Jun 2022 14:25:17 -0700 (PDT)
+X-Gm-Message-State: AOAM5332pw3IdjpmCTEOMmtF30mst/oB2Ko+ZgE8vNdinodXqwDdGXws
+        Izu64YLwPLn7gm0FIXS9yGPGWvm8Bw1/fD2oew==
+X-Google-Smtp-Source: ABdhPJznf30KHWe8+z+YOq+izPos96vlalgcSMg0OYweCf6ENJfJTZBrfLeqOWSlufxTTtn0BIGqeF6S2vYhe3jMi2M=
+X-Received: by 2002:a1f:aac7:0:b0:35e:1c45:def with SMTP id
+ t190-20020a1faac7000000b0035e1c450defmr11545955vke.35.1654896316529; Fri, 10
+ Jun 2022 14:25:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-3-shy828301@gmail.com>
- <CAAa6QmTYZQVf_U3dBnFpYGh3E8Qc4w8CKctMUC7jV_t=naGURQ@mail.gmail.com>
- <CAHbLzkr42VJhwj5EELw4oOXxm8bHzB7AEUBa0JqWYpvNXw6oNg@mail.gmail.com>
- <CAAa6QmRThv3OMr_j9Z7i_Q4zL3EFYHJSJxdUhE5ebmOMD_+n7w@mail.gmail.com> <CAHbLzkq8Ko+KL1wnxLGjgL=z8k9Bz5cX6q9Y-cfaWo9T5iSXbg@mail.gmail.com>
-In-Reply-To: <CAHbLzkq8Ko+KL1wnxLGjgL=z8k9Bz5cX6q9Y-cfaWo9T5iSXbg@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 10 Jun 2022 14:24:34 -0700
-Message-ID: <CAHbLzkqmS2RLAqTV6dC_W60FdwbOG2jZX0NU+zS0p2wuiK1t-Q@mail.gmail.com>
-Subject: Re: [v3 PATCH 2/7] mm: thp: introduce transhuge_vma_size_ok() helper
-To:     "Zach O'Keefe" <zokeefe@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220610203818.2193593-1-robh@kernel.org> <YqOvmrDGgS0AubU4@ravnborg.org>
+In-Reply-To: <YqOvmrDGgS0AubU4@ravnborg.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 10 Jun 2022 15:25:05 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJmkp=LUa+TmFo=3dZAKPhPNMGFWj5jyHq_Q9RxZqz4qw@mail.gmail.com>
+Message-ID: <CAL_JsqJmkp=LUa+TmFo=3dZAKPhPNMGFWj5jyHq_Q9RxZqz4qw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: display: panel-simple: Add Arm virtual
+ platforms display
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Liviu Dudau <Liviu.Dudau@arm.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 9:38 AM Yang Shi <shy828301@gmail.com> wrote:
+On Fri, Jun 10, 2022 at 2:55 PM Sam Ravnborg <sam@ravnborg.org> wrote:
 >
-> On Thu, Jun 9, 2022 at 5:52 PM Zach O'Keefe <zokeefe@google.com> wrote:
-> >
-> > On Thu, Jun 9, 2022 at 5:08 PM Yang Shi <shy828301@gmail.com> wrote:
-> > >
-> > > On Thu, Jun 9, 2022 at 3:21 PM Zach O'Keefe <zokeefe@google.com> wrote:
-> > > >
-> > > > On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
-> > > > >
-> > > > > There are couple of places that check whether the vma size is ok for
-> > > > > THP or not, they are open coded and duplicate, introduce
-> > > > > transhuge_vma_size_ok() helper to do the job.
-> > > > >
-> > > > > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > > > > ---
-> > > > >  include/linux/huge_mm.h | 17 +++++++++++++++++
-> > > > >  mm/huge_memory.c        |  5 +----
-> > > > >  mm/khugepaged.c         | 12 ++++++------
-> > > > >  3 files changed, 24 insertions(+), 10 deletions(-)
-> > > > >
-> > > > > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> > > > > index 648cb3ce7099..a8f61db47f2a 100644
-> > > > > --- a/include/linux/huge_mm.h
-> > > > > +++ b/include/linux/huge_mm.h
-> > > > > @@ -116,6 +116,18 @@ extern struct kobj_attribute shmem_enabled_attr;
-> > > > >
-> > > > >  extern unsigned long transparent_hugepage_flags;
-> > > > >
-> > > > > +/*
-> > > > > + * The vma size has to be large enough to hold an aligned HPAGE_PMD_SIZE area.
-> > > > > + */
-> > > > > +static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
-> > > > > +{
-> > > > > +       if (round_up(vma->vm_start, HPAGE_PMD_SIZE) <
-> > > > > +           (vma->vm_end & HPAGE_PMD_MASK))
-> > > > > +               return true;
-> > > > > +
-> > > > > +       return false;
-> > > > > +}
-> > > >
-> > > > First time coming across round_up() - thanks for that - but for
-> > > > symmetry, maybe also use round_down() for the end? No strong opinion -
-> > > > just a suggestion given I've just discovered it.
-> > >
-> > > Yeah, round_down is fine too.
-> > >
-> > > >
-> > > > >  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
-> > > > >                 unsigned long addr)
-> > > > >  {
-> > > > > @@ -345,6 +357,11 @@ static inline bool transparent_hugepage_active(struct vm_area_struct *vma)
-> > > > >         return false;
-> > > > >  }
-> > > > >
-> > > > > +static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
-> > > > > +{
-> > > > > +       return false;
-> > > > > +}
-> > > > > +
-> > > > >  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
-> > > > >                 unsigned long addr)
-> > > > >  {
-> > > > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> > > > > index 48182c8fe151..36ada544e494 100644
-> > > > > --- a/mm/huge_memory.c
-> > > > > +++ b/mm/huge_memory.c
-> > > > > @@ -71,10 +71,7 @@ unsigned long huge_zero_pfn __read_mostly = ~0UL;
-> > > > >
-> > > > >  bool transparent_hugepage_active(struct vm_area_struct *vma)
-> > > > >  {
-> > > > > -       /* The addr is used to check if the vma size fits */
-> > > > > -       unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
-> > > > > -
-> > > > > -       if (!transhuge_vma_suitable(vma, addr))
-> > > > > +       if (!transhuge_vma_size_ok(vma))
-> > > > >                 return false;
-> > > > >         if (vma_is_anonymous(vma))
-> > > > >                 return __transparent_hugepage_enabled(vma);
-> > > >
-> > > > Do we need a check for vma->vm_pgoff alignment here, after
-> > > > !vma_is_anonymous(), and now that we don't call
-> > > > transhuge_vma_suitable()?
-> > >
-> > > Actually I was thinking about this too. But the THPeligible bit shown
-> > > by smaps is a little bit ambiguous for file vma. The document says:
-> > > "THPeligible" indicates whether the mapping is eligible for allocating
-> > > THP pages - 1 if true, 0 otherwise.
-> > >
-> > > Even though it doesn't fulfill the alignment, it is still possible to
-> > > get THP allocated, but just can't be PMD mapped. So the old behavior
-> > > of THPeligible for file vma seems problematic, or at least doesn't
-> > > match the document.
-> >
-> > I think the term "THP" is used ambiguously. Often, but not always, in
-> > the code, folks will go out of their way to specify "hugepage-sized"
-> > page vs "pmd-mapped hugepage" - but at least from my experience,
-> > external documentation doesn't. Given that THP as a concept doesn't
-> > make much sense without the possibility of pmd-mapping, I think
-> > "THPeligible here means "pmd mappable". For example, AnonHugePages in
-> > smaps means  pmd-mapped anon hugepages.
+> Hi Rob,
 >
-> Yeah, depends on the expectation.
+> On Fri, Jun 10, 2022 at 02:38:18PM -0600, Rob Herring wrote:
+> > 'arm,rtsm-display' is a panel for Arm, Ltd. virtual platforms (e.g. FVP).
+> > The binding has been in use for a long time, but was never documented.
+> >
+> > Some users and an example have a 'panel-dpi' compatible, but that's not
+> > needed without a 'panel-timing' node which none of the users have since
+> > commit 928faf5e3e8d ("arm64: dts: fvp: Remove panel timings"). The
+> > example does have a 'panel-timing' node, but it should not for the
+> > same reasons the node was removed in the dts files. So update the
+> > example in arm,pl11x.yaml to match the schema.
+> >
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Robin Murphy <robin.murphy@arm.com>
+> > Cc: Andre Przywara <andre.przywara@arm.com>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../bindings/display/arm,pl11x.yaml           | 15 +-------------
+> >  .../bindings/display/panel/panel-simple.yaml  | 20 +++++++++++++------
+> >  2 files changed, 15 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/arm,pl11x.yaml b/Documentation/devicetree/bindings/display/arm,pl11x.yaml
+> > index b545c6d20325..6cc9045e5c68 100644
+> > --- a/Documentation/devicetree/bindings/display/arm,pl11x.yaml
+> > +++ b/Documentation/devicetree/bindings/display/arm,pl11x.yaml
+> > @@ -159,25 +159,12 @@ examples:
+> >      };
+> >
+> >      panel {
+> > -        compatible = "arm,rtsm-display", "panel-dpi";
+> > -        power-supply = <&vcc_supply>;
+> > +        compatible = "arm,rtsm-display";
+> >
+> >          port {
+> >              clcd_panel: endpoint {
+> >                  remote-endpoint = <&clcd_pads>;
+> >              };
+> >          };
+> > -
+> > -        panel-timing {
+> > -            clock-frequency = <25175000>;
+> > -            hactive = <640>;
+> > -            hback-porch = <40>;
+> > -            hfront-porch = <24>;
+> > -            hsync-len = <96>;
+> > -            vactive = <480>;
+> > -            vback-porch = <32>;
+> > -            vfront-porch = <11>;
+> > -            vsync-len = <2>;
+> > -        };
+> >      };
+> >  ...
+> > diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+> > index 21ba90c9fe33..97afd276c54a 100644
+> > --- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+> > +++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+> > @@ -19,9 +19,6 @@ description: |
+> >
+> >    If the panel is more advanced a dedicated binding file is required.
+> >
+> > -allOf:
+> > -  - $ref: panel-common.yaml#
+> > -
+> >  properties:
+> >
+> >    compatible:
+> > @@ -35,6 +32,8 @@ properties:
+> >        - ampire,am-480272h3tmqw-t01h
+> >          # Ampire AM-800480R3TMQW-A1H 7.0" WVGA TFT LCD panel
+> >        - ampire,am800480r3tmqwa1h
+> > +        # Arm, Ltd. Virtual Platforms Display
+> > +      - arm,rtsm-display
+> >          # AU Optronics Corporation 10.1" WSVGA TFT LCD panel
+> >        - auo,b101aw03
+> >          # AU Optronics Corporation 10.1" WSVGA TFT LCD panel
+> > @@ -340,9 +339,18 @@ properties:
+> >
+> >  additionalProperties: false
+> >
+> > -required:
+> > -  - compatible
+> > -  - power-supply
+> > +allOf:
+> > +  - $ref: panel-common.yaml#
+> > +  - if:
+> > +      # Most 'simple' panels must have a single supply, but a virtual display does not
+> > +      not:
+> > +        properties:
+> > +          compatible:
+> > +            contains:
+> > +              const: arm,rtsm-display
+> > +    then:
+> > +      required:
+> > +        - power-supply
+>
+> Sorry, but I do not like this change. The beauty of panel-simple is that
+> this is a collection of simple display with identical bindings because
+> the HW is more or less the same (in general - not in details like size
+> etc).
+>
+> Any panels that requires more are pushed out to their own binding and
+> for arm,rtsm-display that would be better.
 
-The funny thing is I was the last one who touched the THPeligible. It
-seems the document needs to be updated too to make "pmd mappable" more
-explicitly.
+But I require less...
 
->
-> >
-> > That all said - the following patches will delete
-> > transparent_hugepage_active() anyways.
->
-> Yes, how I could forget this :-( The following removal of
-> transparent_hugepage_active() will restore the old behavior.
->
-> >
-> > > I should elaborate this in the commit log.
-> > >
-> > > >
-> > > > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > > > > index 84b9cf4b9be9..d0f8020164fc 100644
-> > > > > --- a/mm/khugepaged.c
-> > > > > +++ b/mm/khugepaged.c
-> > > > > @@ -454,6 +454,9 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
-> > > > >                                 vma->vm_pgoff, HPAGE_PMD_NR))
-> > > > >                 return false;
-> > > > >
-> > > > > +       if (!transhuge_vma_size_ok(vma))
-> > > > > +               return false;
-> > > > > +
-> > > > >         /* Enabled via shmem mount options or sysfs settings. */
-> > > > >         if (shmem_file(vma->vm_file))
-> > > > >                 return shmem_huge_enabled(vma);
-> > > > > @@ -512,9 +515,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
-> > > > >                           unsigned long vm_flags)
-> > > > >  {
-> > > > >         if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
-> > > > > -           khugepaged_enabled() &&
-> > > > > -           (((vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK) <
-> > > > > -            (vma->vm_end & HPAGE_PMD_MASK))) {
-> > > > > +           khugepaged_enabled()) {
-> > > > >                 if (hugepage_vma_check(vma, vm_flags))
-> > > > >                         __khugepaged_enter(vma->vm_mm);
-> > > > >         }
-> > > > > @@ -2142,10 +2143,9 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
-> > > > >                         progress++;
-> > > > >                         continue;
-> > > > >                 }
-> > > > > -               hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
-> > > > > +
-> > > > > +               hstart = round_up(vma->vm_start, HPAGE_PMD_SIZE);
-> > > > >                 hend = vma->vm_end & HPAGE_PMD_MASK;
-> > > > > -               if (hstart >= hend)
-> > > > > -                       goto skip;
-> > > > >                 if (khugepaged_scan.address > hend)
-> > > > >                         goto skip;
-> > > > >                 if (khugepaged_scan.address < hstart)
-> > > >
-> > > > Likewise, could do round_down() here (just a suggestion)
-> > >
-> > > Fine to me.
-> > >
-> > > >
-> > > > > --
-> > > > > 2.26.3
-> > > > >
-> > > > >
+> It is not this single exceptions that bothers me, it is the many
+> exceptions we will have in a few years from now.
+
+Fair enough, I'll make it a separate file.
+
+Rob

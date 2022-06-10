@@ -2,118 +2,1531 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA1E5458E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74425458EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 02:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238055AbiFJAB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 20:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S238537AbiFJADQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 20:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiFJAB4 (ORCPT
+        with ESMTP id S237712AbiFJADN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:01:56 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD25B2358E9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:01:53 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id f65so13078401pgc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Jun 2022 17:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1O6AEKHlVD9Bngjug6xvCzo7n1uYfU+pNTujv/UlryM=;
-        b=gKODhx7XfIhwVIKz1he6ZDxvO/tY2AjUieoIgQuHMoThC0FJ4vzfaklHySIZt6r5WJ
-         1R8GaaFWN7nRXrevu/NSq1d8aV7Nu5/Sq5SLQHFVXwnEKGZJ5+q1zAkFZtFVBmGUCXpX
-         N/Qwo7oTj9TeHGHffxgpURt4vfLx88GxXrRySh/Sl3XSD2BJnZbEbVYT/3f9not46+ZI
-         NeJ4VyzzDhjO9WJnnxSD2Oi+D9cmk9rIflkNVFrOj/9R5e/oxmPlmHcCQcgxtU3MyvMw
-         Ny75uHCxqiIETZYnXUhrZqG3DvDjUFLb+/+sXo+YrKfswDw/6fHuk6llXVutFVIDRKdU
-         FAKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1O6AEKHlVD9Bngjug6xvCzo7n1uYfU+pNTujv/UlryM=;
-        b=CEpD4F48tpR4EWibvVtR1Avu7YdcZJNCzcgb4vhOxuIFaB7FRKG3+fmEh4il3V7mbl
-         taP7IIEIPX5AK8Gl1JgVxT0r2tHaR7pixtBAPIobmgCg64Ch7iv29yHnqPxY5P31ooTB
-         C8P5bzhMnO+qxbX6zR6Ura5IoTL3Y9hdzHy8lBIqSKc8eRoNdb3gZxvpOsKCdDmR1n+y
-         lc0zHPKmgcg/L3rISbzK7bpav6sWsjoqHK3KbdClvgq99ageTxLd7hNNaJm3Oyvmk9eb
-         7fo/MFNo6JOQZlti4BBc5aiEdzPQAQCIXcdbEvffBPlxlXeUDiM0zWo59Yb7X7tgodg2
-         UYgQ==
-X-Gm-Message-State: AOAM533VFyemkSg8n/5yvZzXcKNgFOlXDR07fJdDGIi5SIbTymkn8K/0
-        vrqYXVn6OL0zVgpJtSKXa/s5D2PSgJ0OdJ3+zNc=
-X-Google-Smtp-Source: ABdhPJzSTcuzVCQRZSa7XT1K3nxjYb6HDH+tN6bJ4JerIlwdo7OsNzX3wTowpisIFYReXy6Awud5rJq+I+eFfEF/O34=
-X-Received: by 2002:a05:6a02:184:b0:3fc:3b43:e5da with SMTP id
- bj4-20020a056a02018400b003fc3b43e5damr36066679pgb.587.1654819312838; Thu, 09
- Jun 2022 17:01:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220606214414.736109-1-shy828301@gmail.com> <20220606214414.736109-4-shy828301@gmail.com>
- <CAAa6QmRTt2EXJTudBf7DK6yPTr2DRDUbGZiHDC8pAmKRwoB4_A@mail.gmail.com>
-In-Reply-To: <CAAa6QmRTt2EXJTudBf7DK6yPTr2DRDUbGZiHDC8pAmKRwoB4_A@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 9 Jun 2022 17:01:40 -0700
-Message-ID: <CAHbLzkqhH5oJmQ6YMvBoAW17t03nqwJsrxfzw4gXtP_mTtnWAg@mail.gmail.com>
-Subject: Re: [v3 PATCH 3/7] mm: khugepaged: remove the redundant anon vma check
-To:     "Zach O'Keefe" <zokeefe@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Jun 2022 20:03:13 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376092E93D7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 17:03:09 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220610000306epoutp02ddd1321e031224ffd640f3f4b20e343e~3GXbNMvuy1263212632epoutp02L
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:03:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220610000306epoutp02ddd1321e031224ffd640f3f4b20e343e~3GXbNMvuy1263212632epoutp02L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1654819386;
+        bh=81GX600gyUyg4hQ9F61jaDu5x13ypM7QU4U5YvBdPMI=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=DMqAHwAEqMZlpX4kcnt9c2ODxa1N3KlxCjSfH/3jzLC+BVQ/cqS4hmSL8mIZ4uq/o
+         fLNhPZdBqDMKIxL55QUC3Xj+WW4O7ZAjj0vN8Rnd1k3ZBmmSNlgz4jUeKyF6yLt7tJ
+         KtkgKrUjpT1MMo6OmylLpQhjnDp9UaPvyUAIVwY0=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220610000305epcas2p29cca6126d12c6aaf3212ac800bad3c11~3GXaWOjE80441104411epcas2p2U;
+        Fri, 10 Jun 2022 00:03:05 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4LK1Ph39Jsz4x9Q9; Fri, 10 Jun
+        2022 00:03:04 +0000 (GMT)
+X-AuditID: b6c32a47-589ff7000000272c-d9-62a28a38dc3f
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        38.57.10028.83A82A26; Fri, 10 Jun 2022 09:03:04 +0900 (KST)
+Mime-Version: 1.0
+Subject: Re: [PATCH v2 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
+Reply-To: wangseok.lee@samsung.com
+Sender: Wangseok Lee <wangseok.lee@samsung.com>
+From:   Wangseok Lee <wangseok.lee@samsung.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>,
+        Yeeun Kim <yeeun119.kim@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220603160314.GA76545@bhelgaas>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220610000303epcms2p537e12cb268999b4d4bdeb4c76e2eb3dd@epcms2p5>
+Date:   Fri, 10 Jun 2022 09:03:03 +0900
+X-CMS-MailID: 20220610000303epcms2p537e12cb268999b4d4bdeb4c76e2eb3dd
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBJsWRmVeSWpSXmKPExsWy7bCmqa5F16Ikg6Z+EYslTRkWLw9pWsw/
+        co7VYveM5UwWr86sZbOYOfUMs8XzQ7OYLT61qFpceNrDZvFy1j02i4ae36wWR958ZLbYf3wl
+        k8XlXXPYLM7OO85mMWHVNxaLN79fsFucW5xp0br3CLvFzjsnmC1+bf3D5CDqsWbeGkaP6+sC
+        PBZsKvXYtKqTzePJlelMHpuX1Hv0bVnF6HH8xnYmj8+b5AI4o7JtMlITU1KLFFLzkvNTMvPS
+        bZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4A+U1IoS8wpBQoFJBYXK+nb2RTll5ak
+        KmTkF5fYKqUWpOQUmBfoFSfmFpfmpevlpZZYGRoYGJkCFSZkZ8xqLCt4e52tYvbFKcwNjLcP
+        snUxcnJICJhIHJt7ibGLkYtDSGAHo8SbV1uBHA4OXgFBib87hEFqhAW8JFZ3zQGrFxJQktix
+        Zh4zRFxf4vqKblYQm01AV+Lf4pdsIK0iAmoSXe2hICOZBSayS8x5ep4ZYhevxIz2pywQtrTE
+        9uUgqzg5OAX0JNafboO6R0Pix7JeqHpRiZur37LD2O+PzWeEsEUkWu+dhaoRlHjwczdUXEpi
+        wZNDrBB2tcT+v7+ZIOwGRon++6kgt0kA3bzjujFImFfAV2Luonlga1kEVCU6LiyFWuUi8fDW
+        FrA4s4C2xLKFr5lBWpkFNCXW79KHmKIsceQWC8xTDRt/s6OzmQX4JDoO/4WL75j3BOoYNYl5
+        K3cyT2BUnoUI5llIds1C2LWAkXkVo1hqQXFuemqxUYExPGqT83M3MYKTuJb7DsYZbz/oHWJk
+        4mA8xCjBwawkwjv318IkId6UxMqq1KL8+KLSnNTiQ4ymQF9OZJYSTc4H5pG8knhDE0sDEzMz
+        Q3MjUwNzJXFer5QNiUIC6YklqdmpqQWpRTB9TBycUg1M+75nPJm/8Okvzl3i7lGnNTasCp1x
+        xauo88q9P7ccExdk3Ujp0bV5IpTBa3e98wRnVaukcoKc4uod9gzy5fWekSsFb/7f4v645qrY
+        vK9lpl/5v5/5vM9c++qmv2zyS0WUKiuPq14/wrBQJqghzCkzXI/nUhh/wT6PWLaLCoctIlv/
+        uwTe2BfcV33oaFPwkQ8ntN5Oreyz27BU2cji6Y6vaokv+vkbl95m0/deHXXn4+WtH3R6p/Wt
+        6yy5NoVRPWWqS0bZ2ZMFnuzPWn32uAcs59Tl70tSC0/YFq/wXX1X8bqlR3e/6bEVPFpeKbuj
+        WT/98core6cF7J3MKbVD3+euTWklf66l5UanJfyz4g4rsRRnJBpqMRcVJwIAf6cfQWsEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220603160329epcas2p1bdb17f3c29513d82b156bae743d8e00d
+References: <20220603160314.GA76545@bhelgaas>
+        <CGME20220603160329epcas2p1bdb17f3c29513d82b156bae743d8e00d@epcms2p5>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 4:24 PM Zach O'Keefe <zokeefe@google.com> wrote:
->
-> On Mon, Jun 6, 2022 at 2:44 PM Yang Shi <shy828301@gmail.com> wrote:
-> >
-> > The hugepage_vma_check() already checked it, so remove the redundant
-> > check.
-> >
-> > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > ---
-> >  mm/khugepaged.c | 3 ---
-> >  1 file changed, 3 deletions(-)
-> >
-> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > index d0f8020164fc..7a5d1c1a1833 100644
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -966,9 +966,6 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
-> >                 return SCAN_ADDRESS_RANGE;
-> >         if (!hugepage_vma_check(vma, vma->vm_flags))
-> >                 return SCAN_VMA_CHECK;
-> > -       /* Anon VMA expected */
-> > -       if (!vma->anon_vma || !vma_is_anonymous(vma))
-> > -               return SCAN_VMA_CHECK;
-> >         return 0;
-> >  }
-> >
-> > --
-> > 2.26.3
-> >
-> >
->
-> So, I don't know if this is possible, but I wonder if there is a race here:
->
-> hugepage_vma_revalidate() is called in the anon path when mmap_lock
-> after dropped + reacquired, and we want to refind / revalidate the
-> vma, since it might have changed.
->
-> There is the possibility that the memory was unmapped, then remapped
-> as file or shmem. If so, hugepage_vma_check() could return true
-> without actually checking vma->anon_vma || !vma_is_anonymous(vma) -
-> and we probably do want to (re)validate that this is indeed still an
-> anon vma.
-
-Nice catch! Totally possible. I did overlook this. I will drop this
-patch in the next version or maybe making the comment clearer is a
-better choice.
+On=C2=A006/04/2022=C2=A001:03,=C2=A0Bjorn=C2=A0Helgaas=C2=A0wrote:=0D=0A>=
+=C2=A0In=C2=A0the=C2=A0subject,=C2=A0why=C2=A0do=C2=A0you=C2=A0tag=C2=A0thi=
+s=C2=A0=22axis=22?=C2=A0=C2=A0There's=C2=A0an=C2=A0existing=0D=0A>=C2=A0pci=
+e-artpec6.c=C2=A0that=C2=A0uses=C2=A0the=C2=A0driver=C2=A0name=C2=A0=22=22a=
+rtpec6-pcie=22=C2=A0and=C2=A0the=0D=0A>=C2=A0subject=C2=A0line=C2=A0tag=C2=
+=A0=22artpec6=22.=0D=0A>=C2=A0=0D=0A>=C2=A0This=C2=A0adds=C2=A0pcie-artpec8=
+.c=C2=A0with=C2=A0driver=C2=A0name=C2=A0=22artpec8-pcie=22,=C2=A0so=C2=A0th=
+e=0D=0A>=C2=A0obvious=C2=A0choice=C2=A0would=C2=A0be=C2=A0=22artpec8=22.=0D=
+=0A>=C2=A0=0D=0A>=C2=A0I=C2=A0assume=C2=A0you=C2=A0evaluated=C2=A0the=C2=A0=
+possibility=C2=A0of=C2=A0extending=C2=A0artpec6=C2=A0to=C2=A0support=0D=0A>=
+=C2=A0artpec8=C2=A0in=C2=A0addition=C2=A0to=C2=A0the=C2=A0artpec6=C2=A0and=
+=C2=A0artpec7=C2=A0it=C2=A0already=C2=A0supports?=0D=0A>=C2=A0=0D=0A=C2=A0=
+=0D=0A=22pcie-artpec6.=C2=A0c=22=C2=A0supports=C2=A0artpec6=C2=A0and=C2=A0a=
+rtpec7=C2=A0H/W.=0D=0Aartpec8=C2=A0can=C2=A0not=C2=A0be=C2=A0expanded=C2=A0=
+because=C2=A0H/W=C2=A0configuration=C2=A0is=0D=0Acompletely=C2=A0different=
+=C2=A0from=C2=A0artpec6/7.=0D=0Aphy=C2=A0and=C2=A0sub=C2=A0controller=C2=A0=
+are=C2=A0different.=0D=0A=C2=A0=0D=0A>=C2=A0On=C2=A0Fri,=C2=A0Jun=C2=A003,=
+=C2=A02022=C2=A0at=C2=A011:34:52AM=C2=A0+0900,=C2=A0Wangseok=C2=A0Lee=C2=A0=
+wrote:=0D=0A>>=C2=A0Add=C2=A0support=C2=A0Axis,=C2=A0ARTPEC-8=C2=A0SoC.=0D=
+=0A>>=C2=A0ARTPEC-8=C2=A0is=C2=A0the=C2=A0SoC=C2=A0platform=C2=A0of=C2=A0Ax=
+is=C2=A0Communications.=0D=0A>>=C2=A0This=C2=A0is=C2=A0based=C2=A0on=C2=A0a=
+rm64=C2=A0and=C2=A0support=C2=A0GEN4=C2=A0&=C2=A02lane.=0D=0A>>=C2=A0This=
+=C2=A0PCIe=C2=A0controller=C2=A0is=C2=A0based=C2=A0on=C2=A0DesignWare=C2=A0=
+Hardware=C2=A0core=0D=0A>>=C2=A0and=C2=A0uses=C2=A0DesignWare=C2=A0core=C2=
+=A0functions=C2=A0to=C2=A0implement=C2=A0the=C2=A0driver.=0D=0A>=0D=0A>=C2=
+=A0Add=C2=A0blank=C2=A0lines=C2=A0between=C2=A0paragraphs.=0D=0A>=0D=0A>=C2=
+=A0Wrap=C2=A0lines=C2=A0to=C2=A0fill=C2=A075=C2=A0columns.=0D=0A>=0D=0A=C2=
+=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0changes=C2=
+=A0since=C2=A0v1=C2=A0:=0D=0A>>=C2=A0improvement=C2=A0review=C2=A0comment=
+=C2=A0of=C2=A0Krzysztof=C2=A0on=C2=A0driver=C2=A0code.=0D=0A>>=C2=A0-debug=
+=C2=A0messages=C2=A0for=C2=A0probe=C2=A0or=C2=A0other=C2=A0functions.=0D=0A=
+>>=C2=A0-Inconsistent=C2=A0coding=C2=A0style=C2=A0(different=C2=A0indentati=
+on=C2=A0in=C2=A0structure=C2=A0members).=0D=0A>>=C2=A0-Inconsistent=C2=A0co=
+de=C2=A0(artpec8_pcie_get_subsystem_resources()=C2=A0gets=C2=A0device=0D=0A=
+>>=C2=A0=C2=A0=C2=A0from=C2=A0pdev=C2=A0and=C2=A0from=C2=A0pci=C2=A0so=C2=
+=A0you=C2=A0have=C2=A0two=C2=A0same=C2=A0pointers;=0D=0A>>=C2=A0=C2=A0=C2=
+=A0or=C2=A0artpec8_pcie_get_ep_mem_resources()=C2=A0stores=C2=A0dev=C2=A0=
+=0D=0A>>=C2=A0=C2=A0=C2=A0as=C2=A0local=C2=A0variable=C2=A0but=C2=A0uses=C2=
+=A0instead=C2=A0pdev->dev).=0D=0A>>=C2=A0-Not=C2=A0using=C2=A0devm_platform=
+_ioremap_resource().=0D=0A>>=C2=A0-Printing=C2=A0messages=C2=A0in=C2=A0inte=
+rrupt=C2=A0handlers.=0D=0A>>=C2=A0-Several=C2=A0local/static=C2=A0structure=
+s=C2=A0or=C2=A0array=C2=A0are=C2=A0not=C2=A0const.=0D=0A>=C2=A0=0D=0A>=C2=
+=A0Thanks=C2=A0for=C2=A0the=C2=A0=22changes=C2=A0since=C2=A0v1=22=C2=A0note=
+s.=C2=A0=C2=A0You=C2=A0can=C2=A0put=C2=A0them=C2=A0below=C2=A0the=0D=0A>=C2=
+=A0=22---=22=C2=A0since=C2=A0there's=C2=A0no=C2=A0need=C2=A0for=C2=A0them=
+=C2=A0in=C2=A0the=C2=A0permanent=C2=A0git=C2=A0commit=C2=A0log:=0D=0A>=C2=
+=A0https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+Documentation/process/submitting-patches.rst?id=3Dv5.18=23n675=0D=0A=C2=A0=
+=0D=0Ai=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0Signed-off-by:=
+=C2=A0Wangseok=C2=A0Lee=C2=A0<wangseok.lee=40samsung.com>=0D=0A>=C2=A0=0D=
+=0A>=C2=A0Why=C2=A0is=C2=A0there=C2=A0no=C2=A0signoff=C2=A0from=C2=A0Jaeho=
+=C2=A0Cho=C2=A0<jaeho79.cho=40samsung.com>?=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=
+=C2=A0will=C2=A0add=C2=A0signoff=C2=A0from=C2=A0Jaeho=C2=A0cho.=0D=0A=C2=A0=
+=0D=0A>>=C2=A0---=0D=0A>>=C2=A0=C2=A0drivers/pci/controller/dwc/Kconfig=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7C=C2=A0=C2=A031=C2=A0++=0D=
+=0A>>=C2=A0=C2=A0drivers/pci/controller/dwc/Makefile=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=7C=C2=A0=C2=A0=C2=A01=C2=A0+=0D=0A>>=C2=A0=C2=A0drive=
+rs/pci/controller/dwc/pcie-artpec8.c=C2=A0=7C=C2=A0864=C2=A0+++++++++++++++=
++++++++++++++++=0D=0A>>=C2=A0=C2=A03=C2=A0files=C2=A0changed,=C2=A0896=C2=
+=A0insertions(+)=0D=0A>>=C2=A0=C2=A0create=C2=A0mode=C2=A0100644=C2=A0drive=
+rs/pci/controller/dwc/pcie-artpec8.c=0D=0A>>=C2=A0=0D=0A>>=C2=A0diff=C2=A0-=
+-git=C2=A0a/drivers/pci/controller/dwc/Kconfig=C2=A0b/drivers/pci/controlle=
+r/dwc/Kconfig=0D=0A>>=C2=A0index=C2=A062ce3ab..4aa6da8=C2=A0100644=0D=0A>>=
+=C2=A0---=C2=A0a/drivers/pci/controller/dwc/Kconfig=0D=0A>>=C2=A0+++=C2=A0b=
+/drivers/pci/controller/dwc/Kconfig=0D=0A>>=C2=A0=40=40=C2=A0-222,6=C2=A0+2=
+22,37=C2=A0=40=40=C2=A0config=C2=A0PCIE_ARTPEC6_EP=0D=0A>>=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Enables=C2=A0suppo=
+rt=C2=A0for=C2=A0the=C2=A0PCIe=C2=A0controller=C2=A0in=C2=A0the=C2=A0ARTPEC=
+-6=C2=A0SoC=C2=A0to=C2=A0work=C2=A0in=0D=0A>>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0endpoint=C2=A0mode.=C2=A0This=C2=
+=A0uses=C2=A0the=C2=A0DesignWare=C2=A0core.=0D=0A>>=C2=A0=C2=A0=0D=0A>>=C2=
+=A0+config=C2=A0PCIE_ARTPEC8=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0bool=C2=A0=22Axis=C2=A0ARTPEC-8=C2=A0PCIe=C2=A0controller=
+=22=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+config=C2=A0PCIE_ARTPEC8_HOST=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool=C2=A0=22Axis=C2=A0=
+ARTPEC-8=C2=A0PCIe=C2=A0controller=C2=A0Host=C2=A0Mode=22=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends=C2=A0on=C2=A0ARCH_ARTP=
+EC=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends=C2=
+=A0on=C2=A0PCI_MSI_IRQ_DOMAIN=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0depends=C2=A0on=C2=A0PCI_ENDPOINT=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select=C2=A0PCI_EPF_TEST=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select=C2=A0PCIE_DW_HOS=
+T=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select=C2=
+=A0PCIE_ARTPEC8=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0help=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0Say=C2=A0'Y'=C2=A0here=C2=A0to=C2=A0enable=C2=A0support=C2=A0for=
+=C2=A0the=C2=A0PCIe=C2=A0controller=C2=A0in=C2=A0the=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ARTPEC-8=C2=A0SoC=C2=
+=A0to=C2=A0work=C2=A0in=C2=A0host=C2=A0mode.=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0This=C2=A0PCIe=C2=A0controller=
+=C2=A0is=C2=A0based=C2=A0on=C2=A0DesignWare=C2=A0Hardware=C2=A0core.=0D=0A>=
+>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0And=C2=
+=A0uses=C2=A0DesignWare=C2=A0core=C2=A0functions=C2=A0to=C2=A0implement=C2=
+=A0the=C2=A0driver.=0D=0A>=C2=A0=0D=0A>=C2=A0Add=C2=A0blank=C2=A0line=C2=A0=
+between=C2=A0paragraphs=C2=A0or=C2=A0rewrap=C2=A0as=C2=A0a=C2=A0single=C2=
+=A0paragraph.=0D=0A>=C2=A0=0D=0A>=C2=A0s/Hardware/hardware/=0D=0A>=C2=A0=0D=
+=0A>=C2=A0The=C2=A0last=C2=A0two=C2=A0sentences=C2=A0should=C2=A0be=C2=A0co=
+mbined=C2=A0since=C2=A0the=C2=A0latter=C2=A0has=C2=A0no=0D=0A>=C2=A0verb:=
+=0D=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=C2=A0This=C2=A0PCIe=C2=A0controller=C2=A0i=
+s=C2=A0based=C2=A0on=C2=A0the=C2=A0DesignWare=C2=A0hardware=C2=A0core=C2=A0=
+and=0D=0A>=C2=A0=C2=A0=C2=A0uses=C2=A0DesignWare=C2=A0core=C2=A0functions=
+=C2=A0to=C2=A0implement=C2=A0the=C2=A0driver.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=
+=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0+config=C2=A0PCIE=
+_ARTPEC8_EP=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0b=
+ool=C2=A0=22Axis=C2=A0ARTPEC-8=C2=A0PCIe=C2=A0controller=C2=A0Endpoint=C2=
+=A0Mode=22=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0de=
+pends=C2=A0on=C2=A0ARCH_ARTPEC=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0depends=C2=A0on=C2=A0PCI_ENDPOINT=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends=C2=A0on=C2=A0PCI_ENDPOINT_CO=
+NFIGFS=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select=
+=C2=A0PCI_EPF_TEST=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0select=C2=A0PCIE_DW_EP=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0select=C2=A0PCIE_ARTPEC8=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Say=C2=A0'Y'=C2=A0here=C2=A0to=C2=A0ena=
+ble=C2=A0support=C2=A0for=C2=A0the=C2=A0PCIe=C2=A0controller=C2=A0in=C2=A0t=
+he=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0ARTPEC-8=C2=A0SoC=C2=A0to=C2=A0work=C2=A0in=C2=A0endpoint=C2=A0mode.=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Thi=
+s=C2=A0PCIe=C2=A0controller=C2=A0is=C2=A0based=C2=A0on=C2=A0DesignWare=C2=
+=A0Hardware=C2=A0core.=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0And=C2=A0uses=C2=A0DesignWare=C2=A0core=C2=A0functi=
+ons=C2=A0to=C2=A0implement=C2=A0the=C2=A0driver.=0D=0A>=C2=A0=0D=0A>=C2=A0S=
+ame.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=
+=A0=0D=0A>>=C2=A0=C2=A0config=C2=A0PCIE_ROCKCHIP_DW_HOST=0D=0A>>=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool=C2=A0=22Rockchip=C2=
+=A0DesignWare=C2=A0PCIe=C2=A0controller=22=0D=0A>>=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select=C2=A0PCIE_DW=0D=0A>>=C2=A0diff=
+=C2=A0--git=C2=A0a/drivers/pci/controller/dwc/Makefile=C2=A0b/drivers/pci/c=
+ontroller/dwc/Makefile=0D=0A>>=C2=A0index=C2=A08ba7b67..b361022=C2=A0100644=
+=0D=0A>>=C2=A0---=C2=A0a/drivers/pci/controller/dwc/Makefile=0D=0A>>=C2=A0+=
+++=C2=A0b/drivers/pci/controller/dwc/Makefile=0D=0A>>=C2=A0=40=40=C2=A0-25,=
+6=C2=A0+25,7=C2=A0=40=40=C2=A0obj-=24(CONFIG_PCIE_TEGRA194)=C2=A0+=3D=C2=A0=
+pcie-tegra194.o=0D=0A>>=C2=A0=C2=A0obj-=24(CONFIG_PCIE_UNIPHIER)=C2=A0+=3D=
+=C2=A0pcie-uniphier.o=0D=0A>>=C2=A0=C2=A0obj-=24(CONFIG_PCIE_UNIPHIER_EP)=
+=C2=A0+=3D=C2=A0pcie-uniphier-ep.o=0D=0A>>=C2=A0=C2=A0obj-=24(CONFIG_PCIE_V=
+ISCONTI_HOST)=C2=A0+=3D=C2=A0pcie-visconti.o=0D=0A>>=C2=A0+obj-=24(CONFIG_P=
+CIE_ARTPEC8)=C2=A0+=3D=C2=A0pcie-artpec8.o=0D=0A>>=C2=A0=C2=A0=0D=0A>>=C2=
+=A0=C2=A0=23=C2=A0The=C2=A0following=C2=A0drivers=C2=A0are=C2=A0for=C2=A0de=
+vices=C2=A0that=C2=A0use=C2=A0the=C2=A0generic=C2=A0ACPI=0D=0A>>=C2=A0=C2=
+=A0=23=C2=A0pci_root.c=C2=A0driver=C2=A0but=C2=A0don't=C2=A0support=C2=A0st=
+andard=C2=A0ECAM=C2=A0config=C2=A0access.=0D=0A>>=C2=A0diff=C2=A0--git=C2=
+=A0a/drivers/pci/controller/dwc/pcie-artpec8.c=C2=A0b/drivers/pci/controlle=
+r/dwc/pcie-artpec8.c=0D=0A>>=C2=A0new=C2=A0file=C2=A0mode=C2=A0100644=0D=0A=
+>>=C2=A0index=C2=A00000000..d9ae9bf=0D=0A>>=C2=A0---=C2=A0/dev/null=0D=0A>>=
+=C2=A0+++=C2=A0b/drivers/pci/controller/dwc/pcie-artpec8.c=0D=0A>>=C2=A0=40=
+=40=C2=A0-0,0=C2=A0+1,864=C2=A0=40=40=0D=0A>>=C2=A0+//=C2=A0SPDX-License-Id=
+entifier:=C2=A0GPL-2.0-only=0D=0A>>=C2=A0+/*=0D=0A>>=C2=A0+=C2=A0*=C2=A0PCI=
+e=C2=A0controller=C2=A0driver=C2=A0for=C2=A0Axis=C2=A0ARTPEC-8=C2=A0SoC=0D=
+=0A>>=C2=A0+=C2=A0*=0D=0A>>=C2=A0+=C2=A0*=C2=A0Copyright=C2=A0(C)=C2=A02019=
+=C2=A0Samsung=C2=A0Electronics=C2=A0Co.,=C2=A0Ltd.=0D=0A>>=C2=A0+=C2=A0*=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0http://www.samsung.com=0D=0A>>=C2=A0+=C2=A0*=0D=0A>>=C2=
+=A0+=C2=A0*=C2=A0Author:=C2=A0Jaeho=C2=A0Cho=C2=A0<jaeho79.cho=40samsung.co=
+m>=0D=0A>>=C2=A0+=C2=A0*=C2=A0This=C2=A0file=C2=A0is=C2=A0based=C2=A0on=C2=
+=A0driver/pci/controller/dwc/pci-exynos.c=0D=0A>>=C2=A0+=C2=A0*/=0D=0A>>=C2=
+=A0+=0D=0A>>=C2=A0+=23include=C2=A0<linux/clk.h>=0D=0A>>=C2=A0+=23include=
+=C2=A0<linux/module.h>=0D=0A>>=C2=A0+=23include=C2=A0<linux/mfd/syscon.h>=
+=0D=0A>>=C2=A0+=23include=C2=A0<linux/of_device.h>=0D=0A>>=C2=A0+=23include=
+=C2=A0<linux/regmap.h>=0D=0A>>=C2=A0+=23include=C2=A0<linux/resource.h>=0D=
+=0A>>=C2=A0+=23include=C2=A0<linux/types.h>=0D=0A>>=C2=A0+=23include=C2=A0<=
+linux/phy/phy.h>=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=23include=C2=A0=22pcie-desig=
+nware.h=22=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=23define=C2=A0to_artpec8_pcie(x)=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_get_drvdata((x)->dev)=
+=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+/*=C2=A0Gen3=C2=A0Control=C2=A0Register=C2=A0=
+*/=0D=0A>>=C2=A0+=23define=C2=A0PCIE_GEN3_RELATED_OFF=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+0x890=0D=0A>>=C2=A0+/*=C2=A0Disables=C2=A0equilzation=C2=A0feature=C2=A0*/=
+=0D=0A>=C2=A0=0D=0A>=C2=A0s/equilzation/equalization/=0D=0A>=C2=A0=0D=0A>=
+=C2=A0Comment=C2=A0is=C2=A0probably=C2=A0unnecessary,=C2=A0since=C2=A0the=
+=C2=A0name=C2=A0is=C2=A0so=C2=A0descriptive.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0A=
+I=C2=A0will=C2=A0remove=C2=A0this=C2=A0comment.=0D=0A=C2=A0=0D=0A>>=C2=A0+=
+=23define=C2=A0PCIE_GEN3_EQUALIZATION_DISABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0(0x1=C2=A0<<=C2=A016)=0D=0A>>=C2=A0+=23define=C2=A0PCIE_G=
+EN3_EQ_PHASE_2_3=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(0x1=C2=A0<<=C2=A09)=0D=0A>>=C2=A0+=
+=23define=C2=A0PCIE_GEN3_RXEQ_PH01_EN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(0x1=C2=A0<<=C2=
+=A012)=0D=0A>>=C2=A0+=23define=C2=A0PCIE_GEN3_RXEQ_RGRDLESS_RXTS=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(0x1=C2=A0<<=C2=A013)=0D=0A>>=C2=A0+=
+=0D=0A>>=C2=A0+=23define=C2=A0FAST_LINK_MODE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(7)=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+/*=
+=C2=A0PCIe=C2=A0ELBI=C2=A0registers=C2=A0*/=0D=0A>>=C2=A0+=23define=C2=A0PC=
+IE_IRQ0_STS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A00x000=0D=0A>>=C2=A0+=23define=C2=A0PCIE_IRQ1_STS=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x004=0D=0A>>=C2=A0+=23defi=
+ne=C2=A0PCIE_IRQ2_STS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A00x008=0D=0A>>=C2=A0+=23define=C2=A0PCIE_IRQ5_STS=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x00C=0D=0A>>=C2=
+=A0+=23define=C2=A0PCIE_IRQ0_EN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A00x010=0D=0A>>=C2=A0+=23define=C2=A0PCIE_IRQ1_EN=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x014=
+=0D=0A>>=C2=A0+=23define=C2=A0PCIE_IRQ2_EN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x018=0D=0A>>=C2=A0+=23define=C2=A0PCIE=
+_IRQ5_EN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A00x01C=0D=0A>>=C2=A0+=23define=C2=A0IRQ_MSI_ENABLE=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(20)=0D=0A>>=C2=A0+=23de=
+fine=C2=A0PCIE_APP_LTSSM_ENABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x054=0D=0A>>=C2=A0+=
+=23define=C2=A0PCIE_ELBI_LTSSM_ENABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x1=0D=0A>>=C2=
+=A0+=23define=C2=A0PCIE_ELBI_CXPL_DEBUG_00_31=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A00x2C8=0D=0A>>=C2=A0+=23define=C2=A0PCIE_ELBI_CXPL_DEBUG_3=
+2_63=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x2CC=0D=0A>>=C2=A0+=23=
+define=C2=A0PCIE_ELBI_SMLH_LINK_UP=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(4)=0D=0A>>=C2=
+=A0+=23define=C2=A0PCIE_ARTPEC8_DEVICE_TYPE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A00x080=0D=0A>>=C2=A0+=23define=C2=A0DEVICE_TYPE_EP=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x0=0D=0A>>=
+=C2=A0+=23define=C2=A0DEVICE_TYPE_LEG_EP=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x1=0D=0A>>=
+=C2=A0+=23define=C2=A0DEVICE_TYPE_RC=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x4=0D=0A>>=C2=A0+=23define=C2=A0PCIE_ELBI_SL=
+V_AWMISC=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x828=0D=0A>>=C2=A0+=23define=C2=A0PCIE_ELBI_=
+SLV_ARMISC=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x820=0D=0A>>=C2=A0+=23define=C2=A0PCIE_EL=
+BI_SLV_DBI_ENABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(21)=0D=
+=0A>>=C2=A0+=23define=C2=A0LTSSM_STATE_MASK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x3f=0D=
+=0A>=C2=A0=0D=0A>=C2=A0The=C2=A0previous=C2=A0hex=C2=A0constants=C2=A0used=
+=C2=A0upper-case;=C2=A0this=C2=A0uses=C2=A0lower-case.=0D=0A>=C2=A0Pick=C2=
+=A0one=C2=A0and=C2=A0stick=C2=A0with=C2=A0it.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=
+=0AI=C2=A0will=C2=A0modify=C2=A0the=C2=A0with=C2=A0upper-case.=0D=0A=C2=A0=
+=0D=0A>=C2=A0This=C2=A0seems=C2=A0like=C2=A0a=C2=A0mix=C2=A0of=C2=A0registe=
+r=C2=A0offsets=C2=A0and=C2=A0definitions=C2=A0of=C2=A0bits=0D=0A>=C2=A0with=
+in=C2=A0registers.=C2=A0=C2=A0It's=C2=A0confusing=C2=A0to=C2=A0mentally=C2=
+=A0sort=C2=A0these=C2=A0out.=C2=A0=C2=A0Is=0D=0A>=C2=A0there=C2=A0any=C2=A0=
+way=C2=A0to=C2=A0make=C2=A0this=C2=A0more=C2=A0obvious?=C2=A0=C2=A0Some=C2=
+=A0drivers,=C2=A0e.g.,=0D=0A>=C2=A0pcie-artpec6.c,=C2=A0use=C2=A0=22BIT(x)=
+=22=C2=A0and=C2=A0=22GENMASK(x,y)=22=C2=A0for=C2=A0bits=C2=A0within=0D=0A>=
+=C2=A0registers.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0clearly=C2=
+=A0devide=C2=A0offset,=C2=A0definitions=C2=A0of=C2=A0bits=C2=A0and=C2=A0red=
+efined.=0D=0A=C2=A0=0D=0A>>=C2=A0+=23define=C2=A0LTSSM_STATE_L0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x11=0D=0A>>=C2=A0=
++=0D=0A>>=C2=A0+/*=C2=A0FSYS=C2=A0SYSREG=C2=A0Offsets=C2=A0*/=0D=0A>=C2=A0=
+=0D=0A>=C2=A0The=C2=A0list=C2=A0below=C2=A0seems=C2=A0to=C2=A0inclue=C2=A0m=
+ore=C2=A0than=C2=A0just=C2=A0register=C2=A0offsets.=0D=0A>=C2=A0=0D=0A=C2=
+=A0=0D=0AIs=C2=A0it=C2=A0clear=C2=A0to=C2=A0change=C2=A0to=C2=A0=22FSYS=C2=
+=A0blue=C2=A0logic=C2=A0system=C2=A0registers=22=C2=A0=0D=0Alike=C2=A0Jaspe=
+r=C2=A0Nilsson=60s=C2=A0comment?=0D=0Ahttps://lore.kernel.org/all/202206070=
+70332.GY18902=40axis.com/=0D=0AMy=C2=A0opinion=C2=A0is=C2=A0the=C2=A0same.=
+=0D=0A=C2=A0=0D=0A>>=C2=A0+=23define=C2=A0FSYS_PCIE_CON=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x424=0D=0A>>=C2=A0+=23d=
+efine=C2=A0PCIE_PERSTN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0BIT(5)=0D=0A>>=C2=A0+=23define=C2=A0FSYS_PCIE_DBI_ADDR_CO=
+N=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A00x428=0D=0A>>=C2=A0+=23define=C2=A0FSYS_PCIE_DBI_AD=
+DR_OVR_CDM=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x00=0D=0A>>=C2=
+=A0+=23define=C2=A0FSYS_PCIE_DBI_ADDR_OVR_SHADOW=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A00x12=0D=0A>>=C2=A0+=23define=C2=A0FSYS_PCIE_DBI_ADDR_O=
+VR_ATU=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x36=0D=0A>>=C2=A0+=
+=0D=0A>>=C2=A0+/*=C2=A0PMU=C2=A0SYSCON=C2=A0Offsets=C2=A0*/=0D=0A>>=C2=A0+=
+=23define=C2=A0PMU_SYSCON_PCIE_ISOLATION=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A00x3200=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+/*=C2=A0BUS=C2=A0P/S=C2=
+=A0SYSCON=C2=A0Offsets=C2=A0*/=0D=0A>>=C2=A0+=23define=C2=A0BUS_SYSCON_BUS_=
+PATH_ENABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x0=0D=0A>>=C2=
+=A0+=0D=0A>>=C2=A0+int=C2=A0artpec8_pcie_dbi_addr_con=5B=5D=C2=A0=3D=C2=A0=
+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0FSYS_PCIE=
+_DBI_ADDR_CON=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+struct=C2=A0a=
+rtpec8_pcie=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0struct=C2=A0dw_pcie=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0*pci;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0struct=C2=A0clk=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0*pipe_clk;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0clk=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*dbi_clk;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0clk=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*mstr_clk;=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0clk=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*slv_clk;=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const=C2=A0struct=C2=A0artp=
+ec8_pcie_pdata=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*pdata;=0D=0A=
+>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void=C2=A0__iomem=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*elbi_=
+base;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=
+=C2=A0regmap=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0*sysreg;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0struct=C2=A0regmap=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0*pmu_syscon;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0struct=C2=A0regmap=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0*bus_s_syscon;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0regmap=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*bus_p_syscon;=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum=C2=A0dw_pcie_device_mode=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mode;=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0link_id;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0/*=C2=A0For=C2=A0Generic=C2=A0PHY=C2=A0Framework=C2=A0*/=0D=0A>=C2=
+=A0=0D=0A>=C2=A0Superfluous=C2=A0comment.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=
+=C2=A0will=C2=A0remove=C2=A0this=C2=A0comment.=0D=0A=C2=A0=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0phy=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*phy;=0D=0A>>=C2=
+=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+struct=C2=A0artpec8_pcie_res_ops=C2=
+=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=
+=A0(*get_mem_resources)(struct=C2=A0platform_device=C2=A0*pdev,=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_p=
+cie=C2=A0*artpec8_ctrl);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0int=C2=A0(*get_clk_resources)(struct=C2=A0platform_device=C2=A0=
+*pdev,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=
+=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0(*init_clk_resources)(struct=C2=A0artpe=
+c8_pcie=C2=A0*artpec8_ctrl);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0void=C2=A0(*deinit_clk_resources)(struct=C2=A0artpec8_pci=
+e=C2=A0*artpec8_ctrl);=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+stru=
+ct=C2=A0artpec8_pcie_pdata=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0const=C2=A0struct=C2=A0dw_pcie_ops=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0*dwc_ops;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0const=C2=A0struct=C2=A0dw_pcie_host_ops=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*host_ops;=0D=0A>=C2=A0=0D=0A>=C2=A0Fix=
+=C2=A0indentation=C2=A0to=C2=A0match=C2=A0surrounding=C2=A0code.=0D=0A>=C2=
+=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const=C2=A0struct=C2=A0=
+artpec8_pcie_res_ops=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*res_op=
+s;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum=C2=A0=
+dw_pcie_device_mode=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mode;=0D=0A>>=C2=A0+=7D;=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+enum=C2=A0artpec8_pcie_isolation=C2=A0=7B=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_CLEAR_ISOLATION=C2=
+=A0=3D=C2=A00,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0PCIE_SET_ISOLATION=C2=A0=3D=C2=A01=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+enum=C2=A0artpec8_pcie_reg_bit=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_REG_BIT_LOW=C2=A0=3D=C2=A00,=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_REG_BIT_HI=
+GH=C2=A0=3D=C2=A01=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=
+=C2=A0void=C2=A0artpec8_pcie_write_dbi(struct=C2=A0dw_pcie=C2=A0*pci,=C2=A0=
+void=C2=A0__iomem=C2=A0*base,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0u32=C2=A0reg,=C2=A0size_t=C2=A0size,=C2=A0u32=C2=A0val);=0D=0A>=
+>=C2=A0+static=C2=A0u32=C2=A0artpec8_pcie_read_dbi(struct=C2=A0dw_pcie=C2=
+=A0*pci,=C2=A0void=C2=A0__iomem=C2=A0*base,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0reg,=C2=A0size_t=C2=A0size);=0D=0A>>=C2=
+=A0+static=C2=A0void=C2=A0artpec8_pcie_writel(void=C2=A0__iomem=C2=A0*base,=
+=C2=A0u32=C2=A0val,=C2=A0u32=C2=A0reg);=0D=0A>=C2=A0=0D=0A>=C2=A0Can=C2=A0y=
+ou=C2=A0reorder=C2=A0the=C2=A0function=C2=A0definitions=C2=A0to=C2=A0avoid=
+=C2=A0the=C2=A0need=C2=A0for=C2=A0these=0D=0A>=C2=A0forward=C2=A0declaratio=
+ns?=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0reorder=C2=A0these=C2=A0=
+function=C2=A0to=C2=A0avoid=C2=A0the=C2=A0need=C2=A0for=C2=A0forward=C2=A0d=
+eclarations.=0D=0A=C2=A0=0D=0A>>=C2=A0+static=C2=A0int=C2=A0artpec8_pcie_ge=
+t_subsystem_resources(struct=C2=A0platform_device=C2=A0*pdev,=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl)=0D=0A>>=C2=
+=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struc=
+t=C2=A0device=C2=A0*dev=C2=A0=3D=C2=A0&pdev->dev;=0D=0A>>=C2=A0+=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*=C2=A0External=C2=A0L=
+ocal=C2=A0Bus=C2=A0interface(ELBI)=C2=A0Register=C2=A0*/=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->elbi_base=C2=A0=
+=3D=C2=A0devm_platform_ioremap_resource_byname(pdev,=C2=A0=22elbi=22);=0D=
+=0A>=C2=A0=0D=0A>=C2=A0Rewrap=C2=A0to=C2=A0fit=C2=A0in=C2=A080=C2=A0columns=
+.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_=
+ERR(artpec8_ctrl->elbi_base))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+dev_err(dev,=C2=A0=22failed=C2=A0to=C2=A0map=C2=A0elbi_base=5Cn=22);=0D=0A>=
+>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PTR_ERR(artpec8_ctrl->elbi_base);=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*=C2=
+=A0fsys=C2=A0sysreg=C2=A0regmap=C2=A0handle=C2=A0*/=0D=0A>=C2=A0=0D=0A>=C2=
+=A0All=C2=A0these=C2=A0comments=C2=A0are=C2=A0superfluous=C2=A0since=C2=A0t=
+hey=C2=A0only=C2=A0repeat=C2=A0the=C2=A0lookup=0D=0A>=C2=A0arguments.=0D=0A=
+>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0remove=C2=A0these=C2=A0comment.=
+=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+artpec8_ctrl->sysreg=C2=A0=3D=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0syscon_re=
+gmap_lookup_by_phandle(dev->of_node,=0D=0A>=C2=A0=0D=0A>=C2=A0The=C2=A0abov=
+e=C2=A0two=C2=A0lines=C2=A0should=C2=A0fit=C2=A0on=C2=A0one=C2=A0line.=0D=
+=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fit=C2=A0on=C2=A0one=C2=A0line=
+.=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=22samsung,fsys-sysreg=22);=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_ERR(artpec8_ctrl->sysreg=
+))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_err(dev,=C2=A0=22fsys=
+=C2=A0sysreg=C2=A0regmap=C2=A0lookup=C2=A0failed.=5Cn=22);=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return=C2=A0PTR_ERR(artpec8_ctrl->sysreg);=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*=C2=A0pmu=C2=
+=A0syscon=C2=A0regmap=C2=A0handle=C2=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->pmu_syscon=C2=A0=3D=C2=A0syscon=
+_regmap_lookup_by_phandle(dev->of_node,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=22samsung,syscon-phandle=
+=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
+=A0(IS_ERR(artpec8_ctrl->pmu_syscon))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0dev_err(dev,=C2=A0=22pmu=C2=A0syscon=C2=A0regmap=C2=A0lookup=C2=A0=
+failed.=5Cn=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PTR_ERR(a=
+rtpec8_ctrl->pmu_syscon);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0/*=C2=A0bus=C2=A0s=C2=A0syscon=C2=A0regmap=C2=A0handle=
+=C2=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artp=
+ec8_ctrl->bus_s_syscon=C2=A0=3D=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0syscon=
+_regmap_lookup_by_phandle(dev->of_node,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=22samsung,syscon-bus-s-fsy=
+s=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
+=A0(IS_ERR(artpec8_ctrl->bus_s_syscon))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0dev_err(dev,=C2=A0=22bus_s_syscon=C2=A0regmap=C2=A0lookup=C2=A0fai=
+led.=5Cn=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PTR_ERR(artp=
+ec8_ctrl->bus_s_syscon);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0/*=C2=A0bus=C2=A0p=C2=A0syscon=C2=A0regmap=C2=A0handle=C2=
+=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8=
+_ctrl->bus_p_syscon=C2=A0=3D=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0syscon_re=
+gmap_lookup_by_phandle(dev->of_node,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=22samsung,syscon-bus-p-fsys=
+=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
+=A0(IS_ERR(artpec8_ctrl->bus_p_syscon))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0dev_err(dev,=C2=A0=22bus_p_syscon=C2=A0regmap=C2=A0lookup=C2=A0fai=
+led.=5Cn=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PTR_ERR(artp=
+ec8_ctrl->bus_p_syscon);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+static=C2=A0int=C2=A0artpec8_pcie_get_rc_mem_resources(struct=C2=A0p=
+latform_device=C2=A0*pdev,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl)=0D=0A>>=C2=A0+=7B=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0=
+dw_pcie=C2=A0*pci=C2=A0=3D=C2=A0artpec8_ctrl->pci;=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*=C2=A0Data=C2=A0Bu=
+s=C2=A0Interface(DBI)=C2=A0Register=C2=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci->dbi_base=C2=A0=3D=C2=A0devm_platform_=
+ioremap_resource_byname(pdev,=C2=A0=22dbi=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_ERR(pci->dbi_base))=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PTR_ERR(pci->dbi_base);=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0retur=
+n=C2=A00;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=
+=A0artpec8_pcie_get_ep_mem_resources(struct=C2=A0platform_device=C2=A0*pdev=
+,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0=
+*artpec8_ctrl)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie_ep=C2=A0*ep;=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie=C2=A0*pci=C2=
+=A0=3D=C2=A0artpec8_ctrl->pci;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0struct=C2=A0device=C2=A0*dev=C2=A0=3D=C2=A0&pdev->dev;=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0res=
+ource=C2=A0*res;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ep=C2=A0=3D=C2=A0&pci->ep;=0D=0A>=C2=A0=0D=0A>=C2=A0Re=
+order=C2=A0the=C2=A0locals=C2=A0above:=0D=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=C2=
+=A0struct=C2=A0dw_pcie=C2=A0*pci=C2=A0=3D=C2=A0artpec8_ctrl->pci;=0D=0A>=C2=
+=A0=C2=A0=C2=A0struct=C2=A0device=C2=A0*dev=C2=A0=3D=C2=A0&pdev->dev;=0D=0A=
+>=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie_ep=C2=A0*ep=C2=A0=3D=C2=A0&pci->ep;=
+=0D=0A>=C2=A0=C2=A0=C2=A0struct=C2=A0resource=C2=A0*res;=0D=0A>=C2=A0=0D=0A=
+>=C2=A0Then=C2=A0they're=C2=A0in=C2=A0the=C2=A0order=C2=A0you=C2=A0use=C2=
+=A0them=C2=A0and=C2=A0you=C2=A0don't=C2=A0need=C2=A0the=C2=A0extra=0D=0A>=
+=C2=A0=22ep=C2=A0=3D=C2=A0&pci->ep=22.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=
+=A0will=C2=A0fix=C2=A0it.=C2=A0thank=C2=A0you=C2=A0for=C2=A0your=C2=A0detal=
+ied=C2=A0review.=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0pci->dbi_base=C2=A0=3D=C2=A0devm_platform_ioremap_resourc=
+e_byname(pdev,=C2=A0=22dbi=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_ERR(pci->dbi_base))=C2=A0=7B=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0dev_err(dev,=C2=A0=22failed=C2=A0to=C2=A0map=C2=A0e=
+p_dbics=5Cn=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0-ENOMEM;=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci->=
+dbi_base2=C2=A0=3D=C2=A0devm_platform_ioremap_resource_byname(pdev,=C2=A0=
+=22dbi2=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+if=C2=A0(IS_ERR(pci->dbi_base2))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0dev_err(dev,=C2=A0=22failed=C2=A0to=C2=A0map=C2=A0ep_dbics2=5Cn=22);=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0-ENOMEM;=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0res=C2=A0=3D=C2=A0platform_=
+get_resource_byname(pdev,=C2=A0IORESOURCE_MEM,=C2=A0=22addr_space=22);=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21res=
+)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0-EINVAL;=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ep->phys_base=C2=A0=3D=C2=
+=A0res->start;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0ep->addr_size=C2=A0=3D=C2=A0resource_size(res);=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A=
+>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0artpec8_pcie=
+_get_clk_resources(struct=C2=A0platform_device=C2=A0*pdev,=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl)=0D=0A>>=C2=A0+=7B=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dev=
+ice=C2=A0*dev=C2=A0=3D=C2=A0&pdev->dev;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->pipe_clk=C2=A0=3D=
+=C2=A0devm_clk_get(dev,=C2=A0=22pipe_clk=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_ERR(artpec8_ctrl->pipe_clk))=
+=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_err(dev,=C2=A0=22couldn't=
+=C2=A0get=C2=A0pipe=C2=A0clock=5Cn=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+return=C2=A0-EINVAL;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0artpec8_ctrl->dbi_clk=C2=A0=3D=C2=A0devm_clk_get(dev,=C2=A0=
+=22dbi_clk=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0if=C2=A0(IS_ERR(artpec8_ctrl->dbi_clk))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0dev_info(dev,=C2=A0=22couldn't=C2=A0get=C2=A0dbi=C2=A0clk=5Cn=
+=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0-EINVAL;=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->s=
+lv_clk=C2=A0=3D=C2=A0devm_clk_get(dev,=C2=A0=22slv_clk=22);=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_ERR(artpec8_ctr=
+l->slv_clk))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_err(dev,=C2=A0=
+=22couldn't=C2=A0get=C2=A0slave=C2=A0clock=5Cn=22);=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0return=C2=A0-EINVAL;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->mstr_clk=C2=A0=3D=C2=A0devm_clk_ge=
+t(dev,=C2=A0=22mstr_clk=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0if=C2=A0(IS_ERR(artpec8_ctrl->mstr_clk))=C2=A0=7B=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_info(dev,=C2=A0=22couldn't=C2=A0get=C2=A0=
+master=C2=A0clk=5Cn=22);=0D=0A>=C2=A0=0D=0A>=C2=A0It'd=C2=A0be=C2=A0nice=C2=
+=A0if=C2=A0the=C2=A0err/info=C2=A0messages=C2=A0matched=C2=A0the=C2=A0exact=
+=C2=A0DT=C2=A0name:=0D=0A>=C2=A0=22pipe_clk=22,=C2=A0=22dbi_clk=22,=C2=A0sl=
+v_clk=22,=C2=A0etc.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=
+=A0it.=0D=0A=C2=A0=0D=0A>=C2=A0Why=C2=A0are=C2=A0some=C2=A0of=C2=A0the=C2=
+=A0above=C2=A0dev_err()=C2=A0and=C2=A0others=C2=A0dev_info()=C2=A0when=C2=
+=A0you=0D=0A>=C2=A0return=C2=A0-EINVAL=C2=A0in=C2=A0all=C2=A0cases?=0D=0A>=
+=C2=A0=0D=0A=C2=A0=0D=0AWhen=C2=A0property=C2=A0is=C2=A0not=C2=A0found,=C2=
+=A0it=C2=A0just=C2=A0to=C2=A0return=C2=A0error.=0D=0AI=C2=A0will=C2=A0modif=
+y=C2=A0to=C2=A0return=C2=A0PTR_ERR.=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0return=C2=A0-EINVAL;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+static=C2=A0int=C2=A0artpec8_pcie_init_clk_resources(struct=C2=
+=A0artpec8_pcie=C2=A0*artpec8_ctrl)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0clk_prepare_enable(artpec8_ctrl->=
+pipe_clk);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cl=
+k_prepare_enable(artpec8_ctrl->dbi_clk);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0clk_prepare_enable(artpec8_ctrl->mstr_clk);=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0clk_prepare_=
+enable(artpec8_ctrl->slv_clk);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=A0+=7D=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+static=C2=A0void=C2=A0artpec8_pcie_deinit_clk_resourc=
+es(struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl)=0D=0A>>=C2=A0+=7B=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0clk_disable_unprepar=
+e(artpec8_ctrl->slv_clk);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0clk_disable_unprepare(artpec8_ctrl->mstr_clk);=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0clk_disable_unprepare(artp=
+ec8_ctrl->dbi_clk);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0clk_disable_unprepare(artpec8_ctrl->pipe_clk);=0D=0A>>=C2=A0+=7D=
+=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0const=C2=A0struct=C2=A0artpec8_pc=
+ie_res_ops=C2=A0artpec8_pcie_rc_res_ops=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.get_mem_resources=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_pcie_get_rc_mem_resour=
+ces,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.get_clk=
+_resources=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_=
+pcie_get_clk_resources,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0.init_clk_resources=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=3D=C2=A0artpec8_pcie_init_clk_resources,=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.deinit_clk_resources=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_pcie_deinit_clk_resources,=
+=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0const=C2=A0str=
+uct=C2=A0artpec8_pcie_res_ops=C2=A0artpec8_pcie_ep_res_ops=C2=A0=3D=C2=A0=
+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.get_mem_=
+resources=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_p=
+cie_get_ep_mem_resources,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0.get_clk_resources=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=3D=C2=A0artpec8_pcie_get_clk_resources,=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.init_clk_resources=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_pcie_init_clk_resources,=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.deinit_clk_res=
+ources=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_pcie=
+_deinit_clk_resources,=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+stat=
+ic=C2=A0void=C2=A0artpec8_pcie_writel(void=C2=A0__iomem=C2=A0*base,=C2=A0u3=
+2=C2=A0val,=C2=A0u32=C2=A0reg)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel(val,=C2=A0base=C2=A0+=C2=A0reg);=
+=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0u32=C2=A0artpec=
+8_pcie_readl(void=C2=A0__iomem=C2=A0*base,=C2=A0u32=C2=A0reg)=0D=0A>>=C2=A0=
++=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=
+=C2=A0readl(base=C2=A0+=C2=A0reg);=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+static=C2=A0int=C2=A0artpec8_pcie_config_phy_power_isolation(struct=
+=C2=A0dw_pcie=C2=A0*pci,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0enum=C2=A0artpec8_pcie_reg_bit=C2=A0val)=0D=0A>>=
+=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st=
+ruct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=C2=A0to_artpec8_pcie(pci=
+);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0r=
+et;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0ret=C2=A0=3D=C2=A0regmap_write(artpec8_ctrl->pmu_syscon,=C2=A0PMU_SYS=
+CON_PCIE_ISOLATION,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val);=0D=0A>>=C2=A0+=0D=0A>=
+>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=
+=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=C2=A0return=C2=A0regmap_write(artpec8_ctrl->p=
+mu_syscon,=C2=A0...);=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=
+=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=
+=A0int=C2=A0artpec8_pcie_config_bus_enable(struct=C2=A0dw_pcie=C2=A0*pci,=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0enum=C2=A0artpec8_pcie_reg_bit=C2=A0val)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=
+=C2=A0*artpec8_ctrl=C2=A0=3D=C2=A0to_artpec8_pcie(pci);=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0ret;=0D=0A>>=C2=A0+=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=
+=C2=A0regmap_write(artpec8_ctrl->bus_p_syscon,=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+BUS_SYSCON_BUS_PATH_ENABLE,=C2=A0val);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0return=C2=A0ret;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0regmap_write(artpec8_ctrl->bus_s_=
+syscon,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BUS_SYSCON_BUS_PATH_ENABLE,=C2=A0val);=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret=
+)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret=
+;=0D=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=C2=A0return=C2=A0regmap_write(artpec8_ctr=
+l->bus_s_syscon,=C2=A0...);=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0=
+fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+sta=
+tic=C2=A0int=C2=A0artpec8_pcie_config_isolation(struct=C2=A0dw_pcie=C2=A0*p=
+ci,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum=C2=A0artpec8_pcie_isolation=C2=
+=A0val)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0int=C2=A0ret;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0/*=C2=A0reg_val=5B0=5D=C2=A0:=C2=A0for=C2=A0phy=C2=A0powe=
+r=C2=A0isolation=C2=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0/*=C2=A0reg_val=5B1=5D=C2=A0:=C2=A0for=C2=A0bus=C2=A0enable=C2=
+=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum=C2=
+=A0artpec8_pcie_reg_bit=C2=A0reg_val=5B2=5D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0switch=C2=A0(val)=C2=A0=7B=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case=C2=A0PC=
+IE_CLEAR_ISOLATION:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg_val=5B0=5D=C2=
+=A0=3D=C2=A0PCIE_REG_BIT_LOW;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg_val=
+=5B1=5D=C2=A0=3D=C2=A0PCIE_REG_BIT_HIGH;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0break;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cas=
+e=C2=A0PCIE_SET_ISOLATION:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg_val=5B0=
+=5D=C2=A0=3D=C2=A0PCIE_REG_BIT_HIGH;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg=
+_val=5B1=5D=C2=A0=3D=C2=A0PCIE_REG_BIT_LOW;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0break;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+default:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0-EINVAL;=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=
+=C2=A0artpec8_pcie_config_phy_power_isolation(pci,=C2=A0reg_val=5B0=5D);=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0ar=
+tpec8_pcie_config_bus_enable(pci,=C2=A0reg_val=5B1=5D);=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>=C2=A0=0D=
+=0A>=C2=A0=C2=A0=C2=A0return=C2=A0artpec8_pcie_config_bus_enable(pci,=C2=A0=
+...);=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=
+=A0=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0art=
+pec8_pcie_config_perstn(struct=C2=A0dw_pcie=C2=A0*pci,=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enu=
+m=C2=A0artpec8_pcie_reg_bit=C2=A0val)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0=
+*artpec8_ctrl=C2=A0=3D=C2=A0to_artpec8_pcie(pci);=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned=C2=A0int=C2=A0bits;=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0ret;=0D=0A>=
+>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=
+=C2=A0(val=C2=A0=3D=3D=C2=A0PCIE_REG_BIT_HIGH)=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0bits=C2=A0=3D=C2=A0PCIE_PERSTN;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bit=
+s=C2=A0=3D=C2=A00;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0regmap_update_bits(artpec8_ctrl->sys=
+reg,=C2=A0FSYS_PCIE_CON,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0PCIE_PERSTN,=C2=A0bits);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>=C2=A0=0D=0A>=
+=C2=A0=C2=A0=C2=A0return=C2=A0regmap_update_bits(artpec8_ctrl->sysreg,=C2=
+=A0...):=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=
+=C2=A0=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0void=C2=
+=A0artpec8_pcie_stop_link(struct=C2=A0dw_pcie=C2=A0*pci)=0D=0A>>=C2=A0+=7B=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0=
+artpec8_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=C2=A0to_artpec8_pcie(pci);=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0val;=0D=0A>=
+>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val=
+=C2=A0=3D=C2=A0artpec8_pcie_readl(artpec8_ctrl->elbi_base,=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_APP_LTSSM_ENABLE);=0D=
+=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+val=C2=A0&=3D=C2=A0=7EPCIE_ELBI_LTSSM_ENABLE;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_writel(artpec8_ctrl->elbi_bas=
+e,=C2=A0val,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0PCIE_APP_LTSSM_ENABLE);=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=
+=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0artpec8_pcie_start_link(struct=C2=
+=A0dw_pcie=C2=A0*pci)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl=C2=
+=A0=3D=C2=A0to_artpec8_pcie(pci);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0u32=C2=A0val;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dw_pcie_dbi_ro_wr_en(pci);=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*=C2=
+=A0Equalization=C2=A0disable=C2=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0val=C2=A0=3D=C2=A0artpec8_pcie_read_dbi(pci,=C2=A0p=
+ci->dbi_base,=C2=A0PCIE_GEN3_RELATED_OFF,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A04);=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_write_dbi(pci,=C2=A0pci=
+->dbi_base,=C2=A0PCIE_GEN3_RELATED_OFF,=C2=A04,=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0val=C2=A0=7C=C2=A0PCIE_GEN3_EQUALIZATION_DISABLE);=
+=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0dw_pcie_dbi_ro_wr_dis(pci);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*=C2=A0assert=C2=A0LTSSM=C2=A0enable=C2=
+=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val=C2=
+=A0=3D=C2=A0artpec8_pcie_readl(artpec8_ctrl->elbi_base,=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_APP_LTSSM_ENABLE);=0D=0A>=
+>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val=
+=C2=A0=7C=3D=C2=A0PCIE_ELBI_LTSSM_ENABLE;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_writel(artpec8_ctrl->elbi_base,=
+=C2=A0val,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0PCIE_APP_LTSSM_ENABLE);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=
+=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0irqreturn_t=C2=A0artpec8_p=
+cie_msi_irq_handler(int=C2=A0irq,=C2=A0void=C2=A0*arg)=0D=0A>>=C2=A0+=7B=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0art=
+pec8_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=C2=A0arg;=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie=C2=A0*pci=C2=A0=3D=
+=C2=A0artpec8_ctrl->pci;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0struct=C2=A0pcie_port=C2=A0*pp=C2=A0=3D=C2=A0&pci->pp;=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0val;=0D=0A>=
+>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val=
+=C2=A0=3D=C2=A0artpec8_pcie_readl(artpec8_ctrl->elbi_base,=C2=A0PCIE_IRQ2_S=
+TS);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0if=C2=A0((val=C2=A0&=C2=A0IRQ_MSI_ENABLE)=C2=A0=3D=3D=C2=A0IRQ_MSI=
+_ENABLE)=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val=C2=A0&=3D=C2=A0IR=
+Q_MSI_ENABLE;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_writel(artp=
+ec8_ctrl->elbi_base,=C2=A0val,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_IRQ2_STS);=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0dw_handle_msi_irq(pp);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0IRQ_HANDLED;=0D=0A>>=C2=A0+=7D=0D=
+=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0void=C2=A0artpec8_pcie_msi_init(stru=
+ct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0val;=0D=0A>>=C2=A0=
++=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*=C2=A0ena=
+ble=C2=A0MSI=C2=A0interrupt=C2=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0val=C2=A0=3D=C2=A0artpec8_pcie_readl(artpec8_ctrl->=
+elbi_base,=C2=A0PCIE_IRQ2_EN);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0val=C2=A0=7C=3D=C2=A0IRQ_MSI_ENABLE;=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_writel(artpec8_ctrl-=
+>elbi_base,=C2=A0val,=C2=A0PCIE_IRQ2_EN);=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=
+=0D=0A>>=C2=A0+static=C2=A0void=C2=A0artpec8_pcie_enable_interrupts(struct=
+=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_ENABLED(CONFIG_PCI=
+_MSI))=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_msi_init(artpec8_ctr=
+l);=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0u32=C2=A0art=
+pec8_pcie_read_dbi(struct=C2=A0dw_pcie=C2=A0*pci,=C2=A0void=C2=A0__iomem=C2=
+=A0*base,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0=
+reg,=C2=A0size_t=C2=A0size)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctr=
+l=C2=A0=3D=C2=A0to_artpec8_pcie(pci);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0val;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool=C2=A0is_atu=C2=A0=3D=C2=A0false;=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
+=A0(base=C2=A0=3D=3D=C2=A0pci->atu_base)=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0is_atu=C2=A0=3D=C2=A0true;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+base=C2=A0=3D=C2=A0pci->dbi_base;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap=
+_write(artpec8_ctrl->sysreg,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_dbi_addr_con=5Bartpec8_=
+ctrl->link_id=5D,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+FSYS_PCIE_DBI_ADDR_OVR_ATU);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0dw_pcie_read(base=C2=A0+=C2=A0reg,=C2=A0size,=C2=A0=
+&val);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0if=C2=A0(is_atu)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write=
+(artpec8_ctrl->sysreg,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_dbi_addr_con=5Bartpec8_ctrl->=
+link_id=5D,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0FSYS_P=
+CIE_DBI_ADDR_OVR_CDM);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0val;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0=
++=0D=0A>>=C2=A0+static=C2=A0void=C2=A0artpec8_pcie_write_dbi(struct=C2=A0dw=
+_pcie=C2=A0*pci,=C2=A0void=C2=A0__iomem=C2=A0*base,=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0reg,=C2=A0size_t=C2=A0size,=C2=A0=
+u32=C2=A0val)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=
+=C2=A0to_artpec8_pcie(pci);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0bool=C2=A0is_atu=C2=A0=3D=C2=A0false;=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(base=C2=A0=
+=3D=3D=C2=A0pci->atu_base)=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0is_=
+atu=C2=A0=3D=C2=A0true;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0base=C2=A0=3D=
+=C2=A0pci->dbi_base;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(artpe=
+c8_ctrl->sysreg,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_dbi_addr_con=5Bartpec8_ctrl->link_i=
+d=5D,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0FSYS_PCIE_DB=
+I_ADDR_OVR_ATU);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0dw_pcie_write(base=C2=A0+=C2=A0reg,=C2=A0size,=C2=A0val);=0D=0A=
+>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=
+=C2=A0(is_atu)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(artpec8_ctr=
+l->sysreg,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_dbi_addr_con=5Bartpec8_ctrl->link_id=5D,=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0FSYS_PCIE_DBI_ADDR=
+_OVR_CDM);=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0void=
+=C2=A0artpec8_pcie_write_dbi2(struct=C2=A0dw_pcie=C2=A0*pci,=C2=A0void=C2=
+=A0__iomem=C2=A0*base,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0reg,=C2=A0size_t=C2=A0size,=C2=A0u32=
+=C2=A0val)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=C2=
+=A0to_artpec8_pcie(pci);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(artpec8_ctrl->sysreg,=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_dbi_addr_con=5Bartpec8_ctrl->link_id=
+=5D,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0FSYS_PCIE_DBI_ADDR_OVR_SHADOW);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dw_pcie_write(base=C2=A0+=
+=C2=A0reg,=C2=A0size,=C2=A0val);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(artpec8_ctrl->sysreg,=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_pcie_dbi_addr_con=5Bartpec8_ctrl->=
+link_id=5D,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0FSYS_PCIE_DBI_ADDR_OVR_CDM);=0D=0A>>=C2=A0+=7D=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0artpec8_pcie_rd_own_conf(struct=
+=C2=A0pci_bus=C2=A0*bus,=C2=A0unsigned=C2=A0int=C2=A0devfn,=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0=
+where,=C2=A0int=C2=A0size,=C2=A0u32=C2=A0*val)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie=C2=
+=A0*pci=C2=A0=3D=C2=A0to_dw_pcie_from_pp(bus->sysdata);=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(PCI_SL=
+OT(devfn))=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*val=C2=A0=3D=C2=
+=A0=7E0;=0D=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=C2=A0PCI_SET_ERROR_RESPONSE(val);=
+=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PCIBIOS_DEVICE_NOT_FOUND;=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>>=C2=
+=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*val=C2=
+=A0=3D=C2=A0dw_pcie_read_dbi(pci,=C2=A0where,=C2=A0size);=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PCIBIOS_SUCCESSFUL=
+;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0artpe=
+c8_pcie_wr_own_conf(struct=C2=A0pci_bus=C2=A0*bus,=C2=A0unsigned=C2=A0int=
+=C2=A0devfn,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0int=C2=A0where,=C2=A0int=C2=A0size,=C2=A0u32=C2=A0val)=0D=
+=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0struct=C2=A0dw_pcie=C2=A0*pci=C2=A0=3D=C2=A0to_dw_pcie_from_pp(bus->sysd=
+ata);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0if=C2=A0(PCI_SLOT(devfn))=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+urn=C2=A0PCIBIOS_DEVICE_NOT_FOUND;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dw_pcie_write_dbi(pci,=C2=A0where,=
+=C2=A0size,=C2=A0val);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0return=C2=A0PCIBIOS_SUCCESSFUL;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0=
++=0D=0A>>=C2=A0+static=C2=A0struct=C2=A0pci_ops=C2=A0artpec8_pci_ops=C2=A0=
+=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+.read=C2=A0=3D=C2=A0artpec8_pcie_rd_own_conf,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.write=C2=A0=3D=C2=A0artpec8_pcie_wr_own_c=
+onf,=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0a=
+rtpec8_pcie_link_up(struct=C2=A0dw_pcie=C2=A0*pci)=0D=0A>>=C2=A0+=7B=0D=0A>=
+>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec8=
+_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=C2=A0to_artpec8_pcie(pci);=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32=C2=A0val;=0D=0A>>=C2=A0=
++=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val=C2=A0=
+=3D=C2=A0artpec8_pcie_readl(artpec8_ctrl->elbi_base,=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_ELBI_CX=
+PL_DEBUG_00_31);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return=C2=A0(val=C2=A0&=C2=A0LTSSM_STATE_MASK)=C2=A0=
+=3D=3D=C2=A0LTSSM_STATE_L0;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=
+static=C2=A0int=C2=A0artpec8_pcie_host_init(struct=C2=A0pcie_port=C2=A0*pp)=
+=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0struct=C2=A0dw_pcie=C2=A0*pci=C2=A0=3D=C2=A0to_dw_pcie_from_pp(pp);=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0=
+artpec8_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=C2=A0to_artpec8_pcie(pci);=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pp->b=
+ridge->ops=C2=A0=3D=C2=A0&artpec8_pci_ops;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dw_pcie_writel_dbi(pci,=C2=A0P=
+CIE_GEN3_RELATED_OFF,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0(PCIE_GEN3_EQ_PHASE_2_3=C2=A0=7C=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0PCIE_GEN3_RXEQ_PH01_EN=C2=A0=7C=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_GEN3_RXEQ_RGRDLESS_RXTS))=
+;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0artpec8_pcie_enable_interrupts(artpec8_ctrl);=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A=
+>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0const=C2=A0struct=C2=
+=A0dw_pcie_host_ops=C2=A0artpec8_pcie_host_ops=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.host_init=C2=A0=3D=C2=
+=A0artpec8_pcie_host_init,=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=
+static=C2=A0u8=C2=A0artpec8_pcie_iatu_unroll_enabled(struct=C2=A0dw_pcie=C2=
+=A0*pci)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0u32=C2=A0val;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val=C2=A0=3D=C2=A0dw_pcie_readl_dbi(pci,=
+=C2=A0PCIE_ATU_VIEWPORT);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0pci->atu_base=C2=A0=3D=C2=A0pci->dbi_base=C2=A0+=C2=A0DEFAUL=
+T_DBI_ATU_OFFSET;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if=C2=A0(val=C2=A0=3D=3D=C2=A00xffffffff)=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A01;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=A0+=
+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0void=C2=A0artpec8_pcie_ep_init=
+(struct=C2=A0dw_pcie_ep=C2=A0*ep)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie=C2=A0*pci=C2=A0=
+=3D=C2=A0to_dw_pcie_from_ep(ep);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0enum=C2=A0pci_barno=C2=A0bar;=0D=0A>=C2=A0=0D=0A>=C2=
+=A0Add=C2=A0blank=C2=A0line=C2=A0here=C2=A0and=C2=A0use=C2=A0usual=C2=A0mul=
+ti-line=C2=A0comment=C2=A0style:=0D=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=C2=A0/*=0D=
+=0A>=C2=A0=C2=A0=C2=A0=C2=A0*=C2=A0Currently=C2=A0PCIe=C2=A0EP=C2=A0core=C2=
+=A0is=C2=A0not=C2=A0...=0D=0A>=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0i=
+t.=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0/*=C2=A0Currently=C2=A0PCIe=C2=A0EP=C2=A0core=C2=A0is=C2=A0not=C2=A0sett=
+ing=C2=A0iatu_unroll_enabled=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0*=C2=A0so=C2=A0let's=C2=A0handle=C2=A0it=C2=A0here.=
+=C2=A0We=C2=A0need=C2=A0to=C2=A0find=C2=A0proper=C2=A0place=C2=A0to=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*=C2=A0initial=
+ize=C2=A0this=C2=A0so=C2=A0that=C2=A0it=C2=A0can=C2=A0be=C2=A0used=C2=A0as=
+=C2=A0for=C2=A0other=C2=A0EP=0D=0A>=C2=A0=C2=A0=0D=0A>=C2=A0=C2=A0=C2=A0...=
+=C2=A0can=C2=A0be=C2=A0used=C2=A0for=C2=A0...=0D=0A>=C2=A0=0D=0A=C2=A0=0D=
+=0AThank=C2=A0you=C2=A0for=C2=A0detailed=C2=A0review.=0D=0A=C2=A0=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*=C2=A0control=
+lers=C2=A0as=C2=A0well.=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0*/=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0pci->iatu_unroll_enabled=C2=A0=3D=C2=A0artpec8_pcie_iatu_unroll_en=
+abled(pci);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0for=C2=A0(bar=C2=A0=3D=C2=A0BAR_0;=C2=A0bar=C2=A0<=3D=C2=A0B=
+AR_5;=C2=A0bar++)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dw_pcie_ep_reset_bar(=
+pci,=C2=A0bar);=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0=
+int=C2=A0artpec8_pcie_raise_irq(struct=C2=A0dw_pcie_ep=C2=A0*ep,=C2=A0u8=C2=
+=A0func_no,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+enum=C2=A0pci_epc_irq_type=C2=A0type,=C2=A0u16=C2=A0interrupt_num)=0D=0A>>=
+=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st=
+ruct=C2=A0dw_pcie=C2=A0*pci=C2=A0=3D=C2=A0to_dw_pcie_from_ep(ep);=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0switc=
+h=C2=A0(type)=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0case=C2=A0PCI_EPC_IRQ_LEGACY:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0return=C2=A0-EINVAL;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0case=C2=A0PCI_EPC_IRQ_MSI:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+return=C2=A0dw_pcie_ep_raise_msi_irq(ep,=C2=A0func_no,=C2=A0interrupt_num);=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default:=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_err(pci->dev,=C2=A0=22UNKNOWN=C2=A0IRQ=
+=C2=A0type=5Cn=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=
+=A0+static=C2=A0const=C2=A0struct=C2=A0pci_epc_features=C2=A0artpec8_pcie_e=
+pc_features=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0.linkup_notifier=C2=A0=3D=C2=A0false,=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.msi_capable=C2=A0=3D=C2=A0tru=
+e,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.msix_capa=
+ble=C2=A0=3D=C2=A0false,=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+st=
+atic=C2=A0const=C2=A0struct=C2=A0pci_epc_features*=0D=0A>>=C2=A0+artpec8_pc=
+ie_ep_get_features(struct=C2=A0dw_pcie_ep=C2=A0*ep)=0D=0A>>=C2=A0+=7B=0D=0A=
+>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0&artpe=
+c8_pcie_epc_features;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=
+=C2=A0const=C2=A0struct=C2=A0dw_pcie_ep_ops=C2=A0artpec8_dw_pcie_ep_ops=C2=
+=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0.ep_init=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8=
+_pcie_ep_init,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0.raise_irq=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpe=
+c8_pcie_raise_irq,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0.get_features=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=
+=A0artpec8_pcie_ep_get_features,=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=
+=C2=A0+static=C2=A0int=C2=A0__init=C2=A0artpec8_add_pcie_ep(struct=C2=A0art=
+pec8_pcie=C2=A0*artpec8_ctrl,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=
+=A0platform_device=C2=A0*pdev)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0ret;=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie_ep=C2=A0*ep;=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_=
+pcie=C2=A0*pci=C2=A0=3D=C2=A0artpec8_ctrl->pci;=0D=0A>>=C2=A0+=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ep=C2=A0=3D=C2=A0&pci->=
+ep;=0D=0A>=C2=A0=0D=0A>=C2=A0Reorder=C2=A0locals=C2=A0and=C2=A0initialize=
+=C2=A0ep=C2=A0as=C2=A0above.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=
+=A0fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0ep->ops=C2=A0=3D=C2=A0&artpec8_dw_pcie_ep_ops;=0D=0A>>=C2=A0=
++=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dw_pcie_wri=
+tel_dbi(pci,=C2=A0PCIE_GEN3_RELATED_OFF,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0(PCIE_GEN3_EQ_PHASE_2_3=C2=A0=7C=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_GEN3_RXEQ_PH01_EN=C2=A0=
+=7C=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_GEN3=
+_RXEQ_RGRDLESS_RXTS));=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0dw_pcie_ep_init(ep);=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=0D=0A>=
+>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=
+=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0__init=C2=A0artpe=
+c8_add_pcie_port(struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl,=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0struct=C2=A0platform_device=C2=A0*pdev)=0D=0A>>=C2=A0+=7B=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0=
+dw_pcie=C2=A0*pci=C2=A0=3D=C2=A0artpec8_ctrl->pci;=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0pcie_port=C2=A0*pp=C2=A0=
+=3D=C2=A0&pci->pp;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0struct=C2=A0device=C2=A0*dev=C2=A0=3D=C2=A0&pdev->dev;=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0ret;=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0irq_flags;=0D=0A>=
+>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0irq;=0D=0A=
+>=C2=A0=0D=0A>=C2=A0Reorder=C2=A0to=C2=A0be=C2=A0in=C2=A0order=C2=A0of=C2=
+=A0use:=0D=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie=C2=A0*pci=
+=C2=A0=3D=C2=A0artpec8_ctrl->pci;=0D=0A>=C2=A0=C2=A0=C2=A0struct=C2=A0pcie_=
+port=C2=A0*pp=C2=A0=3D=C2=A0&pci->pp;=0D=0A>=C2=A0=C2=A0=C2=A0struct=C2=A0d=
+evice=C2=A0*dev=C2=A0=3D=C2=A0&pdev->dev;=0D=0A>=C2=A0=C2=A0=C2=A0int=C2=A0=
+irq;=0D=0A>=C2=A0=C2=A0=C2=A0int=C2=A0irq_flags;=0D=0A>=C2=A0=C2=A0=C2=A0in=
+t=C2=A0ret;=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=
+=0A=C2=A0=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0if=C2=A0(IS_ENABLED(CONFIG_PCI_MSI))=C2=A0=7B=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0irq=C2=A0=3D=C2=A0platform_get_irq_byname(pdev,=C2=A0=22i=
+ntr=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21irq)=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+urn=C2=A0-ENODEV;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_fl=
+ags=C2=A0=3D=C2=A0IRQF_SHARED=C2=A0=7C=C2=A0IRQF_NO_THREAD;=0D=0A>>=C2=A0+=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0devm_request_irq(dev,=
+=C2=A0irq,=C2=A0artpec8_pcie_msi_irq_handler,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_flags,=C2=A0=22artpec8-pcie=22,=C2=A0artpec8=
+_ctrl);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=
+=C2=A0ret;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0/*=C2=A0Prevent=C2=A0core=C2=A0for=C2=A0messing=C2=A0with=C2=A0the=C2=
+=A0IRQ,=C2=A0since=C2=A0it's=C2=A0muxed=C2=A0*/=0D=0A>=C2=A0=0D=0A>=C2=A0=
+=C2=A0=C2=A0Prevent=C2=A0core=C2=A0from=C2=A0...=0D=0A>=C2=A0=0D=0A=C2=A0=
+=0D=0AI=C2=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pp->msi_irq=C2=A0=3D=C2=A0-ENODEV;=0D=
+=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ret=C2=A0=3D=C2=A0dw_pcie_host_init(pp);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>=C2=A0=0D=0A>=C2=A0=C2=A0=
+=C2=A0return=C2=A0dw_pcie_host_init(pp);=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=
+=A0will=C2=A0fix=C2=A0it.=0D=0A=C2=A0=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+static=C2=A0const=C2=A0struct=C2=A0dw_pcie_ops=C2=A0artpec8_dw_=
+pcie_ops=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0.read_dbi=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=
+=C2=A0artpec8_pcie_read_dbi,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0.write_dbi=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=3D=C2=A0artpec8_pcie_write_dbi,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.write_dbi2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=3D=C2=A0artpec8_pcie_write_dbi2,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.start_link=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=3D=C2=A0artpec8_pcie_start_link,=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.stop_link=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_pcie_stop_link,=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.link_up=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0artpec8_pcie_link_up,=0D=0A>>=C2=A0+=7D;=
+=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0artpec8_pcie_probe(struc=
+t=C2=A0platform_device=C2=A0*pdev)=0D=0A>>=C2=A0+=7B=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int=C2=A0ret;=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dw_pcie=C2=A0*pci;=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0=
+pcie_port=C2=A0*pp;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0struct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl;=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum=C2=A0dw_pcie_device_mode=C2=
+=A0mode;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0stru=
+ct=C2=A0device=C2=A0*dev=C2=A0=3D=C2=A0&pdev->dev;=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const=C2=A0struct=C2=A0artpec8_pcie_=
+pdata=C2=A0*pdata;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0struct=C2=A0device_node=C2=A0*np=C2=A0=3D=C2=A0dev->of_node;=0D=0A>=
+=C2=A0=0D=0A>=C2=A0Reorder=C2=A0in=C2=A0order=C2=A0of=C2=A0use.=0D=0A>=C2=
+=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0reorder=C2=A0in=C2=A0order=C2=A0of=C2=
+=A0use=C2=A0like=C2=A0below.=0D=0A=C2=A0=0D=0Astruct=C2=A0device=C2=A0*dev=
+=C2=A0=3D=C2=A0&pdev->dev;=0D=0Astruct=C2=A0artpec8_pcie=C2=A0*artpec8_ctrl=
+;=0D=0Astruct=C2=A0dw_pcie=C2=A0*pci;=0D=0Aconst=C2=A0struct=C2=A0artpec8_p=
+cie_pdata=C2=A0*pdata;=0D=0Aenum=C2=A0dw_pcie_device_mode=C2=A0mode;=0D=0As=
+truct=C2=A0pcie_port=C2=A0*pp;=0D=0Astruct=C2=A0device_node=C2=A0*np=C2=A0=
+=3D=C2=A0dev->of_node;=0D=0Aint=C2=A0ret;=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl=C2=A0=3D=C2=A0devm_k=
+zalloc(dev,=C2=A0sizeof(*artpec8_ctrl),=C2=A0GFP_KERNEL);=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21artpec8_ctrl)=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0-ENOMEM;=0D=0A>>=C2=A0+=0D=0A>=
+>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci=C2=A0=3D=C2=A0d=
+evm_kzalloc(dev,=C2=A0sizeof(*pci),=C2=A0GFP_KERNEL);=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21pci)=0D=0A>>=C2=A0+=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return=C2=A0-ENOMEM;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pdata=C2=A0=3D=C2=A0(const=C2=
+=A0struct=C2=A0artpec8_pcie_pdata=C2=A0*)=0D=0A>=C2=A0=0D=0A>=C2=A0Unnecess=
+ary=C2=A0cast.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AI=C2=A0will=C2=A0remove=C2=A0c=
+ast.=0D=0A=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0of_device_get_match_d=
+ata(dev);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=
+=C2=A0(=21pdata)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0-ENODEV;=
+=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0mode=C2=A0=3D=C2=A0(enum=C2=A0dw_pcie_device_mode)pdata->mode;=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpe=
+c8_ctrl->pci=C2=A0=3D=C2=A0pci;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->pdata=C2=A0=3D=C2=A0pdata;=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->mode=C2=A0=
+=3D=C2=A0mode;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0pci->dev=C2=A0=3D=C2=A0dev;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci->ops=C2=A0=3D=C2=A0pdata->dwc_ops;=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci->dbi_base2=
+=C2=A0=3D=C2=A0NULL;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0pci->dbi_base=C2=A0=3D=C2=A0NULL;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pp=C2=A0=3D=C2=A0&pci->pp;=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pp->ops=C2=A0=3D=C2=A0artpec8_=
+ctrl->pdata->host_ops;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(mode=C2=A0=3D=3D=C2=A0DW_PCIE_RC_TYPE)=
+=0D=0A>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_ctrl->link_id=C2=A0=3D=C2=A0of_=
+alias_get_id(np,=C2=A0=22pcierc=22);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0else=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_c=
+trl->link_id=C2=A0=3D=C2=A0of_alias_get_id(np,=C2=A0=22pcieep=22);=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+=C2=A0=3D=C2=A0artpec8_pcie_get_subsystem_resources(pdev,=C2=A0artpec8_ctrl=
+);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(r=
+et)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(pdata-=
+>res_ops=C2=A0&&=C2=A0pdata->res_ops->get_mem_resources)=C2=A0=7B=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0pdata->res_ops->get_mem_res=
+ources(pdev,=C2=A0artpec8_ctrl);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
+=A0(ret)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(pdata->res_ops=C2=A0&&=C2=A0pdata->r=
+es_ops->get_clk_resources)=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+=C2=A0=3D=C2=A0pdata->res_ops->get_clk_resources(pdev,=C2=A0artpec8_ctrl);=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret=
+;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0pda=
+ta->res_ops->init_clk_resources(artpec8_ctrl);=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0platform_set_drvdata(pdev,=C2=
+=A0artpec8_ctrl);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0artpec8_pcie_config_isolation(pci,=
+=C2=A0PCIE_CLEAR_ISOLATION);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=
+=C2=A0ret;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0artpec8_pcie_config_perstn(pci,=C2=A0PCIE_=
+REG_BIT_HIGH);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0if=C2=A0(ret)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=
+=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+artpec8_ctrl->phy=C2=A0=3D=C2=A0devm_of_phy_get(dev,=C2=A0np,=C2=A0NULL);=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(IS_=
+ERR(artpec8_ctrl->phy))=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0PTR=
+_ERR(artpec8_ctrl->phy);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0phy_init(artpec8_ctrl->phy);=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0phy_reset(artpec8_ctrl->phy);=
+=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0switch=C2=A0(mode)=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0case=C2=A0DW_PCIE_RC_TYPE:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0artpec8_pcie_writel(artpec8_ctrl->elbi_base,=C2=A0DEVICE_TYPE_RC,=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_ARTPEC8_DEVICE_T=
+YPE);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0artpec8_add_pci=
+e_port(artpec8_ctrl,=C2=A0pdev);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
+=A0(ret=C2=A0<=C2=A00)=0D=0A>=C2=A0=0D=0A>=C2=A0Are=C2=A0there=C2=A0positiv=
+e=C2=A0return=C2=A0values=C2=A0that=C2=A0indicate=C2=A0success?=C2=A0=C2=A0=
+Most=C2=A0places=0D=0A>=C2=A0above=C2=A0you=C2=A0assume=C2=A0=22ret=C2=A0=
+=21=3D=C2=A00=22=C2=A0means=C2=A0failure,=C2=A0so=C2=A0just=C2=A0curious=C2=
+=A0why=C2=A0you=0D=0A>=C2=A0test=C2=A0=22ret=C2=A0<=C2=A00=22=C2=A0instead=
+=C2=A0of=C2=A0just=C2=A0=22ret=22.=0D=0A>=C2=A0=0D=0A=C2=A0=0D=0AThere=C2=
+=A0is=C2=A0no=C2=A0special=C2=A0reason,=C2=A0but=C2=A0it=C2=A0seems=C2=A0th=
+at=C2=A0the=C2=A0format=C2=A0used=C2=A0=0D=0Ain=C2=A0the=C2=A0existing=C2=
+=A0dw=C2=A0driver=C2=A0is=C2=A0applied.=0D=0A=C2=A0=0D=0AThank=C2=A0you=C2=
+=A0for=C2=A0kindness=C2=A0reivew.=0D=0A=C2=A0=0D=0ABest=C2=A0regards,=0D=0A=
+Wangseok=C2=A0Lee=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0goto=C2=A0fail_probe;=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0break;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0case=C2=A0DW_PCIE_EP_TYPE:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0artpec8_p=
+cie_writel(artpec8_ctrl->elbi_base,=C2=A0DEVICE_TYPE_EP,=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0PCIE_ARTPEC8_DEVICE_TYPE);=0D=0A>>=
+=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0artpec8_add_=
+pcie_ep(artpec8_ctrl,=C2=A0pdev);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
+=A0(ret=C2=A0<=C2=A00)=0D=0A>=C2=A0=0D=0A>=C2=A0Same=C2=A0question.=0D=0A>=
+=C2=A0=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0goto=C2=A0fail_probe;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bre=
+ak;=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default:=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=C2=A0=3D=C2=A0-EINVAL;=0D=0A>>=C2=
+=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0goto=C2=A0fail_probe;=0D=0A>>=C2=A0+=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=A0+=0D=
+=0A>>=C2=A0+fail_probe:=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0phy_exit(artpec8_ctrl->phy);=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(pdata->res_ops=C2=A0&&=C2=A0pdata->r=
+es_ops->deinit_clk_resources)=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pdata->re=
+s_ops->deinit_clk_resources(artpec8_ctrl);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=C2=A0ret;=0D=0A>>=C2=A0=
++=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0int=C2=A0__exit=C2=A0artpec8_=
+pcie_remove(struct=C2=A0platform_device=C2=A0*pdev)=0D=0A>>=C2=A0+=7B=0D=0A=
+>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0artpec=
+8_pcie=C2=A0*artpec8_ctrl=C2=A0=3D=C2=A0platform_get_drvdata(pdev);=0D=0A>>=
+=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const=C2=A0struct=C2=
+=A0artpec8_pcie_pdata=C2=A0*pdata=C2=A0=3D=C2=A0artpec8_ctrl->pdata;=0D=0A>=
+>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=
+=C2=A0(pdata->res_ops=C2=A0&&=C2=A0pdata->res_ops->deinit_clk_resources)=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pdata->res_ops->deinit_clk_resources(artpe=
+c8_ctrl);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0return=C2=A00;=0D=0A>>=C2=A0+=7D=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+s=
+tatic=C2=A0const=C2=A0struct=C2=A0artpec8_pcie_pdata=C2=A0artpec8_pcie_rc_p=
+data=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0.dwc_ops=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=
+=A0&artpec8_dw_pcie_ops,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0.host_ops=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=
+=A0&artpec8_pcie_host_ops,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0.res_ops=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=
+=C2=A0&artpec8_pcie_rc_res_ops,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0.mode=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0DW_PCIE_RC_TYPE,=
+=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+static=C2=A0const=C2=A0str=
+uct=C2=A0artpec8_pcie_pdata=C2=A0artpec8_pcie_ep_pdata=C2=A0=3D=C2=A0=7B=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dwc_ops=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0&artpec8_dw_pcie_ops,=0D=
+=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.host_ops=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0&artpec8_pcie_host_ops,=
+=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.res_ops=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0&artpec8_pcie_ep_res_=
+ops,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.mode=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=3D=C2=A0DW_PCIE_EP_TYPE,=0D=0A>>=C2=A0+=7D;=0D=0A>>=C2=
+=A0+=0D=0A>>=C2=A0+static=C2=A0const=C2=A0struct=C2=A0of_device_id=C2=A0art=
+pec8_pcie_of_match=5B=5D=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.compa=
+tible=C2=A0=3D=C2=A0=22axis,artpec8-pcie=22,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0.data=C2=A0=3D=C2=A0&artpec8_pcie_rc_pdata,=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.co=
+mpatible=C2=A0=3D=C2=A0=22axis,artpec8-pcie-ep=22,=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0.data=C2=A0=3D=C2=A0&artpec8_pcie_ep_pdata,=0D=0A>>=C2=A0+=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D,=0D=0A>>=C2=A0+=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7B=7D,=0D=0A>>=C2=A0+=7D;=0D=0A>>=
+=C2=A0+MODULE_DEVICE_TABLE(of,=C2=A0artpec8_pcie_of_match);=0D=0A>>=C2=A0+=
+=0D=0A>>=C2=A0+static=C2=A0struct=C2=A0platform_driver=C2=A0artpec8_pcie_dr=
+iver=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0.probe=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0=
+artpec8_pcie_probe,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0.remove=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0__exit_p(artpec8_pcie_remov=
+e),=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver=
+=C2=A0=3D=C2=A0=7B=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.name=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D=C2=A0=22artpec8-pcie=22,=0D=0A>>=C2=A0=
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table=C2=A0=3D=C2=A0artpec8_pcie_of_match=
+,=0D=0A>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D,=0D=0A>=
+>=C2=A0+=7D;=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+module_platform_driver(artpec8_pc=
+ie_driver);=0D=0A>>=C2=A0+=0D=0A>>=C2=A0+MODULE_LICENSE(=22GPL=22);=0D=0A>>=
+=C2=A0+MODULE_AUTHOR(=22Jaeho=C2=A0Cho=C2=A0<jaeho79.cho=40samsung.com>=22)=
+;=0D=0A>>=C2=A0--=C2=A0=0D=0A>>=C2=A02.9.5=0D=0A>>=C2=A0=0D=0A>>=C2=A0--=C2=
+=A0=0D=0A>>=C2=A0linux-phy=C2=A0mailing=C2=A0list=0D=0A>>=C2=A0linux-phy=40=
+lists.infradead.org=0D=0A>>=C2=A0https://protect2.fireeye.com/v1/url?k=3D8d=
+601177-ec1df90b-8d619a38-74fe485cc33c-571071ed0e3feda8&q=3D1&e=3D731ce886-1=
+30a-4ad1-bf82-3da4fec844b6&u=3Dhttps%3A%2F%2Flists.infradead.org%2Fmailman%=
+2Flistinfo%2Flinux-phy=0D=0A=C2=A0

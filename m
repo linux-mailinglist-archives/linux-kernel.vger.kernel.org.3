@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74218546ED5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34083546ED4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350762AbiFJUye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 16:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S1350733AbiFJUya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 16:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350721AbiFJUy2 (ORCPT
+        with ESMTP id S1350238AbiFJUyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 16:54:28 -0400
+        Fri, 10 Jun 2022 16:54:25 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1D9403CC;
-        Fri, 10 Jun 2022 13:54:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17F438183;
+        Fri, 10 Jun 2022 13:54:18 -0700 (PDT)
 Received: from g550jk.localnet (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id AE467CD398;
-        Fri, 10 Jun 2022 20:53:55 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 4B063CD36E;
+        Fri, 10 Jun 2022 20:54:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1654894435; bh=mtnnRXfEvyS5PCWjmATdGdb1H0kGP9ygAVEp9Lld9AI=;
+        t=1654894455; bh=ReHCgRQiyBeVa6Oze6kiepfxtxodGrFLvPA/WtYpe1c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=e1YgONubjsg9FKxawsYB/EUQBLF6hTjYLC83dblsiKhSrT5kfsUnTuGM6TlhLHzgx
-         xVrT5giK0zK/TV7PjQROqlmG8QCFAXSv7XX0YLUvYX1LCwkjH6zH9Jmqfx31GjIq46
-         aemaIcjeXjI5/FR32sBTPlFVNYHUN8AQLXH9wAIE=
+        b=BJSI5fU7XXNKeWe9bTlCgtNZWjO4ITUpcZ9ehN+UyhX63nWSMQYjpjkmBXurQhQUn
+         LkPUlviLAtXY4vDKGp3mEOk+RwwCr6cgx5xCy4+FBKZrqnXoBrcZH+qvF/pFCi3nqC
+         S8tkC099CHtfixaka5Yu/qAFg+20uhJvRssyGAP4=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -35,11 +35,11 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 03/14] ARM: dts: qcom: use generic sram as name for imem and ocmem nodes
-Date:   Fri, 10 Jun 2022 22:53:55 +0200
-Message-ID: <2632793.mvXUDI8C0e@g550jk>
-In-Reply-To: <20220607171848.535128-3-krzysztof.kozlowski@linaro.org>
-References: <20220607171848.535128-1-krzysztof.kozlowski@linaro.org> <20220607171848.535128-3-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 05/14] ARM: dts: qcom: msm8974: add dedicated IMEM compatible
+Date:   Fri, 10 Jun 2022 22:54:15 +0200
+Message-ID: <5573836.DvuYhMxLoT@g550jk>
+In-Reply-To: <20220607171848.535128-5-krzysztof.kozlowski@linaro.org>
+References: <20220607171848.535128-1-krzysztof.kozlowski@linaro.org> <20220607171848.535128-5-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -55,73 +55,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-On Dienstag, 7. Juni 2022 19:18:37 CEST Krzysztof Kozlowski wrote:
-> According to Devicetree specification, the device nodes should be
-> generic, reflecting the function of the device.  The typical name for
-> memory regions is "sram".
+On Dienstag, 7. Juni 2022 19:18:39 CEST Krzysztof Kozlowski wrote:
+> syscon compatible must be preceded with a specific compatible, to
+> accurately describe the device.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
 
-Regards
-Luca
-
 > ---
->  arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts | 2 +-
->  arch/arm/boot/dts/qcom-msm8974.dtsi                | 4 ++--
->  arch/arm/boot/dts/qcom-sdx55.dtsi                  | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-> b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts index
-> ca9f73528196..de01e34409f2 100644
-> --- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-> @@ -341,7 +341,7 @@ mmc@12400000 {
->  			};
->  		};
-> 
-> -		imem@2a03f000 {
-> +		sram@2a03f000 {
->  			compatible = "syscon", "simple-mfd";
->  			reg = <0x2a03f000 0x1000>;
+>  arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi
-> b/arch/arm/boot/dts/qcom-msm8974.dtsi index 814ad0b46232..09b181bb5365
+> b/arch/arm/boot/dts/qcom-msm8974.dtsi index 09b181bb5365..5e6b2ae72e62
 > 100644
 > --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
 > +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> @@ -1603,7 +1603,7 @@ opp-27000000 {
->  			};
+> @@ -1651,7 +1651,7 @@ smd-edge {
 >  		};
 > 
-> -		ocmem@fdd00000 {
-> +		sram@fdd00000 {
->  			compatible = "qcom,msm8974-ocmem";
->  			reg = <0xfdd00000 0x2000>,
->  			      <0xfec00000 0x180000>;
-> @@ -1650,7 +1650,7 @@ smd-edge {
->  			};
->  		};
-> 
-> -		imem: imem@fe805000 {
-> +		imem: sram@fe805000 {
->  			compatible = "syscon", "simple-mfd";
+>  		imem: sram@fe805000 {
+> -			compatible = "syscon", "simple-mfd";
+> +			compatible = "qcom,msm8974-imem", "syscon", 
+"simple-mfd";
 >  			reg = <0xfe805000 0x1000>;
 > 
-> diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi
-> b/arch/arm/boot/dts/qcom-sdx55.dtsi index 1c2b208a5670..710c7f772d42 100644
-> --- a/arch/arm/boot/dts/qcom-sdx55.dtsi
-> +++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
-> @@ -561,7 +561,7 @@ tlmm: pinctrl@f100000 {
->  			#interrupt-cells = <2>;
->  		};
-> 
-> -		imem@1468f000 {
-> +		sram@1468f000 {
->  			compatible = "simple-mfd";
->  			reg = <0x1468f000 0x1000>;
+>  			reboot-mode {
 
 
 

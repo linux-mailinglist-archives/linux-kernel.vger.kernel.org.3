@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06ACC54679C
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC8E54679D
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238432AbiFJNsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S237118AbiFJNsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbiFJNsW (ORCPT
+        with ESMTP id S235863AbiFJNsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Jun 2022 09:48:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F3522B35;
-        Fri, 10 Jun 2022 06:48:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB57B85A;
+        Fri, 10 Jun 2022 06:48:21 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 582E3B83500;
-        Fri, 10 Jun 2022 13:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F34C34114;
-        Fri, 10 Jun 2022 13:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654868895;
-        bh=T+pPDaDcvZBdzFlfEgDE/742pWO4FIoVsNv9CScJ/4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SANMuVrPIf1A4ysoL3oDttK/kvQYqkGdgddwxMRf4rzO3lJXrSHANVgrcLg3RfAnP
-         znsT8L7iR7heDAfk1cl/HdupPnK1FGfRmpcZtw4ZFhnSDFh3z6W+p2EZyxaOfE8lb1
-         vrKs51/mWKp4SeuBjgSH8iToYiqM7xr4ai5Jz5ZJzHvmasxJZiP/KIo7vThuOvWb9t
-         MJnX7DDIz7WxqWFnROwR4qKMYA2RAq4eqbQw/9zN2amRRW8/OMt0Tm3D5wciZ1Nh3A
-         ATB8715JCHdYX9FjACZEew86eYDC1Bu7EOxddiVkHykIxaOiKdFOmFM09rn7SFRq1D
-         ISvCHTEFFtkAA==
-Date:   Fri, 10 Jun 2022 19:18:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RESEND PATCH v2] dmaengine: mxs: fix driver registering
-Message-ID: <YqNLmixdb3fv7Cgs@matsya>
-References: <20220607095829.1035903-1-dario.binacchi@amarulasolutions.com>
- <YqGJnORzbp2xiEU3@matsya>
- <CAOf5uwkxit8kAAmwWGgTqR57m_SRmAxere10rCucOuBHU5+8fw@mail.gmail.com>
- <YqGODNACHfKKHBOf@matsya>
- <CAOf5uw=8j1F3tLE9fLAjFGhVt4WXsU7GJdCkEhPtAAxvzM2fyg@mail.gmail.com>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3A21B66016C3;
+        Fri, 10 Jun 2022 14:48:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654868899;
+        bh=BilRyir/crWErV5fDo+jnVnwBSywHk1bpFGWraz5JfE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DrRRUOEsNVSqutVev5GSgPTtKnxmDE8RX1DeJEFL8ZR0X2MWoUbUH5056NeZupqrg
+         Q7y+G+GkFsWuHQYaStTi5HJJnTOGHNJkZpZssd6lQgCVDWvotuHXl5kmjRPEmVJgLy
+         2A9O5IQfEgY6b3R2WemU2ybfZMtOt3dPIKmA9F+B2c81AtjyLXJKBZFUlzhq44SB5J
+         5AMP2gzYPYrtLTYS7o/bSDcoUWmMEqQa/EwolszCkRAz8JbWIIb82lHm30bxg0wKge
+         eUHTILodjzMFTrVizRWtclUjANnqI8Uu4OCyh1BLR35kmM93XWvxEMZ/kKjsjQt9lV
+         +iZTu+0qbmyCw==
+Message-ID: <1cfcfa52-923d-fa4b-05c8-88635f8d93e5@collabora.com>
+Date:   Fri, 10 Jun 2022 16:48:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOf5uw=8j1F3tLE9fLAjFGhVt4WXsU7GJdCkEhPtAAxvzM2fyg@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1 4/5] media: rkvdec: Re-enable H.264 error detection
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     linux-media@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
+ <20220610125215.240539-5-nicolas.dufresne@collabora.com>
+ <20220610132017.GD2146@kadam>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220610132017.GD2146@kadam>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,81 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09-06-22, 08:18, Michael Nazzareno Trimarchi wrote:
-> Hi Vinod
+On 6/10/22 16:20, Dan Carpenter wrote:
+> On Fri, Jun 10, 2022 at 08:52:14AM -0400, Nicolas Dufresne wrote:
+>> This re-enables H.264 error detection, but using the other error mode.
+>> In that mode, the decoder will skip over the error macro-block or
+>> slices and complete the decoding. As a side effect, the error status
+>> is not set in the interrupt status register, and instead errors are
+>> detected per format. Using this mode workaround the issue that the
+>> HW get stuck in error stated and allow reporting that some corruption
+>> may be present in the buffer returned to userland.
+>>
+>> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>> ---
+>>  drivers/staging/media/rkvdec/rkvdec-h264.c | 23 +++++++++++++++++++---
+>>  1 file changed, 20 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+>> index 55596ce6bb6e..60a89918e2c1 100644
+>> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+>> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+>> @@ -1175,14 +1175,15 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+>>  
+>>  	schedule_delayed_work(&rkvdec->watchdog_work, msecs_to_jiffies(2000));
+>>  
+>> -	writel(0, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
+>> -	writel(0, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
+>> +	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
+>> +	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
 > 
-> On Thu, Jun 9, 2022 at 8:07 AM Vinod Koul <vkoul@kernel.org> wrote:
-> >
-> > On 09-06-22, 08:01, Michael Nazzareno Trimarchi wrote:
-> > > Hi
-> > >
-> > > On Thu, Jun 9, 2022 at 7:48 AM Vinod Koul <vkoul@kernel.org> wrote:
-> > > >
-> > > > On 07-06-22, 11:58, Dario Binacchi wrote:
-> > > > > Driver registration fails on SOC imx8mn as its supplier, the clock
-> > > > > control module, is not ready. Since platform_driver_probe(), as
-> > > > > reported by its description, is incompatible with deferred probing,
-> > > > > we have to use platform_driver_register().
-> > > > >
-> > > > > Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
-> > > > > Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > > > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > > > > Cc: stable@vger.kernel.org
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > Changes in v2:
-> > > > > - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
-> > > > >
-> > > > >  drivers/dma/mxs-dma.c | 11 ++++-------
-> > > > >  1 file changed, 4 insertions(+), 7 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
-> > > > > index 994fc4d2aca4..b8a3e692330d 100644
-> > > > > --- a/drivers/dma/mxs-dma.c
-> > > > > +++ b/drivers/dma/mxs-dma.c
-> > > > > @@ -670,7 +670,7 @@ static enum dma_status mxs_dma_tx_status(struct dma_chan *chan,
-> > > > >       return mxs_chan->status;
-> > > > >  }
-> > > > >
-> > > > > -static int __init mxs_dma_init(struct mxs_dma_engine *mxs_dma)
-> > > > > +static int mxs_dma_init(struct mxs_dma_engine *mxs_dma)
-> > > >
-> > > > why drop __init for these...?
-> > > >
-> > >
-> > > I think that you refer to the fact that it can not be compiled as a
-> > > module, am I right?
-> >
-> > It is still declared as a module_platform_driver... From changelog I can
-> > understand that you are changing init level from subsys to module (in
-> > fact clocks should be moved up as arch level and dmaengine users as
-> > module) ...
-> 
-> The way the driver was using to register was:
-> platform_driver_probe(&driver, driver_probe);
-> 
-> The function try to register the driver, one time and if the
-> dependences is not satisfied,
-> then there will not a next try, so the driver initialized that way can
-> not depends to anything
-> apart himself, or all the dependencies should be ready at the time the
-> driver_probe is called
+> This reverts the changes in patch 1/5.  Could we just skip patch 1/5
+> instead?
 
-There are two ways to solve this, you lowered the init level of this
-driver but your consumers are going to have same issue...
-
-> 
-> >
-> > But why remove __init declaration from these? Whatever purpose that may
-> > solve needs to be documented in changelog and perhaps a different patch
-> >
-> 
-> I was thinking that driver can be compiled as module as other driver
-> but is bool and not tristate
-
-Ok, but why drop __init()
+The first patch must go to the stable kernels, hence we couldn't skip it.
 
 -- 
-~Vinod
+Best regards,
+Dmitry

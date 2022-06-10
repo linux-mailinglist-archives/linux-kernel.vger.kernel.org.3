@@ -2,110 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E867546D43
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF89546D57
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 21:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347427AbiFJT2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 15:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S1348489AbiFJTgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 15:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350550AbiFJT2j (ORCPT
+        with ESMTP id S1344509AbiFJTgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:28:39 -0400
-Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5BE1C78F9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:28:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=yUY/DnIxjDue7wT95qIOB79riamGBEfZ96J6K/Td21w=;
-        b=WbYF3yEuHjKi421BzbyY2CD+QL/rWS7WXaQK5nlcZ3rX7m3U8DyTwQpk2Hn1OnP++6xy9XuFn0+FD
-         9lrwb5CXeUCBjzcAg0JP1v3IMKHFgCsRFX7pYJnvjsVgNTvvVq77Qf6/W2PXd+PAO96H1krFVBHlZX
-         RBQI/ukV7QE0XLMoak0abtoDLSct+W4Dt9l5+hgll4cYy9D9DSclmBDJpRziJ4jPX8eIn79YjFH+Ax
-         5GGRUEOrXPCxSa6Eo3yA5fCx96ENO2KDERmSdvviG9R83akUVq29lXMPpQa9bMD44ah23fG+Nv/tVA
-         bLRxmanpnfL5AT05H/t93fBtDo+EJXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=yUY/DnIxjDue7wT95qIOB79riamGBEfZ96J6K/Td21w=;
-        b=cp4Qer+Ca5vbaOZQ2RKoX1pcPPkX4ULqp1SNlb/2ByHWnkr93naQB1aJUJWVov1t5gilzSpvlUC9W
-         BbJJXzEAg==
-X-HalOne-Cookie: 37fa42ebdd97f57a6e422a39d60d3a92bdb63160
-X-HalOne-ID: 84985802-e8f3-11ec-be77-d0431ea8bb03
-Received: from mailproxy4.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 84985802-e8f3-11ec-be77-d0431ea8bb03;
-        Fri, 10 Jun 2022 19:28:34 +0000 (UTC)
-Date:   Fri, 10 Jun 2022 21:28:32 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH 2/3] drm/panel: panel-dsi-cm: Use backlight helpers
-Message-ID: <YqObYPttYuRDikrO@ravnborg.org>
-References: <20220607182026.1121992-1-steve@sk2.org>
- <20220607182026.1121992-3-steve@sk2.org>
- <20220609215236.ojxw6l2vkf652hgu@mercury.elektranox.org>
- <20220610194720.485cf7be@heffalump.sk2.org>
+        Fri, 10 Jun 2022 15:36:45 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EA6101EE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 12:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=ygCFBqZbkR6suCHUcTKZ8do/gLGGzc7CS3f6CgBBhbs=;
+        t=1654889802; x=1656099402; b=t2sOq5LuXrPbBiAjbwbpuqYrsXdK2pWJG2H8EYXsP8aPsYm
+        2LqulIizGXuA0bl5OmvJft3jjTURhqgdn29EA2019zZU0rttPtxlLOqu0UssHuqp4a5blxVCQeuVg
+        sRttW0YcJdboW9w+QDVMRFTEXJWk3l9KN3WGxFRnU9zYJs6R4PxU8RPp11xGncm1X1VmCszSZYiF0
+        OeIKUrBVxJHAaptH4wtBP1wEINNWPedac7Dm3Kv5WJm5MRcyeip4y63ThbqPVDBUzEcVm7VNZojuZ
+        Ou2DZElorKTL+8ue2FqYjRMUNc7VBZ+bFbeU6qtG7mHNUeLmV4ucknIbzHxOzm/g==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nzkQi-001dhU-N4;
+        Fri, 10 Jun 2022 21:36:24 +0200
+Message-ID: <3670b59063e3815f281c602d6f88dde8e9b1c50f.camel@sipsolutions.net>
+Subject: Re: [PATCH] um: virt-pci: set device ready in probe()
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc:     kernel@axis.com, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Fri, 10 Jun 2022 21:36:23 +0200
+In-Reply-To: <20220610151203.3492541-1-vincent.whitchurch@axis.com>
+References: <20220610151203.3492541-1-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610194720.485cf7be@heffalump.sk2.org>
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen.
-On Fri, Jun 10, 2022 at 07:47:20PM +0200, Stephen Kitt wrote:
-> Hi Sebastian,
-> 
-> On Thu, 9 Jun 2022 23:52:36 +0200, Sebastian Reichel
-> <sebastian.reichel@collabora.com> wrote:
-> > On Tue, Jun 07, 2022 at 08:20:25PM +0200, Stephen Kitt wrote:
-> > > diff --git a/drivers/gpu/drm/panel/panel-dsi-cm.c
-> > > b/drivers/gpu/drm/panel/panel-dsi-cm.c index b58cb064975f..aa36dc6cedd3
-> > > 100644 --- a/drivers/gpu/drm/panel/panel-dsi-cm.c
-> > > +++ b/drivers/gpu/drm/panel/panel-dsi-cm.c
-> > > @@ -86,16 +86,10 @@ static void dsicm_bl_power(struct panel_drv_data
-> > > *ddata, bool enable) return;
-> > >  
-> > >  	if (enable) {
-> > > -		backlight->props.fb_blank = FB_BLANK_UNBLANK;
-> > > -		backlight->props.state = ~(BL_CORE_FBBLANK |
-> > > BL_CORE_SUSPENDED);
-> > > -		backlight->props.power = FB_BLANK_UNBLANK;
-> > > +		backlight_enable(backlight);
-> > >  	} else {
-> > > -		backlight->props.fb_blank = FB_BLANK_NORMAL;
-> > > -		backlight->props.power = FB_BLANK_POWERDOWN;
-> > > -		backlight->props.state |= BL_CORE_FBBLANK |
-> > > BL_CORE_SUSPENDED;
-> > > +		backlight_disable(backlight);
-> > >  	}  
-> > 
-> > The brackets can be removed now. Otherwise:
-> 
-> > 
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> 
-> Thanks, I’ll wait a little more to see if there are any other reviews of the
-> patches and then push a v2 with that fix.
-It would be very nice if you could kill all uses of FB_BLANK in the
-drivers/gpu/drm/panel/* drivers, and post them as one series.
-This is long overdue to introduce the backlight helpers.
+On Fri, 2022-06-10 at 17:12 +0200, Vincent Whitchurch wrote:
+> Call virtio_device_ready() to make this driver work after commit
+> b4ec69d7e09 ("virtio: harden vring IRQ"), since the driver uses the
+> virtqueues in the probe function.  (The virtio core sets the device
+> ready when probe returns.)
+>=20
+> Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-The three you posted is already a nice step forward, and there may be
-more panel drivers I have missed.
+Thank you! I had apparently run into this a few days ago, but hadn't had
+a chance to debug it yet. This patch fixes my test setup on 5.19-rc1.
 
-	Sam
+Tested-by: Johannes Berg <johannes@sipsolutions.net>
+
+johannes

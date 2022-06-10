@@ -2,58 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F54546AA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11FB546A9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349783AbiFJQio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S1349697AbiFJQjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349839AbiFJQii (ORCPT
+        with ESMTP id S1349828AbiFJQjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:38:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E12B5995C;
-        Fri, 10 Jun 2022 09:38:36 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 08E4D660172B;
-        Fri, 10 Jun 2022 17:38:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654879114;
-        bh=hp2gpcoxc1L1t8wOVnHFtGzaBF7lMMf2WNxZjV6zYgM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=F41jVeJokGk1hhiSW1+tW6PCI1j3GAOJWAJfYoahkz5x45dk4JR4jJ+qXu5P8wNHT
-         3IAfU69kP4ohOwsn45pMzXodDXDNuQH61UOqQ+hJifk9GWe/uN9au8uiHfqrE/VLMM
-         c0U21ESFIzCPrFJT9m5Iyqbd5NFQECUKGNm+oMj53FZzHwnWqA9t1tkLs3IWfklACm
-         ZbP5ujWXI35j9SimuIbhj6pXU1a8WrJFBUgJWTDRcrd3LMP2znB4DYHnjyGuROro6M
-         uDpBSNg3V40ET4zsMLpP7bVi2FVBJPORORz+RUsV47Ost1ChlF9nc7Sv9H/IKGLAqF
-         YVEL81r24tCDg==
-Message-ID: <16e50526255d585bcd5c863755ebb423466d53ff.camel@collabora.com>
-Subject: Re: [PATCH v1 4/5] media: rkvdec: Re-enable H.264 error detection
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Fri, 10 Jun 2022 12:38:24 -0400
-In-Reply-To: <CAAEAJfAdPt59oCi4wPybwn0a4zHq_3x66L5mRSQ54yQezz+ZZA@mail.gmail.com>
-References: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
-         <20220610125215.240539-5-nicolas.dufresne@collabora.com>
-         <CAAEAJfAdPt59oCi4wPybwn0a4zHq_3x66L5mRSQ54yQezz+ZZA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Fri, 10 Jun 2022 12:39:12 -0400
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30114.outbound.protection.outlook.com [40.107.3.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF765DE74;
+        Fri, 10 Jun 2022 09:39:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZMwyc6Z4+jbo+mYVAcUJP6lJjvJBfykrzx8IYom0hzHs5cTXyW2lIXtz84u4X73rpN0xlW6til77PO3KA+aQD40/f+3TnHSq89N+CZpbFNWnRQc3ffKV/KNIyQuAA5/y1/D6unw0LWKF2g3v4eDo4yu9AFe5xtiA7RHu8hB8uTU7wBdET3yOczWoXvham18XhFihq4B8Awr5mSmz1APrvHnG1tclp2TzQ/g0A7aJNlM+d6Ysl9tEX9CiMi7xUGLSvnKZ/C+ne5fH2bck89W2QmnJMH3svQtQfFPTTmwhu32eYcSX4jIZFfGSxyl8+ShUoI6FcT/v6Kpyv294WLckYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ko2cLk9XQ+yhgKdLfPZVHmKLgKmyXFoVYF2xXgjF9js=;
+ b=PKbta/uXKmLaZ5fVjSO229qCycypGcAsqEt7RwEgnEu5G+b7+kBzNdmqj8i0w+MB5arOMTFHPhE2+/54AvdoFj1eQAAdW9VVigCrv553fEvyGlBXpm93dVK7YEQ/fJ2ewPGxfGw3Unq+7JpEy5GUVQaXDynItzlfUlyMT7I69ZJ++j9vjXf62XlyJ4dyjk6nVgCSktSZdD1Ai+tpW9QuWZEkNccSqUOT/kdtcf0NbPb2kt853froDRpNrwzWvQGS81Unhf3Zs+4yf8LbG0YRIm2PyONlRysbdnItgiwTmrYhIyQ/Dv3lAeN/+rYMPKR0idjM35nwkuBxtVJ7qm+v7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ko2cLk9XQ+yhgKdLfPZVHmKLgKmyXFoVYF2xXgjF9js=;
+ b=IKKqD0mYvxdNoZuKiFHQz2/S3/5OpRXtwXgNbRWw/PUuPCuEhTtteVjq4oxzp3IklLHeK5B8w2sVd7S3n/Bht8okVlNAa4sSYV72rncYpw2GmrxfsKgllAcQ4Fnzt5yPZAM10Ju2KQO63hMbss/5VXnG3CLi0ZEOeC9hOpyDcBI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from VE1PR08MB4989.eurprd08.prod.outlook.com (2603:10a6:803:114::19)
+ by AM9PR08MB6180.eurprd08.prod.outlook.com (2603:10a6:20b:2d4::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14; Fri, 10 Jun
+ 2022 16:39:04 +0000
+Received: from VE1PR08MB4989.eurprd08.prod.outlook.com
+ ([fe80::5f7:6dd:4715:5169]) by VE1PR08MB4989.eurprd08.prod.outlook.com
+ ([fe80::5f7:6dd:4715:5169%6]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
+ 16:39:03 +0000
+Message-ID: <cb7f3533-a904-ef0f-e3a9-39eed6775aad@virtuozzo.com>
+Date:   Fri, 10 Jun 2022 19:38:59 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 0/2] Introduce CABA helper process tree
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-ia64@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, kernel@openvz.org
+References: <20220610163214.49974-1-ptikhomirov@virtuozzo.com>
+From:   Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+In-Reply-To: <20220610163214.49974-1-ptikhomirov@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS8PR04CA0071.eurprd04.prod.outlook.com
+ (2603:10a6:20b:313::16) To VE1PR08MB4989.eurprd08.prod.outlook.com
+ (2603:10a6:803:114::19)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3a733b14-233b-48b6-6aee-08da4affbacc
+X-MS-TrafficTypeDiagnostic: AM9PR08MB6180:EE_
+X-Microsoft-Antispam-PRVS: <AM9PR08MB6180F506ADE77DF180021339B7A69@AM9PR08MB6180.eurprd08.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rf99ihfiGoTOeYLPV/tN5EDNHL30NEPzr0aPCVvmQbRsGQkCuG3iFGy7PjBYTuq4Vi8oLGhIGd3pFN2NVsmSuqaeRY6nS9QICqa1ubG3syXPts/vfZQZLw9qWdQqUIF7H1vsEJC7inQXGS7UYux0PUbPdux0lGaUKm5PZmorObxD/FTsFg3/YjQ09/dbFiEEaDG92fZqW2ERoRwyMmvfZLQffip3FueX0S3+RAz2dj0HgYgdFcJmoll45IJJu/Q9J62Li5TUHyX8CLQIbFU4xpR45Ol5m2jE5Ix0KE561rktzZnwZ+YrzTVxhyXzXYuDEtSNK151k1M2arv5gq+merZdrj1ZMge6e66fK9iMt7vKa/zMNcVwvcK1tevS10cxITWaOUB0rknoY1XtmZklWsAzgEj+/ccRP4Rx5TFSOC7dCF297AwarTq/MkFw2lGam4Pnsx3hg0eRTHnZD/rOwGUawFsfJryAwOJE9IEgqHpC2vTbkou9RqTIl6NEMfKfi6NPBalYbW2C0FZEoDI+K8TmDl2L5lywAoMBKbUaEqBeG1/Cwencrv5klgk5ppMpW9djlSBEr6s2PkJ8b+lDYUItSzyqVXqNNUkb2ZE2pRoK/Q4JDF2+F3zJFnSVhFgSFdYl7CUOwmlZ957x2ZpU+KnojLH04Ihf6Wbp+2W9L5crTn5qPj/iiQz/GYhST2Gs0U8jlHvWkzvigXBvRvh1cLmfPhKUKHRkDbLl9qj+TBU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4989.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(26005)(6506007)(186003)(6512007)(36756003)(31696002)(2616005)(31686004)(107886003)(86362001)(508600001)(8936002)(38100700002)(316002)(6916009)(54906003)(83380400001)(53546011)(6666004)(8676002)(4326008)(2906002)(5660300002)(7416002)(66946007)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWoyaGhIUU1FUXZjL3V4eVhYdWVwMEdkdFlrL0I5NThUSlNibjkzWXQxcVN0?=
+ =?utf-8?B?WTJkNC9QUFprQmdXZEppL2l1WWk1WHYxU3NTZ3NQdlg1VjIrOUFwTGhnakd1?=
+ =?utf-8?B?QVBSYWVWZTM4M2xuR1J2SGVkZlF3RkpkZEJBV09ZZHVqeE5Uc20zb2paL3Fx?=
+ =?utf-8?B?MmNrRlZwODNFOERLbWdQazEzTHY1UTN5Nys4OGEwbThCd1lBeVVvUWNDTlhF?=
+ =?utf-8?B?UjJtVCttYmt4MDhMUGJtbFpQWkp3cWVYVGVqMmk0b3dPQkpDOTY5UGlxYzBo?=
+ =?utf-8?B?anBCNjNQNmFWcmxoV2ZZRVU1ZlFpZFMzc3JkUGY3dFNrRlo4RjVMQzhVOUkr?=
+ =?utf-8?B?eGZwdWxhUW1lZ2hRdERlR3pQc0NVbDJGejI3d01LTTRraXBiTmlqQW1KRTdD?=
+ =?utf-8?B?QjNqNTlXUGljS1JKbEFrSGVPR2RvWHlPQjlRNnBtSFVDUWdXY0tuZ2NWcnE1?=
+ =?utf-8?B?NDlrM0FNYUFDMFFYYVkzLzRmeng2ZjREYzNXZkFNKzNua3FvRjVuNWNoaks5?=
+ =?utf-8?B?NFUzNFBmaUx0ZWhNVFplNE5TN054SlNsTXRWUlhDY01YVDFlajlnWDhMbG9m?=
+ =?utf-8?B?dTBISjU4WXRwdVZCUS93d1c0VjR1eFo1QnZXKzdqUkpVdDBoWDQzU2ZFNHdI?=
+ =?utf-8?B?VGVSLzkrSGZ5cFVWMmJXYy9rRHNGenpudlR5VHlpRTV5VFpDYlVjRVNsOHoy?=
+ =?utf-8?B?STUwUGtzalFYWUpFRjI3alFhUWM0bkkzTTZCY25FL2ZEdkcrRUd1czJqb28w?=
+ =?utf-8?B?M1lOYTZOTkxaR2hqaE9WTWtHbTBGZzhEeTQzSVpjSWtUTGR4c1R3aGd2YzFy?=
+ =?utf-8?B?bXI5RzBSajdLOEdaVmRsbk1GMGtEOXlwNmlJR0sxcHBTM0VjcmtzNWNWUE5P?=
+ =?utf-8?B?cUoxeDdwUTgxUEczNG96K1FRaTBZWGRBWDVZMkk0ZmdsaUJON05kbC9PajVW?=
+ =?utf-8?B?ZG1zTnVORSt2NERRc3MvVE5OY2M2RlJZKzhtb1FIQXV5THdoaGVWTk9TRlZZ?=
+ =?utf-8?B?aitFeHRIK0F6WXBTaGV0L2FXN2E4L2lOTTJHaHRpZTRpUkhCSWs2TmIyZm96?=
+ =?utf-8?B?c1U4THdGL3grZlpaSlkvNTRoRzJYdEozRTJPSUs3MmhZeVF4MUYvR0VVSFVr?=
+ =?utf-8?B?QWtrUDVLZG1XQjZmZTBwZEdNNmpQNWd3dmJYOSttTTJUT0NsVmJ2b09jSWhQ?=
+ =?utf-8?B?RDBwbWMvZFlMUEN2aldqZzBYOVk5a2lLSmZRU1h6OUFuci8xOU9DV3AzZXBQ?=
+ =?utf-8?B?dEtGWEJZUjZpWTZ2clljK2l4cGxnVWtjNkQ2c2dITWxIakZKSnFYNE1CYUQy?=
+ =?utf-8?B?QTJvQlRvWjdkQVVtQ05nRTRJVjdFOCsyU1lJQklodEhJa3dRK3N4bVE5VTJJ?=
+ =?utf-8?B?NzdZd0VLcFhvRkxiVnRFeFFqeVd1bi9xeHU0Tzd4ajZsaEZGMVEvRUhiMktl?=
+ =?utf-8?B?QzFWaU1Tc0J3N1NQdDlXMDVrQktFLysyMDV1NFNVdTBuTWdxSmJUQ0pwdElM?=
+ =?utf-8?B?by9Pa09IV1Zad3hDcGh5TVpzVXQ4cGJtVHdFWkdtWWZ3RmIzV1hyZWd1Q0ht?=
+ =?utf-8?B?YVczUjJCUFdiTkFsSlBwcmtqcE1HTEV5RTJZdHBTZEtGVEFYQlZsdGxYQ2t2?=
+ =?utf-8?B?dXYvMXlQSnlDWTdZazEzdkJjSnhTODA1dVJQVm5pUjJuUWZHUndNOUNWenZB?=
+ =?utf-8?B?NVBUY0gwekg2ODI2dlk0NEhtam9TN0QxZ2NiQXlOVEpFQ2ZKakNHNklyVWlM?=
+ =?utf-8?B?bjdmVDhSMGZIbjhQRWlidC9PeW5kaGlRbEtzem03NDJJblR0Nkg0REljR05Q?=
+ =?utf-8?B?QjI2cHRyUlFZcjVnTTFOK1pLbjBPQ1oxRmk5ODhZT2tKNzN3bkJDb1VOL29q?=
+ =?utf-8?B?SzREaEVaUU5RRGZhUkJDeElOWTlqRkhGalRuemhsRUhsM0xwM2FxTlZvR1dF?=
+ =?utf-8?B?T1FwUjlVYjY0VmJrMkd1Z1Q1dnVyd3EvN1NnZzRjMlo3bk9NYTRsc2x0Tmxx?=
+ =?utf-8?B?b09RRFUzaGtucExvclE1TytnTFAxYkpHQmhkaThENjhiN21reWdhSXZQcGoz?=
+ =?utf-8?B?a2hseHZmUnVEc1V2eU5Bb1c5WFUxNFI2OVdrZFlCaWRoV3RQRDJuWm1PZlpU?=
+ =?utf-8?B?ZjFQcUJ2Ni91RVEzWTc5c2FweHZiU0c4VWtsY0tNdVArMnVsdGNXVjVpbHFS?=
+ =?utf-8?B?YXdIU1BUdGlyd0NEYU5pZWl3WnJ4YzhoWmlUUWZwYXFmVE1RcUFIZXFTM25r?=
+ =?utf-8?B?TCtxL3J0M1NLNEJsMmRBcGNYNGxRV25pdkJIbE14ZzRvTWN6SmU2TXNsQks0?=
+ =?utf-8?B?M1Mvc0k3ck15NTgvcUt1bGc2NkVsTGUxS1dHY3Z0Rk9zeVBxbVJoYmJKUGhy?=
+ =?utf-8?Q?9nFLVbV6yh8O3Xks=3D?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a733b14-233b-48b6-6aee-08da4affbacc
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4989.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 16:39:03.8671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CXhebvYXzrTW7ZLwwjmrDj82H48iCyf4Nv+vWc6jfng7yE7qJAZNvM9lw7EV+2gWSpiRD7UZbFdbRsT3rkPhIG5fcxTfpdzl8z21df+n4uk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6180
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,132 +144,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 10 juin 2022 =C3=A0 12:01 -0300, Ezequiel Garcia a =C3=A9crit=
-=C2=A0:
-> Hi Nicolas,
->=20
-> Great stuff! See below for some ideas how to expose errors.
->=20
-> On Fri, Jun 10, 2022 at 9:52 AM Nicolas Dufresne
-> <nicolas.dufresne@collabora.com> wrote:
-> >=20
-> > This re-enables H.264 error detection, but using the other error mode.
-> > In that mode, the decoder will skip over the error macro-block or
-> > slices and complete the decoding. As a side effect, the error status
-> > is not set in the interrupt status register, and instead errors are
-> > detected per format. Using this mode workaround the issue that the
-> > HW get stuck in error stated and allow reporting that some corruption
-> > may be present in the buffer returned to userland.
-> >=20
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > ---
-> >  drivers/staging/media/rkvdec/rkvdec-h264.c | 23 +++++++++++++++++++---
-> >  1 file changed, 20 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/stagi=
-ng/media/rkvdec/rkvdec-h264.c
-> > index 55596ce6bb6e..60a89918e2c1 100644
-> > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> > @@ -1175,14 +1175,15 @@ static int rkvdec_h264_run(struct rkvdec_ctx *c=
-tx)
-> >=20
-> >         schedule_delayed_work(&rkvdec->watchdog_work, msecs_to_jiffies(=
-2000));
-> >=20
-> > -       writel(0, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
-> > -       writel(0, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
-> > +       writel(0xffffffff, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
-> > +       writel(0xffffffff, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
-> >         writel(1, rkvdec->regs + RKVDEC_REG_PREF_LUMA_CACHE_COMMAND);
-> >         writel(1, rkvdec->regs + RKVDEC_REG_PREF_CHR_CACHE_COMMAND);
-> >=20
-> >         /* Start decoding! */
-> >         writel(RKVDEC_INTERRUPT_DEC_E | RKVDEC_CONFIG_DEC_CLK_GATE_E |
-> > -              RKVDEC_TIMEOUT_E | RKVDEC_BUF_EMPTY_E,
-> > +              RKVDEC_TIMEOUT_E | RKVDEC_BUF_EMPTY_E |
-> > +              RKVDEC_H264ORVP9_ERR_MODE,
-> >                rkvdec->regs + RKVDEC_REG_INTERRUPT);
-> >=20
-> >         return 0;
-> > @@ -1196,10 +1197,26 @@ static int rkvdec_h264_try_ctrl(struct rkvdec_c=
-tx *ctx, struct v4l2_ctrl *ctrl)
-> >         return 0;
-> >  }
-> >=20
-> > +static int rkvdec_h264_check_error_info(struct rkvdec_ctx *ctx)
-> > +{
-> > +       struct rkvdec_dev *rkvdec =3D ctx->dev;
-> > +       int err;
-> > +
-> > +       err =3D readl(rkvdec->regs + RKVDEC_REG_H264_ERRINFO_NUM);
-> > +       if (err & RKVDEC_STRMD_DECT_ERR_FLAG) {
-> > +               pr_debug("Decoded picture have %i/%i slices with errors=
-.\n",
-> > +                        RKVDEC_ERR_PKT_NUM(err), RKVDEC_SLICEDEC_NUM(e=
-rr));
->=20
-> It's more useful friendly to just keep a counter somewhere. In the past,
-> we've created a user control, which has the advantage of leveraging
-> an existing mechanism, and already being per-fd.
->=20
-> See:
->=20
-> commit b2d3bef1aa7858b2ae5e0d01adb214121ba00b9f
-> "media: coda: Add a V4L2 user for control error macroblocks count".
->=20
-> I would drop the pr_debug, or if you think it's really useful for users
-> and developers, go with v4l2_dbg. In which case, how do you ensure
-> a corrupted stream won't flood the logs?
+CC: kernel@openvz.org
 
-There is no use case to make this a control, but yes, a corrupted stream ca=
-n
-flood, but isn't the point of pr_debug() that it won't show if you don't en=
-abled
-it ?
+On 10.06.2022 19:32, Pavel Tikhomirov wrote:
+> Please see "Add CABA tree to task_struct" for deeper explanation, and
+> "tests: Add CABA selftest" for a small test and an actual case for which
+> we might need CABA.
+> 
+> Probably the original problem of restoring process tree with complex
+> sessions can be resolved by allowing sessions copying, like we do for
+> process group, but I'm not sure if that would be too secure to do it,
+> and if there would not be another similar resource in future.
+> 
+> We can use CABA not only for CRIU for restoring processes, in normal
+> life when processes detach CABA will help to understand from which place
+> in process tree they were originally started from sshd/crond or
+> something else.
+> 
+> Hope my idea is not completely insane =)
+> 
+> CC: Eric Biederman <ebiederm@xmission.com>
+> CC: Kees Cook <keescook@chromium.org>
+> CC: Alexander Viro <viro@zeniv.linux.org.uk>
+> CC: Ingo Molnar <mingo@redhat.com>
+> CC: Peter Zijlstra <peterz@infradead.org>
+> CC: Juri Lelli <juri.lelli@redhat.com>
+> CC: Vincent Guittot <vincent.guittot@linaro.org>
+> CC: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> CC: Steven Rostedt <rostedt@goodmis.org>
+> CC: Ben Segall <bsegall@google.com>
+> CC: Mel Gorman <mgorman@suse.de>
+> CC: Daniel Bristot de Oliveira <bristot@redhat.com>
+> CC: Valentin Schneider <vschneid@redhat.com>
+> CC: Andrew Morton <akpm@linux-foundation.org>
+> CC: linux-ia64@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> CC: linux-mm@kvack.org
+> CC: linux-fsdevel@vger.kernel.org
+> 
+> Pavel Tikhomirov (2):
+>    Add CABA tree to task_struct
+>    tests: Add CABA selftest
+> 
+>   arch/ia64/kernel/mca.c                   |   3 +
+>   fs/exec.c                                |   1 +
+>   fs/proc/array.c                          |  18 +
+>   include/linux/sched.h                    |   7 +
+>   init/init_task.c                         |   3 +
+>   kernel/exit.c                            |  50 ++-
+>   kernel/fork.c                            |   4 +
+>   tools/testing/selftests/Makefile         |   1 +
+>   tools/testing/selftests/caba/.gitignore  |   1 +
+>   tools/testing/selftests/caba/Makefile    |   7 +
+>   tools/testing/selftests/caba/caba_test.c | 501 +++++++++++++++++++++++
+>   tools/testing/selftests/caba/config      |   1 +
+>   12 files changed, 591 insertions(+), 6 deletions(-)
+>   create mode 100644 tools/testing/selftests/caba/.gitignore
+>   create mode 100644 tools/testing/selftests/caba/Makefile
+>   create mode 100644 tools/testing/selftests/caba/caba_test.c
+>   create mode 100644 tools/testing/selftests/caba/config
+> 
 
-As for v4l2_dbg I'm not familiar with that and its not used in this driver =
-for
-traces. I've use pr_debug for reference list tracing previously and floodin=
-g was
-not considered a problem despite being a per-frame trace. You can even out-
-compile these if you need to.
-
-Let me know if you have further rationale in the suggestion direction. The
-rationale in my coding for such trace is that if I read 1 bit of a register=
-, and
-trace the surrounding value, I can validate (as a human) that the rest of t=
-he
-register isn't complete garbage, and that I'm not basically reading a rando=
-m
-bit. Leaving the trace there, allow other developer on other variant of the=
-se
-SoC to also notice if that register becomes garbage. This is in contrast of=
- just
-telling others "trust me, I tested it".
-
-Nicolas
-
->=20
-> Thanks,
-> Ezequiel
->=20
->=20
-> > +               return VB2_BUF_STATE_ERROR;
-> > +       }
-> > +
-> > +       return VB2_BUF_STATE_DONE;
-> > +}
-> > +
-> >  const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops =3D {
-> >         .adjust_fmt =3D rkvdec_h264_adjust_fmt,
-> >         .start =3D rkvdec_h264_start,
-> >         .stop =3D rkvdec_h264_stop,
-> >         .run =3D rkvdec_h264_run,
-> >         .try_ctrl =3D rkvdec_h264_try_ctrl,
-> > +       .check_error_info =3D rkvdec_h264_check_error_info,
-> >  };
-> > --
-> > 2.36.1
-> >=20
-
+-- 
+Best regards, Tikhomirov Pavel
+Software Developer, Virtuozzo.

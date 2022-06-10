@@ -2,42 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BA15461AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C464C5461AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348980AbiFJJTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S1349055AbiFJJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348970AbiFJJSb (ORCPT
+        with ESMTP id S1349030AbiFJJSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:18:31 -0400
+        Fri, 10 Jun 2022 05:18:37 -0400
 Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7400E8BA4;
-        Fri, 10 Jun 2022 02:16:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904FE2D9AF4;
+        Fri, 10 Jun 2022 02:16:41 -0700 (PDT)
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1nzakJ-005Mct-RQ; Fri, 10 Jun 2022 19:16:01 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 10 Jun 2022 17:16:00 +0800
-Date:   Fri, 10 Jun 2022 17:16:00 +0800
+        id 1nzakk-005Md7-52; Fri, 10 Jun 2022 19:16:27 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 10 Jun 2022 17:16:26 +0800
+Date:   Fri, 10 Jun 2022 17:16:26 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Shijith Thotton <sthotton@marvell.com>
-Cc:     Arnaud Ebalard <arno@natisbad.org>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        linux-crypto@vger.kernel.org, jerinj@marvell.com,
-        sgoutham@marvell.com, Srujana Challa <schalla@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] crypto: octeontx2: add firmware version in devlink info
-Message-ID: <YqML0PX4GbignSK4@gondor.apana.org.au>
-References: <421b1fbe94a82e678887260f768478c11daa1e32.1653589007.git.sthotton@marvell.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheng Bin <zhengbin13@huawei.com>,
+        Eric Biggers <ebiggers@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH crypto] crypto: memneq - move into lib/
+Message-ID: <YqML6nrdohsG7gsR@gondor.apana.org.au>
+References: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
+ <20220528102429.189731-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <421b1fbe94a82e678887260f768478c11daa1e32.1653589007.git.sthotton@marvell.com>
+In-Reply-To: <20220528102429.189731-1-Jason@zx2c4.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
@@ -47,16 +42,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 01:24:48PM +0530, Shijith Thotton wrote:
-> Added running firmware version information of AE, SE and IE components
-> in devlink info.
+On Sat, May 28, 2022 at 12:24:29PM +0200, Jason A. Donenfeld wrote:
+> This is used by code that doesn't need CONFIG_CRYPTO, so move this into
+> lib/ with a Kconfig option so that it can be selected by whatever needs
+> it.
 > 
-> Signed-off-by: Shijith Thotton <sthotton@marvell.com>
+> This fixes a linker error Zheng pointed out when
+> CRYPTO_MANAGER_DISABLE_TESTS!=y and CRYPTO=m:
+> 
+>   lib/crypto/curve25519-selftest.o: In function `curve25519_selftest':
+>   curve25519-selftest.c:(.init.text+0x60): undefined reference to `__crypto_memneq'
+>   curve25519-selftest.c:(.init.text+0xec): undefined reference to `__crypto_memneq'
+>   curve25519-selftest.c:(.init.text+0x114): undefined reference to `__crypto_memneq'
+>   curve25519-selftest.c:(.init.text+0x154): undefined reference to `__crypto_memneq'
+> 
+> Reported-by: Zheng Bin <zhengbin13@huawei.com>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: stable@vger.kernel.org
+> Fixes: aa127963f1ca ("crypto: lib/curve25519 - re-add selftests")
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
->  .../marvell/octeontx2/otx2_cpt_devlink.c      | 40 ++++++++++++++++++-
->  .../marvell/octeontx2/otx2_cptpf_ucode.c      |  2 +-
->  .../marvell/octeontx2/otx2_cptpf_ucode.h      |  3 ++
->  3 files changed, 42 insertions(+), 3 deletions(-)
+> I'm traveling over the next week, and there are a few ways to skin this
+> cat, so if somebody here sees issue, feel free to pick this v1 up and
+> fashion a v2 out of it.
+> 
+>  crypto/Kconfig           | 1 +
+>  crypto/Makefile          | 2 +-
+>  lib/Kconfig              | 3 +++
+>  lib/Makefile             | 1 +
+>  lib/crypto/Kconfig       | 1 +
+>  {crypto => lib}/memneq.c | 0
+>  6 files changed, 7 insertions(+), 1 deletion(-)
+>  rename {crypto => lib}/memneq.c (100%)
 
 Patch applied.  Thanks.
 -- 

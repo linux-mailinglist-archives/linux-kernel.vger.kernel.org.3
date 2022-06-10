@@ -2,100 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F9D545F77
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1019454607F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 10:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347877AbiFJIkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 04:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S1348405AbiFJIvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 04:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241270AbiFJIki (ORCPT
+        with ESMTP id S1344251AbiFJIvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 04:40:38 -0400
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E341A5;
-        Fri, 10 Jun 2022 01:40:37 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so803940wmq.0;
-        Fri, 10 Jun 2022 01:40:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ztq4k3KUPkKf4HUs/0KYVoq6RFzFscI/AU5d2/079VY=;
-        b=0Z/HATVtdJxGJ4Fd4/G/QwZILxgDvo86fBR/vnqIrUkKCki5H3ma+9nQPJxAks0OK5
-         WRy7yL3br6970z+NBFo+uYCsAGbY/ndtgWnNhwBTUalcE1M9mGqQhEBHH29XAOmP/qez
-         x8UJrtQ62zSgzRnSmZmnd0b+vkl5QX+FATScGm98RH3ncUEyA1z//EFzF08DtFeLwDdk
-         m6kE6HIUkJwvETF7Zz3IkJ9Zz4erLaLvyeKEK3S3tYDQhcgobAxSfHxH/67jGXhON+2s
-         +4oOuWPNxeb46X1o9cPcbC7jpYIr3Ge2wz4rpTQWshpo17HvMWReEyledcSnalbXhtWb
-         zq7g==
-X-Gm-Message-State: AOAM5335dW+en9sKVFy214ndBvMXvCGE1gLBk4t1mzuYQnD7+i+SpDTj
-        FH0zxHCP61LudLCkE5S48Fg=
-X-Google-Smtp-Source: ABdhPJyQtOeBG1bBmUjSZGZ8BW8JYMPPtMA6gpFagh2WNHrMfZnGM2P6qHsHBdknbAwB+oOQ/gdRFA==
-X-Received: by 2002:a05:600c:190b:b0:39c:7704:74a4 with SMTP id j11-20020a05600c190b00b0039c770474a4mr4333763wmq.92.1654850435757;
-        Fri, 10 Jun 2022 01:40:35 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id 123-20020a1c1981000000b003975c7058bfsm2172199wmz.12.2022.06.10.01.40.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 01:40:35 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 08:40:33 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>
-Subject: Re: [PATCH] Drivers: hv: vmbus: Release cpu lock in error case
-Message-ID: <20220610084033.r6llz4dadlw6gyoz@liuwe-devbox-debian-v2>
-References: <1654794996-13244-1-git-send-email-ssengar@linux.microsoft.com>
- <PH0PR21MB30259484AB91D8EA2DEBD3E7D7A79@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Fri, 10 Jun 2022 04:51:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358911D4227;
+        Fri, 10 Jun 2022 01:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654851059; x=1686387059;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=etC3uz8qUuWgAsIvtsfrLwFYKAKR7aLj+1lVe6qTKuw=;
+  b=BDnm5jblDI/BJ1fMpxKz41dTv15Oe8QOoGw/R2kv09jRhZ0TH+WAtbke
+   ZCBgF0V8v9QULF9VDLqA/c9aQbBHv873djpIpK5ia/mxyulMfl4MgQ5Yn
+   NvNqCNFi0gmI8TAxy0wg9uqXNqx3x+4fzps8N2xI8SyyLpAgU5mwgpDYu
+   YoQbL73YQQFhvT19Tway0ChFquZxicfAhPEnM7DrmT4j9+R+VvNlpyPaa
+   lRNCHH89mvYGE++wzYnujvKoVJQlm0/GGGWTqu2EP8QEhDBgqVg4Jv1rS
+   NsOMvLZe0xY0AcpLnKunsOtQgsyCjUQxNH20HyyMe+yHMcy/ZTM3TatOx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363893926"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="363893926"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 01:50:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="638025972"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2022 01:50:55 -0700
+Date:   Fri, 10 Jun 2022 16:42:59 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
+        Ivan Bornyakov <brnkv.i1@gmail.com>,
+        Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v17 1/4] fpga: fpga-mgr: support bitstream offset in
+  image buffer
+Message-ID: <20220610084259.GB693376@yilunxu-OptiPlex-7050>
+References: <20220609154752.20781-1-i.bornyakov@metrotek.ru>
+ <20220609154752.20781-2-i.bornyakov@metrotek.ru>
+ <20220610074311.GA693376@yilunxu-OptiPlex-7050>
+ <20220610081342.45x65lxbuxozej57@x260>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR21MB30259484AB91D8EA2DEBD3E7D7A79@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220610081342.45x65lxbuxozej57@x260>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 05:39:06PM +0000, Michael Kelley (LINUX) wrote:
-> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, June 9, 2022 10:17 AM
+On Fri, Jun 10, 2022 at 11:13:42AM +0300, Ivan Bornyakov wrote:
+> On Fri, Jun 10, 2022 at 03:43:11PM +0800, Xu Yilun wrote:
+> > On Thu, Jun 09, 2022 at 06:47:49PM +0300, Ivan Bornyakov wrote:
+> > > At the moment FPGA manager core loads to the device entire image
+> > > provided to fpga_mgr_load(). But it is not always whole FPGA image
+> > > buffer meant to be written to the device. In particular, .dat formatted
+> > > image for Microchip MPF contains meta info in the header that is not
+> > > meant to be written to the device. This is issue for those low level
+> > > drivers that loads data to the device with write() fpga_manager_ops
+> > > callback, since write() can be called in iterator over scatter-gather
+> > > table, not only linear image buffer. On the other hand, write_sg()
+> > > callback is provided with whole image in scatter-gather form and can
+> > > decide itself which part should be sent to the device.
+> > > 
+> > > Add header_size and data_size to the fpga_image_info struct and adjust
+> > > fpga_mgr_write() callers with respect to them.
+> > > 
+> > >   * info->header_size indicates part at the beginning of image buffer
+> > >     that is *not* meant to be written to the device. It is optional and
+> > >     can be 0.
+> > > 
+> > >   * info->data_size is the size of actual bitstream data that *is* meant
+> > >     to be written to the device, starting at info->header_size from the
+> > >     beginning of image buffer. It is also optional and can be 0, which
+> > >     means bitstream data is up to the end of image buffer.
+> > > 
+> > > Also add parse_header() callback to fpga_manager_ops, which purpose is
+> > > to set info->header_size and info->data_size. At least
+> > > initial_header_size bytes of image buffer will be passed into
+> > > parse_header() first time. If it is not enough, parse_header() should
+> > > set desired size into info->header_size and return -EAGAIN, then it will
+> > > be called again with greater part of image buffer on the input.
+> > > 
+> > > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > > ---
+> > >  drivers/fpga/fpga-mgr.c       | 243 +++++++++++++++++++++++++++++-----
+> > >  include/linux/fpga/fpga-mgr.h |  17 ++-
+> > >  2 files changed, 229 insertions(+), 31 deletions(-)
+> > > 
+> > > diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> > > index 08dc85fcd511..0854fbc8f11e 100644
+> > > --- a/drivers/fpga/fpga-mgr.c
+> > > +++ b/drivers/fpga/fpga-mgr.c
 > > 
-> > In case of invalid sub channel, release cpu lock before returning.
+> > Should we check in fpga_mgr_create, that initial_header_size must not be
+> > 0 if parse_header() is defined. If we pass no data to parse_header(),
+> > does it make any sense?
 > > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  drivers/hv/channel_mgmt.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> > index 280b529..5b12040 100644
-> > --- a/drivers/hv/channel_mgmt.c
-> > +++ b/drivers/hv/channel_mgmt.c
-> > @@ -639,6 +639,7 @@ static void vmbus_process_offer(struct vmbus_channel
-> > *newchannel)
-> >  		 */
-> >  		if (newchannel->offermsg.offer.sub_channel_index == 0) {
-> >  			mutex_unlock(&vmbus_connection.channel_mutex);
-> > +			cpus_read_unlock();
-> >  			/*
-> >  			 * Don't call free_channel(), because newchannel->kobj
-> >  			 * is not initialized yet.
-> > --
-> > 1.8.3.1
 > 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> If FPGA image is mapped, whole buffer will be passed to parse_header(),
+> regardless of initial_header_size.
 > 
+> If FPGA image is sg_table and initial_header_size is 0, first sg
+> fragment will be passed to parse_header() in
+> fpga_mgr_parse_header_sg_first().
+> 
+> If low level driver's parse_header() is buggy and return -EAGAIN without
+> setting desired size into info->header_size, we will fail in
+> fpga_mgr_parse_header_sg() with -ENOMEM.
+> 
+> static ssize_t fpga_mgr_parse_header_sg(...)
+> {
+> 	size_t header_size = mgr->mops->initial_header_size; /* header_size == 0 */
+> 	...
+> 
+> 	do {
+> 		if (info->header_size) /* header_size is still 0 */
+> 			header_size = info->header_size;
+> 
+> 		buf = krealloc(buf, header_size, GFP_KERNEL); /* returned buf will be NULL */
+> 		if (!buf) {
+> 			ret = -ENOMEM;
+> 			break;
+> 		}
+> 
+> 		...
+> 
+> 	} while (ret == -EAGAIN);
+> 
+> 	...
+> }
+> 
+> So, I believe it is OK to define parse_header() without defining
+> initial_header_size.
 
-The bug comes from a949e86c0d780.
+That's good to me.
 
-Added a Fixes tag and applied to hyperv-fixes. Thanks.
+> 
+> > > @@ -74,6 +74,15 @@ static inline int fpga_mgr_write_complete(struct fpga_manager *mgr,
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +static inline int fpga_mgr_parse_header(struct fpga_manager *mgr,
+> > > +					struct fpga_image_info *info,
+> > > +					const char *buf, size_t count)
+> > > +{
+> > > +	if (mgr->mops->parse_header)
+> > > +		return mgr->mops->parse_header(mgr, info, buf, count);
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  static inline int fpga_mgr_write_init(struct fpga_manager *mgr,
+> > >  				      struct fpga_image_info *info,
+> > >  				      const char *buf, size_t count)
+> > > @@ -136,24 +145,145 @@ void fpga_image_info_free(struct fpga_image_info *info)
+> > >  EXPORT_SYMBOL_GPL(fpga_image_info_free);
+> > >  
+> > >  /*
+> > > - * Call the low level driver's write_init function.  This will do the
+> > > + * Call the low level driver's parse_header function with entire FPGA image
+> > > + * buffer on the input. This will set info->header_size and info->data_size.
+> > > + */
+> > > +static int fpga_mgr_parse_header_mapped(struct fpga_manager *mgr,
+> > > +					struct fpga_image_info *info,
+> > > +					const char *buf, size_t count)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+> > > +	ret = fpga_mgr_parse_header(mgr, info, buf, count);
+> > > +
+> > > +	if (info->header_size + info->data_size > count) {
+> > > +		dev_err(&mgr->dev, "Bitsream data outruns FPGA image\n");
+> > > +		ret = -EINVAL;
+> > > +	}
+> > > +
+> > > +	if (ret) {
+> > > +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
+> > > +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+> > > +	}
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +/*
+> > > + * Call the low level driver's parse_header function with first fragment of
+> > > + * scattered FPGA image on the input. If header fits first fragment,
+> > > + * parse_header will set info->header_size and info->data_size. If it is not,
+> > > + * parse_header will set desired size to info->header_size and -EAGAIN will be
+> > > + * returned.
+> > > + */
+> > > +static int fpga_mgr_parse_header_sg_first(struct fpga_manager *mgr,
+> > > +					  struct fpga_image_info *info,
+> > > +					  struct sg_table *sgt)
+> > > +{
+> > > +	size_t header_size = mgr->mops->initial_header_size;
+> > > +	struct sg_mapping_iter miter;
+> > > +	int ret;
+> > > +
+> > > +	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+> > > +
+> > > +	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
+> > > +	if (sg_miter_next(&miter) &&
+> > > +	    miter.length >= header_size)
+> > > +		ret = fpga_mgr_parse_header(mgr, info, miter.addr, miter.length);
+> > > +	else
+> > > +		ret = -EAGAIN;
+> > > +	sg_miter_stop(&miter);
+> > > +
+> > > +	if (ret && ret != -EAGAIN) {
+> > > +		dev_err(&mgr->dev, "Error while parsing FPGA image header\n");
+> > > +		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+> > > +	}
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +/*
+> > > + * Copy scattered FPGA image fragments to temporary buffer and call the
+> > > + * low level driver's parse_header function. This should be called after
+> > > + * fpga_mgr_parse_header_sg_first() returned -EAGAIN. In case of success,
+> > > + * pointer to the newly allocated image header copy will be set into *ret_buf
+> > > + * and its size will be returned. *ret_buf needs to be freed by caller.
+> > > + */
+> > > +static ssize_t fpga_mgr_parse_header_sg(struct fpga_manager *mgr,
+> > > +					struct fpga_image_info *info,
+> > > +					struct sg_table *sgt, char **ret_buf)
+> > 
+> > Since the function allocs buffer for the user, I suggest it still returns
+> > the buffer pointer. The buffer size could be an output parameter.
+> > 
+> 
+> OK, will do that.
+> 
+> > > +{
+> > > +	size_t len, header_size = mgr->mops->initial_header_size;
+> > > +	char *buf = NULL;
+> > > +	int ret;
+> > > +
+> > > +	do {
+> > > +		if (info->header_size)
+> > > +			header_size = info->header_size;
+> > > +
+> > > +		buf = krealloc(buf, header_size, GFP_KERNEL);
+> > > +		if (!buf) {
+> > > +			ret = -ENOMEM;
+> > 
+> > If you need to return ERROR value, ERR_PTR() could be used.
+> > 
+> > 
+> > BTW: Have you tried to test your FPGA programming using sg buffers? I want
+> > to ensure these changes are actually tested?
+> > 
+> 
+> Of course, but not every single error path, to be honest. Yet, I'm
+> trying my best.
+
+That's fine. Thanks for your support.

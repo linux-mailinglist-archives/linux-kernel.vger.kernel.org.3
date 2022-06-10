@@ -2,162 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC82F54657A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936D6546577
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348925AbiFJLYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
+        id S1348883AbiFJLYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiFJLYq (ORCPT
+        with ESMTP id S233916AbiFJLYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:24:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81CB19299;
-        Fri, 10 Jun 2022 04:24:44 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260717744"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="260717744"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:24:44 -0700
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="649791280"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:24:41 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nzcii-000Yiq-Fy;
-        Fri, 10 Jun 2022 14:22:28 +0300
-Date:   Fri, 10 Jun 2022 14:22:28 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw: Add deferred DMA-channels setup support
-Message-ID: <YqMpdEitU/84oUWV@smile.fi.intel.com>
-References: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
+        Fri, 10 Jun 2022 07:24:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E6D3D329D;
+        Fri, 10 Jun 2022 04:23:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0422F620EA;
+        Fri, 10 Jun 2022 11:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AC8C34114;
+        Fri, 10 Jun 2022 11:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654860238;
+        bh=HeCAjKOn2KigltHeufUPG6Zo86H7F1OtCV+x3kBERyk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TMWnGNYSc8xYLa6h/7+SvfAxfukNjSnBmdGr1vx1M75fSRRkjk3It0RW6/WLU5if5
+         16UB5WVv7vsf89dGWJyYKHVGlNoOxpSfjzmPYWLNA5tYuV7jDgynOYq39eu6g3nRMR
+         //f+6IrPyJYySE7gP86xQ1Q/tt6iSrtEjCDJRAfQQeeRUWj0xEg81s0YtvAGs6cSO3
+         00QYQBkLSl4XnElHfZwizATFsAEbF64abjgRNRzgHs54NB1+dbXOvWoYD/j58n9tiD
+         iPFbVVvOEOLRnC+vnpgf0T//7wFXEmbnj4ABIBzrYNFfPq4EQh6BfkHafGQrx1p47o
+         kXfHKB8gPE8qQ==
+Received: by mail-ot1-f44.google.com with SMTP id h15-20020a9d600f000000b0060c02d737ecso9045498otj.1;
+        Fri, 10 Jun 2022 04:23:58 -0700 (PDT)
+X-Gm-Message-State: AOAM531JvW9nQlhJbg0TiaqhrDHkvaa3sBi8GHSgBfhjm+rdMKEZX7Ft
+        qLSvaNiviFTuzhWx7MHTsuhKgGHVBWrCMEsyU6k=
+X-Google-Smtp-Source: ABdhPJw61qaz84kbcnvqt3Pfi7RCDWoDotPOctj0KisQ84BqKvHZdKcC0MvHMZLpsJONm1ypLPd1ws7GG69fHNK89dQ=
+X-Received: by 2002:a05:6830:9c2:b0:606:1e0a:cc8d with SMTP id
+ y2-20020a05683009c200b006061e0acc8dmr19098159ott.265.1654860227136; Fri, 10
+ Jun 2022 04:23:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220607093805.1354256-1-mawupeng1@huawei.com>
+In-Reply-To: <20220607093805.1354256-1-mawupeng1@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 10 Jun 2022 13:23:34 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXH5r=CUoLCndBUsZ04_0UCJ2VqgJDdp2wbdNCtEx0Yxag@mail.gmail.com>
+Message-ID: <CAMj1kXH5r=CUoLCndBUsZ04_0UCJ2VqgJDdp2wbdNCtEx0Yxag@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] introduce mirrored memory support for arm64
+To:     Wupeng Ma <mawupeng1@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>, songmuchun@bytedance.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        damien.lemoal@opensource.wdc.com,
+        Stephen Boyd <swboyd@chromium.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>, gpiccoli@igalia.com,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        chenzhou10@huawei.com, vijayb@linux.microsoft.com,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:50:06AM +0300, Serge Semin wrote:
-> Currently if the source DMA device isn't ready to provide the channels
-> capable of the SPI DMA transfers, the DW SSI controller will be registered
-> with no DMA support. It isn't right since all what the driver needs to do
-> is to postpone the probe procedure until the DMA device is ready. Let's
-> fix that in the framework of the DWC SSI generic DMA implementation. First
-> we need to use the dma_request_chan() method instead of the
-> dma_request_slave_channel() function, because the later one is deprecated
-> and most importantly doesn't return the failure cause but the
-> NULL-pointer. Second we need to stop the DW SSI controller probe procedure
-> if the -EPROBE_DEFER error is returned on the DMA initialization. The
-> procedure will resume later when the channels are ready to be requested.
+On Tue, 7 Jun 2022 at 11:16, Wupeng Ma <mawupeng1@huawei.com> wrote:
+>
+> From: Ma Wupeng <mawupeng1@huawei.com>
+>
+> Commit b05b9f5f9dcf ("x86, mirror: x86 enabling - find mirrored memory ranges")
+> introduced mirrored memory support for x86. This support rely on UEFI to
+> report mirrored memory address ranges.  See UEFI 2.5 spec pages 157-158:
+>
+>   http://www.uefi.org/sites/default/files/resources/UEFI%202_5.pdf
+>
+> Memory mirroring is a technique used to separate memory into two separate
+> channels, usually on a memory device, like a server. In memory mirroring,
+> one channel is copied to another to create redundancy. This method makes
+> input/output (I/O) registers and memory appear with more than one address
+> range because the same physical byte is accessible at more than one
+> address. Using memory mirroring, higher memory reliability and a higher
+> level of memory consolidation are possible.
+>
+> These EFI memory regions have various attributes, and the "mirrored"
+> attribute is one of them. The physical memory region whose descriptors
+> in EFI memory map has EFI_MEMORY_MORE_RELIABLE attribute (bit: 16) are
+> mirrored. The address range mirroring feature of the kernel arranges such
+> mirrored regions into normal zones and other regions into movable zones.
+>
+> Arm64 can support this too. So mirrored memory support is added to support
+> arm64.
+>
+> The main purpose of this patch set is to introduce mirrored support for
+> arm64 and we have already fixed the problems we had which is shown in
+> patch #5 to patch #8 and try to bring total isolation in patch #9 which
+> will disable mirror feature if kernelcore is not specified.
+>
+> In order to test this support in arm64:
+> - patch this patch set
+> - add kernelcore=mirror in kernel parameter
+> - start you kernel
+>
+> Patch #1-#2 introduce mirrored memory support form arm64.
+> Patch #3-#5 fix some bugs for arm64 if memory reliable is enabled.
+> Patch #6 disable mirror feature if kernelcore is not specified.
+>
+> Thanks to Ard Biesheuvel's hard work [1], now kernel will perfer mirrored
+> memory if kaslr is enabled.
+>
+> [1] https://lore.kernel.org/linux-arm-kernel/CAMj1kXEPVEzMgOM4+Yj6PxHA-jFuDOAUdDJSiSxy_XaP4P7LSw@mail.gmail.com/T/
+>
+> Changelog since v2:
+> - remove efi_fake_mem support
+> - remove Commit ("remove some redundant code in ia64 efi_init") since
+>   efi_print_memmap() is not public
+> - add mirror flag back on initrd memory
+>
+> Changelog since v1:
+> - update changelog in cover letter
+> - use PHYS_PFN in patch #7
+>
+> Ma Wupeng (6):
+>   efi: Make efi_find_mirror() public
+>   arm64/mirror: arm64 enabling - find mirrored memory ranges
+>   mm: Ratelimited mirrored memory related warning messages
+>   mm: Demote warning message in vmemmap_verify() to debug level
+>   mm: Add mirror flag back on initrd memory
+>   efi: Disable mirror feature if kernelcore is not specified
+>
 
-One nit-pick below
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+I have tested these changes on QEMU/arm64 with the patch below, and
+things seem to work as expected. We have some minor issues to work out
+but the general shape of this code is good.
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/spi/spi-dw-core.c |  5 ++++-
->  drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
->  2 files changed, 22 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index ecea471ff42c..911ea9bddbee 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->  
->  	if (dws->dma_ops && dws->dma_ops->dma_init) {
->  		ret = dws->dma_ops->dma_init(dev, dws);
-> -		if (ret) {
-> +		if (ret == -EPROBE_DEFER) {
-> +			goto err_free_irq;
-> +		} else if (ret) {
->  			dev_warn(dev, "DMA init failed\n");
->  		} else {
->  			master->can_dma = dws->dma_ops->can_dma;
-> @@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->  	if (dws->dma_ops && dws->dma_ops->dma_exit)
->  		dws->dma_ops->dma_exit(dws);
->  	dw_spi_enable_chip(dws, 0);
-> +err_free_irq:
->  	free_irq(dws->irq, master);
->  err_free_master:
->  	spi_controller_put(master);
-> diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-> index 63e5260100ec..1322b8cce5b7 100644
-> --- a/drivers/spi/spi-dw-dma.c
-> +++ b/drivers/spi/spi-dw-dma.c
-> @@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
->  
->  static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
->  {
-> -	dws->rxchan = dma_request_slave_channel(dev, "rx");
-> -	if (!dws->rxchan)
-> -		return -ENODEV;
-> +	int ret;
->  
-> -	dws->txchan = dma_request_slave_channel(dev, "tx");
-> -	if (!dws->txchan) {
-> -		dma_release_channel(dws->rxchan);
-> +	dws->rxchan = dma_request_chan(dev, "rx");
-> +	if (IS_ERR(dws->rxchan)) {
-> +		ret = PTR_ERR(dws->rxchan);
->  		dws->rxchan = NULL;
-
-> -		return -ENODEV;
-> +		goto err_exit;
-
-This change doesn't bring anything...
-
-> +	}
-> +
-> +	dws->txchan = dma_request_chan(dev, "tx");
-> +	if (IS_ERR(dws->txchan)) {
-> +		ret = PTR_ERR(dws->txchan);
-> +		dws->txchan = NULL;
-> +		goto free_rxchan;
->  	}
->  
->  	dws->master->dma_rx = dws->rxchan;
-> @@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
->  	dw_spi_dma_sg_burst_init(dws);
->  
->  	return 0;
-> +
-> +free_rxchan:
-> +	dma_release_channel(dws->rxchan);
-> +	dws->rxchan = NULL;
-
-> +err_exit:
-
-...and this too.
-
-> +	return ret;
->  }
->  
->  static void dw_spi_dma_exit(struct dw_spi *dws)
-> -- 
-> 2.35.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+As for the mm/ changes: does anyone mind if I take those through the
+EFI tree as well? I don't think the EFI and -mm changes depend on each
+other, so they can go into -mm separately as well.

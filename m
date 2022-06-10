@@ -2,119 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF835546AAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD1F546AA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 18:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349713AbiFJQh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 12:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
+        id S1345068AbiFJQh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 12:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344890AbiFJQhP (ORCPT
+        with ESMTP id S1349797AbiFJQhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:37:15 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94EFF56FB8;
-        Fri, 10 Jun 2022 09:37:14 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 57D1220BE67F; Fri, 10 Jun 2022 09:37:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 57D1220BE67F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1654879034;
-        bh=rcPTYQEFoo7Vpv208s+mxB/YH8/TY4Eoz0CP7fKKexY=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=QT0TtHGeWPhHDKEmXk4NtsdSizTmD2Ik/G9PK/mGF8lDnJnFWBlRLJtPnuenDTTeL
-         sNvg4ykbiwTTb4Fmm/F5sApOJKdWDpsB35YU8UphKatpWKBPqa2Gk+7kfOGZR4UgXc
-         U+oCAZLDuyzTmMfs4ZwzxPHNiJTBAjH+hX6HEF1g=
-Date:   Fri, 10 Jun 2022 09:37:14 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ssengar@microsoft.com, mikelley@microsoft.com,
-        linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Subject: Re: [PATCH] scsi: storvsc: Correct sysfs parameters as per Hyper-V
- storvsc requirement
-Message-ID: <20220610163714.GA25982@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1654878824-25691-1-git-send-email-ssengar@linux.microsoft.com>
+        Fri, 10 Jun 2022 12:37:47 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCC059957
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:37:40 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id h18so18952284qvj.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l035eZ/XND4LkeE/0rb+BaCGJ69LjeSCzpLD7E1nar4=;
+        b=tWnFa1f9RqnIXyNkw9tEkdYFRwIr/j3Pn+mWG/fbYKXNYLyz6F0qgS9NwJ3Q0t335K
+         WbK8SsXExbpIQq9wHUwNLEEXYmzLzGvtrXm3gMUcd6EVynr+9l3rQ87Np3uKyxTxwDZ3
+         8wI+WHw1E6YfMK0UkVpq7180PrktraZTrAjW8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l035eZ/XND4LkeE/0rb+BaCGJ69LjeSCzpLD7E1nar4=;
+        b=T+3+2vaTHKYtA9HvbQwVUU/pStGL68jDaFCeobu0o4euPBVaxeGwcHc7LSUe0ICeR2
+         fCR4egNcRiapaP7GeMN7UQ00P74cIoX74RYpTf7vN0nfHdF2LCjknSaP32sP9gs9QKS2
+         jxi/1nY25TKmq2tlbMIJ/MoB3TflS9ihZg1ucFZy2WxAmrBuVRvf5dFhqEUp+oP5NUhi
+         n4Xf7NExS3fJ7t8bwVJjQf27WbQ+R2XJP36zcAJZ91MlTK9Y53DQPZvpu1uTurePtRT9
+         dWaesJyNtjVZYyXpKkY7cO1369UaRJubviG1H5ElULwr3d3rF/RamgJrLrB0Z52fTq9X
+         C8RA==
+X-Gm-Message-State: AOAM530Y2rAPJUtP7kYEdiZP/rJGwTtOD04MHj6ogwP1+pDU6uDPJLP4
+        KdH5/UYr+tiVPN3k2gu2BV95uw==
+X-Google-Smtp-Source: ABdhPJyW2ewd5LdFtq8oxipdId0RNoZcgXX6ZpQKBvORIiKwtAfDFWYKAcO6WZpd1/+0CNHE+LiN6w==
+X-Received: by 2002:ad4:5ba3:0:b0:467:dc64:cf9a with SMTP id 3-20020ad45ba3000000b00467dc64cf9amr30324849qvq.73.1654879059954;
+        Fri, 10 Jun 2022 09:37:39 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id ay33-20020a05620a17a100b006a6f68c8a87sm8412785qkb.126.2022.06.10.09.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 09:37:39 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 16:37:39 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, josh@joshtriplett.org,
+        rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        boqun.feng@gmail.com, urezki@gmail.com
+Subject: Re: [PATCH] rcu/tree: Add comment to describe GP done condition in
+ fqs loop
+Message-ID: <YqNzUwfII/gJoP52@google.com>
+References: <20220609071340.30375-1-quic_neeraju@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1654878824-25691-1-git-send-email-ssengar@linux.microsoft.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220609071340.30375-1-quic_neeraju@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC : linux-scsi@vger.kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com
-
-On Fri, Jun 10, 2022 at 09:33:44AM -0700, Saurabh Sengar wrote:
-> This patch corrects 3 parameters:
-> 1. Correct the sysfs entry for maximum hardware transfer limit of single
->    transfer (max_hw_sectors_kb) by setting max_sectors, this was set to
->    default value 512kb before.
-> 2. Correct SGL memory offset alignment as per Hyper-V page size.
-> 3. Correct sg_tablesize which accounts for max SGL segments entries in a
->    single SGL.
+On Thu, Jun 09, 2022 at 12:43:40PM +0530, Neeraj Upadhyay wrote:
+> Add a comment to explain why !rcu_preempt_blocked_readers_cgp() condition
+> is required on root rnp node, for GP completion check in rcu_gp_fqs_loop().
 > 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 > ---
->  drivers/scsi/storvsc_drv.c | 28 ++++++++++++++++++++++++----
->  1 file changed, 24 insertions(+), 4 deletions(-)
+>  kernel/rcu/tree.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-> index ca3530982e52..3e032660ae36 100644
-> --- a/drivers/scsi/storvsc_drv.c
-> +++ b/drivers/scsi/storvsc_drv.c
-> @@ -1844,7 +1844,7 @@ static struct scsi_host_template scsi_driver = {
->  	.cmd_per_lun =		2048,
->  	.this_id =		-1,
->  	/* Ensure there are no gaps in presented sgls */
-> -	.virt_boundary_mask =	PAGE_SIZE-1,
-> +	.virt_boundary_mask =	HV_HYP_PAGE_SIZE - 1,
->  	.no_write_same =	1,
->  	.track_queue_depth =	1,
->  	.change_queue_depth =	storvsc_change_queue_depth,
-> @@ -1969,11 +1969,31 @@ static int storvsc_probe(struct hv_device *device,
->  	/* max cmd length */
->  	host->max_cmd_len = STORVSC_MAX_CMD_LEN;
->  
-> +	/* max_hw_sectors_kb */
-> +	host->max_sectors = (stor_device->max_transfer_bytes) >> 9;
->  	/*
-> -	 * set the table size based on the info we got
-> -	 * from the host.
-> +	 * There are 2 requirements for Hyper-V storvsc sgl segments,
-> +	 * based on which the below calculation for max segments is
-> +	 * done:
-> +	 *
-> +	 * 1. Except for the first and last sgl segment, all sgl segments
-> +	 *    should be align to HV_HYP_PAGE_SIZE, that also means the
-> +	 *    maximum number of segments in a sgl can be calculated by
-> +	 *    dividing the total max transfer length by HV_HYP_PAGE_SIZE.
-> +	 *
-> +	 * 2. Except for the first and last, each entry in the SGL must
-> +	 *    have an offset that is a multiple of HV_HYP_PAGE_SIZE,
-> +	 *    whereas the complete length of transfer may not be aligned
-> +	 *    to HV_HYP_PAGE_SIZE always. This can result in 2 cases:
-> +	 *    Example for unaligned case: Let's say the total transfer
-> +	 *    length is 6 KB, the max segments will be 3 (1,4,1).
-> +	 *    Example for aligned case: Let's say the total transfer length
-> +	 *    is 8KB, then max segments will still be 3(2,4,2) and not 4.
-> +	 *    4 (read next higher value) segments will only be required
-> +	 *    once the length is at least 2 bytes more then 8KB (read any
-> +	 *    HV_HYP_PAGE_SIZE aligned length).
->  	 */
-> -	host->sg_tablesize = (stor_device->max_transfer_bytes >> PAGE_SHIFT);
-> +	host->sg_tablesize = ((stor_device->max_transfer_bytes - 2) >> HV_HYP_PAGE_SHIFT) + 2;
->  	/*
->  	 * For non-IDE disks, the host supports multiple channels.
->  	 * Set the number of HW queues we are supporting.
-> -- 
-> 2.25.1
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index a93c5f4d7e09..9cd1ba512fdc 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2083,7 +2083,17 @@ static noinline_for_stack void rcu_gp_fqs_loop(void)
+>  		rcu_gp_torture_wait();
+>  		WRITE_ONCE(rcu_state.gp_state, RCU_GP_DOING_FQS);
+>  		/* Locking provides needed memory barriers. */
+> -		/* If grace period done, leave loop. */
+> +		/*
+> +		 * If grace period done, leave loop. rcu_preempt_blocked_readers_cgp(rnp)
+> +		 * check is required for the case where we only have single node in the
+> +		 * rcu_node tree; so, root rcu node is also the leaf node, where readers
+> +		 * blocking current gp are queued. For multi-node tree, checking ->qsmask
+> +		 * on the root node is sufficient, as root rcu node's ->qsmask is only
+> +		 * cleared, when all leaf rcu nodes have propagated their quiescent
+> +		 * state to their parent node, which happens only after both ->qsmask
+> +		 * and rcu_preempt_blocked_readers_cgp(rnp_leaf) are cleared for those
+> +		 * leaf nodes.
+> +		 */
+>  		if (!READ_ONCE(rnp->qsmask) &&
+>  		    !rcu_preempt_blocked_readers_cgp(rnp))
+>  			break;
+
+Paul's wording changes are OK with me.
+
+For the patch:
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+thanks,
+
+ - Joel
+

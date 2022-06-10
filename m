@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31BE546C93
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C91546C9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350255AbiFJSgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S1347907AbiFJSjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350390AbiFJSgR (ORCPT
+        with ESMTP id S1347017AbiFJSjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:36:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3C8B3FD8C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654886160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1vmTWMZvDmE1FO6rs2zTYe37OspeJHlTiBA08DM86zY=;
-        b=G2+AuxqKTy57hjDCg9sP2KLjVb2QBktASVcge/Vmcp+PYO4y0jOrsLgkxWy9l9M0UOKRcu
-        TQmMq68ZQLDEBWL/PJxMovf+pEO8fbJd+vvBrGIfrCWc3N3LruHKqydPto1nce5jcHcufm
-        9jNQ9/rT+1JRy7HFZMl1utueaXX19aE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-27-wA5lDc8MNm2qOJza1114VQ-1; Fri, 10 Jun 2022 14:35:57 -0400
-X-MC-Unique: wA5lDc8MNm2qOJza1114VQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1780218A0711;
-        Fri, 10 Jun 2022 18:35:57 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 073A61121314;
-        Fri, 10 Jun 2022 18:35:55 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org
-cc:     dhowells@redhat.com,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@linux.microsoft.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        keyrings@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] certs: Convert spaces in certs/Makefile to a tab
+        Fri, 10 Jun 2022 14:39:45 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CBD2E9D4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=UU5YjojlQCeCu9qlG2U4gDtMpva3
+        cln2VaeHsGNEyGs=; b=CQbK9ijqe4r2UR1IviVxCEjgV8Zkq+S0aZIbbUPhO1mo
+        rJSVajB1cDtUtJBuiTHDpV9iRHvNUKeQYAWLx/RXNp4ix870jRwybTJ5O+hBecPM
+        3F2wMESvrrDFKBTjFKfgVNeV3kcwrPMg3DGsw4zgAQ0D+CjjTQK0/s2fZMMuFGA=
+Received: (qmail 344059 invoked from network); 10 Jun 2022 20:39:36 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jun 2022 20:39:36 +0200
+X-UD-Smtp-Session: l3s3148p1@tXaWQhzhzGxZD+3R
+Date:   Fri, 10 Jun 2022 20:39:35 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0
+ support
+Message-ID: <YqOP51pNPTtXQTMQ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220609194154.12829-1-wsa+renesas@sang-engineering.com>
+ <CAMuHMdXg3rC++RBp+aZM1Q_EkYyTxot-9LZnMfJFRz7cp0NLoQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 10 Jun 2022 19:35:55 +0100
-Message-ID: <662080.1654886155@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CN9TMHG+L/SSyQsL"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXg3rC++RBp+aZM1Q_EkYyTxot-9LZnMfJFRz7cp0NLoQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,50 +73,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi Linus,
+--CN9TMHG+L/SSyQsL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Can you apply this please?  It fixes a build error that can crop up
-occasionally due to a Makefile error.
 
-Thanks,
-David
----
-certs: Convert spaces in certs/Makefile to a tab
+> Unfortunately not:
+>=20
+> arch/arm64/boot/dts/renesas/r8a779f0-spider.dtb: thermal@e6198000:
+> reg: [[0, 3860430848, 0, 512], [0, 3860463616, 0, 512], [0,
+> 3860496384, 0, 512]] is too short
 
-There's a rule in certs/Makefile for which the command begins with eight
-spaces.  This results in:
+Okay, I managed to find the missing dependency to finally update my
+dtschema. I'll send a new version which I then tested myself.
 
-        ../certs/Makefile:21: FORCE prerequisite is missing
-        ../certs/Makefile:21: *** missing separator.  Stop.
 
-Fix this by turning the spaces into a tab.
+--CN9TMHG+L/SSyQsL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fixes: addf466389d9 ("certs: Check that builtin blacklist hashes are valid")
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Reviewed-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-cc: keyrings@vger.kernel.org
-Link: https://lore.kernel.org/r/486b1b80-9932-aab6-138d-434c541c934a@digiko=
-d.net/ # v1
----
- certs/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/certs/Makefile b/certs/Makefile
-index bb904f90f139..cb1a9da3fc58 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -18,7 +18,7 @@ CFLAGS_blacklist_hashes.o +=3D -I$(srctree)
-=20
- targets +=3D blacklist_hashes_checked
- $(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(=
-SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FOR=
-CE
--       $(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LI=
-ST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
-+	$(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SRC=
-PREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
- obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_hashes.o
- else
- obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_nohashes.o
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKjj+MACgkQFA3kzBSg
+Kbb3CRAAjhxA1Oulpxyo+WFjBsKSfz1oGJ+Y/Scd3X0Q9obSO7qA2aMyYoi/gCSa
+bjvhdz68XgfJQi96qu4v/dWUL2Z+5OhE4tFcfFx1aoxKD8Ovgnc3e/sJtpb+qEER
+IYO20H5V9GHLxL9daX6Jvgr7YXo+Nk7Q2HAv8v9NTuj1rorksto2TiUriAWhOFqo
+BdTae1Vaa/3uL+EXfqH5sKmGM9QNdkV+vh17VIifVMxQpuzXRVqZpetv66fP/uRK
+olWyAQ9anMTkazCqW854YoQFt9+CNOrOu8nXrP5lD3ypUfIgfGkanqOBrOG0KR7N
+yazpd7v6aO+ql00ek4QkzZS4GnOfXQVOxJZWA33hH+a4c4q5RZgXx4MqxT5b+IO3
+i9G7EBu735qxkmY/HQW+p0GFNQ+Wel6mzqVOhEymCqxldmVqoe3EZWtJD7q8JlXV
+v+hjLyjh6YsQqdFp4hfhgcLBNiTgzuAxeVEsJyRedvGMIqPR6Hwrcf9VT0SVBEBS
+3p+Ct5qS/JyQxLfxbTePwbwvnz2fi23KflkvQ17a9+5MM3Zth70kQFmiC2t0zmnU
+AOHcnik0WkmlbGSlpdmWf+yKZQluwWwkPs3EpVBJcC0P9xtCuk0Y4EhNrt+AInQm
+gkcqsYNJAmkGVD6OrY5wJU8oMh3FYgjxbizi/tmbihIojPTefcY=
+=h7HU
+-----END PGP SIGNATURE-----
 
+--CN9TMHG+L/SSyQsL--

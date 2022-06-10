@@ -2,160 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0E7546CAD
+	by mail.lfdr.de (Postfix) with ESMTP id 93895546CAE
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349796AbiFJSq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
+        id S1349839AbiFJSqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347817AbiFJSqY (ORCPT
+        with ESMTP id S1346230AbiFJSqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:46:24 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FA8277FA0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:46:23 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id t32so64874ybt.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:46:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QckDBPSwpnz2yiVzfF53cZ+SpuqEwRglZc9JnM2/2zs=;
-        b=AdSNAkn6KcLWIHl/b2zcbW+/xKnsmsR4YJfiYh2v6WHCatiIEzbOPSkTWjO6MOqbDO
-         xcKIYk+tECJFxtnueGS9wfy/F40V/M+wIGzC9GDaSOZDfGHPdEqvVQcpfqpHL+rKpccn
-         SiQve+NdZnR3CyBJeFNep3L57WHkLpl5NIMdXDvJsPqJATW6tWg3pABkwgMUUt5H9mJw
-         hLgvAJ18nZ3Zt/su2UdEqWCnmhbRvBZpqrVuFX4NQgvqG3X7JCN376OSOMOVxm67IcLs
-         RckGnl8hDripRYXYWultMaM4HDTeZPTkrnVjJUH/j7z2Bzxi+DArpJ1A4y/pvytIbbal
-         fE4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QckDBPSwpnz2yiVzfF53cZ+SpuqEwRglZc9JnM2/2zs=;
-        b=J1vL3uMZTNPG/xqI5HGBbtP8fmQhp4rC/XeUmELVsbcnmkJaSfkxRZaczfpsog7yY9
-         nFvwnC33HPZIe4n/+AOxjIKsT/7IAsT2cwuWSeM6cGaQqiXwjgX/YKZoCwZG2tfQFU8K
-         axUj6n6eEaT5hR7hKcnw//A33eWLepFlYyiyxmbG+o7+JRcJAHBLeYUrGXoBVpB8bLUh
-         qc7JIRUgrJ2jyuhVwQDlsanSlLEYiK4p897cWvR6Mx22EotHhMNcdQneQP5fnqpUY55x
-         iZf1eRSW0WfeaWhGukNBkyQ3Rz7DmWeOHi4kVuaSBw1vc+KX+Oxpqewx9QybktF+zjZS
-         Q78w==
-X-Gm-Message-State: AOAM530jfPyAuSuFs5b18fY9oMFFFJqGn5pETP8vJXpP0O78dwjvgaiN
-        8WEtPQ9KSsO9gfrfLThuai40Jb0Re5iXUmmIquq5SQ==
-X-Google-Smtp-Source: ABdhPJzUKPoQldEdqL1Y47s53FhEWmcexwLg1lFyw5141nWMQC00uXcTf01ftxOVqsDfMhkHrjtFRQjqvIxvSQoHdHc=
-X-Received: by 2002:a25:cb8a:0:b0:65c:a718:475c with SMTP id
- b132-20020a25cb8a000000b0065ca718475cmr47863832ybg.352.1654886781855; Fri, 10
- Jun 2022 11:46:21 -0700 (PDT)
+        Fri, 10 Jun 2022 14:46:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BBC27F892
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:46:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05E48621FB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:46:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38642C34114;
+        Fri, 10 Jun 2022 18:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654886802;
+        bh=WXGBkUiTe50Bk0aDEY/TJ56Vy0QMGwI6PLwEWi8lGBY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VH3fVi2ogdd2mPfoQr4AfGNIEAW29o8QrxCH+5yzD73ztziIcAoSk1ICFL0w0Rq3M
+         k45+y2MUKZxm9XgjPtWQhovvtid0I/1wXWNf3sp5vhCAMPxSJQk4aMmLPJ6sOaq0FW
+         bmw2gxzcPL4eCzzol3sGdmC/4ALtzkC3csybiBsT9DCRFqRdk395mWY678d0aWs0ym
+         9wE+qoL/JrZlueJiC+qSBLpkuHlbAh4VTmvyHTZWWOPfKDQRdPI7V34vn/l+526ese
+         fNFt/N8coR7ATGZ+Bt9FoZJQ7L3f+hHZOVqFGIjJfp+whax+0IvxEkXksXVW4IEaaw
+         QVShcID8iLatQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E57304096F; Fri, 10 Jun 2022 15:46:39 -0300 (-03)
+Date:   Fri, 10 Jun 2022 15:46:39 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] perf beauty: Update copy of linux/socket.h with the
+ kernel sources
+Message-ID: <YqORj9d58AiGYl8b@kernel.org>
 MIME-Version: 1.0
-References: <20220609025515.2086253-1-joshdon@google.com> <CAKfTPtCc4NZ51qruKX1zROFHqg-_MQBadaJfVbYPxT=7c4So=Q@mail.gmail.com>
- <CABk29NtX7EZsAqrT8vXd6tgWe2HPRNPM=cWxFSSxBtW1MjFqOA@mail.gmail.com> <CAKfTPtCZyig6MrdS7zAL=4mzhD5KBba74C0UCtvX+7N7BrzSig@mail.gmail.com>
-In-Reply-To: <CAKfTPtCZyig6MrdS7zAL=4mzhD5KBba74C0UCtvX+7N7BrzSig@mail.gmail.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Fri, 10 Jun 2022 11:46:10 -0700
-Message-ID: <CABk29NsHOdxuCmfXBRv2ndo+u=GAz6JUvY2C1usPNDUbNtu7TA@mail.gmail.com>
-Subject: Re: [PATCH] sched: allow newidle balancing to bail out of load_balance
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 1:10 AM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
->
-> On Thu, 9 Jun 2022 at 21:40, Josh Don <joshdon@google.com> wrote:
-> >
-> > Thanks Vincent,
-> >
-> > On Thu, Jun 9, 2022 at 6:42 AM Vincent Guittot
-> > <vincent.guittot@linaro.org> wrote:
-> > >
-> > > On Thu, 9 Jun 2022 at 04:55, Josh Don <joshdon@google.com> wrote:
-> > > >
-> > > > While doing newidle load balancing, it is possible for new tasks to
-> > > > arrive, such as with pending wakeups. newidle_balance() already accounts
-> > > > for this by exiting the sched_domain load_balance() iteration if it
-> > > > detects these cases. This is very important for minimizing wakeup
-> > > > latency.
-> > > >
-> > > > However, if we are already in load_balance(), we may stay there for a
-> > > > while before returning back to newidle_balance(). This is most
-> > > > exacerbated if we enter a 'goto redo' loop in the LBF_ALL_PINNED case. A
-> > > > very straightforward workaround to this is to adjust should_we_balance()
-> > > > to bail out if we're doing a CPU_NEWLY_IDLE balance and new tasks are
-> > > > detected.
-> > >
-> > > This one is close to the other tests and I wonder if it should be
-> > > better placed before taking the busiest rq lock and detaching some
-> > > tasks.
-> > >
-> > > Beside your use case where all other threads can't move in local cpu
-> > > and load_balance() loops and clears other cpus, most of the time is
-> > > probably spent in fbg() and fbq() so there are more chance that a task
-> > > woke in this meantime and I imagine that it becomes useless to take
-> > > lock and move tasks from another cpu if the local cpu is no more newly
-> > > idle.
-> > >
-> > > Have you tried other places in load_balance() and does this one
-> > > provide the lowest wakeup latency ?
-> > >
-> > > That being said, the current patch makes sense.
-> >
-> > I tested with another check after fbg/fbq and there wasn't any
-> > noticeable improvement to observed wakeup latency (not totally
-> > unexpected, since it only helps for wakeups that come during fbg/fbq).
->
-> ok. so IIUC the wakeup has already happened when we start
-> load_balance() in your case so the additional test is useless in your
-> case
+Just FYI, I'm carrying this on the perf tools tree.
 
-Not necessarily; the wakeup could also happen while we're in the
-ALL_PINNED redo loop (this lasts ~100us), but the added check doesn't
-meaningfully affect latency for my specific repro.
+- Arnaldo
 
-> > However, I don't think there's any harm in having that extra check in
-> > the CPU_NEWLY_IDLE case; might as well avoid bouncing the rq lock if
-> > we can. fbq+fbg are together taking ~3-4us per iteration in my repro.
-> >
-> > If there are no objections I can send a v2 with the added delta:
->
-> Would be good to get figures that show some benefits of this
-> additional check for some benchmarks
->
-> So I think that we can stay with your current proposal for now
+---
 
-Sounds good, thanks for taking a look!
+To pick the changes in:
 
-> >
-> > @@ -9906,6 +9906,16 @@ static int load_balance(int this_cpu, struct rq *this_rq,
-> >                 goto out_balanced;
-> >         }
-> >
-> > +       /*
-> > +        * fbg/fbq can take a while. In the newly idle case, recheck whether
-> > +        * we should continue with balancing, since it is possible that a
-> > +        * task woke up in the interim.
-> > +        */
-> > +       if (env.idle == CPU_NEWLY_IDLE && !should_we_balance(&env)) {
-> > +               *continue_balancing = 0;
-> > +               goto out_balanced;
-> > +       }
-> > +
-> >         BUG_ON(busiest == env.dst_rq);
-> >
-> >         schedstat_add(sd->lb_imbalance[idle], env.imbalance);
+  f94fd25cb0aaf77f ("tcp: pass back data left in socket after receive")
+
+That don't result in any changes in the tables generated from that
+header.
+
+This silences this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/perf/trace/beauty/include/linux/socket.h' differs from latest version at 'include/linux/socket.h'
+  diff -u tools/perf/trace/beauty/include/linux/socket.h include/linux/socket.h
+
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/trace/beauty/include/linux/socket.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/trace/beauty/include/linux/socket.h b/tools/perf/trace/beauty/include/linux/socket.h
+index 6f85f5d957efea06..17311ad9f9af2479 100644
+--- a/tools/perf/trace/beauty/include/linux/socket.h
++++ b/tools/perf/trace/beauty/include/linux/socket.h
+@@ -50,6 +50,9 @@ struct linger {
+ struct msghdr {
+ 	void		*msg_name;	/* ptr to socket address structure */
+ 	int		msg_namelen;	/* size of socket address structure */
++
++	int		msg_inq;	/* output, data left in socket */
++
+ 	struct iov_iter	msg_iter;	/* data */
+ 
+ 	/*
+@@ -62,8 +65,9 @@ struct msghdr {
+ 		void __user	*msg_control_user;
+ 	};
+ 	bool		msg_control_is_user : 1;
+-	__kernel_size_t	msg_controllen;	/* ancillary data buffer length */
++	bool		msg_get_inq : 1;/* return INQ after receive */
+ 	unsigned int	msg_flags;	/* flags on received message */
++	__kernel_size_t	msg_controllen;	/* ancillary data buffer length */
+ 	struct kiocb	*msg_iocb;	/* ptr to iocb for async requests */
+ };
+ 
+@@ -434,6 +438,7 @@ extern struct file *do_accept(struct file *file, unsigned file_flags,
+ extern int __sys_accept4(int fd, struct sockaddr __user *upeer_sockaddr,
+ 			 int __user *upeer_addrlen, int flags);
+ extern int __sys_socket(int family, int type, int protocol);
++extern struct file *__sys_socket_file(int family, int type, int protocol);
+ extern int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrlen);
+ extern int __sys_connect_file(struct file *file, struct sockaddr_storage *addr,
+ 			      int addrlen, int file_flags);
+-- 
+2.36.1
+

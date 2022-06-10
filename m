@@ -2,82 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A41546677
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867DD546674
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348866AbiFJMST convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Jun 2022 08:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S1348681AbiFJMTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348797AbiFJMSL (ORCPT
+        with ESMTP id S240115AbiFJMTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:18:11 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE310272369
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:18:08 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-317-aDi4xA9AOVCCz2X-8OmFHQ-1; Fri, 10 Jun 2022 13:18:05 +0100
-X-MC-Unique: aDi4xA9AOVCCz2X-8OmFHQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Fri, 10 Jun 2022 13:18:03 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Fri, 10 Jun 2022 13:18:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Alexander Lobakin' <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: RE: [PATCH v2 1/6] ia64, processor: fix -Wincompatible-pointer-types
- in ia64_get_irr()
-Thread-Topic: [PATCH v2 1/6] ia64, processor: fix -Wincompatible-pointer-types
- in ia64_get_irr()
-Thread-Index: AQHYfL5z40oI9Qjgz0qz+n7lpkip7a1Ijjiw
-Date:   Fri, 10 Jun 2022 12:18:03 +0000
-Message-ID: <8711f7d6bdc148bd916d87515e71b3c2@AcuMS.aculab.com>
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
- <20220610113427.908751-2-alexandr.lobakin@intel.com>
-In-Reply-To: <20220610113427.908751-2-alexandr.lobakin@intel.com>
-Accept-Language: en-GB, en-US
+        Fri, 10 Jun 2022 08:19:02 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76C629FE6A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1654863541; x=1686399541;
+  h=from:to:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=LzulFglMBoesllwk264Jv5fA72Yf7pBzBb27FMzAEqA=;
+  b=VQOyRHJCQb1+dV4qz0aUTu7uRjzS1G0Jeg8hkT+jRE3Iwhxa0448bp80
+   ZKZetVUeUES4TgkwKhCrDHkm5XCybHKTuc81lkF7idIq6OjA0PUhJ/wQM
+   Zp+8QF0F3Fb4QuAJ442ndIhnkASBBJi+0TGTJuScOT4tbXx4EcxDmGu4d
+   aePVPwxe5uTtLQ1Mnz/ktVQgNM1pZN50RoNRl7UiTlwLLjqPNUsQuToMT
+   wbpyVlimAondgb5Jy3Xa4rvH+/SFKjY0rJqP8NZkf2lBGvhhdsVCrKvvC
+   aO8dwS7RYDWjOb5mvpIM97eOhpLViGXEJeRUzyluErR6/HeO2ZFsRz8k0
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,290,1647273600"; 
+   d="scan'208";a="307079840"
+Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
+  by ob1.hgst.iphmx.com with ESMTP; 10 Jun 2022 20:19:00 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PDeJG6qKXaa8kFAQkTg0rK46ls+4PIY1sA9mMsQIfMgByL+X+TzTbKdTeCpJvn2tUcJ/3V+WDUwH8gksmSfPRmMOdQ9gGqcHkrgvP840axSQ7vwsIWsUqj9LX3NByk31QYCzwj93G3TCNWsf5tatQ6QzEBIVsPdtCRMSjBgZ4EbLQw34msoN53tbc0EsQLk9Q6yh7xUnAYC47W1/JFBjrVI4VvEhfGyrnZ28V93VqKIuks2HqqNQ/09RFPd430C/KWJsTU5yk+EXmcZu2duj5yl7vmB+ZzKLeJi08VD7O2RkKhidGM6gYI+egodn7EUHsXNJREN7gJH4y/6FvMLCCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LzulFglMBoesllwk264Jv5fA72Yf7pBzBb27FMzAEqA=;
+ b=aqfDk2xDGKJrytpLdQmcjE2AICfEEnHavWxHKWabWItgtvWo/KVhiaL7kRU1GCx8C1w/2jHrYb2HzlUKKOvqGZbS/C/7R8ZhELu9I54AAfu7uJcjHkh172SPYsSA0Wk6Hli288IIsZo8UTL/3AmK8rmrr0LQ3Xx6EVW4CfCYVpXFGaGvXvqN7lxIDMyzSN+mLg9G+Uarczk34aPYsQ8d++vgUJt/zkCZYBKy8cFzKRFyHezfBTKs9zWfeHl+uyqHuq5GJX/Sf2UpBhVteDJsewDPAQINq88vOQqtZ7cgWK/EzhisyYpRbCIIG5vmUVWc74XlfD4nxQn4Yi+dUWUUrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LzulFglMBoesllwk264Jv5fA72Yf7pBzBb27FMzAEqA=;
+ b=zj7tx9nPtxbpdqz2/RADvyP2jpmkU8lq88GDIebmtUxug+nQWQBsL30CpBqYQl0lczyR0gpCLZCEeI8mRXJCt3L1GxjT9gNGB5v8fDVAKWeNR5B5V1Hzx6eIRCwcPncqL9eWyuuV4sOzEs3qHmHTOwnGEjk5aNPzLG+Z2T80KvI=
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
+ by BN3PR04MB2161.namprd04.prod.outlook.com (2a01:111:e400:c5f0::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Fri, 10 Jun
+ 2022 12:18:57 +0000
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::81de:9644:6159:cb38]) by PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::81de:9644:6159:cb38%5]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
+ 12:18:57 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     keliu <liuke94@huawei.com>,
+        "morbidrsa@gmail.com" <morbidrsa@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drivers: mcb: Directly use ida_alloc()/free()
+Thread-Topic: [PATCH] drivers: mcb: Directly use ida_alloc()/free()
+Thread-Index: AQHYfMRB0uPvaSYWfUSTi2n3kA/ZQQ==
+Date:   Fri, 10 Jun 2022 12:18:57 +0000
+Message-ID: <PH0PR04MB7416F2E5DC9C9580512781229BA69@PH0PR04MB7416.namprd04.prod.outlook.com>
+References: <20220527071156.2359578-1-liuke94@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f57afe77-813a-4eeb-8977-08da4adb64bf
+x-ms-traffictypediagnostic: BN3PR04MB2161:EE_
+x-microsoft-antispam-prvs: <BN3PR04MB2161ED63D5D893013110AADB9BA69@BN3PR04MB2161.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hHOvRChQzZ0/UjPwIxMVfpdSBtlUKZwQiE+6MJrhFIvv8wdTJe15S4IYJVD8qm3H8WLrrtTf3gJUZK5XSfzaIFPi8w/XtCn5HoVsYrtS3XDcLU8cB+JI1JWtRjeY9YwJHMPy/5AOeVTZQt1/MMuuhxpAtb2vkjlp5T8PwFoKjwTPv4iXyQNwy3pCxx7f0DXoSQ1+EZHPrPOBAyllApCKSQ9874P3OjsQZ5xStMi3UXB+Ch/TDLn0aNvDP6ilfIu8Ll9EzX9x9S5Dh4+jbevoxXPXOWyr7shC+l0TTsdyx6mbDlCk/j8Bv5vN16pXY0+AaA1XXmdiiuMUDL8dlRubsIJVYVNkex15dCQxnWi+oSMAHCVfrltRmHkul3IyjUTNXn8L7JQdi3Tr66M12Ss6KxpS8zqlimkscodIUdrZu7qbIL9aDaVIQnf/Ve9HN+8oJnbIm7i+28VVS+NkpB7sJAYr3rYWirLtDEWctPPo2AG8hz8W7ffyv0oRJFcdxISryxPybdtzJXObgVUJL5utX4sfypagUPdA2a/U3q0/ahuhjBOnnbf5eDm1Sh7PnPV7HYyWkQ+f3mOQi03fcCmQTwO40qDgJL7Jsd4y5EMs975wqQ1MceIpBieIVjtaLBL4kXCD+rV+hd9ynYfsggCHzEmREKLxNZPXaP5MD+pci90UgCwggMlY3eGWbmPl/OaEurdLRpEn5XBysRQZb3Hp5Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(66556008)(66476007)(66446008)(8936002)(76116006)(8676002)(316002)(64756008)(91956017)(5660300002)(55016003)(86362001)(110136005)(33656002)(558084003)(52536014)(2906002)(9686003)(6506007)(186003)(82960400001)(508600001)(122000001)(38100700002)(38070700005)(71200400001)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?trhbyPsxblJ03j/l1KPjpJQ4k9E7Hlk2LlcY/fsR9/Ipu3pTtZ5zTm8jWxu/?=
+ =?us-ascii?Q?4eKnccdfVnc6zJQy7/C2BtyY0/BCQw3M6MqTRfQy99WutQ6TOQGVtcBuXnhG?=
+ =?us-ascii?Q?rvhtxeaP5S2sIow4HfICzSx7GtnFdeZOKxRi/+VYQiH+/i7gVB/GqeTsGllE?=
+ =?us-ascii?Q?pM3I+KaGWxICvEoT/d9UmuhXb0i1dqkFrb2iA0C8HRebWh/iM3uhBNDQyZjI?=
+ =?us-ascii?Q?z0PZzUpu0Wrj7S6vvPIwJnw5OY2NrEd8O5ul/vx9gi3wyeJUJ1G9oQD3wVGF?=
+ =?us-ascii?Q?8vM+wbarMMAoompYgOJJzf91v81qCbQVTEgbdalJ7hyakScGMcX1oWBy4jnc?=
+ =?us-ascii?Q?e+LmJwLRyF+6g+yWkBNZibBuTtiV5NZHbwoUWZHJ0mPVF/qK3v9AyTZ2fcyP?=
+ =?us-ascii?Q?fZOy8xBor34HdJriSltRGsK1a5upVYl5ro2M/SIJNCnh44LJwxR039zJld16?=
+ =?us-ascii?Q?6+oDeNrolH7Ww/iyTT3T39DELZOTD7a7CH6mpy6juxvjqiMZjYksVkzNqokZ?=
+ =?us-ascii?Q?dGFwsYERc3AAZdgVVOxg5ct4g/FpliifPD1wg0wK8IhK1rDwWlGu0+jhlenD?=
+ =?us-ascii?Q?UNCqd27nRx9hxXHbORbEckM2JgqU16e2rZAbikkjM4HfKtWHCO9hcPqqxSqm?=
+ =?us-ascii?Q?eavhA2LB6cuvc2tIW+0UnUJpf8sHBzdYxIe3yFZkxSgB48x6C6ogc8l2Ehi9?=
+ =?us-ascii?Q?B1CBNU69oUlauX5CAammf9m2O5fUnCLcc5lJfoY06Bu91OJmC1bImUidJh3o?=
+ =?us-ascii?Q?81NQZyCnR54jpmI1DhQjWAU0Z3sp75AUOQLqLKGWMo0zlZdh613tBJeTkjrA?=
+ =?us-ascii?Q?AtuO6V/63txkPxyRO8ekkOzQEP1G+B6bJOja07TowURyx97aYdzdXNLMYUFd?=
+ =?us-ascii?Q?nmLOZedaJ3ou9BwD9n/tFIQp1fbFeSFIA5fJcRC4AdnGLf+4H4e+ghdMkUxy?=
+ =?us-ascii?Q?hP/Z2XzHt4RyUkCmAnWIBPNNU05D3EOLiKGMf8RyFY0z/svgE9D64KL/AKzM?=
+ =?us-ascii?Q?7jE5UNTAeW/K1TesmQuyKVVmSbt6QPn7QcrzKh+teSS+Yyzs48ce7X50OTFi?=
+ =?us-ascii?Q?MdnoaLYOpFgcWmiAowiBwQIYO2YysimWfAJGM7Jwqb/SQnLPJGhlic+o3PU7?=
+ =?us-ascii?Q?g1wxBUJ42OKtqaPKpwsPj9TgaVhha3X5RCEFXYynQrGBB2KvLAG9PfpbSz0k?=
+ =?us-ascii?Q?GE1YB1Yp8e0pTUvb4V6ATvUxGAPYlg7MRR+WMhaVaWu6FLZN9hx4OOOj02i9?=
+ =?us-ascii?Q?oFyckshVLWiNFib8fT0qj9M7vhdN0QvU/MC6byamkM6gp6UjCjxD7brWeIQC?=
+ =?us-ascii?Q?I8/rTiCVgdHe2qOHAd8Tej1jTRXut+SnL14cGel97lK4YpVQNrmF+TbXIEL0?=
+ =?us-ascii?Q?RM0qp9fyTzwT1Ejr3EReQY1rHN+72kvhbuHTTWz5HohERJ8ZsI8NM7vjAbQQ?=
+ =?us-ascii?Q?AMNxKzLfVz6DNpVl/seaRZwrbehAUVkIjaQBLcZrlxAxImF3ZXB41kei8o0l?=
+ =?us-ascii?Q?QGABeNGcUfx6d1YrAdu2fHB0v3yV1C+Pz/Nb3oMJClht0Ibv1nFB/cXN9tja?=
+ =?us-ascii?Q?s+oiiTZ2PJQXryWVTm2ElverZKqiS354JdN4mkdy+/Opjb48otYjpZeEeEBq?=
+ =?us-ascii?Q?oz5bFeZ8UgVUL8v8SJsIU1kDEH+kAqx9DIf3E4ti1S8irs1vCQ82rZDCVZDt?=
+ =?us-ascii?Q?8A6Hm+cAbwMuImdwqWvq1tLxneqm9aEL4uYV6ofFkWAP3zLv68W8vEzTxslW?=
+ =?us-ascii?Q?499B8XZQ4P1ikVF8EQy50/0FqZBBG6ZflEfeBQVNtfexeHWtqA9zFx0QAUst?=
+x-ms-exchange-antispam-messagedata-1: EA0FspoDer6u644kn0Na8jLZAzLjX4Z+5Z/EJFYBA/uTLiG24266JWT+
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f57afe77-813a-4eeb-8977-08da4adb64bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2022 12:18:57.4601
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tNKrP7tfRi1EyBlJB/MMyX/HZYbRYEk2phID7cZcf+GPgP/JWWQ7iyrlDsUmyeE2sonKEEoI+zhowaQRqG8tTqOmNjKXjO0Ulh8ByW7ggVM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR04MB2161
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,53 +138,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin
-> Sent: 10 June 2022 12:34
-> 
-> test_bit(), as any other bitmap op, takes `unsigned long *` as a
-> second argument (pointer to the actual bitmap), as any bitmap
-> itself is an array of unsigned longs. However, the ia64_get_irr()
-> code passes a ref to `u64` as a second argument.
-> This works with the ia64 bitops implementation due to that they
-> have `void *` as the second argument and then cast it later on.
-> This works with the bitmap API itself due to that `unsigned long`
-> has the same size on ia64 as `u64` (`unsigned long long`), but
-> from the compiler PoV those two are different.
-> Define @irr as `unsigned long` to fix that. That implies no
-> functional changes. Has been hidden for 16 years!
-
-Wouldn't it be better to just test the bit?
-As in:
-	return irr & (1ull << bit);
-
-    David
-
-> 
-> Fixes: a58786917ce2 ("[IA64] avoid broken SAL_CACHE_FLUSH implementations")
-> Cc: stable@vger.kernel.org # 2.6.16+
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  arch/ia64/include/asm/processor.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/ia64/include/asm/processor.h b/arch/ia64/include/asm/processor.h
-> index 7cbce290f4e5..757c2f6d8d4b 100644
-> --- a/arch/ia64/include/asm/processor.h
-> +++ b/arch/ia64/include/asm/processor.h
-> @@ -538,7 +538,7 @@ ia64_get_irr(unsigned int vector)
->  {
->  	unsigned int reg = vector / 64;
->  	unsigned int bit = vector % 64;
-> -	u64 irr;
-> +	unsigned long irr;
-> 
->  	switch (reg) {
->  	case 0: irr = ia64_getreg(_IA64_REG_CR_IRR0); break;
-> --
-> 2.36.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Thanks,=0A=
+I'll queue it up for 5.20=0A=

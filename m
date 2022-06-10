@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7E8546751
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3486254674E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245002AbiFJN0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
+        id S245088AbiFJN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbiFJN0L (ORCPT
+        with ESMTP id S242456AbiFJN0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:26:11 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C98B15A3DE;
-        Fri, 10 Jun 2022 06:26:05 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id c144so17361229qkg.11;
-        Fri, 10 Jun 2022 06:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ow44vJixTJI3bDLbO6IuQAgGyjbFuK55tv6KHdA7yKE=;
-        b=mlTLGiRQqGAqZUXhGPc9iKwdlZB0ss78nnQ8j03HInq0uIUB98UynOy2B/ZNvV/Y/N
-         X2h5Uh8tnxYia6rUZqlhfoR9fI0ipHP0GFy1zLRw/gvoWjv2M/myc/cYmoBMgEVrbaLA
-         B1olK1qQB65AuFPKiA/5OayHIYJKZTD0jxadaqxkCpAIbCbaxIoO5M/iwZg9pcIgnlVc
-         gPjc0XLZvEI2CeRF/9CdKWV+BHS3kPiS4cM6ib/oaaXaC3g9uv8vnkj1MrVqV1aniZO6
-         ztmA5psXbfaulM6yvIE1BxqpgC8ZR9bXeyg6lzmmKgTCsh6mwk1MiBGHnZ02i3Ked4dN
-         c9Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ow44vJixTJI3bDLbO6IuQAgGyjbFuK55tv6KHdA7yKE=;
-        b=qFgwIfHc/NZDMP95I04BozrcsjTbWW52nyHbkSMRtOufsdhPniMrxdlS2d843EpZtE
-         1xC1j9hQRFyt+yEdzS/Pmyu3lnyfb/P8IP2BJiN3Ot4rv+AQTYgmVjoIVrQ3cLijSp8X
-         Ki51qSVA1Cyc0w0OEOx5fN988Qdw1P8LmvbPIFgFtYYRAPtlxPROwbXOM8LVpMPfaNeg
-         D1ZubQ8RlhiiUGdtXtA6BAF0KNjVvweu9+IDl09cYlWBZI461vHcu6HJRriMu2fXdDpn
-         Jy6YaipLrQWEIghNuWTI+IXuQi8mvIvehg3JOXZo7ch3njYvcdQQvGsvhOdNKmCNj0X+
-         RPnQ==
-X-Gm-Message-State: AOAM533OAuHFQEbOq69Yydj+s85rGzwx/unb44kF7PbW5xxAug/3AFWX
-        iQxz+vJZtyJJX/IJO5GG0O1KFzWarzaKzQ==
-X-Google-Smtp-Source: ABdhPJzdF9S6OSps6LldwbWkRol9JBXWt5aJOVrTn8JJEeavL0ZEONRe2Eo3CfToQROOPOUB1v4uQg==
-X-Received: by 2002:a05:620a:4726:b0:6a6:d207:7a3f with SMTP id bs38-20020a05620a472600b006a6d2077a3fmr15475207qkb.239.1654867564570;
-        Fri, 10 Jun 2022 06:26:04 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id w184-20020a3794c1000000b006a098381abcsm21509546qkd.114.2022.06.10.06.26.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 06:26:03 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: Fix SoQuartz CM4IO usb
-Date:   Fri, 10 Jun 2022 09:26:01 -0400
-Message-Id: <20220610132601.160088-1-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 10 Jun 2022 09:26:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60F41BE659;
+        Fri, 10 Jun 2022 06:26:11 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 74DF76601724;
+        Fri, 10 Jun 2022 14:26:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654867570;
+        bh=tT1jJ5a9K7KdBiLm8g0dOgTvRZsIIl3nYsCefhYiaKE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JtfphsybuNf9jwA62JOvrpW2KC2UX/VuEo7eJvFHDbDMDZ8+PS0O0oRXnNT+lEddW
+         xUJe48C/W2diI+BjpeBTTJs0m+JXTWQGpzPx0q5nH4+VtM6AIolI5F95UuwVD29Uqv
+         my99LRuc7hXy6LyBrgFglX+9HcT9bUoPE1NqOYvji8PkzuN7KXX4MoIVrXNB/k/Wx1
+         5ENAtraBwUS2yEZ4/hRQmA+npqJiZ/S53A/FUymrRKBZTxdPD3yvNRZrucGIILhbjK
+         OXVMY3hRBSTzW3PxgwT6paWSPWS1Kpace4Nn2vKieWsXDdSKLQFRMJ+dlu8Wlu2tfb
+         r7TpYKUWgVp4Q==
+Message-ID: <dabcc9ff-2fec-2f84-936e-3e0b71ad7ca3@collabora.com>
+Date:   Fri, 10 Jun 2022 16:26:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1 1/5] media: rkvdec: Disable H.264 error detection
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     kernel@collabora.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
+ <20220610125215.240539-2-nicolas.dufresne@collabora.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220610125215.240539-2-nicolas.dufresne@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SoQuartz CM4-IO should support otg mode, however it currently
-defaults to device mode when otg is enabled. Force it to host mode to
-retain the previous behavior.
+On 6/10/22 15:52, Nicolas Dufresne wrote:
+> Quite often, the HW get stuck in error condition if a stream error
+> was detected. As documented, the HW should stop immediately and self
+> reset. There is likely a problem or a miss-understanding of the self
+> self reset mechanism, as unless we make a long pause, the next command
+> will then report an error even if there is no error in it.
+> 
+> Disabling error detection fixes the issue, and let the decoder continue
+> after an error. This patch is safe for backport into older kernels.
+> 
+> Fixes: cd33c830448b ("media: rkvdec: Add the rkvdec driver")
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> ---
 
-Fixes: bc405bb3eeee ("arm64: dts: rockchip: enable otg/drd operation of usb_host0_xhci in rk356x")
+Nit: won't hurt to add the explicit stable tag if you'll make the v2.
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 1 +
- 1 file changed, 1 insertion(+)
+Cc: stable@vger.kernel.org
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-index e00568a6be5c..56764fae9f9d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-@@ -169,6 +169,7 @@ &usb2phy0_otg {
- };
- 
- &usb_host0_xhci {
-+	dr_mode = "host";
- 	status = "okay";
- };
- 
 -- 
-2.25.1
-
+Best regards,
+Dmitry

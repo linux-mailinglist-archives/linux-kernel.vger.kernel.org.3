@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73685462A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60CB5462B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245028AbiFJJlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S244209AbiFJJpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343985AbiFJJlT (ORCPT
+        with ESMTP id S245750AbiFJJpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:41:19 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF381915DB;
-        Fri, 10 Jun 2022 02:41:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B37D1CE3433;
-        Fri, 10 Jun 2022 09:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBF3C34114;
-        Fri, 10 Jun 2022 09:41:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654854072;
-        bh=RFUzyhUSwzSu4iiHMiqKtHk3uhYnFdDUQekeZLUrGmk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WAJdh4OPIfIrsMMSyYq0pYDhh9+9rJgP2K/4RZHv6EPvUgWlk8QHEHDAGvr2rJK3V
-         YGiwI6CK3/M+WgZBsTIFlfYQJfXnRpJBu0NXcSFJS4xBjPIs8OQ1HWYsy9coEJWm/c
-         bihiPgSDbzv8rsP8yPuyzSCUHQqqr+jrY0fSFG1o=
-Date:   Fri, 10 Jun 2022 11:41:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Wang Wenhu <lonehugo@hotmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:FPGA DFL DRIVERS" <linux-fpga@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        wenhu.wang@hotmail.com
-Subject: Re: [PATCH] mm: eliminate ifdef of HAVE_IOREMAP_PROT in .c files
-Message-ID: <YqMRtWAH5fIWsLQB@kroah.com>
-References: <PN3PR01MB7725BD573E8D63C1CB978AD8D2A69@PN3PR01MB7725.INDPRD01.PROD.OUTLOOK.COM>
+        Fri, 10 Jun 2022 05:45:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF32A276238
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:45:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nzbCi-00058b-HA; Fri, 10 Jun 2022 11:45:20 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nzbCi-007YFI-8S; Fri, 10 Jun 2022 11:45:18 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nzbCg-005Rka-B3; Fri, 10 Jun 2022 11:45:18 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v1 1/1] net: macb: fix negative max_mtu size for sama5d3
+Date:   Fri, 10 Jun 2022 11:45:17 +0200
+Message-Id: <20220610094517.1298261-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PN3PR01MB7725BD573E8D63C1CB978AD8D2A69@PN3PR01MB7725.INDPRD01.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 02:25:18AM -0700, Wang Wenhu wrote:
-> It is recommended in the "Conditional Compilation" chapter of kernel
-> coding-style documentation that preprocessor conditionals should not
-> be used in .c files wherever possible.
-> 
-> As for the micro CONFIG_HAVE_IOREMAP_PROT, now it's a proper chance
-> to eliminate it in .c files as we add a no-op function defination
-> in the header file if the micro is not enabled.
-> 
-> The main trigger for this patch is an UIO driver series and as Greg
-> commented we'd better not use such preprocessor contionals.
-> See: https://lore.kernel.org/lkml/YqHy1uXwCLlJmftr@kroah.com/
-> For there is little work to do with the UIO driver, I try to push
-> this commit independently.
-> 
-> Signed-off-by: Wang Wenhu <lonehugo@hotmail.com>
-> ---
->  drivers/char/mem.c          | 2 --
->  drivers/fpga/dfl-afu-main.c | 2 --
->  drivers/pci/mmap.c          | 2 --
->  drivers/uio/uio.c           | 2 --
->  include/linux/mm.h          | 8 ++++++++
->  mm/memory.c                 | 4 ----
->  6 files changed, 8 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-> index 84ca98ed1dad..40186a441e38 100644
-> --- a/drivers/char/mem.c
-> +++ b/drivers/char/mem.c
-> @@ -354,9 +354,7 @@ static inline int private_mapping_ok(struct vm_area_struct *vma)
->  #endif
->  
->  static const struct vm_operations_struct mmap_mem_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys
-> -#endif
->  };
->  
->  static int mmap_mem(struct file *file, struct vm_area_struct *vma)
-> diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-> index 7f621e96d3b8..833e14806c7a 100644
-> --- a/drivers/fpga/dfl-afu-main.c
-> +++ b/drivers/fpga/dfl-afu-main.c
-> @@ -797,9 +797,7 @@ static long afu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->  }
->  
->  static const struct vm_operations_struct afu_vma_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys,
-> -#endif
->  };
->  
->  static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
-> diff --git a/drivers/pci/mmap.c b/drivers/pci/mmap.c
-> index b8c9011987f4..1dcfabf80453 100644
-> --- a/drivers/pci/mmap.c
-> +++ b/drivers/pci/mmap.c
-> @@ -35,9 +35,7 @@ int pci_mmap_page_range(struct pci_dev *pdev, int bar,
->  #endif
->  
->  static const struct vm_operations_struct pci_phys_vm_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys,
-> -#endif
->  };
->  
->  int pci_mmap_resource_range(struct pci_dev *pdev, int bar,
-> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
-> index 43afbb7c5ab9..c9205a121007 100644
-> --- a/drivers/uio/uio.c
-> +++ b/drivers/uio/uio.c
-> @@ -719,9 +719,7 @@ static int uio_mmap_logical(struct vm_area_struct *vma)
->  }
->  
->  static const struct vm_operations_struct uio_physical_vm_ops = {
-> -#ifdef CONFIG_HAVE_IOREMAP_PROT
->  	.access = generic_access_phys,
-> -#endif
->  };
->  
->  static int uio_mmap_physical(struct vm_area_struct *vma)
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index bc8f326be0ce..66d0cff6054e 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1857,8 +1857,16 @@ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
->  	unsigned long *pfn);
->  int follow_phys(struct vm_area_struct *vma, unsigned long address,
->  		unsigned int flags, unsigned long *prot, resource_size_t *phys);
-> +#ifdef CONFIG_HAVE_IOREMAP_PROT
->  int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
->  			void *buf, int len, int write);
-> +#else
-> +int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
-> +			void *buf, int len, int write)
+On Microchip SAMA5D3 the JML will return null. So, after header and FCS length
+subtraction we will get negative max_mtu size. This issue was directly
+affecting DSA drivers with MTU support (for example KSZ9477).
 
-This needs to be an inline function, right?
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/ethernet/cadence/macb_main.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-Did you test build this?
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index d89098f4ede8..c7e1c9ac9809 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -4913,10 +4913,24 @@ static int macb_probe(struct platform_device *pdev)
+ 
+ 	/* MTU range: 68 - 1500 or 10240 */
+ 	dev->min_mtu = GEM_MTU_MIN_SIZE;
+-	if (bp->caps & MACB_CAPS_JUMBO)
+-		dev->max_mtu = gem_readl(bp, JML) - ETH_HLEN - ETH_FCS_LEN;
+-	else
++	if (bp->caps & MACB_CAPS_JUMBO) {
++		u32 val;
++
++		if (bp->jumbo_max_len)
++			val = bp->jumbo_max_len;
++		else
++			val = gem_readl(bp, JML);
++
++		if (val < ETH_DATA_LEN) {
++			dev_warn(&pdev->dev, "Suspicious max MTU size (%u), overwriting to %u\n",
++				 val, ETH_DATA_LEN);
++			dev->max_mtu = ETH_DATA_LEN;
++		} else {
++			dev->max_mtu = val - ETH_HLEN - ETH_FCS_LEN;
++		}
++	} else {
+ 		dev->max_mtu = ETH_DATA_LEN;
++	}
+ 
+ 	if (bp->caps & MACB_CAPS_BD_RD_PREFETCH) {
+ 		val = GEM_BFEXT(RXBD_RDBUFF, gem_readl(bp, DCFG10));
+-- 
+2.30.2
 
-thanks,
-
-greg k-h

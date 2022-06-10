@@ -2,146 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16646546207
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A53D546213
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348506AbiFJJ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S1343983AbiFJJ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244365AbiFJJ0y (ORCPT
+        with ESMTP id S1348962AbiFJJ0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Jun 2022 05:26:54 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60684F47E
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB36254039
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654853021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ui+GefT7glVYbZJx7tAzYAgsijo4mtXjq2iJjZnCAk0=;
+        b=VwiEIxe/LaExm6l2og1pbF5h542CfsUbeaCks3VXGwCXMuri4GoOLcGYT7NYJiHxON0kbF
+        N52CeSOpi7/at0/StowzFU8+kVk/IN/nAti+lkk3oCThaK31fSeS1zPE7BG02REVvqwXGz
+        DuXY7lOLypFxDE0DFFuHtqzSll0OGc4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-HElekXG8NDesHqXHYvh66Q-1; Fri, 10 Jun 2022 05:23:40 -0400
+X-MC-Unique: HElekXG8NDesHqXHYvh66Q-1
+Received: by mail-wm1-f72.google.com with SMTP id k34-20020a05600c1ca200b0039c7db490c8so632496wms.1
         for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:23:40 -0700 (PDT)
-Received: from ktm (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id AF81E83DFE;
-        Fri, 10 Jun 2022 11:23:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1654853018;
-        bh=5weI8ThFC9uRaLOv9c3iXamNh9h427e4N5Q5IBoMeLg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lQPNjVazUi1IWi0Edu2lkBtFEnjDd+uztvzyip15bbk/uS4uan2GsP5lo13vAIMuJ
-         vPbwv78Ewi/w9XD5bof+XwiJlREVbCiUvfqcby+40+lrA675A025upX9dESktvRoOA
-         ZiR1erXnQ4cxrtr7pg2whiYAlDJZOSGRq+oTpTgNpm85kmODnv59oVJEftgm3S8zvt
-         1XdJvGIFgu/KvEkNHVEX9rJGelNlASRpshYMgIGy41u4+ERkoyBGgHJCmHx55MEyKT
-         Hq9VJztTdqUhQmdFSLJii/LKiUEflEoTQS5IPNmyMZPnkAkDnRcM2XHZqt9yib2D+U
-         v012UucOCfYDg==
-Date:   Fri, 10 Jun 2022 11:23:31 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
-Subject: Re: [PATCH 3/3] ASoC: wm8940: Mute also the speaker output
-Message-ID: <20220610112331.4dcc183b@ktm>
-In-Reply-To: <Yp4qb5jaGYf5qnxt@sirena.org.uk>
-References: <20220606154441.20848-1-lukma@denx.de>
-        <20220606154441.20848-3-lukma@denx.de>
-        <Yp4qb5jaGYf5qnxt@sirena.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ui+GefT7glVYbZJx7tAzYAgsijo4mtXjq2iJjZnCAk0=;
+        b=jmpA14cSZuxUc88gMna1q0BLExG6yptRUqk9D+39w5VijiGZyFAwvTh12ieSMF5N2o
+         /gOyc58OzDK1gP1ENJu5YDOO6cYiD2Bua/O/jJa3y/qOh6XVul2vtptTabbHqkgtZ28t
+         T4bkBZflmLeXH8xhPkz3AAr84c+4hwb8nP3JZwWA1IlBKMEfLLSwrRisyqjjzMtQ8d4p
+         3jbTKTCog0LinoreE2n978egNUWumx5ynPvpTn2ahQjKtDjm6AZ9jYFlfy12ajoY376E
+         Gjpv+32lyBWVvGF77DL11BvDFivd0BFXb5o717BWsoP800OKMIef+gzckVxi/OEZR8xB
+         B5Qg==
+X-Gm-Message-State: AOAM530MfS603+gi5SYXOHa9JvGBc2gQiVu9InNxx/U0QSvspQcNMZbq
+        ip9FXoohuNA1qAemgPyw7Okn1vo3xuK9bm9x4qrNO+wuaqLnxZ4sfqSlbGLBqgHo7qQuRm28JWu
+        s9Ga6kh8XjdwIyObkN7MkC2O4
+X-Received: by 2002:a05:600c:1e2a:b0:39c:51f8:80d4 with SMTP id ay42-20020a05600c1e2a00b0039c51f880d4mr7909009wmb.192.1654853018894;
+        Fri, 10 Jun 2022 02:23:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzors8lrVCLvoMtZbR/XO1Cue4ykhrTN0Lh/orNjpsTm7XBIYzUbhU/YNQRJll7iilJG9sY3A==
+X-Received: by 2002:a05:600c:1e2a:b0:39c:51f8:80d4 with SMTP id ay42-20020a05600c1e2a00b0039c51f880d4mr7908984wmb.192.1654853018625;
+        Fri, 10 Jun 2022 02:23:38 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id e16-20020a05600c255000b0039c4b518df4sm2814684wma.5.2022.06.10.02.23.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 02:23:38 -0700 (PDT)
+Message-ID: <3babc5cc-2f03-4b25-1cb3-82f039e3c40d@redhat.com>
+Date:   Fri, 10 Jun 2022 11:23:37 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- boundary="Sig_/oEf7duWcwTr6LfWwV/Z47nI"; protocol="application/pgp-signature"
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220610144958.5b90e8d3@canb.auug.org.au>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220610144958.5b90e8d3@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/oEf7duWcwTr6LfWwV/Z47nI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello Stephen,
 
-Hi Mark,
+On 6/10/22 06:49, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the drm-misc tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
+> 
+> drivers/firmware/efi/sysfb_efi.c:29:10: fatal error: asm/efi.h: No such file or directory
+>    29 | #include <asm/efi.h>
+>       |          ^~~~~~~~~~~
+>
 
-> On Mon, Jun 06, 2022 at 05:44:41PM +0200, Lukasz Majewski wrote:
->=20
-> > Without this change the BTL speaker produces some
-> > "distortion" noise when test program
-> > (speaker-test -t waw) is ended with ctrl+c. =20
->=20
-> > As our design uses speaker outputs to drive BTL speaker,
-> > it was necessary to also mute the speaker via the codec
-> > internal WM8940_SPKVOL register with setting
-> > WM8940_SPKMUTE bit. =20
->=20
-> This will not interact well with both the user visible control of the
-> speaker volume via the Speaker Playback Volume control and the analog
-> bypass paths that the device has - it'll change the state of the
-> control without generating any events, and cut off any bypassed audio
-> that's mixed in.
->=20
+I noticed that this header include is not necessary so I posted [0] to
+just drop it, and mentioned the build error too with your Reported-by.
+ 
+> Caused by commit
+> 
+>   fa0e256450f2 ("fbdev: vesafb: Allow to be built if COMPILE_TEST is enabled")
+>
 
-I'm wondering why it is safe to call DAI's .digital_mute()
-callback, which explicitly changes state of the "DAC soft mute enable"
-bit (DACMU) ?
+I posted a revert [1] for this but for a different reason (since after
+[0] I believe the issue in powerpc should be fixed), which is that the
+patch led to linking errors on arches that don't define a screen_info.
 
-And on the other hand it is not correct to just mute the speakers?
+[0]: https://lkml.org/lkml/2022/6/10/323
+[1]: https://lkml.org/lkml/2022/6/10/316
 
-> You can probably achieve a similar effect by making the control an
-> _AUTODISABLE one which will allow the core to mute the control when
-> it's not being used in a way that's not visible to userspace.
-
-The exact definition for the event, which I'm forcing above:
-
-SOC_SINGLE("Speaker Playback Switch", WM8940_SPKVOL,  6, 1, 1),
-
-And there is no SOC_SINGLE_AUTODISABLE() macro available.
-
-
-The issue I'm trying to fix:
-
-- The mclk clock is stopped (after some time) by imx SOC when I end
-  'speaker-test' program with ctrl+c.
-
-- When the clock is not provided (after ~1sec) I do hear a single short
-  noise from speakers.
-
-- The other solution (which also works) would be to enable clock once
-  (during probe) and then do not disable it till system is powered
-  off (yes it is a hack :-) ).
-
-
-I'm wondering if this can be fixed by some 'amixer' user space switch?
-
-Thanks in advance for help.
-
+-- 
 Best regards,
 
-Lukasz Majewski
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
---
-
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/oEf7duWcwTr6LfWwV/Z47nI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmKjDZMACgkQAR8vZIA0
-zr2CUQf/cMiEn0CiJcSLLczk6LXmGNX0z7B7luu7hDG27kP/cyJH42qi50TI8cRg
-eF8C0FxzKATJ6yt9I70mXvYsSZOeadZUbvKxuS40twZgIowbtuIDXwXIaOFTuC1D
-haC6/3iQSLq0CUYZfPO+4SJKXGIUsGa7pu/Tr+BdlPWqhhb5kmS/4QTTAhlhEh+a
-S0QHrJxahiouJL53wgvYBZibmsgnVAr83T+tTGI7zZ9g/mhdUOdnZ1N0eLrbSRC4
-EsNfnNPvB/xkj7gouSrugdg4eQxF4drpJDmUrgMwNIMxQxK9gGdWHU41TVuUU4xw
-2MD+/qf7xGmZqKGM2qUaFUAGsbwnrw==
-=vKPT
------END PGP SIGNATURE-----
-
---Sig_/oEf7duWcwTr6LfWwV/Z47nI--

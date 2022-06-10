@@ -2,136 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DE5546983
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70F9546990
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344208AbiFJPit convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Jun 2022 11:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        id S1346006AbiFJPjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 11:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345163AbiFJPi3 (ORCPT
+        with ESMTP id S1345199AbiFJPjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:38:29 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E70126D925;
-        Fri, 10 Jun 2022 08:38:27 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LKQ3K4K7hz67KPP;
-        Fri, 10 Jun 2022 23:33:33 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Fri, 10 Jun 2022 17:38:24 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Fri, 10 Jun 2022 17:38:24 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2QgAG+ywCAACILEA==
-Date:   Fri, 10 Jun 2022 15:38:24 +0000
-Message-ID: <4bc349a59e4042f7831b1190914851fe@huawei.com>
-References: <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
- <541e9ea1-024f-5c22-0b58-f8692e6c1eb1@landley.net>
- <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
- <1561909199.3985.33.camel@linux.ibm.com>
- <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
- <1561991485.4067.14.camel@linux.ibm.com>
- <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
- <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
- <20220609102627.GA3922@lxhi-065>
- <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
- <20220610153336.GA8881@lxhi-065>
-In-Reply-To: <20220610153336.GA8881@lxhi-065>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 10 Jun 2022 11:39:17 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7763D28D694
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:39:13 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id h19so35846032edj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ttBUCbYGFLdzm2aXxZ1IGyfndCTrcRAN4ru0azsH/58=;
+        b=cZYmDUDy0wu5c9j6ewi0ELxc7qQdw0DCbocteP7SGDeSU/o89n1z5e1aVYndYZuLf8
+         vcmhpeWbwh5y1mYzyOM22ClVplmgYc831kwVHywjMRjHAgsz3d28u3WIXtmfaxFYWNyU
+         e16JsDO1awPiuGSta1Vrs/klJXTKa0bU9VpMc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ttBUCbYGFLdzm2aXxZ1IGyfndCTrcRAN4ru0azsH/58=;
+        b=GtLI08BW0e2/fVz0Ea1u0XPaRvSOfoXiNmLdJy/qzY4tonGGdO+FObIPkLAo5uSIqB
+         H9SFx164GoGKoV1Lmbh7qF96WkopSrlLBwxGacDREQDbL10d8eZ0NQmqOKDBFSBZ9DUJ
+         rcrVsXvhL/zSYhi/3IjQ4SkkqiTzY49SJ8d9aBTvtagKezDtzu9Qc0b/Q2TpdmpZpmui
+         G5yGW6ODOrmCxjFav2xWwLXbkJBY1sE5cvFtccP5xcRCYOoeP1OCfrh9uoa1MbksP8Cd
+         +Pe6gt8p9LbBOhPM3lwgFVLA9ECeXHsa5+kSDpHykkc2exWA9i8+D/malpIIvOpvjth4
+         NwOw==
+X-Gm-Message-State: AOAM533hBbdVglpIWlsGkGlOKMM0bf7XERD2FekTxCyUu6kj0cQBHYdf
+        PwwjydA/dHxwBT4ML2noF2NqPg==
+X-Google-Smtp-Source: ABdhPJyspXoMrwetgWUuQuUkvvnhDg0orQX5YpJax1xZh6BFYrS78uu1TShKsDkAnTFa3pXF0usKJA==
+X-Received: by 2002:a05:6402:22eb:b0:42d:d578:25d9 with SMTP id dn11-20020a05640222eb00b0042dd57825d9mr52318904edb.310.1654875552048;
+        Fri, 10 Jun 2022 08:39:12 -0700 (PDT)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id h24-20020a170906829800b0070f7d1c5a18sm9783857ejx.55.2022.06.10.08.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 08:39:10 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     hauke@hauke-m.de, Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/5] net: dsa: realtek: rtl8365mb: improve handling of PHY modes
+Date:   Fri, 10 Jun 2022 17:38:24 +0200
+Message-Id: <20220610153829.446516-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
-> Sent: Friday, June 10, 2022 5:34 PM
-> Hello Roberto,
-> 
-> On Do, Jun 09, 2022 at 11:05:45 +0000, Roberto Sassu wrote:
-> > > From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
-> > > Sent: Thursday, June 9, 2022 12:26 PM
-> > > Dear Roberto,
-> > > Cc: Yamada-san, linux-kbuild
-> > >
-> > > On Mi, Jul 24, 2019 at 05:34:53 +0200, Roberto Sassu wrote:
-> > > > Is there anything I didn't address in this patch set, that is delaying
-> > > > the review? I would appreciate if you can give me a feedback, positive
-> > > > or negative.
-> > > >
-> > > > Thanks a lot!
-> > > >
-> > > > Roberto
-> > >
-> > > Some of our users have recently asked for this patch series.
-> >
-> > Hello
-> >
-> > thanks for your interest in this patch set.
-> >
-> > > Could you please feedback if this is the latest revision available or
-> > > maybe there is a newer one developed and potentially not shared on LKML?
-> >
-> > Yes, it is the latest revision available. There might have been few
-> > fixes in the final code. You may want to have a look at:
-> 
-> Many thanks for the links to the updated patch revisions. It looks
-> like the new versions added a couple of bugfixes and refinements.
-> 
-> With more users now using this feature, do you think there is a higher
-> chance for upstreaming, compared to 2019 (original submission date)?
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Hello Eugeniu
+This series introduces some minor cleanup of the driver and improves the
+handling of PHY interface modes to break the assumption that CPU ports
+are always over an external interface, and the assumption that user
+ports are always using an internal PHY.
 
-I would be happy to address the remaining concerns, or take more
-suggestions, and then develop a new version of the patch set.
+Changes v1 -> v2:
 
-Thanks
+ - patches 1-4: no code change
 
-Roberto
+ - add Luiz' reviewed-by to some of the patches
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Yang Xi, Li He
+ - patch 5: put the chip_infos into a static array and get rid of the
+   switch in the detect function; also remove the macros for various
+   chip ID/versions and embed them directly into the array
+
+ - patch 5: use array of size 3 rather than flexible array for extints
+   in the chip_info struct; gcc complained about initialization of
+   flexible array members in a nested context, and anyway, we know that
+   the max number of external interfaces is 3
+
+Alvin Šipraga (5):
+  net: dsa: realtek: rtl8365mb: rename macro RTL8367RB -> RTL8367RB_VB
+  net: dsa: realtek: rtl8365mb: remove port_mask private data member
+  net: dsa: realtek: rtl8365mb: correct the max number of ports
+  net: dsa: realtek: rtl8365mb: remove learn_limit_max private data
+    member
+  net: dsa: realtek: rtl8365mb: handle PHY interface modes correctly
+
+ drivers/net/dsa/realtek/rtl8365mb.c | 299 ++++++++++++++++------------
+ 1 file changed, 177 insertions(+), 122 deletions(-)
+
+-- 
+2.36.1
+

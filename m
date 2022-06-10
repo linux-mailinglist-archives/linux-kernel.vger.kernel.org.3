@@ -2,188 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519505461D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844415461D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241463AbiFJJWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
+        id S1348956AbiFJJWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348877AbiFJJVz (ORCPT
+        with ESMTP id S1348824AbiFJJWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:21:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AA517EF4E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:19:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CAD5B83309
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 09:19:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20543C3411C;
-        Fri, 10 Jun 2022 09:19:36 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YlJTWccV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654852773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p0ZlcEzOmh/ydalvLnOpLOlkx/qyF5DNIPEx1qZBrPs=;
-        b=YlJTWccV31WUh+THqnnmoQsWbfRYTbMmPYXb59YQmr/IYHluQ1m4VxpETT6L/UXL5ve3Sf
-        7WH54gysPMpRLkofMS7VZm9bhmDetT/hxJ0DSE+INaNVhN0iK4o2KrCDcP15f7L41De/Zx
-        8L7Gz0btKrczHnmBHZ43tHLjukR9pAY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 06324467 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 10 Jun 2022 09:19:33 +0000 (UTC)
-Date:   Fri, 10 Jun 2022 11:19:31 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "R, Monish Kumar" <monish.kumar.r@intel.com>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "alan.adamson@oracle.com" <alan.adamson@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Yi Zhang <yi.zhang@redhat.com>,
-        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "Rao, Abhijeet" <abhijeet.rao@intel.com>
-Subject: Re: 2 second nvme initialization delay regression in 5.18 [Was: Re:
- [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR
- observed during blktests]
-Message-ID: <YqMMo2Dv9SZRtR7B@zx2c4.com>
-References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
- <Ykyf5Zuz1W8yHhNY@zx2c4.com>
- <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
- <CAHmME9o-orF52HzkT80054e3Op5fLOcTHb-KHpvvU7H3FpAJ7A@mail.gmail.com>
- <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
- <YqG/pybFg0P5yQ9a@zx2c4.com>
- <20220610061449.GD24331@lst.de>
+        Fri, 10 Jun 2022 05:22:18 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6148B15434A;
+        Fri, 10 Jun 2022 02:20:20 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id D93E45C00A4;
+        Fri, 10 Jun 2022 05:20:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 10 Jun 2022 05:20:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1654852817; x=1654939217; bh=f1H+DWhyV6
+        bEImtYz7G/ATvgHdFloSPJtVwvi8rl+34=; b=kEt2Z+26Z1Dy0WDBiZZMW8CA1K
+        wRLPKsTRa44XnoDqtc4tVZUfysSf4K2Nd2fFY3URZL76g/7i1Nvjwyv001O78Qn2
+        2JdDXE9bAQz7w82oBwsi1wl7Gm2PxQ07tJ9GKRw1VZaTI2gYMurnACi1b4HPMt7l
+        SKEX0Pob5rqse7x6b2GUVjtabOC1R88MUbgmOGlmB+j5dOyQnptlBAQMrH3LSnwR
+        TIT8H7Z+FQmWUog7mT/4592X1/KfczaxRmBhxgHlvoRJnmc35Q7CpKzzzG0zbBIM
+        NZ81xyhxSd7qrd8oQ5iq+Q8tZJ6Su3y9ubzkgjCQzdZ2UfUxu3SFtODG5p4w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1654852817; x=1654939217; bh=f1H+DWhyV6bEImtYz7G/ATvgHdFl
+        oSPJtVwvi8rl+34=; b=EBN2OC9WYnd1RqRxhQZOfxvsF7tGI2ix9Um9PazNF78/
+        SiuxErPtdzqWx72Z4CaWlNK0LTkCGpYlDZRkmeF2Qpmzv8SqSLyEdWjEChrRxQen
+        QVvuH3pjD4xHQhYXQMMYmhE9D0cn580ojl0WAM+yVxxY7Dm8QTbvHUbcp0TpfFHe
+        CVmArbAnwORQDLLAMjG5Y3fUzw5n5y2CDFFoDzBPVxVvMKpGlyzlMT8TRngJZuZo
+        HFlKI1iBE5ndi+/BqvCgvWonCv9zyOl97woJrxtsBQYEKABKpT8cd+kAOJXuJmTq
+        y3Fi86ZwXLMlyc1NWEM+6iHmEDIuXwQP7/bkeaOUOQ==
+X-ME-Sender: <xms:0QyjYh4UGmuHsQ1OEfRztzXvh-7XLsAuF8fUNRF5-aWnvQGnTHoyAw>
+    <xme:0QyjYu6gy9_QOdf2A7NZu-J4i1WSUYH2s1oG6jFwk7JtssAWf5YOMQxEt_622PUJ_
+    KVrndZPFSxkxg>
+X-ME-Received: <xmr:0QyjYoexEfOrcP24M8iZLnYJEsmt-VLE-_yi5VNBAesZpF0q_njA0uhx8KhHwAy6OHxe_AybvhnSS25ZR2vYxrpeQTTKdr4B>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudduuddgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:0QyjYqJMX2OiARVcy2ojYbZ2zuGAWW3LE8-BObcBOdbsiiFXKgCtIA>
+    <xmx:0QyjYlLxCEyYtkPMRNajwlBECFs8X0TmNxGlG66TZcD_XCSkWoNx0A>
+    <xmx:0QyjYjwIHX2yF2_-BQU98v1wNJIBbaV8pBTU8O7GL3pqlv03F8CjDw>
+    <xmx:0QyjYvDjeCMgy4-_VgYjSw32rT2UXAqxa4MVrb0ivj8kJlOfaKhTyw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 10 Jun 2022 05:20:17 -0400 (EDT)
+Date:   Fri, 10 Jun 2022 11:20:13 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the extcon tree with the usb tree
+Message-ID: <YqMMzfFtWiZM8iOw@kroah.com>
+References: <20220426152739.62f6836e@canb.auug.org.au>
+ <20220523184254.4e657cd1@canb.auug.org.au>
+ <20220604111841.3887bf65@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610061449.GD24331@lst.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220604111841.3887bf65@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
-
-On Fri, Jun 10, 2022 at 08:14:49AM +0200, Christoph Hellwig wrote:
-> That leaves us with two plausible theories:
+On Sat, Jun 04, 2022 at 11:18:40AM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
->  - the problems could be due to an earlier firmware version or
->    ASIC stepping
->  - the problems are due to the thunderbolt attachment
+> On Mon, 23 May 2022 18:42:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > On Tue, 26 Apr 2022 15:27:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > Today's linux-next merge of the extcon tree got a conflict in:
+> > > 
+> > >   drivers/usb/dwc3/drd.c
+> > > 
+> > > between commit:
+> > > 
+> > >   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+> > > 
+> > > from the usb tree and commit:
+> > > 
+> > >   88490c7f43c4 ("extcon: Fix extcon_get_extcon_dev() error handling")  
+> > 
+> > This is now commit
+> > 
+> >   58e4a2d27d32 ("extcon: Fix extcon_get_extcon_dev() error handling")
+> > 
+> > > from the extcon tree.
+> > > 
+> > > I fixed it up (the former moved the code modified by the latter, so I
+> > > used the former version of this files and added the following merge fix
+> > > patch) and can carry the fix as necessary. This is now fixed as far as
+> > > linux-next is concerned, but any non trivial conflicts should be
+> > > mentioned to your upstream maintainer when your tree is submitted for
+> > > merging.  You may also want to consider cooperating with the maintainer
+> > > of the conflicting tree to minimise any particularly complex conflicts.
+> > > 
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Date: Tue, 26 Apr 2022 15:24:04 +1000
+> > > Subject: [PATCH] fixup for "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"
+> > > 
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > ---
+> > >  drivers/usb/dwc3/core.c | 9 ++-------
+> > >  1 file changed, 2 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > index 2345a54b848b..950e238c65bf 100644
+> > > --- a/drivers/usb/dwc3/core.c
+> > > +++ b/drivers/usb/dwc3/core.c
+> > > @@ -1649,13 +1649,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+> > >  	 * This device property is for kernel internal use only and
+> > >  	 * is expected to be set by the glue code.
+> > >  	 */
+> > > -	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> > > -		edev = extcon_get_extcon_dev(name);
+> > > -		if (!edev)
+> > > -			return ERR_PTR(-EPROBE_DEFER);
+> > > -
+> > > -		return edev;
+> > > -	}
+> > > +	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
+> > > +		return extcon_get_extcon_dev(name);
+> > >  
+> > >  	/*
+> > >  	 * Try to get an extcon device from the USB PHY controller's "port"
+> > > -- 
+> > > 2.35.1  
+> > 
+> > This is now a conflict between the char-misc tree and the usb tree.
+> 
+> This merge resolution seems to have been lost somewhere along the way
+> :-(
 
-Right, that seems like the set of variance we're dealing with. If it's a
-firmware version issue, then we revert because people can update? Or can
-we quirk firmware version numbers too? If it's ASIC stepping, I guess we
-need to quirk that. And likewise thunderbolt, but that seems more
-awkward to quirk around, because afaik, it all just appears as PCIe?
+I've taken your resolution in the tree now, sorry for the delay.
 
-> Monish and Jason, can you please send me the output of nvme id-ctrl
-> /dev/nvmeX (where /dev/nvmeX is the actual device number)?
-
-NVME Identify Controller:
-vid       : 0x144d
-ssvid     : 0x144d
-sn        : <redacted>
-mn        : Samsung SSD 970 EVO Plus 2TB            
-fr        : 2B2QEXM7
-rab       : 2
-ieee      : 002538
-cmic      : 0
-mdts      : 9
-cntlid    : 0x4
-ver       : 0x10300
-rtd3r     : 0x30d40
-rtd3e     : 0x7a1200
-oaes      : 0
-ctratt    : 0
-rrls      : 0
-cntrltype : 0
-fguid     : 
-crdt1     : 0
-crdt2     : 0
-crdt3     : 0
-nvmsr     : 0
-vwci      : 0
-mec       : 0
-oacs      : 0x17
-acl       : 7
-aerl      : 3
-frmw      : 0x16
-lpa       : 0x3
-elpe      : 63
-npss      : 4
-avscc     : 0x1
-apsta     : 0x1
-wctemp    : 358
-cctemp    : 358
-mtfa      : 0
-hmpre     : 0
-hmmin     : 0
-tnvmcap   : 2000398934016
-unvmcap   : 0
-rpmbs     : 0
-edstt     : 35
-dsto      : 0
-fwug      : 0
-kas       : 0
-hctma     : 0x1
-mntmt     : 356
-mxtmt     : 358
-sanicap   : 0
-hmminds   : 0
-hmmaxd    : 0
-nsetidmax : 0
-endgidmax : 0
-anatt     : 0
-anacap    : 0
-anagrpmax : 0
-nanagrpid : 0
-pels      : 0
-domainid  : 0
-megcap    : 0
-sqes      : 0x66
-cqes      : 0x44
-maxcmd    : 0
-nn        : 1
-oncs      : 0x5f
-fuses     : 0
-fna       : 0x5
-vwc       : 0x1
-awun      : 1023
-awupf     : 0
-icsvscc     : 1
-nwpc      : 0
-acwu      : 0
-ocfs      : 0
-sgls      : 0
-mnan      : 0
-maxdna    : 0
-maxcna    : 0
-subnqn    : 
-ioccsz    : 0
-iorcsz    : 0
-icdoff    : 0
-fcatt     : 0
-msdbd     : 0
-ofcs      : 0
-ps    0 : mp:7.50W operational enlat:0 exlat:0 rrt:0 rrl:0
-          rwt:0 rwl:0 idle_power:- active_power:-
-ps    1 : mp:5.90W operational enlat:0 exlat:0 rrt:1 rrl:1
-          rwt:1 rwl:1 idle_power:- active_power:-
-ps    2 : mp:3.60W operational enlat:0 exlat:0 rrt:2 rrl:2
-          rwt:2 rwl:2 idle_power:- active_power:-
-ps    3 : mp:0.0700W non-operational enlat:210 exlat:1200 rrt:3 rrl:3
-          rwt:3 rwl:3 idle_power:- active_power:-
-ps    4 : mp:0.0050W non-operational enlat:2000 exlat:8000 rrt:4 rrl:4
-          rwt:4 rwl:4 idle_power:- active_power:-
-
-Jason
+greg k-h

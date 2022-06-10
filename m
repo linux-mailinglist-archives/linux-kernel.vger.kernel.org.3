@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2352C545D99
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17AA545D9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347030AbiFJHdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S1346982AbiFJHeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346798AbiFJHcu (ORCPT
+        with ESMTP id S1346946AbiFJHdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:32:50 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1C212C94C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:32:32 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id y188so16162102ybe.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VpciQYHvryj/PequWAT65fK8eJ0KET3ZyhRRjOWqX1M=;
-        b=UQ/yeNEKOtigurLd3J5UurzMzK/E0NubjoHgaLV+IJcD/aIMXKfBefiPuvfEu1Xp94
-         oao/op3nyn/VBSVwZYQ9FboihtQcWlOGwGbhJEX3Ypq0CJDExUsCR726Oqua5Z8X+Bd3
-         klgenZZQ7M2aOLizpFGil8fRF5QP8nA4zixyH8sZ2X+Hi3OQTasZPW7XIjCxORtrUi7f
-         j9LGi8hfxudJgV/noJCWT24jBloCNlc6+Hlt0bNWiZVrb8VGz9pw5PFUypzoEeV+A1hx
-         rhpTqPtB0beClKdRNPHpqt/lW1DO6YlKlxpbAKi5bxLsB9Ab7cXnUo8B/CGc2k+33JqQ
-         WBFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VpciQYHvryj/PequWAT65fK8eJ0KET3ZyhRRjOWqX1M=;
-        b=LpcyehTfRezZ29oYCj4Y/UA8hly8DFmJqIC8ly3F9niJU5lzBrptVF7zWo3qxdR1u2
-         2fu9CZJILf3bD22A3KP0zhltc+B0O5SllCvLPRrVXIIIOKFmHxwYOQKRqD+kOtoJ/xXV
-         BBshmQzCtD8nuJqWyW/nw7sxIPp5GPP0QP5faYvofiGsPTpl5dbeCfqzCqLClOOgOA2D
-         3Wzbaf8YmJLR7IwDF2AR69xsy0CNAEso/9gEjKbfyKOMfSv6d43rN/WcE+bfKXH2h5Os
-         kXbsT/RU7fHEq44pri+ssMZp4NNBGwZbgfzXpqHjnrb5rY3kmgiaW2N5d4379bd2Mcaq
-         p+Yg==
-X-Gm-Message-State: AOAM532uNFBY3WKoatT1wpDy37UhokIpH4dSYQZTCR4/9PLGomUp9o/Q
-        ptmG9n+AqOXlTK2gBMUFv4sAmCwR84deFbEiV8Ho+A==
-X-Google-Smtp-Source: ABdhPJyodnCZYSm5uCy1IFU1S5PAg2DfIXbShb1DCSPfCarwHd2KuFRpUkN6RVaisqspfcszAh5pzkAxuGGPbpUlM24=
-X-Received: by 2002:a05:6902:c9:b0:641:1998:9764 with SMTP id
- i9-20020a05690200c900b0064119989764mr42673115ybs.427.1654846350939; Fri, 10
- Jun 2022 00:32:30 -0700 (PDT)
+        Fri, 10 Jun 2022 03:33:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88344131F1F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:33:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LKCPY2k9Hz4xZ7;
+        Fri, 10 Jun 2022 17:33:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1654846417;
+        bh=ZwuNMyeEn4/k09HgbzyRNNQPwPmbjayEkiANCys25H0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=XZpuxytflZ9rOzutXEJeY1hrf7cGPBRASffqsC+RY8GkqWOE1YRr35BrNOudZcwVC
+         6KS++Uxq/eQjykz/AsvPc3QJ//mam7lfobCTOprGE9zrIObqcBhV6c5KjubpNOF3Px
+         g3QMdsMfxMZf+eO2TZbRAvOmsDN0SWhYtFdkI516JFPgRbHs52z2zCL1Otpk7amP/e
+         hf8aZh7abJTWfCb8yeA8YWPGyAqeA6KxfNlQ2hLmkNxdIWTcQSVDCQShlJ4D4IfIPS
+         mHg1NzqfoDGSAQklujgnHHK84B5snoRpangujWi0B8OqyWqNx/SBAJogXWiS+ZpaT6
+         0NuEzFmRt6Ubw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for
+ PCI domain
+In-Reply-To: <20220504175718.29011-1-pali@kernel.org>
+References: <20220504175718.29011-1-pali@kernel.org>
+Date:   Fri, 10 Jun 2022 17:33:32 +1000
+Message-ID: <87edzxc6r7.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20220610070529.1623-1-zhudi2@huawei.com>
-In-Reply-To: <20220610070529.1623-1-zhudi2@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 10 Jun 2022 00:32:19 -0700
-Message-ID: <CANn89iKvXUbunP6UtNE1tNCH7FwCux22_rqwhGigvGn_64-6FA@mail.gmail.com>
-Subject: Re: [PATCH] fq_codel: Discard problematic packets with pkt_len 0
-To:     Di Zhu <zhudi2@huawei.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, rose.chen@huawei.com,
-        syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:07 AM Di Zhu <zhudi2@huawei.com> wrote:
+Pali Roh=C3=A1r <pali@kernel.org> writes:
+> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on
+> device-tree properties"), powerpc kernel always fallback to PCI domain
+> assignment from OF / Device Tree 'reg' property of the PCI controller.
 >
-> Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
-> skbs, that is, the flow->head is null.
-> The root cause is that: when the first queued skb with pkt_len 0, backlogs
-> of the flow that this skb enqueued is still 0 and if sch->limit is set to
-> 0 then fq_codel_drop() will be called. At this point, the backlogs of all
-> flows are all 0, so flow with idx 0 is selected to drop, but this flow have
-> not any skbs.
-> skb with pkt_len 0 can break existing processing logic, so just discard
-> these invalid skbs.
+> PCI code for other Linux architectures use increasing assignment of the P=
+CI
+> domain for individual controllers (assign the first free number), like it
+> was also for powerpc prior mentioned commit.
 >
-> LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
->
-> Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-> Signed-off-by: Di Zhu <zhudi2@huawei.com>
-> ---
->  net/sched/sch_fq_codel.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
-> index 839e1235db05..c0f82b7358e1 100644
-> --- a/net/sched/sch_fq_codel.c
-> +++ b/net/sched/sch_fq_codel.c
-> @@ -191,6 +191,9 @@ static int fq_codel_enqueue(struct sk_buff *skb, struct Qdisc *sch,
->         unsigned int pkt_len;
->         bool memory_limited;
->
-> +       if (unlikely(!qdisc_pkt_len(skb)))
-> +               return qdisc_drop(skb, sch, to_free);
-> +
+> Upgrading powerpc kernels from LTS 4.4 version (which does not contain
+> mentioned commit) to new LTS versions brings a regression in domain
+> assignment.
 
+I'm sorry this broke your system. But I don't really consider it a
+regression, the kernel provides no guarantee about the PCI domain
+numbering across LTS releases.
 
-This has been discussed in the past.
+Prior to the change the numbering was just based on the order the PHBs
+were discovered in the device tree, which is not robust. A cosmetic
+refactor of the device tree source could cause PHBs to be discovered in
+a different order.
 
-Feeding ndo_start_xmit() in hundreds of drivers with zero-length
-packets will crash anyway.
+Similarly a change in firmware PCI discovery or device tree generation
+could cause the numbering to change.
 
-We are not going to add such silly tests in all qdiscs, and then all
-ndo_start_xmit(), since qdiscs are not mandatory.
+If you have scripts that are looking for certain devices they can use
+the vendor/device fields in sysfs to find the actual devices they want,
+not just whatever happens to be at 0000:01:00.0.
 
-Please instead fix BPF layer, instead of hundreds of drivers/qdiscs.
+> Fix this issue by introducing a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_=
+REG
+> When this options is disabled then powerpc kernel would assign PCI domains
+> in the similar way like it is doing kernel for other architectures and al=
+so
+> how it was done prior that commit.
+
+I really don't want a config option for that.
+
+There is a device tree property "linux,pci-domain", described in
+Documentation/devicetree/bindings/pci/pci.txt.
+
+Can you try adding that to your device tree and updating
+get_phb_number() to look for it?
+
+cheers

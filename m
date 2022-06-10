@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F239A546735
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A3154672E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347667AbiFJNND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        id S244850AbiFJNMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343655AbiFJNMt (ORCPT
+        with ESMTP id S245274AbiFJNMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:12:49 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CFB5BE6C;
-        Fri, 10 Jun 2022 06:12:44 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id d123so6259590iof.10;
-        Fri, 10 Jun 2022 06:12:44 -0700 (PDT)
+        Fri, 10 Jun 2022 09:12:44 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222A15A0A0;
+        Fri, 10 Jun 2022 06:12:42 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id p128so5781100iof.1;
+        Fri, 10 Jun 2022 06:12:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=IkgD32JQQv4iXIcEl6HeM9jrQJQd0Tq+F8d36Y5X2zg=;
-        b=tzoazb7HJ57+oOqoUkqJQ1EV0aftXD5PAp3h4oVpz2Zxyn3q6P6STcF+S1mJYqvWma
-         TSQsM5tqxl4/dOGW3rcg/LC4yUN0HZCFULVt88c2wKyaJf6fO+wFOAeG4CdUSOofmhph
-         EkaDhc3gqWfb/Oikk9IuuShFCnEgTHtyvtav9ygKGkM/cCWaQn08uSI0g0j8Gw2QVJVh
-         ECdag3quSfioBdJrbIxfaOgI12jexeBlnwbPr+7XKeowzEU3RDsJU0RbANLU/jfdX7F/
-         xEJ03oJY83bJPCL9iiY0zLHL4GcMYF7Km0KBC6E5Jcct0koXp8zlGf5WH4WD/NKQ2X0r
-         PPrw==
-X-Gm-Message-State: AOAM532Ho6QCezIA06wV89ubcVSipHF5Fz1cAFVQy+N7ZpbZtSkbq4lk
-        wQTtkRTt3IcsQWcljZs33A==
-X-Google-Smtp-Source: ABdhPJw7sfj49a/XqcZX4iEyYBeVBikgyBwiHnh2QxO3rAv60pfY7q66XAD3rxdzNX0bgAVsDTmVOw==
-X-Received: by 2002:a5d:9a13:0:b0:668:94ba:46ab with SMTP id s19-20020a5d9a13000000b0066894ba46abmr20425276iol.155.1654866764099;
-        Fri, 10 Jun 2022 06:12:44 -0700 (PDT)
+        bh=GUJQPqIBLKX/t4jWZnKHkjJZiTQ4T+t3dlD445+qEg8=;
+        b=LlhnE92a043p3tJrMlkAtD2UCOHS8aCuiaITaFpjOCwfOJxA24CvrBstlu746Mac3j
+         +BVMeyB8GCgWW8c31/6Ng6JW4RwHWMfB+pWSDoZmICNjwbbSMWkuwuHF1Z5nmSch8Tej
+         xDaYkQdjADFSVLfN1gzDokCmy7H3hIJpcws3DpTdXYXBfwIqNs2UsgzN//Cm5sB2rqsj
+         d+AdJ6PT+6wfMHcgviVx9yvL6+Wv13q8mGGAnQIa+IDULhmqfIt6aGTTtbPX0Q0I7uIT
+         TUr8P42+11957ikGmbGtwzTWmMYotH4/zwpOXWw8j7ySdmezVb+lXTA1ccoLp5xdu0KD
+         WTng==
+X-Gm-Message-State: AOAM530/u80Zj2VvH0cr55npuY+yJOCiFMwdtMtMBl04oacG5lohO0xN
+        DWLXrzbTL/rHr9U51A32oQ==
+X-Google-Smtp-Source: ABdhPJzpXU+91NH1R+XxaxuT7R1s4GIE+oR2ZORwDbUcWvGs8HOPQcvwCCMc8f49vy0vBOWd3ZsDGw==
+X-Received: by 2002:a05:6602:2b04:b0:669:5fa:12fa with SMTP id p4-20020a0566022b0400b0066905fa12famr21843526iov.178.1654866761402;
+        Fri, 10 Jun 2022 06:12:41 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id z12-20020a02344c000000b003318ba8386bsm7885984jaz.81.2022.06.10.06.12.42
+        by smtp.gmail.com with ESMTPSA id m8-20020a0566380dc800b00331e38ccc4asm4368616jaj.51.2022.06.10.06.12.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 06:12:43 -0700 (PDT)
-Received: (nullmailer pid 1529407 invoked by uid 1000);
+        Fri, 10 Jun 2022 06:12:40 -0700 (PDT)
+Received: (nullmailer pid 1529405 invoked by uid 1000);
         Fri, 10 Jun 2022 13:12:35 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Cc:     wenst@chromium.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        robh+dt@kernel.org, angelogioacchino.delregno@collabora.com,
-        chunkuang.hu@kernel.org, daniel@ffwll.ch, matthias.bgg@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        granquet@baylibre.com, airlied@linux.ie, p.zabel@pengutronix.de,
-        linux-fbdev@vger.kernel.org, ck.hu@mediatek.com,
-        tzimmermann@suse.de, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, mripard@kernel.org,
-        dri-devel@lists.freedesktop.org, deller@gmx.de, msp@baylibre.com,
-        jitao.shi@mediatek.com
-In-Reply-To: <20220610105522.13449-2-rex-bc.chen@mediatek.com>
-References: <20220610105522.13449-1-rex-bc.chen@mediatek.com> <20220610105522.13449-2-rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH v11 01/10] dt-bindings: mediatek,dp: Add Display Port binding
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Simon Xue <xxm@rock-chips.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+In-Reply-To: <20220610085706.15741-12-Sergey.Semin@baikalelectronics.ru>
+References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru> <20220610085706.15741-12-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v3 11/17] dt-bindings: PCI: dwc: Apply common schema to Rockchip DW PCIe nodes
 Date:   Fri, 10 Jun 2022 07:12:35 -0600
-Message-Id: <1654866755.768151.1529406.nullmailer@robh.at.kernel.org>
+Message-Id: <1654866755.753412.1529404.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,24 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Jun 2022 18:55:13 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Fri, 10 Jun 2022 11:56:59 +0300, Serge Semin wrote:
+> As the DT-bindings description states the Rockchip PCIe controller is
+> based on the DW PCIe RP IP-core thus its DT-nodes are supposed to be
+> compatible with the common DW PCIe controller schema. Let's make sure they
+> evaluated against it by referring to the snps,dw-pcie-common.yaml schema
+> in the allOf sub-schemas composition.
 > 
-> This controller is present on several mediatek hardware. Currently
-> mt8195 and mt8395 have this controller without a functional difference,
-> so only one compatible field is added.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> The controller can have two forms, as a normal display port and as an
-> embedded display port.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Fix reviewers' comment]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 > ---
->  .../display/mediatek/mediatek,dp.yaml         | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> 
+> Changelog v3:
+> - This is a new patch created on v3 lap of the series.
+> ---
+>  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -94,10 +99,10 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.example.dtb: dp_tx@1c600000: max-lanes: b'\x04' is not of type 'object', 'array', 'boolean', 'null'
-	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.example.dtb: dp_tx@1c600000: max-linkrate: b'\x1f\xa4' is not of type 'object', 'array', 'boolean', 'null'
-	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
+./Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/pci/snps,dw-pcie-common.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.example.dtb: pcie@fe280000: False schema does not allow {'compatible': ['rockchip,rk3568-pcie'], 'reg': [[3, 3229614080, 0, 3735552], [0, 4264034304, 0, 65536], [3, 2147483648, 0, 1048576]], 'reg-names': ['dbi', 'apb', 'config'], 'bus-range': [[32, 47]], 'clocks': [[4294967295, 143], [4294967295, 144], [4294967295, 145], [4294967295, 146], [4294967295, 147]], 'clock-names': ['aclk_mst', 'aclk_slv', 'aclk_dbi', 'pclk', 'aux'], 'device_type': ['pci'], 'linux,pci-domain': [[2]], 'max-link-speed': [[2]], 'msi-map': [[8192, 4294967295, 8192, 4096]], 'num-lanes': [[2]], 'phys': [[4294967295]], 'phy-names': ['pcie-phy'], 'power-domains': [[4294967295, 15]], 'ranges': [[2164260864, 0, 2155872256, 3, 2155872256, 0, 1048576], [2197815296, 0, 2156920832, 3, 2156920832, 0, 1064304640]], 'resets': [[4294967295, 193]], 'reset-names': ['pipe'], '#address-cells': [[3]], '#size-cells': [[2]], '$nodename': ['pcie
+ @fe280000']}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
 
 doc reference errors (make refcheckdocs):
 

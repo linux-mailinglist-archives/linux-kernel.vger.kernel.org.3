@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015A2546640
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B123546642
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 14:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348399AbiFJME1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 08:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S1347758AbiFJMGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 08:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347752AbiFJMEY (ORCPT
+        with ESMTP id S240885AbiFJMGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 08:04:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D8F193E4;
-        Fri, 10 Jun 2022 05:04:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A38B6B834E0;
-        Fri, 10 Jun 2022 12:04:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53FECC3411D;
-        Fri, 10 Jun 2022 12:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654862661;
-        bh=q29Sh8OaZZnjTZf4cfd9bieOC8BLYRFYnh2YtXknEQs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YHYc9HR0FWAu3R/i2PNgPZXqUoX/2Mv13LjYTzteYGKaiqmIdWGzdfiX/5l8szL39
-         J1JxpDpN9bearnk8nZaOK39LmBiJbW/cc/JDRgqZ7ha6bxBdsYGdq+LiDTo9dLOovh
-         v+nEfprR3nynbRN/ZEGdkZ+0/23GyGzB65rYLFGgjEUY5h5IVrTSDcmHsgv538lYit
-         NDXZWg2gMnc3FJyfTezyMKsBKZjBDfN+1Qa3ANPN2uQ7vklE+ts0eOOD4AlURlnHwg
-         M5qv5wGdExkSg/pEohXx2n2ln4hjflkJOHkTxFzz/ub3yoIZ0AaVGuW2OA52Coq6g7
-         7vNT6JWOg/dhA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1nzdNB-0002li-B5; Fri, 10 Jun 2022 14:04:17 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>
-Subject: [PATCH stable-4.9] PCI: qcom: Fix unbalanced PHY init on probe errors
-Date:   Fri, 10 Jun 2022 14:04:11 +0200
-Message-Id: <20220610120411.10619-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Fri, 10 Jun 2022 08:06:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E433EF18
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 05:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654862800; x=1686398800;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K1k+oIO+VBXWvrUqhojZiI+4Uhrj8EJsXUfooupVGdk=;
+  b=isXcptkfyiD5+jn8C0KpGl4t/Ml24v8MeuLT3Mm2JGcGrIn+irgyqPg6
+   bQH15yRbIDb0/PogITJn6/6rbi6drU2PUWIxFeNi8IXp9ptVeCoEzLvH0
+   2UtpxIzMBgFJ53GliHT4zHljsBFagSOO+AMNOlZL/wih01Tg/g/XU39Fy
+   j/58EihWuC+38Z4VoF54guTkUOwzAsivHutkWymjgHUNlWJbU8qmkLOAM
+   GsOneoFwT580nJnzOf8MXQIly81/2i69y59hgx1Pa4yU61UEuLaKKPC9J
+   cwWWaEjYzebibk4JSe0DN9CbY1eq0S7XoT55dpuSo216qbsNPW4VMQx1z
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275142446"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="275142446"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:06:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="828225455"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Jun 2022 05:06:39 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzdPS-000Hvx-De;
+        Fri, 10 Jun 2022 12:06:38 +0000
+Date:   Fri, 10 Jun 2022 20:05:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [chrome-platform:for-next 13/34]
+ drivers/platform/chrome/cros_kbd_led_backlight.c:192:42: warning:
+ 'keyboard_led_drvdata_ec_pwm' defined but not used
+Message-ID: <202206102051.ZaCPUVE8-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 83013631f0f9961416abd812e228c8efbc2f6069 upstream.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+head:   cfed691b80dce32b62634b1d7f92a661a3b03e4f
+commit: 40f58143745eaabc68ef44b068642ca3b38d23a6 [13/34] platform/chrome: cros_kbd_led_backlight: support EC PWM backend
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220610/202206102051.ZaCPUVE8-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/commit/?id=40f58143745eaabc68ef44b068642ca3b38d23a6
+        git remote add chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
+        git fetch --no-tags chrome-platform for-next
+        git checkout 40f58143745eaabc68ef44b068642ca3b38d23a6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/chrome/
 
-Undo the PHY initialisation (e.g. balance runtime PM) if host
-initialisation fails during probe.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Link: https://lore.kernel.org/r/20220401133854.10421-3-johan+linaro@kernel.org
-Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc: stable@vger.kernel.org      # 4.5
-[ johan: adjust context to 4.9 ]
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/pci/host/pcie-qcom.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/pci/host/pcie-qcom.c b/drivers/pci/host/pcie-qcom.c
-index aeb46f8c7087..4e21ca3c067e 100644
---- a/drivers/pci/host/pcie-qcom.c
-+++ b/drivers/pci/host/pcie-qcom.c
-@@ -562,10 +562,15 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	ret = dw_pcie_host_init(pp);
- 	if (ret) {
- 		dev_err(dev, "cannot initialize host\n");
--		return ret;
-+		goto err_phy_exit;
- 	}
- 
- 	return 0;
-+
-+err_phy_exit:
-+	phy_exit(pcie->phy);
-+
-+	return ret;
- }
- 
- static const struct of_device_id qcom_pcie_match[] = {
+>> drivers/platform/chrome/cros_kbd_led_backlight.c:192:42: warning: 'keyboard_led_drvdata_ec_pwm' defined but not used [-Wunused-const-variable=]
+     192 | static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {};
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/keyboard_led_drvdata_ec_pwm +192 drivers/platform/chrome/cros_kbd_led_backlight.c
+
+   191	
+ > 192	static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {};
+   193	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

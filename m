@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56757545CD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A218545CBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245323AbiFJHHv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Jun 2022 03:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S243661AbiFJHCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239815AbiFJHHp (ORCPT
+        with ESMTP id S233620AbiFJHB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:07:45 -0400
-X-Greylist: delayed 540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 00:07:43 PDT
-Received: from mx1.uni-regensburg.de (mx1.uni-regensburg.de [194.94.157.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DF2666
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:07:43 -0700 (PDT)
-Received: from mx1.uni-regensburg.de (localhost [127.0.0.1])
-        by localhost (Postfix) with SMTP id 1E0EB600005A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:58:38 +0200 (CEST)
-Received: from gwsmtp.uni-regensburg.de (gwsmtp1.uni-regensburg.de [132.199.5.51])
-        by mx1.uni-regensburg.de (Postfix) with ESMTP id 04F706000051
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 08:58:38 +0200 (CEST)
-Received: from uni-regensburg-smtp1-MTA by gwsmtp.uni-regensburg.de
-        with Novell_GroupWise; Fri, 10 Jun 2022 08:58:38 +0200
-Message-Id: <62A2EB9C020000A10004ACB6@gwsmtp.uni-regensburg.de>
-X-Mailer: Novell GroupWise Internet Agent 18.4.0 
-Date:   Fri, 10 Jun 2022 08:58:36 +0200
-From:   "Ulrich Windl" <Ulrich.Windl@rz.uni-regensburg.de>
-To:     <linux-kernel@vger.kernel.org>
-Subject: Q: (rt)netlink documentation
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
+        Fri, 10 Jun 2022 03:01:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9A229A62D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:01:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1807461F46
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:01:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE37C3411B;
+        Fri, 10 Jun 2022 07:01:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654844515;
+        bh=M6EuY9oN0LZN9afnalEpOzjuWTpDRjltWbC0UqJViuM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=waLjTEv9RnDloT0kKZ1mohHPRUuP1+2C3VNrZC1ujQS3ZjMQFP5rQvKKchwhSLHjQ
+         ucDqxOtvGEk/6pnIv6ewMYGb/X99A0U19rfazqyiq3N3IvsDO1ycSeD4QTjgKHJlwA
+         +j+VJgIyw4ctd6cdk5GTnunnmF8QM1v6Z+crrvnA=
+Date:   Fri, 10 Jun 2022 09:01:52 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Agam Kohli <agamkohli9@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Staging: rts5208: spi: Removed unnecessary ftrace-like
+ logging
+Message-ID: <YqLsYKSgLOk4jKGS@kroah.com>
+References: <20220609153144.11803-1-agamkohli9@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609153144.11803-1-agamkohli9@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Thu, Jun 09, 2022 at 11:31:44AM -0400, Agam Kohli wrote:
+> Coding Style Fix
+> 
+> Signed-off-by: Agam Kohli <agamkohli9@gmail.com>
+> ---
+>  drivers/staging/rts5208/spi.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/staging/rts5208/spi.c b/drivers/staging/rts5208/spi.c
+> index f1e9e80044ed..0d2d065508d3 100644
+> --- a/drivers/staging/rts5208/spi.c
+> +++ b/drivers/staging/rts5208/spi.c
+> @@ -460,7 +460,6 @@ int spi_set_parameter(struct scsi_cmnd *srb, struct rtsx_chip *chip)
+>  	spi->clk_div = ((u16)(srb->cmnd[4]) << 8) | srb->cmnd[5];
+>  	spi->write_en = srb->cmnd[6];
+>  
+> -	dev_dbg(rtsx_dev(chip), "%s: ", __func__);
+>  	dev_dbg(rtsx_dev(chip), "spi_clock = %d, ", spi->spi_clock);
+>  	dev_dbg(rtsx_dev(chip), "clk_div = %d, ", spi->clk_div);
+>  	dev_dbg(rtsx_dev(chip), "write_en = %d\n", spi->write_en);
+> -- 
+> 2.36.1
+> 
+> 
 
-I'm working with an older kernel (SLES12 SP5, 4.12.14), trying to implement a module to access rtnetlink data, specifically that returned for RTM_GETLINK.
-However I have the problem that the documentation on the packet structure is very poor, if not to say absent. So I fail to parse the response correctly.
-Furthermore I realized (when trying to contact the maintainer), that "netlink" is not present in the MAINTAINERS file.
+Hi,
 
-To be honest, the only working example I have is derived from some C code someone had published.
-From the manual pages or header files (even from the kernel sources, or the Documentation directory) it's absolutely non-obvious how the data is structured and how to use those many macros defined.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-NLMSG_ALIGN
-RTA_ALIGN
-RTA_OK
-RTA_NEXT
-RTA_LENGTH
-RTA_SPACE
-RTA_DATA
-RTA_PAYLOAD
-RTM_RTA
-RTM_PAYLOAD
-TCA_RTA
-TCA_PAYLOAD
-TA_RTA
-TA_PAYLOAD
-NFDN_RTMSG
-NLMSG_LENGTH
-NLMSG_SPACE
-NLMSG_DATA
-NLMSG_NEXT
-NLMSG_OK
-NLMSG_PAYLOAD
-IFA_RTA
-IFA_PAYLOAD
-NFM_PAYLOAD
-IFLA_RTA
-IFLA_PAYLOAD
-(This list is most likely not complete)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Regards,
-Ulrich Windl
-P.S.: Keep me on CC:, I'm not subscribed to LKML
+- Your patch did not apply to any known trees that Greg is in control
+  of.  Possibly this is because you made it against Linus's tree, not
+  the linux-next tree, which is where all of the development for the
+  next version of the kernel is at.  Please refresh your patch against
+  the linux-next tree, or even better yet, the development tree
+  specified in the MAINTAINERS file for the subsystem you are submitting
+  a patch for, and resend it.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
+thanks,
+
+greg k-h's patch email bot

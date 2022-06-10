@@ -2,173 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08747547059
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 02:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECB0547063
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 02:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348268AbiFJXzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 19:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
+        id S1350650AbiFJXz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 19:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235486AbiFJXzL (ORCPT
+        with ESMTP id S235486AbiFJXzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:55:11 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A551FD9E7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:55:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654905310; x=1686441310;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ILHwzbuqoTavblOqVRrMWSnbrTMh/tnvOLDHhG8DbiI=;
-  b=VIjYFhDqbFFKcj7zvAjmX9j81uXhE3ROsW+hbDuL/Nk/H7Ol/8I/FG4U
-   q1QSmg/qDBF0HZmnYywrAhDkc2ydOThkdXPMDEQ9fKNXNg8QxtILFkNYH
-   XH97aBGVLFdpJkG1twMExUuilUnjfC1ZS3TR+qNG71Jekp4Z5yhHt85TX
-   sKrTKyDxT1tvGGNfKBNw2B+AOm9rSEVLY8izqAMLY2EeDRu17wm2GsSss
-   LvKX5d0qNSsoM1OjgvEupwPWQbCnJU2RmQyLOUaT8lfcqp8VBNEosIGBE
-   0xzaTjmCBe8yh+sqI+sc32vKJ6Q8SRWHsXfPJAvyEqsYhknSJMe3u1RCM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="257616542"
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="257616542"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:55:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="586460845"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jun 2022 16:55:06 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 10 Jun 2022 16:55:06 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 10 Jun 2022 16:55:06 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 10 Jun 2022 16:55:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZSmxLJXspuXujQHBWreaIP5A9R1rv7FS0Hu5z3NrvnLWHCfi25l27tygpIZd5quW/JmQ21zinGzAigbCspW4Pd4ZeksGoFoENn3gMVOcg8ppJBd3gYQBYYtBE5sMiOZoxlqd+IAJSrzpjQjZm/3IW+bNYr8SkbE4fQEGZNQ7j/V6uDL42sfLUFzNcUyfvV/nS69MLTtkZVHH+yC47Z+4uldEVOM1AxG0RYhptAg5dpaq9Kr3e2M3lgJI+yAu9FiiOOWOlx9UxGcMZlMqECs5RPBgzWNkaJkJC+LRoZDfAB0l2tDm0cO28mDZWHbJX04+WyfM51td+WpisNIV09HfRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ILHwzbuqoTavblOqVRrMWSnbrTMh/tnvOLDHhG8DbiI=;
- b=dABAHhbxeuxM/ZJ78h0iR2t8zC7lE+mfUyHT6QQDyOaBV0r+n5tNzz+YEw2DGpF9wfeeXslUcxGJuLX34hE2TUxYCi2hpORTnb+Z7DS9lkywYDOH203343lVTyMYXtj6sJw2wl7PrGQHFKnWckt8Vfl+pizrJi+ni8xribKPrd+aBxc64ikK+y4ww/A0Y46GzEIURPll2MFZ56S3iRLUtSygfZQlrAcBAHijh/hAX1Ea/ki3BCf5fDyNlCMA8TDcYH90Qsy6XZXNVohYrbLPER0/uHiE6NL4+VD8dx43Vyfc3OsQ0v3P9d8q3xg555EqKEdcXI28NSiSVOyOM7CJUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MN2PR11MB3759.namprd11.prod.outlook.com (2603:10b6:208:f2::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17; Fri, 10 Jun
- 2022 23:55:03 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::6463:8e61:8405:30f4]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::6463:8e61:8405:30f4%11]) with mapi id 15.20.5314.019; Fri, 10 Jun
- 2022 23:55:02 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [PATCHv3 4/8] x86/mm: Handle LAM on context switch
-Thread-Topic: [PATCHv3 4/8] x86/mm: Handle LAM on context switch
-Thread-Index: AQHYfNdb1narbRcmgUCmzQaMVS98/K1JUVEA
-Date:   Fri, 10 Jun 2022 23:55:02 +0000
-Message-ID: <d1a5615633f5e0376d7a75c1d8d12bbd89a7a63e.camel@intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
-         <20220610143527.22974-5-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220610143527.22974-5-kirill.shutemov@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cd649891-d299-4bd0-fbb9-08da4b3ca2c8
-x-ms-traffictypediagnostic: MN2PR11MB3759:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MN2PR11MB37599A74A8BB57E3B11FF8EFC9A69@MN2PR11MB3759.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j5x5RMc3xaeL/zv5xaVTS4Vl/EyBpM+QrPYR/CipnKowGiNKV5oot1iSwUNax+mezt/r5AuEumi4lc3vTjLgt1qZQ5MAO4gk7P5KuepyGJq5qGPInKOJvQHH3Hk+7fHJhQDinvpCYvjaK+fYlXc8KhiNZVpALAzyzEPtR2LQ2XTDIf5PSeoNPmujIeKbxyF9TKtIB0DgotEBVTdSR88yzVQJNa7K2qljGse/cSHhoTSYEkRMIy9NvnHand8MzN2XqrrAIHrmRkJ2+wAQ4kNPrWwwbwyAMPNdSCQnJKCAPSETZmTarC5DGxzatIo9lN7/rdgITg8KgbP77sfGdvw52Yp1uNsNSYXfIGYceKSnJSUPV5KAi0VKfwLqd4XZl7RxpMhh3XSck6+Vvl3Ir9YqDeyMcgmG1SSMrLaTceQ63XquPZT0EdjrssN7wClYyR9HxIOoMslLs4NB/0y0i+Q4k/1ubQ+Z2te8+l4ROqhoLk1gCL0FF3Ff0KsXUPOHfqxbl4dKKmxycVtIQP4DteVfFWu5NvzBkKLx2xCIBgUZjgdBschVHU9fE6qbLZ+4CMHeo+LNKfJhU2dJB+XxnBYzov4ho5/d69/aRxtafScXuqecZDTtqArn8de8f+wELuQvTgqWQ9KNMpAG1i6vRS5pu7renj1LgN82EMd+sw9qZZSDc+ypxcp2DRSGsD+OB8U4ycZ0gzWmiimH+HvllEZwUN0yQgX62sPdMSy76n4JrR0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(508600001)(36756003)(82960400001)(8936002)(38070700005)(122000001)(38100700002)(71200400001)(5660300002)(66476007)(76116006)(66946007)(66556008)(66446008)(64756008)(6486002)(8676002)(4744005)(7416002)(6506007)(86362001)(2906002)(54906003)(26005)(316002)(110136005)(186003)(6512007)(2616005)(4326008)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bEtOYXg0Mk1PemdWVEs3MFR6bDUwNVZmRVpQYjVrWWVvT0U4cHkydCt0MDB5?=
- =?utf-8?B?bTF3OENreHQxb29yUXBUbFM4cklXWDZmQ0dHUGVPL29WZ1NEcDJoelhpTndI?=
- =?utf-8?B?QzhlS3dJZ1E5d3ZBUitUZDJINUQwMlpaNTc0YS9ZQnovaW5temNLUHN3ZGs3?=
- =?utf-8?B?WVMzL1p5U08vY3lieUZjRGxRSDBTVjdjWFQrcXRoTnVtNm9PenpKUTZ0ak9L?=
- =?utf-8?B?Lzc5bWJ1ZFh4ZjJGbllSa3d1RTBHZHVjVkJYbGZ6L2JHVWN2YXVXMkRKVURX?=
- =?utf-8?B?ZFJ6d2UxM0pzanU2QlMwRFF5SnRCblR4ZGdycVZmVmJRVXFndTBZNENjU3VX?=
- =?utf-8?B?TFYyajYrQjhpaXJhOWFXT3hpdEFWY3lrZVEwcjJkUjlBS2ZFTVY0anA3SzZH?=
- =?utf-8?B?dE1qVVlHTHFnY1Q1dGJnTVpDa1gyZnJ5OXZGVW04WEdoZ0lBRTd4L0wwcFZ3?=
- =?utf-8?B?WUFnTWlYekx3ZmVJLzRPaGJqWkdJZkp3NkF2RjY0ZmdxZGlGV3MwaFFpcE8v?=
- =?utf-8?B?WGZmcU5aTzY3UFZWQklPRlgzQXlZTDNrQkVjbnd4MDhtNGloQ1IrNU4yQUdH?=
- =?utf-8?B?SVlqNVNSdUQ5c29zOUhwV3g0OWt2dVdVRmJucmxwNUMvalRIUTdVSitlZ0tk?=
- =?utf-8?B?Y0V0MEJYeVVQN2RIbjZDNk9OM2NmNzNUWi82VkU1ZVB3VjhnV05nK0VvZTNr?=
- =?utf-8?B?VWhTVXJyblhiOWlzN0M3WXR1MU1xbGFYc2FWTUZkTXZKZVUrbTVQNnh1S1ZK?=
- =?utf-8?B?bWNSUWU5ZHZoK2NmRjMvcjlnaExKMDYwTy9iaTlHcHJUUGtEM1FTVlBKcDdF?=
- =?utf-8?B?ZGU2RmE4bmJwWXBVSlJwUzIrZENsMzdKRmlzaXBwajdOMlBZTE5RU2RLY3Q5?=
- =?utf-8?B?azBrb3pwM0xlWUYwRi9PeUZuenRHM0lzUUZqeXFySWNuQkRuc2F6eVpSUTlz?=
- =?utf-8?B?eXJPMVBuSW5kYm1TMVM5YWU1ZnZvUU9GRmxDTHY1Uy9GSGVweVlsTXVseTNU?=
- =?utf-8?B?YkViSFh1aGt3ZEZsT2N1a1hlUkVUWUlnK1htWG1YRCt3Rno3Y0pFVWQwZ3d5?=
- =?utf-8?B?WWUyTHZpcEdXVjVqUGJaV3l6VG1pdDk5dmVzei9Fdnp3bjgzTW83dnZTR0tP?=
- =?utf-8?B?ODFTT2NKUi9aMDlwUFdRMGpxYnpxR2UvalhTRXkvb1VyaHdsMVd1c3VHTlBT?=
- =?utf-8?B?d2M0SU51cjFLcU85dUlZNWNxck1RVk5pdTdMdW0wa1dNR1NtTzVudmJZRFNM?=
- =?utf-8?B?WHZYWUlRWUhFZmZVQ21XVWh2WHVnWWFvTmNhNElpcUpQYmpFdndDSjJlQ2ll?=
- =?utf-8?B?a0xKTURxTDRTL1BuMkxPdldSbUplUHNZUnNDZzFpRldIQWJoK2hTaHJNbkt0?=
- =?utf-8?B?SmNGZDJoR3VGb0FMTXV2MCtON0p2V0syajBpT0thSFdKeUlkTTJaS3dra2ta?=
- =?utf-8?B?ZmtQTHhKSWI0MlRaVE9UeEY5ZkZxZzJhSkNnckJIUkdiMFV1OVZ0OUNQbkFt?=
- =?utf-8?B?VGNjUmc5M1ZhSFp5SXRxVEVBSXhYMDNnQVhoVGlSVTQwWTJBSno2ZDRkblhi?=
- =?utf-8?B?M0FhNTJpMHpRUWtXT0VPWmZBa0lwN1RKdVVENUdsV0R4KytGNXluWG5QbWxM?=
- =?utf-8?B?TjJPaWRVY2g3OUM2ZHk2QXNtT1lTcy95bTdXWWxaZU1na2dZZVg2MjlHdDlK?=
- =?utf-8?B?UitaUnVEbEVlcHBwZHQ5S0RKMzkwUmRFcmNINUdWb1ZrVWtoWm4xQlp4MzdP?=
- =?utf-8?B?MG02Mis4UE9GdnNGdFprcnY2VWlIWC9EVmkvcDBxQnJkc05EUlBRYXJPRTEy?=
- =?utf-8?B?Z28yb05ZSHhYR1ZXclh0M0N2eDhPMHRtc2xvQ3crK1ZGQzhZWFJ2VkZGTW9C?=
- =?utf-8?B?a3NFa2NlcXg0QmMvaVlqSm41NEVEUVhjMy9aSERtcmc4ZGo0R0dnMThBR2tp?=
- =?utf-8?B?aDJJUVJrYUp5LzZlcnNrMHZ1dGxaSkcvUUx2TE1NWGl6bzlaaVIvTHdkMXI4?=
- =?utf-8?B?MmRLWXpZd1ozNnZ0SnFTWGhYUUpKM3MvajNkMVFoREpybTFtOU1GN2dJMVVk?=
- =?utf-8?B?UUtDbEJhQWY5QmVTNWxIclRKWEIxbGpPTzJVVUdraURXd3NxMmdwSUd6TVNK?=
- =?utf-8?B?QTJnVUFvY2FvYUt5VHlvV2ltTmdMMm16Y2pLMXd3enRYa1kvam1sNjVXbG1C?=
- =?utf-8?B?Z0xrcHlaa00zZVNkcEdneThyVXhiQzAzd3hCOFRRR09OSTNRSE91NDlFaUhx?=
- =?utf-8?B?UndWWGpTZk1POHMxMFk3ZG5KNFl2VExjWmpVL0ZQeDh2MHE0Y29PM1RlNTkz?=
- =?utf-8?B?ZWRpdFNIVzJTVHEvL2hzNVhaVzdkQmR4aVA1aWpNLzE3VGwwN1VrT0sxSy9E?=
- =?utf-8?Q?OUDJOL4PdpO2yqWyj+0vKQ3ey/D4uzFnmC1ts?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <047BAF488DAAB947B5D7C7C642D655E9@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 10 Jun 2022 19:55:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A16744A0D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 16:55:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EB261E1D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 23:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53EBC34114;
+        Fri, 10 Jun 2022 23:55:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654905353;
+        bh=PlxS3We0GdjvIOX2k5kRle3oBLQPYE2copSxEUBjiCE=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=e9MFev+ELzkkT08dn92q8sS/Kd47fC9pAvCBRCz9e26GbRXhrfwisf8908zziERxw
+         KHcjGSXKKNVJ40jcxbxKerTv3ucB8IOGqtNlDHAosZ7pcWvFIHbNq1ekks8PIURuGz
+         dt3k3JBCaehqBlEIqtkssdBmQnCJbL3I5cS0FHVxos+Q4t7kaNCdKgDdu+lQwFxOjI
+         jaUjfLTme3PKgNddTPXufGtJcmq/ftmgTTf7UHGFNlSNYQrZoCzFKXM/ORyu9VrCke
+         X8b/EJewUfytquvcmxaFxH3jyTVPsX8YZjKxym772t2SsAyD+wHiNCVX8OH9o8U0G4
+         S8cEXBze6uuKA==
+Date:   Fri, 10 Jun 2022 16:55:52 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr <olekstysh@gmail.com>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
+Subject: Re: [RFC PATCH 2/2] xen/grant-table: Use unpopulated DMAable pages
+ instead of real RAM ones
+In-Reply-To: <7f886dfb-2b42-bc70-d55f-14ecd8144e3e@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2206101644210.756493@ubuntu-linux-20-04-desktop>
+References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com> <1652810658-27810-3-git-send-email-olekstysh@gmail.com> <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop> <7f886dfb-2b42-bc70-d55f-14ecd8144e3e@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd649891-d299-4bd0-fbb9-08da4b3ca2c8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2022 23:55:02.6923
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: W8Zgj8bxbRU9DbpdiNZmVcD2lrLB3cS4CFMZyET3NyCuLeWDvcfJvhLbyq8ur+/d2mo28VJ++L/JVF7L1TbFZa93iXWedIJk1ezxDn8HVcc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB3759
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/mixed; BOUNDARY="8323329-1025708553-1654904664=:756493"
+Content-ID: <alpine.DEB.2.22.394.2206101644500.756493@ubuntu-linux-20-04-desktop>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -176,23 +60,249 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA2LTEwIGF0IDE3OjM1ICswMzAwLCBLaXJpbGwgQS4gU2h1dGVtb3Ygd3Jv
-dGU6DQo+IEBAIC02ODcsNiArNzE2LDcgQEAgdm9pZCBpbml0aWFsaXplX3RsYnN0YXRlX2FuZF9m
-bHVzaCh2b2lkKQ0KPiAgICAgICAgIHN0cnVjdCBtbV9zdHJ1Y3QgKm1tID0gdGhpc19jcHVfcmVh
-ZChjcHVfdGxic3RhdGUubG9hZGVkX21tKTsNCj4gICAgICAgICB1NjQgdGxiX2dlbiA9IGF0b21p
-YzY0X3JlYWQoJmluaXRfbW0uY29udGV4dC50bGJfZ2VuKTsNCj4gICAgICAgICB1bnNpZ25lZCBs
-b25nIGNyMyA9IF9fcmVhZF9jcjMoKTsNCj4gKyAgICAgICB1NjQgbGFtID0gY3IzICYgKFg4Nl9D
-UjNfTEFNX1U0OCB8IFg4Nl9DUjNfTEFNX1U1Nyk7DQo+ICANCj4gICAgICAgICAvKiBBc3NlcnQg
-dGhhdCBDUjMgYWxyZWFkeSByZWZlcmVuY2VzIHRoZSByaWdodCBtbS4gKi8NCj4gICAgICAgICBX
-QVJOX09OKChjcjMgJiBDUjNfQUREUl9NQVNLKSAhPSBfX3BhKG1tLT5wZ2QpKTsNCj4gQEAgLTcw
-MCw3ICs3MzAsNyBAQCB2b2lkIGluaXRpYWxpemVfdGxic3RhdGVfYW5kX2ZsdXNoKHZvaWQpDQo+
-ICAgICAgICAgICAgICAgICAhKGNyNF9yZWFkX3NoYWRvdygpICYgWDg2X0NSNF9QQ0lERSkpOw0K
-PiAgDQo+ICAgICAgICAgLyogRm9yY2UgQVNJRCAwIGFuZCBmb3JjZSBhIFRMQiBmbHVzaC4gKi8N
-Cj4gLSAgICAgICB3cml0ZV9jcjMoYnVpbGRfY3IzKG1tLT5wZ2QsIDApKTsNCj4gKyAgICAgICB3
-cml0ZV9jcjMoYnVpbGRfY3IzKG1tLT5wZ2QsIDAsIGxhbSkpOw0KPiAgDQoNCkNhbiB5b3UgZXhw
-bGFpbiB3aHkgdG8ga2VlcCB0aGUgbGFtIGJpdHMgdGhhdCB3ZXJlIGluIENSMyBoZXJlPyBJdA0K
-c2VlbXMgdG8gYmUgd29ycmllZCBzb21lIENSMyBiaXRzIGdvdCBjaGFuZ2VkIGFuZCBuZWVkIHRv
-IGJlIHNldCB0byBhDQprbm93biBzdGF0ZS4gV2h5IG5vdCB0YWtlIHRoZW0gZnJvbSB0aGUgTU0/
-DQoNCkFsc28sIGl0IHdhcm5zIGlmIHRoZSBjcjMgcGZuIGRvZXNuJ3QgbWF0Y2ggdGhlIG1tIHBn
-ZCwgc2hvdWxkIGl0IHdhcm4NCmlmIGNyMyBsYW0gYml0cyBkb24ndCBtYXRjaCB0aGUgTU0ncyBj
-b3B5Pw0K
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1025708553-1654904664=:756493
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <alpine.DEB.2.22.394.2206101644501.756493@ubuntu-linux-20-04-desktop>
+
+On Thu, 9 Jun 2022, Oleksandr wrote:
+> On 04.06.22 00:19, Stefano Stabellini wrote:
+> Hello Stefano
+> 
+> Thank you for having a look and sorry for the late response.
+> 
+> > On Tue, 17 May 2022, Oleksandr Tyshchenko wrote:
+> > > From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> > > 
+> > > Depends on CONFIG_XEN_UNPOPULATED_ALLOC. If enabled then unpopulated
+> > > DMAable (contiguous) pages will be allocated for grant mapping into
+> > > instead of ballooning out real RAM pages.
+> > > 
+> > > TODO: Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages()
+> > > fails.
+> > > 
+> > > Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> > > ---
+> > >   drivers/xen/grant-table.c | 27 +++++++++++++++++++++++++++
+> > >   1 file changed, 27 insertions(+)
+> > > 
+> > > diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
+> > > index 8ccccac..2bb4392 100644
+> > > --- a/drivers/xen/grant-table.c
+> > > +++ b/drivers/xen/grant-table.c
+> > > @@ -864,6 +864,25 @@ EXPORT_SYMBOL_GPL(gnttab_free_pages);
+> > >    */
+> > >   int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
+> > >   {
+> > > +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
+> > > +	int ret;
+> > This is an alternative implementation of the same function.
+> 
+> Currently, yes.
+> 
+> 
+> >   If we are
+> > going to use #ifdef, then I would #ifdef the entire function, rather
+> > than just the body. Otherwise within the function body we can use
+> > IS_ENABLED.
+> 
+> 
+> Good point. Note, there is one missing thing in current patch which is
+> described in TODO.
+> 
+> "Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages() fails."  So I
+> will likely use IS_ENABLED within the function body.
+> 
+> If CONFIG_XEN_UNPOPULATED_ALLOC is enabled then gnttab_dma_alloc_pages() will
+> try to call xen_alloc_unpopulated_dma_pages() the first and if fails then
+> fallback to allocate RAM pages and balloon them out.
+> 
+> One moment is not entirely clear to me. If we use fallback in
+> gnttab_dma_alloc_pages() then we must use fallback in gnttab_dma_free_pages()
+> as well, we cannot use xen_free_unpopulated_dma_pages() for real RAM pages.
+> The question is how to pass this information to the gnttab_dma_free_pages()?
+> The first idea which comes to mind is to add a flag to struct
+> gnttab_dma_alloc_args...
+ 
+You can check if the page is within the mhp_range range or part of
+iomem_resource? If not, you can free it as a normal page.
+
+If we do this, then the fallback is better implemented in
+unpopulated-alloc.c because that is the one that is aware about
+page addresses.
+
+ 
+ 
+> > > +	ret = xen_alloc_unpopulated_dma_pages(args->dev, args->nr_pages,
+> > > +			args->pages);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	ret = gnttab_pages_set_private(args->nr_pages, args->pages);
+> > > +	if (ret < 0) {
+> > > +		gnttab_dma_free_pages(args);
+> > it should xen_free_unpopulated_dma_pages ?
+> 
+> Besides calling the xen_free_unpopulated_dma_pages(), we also need to call
+> gnttab_pages_clear_private() here, this is what gnttab_dma_free_pages() is
+> doing.
+> 
+> I can change to call both function instead:
+> 
+>     gnttab_pages_clear_private(args->nr_pages, args->pages);
+>     xen_free_unpopulated_dma_pages(args->dev, args->nr_pages, args->pages);
+> 
+> Shall I?
+
+No, leave it as is. I didn't realize that gnttab_pages_set_private can
+fail half-way through.
+
+ 
+> > 
+> > 
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	args->vaddr = page_to_virt(args->pages[0]);
+> > > +	args->dev_bus_addr = page_to_phys(args->pages[0]);
+> > There are two things to note here.
+> > 
+> > The first thing to note is that normally we would call pfn_to_bfn to
+> > retrieve the dev_bus_addr of a page because pfn_to_bfn takes into
+> > account foreign mappings. However, these are freshly allocated pages
+> > without foreign mappings, so page_to_phys/dma should be sufficient.
+> 
+> agree
+> 
+> 
+> > 
+> > 
+> > The second has to do with physical addresses and DMA addresses. The
+> > functions are called gnttab_dma_alloc_pages and
+> > xen_alloc_unpopulated_dma_pages which make you think we are retrieving a
+> > DMA address here. However, to get a DMA address we need to call
+> > page_to_dma rather than page_to_phys.
+> > 
+> > page_to_dma takes into account special offsets that some devices have
+> > when accessing memory. There are real cases on ARM where the physical
+> > address != DMA address, e.g. RPi4.
+> 
+> I got it. Now I am in doubt whether it would be better to name the API:
+> 
+> xen_alloc_unpopulated_cma_pages()
+> 
+> or
+> 
+> xen_alloc_unpopulated_contiguous_pages()
+> 
+> What do you think?
+
+Yeah actually I think it is better to stay away from "dma" in the name.
+I like xen_alloc_unpopulated_contiguous_pages().
+ 
+ 
+> > However, to call page_to_dma you need to specify as first argument the
+> > DMA-capable device that is expected to use those pages for DMA (e.g. an
+> > ethernet device or a MMC controller.) While the args->dev we have in
+> > gnttab_dma_alloc_pages is the gntdev_miscdev.
+> 
+> agree
+> 
+> As I understand, at this time it is unknown for what exactly device these
+> pages are supposed to be used at the end.
+> 
+> For now, it is only known that these pages to be used by userspace PV backend
+> for grant mappings.
+
+Yeah
+ 
+
+> > So this interface cannot actually be used to allocate memory that is
+> > supposed to be DMA-able by a DMA-capable device, such as an ethernet
+> > device.
+> 
+> agree
+> 
+> 
+> > 
+> > But I think that should be fine because the memory is meant to be used
+> > by a userspace PV backend for grant mappings. If any of those mappings
+> > end up being used for actual DMA in the kernel they should go through the
+> > drivers/xen/swiotlb-xen.c and xen_phys_to_dma should be called, which
+> > ends up calling page_to_dma as appropriate.
+> > 
+> > It would be good to double-check that the above is correct and, if so,
+> > maybe add a short in-code comment about it:
+> > 
+> > /*
+> >   * These are not actually DMA addresses but regular physical addresses.
+> >   * If these pages end up being used in a DMA operation then the
+> >   * swiotlb-xen functions are called and xen_phys_to_dma takes care of
+> >   * the address translations:
+> >   *
+> >   * - from gfn to bfn in case of foreign mappings
+> >   * - from physical to DMA addresses in case the two are different for a
+> >   *   given DMA-mastering device
+> >   */
+> 
+> I agree this needs to be re-checked. But, there is one moment here, if
+> userspace PV backend runs in other than Dom0 domain (non 1:1 mapped domain),
+> the xen-swiotlb seems not to be in use then? How to be in this case?
+ 
+In that case, an IOMMU is required. If an IOMMU is setup correct, then
+the gfn->bfn translation is not necessary because it is done
+automatically by the IOMMU. That is because when the foreign page is
+mapped in the domain, the mapping also applies to the IOMMU pagetable.
+
+So the device is going to do DMA to "gfn" and the IOMMU will translate
+it to the right "mfn", the one corresponding to "bfn".
+
+The physical to DMA address should be done automatically by the default
+(non-swiotlb_xen) dma_ops in Linux. E.g.
+kernel/dma/direct.c:dma_direct_map_sg correctly calls
+dma_direct_map_page, which calls phys_to_dma.
+ 
+ 
+ 
+> > > +	return ret;
+> > > +#else
+> > >   	unsigned long pfn, start_pfn;
+> > >   	size_t size;
+> > >   	int i, ret;
+> > > @@ -910,6 +929,7 @@ int gnttab_dma_alloc_pages(struct
+> > > gnttab_dma_alloc_args *args)
+> > >   fail:
+> > >   	gnttab_dma_free_pages(args);
+> > >   	return ret;
+> > > +#endif
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
+> > >   @@ -919,6 +939,12 @@ EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
+> > >    */
+> > >   int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
+> > >   {
+> > > +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
+> > > +	gnttab_pages_clear_private(args->nr_pages, args->pages);
+> > > +	xen_free_unpopulated_dma_pages(args->dev, args->nr_pages,
+> > > args->pages);
+> > > +
+> > > +	return 0;
+> > > +#else
+> > >   	size_t size;
+> > >   	int i, ret;
+> > >   @@ -946,6 +972,7 @@ int gnttab_dma_free_pages(struct
+> > > gnttab_dma_alloc_args *args)
+> > >   		dma_free_wc(args->dev, size,
+> > >   			    args->vaddr, args->dev_bus_addr);
+> > >   	return ret;
+> > > +#endif
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(gnttab_dma_free_pages);
+> > >   #endif
+> > > -- 
+> > > 2.7.4
+> > > 
+--8323329-1025708553-1654904664=:756493--

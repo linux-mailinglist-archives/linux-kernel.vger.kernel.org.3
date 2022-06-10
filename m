@@ -2,123 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E343A545DA1
+	by mail.lfdr.de (Postfix) with ESMTP id 2957D545D9F
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 09:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239509AbiFJHff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 03:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S1346470AbiFJHfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 03:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243890AbiFJHfS (ORCPT
+        with ESMTP id S245087AbiFJHff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:35:18 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51C012AB38
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:35:16 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id r3so11478160ybr.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7ePcvtrAfkDDMXBENLN5wUjeDPbbwzDe0oZvNvxzKMI=;
-        b=iQ33QWZUIB+joeFDLf2jIZ39BXXh2xjPLpwX+yXbb6yVQYYr/hGUn97AjuBRUn5bzq
-         MIBXrrIYvx+amFBeh2i4c0ZtPFJQKOmnKiJ+olioV+zq5N2EVcPdp97VpYEjRYhmaf/X
-         9zqr5NAzlWJzvUnLyshBIzzJ1GPEAfFFs/spS29v1myE0I1H/MjFlnhLA2QR/IibECz2
-         2oU2Vm0HgY1nlXFkBfpAu6wEugw/gstzWYQuows3fZWTw94iWyzi8YhiT/+J0avFdcAt
-         lLb8vc6PpBZwhl6pdfHHnGSziPqJpn1cqYuBaAj2gZZZlccVu+Xh0kuWUWN9cqOBS2gg
-         gFCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7ePcvtrAfkDDMXBENLN5wUjeDPbbwzDe0oZvNvxzKMI=;
-        b=08E2iPqz4RqjMMn/Y7bCIP6mrgAOqNP1hHYqwStlZi9xEfDfEHTrlidH9VM2uwLE9m
-         mvGoRybSa9H2lFe6SPwIBRB524gvOfjRCj/x2s0HWMhTiPpWz8yrk6NNqCJwanVogW1j
-         crtPfK1rsFcZ6kIIXa1lT3/YdiubUsuLTWjPGBb+U30n7RWhvc7YKfs3CcaTPNv2k0lL
-         V0yoPBL6ROHQKPmmuk602ZrF3XZcbkZ+6KNTG4ZzrVTyq/UpVoHNKE8d4ETMyp5EmBJ2
-         2mA3bLeW7VNXgexGUR+77LiJfPPPcoYjwk+WqrsZs0MNguavxqEv+p0z73wXAJmobn7m
-         9wDg==
-X-Gm-Message-State: AOAM533IQMCifPSKgccSGJc+050wO1gXOG47Ml+8gIQs1XTQKWCzI6fN
-        PHvRUVmtrXQI4nlW9RBdBKhoYY04rWlbhy486hdoKQ==
-X-Google-Smtp-Source: ABdhPJxUeoqxYCw43kLFvWl9u/XspDZQiRg+1tO44tOFvdv0fzp7Aauqg6TmGklPZmpqMozaFMOe+EVigVqG53ea6EU=
-X-Received: by 2002:a25:504:0:b0:664:621d:1af4 with SMTP id
- 4-20020a250504000000b00664621d1af4mr1869951ybf.55.1654846515784; Fri, 10 Jun
- 2022 00:35:15 -0700 (PDT)
+        Fri, 10 Jun 2022 03:35:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F3031516
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 00:35:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 660C561FE2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 07:35:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCF4C34114;
+        Fri, 10 Jun 2022 07:35:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654846532;
+        bh=uTbaZzKG7C/xctt/sOZ6EpBYH3dQrKSYHH0fK1iFLK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gZ5pqO33Ns/B9uSn8GR3qtAfNcd+gbzjbG/Ls3JBJpOHVh3jglilpPPz9xIU/gVUp
+         8AvD7t4f9u8Au3yiYBNEsOyh2jhR1p50nVhaeQEpANfpqCkgWRM/N9OTphYgBuS8Mr
+         BsBWfcPDeENDI2jliRbaIwxWepYS1b069mEGxw6cOVsrC+ifJhNTeoSkp75EHQKI4E
+         fDKAMSmlrhxrTg2DZXy8VR0E8LmgQv/jtKSCWsfUhICcpu2R/o0a9nipk/ElUjOlxS
+         F3Dl7WhSUWEib39ncLEQx/2TW/2AClfTKqsrkotx31Mt4mBBzn6+pf3ffY3dVmnTxP
+         N8wfWJzPGmZPg==
+Received: by pali.im (Postfix)
+        id 902131D32; Fri, 10 Jun 2022 09:35:29 +0200 (CEST)
+Date:   Fri, 10 Jun 2022 09:35:29 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for
+ PCI domain
+Message-ID: <20220610073529.n263gub3pv7jej7a@pali>
+References: <20220504175718.29011-1-pali@kernel.org>
+ <87edzxc6r7.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20220610070529.1623-1-zhudi2@huawei.com> <CANn89iKvXUbunP6UtNE1tNCH7FwCux22_rqwhGigvGn_64-6FA@mail.gmail.com>
-In-Reply-To: <CANn89iKvXUbunP6UtNE1tNCH7FwCux22_rqwhGigvGn_64-6FA@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 10 Jun 2022 00:35:04 -0700
-Message-ID: <CANn89i+PQ0Z5LHoTfBixJ9gzAcWD9_8dWccO80gSPx+uZ_wujA@mail.gmail.com>
-Subject: Re: [PATCH] fq_codel: Discard problematic packets with pkt_len 0
-To:     Di Zhu <zhudi2@huawei.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, rose.chen@huawei.com,
-        syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87edzxc6r7.fsf@mpe.ellerman.id.au>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:32 AM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Fri, Jun 10, 2022 at 12:07 AM Di Zhu <zhudi2@huawei.com> wrote:
-> >
-> > Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
-> > skbs, that is, the flow->head is null.
-> > The root cause is that: when the first queued skb with pkt_len 0, backlogs
-> > of the flow that this skb enqueued is still 0 and if sch->limit is set to
-> > 0 then fq_codel_drop() will be called. At this point, the backlogs of all
-> > flows are all 0, so flow with idx 0 is selected to drop, but this flow have
-> > not any skbs.
-> > skb with pkt_len 0 can break existing processing logic, so just discard
-> > these invalid skbs.
-> >
-> > LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
-> >
-> > Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-> > Signed-off-by: Di Zhu <zhudi2@huawei.com>
-> > ---
-> >  net/sched/sch_fq_codel.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
-> > index 839e1235db05..c0f82b7358e1 100644
-> > --- a/net/sched/sch_fq_codel.c
-> > +++ b/net/sched/sch_fq_codel.c
-> > @@ -191,6 +191,9 @@ static int fq_codel_enqueue(struct sk_buff *skb, struct Qdisc *sch,
-> >         unsigned int pkt_len;
-> >         bool memory_limited;
-> >
-> > +       if (unlikely(!qdisc_pkt_len(skb)))
-> > +               return qdisc_drop(skb, sch, to_free);
-> > +
->
->
-> This has been discussed in the past.
->
+On Friday 10 June 2022 17:33:32 Michael Ellerman wrote:
+> If you have scripts that are looking for certain devices they can use
+> the vendor/device fields in sysfs to find the actual devices they want,
+> not just whatever happens to be at 0000:01:00.0.
 
-https://www.spinics.net/lists/netdev/msg777503.html
-
-> Feeding ndo_start_xmit() in hundreds of drivers with zero-length
-> packets will crash anyway.
->
-> We are not going to add such silly tests in all qdiscs, and then all
-> ndo_start_xmit(), since qdiscs are not mandatory.
->
-> Please instead fix BPF layer, instead of hundreds of drivers/qdiscs.
+This does not work if you have more cards with same vendor+device ids in system.

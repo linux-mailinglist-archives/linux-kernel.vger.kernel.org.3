@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB2B546110
+	by mail.lfdr.de (Postfix) with ESMTP id E5ACB546111
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 11:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346858AbiFJJJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 05:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S1344545AbiFJJKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 05:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346754AbiFJJH2 (ORCPT
+        with ESMTP id S1344416AbiFJJJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:07:28 -0400
-Received: from out0-151.mail.aliyun.com (out0-151.mail.aliyun.com [140.205.0.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D1E27E464;
-        Fri, 10 Jun 2022 02:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=alibaba-inc.com; s=default;
-        t=1654852008; h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type;
-        bh=e6YItSYSvR2X0RI4hmCMDtqJZC08EPzkVeRsalHStFU=;
-        b=f/G9YoMhuId38ijqLTqa4r3FpN1iz7bRYw7BOan19fEbOFZe1QQiiDYrWL1AgnNyxIEQpC/HkS1NA1TWbWgfKJNqwZVgdO1NAzrGaj+b0sGc+h0kZZiEyaMFgmmCQ7rAqQoWHBgt6ERam97lkUV/odb13IAFGeMW5IONrGD6lhE=
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047208;MF=zhaowuyun.zwy@alibaba-inc.com;NM=1;PH=DW;RN=4;SR=0;TI=W4_0.1.30_v5ForWebDing_2126A81F_1654851901386_o7001c428;
-Received: from WS-web (zhaowuyun.zwy@alibaba-inc.com[W4_0.1.30_v5ForWebDing_2126A81F_1654851901386_o7001c428]) by ay29a011140100180.et135 at Fri, 10 Jun 2022 17:06:48 +0800
-Date:   Fri, 10 Jun 2022 17:06:48 +0800
-From:   "=?UTF-8?B?6LW15q2m5LqR?=" <zhaowuyun.zwy@alibaba-inc.com>
-To:     "axboe" <axboe@kernel.dk>
-Cc:     "linux-block" <linux-block@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "zhaowuyun.zwy" <zhaowuyun.zwy@alibaba-inc.com>
-Reply-To: "=?UTF-8?B?6LW15q2m5LqR?=" <zhaowuyun.zwy@alibaba-inc.com>
-Message-ID: <fd0ee676-4083-4b89-a58a-429d74fb2d33.zhaowuyun.zwy@alibaba-inc.com>
-Subject: =?UTF-8?B?W1BBVENIXSBibG9jazogcGVlayBQTSByZXF1ZXN0cyBkdXJpbmcgcnVudGltZSBQTQ==?=
-X-Mailer: [Alimail-Mailagent revision 5][W4_0.1.30][v5ForWebDing][Safari]
+        Fri, 10 Jun 2022 05:09:38 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2964027B9A1;
+        Fri, 10 Jun 2022 02:07:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bXxz99A/1bROjeBADKcboeYWcTMomw1+irrsnCiiwtFmZ0bvfOh8eUXvRdnQRg8Yf523L2atzHxKPuBk09DtqJ81v50oiIm46PMXQ/5bLnZSs5sUVBtKIIa+8HDd+Rp37xJjNp8lOvnKL80QP9iJhWc5/hqGZND0qQMtzUWT51ROSmJO78H/6ZvP34bZaogIO9XT2zVQfH6s5mjLin5B7UzJN6e+1cC9lXOnV6aa3Ei4FUi+aphAlcXLDKiikp97gAQsaVzQlV7RKTmhFetR8L1ju7vVPwkt79rI8703EyKHU3ScuCi7zh/9FCbCINj3Nh1N2iAblVhEBBt128D5bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HygiLJT23LuhSK8uQsZiowr7RwLPGl/xF0b9GGJSCLE=;
+ b=T8LtKx35w7faIwg9/1i1VifufdXZwPtC1d0386MfbJfBKM+akn0Oj7XyU4YAGLjH3R7opYLrxgbbnDxq82GeVS9ufnYKL7Wrtyrj5trUjcIddPmMO0JqGuKUKqDOFaaHslVBMmoizT6KEACpddi7xvOw5m2Rr6Fx6F/8tAPFmuYW3RCDkK67o+OsIcrOoQUsG3EKNsuGbh7EJLzIrATGKoT4rxs94mVprc9JEQ4SzzlktVbgfTO5we6oQS6Y+BMDBIjtDuQAH1We7nSU7ybBhaBMgMbsFqINudlXty0sYZf4p9UAJVd+nrgtpt0ZKTaJsgy/lRlWFp4PiC21iJFV2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HygiLJT23LuhSK8uQsZiowr7RwLPGl/xF0b9GGJSCLE=;
+ b=VQTbqhcC0frxzPxK65NJMHNLfJw2kFk0MDKCWtyJLGIh9/qzaL0g51pxFdBJ2VqjSdp/tUB1yewxoiRxz6654GLltsTjDrDGSgRglo141+fSRS3izxf2WVjxpvad/bk6/rtkZo3pRMeE+zq4qJKMlkasVEWAdNJ/gBtbAM4HfWQ=
+Received: from DM6PR13CA0022.namprd13.prod.outlook.com (2603:10b6:5:bc::35) by
+ MN2PR12MB4285.namprd12.prod.outlook.com (2603:10b6:208:1d7::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Fri, 10 Jun
+ 2022 09:07:24 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:bc:cafe::bf) by DM6PR13CA0022.outlook.office365.com
+ (2603:10b6:5:bc::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.7 via Frontend
+ Transport; Fri, 10 Jun 2022 09:07:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Fri, 10 Jun 2022 09:07:24 +0000
+Received: from BLR-5CG1345Z9Y.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 10 Jun
+ 2022 04:07:21 -0500
+From:   Kalpana Shetty <kalpana.shetty@amd.com>
+To:     <akpm@linux-foundation.org>, <shuah@kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Kalpana Shetty <kalpana.shetty@amd.com>
+Subject: [PATCH V2] selftests/vm: Add protection_keys tests to run_vmtests
+Date:   Fri, 10 Jun 2022 14:37:04 +0530
+Message-ID: <20220610090704.296-1-kalpana.shetty@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-x-aliyun-mail-creator: W4_0.1.30_v5ForWebDing_QvNTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNjA1LjEuMTUgKEtIVE1MLCBsaWtlIEdlY2tvKSBWZXJzaW9uLzE1LjIgU2FmYXJpLzYwNS4xLjE1La
-Content-Type: multipart/mixed;
-  boundary="----=ALIBOUNDARY_75069_7f504c844700_62a309a8_23b95d"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 57214a24-82fd-4e00-4747-08da4ac0a23e
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4285:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4285E3A6437F3145E529AD1C8CA69@MN2PR12MB4285.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WsLkSzFVLhZPFyGQ8rZ6evxZ8jBGToTpNxqTDF5+VJ3WLt3DvWH3GsbBfdeVTyEd543Y/2LqOen8vkDSGlWHM4YEcMGk3bbDp42+8UMoQOJQHWSImC5XsEgWKOJw7fTrCaZLq//1OnjIZ/RgjHAlRK5O+4puBbbU1ob1MqEJDWJ9Lo+oeH9SbKoxeAgf8rEL97E/hjCi0eKL5jURs6JOvcv51Ufg5ZrLhR8xlhAGM6KhdkXcKQ8CqsFoXl4EZ1hY7IrURdHSux+eHgm2aq+p+NsQjyJ57UsIUPrNtWy8AHGIaM6EAEngK4caAFGeMd6nr7WFM54id3+8/+3XAt/lbKkmLQEP+0Y88ijlszgnFYOipnMKs+pPhuhjBQwAolHEjMK8+KhilEwk4dLoJ7KclM41t+9kOJpKCIatigXT2v1J1rR3otarVcmHVfxJWOREC9HxGxAHwhbJtKqH3pAeqwdRFSv/Q0P/qkSodWAu5NVg0EETJ2Sou1oDinKYXGPFPoYXW/nPnWRf+FvEYqq4W4ip0bQVAfD8XV1C2Z/8ad+6FkzsT2xaSX7MCZLQq+wRN5DA7MCiP6fp9diKhD70KcKJtpeWxd6+4ODyYUTOUI4qt4qmIuI70Lb6pAzrhrFp0VLyIwnqLRpBNV2qDG3YzqOar4CBCJvGnzrRkfTLslDe8kssBSslmsWwIfZ7wFYUe4jhJtec0Wax2V2X6JOlM3Ik3vxKckPOeqQHT2KT6DA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(26005)(7696005)(86362001)(6666004)(1076003)(2906002)(8676002)(36756003)(110136005)(82310400005)(4326008)(316002)(70586007)(70206006)(36860700001)(508600001)(4744005)(81166007)(44832011)(40460700003)(186003)(336012)(47076005)(426003)(16526019)(8936002)(5660300002)(2616005)(356005)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 09:07:24.1575
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57214a24-82fd-4e00-4747-08da4ac0a23e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4285
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
+Adding "protected_keys" tests to "run_vmtests.sh" would help out to run all VM related tests
+from a single shell script.
 
-------=ALIBOUNDARY_75069_7f504c844700_62a309a8_23b95d
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Signed-off-by: Kalpana Shetty <kalpana.shetty@amd.com>
+---
+ Changes in V2:
+  * Added patch description.
 
-SGkgSmVucywKCnBsZWFzZSBjaGVjayB0aGlzIHBhdGNoIGZvciA0LjE5IGluIHRoZSBhdHRhY2ht
-ZW50LgpiZWNhdXNlIGkgY2FuIG5vdCB1c2UgZ2l0IHNlbmQtZW1haWwgd2l0aCBlbWFpbCBvZiBv
-dXIgY29tcGFueSwgc28gaSBzZW5kIGF0dGFjaG1lbnQuCgoKCg==
-------=ALIBOUNDARY_75069_7f504c844700_62a309a8_23b95d
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename="=?UTF-8?B?MDAwMS1ibG9jay1wZWVrLVBNLXJlcXVlc3RzLWR1cmluZy1ydW50aW1lLVBNLnBhdGNo?="
-Content-Transfer-Encoding: base64
+ tools/testing/selftests/vm/run_vmtests.sh | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-RnJvbSBjNDczM2M3MTY2YjdlNjk2YmE1YzZmNGI3OGUxMGQ0MDkzNmFlYzA0IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBaaGFvIFd1eXVuIDx6aGFvd3V5dW4uend5QGFsaWJhYmEtaW5j
-LmNvbT4KRGF0ZTogRnJpLCAxMCBKdW4gMjAyMiAxNjowMTo0MyArMDgwMApTdWJqZWN0OiBbUEFU
-Q0hdIGJsb2NrOiBwZWVrIFBNIHJlcXVlc3RzIGR1cmluZyBydW50aW1lIFBNCgpxdWV1ZSBibG9j
-a2VkIGR1cmluZyBydW50aW1lIFBNIHdoZW4gYXQgdGhlIGZvbGxvd2luZyBzaXR1YXRpb246Cgpw
-cm9jZXNzIEE6CiAgICBydW50aW1lIHN1c3BlbmQgcnVuIGFuZCBzZXQgdGhlIFBNIHN0YXR1cyB0
-byBSUE1fU1VTUEVORElORwogICAgdGhlbiBydW4gcmVxIHdpdGggUlFGX1BNIHdpdGggYmxrX2V4
-ZWN1dGVfcnEocmVxLT5xLCBOVUxMLCByZXEsIDEpCiAgICB0aGVuIHRoZSByZXEgcXVldWVkIHRv
-IGhlYWQKICAgIGl0IGlzIG5vdCBleGVjdXRlZCB3aGVuIHRoZSBkcml2ZXIgaXMgYnVzeQoKcHJv
-Y2VzcyBCOgogICAgbm9ybWFsIGRldmljZSBtYW5hZ2VtZW50IG9wZXJhdGlvbgogICAgcnVuIHJl
-cSB3aXRoIG5vIFJRRl9QTSB3aXRoIGJsa19leGVjdXRlX3JxKHJlcS0+cSwgTlVMTCwgcmVxLCAx
-KQogICAgdGhlIHRoZSByZXEgaXMgcXVldWVkIGluIGZyb250IG9mIHRoZSBSUUZfUE0gcmVxIG9m
-IHByb2Nlc3MgQQogICAgX19ibGtfcnVuX3F1ZXVlIHN0aWxsIG5vdCBydW4KCmJlY2F1c2UgdGhl
-IGZpcnN0IHJlcSBpcyBub24gUlFGX1BNIHJlcSBhbmQgd2l0aCBSUUZfU09GVEJBUlJJRVIsCnNv
-IHRoZSBxdWV1ZSBpcyB0b3RhbGx5IGJsb2NrZWQgd2hlbiBhdCBSUE1fU1VTUEVORElORyBzdGF0
-dXMuCgpzZWUgdGhlIGZvbGxvd2luZyB0YXNrIGNhbGx0cmFjZToKCnByb2Nlc3MgQToKICAgIFs8
-ZmZmZmZmOWQ4N2U4NjE1MD5dIF9fc3dpdGNoX3RvKzB4MTBjCiAgICBbPGZmZmZmZjlkODhlZDhh
-YjA+XSBfX3NjaGVkdWxlKzB4NjcwCiAgICBbPGZmZmZmZjlkODhlZDhkMTg+XSBzY2hlZHVsZSsw
-eDc0CiAgICBbPGZmZmZmZjlkODhlZGM4ZjQ+XSBzY2hlZHVsZV90aW1lb3V0KzB4MzI4CiAgICBb
-PGZmZmZmZjlkODhlZDkxMzA+XSBpb19zY2hlZHVsZV90aW1lb3V0KzB4MjQKICAgIFs8ZmZmZmZm
-OWQ4OGVkOWIxMD5dIHdhaXRfZm9yX2NvbW1vbl9pbysweDkwCiAgICBbPGZmZmZmZjlkODhlZDli
-YjQ+XSB3YWl0X2Zvcl9jb21wbGV0aW9uX2lvX3RpbWVvdXQrMHgyNAogICAgWzxmZmZmZmY5ZDg4
-MjllMWUwPl0gYmxrX2V4ZWN1dGVfcnErMHg4OAogICAgWzxmZmZmZmY5ZDg4NTliM2E0Pl0gc2Nz
-aV9leGVjdXRlKzB4MTE0CiAgICBbPGZmZmZmZjlkODg1YzQwNzA+XSBzZF9zeW5jX2NhY2hlKzB4
-ZmMKICAgIFs8ZmZmZmZmOWQ4ODVjNDM5Yz5dIHNkX3N1c3BlbmRfY29tbW9uKzB4NTgKICAgIFs8
-ZmZmZmZmOWQ4ODVjNDMzOD5dIHNkX3N1c3BlbmRfcnVudGltZSsweDIwCiAgICBbPGZmZmZmZjlk
-ODg1YTczY2M+XSBzY3NpX3J1bnRpbWVfc3VzcGVuZCsweDcwCiAgICBbPGZmZmZmZjlkODg1MzQx
-ZTg+XSBfX3JwbV9jYWxsYmFjaysweGNjCiAgICBbPGZmZmZmZjlkODg1MzQwZTg+XSBycG1fY2Fs
-bGJhY2srMHg1YwogICAgWzxmZmZmZmY5ZDg4NTMyMTM0Pl0gcnBtX3N1c3BlbmQrMHgxZTgKICAg
-IFs8ZmZmZmZmOWQ4ODUzM2IyOD5dIHBtX3J1bnRpbWVfd29yaysweDdjCiAgICBbPGZmZmZmZjlk
-ODdlZDMxZDQ+XSBwcm9jZXNzX29uZV93b3JrKzB4MWJjCiAgICBbPGZmZmZmZjlkODdlZDM2Njg+
-XSB3b3JrZXJfdGhyZWFkKzB4MjE0CiAgICBbPGZmZmZmZjlkODdlZDgzOWM+XSBrdGhyZWFkKzB4
-MTFjCiAgICBbPGZmZmZmZjlkODdlODRmY2M+XSByZXRfZnJvbV9mb3JrKzB4MTAKCnByb2Nlc3Mg
-QjoKICAgIFs8ZmZmZmZmOWQ4N2U4NjE1MD5dIF9fc3dpdGNoX3RvKzB4MTBjCiAgICBbPGZmZmZm
-ZjlkODhlZDhhYjA+XSBfX3NjaGVkdWxlKzB4NjcwCiAgICBbPGZmZmZmZjlkODhlZDhkMTg+XSBz
-Y2hlZHVsZSsweDc0CiAgICBbPGZmZmZmZjlkODhlZGM4ZjQ+XSBzY2hlZHVsZV90aW1lb3V0KzB4
-MzI4CiAgICBbPGZmZmZmZjlkODhlZDkxMzA+XSBpb19zY2hlZHVsZV90aW1lb3V0KzB4MjQKICAg
-IFs8ZmZmZmZmOWQ4OGVkOWIxMD5dIHdhaXRfZm9yX2NvbW1vbl9pbysweDkwCiAgICBbPGZmZmZm
-ZjlkODhlZDliYjQ+XSB3YWl0X2Zvcl9jb21wbGV0aW9uX2lvX3RpbWVvdXQrMHgyNAogICAgWzxm
-ZmZmZmY5ZDg4MjllMWUwPl0gYmxrX2V4ZWN1dGVfcnErMHg4OAogICAgWzxmZmZmZmY5ZDg4NTli
-M2E0Pl0gc2NzaV9leGVjdXRlKzB4MTE0CiAgICBbPGZmZmZmZjlkODg1OWQ4NTQ+XSBzY3NpX3Rl
-c3RfdW5pdF9yZWFkeSsweDcwCiAgICBbPGZmZmZmZjlkODg1YzJmNDg+XSBzZF9jaGVja19ldmVu
-dHMrMHhkNAogICAgWzxmZmZmZmY5ZDg4MmFiZGU4Pl0gZGlza19jaGVja19ldmVudHMrMHg1OAog
-ICAgWzxmZmZmZmY5ZDg4MmFjYzBjPl0gZGlza19ldmVudHNfd29ya2ZuKzB4MjAKICAgIFs8ZmZm
-ZmZmOWQ4N2VkMzFkND5dIHByb2Nlc3Nfb25lX3dvcmsrMHgxYmMKICAgIFs8ZmZmZmZmOWQ4N2Vk
-MzY2OD5dIHdvcmtlcl90aHJlYWQrMHgyMTQKICAgIFs8ZmZmZmZmOWQ4N2VkODM5Yz5dIGt0aHJl
-YWQrMHgxMWMKICAgIFs8ZmZmZmZmOWQ4N2U4NGZjYz5dIHJldF9mcm9tX2ZvcmsrMHgxMAoKU2ln
-bmVkLW9mZi1ieTogWmhhbyBXdXl1biA8emhhb3d1eXVuLnp3eUBhbGliYWJhLWluYy5jb20+Ci0t
-LQogYmxvY2svYmxrLWNvcmUuYyB8IDkgKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgOSBpbnNl
-cnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvYmxvY2svYmxrLWNvcmUuYyBiL2Jsb2NrL2Jsay1jb3Jl
-LmMKaW5kZXggYTMzNzc1Y2Q5N2JlLi44YjkyNzJiZmRjMDkgMTAwNjQ0Ci0tLSBhL2Jsb2NrL2Js
-ay1jb3JlLmMKKysrIGIvYmxvY2svYmxrLWNvcmUuYwpAQCAtMjg1Niw2ICsyODU2LDE1IEBAIHN0
-YXRpYyBzdHJ1Y3QgcmVxdWVzdCAqZWx2X25leHRfcmVxdWVzdChzdHJ1Y3QgcmVxdWVzdF9xdWV1
-ZSAqcSkKIAkJCWlmIChibGtfcG1fYWxsb3dfcmVxdWVzdChycSkpCiAJCQkJcmV0dXJuIHJxOwog
-CisJCQkvKgorCQkJICogbGV0IHRoZSBQTSByZXF1ZXN0IHJ1biwKKwkJCSAqIG9yIHRoZSBxdWV1
-ZSBtYXkgYmUgYmxvY2tlZCBieSB0aGUgbm9uLVBNIHJlcXVlc3QKKwkJCSAqIHdpdGggUlFGX1NP
-RlRCQVJSSUVSIGZvcmV2ZXIgd2hpbGUgZG9pbmcgcnVudGltZSBQTS4KKwkJCSAqLworCQkJaWYg
-KHEtPnJwbV9zdGF0dXMgPT0gUlBNX1NVU1BFTkRJTkcKKwkJCQkJCXx8IHEtPnJwbV9zdGF0dXMg
-PT0gUlBNX1JFU1VNSU5HKQorCQkJCWNvbnRpbnVlOworCiAJCQlpZiAocnEtPnJxX2ZsYWdzICYg
-UlFGX1NPRlRCQVJSSUVSKQogCQkJCWJyZWFrOwogCQl9Ci0tIAoyLjMyLjEgKEFwcGxlIEdpdC0x
-MzMpCgo=
-
-------=ALIBOUNDARY_75069_7f504c844700_62a309a8_23b95d--
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index 41fce8bea929..54a0c28f810c 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -179,4 +179,11 @@ run_test ./ksm_tests -N -m 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+ run_test ./ksm_tests -N -m 0
+ 
++# protection_keys tests
++if [ $VADDR64 -eq 0 ]; then
++	run_test ./protection_keys_32
++else
++	run_test ./protection_keys_64
++fi
++
+ exit $exitcode
+-- 
+2.25.1
 

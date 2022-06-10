@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F08546969
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDD3546970
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 17:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244833AbiFJPae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 11:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S1344827AbiFJPdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 11:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiFJPa3 (ORCPT
+        with ESMTP id S233020AbiFJPdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:30:29 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2563A1A0;
-        Fri, 10 Jun 2022 08:30:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 10 Jun 2022 11:33:45 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7BE17ED36;
+        Fri, 10 Jun 2022 08:33:43 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E27D1CE36F6;
-        Fri, 10 Jun 2022 15:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB5AC34114;
-        Fri, 10 Jun 2022 15:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654875022;
-        bh=ta96T6c2nNcPWAsBNRTtLMz9n9426tesAoUAX1Q+IMM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=QTha3y968nP9ETEGDQmF6NzJDQ2F4BQH3LJGoscUtpOb2lrMjg/UMPaLmZy04j5iK
-         gu34asgm5pjSkdIl7Ps9AdUNL4no45ztjiHjUU0njH75skMJONKlY6nd0PiBk186He
-         /4nCrqYWqWfh4s68LGCdn6YPMRt3QTU5S0oecdm6ozFzx0YIpWJc2xwGy15ITfs4aP
-         qPUJQ5BaA3G3o1XWW50E8++U2X5Owivd6AUdImZGQONyIv3XeyaCzVkC6dbgdlsVfH
-         KDwPtrt9lp3VSvJaMk9TyV5JJxwkJspPr3bxlOhm2haQI/PBdy+AukmtVQfKcFJ1Sq
-         P0h/pRD7CRv0w==
-Date:   Fri, 10 Jun 2022 10:30:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Wangseok Lee <wangseok.lee@samsung.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id BB6A5520171;
+        Fri, 10 Jun 2022 17:33:41 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.27) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Fri, 10 Jun
+ 2022 17:33:40 +0200
+Date:   Fri, 10 Jun 2022 17:33:36 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-Subject: Re: [PATCH v2 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
-Message-ID: <20220610153020.GA597980@bhelgaas>
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Message-ID: <20220610153336.GA8881@lxhi-065>
+References: <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
+ <541e9ea1-024f-5c22-0b58-f8692e6c1eb1@landley.net>
+ <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610000303epcms2p537e12cb268999b4d4bdeb4c76e2eb3dd@epcms2p5>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.27]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,99 +81,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 09:03:03AM +0900, Wangseok Lee wrote:
-> On 06/04/2022 01:03, Bjorn Helgaas wrote:
-> > In the subject, why do you tag this "axis"?  There's an existing
-> > pcie-artpec6.c that uses the driver name ""artpec6-pcie" and the
-> > subject line tag "artpec6".
-> > 
-> > This adds pcie-artpec8.c with driver name "artpec8-pcie", so the
-> > obvious choice would be "artpec8".
-> > 
-> > I assume you evaluated the possibility of extending artpec6 to support
-> > artpec8 in addition to the artpec6 and artpec7 it already supports?
->  
-> "pcie-artpec6. c" supports artpec6 and artpec7 H/W.
-> artpec8 can not be expanded because H/W configuration is
-> completely different from artpec6/7.
-> phy and sub controller are different.
+Hello Roberto,
 
-Thanks for this detail.  Can you include this in the commit log next
-time around in case anybody else has a similar question?
+On Do, Jun 09, 2022 at 11:05:45 +0000, Roberto Sassu wrote:
+> > From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
+> > Sent: Thursday, June 9, 2022 12:26 PM
+> > Dear Roberto,
+> > Cc: Yamada-san, linux-kbuild
+> > 
+> > On Mi, Jul 24, 2019 at 05:34:53 +0200, Roberto Sassu wrote:
+> > > Is there anything I didn't address in this patch set, that is delaying
+> > > the review? I would appreciate if you can give me a feedback, positive
+> > > or negative.
+> > >
+> > > Thanks a lot!
+> > >
+> > > Roberto
+> > 
+> > Some of our users have recently asked for this patch series.
+> 
+> Hello
+> 
+> thanks for your interest in this patch set.
+> 
+> > Could you please feedback if this is the latest revision available or
+> > maybe there is a newer one developed and potentially not shared on LKML?
+> 
+> Yes, it is the latest revision available. There might have been few
+> fixes in the final code. You may want to have a look at:
 
-> >> +/* FSYS SYSREG Offsets */
-> > 
-> > The list below seems to inclue more than just register offsets.
-> > 
->  
-> Is it clear to change to "FSYS blue logic system registers" 
-> like Jasper Nilsson`s comment?
-> https://lore.kernel.org/all/20220607070332.GY18902@axis.com/
-> My opinion is the same.
+Many thanks for the links to the updated patch revisions. It looks
+like the new versions added a couple of bugfixes and refinements.
 
-Yep, that's fine.  But spell it "glue logic", not "blue logic" :)
+With more users now using this feature, do you think there is a higher
+chance for upstreaming, compared to 2019 (original submission date)?
 
-> >> +static int artpec8_pcie_get_clk_resources(struct platform_device *pdev,
-> >> +                                       struct artpec8_pcie *artpec8_ctrl)
-> >> +{
-> >> +        struct device *dev = &pdev->dev;
-> >> +
-> >> +        artpec8_ctrl->pipe_clk = devm_clk_get(dev, "pipe_clk");
-> >> +        if (IS_ERR(artpec8_ctrl->pipe_clk)) {
-> >> +                dev_err(dev, "couldn't get pipe clock\n");
-> >> +                return -EINVAL;
-> >> +        }
-> >> +
-> >> +        artpec8_ctrl->dbi_clk = devm_clk_get(dev, "dbi_clk");
-> >> +        if (IS_ERR(artpec8_ctrl->dbi_clk)) {
-> >> +                dev_info(dev, "couldn't get dbi clk\n");
-> >> +                return -EINVAL;
-> >> +        }
-> >> +
-> >> +        artpec8_ctrl->slv_clk = devm_clk_get(dev, "slv_clk");
-> >> +        if (IS_ERR(artpec8_ctrl->slv_clk)) {
-> >> +                dev_err(dev, "couldn't get slave clock\n");
-> >> +                return -EINVAL;
-> >> +        }
-> >> +
-> >> +        artpec8_ctrl->mstr_clk = devm_clk_get(dev, "mstr_clk");
-> >> +        if (IS_ERR(artpec8_ctrl->mstr_clk)) {
-> >> +                dev_info(dev, "couldn't get master clk\n");
-> > 
-> > It'd be nice if the err/info messages matched the exact DT name:
-> > "pipe_clk", "dbi_clk", slv_clk", etc.
-> > 
->  
-> I will fix it.
->  
-> > Why are some of the above dev_err() and others dev_info() when you
-> > return -EINVAL in all cases?
->  
-> When property is not found, it just to return error.
-> I will modify to return PTR_ERR.
-
-Using PTR_ERR() looks like a good idea, since then you return the
-actual error from devm_clk_get() instead of always returning -EINVAL.
-
-But that wasn't my comment.  My comment was that it looks like these
-should be all dev_err() (or all dev_info()).
-
-> >> +        switch (mode) {
-> >> +        case DW_PCIE_RC_TYPE:
-> >> +                artpec8_pcie_writel(artpec8_ctrl->elbi_base, DEVICE_TYPE_RC,
-> >> +                                PCIE_ARTPEC8_DEVICE_TYPE);
-> >> +                ret = artpec8_add_pcie_port(artpec8_ctrl, pdev);
-> >> +                if (ret < 0)
-> > 
-> > Are there positive return values that indicate success?  Most places
-> > above you assume "ret != 0" means failure, so just curious why you
-> > test "ret < 0" instead of just "ret".
->  
-> There is no special reason, but it seems that the format used 
-> in the existing dw driver is applied.
-
-Fair enough.  "git grep -A2 add_pcie_port drivers/pci/controller/"
-says all *_add_pcie_port() calls use the same pattern, so thanks for
-following that.
-
-Bjorn
+Best Regards,
+Eugeniu

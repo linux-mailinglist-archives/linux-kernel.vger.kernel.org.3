@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080C55464B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FF75464BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348977AbiFJKzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S1349253AbiFJKzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348793AbiFJKya (ORCPT
+        with ESMTP id S1349207AbiFJKyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:54:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5594CD74
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:51:28 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nzcEU-0000CS-8q; Fri, 10 Jun 2022 12:51:14 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        Fri, 10 Jun 2022 06:54:46 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2746212C8B;
+        Fri, 10 Jun 2022 03:51:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 775AE91008;
-        Fri, 10 Jun 2022 10:51:10 +0000 (UTC)
-Date:   Fri, 10 Jun 2022 12:51:09 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 11/13] can: slcan: add ethtool support to reset
- adapter errors
-Message-ID: <20220610105109.he4tiihbxggxhx7f@pengutronix.de>
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
- <20220607094752.1029295-12-dario.binacchi@amarulasolutions.com>
- <20220607105225.xw33w32en7fd4vmh@pengutronix.de>
- <CABGWkvozX51zeQt16bdh+edsjwqST5A11qtfxYjTvP030DnToQ@mail.gmail.com>
- <20220609063813.jf5u6iaghoae5dv3@pengutronix.de>
- <CABGWkvrViDyWfU=PUfKq2HXnDjhiZdOMWSBt3xcmxFKxhHKCyw@mail.gmail.com>
- <20220609080112.24bw2764ov767pqc@pengutronix.de>
- <CABGWkvq2nbfYRww0KWB1YxLQ92hjsWjfV9+nT-cKzc5FPF=DzA@mail.gmail.com>
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LKHnt7049z4xD3;
+        Fri, 10 Jun 2022 20:51:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654858293;
+        bh=zgmxwfoNJ1GaOK0G2QJTcV3/IuzAV1jWBY06oRVWOzk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iJgfAJDu9juLt5OHZWwEdcZEKvlFF8tWCFaSJUGf/8S1ueE9VgDuOhNp6C54KwRcP
+         B7gKJe4gww1EH6DZQO4hosTet3sBLx22ZrUVue5av/ghfPhM+sXMmBinq2NbIHqBZB
+         2JLwnx9uQ/J5SMl+rXzj0MzkxVxDDo+IJNfJlDEwOT0NtPcekRSqBQGn9GogoV0JKH
+         zUU08wer2WldZe6ugRxkgTzyUx8/Ue8fvnMMPIDKZg0w5tDQKNUdiGJyEpAYoHdFa5
+         p7wJoD0C8l95V8V9KoePJE72ZvnpYywnkn4D/QKWWKdydhUoLmZtLqkA9saj3p6XDN
+         sTI3Q/atDv9CA==
+Date:   Fri, 10 Jun 2022 20:51:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the extcon tree with the usb tree
+Message-ID: <20220610205129.18a3c372@canb.auug.org.au>
+In-Reply-To: <YqMMzfFtWiZM8iOw@kroah.com>
+References: <20220426152739.62f6836e@canb.auug.org.au>
+        <20220523184254.4e657cd1@canb.auug.org.au>
+        <20220604111841.3887bf65@canb.auug.org.au>
+        <YqMMzfFtWiZM8iOw@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fmv4lnkvnggz7rbr"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvq2nbfYRww0KWB1YxLQ92hjsWjfV9+nT-cKzc5FPF=DzA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/H.SXB32sJBFJLaNSvO7zMU/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---fmv4lnkvnggz7rbr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/H.SXB32sJBFJLaNSvO7zMU/
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On 09.06.2022 10:52:03, Dario Binacchi wrote:
-> > > The help option of slcan_attach and slcand prints " -f (read status
-> > > flags with 'F\\r' to reset error states)\n" I looked at the sources of
-> > > the adapter I am using (USBtin, which uses the mcp2515 controller).
-> > > The 'F' command reads the EFLG register (0x2d) without resetting the
-> > > RX0OVR and RX1OVR overrun bits.
-> >
-> > The Lawicel doc [1] says 'F' is to read the status flags not to clear
-> > it. However commit 7ef581fec029 ("slcan_attach: added '-f' commandline
-> > option to read status flags") [2] suggests that there are some adapters
-> > that the reading of the status flag clears the errors. IMHO the 'F'
-> > command should be send unconditionally during open.
+Hi Greg,
+
+On Fri, 10 Jun 2022 11:20:13 +0200 Greg KH <greg@kroah.com> wrote:
+> >=20
+> > This merge resolution seems to have been lost somewhere along the way
+> > :-( =20
 >=20
-> When in doubt I would follow the slcand / slcan_attach approach, that don=
-'t
-> send the 'F \ r' command by default. We would be more backward compatible
-> as regards the sequence of commands to be sent to the controller.
+> I've taken your resolution in the tree now, sorry for the delay.
 
-Ok, keep it this way.
-
-Marc
+Thanks.   I have now dropped my copy.
 
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Cheers,
+Stephen Rothwell
 
---fmv4lnkvnggz7rbr
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/H.SXB32sJBFJLaNSvO7zMU/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKjIhsACgkQrX5LkNig
-010VdggAgzCPnmFDsBxLr+elg2NDIiGGSoOr+fWEHtMIkE37bCM9+3W7Ykh5lb1E
-/g/eElBH89yLwRVxZfSHuWiu4uFTYflF6/4Jh1sOmOWLHHiFt9XhWDDNw4lOwZ/t
-Y7gxaOiSgf5lUdcAvpFhBDP75GuH14uP3zeZTdpHbE836gFjXh9gPe5+1MJc6YJb
-rTD2omTEBR8a01XUzTuooRdCoChRj3ekr7fzVxQZYpLPxnsZVJRabwEfKT4+iEr4
-B7HfOdIeqtgVpOMj/hnns99US6Izxzz7gVxZLBH8gucqy3WoietOWZ7VI+tOirE+
-JTA0661k6mExdytVRzUMgZRhYVfEGA==
-=Fqe+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKjIjEACgkQAVBC80lX
+0Gx/qgf9GMMSRxbNjiSwJeX1UqLYoZfnGG511nMdNhc6vDnc/uY1NBbWnPk3m3+q
+tT2SFT0/9ZPjZawmEI8QOvWfahkqXEs3Ubq7xsgOzBn5MwzwatomtkTUBeV6Fm1h
+pZdFyxEBvelx8XAJGKlNH7JrNVrjBHKFEXixMAkW1PZO/L4ce5o7hkmMIAXo3ySI
+lzRQqkElfuxIYZrPiqo0n05tSczfKp18zEX6o7RFWfiDzOaieGwwtUwpWuBTnfV8
+ckomJZzjnXyO/wzD7i/PQwX4WSIz0d6rp97nqbvLgoAgpJu2wAtyHNqz2MuvVVPq
+HWOMAQSWpYNUHeSTKGK7Jd4YHak9mg==
+=+3Le
 -----END PGP SIGNATURE-----
 
---fmv4lnkvnggz7rbr--
+--Sig_/H.SXB32sJBFJLaNSvO7zMU/--

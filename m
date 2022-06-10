@@ -2,112 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA176546FB8
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 00:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9138546FC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 00:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348797AbiFJWoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 18:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S1347997AbiFJWxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 18:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348401AbiFJWoO (ORCPT
+        with ESMTP id S1347460AbiFJWxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 18:44:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 375A23BFAE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 15:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654901052;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pblZd+Kqp7f2K+2rxNpvXUuiOLaopPh9IaEYk0kwYKE=;
-        b=NTjYhRsx6ctDVsjQjsegWvbKCxKclOsEO07UrXSk8ypDynoqmphEPoXwlWosTDmIHU9jKu
-        NKAwmxOJK34qSCSYKb+G7QwCrJl47j/kbQpKWg4P/UnmlckC+uUe3niKVZInsbxS/dMuzs
-        suM1nz9eAMOXglsw91/x6M5dOdPLk4g=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-LWyJeVxTNRizHAeT01e6VQ-1; Fri, 10 Jun 2022 18:44:11 -0400
-X-MC-Unique: LWyJeVxTNRizHAeT01e6VQ-1
-Received: by mail-il1-f198.google.com with SMTP id p12-20020a056e02144c00b002d196a4d73eso275887ilo.18
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 15:44:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=pblZd+Kqp7f2K+2rxNpvXUuiOLaopPh9IaEYk0kwYKE=;
-        b=adGI+YXacSFQUaFfxvf1wIPWbAkbiO0waNoEMdM1Z0eCAQ78l1sj1+FzQhp4vGeiIK
-         JDQiyvGKwBDiJUb760f6Ij9Es0vgEQ53IUdE76AC8ZeeEDYMHLEaFjwXEuSv6eLld0Se
-         qZugrJcbqMivaIflRoO6SGQA8yrA7V0g0mHOXl5oFyCOGwYNB06CLbdd9jRjtSrKpXBl
-         c6LSqBwIQG3uclT1Esf4feBngpCciJfB7bK855XtiWWSAFw8uo4u9VECRJ/dol4WuFkv
-         NNhzSL3cTT+RvA2sZtxGR99XGhnzoYUdVf6biX5TtUHi78fTyFutqVsFIoZiXd0QhnA/
-         gOaQ==
-X-Gm-Message-State: AOAM532xDxxqN4ftEwfSATMutbiPa9HksY9b5DQdhiPqVE46dDseRVv5
-        SS0jKGGlg/ZNV0Ux1gmDaD5H58uCZANR5HBOcr8jufNFYMyFF0t5NvUZHI/cFnanKBQ709tE8a8
-        JkiOUUcw9tCGx8roFUZBlAG4D
-X-Received: by 2002:a02:c811:0:b0:332:2c2e:88e0 with SMTP id p17-20020a02c811000000b003322c2e88e0mr343355jao.132.1654901050840;
-        Fri, 10 Jun 2022 15:44:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwgEFjSHs9TXHG3p6x60NRKxwsOGKtJ1mMFIodXcBQ3lbM9zLgveeGgcd98DfNgAuz2vKQAXQ==
-X-Received: by 2002:a02:c811:0:b0:332:2c2e:88e0 with SMTP id p17-20020a02c811000000b003322c2e88e0mr343346jao.132.1654901050600;
-        Fri, 10 Jun 2022 15:44:10 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id y2-20020a926402000000b002d3a3a089b3sm130533ilb.1.2022.06.10.15.44.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 15:44:09 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 16:44:07 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kwankhede@nvidia.com, farman@linux.ibm.com, mjrosato@linux.ibm.com,
-        pasic@linux.ibm.com, diana.craciun@oss.nxp.com, cohuck@redhat.com,
-        eric.auger@redhat.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, yishaih@nvidia.com, hch@lst.de
-Subject: Re: [PATCH] vfio: de-extern-ify function prototypes
-Message-ID: <20220610164407.25feeb23.alex.williamson@redhat.com>
-In-Reply-To: <20220610000434.GE1343366@nvidia.com>
-References: <165471414407.203056.474032786990662279.stgit@omen>
-        <20220610000434.GE1343366@nvidia.com>
-Organization: Red Hat
+        Fri, 10 Jun 2022 18:53:46 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6360019A725;
+        Fri, 10 Jun 2022 15:53:45 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id AE08DCD391;
+        Fri, 10 Jun 2022 22:53:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1654901593; bh=88+qj1kVLsROnvBzdihA9DB1rFfJnLoQ5W2nf9uKvFQ=;
+        h=From:To:Cc:Subject:Date;
+        b=EE+jhgrFAT0mU76Udy+p+jgMSf1oqrket44WRuxIxT4m2y70RYXK7zmbCz5mV3Ew0
+         NRMR0DfQD4uQgdMTn8UM4j3kqjZDWwi+Qxp9/aHpLDODjVCNrFZfgKocZKUMSupSxf
+         JCIKBgOnBj5uvBy7+puEKXrRNBI8xCn6oo6ugDb0=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sireesh Kodali <sireeshkodali1@gmail.com>,
+        James Willcox <jwillcox@squareup.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] drm/msm/mdp5: Add perf data for MDP v1.16
+Date:   Sat, 11 Jun 2022 00:53:02 +0200
+Message-Id: <20220610225304.267508-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 21:04:34 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+From: Vladimir Lypak <vladimir.lypak@gmail.com>
 
-> On Wed, Jun 08, 2022 at 12:55:13PM -0600, Alex Williamson wrote:
-> > The use of 'extern' in function prototypes has been disrecommended in
-> > the kernel coding style for several years now, remove them from all vfio
-> > related files so contributors no longer need to decide between style and
-> > consistency.
-> > 
-> > Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-> > ---
-> > 
-> > A patch in the same vein was proposed about a year ago, but tied to an ill
-> > fated series and forgotten.  Now that we're at the beginning of a new
-> > development cycle, I'd like to propose kicking off the v5.20 vfio next
-> > branch with this patch and would kindly ask anyone with pending respins or
-> > significant conflicts to rebase on top of this patch.  Thanks!  
-> 
-> Can you stick it in your branch please?
+Add the perf data for the mdp found in msm8953.
 
-Thanks for the R-b, it was my plan today to put it in my next branch,
-but I can't currently test vfio on mainline due to:
+Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-https://lore.kernel.org/all/165490039431.944052.12458624139225785964.stgit@omen/
-
-I'll get this in once there's a mainline base where vfio still works.  Thanks,
-
-Alex
+diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+index 1bf9ff5dbabc..b17f868ffca8 100644
+--- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
++++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+@@ -837,6 +837,11 @@ static const struct mdp5_cfg_hw msm8x53_config = {
+ 			[2] = INTF_DSI,
+ 		},
+ 	},
++	.perf = {
++		.ab_inefficiency = 100,
++		.ib_inefficiency = 200,
++		.clk_inefficiency = 105
++	},
+ 	.max_clk = 400000000,
+ };
+ 
+-- 
+2.36.1
 

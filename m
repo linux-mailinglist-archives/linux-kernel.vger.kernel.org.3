@@ -2,117 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994AF546EF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD818546EF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 23:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350801AbiFJVE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 17:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S1350659AbiFJVEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 17:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350765AbiFJVEw (ORCPT
+        with ESMTP id S1348020AbiFJVEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:04:52 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272D7245A0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:50 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id g205so449719pfb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:50 -0700 (PDT)
+        Fri, 10 Jun 2022 17:04:45 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0985624BDB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:44 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id v143so646148oie.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 14:04:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SiLCrAL53VdiLKOXfLPLunTsPwo2FINx12xxld+VcU4=;
-        b=bFQVTO6kUj6C9eZqt3ASwH3yDJCd8h4+qHqP1I+aPVsKQAS8QoEkX82JRGy9ooQDC2
-         MR8htAsandvUIN3h90FZvL04oRvRshPFFbdKJ1A29ojwxreeu/mqSzweWjeNRGmGx7xK
-         Vs/O8fPBaQaYpevC/OBloET2GC9ejXJDZpiNRsmSGIxlYWF9RIQEu1Gf6dmrhl7I17o0
-         RB5a0RHCLeFhu3WcZSBQtNm0A6dj5SnN2ZdpmFi2FYl4qCF/bRV7JG8Su4HSu+8+sCZH
-         2eeIIsuAeOG5yJwagorVIKfbV+8tCYLs/V4UtEdtzjxCBKK+8VbpEUb2vw187EbIm1YC
-         t1Pg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=6BSSJ/rWsXUBg5MMoeJBHI5sh4Vg+Gf+Lk7kJ6t8nrM=;
+        b=ldlk36TEpLb8bKM9kbq6yMC+kG1oiGHmPqVQxcVdRKo79hJxr7pqzJPr/BfNqZZJlT
+         XSswpqq4c+gHIsrn8uVopdU6inApeuSxfIzbubd0SWZLVr1Q/SD6zdImR0WiqMGuATFR
+         8QB4g9Dvv645HlH5d+XtOqkStx++qXkKgy4II=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SiLCrAL53VdiLKOXfLPLunTsPwo2FINx12xxld+VcU4=;
-        b=NZCV2c6Kvr/c9e4unsL+fHcp2GaCWAehJ4eEbrspSWcLbyBFZb3s0zSSfazhDKhc5p
-         5GY7WhV9y5gwBY0PH4CAv2imPpa8SG+nFgBZLU0EY2zVHs1C7x8M7Si/yg76en2k/09+
-         qeJEn3FfKJCd+dZEiMDSrid8cSFi/iLJmYwzjONRlKd0N4i3iKYQZYlarFoaehp4+/+f
-         k7yvS11zIDFP8AXZ6kOWLxppMpT5DHedc06Qxmaog2MzxWZFpsYhWh1pRNPikJzwmYtE
-         dvDHjlfUheXwH7Eae3sUStLYGBLQIHkT2MbuyBLyAcskIA9piefMx+FRlGqGye0LVkk2
-         vPgg==
-X-Gm-Message-State: AOAM530ZkqZQ0Ard2GT8Aa7iqRJkPguk3t4Ec3vsQPLqm+Ygw4E8w+AQ
-        YdJ+/WiG4rmlmfPz8+uuELbXa76zNyiJaJjmV2kD
-X-Google-Smtp-Source: ABdhPJwNdRdVzr3QMEopSyl6AGpCfiZgxW6A683tU/g0pcw8EZpJjU6kRe3OUp1IJyJkmTxwo6rWP/C3gyWE88D/3OI=
-X-Received: by 2002:a62:868c:0:b0:51b:bd62:4c87 with SMTP id
- x134-20020a62868c000000b0051bbd624c87mr47036124pfd.83.1654895089650; Fri, 10
- Jun 2022 14:04:49 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=6BSSJ/rWsXUBg5MMoeJBHI5sh4Vg+Gf+Lk7kJ6t8nrM=;
+        b=w6QQNzvMYCoRMXwjUMOZq+UN6Q0AzrAN9WFqXSKOUw64FpZJehmwLuFEo/wMnUcH5j
+         w4dvTp4yIuANloiAn6idWi/FqqEQbE/3WvdRDV4hzspQS+pjuW8JstetI19mlIQ0P9zg
+         W9qWZHRvioUI2YBGoel0XkbKypMNOGrWjR6J9GmWUUZBjFkba9y/+ngaC7iFtR42p2fc
+         fzgyHhEp2Vphi9XzYfI/EC7TW4zbRODPurIFf3hIHD7tgFpmJlZaqvF4dZ+vHQDbp2h3
+         I9MRhoJFMnrnDr+L2CwwGa5N78KA791/iFJeWZ8owyvec6Y6cu69Z8bV+PpyK5kiZZix
+         sMXg==
+X-Gm-Message-State: AOAM530R1b6MrYPDpacGPOl4DfJRHDgrhgwVYiI8UFD1RySZc46xuEXu
+        vFPkVTWDXfkJiZmdRnaEmDs4coIJqZR2yCd/o22Qxg==
+X-Google-Smtp-Source: ABdhPJzGn0kc0KitEDzC39ApVuo0Gabefuaw+3AKA6iKU3xzQfk8aDXBAJ2dQY9eYenZKctLFWTXf3x1wQcbiYQgVe8=
+X-Received: by 2002:a05:6808:1703:b0:32e:851e:7f81 with SMTP id
+ bc3-20020a056808170300b0032e851e7f81mr924613oib.63.1654895083399; Fri, 10 Jun
+ 2022 14:04:43 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 10 Jun 2022 14:04:42 -0700
 MIME-Version: 1.0
-References: <20220609230146.319210-1-casey@schaufler-ca.com> <20220609230146.319210-27-casey@schaufler-ca.com>
-In-Reply-To: <20220609230146.319210-27-casey@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 10 Jun 2022 17:04:38 -0400
-Message-ID: <CAHC9VhT-qo=N4k7fWvZNELNLTGDWuE4kDXEOYwMBgZGRQu8f7w@mail.gmail.com>
-Subject: Re: [PATCH v36 26/33] Audit: Allow multiple records in an audit_buffer
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
+In-Reply-To: <1653687133-32331-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1653687133-32331-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 10 Jun 2022 14:04:42 -0700
+Message-ID: <CAE-0n519jUEQK565OFVevvyoF49rgTazf4McjKmDS8mfDrWwyQ@mail.gmail.com>
+Subject: Re: [PATCH v4] drm/msm/dp: force link training for display resolution change
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 7:15 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> Replace the single skb pointer in an audit_buffer with
-> a list of skb pointers. Add the audit_stamp information
-> to the audit_buffer as there's no guarantee that there
-> will be an audit_context containing the stamp associated
-> with the event. At audit_log_end() time create auxiliary
-> records (none are currently defined) as have been added
-> to the list. Functions are created to manage the skb list
-> in the audit_buffer.
->
-> Suggested-by: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->  kernel/audit.c | 113 +++++++++++++++++++++++++++++++++++++++----------
->  1 file changed, 90 insertions(+), 23 deletions(-)
+Quoting Kuogee Hsieh (2022-05-27 14:32:13)
+> During display resolution changes display have to be disabled first
+> followed by display enabling with new resolution. Display disable
+> will turn off both pixel clock and main link clock so that main link
+> have to be re trained during display enable to have new video stream
 
-...
+s/re/re-/
 
-> diff --git a/kernel/audit.c b/kernel/audit.c
-> index 6b6c089512f7..987740374dfa 100644
-> --- a/kernel/audit.c
-> +++ b/kernel/audit.c
-> @@ -1784,8 +1789,12 @@ static struct audit_buffer *audit_buffer_alloc(struct audit_context *ctx,
->         ab->skb = nlmsg_new(AUDIT_BUFSIZ, gfp_mask);
->         if (!ab->skb)
->                 goto err;
+> flow again. At current implementation, display enable function manually
+> kicks up irq_hpd_handle which will read panel link status and start link
+> training if link status is not in sync state. However, there is rare
+> case that a particular panel links status keep staying in sync for
+> some period of time after main link had been shut down previously at
+> display disabled. Main link retraining will not be executed by
+> irq_hdp_handle() if the link status read from pane shows it is in
+
+s/pane/panel/
+
+> sync state. If this was happen, then video stream of newer display
+> resolution will fail to be transmitted to panel due to main link is
+> not in sync between host and panel. This patch force main link always
+> be retrained during display enable procedure to prevent this rare
+> failed case from happening. Also this implementation are more
+> efficient than manual kicking off irq_hpd_handle function.
+
+The description makes it sound like the link status is not updated,
+sometimes. Isn't that the real issue here? Not that link training needs
+to be done again (which it always does apparently), but that disabling
+the display doesn't wait for the link to go down. Or disabling the link
+is causing some sort of glitch on the sink causing it to report the
+status as OK when it really isn't.
+
+>
+> Changes in v2:
+> -- set force_link_train flag on DP only (is_edp == false)
+>
+> Changes in v3:
+> -- revise commit  text
+> -- add Fixes tag
+>
+> Changes in v4:
+> -- revise commit  text
+>
+> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index c388323..370348d 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1688,10 +1689,14 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+>
+>         state =  dp_display->hpd_state;
+>
+> -       if (state == ST_DISPLAY_OFF)
+> +       if (state == ST_DISPLAY_OFF) {
+>                 dp_display_host_phy_init(dp_display);
+>
+> -       dp_display_enable(dp_display, 0);
+> +               if (!dp->is_edp)
+
+Does this assume eDP has one resolution? I don't understand why eDP is
+special here, especially if eDP has more than one resolution available
+it seems like we would want to retrain the link regardless.
+
+> +                       force_link_train = true;
+> +       }
 > +
-> +       skb_queue_head_init(&ab->skb_list);
-> +       skb_queue_tail(&ab->skb_list, ab->skb);
-> +
->         if (!nlmsg_put(ab->skb, 0, 0, type, 0, 0))
-> -               goto err;
-> +               kfree_skb(ab->skb);
+> +       dp_display_enable(dp_display, force_link_train);
 >
->         ab->ctx = ctx;
->         ab->gfp_mask = gfp_mask;
-
-I didn't notice this in v35, but if the nlmsg_put() fails I think you
-need to preserve the 'goto err;' since the skb hasn't been properly
-initialized.  The good news is that I don't think you need to worry
-about the 'kfree_skb(ab->skb);' in the error handler as it's already
-been placed on the audit_buffer:skb_list list and will be freed when
-audit_buffer_alloc()'s error handling code calls audit_buffer_free().
-
--- 
-paul-moore.com
+>         rc = dp_display_post_enable(dp);
+>         if (rc) {

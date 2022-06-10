@@ -2,162 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0625054656B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC82F54657A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348729AbiFJLVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S1348925AbiFJLYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237231AbiFJLVB (ORCPT
+        with ESMTP id S233916AbiFJLYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:21:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F3A14B67E;
-        Fri, 10 Jun 2022 04:21:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF1E0620B0;
-        Fri, 10 Jun 2022 11:20:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E7B0C34114;
-        Fri, 10 Jun 2022 11:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654860059;
-        bh=xP5iYMV7lF2tEmzcBQ+jmLwPazuiglMxmNPs6b0I0/8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WpGddpvWv1wRH7zaLOcFreox7kAsZxznDXf1IJ775RtaTYZd85HBrIgC6GCJU7ySu
-         YN7fHFfU4id+21vDKbwcQbSHhKrvoS42v04G+2Zvn8i2c9QmdXKskN3Sq0s6Hs4vUY
-         kr0CBZgiQU0megrVUCVewzV9GQI/XNCeBP7QsrCS3LfHjX48SulJL+syyFH6zBNIUF
-         GLsC9CTF3VjfoK37lQgLWabmb2x5YoRdlVZbk2B9yyhtsdNuWcsjbFZm6KYaXqTTnw
-         46qMDgmHAXv0v7eYlxpw2b8yBWGEgrEOCInbmNSKBJsdmrBnqiwXOhKTgMLKR8/2l/
-         dqP2E2YzOyTFA==
-Received: by mail-yb1-f177.google.com with SMTP id e184so46470056ybf.8;
-        Fri, 10 Jun 2022 04:20:59 -0700 (PDT)
-X-Gm-Message-State: AOAM5302hhdyYG9hi94dRkS2x7Ui6eIm0a1jwfn97v/FloWLrvK6tIOu
-        U/huglNqnjxMhNRq627NGsgDa41Tx6ZwPuvIAmM=
-X-Google-Smtp-Source: ABdhPJwW7AgFca3wNHZohnSbkTgJQBw/fxL1AiQUUZkoXlebPze1b83w86K0iW12ZT4jzD5smdkaHxw4868lc9szGl4=
-X-Received: by 2002:a05:6830:9c2:b0:606:1e0a:cc8d with SMTP id
- y2-20020a05683009c200b006061e0acc8dmr19092482ott.265.1654860048097; Fri, 10
- Jun 2022 04:20:48 -0700 (PDT)
+        Fri, 10 Jun 2022 07:24:46 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81CB19299;
+        Fri, 10 Jun 2022 04:24:44 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260717744"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="260717744"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:24:44 -0700
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="649791280"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:24:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1nzcii-000Yiq-Fy;
+        Fri, 10 Jun 2022 14:22:28 +0300
+Date:   Fri, 10 Jun 2022 14:22:28 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dw: Add deferred DMA-channels setup support
+Message-ID: <YqMpdEitU/84oUWV@smile.fi.intel.com>
+References: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220607093805.1354256-1-mawupeng1@huawei.com> <20220607093805.1354256-7-mawupeng1@huawei.com>
-In-Reply-To: <20220607093805.1354256-7-mawupeng1@huawei.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 10 Jun 2022 13:20:34 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGMHn_jsMe2WxWZ-s_QV==1tc5k=xpbNXuDbGp0qF534w@mail.gmail.com>
-Message-ID: <CAMj1kXGMHn_jsMe2WxWZ-s_QV==1tc5k=xpbNXuDbGp0qF534w@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] efi: Disable mirror feature if kernelcore is not specified
-To:     Wupeng Ma <mawupeng1@huawei.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>, songmuchun@bytedance.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        damien.lemoal@opensource.wdc.com,
-        Stephen Boyd <swboyd@chromium.org>, wei.liu@kernel.org,
-        robin.murphy@arm.com, david@redhat.com, anshuman.khandual@arm.com,
-        thunder.leizhen@huawei.com, wangkefeng.wang@huawei.com,
-        gpiccoli@igalia.com, chenhuacai@kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        chenzhou10@huawei.com, vijayb@linux.microsoft.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 11:16, Wupeng Ma <mawupeng1@huawei.com> wrote:
->
-> From: Ma Wupeng <mawupeng1@huawei.com>
->
-> If system have some mirrored memory and mirrored feature is not specified
-> in boot parameter, the basic mirrored feature will be enabled and this will
-> lead to the following situations:
->
-> - memblock memory allocation prefers mirrored region. This may have some
->   unexpected influence on numa affinity.
->
-> - contiguous memory will be split into several parts if parts of them
->   is mirrored memory via memblock_mark_mirror().
->
-> To fix this, variable mirrored_kernelcore will be checked before calling
-> efi_find_mirror() which will enable basic mirrored feature and this
-> variable is true if kernelcore=mirror is added in the kernel parameters.
->
-> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+On Fri, Jun 10, 2022 at 10:50:06AM +0300, Serge Semin wrote:
+> Currently if the source DMA device isn't ready to provide the channels
+> capable of the SPI DMA transfers, the DW SSI controller will be registered
+> with no DMA support. It isn't right since all what the driver needs to do
+> is to postpone the probe procedure until the DMA device is ready. Let's
+> fix that in the framework of the DWC SSI generic DMA implementation. First
+> we need to use the dma_request_chan() method instead of the
+> dma_request_slave_channel() function, because the later one is deprecated
+> and most importantly doesn't return the failure cause but the
+> NULL-pointer. Second we need to stop the DW SSI controller probe procedure
+> if the -EPROBE_DEFER error is returned on the DMA initialization. The
+> procedure will resume later when the channels are ready to be requested.
 
-This seems like the wrong place to do this. If mirrored memory is
-irrelevant to memblock, it should ignore the attribute. So I think
-this check belongs in mm/memblock.c instead.
+One nit-pick below
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > ---
->  drivers/firmware/efi/efi.c | 3 +++
->  include/linux/mm.h         | 2 ++
->  mm/page_alloc.c            | 2 +-
->  3 files changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index 79c232e07de7..8a5edcb0dd82 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -454,6 +454,9 @@ void __init efi_find_mirror(void)
->         if (!efi_enabled(EFI_MEMMAP))
->                 return;
->
-> +       if (!mirrored_kernelcore)
-> +               return;
-> +
->         for_each_efi_memory_desc(md) {
->                 unsigned long long start = md->phys_addr;
->                 unsigned long long size = md->num_pages << EFI_PAGE_SHIFT;
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index bc8f326be0ce..741ac7d022c3 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2540,6 +2540,8 @@ extern void get_pfn_range_for_nid(unsigned int nid,
->                         unsigned long *start_pfn, unsigned long *end_pfn);
->  extern unsigned long find_min_pfn_with_active_regions(void);
->
-> +extern bool mirrored_kernelcore;
-> +
->  #ifndef CONFIG_NUMA
->  static inline int early_pfn_to_nid(unsigned long pfn)
+>  drivers/spi/spi-dw-core.c |  5 ++++-
+>  drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
+>  2 files changed, 22 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index ecea471ff42c..911ea9bddbee 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+>  
+>  	if (dws->dma_ops && dws->dma_ops->dma_init) {
+>  		ret = dws->dma_ops->dma_init(dev, dws);
+> -		if (ret) {
+> +		if (ret == -EPROBE_DEFER) {
+> +			goto err_free_irq;
+> +		} else if (ret) {
+>  			dev_warn(dev, "DMA init failed\n");
+>  		} else {
+>  			master->can_dma = dws->dma_ops->can_dma;
+> @@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+>  	if (dws->dma_ops && dws->dma_ops->dma_exit)
+>  		dws->dma_ops->dma_exit(dws);
+>  	dw_spi_enable_chip(dws, 0);
+> +err_free_irq:
+>  	free_irq(dws->irq, master);
+>  err_free_master:
+>  	spi_controller_put(master);
+> diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+> index 63e5260100ec..1322b8cce5b7 100644
+> --- a/drivers/spi/spi-dw-dma.c
+> +++ b/drivers/spi/spi-dw-dma.c
+> @@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+>  
+>  static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
 >  {
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e008a3df0485..cf6f70aba787 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -356,7 +356,7 @@ static unsigned long required_kernelcore_percent __initdata;
->  static unsigned long required_movablecore __initdata;
->  static unsigned long required_movablecore_percent __initdata;
->  static unsigned long zone_movable_pfn[MAX_NUMNODES] __initdata;
-> -static bool mirrored_kernelcore __meminitdata;
-> +bool mirrored_kernelcore __meminitdata;
->
->  /* movable_zone is the "real" zone pages in ZONE_MOVABLE are taken from */
->  int movable_zone;
-> --
-> 2.25.1
->
+> -	dws->rxchan = dma_request_slave_channel(dev, "rx");
+> -	if (!dws->rxchan)
+> -		return -ENODEV;
+> +	int ret;
+>  
+> -	dws->txchan = dma_request_slave_channel(dev, "tx");
+> -	if (!dws->txchan) {
+> -		dma_release_channel(dws->rxchan);
+> +	dws->rxchan = dma_request_chan(dev, "rx");
+> +	if (IS_ERR(dws->rxchan)) {
+> +		ret = PTR_ERR(dws->rxchan);
+>  		dws->rxchan = NULL;
+
+> -		return -ENODEV;
+> +		goto err_exit;
+
+This change doesn't bring anything...
+
+> +	}
+> +
+> +	dws->txchan = dma_request_chan(dev, "tx");
+> +	if (IS_ERR(dws->txchan)) {
+> +		ret = PTR_ERR(dws->txchan);
+> +		dws->txchan = NULL;
+> +		goto free_rxchan;
+>  	}
+>  
+>  	dws->master->dma_rx = dws->rxchan;
+> @@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+>  	dw_spi_dma_sg_burst_init(dws);
+>  
+>  	return 0;
+> +
+> +free_rxchan:
+> +	dma_release_channel(dws->rxchan);
+> +	dws->rxchan = NULL;
+
+> +err_exit:
+
+...and this too.
+
+> +	return ret;
+>  }
+>  
+>  static void dw_spi_dma_exit(struct dw_spi *dws)
+> -- 
+> 2.35.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

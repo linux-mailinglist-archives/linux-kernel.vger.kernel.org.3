@@ -2,113 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA417546E88
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A90546E94
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 22:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350472AbiFJUig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 16:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        id S1350510AbiFJUll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 16:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350581AbiFJUi2 (ORCPT
+        with ESMTP id S1347415AbiFJUlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 16:38:28 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC86B30E752
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:38:23 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-fdfe64231dso656713fac.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=OmNB8Tcgddvh+DStPNDRj/l3PH4AXfXE+UIaJzFaKDU=;
-        b=PeEQYbTqlBNmQVeOneHYbMQ2SNrnE9oRTTJBeeItlAIoqfZ+jTsaeM3pXbv4byuW2/
-         AfTroOiJeqAqHgr6g/W5/8NxXUIGHdQ7BxUq1EEr3ZV/U/uQjrGlxVpcIR3cc5hcxYdl
-         QtdINxF1F92WAg6BPLRNtQNPQFQiMlm1VhshM=
+        Fri, 10 Jun 2022 16:41:37 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31311369E4;
+        Fri, 10 Jun 2022 13:41:37 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id p1so174765ilj.9;
+        Fri, 10 Jun 2022 13:41:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=OmNB8Tcgddvh+DStPNDRj/l3PH4AXfXE+UIaJzFaKDU=;
-        b=TsT4sKPDWzVD8r6eCWgqo+Bt4HSBoli+c1QDqR+XfdAx1MnP7GNau4krYDsPfFqPKd
-         3udnOUQFA4h5WUkcWeV6zgWmbLbqocpoycV6b4s4NxT12RulGkbd4Ri997xDOk+NKdGv
-         Q+fooft2eXYfOkV+rrd0qPlKGQcX4g8cBHezCuJf0oZ+LYBt0fHpamwPaLEdS0Fy1yfM
-         RU5ehIiT0S0tU7ravuJONi7n2u5KN0z7a64KdQfd4xzUikV024fXMz6iCtTYivso0H9S
-         GxGDwKyj5aWM911D+5TcaB0kdcQzYOes+KJpiqQJmzn8f27GaT+jTz0wgN2QCUbLYhlC
-         axWA==
-X-Gm-Message-State: AOAM532wykGIKMwF/L7FqrZuKB1ymWKQihLA2PDwqYuolTTjStXRRLSr
-        VJzWWkS+dVmPAkFyQXd0fZ7Eakwv88JZ+zFNSPHOsW0fRBA=
-X-Google-Smtp-Source: ABdhPJxrnMCKEY4AraCYzAprPhmiQ1YNHjc36TBp1WRgX1iN4BwAyAiw6GjZRAmfjgdlO1edLxRj4Tmv7M7qh5o0Mgk=
-X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
- w1-20020a056870b38100b000fe2004b3b5mr922317oap.63.1654893502377; Fri, 10 Jun
- 2022 13:38:22 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 10 Jun 2022 13:38:21 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ay9qEjaKzTwJySEiYdo7I7NMgl95SkInDvkrEPDZkNc=;
+        b=ghK/R9PhX2SlpwIItXVqaZd7OXB7VaqNxDjmBp0w591QXnUINrZnrxCXxDj6/Pv8y8
+         s+WMLaUvhoNq5DjJaEw8bYpq1nf1pOYkQM3UJZCFqY5pr339Cwfs195TI2g8oEZKeZ3A
+         udjoPnCgfrOfZgaFgC3TuGx/tIzrOebXiqQQ/zitycJs/ISxPulz0IgJfKByiQstWStq
+         U4D7aQ/n7TDBdw5ZtOqObsO10eG3usOnbxyjHYGLeY2TxwHAwF7qTuGWnkGKMVYtyEuQ
+         suV3oFZjbHODNy93W+rwoQ4wNRh0+dRfGhC+WOqTWHzswADjX/Pe5Tx9c6cGXUzLzsgW
+         2njQ==
+X-Gm-Message-State: AOAM532VHBVR8fdkqGhoMrGdgZRg3uIOtSc2YHXJGi6D9DX5Z+6lNjbY
+        6f4tPgAl4FU2NfffRxBG25f0Po4bvQ==
+X-Google-Smtp-Source: ABdhPJzdFryVQmT1X0CHlty7rZltQ9RCroq52q6f9tq/ufbZHEISZjrOKH764lm3npH/yNWPE4hUGw==
+X-Received: by 2002:a05:6e02:1a42:b0:2d3:afa3:bd with SMTP id u2-20020a056e021a4200b002d3afa300bdmr26593907ilv.142.1654893696438;
+        Fri, 10 Jun 2022 13:41:36 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.251])
+        by smtp.googlemail.com with ESMTPSA id z8-20020a92bf08000000b002d77734e157sm1996200ilh.56.2022.06.10.13.41.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 13:41:36 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: arm/fvp-base-revc: Remove 'panel-dpi' compatible
+Date:   Fri, 10 Jun 2022 14:40:57 -0600
+Message-Id: <20220610204057.2203419-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <1654775566-21953-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1654775566-21953-1-git-send-email-quic_dikshita@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 10 Jun 2022 13:38:21 -0700
-Message-ID: <CAE-0n50q5GJ_q9Pojjrh+34W+i6BXhxSDCS6M_6NLP0pyZYuQg@mail.gmail.com>
-Subject: Re: [PATCH] venus: Add support for SSR trigger using fault injection
-To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, stanimir.varbanov@linaro.org,
-        quic_vgarodia@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Dikshita Agarwal (2022-06-09 04:52:46)
-> diff --git a/drivers/media/platform/qcom/venus/dbgfs.c b/drivers/media/platform/qcom/venus/dbgfs.c
-> index 52de47f..a0bfb9e 100644
-> --- a/drivers/media/platform/qcom/venus/dbgfs.c
-> +++ b/drivers/media/platform/qcom/venus/dbgfs.c
-> @@ -4,13 +4,31 @@
->   */
->
->  #include <linux/debugfs.h>
-> +#include <linux/fault-inject.h>
->
->  #include "core.h"
->
-> +#ifdef CONFIG_FAULT_INJECTION
-> +static DECLARE_FAULT_ATTR(venus_ssr_attr);
-> +#endif
-> +
-> +bool venus_fault_inject_ssr(void)
-> +{
-> +#ifdef CONFIG_FAULT_INJECTION
-> +       return should_fail(&venus_ssr_attr, 1);
-> +#else
-> +       return false;
-> +#endif
-> +}
+The rtsm-display panel timing node was removed in commit 928faf5e3e8d
+("arm64: dts: fvp: Remove panel timings"). Without the node, 'panel-dpi'
+is not needed either.
 
-It would be better to remove the ifdef in this function and define a
-static inline version that returns false when CONFIG_FAULT_INJECTION is
-disabled so that the compiler doesn't have to insert a function call to
-venus_fault_inject_ssr() when the config is disabled. It may also be
-good to avoid the jump when enabled by exporting the attribute to the
-irq handler file.
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/arm64/boot/dts/arm/fvp-base-revc.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +
->  void venus_dbgfs_init(struct venus_core *core)
->  {
->         core->root = debugfs_create_dir("venus", NULL);
->         debugfs_create_x32("fw_level", 0644, core->root, &venus_fw_debug);
-> +
-> +#ifdef CONFIG_FAULT_INJECTION
-> +       fault_create_debugfs_attr("fail_ssr", core->root, &venus_ssr_attr);
-> +#endif
->  }
->
->  void venus_dbgfs_deinit(struct venus_core *core)
+diff --git a/arch/arm64/boot/dts/arm/fvp-base-revc.dts b/arch/arm64/boot/dts/arm/fvp-base-revc.dts
+index a496e39e6204..5f6f30c801a7 100644
+--- a/arch/arm64/boot/dts/arm/fvp-base-revc.dts
++++ b/arch/arm64/boot/dts/arm/fvp-base-revc.dts
+@@ -186,7 +186,7 @@ smmu: iommu@2b400000 {
+ 	};
+ 
+ 	panel {
+-		compatible = "arm,rtsm-display", "panel-dpi";
++		compatible = "arm,rtsm-display";
+ 		port {
+ 			panel_in: endpoint {
+ 				remote-endpoint = <&clcd_pads>;
+-- 
+2.34.1
+

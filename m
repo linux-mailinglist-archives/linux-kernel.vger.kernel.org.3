@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2BF545A31
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C99545A38
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 04:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345504AbiFJCk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Jun 2022 22:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S241490AbiFJCpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Jun 2022 22:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiFJCkT (ORCPT
+        with ESMTP id S233634AbiFJCpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Jun 2022 22:40:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B50168D0A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Jun 2022 19:40:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CCDD61B9F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 02:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E1EFC3411B;
-        Fri, 10 Jun 2022 02:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654828817;
-        bh=TeQU+C7+kasU+D5PtQZUnBG166WgQJuY+O5xa7YKewI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=J6endfR/Bs4gcJvyIKyC25Cy3ikh3rCJN8/DLFps0xx2jpYbZxFhKk12B7MXuiD/2
-         PszmR7cXJ9zKl2fN9czFCmAUzN0Ikf8Xo3+WJX7iv4zK+62WePafvMH/oBN7CdvSYW
-         WaFQBJlSxZd+d0KpvguRnulIGwaEwmfu5lT/e5eFyr2lg9H9ruCj/Z4ALXI324RIkO
-         xYHr4B+i/uSXjw5LALiCEo6e6xbwap4czZ0hdOcQrlc8DC1X5nRo6lNgyKWpOslbVX
-         sOuxVsP7Npc8wsEa+Qa3Y1AYvPNj30FQ/3cWoc6OBtlhGqgbcIrlYEPRjzltoHrRk4
-         G3h3xwkOIhiGA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 83057E737ED;
-        Fri, 10 Jun 2022 02:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Jun 2022 22:45:17 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F561E0AD6;
+        Thu,  9 Jun 2022 19:45:15 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id c196so22698698pfb.1;
+        Thu, 09 Jun 2022 19:45:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wD58Q0nVdN+lpK7XOvbDvW4lZ7h1rqEWk+skYGgOvJ0=;
+        b=Y6A0K30lWxEicLPPmjfvigg4Z03uPa39KfSU4jwd5vx9b6x5HxdPlyyVwybkBiEqAQ
+         Q15JzwoiSLcUKwmQqfQZLOkbHx/bvsG8q4SQ8dnhpsKngiFuu+nYfYjMZ833CCyEKYQ3
+         ztpR4i6TcGQUIE04Cq3wSu0pyDOglJGCx/URJroH+yN+0OWdOj7YUB99S07kecNm+T+g
+         4bllY4ycfzaVRA7UJyChYPED0DNusFEaXz4h1vP61YO/M9cxKQvuTojmGDS6I4WOlYll
+         qgjVIfP0PHaKlStMD0rk8R34u2rMEgjY54g2rkFPYv5zx6TbRkXI1gbkW6+ipw/bPz4t
+         NhOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wD58Q0nVdN+lpK7XOvbDvW4lZ7h1rqEWk+skYGgOvJ0=;
+        b=yH3w87WQsDUYDf3L+HyYxPp5dZaAc/NsmBcs3mFn8NaSFtSKtNi9Jl5NfkgJz9rS/2
+         GrHmU2MK4Shbw8Cxr5qcCWAogxGckLXouN5/4ss5G9/Bz6nSyWK0njWOhJ7lJVWBBWcf
+         JsgmAUd1M486apdSxgxKuPS5KBhUBG7PZqmnW+4Jh2Yz1D9DHatw6ul8coHrwFV7gexD
+         iFr+8erJqNEezxwdXOEmXw/ZLvRRCrsB27fYx0R8B8kVoTmKHmF91HxtEf226wvNoYEa
+         UAOaMT8j9yruFyNkgpuIAhWqO9wtrVi3rFPDEt8iigNrv+WN0O4+ztDIheVCRN9Hn55w
+         hjrA==
+X-Gm-Message-State: AOAM532PvU49A6TCZaQqYCNN+7jdT0kSf07P9YnGGFvNLZIOOjGU+g1I
+        Z471de+e2Tb5h1F0FrZi+Y4=
+X-Google-Smtp-Source: ABdhPJzXoeE6YpY5U1nxIZxvEZy9G6CyhdPsDVTXr9N4njk0dTSSPoL3DwikxvApkTiURMuoC0DoBQ==
+X-Received: by 2002:aa7:9e9c:0:b0:51b:e1b8:271c with SMTP id p28-20020aa79e9c000000b0051be1b8271cmr36159630pfq.73.1654829114947;
+        Thu, 09 Jun 2022 19:45:14 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id jg15-20020a17090326cf00b001640594376dsm17562244plb.183.2022.06.09.19.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 19:45:14 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     mhocko@kernel.org, roman.gushchin@linux.dev
+Cc:     hannes@cmpxchg.org, shakeelb@google.com, akpm@linux-foundation.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
+Subject: [PATCH] mm: memcontrol: reference to tools/cgroup/memcg_slabinfo.py
+Date:   Fri, 10 Jun 2022 02:44:52 +0000
+Message-Id: <20220610024451.744135-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 00/21] platform/chrome: Kunit tests and refactor for
- cros_ec_query_all()
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165482881753.28809.12318333795331235852.git-patchwork-notify@kernel.org>
-Date:   Fri, 10 Jun 2022 02:40:17 +0000
-References: <20220609084957.3684698-1-tzungbi@kernel.org>
-In-Reply-To: <20220609084957.3684698-1-tzungbi@kernel.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-This series was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+There is no slabinfo.py in tools/cgroup, but has memcg_slabinfo.py instead.
 
-On Thu,  9 Jun 2022 08:49:36 +0000 you wrote:
-> The series adds Kunit tests, refactors, and clean-ups for cros_ec_query_all().
-> 
-> Tzung-Bi Shih (21):
->   platform/chrome: cros_ec_commands: fix compile errors
-> -> Fixes compile errors when including cros_ec_commands.h.
-> 
->   platform/chrome: cros_ec_proto: add Kunit tests for
->     cros_ec_query_all()
-> -> Adds Kunit tests for cros_ec_query_all().  They are baseline tests
->    for the following refactor patches.  They are designed to pass current
->    code.
-> 
-> [...]
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ mm/memcontrol.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Here is the summary with links:
-  - [v4,01/21] platform/chrome: cros_ec_commands: fix compile errors
-    https://git.kernel.org/chrome-platform/c/ea7f0f777d28
-  - [v4,02/21] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
-    https://git.kernel.org/chrome-platform/c/b99eb596efbd
-  - [v4,03/21] platform/chrome: use macros for passthru indexes
-    https://git.kernel.org/chrome-platform/c/3db0c9e5de7b
-  - [v4,04/21] platform/chrome: cros_ec_proto: assign buffer size from protocol info
-    https://git.kernel.org/chrome-platform/c/e796c0c4b1ad
-  - [v4,05/21] platform/chrome: cros_ec_proto: remove redundant NULL check
-    https://git.kernel.org/chrome-platform/c/8e3991610ba5
-  - [v4,06/21] platform/chrome: cros_ec_proto: use cros_ec_map_error()
-    https://git.kernel.org/chrome-platform/c/93bea2faed63
-  - [v4,07/21] platform/chrome: cros_ec_proto: separate cros_ec_get_proto_info()
-    https://git.kernel.org/chrome-platform/c/b4d0836e8160
-  - [v4,08/21] platform/chrome: cros_ec_proto: add Kunit tests for getting proto info
-    https://git.kernel.org/chrome-platform/c/3e97581ed9a2
-  - [v4,09/21] platform/chrome: cros_ec_proto: handle empty payload in getting proto info
-    https://git.kernel.org/chrome-platform/c/878c36f6caa4
-  - [v4,10/21] platform/chrome: cros_ec_proto: separate cros_ec_get_proto_info_legacy()
-    https://git.kernel.org/chrome-platform/c/a88f79666d14
-  - [v4,11/21] platform/chrome: cros_ec_proto: add Kunit test for getting legacy info
-    https://git.kernel.org/chrome-platform/c/cce5d551809c
-  - [v4,12/21] platform/chrome: cros_ec_proto: handle empty payload in getting info legacy
-    https://git.kernel.org/chrome-platform/c/d394ab5c062a
-  - [v4,13/21] platform/chrome: cros_ec_proto: don't show MKBP version if unsupported
-    https://git.kernel.org/chrome-platform/c/b36f0643ff14
-  - [v4,14/21] platform/chrome: cros_ec_proto: return 0 on getting cmd mask success
-    https://git.kernel.org/chrome-platform/c/f91183aa459a
-  - [v4,15/21] platform/chrome: cros_ec_proto: add Kunit test for getting cmd mask error
-    https://git.kernel.org/chrome-platform/c/a8f77c63baec
-  - [v4,16/21] platform/chrome: cros_ec_proto: check `msg->result` in getting cmd mask
-    https://git.kernel.org/chrome-platform/c/ec5134899335
-  - [v4,17/21] platform/chrome: cros_ec_proto: add Kunit tests for getting cmd mask
-    https://git.kernel.org/chrome-platform/c/8120febafccb
-  - [v4,18/21] platform/chrome: cros_ec_proto: handle empty payload in getting cmd mask
-    https://git.kernel.org/chrome-platform/c/aac29b04dc3f
-  - [v4,19/21] platform/chrome: cros_ec_proto: return 0 on getting wake mask success
-    https://git.kernel.org/chrome-platform/c/d65da5f9bb0a
-  - [v4,20/21] platform/chrome: cros_ec_proto: add Kunit test for getting wake mask
-    https://git.kernel.org/chrome-platform/c/e43772294246
-  - [v4,21/21] platform/chrome: cros_ec_proto: handle empty payload in getting wake mask
-    https://git.kernel.org/chrome-platform/c/cfed691b80dc
-
-You are awesome, thank you!
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index dfbc84313745..ca714699a8e9 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -4820,7 +4820,7 @@ static int mem_cgroup_slab_show(struct seq_file *m, void *p)
+ {
+ 	/*
+ 	 * Deprecated.
+-	 * Please, take a look at tools/cgroup/slabinfo.py .
++	 * Please, take a look at tools/cgroup/memcg_slabinfo.py .
+ 	 */
+ 	return 0;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 

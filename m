@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ADB546758
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B7A546759
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 15:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347183AbiFJN1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 09:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S1348715AbiFJN2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 09:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237423AbiFJN1T (ORCPT
+        with ESMTP id S1345932AbiFJN2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 09:27:19 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772D51F1840;
-        Fri, 10 Jun 2022 06:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=a17rIhmYMXk/cMHXQP0SBvxNj3jz7ib4FGJ0RQdnt8U=;
-        t=1654867638; x=1656077238; b=Q8Kc4OeQu90J4RYpYmf+cj+JE432E0qSBEBe9Ip5yyaQn1D
-        IkmpEXetWeR1s5iEPIvDNohJKeg4mtoXgHQfATg8DAUG4GgCSgEnr9G6WE3XHejCiYcdmnfdRSJYO
-        cMPjGWNrBC1AaHa2DWlqL5NImh7DvL1w1KWAbPU3qfiX4yrJ4nHJ8ArKI4AIVZOylp8oX394UsN71
-        x8V0RsIPe99NueTLJ4zP0ori7xUGriCpbc5n4HYqO2kTOEuAUSz1rxx7lK8OR7NlXynfxu9PgPgKS
-        LrYSN+DZVggtjkn/yp4UnLtww0z/daNlQ+FSuYHUCaCAhwu3ZgoTgM2+PY+EZIzQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nzefI-001VO4-R7;
-        Fri, 10 Jun 2022 15:27:05 +0200
-Message-ID: <f3246ffaf0a15bff2d8a9568ed73967d07dd414b.camel@sipsolutions.net>
-Subject: Re: [PATCH v6 0/2] Remove useless param of devcoredump functions
- and fix bugs
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        briannorris@chromium.org, amitkarwar@gmail.com,
-        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
-        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, rafael@kernel.org
-Date:   Fri, 10 Jun 2022 15:27:03 +0200
-In-Reply-To: <YqNGB5VitXvBWzzp@kroah.com>
-References: <cover.1654569290.git.duoming@zju.edu.cn>
-         <YqNGB5VitXvBWzzp@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Fri, 10 Jun 2022 09:28:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CC7210F93
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 06:28:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C986196E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 13:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC1DBC34114;
+        Fri, 10 Jun 2022 13:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654867687;
+        bh=/huRNf7iDo2vUg30P8tgoQxcn23LPNAS9S4NZiDWXuA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eo8JHQWyICc9bS0qS1ou80vn5R8Ma3EroCcKaiYsM59mbv9hKiLjuTU8TTmKpqgnX
+         HCoywIXquyQ3g1fn8jwg861uqutf3Eu0dmJvrS+gKDiUUEqjlW8BLpuO+w/8FYyLWf
+         XPhC8Df4fGvWk5ngkc/MqAUmfUNaZJiwUt5NrEXM=
+Date:   Fri, 10 Jun 2022 15:28:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shreenidhi Shedi <yesshedi@gmail.com>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Shreenidhi Shedi <sshedi@vmware.com>
+Subject: Re: [PATCH 1/2] char: lp: ensure that index has not exceeded LP_NO
+Message-ID: <YqNG5H+JbNJMeOWq@kroah.com>
+References: <20220603130040.601673-1-sshedi@vmware.com>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603130040.601673-1-sshedi@vmware.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-10 at 15:24 +0200, Greg KH wrote:
-> On Tue, Jun 07, 2022 at 11:26:24AM +0800, Duoming Zhou wrote:
-> > The first patch removes the extra gfp_t param of dev_coredumpv()
-> > and dev_coredumpm().
-> >=20
-> > The second patch fix sleep in atomic context bugs of mwifiex
-> > caused by dev_coredumpv().
-> >=20
-> > Duoming Zhou (2):
-> >   devcoredump: remove the useless gfp_t parameter in dev_coredumpv and
-> >     dev_coredumpm
-> >   mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
->=20
-> Did you forget to cc: everyone on patch 2?
->=20
+On Fri, Jun 03, 2022 at 06:30:39PM +0530, Shreenidhi Shedi wrote:
+> From: Shreenidhi Shedi <sshedi@vmware.com>
+> 
+> After finishing the loop, index value can be equal to LP_NO and lp_table
+> array is of size LP_NO, so this can end up in accessing an out of bound
+> address in lp_register function.
+> 
+> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+> ---
+>  drivers/char/lp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/lp.c b/drivers/char/lp.c
+> index 0e22e3b0a..d474d02b6 100644
+> --- a/drivers/char/lp.c
+> +++ b/drivers/char/lp.c
+> @@ -972,7 +972,7 @@ static void lp_attach(struct parport *port)
+>  			if (port_num[i] == -1)
+>  				break;
+> 
+> -		if (!lp_register(i, port))
+> +		if (i < LP_NO && !lp_register(i, port))
+>  			lp_count++;
 
-Don't think so? I got it, and you're listed there too, afaict.
+How can this ever be needed?  Look at the check further up for the check
+of lp_count which prevents this from every going too large.
 
-That said, it's actually entirely independent from patch 1, and patch 2
-should probably even be Cc stable.
+So how can an address be accessed out of bound here?
 
-johannes
+thanks,
+
+greg k-h

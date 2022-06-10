@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26238546464
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2C9546467
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 12:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346650AbiFJKpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 06:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S1346602AbiFJKqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 06:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346972AbiFJKns (ORCPT
+        with ESMTP id S1348299AbiFJKn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:43:48 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA162533CF;
-        Fri, 10 Jun 2022 03:40:23 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 80A23100003;
-        Fri, 10 Jun 2022 10:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654857622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CPqa3snjp+V3swy+paQVl3SWlOSGmf0pkLwY6FTDI9U=;
-        b=boAs/cHxD1v49A/IVeVtIuEz8fBNz17KEqTSD8TF0pb3tuwqKcx8ieyXiAvkchawghAV6Z
-        PAZwqCV0PZ49VSLYs9l/wEVXJZQbf/mZhMpMTRM/w0eZnFZr0GbP1cCJvU5zhJebNZDtIl
-        kx90AMeV+gMRuniOD3vAbNsbhrjHAf/rHRuYiHs+VQAQSOtjE/Q9DASLesAreXrLPNIXS6
-        rop2qSp/Nok87u1iW2IvGGldHlL9pQzrqPcK8lSQDinIvuQOmGjXzZdUW0MePrVKLB6hPy
-        pGiDY36c8H4pB8JHRoGFI8lNpN6NZ0+wMLtQElyftguowNu+A67z91TE8dBikQ==
-Date:   Fri, 10 Jun 2022 12:40:16 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Peter Korsgaard <peter@korsgaard.com>
-Cc:     "Neeli, Srinivas" <srinivas.neeli@amd.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "sgoud@xilinx.com" <sgoud@xilinx.com>,
-        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
-        "neelisrinivas18@gmail.com" <neelisrinivas18@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git@xilinx.com" <git@xilinx.com>
-Subject: Re: [PATCH V6 2/2] rtc: zynqmp: Add calibration set and get support
-Message-ID: <YqMfkNwAidCpYY1E@mail.local>
-References: <20220609140833.1784738-1-srinivas.neeli@xilinx.com>
- <20220609140833.1784738-2-srinivas.neeli@xilinx.com>
- <87r13x28o4.fsf@dell.be.48ers.dk>
- <YqIJektBvAwOqNkA@mail.local>
- <87mtel287y.fsf@dell.be.48ers.dk>
- <BY5PR12MB40335583AD9D0527DEEFC4E093A69@BY5PR12MB4033.namprd12.prod.outlook.com>
- <87pmjgyghw.fsf@dell.be.48ers.dk>
+        Fri, 10 Jun 2022 06:43:59 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F4AA6A402
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 03:40:33 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 9AE9416A0;
+        Fri, 10 Jun 2022 13:41:24 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 9AE9416A0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1654857684;
+        bh=Uqh7TxAHtqvXlqFqGrBhcGHzOI/WX65SV51LFZPifUQ=;
+        h=From:To:CC:Subject:Date:From;
+        b=YGzacVFN0Nbv4RcRmdiNHQb3HODX57BOgfR/P/oTeWRO0BBhwlmajdZCgl4Y+eAF9
+         n8GbMwcyb2oIaRYNY6ankN8zB3BNfFSfoeIABUaxU4noaovkDXEmj9g62SpIEojAvd
+         zmUhfGpY9NZdRJfg1P34aVDR7rH9jAqyl+62BQvI=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 13:40:32 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        <soc@kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
+Date:   Fri, 10 Jun 2022 13:40:29 +0300
+Message-ID: <20220610104030.28399-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pmjgyghw.fsf@dell.be.48ers.dk>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/2022 12:12:11+0200, Peter Korsgaard wrote:
-> >>>>> "Neeli," == Neeli, Srinivas <srinivas.neeli@amd.com> writes:
-> 
-> Hi,
-> 
->  >> >> Where do you see that? ug1085 rev2.2 still lists:
->  >> >>
->  >> >> Programming Sequences
->  >> >> init rtc
->  >> >> 1. Write the value 0019_8231h into the calibration register, CALIB_WRITE.
->  >> >>
->  >> 
->  >> > This is a very weird value. Last time I had a look, I couldn't find an  >
->  >> explanation for it.
->  >> 
->  >> Agreed. I am not arguing that it is sensible, I just wondered where this new
->  >> value comes from?
->  >> 
->  > This information is missing in our TRM, as per the internal RTC IP
->  > design specification document, the calibration value should be crystal
->  > clock frequency minus one.
->  > For a crystal oscillator of 32.768KHz(0x8000) frequency, the calibration value will be 0x7FFF.
-> 
->  > Will update TRM with the required information.
-> 
-> Ok, great!
-> 
-> Please put this change in a separate commit from the get/set logic.
+The Baikal-T1 APB bus driver correctly handles the deferred probe
+situation, but still pollutes the system log with a misleading error
+message. Let's fix that by using the dev_err_probe() method to print the
+log message in case of the clocks/resets request errors.
 
-I'm not sure it is worth it as it is probably being set (to the wrong
-value) from your device tree anyway and the driver won't forcefully
-change it in that case. The worse that can happen is that your new
-boards will have the correct value.
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
+---
 
+Link: https://lore.kernel.org/lkml/20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Use the dev_err_probe() return value as the return status of the
+  corresponding method. (@Philipp)
+---
+ drivers/bus/bt1-apb.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
+index b25ff941e7c7..63b1b4a76671 100644
+--- a/drivers/bus/bt1-apb.c
++++ b/drivers/bus/bt1-apb.c
+@@ -175,10 +175,9 @@ static int bt1_apb_request_rst(struct bt1_apb *apb)
+ 	int ret;
+ 
+ 	apb->prst = devm_reset_control_get_optional_exclusive(apb->dev, "prst");
+-	if (IS_ERR(apb->prst)) {
+-		dev_warn(apb->dev, "Couldn't get reset control line\n");
+-		return PTR_ERR(apb->prst);
+-	}
++	if (IS_ERR(apb->prst))
++		return dev_err_probe(apb->dev, PTR_ERR(apb->prst),
++				     "Couldn't get reset control line\n");
+ 
+ 	ret = reset_control_deassert(apb->prst);
+ 	if (ret)
+@@ -199,10 +198,9 @@ static int bt1_apb_request_clk(struct bt1_apb *apb)
+ 	int ret;
+ 
+ 	apb->pclk = devm_clk_get(apb->dev, "pclk");
+-	if (IS_ERR(apb->pclk)) {
+-		dev_err(apb->dev, "Couldn't get APB clock descriptor\n");
+-		return PTR_ERR(apb->pclk);
+-	}
++	if (IS_ERR(apb->pclk))
++		return dev_err_probe(apb->dev, PTR_ERR(apb->pclk),
++				     "Couldn't get APB clock descriptor\n");
+ 
+ 	ret = clk_prepare_enable(apb->pclk);
+ 	if (ret) {
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+

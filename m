@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0A5546CB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF5E546CB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 20:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350284AbiFJSsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 14:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S1347716AbiFJSsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 14:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350143AbiFJSsL (ORCPT
+        with ESMTP id S1346230AbiFJSsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:48:11 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB2B13F5A;
-        Fri, 10 Jun 2022 11:48:10 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id r82so61392ybc.13;
-        Fri, 10 Jun 2022 11:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=mdwxCbMVnUflD8KqY3kvmp5JENjUtJq9naYDesB5/DY=;
-        b=MvjwXoFsiuuQnlfXAYcYyza3/fwOC6AA64ivCYSLtbU8kmqA16SxwFNwMqdW87Ww6/
-         1H9KvCXqdxg3RX6GUQ9gNtceejYMUnkOeVoRXbQlnSANnag9/Pouk1A9nL5rEDnor1Ds
-         AR9IwXVIhSEGJccp1EHgGrGEGSjbyDuaH5rxMVoTxZE2jFLqd5Rpmn20yZ/2aWnVxOMN
-         YpXzxTl743OD5nlwTCIa3/tTA8IvPZO/3Wp8/7+F9B/fUWrKqNbXq5vBDO0+ZLFrOCF5
-         VFlV820CAyUgTCQc0vqgLTDFhY7PczTzabanhhUT8dw6zEDEWGdzQoDsyeJBhoj1/g4O
-         keKw==
+        Fri, 10 Jun 2022 14:48:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1B6513F5A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654886885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cQJvEeLF3FaPSVIqqkc4TorYc9fXCT+vm0vr/Ev8Wck=;
+        b=Me8924kzA6/bTKUV9p+6PKXxilgKHvunYSMDTghFrsO5mwYgx2XzL7EroRuiOFzSz7xbJk
+        mO/ImtCR+LiF4NCOhfgyfEPaU28dOzFJptn/RuwYrGhzG1l1aB4k2BuSEMvqWERqlB0WFe
+        JsDJmEOGoYU7xOlGb51d6gWqkD6GOSM=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-eoP5urhqO4m4qqpqjOAzAg-1; Fri, 10 Jun 2022 14:48:04 -0400
+X-MC-Unique: eoP5urhqO4m4qqpqjOAzAg-1
+Received: by mail-ed1-f72.google.com with SMTP id g7-20020a056402424700b0042dee9d11d0so54054edb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 11:48:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=mdwxCbMVnUflD8KqY3kvmp5JENjUtJq9naYDesB5/DY=;
-        b=lBThHXOxzSf8SOSZqmn+cOZVNTTyDNeLKXZ89Nh3Zy7wmjTaLKS+JSZtfSfXRPYOAG
-         gq9b5Zg2w5dLHQoBE/nan6AQqrpZdMqTeSq7r1i0q1W9VWhUSci75rJZ+8UkJh1p45CJ
-         LFcqiDdM0iG4UYOD732MkX9LIE/e3D1hhYHZWzzNRHBxuzw2QuY79WwWH7lKhaoa3LIh
-         hhwqqCsWJ9SIp6jPC3rMYTJ7MX6MV20k9lXSyMeoLiFyfEICzjlT5vhOoeUuWubgV0w3
-         2s4bzGXAotxzcsC5w0PbQ6tXlxhi8BOfAnYClWSypUZ4pClegg4YBhqjH8zrKrEoK344
-         ifvA==
-X-Gm-Message-State: AOAM532Kp1xhVbgmLDDOEASFqbiHRJ3i6VN8QrDGzj+wgBzLOwdJ0dTQ
-        QZtmfFk+I+a68+/gU6yJRe3llPRmPOcmG2/LxqxlCT6PMcI=
-X-Google-Smtp-Source: ABdhPJwO2Yi8dQo4+Rvzo1c8dwfE1RnzUaj5Xk434lx3wveFj8YtiQSWwQ5kjzjpPjEzQcqR9PjrPXQbm0DFwhjR7Ks=
-X-Received: by 2002:a25:76d5:0:b0:663:ad77:8d48 with SMTP id
- r204-20020a2576d5000000b00663ad778d48mr22667425ybc.633.1654886889941; Fri, 10
- Jun 2022 11:48:09 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cQJvEeLF3FaPSVIqqkc4TorYc9fXCT+vm0vr/Ev8Wck=;
+        b=of1ae8XYdTtuyNohFFgolsFboxVWGdYt3uE51y5sXWo7ygmODRJmSYtaZ2q/NWJ9mw
+         cH7aANbalyYo6oyz1UrtyTo4Jb5XH64KvHRnH6Gewj6wgR+fJ2Hr6zgc5WHDyGtvroIV
+         6eQBYHG4tyEIiwP3F9FKJ5eRFwVuPpdzxfMKwRK1pZUcCJqufGNNEojCHiL1m6URKp0b
+         O+3gy7hsNWN9VVX/tIHJHSYnwx2CS2QO0HCLe+xQ54axg4mVrFB/C6Wm2R1JVbycfJqz
+         tu5smndH/p35CG9dgDKsTOeevTcrjsLVOcHDljELCjCPZGpndb1QS4It8OmUC9rq/l1l
+         FOLA==
+X-Gm-Message-State: AOAM531N+Malh3R2T9wB/gDTL69VMe2MtqF8Sadzi9rT/QE6FpjpeB4o
+        3PzSBCNo131syonbNUaAmNwQ9nobGDalqkcg937/r7AePv8uhDOLztCzjb2PqBUCON9sd5Jl/ou
+        xgWShU3bwFYuZ+kKNKOixNUDh
+X-Received: by 2002:a05:6402:5191:b0:42f:b303:ed61 with SMTP id q17-20020a056402519100b0042fb303ed61mr41996444edd.233.1654886882375;
+        Fri, 10 Jun 2022 11:48:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx7lXvW4sKC5uS5pmUSAk6B7E3AsjomPuvd4DXesgz0gbp4+TrP/ck0tZ0CAi4KKOttG5GVkA==
+X-Received: by 2002:a05:6402:5191:b0:42f:b303:ed61 with SMTP id q17-20020a056402519100b0042fb303ed61mr41996424edd.233.1654886882160;
+        Fri, 10 Jun 2022 11:48:02 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
+        by smtp.gmail.com with ESMTPSA id e20-20020a056402149400b0042bd75c53casm17024484edv.83.2022.06.10.11.48.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 11:48:01 -0700 (PDT)
+Message-ID: <01b424c3-fd5b-c60f-5b1d-6eb76fe732ea@redhat.com>
+Date:   Fri, 10 Jun 2022 20:48:01 +0200
 MIME-Version: 1.0
-From:   =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
-Date:   Fri, 10 Jun 2022 20:47:58 +0200
-Message-ID: <CAJZ5v0j0YHi9XURA8pU=+zAyCB7kDFCJQ9G=PhfcVMygyWaV=A@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.19-rc2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] [PATCH] platform/x86/intel: Fix pmt_crashlog array
+ reference
+Content-Language: en-US
+To:     David Arcari <darcari@redhat.com>,
+        platform-driver-x86@vger.kernel.org
+Cc:     "David E. Box" <david.e.box@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220526203140.339120-1-darcari@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220526203140.339120-1-darcari@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi,
 
-Please pull from the tag
+On 5/26/22 22:31, David Arcari wrote:
+> The probe function pmt_crashlog_probe() may incorrectly reference
+> the 'priv->entry array' as it uses 'i' to reference the array instead
+> of 'priv->num_entries' as it should.  This is similar to the problem
+> that was addressed in pmt_telemetry_probe via commit 2cdfa0c20d58
+> ("platform/x86/intel: Fix 'rmmod pmt_telemetry' panic").
+> 
+> Cc: "David E. Box" <david.e.box@linux.intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: David Arcari <darcari@redhat.com>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.19-rc2
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-with top-most commit 67e59f8d019fb097f35c82533cc9b27bb392e5b1
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
- Merge branch 'pm-sysoff'
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-on top of commit f2906aa863381afb0015a9eb7fefad885d4e5a56
+Regards,
 
- Linux 5.19-rc1
+Hans
 
-to receive power management fixes for 5.19-rc2.
+> ---
+>  drivers/platform/x86/intel/pmt/crashlog.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/pmt/crashlog.c b/drivers/platform/x86/intel/pmt/crashlog.c
+> index 34daf9df168b..ace1239bc0a0 100644
+> --- a/drivers/platform/x86/intel/pmt/crashlog.c
+> +++ b/drivers/platform/x86/intel/pmt/crashlog.c
+> @@ -282,7 +282,7 @@ static int pmt_crashlog_probe(struct auxiliary_device *auxdev,
+>  	auxiliary_set_drvdata(auxdev, priv);
+>  
+>  	for (i = 0; i < intel_vsec_dev->num_resources; i++) {
+> -		struct intel_pmt_entry *entry = &priv->entry[i].entry;
+> +		struct intel_pmt_entry *entry = &priv->entry[priv->num_entries].entry;
+>  
+>  		ret = intel_pmt_dev_create(entry, &pmt_crashlog_ns, intel_vsec_dev, i);
+>  		if (ret < 0)
 
-These fix an intel_idle issue introduced during the 5.16 development
-cycle and two recent regressions in the system reboot/poweroff code.
-
-Specifics:
-
- - Fix CPUIDLE_FLAG_IRQ_ENABLE handling in intel_idle (Peter Zijlstra).
-
- - Allow all platforms to use the global poweroff handler and make
-   non-syscall poweroff code paths work again (Dmitry Osipenko).
-
-Thanks!
-
-
----------------
-
-Dmitry Osipenko (2):
-      kernel/reboot: Use static handler for register_platform_power_off()
-      kernel/reboot: Fix powering off using a non-syscall code paths
-
-Peter Zijlstra (1):
-      cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-
----------------
-
- drivers/idle/intel_idle.c | 32 +++++++++++++----
- kernel/reboot.c           | 87 +++++++++++++++++++++++++++++++++--------------
- 2 files changed, 87 insertions(+), 32 deletions(-)

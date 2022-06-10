@@ -2,125 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC6F54659D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE5854659F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Jun 2022 13:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242966AbiFJLeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 07:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
+        id S1348445AbiFJLeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 07:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349311AbiFJLdp (ORCPT
+        with ESMTP id S239725AbiFJLeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 07:33:45 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD466D971
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654860825; x=1686396825;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kf7/+6h+TKchnxu3qzFXkCkggkGUpmXXxa1pbt5obz4=;
-  b=GUCtUTHTRTCw+warPjtRW/fwzGr4BxXt8AjxR6KKHRb4+Wg2sAIfGbdK
-   tf89fzHGxb1oDKiCtmXJ/pkkjtDNN329GLnetsxVaqyDiXAf+4qYvCykL
-   JlnkN1uopitMZrXP5jTBtT1XTxi/CmBF3J9RrUvo5+wjoZClRPoaurYkw
-   dVdYmYtRgY9w2GL3qccyedzcYkzovZhroGxsT8Lx1VMiLde54dM2US3p7
-   aE95Y97NXJ4BEJWnwPt4vpJoJjMt7jdVwVbtegZ52cLU8H0gN5OXqPsJS
-   rkG0g6nq7l95IPYRLb4xQfTuPYhFsG9KBK4A1WEDarDdrtcBHqNusO+gD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275134394"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="275134394"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:33:44 -0700
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="616446336"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.56.178])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:33:42 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] perf script: Add some missing event dumps
-Date:   Fri, 10 Jun 2022 14:33:16 +0300
-Message-Id: <20220610113316.6682-6-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220610113316.6682-1-adrian.hunter@intel.com>
-References: <20220610113316.6682-1-adrian.hunter@intel.com>
+        Fri, 10 Jun 2022 07:34:15 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82476EB31
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:34:13 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id z17so8928964wmi.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 04:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+rY4WAh4Z/g9RXMWfmzOnjp3/fpy58yyzKY2ezEUe3w=;
+        b=yasOb4+fOBN2YPRJwEDj2ZaIucLc/JDD+7cGR9k6PM9bNfEB0cvmA4tAUtoFsDA8Zs
+         DDWXbli5ew/mEHSoaWk/1xOaLVU+ov72PkdQ1AJedEzd7dP5pZAEbW6HY1D47pJbpypC
+         lIvxWbC1Emfpf1qGogjgXCu9ZmbPSVpOCsnQxM2dUaSMEpy3BbVogWKTCJWryMgtgaFF
+         9Dy+1Q9alroZnlrtcBvRjYQbiyONu/7RGZXaN9NmwqqklwfRT7LCls2ahhjG+aN3s2AC
+         L+Al38pEQY5sIBvwW1KNpU3W48rykfFz6Iq1VfefpMJcXhxO6uxtFs7svFzZHz128lV7
+         aJ+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+rY4WAh4Z/g9RXMWfmzOnjp3/fpy58yyzKY2ezEUe3w=;
+        b=XaOK1HfUeW2dhep9/nvKKbcCxagHdwMZWBYBVlCuCCmPGrPkAIVQyW0AQvNMln8PTL
+         e/wm+TX9wEYJpsYl+BA11f+OMlNumh4mlD/SBmUs+sBdNE13tcJY2H0lRjA+e4QxODDM
+         6efz92QlG1I5Ml/Xn+8uauN2aZEbtR+zkmkfDN1YtMSFaPAS7YrwpdxgXjNZuOQAcBBU
+         jJO7S+JRdlN0GmeHgD068POT1z6b+LNG6WedwR2OlRDx4bjDZ39P1aytSahs8wPJ8zK2
+         JUWWUSc5vWWp3/KZsbfwZbTiv3LOKp7tPjwDxCtIFDWDDOrWbMVC34cwkszejhcS3lU7
+         SeqA==
+X-Gm-Message-State: AOAM532/yS6RR8hV403D4eYgcLV2Iw0sOlv4VwVvfR3SqDoQprB3hrPj
+        XcWEU+UrOgNcIz0twBXNchIDRj5gVvHMo6xZMW0/5w==
+X-Google-Smtp-Source: ABdhPJzsylhjboW+YxML3OizLCPVAQ/+/Io022u1dtE5+iGWeWdxRjb7eJs0BUYmo+3ob/154dyzX8CeYr8R/rBhXxM=
+X-Received: by 2002:a7b:c10d:0:b0:39c:4a17:1e90 with SMTP id
+ w13-20020a7bc10d000000b0039c4a171e90mr8159903wmi.108.1654860852260; Fri, 10
+ Jun 2022 04:34:12 -0700 (PDT)
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220603004331.1523888-1-seanjc@google.com> <21570ac1-e684-7983-be00-ba8b3f43a9ee@redhat.com>
+ <CAAhSdy0_50KshS1rAcOjtFBUu=R7a0uXYa76vNibD_n7s=q6XA@mail.gmail.com>
+ <CAAhSdy1N9vwX1aXkdVEvO=MLV7TEWKMB2jxpNNfzT2LUQ-Q01A@mail.gmail.com>
+ <YqIKYOtQTvrGpmPV@google.com> <YqKRrK7SwO0lz/6e@google.com>
+In-Reply-To: <YqKRrK7SwO0lz/6e@google.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 10 Jun 2022 17:03:57 +0530
+Message-ID: <CAAhSdy1-2JAWk=2cj+=NuQxqE-T0NNe-o3kYT=114qiHCWq=Dg@mail.gmail.com>
+Subject: Re: [PATCH v2 000/144] KVM: selftests: Overhaul APIs, purge VCPU_ID
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        KVM General <kvm@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the -D option is used, the details of thread-map, cpu-map and
-event-update events are not currently dumped. Add prints so that they are.
+On Fri, Jun 10, 2022 at 6:04 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Jun 09, 2022, Sean Christopherson wrote:
+> > On Thu, Jun 09, 2022, Anup Patel wrote:
+> > > On Wed, Jun 8, 2022 at 9:26 PM Anup Patel <anup@brainfault.org> wrote:
+> > > >
+> > > > On Tue, Jun 7, 2022 at 8:57 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > > > >
+> > > > > Marc, Christian, Anup, can you please give this a go?
+> > > >
+> > > > Sure, I will try this series.
+> > >
+> > > I tried to apply this series on top of kvm/next and kvm/queue but
+> > > I always get conflicts. It seems this series is dependent on other
+> > > in-flight patches.
+> >
+> > Hrm, that's odd, it's based directly on kvm/queue, commit 55371f1d0c01 ("KVM: ...).
+>
+> Duh, Paolo updated kvm/queue.  Where's Captain Obvious when you need him...
+>
+> > > Is there a branch somewhere in a public repo ?
+> >
+> > https://github.com/sean-jc/linux/tree/x86/selftests_overhaul
+>
+> I pushed a new version that's based on the current kvm/queue, commit 5e9402ac128b.
+> arm and x86 look good (though I've yet to test on AMD).
+>
 
-Example:
+I have tested this for KVM RISC-V and it works fine.
 
- # perf record --kcore sleep 0.1
- [ perf record: Woken up 1 times to write data ]
- [ perf record: Captured and wrote 0.021 MB perf.data (7 samples) ]
- # perf script -D | grep 'THREAD\|CPU'
- 0 0x4950 [0x28]: PERF_RECORD_THREAD_MAP nr: 1 thread: 35116
- 0 0x4978 [0x20]: PERF_RECORD_CPU_MAP: 0-7
- # perf script -D | grep -A4 'UPDATE'
- 0 0x4920 [0x30]: PERF_RECORD_EVENT_UPDATE
- ... id:    147
- ... 0-7
+Tested-by: Anup Patel <anup@brainfault.org>
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/builtin-script.c | 6 ++++++
- tools/perf/util/header.c    | 3 +++
- 2 files changed, 9 insertions(+)
-
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index c689054002cc..7cf21ab16f4f 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -3633,6 +3633,9 @@ int process_thread_map_event(struct perf_session *session,
- 	struct perf_tool *tool = session->tool;
- 	struct perf_script *script = container_of(tool, struct perf_script, tool);
- 
-+	if (dump_trace)
-+		perf_event__fprintf_thread_map(event, stdout);
-+
- 	if (script->threads) {
- 		pr_warning("Extra thread map event, ignoring.\n");
- 		return 0;
-@@ -3652,6 +3655,9 @@ int process_cpu_map_event(struct perf_session *session,
- 	struct perf_tool *tool = session->tool;
- 	struct perf_script *script = container_of(tool, struct perf_script, tool);
- 
-+	if (dump_trace)
-+		perf_event__fprintf_cpu_map(event, stdout);
-+
- 	if (script->cpus) {
- 		pr_warning("Extra cpu map event, ignoring.\n");
- 		return 0;
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index 53332da100e8..de5b7a023e9e 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -4349,6 +4349,9 @@ int perf_event__process_event_update(struct perf_tool *tool __maybe_unused,
- 	struct evsel *evsel;
- 	struct perf_cpu_map *map;
- 
-+	if (dump_trace)
-+		perf_event__fprintf_event_update(event, stdout);
-+
- 	if (!pevlist || *pevlist == NULL)
- 		return -EINVAL;
- 
--- 
-2.25.1
-
+Regards,
+Anup

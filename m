@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EDD5472C5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 10:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AE15472C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 10:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbiFKIJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 04:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S231574AbiFKIKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 04:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiFKIJM (ORCPT
+        with ESMTP id S229661AbiFKIKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 04:09:12 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5538255A5
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 01:09:11 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id f8so1064380plo.9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 01:09:11 -0700 (PDT)
+        Sat, 11 Jun 2022 04:10:46 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE641167
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 01:10:45 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id o6so1092943plg.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 01:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/1LvpVCwoMjQ4GHgdo6SEb9cA+cNoWEGxjfe3uUOYS0=;
-        b=mzP4XvuJ28oxNoPHs5SCRoPybYgIgKtkqjtNDKwcPUI4koqh8x6njuDHmO9Tu1E8mk
-         ktFs4YldkEIPbLAG0/w3orCA1ccjbzdbHIZKtnaJB9kIBSy6EEggbkhAsIIlBtH3zdTZ
-         kDtW3fUZXUyKudRgquBdjCLBjpI1qgKODMpwJ8OR5y0w+1nm5elkA4CA0rYOfjpb7NXR
-         83Yt9OpUJRSoNdjriDc447i5unubf7OcZ6i7lWg5WLCNhKYDNcRrLOxnzjfbo3nZ6qf2
-         FJ28GPrRH0E6SNPPNxBHXREMDPEhfPpcaaLQUNXeI7CKWVc1UGtM9eCeRo6RX96KVpEE
-         a8DA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Xdmi5qWYOhZsQOyZGBfH+vQOujfDSnvCoY7JRpLmrLc=;
+        b=S70MPRg4USexJF7NybfHc3jyQq+dGlkjkSxNHKeWapEKUFlGiK2O02DDzHrVInETJm
+         lVisnlj2qXewebxWFeMTXcwFiPUd2shNlvLyMaXywGnBxHVPFeAX/KkiySM6vxO1HAD1
+         Bea8MT1Mt3tMaUGvr9A8C6AUYepnxefRuUPcdi64qEIr3gXKajA09zV6SCAJlfcLKOfR
+         GS6Qkh0XxbTch4KOGZEsL9UHBdSevgAw9QzV88XHCACzFV8yAchmxD3zmeHQjkgnTwae
+         1aoxsSsjexrEd1r98HQhCklGg7c6uxr/J32GS50HMH4LT8eM0nOsDKeW6SU48MFacG9S
+         RhnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/1LvpVCwoMjQ4GHgdo6SEb9cA+cNoWEGxjfe3uUOYS0=;
-        b=klQ8wQwa/8EjidkMfnaeOiwghF4TV1n45n7+lUSjaqKEtvh1Gy6jmctDRef2eKiTHe
-         gjp8cXYA6p1xtFQK1lngQle1zVwfIkxh2NlQ0ddhkCTzSyPuCfheeEpsIZUsq5upQL4z
-         qyt9OhOzNs812TZwJVbL2ZujZG3PaZGZyaoXRmYOD5GTEf9IDCmg4l4Zgh304gpHqw3p
-         bPwDlpdX4suvOv7sGKnF5WYKSWvyRw2TT2DxmJLI0MqiskV5mUnI2bWQ7VkAwS2J6CJ/
-         w6rBCAArup15rsL2CyusHr7M1wY3aFhSkfqDJy75h3OeG3OrvqIVq4t6YU3ppI9Zktde
-         zmOg==
-X-Gm-Message-State: AOAM530xe2PC4MeAYKSD6WminpLpDXcVwYmrpJbtw16R3SwEELaOOzjn
-        UkjarlxwYbzxDoX2dCmq65uYRh7phE8UZQ==
-X-Google-Smtp-Source: ABdhPJynEWC2B9PcNZCxAAHQ8EbVX/U9IhfUnvhvvE0LKddC7ET+zm2QRfJPVpq+DJLBh/9uewyCNQ==
-X-Received: by 2002:a17:903:2c1:b0:158:f9d0:839c with SMTP id s1-20020a17090302c100b00158f9d0839cmr47937568plk.118.1654934950785;
-        Sat, 11 Jun 2022 01:09:10 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id q3-20020a170902edc300b00161ac982b52sm970914plk.95.2022.06.11.01.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 01:09:10 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     bhutchings@solarflare.com, decot@googlers.com, info@metux.net,
-        josh@joshtriplett.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/cpu_rmap: do *_get before using cpu_rmap
-Date:   Sat, 11 Jun 2022 16:09:04 +0800
-Message-Id: <20220611080904.92120-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Xdmi5qWYOhZsQOyZGBfH+vQOujfDSnvCoY7JRpLmrLc=;
+        b=XTDOzSUSmImTDzCKksV+GEZ2wtOG4FMEsGrqYEym5Uolb3Hd6ipZpPAYuyr3/Y7vaz
+         t1+qhRgoBQFREkq1q9kUQEnFmi5BPumyUkFqVZWupNvkTXBb8kbnOOUzfLKeVrKyoRQK
+         d1D+TiTVGMjXLti9DkjfNJ0I07AQBNQeGGurYBmDLn9QGUm33M8xG5Yxg0rqcJE0HyAa
+         UdeZ6pR6LSV0L8+N4k80VpntyXqVh2hiGGtkvnud8jE4xHYqtVZ6zshzkb1PeGmQV5pF
+         VBPC5K/ceOzBkGoaDXgMl4xYC5q9VjlpeNIuiO01qj+waRupu0ZXvDH6Czhwdn0NrdEU
+         4Hfw==
+X-Gm-Message-State: AOAM531wschFTt88A28Ym9YJyO802DC7ho2FqIVyGb8/i25tHNSWZDU0
+        msIzVh2187rDTCRjPKZhEVS2Yo0r3LioFsediuI=
+X-Google-Smtp-Source: ABdhPJy1NmMPAENWSPH386W1qI/1ypKm6XffHtbdO55ll12985KowgSOsXsOQoP3oM9uBc9y4uMPJ7+rmDBoGbJhUFE=
+X-Received: by 2002:a17:902:db06:b0:163:e89d:622c with SMTP id
+ m6-20020a170902db0600b00163e89d622cmr48704426plx.143.1654935044245; Sat, 11
+ Jun 2022 01:10:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ac4:a2c3:0:b0:4cb:a952:1459 with HTTP; Sat, 11 Jun 2022
+ 01:10:43 -0700 (PDT)
+Reply-To: giannini_amadeo@outlook.com
+From:   Bank of America <1001kuikui163@gmail.com>
+Date:   Sat, 11 Jun 2022 09:10:43 +0100
+Message-ID: <CAPK65Xmem9ebbBemug_c4UZogxhwaRpB9EkQMFo4=h+Yc5s0Ow@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:62a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [1001kuikui163[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [1001kuikui163[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's ok in irq_cpu_rmap_add:
-
-glue->rmap = rmap;
-cpu_rmap_get(rmap);
-
-however, it's logically better to do *_get before passing the var..
-
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- lib/cpu_rmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/lib/cpu_rmap.c b/lib/cpu_rmap.c
-index f08d9c56f712..590eb544f0d8 100644
---- a/lib/cpu_rmap.c
-+++ b/lib/cpu_rmap.c
-@@ -291,8 +291,8 @@ int irq_cpu_rmap_add(struct cpu_rmap *rmap, int irq)
- 		return -ENOMEM;
- 	glue->notify.notify = irq_cpu_rmap_notify;
- 	glue->notify.release = irq_cpu_rmap_release;
--	glue->rmap = rmap;
- 	cpu_rmap_get(rmap);
-+	glue->rmap = rmap;
- 	glue->index = cpu_rmap_add(rmap, glue);
- 	rc = irq_set_affinity_notifier(irq, &glue->notify);
- 	if (rc) {
 -- 
-2.20.1
+Hello loan applicant, do you need a loan? How much is the loan money?
+And the duration period? Contact Amadeo Giannini, the loan director of
+Bank of America a Private Money Lender and a corporate finance for
+real estate and any kinds of business financing. I also offer Loans to
+individuals, Firms and corporate bodies at 3% interest rate per annual
+and 0.5% interest rate monthly base, loan terms determinant.
+INFORMATION NEEDED ARE: Full Name: Location: Age: Sex: Country:
+Contact Phone numbers: Amount Needed/Duration:
 
+Best regards,
+Amadeo Giannini
+Bank of America
+Website: www.bankofamerica.com

@@ -2,118 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0A25471AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 05:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3145471AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 05:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234208AbiFKDqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 23:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S1347546AbiFKDuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 23:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiFKDqd (ORCPT
+        with ESMTP id S235407AbiFKDuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 23:46:33 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997DB26F1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 20:46:32 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n18so797623plg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 20:46:32 -0700 (PDT)
+        Fri, 10 Jun 2022 23:50:20 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3441439A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 20:50:20 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o33-20020a17090a0a2400b001ea806e48c6so1088724pjo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 20:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4IrN97Z1/unmod/0ZIgRREwNK9Dy4GlFmKlR4IOlB2k=;
-        b=hb4l4z3HG1CVMmqPwl4/D1F8761cs2tTehUNvl/L8uMyrLPJvW7RsrggENAgsab4io
-         Zv5yQK9qdUPwNuP9lVOY/y6TY8a3Oc5qDekpUtenRoFkvrFPoA6UvVws1C3tux1dCimp
-         kOOuIyXvbj0inJNrczRDU//NJz3ohut46sRl6O7ofLIlPIoE71x5lG+Yn7kt055M4sGG
-         V3coDTpJC9jh77FPAguxa2tqFo6LVbh2uJe7xg/aKvo/L4ePRAtsYhHyq4AxEoer/WML
-         1ISE+Dm6SqmodoZ5bat1m55xhIzPSSrGZkDr+QuXreldboiOkADsv4W9qfm6qSC2EK86
-         RtKQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FBKlFdK4PX2cFyTdjAl6VU9HARFofyR9t9zwGts6b7U=;
+        b=pEkMsE98bnoHn3Kb7FwscLB2ArAgu1loIHLwd+dvPKR62K/thYl91V0nTPMor4JF2D
+         Rw2pGHKz4EoUyQlCR/VObEfdxX55yHnj2/EiWuUgEapX5S8Envl3tSNiH70S5FHfIagM
+         k9GJBXEKlMLW75F+HD7N/kTfjiTx6cUSe3CN8WOWAVja5SQcI8CAE+YQLhgwEc2mmxHm
+         +ZpwiTNSXtJde9FXkMco8DoZ3U9KEZ5UA2bafkwxV43pvHc1SnazGbujsLqiiHRePfe7
+         pdWjAqskPHSwcG3mmaljvdxSRzyAIh/Iec6mi2WhEeA+C1zjkoMH/0FFaSR0cjLdiTvr
+         vj9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4IrN97Z1/unmod/0ZIgRREwNK9Dy4GlFmKlR4IOlB2k=;
-        b=HAjpM/2ctOBYC4HMuEBX+Uq9niLE0FtbAG6O7ojoOsXrlifeEt3pf6kQSllqDCY61d
-         Jb1n8bLp2l9a6u1EajGki7n1UJk6tiMGFm/5g1L3t0E3EB30dVdb2bj5dDDYyoWTv6ri
-         aZT046WJiGr0zXjfJNw0/jY7hwPmgg1iR4zx7lyELNPlZLV4ZrU6CF7P6kFvDX7YW0eI
-         5czBYnopEhZxD2P04XVaB5qVYvuNG0PyWXN42524q3Fu9jaqh2NsM/ljhAB02ARsjFEC
-         zuwyLDMXZ9lNyQaJuaUtMBzkV+usrK5aYxHlizSwv+EqvIjjP4aa/B/kog5Gg5V6yuC9
-         vudA==
-X-Gm-Message-State: AOAM532vnjN+XhvzRQ0WvxXCM8CMfSeaB97ecWJFP7/vohDDGE/lyRTf
-        f4bLweBNNdkyI9DQZwCCKkk=
-X-Google-Smtp-Source: ABdhPJz/jDdaLC34L72YARJH+N80C4P6Crbov088Y5N17eQQL78XPGY9rLyVrHfAlIl2f4KrcPbuXg==
-X-Received: by 2002:a17:90b:3506:b0:1e8:8449:6acb with SMTP id ls6-20020a17090b350600b001e884496acbmr3024124pjb.27.1654919192077;
-        Fri, 10 Jun 2022 20:46:32 -0700 (PDT)
-Received: from [192.168.1.104] ([101.86.206.203])
-        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b001677d4a9654sm463706plk.265.2022.06.10.20.46.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 20:46:31 -0700 (PDT)
-Message-ID: <957f5626-2c89-f53a-2156-bbde2bb545f2@gmail.com>
-Date:   Sat, 11 Jun 2022 11:46:27 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FBKlFdK4PX2cFyTdjAl6VU9HARFofyR9t9zwGts6b7U=;
+        b=SDfomiYHYsLdLgUAF4i3c/T0CMYvunkvuAnXKCdrWVp2GdgDyWuoa2hcQ0tN6j/QF7
+         SqZ2amRSuQ+GHBZLBkBuJ5x7scmX7jfEIT59QLtKh3XX3TxUTbLXlVRbo42aJYz+lt6Q
+         ggqmwp2UDKtZvPAXpPAYYmFRL6ZcPCvsk9nuVNTHBXgVXrLW2bAz4e41xl0RmFeq1fC+
+         IjKa05MkM1/jOx9ocyLX3CRZT/PrPaG25caddOJ7oiHMCIboFV393Mv6iNlQoNrf7IE+
+         jjdosUTmEi4b70AENW7H40NH8iTOl4zHctN1TN4AmQqV1vczi3w1eRe+rcxqmO5gv1Kc
+         2LbQ==
+X-Gm-Message-State: AOAM530QcwiLFWqWmOPYyhmvhY1OVa9SSmvECZskJLt4607fIjzQ5atf
+        vvZXQHRduR9JhojeAVv7zu4=
+X-Google-Smtp-Source: ABdhPJxtlzxs3+O913NXNcri66h1VaR4TYdkSkiD6iwm5eGBZc68W/DT9TWoN0emd1hIUj6j+jP3Pw==
+X-Received: by 2002:a17:903:2cf:b0:151:a932:f1f0 with SMTP id s15-20020a17090302cf00b00151a932f1f0mr48762665plk.130.1654919419758;
+        Fri, 10 Jun 2022 20:50:19 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id x195-20020a627ccc000000b005185407eda5sm368133pfc.44.2022.06.10.20.50.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 20:50:18 -0700 (PDT)
+Date:   Sat, 11 Jun 2022 12:50:08 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] mm, slab: fix bad alignments
+Message-ID: <YqQQ8HallkC5pTBV@hyeyoo>
+References: <20220609040132.89192-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/3] mm: kmemleak: check physical address when scan
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yee.lee@mediatek.com
-References: <20220609124950.1694394-1-patrick.wang.shcn@gmail.com>
- <20220609124950.1694394-4-patrick.wang.shcn@gmail.com>
- <YqI44Q20oJNVl+QV@arm.com>
-From:   Patrick Wang <patrick.wang.shcn@gmail.com>
-In-Reply-To: <YqI44Q20oJNVl+QV@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609040132.89192-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/10 02:16, Catalin Marinas wrote:
-> On Thu, Jun 09, 2022 at 08:49:50PM +0800, Patrick Wang wrote:
->> Check the physical address of objects for its boundary
->> when scan instead of in kmemleak_*_phys().
->>
->> Fixes: 23c2d497de21 ("mm: kmemleak: take a full lowmem check in kmemleak_*_phys()")
->> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
->> Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+On Thu, Jun 09, 2022 at 12:01:32PM +0800, Jiapeng Chong wrote:
+> As reported by coccicheck:
 > 
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> ./mm/slab.c:3253:2-59: code aligned with following code on line 3255.
 > 
-> The fixed commit above was cc stable, so we'll probably need all these
-> three patches in stable. But I'd keep them a bit in -next for testing
-> first (and I see Andrew already picked them up; we might as well merge
-> them in 5.20 and send them to -stable after, it's not some critical
-> feature).
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  mm/slab.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Thanks for the series. I don't think you need to respin unless others of
-> comments.
+> diff --git a/mm/slab.c b/mm/slab.c
+> index 47151fb2b2d2..c359c0f2c897 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -3223,7 +3223,7 @@ slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_
+>  	}
+>  	/* ___cache_alloc_node can fall back to other nodes */
+>  	ptr = ____cache_alloc_node(cachep, flags, nodeid);
+> -  out:
+> +out:
+>  	local_irq_restore(save_flags);
+>  	ptr = cache_alloc_debugcheck_after(cachep, flags, ptr, caller);
+>  	init = slab_want_init_on_alloc(flags, cachep);
+> @@ -3252,7 +3252,7 @@ __do_cache_alloc(struct kmem_cache *cache, gfp_t flags)
+>  	if (!objp)
+>  		objp = ____cache_alloc_node(cache, flags, numa_mem_id());
+>  
+> -  out:
+> +out:
+>  	return objp;
+>  }
+>  #else
+> -- 
+> 2.20.1.7.g153144c
 
-I've received an auto build test WARNING from kernel test robot:
+Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-    mm/kmemleak.c: In function 'scan_object':
-   >> arch/powerpc/include/asm/page.h:215:42: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-        215 | #define __va(x) ((void *)(unsigned long)((phys_addr_t)(x) + VIRT_PHYS_OFFSET))
-            |                                          ^
-      mm/kmemleak.c:1403:19: note: in expansion of macro '__va'
-       1403 |                   __va((void *)object->pointer) :
-            |                   ^~~~
-
-So I will replace __va((void *)object->pointer)
-to __va((phys_addr_t)object->pointer) for fixing this warning,
-and move the prototype change and the kmemleak_not_leak_phys()
-removal to a separate one as you suggested at the same time.
-
-Thanks for these comments and suggestions.
-
+-- 
 Thanks,
-Patrick
+Hyeonggon

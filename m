@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4ABA5476D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948645476D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238595AbiFKRXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 13:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S239049AbiFKRX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 13:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238181AbiFKRXn (ORCPT
+        with ESMTP id S238179AbiFKRXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 11 Jun 2022 13:23:43 -0400
 Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C317B3CFC9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30783CA54;
         Sat, 11 Jun 2022 10:23:37 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 25BHMhjP022692;
+        by conuserg-09.nifty.com with ESMTP id 25BHMhjQ022692;
         Sun, 12 Jun 2022 02:22:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 25BHMhjP022692
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 25BHMhjQ022692
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654968165;
-        bh=MMlWHI79ZXLVfVOPspFzx7WO3YALeI7+en73nS8lFyY=;
+        s=dec2015msa; t=1654968166;
+        bh=A23KTIgin1aGL7tlLpcBM/pr60oqIzwLBoV8Wxeh2p0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BPPzm9G0e6v8UIo5UGvWV0+CS09mXXIW3BFcw18fSZLEkOet4hu6efpdPrCVjuOWb
-         I2CJb4QtmLSyESS+JDvVKxbDWuhE1Zbejlb6XpWGX0e/FGzVUU+RhEylEtIVu9hI9G
-         Sux8kMsCqnJ+Z2lQHhnmBJjiBbaqwaRlYUH5SmP1mZv3stMcrG/bXRvNxNu9kmkJ4L
-         VhE6vEpva8xUzxhrMLQZI+6qDiLomI4r1XkR5XTZo8rjakxevx3rBFskiMw+mf45o3
-         Njb+uypw1Pk1fqynv+6cNh1GqX7/AK0dvTB4zmiG1JUyiyn6x1i1BtvIdm+kcfIT55
-         3RaI0LCqLS0xw==
+        b=Llyi0YLJ14b5QWQVQPqHLa7n2JvTbXAheXVqnQLLwV0dA7csg05zwWc8mLxmZ0bTj
+         rAV3r35WL7MPi6o487lTvAsb//1F7Y4OHCgePgTH/1I+q/IVsQZhWBgSB2yvhdP10e
+         YZmOYrv0zRp/1mQaUqky6+MZM3SdSr3Z778OEhDjM84ORNU5/nqSdtOdXt7dB7NP9f
+         sIlf0jfmyFU8xV0RBK52K66MsXzXjxfBObAHb7cgkwgAHL7vpN8KPUzR64FTmW0lou
+         DGiWioOnHdDVKsgy2fW8e6xGEgYUaUjVATsKAe7hwOOUHouugTZhBJH3DjyTuDrbR7
+         FIfgpRrAQ1IeQ==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     David Howells <dhowells@redhat.com>,
         <mic@linux.microsoft.com>, Masahiro Yamada <masahiroy@kernel.org>,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] certs: move scripts/check-blacklist-hashes.awk to certs/
-Date:   Sun, 12 Jun 2022 02:22:32 +0900
-Message-Id: <20220611172233.1494073-3-masahiroy@kernel.org>
+Subject: [PATCH 4/4] certs: unify blacklist_hashes.c and blacklist_nohashes.c
+Date:   Sun, 12 Jun 2022 02:22:33 +0900
+Message-Id: <20220611172233.1494073-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220611172233.1494073-1-masahiroy@kernel.org>
 References: <20220611172233.1494073-1-masahiroy@kernel.org>
@@ -55,47 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This script is only used in certs/Makefile, so certs/ is a better
-home for it.
+These two files are very similar. Unify them.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- MAINTAINERS                                   | 1 -
- certs/Makefile                                | 2 +-
- {scripts => certs}/check-blacklist-hashes.awk | 0
- 3 files changed, 1 insertion(+), 2 deletions(-)
- rename {scripts => certs}/check-blacklist-hashes.awk (100%)
+ certs/Makefile             | 12 +++++-------
+ certs/blacklist_hashes.c   |  1 -
+ certs/blacklist_nohashes.c |  6 ------
+ 3 files changed, 5 insertions(+), 14 deletions(-)
+ delete mode 100644 certs/blacklist_nohashes.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1fc9ead83d2a..7c2a7c304824 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4627,7 +4627,6 @@ L:	keyrings@vger.kernel.org
- S:	Maintained
- F:	Documentation/admin-guide/module-signing.rst
- F:	certs/
--F:	scripts/check-blacklist-hashes.awk
- F:	scripts/sign-file.c
- F:	tools/certs/
- 
 diff --git a/certs/Makefile b/certs/Makefile
-index a8d628fd5f7b..df7aaeafd19c 100644
+index df7aaeafd19c..7068d45db807 100644
 --- a/certs/Makefile
 +++ b/certs/Makefile
-@@ -13,7 +13,7 @@ CFLAGS_blacklist_hashes.o := -I $(obj)
+@@ -4,24 +4,22 @@
+ #
+ 
+ obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o common.o
+-obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
++obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o blacklist_hashes.o
+ obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
+-ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
+ 
+ $(obj)/blacklist_hashes.o: $(obj)/blacklist_hash_list
+ CFLAGS_blacklist_hashes.o := -I $(obj)
  
  quiet_cmd_check_and_copy_blacklist_hash_list = GEN     $@
        cmd_check_and_copy_blacklist_hash_list = \
--	$(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) >&2; \
-+	$(AWK) -f $(srctree)/$(src)/check-blacklist-hashes.awk $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) >&2; \
- 	cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
++	$(if $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST), \
+ 	$(AWK) -f $(srctree)/$(src)/check-blacklist-hashes.awk $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) >&2; \
+-	cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
++	{ cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST); echo $(comma) NULL; } > $@, \
++	echo NULL > $@)
  
  $(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
-diff --git a/scripts/check-blacklist-hashes.awk b/certs/check-blacklist-hashes.awk
-similarity index 100%
-rename from scripts/check-blacklist-hashes.awk
-rename to certs/check-blacklist-hashes.awk
+ 	$(call if_changed,check_and_copy_blacklist_hash_list)
+-obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
+-else
+-obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
+-endif
++
+ targets += blacklist_hash_list
+ 
+ quiet_cmd_extract_certs  = CERT    $@
+diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
+index 86d66fe11348..0c5476abebd9 100644
+--- a/certs/blacklist_hashes.c
++++ b/certs/blacklist_hashes.c
+@@ -3,5 +3,4 @@
+ 
+ const char __initconst *const blacklist_hashes[] = {
+ #include "blacklist_hash_list"
+-	, NULL
+ };
+diff --git a/certs/blacklist_nohashes.c b/certs/blacklist_nohashes.c
+deleted file mode 100644
+index 753b703ef0ef..000000000000
+--- a/certs/blacklist_nohashes.c
++++ /dev/null
+@@ -1,6 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include "blacklist.h"
+-
+-const char __initconst *const blacklist_hashes[] = {
+-	NULL
+-};
 -- 
 2.32.0
 

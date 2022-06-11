@@ -2,64 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F21B5474E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF415474EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbiFKNoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 09:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S233732AbiFKNu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 09:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbiFKNoR (ORCPT
+        with ESMTP id S231378AbiFKNuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 09:44:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3628D13CE9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 06:44:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654955055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=45HLPCXXqTkMdZ7LqQ9jrXy/Uzs9B569cMj5sdJqp1c=;
-        b=VfL59h1MYcB+uSrIMAQS+UqtiaesRKK6ctIuHoONEz13f73kfaZOfQuUa6HBf9xffM6yJA
-        UiCnrC4UfM+nvxMqnfQ9+HFH9pCszwTJrx9l1Bb7m4LKG+yd5YZeQmDCbglxP5BUW9iTAW
-        fH6pkLDh6B/wVlAtTdMIQYVIiWE4+nA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-VoatBileMyOaX4L1wnbWew-1; Sat, 11 Jun 2022 09:44:10 -0400
-X-MC-Unique: VoatBileMyOaX4L1wnbWew-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDA31801E67;
-        Sat, 11 Jun 2022 13:44:09 +0000 (UTC)
-Received: from starship (unknown [10.40.194.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 64CDD1415102;
-        Sat, 11 Jun 2022 13:44:07 +0000 (UTC)
-Message-ID: <1d71f8acb62120aed87238051ef0f22b1ac58470.camel@redhat.com>
-Subject: Re: [PATCH] KVM: SVM: Fix a misplaced paranthesis in APICV inhibit
- mask generation
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 11 Jun 2022 16:44:06 +0300
-In-Reply-To: <20220610191813.371682-1-seanjc@google.com>
-References: <20220610191813.371682-1-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Sat, 11 Jun 2022 09:50:23 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3DD5EBF0;
+        Sat, 11 Jun 2022 06:50:20 -0700 (PDT)
+Received: from p508fd9f0.dip0.t-ipconnect.de ([80.143.217.240] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o01VC-0004TJ-AU; Sat, 11 Jun 2022 15:50:10 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: rockchip: Fix SoQuartz CM4IO usb
+Date:   Sat, 11 Jun 2022 15:50:08 +0200
+Message-ID: <4178848.3VsfAaAtOV@phil>
+In-Reply-To: <CAMdYzYqJ2S8K2NCH1uQ2xDjTfLmePPv5TzgeXZa0EG6XdGQzBQ@mail.gmail.com>
+References: <20220610132601.160088-1-pgwipeout@gmail.com> <CAMdYzYqJ2S8K2NCH1uQ2xDjTfLmePPv5TzgeXZa0EG6XdGQzBQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,46 +46,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-10 at 19:18 +0000, Sean Christopherson wrote:
-> Relocate a ")" to its proper place at the end of a BIT usage, the intent
-> is most definitely not to have a feedback loop of BITs in the mask.
+Am Freitag, 10. Juni 2022, 16:44:23 CEST schrieb Peter Geis:
+> On Fri, Jun 10, 2022 at 9:26 AM Peter Geis <pgwipeout@gmail.com> wrote:
+> >
+> > The SoQuartz CM4-IO should support otg mode, however it currently
+> > defaults to device mode when otg is enabled. Force it to host mode to
+> > retain the previous behavior.
 > 
-> arch/x86/kvm/svm/avic.c: In function ‘avic_check_apicv_inhibit_reasons’:
-> include/vdso/bits.h:7:40: error: left shift count >= width of type [-Werror=shift-count-overflow]
->     7 | #define BIT(nr)                 (UL(1) << (nr))
->       |                                        ^~
-> arch/x86/kvm/svm/avic.c:911:27: note: in expansion of macro ‘BIT’
->   911 |                           BIT(APICV_INHIBIT_REASON_SEV      |
->       |                           ^~~
-> 
-> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
-> Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 5542d8959e11..d1bc5820ea46 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -908,9 +908,9 @@ bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
->  			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
->  			  BIT(APICV_INHIBIT_REASON_X2APIC) |
->  			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
-> -			  BIT(APICV_INHIBIT_REASON_SEV      |
-> +			  BIT(APICV_INHIBIT_REASON_SEV)      |
->  			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
-> -			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED));
-> +			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED);
->  
->  	return supported & BIT(reason);
->  }
-> 
-> base-commit: b23f8810c46978bc05252db03055a61fcadc07d5
+> It would seem the role-switch issue is more widespread than originally
+> thought, affecting other boards where automatic control should work.
+> Please hold this patch while I investigate further.
 
-Sorry about it!
+ok!
 
-Best regards,
-	Maxim Levitsky
+I guess this also applies to
+	"arm64: dts: rockchip: Fix Quartz64-A dwc3 otg port behavior"?
+
+
+Heiko
+
+
+> >
+> > Fixes: bc405bb3eeee ("arm64: dts: rockchip: enable otg/drd operation of usb_host0_xhci in rk356x")
+> >
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > ---
+> >  arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > index e00568a6be5c..56764fae9f9d 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > @@ -169,6 +169,7 @@ &usb2phy0_otg {
+> >  };
+> >
+> >  &usb_host0_xhci {
+> > +       dr_mode = "host";
+> >         status = "okay";
+> >  };
+> >
+> > --
+> > 2.25.1
+> >
+> 
+
+
+
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D9B5471CE
+	by mail.lfdr.de (Postfix) with ESMTP id 6158A5471CC
 	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 06:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350498AbiFKEXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 00:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S1350478AbiFKEXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 00:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350383AbiFKEXP (ORCPT
+        with ESMTP id S1350442AbiFKEXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 00:23:15 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BAE1AF15;
-        Fri, 10 Jun 2022 21:23:06 -0700 (PDT)
+        Sat, 11 Jun 2022 00:23:18 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8261B7A3;
+        Fri, 10 Jun 2022 21:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654921388; x=1686457388;
+  t=1654921396; x=1686457396;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=d6q+N4nqEChKtNxaXpqdHl5FFoqFAfkB61ZBgBZWDJU=;
-  b=YjJkUACexb5y7kr+psfU/GEijfS6jgjTOAl74TeQvRwODL3FMGcyWwYQ
-   VhaBn1DcQ9rZXQyzUJy4vqAK/przdibJPvFI3ZoN9aYiwcw4R7bmbtExX
-   QJCZdQK4R0vYqKb5QxvnMx6u0rC9RJ56r+VYnFyhxIDBnTjFTBPmXLC1J
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 Jun 2022 21:23:06 -0700
+  bh=c8bqdAnqmktg0aOzLWCVGCCGf+orHFeBka/gFzLMk08=;
+  b=H2zXt2+a43MctBkJND8y4Cpp+uUxUemZCHAKYsekmG84QHPnHTYY2F1D
+   QMZZjB79fnmxTUXQX9FGgQnlKa+mChTHPjb68Mxw02MN0zr3a2FH/Ib8H
+   oec4GDBtYXXtMphuXp3VlK2dH8O520zAxNVOh/s5cXygiYflxYsqLu7qj
+   c=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 10 Jun 2022 21:23:13 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 21:23:05 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 21:23:11 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 10 Jun 2022 21:23:05 -0700
+ 15.2.986.22; Fri, 10 Jun 2022 21:23:11 -0700
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 10 Jun 2022 21:22:59 -0700
+ 15.2.986.22; Fri, 10 Jun 2022 21:23:05 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <judyhsiao@chromium.org>, Linus Walleij <linus.walleij@linaro.org>,
         <linux-gpio@vger.kernel.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v4 1/2] dt-bindings: pinctrl: qcom: sc7280: Add boolean param for ADSP bypass platforms
-Date:   Sat, 11 Jun 2022 09:52:36 +0530
-Message-ID: <1654921357-16400-2-git-send-email-quic_srivasam@quicinc.com>
+Subject: [PATCH v4 2/2] pinctrl: qcom: sc7280: Add clock optional check for ADSP bypass targets
+Date:   Sat, 11 Jun 2022 09:52:37 +0530
+Message-ID: <1654921357-16400-3-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1654921357-16400-1-git-send-email-quic_srivasam@quicinc.com>
 References: <1654921357-16400-1-git-send-email-quic_srivasam@quicinc.com>
@@ -70,31 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add boolean param qcom,adsp-bypass-mode to support adsp bypassed sc7280
-platforms. Which is required to make clock voting as optional for ADSP
-bypass platforms.
+Update lpass lpi pin control driver, with clock optional check for ADSP
+disabled platforms. This check required for distingushing ADSP based
+platforms and ADSP bypass platforms.
+In case of ADSP enabled platforms, where audio is routed through ADSP
+macro and decodec GDSC Switches are triggered as clocks by pinctrl
+driver and ADSP firmware controls them. So It's mandatory to enable
+them in ADSP based solutions.
+In case of ADSP bypass platforms clock voting is optional as these macro
+and dcodec GDSC switches are maintained as power domains and operated from
+lpass clock drivers.
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 ---
- .../devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml   | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.c        | 2 ++
+ drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c | 1 -
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml
-index d32ee32..33d1d37 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml
-@@ -19,6 +19,11 @@ properties:
-   compatible:
-     const: qcom,sc7280-lpass-lpi-pinctrl
+diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+index 74810ec..b3d4244 100644
+--- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
++++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+@@ -388,6 +388,8 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
+ 	pctrl->data = data;
+ 	pctrl->dev = &pdev->dev;
  
-+  qcom,adsp-bypass-mode:
-+    description:
-+      Tells ADSP is in bypass mode.
-+    type: boolean
++	data->is_clk_optional = of_property_read_bool(np, "qcom,adsp-bypass-mode");
 +
-   reg:
-     minItems: 2
-     maxItems: 2
+ 	pctrl->clks[0].id = "core";
+ 	pctrl->clks[1].id = "audio";
+ 
+diff --git a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
+index 2add9a4..d615b6c5 100644
+--- a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
++++ b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
+@@ -141,7 +141,6 @@ static const struct lpi_pinctrl_variant_data sc7280_lpi_data = {
+ 	.ngroups = ARRAY_SIZE(sc7280_groups),
+ 	.functions = sc7280_functions,
+ 	.nfunctions = ARRAY_SIZE(sc7280_functions),
+-	.is_clk_optional = true,
+ };
+ 
+ static const struct of_device_id lpi_pinctrl_of_match[] = {
 -- 
 2.7.4
 

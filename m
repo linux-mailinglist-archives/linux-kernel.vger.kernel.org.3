@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C3C5473D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 12:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96015473D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 12:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbiFKKiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 06:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S232051AbiFKKjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 06:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiFKKiG (ORCPT
+        with ESMTP id S230176AbiFKKjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 06:38:06 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A5367D13;
-        Sat, 11 Jun 2022 03:38:05 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b8so1711779edj.11;
-        Sat, 11 Jun 2022 03:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TL01zc1wHBLAGsEfDb4Hq71GrxMg8CwLyZooSJWIhuQ=;
-        b=QtMJWb1UWXwOslP4l+K17Z3gPpguIKDzqP/AcqYwPBpC9m4HNdrAjx8i0yHIs3Jr81
-         T+JWJK6hUr31ohqOEfqY2jE6+afIfHuPKmSFsVHEQwRoq2HS0BakWDReEK31a4xLWKvh
-         HPtQxyskTRUBnBwAVtoWMBjdJ/+qSVbZEBUt7Xbbq6uFY4l0eKXbR2XeYQPB26nt7sTg
-         gKdrjJQ/SB6iyg/q6jT0XNZ1e9+gnB6bgwYTPEI1UHJ7nX0MN0JQ3865pCeA02GV5cYX
-         rjZa83ux9I4Jnsvh2vEcZwVkKMXC85eUejoUYIGlcftYfJSFZqYe6Misg/Hg1zXYK/uq
-         eqfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TL01zc1wHBLAGsEfDb4Hq71GrxMg8CwLyZooSJWIhuQ=;
-        b=Erpc6IYTjF1ZZsnAumCcffnwE3GO5r/qfHKu+0mzQRg6QR0c8vgVL1QbH/KNVSSL5h
-         s8B4Jojgd3YvSdcRLtJWgwb5qzEYgYRjDbDnqtCis8jXff4XfJBEbwUSdvsFvDw5Iquv
-         m00JEIS9zTC4VL70V1kg27wycj1Wu6s/sqIaQc/LSlp5fLWMNql0dTzMHg0bfniRbwZR
-         A8LNt3Yb1ztlfEQfg0LhlCS65v1jp+9LI8k+jtZTKqn6ta75XILFbntdg+9PQs5rMRqc
-         PnwvWhvQovn0j9HvINj/r64D3C0c5sdR6Vk/DUTMzW9D6XVB4i7JDa/CcUUwBa58FH+X
-         p95g==
-X-Gm-Message-State: AOAM530VzFzugfYXmHJP6lPoN47pnUF6/Ja8xjQTcPlgAcXS3nwNfMsu
-        HrUloqJRgLHZ/Ua0DDSphbQZZ1pHZe9/Pa1ES+U=
-X-Google-Smtp-Source: ABdhPJxOKZWJKsTpPKPkSmo+fc5cRoKy2TeJYcjjoqHFnLmWCxs8wNug/URbpvWmB5zAg4RAjyWV7Q2UqWlqDbnMnIQ=
-X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
- b1-20020aa7d481000000b0042dd5fdf963mr55696954edr.209.1654943883982; Sat, 11
- Jun 2022 03:38:03 -0700 (PDT)
+        Sat, 11 Jun 2022 06:39:46 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B60827FCA;
+        Sat, 11 Jun 2022 03:39:45 -0700 (PDT)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4LKvTq5Txzz4xXh;
+        Sat, 11 Jun 2022 20:39:43 +1000 (AEST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LKvTg4kn6z4xXg;
+        Sat, 11 Jun 2022 20:39:35 +1000 (AEST)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Ian Woloschin <ian.woloschin@akamai.com>
+Subject: [PATCH] spi: aspeed: Fix division by zero
+Date:   Sat, 11 Jun 2022 12:39:29 +0200
+Message-Id: <20220611103929.1484062-1-clg@kaod.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220610202330.799510-1-colin.foster@in-advantage.com> <20220610202330.799510-2-colin.foster@in-advantage.com>
-In-Reply-To: <20220610202330.799510-2-colin.foster@in-advantage.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 11 Jun 2022 12:37:26 +0200
-Message-ID: <CAHp75Vc+V3APvBO8rJ0awu65iPbEoYKn5bn4GhC0DEvC4DiKiw@mail.gmail.com>
-Subject: Re: [PATCH v10 net-next 1/7] mfd: ocelot: add helper to get regmap
- from a resource
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:23 PM Colin Foster
-<colin.foster@in-advantage.com> wrote:
->
-> Several ocelot-related modules are designed for MMIO / regmaps. As such,
-> they often use a combination of devm_platform_get_and_ioremap_resource and
-> devm_regmap_init_mmio.
->
-> Operating in an MFD might be different, in that it could be memory mapped,
-> or it could be SPI, I2C... In these cases a fallback to use IORESOURCE_REG
-> instead of IORESOURCE_MEM becomes necessary.
->
-> When this happens, there's redundant logic that needs to be implemented in
-> every driver. In order to avoid this redundancy, utilize a single function
-> that, if the MFD scenario is enabled, will perform this fallback logic.
+When using the normal read operation for data transfers, the dummy bus
+width is zero. In that case, they are no dummy bytes to transfer and
+setting the dummy field in the controller register becomes useless.
 
-v10 has the same issues I have pointed out in v9.
+Issue was found on a custom "Bifrost" board with a AST2500 SoC and
+using a MX25L51245GMI-08G SPI Flash.
 
-Please, take your time and instead of bombing mailing lists with new
-versions try to look how other (most recent) drivers have been done.
+Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Reported-by: Ian Woloschin <ian.woloschin@akamai.com>
+Fixes: 54613fc6659b ("spi: aspeed: Add support for direct mapping")
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+---
+ drivers/spi/spi-aspeed-smc.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-Also pay attention to the API design.
-
+diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+index 496f3e1e9079..3e891bf22470 100644
+--- a/drivers/spi/spi-aspeed-smc.c
++++ b/drivers/spi/spi-aspeed-smc.c
+@@ -558,6 +558,14 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+ 	u32 ctl_val;
+ 	int ret = 0;
+ 
++	dev_dbg(aspi->dev,
++		"CE%d %s dirmap [ 0x%.8llx - 0x%.8llx ] OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x\n",
++		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
++		desc->info.offset, desc->info.offset + desc->info.length,
++		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
++		op->dummy.buswidth, op->data.buswidth,
++		op->addr.nbytes, op->dummy.nbytes);
++
+ 	chip->clk_freq = desc->mem->spi->max_speed_hz;
+ 
+ 	/* Only for reads */
+@@ -574,9 +582,11 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+ 	ctl_val = readl(chip->ctl) & ~CTRL_IO_CMD_MASK;
+ 	ctl_val |= aspeed_spi_get_io_mode(op) |
+ 		op->cmd.opcode << CTRL_COMMAND_SHIFT |
+-		CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth) |
+ 		CTRL_IO_MODE_READ;
+ 
++	if (op->dummy.nbytes)
++		ctl_val |= CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth);
++
+ 	/* Tune 4BYTE address mode */
+ 	if (op->addr.nbytes) {
+ 		u32 addr_mode = readl(aspi->regs + CE_CTRL_REG);
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.3
+

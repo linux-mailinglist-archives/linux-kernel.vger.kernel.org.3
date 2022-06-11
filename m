@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173C65477AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 23:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298315477B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 23:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbiFKVVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 17:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S232133AbiFKVkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 17:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiFKVVq (ORCPT
+        with ESMTP id S229457AbiFKVkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 17:21:46 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1B056391
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 14:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654982505; x=1686518505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jAoJwbluCgt/kSBjQvcAdIJUWzr781/aoGpszolGa4k=;
-  b=UD51h//eqFb+Is03isJkOL6c5P7FSfyUXuOSEP0MBqt8x5B3jupDbKDF
-   SAwXS3TsePhm3U4+Ru7jMvJPHP76O0qIDFrw09ojIPAH9IjSyWCm4eL22
-   8aVohfoBeZtJxcyKCs5onI5/mfbcuBHXoRqgr32FXbwtaktHRZWMeTp2k
-   6hmjSYqxT3mi6uAU637Ns7lBboC76Pi7MxNBthoOmnM8EGh6HixT8jGGH
-   lAbuRUwlBkfombR8PK83aAJdebqlBxUcqNnA5hiv1CYNFE7kz6OBcmZSi
-   Nqjxh10cED9nZBbSGUsHaBaa+E8Emt0nDI54h8YopiwCgSxFt0qz5Svk9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="276719152"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="276719152"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 14:21:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="616956844"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Jun 2022 14:21:44 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o08YB-000JJe-DE;
-        Sat, 11 Jun 2022 21:21:43 +0000
-Date:   Sun, 12 Jun 2022 05:21:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: WARNING: modpost: vmlinux.o(.text.unlikely+0x24dc): Section mismatch
- in reference from the function find_next_bit() to the variable
- .init.rodata:__setup_str_initcall_blacklist
-Message-ID: <202206120501.LD90ONuZ-lkp@intel.com>
+        Sat, 11 Jun 2022 17:40:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93746B0AD;
+        Sat, 11 Jun 2022 14:40:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53C47612B3;
+        Sat, 11 Jun 2022 21:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A58F0C3411C;
+        Sat, 11 Jun 2022 21:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654983613;
+        bh=6RRA9QNgaXVnE/UIBBzd6rblPf5Yo595VngXDmM1I5k=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=iVYLaQIyE4q+wjSvuTjF9kcjWR7sdcFRvOZ/bIJTJNR1EWJZrOxq+zRvZq6bYNX5v
+         I0eglXvTEv5ZqXgtW8bZs8U4F0DPMd0dVl23Gjjm6ffxdSPoUTrroGrHag6UCOWgQn
+         tWn2MyrbRmQ1jW7gfeP6gdqI19MWc606X7k7ymKPAav8WdyIc9I0Yo5AiLLXTdoofu
+         ACnfHncJStp8PXUj8JEzRoFTRHFTJtyQ/pG0P++QsRzIhGtFFpD7TMlnNFzDR3/Ezx
+         RhCoRAf3jBAp4WsaAI1CT7MPnJy5gDz733pHedOybhYNSZGHMKwUzWMDrrTejQHL5e
+         /r1kK83scn1/g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88F4DE737F4;
+        Sat, 11 Jun 2022 21:40:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 0/2] Optimize performance of update hash-map when free is
+ zero
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165498361355.20267.7962671859794283090.git-patchwork-notify@kernel.org>
+Date:   Sat, 11 Jun 2022 21:40:13 +0000
+References: <20220610023308.93798-1-zhoufeng.zf@bytedance.com>
+In-Reply-To: <20220610023308.93798-1-zhoufeng.zf@bytedance.com>
+To:     Feng zhou <zhoufeng.zf@bytedance.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,35 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0678afa6055d14799c1dc1eee47c8025eba56cab
-commit: 2c523550b9924f98299414253d8a1fef7c60ef2d lib/bitmap: add test for bitmap_{from,to}_arr64
-date:   8 days ago
-config: xtensa-randconfig-r001-20220612 (https://download.01.org/0day-ci/archive/20220612/202206120501.LD90ONuZ-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c523550b9924f98299414253d8a1fef7c60ef2d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2c523550b9924f98299414253d8a1fef7c60ef2d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+Hello:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+On Fri, 10 Jun 2022 10:33:06 +0800 you wrote:
+> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+> 
+> We encountered bad case on big system with 96 CPUs that
+> alloc_htab_elem() would last for 1ms. The reason is that after the
+> prealloc hashtab has no free elems, when trying to update, it will still
+> grab spin_locks of all cpus. If there are multiple update users, the
+> competition is very serious.
+> 
+> [...]
 
-<< WARNING: modpost: vmlinux.o(.text.unlikely+0x24b0): Section mismatch in reference from the function bitmap_equal() to the variable .init.rodata:__setup_str_initcall_blacklist
->> WARNING: modpost: vmlinux.o(.text.unlikely+0x24dc): Section mismatch in reference from the function find_next_bit() to the variable .init.rodata:__setup_str_initcall_blacklist
-The function find_next_bit() references
-the variable __initconst __setup_str_initcall_blacklist.
-This is often because find_next_bit lacks a __initconst
-annotation or the annotation of __setup_str_initcall_blacklist is wrong.
+Here is the summary with links:
+  - [v6,1/2] bpf: avoid grabbing spin_locks of all cpus when no free elems
+    https://git.kernel.org/bpf/bpf-next/c/54a9c3a42d92
+  - [v6,2/2] selftest/bpf/benchs: Add bpf_map benchmark
+    https://git.kernel.org/bpf/bpf-next/c/89eda98428ce
 
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109BD54767F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821D7547678
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbiFKQi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 12:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S233895AbiFKQbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 12:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiFKQi5 (ORCPT
+        with ESMTP id S233120AbiFKQbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 12:38:57 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1B513A;
-        Sat, 11 Jun 2022 09:38:56 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id e20so2067068vso.4;
-        Sat, 11 Jun 2022 09:38:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=T0+fsFmOup/o09KuIuGw1PBADlVzWVKCMk9v2xQnxN4=;
-        b=ST2X0WFBxlhScFYIaEi0r3xQx3Q6gyso1QHyqjqM28ZdEwQzGXGPLYJJdsG8ORPfHX
-         u2uTX+w25lme/FUEYMyIpD1x3RKq9jsZd7Rz3XrF3T+Qp66Mb6Zwz8UZBHae2PrG6pr1
-         bYeOIywpBwYa3wOmLHaHXZHHcjzuP8p1/s1w15YSDQwIEmCuTZVPd6bBcDGtQpcS4hw2
-         etGMWQ+2ZAy8zXynH1q18j5pbc/vcJDyYzmKaMOS33ITgACZnnHK8il+ZOof/fMQS6gk
-         6uBrehNDMQFcMJP4FaM1EMgv4HWu8j1eiVFKqomM7WmO6U+gnVDhxnPcAzq7Nst0/aCl
-         1L3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=T0+fsFmOup/o09KuIuGw1PBADlVzWVKCMk9v2xQnxN4=;
-        b=W2yT7IPs+ETgj7TL8TLqtMzIK6liP7i9Y+Tllm4a3Ay2xmv0wdUhBN3R6Pj5v89RI5
-         sNXlVdyx0lx+BWJO9aK8cn9K1azTHJ8o8OwTSb8t9PfY7w5FMxYyawR7jFnp3Sl0Qeez
-         Uz1EyeHBVBCH64teuHbllV2Vd2MtOex2zog6T9c6GwlQMIeWJes0VKYlqrq5Y912PKOT
-         4bXKdLKQ0IR5kKrvgXcmZOtu+tXr5HAp51pnu0Ab6RwMm4vedv1IgPl9kRaE4YqNARcp
-         VwUPvGwMZ0MbE9/iP4si7ApzjO7X6jr8eFfx8O66idKmdIhx9gvLzFpSp9f8BwZahInN
-         WlKQ==
-X-Gm-Message-State: AOAM533yQzRFf4P/zjBX4CHxT/Y7TdHPoLu0CC7n7Gofe71cuX4RAHA7
-        rFqbJCq/6QAsdMt3v3SgLZev3nHTgBNxtEmp3OxqCdl7iV4=
-X-Google-Smtp-Source: ABdhPJwtaRvw4iYPzBjhQNX3R1G/D1yZqCexlLnLSbSBIQyYpOIFcSqrHrCECYwtfGnJCbFt8pUAR9VUdmPnd+WHKlI=
-X-Received: by 2002:a05:6102:5090:b0:34b:c270:436e with SMTP id
- bl16-20020a056102509000b0034bc270436emr13503080vsb.61.1654965535754; Sat, 11
- Jun 2022 09:38:55 -0700 (PDT)
+        Sat, 11 Jun 2022 12:31:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3F2580FF;
+        Sat, 11 Jun 2022 09:31:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0B066114C;
+        Sat, 11 Jun 2022 16:31:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A7A9C34116;
+        Sat, 11 Jun 2022 16:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654965100;
+        bh=qCwIEMpnsRIufmi3vST+sz+tw/W8NyVbRjkNPScHWiI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SLdsrzSbCA4DC5ou45xrOX+yffeUADxedHv4VEBvVZBc+dI13A9YQFvX95EBLAXQT
+         UeSO9YqTNOkYKE2ok0357UrUzPb/MUGZs/GqA/vMXcNPHIY5TSe3if1QVyGf8HTIC2
+         58DCXozHGyWXEnAmPZ96TVVIF4lM7vzlkI4IOcxIVqwPILXjDicK9aNxFsXlU2YTYZ
+         vUSqR1OBw36vNP0u+/NDEJUSZiPXfNerKimsoJ82IOlkQ9fkvJwB6zFBJ6/XC4VvZU
+         hnthPhQ99CrrGoHNCIJ/Oolm8IA7ahRwRuhj1iTI+xtT/xxMc7dsLEhCyffTduQwv2
+         pBi4y0LrOf4pQ==
+Date:   Sat, 11 Jun 2022 17:40:49 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     <eugen.hristev@microchip.com>, <lars@metafoo.de>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 16/16] iio: adc: at91-sama5d2_adc: use pm_ptr()
+Message-ID: <20220611174049.129df964@jic23-huawei>
+In-Reply-To: <20220609083213.1795019-17-claudiu.beznea@microchip.com>
+References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
+        <20220609083213.1795019-17-claudiu.beznea@microchip.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 11 Jun 2022 11:38:45 -0500
-Message-ID: <CAH2r5msLEuGjB+JQBHF34AG+hx4szrzYsT1A=mj7Rmn7Y_r5FQ@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-f2906aa863381afb0015a9eb7fefad885d4e5a56:
+On Thu, 9 Jun 2022 11:32:13 +0300
+Claudiu Beznea <claudiu.beznea@microchip.com> wrote:
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+> Use pm_ptr() on the assignment of at91_adc_pm_ops to
+> at91_adc_driver.driver.pm.
 
-are available in the Git repository at:
+Squash this into the previous patch.
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.19-rc1-smb3-client-fixes
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  drivers/iio/adc/at91-sama5d2_adc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+> index 5d9ad51d0920..221c09532b38 100644
+> --- a/drivers/iio/adc/at91-sama5d2_adc.c
+> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+> @@ -2647,7 +2647,7 @@ static struct platform_driver at91_adc_driver = {
+>  	.driver = {
+>  		.name = "at91-sama5d2_adc",
+>  		.of_match_table = at91_adc_dt_match,
+> -		.pm = &at91_adc_pm_ops,
+> +		.pm = pm_ptr(&at91_adc_pm_ops),
+>  	},
+>  };
+>  module_platform_driver(at91_adc_driver)
 
-for you to fetch changes up to 4c14d7043fede258957d7b01da0cad2d9fe3a205:
-
-  cifs: populate empty hostnames for extra channels (2022-06-10 18:55:02 -0500)
-
-----------------------------------------------------------------
-3 smb3 reconnect fixes, all for stable as well
-
-One of these three reconnect fixes does address a problem with
-multichannel reconnect,
-but this P/R does not include the additional fix (still being tested)
-for dynamically
-detecting multichannel adapter changes which will improve those
-reconnect scenarios
-even more.
-----------------------------------------------------------------
-Paulo Alcantara (1):
-      cifs: fix reconnect on smb3 mount types
-
-Shyam Prasad N (2):
-      cifs: return errors during session setup during reconnects
-      cifs: populate empty hostnames for extra channels
-
- fs/cifs/cifsfs.c  |  2 +-
- fs/cifs/cifsfs.h  |  2 +-
- fs/cifs/connect.c |  4 ++++
- fs/cifs/misc.c    | 27 ++++++++++++++++-----------
- fs/cifs/sess.c    |  5 ++++-
- fs/cifs/smb2pdu.c |  3 +++
- 6 files changed, 29 insertions(+), 14 deletions(-)
-
-
--- 
-Thanks,
-
-Steve

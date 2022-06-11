@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6495473C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 12:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1295473BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 12:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbiFKKeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 06:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S231806AbiFKKcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 06:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiFKKeI (ORCPT
+        with ESMTP id S231777AbiFKKcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 06:34:08 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C5F4EDC7
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 03:34:06 -0700 (PDT)
-X-UUID: c7f489961c3544beb898bd506cb55f0e-20220611
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:3b6a874e-b265-49a7-91e6-38f4f8bef670,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:f5416c50-276a-4a9a-a4c8-ea931023add4,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: c7f489961c3544beb898bd506cb55f0e-20220611
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1457543295; Sat, 11 Jun 2022 18:33:59 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sat, 11 Jun 2022 18:33:58 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 11 Jun 2022 18:33:57 +0800
-From:   <yf.wang@mediatek.com>
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MEDIATEK IOMMU DRIVER" <iommu@lists.linux-foundation.org>,
-        "moderated list:MEDIATEK IOMMU DRIVER" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list" <linux-kernel@vger.kernel.org>
-CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <Yong.Wu@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Yunfei Wang <yf.wang@mediatek.com>,
-        Ning Li <ning.li@mediatek.com>
-Subject: [PATCH v8 3/3] iommu/mediatek: Allow page table PA up to 35bit
-Date:   Sat, 11 Jun 2022 18:26:55 +0800
-Message-ID: <20220611102656.10954-4-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220611102656.10954-1-yf.wang@mediatek.com>
-References: <20220611102656.10954-1-yf.wang@mediatek.com>
+        Sat, 11 Jun 2022 06:32:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43A98CD9
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 03:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654943528;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JD69J2sLUFBpAYD/xB2JKlPgocy/ryA5OTBJSpAmob4=;
+        b=b/wXBWMP6elMTWPUZ7oBWXgWBNJgFZ9jV5oGGEjKUR5yNmoxDqxlVUKCXm0T/D2fPmtm1R
+        nOxu1fiYdmvzIwyrVOp/AUwLEIsfbH97EG9WQqyyy7WUWJKMKIrTR7WOIwn4O9/8O3VqsT
+        rra0H/Tz5K0Gmjos4l7evFM2dhKyunE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-213-Ktr_Xw39O5WI9C1k7jIHXA-1; Sat, 11 Jun 2022 06:32:05 -0400
+X-MC-Unique: Ktr_Xw39O5WI9C1k7jIHXA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 773A485A580;
+        Sat, 11 Jun 2022 10:32:04 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6A1A22166B26;
+        Sat, 11 Jun 2022 10:32:04 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 25BAW4bZ010370;
+        Sat, 11 Jun 2022 06:32:04 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 25BAW3gg010366;
+        Sat, 11 Jun 2022 06:32:03 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Sat, 11 Jun 2022 06:32:03 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Subject: Re: Warnings when suspending to disk
+In-Reply-To: <YqD1YjeovGu28xsP@yaz-fattaah>
+Message-ID: <alpine.LRH.2.02.2206110625280.9999@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com> <YpUcf19E+qgb6Eyu@kroah.com> <alpine.LRH.2.02.2205310324410.13770@file01.intranet.prod.int.rdu2.redhat.com> <Ypjr5yIMan1N0bqH@yaz-fattaah>
+ <alpine.LRH.2.02.2206031327190.25179@file01.intranet.prod.int.rdu2.redhat.com> <YqD1YjeovGu28xsP@yaz-fattaah>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,78 +72,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
 
-Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA. So add
-the quirk IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT to let level 1 and level 2
-pgtable support at most 35bit PA.
 
-Signed-off-by: Ning Li <ning.li@mediatek.com>
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
----
- drivers/iommu/mtk_iommu.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+On Wed, 8 Jun 2022, Yazen Ghannam wrote:
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 3d62399e8865..4dbc33758711 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -138,6 +138,7 @@
- /* PM and clock always on. e.g. infra iommu */
- #define PM_CLK_AO			BIT(15)
- #define IFA_IOMMU_PCIE_SUPPORT		BIT(16)
-+#define PGTABLE_PA_35_EN		BIT(17)
- 
- #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
- 				((((pdata)->flags) & (mask)) == (_x))
-@@ -240,6 +241,7 @@ struct mtk_iommu_data {
- struct mtk_iommu_domain {
- 	struct io_pgtable_cfg		cfg;
- 	struct io_pgtable_ops		*iop;
-+	u32				ttbr;
- 
- 	struct mtk_iommu_bank_data	*bank;
- 	struct iommu_domain		domain;
-@@ -596,6 +598,9 @@ static int mtk_iommu_domain_finalise(struct mtk_iommu_domain *dom,
- 		.iommu_dev = data->dev,
- 	};
- 
-+	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN))
-+		dom->cfg.quirks |= IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT;
-+
- 	if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_4GB_MODE))
- 		dom->cfg.oas = data->enable_4GB ? 33 : 32;
- 	else
-@@ -684,8 +689,8 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
- 			goto err_unlock;
- 		}
- 		bank->m4u_dom = dom;
--		writel(dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK,
--		       bank->base + REG_MMU_PT_BASE_ADDR);
-+		bank->m4u_dom->ttbr = MTK_IOMMU_ADDR(dom->cfg.arm_v7s_cfg.ttbr);
-+		writel(bank->m4u_dom->ttbr, data->base + REG_MMU_PT_BASE_ADDR);
- 
- 		pm_runtime_put(m4udev);
- 	}
-@@ -1366,8 +1371,7 @@ static int __maybe_unused mtk_iommu_runtime_resume(struct device *dev)
- 		writel_relaxed(reg->int_control[i], base + REG_MMU_INT_CONTROL0);
- 		writel_relaxed(reg->int_main_control[i], base + REG_MMU_INT_MAIN_CONTROL);
- 		writel_relaxed(reg->ivrp_paddr[i], base + REG_MMU_IVRP_PADDR);
--		writel(m4u_dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK,
--		       base + REG_MMU_PT_BASE_ADDR);
-+		writel(m4u_dom->ttbr, base + REG_MMU_PT_BASE_ADDR);
- 	} while (++i < data->plat_data->banks_num);
- 
- 	/*
-@@ -1401,7 +1405,7 @@ static const struct mtk_iommu_plat_data mt2712_data = {
- static const struct mtk_iommu_plat_data mt6779_data = {
- 	.m4u_plat      = M4U_MT6779,
- 	.flags         = HAS_SUB_COMM_2BITS | OUT_ORDER_WR_EN | WR_THROT_EN |
--			 MTK_IOMMU_TYPE_MM,
-+			 MTK_IOMMU_TYPE_MM | PGTABLE_PA_35_EN,
- 	.inv_sel_reg   = REG_MMU_INV_SEL_GEN2,
- 	.banks_num    = 1,
- 	.banks_enable = {true},
--- 
-2.18.0
+> On Fri, Jun 03, 2022 at 01:34:26PM -0400, Mikulas Patocka wrote:
+> 
+> ...
+> 
+> > I tried this patch and it doesn't help.
+> 
+> Thanks Mikulas for testing.
+> 
+> I'm still not able to reproduce the exact issue. But I was able to reproduce
+> the same symptom by hacking the kernel and doing CPU hotplug.
+
+I also see the warnings when disabling cores.
+
+> Can you please try the following patch? This seems to work in my hacked case.
+> I also tried to write out a detailed description of the issue to the best of
+> my knowledge.
+
+This patch works - there are no longer any warnings on CPU disable or on 
+suspend to disk.
+
+Mikulas
+
+> Thanks,
+> Yazen
+> 
+> ========================
+> 
+> >From d1fa5cdc7f29bf810215f0a83f16bc7435e55240 Mon Sep 17 00:00:00 2001
+> From: Yazen Ghannam <yazen.ghannam@amd.com>
+> Date: Mon, 6 Jun 2022 19:45:56 +0000
+> Subject: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when removing
+>  threshold blocks
+> 
+> AMD systems from Family 10h to 16h share MCA bank 4 across multiple CPUs.
+> Therefore, the threshold_bank structure for bank 4, and its threshold_block
+> structures, will be initialized once at boot time. And the kobject for the
+> shared bank will be added to each of the CPUs that share it. Furthermore,
+> the threshold_blocks for the shared bank will be added again to the bank's
+> kobject. These additions will increase the refcount for the bank's kobject.
+> 
+> For example, a shared bank with two blocks and shared across two CPUs will
+> be set up like this:
+> 
+> CPU0 init
+>   bank create and add; bank refcount = 1; threshold_create_bank()
+>     block 0 init and add; bank refcount = 2; allocate_threshold_blocks()
+>     block 1 init and add; bank refcount = 3; allocate_threshold_blocks()
+> CPU1 init
+>   bank add; bank refcount = 3; threshold_create_bank()
+>     block 0 add; bank refcount = 4; __threshold_add_blocks()
+>     block 1 add; bank refcount = 5; __threshold_add_blocks()
+> 
+> Currently in threshold_remove_bank(), if the bank is shared then
+> __threshold_remove_blocks() is called. Here the shared bank's kobject and
+> the bank's blocks' kobjects are deleted. This is done on the first call
+> even while the structures are still shared. Subsequent calls from other
+> CPUs that share the structures will attempt to delete the kobjects.
+> 
+> During kobject_del(), kobject->sd is removed. If the kobject is not part of
+> a kset with default_groups, then subsequent kobject_del() calls seem safe
+> even with kobject->sd == NULL.
+> 
+> Originally, the AMD MCA thresholding structures did not use default_groups.
+> And so the above behavior was not apparent.
+> 
+> However, a recent change implemented default_groups for the thresholding
+> structures. Therefore, kobject_del() will go down the sysfs_remove_groups()
+> code path. In this case, the first kobject_del() may succeed and remove
+> kobject->sd. But subsequent kobject_del() calls will give a WARNing in
+> kernfs_remove_by_name_ns() since kobject->sd == NULL.
+> 
+> Use kobject_put() on the shared bank's kobject when "removing" blocks. This
+> decrements the bank's refcount while keeping kobjects enabled until the
+> bank is no longer shared. At that point, kobject_put() will be called on
+> the blocks which drives their refcount to 0 and deletes them and also
+> decrementing the bank's refcount. And finally kobject_put() will be called
+> on the bank driving its refcount to 0 and deleting it.
+> 
+> With this patch and the example above:
+> 
+> CPU1 shutdown
+>   bank is shared; bank refcount = 5; threshold_remove_bank()
+>     block 0 put parent bank; bank refcount = 4; __threshold_remove_blocks()
+>     block 1 put parent bank; bank refcount = 3; __threshold_remove_blocks()
+> CPU0 shutdown
+>   bank is no longer shared; bank refcount = 3; threshold_remove_bank()
+>     block 0 put block; bank refcount = 2; deallocate_threshold_blocks()
+>     block 1 put block; bank refcount = 1; deallocate_threshold_blocks()
+>   put bank; bank refcount = 0; threshold_remove_bank()
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+
+Tested-by: Mikulas Patocka <mpatocka@redhat.com>
+
+> ---
+>  arch/x86/kernel/cpu/mce/amd.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+> index 2b7ee4a6c6ba..680b75d23a03 100644
+> --- a/arch/x86/kernel/cpu/mce/amd.c
+> +++ b/arch/x86/kernel/cpu/mce/amd.c
+> @@ -1260,10 +1260,10 @@ static void __threshold_remove_blocks(struct threshold_bank *b)
+>  	struct threshold_block *pos = NULL;
+>  	struct threshold_block *tmp = NULL;
+>  
+> -	kobject_del(b->kobj);
+> +	kobject_put(b->kobj);
+>  
+>  	list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
+> -		kobject_del(&pos->kobj);
+> +		kobject_put(b->kobj);
+>  }
+>  
+>  static void threshold_remove_bank(struct threshold_bank *bank)
+> -- 
+> 2.25.1
+> 
 

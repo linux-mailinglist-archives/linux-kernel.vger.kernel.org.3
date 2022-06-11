@@ -2,121 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2F25476F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763465476EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiFKRmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 13:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S230005AbiFKRhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 13:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiFKRmu (ORCPT
+        with ESMTP id S229489AbiFKRhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 13:42:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AD357986;
-        Sat, 11 Jun 2022 10:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cy4LqclDCzXO19Ll6jpbh9YluwE5VQrU+JF2sYO2jE0=; b=IxeQ9knTGfuPFY2EQO3cFHURNk
-        8Aq729adAtGTjemhV30dzAco9EIMZh7j/WvantcPtZcAMhMNIPxKuaGYOXVzVodW8cCJuFcGPJvdz
-        3QhZzc4YjmenhkYU1RNPeSB/3NQAUJLLXclhkJLs4g8y3YZhRxIr2xqWTvvmDLCWSIwJSDGoO3DUa
-        he3gxqAngeEH8UKmIFvz6Nw/8zGYCDk+w2n763osH8eOIwcEaK5uV3XAdM5oW25NaZpZG1a71zz9i
-        jzRYnpIMmls8+HfSypjUz43b/PCTd3Y7GlL9fnHttL5rcxmTekuN0llIvQl7xeqnMDThcspXRnPnR
-        mcBtAr5A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o058D-00FPYV-Al; Sat, 11 Jun 2022 17:42:41 +0000
-Date:   Sat, 11 Jun 2022 18:42:41 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        akpm@linux-foundation.org, axboe@kernel.dk,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
- accessed in filemap_read()
-Message-ID: <YqTUEZ+Pa24p09Uc@casper.infradead.org>
-References: <20220602082129.2805890-1-yukuai3@huawei.com>
- <YpkB1+PwIZ3AKUqg@casper.infradead.org>
- <c49af4f7-5005-7cf1-8b58-a398294472ab@huawei.com>
- <YqNWY46ZRoK6Cwbu@casper.infradead.org>
- <YqNW8cYn9gM7Txg6@casper.infradead.org>
- <c5f97e2f-8a48-2906-91a2-1d84629b3641@gmail.com>
- <YqOOsHecZUWlHEn/@casper.infradead.org>
- <dfa6d60d-0efd-f12d-9e71-a6cd24188bba@huawei.com>
+        Sat, 11 Jun 2022 13:37:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFFB25CF;
+        Sat, 11 Jun 2022 10:37:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E01AB80AE4;
+        Sat, 11 Jun 2022 17:37:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A10C34116;
+        Sat, 11 Jun 2022 17:37:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654969028;
+        bh=87s5IER2Hkii2UwGwmS+MjR5p1EgqGo8RMcZqPW65e4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XriqISjLhSiM1lS74ptrk8SHbnrzVrKf0BalmgOhxlZXfO1dUwyXqS7SWE9Wkl8ji
+         3ZIukpf9swW+uROIXAdpH/NvYkYTh10KbyQuThF9Xa95I44B/a4BYPbcr0fOnSmqNx
+         KsYGZgPcyh5jw+N7Oc/gTBQi98msaUJgJ1mHHJQ+U6+H+7ydk2TfxlJILvLWHD52qN
+         qFQpSlZFZc7bQOj5zMOQgqZFnG2SqCDRxgkVT8m9R7ts3uj3MgKWdPhNVumAQYjbsh
+         cf5UjtJP5qG4zbYtq4Upn5K4c8KcMnHJ1z/SMOxtCgzsk3ha3LS0fIlQ4sQwPZ+IZ8
+         PNYH1dtMxsVMA==
+Date:   Sat, 11 Jun 2022 18:46:17 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     <eugen.hristev@microchip.com>, <lars@metafoo.de>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 04/16] iio: adc: at91-sama5d2_adc: handle different
+ EMR.OSR for different hw versions
+Message-ID: <20220611184617.0aa9eb85@jic23-huawei>
+In-Reply-To: <20220609083213.1795019-5-claudiu.beznea@microchip.com>
+References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
+        <20220609083213.1795019-5-claudiu.beznea@microchip.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dfa6d60d-0efd-f12d-9e71-a6cd24188bba@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 04:23:42PM +0800, Yu Kuai wrote:
-> > This is going to mark the folio as accessed multiple times if it's
-> > a multi-page folio.  How about this one?
-> > 
-> Hi, Matthew
+On Thu, 9 Jun 2022 11:32:01 +0300
+Claudiu Beznea <claudiu.beznea@microchip.com> wrote:
+
+> SAMA7G5 introduces 64 and 256 oversampling rates. Due to this EMR.OSR is 3
+> bits long. Change the code to reflect this. Commit prepares the code
+> for the addition of 64 and 256 oversampling rates.
 > 
-> Thanks for the patch, it looks good to me.
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  drivers/iio/adc/at91-sama5d2_adc.c | 55 ++++++++++++++++++++++--------
+>  1 file changed, 40 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+> index b76328da0cb2..1ceab097335c 100644
+> --- a/drivers/iio/adc/at91-sama5d2_adc.c
+> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+> @@ -138,8 +138,7 @@ struct at91_adc_reg_layout {
+>  /* Extended Mode Register */
+>  	u16				EMR;
+>  /* Extended Mode Register - Oversampling rate */
+> -#define AT91_SAMA5D2_EMR_OSR(V)			((V) << 16)
+> -#define AT91_SAMA5D2_EMR_OSR_MASK		GENMASK(17, 16)
+> +#define AT91_SAMA5D2_EMR_OSR(V, M)		(((V) << 16) & (M))
+>  #define AT91_SAMA5D2_EMR_OSR_1SAMPLES		0
+>  #define AT91_SAMA5D2_EMR_OSR_4SAMPLES		1
+>  #define AT91_SAMA5D2_EMR_OSR_16SAMPLES		2
+> @@ -403,6 +402,8 @@ static const struct at91_adc_reg_layout sama7g5_layout = {
+>   * @max_index:		highest channel index (highest index may be higher
+>   *			than the total channel number)
+>   * @hw_trig_cnt:	number of possible hardware triggers
+> + * @osr_mask:		oversampling ratio bitmask on EMR register
+> + * @osr_vals:		available oversampling rates
+>   */
+>  struct at91_adc_platform {
+>  	const struct at91_adc_reg_layout	*layout;
+> @@ -414,6 +415,8 @@ struct at91_adc_platform {
+>  	unsigned int				max_channels;
+>  	unsigned int				max_index;
+>  	unsigned int				hw_trig_cnt;
+> +	unsigned int				osr_mask;
+> +	unsigned int				osr_vals;
+>  };
+>  
+>  /**
+> @@ -612,6 +615,10 @@ static const struct at91_adc_platform sama5d2_platform = {
+>  	.max_index = AT91_SAMA5D2_MAX_CHAN_IDX,
+>  #define AT91_SAMA5D2_HW_TRIG_CNT	3
+>  	.hw_trig_cnt = AT91_SAMA5D2_HW_TRIG_CNT,
+> +	.osr_mask = GENMASK(17, 16),
+> +	.osr_vals = BIT(AT91_SAMA5D2_EMR_OSR_1SAMPLES) |
+> +		    BIT(AT91_SAMA5D2_EMR_OSR_4SAMPLES) |
+> +		    BIT(AT91_SAMA5D2_EMR_OSR_16SAMPLES),
+>  };
+>  
+>  static const struct at91_adc_platform sama7g5_platform = {
+> @@ -627,6 +634,10 @@ static const struct at91_adc_platform sama7g5_platform = {
+>  	.max_index = AT91_SAMA7G5_MAX_CHAN_IDX,
+>  #define AT91_SAMA7G5_HW_TRIG_CNT	3
+>  	.hw_trig_cnt = AT91_SAMA7G5_HW_TRIG_CNT,
+> +	.osr_mask = GENMASK(18, 16),
+> +	.osr_vals = BIT(AT91_SAMA5D2_EMR_OSR_1SAMPLES) |
+> +		    BIT(AT91_SAMA5D2_EMR_OSR_4SAMPLES) |
+> +		    BIT(AT91_SAMA5D2_EMR_OSR_16SAMPLES),
+>  };
+>  
+>  static int at91_adc_chan_xlate(struct iio_dev *indio_dev, int chan)
+> @@ -725,34 +736,45 @@ static void at91_adc_eoc_ena(struct at91_adc_state *st, unsigned int channel)
+>  		at91_adc_writel(st, EOC_IER, BIT(channel));
+>  }
+>  
+> -static void at91_adc_config_emr(struct at91_adc_state *st)
+> +static int at91_adc_config_emr(struct at91_adc_state *st,
+> +			       u32 oversampling_ratio)
+>  {
+>  	/* configure the extended mode register */
+>  	unsigned int emr = at91_adc_readl(st, EMR);
+> +	unsigned int osr_mask = st->soc_info.platform->osr_mask;
+> +	unsigned int osr_vals = st->soc_info.platform->osr_vals;
+>  
+>  	/* select oversampling per single trigger event */
+>  	emr |= AT91_SAMA5D2_EMR_ASTE(1);
+>  
+>  	/* delete leftover content if it's the case */
+> -	emr &= ~AT91_SAMA5D2_EMR_OSR_MASK;
+> +	emr &= ~osr_mask;
+>  
+>  	/* select oversampling ratio from configuration */
+> -	switch (st->oversampling_ratio) {
+> +	switch (oversampling_ratio) {
+>  	case AT91_OSR_1SAMPLES:
+> -		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_1SAMPLES) &
+> -		       AT91_SAMA5D2_EMR_OSR_MASK;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_1SAMPLES)))
+> +			return -EINVAL;
+> +		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_1SAMPLES,
+> +					    osr_mask);
+>  		break;
+>  	case AT91_OSR_4SAMPLES:
+> -		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_4SAMPLES) &
+> -		       AT91_SAMA5D2_EMR_OSR_MASK;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_4SAMPLES)))
+> +			return -EINVAL;
+> +		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_4SAMPLES,
+> +					    osr_mask);
+>  		break;
+>  	case AT91_OSR_16SAMPLES:
+> -		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_16SAMPLES) &
+> -		       AT91_SAMA5D2_EMR_OSR_MASK;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_16SAMPLES)))
+> +			return -EINVAL;
+> +		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_16SAMPLES,
+> +					    osr_mask);
+>  		break;
+>  	}
+>  
+>  	at91_adc_writel(st, EMR, emr);
+> +
+> +	return 0;
+>  }
+>  
+>  static int at91_adc_adjust_val_osr(struct at91_adc_state *st, int *val)
+> @@ -1643,6 +1665,7 @@ static int at91_adc_write_raw(struct iio_dev *indio_dev,
+>  			      int val, int val2, long mask)
+>  {
+>  	struct at91_adc_state *st = iio_priv(indio_dev);
+> +	int ret = 0;
+>  
+>  	if (iio_buffer_enabled(indio_dev))
+>  		return -EBUSY;
+> @@ -1656,12 +1679,14 @@ static int at91_adc_write_raw(struct iio_dev *indio_dev,
+>  		mutex_lock(&st->lock);
+>  		if (val == st->oversampling_ratio)
+>  			goto unlock;
+> -		st->oversampling_ratio = val;
+>  		/* update ratio */
+> -		at91_adc_config_emr(st);
+> +		ret = at91_adc_config_emr(st, val);
+> +		if (ret)
+> +			goto unlock;
+> +		st->oversampling_ratio = val;
 
-Did you test it?  This is clearly a little subtle ;-)
+Good. I looked at the old ordering when reviewing earlier patch and thought
+that doesn't look good :)
 
-> BTW, I still think the fix should be commit 06c0444290ce ("mm/filemap.c:
-> generic_file_buffered_read() now uses find_get_pages_contig").
+However, now you hae the value passed to at91_adc_config_emr() perhaps
+you can drop the checking that it is a possible value from above this call
+and move it to the default case on the switch statement in there?
+(noticed on later patch, where that context is visible).
 
-Hmm, yes.  That code also has problems, but they're more subtle and
-probably don't amount to much.
-
--       iocb->ki_pos += copied;
--
--       /*
--        * When a sequential read accesses a page several times,
--        * only mark it as accessed the first time.
--        */
--       if (iocb->ki_pos >> PAGE_SHIFT != ra->prev_pos >> PAGE_SHIFT)
--               mark_page_accessed(page);
--
--       ra->prev_pos = iocb->ki_pos;
-
-This will mark the page accessed when we _exit_ a page.  So reading
-512-bytes at a time from offset 0, we'll mark page 0 as accessed on the
-first read (because the prev_pos is initialised to -1).  Then on the
-eighth read, we'll mark page 0 as accessed again (because ki_pos will
-now be 4096 and prev_pos is 3584).  We'll then read chunks of page 1
-without marking it as accessed, until we're about to step into page 2.
-
-Marking page 0 accessed twice is bad; it'll set the referenced bit the
-first time, and then the second time, it'll activate it.  So it'll be
-thought to be part of the workingset when it's really just been part of
-a streaming read.
-
-And the last page we read will never be marked accessed unless it
-happens to finish at the end of a page.
-
-Before Kent started his refactoring, I think it worked:
-
--       pgoff_t prev_index;
--       unsigned int prev_offset;
-...
--       prev_index = ra->prev_pos >> PAGE_SHIFT;
--       prev_offset = ra->prev_pos & (PAGE_SIZE-1);
-...
--               if (prev_index != index || offset != prev_offset)
--                       mark_page_accessed(page);
--               prev_index = index;
--               prev_offset = offset;
-...
--       ra->prev_pos = prev_index;
--       ra->prev_pos <<= PAGE_SHIFT;
--       ra->prev_pos |= prev_offset;
-
-At least, I don't detect any bugs in this.
+>  unlock:
+>  		mutex_unlock(&st->lock);
+> -		return 0;
+> +		return ret;
+>  	case IIO_CHAN_INFO_SAMP_FREQ:
+>  		if (val < st->soc_info.min_sample_rate ||
+>  		    val > st->soc_info.max_sample_rate)
+> @@ -1834,7 +1859,7 @@ static void at91_adc_hw_init(struct iio_dev *indio_dev)
+>  	at91_adc_setup_samp_freq(indio_dev, st->soc_info.min_sample_rate);
+>  
+>  	/* configure extended mode register */
+> -	at91_adc_config_emr(st);
+> +	at91_adc_config_emr(st, st->oversampling_ratio);
+>  }
+>  
+>  static ssize_t at91_adc_get_fifo_state(struct device *dev,
 

@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53365475D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 16:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1302B5475DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236789AbiFKO4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 10:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
+        id S237069AbiFKPAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 11:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234101AbiFKO4g (ORCPT
+        with ESMTP id S236868AbiFKPAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 10:56:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145BDB481
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 07:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EesJp6Q28Dva5LrN482KPkK1Tg2M3LLR40lrcCvgAAk=; b=WMGh50naDvnyC2S29Ju83tWUBS
-        aEzMG9CJXl92X/gsKJ/OXv7EBMXs63k3gZkWiwavEUQAP2d24xo6/D3ReKv2dcJoMSMxQgQs+o0LD
-        AILEIcXZRk1OZZZw2FukdV8MKv4UyBBjUXFoW3RBMqmC+Q3b4nP5ENAHg8qq9fTf1U0atiy33QZTm
-        j6nsvfemD/IEUDObGwdIh5j8vLWLZTf9S0c/6EF7pqWiZLOZYVWBkO1+0QlkTk1g4HZeuC5Rv/uvi
-        dSQex/M7UvtgSHsmkF0kYUapzwb+n+/qldIAldWSIhK0aQFSDCBn+0iJzhT3zhgmBD2f1436NUzR+
-        WW10RAjA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o02X8-00FJxM-7v; Sat, 11 Jun 2022 14:56:14 +0000
-Date:   Sat, 11 Jun 2022 15:56:14 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Zhangfei Gao <zhangfei.gao@linaro.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        shameerali.kolothum.thodi@huawei.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: fix is_pinnable_page return value
-Message-ID: <YqStDm5sdDL6YXn8@casper.infradead.org>
-References: <20220611133442.15290-1-zhangfei.gao@linaro.org>
+        Sat, 11 Jun 2022 11:00:19 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866CF5A095
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654959618; x=1686495618;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/sGcbr6Om4nizcD1B7N2v+rlnT2Bo4o8raxiJd14DwU=;
+  b=OAN6UGNalZqX5oKu1+WW/cEXQpBtnMHhsClrGyUFiUKllrljEs1oz2i2
+   d+8HtW6D9J70Cw1Jmyp9HLhwjgcN0ELbPS9TII0aBOZOFqmmOD07sesoD
+   BEAZeMt42FRhv93Qnjs8z0fKtJbfeLafINTAlCMNTb+SQt5EjclQWIZCX
+   lhrbZEc89XtqjPzoSxc4N5fWlz19mZEkvZfZZswfg6RjI7z/dXkFljv9f
+   dYvWMArJ3vnVQR375o5nt2PalOT5y7aRgb3yiUO7wA0olQrzWIOcWWt8U
+   XZoopLh2OcmeElwD9cE1WcExZC6nY84LDxArOcWUMaR1yNzL0g/3C5ubV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="257727943"
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="257727943"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:00:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="586796321"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Jun 2022 08:00:17 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o02b2-000IzN-Pg;
+        Sat, 11 Jun 2022 15:00:16 +0000
+Date:   Sat, 11 Jun 2022 22:59:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 26/29] arch/riscv/kvm/aia.c:324:2-3:
+ Unneeded semicolon
+Message-ID: <202206112231.Oz0t7IEP-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220611133442.15290-1-zhangfei.gao@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 09:34:42PM +0800, Zhangfei Gao wrote:
-> Commit 1c563432588d ("mm: fix is_pinnable_page against a cma page")
-> Changes from
-> return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
->         is_zero_pfn(page_to_pfn(page));
-> to
-> return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   9c50a2eb51ca70ba23cf9bc8cef121e8765b2c01
+commit: 4b5db34c607d39e59bdd3b0f37864643f5c31924 [26/29] RISC-V: KVM: Virtualize per-HART AIA CSRs
+config: riscv-randconfig-c024-20220611 (https://download.01.org/0day-ci/archive/20220611/202206112231.Oz0t7IEP-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
 
-Mailing lists can be read as well as written.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-https://lore.kernel.org/linux-mm/165490039431.944052.12458624139225785964.stgit@omen/
+
+cocci warnings: (new ones prefixed by >>)
+>> arch/riscv/kvm/aia.c:324:2-3: Unneeded semicolon
+   arch/riscv/kvm/aia.c:357:2-3: Unneeded semicolon
+   arch/riscv/kvm/aia.c:383:2-3: Unneeded semicolon
+   arch/riscv/kvm/aia.c:235:2-3: Unneeded semicolon
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

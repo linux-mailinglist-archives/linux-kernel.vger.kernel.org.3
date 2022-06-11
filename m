@@ -2,194 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBF95471AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 05:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0A25471AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 05:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349933AbiFKDlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 23:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S234208AbiFKDqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 23:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242868AbiFKDlE (ORCPT
+        with ESMTP id S229994AbiFKDqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 23:41:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A51F1B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 20:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654918863; x=1686454863;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=agqgZT7RLJJ/GHDSQgEfAwn3LSYYH6TOzTJNHpRnA9s=;
-  b=WzzOXZ9NzmzqLXuOzunVV061DrtXMFY+lXcWwBlVGGVOV+rgRBE3pcRB
-   9Jt//GWsk8rzp69KdwlfrSJgnMGuW9V8lB1d1MV2XtrOf3uOInUEloH/L
-   U96BYU6hOJsOlzZFSdjZhBYLO9LFSDJGpigbJ5Am6sHYN4DeIZOBbLC7e
-   GEwDD3nAfl96h9cxqVCY3n+tmk3R1z20QRcZlTvvcoFJZul6alO7vQ66c
-   F273IvusiSWWTc3z9jVZwhoFBa6C+l3Ii/hg/iXOkddh1+cWrwPxSA7bu
-   H78UfHhjxTwwMG9AoPur9SJlon4YBBwlWWJLB+iFqdTxrHs+HCt0jk7yv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="341868343"
-X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="341868343"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 20:41:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="611004674"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 10 Jun 2022 20:41:00 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzrzg-000IVl-8y;
-        Sat, 11 Jun 2022 03:41:00 +0000
-Date:   Sat, 11 Jun 2022 11:40:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 29/57]
- include/linux/page-flags.h:788:20: error: passing 'const struct page *' to
- parameter of type 'struct page *' discards qualifiers
-Message-ID: <202206111140.r2gAQWTY-lkp@intel.com>
+        Fri, 10 Jun 2022 23:46:33 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997DB26F1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 20:46:32 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id n18so797623plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 20:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4IrN97Z1/unmod/0ZIgRREwNK9Dy4GlFmKlR4IOlB2k=;
+        b=hb4l4z3HG1CVMmqPwl4/D1F8761cs2tTehUNvl/L8uMyrLPJvW7RsrggENAgsab4io
+         Zv5yQK9qdUPwNuP9lVOY/y6TY8a3Oc5qDekpUtenRoFkvrFPoA6UvVws1C3tux1dCimp
+         kOOuIyXvbj0inJNrczRDU//NJz3ohut46sRl6O7ofLIlPIoE71x5lG+Yn7kt055M4sGG
+         V3coDTpJC9jh77FPAguxa2tqFo6LVbh2uJe7xg/aKvo/L4ePRAtsYhHyq4AxEoer/WML
+         1ISE+Dm6SqmodoZ5bat1m55xhIzPSSrGZkDr+QuXreldboiOkADsv4W9qfm6qSC2EK86
+         RtKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4IrN97Z1/unmod/0ZIgRREwNK9Dy4GlFmKlR4IOlB2k=;
+        b=HAjpM/2ctOBYC4HMuEBX+Uq9niLE0FtbAG6O7ojoOsXrlifeEt3pf6kQSllqDCY61d
+         Jb1n8bLp2l9a6u1EajGki7n1UJk6tiMGFm/5g1L3t0E3EB30dVdb2bj5dDDYyoWTv6ri
+         aZT046WJiGr0zXjfJNw0/jY7hwPmgg1iR4zx7lyELNPlZLV4ZrU6CF7P6kFvDX7YW0eI
+         5czBYnopEhZxD2P04XVaB5qVYvuNG0PyWXN42524q3Fu9jaqh2NsM/ljhAB02ARsjFEC
+         zuwyLDMXZ9lNyQaJuaUtMBzkV+usrK5aYxHlizSwv+EqvIjjP4aa/B/kog5Gg5V6yuC9
+         vudA==
+X-Gm-Message-State: AOAM532vnjN+XhvzRQ0WvxXCM8CMfSeaB97ecWJFP7/vohDDGE/lyRTf
+        f4bLweBNNdkyI9DQZwCCKkk=
+X-Google-Smtp-Source: ABdhPJz/jDdaLC34L72YARJH+N80C4P6Crbov088Y5N17eQQL78XPGY9rLyVrHfAlIl2f4KrcPbuXg==
+X-Received: by 2002:a17:90b:3506:b0:1e8:8449:6acb with SMTP id ls6-20020a17090b350600b001e884496acbmr3024124pjb.27.1654919192077;
+        Fri, 10 Jun 2022 20:46:32 -0700 (PDT)
+Received: from [192.168.1.104] ([101.86.206.203])
+        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b001677d4a9654sm463706plk.265.2022.06.10.20.46.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 20:46:31 -0700 (PDT)
+Message-ID: <957f5626-2c89-f53a-2156-bbde2bb545f2@gmail.com>
+Date:   Sat, 11 Jun 2022 11:46:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 3/3] mm: kmemleak: check physical address when scan
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yee.lee@mediatek.com
+References: <20220609124950.1694394-1-patrick.wang.shcn@gmail.com>
+ <20220609124950.1694394-4-patrick.wang.shcn@gmail.com>
+ <YqI44Q20oJNVl+QV@arm.com>
+From:   Patrick Wang <patrick.wang.shcn@gmail.com>
+In-Reply-To: <YqI44Q20oJNVl+QV@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
-commit: f951c9604853872cf088bb3dbf7d49e3f96b090d [29/57] mm: Make some folio function arguments const
-config: mips-randconfig-r033-20220610 (https://download.01.org/0day-ci/archive/20220611/202206111140.r2gAQWTY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/f951c9604853872cf088bb3dbf7d49e3f96b090d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout f951c9604853872cf088bb3dbf7d49e3f96b090d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:13:
-   In file included from include/linux/list_lru.h:14:
-   In file included from include/linux/xarray.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:22:
->> include/linux/page-flags.h:788:20: error: passing 'const struct page *' to parameter of type 'struct page *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           PF_POISONED_CHECK(page);
-                             ^~~~
-   include/linux/page-flags.h:370:41: note: expanded from macro 'PF_POISONED_CHECK'
-                   VM_BUG_ON_PGFLAGS(PagePoisoned(page), page);            \
-                                                         ^~~~
-   include/linux/mmdebug.h:94:60: note: expanded from macro 'VM_BUG_ON_PGFLAGS'
-   #define VM_BUG_ON_PGFLAGS(cond, page) VM_BUG_ON_PAGE(cond, page)
-                                                              ^~~~
-   include/linux/mmdebug.h:21:14: note: expanded from macro 'VM_BUG_ON_PAGE'
-                           dump_page(page, "VM_BUG_ON_PAGE(" __stringify(cond)")");\
-                                     ^~~~
-   include/linux/mmdebug.h:12:29: note: passing argument to parameter 'page' here
-   void dump_page(struct page *page, const char *reason);
-                               ^
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
-   void output_ptreg_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_ptreg_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
-   void output_task_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_task_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
-   void output_thread_info_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_info_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
-   void output_thread_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
-   void output_mm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_mm_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
-   void output_sc_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:218:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_sc_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
-   void output_signal_defined(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:253:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_signal_defined(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for function 'output_pm_defines' [-Wmissing-prototypes]
-   void output_pm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:332:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_pm_defines(void)
-   ^
-   static 
-   8 warnings and 1 error generated.
-   make[2]: *** [scripts/Makefile.build:117: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1196: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
 
 
-vim +788 include/linux/page-flags.h
+On 2022/6/10 02:16, Catalin Marinas wrote:
+> On Thu, Jun 09, 2022 at 08:49:50PM +0800, Patrick Wang wrote:
+>> Check the physical address of objects for its boundary
+>> when scan instead of in kmemleak_*_phys().
+>>
+>> Fixes: 23c2d497de21 ("mm: kmemleak: take a full lowmem check in kmemleak_*_phys()")
+>> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+>> Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+> 
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> 
+> The fixed commit above was cc stable, so we'll probably need all these
+> three patches in stable. But I'd keep them a bit in -next for testing
+> first (and I see Andrew already picked them up; we might as well merge
+> them in 5.20 and send them to -stable after, it's not some critical
+> feature).
+> 
+> Thanks for the series. I don't think you need to respin unless others of
+> comments.
 
-e7d324850bfcb3 Muchun Song   2022-03-22  785  
-f951c960485387 David Howells 2022-06-08  786  static __always_inline int PageHead(const struct page *page)
-e7d324850bfcb3 Muchun Song   2022-03-22  787  {
-e7d324850bfcb3 Muchun Song   2022-03-22 @788  	PF_POISONED_CHECK(page);
-e7d324850bfcb3 Muchun Song   2022-03-22  789  	return test_bit(PG_head, &page->flags) && !page_is_fake_head(page);
-e7d324850bfcb3 Muchun Song   2022-03-22  790  }
-e7d324850bfcb3 Muchun Song   2022-03-22  791  
+I've received an auto build test WARNING from kernel test robot:
 
-:::::: The code at line 788 was first introduced by commit
-:::::: e7d324850bfcb30df563d144c0363cc44595277d mm: hugetlb: free the 2nd vmemmap page associated with each HugeTLB page
+    mm/kmemleak.c: In function 'scan_object':
+   >> arch/powerpc/include/asm/page.h:215:42: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+        215 | #define __va(x) ((void *)(unsigned long)((phys_addr_t)(x) + VIRT_PHYS_OFFSET))
+            |                                          ^
+      mm/kmemleak.c:1403:19: note: in expansion of macro '__va'
+       1403 |                   __va((void *)object->pointer) :
+            |                   ^~~~
 
-:::::: TO: Muchun Song <songmuchun@bytedance.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+So I will replace __va((void *)object->pointer)
+to __va((phys_addr_t)object->pointer) for fixing this warning,
+and move the prototype change and the kmemleak_not_leak_phys()
+removal to a separate one as you suggested at the same time.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks for these comments and suggestions.
+
+Thanks,
+Patrick

@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC19954765B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC0154764F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239382AbiFKQNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 12:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
+        id S238625AbiFKQDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 12:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbiFKQNX (ORCPT
+        with ESMTP id S233496AbiFKQDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 12:13:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E8E39815
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654964002; x=1686500002;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ML5pdHk40QEa1TxA5mVW1n6giskH9h6L4ibWC8gVMBA=;
-  b=ZVwpJqfFbFFj4GneYSLSs8et1ULvlcbRC3H4pjmnhn98w6hog3G6pW30
-   zg6vUVszd2C1lgabsgRgha4A32Y4SGr3+mrK3TLzCrQzbP9AaI8ZXvO3X
-   4bvonKGpNtXiJOHjXGEcEyAbuT42pwrfFAP6JXNh/x3MOkafUfKLfB6KD
-   yfvF4Ahk89922JO8FpicgF4NLazLotj8yfYLRQO0SLwWoV9N4NYGX7WEs
-   iUkGE423y0vHm4pt3RXiOXcZaKP3N3rSfHmGSywLWBv9TcVP+6l6M4Nuf
-   5dO5w/v2atZNMG6+e1mZCzrqx5KDISS43zZ6Ov/gYC7qYMQjA9kTnf3Ut
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="258339400"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="258339400"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 09:13:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="567290238"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 11 Jun 2022 09:13:21 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o03jk-000J3m-D5;
-        Sat, 11 Jun 2022 16:13:20 +0000
-Date:   Sun, 12 Jun 2022 00:12:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/arm/mm/copypage-feroceon.c:65:6: warning: no previous prototype
- for 'feroceon_copy_user_highpage'
-Message-ID: <202206120025.LnzrdX8M-lkp@intel.com>
+        Sat, 11 Jun 2022 12:03:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77E21115E;
+        Sat, 11 Jun 2022 09:03:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E726114E;
+        Sat, 11 Jun 2022 16:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F1DC34116;
+        Sat, 11 Jun 2022 16:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654963426;
+        bh=pXHToWyY4mQlOO2SpdBWrNbDgW1ppK7DRYcXS5SEyLY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uwuPyfLgxPj2gsic7f2BhqkH5xVXwidkQq9VAN0ltcK0I6r804hmrQwTTpOF5QIHd
+         uXy5fSoBEPOSosIa3OpoK0MIezJFgnXjHErvmsSIKjZqpy63mD2f1WwDaukkaxYmuf
+         zQ/KJU5IJ82sTzb6/XhUsi9VU9zhn24o76wG/Z649z3gHYQk+/VAFYPBVDC8f6UEu+
+         y2rhrimXdZtLOE29TPlhdDkeGhzHSlM//EkV3QpCtWSgpE/Z+whCiPgIhg2Hy1lQce
+         skzlD5swkGL11Ax5ZdaqtvPDh9sKZHspPm30rb37TMBMIdghRO+QtMLbd6gpMfW6+g
+         qJ7qr+aD/GCdQ==
+Date:   Sat, 11 Jun 2022 17:12:55 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Olivier Moysan <olivier.moysan@foss.st.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH] iio: adc: stm32: fix vrefint wrong calibration value
+ handling
+Message-ID: <20220611171255.6cbc16c0@jic23-huawei>
+In-Reply-To: <20220609095856.376961-1-olivier.moysan@foss.st.com>
+References: <20220609095856.376961-1-olivier.moysan@foss.st.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,100 +63,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Thu, 9 Jun 2022 11:58:56 +0200
+Olivier Moysan <olivier.moysan@foss.st.com> wrote:
 
-First bad commit (maybe != root cause):
+> If the vrefint calibration is zero, the vrefint channel output value
+> cannot be computed. Currently, in such case, the raw conversion value
+> is returned, which is not relevant.
+> Do not expose the vrefint channel when the output value cannot be
+> computed, instead.
+> 
+> Fixes: 0e346b2cfa85 ("iio: adc: stm32-adc: add vrefint calibration support")
+> 
+No line break here. Fixes is part of the tag block (and a pull request sent with
+this gap will get rejected). Fixed up whilst applying.
+> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0885eacdc81f920c3e0554d5615e69a66504a28d
-commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
-date:   8 days ago
-config: arm-randconfig-r004-20220611 (https://download.01.org/0day-ci/archive/20220612/202206120025.LnzrdX8M-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7036440eab3e2d47a775d4616909f8235488d714
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-lpc32xx/ arch/arm/mach-versatile/ arch/arm/mm/ drivers/cpufreq/
+Applied to the fixes-togreg branch of iiogit.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I initially wondered if using -ENOENT for this was safe in that it couldn't
+come from anywhere else.  Looks like it is given how little this function does
+so fair enough.
 
-All warnings (new ones prefixed by >>):
+Thanks,
 
->> arch/arm/mm/copypage-feroceon.c:65:6: warning: no previous prototype for 'feroceon_copy_user_highpage' [-Wmissing-prototypes]
-      65 | void feroceon_copy_user_highpage(struct page *to, struct page *from,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm/mm/copypage-feroceon.c:78:6: warning: no previous prototype for 'feroceon_clear_user_highpage' [-Wmissing-prototypes]
-      78 | void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
---
->> arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype for 'lpc32xx_loopback_set' [-Wmissing-prototypes]
-      63 | void lpc32xx_loopback_set(resource_size_t mapbase, int state)
-         |      ^~~~~~~~~~~~~~~~~~~~
---
->> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for 'mmc_status' [-Wmissing-prototypes]
-      56 | unsigned int mmc_status(struct device *dev)
-         |              ^~~~~~~~~~
---
->> drivers/cpufreq/davinci-cpufreq.c:151:12: warning: no previous prototype for 'davinci_cpufreq_init' [-Wmissing-prototypes]
-     151 | int __init davinci_cpufreq_init(void)
-         |            ^~~~~~~~~~~~~~~~~~~~
+Jonathan
 
+> ---
+>  drivers/iio/adc/stm32-adc.c | 27 +++++++++++++++++----------
+>  1 file changed, 17 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+> index a68ecbda6480..f13c112f540f 100644
+> --- a/drivers/iio/adc/stm32-adc.c
+> +++ b/drivers/iio/adc/stm32-adc.c
+> @@ -1365,7 +1365,7 @@ static int stm32_adc_read_raw(struct iio_dev *indio_dev,
+>  		else
+>  			ret = -EINVAL;
+>  
+> -		if (mask == IIO_CHAN_INFO_PROCESSED && adc->vrefint.vrefint_cal)
+> +		if (mask == IIO_CHAN_INFO_PROCESSED)
+>  			*val = STM32_ADC_VREFINT_VOLTAGE * adc->vrefint.vrefint_cal / *val;
+>  
+>  		iio_device_release_direct_mode(indio_dev);
+> @@ -1979,10 +1979,10 @@ static int stm32_adc_populate_int_ch(struct iio_dev *indio_dev, const char *ch_n
+>  
+>  	for (i = 0; i < STM32_ADC_INT_CH_NB; i++) {
+>  		if (!strncmp(stm32_adc_ic[i].name, ch_name, STM32_ADC_CH_SZ)) {
+> -			adc->int_ch[i] = chan;
+> -
+> -			if (stm32_adc_ic[i].idx != STM32_ADC_INT_CH_VREFINT)
+> -				continue;
+> +			if (stm32_adc_ic[i].idx != STM32_ADC_INT_CH_VREFINT) {
+> +				adc->int_ch[i] = chan;
+> +				break;
+> +			}
+>  
+>  			/* Get calibration data for vrefint channel */
+>  			ret = nvmem_cell_read_u16(&indio_dev->dev, "vrefint", &vrefint);
+> @@ -1990,10 +1990,15 @@ static int stm32_adc_populate_int_ch(struct iio_dev *indio_dev, const char *ch_n
+>  				return dev_err_probe(indio_dev->dev.parent, ret,
+>  						     "nvmem access error\n");
+>  			}
+> -			if (ret == -ENOENT)
+> -				dev_dbg(&indio_dev->dev, "vrefint calibration not found\n");
+> -			else
+> -				adc->vrefint.vrefint_cal = vrefint;
+> +			if (ret == -ENOENT) {
+> +				dev_dbg(&indio_dev->dev, "vrefint calibration not found. Skip vrefint channel\n");
+> +				return ret;
+> +			} else if (!vrefint) {
+> +				dev_dbg(&indio_dev->dev, "Null vrefint calibration value. Skip vrefint channel\n");
+> +				return -ENOENT;
+> +			}
+> +			adc->int_ch[i] = chan;
+> +			adc->vrefint.vrefint_cal = vrefint;
+>  		}
+>  	}
+>  
+> @@ -2030,7 +2035,9 @@ static int stm32_adc_generic_chan_init(struct iio_dev *indio_dev,
+>  			}
+>  			strncpy(adc->chan_name[val], name, STM32_ADC_CH_SZ);
+>  			ret = stm32_adc_populate_int_ch(indio_dev, name, val);
+> -			if (ret)
+> +			if (ret == -ENOENT)
+> +				continue;
+> +			else if (ret)
+>  				goto err;
+>  		} else if (ret != -EINVAL) {
+>  			dev_err(&indio_dev->dev, "Invalid label %d\n", ret);
 
-vim +/feroceon_copy_user_highpage +65 arch/arm/mm/copypage-feroceon.c
-
-d73e60b7144a86 Russell King  2008-10-31   64  
-063b0a4207e43a Russell King  2008-10-31  @65  void feroceon_copy_user_highpage(struct page *to, struct page *from,
-f00a75c094c340 Russell King  2009-10-05   66  	unsigned long vaddr, struct vm_area_struct *vma)
-063b0a4207e43a Russell King  2008-10-31   67  {
-063b0a4207e43a Russell King  2008-10-31   68  	void *kto, *kfrom;
-063b0a4207e43a Russell King  2008-10-31   69  
-5472e862de2bc4 Cong Wang     2011-11-25   70  	kto = kmap_atomic(to);
-5472e862de2bc4 Cong Wang     2011-11-25   71  	kfrom = kmap_atomic(from);
-2725898fc9bb21 Russell King  2009-10-05   72  	flush_cache_page(vma, vaddr, page_to_pfn(from));
-063b0a4207e43a Russell King  2008-10-31   73  	feroceon_copy_user_page(kto, kfrom);
-5472e862de2bc4 Cong Wang     2011-11-25   74  	kunmap_atomic(kfrom);
-5472e862de2bc4 Cong Wang     2011-11-25   75  	kunmap_atomic(kto);
-063b0a4207e43a Russell King  2008-10-31   76  }
-063b0a4207e43a Russell King  2008-10-31   77  
-303c6443659bc1 Russell King  2008-10-31  @78  void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
-d73e60b7144a86 Russell King  2008-10-31   79  {
-5472e862de2bc4 Cong Wang     2011-11-25   80  	void *ptr, *kaddr = kmap_atomic(page);
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   81  	asm volatile ("\
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   82  	mov	r1, %2				\n\
-d73e60b7144a86 Russell King  2008-10-31   83  	mov	r2, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   84  	mov	r3, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   85  	mov	r4, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   86  	mov	r5, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   87  	mov	r6, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   88  	mov	r7, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   89  	mov	ip, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   90  	mov	lr, #0				\n\
-303c6443659bc1 Russell King  2008-10-31   91  1:	stmia	%0, {r2-r7, ip, lr}		\n\
-d73e60b7144a86 Russell King  2008-10-31   92  	subs	r1, r1, #1			\n\
-303c6443659bc1 Russell King  2008-10-31   93  	mcr	p15, 0, %0, c7, c14, 1		@ clean and invalidate D line\n\
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   94  	add	%0, %0, #32			\n\
-d73e60b7144a86 Russell King  2008-10-31   95  	bne	1b				\n\
-303c6443659bc1 Russell King  2008-10-31   96  	mcr	p15, 0, r1, c7, c10, 4		@ drain WB"
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   97  	: "=r" (ptr)
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   98  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
-303c6443659bc1 Russell King  2008-10-31   99  	: "r1", "r2", "r3", "r4", "r5", "r6", "r7", "ip", "lr");
-5472e862de2bc4 Cong Wang     2011-11-25  100  	kunmap_atomic(kaddr);
-d73e60b7144a86 Russell King  2008-10-31  101  }
-d73e60b7144a86 Russell King  2008-10-31  102  
-
-:::::: The code at line 65 was first introduced by commit
-:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
-
-:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

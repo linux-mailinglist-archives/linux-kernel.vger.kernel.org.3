@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C744D547793
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8AC547792
 	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 22:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiFKUtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 16:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S232068AbiFKUtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 16:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiFKUtO (ORCPT
+        with ESMTP id S229688AbiFKUtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 16:49:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80604286E6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:49:12 -0700 (PDT)
+        Sat, 11 Jun 2022 16:49:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62EF5275D1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:49:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654980551;
+        s=mimecast20190719; t=1654980545;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KEbYtgeCY5d2A+34Js+u4oC9j4ydleTr8OH6QnelxU8=;
-        b=f/gBQwwBn8D+cC5a6OJU8knQkhi/ykFjvE+D2QCXKIpr55NoqnlwqSKwh1cNw30j9uPDyR
-        I5dMWSSEtDmfnoGSZHyntLrNM9LGO8lF/VzMj4To/8HqLvJvZc9NpP2D/RkqeiAjkjvE08
-        vtM/U9GadGy4csKDPS7ov49zQbQKMdY=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RPW8MJZeU1cQQOGf+k4czGCcsVXXmPCDagh2Sq6V6IM=;
+        b=FJPUZvy3Aor0WR0LFrB/t9Nf6ObSBd9RN4QFHgyKhonyJEXwYm6P0ofiISHHVs424lL809
+        s/LZoG7vL+SdjJZUDel0ni9qRqWSQgVceW9QxiZy4BLJAHVWjt7++yZv7T/NPuVEYjNOqf
+        E3730JpJFGTJwV/eQXL85kFLnrJ4DCQ=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-PibKsS3xNGm3iWsin3nDQw-1; Sat, 11 Jun 2022 16:49:02 -0400
-X-MC-Unique: PibKsS3xNGm3iWsin3nDQw-1
-Received: by mail-wm1-f69.google.com with SMTP id k5-20020a05600c0b4500b003941ca130f9so1365337wmr.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:49:02 -0700 (PDT)
+ us-mta-78-QYucmGZSMWiuAJgW-3hi_Q-1; Sat, 11 Jun 2022 16:49:04 -0400
+X-MC-Unique: QYucmGZSMWiuAJgW-3hi_Q-1
+Received: by mail-wm1-f69.google.com with SMTP id r8-20020a1c4408000000b0039c832fbd02so88484wma.4
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:49:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KEbYtgeCY5d2A+34Js+u4oC9j4ydleTr8OH6QnelxU8=;
-        b=JxJwwXrKdI66nBMK8m2LPk/bngOHansQf1JjcJGRYAif3WXaj1kRfHfr2x9MD+hFAS
-         UcGg+GcZS4IVrQ4DHpetaH+sII+qqsfosQ432RBjhMJ4fbm6zpR8df0aJc6idunh4guW
-         DNnDNI/FodwJh6cKjfH7A8DmB9Rx0uYgxlDxId80TiKkO4QqTBd6uxTph1ox0M0Pg3Sm
-         4XVCgkRBlV8DOmiu7GDzcEUuyNY5pJWoRFZ0cQ5Cyebiar+Wl5BuoD9LALEcJFhh9PeI
-         p8PhDFvyuQ6v4yhPaoCBbhVxZQgVlVYcjB8GQxTzTijY2SnRmACE2mM+cVf23q82aQ9I
-         YWJA==
-X-Gm-Message-State: AOAM532Y/pVH8eOhQHk49jYFqd44t7kuPYJ8fPFY8lBrD0l/DctFXgz+
-        DhD1wzw7np+gB04ITpvoOnbskH3dg0HTt3IM9gYkRHpKOjhmAd1Y0NlEvywDtaQDrS6UQOA1Fbl
-        WEklUBEjA3HxQRViDyYGwjIo=
-X-Received: by 2002:a5d:4845:0:b0:210:25fa:dc7c with SMTP id n5-20020a5d4845000000b0021025fadc7cmr49214325wrs.131.1654980541130;
-        Sat, 11 Jun 2022 13:49:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw48t8wKUPQYNAVF5n9sTc868ZFn15aSjSQu8D4WNlpoKkdHCO5/bj2xUhmGmbcBeQcf6rWaw==
-X-Received: by 2002:a5d:4845:0:b0:210:25fa:dc7c with SMTP id n5-20020a5d4845000000b0021025fadc7cmr49214317wrs.131.1654980540940;
-        Sat, 11 Jun 2022 13:49:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RPW8MJZeU1cQQOGf+k4czGCcsVXXmPCDagh2Sq6V6IM=;
+        b=eL2KYKeo54LTV5LZzORy11V/kgfOpn+24Gd2zBHJSlGR8EtkTCEikJzvskduRd6F3L
+         pGiLkJ+crFywqhP9fWMeSb8i+AE511w3bV7cpYSWn2vHBdo7A1lnr3S3uwohpQwQt+vI
+         0C+eX/Q77kDCEiyOCF3QoW+VL4GGkCMg9nJhxQm3XAvJUSLmq6ec35dnAMCYi18OoaGC
+         Vg4i3UuATIrAtf8pSkVSlPkFy966w1KGSVtvuBEf3cd1A8Jykol/CFahMYPE5pVovRTl
+         MBPWl5yuL9QEGJSP3tcGqdnUBsWDD3n14UJkeKhUVB+EX+e/ghtvUZcZ67I/PrGChUPo
+         UYNw==
+X-Gm-Message-State: AOAM532KDhgoV975tw9dhBCZrXj3ZUxgqX7OMpmwS4fIYrzIEZEDNExy
+        6XkmyK934U3RpNxVYWmFkhRC7WLGgbqZ0rr8pOXwRv8Mjznm5XOcyds1Jdtvo9dk8lfUrZ8T8g0
+        yAHKYfg0LjSaWLmnN05Hs6dQ=
+X-Received: by 2002:a1c:f710:0:b0:394:1960:e8a1 with SMTP id v16-20020a1cf710000000b003941960e8a1mr6365031wmh.154.1654980543005;
+        Sat, 11 Jun 2022 13:49:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx0/vf4dqScx5mIF462WlkjbnsS1YIOrSwAvq/DIjRGKMRoNpUKnWJeKabDZIF1OiI5YyM06w==
+X-Received: by 2002:a1c:f710:0:b0:394:1960:e8a1 with SMTP id v16-20020a1cf710000000b003941960e8a1mr6365019wmh.154.1654980542848;
+        Sat, 11 Jun 2022 13:49:02 -0700 (PDT)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id d4-20020adffbc4000000b00219b4c01712sm3506635wrs.92.2022.06.11.13.49.00
+        by smtp.gmail.com with ESMTPSA id w17-20020a1cf611000000b0039c5a765388sm3518789wmc.28.2022.06.11.13.49.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 13:49:00 -0700 (PDT)
+        Sat, 11 Jun 2022 13:49:01 -0700 (PDT)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, joro@8bytes.org, will@kernel.org,
         dwmw2@infradead.org, baolu.lu@linux.intel.com, hpa@zytor.com
 Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         atomlin@atomlin.com
-Subject: [RFC PATCH 1/3] x86/boot/e820: Make __e820__mapped_all() external
-Date:   Sat, 11 Jun 2022 21:48:57 +0100
-Message-Id: <20220611204859.234975-1-atomlin@redhat.com>
+Subject: [RFC PATCH 2/3] x86/boot/e820: Make e820_type_to_string() external
+Date:   Sat, 11 Jun 2022 21:48:58 +0100
+Message-Id: <20220611204859.234975-2-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220611204859.234975-1-atomlin@redhat.com>
+References: <20220611204859.234975-1-atomlin@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,7 +81,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 No functional change.
 
-This patch allows __e820__mapped_all() to be available for
+This patch allows e820_type_to_string() to be available for
 external use, in preparation to enhance the error message
 generated by arch_rmrr_sanity_check().
 
@@ -89,30 +92,30 @@ Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
  2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
-index e8f58ddd06d9..bf78daa08897 100644
+index bf78daa08897..ceb301e591de 100644
 --- a/arch/x86/include/asm/e820/api.h
 +++ b/arch/x86/include/asm/e820/api.h
-@@ -13,6 +13,7 @@ extern unsigned long pci_mem_start;
- extern bool e820__mapped_raw_any(u64 start, u64 end, enum e820_type type);
- extern bool e820__mapped_any(u64 start, u64 end, enum e820_type type);
- extern bool e820__mapped_all(u64 start, u64 end, enum e820_type type);
-+struct e820_entry *__e820__mapped_all(u64 start, u64 end, enum e820_type type);
+@@ -43,6 +43,7 @@ extern void e820__reallocate_tables(void);
+ extern void e820__register_nosave_regions(unsigned long limit_pfn);
  
- extern void e820__range_add   (u64 start, u64 size, enum e820_type type);
- extern u64  e820__range_update(u64 start, u64 size, enum e820_type old_type, enum e820_type new_type);
+ extern int  e820__get_entry_type(u64 start, u64 end);
++const char *e820_type_to_string(struct e820_entry *entry);
+ 
+ /*
+  * Returns true iff the specified range [start,end) is completely contained inside
 diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index f267205f2d5a..09b1c863a766 100644
+index 09b1c863a766..95b994cf80cd 100644
 --- a/arch/x86/kernel/e820.c
 +++ b/arch/x86/kernel/e820.c
-@@ -109,7 +109,7 @@ EXPORT_SYMBOL_GPL(e820__mapped_any);
-  * Note: this function only works correctly once the E820 table is sorted and
-  * not-overlapping (at least for the range specified), which is the case normally.
-  */
--static struct e820_entry *__e820__mapped_all(u64 start, u64 end,
-+struct e820_entry *__e820__mapped_all(u64 start, u64 end,
- 					     enum e820_type type)
+@@ -1071,7 +1071,7 @@ void __init e820__finish_early_params(void)
+ 	}
+ }
+ 
+-static const char *__init e820_type_to_string(struct e820_entry *entry)
++const char *__init e820_type_to_string(struct e820_entry *entry)
  {
- 	int i;
+ 	switch (entry->type) {
+ 	case E820_TYPE_RESERVED_KERN:	/* Fall-through: */
 -- 
 2.34.1
 

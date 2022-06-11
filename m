@@ -2,107 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948025477E4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 01:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331BF5477E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 01:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbiFKXRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 19:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S232053AbiFKXRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 19:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiFKXRB (ORCPT
+        with ESMTP id S229558AbiFKXRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 19:17:01 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593B3403F0;
-        Sat, 11 Jun 2022 16:16:58 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31332df12a6so21580537b3.4;
-        Sat, 11 Jun 2022 16:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7tY0AdLKGQcBZThRCKqEnHHKhqjAUktylGqxkcbwV5M=;
-        b=MkUznwHRAxP9+dhosAeqvGb2QHCUqhvglnLe+Ay0eMDpsTrsROFrqBqQNV907jqR1k
-         PE2DZB0piQZii/9kYn3Nn6qK4782QU37QOcmw7/isWdIyQV+2HSeVQdT43sMKW2+E8JI
-         dhOaGyLje/PreClJgBIcQ6/7fcZqE4h66uDkBxHR/kjW+qZwvD5X9qTF+pX9Ulcqw6XA
-         P3abM7JyEvmvQmqbrIwWVbuRM2ZH8kxFqEIKDrMHJjfFKdsDBG/HUMY4NmC/FetK5vbt
-         q9BwbuOnI+NtI6u57xBjA1qJzpd2I2vWt4s2kFz6zP9JEHmDYIQhgT8OsOrjWu2Qs1BM
-         7PeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7tY0AdLKGQcBZThRCKqEnHHKhqjAUktylGqxkcbwV5M=;
-        b=xqNv10xmIJZbqu12FRWVcjo7pHjfa/2Pk3/iGQ2l9TyVoYT9e6XNe/QW3GWnqCZcxn
-         Oay9ENcMCVdQFAnLmO8qlZCxQi4vmAN2ffYSK2+c8ET3pF4uTV06AclPLSyFHKSz/t5g
-         pAAOavfdDV641sV7TTXdhrpaqtw0WfV9bS1PSLQEvBLEh79qJ6yr3m/2SRUtZ00u0+HZ
-         ZeT5quJXLxtVEgKOa77QgwtkmLFLAz9Vtxfx9OT5mHPFpB9GUQ5ecxq/vTnEokh16f32
-         vmsb5nJNSiIyzgwSyx+T7EgGl03wQQFTDRGwH3zSqUsmyeMZP7gDTsBqCXIK02YJP/kP
-         m91w==
-X-Gm-Message-State: AOAM530B1FLOB3sr11dUKgUar+41JwhwiLVsqJjC+cvBaCtCc0/wXrAh
-        A4yN+y06JXJtIEpFG3xHltbv2YjF/yrFULsHSak=
-X-Google-Smtp-Source: ABdhPJzlwYpvKTPyyPdeXtV2pl9MFSrG58VQNbCZMgzIM4+A3xkdjLHgnk9bXvveXs22MFjk8SlQTB1IJrT1XFksgVA=
-X-Received: by 2002:a81:25cc:0:b0:30f:ea57:af01 with SMTP id
- l195-20020a8125cc000000b0030fea57af01mr54129487ywl.488.1654989417608; Sat, 11
- Jun 2022 16:16:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <YqRyL2sIqQNDfky2@debian> <YqSGv6uaZzLxKfmG@zeniv-ca.linux.org.uk>
- <YqSMmC/UuQpXdxtR@zeniv-ca.linux.org.uk> <YqSQ++8UnEW0AJ2y@zeniv-ca.linux.org.uk>
-In-Reply-To: <YqSQ++8UnEW0AJ2y@zeniv-ca.linux.org.uk>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Sun, 12 Jun 2022 00:16:21 +0100
-Message-ID: <CADVatmOJvTj21vrL5cnAVjWx46cB4r_kB+T2ankDj+mKH2-7=w@mail.gmail.com>
-Subject: Re: mainline build failure due to 6c77676645ad ("iov_iter: Fix iter_xarray_get_pages{,_alloc}()")
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     David Howells <dhowells@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
-        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 11 Jun 2022 19:17:43 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514F72B243
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 16:17:39 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 77974C01F; Sun, 12 Jun 2022 01:17:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1654989458; bh=51Zpk5kYQNoaNHj5xDV/BEXLNsTdPQOa3HXVja3g0+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1/Uiym/anbOFwI+jcwxEZu2zWHFhmcbYuqxmPVikZTekj/Dk+3aBRetoNDmjgXGZq
+         DZ6vI343NnICHZXex2QExfl/pidMiBwsI7GAEnWZy7BobBsK0u+w1hvxpIVsAJeTuz
+         VAut/K3TViHA9atLBAzDPlbdJK3RUn2otlfB73gI2y5kp6CXf4rAUr4iQ0V3qNKWW3
+         M0cO2usnwAicuXd5/9Rl8G6vtdBVZRUdUEbXLzky47zhdS0SAfLhteyZ3OEFd1/K86
+         EHLwOD5y2Riza/8Vao5Dmccf6osg1Dc150CF7qxhXufDnoJvFFiTDu0jDIJeRtgPwV
+         2XpeVlO6X7+zQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 4ED0AC009;
+        Sun, 12 Jun 2022 01:17:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1654989457; bh=51Zpk5kYQNoaNHj5xDV/BEXLNsTdPQOa3HXVja3g0+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y5rF06hnrV/kr2HQYwaXZTuO/OaUIXfl7S5AcXhEJF0gGIMGpP4SUl10YGzBZvsL8
+         pQ2GjYw0+8VESlpEHZR1bRITOjwSsc7P2Ilej7UaC42Bcbu3HokPhORJAQzZoYDgS2
+         VeXel+euGfr46iLT10K8gF/UcuYHdaOWwFD213qbDAEwIoM0JR8N01+A2GREg7TpEr
+         A9fgi+YIVluV/Wx8V3Av+HsNAJJH+eMzZ+DhOT4HiNx3NyJBVoMHza0Srv/uvaNjKH
+         mhTytVGj1dDPwDYAS6fxAMislhVBvtiIUiv1bTLiVZfNNV5BnJlRDJGSC+VqLWBX7r
+         m60WvEx8N1ffw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 71a9de38;
+        Sat, 11 Jun 2022 23:17:31 +0000 (UTC)
+Date:   Sun, 12 Jun 2022 08:17:16 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Jianyong Wu <jianyong.wu@arm.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] 9p: Fix refcounting during full path walks for
+ fid lookups
+Message-ID: <YqUifCFPTG8Qmn7a@codewreck.org>
+References: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
+ <20220527000003.355812-2-tyhicks@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220527000003.355812-2-tyhicks@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 1:56 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Sat, Jun 11, 2022 at 12:37:44PM +0000, Al Viro wrote:
-> > On Sat, Jun 11, 2022 at 12:12:47PM +0000, Al Viro wrote:
-> >
-> >
-> > > At a guess, should be
-> > >     return min((size_t)nr * PAGE_SIZE - offset, maxsize);
-> > >
-> > > in both places.  I'm more than half-asleep right now; could you verify that it
-> > > (as the last lines of both iter_xarray_get_pages() and iter_xarray_get_pages_alloc())
-> > > builds correctly?
-> >
-> > No, I'm misreading it - it's unsigned * unsigned long - unsigned vs. size_t.
-> > On arm it ends up with unsigned long vs. unsigned int; functionally it *is*
-> > OK (both have the same range there), but it triggers the tests.  Try
-> >
-> >       return min_t(size_t, nr * PAGE_SIZE - offset, maxsize);
-> >
-> > there (both places).
->
-> The reason we can't overflow on multiplication there, BTW, is that we have
-> nr <= count, and count has come from weirdly open-coded
->         DIV_ROUND_UP(size + offset, PAGE_SIZE)
-> IMO we'd better make it explicit, so how about the following:
+Tyler Hicks wrote on Thu, May 26, 2022 at 06:59:59PM -0500:
+> Decrement the refcount of the parent dentry's fid after walking
+> each path component during a full path walk for a lookup. Failure to do
+> so can lead to fids that are not clunked until the filesystem is
+> unmounted, as indicated by this warning:
+> 
+>  9pnet: found fid 3 not clunked
+> 
+> The improper refcounting after walking resulted in open(2) returning
+> -EIO on any directories underneath the mount point when using the virtio
+> transport. When using the fd transport, there's no apparent issue until
+> the filesytem is unmounted and the warning above is emitted to the logs.
+> 
+> In some cases, the user may not yet be attached to the filesystem and a
+> new root fid, associated with the user, is created and attached to the
+> root dentry before the full path walk is performed. Increment the new
+> root fid's refcount to two in that situation so that it can be safely
+> decremented to one after it is used for the walk operation. The new fid
+> will still be attached to the root dentry when
+> v9fs_fid_lookup_with_uid() returns so a final refcount of one is
+> correct/expected.
+> 
+> Fixes: 6636b6dcc3db ("9p: add refcount to p9_fid struct")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> ---
+>  fs/9p/fid.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
+> 
+> diff --git a/fs/9p/fid.c b/fs/9p/fid.c
+> index 79df61fe0e59..5a469b79c1ee 100644
+> --- a/fs/9p/fid.c
+> +++ b/fs/9p/fid.c
+> @@ -152,7 +152,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+>  	const unsigned char **wnames, *uname;
+>  	int i, n, l, clone, access;
+>  	struct v9fs_session_info *v9ses;
+> -	struct p9_fid *fid, *old_fid = NULL;
+> +	struct p9_fid *fid, *old_fid;
+>  
+>  	v9ses = v9fs_dentry2v9ses(dentry);
+>  	access = v9ses->flags & V9FS_ACCESS_MASK;
+> @@ -194,13 +194,12 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+>  		if (IS_ERR(fid))
+>  			return fid;
+>  
+> +		refcount_inc(&fid->count);
+>  		v9fs_fid_add(dentry->d_sb->s_root, fid);
+>  	}
+>  	/* If we are root ourself just return that */
+> -	if (dentry->d_sb->s_root == dentry) {
+> -		refcount_inc(&fid->count);
+> +	if (dentry->d_sb->s_root == dentry)
+>  		return fid;
+> -	}
+>  	/*
+>  	 * Do a multipath walk with attached root.
+>  	 * When walking parent we need to make sure we
+> @@ -212,6 +211,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+>  		fid = ERR_PTR(n);
+>  		goto err_out;
+>  	}
+> +	old_fid = fid;
+>  	clone = 1;
+>  	i = 0;
+>  	while (i < n) {
+> @@ -221,15 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+>  		 * walk to ensure none of the patch component change
+>  		 */
+>  		fid = p9_client_walk(fid, l, &wnames[i], clone);
+> +		p9_client_clunk(old_fid);
 
-Thanks. Fixed the build for me.
+hmm, if we're not cloning then fid == old_fid and the refcount is not
+increased? (I think... I didn't even realize/remember that walk had a
+no-clone mode, sorry.)
 
+So we'd only need to clunk if old fid here if we're cloning (old fid is
+the initial root fid), but I'm not sure how to test this path as I
+couldn't think of any pattern that'd trigger a multi-level lookup,
+so I'm not 100% sure; I'll try a bit more.
 
 -- 
-Regards
-Sudip
+Dominique

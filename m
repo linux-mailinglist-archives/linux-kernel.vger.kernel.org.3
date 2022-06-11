@@ -2,49 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C2354713A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 04:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B72547161
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 04:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347115AbiFKCON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 22:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S1349394AbiFKCd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 22:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346959AbiFKCOK (ORCPT
+        with ESMTP id S1346296AbiFKCdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 22:14:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EF96CAB4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:14:09 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LKhDp3H44zjXX8;
-        Sat, 11 Jun 2022 10:12:42 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 11 Jun 2022 10:14:00 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 11 Jun
- 2022 10:13:59 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>,
-        <s.hauer@pengutronix.de>, <vigneshr@ti.com>,
-        <Artem.Bityutskiy@nokia.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
-Subject: [PATCH] ubi: ubi_wl_put_peb: Fix infinite loop when wear-leveling work failed
-Date:   Sat, 11 Jun 2022 10:27:06 +0800
-Message-ID: <20220611022706.926980-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 10 Jun 2022 22:33:20 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9422B41995
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:33:17 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id v19so1025917edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rgKkPquDB/3ylB22sdoq44O3nuMRqOGPmfYPJEM3DpI=;
+        b=JsXVqmPM/FghNi+FuyecZKJimRfQRZRaZMN7LbU4AElduixKN8TVkmhpZTWnrsGkbZ
+         5LwE/p8/n+cIXvQ1YTcLTi0yyURcD/DMLBUnB+eqSpwlWIAygkMHM4b3P17Zp5erCg7D
+         knTgcyr8j5ARmG7z3CGlckVUGoumxDAZyb+n8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rgKkPquDB/3ylB22sdoq44O3nuMRqOGPmfYPJEM3DpI=;
+        b=tB49+uaDJdug17OqGeLmAifNdzcOdnG1zGAXin5WggOtbCiG/NSLJVrf9wsNKrKKiH
+         dV6CY8iHg0fpVs349RXn2Dcj6ZKbUC839hsX2rqZ3wnvZt57Gss7BaWGFpEx2lnVmzjP
+         CVZGzsfYyotoF0yas/ZrTwoxIj+1Qk92JTKewJdOVapmduPEj7eJrhyxsegfqDJeSmE2
+         Pu24B2EevdSnjgIAhELBxAGMOFBHlxNvWR5jPpmO5ADxEpFYQB9Yyjop5Ok4HiMtImjY
+         vuc8uvpprbm2Gj6upbVTdzmIBclFi2XCerAJka4gxnvZ8wZmMmteCmDIjPpPqGvsXzPK
+         d2IA==
+X-Gm-Message-State: AOAM531M9mn3SzBmp0Yb4AVEo3TOeHf5BnWPTM6l+lKMBVM/JLt4o32A
+        Jiqqzk2YpiEmiA3OKGHdB4OVwN7Uxrh3q5sn1oeivQ==
+X-Google-Smtp-Source: ABdhPJzFbgEeXrjhdaEFlL5CPKYiFgrRM2XGTpISMDDKOxh3YJg+nd70yb1Qcu1fnLsZwhWAweXqTRUn04uTYMjQVNU=
+X-Received: by 2002:aa7:c604:0:b0:42d:cffb:f4dc with SMTP id
+ h4-20020aa7c604000000b0042dcffbf4dcmr55022482edq.270.1654914796079; Fri, 10
+ Jun 2022 19:33:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220608142723.103523089@infradead.org> <20220608144517.444659212@infradead.org>
+ <YqG6URbihTNCk9YR@alley> <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
+ <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com> <YqHvXFdIJfvUDI6e@alley>
+In-Reply-To: <YqHvXFdIJfvUDI6e@alley>
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+Date:   Sat, 11 Jun 2022 11:33:05 +0900
+Message-ID: <CA+_sPaq1ez7jah0bibAdeA__Yp92K_VA7E-NZ9knoUmOW9itJg@mail.gmail.com>
+Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
+        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,84 +121,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following process will trigger an infinite loop in ubi_wl_put_peb():
+On Thu, Jun 9, 2022 at 10:02 PM Petr Mladek <pmladek@suse.com> wrote:
+>
+> On Thu 2022-06-09 20:30:58, Sergey Senozhatsky wrote:
+> > My emails are getting rejected... Let me try web-interface
+>
+> Bad day for mail sending. I have problems as well ;-)
 
-	ubifs_bgt		ubi_bgt
-ubifs_leb_unmap
-  ubi_leb_unmap
-    ubi_eba_unmap_leb
-      ubi_wl_put_peb	wear_leveling_worker
-                          e1 = rb_entry(rb_first(&ubi->used)
-			  e2 = get_peb_for_wl(ubi)
-			  ubi_io_read_vid_hdr  // return err (flash fault)
-			  out_error:
-			    ubi->move_from = ubi->move_to = NULL
-			    wl_entry_destroy(ubi, e1)
-			      ubi->lookuptbl[e->pnum] = NULL
-      retry:
-        e = ubi->lookuptbl[pnum];	// return NULL
-	if (e == ubi->move_from) {	// NULL == NULL gets true
-	  goto retry;			// infinite loop !!!
+For me the problem is still there and apparently it's an "too many
+recipients" error.
 
-$ top
-  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     COMMAND
-  7676 root     20   0       0      0      0 R 100.0  0.0  ubifs_bgt0_0
+> > I'm somewhat curious whether we can actually remove that trace event.
+>
+> Good question.
+>
+> Well, I think that it might be useful. It allows to see trace and
+> printk messages together.
 
-Fix it by:
- 1) Letting ubi_wl_put_peb() returns directly if wearl leveling entry has
-    been removed from 'ubi->lookuptbl'.
- 2) Using 'ubi->wl_lock' protecting wl entry deletion to preventing an
-    use-after-free problem for wl entry in ubi_wl_put_peb().
+Fair enough. Seems that back in 2011 people were pretty happy with it
+https://lore.kernel.org/all/1322161388.5366.54.camel@jlt3.sipsolutions.net/T/#m7bf6416f469119372191f22a6ecf653c5f7331d2
 
-Fetch a reproducer in [Link].
+but... reportedly, one of the folks who Ack-ed it (*cough cough*
+PeterZ) has never used it.
 
-Fixes: 43f9b25a9cdd7b1 ("UBI: bugfix: protect from volume removal")
-Fixes: ee59ba8b064f692 ("UBI: Fix stale pointers in ubi->lookuptbl")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216111
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- drivers/mtd/ubi/wl.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+> It was ugly when it was in the console code. The new location
+> in vprintk_store() allows to have it even "correctly" sorted
+> (timestamp) against other tracing messages.
 
-diff --git a/drivers/mtd/ubi/wl.c b/drivers/mtd/ubi/wl.c
-index 55bae06cf408..c95bfbdfa475 100644
---- a/drivers/mtd/ubi/wl.c
-+++ b/drivers/mtd/ubi/wl.c
-@@ -973,11 +973,13 @@ static int wear_leveling_worker(struct ubi_device *ubi, struct ubi_work *wrk,
- 	spin_lock(&ubi->wl_lock);
- 	ubi->move_from = ubi->move_to = NULL;
- 	ubi->move_to_put = ubi->wl_scheduled = 0;
-+	ubi->lookuptbl[e1->pnum] = NULL;
-+	ubi->lookuptbl[e2->pnum] = NULL;
- 	spin_unlock(&ubi->wl_lock);
- 
- 	ubi_free_vid_buf(vidb);
--	wl_entry_destroy(ubi, e1);
--	wl_entry_destroy(ubi, e2);
-+	kmem_cache_free(ubi_wl_entry_slab, e1);
-+	kmem_cache_free(ubi_wl_entry_slab, e2);
- 
- out_ro:
- 	ubi_ro_mode(ubi);
-@@ -1253,6 +1255,18 @@ int ubi_wl_put_peb(struct ubi_device *ubi, int vol_id, int lnum,
- retry:
- 	spin_lock(&ubi->wl_lock);
- 	e = ubi->lookuptbl[pnum];
-+	if (!e) {
-+		/*
-+		 * This wl entry has been removed for some errors by other
-+		 * process (eg. wear leveling worker), corresponding process
-+		 * (except __erase_worker, which cannot concurrent with
-+		 * ubi_wl_put_peb) will set ubi ro_mode at the same time,
-+		 * just ignore this wl entry.
-+		 */
-+		spin_unlock(&ubi->wl_lock);
-+		up_read(&ubi->fm_protect);
-+		return 0;
-+	}
- 	if (e == ubi->move_from) {
- 		/*
- 		 * User is putting the physical eraseblock which was selected to
--- 
-2.31.1
-
+That's true.

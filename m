@@ -2,153 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA27B5474E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F21B5474E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiFKNoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 09:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        id S233754AbiFKNoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 09:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbiFKNoB (ORCPT
+        with ESMTP id S233648AbiFKNoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 09:44:01 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E002B4A4;
-        Sat, 11 Jun 2022 06:44:00 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id f9so1522106plg.0;
-        Sat, 11 Jun 2022 06:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ixh/tGjYEGtd9B0U4un+L2Dg2/GvxVifxx8JOO5/xxs=;
-        b=dWFageSqD+a/p7/dg6peuXBetNvvozPq1OrZOQ/jnLrmOlYGPzNGQ4RjNm2jbazw9i
-         u781rrcK5N+1rObNiGXHrWMqVQY7pZTTAMDXq7DNXEPeF453QBw6/bxOS0JTWBW4mEFL
-         oUM/P6Tc2N9Ofg4sbBfsItn4mThyJNPYPK0dfcLnQTh5rjJPmndWQJuSTs7DAwaCi/Vx
-         rL+jaeKda3xCTVgeOwll+wUPQ1XB4/3T0OO18jS1/nlZwt9iAYKwdDwzN6eMueoG9fyg
-         LLwuRDA7jXNLhI6Pff6Xji5gCQ5vnnxkZEApvX0oXAyGKRCiRXSTKan8B5OV8LXdXJGh
-         CGZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Ixh/tGjYEGtd9B0U4un+L2Dg2/GvxVifxx8JOO5/xxs=;
-        b=wXfDFrpYDnGpiJnabp8sN75w74M9E0Y8PzOb3H9hcO0MwIMY1UoXYS9gZgecAlipg/
-         P4t2ad522G9Jmha+shE3ydjXSt585sVGVllOVzPEuRPMPcWiAI5fkFyuRblI/PFi09cE
-         PCVEXLTQMaFfb6n8Z4hqM5dbAcpUVcfqyKEIZxhDo/1H/iUN+TDRAGQElxYbq3zMan52
-         Bi0cyjOME63xd3YUimrMXVnN0pbh7M2iCTCqZJkAnIcHfU+8qrOqBsQo+rj6y0gyQvtB
-         3yLKcTZM8EqDnmhq3sssAN9Hro4vN54l1WzEIzYuQVhS19tY8sUc1pNWNSjkl6PmU6Xw
-         bPMA==
-X-Gm-Message-State: AOAM530t+ot3f2XxpbZgzfbXzC/hnDSy1T3Q24Fw1FOOEtAXFy3QcckV
-        1ioMKzn1A6Kfl1Ovmi5/H6j+Y3DvhqU=
-X-Google-Smtp-Source: ABdhPJyVm1Qx3rpbnexbaPz3LjRNh5xdY5jWDRPJD5O1BPtSHpLAWd+II5ejGzWE9luF6mWKd4zRSA==
-X-Received: by 2002:a17:902:9f96:b0:163:dc33:6b72 with SMTP id g22-20020a1709029f9600b00163dc336b72mr50033692plq.34.1654955039652;
-        Sat, 11 Jun 2022 06:43:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a12-20020a1709027e4c00b00164097a779fsm1523377pln.147.2022.06.11.06.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 06:43:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 11 Jun 2022 06:43:57 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     David Howells <dhowells@redhat.com>
-Cc:     jlayton@kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
-        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
-Message-ID: <20220611134357.GA278954@roeck-us.net>
-References: <165476202136.3999992.433442175457370240.stgit@warthog.procyon.org.uk>
+        Sat, 11 Jun 2022 09:44:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3628D13CE9
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 06:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654955055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=45HLPCXXqTkMdZ7LqQ9jrXy/Uzs9B569cMj5sdJqp1c=;
+        b=VfL59h1MYcB+uSrIMAQS+UqtiaesRKK6ctIuHoONEz13f73kfaZOfQuUa6HBf9xffM6yJA
+        UiCnrC4UfM+nvxMqnfQ9+HFH9pCszwTJrx9l1Bb7m4LKG+yd5YZeQmDCbglxP5BUW9iTAW
+        fH6pkLDh6B/wVlAtTdMIQYVIiWE4+nA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-422-VoatBileMyOaX4L1wnbWew-1; Sat, 11 Jun 2022 09:44:10 -0400
+X-MC-Unique: VoatBileMyOaX4L1wnbWew-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDA31801E67;
+        Sat, 11 Jun 2022 13:44:09 +0000 (UTC)
+Received: from starship (unknown [10.40.194.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 64CDD1415102;
+        Sat, 11 Jun 2022 13:44:07 +0000 (UTC)
+Message-ID: <1d71f8acb62120aed87238051ef0f22b1ac58470.camel@redhat.com>
+Subject: Re: [PATCH] KVM: SVM: Fix a misplaced paranthesis in APICV inhibit
+ mask generation
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 11 Jun 2022 16:44:06 +0300
+In-Reply-To: <20220610191813.371682-1-seanjc@google.com>
+References: <20220610191813.371682-1-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <165476202136.3999992.433442175457370240.stgit@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 09:07:01AM +0100, David Howells wrote:
-> The maths at the end of iter_xarray_get_pages() to calculate the actual
-> size doesn't work under some circumstances, such as when it's been asked to
-> extract a partial single page.  Various terms of the equation cancel out
-> and you end up with actual == offset.  The same issue exists in
-> iter_xarray_get_pages_alloc().
+On Fri, 2022-06-10 at 19:18 +0000, Sean Christopherson wrote:
+> Relocate a ")" to its proper place at the end of a BIT usage, the intent
+> is most definitely not to have a feedback loop of BITs in the mask.
 > 
-> Fix these to just use min() to select the lesser amount from between the
-> amount of page content transcribed into the buffer, minus the offset, and
-> the size limit specified.
+> arch/x86/kvm/svm/avic.c: In function ‘avic_check_apicv_inhibit_reasons’:
+> include/vdso/bits.h:7:40: error: left shift count >= width of type [-Werror=shift-count-overflow]
+>     7 | #define BIT(nr)                 (UL(1) << (nr))
+>       |                                        ^~
+> arch/x86/kvm/svm/avic.c:911:27: note: in expansion of macro ‘BIT’
+>   911 |                           BIT(APICV_INHIBIT_REASON_SEV      |
+>       |                           ^~~
 > 
-> This doesn't appear to have caused a problem yet upstream because network
-> filesystems aren't getting the pages from an xarray iterator, but rather
-> passing it directly to the socket, which just iterates over it.  Cachefiles
-> *does* do DIO from one to/from ext4/xfs/btrfs/etc. but it always asks for
-> whole pages to be written or read.
-> 
-> Fixes: 7ff5062079ef ("iov_iter: Add ITER_XARRAY")
-> Reported-by: Jeff Layton <jlayton@kernel.org>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> cc: Dominique Martinet <asmadeus@codewreck.org>
-> cc: Mike Marshall <hubcap@omnibond.com>
-> cc: Gao Xiang <xiang@kernel.org>
-> cc: linux-afs@lists.infradead.org
-> cc: v9fs-developer@lists.sourceforge.net
-> cc: devel@lists.orangefs.org
-> cc: linux-erofs@lists.ozlabs.org
-> cc: linux-cachefs@redhat.com
-> cc: linux-fsdevel@vger.kernel.org
+> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
+>  arch/x86/kvm/svm/avic.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  lib/iov_iter.c |   20 ++++----------------
->  1 file changed, 4 insertions(+), 16 deletions(-)
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 5542d8959e11..d1bc5820ea46 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -908,9 +908,9 @@ bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
+>  			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
+>  			  BIT(APICV_INHIBIT_REASON_X2APIC) |
+>  			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
+> -			  BIT(APICV_INHIBIT_REASON_SEV      |
+> +			  BIT(APICV_INHIBIT_REASON_SEV)      |
+>  			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
+> -			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED));
+> +			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED);
+>  
+>  	return supported & BIT(reason);
+>  }
 > 
-> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> index 834e1e268eb6..814f65fd0c42 100644
-> --- a/lib/iov_iter.c
-> +++ b/lib/iov_iter.c
-> @@ -1434,7 +1434,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
->  {
->  	unsigned nr, offset;
->  	pgoff_t index, count;
-> -	size_t size = maxsize, actual;
-> +	size_t size = maxsize;
->  	loff_t pos;
->  
->  	if (!size || !maxpages)
-> @@ -1461,13 +1461,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
->  	if (nr == 0)
->  		return 0;
->  
-> -	actual = PAGE_SIZE * nr;
-> -	actual -= offset;
-> -	if (nr == count && size > 0) {
-> -		unsigned last_offset = (nr > 1) ? 0 : offset;
-> -		actual -= PAGE_SIZE - (last_offset + size);
-> -	}
-> -	return actual;
-> +	return min(nr * PAGE_SIZE - offset, maxsize);
+> base-commit: b23f8810c46978bc05252db03055a61fcadc07d5
 
-This needs min_t to avoid a build error on 32-bit builds.
+Sorry about it!
 
-In file included from include/linux/kernel.h:26,
-                 from include/linux/crypto.h:16,
-                 from include/crypto/hash.h:11,
-                 from lib/iov_iter.c:2:
-lib/iov_iter.c: In function 'iter_xarray_get_pages':
-include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast [-Werror]
-...
-lib/iov_iter.c:1628:16: note: in expansion of macro 'min'
- 1628 |         return min(nr * PAGE_SIZE - offset, maxsize);
-      |                ^~~
+Best regards,
+	Maxim Levitsky
 
-Guenter

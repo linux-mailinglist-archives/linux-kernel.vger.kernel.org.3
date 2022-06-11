@@ -2,110 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AE15472C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 10:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075FE5472CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 10:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiFKIKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 04:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S234320AbiFKIL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 04:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiFKIKq (ORCPT
+        with ESMTP id S229661AbiFKILX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 04:10:46 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE641167
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 01:10:45 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id o6so1092943plg.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 01:10:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Xdmi5qWYOhZsQOyZGBfH+vQOujfDSnvCoY7JRpLmrLc=;
-        b=S70MPRg4USexJF7NybfHc3jyQq+dGlkjkSxNHKeWapEKUFlGiK2O02DDzHrVInETJm
-         lVisnlj2qXewebxWFeMTXcwFiPUd2shNlvLyMaXywGnBxHVPFeAX/KkiySM6vxO1HAD1
-         Bea8MT1Mt3tMaUGvr9A8C6AUYepnxefRuUPcdi64qEIr3gXKajA09zV6SCAJlfcLKOfR
-         GS6Qkh0XxbTch4KOGZEsL9UHBdSevgAw9QzV88XHCACzFV8yAchmxD3zmeHQjkgnTwae
-         1aoxsSsjexrEd1r98HQhCklGg7c6uxr/J32GS50HMH4LT8eM0nOsDKeW6SU48MFacG9S
-         RhnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Xdmi5qWYOhZsQOyZGBfH+vQOujfDSnvCoY7JRpLmrLc=;
-        b=XTDOzSUSmImTDzCKksV+GEZ2wtOG4FMEsGrqYEym5Uolb3Hd6ipZpPAYuyr3/Y7vaz
-         t1+qhRgoBQFREkq1q9kUQEnFmi5BPumyUkFqVZWupNvkTXBb8kbnOOUzfLKeVrKyoRQK
-         d1D+TiTVGMjXLti9DkjfNJ0I07AQBNQeGGurYBmDLn9QGUm33M8xG5Yxg0rqcJE0HyAa
-         UdeZ6pR6LSV0L8+N4k80VpntyXqVh2hiGGtkvnud8jE4xHYqtVZ6zshzkb1PeGmQV5pF
-         VBPC5K/ceOzBkGoaDXgMl4xYC5q9VjlpeNIuiO01qj+waRupu0ZXvDH6Czhwdn0NrdEU
-         4Hfw==
-X-Gm-Message-State: AOAM531wschFTt88A28Ym9YJyO802DC7ho2FqIVyGb8/i25tHNSWZDU0
-        msIzVh2187rDTCRjPKZhEVS2Yo0r3LioFsediuI=
-X-Google-Smtp-Source: ABdhPJy1NmMPAENWSPH386W1qI/1ypKm6XffHtbdO55ll12985KowgSOsXsOQoP3oM9uBc9y4uMPJ7+rmDBoGbJhUFE=
-X-Received: by 2002:a17:902:db06:b0:163:e89d:622c with SMTP id
- m6-20020a170902db0600b00163e89d622cmr48704426plx.143.1654935044245; Sat, 11
- Jun 2022 01:10:44 -0700 (PDT)
+        Sat, 11 Jun 2022 04:11:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01761D0EC;
+        Sat, 11 Jun 2022 01:11:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BAA161216;
+        Sat, 11 Jun 2022 08:11:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295ADC34116;
+        Sat, 11 Jun 2022 08:11:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="h+8trSs6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654935079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JhE9QV1bIqPw2urSYw+/iYLr0eUuZ5Re2c1gfvfbv5E=;
+        b=h+8trSs6BSUBjfcUc3USmvwUUElptBvOObS+NJYTCuXivUasQP+rq7vks3W3Hn/QkQYQxj
+        Dq+LADDqdzoRHFjAjJAteEdtOe2CTO3BQ0zBox050twqW6TqN+685aDbZ/EV0GWNBuWvJA
+        GZkJalKoSsWBZSz4rXKvAQuT0ZrcSDQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 88227a06 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 11 Jun 2022 08:11:19 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH] powerpc/rng: wire up during setup_arch
+Date:   Sat, 11 Jun 2022 10:11:14 +0200
+Message-Id: <20220611081114.449165-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Received: by 2002:ac4:a2c3:0:b0:4cb:a952:1459 with HTTP; Sat, 11 Jun 2022
- 01:10:43 -0700 (PDT)
-Reply-To: giannini_amadeo@outlook.com
-From:   Bank of America <1001kuikui163@gmail.com>
-Date:   Sat, 11 Jun 2022 09:10:43 +0100
-Message-ID: <CAPK65Xmem9ebbBemug_c4UZogxhwaRpB9EkQMFo4=h+Yc5s0Ow@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:62a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [1001kuikui163[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [1001kuikui163[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello loan applicant, do you need a loan? How much is the loan money?
-And the duration period? Contact Amadeo Giannini, the loan director of
-Bank of America a Private Money Lender and a corporate finance for
-real estate and any kinds of business financing. I also offer Loans to
-individuals, Firms and corporate bodies at 3% interest rate per annual
-and 0.5% interest rate monthly base, loan terms determinant.
-INFORMATION NEEDED ARE: Full Name: Location: Age: Sex: Country:
-Contact Phone numbers: Amount Needed/Duration:
+The platform's RNG must be available before random_init() in order to be
+useful for initial seeding, which in turn means that it needs to be
+called from setup_arch(), rather than from an init call. Fortunately,
+each platform already has a setup_arch function pointer, which means
+it's easy to wire this up for each of the three platforms that have an
+RNG. This commit also removes some noisy log messages that don't add
+much.
 
-Best regards,
-Amadeo Giannini
-Bank of America
-Website: www.bankofamerica.com
+Cc: stable@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/powerpc/platforms/microwatt/rng.c   |  9 ++-------
+ arch/powerpc/platforms/microwatt/setup.c |  8 ++++++++
+ arch/powerpc/platforms/powernv/rng.c     | 17 ++++-------------
+ arch/powerpc/platforms/powernv/setup.c   |  4 ++++
+ arch/powerpc/platforms/pseries/rng.c     | 11 ++---------
+ arch/powerpc/platforms/pseries/setup.c   |  3 +++
+ 6 files changed, 23 insertions(+), 29 deletions(-)
+
+diff --git a/arch/powerpc/platforms/microwatt/rng.c b/arch/powerpc/platforms/microwatt/rng.c
+index 7bc4d1cbfaf0..d13f656910ad 100644
+--- a/arch/powerpc/platforms/microwatt/rng.c
++++ b/arch/powerpc/platforms/microwatt/rng.c
+@@ -29,7 +29,7 @@ static int microwatt_get_random_darn(unsigned long *v)
+ 	return 1;
+ }
+ 
+-static __init int rng_init(void)
++__init void microwatt_rng_init(void)
+ {
+ 	unsigned long val;
+ 	int i;
+@@ -37,12 +37,7 @@ static __init int rng_init(void)
+ 	for (i = 0; i < 10; i++) {
+ 		if (microwatt_get_random_darn(&val)) {
+ 			ppc_md.get_random_seed = microwatt_get_random_darn;
+-			return 0;
++			return;
+ 		}
+ 	}
+-
+-	pr_warn("Unable to use DARN for get_random_seed()\n");
+-
+-	return -EIO;
+ }
+-machine_subsys_initcall(, rng_init);
+diff --git a/arch/powerpc/platforms/microwatt/setup.c b/arch/powerpc/platforms/microwatt/setup.c
+index 0b02603bdb74..23c996dcc870 100644
+--- a/arch/powerpc/platforms/microwatt/setup.c
++++ b/arch/powerpc/platforms/microwatt/setup.c
+@@ -32,10 +32,18 @@ static int __init microwatt_populate(void)
+ }
+ machine_arch_initcall(microwatt, microwatt_populate);
+ 
++__init void microwatt_rng_init(void);
++
++static void __init microwatt_setup_arch(void)
++{
++	microwatt_rng_init();
++}
++
+ define_machine(microwatt) {
+ 	.name			= "microwatt",
+ 	.probe			= microwatt_probe,
+ 	.init_IRQ		= microwatt_init_IRQ,
++	.setup_arch		= microwatt_setup_arch,
+ 	.progress		= udbg_progress,
+ 	.calibrate_decr		= generic_calibrate_decr,
+ };
+diff --git a/arch/powerpc/platforms/powernv/rng.c b/arch/powerpc/platforms/powernv/rng.c
+index e3d44b36ae98..ef24e72a1b69 100644
+--- a/arch/powerpc/platforms/powernv/rng.c
++++ b/arch/powerpc/platforms/powernv/rng.c
+@@ -84,24 +84,20 @@ static int powernv_get_random_darn(unsigned long *v)
+ 	return 1;
+ }
+ 
+-static int __init initialise_darn(void)
++static void __init initialise_darn(void)
+ {
+ 	unsigned long val;
+ 	int i;
+ 
+ 	if (!cpu_has_feature(CPU_FTR_ARCH_300))
+-		return -ENODEV;
++		return;
+ 
+ 	for (i = 0; i < 10; i++) {
+ 		if (powernv_get_random_darn(&val)) {
+ 			ppc_md.get_random_seed = powernv_get_random_darn;
+-			return 0;
++			return;
+ 		}
+ 	}
+-
+-	pr_warn("Unable to use DARN for get_random_seed()\n");
+-
+-	return -EIO;
+ }
+ 
+ int powernv_get_random_long(unsigned long *v)
+@@ -163,14 +159,12 @@ static __init int rng_create(struct device_node *dn)
+ 
+ 	rng_init_per_cpu(rng, dn);
+ 
+-	pr_info_once("Registering arch random hook.\n");
+-
+ 	ppc_md.get_random_seed = powernv_get_random_long;
+ 
+ 	return 0;
+ }
+ 
+-static __init int rng_init(void)
++__init void powernv_rng_init(void)
+ {
+ 	struct device_node *dn;
+ 	int rc;
+@@ -188,7 +182,4 @@ static __init int rng_init(void)
+ 	}
+ 
+ 	initialise_darn();
+-
+-	return 0;
+ }
+-machine_subsys_initcall(powernv, rng_init);
+diff --git a/arch/powerpc/platforms/powernv/setup.c b/arch/powerpc/platforms/powernv/setup.c
+index 824c3ad7a0fa..a0c5217bc5c0 100644
+--- a/arch/powerpc/platforms/powernv/setup.c
++++ b/arch/powerpc/platforms/powernv/setup.c
+@@ -184,6 +184,8 @@ static void __init pnv_check_guarded_cores(void)
+ 	}
+ }
+ 
++__init void powernv_rng_init(void);
++
+ static void __init pnv_setup_arch(void)
+ {
+ 	set_arch_panic_timeout(10, ARCH_PANIC_TIMEOUT);
+@@ -203,6 +205,8 @@ static void __init pnv_setup_arch(void)
+ 	pnv_check_guarded_cores();
+ 
+ 	/* XXX PMCS */
++
++	powernv_rng_init();
+ }
+ 
+ static void __init pnv_init(void)
+diff --git a/arch/powerpc/platforms/pseries/rng.c b/arch/powerpc/platforms/pseries/rng.c
+index 6268545947b8..d39bfce39aa1 100644
+--- a/arch/powerpc/platforms/pseries/rng.c
++++ b/arch/powerpc/platforms/pseries/rng.c
+@@ -24,19 +24,12 @@ static int pseries_get_random_long(unsigned long *v)
+ 	return 0;
+ }
+ 
+-static __init int rng_init(void)
++__init void pseries_rng_init(void)
+ {
+ 	struct device_node *dn;
+-
+ 	dn = of_find_compatible_node(NULL, NULL, "ibm,random");
+ 	if (!dn)
+-		return -ENODEV;
+-
+-	pr_info("Registering arch random hook.\n");
+-
++		return;
+ 	ppc_md.get_random_seed = pseries_get_random_long;
+-
+ 	of_node_put(dn);
+-	return 0;
+ }
+-machine_subsys_initcall(pseries, rng_init);
+diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
+index afb074269b42..7f3ee2658163 100644
+--- a/arch/powerpc/platforms/pseries/setup.c
++++ b/arch/powerpc/platforms/pseries/setup.c
+@@ -779,6 +779,8 @@ static resource_size_t pseries_pci_iov_resource_alignment(struct pci_dev *pdev,
+ }
+ #endif
+ 
++__init void pseries_rng_init(void);
++
+ static void __init pSeries_setup_arch(void)
+ {
+ 	set_arch_panic_timeout(10, ARCH_PANIC_TIMEOUT);
+@@ -839,6 +841,7 @@ static void __init pSeries_setup_arch(void)
+ 	}
+ 
+ 	ppc_md.pcibios_root_bridge_prepare = pseries_root_bridge_prepare;
++	pseries_rng_init();
+ }
+ 
+ static void pseries_panic(char *str)
+-- 
+2.35.1
+

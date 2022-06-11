@@ -2,109 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7756D547685
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183D454768A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbiFKQo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 12:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S236044AbiFKQo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 12:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiFKQoZ (ORCPT
+        with ESMTP id S230518AbiFKQoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 12:44:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDF22182
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:44:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654965864; x=1686501864;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4HitFCdBPXiYkZ3gaeuzkbNd/dxt9elajBwRomlnFn8=;
-  b=HVj1ClTaYjSg7RlA5XAs/WXL/sCj/hcnIxxrMCRRjBnQFgSvKtinj4yf
-   uTngob3XIZOEgptaaVU7IaDqhsnw/ArBrB+wISxTsUhhRWurmV5IseUz0
-   vKReiv+KINeufCT5iXhK9chhXob6eBG6smArrUrIR44SS+lD8W92DP7xv
-   0nCgPlxcDG56iScv0w0Fut74hyHJdbuFD9PaF9Q1JP/US1qji+L007MkH
-   k/ViM6tUz6bF7PSm18PgvbWoqVIIQVol1ntIPkr8RmfN+RgY/YsqbjsT1
-   Kg66dDhEACPzPA3i4wMcapm+x+ryixXKjlylRmNKtsNr0/drnKZ1K4q2L
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="341937339"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="341937339"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 09:44:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="611150072"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 11 Jun 2022 09:44:22 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o04Dl-000J61-ON;
-        Sat, 11 Jun 2022 16:44:21 +0000
-Date:   Sun, 12 Jun 2022 00:43:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [jic23-iio:testing 199/199]
- drivers/iio/adc/intel_mrfld_adc.c:222:40: warning: 'mrfld_adc_id_table'
- defined but not used
-Message-ID: <202206120003.GMmufF0x-lkp@intel.com>
+        Sat, 11 Jun 2022 12:44:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E5D140DE;
+        Sat, 11 Jun 2022 09:44:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8013361197;
+        Sat, 11 Jun 2022 16:44:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F21C34116;
+        Sat, 11 Jun 2022 16:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654965891;
+        bh=ghuGRd/Z1xd0bQJRFUBDaFRmlY9Al7Fa1PVRTFvEztg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ah79EYQQ1Lbel4/ydfUhCZ/zH3iHLyB0lO3GeVQrrnCIpp9P3C2QYzPFcsm1ln4jE
+         NEePSWFqfrEOcShIgX7UDuXNZRVDGC1ZqxwVj9/WgdGDAjJNLErFT+TSv773A+rxwT
+         I79HiiyXW734tJKW6sNCJOwVXVlNX0gVtndY8EXNWoumak3oJBoYbwwgOuauWklXi+
+         kaCiwJGTmS9Q+kaDwp6RT1nlbgztPuWVewUTJjlEsky3lKt9ivHcwK/yY4nR6UbbLN
+         EgC2oSflm8T1enM8WPtQXqBsK7QlEsmbIB0hzoaBkcoQoFljx3cSLJUJf28GYOlZOt
+         vTAyJBg9dykBw==
+Message-ID: <6410890e-333d-5f0e-52f2-1041667c80f8@kernel.org>
+Date:   Sat, 11 Jun 2022 10:44:50 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [REGRESSION] connection timeout with routes to VRF
+Content-Language: en-US
+To:     Jan Luebbe <jluebbe@lasnet.de>,
+        Robert Shearman <robertshearman@gmail.com>,
+        Andy Roulin <aroulin@nvidia.com>
+Cc:     Mike Manning <mvrmanning@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        regressions@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <a54c149aed38fded2d3b5fdb1a6c89e36a083b74.camel@lasnet.de>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <a54c149aed38fded2d3b5fdb1a6c89e36a083b74.camel@lasnet.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-head:   8e3460e351d063ba81c3f50ed946dd825848d892
-commit: 8e3460e351d063ba81c3f50ed946dd825848d892 [199/199] iio: core: drop of.h from iio.h
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220612/202206120003.GMmufF0x-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=8e3460e351d063ba81c3f50ed946dd825848d892
-        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
-        git fetch --no-tags jic23-iio testing
-        git checkout 8e3460e351d063ba81c3f50ed946dd825848d892
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/adc/
+On 6/11/22 5:14 AM, Jan Luebbe wrote:
+> Hi,
+> 
+> TL;DR: We think we have found a regression in the handling of VRF route leaking
+> caused by "net: allow binding socket in a VRF when there's an unbound socket"
+> (3c82a21f4320).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This is the 3rd report in the past few months about this commit.
 
-All warnings (new ones prefixed by >>):
+...
 
-   drivers/iio/adc/intel_mrfld_adc.c:222:40: error: array type has incomplete element type 'struct platform_device_id'
-     222 | static const struct platform_device_id mrfld_adc_id_table[] = {
-         |                                        ^~~~~~~~~~~~~~~~~~
->> drivers/iio/adc/intel_mrfld_adc.c:222:40: warning: 'mrfld_adc_id_table' defined but not used [-Wunused-variable]
+> 
+> Our minimized test case looks like this:
+>  ip rule add pref 32765 from all lookup local
+>  ip rule del pref 0 from all lookup local
+>  ip link add red type vrf table 1000
+>  ip link set red up
+>  ip route add vrf red unreachable default metric 8192
+>  ip addr add dev red 172.16.0.1/24
+>  ip route add 172.16.0.0/24 dev red
+>  ip vrf exec red socat -dd TCP-LISTEN:1234,reuseaddr,fork SYSTEM:"echo connected" &
+>  sleep 1
+>  nc 172.16.0.1 1234 < /dev/null
+> 
 
+...
+Thanks for the detailed analysis and reproducer.
 
-vim +/mrfld_adc_id_table +222 drivers/iio/adc/intel_mrfld_adc.c
+> 
+> The partial revert
+> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+> index 98e1ec1a14f0..41e7f20d7e51 100644
+> --- a/include/net/inet_hashtables.h
+> +++ b/include/net/inet_hashtables.h
+> @@ -310,8 +310,9 @@ static inline struct sock *inet_lookup_listener(struct net *net,
+>  #define INET_MATCH(__sk, __net, __cookie, __saddr, __daddr, __ports, __dif, __sdif) \
+>         (((__sk)->sk_portpair == (__ports))                     &&      \
+>          ((__sk)->sk_addrpair == (__cookie))                    &&      \
+> -        (((__sk)->sk_bound_dev_if == (__dif))                  ||      \
+> -         ((__sk)->sk_bound_dev_if == (__sdif)))                &&      \
+> +        (!(__sk)->sk_bound_dev_if      ||                              \
+> +          ((__sk)->sk_bound_dev_if == (__dif))                 ||      \
+> +          ((__sk)->sk_bound_dev_if == (__sdif)))               &&      \
+>          net_eq(sock_net(__sk), (__net)))
+>  #else /* 32-bit arch */
+>  #define INET_ADDR_COOKIE(__name, __saddr, __daddr) \
+> @@ -321,8 +322,9 @@ static inline struct sock *inet_lookup_listener(struct net *net,
+>         (((__sk)->sk_portpair == (__ports))             &&              \
+>          ((__sk)->sk_daddr      == (__saddr))           &&              \
+>          ((__sk)->sk_rcv_saddr  == (__daddr))           &&              \
+> -        (((__sk)->sk_bound_dev_if == (__dif))          ||              \
+> -         ((__sk)->sk_bound_dev_if == (__sdif)))        &&              \
+> +        (!(__sk)->sk_bound_dev_if      ||                              \
+> +          ((__sk)->sk_bound_dev_if == (__dif))         ||              \
+> +          ((__sk)->sk_bound_dev_if == (__sdif)))       &&              \
+>          net_eq(sock_net(__sk), (__net)))
+>  #endif /* 64-bit arch */
+> 
+> restores the original behavior when applied on v5.18. This doesn't apply
+> directly on master, as the macro was replaced by an inline function in "inet:
+> add READ_ONCE(sk->sk_bound_dev_if) in INET_MATCH()" (4915d50e300e).
+> 
+> I have to admit I don't quite understand 3c82a21f4320, so I'm not sure how to
+> proceed. What would be broken by the partial revert above? Are there better ways
+> to configure routing into the VRF than simply "ip route add 172.16.0.0/24 dev
+> red" that still work?
+> 
+> Thanks,
+> Jan
+> 
+> #regzbot introduced: 3c82a21f4320
+> 
+> 
+> 
 
-a7118662734a3f9 Vincent Pelletier 2019-03-26  221  
-a7118662734a3f9 Vincent Pelletier 2019-03-26 @222  static const struct platform_device_id mrfld_adc_id_table[] = {
-a7118662734a3f9 Vincent Pelletier 2019-03-26  223  	{ .name = "mrfld_bcove_adc" },
-a7118662734a3f9 Vincent Pelletier 2019-03-26  224  	{}
-a7118662734a3f9 Vincent Pelletier 2019-03-26  225  };
-a7118662734a3f9 Vincent Pelletier 2019-03-26  226  MODULE_DEVICE_TABLE(platform, mrfld_adc_id_table);
-a7118662734a3f9 Vincent Pelletier 2019-03-26  227  
-
-:::::: The code at line 222 was first introduced by commit
-:::::: a7118662734a3f97622d8274708cb61fd53d693a iio: adc: intel_mrfld_adc: Add Basin Cove ADC driver
-
-:::::: TO: Vincent Pelletier <plr.vincent@gmail.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Andy Roulin suggested the same fix to the same problem a few weeks back.
+Let's do it along with a test case in fcnl-test.sh which covers all of
+these vrf permutations.

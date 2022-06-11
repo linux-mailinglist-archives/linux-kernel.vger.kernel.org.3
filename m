@@ -2,64 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A5A5475D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 16:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B597B5475D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 16:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236318AbiFKOvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 10:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S236354AbiFKOxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 10:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbiFKOvL (ORCPT
+        with ESMTP id S236505AbiFKOx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 10:51:11 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87715584;
-        Sat, 11 Jun 2022 07:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=/EEge3ftYRCZN5Nh04+7KkRdYV+5milHO3YyNYaNuqY=; b=0U
-        rcM6JbUZgmpprIh8gXXmSQ+tH9GHd0ii4a55+BC4iJeJ7hYNIjpzA1hutbEX6UHiqj4pYBQF3NkZV
-        qmPmRDmWSzR42yedwY37gPk3ZohAu0cqDyiBnkQZVzJPSgNbDWJhVCBX8Kl13q94wb2dvNDriDyie
-        Y1ZQVdwBogGd9sc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o02Rk-006W9u-Sy; Sat, 11 Jun 2022 16:50:40 +0200
-Date:   Sat, 11 Jun 2022 16:50:40 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: networking: phy: Fix a typo
-Message-ID: <YqSrwHg/JpCvmz4j@lunn.ch>
-References: <20220610072809.352962-1-j.neuschaefer@gmx.net>
+        Sat, 11 Jun 2022 10:53:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E5CF0F;
+        Sat, 11 Jun 2022 07:53:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DE2060C20;
+        Sat, 11 Jun 2022 14:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6AEC34116;
+        Sat, 11 Jun 2022 14:53:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QXa8KogU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654959201;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bKbSeBuOdlxWzcVReKbVmpA4lJrc6qzgy7XqD/6bAtw=;
+        b=QXa8KogUbmnrgICN3mIIm8wPs35V15sU96OJDtVFHsctRC1k8Ogwr/yqw3wXdVHqZjDjmY
+        UsNnupyvqNMVzsNmWNeY/PxXlVFmUQmOxc20onLXrCjbYy6bhS2sBnkLkH29WsF88NXR7J
+        ab60omI0X6zWmRMVlT8TUz8xp73jQOM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e5c205e2 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 11 Jun 2022 14:53:21 +0000 (UTC)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-30c143c41e5so15895497b3.3;
+        Sat, 11 Jun 2022 07:53:21 -0700 (PDT)
+X-Gm-Message-State: AOAM530ZJ2vBDuR84TCVEXVfWKTrTddFctKg0ZNBfoMJ6iNfV6zZC9/c
+        Aqrp6zlEeH5eGkVvt8I0ZFjfFaqtM69mgkuwhP8=
+X-Google-Smtp-Source: ABdhPJwVIznr3iPBOVShCFe6E/BZjiQuHFZfe/9f5Zu2mD9Vr+9h/iopjzg3V+juSXJQ+5DDeqF6O5Ha5SbJHQXwPrs=
+X-Received: by 2002:a81:4887:0:b0:30c:40bd:3e7b with SMTP id
+ v129-20020a814887000000b0030c40bd3e7bmr55918247ywa.396.1654959200598; Sat, 11
+ Jun 2022 07:53:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610072809.352962-1-j.neuschaefer@gmx.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220611100447.5066-1-Jason@zx2c4.com> <20220611100447.5066-4-Jason@zx2c4.com>
+ <80cca718-d637-b48a-ddb3-e6931cd08c24@csgroup.eu>
+In-Reply-To: <80cca718-d637-b48a-ddb3-e6931cd08c24@csgroup.eu>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sat, 11 Jun 2022 16:53:09 +0200
+X-Gmail-Original-Message-ID: <CAHmME9ortseAax04+h1TVZAWEYN0uVDAkhzTrBZnQnWzj9xn6A@mail.gmail.com>
+Message-ID: <CAHmME9ortseAax04+h1TVZAWEYN0uVDAkhzTrBZnQnWzj9xn6A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] powerpc/pseries: wire up rng during setup_arch
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 09:28:08AM +0200, Jonathan Neuschäfer wrote:
-> Write "to be operated" instead of "to be operate".
-> 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Hi Christophe,
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+On Sat, Jun 11, 2022 at 4:45 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> There must be a empty line between declarations and code.
 
-    Andrew
+Ack.
+
+> Prototype has to go in a header file
+
+Already voiced disagreement about this in the other thread.
+
+> and should be pSeries maybe
+> allthough camelCase in throw up on.
+
+All the rng.c functions use pseries_ in lower case, so I'll stick with
+that, as that's where the function is defined.
+
+Jason

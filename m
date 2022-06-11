@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44B45476AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C575476B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237798AbiFKQzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 12:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S233684AbiFKQ5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 12:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236770AbiFKQzo (ORCPT
+        with ESMTP id S236770AbiFKQ5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 12:55:44 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EED46FA2E;
-        Sat, 11 Jun 2022 09:55:43 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LL3qc4l1kz9tSH;
-        Sat, 11 Jun 2022 18:55:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 54irvjHsnLrs; Sat, 11 Jun 2022 18:55:40 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LL3qb02SMz9tSJ;
-        Sat, 11 Jun 2022 18:55:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E074A8B768;
-        Sat, 11 Jun 2022 18:55:38 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ZtZubZVjpOjl; Sat, 11 Jun 2022 18:55:38 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.192])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9D4638B77C;
-        Sat, 11 Jun 2022 18:55:38 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25BGtQqR742066
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 11 Jun 2022 18:55:26 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25BGtQR1742065;
-        Sat, 11 Jun 2022 18:55:26 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 2/2] powerpc: Move prom_init() out of asm-prototypes.h
-Date:   Sat, 11 Jun 2022 18:55:16 +0200
-Message-Id: <e111e4f0addb0fa810d5f6a71d3b8e62c0b53492.1654966508.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <3b1dfb19a2c3265fb4abc2bfc7b6eae9261a998b.1654966508.git.christophe.leroy@csgroup.eu>
-References: <3b1dfb19a2c3265fb4abc2bfc7b6eae9261a998b.1654966508.git.christophe.leroy@csgroup.eu>
+        Sat, 11 Jun 2022 12:57:17 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7422E18388
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:57:16 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id kq6so3476186ejb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W83l/pLxbVmfdY4Bh3kAV9FBhPiwp545eDF2N1BjQ/0=;
+        b=QZFxcEKrwiT/RpVaiTi05b84+BOEJXjGP0UMn3IqGzce/BDk93ukoGPtqbDYlqaeML
+         WwwEbRGvqg0gN2HFDwZCwSPNECNvzPHHpYwbsRW/PpLrRQpmpYITmQ292c5X/16X6nAB
+         XC3OXxSNmfDTBC0Q369g5kF7e+6gGX27oEtkM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W83l/pLxbVmfdY4Bh3kAV9FBhPiwp545eDF2N1BjQ/0=;
+        b=5gyzzZl50Vq6IdDC1EceUQx98Q0D8g5QcWJn2Wd7yWlKBW+T1iq5a5p/Ncww3zc1Tq
+         YLmvOApCol8EqwsweUuf71IUh43TgOZB0qEXKbojbl8TDaVgsUDv1Zv06w8CuVMJdcI+
+         hTYZlpwK6PmU5YG5fiI8PJ98TX1kIFzw8mwe64SmU0AWFpeZxuAbb12YRwcBVAOJNo+k
+         d3ps5LGh+VZLpMy5CRN5lgZTpi+2iNFSvXb+1mn3spWQhZJ9La16DJbKeYK+Vla697do
+         uY6vUzPIDjB7/TWL+S5nbYzbKrFIsha6DBTQ5TpzwEbmlmN1fdkIfjZnBhj8XqK1q6ga
+         8WGw==
+X-Gm-Message-State: AOAM5311u8pXgD2iHhZUL5HeazLssdUhvdg14bEkR3u0sZ8eFrZB9lgv
+        mJ1SXKs8mJ1Wq+ohlUy74uYH2n/TlM5wIMz+Ars=
+X-Google-Smtp-Source: ABdhPJw1yk86w1avlefK1oY0ZivbFqzbFTdLNbiI1sinTMrC9m2tA9Hx+6Kxd/Bw+8Z1q3o9hI9/uw==
+X-Received: by 2002:a17:907:1c18:b0:711:c83b:8a14 with SMTP id nc24-20020a1709071c1800b00711c83b8a14mr29410785ejc.379.1654966634664;
+        Sat, 11 Jun 2022 09:57:14 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id m6-20020a50d7c6000000b0042dd60352d1sm1704712edj.35.2022.06.11.09.57.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jun 2022 09:57:14 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id z9so909352wmf.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:57:13 -0700 (PDT)
+X-Received: by 2002:a05:600c:591:b0:39c:4544:b814 with SMTP id
+ o17-20020a05600c059100b0039c4544b814mr5603093wmd.118.1654966633270; Sat, 11
+ Jun 2022 09:57:13 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1654966513; l=1938; s=20211009; h=from:subject:message-id; bh=fAU2YJdaMaOCNND6abnDDcAnCp5BkcWZrEWb3FSr2r4=; b=M0hlhV7MqNO1F1MezaSEWaQWJ4ODhBlt/ywxnrufJ0TCozr+u4yi5MIx1ahy7GJ+pRPUeNmT+I5+ vP5IxmV/BwZJt8oFInL4YdYaoDNr6lO53jkSLvmXxZtlMyCoxf+E
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220611182119.4e115fba@canb.auug.org.au>
+In-Reply-To: <20220611182119.4e115fba@canb.auug.org.au>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Sat, 11 Jun 2022 09:57:01 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X2cwr_s3bQJk0hOb88-zPrZR-2fKxP8yKSAy9vuKFtzQ@mail.gmail.com>
+Message-ID: <CAD=FV=X2cwr_s3bQJk0hOb88-zPrZR-2fKxP8yKSAy9vuKFtzQ@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the end of the work started with commit 76222808fc25 ("powerpc:
-Move C prototypes out of asm-prototypes.h")
+Hi,
 
-Now that asm/machdep.h doesn't include asm/setup.h anymore, there are
-no conflicts anymore with the function prom_init() defined in
-drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowrom.o
+On Sat, Jun 11, 2022 at 1:21 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>
+> Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:377: WARNING: Unexpected indentation.
+> Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:378: WARNING: Block quote ends without a blank line; unexpected unindent.
+>
+> Introduced by commit
+>
+>   69ef4a192bba ("drm: Document the power requirements for DP AUX transfers")
 
-So we can move it to asm/setup.h
+Thanks for the report. Fixed by:
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/asm-prototypes.h | 6 ------
- arch/powerpc/include/asm/setup.h          | 5 +++++
- 2 files changed, 5 insertions(+), 6 deletions(-)
+https://lore.kernel.org/r/20220611095445.1.I534072d346b1ebbf0db565b714de9b65cbb24651@changeid
 
-diff --git a/arch/powerpc/include/asm/asm-prototypes.h b/arch/powerpc/include/asm/asm-prototypes.h
-index d995c65d18ab..3b2bbc273055 100644
---- a/arch/powerpc/include/asm/asm-prototypes.h
-+++ b/arch/powerpc/include/asm/asm-prototypes.h
-@@ -34,12 +34,6 @@ int64_t __opal_call(int64_t a0, int64_t a1, int64_t a2, int64_t a3,
- 		    int64_t a4, int64_t a5, int64_t a6, int64_t a7,
- 		    int64_t opcode, uint64_t msr);
- 
--/* prom_init (OpenFirmware) */
--unsigned long __init prom_init(unsigned long r3, unsigned long r4,
--			       unsigned long pp,
--			       unsigned long r6, unsigned long r7,
--			       unsigned long kbase);
--
- /* misc runtime */
- extern u64 __bswapdi2(u64);
- extern s64 __lshrdi3(s64, int);
-diff --git a/arch/powerpc/include/asm/setup.h b/arch/powerpc/include/asm/setup.h
-index 8fa37ef5da4d..14a0b8af738e 100644
---- a/arch/powerpc/include/asm/setup.h
-+++ b/arch/powerpc/include/asm/setup.h
-@@ -85,6 +85,11 @@ void __init machine_init(u64 dt_ptr);
- void __init early_setup(unsigned long dt_ptr);
- void early_setup_secondary(void);
- 
-+/* prom_init (OpenFirmware) */
-+unsigned long __init prom_init(unsigned long r3, unsigned long r4,
-+			       unsigned long pp, unsigned long r6,
-+			       unsigned long r7, unsigned long kbase);
-+
- #endif /* !__ASSEMBLY__ */
- 
- #endif	/* _ASM_POWERPC_SETUP_H */
--- 
-2.35.3
+I'll plan to land it as soon as I see a Reviewed-by.
 
+-Doug

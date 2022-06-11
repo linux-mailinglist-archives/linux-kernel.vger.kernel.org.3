@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D9254779B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 22:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F935477A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 23:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbiFKUy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 16:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S230150AbiFKVBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 17:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiFKUyY (ORCPT
+        with ESMTP id S229454AbiFKVBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 16:54:24 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660E33D4BE
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:54:22 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id y19so4165206ejq.6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jd7TZkA7lybh5B4uGr3K0a+i9m897gef1MV3s/kY0MM=;
-        b=ZKtc6ITWcmXElVEp6qLBUlUlxN4QCWWpTIcgoe928nfmImWDbRwEkCBMQw1ZehvMPL
-         hbGFsMyz6TVPb23UsQxg2jH8TW6UuovjvODgmvtsRe35LVd4bFB/ikjDYwuVdIK3/McG
-         ++b781QwMlGiazIwReCrubG7sfXZP5PqT/0fg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jd7TZkA7lybh5B4uGr3K0a+i9m897gef1MV3s/kY0MM=;
-        b=upm/s2mYB3Qdcbf0glu0fkYp7H959jVGARTj7g3Ne0g2kI8p7BswFD7eIvxA2rzdm5
-         DiPfCb3KeJyBbYAsC+TLAQhK5y4enV4yUrJSEeSk5ORMqoLkfbwRSrzcumSVuuDeYnYT
-         IGBuF0RGIf7KemUoZe/HuMv6OKZ+Hk1rKtxRdtKnijQUijqVYP5wPkW6zONqu6akStpv
-         vFmLPTlUBtiQ0QnBggdFxi6O01NdyMH4PifTt6dBr3flDTuG6NSG0qJ97tIR4l3LUqTE
-         MX0CAxkyKeno1NOB4wNNSOUBCkFC/Lw4CXLpep5O3YuGUre+j04aUyVaHNpwSSv6m+2i
-         CmfA==
-X-Gm-Message-State: AOAM531tVi/D+sNdMf8JF+YAy+2GfkI6NZsXBT8FjugdSPrbs+hpeKE8
-        TFTnwLWo3WwtU4KsFDEHW91JzCla6dhxvpOL
-X-Google-Smtp-Source: ABdhPJwVhYj2PYM6c2v+x5ziCGyBmSSkiiBg2gU4eefQz4AwiDrstpmttxvWgpZLECMNEARdeqPGGw==
-X-Received: by 2002:a17:907:7256:b0:711:d5ac:b9e6 with SMTP id ds22-20020a170907725600b00711d5acb9e6mr27273734ejc.680.1654980860760;
-        Sat, 11 Jun 2022 13:54:20 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id qn18-20020a170907871200b006f3ef214ddfsm1492461ejc.69.2022.06.11.13.54.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jun 2022 13:54:20 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id a15so2657945wrh.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:54:19 -0700 (PDT)
-X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
- h4-20020a05600016c400b0020fcd5d4797mr50015896wrf.193.1654980859591; Sat, 11
- Jun 2022 13:54:19 -0700 (PDT)
+        Sat, 11 Jun 2022 17:01:45 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B07C38783
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 14:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654981304; x=1686517304;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Dd0wte+Cdpv37UYBfgqGw46kiLrKtJCEiyWEQ+n5icQ=;
+  b=dNU0RqxHwsU48Wud1NGKGz0PhG1meQnk4BvO/YRgCm2zEbl/wLeCAgGj
+   mHPcorkObUofcx+Tw+UkRltJX4FaFIYZ/JGYcdqazRkIgXeBRCkchc9rI
+   lF3zJmqMB+LPBCAHc5L8keH5IdJxEID7H3/f3fII3F/D0WUlDRFSenFfX
+   8vjP0ldBsL/4DhzV1l1nLMTdBlRTLaL1db8tjQAjJ/VQkX2wSTleckfjj
+   Tj3oN0T9bBvuMWCNM4IH7lJlndKy1Z9eYEH8neiC8fWkqPfeqj6E+/tNP
+   csxMChiuiPDLDZax5ldoR1cCR/yodu+eDtRipecqGHnnD5RYvkUfk6TA6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="341960219"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="341960219"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 14:01:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="534562140"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 11 Jun 2022 14:01:43 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o08Eo-000JIJ-8f;
+        Sat, 11 Jun 2022 21:01:42 +0000
+Date:   Sun, 12 Jun 2022 05:00:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final
+ BE8 format
+Message-ID: <202206120438.Un6Wq4N0-lkp@intel.com>
 MIME-Version: 1.0
-References: <YqT8fYe1PqP9rCRs@zeniv-ca.linux.org.uk>
-In-Reply-To: <YqT8fYe1PqP9rCRs@zeniv-ca.linux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 11 Jun 2022 13:54:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjD0MoRivXBF=YDZV_E=aEHOsduPXV9mKaETwqJxtV6Sg@mail.gmail.com>
-Message-ID: <CAHk-=wjD0MoRivXBF=YDZV_E=aEHOsduPXV9mKaETwqJxtV6Sg@mail.gmail.com>
-Subject: Re: [git pull] build fix
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 1:35 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
->   fix warnings on 32bit caused by ITER_XARRAY fix (2022-06-11 12:43:21 -0400)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0678afa6055d14799c1dc1eee47c8025eba56cab
+commit: 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3 ARM: rework endianess selection
+date:   9 weeks ago
+config: arm-randconfig-r012-20220612 (https://download.01.org/0day-ci/archive/20220612/202206120438.Un6Wq4N0-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-I already fixed this in my tree (identically to your fix) earlier
-today, since I was cc'd on the same report from Sudhip..
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Commit 1c27f1fc1549 ("iov_iter: fix build issue due to possible type mis-match")
+All errors (new ones prefixed by >>):
 
-            Linus
+>> arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final BE8 format
+   arm-linux-gnueabi-ld: failed to merge target specific data of file .btf.vmlinux.bin.o
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

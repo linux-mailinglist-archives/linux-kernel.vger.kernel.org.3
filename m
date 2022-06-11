@@ -2,134 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EFC54763E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD35547642
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238979AbiFKPwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 11:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S239003AbiFKPxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 11:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiFKPwW (ORCPT
+        with ESMTP id S233786AbiFKPxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 11:52:22 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03024E6B
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654962741; x=1686498741;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hUZ65Rg3EEiHgzz4LA4Q3Vxkj3mq3OjDaPirGkBxR60=;
-  b=Y4angcpWru4vXyxSVnKJv00hYuweYre/eNyabWJv4/FYQtYKByJm4pkC
-   SD2MtOQkHsFCEDJduTXHyV+OBEAQQhyGkoQBEztLgeqdOD32ReDNMYmSf
-   TubIcP20a8h7ZolfHabIS/4SC3WCQ5CBSXqlDQ9iWUnK50oJEzmQgcvi/
-   zqnCXh7fCwLnfnmIOEBm3yVBbPuhmjKs1B17UkRpr2LkWfIlhHssyy7yi
-   kYhJwUDL6NlUs9mwRJJnId8YsL1rhK/MU06RkTDz2UOvPtGFq8xXxOY+3
-   K2ws224bEx8Y06bBiq5FezI0Eat5C1UIUtAymqp2RJEqlZlzuacqWWz4/
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="277941065"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="277941065"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:52:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="711363163"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 11 Jun 2022 08:52:20 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o03PP-000J2X-FP;
-        Sat, 11 Jun 2022 15:52:19 +0000
-Date:   Sat, 11 Jun 2022 23:51:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 443/453]
- arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used
-Message-ID: <202206112336.404YWKiT-lkp@intel.com>
-MIME-Version: 1.0
+        Sat, 11 Jun 2022 11:53:48 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2100.outbound.protection.outlook.com [40.107.243.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E43F184;
+        Sat, 11 Jun 2022 08:53:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LiI+ma8ksNZGvO5LhydVkyuZ0CgofIwcI2NaYysAjd7fEOdeTRkl/JxQVhcDAQb9cLezAR3cttH1Xbhw6JR3QkPba2gqxIia9hR2DLcvKW+2WRkrkirSKvt6MMRWCEFimXRiqalg+vtDOffuMWBK0NlLULwyrCA3LjQ5Gyid4FFkWX2cuJaR+FJMyOJ52MEZK+kAB91C08KTEgcNYyuLjjz5Mpig6kggq85dsU7mvS2q4XH9nDytxusr3AKmfyPdTZiKVm5H8yHL7A0i6ubBBw+hgdbGqrFEHxRAFzEBP+DMslN/wUusR+3UR/ZJymE8VWIN178XOecpmoB/+R0CUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cLHZhUEIzuAYAOI0Ibo95vqLwXIRj3ddyThO4VlhG4c=;
+ b=ETtOzfxMB0D0UGMFkC3tWJe5q8uAcLcvi8uxfvJQmbnWRyy3vuITzvwS0hj65ZLAhjCvahLL78cLGgWgP3iGIYUUFB/L8UGrwYAJ1FnO8j6OAhq1qVPmreGLX5E1e0FVoL5JeN5LCM3kag52/Ors4XswiBiD13S099japLxL4cEodu/JpS1wB2S3avnyr8doPd+ICHmYsHAHkdomtDgAczQquDmJpaJqHTfw9shZG8l1wSU5PWiDr+5ssr2C6iUPRm0mfHsLoacjA1hjhfExZb8uWOXl1SDaKjeAdvk36RF8QGUkW8QxmuPRcA7Nxwj7da2rv7TSTvzgz4/ssaQEew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cLHZhUEIzuAYAOI0Ibo95vqLwXIRj3ddyThO4VlhG4c=;
+ b=NrW5pofmc2vajMuoJdI9HkNMSDXAS2Rr2FNiO52WJpUBb1qeh6S/YUuJu8uwklJaWP1fLlKMGAJucXHkftftytmURUdLAGcLjABdvLnpfzaZxjGuJbiHUK6zIOGkfQe3FV6SBoCoMaAq6iH1FWnPWBdGxTfScJORXYOJZrPX+t0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BY5PR10MB4145.namprd10.prod.outlook.com
+ (2603:10b6:a03:208::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.15; Sat, 11 Jun
+ 2022 15:53:43 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b8c0:76a2:4c89:d10f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b8c0:76a2:4c89:d10f%7]) with mapi id 15.20.5332.014; Sat, 11 Jun 2022
+ 15:53:43 +0000
+Date:   Sat, 11 Jun 2022 08:53:34 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>
+Subject: Re: [PATCH v9 net-next 1/7] mfd: ocelot: add helper to get regmap
+ from a resource
+Message-ID: <20220611155334.GA848433@euler>
+References: <20220610175655.776153-1-colin.foster@in-advantage.com>
+ <20220610175655.776153-2-colin.foster@in-advantage.com>
+ <CAHp75VfHG7pqvTLcBu=vqx9PzXVrJhxyu6XHr9xaiMmhqke-Tg@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHp75VfHG7pqvTLcBu=vqx9PzXVrJhxyu6XHr9xaiMmhqke-Tg@mail.gmail.com>
+X-ClientProxiedBy: MWHPR19CA0067.namprd19.prod.outlook.com
+ (2603:10b6:300:94::29) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 091398dd-4339-4cb4-94d7-08da4bc28f7a
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4145:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR10MB4145DF7D4A8C081ADBACC7B0A4A99@BY5PR10MB4145.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vT8T+e1dWhLc9ER9hdnNEMntWyJO0R1LTApZUHwvsMg+29uB4VI8kB3EjJ+lDBmvhFOpYAazIHniCUcQ0HUNVkZYAfmUUHQCengu6O5EWPSHnJAXxsUefAgoujtLr0x2PJ1I3B4oqbdgGJKL60Poh24xTVBax9vMlIW53UxTPSXZFr80EBbYHL8BlD+hxp28wkv7IBPtXLAwfl82IrSEtIwiPFmykxpqQt3QImhK9FbI5F07i/YAbmfuMu/R/EVB5Akh9zhc+nJeo8SPoldXhQl6Yc0cY7ejgNhYeM/q8BCTpgrwR+U3pm4z2PQrx1FzO9wnG3QAGDawonvNSuyWXsuFqEjGRhQ8icB6FQmMQ4TvoNovIH1qW3EFEq3ca/IDY+w8+tCaIYfMEEDcJLm9NAYRLk/pQg5tfSzvmUU+700Usd1sZlQX/8OuBRTYL0+n3SsPlAVVW35G+AkjIPskuvwUEa0EiuK1az+If2qeHKdXMvQI/Tgg/n68tnvhuwwGdqOY+vsGpxWEvatZ8Wox+t46KtSO5nqzyj9v1DCvJ49DQyFpVAfA+4Ct1qS+fW4Kqpfhz3e386/6jOqKLSOunanGcGMyhI7AQ11jqunFFo78SRNtaRtQV/JWWqxI1NmfkcXA6iXY62WLQpd/9Z+oNIJ5uq80PxWEfazrCRkV7UGxR46rzsjNFUHAY9BYkFxHGMT83mGfJfC5CRHPZ0Sl2A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(366004)(39830400003)(346002)(136003)(1076003)(6666004)(53546011)(52116002)(6506007)(186003)(41300700001)(6512007)(26005)(9686003)(83380400001)(38350700002)(38100700002)(66946007)(33716001)(8936002)(7416002)(44832011)(5660300002)(4326008)(86362001)(8676002)(2906002)(66476007)(33656002)(316002)(66556008)(6486002)(508600001)(6916009)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0HHFvRVJHmWpDWbEZYSkt+5OHU+d249t8mM2kPMx6UFWAYG6TyhVKpa3XTgq?=
+ =?us-ascii?Q?lkxrihRR2p0JxSRHpHCU0eHbMhmk0BkBfeHTVxEfevuXqwcqMPD3cKPqjFec?=
+ =?us-ascii?Q?ivIDGua7XcGun5p07i+CfTEF98qfDZHw0vMjdMrhru23fhLp/+bTC9NaN0/i?=
+ =?us-ascii?Q?EK1hCV7qSBJhZuimr8Rse5fTkJu69RIRtCT4SyEMNuOtYlaiRP7rBgya/wwa?=
+ =?us-ascii?Q?27XH4vg8h6Q1M3zYwZBeCBeIaIZxsvUCq7P0uEWfavqwMtdtWc4wFRQD0iFA?=
+ =?us-ascii?Q?DGp8iUs0aFN5gO/JhWcjKE3unv7v4dsPh8yhnDqKBGLWX8/6AhTeV9UewXmZ?=
+ =?us-ascii?Q?01TWACmZ/FvALOxhoi/fyp9ZthQFjSy+pY9l8Q+XElk+LmpipqLWgFYabxfE?=
+ =?us-ascii?Q?R/Gv+ooHrhpc8zh6lGI/n4x0rtUJoycIggi4uqBCXmczZ2/iwf9IcsUFMftQ?=
+ =?us-ascii?Q?cc/d4QoSegmuXgPpjMY4M20JmuT5RqkqSNvPswiTKKuDFfHzP2kuxFrTH9YY?=
+ =?us-ascii?Q?SUNbK9lGKSODsdx7bDffcy8s53Tw34U9O6DaztAjN1WGpbchbetnTNC8bqg1?=
+ =?us-ascii?Q?4/WRRn6zdnnhYAUYhDEhJ8NDVyIeoofuNU2Y/RKdqQwjj0/1PN4npXHlYk4X?=
+ =?us-ascii?Q?vSvRXLgQ+jLcxlwTAYOK8OpnengDP7ho1PPcDUqZ0Pk+ojkTM0EMNewxkAUj?=
+ =?us-ascii?Q?/0ue48sXLUiqO8cH6n5aCobIhT33qopEOV4twow48QspUUCaZstbsUQm78Sh?=
+ =?us-ascii?Q?385R8d4r5zgxh+mnSrPnTvUWTWlog1tNJhLB30YfO0t5i0UuKn43XN99TYPs?=
+ =?us-ascii?Q?5kBByL2kSxtyCny87AhxlMha/24rxTW8+JjwOQsZDeLPFaCWcQ3HkZWS5/+a?=
+ =?us-ascii?Q?eOXYV60d174bWQqRzpjevPo7SG61u3Fhzwbk5t+I+E0fSTl9bsLC30PkjXFs?=
+ =?us-ascii?Q?Ow2Gekh/ywH1dqVAS3AOl6YkrVQGxIv1DXJ+YteHKcdcH6D+z44DsHZCIXWz?=
+ =?us-ascii?Q?CCL4Q8bpfx4FJPIBHZ2p8UpUa2djDl4jsMqyhLy7Kashe6icGti3a2APLCsH?=
+ =?us-ascii?Q?YsEJhx7D2o74E91KNKylkmkspZYey5XCRWj6iXMyt/xpajYF0BaK2mkdC9vx?=
+ =?us-ascii?Q?yKQBdWtpZBzA6Pq4LY6ZxQX9EnrfxBwzc3pmqWyuwdYxH8plBqz2tbXjKttI?=
+ =?us-ascii?Q?dN12jQeEM+criRNnW7DeacfdnZe9TkKDshkfiQ9bMZtsMGrIKy37Lur+aS6h?=
+ =?us-ascii?Q?wthAURqwHiJILnLDdhaajiBppdHMAxJ2y8qugnwQT+WKzPJuqL0rnUnH165X?=
+ =?us-ascii?Q?J7O4ckVoq7ADv9Ft2YIrLBDhhVzT7rqqW+SmoYWnYUyWU0K0ehKoSKnz6gdo?=
+ =?us-ascii?Q?v7mP8qxQpTeQr0i+TBr+qD5MP34sY8vDlSXjR1H79YQm74lfg8o1D5dwAd+T?=
+ =?us-ascii?Q?6F7n53ec1300AueW4Ry8eknajNWCGEByW6PIuHgJsCsmFQE9MBPr+XCza9XJ?=
+ =?us-ascii?Q?TXw6e0nfYkLJois8G2u0f2Zpjqk1gti5/p22yQHKb+YO9b1pKyKIF/MC18zd?=
+ =?us-ascii?Q?qHde+3yEXIpKx0eCWbiYe05yAnfhXg56n4KRlxdflhE0BaeqY+rAu8IkKmI2?=
+ =?us-ascii?Q?1tZpqJSQEzdOkeYtP449l77bHDyqnSyTuY2t4k5YOdtJW2VXws18NXwgYDAR?=
+ =?us-ascii?Q?XknHLheiSF1haLiYSrNaQYvD44hoY8eiMiMZv/CV7+HGxDp5ebjuIpiAhIMG?=
+ =?us-ascii?Q?8SM7kM53JpafpiGVs567eMGJWpCt9NcDEnhcv9YuvypRMe1aPVuL?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 091398dd-4339-4cb4-94d7-08da4bc28f7a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2022 15:53:43.2229
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7YAba/Eug1VB/8g4kjkT3vinvcBV/4eVnd1VIoLfqNxE+S++09uI/JnqcJ8/Zt9233wnfnh2VxqcOlc97asWnVDLWghTmn27qZtt6v55T8U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4145
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   64f3ddf316eab9398414b94e62a01d185e6e94c8
-commit: d4ee16fc8532473025338c594b8fbe6a6faa0887 [443/453] KVM: x86/mmu: update lpage_info on changing page_type
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220611/202206112336.404YWKiT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/d4ee16fc8532473025338c594b8fbe6a6faa0887
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout d4ee16fc8532473025338c594b8fbe6a6faa0887
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/ arch/x86/kvm/
+On Sat, Jun 11, 2022 at 12:26:31PM +0200, Andy Shevchenko wrote:
+> On Fri, Jun 10, 2022 at 7:57 PM Colin Foster
+> <colin.foster@in-advantage.com> wrote:
+> >
+> > Several ocelot-related modules are designed for MMIO / regmaps. As such,
+> > they often use a combination of devm_platform_get_and_ioremap_resource and
+> > devm_regmap_init_mmio.
+> >
+> > Operating in an MFD might be different, in that it could be memory mapped,
+> > or it could be SPI, I2C... In these cases a fallback to use IORESOURCE_REG
+> > instead of IORESOURCE_MEM becomes necessary.
+> >
+> > When this happens, there's redundant logic that needs to be implemented in
+> > every driver. In order to avoid this redundancy, utilize a single function
+> > that, if the MFD scenario is enabled, will perform this fallback logic.
+> 
+> ...
+> 
+> > +#include <linux/err.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> 
+> Since it's header the rule of thumb is to include headers this one is
+> a direct user of. Here I see missed
+> types.h
+> 
+> Also missed forward declarations
+> 
+> struct resource;
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ahh, thank you. Yes, you mentioned this in v8 but I misuderstood what
+you were saying. I'll also include types.h.
 
-Note: the intel-tdx/kvm-upstream-workaround HEAD 64f3ddf316eab9398414b94e62a01d185e6e94c8 builds fine.
-      It only hurts bisectability.
+> 
+> ...
+> 
+> > +       if (!IS_ERR(regs))
+> 
+> Why not positive conditional?
+> 
+> > +               *map = devm_regmap_init_mmio(&pdev->dev, regs, config);
+> > +       else
+> > +               *map = ERR_PTR(ENODEV);
+> 
+> Missed -.
 
-All errors (new ones prefixed by >>):
+Fixed. Thanks.
 
-   In file included from arch/x86/kvm/mmu/mmu.c:18:
-   In file included from arch/x86/kvm/irq.h:15:
-   In file included from include/linux/kvm_host.h:47:
-   include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
->> arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used [-Werror,-Wunused-but-set-variable]
-           enum kvm_page_type type;
-                              ^
-   2 errors generated.
-
-
-vim +/type +982 arch/x86/kvm/mmu/mmu.c
-
-7c45d6a017129b Xiaoyao Li     2021-08-31  977  
-09cbecc5a0e81f Xiaoyao Li     2022-05-25  978  static void split_page_type(gfn_t gfn, struct kvm_memory_slot *slot,
-09cbecc5a0e81f Xiaoyao Li     2022-05-25  979  			    enum pg_level level)
-7c45d6a017129b Xiaoyao Li     2021-08-31  980  {
-7c45d6a017129b Xiaoyao Li     2021-08-31  981  	struct kvm_page_attr *page_attr = page_attr_slot(gfn, slot, level);
-7c45d6a017129b Xiaoyao Li     2021-08-31 @982  	enum kvm_page_type type;
-7c45d6a017129b Xiaoyao Li     2021-08-31  983  	gfn_t base_gfn;
-7c45d6a017129b Xiaoyao Li     2021-08-31  984  
-7c45d6a017129b Xiaoyao Li     2021-08-31  985  	if (WARN_ON_ONCE(!kvm_page_type_valid(page_attr) || level <= PG_LEVEL_4K))
-7c45d6a017129b Xiaoyao Li     2021-08-31  986  		return;
-7c45d6a017129b Xiaoyao Li     2021-08-31  987  
-7c45d6a017129b Xiaoyao Li     2021-08-31  988  	base_gfn = gfn & ~(KVM_PAGES_PER_HPAGE(level) - 1);
-7c45d6a017129b Xiaoyao Li     2021-08-31  989  	type = page_attr->type;
-09cbecc5a0e81f Xiaoyao Li     2022-05-25  990  
-7c45d6a017129b Xiaoyao Li     2021-08-31  991  	/*
-7c45d6a017129b Xiaoyao Li     2021-08-31  992  	 * Set the type to KVM_PAGE_TYPE_MIXED in advance since when a large
-7c45d6a017129b Xiaoyao Li     2021-08-31  993  	 * page needs to be split means one of the 4K page of it needs to be
-7c45d6a017129b Xiaoyao Li     2021-08-31  994  	 * changed to oppsite type
-7c45d6a017129b Xiaoyao Li     2021-08-31  995  	 */
-d4ee16fc853247 Isaku Yamahata 2022-06-02  996  	page_type_set(page_attr, KVM_PAGE_TYPE_MIXED, base_gfn, slot, level);
-7c45d6a017129b Xiaoyao Li     2021-08-31  997  }
-7c45d6a017129b Xiaoyao Li     2021-08-31  998  
-
-:::::: The code at line 982 was first introduced by commit
-:::::: 7c45d6a017129b913c57fb0a2cc14a866f2434a4 KVM: MMU: Update page_attr->type when guest converts the page
-
-:::::: TO: Xiaoyao Li <xiaoyao.li@intel.com>
-:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko

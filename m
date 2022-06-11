@@ -2,201 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480FE5474DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF2F5474F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbiFKNld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 09:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
+        id S233417AbiFKNvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 09:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbiFKNlc (ORCPT
+        with ESMTP id S231378AbiFKNvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 09:41:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6FCB2F;
-        Sat, 11 Jun 2022 06:41:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9189BB80B51;
-        Sat, 11 Jun 2022 13:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D40C34116;
-        Sat, 11 Jun 2022 13:41:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654954888;
-        bh=3E8V+Y/yWmCjrt9LqOYei7eYzA3X29NTZvx+kCzyhhc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j+r9oQfnFLkuSNzbrMs5l526KP3kWGt9UpJGLoVW+EpWcqvKrMYYz2g10k2vfaSJM
-         xmj+wUu5q3JcQySkDowFQymHNnKPzh47thUzkEisYJbQxTwbl5CnqGKjzgDq//tloo
-         MvvBFMpC/0cVL29P3Rr33cwYV1q0Z0CF98qahZELKG2ynBGyVu3N7/hf+TTMTjr1Gu
-         R1HhuNR0TKe809cxizvLUcH9yVtysywMFqWFjXyBtu6XdI25svw0YTU+SXRUxPtHh5
-         t+njqOCJqVqqCv5bxzic+SQLXW7PBaK5NjVJMD0SYSoBX+HCm1bsRphEJDFgJhNpjG
-         FdtX2dFiapouA==
-Date:   Sat, 11 Jun 2022 14:50:34 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH 04/49] iio: fix opencoded for_each_set_bit()
-Message-ID: <20220611145034.07efd279@jic23-huawei>
-In-Reply-To: <20220604164113.2ed4f681@jic23-huawei>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
-        <20220210224933.379149-5-yury.norov@gmail.com>
-        <2d5e9096-e40d-13af-234a-539108df1c50@wanadoo.fr>
-        <20220604164113.2ed4f681@jic23-huawei>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 11 Jun 2022 09:51:07 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B882E1A38B;
+        Sat, 11 Jun 2022 06:51:05 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3137316bb69so14734767b3.10;
+        Sat, 11 Jun 2022 06:51:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CIi/KR48LCf1Hz2Cz/+6pDezxkIjhX95zYaLpybh09Y=;
+        b=gKtsdoiImvMAjdt8jolYmLjjoL5nKmt7wFj2Hy/7Fo6Wc75aFcSpIfm9DWYwGvXN+u
+         gL7J63+aKiOgihEp6oFVgF5v9kIRxtOhj0zIGZYm7JqPBEgM4ZVhPumey4YVoJk6g1fN
+         Hlznvz3xCAOZJMHsbChoZprnCfXCpaHliMZDHOgcb1VkCW5zKMjGFfUC84cnjPwUWxYy
+         uSf4B6baXr5rBXWliYbL5Lngau/PiG+I4p3md9XiGcy6o8HOtxD4XPUmyrJcZEuZI/ux
+         n3nWCQ/qp8hmoG7R8FCkoH5U2Y4GXNXwK9jxif3RHqV7IOOwPlmNULU16p9iSAmvvvV6
+         9HsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CIi/KR48LCf1Hz2Cz/+6pDezxkIjhX95zYaLpybh09Y=;
+        b=5cRZqJ7yoRo8dTWNV0XAwMMpX6zgkgV5txqKW2Ym0BA9ZHCEobrwE2cnXiUerNxYle
+         0i5kD9WRpdq60QPCcT1joJBEhJFieTosampqOIode61P6nuOmkbG9nZBsOAPrQKAwWd6
+         b4UnYWcAqFZ2F0kTRJgvHPeiG5iqlDKEoENihZFG0PIwL0GtkLh6cA1ar5PhqmUhbvz2
+         rD0a42e8m8R1/HtVtKPQ58i97ZJt0c/TZkXMVyveFaiA42aXe/kU+6vWHqxgq2rHXZEB
+         TaYzlStfyTjvVqfSm4ZFlFX6dQP3+Nw1j4xy0yOT5YeQEtgSH2gD+nhO/8ivINNQQQAx
+         YNnw==
+X-Gm-Message-State: AOAM532t0yhwus5Aad0hLOixkVKIObEffxxas9x4xLNcmPc0TePAwsH6
+        ZiHjtocdCENE86puRKvY2JY03TmDHVbvh2df5n8=
+X-Google-Smtp-Source: ABdhPJyw0mX4zwcIWAZ5xfazDHvtqgj48NkNv3sycBKJaZXGBlQWdOiHMHgR1FUorl6uAIo6XP9y9mOeIj8U7uM5WvE=
+X-Received: by 2002:a81:5c5:0:b0:313:e5c5:53d5 with SMTP id
+ 188-20020a8105c5000000b00313e5c553d5mr3625440ywf.281.1654955464947; Sat, 11
+ Jun 2022 06:51:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220611065300.885212-1-frattaroli.nicolas@gmail.com>
+In-Reply-To: <20220611065300.885212-1-frattaroli.nicolas@gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sat, 11 Jun 2022 09:50:54 -0400
+Message-ID: <CAMdYzYpvtZf8q+7Fon-nj=XbjZ-XQdD-bnY0mdaBxELVad2Cgg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] HDMI Audio on RK356x/Quartz64 Model A
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Liang Chen <cl@rock-chips.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Jun 2022 16:41:13 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
+On Sat, Jun 11, 2022 at 2:53 AM Nicolas Frattaroli
+<frattaroli.nicolas@gmail.com> wrote:
+>
+> This enables HDMI audio on Quartz64 Model A, and the RK356x SoC in
+> general.
+>
+> i2s0 on the RK356x is connected to HDMI, and only has one DMA. I've
+> confirmed this with the TRM.
+>
+> To test this, one needs a video clock, i.e. there is no audio if your
+> screen is off. The framebuffer console or something else needs to be
+> running to get audio output.
 
-> On Fri, 11 Feb 2022 18:17:37 +0100
-> Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
->=20
-> > Le 10/02/2022 =C3=A0 23:48, Yury Norov a =C3=A9crit=C2=A0: =20
-> > > iio_simple_dummy_trigger_h() is mostly an opencoded for_each_set_bit(=
-).
-> > > Using for_each_set_bit() make code much cleaner, and more effective.
-> > >=20
-> > > Signed-off-by: Yury Norov <yury.norov-Re5JQEeQqe8AvxtiuMwx3w@public.g=
-mane.org>
-> > > ---
-> > >   drivers/iio/dummy/iio_simple_dummy_buffer.c | 48 ++++++++----------=
----
-> > >   1 file changed, 19 insertions(+), 29 deletions(-)
-> > >=20
-> > > diff --git a/drivers/iio/dummy/iio_simple_dummy_buffer.c b/drivers/ii=
-o/dummy/iio_simple_dummy_buffer.c
-> > > index d81c2b2dad82..3bc1b7529e2a 100644
-> > > --- a/drivers/iio/dummy/iio_simple_dummy_buffer.c
-> > > +++ b/drivers/iio/dummy/iio_simple_dummy_buffer.c
-> > > @@ -45,41 +45,31 @@ static irqreturn_t iio_simple_dummy_trigger_h(int=
- irq, void *p)
-> > >   {
-> > >   	struct iio_poll_func *pf =3D p;
-> > >   	struct iio_dev *indio_dev =3D pf->indio_dev;
-> > > +	int i =3D 0, j;
-> > >   	u16 *data;
-> > >  =20
-> > >   	data =3D kmalloc(indio_dev->scan_bytes, GFP_KERNEL);
-> > >   	if (!data)
-> > >   		goto done;
-> > >  =20
-> > > -	if (!bitmap_empty(indio_dev->active_scan_mask, indio_dev->masklengt=
-h)) {
-> > > -		/*
-> > > -		 * Three common options here:
-> > > -		 * hardware scans: certain combinations of channels make
-> > > -		 *   up a fast read.  The capture will consist of all of them.
-> > > -		 *   Hence we just call the grab data function and fill the
-> > > -		 *   buffer without processing.
-> > > -		 * software scans: can be considered to be random access
-> > > -		 *   so efficient reading is just a case of minimal bus
-> > > -		 *   transactions.
-> > > -		 * software culled hardware scans:
-> > > -		 *   occasionally a driver may process the nearest hardware
-> > > -		 *   scan to avoid storing elements that are not desired. This
-> > > -		 *   is the fiddliest option by far.
-> > > -		 * Here let's pretend we have random access. And the values are
-> > > -		 * in the constant table fakedata.
-> > > -		 */
-> > > -		int i, j;
-> > > -
-> > > -		for (i =3D 0, j =3D 0;
-> > > -		     i < bitmap_weight(indio_dev->active_scan_mask,
-> > > -				       indio_dev->masklength);
-> > > -		     i++, j++) {
-> > > -			j =3D find_next_bit(indio_dev->active_scan_mask,
-> > > -					  indio_dev->masklength, j);
-> > > -			/* random access read from the 'device' */
-> > > -			data[i] =3D fakedata[j];
-> > > -		}
-> > > -	}
-> > > +	/*
-> > > +	 * Three common options here:
-> > > +	 * hardware scans: certain combinations of channels make
-> > > +	 *   up a fast read.  The capture will consist of all of them.
-> > > +	 *   Hence we just call the grab data function and fill the
-> > > +	 *   buffer without processing.
-> > > +	 * software scans: can be considered to be random access
-> > > +	 *   so efficient reading is just a case of minimal bus
-> > > +	 *   transactions.
-> > > +	 * software culled hardware scans:
-> > > +	 *   occasionally a driver may process the nearest hardware
-> > > +	 *   scan to avoid storing elements that are not desired. This
-> > > +	 *   is the fiddliest option by far.
-> > > +	 * Here let's pretend we have random access. And the values are
-> > > +	 * in the constant table fakedata.
-> > > +	 */   =20
-> >=20
-> > Nitpicking: you could take advantage of the tab you save to use the ful=
-l=20
-> > width of the line and save some lines of code. =20
->=20
-> Tweaked whilst applying.
->=20
-> Sorry this one took so long. I marked it as a patch that I'd revisit if a=
-nd
-> tidy up if there was no v2 sent, but then managed to forget about it until
-> I came to do a clean out of patchwork today.
->=20
-> Anyhow, now applied to the togreg branch of iio.git - initially pushed out
-> as testing for 0-day to see if we missed anything.
+Excellent work!
+Tested on Quartz64 Model A.
+Tested-by: Peter Geis <pgwipeout@gmail.com>
 
-And dropped again during a rebase as a different version has gone upstream
-through a pull request to Linus.
-
-Whilst I have no strong opinion on that in general, I am a little grumpy
-that a version was merged that was never posted to the mailing lists (that
-I can find on lore.kernel.org.)  Sure the changes were minor and easy to ve=
-rify
-as harmless, but none the less they should have been posted.
-
-Jonathan
-
->=20
-> Thanks,
->=20
-> Jonathan
->=20
-> >=20
-> > Just my 2c.
-> >=20
-> > CJ
-> >=20
-> >  =20
-> > > +	for_each_set_bit(j, indio_dev->active_scan_mask, indio_dev->masklen=
-gth)
-> > > +		data[i++] =3D fakedata[j];
-> > >  =20
-> > >   	iio_push_to_buffers_with_timestamp(indio_dev, data,
-> > >   					   iio_get_time_ns(indio_dev));   =20
-> >  =20
->=20
-
+>
+> Changes in v3:
+>  - rebased onto next-20220610
+>
+> Changes in v2:
+>  - reordered nodes in rk356x.dtsi to conform
+>  - reordered properties in rk356x.dtsi to conform
+>  - add Michael Riesch's Tested-by to rk356x.dtsi
+>
+> Nicolas Frattaroli (2):
+>   arm64: dts: rockchip: rk356x: Add HDMI audio nodes
+>   arm64: dts: rockchip: Enable HDMI audio on Quartz64 A
+>
+>  .../boot/dts/rockchip/rk3566-quartz64-a.dts   |  8 +++++
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 33 +++++++++++++++++++
+>  2 files changed, 41 insertions(+)
+>
+> --
+> 2.36.1
+>

@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A84F54769D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8C25476A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbiFKQvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 12:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S233753AbiFKQzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 12:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233455AbiFKQvd (ORCPT
+        with ESMTP id S230518AbiFKQz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 12:51:33 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B242E6BC;
-        Sat, 11 Jun 2022 09:51:32 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LL3km2WgVz9t4V;
-        Sat, 11 Jun 2022 18:51:28 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Lyxc5OlcYbSP; Sat, 11 Jun 2022 18:51:28 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LL3kl4Q65z9tPh;
-        Sat, 11 Jun 2022 18:51:27 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 79A8D8B781;
-        Sat, 11 Jun 2022 18:51:27 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id W-cpnlqeV72J; Sat, 11 Jun 2022 18:51:27 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.192])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 06D538B77E;
-        Sat, 11 Jun 2022 18:51:26 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25BGpEt2741180
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 11 Jun 2022 18:51:14 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25BGpE1t741179;
-        Sat, 11 Jun 2022 18:51:14 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, deller@gmx.de,
-        manoj@linux.ibm.com, mrochs@linux.ibm.com, ukrishn@linux.ibm.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, tzimmermann@suse.de
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH 4/4] powerpc: Finally remove unnecessary headers from asm/prom.h
-Date:   Sat, 11 Jun 2022 18:51:00 +0200
-Message-Id: <187891a76d7f2eea1b75b5aa897fec62ca18f0e9.1654966253.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <a1dfa936043eeed715e8cda7f8690fe553ba7c1a.1654966253.git.christophe.leroy@csgroup.eu>
-References: <a1dfa936043eeed715e8cda7f8690fe553ba7c1a.1654966253.git.christophe.leroy@csgroup.eu>
+        Sat, 11 Jun 2022 12:55:28 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8007F44
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:55:27 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 15so2107143pfy.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2zoTb5k5EV/NF02gzMw6UTCx2uR15xgLzy53hNpxo78=;
+        b=VgDv7nn4q0/TTWEqYvRIch9uffEkgT/6W7sM+ndk4pwN9b7GzTpFq9HuDDGUmal2A0
+         d2+D7jx090DtcDd/IuWHBJxCjj5hD71h+ZaclAl3jDtzqC0CICpuCMqlX5SSlR2EZZN+
+         r9NWcCs1Yj95xStZDSO8gkkT0yvX2DIiiS0hM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2zoTb5k5EV/NF02gzMw6UTCx2uR15xgLzy53hNpxo78=;
+        b=1Kvn9JPm/uveW0so7zLQSaBOGdIo7qQ0nxLWwJ3u3WC5uchfb4SKD+nbHpGcfuQX5y
+         UAZTuiKI/SxRk5nZKATphMduF1tU1ep6dRhZ6SDhR/j4JmJ9U3dIli2s56FLb0j17s5c
+         ZemP6RAPxxK3cJ/qIC9eAV5XH1U21AryfelrpL+k6FqTbz3JBuvJ2gy/32/xCNC0tsl9
+         RemTS7cPaa+YCRArGZR2lyxC8Wbyvzs0Eu1iLDGLMY4Hr/gv4rGZkjZ0SKkBJ2EoBWVD
+         pCqhWOkPNzBYGpw+Ce3qmrXpBYc8aJoc20gXdjjtkTuFBiJMoM2+H1ZnmRG7hj05UlZG
+         +0dA==
+X-Gm-Message-State: AOAM530hXKV48Cf02cbM8mg6nokZ1QjcCd5vV5seFJ5d4qZG3xjHbzNu
+        Pb/1MaoVHdZKwtwP2EyeMLRUCA==
+X-Google-Smtp-Source: ABdhPJxyOIJIVHsi9TiIYxc/i6gBtrPGAM+dWl536891vIHEVw5CCtAWjYJBtI28CFbRzjy/cjL4NQ==
+X-Received: by 2002:a62:4e92:0:b0:520:6870:fc38 with SMTP id c140-20020a624e92000000b005206870fc38mr8415682pfb.8.1654966527300;
+        Sat, 11 Jun 2022 09:55:27 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:1400:c3e5:17df:f636])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170902654800b0015e8d4eb2ccsm1726604pln.278.2022.06.11.09.55.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 09:55:26 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: Fix htmldocs indentation warning w/ DP AUX power requirements
+Date:   Sat, 11 Jun 2022 09:55:04 -0700
+Message-Id: <20220611095445.1.I534072d346b1ebbf0db565b714de9b65cbb24651@changeid>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1654966257; l=1119; s=20211009; h=from:subject:message-id; bh=itD5+bDLtYc+2iYXxBP9QmALVM+RjdRtxOZhjnKzBYg=; b=gsABDeddGKDSjK3Vl2jQm77znS7PcwAAZc1Nf1o+nYMw48ieIDWqx+54KMOjE+swfN/blRWWvuYQ R7uF8lmtCDVATXa+MyMUPJvWsVWwhX3ga+O98NIGCqv4U8854wy5
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove all headers included from asm/prom.h which are not used
-by asm/prom.h itself.
+Two blank lines are needed to make the rst valid.
 
-Declare struct device_node and struct property locally to
-avoid including of.h
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Fixes: 69ef4a192bba ("drm: Document the power requirements for DP AUX transfers")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
- arch/powerpc/include/asm/prom.h | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/prom.h b/arch/powerpc/include/asm/prom.h
-index 5c80152e8f18..93f112133934 100644
---- a/arch/powerpc/include/asm/prom.h
-+++ b/arch/powerpc/include/asm/prom.h
-@@ -12,15 +12,9 @@
-  * Updates for PPC64 by Peter Bergner & David Engebretsen, IBM Corp.
-  */
- #include <linux/types.h>
--#include <asm/irq.h>
--#include <linux/atomic.h>
--
--/* These includes should be removed once implicit includes are cleaned up. */
--#include <linux/of.h>
--#include <linux/of_fdt.h>
--#include <linux/of_address.h>
--#include <linux/of_irq.h>
--#include <linux/platform_device.h>
-+
-+struct device_node;
-+struct property;
- 
- #define OF_DT_BEGIN_NODE	0x1		/* Start of node, full name */
- #define OF_DT_END_NODE		0x2		/* End node */
+ include/drm/display/drm_dp_helper.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
+index dc3c02225fcf..c5f8f45511ed 100644
+--- a/include/drm/display/drm_dp_helper.h
++++ b/include/drm/display/drm_dp_helper.h
+@@ -372,8 +372,10 @@ struct drm_dp_aux {
+ 	 * Also note that this callback can be called no matter the
+ 	 * state @dev is in and also no matter what state the panel is
+ 	 * in. It's expected:
++	 *
+ 	 * - If the @dev providing the AUX bus is currently unpowered then
+ 	 *   it will power itself up for the transfer.
++	 *
+ 	 * - If we're on eDP (using a drm_panel) and the panel is not in a
+ 	 *   state where it can respond (it's not powered or it's in a
+ 	 *   low power state) then this function may return an error, but
 -- 
-2.35.3
+2.36.1.476.g0c4daa206d-goog
 

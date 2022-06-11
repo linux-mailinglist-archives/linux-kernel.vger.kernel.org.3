@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69E4547120
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 03:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA736547123
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 03:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348595AbiFKB2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 21:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S1348766AbiFKBdQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Jun 2022 21:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242861AbiFKB2c (ORCPT
+        with ESMTP id S236616AbiFKBdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 21:28:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917AF3FBBD7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654910911; x=1686446911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6kbuoWn2/Np3kiQGVvTfuTgoBDbVE2L6Exk4Okh2Jl0=;
-  b=c7X7Mp51y5Ya5P5oU+RWzLFQwJEZL208xvHBLe3ADLRAi17HsGedXczD
-   QG0jY+Hb6IiPxsve4PYdEEyi/7lGGpr55JeFtFnoTFWgpj2AWovj8RShG
-   FMzEGbs31/yZkk4+nXAPIqW+BFpB206NQzCUuyYwLFwuVS2or5/OVP549
-   t9bqHb1OeNFCwrvcQ541EjZGXyCbIQbT6DrqICqd9bOgSibgTeuPdahe1
-   17+tKb5nbLeNWjN+xc+tOeHwfn4h/VDdfymiCVdE/PpIWdtZOOu78bl+f
-   jKrtR6tfJsAg4xE5XDISs7o1DhwfNnSa3102nvpM8QnyMTz3Rz9I3D2hS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="260914147"
-X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="260914147"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 18:28:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="650128436"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Jun 2022 18:28:27 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id A4535F8; Sat, 11 Jun 2022 04:28:30 +0300 (EEST)
-Date:   Sat, 11 Jun 2022 04:28:30 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 7/8] x86: Expose untagging mask in
- /proc/$PID/arch_status
-Message-ID: <20220611012830.hs437yikbjgwlije@black.fi.intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-8-kirill.shutemov@linux.intel.com>
- <144af1ab-1e7e-b75c-331c-d9c2e55b9062@intel.com>
+        Fri, 10 Jun 2022 21:33:13 -0400
+Received: from relay5.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678D2A189
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:33:11 -0700 (PDT)
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id A5CAC21849;
+        Sat, 11 Jun 2022 01:33:09 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id C68C36000F;
+        Sat, 11 Jun 2022 01:33:07 +0000 (UTC)
+Message-ID: <c86b53f8d8c60a16a4cb3b34ac9ab2ab8b992595.camel@perches.com>
+Subject: Re: [PATCH 5/7] checkpatch: warn if <asm/export.h> is included
+From:   Joe Perches <joe@perches.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 10 Jun 2022 18:33:06 -0700
+In-Reply-To: <20220610183236.1272216-6-masahiroy@kernel.org>
+References: <20220610183236.1272216-1-masahiroy@kernel.org>
+         <20220610183236.1272216-6-masahiroy@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <144af1ab-1e7e-b75c-331c-d9c2e55b9062@intel.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: C68C36000F
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: de5mfnp8ux5zw686hw4ahh34rdrwa9om
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+Z+c4AphhDFTvORlz0qKlomJRpQrbLtJA=
+X-HE-Tag: 1654911187-1721
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 08:24:38AM -0700, Dave Hansen wrote:
-> On 6/10/22 07:35, Kirill A. Shutemov wrote:
-> > +/*
-> > + * Report architecture specific information
-> > + */
-> > +int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
-> > +			struct pid *pid, struct task_struct *task)
-> > +{
-> > +	/*
-> > +	 * Report AVX512 state if the processor and build option supported.
-> > +	 */
-> > +	if (cpu_feature_enabled(X86_FEATURE_AVX512F))
-> > +		avx512_status(m, task);
-> > +
-> > +	seq_printf(m, "untag_mask:\t%#lx\n", mm_untag_mask(task->mm));
-> > +
-> > +	return 0;
-> > +}
+On Sat, 2022-06-11 at 03:32 +0900, Masahiro Yamada wrote:
+> With the previous refactoring,
 > 
-> Arch-specific gunk is great for, well, arch-specific stuff.  AVX-512 and
-> its, um, "quirks", really won't show up anywhere else.  But x86 isn't
-> even the first to be doing this address tagging business.
+>  - <asm/export.h> is a wrapper of <asm-generic/export.h>
+>  - <asm-generic/export.h> is a wrapper of <linux/export.h>
 > 
-> Shouldn't we be talking to the ARM folks about a common way to do this?
+> My hope is to replace
+> 
+>    #include <asm/export.h>  -->  #include <linux/export.h>
+> 
+> for all *.S files.
+> 
+> For now, adding a warning in the checkpatch.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>  scripts/checkpatch.pl | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+[]
+> @@ -3753,6 +3753,13 @@ sub process {
+>  			     "Avoid using '.L' prefixed local symbol names for denoting a range of code via 'SYM_*_START/END' annotations; see Documentation/asm-annotations.rst\n" . $herecurr);
+>  		}
+>  
+> +# warn if <asm/export.h> is included.
+> +# <asm/export.h> is a wrapper of <linux/export.h>. Please include <linux/export.h> directly.
+> +		if ($tree && $rawline =~ m{^.\s*\#\s*include\s*\<asm\/export\.h\>}) {
+> +			WARN("INCLUDE_LINUX_EXPORT",
+> +			    "Please include <linux/export.h> instead of <asm/export.h>\n" . $herecurr);
+> +		}
 
-+ Catalin, Will.
+This warns on patch context lines.
+That's not something checkpatch generally does.
 
-I guess we can expose the mask via proc for ARM too, but I'm not sure if
-we can unify interface further without breaking existing TBI users: TBI is
-enabled per-thread while LAM is per-process.
+Likely this should use /^\+ rather than /^.
 
-Any opinions?
+And it's nice to have --fix capability
 
--- 
- Kirill A. Shutemov
+			if (WARN("etc...") &&
+			    $fix) {
+				$fixed[$fixlinenr] =~ s/\s*#\s*include\s*\<asm\/export\.h\>/#include <linux/export.h>/;
+			}
+
+cheers, Joe

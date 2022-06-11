@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F5A547638
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935BE54763A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238914AbiFKPta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 11:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S238925AbiFKPus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 11:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbiFKPt1 (ORCPT
+        with ESMTP id S233305AbiFKPur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 11:49:27 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CA62E8
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:49:26 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id x138so1978037pfc.12
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:49:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=lsyXcbGVnnHp+ZTNPftnqBlou4cClChxNQXmkWFyJdY=;
-        b=nPcPHBg2LkXgICUCt2NPzN7d60V1Vh6guMz6DvIQ5NVBuAPZOv1UcCoUe7vLUqS3lr
-         +RK9vgjy53GiYCoS1zFlK7ocFevJ5JhfAYV+7DYOMv/+lsX11UKUMknOAWBYEF54834p
-         GkIw+PTm67eJRd0v+ZDJdscRwY6ZRg+Kahk1l/hNTNfyQS3z2B941AOrNRShZY59TBep
-         ooTcQZF5CWUa6Y+i+2scykCeAQCNRuerXdmH/LUgOOjjoCNANa/OcX/HYnS8bCNTIXcy
-         oCbpvRnwLPEHoXR9oyNVTF1Tgy/uGm4JDLoBkedBtCexnB2fj4zZwLB06SYNDglfQxTB
-         2KUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=lsyXcbGVnnHp+ZTNPftnqBlou4cClChxNQXmkWFyJdY=;
-        b=n+P7tpyyWV1sL2dVFBCYr+B4XfhAnZfg1hSjVSjwbWot5tXCI1sIYZFXJ89eJB1eiV
-         6mPUzjhorLJsfNeOmk8uq1onMbAzyh6xzgjZ7CMa0DuA8Qexoq8jbi4VV7FfsqnSIOZM
-         DuXlNfIs4bQJblnoyoCQb9nGMpPbxR3JX1nuEumbJOMIfk2d/F2iobCqbQLvK0BFVBmT
-         j7LfrNh7KCV4fvYAbH4E09zRMk3nlsfw8rGq8cK2kqHQWBTjRGvRsoPlDykpxMVyOkxa
-         Q8/QIJE6pnc90IdMe4GrU1HQHkO9PWWHqiLz7Pf0LXsJ6q/u025cVXMC9YeyMPFrT3iV
-         kFdg==
-X-Gm-Message-State: AOAM531APwT+uIkBLb7ZFLReNjt2QtKIdW7xkv/Cq8GmPvM+dKm7oOMw
-        wIRySr2xME2M+XZEk3efBrG0nwJw0jEzhw==
-X-Google-Smtp-Source: ABdhPJxgLUe7jHqK+3Z6z6ZPnrXY8lJGa0zEqsh99jnkBDi/EeyQBdZhDkayKW8xzfRmElRifbtvew==
-X-Received: by 2002:a63:f242:0:b0:3fd:8a04:df6 with SMTP id d2-20020a63f242000000b003fd8a040df6mr31834881pgk.300.1654962565866;
-        Sat, 11 Jun 2022 08:49:25 -0700 (PDT)
-Received: from [10.139.0.6] ([199.101.192.70])
-        by smtp.gmail.com with ESMTPSA id n6-20020a17090a928600b001df239bab14sm1609621pjo.46.2022.06.11.08.49.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jun 2022 08:49:25 -0700 (PDT)
-Subject: Re: [PATCH] mm: fix is_pinnable_page return value
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        shameerali.kolothum.thodi@huawei.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220611133442.15290-1-zhangfei.gao@linaro.org>
- <YqStDm5sdDL6YXn8@casper.infradead.org>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Message-ID: <9379fcb3-43c8-d13d-a425-a55204380db9@linaro.org>
-Date:   Sat, 11 Jun 2022 23:49:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sat, 11 Jun 2022 11:50:47 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7D2E8;
+        Sat, 11 Jun 2022 08:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Xv1QWDfN+pMOMjcRPK9HZ6apjXb/JqFW9eOeMHDl0ko=; b=6Z7MqSXb+AeT9JnALtIjBFGwGO
+        bEvIKhH2/5lWYoQ8bP+A4FMPGwo5Y2l0aPuqWPZrapsf2OYKQPRhmy5CmYu61dzoMrRLAsrXgM/oM
+        VeCnEeXlzXQYy4ihgqi+isJzGIWPPZ6mRyvESECh2JwYDBpUd4S9f8BIT0jrlJNvmO4Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o03Nj-006War-69; Sat, 11 Jun 2022 17:50:35 +0200
+Date:   Sat, 11 Jun 2022 17:50:35 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Kubecek <mkubecek@suse.cz>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: phy: add remote fault support
+Message-ID: <YqS5yxrRX4Y4LTWd@lunn.ch>
+References: <20220608093403.3999446-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <YqStDm5sdDL6YXn8@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608093403.3999446-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> --- a/include/uapi/linux/ethtool.h
+> +++ b/include/uapi/linux/ethtool.h
+> @@ -1840,6 +1840,46 @@ static inline int ethtool_validate_duplex(__u8 duplex)
+>  #define MASTER_SLAVE_STATE_SLAVE		3
+>  #define MASTER_SLAVE_STATE_ERR			4
+>  
+> +#define REMOTE_FAULT_CFG_UNSUPPORTED		0
+> +#define REMOTE_FAULT_CFG_UNKNOWN		1
+> +#define REMOTE_FAULT_CFG_NO_ERROR		2
+> +/* IEEE 802.3-2018 28.2.1.2.4 Fault without additional information */
+> +#define REMOTE_FAULT_CFG_ERROR			3
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 0 - RF Test */
+> +#define REMOTE_FAULT_CFG_TEST			4
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 1 - Link Loss */
+> +#define REMOTE_FAULT_CFG_LINK_LOSS		5
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 2 - Jabber */
+> +#define REMOTE_FAULT_CFG_JABBER			6
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 3 - Parallel Detection Fault */
+> +#define REMOTE_FAULT_CFG_PDF			7
+> +/* IEEE 802.3-2018 37.2.1.5.2 Offline */
+> +#define REMOTE_FAULT_CFG_OFFLINE		8
+> +/* IEEE 802.3-2018 37.2.1.5.3 Link_Failure */
+> +#define REMOTE_FAULT_CFG_LINK_FAIL		9
+> +/* IEEE 802.3-2018 37.2.1.5.4 Auto-Negotiation_Error */
+> +#define REMOTE_FAULT_CFG_AN_ERROR		10
+> +
+> +#define REMOTE_FAULT_STATE_UNSUPPORTED		0
+> +#define REMOTE_FAULT_STATE_UNKNOWN		1
+> +#define REMOTE_FAULT_STATE_NO_ERROR		2
+> +/* IEEE 802.3-2018 28.2.1.2.4 Fault without additional information */
+> +#define REMOTE_FAULT_STATE_ERROR		3
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 0 - RF Test */
+> +#define REMOTE_FAULT_STATE_TEST			4
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 1 - Link Loss */
+> +#define REMOTE_FAULT_STATE_LINK_LOSS		5
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 2 - Jabber */
+> +#define REMOTE_FAULT_STATE_JABBER		6
+> +/* IEEE 802.3-2018 28C.5 Message code 4: 3 - Parallel Detection Fault */
+> +#define REMOTE_FAULT_STATE_PDF			7
+> +/* IEEE 802.3-2018 37.2.1.5.2 Offline */
+> +#define REMOTE_FAULT_STATE_OFFLINE		8
+> +/* IEEE 802.3-2018 37.2.1.5.3 Link_Failure */
+> +#define REMOTE_FAULT_STATE_LINK_FAIL		9
+> +/* IEEE 802.3-2018 37.2.1.5.4 Auto-Negotiation_Error */
+> +#define REMOTE_FAULT_STATE_AN_ERROR		10
 
+I'm not sure there is any value in having these values twice. They are
+expected to be identical, so one set should be enough.
 
-On 2022/6/11 下午10:56, Matthew Wilcox wrote:
-> On Sat, Jun 11, 2022 at 09:34:42PM +0800, Zhangfei Gao wrote:
->> Commit 1c563432588d ("mm: fix is_pinnable_page against a cma page")
->> Changes from
->> return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
->>          is_zero_pfn(page_to_pfn(page));
->> to
->> return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
-> Mailing lists can be read as well as written.
->
-> https://lore.kernel.org/linux-mm/165490039431.944052.12458624139225785964.stgit@omen/
-Oops, I am stucked in debugging the qemu hung issue, not noticed it has 
-been fixed.
-
-Thanks Matthew.
+	 Andrew

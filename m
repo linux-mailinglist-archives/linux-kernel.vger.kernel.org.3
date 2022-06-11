@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207FF54744E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 13:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FDE547448
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 13:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiFKLj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 07:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S233093AbiFKLjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 07:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiFKLjX (ORCPT
+        with ESMTP id S229765AbiFKLjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 07:39:23 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE37DFF0;
-        Sat, 11 Jun 2022 04:39:22 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id u8so1568314wrm.13;
-        Sat, 11 Jun 2022 04:39:22 -0700 (PDT)
+        Sat, 11 Jun 2022 07:39:25 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7816540;
+        Sat, 11 Jun 2022 04:39:23 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id o8so1616601wro.3;
+        Sat, 11 Jun 2022 04:39:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3PjQuKMkTY1kyPsdXkRWcy11RqWiSJraBoDtsiZIFcs=;
-        b=pMAV4YZDWCCWc6eMKct6qOVKz92iXyCAAj6bSWuv4NVXkN0+IWOEQR8ZeWUHIQmJHS
-         mjZAKDrY44b8qeA0wJvGleRTdaUHPSx78Oeno5tSF6rVODsXtE30gfRE6HMPN9qMw5Oc
-         cD1Z5XkYo8Ftc+6J/KafWm/L8U4chJ+2mwRFKwHhqhqDnzmYDtwiQ7s0gV+LT2rzC4TE
-         7l4G5QQoZEgoA2RZjHUs605L9aYxlOMy3yUNX19cImlBP+BxIXeOieQt0/romLmim5Hm
-         r4T5+CH30zPpwt8gIX7mCEeL0OoP22JlMIBLjhq895y57HOdz0U8tad4h03tUkb6Hiox
-         rD/A==
+        bh=p9el9auPnq6m6H+z0qpqCnwqiGaqlZa/48GpKoNNR/g=;
+        b=iWicCkBMa5ubbvSCKu1d9G7/O9QYfHJxBaudj/9sZnJN9pOeDqlUrXzKL6fLCikzm9
+         /866KjSAmJNuvvEodN+Nftz17BMeJzU8qF5QGpKSoWAS8lnF1aH/wWXJjQe/auC8sZAz
+         xdzvYDapUzcyWXWB1VAMlETGL1E9KbgCwkQrZ8YY4TH4ntz06J7Sg2G7PtWLJlsiTzVN
+         zMPvbDktGbyYotsMlvgsHZE/Xu4AAhSO4zGQ9nxRif0mqFFL8Sv82b5KvK1V9y1a+sxr
+         3BFOhI4WD4xt7SBr03bep1NC9ttZr/sS0MrsLaDIpVsQlfc41G/4wfFVKHJwaq3ayWKE
+         bRwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3PjQuKMkTY1kyPsdXkRWcy11RqWiSJraBoDtsiZIFcs=;
-        b=GfLdbh/Z+yyvRVyme8yHETiXvy+TpL32R3AAJcXoIwAK6Uw41Jj973QaUz0vqyN4gT
-         6r49s7UpLALJzY1a27/lMEvAhYzFZfRblYf5UrHRHzDpfrQBYZtsAoTCcGB9xWiEXtE0
-         BXI17bgzLUVBXnI2GATwQZRFlf8WeFj0EytzK8hBOJKAebo1w6IcrwRiJRe0qdZNMnuA
-         +2NWiT64LPqp0X1TQKSAm2u/yJv/zbzhEFCjRrcTA4EqhRxZd5Pcmsl8Gbt89QtZpShV
-         efSTmZAVXOJZNonBXExRJreDEsFJf3ooGZEsi4HRGRbQfP186RPMls9vn0dUFnQdlxlJ
-         ytgA==
-X-Gm-Message-State: AOAM530hB77Nhd4FTJumOnpe+MTYDqNKVt2vYQNbHj9Utmap8LdEBgcB
-        3wlV0CzH4PhHSbzaLgu2UU27PAZrJw4=
-X-Google-Smtp-Source: ABdhPJzc8Pvxr69wjXMxllNgQSpnO+W1ifZeTXJfLLTeqTD7bbuEmGlT069kZ9+kpx5w61LrtA1qgQ==
-X-Received: by 2002:a5d:624e:0:b0:210:a42:f29d with SMTP id m14-20020a5d624e000000b002100a42f29dmr47648017wrv.615.1654947560749;
-        Sat, 11 Jun 2022 04:39:20 -0700 (PDT)
+        bh=p9el9auPnq6m6H+z0qpqCnwqiGaqlZa/48GpKoNNR/g=;
+        b=trYmj2zkqi7fkNc9vwT/7Wd9953E7KtKye12NPNSU3nvJtPmhxajDORA6uHeU/Rzar
+         dJo3bje46ap7GmJy8uZZ2x1tXf/JUkEMVBFOJ/5yhQoAyGllXfUYL+ulrOAt6HqNUSLF
+         hqHFeABzN8m/55c4XQZvxkf+BeicOFthUjBRkTS+G7HiDDaawwpyI8PpIhkOydGcyGwn
+         steCQG1mg5bf/9yYbABLRGPiosU2Krg7a6SGuq6EhBD0kbESZUSGRcEKRySZalTk/d3m
+         9akAvVrkZhtg3mMxPwwMGNDDyaCgcMbBt2cRsYV3hxGJpioGADTsMa2EQlCgr47mEVeW
+         fudA==
+X-Gm-Message-State: AOAM532t3oj4u88naFinXxlRp77d6oA+EcJ9rHyFTTqo6ogbSZqs3AhH
+        Zw8NkCVjVsm2MJKqOV27s8Zpq8O1aXA=
+X-Google-Smtp-Source: ABdhPJwdmsGGVtNQ7Ntk/KrGGQQFxxRfqWdhnADjZeAHAKx9zeCrkXLJE2cbiZ1s03NGdzxjiF4rCw==
+X-Received: by 2002:a05:6000:1869:b0:211:7f25:89da with SMTP id d9-20020a056000186900b002117f2589damr48444955wri.696.1654947562243;
+        Sat, 11 Jun 2022 04:39:22 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id g15-20020a05600c4ecf00b0039c4945c753sm6574198wmq.39.2022.06.11.04.39.19
+        by smtp.gmail.com with ESMTPSA id g15-20020a05600c4ecf00b0039c4945c753sm6574198wmq.39.2022.06.11.04.39.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 04:39:20 -0700 (PDT)
+        Sat, 11 Jun 2022 04:39:21 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     jikos@kernel.org
 Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
@@ -55,9 +55,9 @@ Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
         stefanberzl@gmail.com, dlatypov@google.com,
         kunit-dev@googlegroups.com,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v4 1/4] HID: uclogic: Make template placeholder IDs generic
-Date:   Sat, 11 Jun 2022 13:39:11 +0200
-Message-Id: <20220611113914.355577-2-jose.exposito89@gmail.com>
+Subject: [PATCH v4 2/4] HID: uclogic: Add KUnit tests for uclogic_rdesc_template_apply()
+Date:   Sat, 11 Jun 2022 13:39:12 +0200
+Message-Id: <20220611113914.355577-3-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220611113914.355577-1-jose.exposito89@gmail.com>
 References: <20220611113914.355577-1-jose.exposito89@gmail.com>
@@ -74,120 +74,269 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Up until now, the report descriptor template parameter IDs were only
-used with pen report descriptors and they were named accordingly.
+The uclogic_rdesc_template_apply() function is used by the driver to
+generate HID descriptors from templates.
 
-Rename the enum and the total number of IDs to make them interface
-agnostic.
+In order to avoid regressions in future patches, add KUnit tests to
+test the function.
 
-Refactor, no functional changes.
+To run the tests:
+
+ $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/hid \
+ 	--kconfig_add CONFIG_VIRTIO_UML=y \
+ 	--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
 
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/hid/hid-uclogic-params.c |  4 ++--
- drivers/hid/hid-uclogic-rdesc.c  | 14 +++++++-------
- drivers/hid/hid-uclogic-rdesc.h  | 10 +++++-----
- 3 files changed, 14 insertions(+), 14 deletions(-)
+ drivers/hid/.kunitconfig             |   5 +
+ drivers/hid/Kconfig                  |  16 +++
+ drivers/hid/Makefile                 |   3 +
+ drivers/hid/hid-uclogic-rdesc-test.c | 183 +++++++++++++++++++++++++++
+ 4 files changed, 207 insertions(+)
+ create mode 100644 drivers/hid/.kunitconfig
+ create mode 100644 drivers/hid/hid-uclogic-rdesc-test.c
 
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index db838f16282d..b43142f98a8b 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -234,7 +234,7 @@ static int uclogic_params_pen_init_v1(struct uclogic_params_pen *pen,
- 	const int len = 12;
- 	s32 resolution;
- 	/* Pen report descriptor template parameters */
--	s32 desc_params[UCLOGIC_RDESC_PEN_PH_ID_NUM];
-+	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
- 	__u8 *desc_ptr = NULL;
+diff --git a/drivers/hid/.kunitconfig b/drivers/hid/.kunitconfig
+new file mode 100644
+index 000000000000..04daeff5c970
+--- /dev/null
++++ b/drivers/hid/.kunitconfig
+@@ -0,0 +1,5 @@
++CONFIG_KUNIT=y
++CONFIG_USB=y
++CONFIG_USB_HID=y
++CONFIG_HID_UCLOGIC=y
++CONFIG_HID_KUNIT_TEST=y
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 70da5931082f..6ce92830b5d1 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -1306,6 +1306,22 @@ config HID_MCP2221
+ 	To compile this driver as a module, choose M here: the module
+ 	will be called hid-mcp2221.ko.
  
- 	/* Check arguments */
-@@ -379,7 +379,7 @@ static int uclogic_params_pen_init_v2(struct uclogic_params_pen *pen,
- 	size_t i;
- 	s32 resolution;
- 	/* Pen report descriptor template parameters */
--	s32 desc_params[UCLOGIC_RDESC_PEN_PH_ID_NUM];
-+	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
- 	__u8 *desc_ptr = NULL;
++config HID_KUNIT_TEST
++	bool "KUnit tests for HID" if !KUNIT_ALL_TESTS
++	depends on KUNIT=y
++	depends on HID_UCLOGIC
++	default KUNIT_ALL_TESTS
++	help
++	  This builds unit tests for HID. This option is not useful for
++	  distributions or general kernels, but only for kernel
++	  developers working on HID and associated drivers.
++
++	  For more information on KUnit and unit tests in general,
++	  please refer to the KUnit documentation in
++	  Documentation/dev-tools/kunit/.
++
++	  If in doubt, say "N".
++
+ endmenu
  
- 	/* Check arguments */
-diff --git a/drivers/hid/hid-uclogic-rdesc.c b/drivers/hid/hid-uclogic-rdesc.c
-index 13f9ce73f1b1..7126fba80968 100644
---- a/drivers/hid/hid-uclogic-rdesc.c
-+++ b/drivers/hid/hid-uclogic-rdesc.c
-@@ -979,7 +979,7 @@ const size_t uclogic_rdesc_xppen_deco01_frame_size =
-  * uclogic_rdesc_template_apply() - apply report descriptor parameters to a
-  * report descriptor template, creating a report descriptor. Copies the
-  * template over to the new report descriptor and replaces every occurrence of
-- * UCLOGIC_RDESC_PH_HEAD, followed by an index byte, with the value from the
-+ * UCLOGIC_RDESC_PEN_PH_HEAD, followed by an index byte, with the value from the
-  * parameter list at that index.
-  *
-  * @template_ptr:	Pointer to the template buffer.
-@@ -996,7 +996,7 @@ __u8 *uclogic_rdesc_template_apply(const __u8 *template_ptr,
- 				   const s32 *param_list,
- 				   size_t param_num)
- {
--	static const __u8 head[] = {UCLOGIC_RDESC_PH_HEAD};
-+	static const __u8 pen_head[] = {UCLOGIC_RDESC_PEN_PH_HEAD};
- 	__u8 *rdesc_ptr;
- 	__u8 *p;
- 	s32 v;
-@@ -1005,12 +1005,12 @@ __u8 *uclogic_rdesc_template_apply(const __u8 *template_ptr,
- 	if (rdesc_ptr == NULL)
- 		return NULL;
+ endif # HID
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index cac2cbe26d11..b0bef8098139 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -144,6 +144,9 @@ obj-$(CONFIG_HID_WIIMOTE)	+= hid-wiimote.o
+ obj-$(CONFIG_HID_SENSOR_HUB)	+= hid-sensor-hub.o
+ obj-$(CONFIG_HID_SENSOR_CUSTOM_SENSOR)	+= hid-sensor-custom.o
  
--	for (p = rdesc_ptr; p + sizeof(head) < rdesc_ptr + template_size;) {
--		if (memcmp(p, head, sizeof(head)) == 0 &&
--		    p[sizeof(head)] < param_num) {
--			v = param_list[p[sizeof(head)]];
-+	for (p = rdesc_ptr; p + sizeof(pen_head) < rdesc_ptr + template_size;) {
-+		if (memcmp(p, pen_head, sizeof(pen_head)) == 0 &&
-+		    p[sizeof(pen_head)] < param_num) {
-+			v = param_list[p[sizeof(pen_head)]];
- 			put_unaligned(cpu_to_le32(v), (s32 *)p);
--			p += sizeof(head) + 1;
-+			p += sizeof(pen_head) + 1;
- 		} else {
- 			p++;
- 		}
-diff --git a/drivers/hid/hid-uclogic-rdesc.h b/drivers/hid/hid-uclogic-rdesc.h
-index 0c6e95e8bde7..9d37090c39d1 100644
---- a/drivers/hid/hid-uclogic-rdesc.h
-+++ b/drivers/hid/hid-uclogic-rdesc.h
-@@ -81,7 +81,7 @@ extern __u8 uclogic_rdesc_twha60_fixed1_arr[];
- extern const size_t uclogic_rdesc_twha60_fixed1_size;
- 
- /* Report descriptor template placeholder head */
--#define UCLOGIC_RDESC_PH_HEAD	0xFE, 0xED, 0x1D
-+#define UCLOGIC_RDESC_PEN_PH_HEAD	0xFE, 0xED, 0x1D
- 
- /* Apply report descriptor parameters to a report descriptor template */
- extern __u8 *uclogic_rdesc_template_apply(const __u8 *template_ptr,
-@@ -89,19 +89,19 @@ extern __u8 *uclogic_rdesc_template_apply(const __u8 *template_ptr,
- 					  const s32 *param_list,
- 					  size_t param_num);
- 
--/* Pen report descriptor template placeholder IDs */
--enum uclogic_rdesc_pen_ph_id {
-+/* Report descriptor template placeholder IDs */
-+enum uclogic_rdesc_ph_id {
- 	UCLOGIC_RDESC_PEN_PH_ID_X_LM,
- 	UCLOGIC_RDESC_PEN_PH_ID_X_PM,
- 	UCLOGIC_RDESC_PEN_PH_ID_Y_LM,
- 	UCLOGIC_RDESC_PEN_PH_ID_Y_PM,
- 	UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM,
--	UCLOGIC_RDESC_PEN_PH_ID_NUM
-+	UCLOGIC_RDESC_PH_ID_NUM
- };
- 
- /* Report descriptor pen template placeholder */
- #define UCLOGIC_RDESC_PEN_PH(_ID) \
--	UCLOGIC_RDESC_PH_HEAD, UCLOGIC_RDESC_PEN_PH_ID_##_ID
-+	UCLOGIC_RDESC_PEN_PH_HEAD, UCLOGIC_RDESC_PEN_PH_ID_##_ID
- 
- /* Report ID for v1 pen reports */
- #define UCLOGIC_RDESC_V1_PEN_ID	0x07
++obj-$(CONFIG_HID_KUNIT_TEST)	+= hid-uclogic-rdesc.o \
++				   hid-uclogic-rdesc-test.o
++
+ obj-$(CONFIG_USB_HID)		+= usbhid/
+ obj-$(CONFIG_USB_MOUSE)		+= usbhid/
+ obj-$(CONFIG_USB_KBD)		+= usbhid/
+diff --git a/drivers/hid/hid-uclogic-rdesc-test.c b/drivers/hid/hid-uclogic-rdesc-test.c
+new file mode 100644
+index 000000000000..ded59e226230
+--- /dev/null
++++ b/drivers/hid/hid-uclogic-rdesc-test.c
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: GPL-2.0+
++
++/*
++ *  HID driver for UC-Logic devices not fully compliant with HID standard
++ *
++ *  Copyright (c) 2022 José Expósito <jose.exposito89@gmail.com>
++ */
++
++#include <kunit/test.h>
++#include "./hid-uclogic-rdesc.h"
++
++struct uclogic_template_case {
++	const char *name;
++	const __u8 *template;
++	size_t template_size;
++	const s32 *param_list;
++	size_t param_num;
++	const __u8 *expected;
++};
++
++static const s32 params_pen_all[UCLOGIC_RDESC_PH_ID_NUM] = {
++	[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = 0xAA,
++	[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = 0xBB,
++	[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = 0xCC,
++	[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] = 0xDD,
++	[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] = 0xEE,
++};
++
++static const s32 params_pen_some[] = {
++	[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = 0xAA,
++	[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = 0xBB,
++};
++
++static const __u8 template_empty[] = { };
++static const __u8 template_small[] = { 0x00 };
++static const __u8 template_no_ph[] = { 0xAA, 0xFE, 0xAA, 0xED, 0x1D };
++
++static const __u8 template_pen_ph_end[] = {
++	0xAA, 0xBB, UCLOGIC_RDESC_PEN_PH_HEAD
++};
++
++static const __u8 template_pen_all_params[] = {
++	UCLOGIC_RDESC_PEN_PH(X_LM),
++	0x47, UCLOGIC_RDESC_PEN_PH(X_PM),
++	0x27, UCLOGIC_RDESC_PEN_PH(Y_LM),
++	UCLOGIC_RDESC_PEN_PH(Y_PM),
++	0x00, UCLOGIC_RDESC_PEN_PH(PRESSURE_LM),
++};
++
++static const __u8 expected_pen_all_params[] = {
++	0xAA, 0x00, 0x00, 0x00,
++	0x47, 0xBB, 0x00, 0x00, 0x00,
++	0x27, 0xCC, 0x00, 0x00, 0x00,
++	0xDD, 0x00, 0x00, 0x00,
++	0x00, 0xEE, 0x00, 0x00, 0x00,
++};
++
++static const __u8 template_pen_some_params[] = {
++	0x01, 0x02,
++	UCLOGIC_RDESC_PEN_PH(X_LM),
++	0x03, UCLOGIC_RDESC_PEN_PH(X_PM),
++	0x04, 0x05,
++};
++
++static const __u8 expected_pen_some_params[] = {
++	0x01, 0x02,
++	0xAA, 0x00, 0x00, 0x00,
++	0x03, 0xBB, 0x00, 0x00, 0x00,
++	0x04, 0x05,
++};
++
++static const __u8 template_params_none[] = {
++	0x27, UCLOGIC_RDESC_PEN_PH(Y_LM),
++	UCLOGIC_RDESC_PEN_PH(Y_PM),
++	0x00, UCLOGIC_RDESC_PEN_PH(PRESSURE_LM),
++};
++
++static struct uclogic_template_case uclogic_template_cases[] = {
++	{
++		.name = "Empty template",
++		.template = template_empty,
++		.template_size = sizeof(template_empty),
++		.param_list = params_pen_all,
++		.param_num = ARRAY_SIZE(params_pen_all),
++		.expected = template_empty,
++	},
++	{
++		.name = "Template smaller than the placeholder",
++		.template = template_small,
++		.template_size = sizeof(template_small),
++		.param_list = params_pen_all,
++		.param_num = ARRAY_SIZE(params_pen_all),
++		.expected = template_small,
++	},
++	{
++		.name = "No placeholder",
++		.template = template_no_ph,
++		.template_size = sizeof(template_no_ph),
++		.param_list = params_pen_all,
++		.param_num = ARRAY_SIZE(params_pen_all),
++		.expected = template_no_ph,
++	},
++	{
++		.name = "Pen placeholder at the end, without ID",
++		.template = template_pen_ph_end,
++		.template_size = sizeof(template_pen_ph_end),
++		.param_list = params_pen_all,
++		.param_num = ARRAY_SIZE(params_pen_all),
++		.expected = template_pen_ph_end,
++	},
++	{
++		.name = "All params present in the pen template",
++		.template = template_pen_all_params,
++		.template_size = sizeof(template_pen_all_params),
++		.param_list = params_pen_all,
++		.param_num = ARRAY_SIZE(params_pen_all),
++		.expected = expected_pen_all_params,
++	},
++	{
++		.name = "Some params present in the pen template (complete param list)",
++		.template = template_pen_some_params,
++		.template_size = sizeof(template_pen_some_params),
++		.param_list = params_pen_all,
++		.param_num = ARRAY_SIZE(params_pen_all),
++		.expected = expected_pen_some_params,
++	},
++	{
++		.name = "Some params present in the pen template (incomplete param list)",
++		.template = template_pen_some_params,
++		.template_size = sizeof(template_pen_some_params),
++		.param_list = params_pen_some,
++		.param_num = ARRAY_SIZE(params_pen_some),
++		.expected = expected_pen_some_params,
++	},
++	{
++		.name = "No params present in the template",
++		.template = template_params_none,
++		.template_size = sizeof(template_params_none),
++		.param_list = params_pen_some,
++		.param_num = ARRAY_SIZE(params_pen_some),
++		.expected = template_params_none,
++	},
++};
++
++static void uclogic_template_case_desc(struct uclogic_template_case *t,
++				       char *desc)
++{
++	strscpy(desc, t->name, KUNIT_PARAM_DESC_SIZE);
++}
++
++KUNIT_ARRAY_PARAM(uclogic_template, uclogic_template_cases,
++		  uclogic_template_case_desc);
++
++static void uclogic_template_test(struct kunit *test)
++{
++	__u8 *res;
++	const struct uclogic_template_case *params = test->param_value;
++
++	res = uclogic_rdesc_template_apply(params->template,
++					   params->template_size,
++					   params->param_list,
++					   params->param_num);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
++	KUNIT_EXPECT_EQ(test, 0,
++			memcmp(res, params->expected, params->template_size));
++	kfree(res);
++}
++
++static struct kunit_case hid_uclogic_rdesc_test_cases[] = {
++	KUNIT_CASE_PARAM(uclogic_template_test, uclogic_template_gen_params),
++	{}
++};
++
++static struct kunit_suite hid_uclogic_rdesc_test_suite = {
++	.name = "hid-uclogic-rdesc-test",
++	.test_cases = hid_uclogic_rdesc_test_cases,
++};
++
++kunit_test_suite(hid_uclogic_rdesc_test_suite);
++
++MODULE_DESCRIPTION("KUnit tests for the UC-Logic driver");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("José Expósito <jose.exposito89@gmail.com>");
 -- 
 2.25.1
 

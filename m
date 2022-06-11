@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A1E5470C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 02:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8596A5470CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 02:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350956AbiFKA6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 20:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S1350559AbiFKA6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 20:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346201AbiFKA6K (ORCPT
+        with ESMTP id S1347858AbiFKA6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Jun 2022 20:58:10 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB0B69CEE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 17:58:07 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id q62-20020a17090a17c400b001e31a482241so303927pja.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 17:58:07 -0700 (PDT)
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE1D69CD5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 17:58:09 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id q8-20020a632a08000000b00402de053ef9so306529pgq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 17:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=eZ8kTZcYsLZa7Sb/Uqf9XtHrVzcz+U7OgKi4WYD6wyc=;
-        b=KhHmet355MHSc1wPItLL5984cuOsg9oaCLgxS78tJ4wM1x3notaW99CfqVyUL0CxZY
-         PwNGzeUb6L/opMdlHaF6tGSus7GjqhyIf+TIf7a2vpNtIYOZIp1W6wVtsnyMtkgnZVXV
-         iQ8L8KrUX3zuROC/ZVcrqcyJniBdJkf8YYbeaNB9OhcZH4xM/pQzPYwCi1kzp1VIAqwq
-         qNpmxYHd5Q+xGtRU/1R0LH+aJwq8dcpsrn+Uj9hp0ZGeHF3tKWG3CXrZVZNNNG01Vc9Y
-         FZMCi+cbC8+PYHrvdGtkYGhqMg/nvKAgoduX+xGOxTxhUP+R8ZpmG19hNwtE3dAtOCp8
-         604A==
+        bh=oY9FxBNio0SCgLpK/jFKCD4Y7vKbbNfnGMEENFi2tNY=;
+        b=rJlcqaygL9Pl8IWHX72a8GtxGllcsh7+hT6QUAaBK7gxlqJOxQSHJJBXNBpTMIwSZb
+         sZD+8DU1ua+ccbHpWn/xOHXidemVVburKSy/zUsvFq+H907wCu1wnZBmCHu9t8vogofQ
+         SybvseBX2yi+hv9YRIHFMV8olFdOEmPh1e6C+4JaFAu4Vwwf1NMda7a7LXUlns4VrR9Y
+         4lFE6tnbsIAI6+MgmqpdDCR5cGrVmJ+NNRENgt2jGQT/iRlNT3fFz8+rlYjJkdCApKCM
+         QrpgKqA4rAnNcJf4KdToc5b4jsg6bX1kbqDn+WMe0+rxwP+1dRKdtNy9+ByvivH4gicH
+         kiWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=eZ8kTZcYsLZa7Sb/Uqf9XtHrVzcz+U7OgKi4WYD6wyc=;
-        b=SGjDLsdn3fv3EetVqLU3Ev9hDNLrDu+DlhfKfUB9ukxPcuYlEh75y4GMF2UyTcxHFc
-         7y9Hm+Ev8RDDWDhqWCthKW6ob8g99v8bmxEAcuKHcd9vm4HF0KvAuibhDYhWSZwePCDH
-         fQYVTwvz8JxqtVM2Kzk82uzJzoJt7ux9d7C4EbuvYqLxTnqQfN+PukTGDt/QnFXikI0i
-         XddfTuMLkYbIw1dVEH6Mxpa6Ra+Se4/86x7x4HUYGtpABODb4p87mU2ipma+ckU37k9Q
-         zPm6GIii/+Q3JoMpNEWnvVVQq+ws0MenD3Nu39lj9CwtDD/aAVcL/lgoxOJEVy2Z+djR
-         z7JA==
-X-Gm-Message-State: AOAM531dNAKZLS1e7XBqEAmB0hRREQMMpMg5pAKkWmYdxm7DzzzLa9L8
-        i2KKcGF3SGkv22fgtHvfbMnIqInTfw0=
-X-Google-Smtp-Source: ABdhPJzSqCMtWXFXI5FV8ny6OajgmJnz9VEynozz1BndGF+AM5OuFcXqv3HRZiFG8Y1ovQT3wKLMQSiXbg4=
+        bh=oY9FxBNio0SCgLpK/jFKCD4Y7vKbbNfnGMEENFi2tNY=;
+        b=WwXitbRLx+fM9VPQGCCRjSLj/pBCacpvVQt/f+Ofvkdfrt2CLGlYLI03n5lCDJIizj
+         4Pg4fiaz7iyAK7dyVmBsAY3i8jIkHOgw19LV9Y3blhSqFOjcP6+B22yrDKqh+m28gyF7
+         +FEmvQg7fmXQqLgift4cGom4g3pby4OPtpc6a8Nr3UUqU2ww2S+zNq+07Wz0fB2OiX/p
+         5hiUEwywdN8nsagMcRepmk/yuFLlTFHKSJ9+7Ems51DRPSoEJEMvIRhgkmBzv1HQ5sNt
+         Ry7L1SujmVzwhkoLwqvkUsv0dWN2Npe+oN+v0cwCRnAiO3DIjmXHwzDnBpawYpt7pWF0
+         kjIA==
+X-Gm-Message-State: AOAM530V3l3VF0wXovKnMSL0P82QxLP3DZHYDhfVMDNdA2F4FqM7m2a8
+        AX9V7fMhaVlhkC56GMdHwZLdkT3hgmw=
+X-Google-Smtp-Source: ABdhPJwJ2J+Ef2pCi/IhSWV9HgKvMUa2SkTCU/3o5PPE6e/sBKhPhXF6Jg7Q0uJ5k3glRZJFOCqvmjVu/9Q=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1a91:b0:51c:2fab:7340 with SMTP id
- e17-20020a056a001a9100b0051c2fab7340mr24647144pfv.74.1654909087017; Fri, 10
- Jun 2022 17:58:07 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1741:b0:51b:ca1a:8563 with SMTP id
+ j1-20020a056a00174100b0051bca1a8563mr46208276pfc.58.1654909088824; Fri, 10
+ Jun 2022 17:58:08 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 11 Jun 2022 00:57:53 +0000
+Date:   Sat, 11 Jun 2022 00:57:54 +0000
 In-Reply-To: <20220611005755.753273-1-seanjc@google.com>
-Message-Id: <20220611005755.753273-6-seanjc@google.com>
+Message-Id: <20220611005755.753273-7-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220611005755.753273-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 5/7] KVM: VMX: Use vcpu_get_perf_capabilities() to get
- guest-visible value
+Subject: [PATCH 6/7] KVM: x86: Ignore benign host accesses to "unsupported"
+ PEBS and BTS MSRs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -74,66 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use vcpu_get_perf_capabilities() when querying MSR_IA32_PERF_CAPABILITIES
-from the guest's perspective, e.g. to update the vPMU and to determine
-which MSRs exist.  If userspace ignores MSR_IA32_PERF_CAPABILITIES but
-clear X86_FEATURE_PDCM, the guest should see '0'.
+Ignore host userspace reads and writes of '0' to PEBS and BTS MSRs that
+KVM reports in the MSR-to-save list, but the MSRs are ultimately
+unsupported.  All MSRs in said list must be writable by userspace, e.g.
+if userspace sends the list back at KVM without filtering out the MSRs it
+doesn't need.
 
-Fixes: 902caeb6841a ("KVM: x86/pmu: Add PEBS_DATA_CFG MSR emulation to support adaptive PEBS")
-Fixes: c59a1f106f5c ("KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS")
+8183a538cd95 ("KVM: x86/pmu: Add IA32_DS_AREA MSR emulation to support guest DS")
+902caeb6841a ("KVM: x86/pmu: Add PEBS_DATA_CFG MSR emulation to support adaptive PEBS")
+c59a1f106f5c ("KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/pmu_intel.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ arch/x86/kvm/x86.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index b1aae60cf061..53ccba896e77 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -199,7 +199,7 @@ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
- static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
- {
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
--	u64 perf_capabilities = vcpu->arch.perf_capabilities;
-+	u64 perf_capabilities;
- 	int ret;
- 
- 	switch (msr) {
-@@ -210,12 +210,13 @@ static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
- 		ret = pmu->version > 1;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 25f471adb8b8..655fb0b3bba4 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3786,6 +3786,16 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		vcpu->arch.guest_fpu.xfd_err = data;
  		break;
- 	case MSR_IA32_PEBS_ENABLE:
--		ret = perf_capabilities & PERF_CAP_PEBS_FORMAT;
-+		ret = vcpu_get_perf_capabilities(vcpu) & PERF_CAP_PEBS_FORMAT;
+ #endif
++	case MSR_IA32_PEBS_ENABLE:
++	case MSR_IA32_DS_AREA:
++	case MSR_PEBS_DATA_CFG:
++		if (kvm_pmu_is_valid_msr(vcpu, msr))
++			return kvm_pmu_set_msr(vcpu, msr_info);
++		/*
++		 * Userspace is allowed to write '0' to MSRs that KVM reports
++		 * as to-be-saved, even if an MSRs isn't fully supported.
++		 */
++		return !msr_info->host_initiated || data;
+ 	default:
+ 		if (kvm_pmu_is_valid_msr(vcpu, msr))
+ 			return kvm_pmu_set_msr(vcpu, msr_info);
+@@ -4122,6 +4132,16 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		msr_info->data = vcpu->arch.guest_fpu.xfd_err;
  		break;
- 	case MSR_IA32_DS_AREA:
- 		ret = guest_cpuid_has(vcpu, X86_FEATURE_DS);
- 		break;
- 	case MSR_PEBS_DATA_CFG:
-+		perf_capabilities = vcpu_get_perf_capabilities(vcpu);
- 		ret = (perf_capabilities & PERF_CAP_PEBS_BASELINE) &&
- 			((perf_capabilities & PERF_CAP_PEBS_FORMAT) > 3);
- 		break;
-@@ -515,6 +516,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	struct kvm_cpuid_entry2 *entry;
- 	union cpuid10_eax eax;
- 	union cpuid10_edx edx;
-+	u64 perf_capabilities;
- 	u64 counter_mask;
- 	int i;
- 
-@@ -599,8 +601,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	if (lbr_desc->records.nr)
- 		bitmap_set(pmu->all_valid_pmc_idx, INTEL_PMC_IDX_FIXED_VLBR, 1);
- 
--	if (vcpu->arch.perf_capabilities & PERF_CAP_PEBS_FORMAT) {
--		if (vcpu->arch.perf_capabilities & PERF_CAP_PEBS_BASELINE) {
-+	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
-+	if (perf_capabilities & PERF_CAP_PEBS_FORMAT) {
-+		if (perf_capabilities & PERF_CAP_PEBS_BASELINE) {
- 			pmu->pebs_enable_mask = counter_mask;
- 			pmu->reserved_bits &= ~ICL_EVENTSEL_ADAPTIVE;
- 			for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
+ #endif
++	case MSR_IA32_PEBS_ENABLE:
++	case MSR_IA32_DS_AREA:
++	case MSR_PEBS_DATA_CFG:
++		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
++			return kvm_pmu_get_msr(vcpu, msr_info);
++		/*
++		 * Userspace is allowed to read MSRs that KVM reports as
++		 * to-be-saved, even if an MSR isn't fully supported.
++		 */
++		return !msr_info->host_initiated;
+ 	default:
+ 		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
+ 			return kvm_pmu_get_msr(vcpu, msr_info);
 -- 
 2.36.1.476.g0c4daa206d-goog
 

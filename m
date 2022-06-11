@@ -2,129 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D452547384
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57BE54738C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 12:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiFKJ7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 05:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        id S229735AbiFKKFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 06:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiFKJ6x (ORCPT
+        with ESMTP id S229464AbiFKKFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 05:58:53 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF2AB845;
-        Sat, 11 Jun 2022 02:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654941531; x=1686477531;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LoUQFEJVS8iKP4KHv45pEyco3cBp3wRIOlEANLpEqfM=;
-  b=bgqfdzNy1BveqUBhjYb6qcGV+ohpGMNQ46SREXJwgR9RUHpNzE2Ow7hG
-   URzohwV8QilFj0qNop1kR2MKQB/6VW2ZeeIOyDhXp8dTGWp1Jhs3Au2X3
-   m0ok7U9ptNXNrs/AaxrKA8xH5Oy86aeXbLXxN7qBsCLMu2yUyymDPufrE
-   JnbmCd1ySdNk9tvJX7YkQHvrv5e50aa+dwnSPz3AwrtbL/dP+PA8L9Da7
-   8+thFf7xqYYz1Q9tgCAnmwN67ZuBEtHDy2JzZh76mWTNWSrksEX3pRc+s
-   R4GIO4QpKT5vh3UEgeCW5KemWxH96VDQBeaiBlei1S+0QAG93VJ0fOhE9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="257694015"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="257694015"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 02:58:51 -0700
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="638638184"
-Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.255.31.17]) ([10.255.31.17])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 02:58:49 -0700
-Message-ID: <bf66a840-594a-d90a-2ca6-595e95c09514@linux.intel.com>
-Date:   Sat, 11 Jun 2022 17:58:46 +0800
+        Sat, 11 Jun 2022 06:05:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FF61162
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 03:05:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36996B83610
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 10:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AABFC34116;
+        Sat, 11 Jun 2022 10:05:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="c5ArRhjg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654941903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=K8Fih1pMzbVI+b3h1u5AjgJXQiwLKTClqbDyl1iljVs=;
+        b=c5ArRhjg4H54HtkZZoMU9fiXH+0tj5yv7Mf/BNtUopdXPcjeHx+AYoga5qFuwfYji9J5iI
+        jFwKQfMTJJSh38GgD7nJPj8lRKEdb4rGFu1+NrhZsBzg1Raj4iRkNkHYZRrl1yxseL0Bj3
+        p949vJSpPkmQjvjlp3APGXpYbhTZCFI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 62c13b0c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 11 Jun 2022 10:05:03 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2 0/3] powerpc: wire up rng during setup_arch
+Date:   Sat, 11 Jun 2022 12:04:44 +0200
+Message-Id: <20220611100447.5066-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 0/6] Configurable VLAN mode for NCSI driver
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-References: <20220610165940.2326777-1-jiaqing.zhao@linux.intel.com>
- <20220610130903.0386c0d9@kernel.org>
- <3c9fa928-f416-3526-be23-12644d18db3b@linux.intel.com>
- <20220610214506.74c3f89c@kernel.org>
- <6f067302-74a8-702f-bf38-4477a805a528@linux.intel.com>
- <20220610224407.4e58dc5a@kernel.org>
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-In-Reply-To: <20220610224407.4e58dc5a@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The platform's RNG must be available before random_init() in order to be
+useful for initial seeding, which in turn means that it needs to be
+called from setup_arch(), rather than from an init call. This series
+wires that up properly on the three platforms that currently initialize
+the RNG from the wrong place.
 
-On 2022-06-11 13:44, Jakub Kicinski wrote:
-> On Sat, 11 Jun 2022 13:18:51 +0800 Jiaqing Zhao wrote:
->> All ncsi devices uses the same driver as they uses same command set,
->> so the driver doesn't know what modes are supported. And in current
->> driver, the vlan related parameters are configured when registering
->> the device, adding an ncsi-netlink command to do so seems to be
->> unsuitable.
-> 
-> Maybe you could draw a diagram? NC-SI is a bit confusing.
+Jason A. Donenfeld (3):
+  powerpc/microwatt: wire up rng during setup_arch
+  powerpc/powernv: wire up rng during setup_arch
+  powerpc/pseries: wire up rng during setup_arch
 
-Yes I admit NC-SI is confusing as its design is not as straightforward
-as the MAC-PHY structure. In NC-SI, there are two macs like below.
+ arch/powerpc/platforms/microwatt/rng.c   |  9 ++-------
+ arch/powerpc/platforms/microwatt/setup.c |  8 ++++++++
+ arch/powerpc/platforms/powernv/rng.c     | 17 ++++-------------
+ arch/powerpc/platforms/powernv/setup.c   |  4 ++++
+ arch/powerpc/platforms/pseries/rng.c     | 11 ++---------
+ arch/powerpc/platforms/pseries/setup.c   |  3 +++
+ 6 files changed, 23 insertions(+), 29 deletions(-)
 
-        Packets + NCSI commands                        Packets
-    MAC-------------------------External controller MAC---------PHY
+-- 
+2.35.1
 
-The NCSI commands are used to set the behavior of the External controller
-MAC, like it's MAC address filter, VLAN filters. Those filtered packets
-will be transferred back to the MAC.
-
-Unlike PHY has standard registers to determine its model and capabilities,
-NC-SI seems does not have such way.
->> And adding a netlink command requires extra application in userspace
->> to switch the mode. In my opinion, it would be more user-friendly to
->> make it usable on boot.
-> 
-> Unfortunately convenience is not reason to start adding system config
-> into DT.
-
-Currently there is already a DT config "use-ncsi" is used to choose using
-MDIO PHY or NCSI stack in the MAC driver with NCSI support like ftgmac100.
-That's why I choose adding another DT option here.
-
->> Netdev also does not work as the ncsi device itself does not have
->> its own netdev, the netdev comes from the mac device. For different
->> vlan modes, the netdev feature set of its parent mac device are the
->> same.
-> 
-> You say that, yet the command handling already takes into account the
-> VLAN list:
-> 
-> 	if (list_empty(&ndp->vlan_vids)) {
-> 
-> which come from the MAC netdev. What's wrong with setting the filtering
-> mode based on NETIF_F_HW_VLAN_CTAG_FILTER ?
-
-When configuring the mac driver, there might be two net_device_ops sets
-for MDIO or NC-SI. When using NC-SI, some features need to be delegated
-to the external controller MAC, like VLAN hardware filtering, different
-ndo_vlan_rx_{add,kill}_vid callbacks need to be assigned.
-
-The filtering mode is an optional mode defined in NC-SI spec, some
-devices does not support it. In this case, to support VLAN, I would
-personally in favor of using the "Any VLAN" mode to let the external
-MAC pass all packets to the internal one, and let the internal MAC
-handle it either with its own hardware filter or software filter. In
-this case, the VLAN list in NC-SI driver (used for setting the external
-MAC filter) is not used.

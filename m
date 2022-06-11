@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB86547347
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7728A547348
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbiFKJbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 05:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
+        id S232491AbiFKJbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 05:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiFKJbM (ORCPT
+        with ESMTP id S229745AbiFKJbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 05:31:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2596326D0;
-        Sat, 11 Jun 2022 02:31:11 -0700 (PDT)
+        Sat, 11 Jun 2022 05:31:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5326B664
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 02:31:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38F8B60B15;
-        Sat, 11 Jun 2022 09:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D251BC34116;
-        Sat, 11 Jun 2022 09:31:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6385B60B15
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 09:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28DF9C3411E;
+        Sat, 11 Jun 2022 09:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654939870;
-        bh=JEHB2+yb07hk08YAU9SCnhBZyTJpoJajIXfHmENt1Z0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W2/NspDpexJKGkKbkeNkX+chUN9NG/XpSSb54CsMxzviqb+n4LdMJi0V3YoW/8cbE
-         OZdUPecVv2z2pqAhccX5dBjSqwHE3++fUnbxNzA4F6//JvZ5qwiVYmV2UGt/k0KMpx
-         REKJeRtRRIeH+CKClrIq0AuFF06/IG4XXyw8RNPS5FKnSfGowBKTT7kKWtci+zNqcd
-         GNNvYpEuKKmH5MsCwbLFJ5ohPKW2YBLMSWO94m4pUpRUAzXtfghP2JMGh9WlPAt3C3
-         0oA7GSO7sC7eEW+xhRJ/SliclBQrETHBWQNcvncHhs8xbU66VpgJ8STk3QIDt/X0xa
-         Kdl6ovF7BhPiw==
-Date:   Sat, 11 Jun 2022 17:31:03 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Ulrich =?iso-8859-1?Q?=D6lmann?= <u.oelmann@pengutronix.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        s=k20201202; t=1654939911;
+        bh=LNnn8VP3ISoWCNHD4Uu1SypzJBaQWj8L3bMqjcuZP8Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bpUbdcvkBoz/tFrK7bc5FMFtC8Cz7sAfTGRCJ1BVE+KYeGWeOIyS2f1ib2vSonciV
+         rIpdOOjgo2RRm3FiRAuoM6KIMja2Nwpb2NW8+qY4/j2g38JvIPQ1oCrpdGckq0IuTv
+         pWOrTjEFV5jySkMIkLXXZAPHnk9Mt1+6Xrg2cgcsHQrYz7S2odO9dwNFv+06nIobza
+         ahzXsZMVbRwmUzPmnl1MAHWIYmeTV0SgtnOQi/+GfyMssGOsjwvXP+llU+fk+iY1IW
+         rH5OwuJ1FZ+JW0j0N9P1CDQvO3l/hCEU5mM9UxeGEKT7pjkt5HJJWKMqhU0dA21cic
+         TccR/bR+SNNdA==
+From:   abelvesa@kernel.org
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Juergen Borleis <jbe@pengutronix.de>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        =?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: Re: [PATCH] ARM: dts: imx6: skov: add pwm-regulator to control the
- panel's VCOM
-Message-ID: <20220611093103.GI254723@dragon>
-References: <20220517071814.3626702-1-u.oelmann@pengutronix.de>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Abel Vesa <abelvesa@nxp.com>
+Subject: [PATCH] MAINTAINERS: Update Abel Vesa's email
+Date:   Sat, 11 Jun 2022 12:31:42 +0300
+Message-Id: <20220611093142.202271-1-abelvesa@kernel.org>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220517071814.3626702-1-u.oelmann@pengutronix.de>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,60 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:18:14AM +0200, Ulrich Ölmann wrote:
-> Skov's i.MX6 based boards come in different flavors which have different panels
-> attached. For optimal contrast experience each panel type needs an individual
-> common voltage (VCOM) to drive its TFT backplane. The latter is generated by an
-> LCD bias supply IC controlled by a pwm as input signal. Introduce a pwm-
-> regulator to describe this hardware property and parameterize it appropriately
-> for the different boards.
-> 
-> Signed-off-by: Ulrich Ölmann <u.oelmann@pengutronix.de>
-> ---
->  arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts |  6 ++++++
->  arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi              | 10 ++++++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
-> index 7f1f19b74bfa..a3f247c722b4 100644
-> --- a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
-> +++ b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
-> @@ -125,3 +125,9 @@ MX6QDL_PAD_EIM_D23__GPIO3_IO23		0x1b0b0
->  		>;
->  	};
->  };
-> +
-> +&reg_tft_vcom {
-> +	regulator-min-microvolt = <3160000>;
-> +	regulator-max-microvolt = <3160000>;
-> +	voltage-table = <3160000 73>;
-> +};
-> diff --git a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
-> index 77a91a97e6cf..3def1b621c8e 100644
-> --- a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
-> @@ -149,6 +149,16 @@ reg_can2_stby: regulator-can2-stby {
->  		gpio = <&gpio4 11 GPIO_ACTIVE_LOW>;
->  	};
->  
-> +	reg_tft_vcom: regulator-tft-vcom {
-> +		compatible = "pwm-regulator";
-> +		pwms = <&pwm3 0 20000 0>;
-> +		regulator-name = "tft_vcom";
-> +		regulator-min-microvolt = <3600000>;
-> +		regulator-max-microvolt = <3600000>;
-> +		regulator-always-on;
+From: Abel Vesa <abelvesa@nxp.com>
 
-You want it to be unmanaged and always-on?
+Use Abel Vesa's kernel.org account in maintainer entry and mailmap.
 
-Shawn
+Signed-off-by: Abel Vesa <abelvesa@nxp.com>
+---
+ .mailmap    | 2 ++
+ MAINTAINERS | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-> +		voltage-table = <3600000 26>;
-> +	};
-> +
->  	reg_vcc_mmc: regulator-vcc-mmc {
->  		compatible = "regulator-fixed";
->  		pinctrl-names = "default";
-> -- 
-> 2.30.2
-> 
+diff --git a/.mailmap b/.mailmap
+index b2967aab5359..dda0030573ca 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -10,6 +10,8 @@
+ # Please keep this list dictionary sorted.
+ #
+ Aaron Durbin <adurbin@google.com>
++Abel Vesa <abelvesa@kernel.org> <abel.vesa@nxp.com>
++Abel Vesa <abelvesa@kernel.org> <abelvesa@gmail.com>
+ Abhinav Kumar <quic_abhinavk@quicinc.com> <abhinavk@codeaurora.org>
+ Adam Oldham <oldhamca@gmail.com>
+ Adam Radford <aradford@gmail.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 475e28365385..6af989d4cdd6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14317,7 +14317,7 @@ F:	drivers/iio/gyro/fxas21002c_i2c.c
+ F:	drivers/iio/gyro/fxas21002c_spi.c
+ 
+ NXP i.MX CLOCK DRIVERS
+-M:	Abel Vesa <abel.vesa@nxp.com>
++M:	Abel Vesa <abelvesa@kernel.org>
+ L:	linux-clk@vger.kernel.org
+ L:	linux-imx@nxp.com
+ S:	Maintained
+-- 
+2.34.3
+

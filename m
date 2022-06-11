@@ -2,365 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6CA54726F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 08:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA25547274
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 08:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiFKGwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 02:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
+        id S229845AbiFKGxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 02:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiFKGw3 (ORCPT
+        with ESMTP id S229867AbiFKGxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 02:52:29 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E52101DD;
-        Fri, 10 Jun 2022 23:52:24 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LKpRW1dZTz9tRp;
-        Sat, 11 Jun 2022 08:52:23 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NVdwKS_-U3pH; Sat, 11 Jun 2022 08:52:23 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LKpRW0KLkz9tR5;
-        Sat, 11 Jun 2022 08:52:23 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E50F18B77C;
-        Sat, 11 Jun 2022 08:52:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id YO9bKdaJQ4Ri; Sat, 11 Jun 2022 08:52:22 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.192])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9BFE98B768;
-        Sat, 11 Jun 2022 08:52:22 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25B6q9S5674767
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 11 Jun 2022 08:52:09 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25B6q528674764;
-        Sat, 11 Jun 2022 08:52:05 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [PATCH] powerpc: Restore CONFIG_DEBUG_INFO in defconfigs
-Date:   Sat, 11 Jun 2022 08:51:57 +0200
-Message-Id: <98a4c2603bf9e4b776e219f5b8541d23aa24e854.1654930308.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
+        Sat, 11 Jun 2022 02:53:20 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FD74CD58;
+        Fri, 10 Jun 2022 23:53:19 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id w27so1361162edl.7;
+        Fri, 10 Jun 2022 23:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Zc/ja1DOr+UGSYNswkfus9lzkrP7FkDW/slHx9/IKhM=;
+        b=Db8030kntC6z/HKCADKmfWp67SFTAkL977Rd3mAm/AQQQSWW+d6OSVqJjYoRJN8+be
+         dZ5H8VU1hpJLBorBdqziN7fYo7ZPMfjibfv7BGTtKAGanOgF8GK53m6mt8X4BTnsfxeI
+         Np+bgEM8laZjxd09uHDPm0c8cxHzwyNPFVu91JO3uUsmHczWoQZ6P49dWRbJsto+28ek
+         ZYtzgQE5KZDT0lQOqthpozIzwd6SUbcAah4nJql59dD8Bfq15KEIoDzmYkPLuw1/ueiU
+         pZMb8tPoNzUFsAv02BIuUonfnphYeYCvSUk3deI7Oa1s84ifD3/d2WQXbV7JTUdTMg8Y
+         572g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Zc/ja1DOr+UGSYNswkfus9lzkrP7FkDW/slHx9/IKhM=;
+        b=nPVE90LKL+xry5tKkyzF9YKhZY/4s4Ipzmim8Thj5iluX4Ydx1Uo8lgq3ppxtbPTmH
+         U7nKCA7P5xygeQ68cUWrFDhcRYyHNJEGSlkAfwwu9iv1fD9wQ64+KqWtfDh3jMldrz+e
+         Zi03Fc6YXNtL52bsCuE3hsfQq2NAdadzmFDvKvSubsTSVsIo7/R2Rt/u3uSZ0UWhzBL+
+         h4ytY1xeiGMigrFNT2aSYHBwDH94mcOmCTgJiNJ3TqECKsJnbmtr/hZNPPg2wMALAHgR
+         S1/+g/9J7IvVhpeaQnECYC+E6tnwbb9nSwiyvYU9+nYCVvh3aJoX/o7wXEmShBdmA9Hs
+         En5w==
+X-Gm-Message-State: AOAM533xGGC/s+Zqbold90potM+xoUvQTNP4RA7Obkd6wClzpn9BcERY
+        CqlvH396Y1asRJ1xim4BvH4=
+X-Google-Smtp-Source: ABdhPJy2mjZchvrqJCiCFKl1zY7F9clkLHeO6YhJTJcF13tJU2Y1Bw540m7desgHARD+bCdkZ72J3Q==
+X-Received: by 2002:a05:6402:5191:b0:42f:b303:ed61 with SMTP id q17-20020a056402519100b0042fb303ed61mr44123860edd.233.1654930397719;
+        Fri, 10 Jun 2022 23:53:17 -0700 (PDT)
+Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id v14-20020a056402348e00b0042dc25fdf5bsm874261edc.29.2022.06.10.23.53.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 23:53:17 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Liang Chen <cl@rock-chips.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] HDMI Audio on RK356x/Quartz64 Model A
+Date:   Sat, 11 Jun 2022 08:52:58 +0200
+Message-Id: <20220611065300.885212-1-frattaroli.nicolas@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1654930315; l=11553; s=20211009; h=from:subject:message-id; bh=mJPG5OKAktxtwKL8QLdInypfepNupuQhNmiePguoAjM=; b=CjW/vScIQXs5mMTAcnC/zyJckoz4dV5etC0lhQEcUKpi0kGiA5G6qUt7yUCIbD9Fd/fongtCZceJ NgZnX1fFCFbYuTfa2jnnpTov+kkg4V1kpy0F24BQlpgz+FlCdBfv
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from a
-choice") broke the selection of CONFIG_DEBUG_INFO by powerpc defconfigs.
+This enables HDMI audio on Quartz64 Model A, and the RK356x SoC in
+general.
 
-It is now necessary to select one of the three DEBUG_INFO_DWARF*
-options to get DEBUG_INFO enabled.
+i2s0 on the RK356x is connected to HDMI, and only has one DMA. I've
+confirmed this with the TRM.
 
-Replace DEBUG_INFO=y by DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y in all
-defconfigs using the following command:
+To test this, one needs a video clock, i.e. there is no audio if your
+screen is off. The framebuffer console or something else needs to be
+running to get audio output.
 
-sed -i s/DEBUG_INFO=y/DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y/g `git grep -l DEBUG_INFO arch/powerpc/configs/`
+Changes in v3:
+ - rebased onto next-20220610
 
-Fixes: f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from a choice")
-Cc: stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/configs/44x/akebono_defconfig    | 2 +-
- arch/powerpc/configs/44x/currituck_defconfig  | 2 +-
- arch/powerpc/configs/44x/fsp2_defconfig       | 2 +-
- arch/powerpc/configs/44x/iss476-smp_defconfig | 2 +-
- arch/powerpc/configs/44x/warp_defconfig       | 2 +-
- arch/powerpc/configs/52xx/lite5200b_defconfig | 2 +-
- arch/powerpc/configs/52xx/motionpro_defconfig | 2 +-
- arch/powerpc/configs/52xx/tqm5200_defconfig   | 2 +-
- arch/powerpc/configs/adder875_defconfig       | 2 +-
- arch/powerpc/configs/ep8248e_defconfig        | 2 +-
- arch/powerpc/configs/ep88xc_defconfig         | 2 +-
- arch/powerpc/configs/fsl-emb-nonhw.config     | 2 +-
- arch/powerpc/configs/mgcoge_defconfig         | 2 +-
- arch/powerpc/configs/mpc5200_defconfig        | 2 +-
- arch/powerpc/configs/mpc8272_ads_defconfig    | 2 +-
- arch/powerpc/configs/mpc885_ads_defconfig     | 2 +-
- arch/powerpc/configs/ppc6xx_defconfig         | 2 +-
- arch/powerpc/configs/pq2fads_defconfig        | 2 +-
- arch/powerpc/configs/ps3_defconfig            | 2 +-
- arch/powerpc/configs/tqm8xx_defconfig         | 2 +-
- 20 files changed, 20 insertions(+), 20 deletions(-)
+Changes in v2:
+ - reordered nodes in rk356x.dtsi to conform
+ - reordered properties in rk356x.dtsi to conform
+ - add Michael Riesch's Tested-by to rk356x.dtsi
 
-diff --git a/arch/powerpc/configs/44x/akebono_defconfig b/arch/powerpc/configs/44x/akebono_defconfig
-index 4bc549c6edc5..fde4824f235e 100644
---- a/arch/powerpc/configs/44x/akebono_defconfig
-+++ b/arch/powerpc/configs/44x/akebono_defconfig
-@@ -118,7 +118,7 @@ CONFIG_CRAMFS=y
- CONFIG_NLS_DEFAULT="n"
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
- CONFIG_XMON=y
-diff --git a/arch/powerpc/configs/44x/currituck_defconfig b/arch/powerpc/configs/44x/currituck_defconfig
-index 717827219921..7283b7d4a1a5 100644
---- a/arch/powerpc/configs/44x/currituck_defconfig
-+++ b/arch/powerpc/configs/44x/currituck_defconfig
-@@ -73,7 +73,7 @@ CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
- CONFIG_NLS_DEFAULT="n"
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
- CONFIG_XMON=y
-diff --git a/arch/powerpc/configs/44x/fsp2_defconfig b/arch/powerpc/configs/44x/fsp2_defconfig
-index 8da316e61a08..3fdfbb29b854 100644
---- a/arch/powerpc/configs/44x/fsp2_defconfig
-+++ b/arch/powerpc/configs/44x/fsp2_defconfig
-@@ -110,7 +110,7 @@ CONFIG_XZ_DEC=y
- CONFIG_PRINTK_TIME=y
- CONFIG_MESSAGE_LOGLEVEL_DEFAULT=3
- CONFIG_DYNAMIC_DEBUG=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
- CONFIG_CRYPTO_CBC=y
-diff --git a/arch/powerpc/configs/44x/iss476-smp_defconfig b/arch/powerpc/configs/44x/iss476-smp_defconfig
-index c11e777b2f3d..0f6380e1e612 100644
---- a/arch/powerpc/configs/44x/iss476-smp_defconfig
-+++ b/arch/powerpc/configs/44x/iss476-smp_defconfig
-@@ -56,7 +56,7 @@ CONFIG_PROC_KCORE=y
- CONFIG_TMPFS=y
- CONFIG_CRAMFS=y
- # CONFIG_NETWORK_FILESYSTEMS is not set
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
- CONFIG_PPC_EARLY_DEBUG=y
-diff --git a/arch/powerpc/configs/44x/warp_defconfig b/arch/powerpc/configs/44x/warp_defconfig
-index 47252c2d7669..20891c413149 100644
---- a/arch/powerpc/configs/44x/warp_defconfig
-+++ b/arch/powerpc/configs/44x/warp_defconfig
-@@ -88,7 +88,7 @@ CONFIG_NLS_UTF8=y
- CONFIG_CRC_CCITT=y
- CONFIG_CRC_T10DIF=y
- CONFIG_PRINTK_TIME=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DEBUG_FS=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
-diff --git a/arch/powerpc/configs/52xx/lite5200b_defconfig b/arch/powerpc/configs/52xx/lite5200b_defconfig
-index 63368e677506..7db479dcbc0c 100644
---- a/arch/powerpc/configs/52xx/lite5200b_defconfig
-+++ b/arch/powerpc/configs/52xx/lite5200b_defconfig
-@@ -58,6 +58,6 @@ CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
- CONFIG_ROOT_NFS=y
- CONFIG_PRINTK_TIME=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DETECT_HUNG_TASK=y
- # CONFIG_DEBUG_BUGVERBOSE is not set
-diff --git a/arch/powerpc/configs/52xx/motionpro_defconfig b/arch/powerpc/configs/52xx/motionpro_defconfig
-index 72762da94846..6186ead1e105 100644
---- a/arch/powerpc/configs/52xx/motionpro_defconfig
-+++ b/arch/powerpc/configs/52xx/motionpro_defconfig
-@@ -84,7 +84,7 @@ CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_PRINTK_TIME=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DETECT_HUNG_TASK=y
- # CONFIG_DEBUG_BUGVERBOSE is not set
- CONFIG_CRYPTO_ECB=y
-diff --git a/arch/powerpc/configs/52xx/tqm5200_defconfig b/arch/powerpc/configs/52xx/tqm5200_defconfig
-index a3c8ca74032c..e6735b945327 100644
---- a/arch/powerpc/configs/52xx/tqm5200_defconfig
-+++ b/arch/powerpc/configs/52xx/tqm5200_defconfig
-@@ -85,7 +85,7 @@ CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_PRINTK_TIME=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DETECT_HUNG_TASK=y
- # CONFIG_DEBUG_BUGVERBOSE is not set
- CONFIG_CRYPTO_ECB=y
-diff --git a/arch/powerpc/configs/adder875_defconfig b/arch/powerpc/configs/adder875_defconfig
-index 5326bc739279..7f35d5bc1229 100644
---- a/arch/powerpc/configs/adder875_defconfig
-+++ b/arch/powerpc/configs/adder875_defconfig
-@@ -45,7 +45,7 @@ CONFIG_CRAMFS=y
- CONFIG_NFS_FS=y
- CONFIG_ROOT_NFS=y
- CONFIG_CRC32_SLICEBY4=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DEBUG_FS=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
-diff --git a/arch/powerpc/configs/ep8248e_defconfig b/arch/powerpc/configs/ep8248e_defconfig
-index 00d69965f898..8df6d3a293e3 100644
---- a/arch/powerpc/configs/ep8248e_defconfig
-+++ b/arch/powerpc/configs/ep8248e_defconfig
-@@ -59,7 +59,7 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ASCII=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_BDI_SWITCH=y
-diff --git a/arch/powerpc/configs/ep88xc_defconfig b/arch/powerpc/configs/ep88xc_defconfig
-index f5c3e72da719..a98ef6a4abef 100644
---- a/arch/powerpc/configs/ep88xc_defconfig
-+++ b/arch/powerpc/configs/ep88xc_defconfig
-@@ -48,6 +48,6 @@ CONFIG_CRAMFS=y
- CONFIG_NFS_FS=y
- CONFIG_ROOT_NFS=y
- CONFIG_CRC32_SLICEBY4=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
-diff --git a/arch/powerpc/configs/fsl-emb-nonhw.config b/arch/powerpc/configs/fsl-emb-nonhw.config
-index df37efed0aec..f14c6dbd7346 100644
---- a/arch/powerpc/configs/fsl-emb-nonhw.config
-+++ b/arch/powerpc/configs/fsl-emb-nonhw.config
-@@ -24,7 +24,7 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_SHA256=y
- CONFIG_CRYPTO_SHA512=y
- CONFIG_DEBUG_FS=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DEBUG_KERNEL=y
- CONFIG_DEBUG_SHIRQ=y
- CONFIG_DETECT_HUNG_TASK=y
-diff --git a/arch/powerpc/configs/mgcoge_defconfig b/arch/powerpc/configs/mgcoge_defconfig
-index dcc8dccf54f3..498d35db7833 100644
---- a/arch/powerpc/configs/mgcoge_defconfig
-+++ b/arch/powerpc/configs/mgcoge_defconfig
-@@ -73,7 +73,7 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ASCII=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DEBUG_FS=y
- CONFIG_MAGIC_SYSRQ=y
- # CONFIG_SCHED_DEBUG is not set
-diff --git a/arch/powerpc/configs/mpc5200_defconfig b/arch/powerpc/configs/mpc5200_defconfig
-index 83d801307178..c0fe5e76604a 100644
---- a/arch/powerpc/configs/mpc5200_defconfig
-+++ b/arch/powerpc/configs/mpc5200_defconfig
-@@ -122,6 +122,6 @@ CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_PRINTK_TIME=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_DEBUG_KERNEL=y
- CONFIG_DETECT_HUNG_TASK=y
-diff --git a/arch/powerpc/configs/mpc8272_ads_defconfig b/arch/powerpc/configs/mpc8272_ads_defconfig
-index 00a4d2bf43b2..4145ef5689ca 100644
---- a/arch/powerpc/configs/mpc8272_ads_defconfig
-+++ b/arch/powerpc/configs/mpc8272_ads_defconfig
-@@ -67,7 +67,7 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ASCII=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
- CONFIG_BDI_SWITCH=y
-diff --git a/arch/powerpc/configs/mpc885_ads_defconfig b/arch/powerpc/configs/mpc885_ads_defconfig
-index c74dc76b1d0d..700115d85d6f 100644
---- a/arch/powerpc/configs/mpc885_ads_defconfig
-+++ b/arch/powerpc/configs/mpc885_ads_defconfig
-@@ -71,7 +71,7 @@ CONFIG_ROOT_NFS=y
- CONFIG_CRYPTO=y
- CONFIG_CRYPTO_DEV_TALITOS=y
- CONFIG_CRC32_SLICEBY4=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_FS=y
- CONFIG_DEBUG_VM_PGTABLE=y
-diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
-index b622ecd73286..91967824272e 100644
---- a/arch/powerpc/configs/ppc6xx_defconfig
-+++ b/arch/powerpc/configs/ppc6xx_defconfig
-@@ -1065,7 +1065,7 @@ CONFIG_NLS_ISO8859_14=m
- CONFIG_NLS_ISO8859_15=m
- CONFIG_NLS_KOI8_R=m
- CONFIG_NLS_KOI8_U=m
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_HEADERS_INSTALL=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_KERNEL=y
-diff --git a/arch/powerpc/configs/pq2fads_defconfig b/arch/powerpc/configs/pq2fads_defconfig
-index 9d8a76857c6f..9d63e2e65211 100644
---- a/arch/powerpc/configs/pq2fads_defconfig
-+++ b/arch/powerpc/configs/pq2fads_defconfig
-@@ -68,7 +68,7 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ASCII=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
- # CONFIG_SCHED_DEBUG is not set
-diff --git a/arch/powerpc/configs/ps3_defconfig b/arch/powerpc/configs/ps3_defconfig
-index 7c95fab4b920..2d9ac233da68 100644
---- a/arch/powerpc/configs/ps3_defconfig
-+++ b/arch/powerpc/configs/ps3_defconfig
-@@ -153,7 +153,7 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_CRC_CCITT=m
- CONFIG_CRC_T10DIF=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_MEMORY_INIT=y
- CONFIG_DEBUG_STACKOVERFLOW=y
-diff --git a/arch/powerpc/configs/tqm8xx_defconfig b/arch/powerpc/configs/tqm8xx_defconfig
-index 77857d513022..083c2e57520a 100644
---- a/arch/powerpc/configs/tqm8xx_defconfig
-+++ b/arch/powerpc/configs/tqm8xx_defconfig
-@@ -55,6 +55,6 @@ CONFIG_CRAMFS=y
- CONFIG_NFS_FS=y
- CONFIG_ROOT_NFS=y
- CONFIG_CRC32_SLICEBY4=y
--CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
+Nicolas Frattaroli (2):
+  arm64: dts: rockchip: rk356x: Add HDMI audio nodes
+  arm64: dts: rockchip: Enable HDMI audio on Quartz64 A
+
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   |  8 +++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 33 +++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+
 -- 
-2.35.3
+2.36.1
 

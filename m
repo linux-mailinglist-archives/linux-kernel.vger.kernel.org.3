@@ -2,129 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0960654740D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 13:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3833154740F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 13:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbiFKLBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 07:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S232756AbiFKLBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 07:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiFKLBA (ORCPT
+        with ESMTP id S231649AbiFKLBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 07:01:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245D13EB2;
-        Sat, 11 Jun 2022 04:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654945259; x=1686481259;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4leKXDQUXZ64qSpn4lsd80iVr7ZStmm6WSA/DgDjVYE=;
-  b=nTT04OQvu7SZd0AxGxVXDknnrH11IrH7FfQwkXp4TEnaSIvU04uUGDVO
-   nJzOmEUgx6N4MU7l2c4oJZkS+8WJGI4cIUHf2XQoGaGGMOc+jzFAfDMyz
-   yBUiqIwdtl5WXYGsyYSP4JcZ3SnUJF91dKh893AiYT+nEhPrta/WvO/pN
-   oHgx2aga/iM4mWDPumsd8thrJjfpQuiIlCAVImvr+JBlnM2Gf6GYq+yNs
-   bOAnDF1Us2Uwo3LyZ0GNIUbyPBhzvpYxfCoM1XGNQTjVA13YtR1eCELQ9
-   +tBH72hCgUr8kTt2OGHqONUYYzseqFyopxothMdf4UAlEDV2IUzQFUUEd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="364197859"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="364197859"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 04:00:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="638653264"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 04:00:57 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] rcu/nocb: Avoid polling when myrdp->nocb_head_rdp list is empty
-Date:   Sat, 11 Jun 2022 19:00:44 +0800
-Message-Id: <20220611110044.2999157-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 11 Jun 2022 07:01:09 -0400
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB3A11A01
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 04:01:07 -0700 (PDT)
+X-QQ-GoodBg: 1
+X-QQ-SSF: 00400000000000F0
+X-QQ-FEAT: WQH7Uj+YMzXRxKsq6/LDWmfq9EU8t9MipGjVqYniJHV6+aTQu/JTntTEJuYRG
+        LsaciIaCsMBlvWhtfAGLQmXqdHO/eSLFd3lYNy37t0FFcxo65Nv7NUmn2qBjdMJiEt99l0X
+        vl+JBqdPYr6VV2b1oSKr4y/iGGGSGHOsz78AFgAIBlN62BhxNlapAm4JBOllPALfSkP1R7q
+        GPv/Irt15mvw9ETXjQCpGyKSfwNjJYmIu/q54mlqxVWbR/Gt57tNn741ADtdtXco7QDkkoQ
+        zmPrXZb+vuYME8K1dxKwM19JvMY43Zfjn1xcq5RCutmPToSRkSf/dU58tyxj84B9jU1SAsv
+        OcRGwaNvqbfF/abu4PF1bz/WYtFTCqw2T9/z94jnWobARpz/xt5AnxnYr+7qw==
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 128.179.229.4
+X-QQ-STYLE: 
+X-QQ-mid: llogic74t1654945248t194087
+From:   "=?utf-8?B?SmlhbmhhbyBYdQ==?=" <jianhao_xu@smail.nju.edu.cn>
+To:     "=?utf-8?B?ZWR1bWF6ZXQ=?=" <edumazet@google.com>
+Cc:     "=?utf-8?B?RGFuaWVsIEJvcmttYW5u?=" <daniel@iogearbox.net>,
+        "=?utf-8?B?amhz?=" <jhs@mojatatu.com>,
+        "=?utf-8?B?eGl5b3Uud2FuZ2Nvbmc=?=" <xiyou.wangcong@gmail.com>,
+        "=?utf-8?B?amlyaQ==?=" <jiri@resnulli.us>,
+        "=?utf-8?B?ZGF2ZW0=?=" <davem@davemloft.net>,
+        "=?utf-8?B?a3ViYQ==?=" <kuba@kernel.org>,
+        "=?utf-8?B?cGFiZW5p?=" <pabeni@redhat.com>,
+        "=?utf-8?B?bmV0ZGV2?=" <netdev@vger.kernel.org>,
+        "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: sched: fix potential null pointer deref
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+Date:   Sat, 11 Jun 2022 13:00:48 +0200
+X-Priority: 3
+Message-ID: <tencent_4CF4EFF2144A820D7BBECA7D@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+References: <20220610021445.2441579-1-jianhao_xu@smail.nju.edu.cn>
+        <3f460707-e267-e749-07fc-c44604cd5713@iogearbox.net>
+        <tencent_29981C021E6150B064C7DBA3@qq.com>
+        <CANn89iKHfi=kQY1FC=07COJfVX4ROTnGkM_1uKvOfPfdhqt4Ow@mail.gmail.com>
+In-Reply-To: <CANn89iKHfi=kQY1FC=07COJfVX4ROTnGkM_1uKvOfPfdhqt4Ow@mail.gmail.com>
+X-QQ-ReplyHash: 1801730707
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1])
+        by smtp.qq.com (ESMTP) with SMTP
+        id ; Sat, 11 Jun 2022 19:00:50 +0800 (CST)
+Feedback-ID: llogic:smail.nju.edu.cn:qybgforeign:qybgforeign8
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, If the 'rcu_nocb_poll' bootargs is enable, all rcuog kthreads
-enter polling mode. however, due to only insert CPU's rdp which belong to
-rcu_nocb_mask to 'nocb_head_rdp' list or all CPU's rdp served by rcuog
-kthread have been de-offloaded, these cause the 'nocb_head_rdp' list
-served by rcuog kthread is empty, when the 'nocb_head_rdp' is empty,
-the rcuog kthread in polling mode not actually do anything. fix it by
-exiting polling mode when the 'nocb_head_rdp'list is empty, otherwise
-entering polling mode.
+VGhhbmtzIGZvciB5b3VyIGFkdmljZSBhbmQgc29ycnkgZm9yIHRoZSBub2lzZS4NCg0KPiBB
+bGwgbmV0ZGV2IGRldmljZXMgaGF2ZSB0aGVpciBkZXYtPl90eCBhbGxvY2F0ZWQgaW4gbmV0
+aWZfYWxsb2NfbmV0ZGV2X3F1ZXVlcygpDQo+IA0KPiBUaGVyZSBpcyBhYnNvbHV0ZWx5IG5v
+IHdheSBNUSBxZGlzYyBjb3VsZCBiZSBhdHRhY2hlZCB0byBhIGRldmljZSB0aGF0DQo+IGhh
+cyBmYWlsZWQgbmV0aWZfYWxsb2NfbmV0ZGV2X3F1ZXVlcygpIHN0ZXAuDQoNCkkgYmVsaWV2
+ZSB0aGlzIG1ha2VzIHNlbnNlLiBCdXQgSSBhbSBzdGlsbCBhIGJpdCBjb25mdXNlZCwgZXNw
+ZWNpYWxseSBhZnRlciB3ZSANCmNyb3NzLWNoZWNrZWQgdGhlIHNpbWlsYXIgY29udGV4dCBv
+ZiBtcSwgbXFwcmlvLCB0YXByaW8uIFRvIGJlIHNwZWNpZmljLCB3ZSANCmNyb3NzLWNoZWNr
+ZWQgd2hldGhlciBgbXFfY2xhc3Nfb3BzYCwgYG1xcHJpb19jbGFzc19vcHNgLCBhbmQgDQpg
+dGFwcmlvX2NsYXNzX29wc2AgY2hlY2sgdGhlIHJldHVybiB2YWx1ZSBvZiAgdGhlaXIgcmVz
+cGVjdGl2ZSB2ZXJzaW9uIG9mIA0KYF9xdWV1ZV9nZXRgIGJlZm9yZSBkZXJlZmVyZW5jaW5n
+IGl0LiANCg0KLS0tLS0tLS0tLS0tLS0tIC0tLS0tIC0tLS0tLS0tLSAtLS0tLS0tLS0gDQpj
+bGFzc19vcHMgICAgICB3aGV0aGVyIGNoZWNrIHRoZSByZXQgdmFsdWUgb2YgX3F1ZXVlX2dl
+dA0KICAgICAgICAgICAgICAgICAgICAgbXEgfCAgbXFwcmlvIHwgdGFwcmlvICAgDQotLS0t
+LS0tLS0tLS0tLS0gLS0tLS0gLS0tLS0tLS0tIC0tLS0tLS0tLSAgDQpzZWxlY3RfcXVldWUg
+ICAgLSAgICAgLSAgICAgICAgIC0gICAgICAgICANCmdyYWZ0ICAgICAgICAgICAgICAgbm8g
+ICAgeWVzICAgICAgeWVzICAgICAgIA0KbGVhZiAgICAgICAgICAgICAgICAgbm8gICAgeWVz
+ICAgICAgeWVzICAgICAgIA0KZmluZCAgICAgICAgICAgICAgICB5ZXMgICAgLSAgICAgICAg
+IHllcyAgICAgICANCndhbGsgICAgICAgICAgICAgICAgLSAgICAgIC0gICAgICAgICAgLSAg
+ICAgICAgIA0KZHVtcCAgICAgICAgICAgICAgbm8gICAgbm8gICAgICAgbm8gICAgICAgIA0K
+ZHVtcF9zdGF0cyAgICAgbm8gICAgbm8gICAgICAgbm8gICAgIA0KLS0tLS0tLS0tLS0tLS0t
+IC0tLS0tIC0tLS0tLS0tLSAtLS0tLS0tLS0gDQogIA0KQXMgc2hvd24gaW4gdGhpcyB0YWJs
+ZSwgYG1xX2xlYWYoKWAgZG9lcyBub3QgY2hlY2sgdGhlIHJldHVybiB2YWx1ZSBvZiANCmBt
+cV9fcXVldWVfZ2V0KClgIGJlZm9yZSB1c2luZyB0aGUgcG9pbnRlciwgd2hpbGUgYG1xcHJp
+b19sZWFmKClgIGFuZCANCmB0YXByaW9fbGVhZigpYCBkbyBoYXZlIHN1Y2ggYSBOVUxMIGNo
+ZWNrLiANCg0KRllJLCBoZXJlIGlzIHRoZSBjb2RlIG9mIGBtcXByaW9fbGVhZigpYCBhbmQg
+d2UgY2FuIGZpbmQgdGhlIE5VTEwgY2hlY2suDQpgYGANCi8vbmV0L3NjaGVkL3NjaF9tcXBy
+aW8uYw0Kc3RhdGljIHN0cnVjdCBRZGlzYyAqbXFwcmlvX2xlYWYoc3RydWN0IFFkaXNjICpz
+Y2gsIHVuc2lnbmVkIGxvbmcgY2wpDQp7DQoJc3RydWN0IG5ldGRldl9xdWV1ZSAqZGV2X3F1
+ZXVlID0gbXFwcmlvX3F1ZXVlX2dldChzY2gsIGNsKTsNCg0KCWlmICghZGV2X3F1ZXVlKQ0K
+CQlyZXR1cm4gTlVMTDsNCg0KCXJldHVybiBkZXZfcXVldWUtPnFkaXNjX3NsZWVwaW5nOw0K
+fQ0KYGBgDQoNClRoYXQgaXMgYWxzbyB0aGUgc2l0dWF0aW9uIG9mIGBtcV9ncmFmdCgpYCwg
+YG1xcHJpb19ncmFmdCgpYCBhbmQgYHRhcHJpb19ncmFmdCgpYC4gDQpJIGFtIG5vdCBzdXJl
+IHdoZXRoZXIgaXQgaXMgcmVhc29uYWJsZSB0byBleHBlY3QgdGhlIGNsYXNzX29wcyBvZiBt
+cSwgbXFwcmlvLCANCmFuZCB0YXByaW8gdG8gYmUgY29uc2lzdGVudCBpbiB0aGlzIHdheS4g
+SWYgc28sIGRvZXMgaXQgbWVhbiB0aGF0IGl0IGlzIHBvc3NpYmxlIA0KdGhhdGBtcV9sZWFm
+KClgYW5kIGBtcV9ncmFmdGAgbWF5IG1pc3MgYSBjaGVjayBoZXJlLCBvciBtcXByaW8sIHRh
+cHJpbyBoYXZlIA0KcmVkdW5kYW50IGNoZWNrcz8NCg0KVGhhbmtzIGFnYWluIGZvciB5b3Vy
+IHRpbWUuIEkgYXBvbG9naXplIGlmIG15IHF1ZXN0aW9uIGlzIHN0dXBpZC4=
 
-Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- v1->v2:
- Move rcu_nocb_poll flags check from rdp_offload_toggle() to 
- rcu_nocb_rdp_offload/deoffload(), avoid unnecessary setting of 
- rdp_gp->nocb_gp_sleep flags, because when rcu_nocb_poll is set  the 
- rdp_gp->nocb_gp_sleep is not used.
- 
- v2->v3:
- When nocb_head_rdp list is empty. put rcuog kthreads in nocb_gp_wq
- waitqueue to wait offloading.
 
- kernel/rcu/tree_nocb.h | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index fa8e4f82e60c..a8f574d8850d 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -584,6 +584,14 @@ static int nocb_gp_toggle_rdp(struct rcu_data *rdp,
- 	return ret;
- }
- 
-+static void nocb_gp_sleep(struct rcu_data *my_rdp, int cpu)
-+{
-+	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
-+	swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
-+					!READ_ONCE(my_rdp->nocb_gp_sleep));
-+	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
-+}
-+
- /*
-  * No-CBs GP kthreads come here to wait for additional callbacks to show up
-  * or for grace periods to end.
-@@ -701,13 +709,19 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
- 		/* Polling, so trace if first poll in the series. */
- 		if (gotcbs)
- 			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
--		schedule_timeout_idle(1);
-+		if (list_empty(&my_rdp->nocb_head_rdp)) {
-+			raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
-+			if (!my_rdp->nocb_toggling_rdp)
-+				WRITE_ONCE(my_rdp->nocb_gp_sleep, true);
-+			raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
-+			/* Wait for any offloading rdp */
-+			nocb_gp_sleep(my_rdp, cpu);
-+		} else {
-+			schedule_timeout_idle(1);
-+		}
- 	} else if (!needwait_gp) {
- 		/* Wait for callbacks to appear. */
--		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
--		swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
--				!READ_ONCE(my_rdp->nocb_gp_sleep));
--		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
-+		nocb_gp_sleep(my_rdp, cpu);
- 	} else {
- 		rnp = my_rdp->mynode;
- 		trace_rcu_this_gp(rnp, my_rdp, wait_gp_seq, TPS("StartWait"));
--- 
-2.25.1
 

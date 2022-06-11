@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95902547349
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB86547347
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbiFKJcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 05:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S232456AbiFKJbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 05:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiFKJcO (ORCPT
+        with ESMTP id S229745AbiFKJbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 05:32:14 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 953801CE;
-        Sat, 11 Jun 2022 02:32:11 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id B9D401E80D77;
-        Sat, 11 Jun 2022 17:31:16 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cZ7eIsdfn8sV; Sat, 11 Jun 2022 17:31:14 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 4F8361E80D70;
-        Sat, 11 Jun 2022 17:31:13 +0800 (CST)
-From:   Li Qiong <liqiong@nfschina.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        hukun@nfschina.com, qixu@nfschina.com, yuzhe@nfschina.com,
-        renyu@nfschina.com, Li Qiong <liqiong@nfschina.com>
-Subject: [PATCH] rcu: Handle failure of memory allocation functions
-Date:   Sat, 11 Jun 2022 17:30:55 +0800
-Message-Id: <20220611093055.1473-1-liqiong@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        Sat, 11 Jun 2022 05:31:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2596326D0;
+        Sat, 11 Jun 2022 02:31:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38F8B60B15;
+        Sat, 11 Jun 2022 09:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D251BC34116;
+        Sat, 11 Jun 2022 09:31:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654939870;
+        bh=JEHB2+yb07hk08YAU9SCnhBZyTJpoJajIXfHmENt1Z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W2/NspDpexJKGkKbkeNkX+chUN9NG/XpSSb54CsMxzviqb+n4LdMJi0V3YoW/8cbE
+         OZdUPecVv2z2pqAhccX5dBjSqwHE3++fUnbxNzA4F6//JvZ5qwiVYmV2UGt/k0KMpx
+         REKJeRtRRIeH+CKClrIq0AuFF06/IG4XXyw8RNPS5FKnSfGowBKTT7kKWtci+zNqcd
+         GNNvYpEuKKmH5MsCwbLFJ5ohPKW2YBLMSWO94m4pUpRUAzXtfghP2JMGh9WlPAt3C3
+         0oA7GSO7sC7eEW+xhRJ/SliclBQrETHBWQNcvncHhs8xbU66VpgJ8STk3QIDt/X0xa
+         Kdl6ovF7BhPiw==
+Date:   Sat, 11 Jun 2022 17:31:03 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Ulrich =?iso-8859-1?Q?=D6lmann?= <u.oelmann@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Juergen Borleis <jbe@pengutronix.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        =?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH] ARM: dts: imx6: skov: add pwm-regulator to control the
+ panel's VCOM
+Message-ID: <20220611093103.GI254723@dragon>
+References: <20220517071814.3626702-1-u.oelmann@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220517071814.3626702-1-u.oelmann@pengutronix.de>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,47 +68,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add warning when these functions (eg:kmalloc,vmalloc) fail, handle the
-failure.
+On Tue, May 17, 2022 at 09:18:14AM +0200, Ulrich Ölmann wrote:
+> Skov's i.MX6 based boards come in different flavors which have different panels
+> attached. For optimal contrast experience each panel type needs an individual
+> common voltage (VCOM) to drive its TFT backplane. The latter is generated by an
+> LCD bias supply IC controlled by a pwm as input signal. Introduce a pwm-
+> regulator to describe this hardware property and parameterize it appropriately
+> for the different boards.
+> 
+> Signed-off-by: Ulrich Ölmann <u.oelmann@pengutronix.de>
+> ---
+>  arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts |  6 ++++++
+>  arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi              | 10 ++++++++++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
+> index 7f1f19b74bfa..a3f247c722b4 100644
+> --- a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
+> +++ b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
+> @@ -125,3 +125,9 @@ MX6QDL_PAD_EIM_D23__GPIO3_IO23		0x1b0b0
+>  		>;
+>  	};
+>  };
+> +
+> +&reg_tft_vcom {
+> +	regulator-min-microvolt = <3160000>;
+> +	regulator-max-microvolt = <3160000>;
+> +	voltage-table = <3160000 73>;
+> +};
+> diff --git a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
+> index 77a91a97e6cf..3def1b621c8e 100644
+> --- a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
+> +++ b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
+> @@ -149,6 +149,16 @@ reg_can2_stby: regulator-can2-stby {
+>  		gpio = <&gpio4 11 GPIO_ACTIVE_LOW>;
+>  	};
+>  
+> +	reg_tft_vcom: regulator-tft-vcom {
+> +		compatible = "pwm-regulator";
+> +		pwms = <&pwm3 0 20000 0>;
+> +		regulator-name = "tft_vcom";
+> +		regulator-min-microvolt = <3600000>;
+> +		regulator-max-microvolt = <3600000>;
+> +		regulator-always-on;
 
-Signed-off-by: Li Qiong <liqiong@nfschina.com>
----
- kernel/rcu/rcutorture.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+You want it to be unmanaged and always-on?
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 7120165a9342..97f90e304ae3 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -1991,6 +1991,10 @@ static void rcu_torture_mem_dump_obj(void)
- 
- 	kcp = kmem_cache_create("rcuscale", 136, 8, SLAB_STORE_USER, NULL);
- 	rhp = kmem_cache_alloc(kcp, GFP_KERNEL);
-+	if (WARN_ON_ONCE(!rhp)) {
-+		kmem_cache_destroy(kcp);
-+		return;
-+	}
- 	pr_alert("mem_dump_obj() slab test: rcu_torture_stats = %px, &rhp = %px, rhp = %px, &z = %px\n", stats_task, &rhp, rhp, &z);
- 	pr_alert("mem_dump_obj(ZERO_SIZE_PTR):");
- 	mem_dump_obj(ZERO_SIZE_PTR);
-@@ -2007,6 +2011,8 @@ static void rcu_torture_mem_dump_obj(void)
- 	kmem_cache_free(kcp, rhp);
- 	kmem_cache_destroy(kcp);
- 	rhp = kmalloc(sizeof(*rhp), GFP_KERNEL);
-+	if (WARN_ON_ONCE(!rhp))
-+		return;
- 	pr_alert("mem_dump_obj() kmalloc test: rcu_torture_stats = %px, &rhp = %px, rhp = %px\n", stats_task, &rhp, rhp);
- 	pr_alert("mem_dump_obj(kmalloc %px):", rhp);
- 	mem_dump_obj(rhp);
-@@ -2014,6 +2020,8 @@ static void rcu_torture_mem_dump_obj(void)
- 	mem_dump_obj(&rhp->func);
- 	kfree(rhp);
- 	rhp = vmalloc(4096);
-+	if (WARN_ON_ONCE(!rhp))
-+		return;
- 	pr_alert("mem_dump_obj() vmalloc test: rcu_torture_stats = %px, &rhp = %px, rhp = %px\n", stats_task, &rhp, rhp);
- 	pr_alert("mem_dump_obj(vmalloc %px):", rhp);
- 	mem_dump_obj(rhp);
--- 
-2.11.0
+Shawn
 
+> +		voltage-table = <3600000 26>;
+> +	};
+> +
+>  	reg_vcc_mmc: regulator-vcc-mmc {
+>  		compatible = "regulator-fixed";
+>  		pinctrl-names = "default";
+> -- 
+> 2.30.2
+> 

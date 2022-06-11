@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A5E5476BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA2C5476C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238111AbiFKRMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 13:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S238157AbiFKROl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 13:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238004AbiFKRMe (ORCPT
+        with ESMTP id S229509AbiFKROg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 13:12:34 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB6C38A
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 10:12:27 -0700 (PDT)
+        Sat, 11 Jun 2022 13:14:36 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454B021E16
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 10:14:33 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-313a8a8b95aso17638517b3.5
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 10:14:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=8VcGizsapvboVcP1zo3t8VxEp/sSKU/KGufu1khKH6o=;
-        b=A2wRRGJm1Dvqzp3wRD+S/rNCRrsrErVX0FjAVx1b5Ac3qvP9aFddXJjAUWE3Fnxz+PfHJ/yqPcorr
-         kxK9ae79ZmxqRar/4qo13DZpgM4yIJaPwRdqpwc8lUBkgIfUXXkoFRqRQmTVyHdC7csX/DePHyFSHW
-         66aUAeyCW4+Dl7S8MPlvoOpRcnUxrr5FUS7QStJSrjDsvgjMmDsprXQTphGT+PHSWVgb4LK/WhkbCf
-         n06mxYRgZAiR+MNZROUeofaPHSbmfOAydPTbpd/TpQYgawN/UVqKXaoM5nabiFx0k7aA3tBAq/V1v5
-         17iBZgSgYqmDPeNRYIWLEywb1y+eCrQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=8VcGizsapvboVcP1zo3t8VxEp/sSKU/KGufu1khKH6o=;
-        b=5IAb1CIcBziY4xbn1yKwpAEQP590Fwx9G74QT+/t4VuSVJBiFkamznak0BvExsLjxPd37010eTkxY
-         QvULcsDBQ==
-X-HalOne-Cookie: e063aac0e33e47e8e18a15f833bc9b5f259a959b
-X-HalOne-ID: a9d70d84-e9a9-11ec-a912-d0431ea8a290
-Received: from mailproxy2.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id a9d70d84-e9a9-11ec-a912-d0431ea8a290;
-        Sat, 11 Jun 2022 17:12:25 +0000 (UTC)
-Date:   Sat, 11 Jun 2022 19:12:23 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     dri-devel@lists.freedesktop.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Kees Cook <keescook@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH] drm: Fix htmldocs indentation warning w/ DP AUX power
- requirements
-Message-ID: <YqTM946ghjz+8CzJ@ravnborg.org>
-References: <20220611095445.1.I534072d346b1ebbf0db565b714de9b65cbb24651@changeid>
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=faaMR93Mu4KJaiGkqy+/FkPgfqW11s1eJ+uAGLC8WaM=;
+        b=oGX3VFXBCYsYguASOM6LH1Z2+Lzz64tqM5zd7Yl/ecsIhk9igbQ2OQffEpJp30BbOq
+         zMhPda7QL33+YyEYzjCKjZ4k733N+XBJsDwe/qNGaiO48Ldn6JMlVz0HekI/lf3Ywj0B
+         iEdqS7cj/ICz9LLrYomYoTvXZMT9Zeq+DKZeoxGCajNhl59DSN7qkU1aUtTm5Fm9HjeL
+         zgjLjjqO2AUwOy2pmb6iHlv3l12B/oStruFRwcLXRqYANNdnR80+M20T60bwoWx1TFaJ
+         kMj8chVlkBw5jANAHOSANzIZQHGoFjNPCMQQjjHIkLlTXqGlZ/4LrstBPb3Ws24GKsmY
+         Zcdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=faaMR93Mu4KJaiGkqy+/FkPgfqW11s1eJ+uAGLC8WaM=;
+        b=N1Yd60pRVtW1+6T1r71OLIVpS5rBO996aPRRSly01toAWjhf2GKmWmwuFtG0yb5r9C
+         cNlcHLauTXWOCSr3etuUvqs+0+9IFFy6kkgGDKlHyBAanOYJV7g77wN6Pcx3ywDNPkHW
+         ld3uDIqNbkaElkGreb/vCUHvbmtkoVIHvYP2eIaUeTOQglueoUPO+tCRPGdYjL0oH35c
+         i9hi28Sr9oX6J/gTz9pFAHmkYprycwIALcYRMmYiNZTapakE1MrKn1RpVfrZIJPNTJYJ
+         wTIyiTNYN6w4lAfHvYwsWfXXDbxH6ChLAcxTe/xFRS9ksMguZuOLWlnQ3w2qWS6FYwVE
+         j5nQ==
+X-Gm-Message-State: AOAM530rpVerCBhU9HjFFVtJWehLqJwAn+TdFIsCXrnsnO034g0TxbsE
+        baEJhVPQeaNIvbr+bvm9ncQ+IfSTHPI7isuB3rg=
+X-Google-Smtp-Source: ABdhPJzgqdPzsfLYKlKjdfEXCHsUWgYHueiwYL1LUa41RZAX1c5RgeM7FONxSOMfVmLRcWy7i1pJ9KsHVBc3HKgn+5E=
+X-Received: by 2002:a81:7243:0:b0:313:acf0:7f0c with SMTP id
+ n64-20020a817243000000b00313acf07f0cmr12891521ywc.8.1654967672537; Sat, 11
+ Jun 2022 10:14:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220611095445.1.I534072d346b1ebbf0db565b714de9b65cbb24651@changeid>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+Received: by 2002:a05:7010:1203:b0:2d5:43c5:2b6b with HTTP; Sat, 11 Jun 2022
+ 10:14:32 -0700 (PDT)
+Reply-To: p.hanigin1@yahoo.com
+From:   Pavel Hanigin <janviervingt1@gmail.com>
+Date:   Sat, 11 Jun 2022 19:14:32 +0200
+Message-ID: <CAMZZeqGmkNZNx-J8wTBrKw_1G1xVvtox7SQW+j-4N-Zq4UeUfg@mail.gmail.com>
+Subject: Urgent Attention
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1131 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [janviervingt1[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [janviervingt1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [p.hanigin1[at]yahoo.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 09:55:04AM -0700, Douglas Anderson wrote:
-> Two blank lines are needed to make the rst valid.
-> 
-> Fixes: 69ef4a192bba ("drm: Document the power requirements for DP AUX transfers")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
-> 
->  include/drm/display/drm_dp_helper.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
-> index dc3c02225fcf..c5f8f45511ed 100644
-> --- a/include/drm/display/drm_dp_helper.h
-> +++ b/include/drm/display/drm_dp_helper.h
-> @@ -372,8 +372,10 @@ struct drm_dp_aux {
->  	 * Also note that this callback can be called no matter the
->  	 * state @dev is in and also no matter what state the panel is
->  	 * in. It's expected:
-> +	 *
->  	 * - If the @dev providing the AUX bus is currently unpowered then
->  	 *   it will power itself up for the transfer.
-> +	 *
->  	 * - If we're on eDP (using a drm_panel) and the panel is not in a
->  	 *   state where it can respond (it's not powered or it's in a
->  	 *   low power state) then this function may return an error, but
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
+Your kind attention is needed.
+
+My name is Pavel Hanigin.  I'm a Russian citizen , but now in a hideout.
+
+I managed to escape due to the fight between my country's army against
+the  innocent civilians of Ukraine.
+
+Why I am sending this message to you  is for you to assist me in
+receiving the sum of $7.6.million dollars, which i have here with me.
+
+Confirm your position to cooperate with me.
+
+Best regards
+Pavel Hanigin

@@ -2,246 +2,616 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E566054768E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A4A547682
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 18:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbiFKQpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 12:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S235550AbiFKQjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 12:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbiFKQp1 (ORCPT
+        with ESMTP id S234061AbiFKQjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 12:45:27 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2108.outbound.protection.outlook.com [40.107.236.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A07C36B63;
-        Sat, 11 Jun 2022 09:45:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IQ/+QkBgjJDjtMCs738cpd5+zO3mwLcwIgq+OoSABasBuEmvdC2I/0AQ+9UVQKcIzHHgE4yl+l1Y15Hkta969KnXiGpn7hCnRxuzigpu0Ow6C5o+RAlmbENb0OKon1QNrNI2Lr0BFxvN5RqiqFUmWudmg7jZYl5pJ2zw+JzGlBwT3TjtyYAK4cwJAbhvilKqJSMl023I7hrJDRmuo9BgrLL/pbmQ6hZU1PFUkNE9f0RFCXTZjXl82CjQ4PSHG3uEusV+Ky/5k24zjQYslY2btJtW4+2hjbizZivbwwpX0rvfI8ocyB5dIeD8g+Jj048Fz03HDZlJGaf00BAe8JX+uQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n88ziDngUp9AKvP4jV9QpCPJ0Z0kM0VtXHiFwC/ZGJY=;
- b=TM/QDmLoIm61mwLjKBJlMQQMROu9PkJO+sM6+vsqA9h+uYxU/xzq3aWzBkUhWeyr/CyI+1Lg2tegwFYUUMDFQ/ue5kvLzE262oeNYRk51PbZ4U0RzGK1RGrxQbDnsiv4PYJAwcveLBfnB38xyGFSf0MKGqO8yoUkI3oy91hTmda/FOufq8HUWHXvuHO4tExFBxqdRmXs15ipwm/MMuLbS0lSXUNoCy1uehxnHGOVPywyZ8ffw2DYLc6W7CmBh7rLc6mvoCLcZ6xN4tHEJzdsT2WBlWOPfLqGr+a+MGDuumeyrqyLmwpx91pOOX+IUQECyIp2v53PpcoDL79YPmPQkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n88ziDngUp9AKvP4jV9QpCPJ0Z0kM0VtXHiFwC/ZGJY=;
- b=abpWCDjAgEg4pgt7h5UQxCqVq5UC+50BxAzYniJ93pA+eOVRIWKjt3xAQVCeLefI7LD/3Z0WdAr4UWBPx3vT9Gv1xztUaB790dnpMu/3aIxky23Y8Csk1+xfkShYRzoZvvGZLCfsSHQgqH5DMKnEGHpuHCmd1S7+saxiwdzBqwU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com (10.174.170.165) by
- DM6PR10MB2922.namprd10.prod.outlook.com (20.177.219.216) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5332.16; Sat, 11 Jun 2022 16:45:23 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b8c0:76a2:4c89:d10f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b8c0:76a2:4c89:d10f%7]) with mapi id 15.20.5332.014; Sat, 11 Jun 2022
- 16:45:23 +0000
-Date:   Sat, 11 Jun 2022 09:45:20 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>
-Subject: Re: [PATCH v9 net-next 2/7] net: mdio: mscc-miim: add ability to be
- used in a non-mmio configuration
-Message-ID: <20220611164520.GB848433@euler>
-References: <20220610175655.776153-1-colin.foster@in-advantage.com>
- <20220610175655.776153-3-colin.foster@in-advantage.com>
- <CAHp75Vd0ZhP3TcpH2LGsb7=6Bqe1hoNU5i6DRyovKm7Vnz=HCw@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vd0ZhP3TcpH2LGsb7=6Bqe1hoNU5i6DRyovKm7Vnz=HCw@mail.gmail.com>
-X-ClientProxiedBy: MW4PR04CA0213.namprd04.prod.outlook.com
- (2603:10b6:303:87::8) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Sat, 11 Jun 2022 12:39:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6BB13A;
+        Sat, 11 Jun 2022 09:39:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED4F6B80ADF;
+        Sat, 11 Jun 2022 16:39:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C0DC34116;
+        Sat, 11 Jun 2022 16:39:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654965555;
+        bh=44Gj0blEk0V7vZ0ufc2zfYwBry6B/52hp9a7fbs+euk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qzkDTXUKBKjrL9aWdnZMUXGetnD6DomoPatOBm2lisEFvFsW5lqwLzMhdAQ0tiE6r
+         4+78DZq5tfUzvZlvvQTSEzOKwRIfBhihr/F4dA3uKS4brnqj9sylF7sACswLU8e9K1
+         hPD/T9yQ9kvbH6ynZvM/unkLQNaf7Flyw5ZnUoJdo3WaJdHRy3jCW8atwhb6A3CBrG
+         sRGOpr3n+fQwb5iIgB4mn96+oUHiS707Cc7p6AQekYLmFjO1B9UVBJ5Ei+phGSHj+v
+         wdm4Y+h2aFTfd/duSMt26+xVg3S27XsTCzWjauH6a9gx+RJwkeavGv94cuDxqW3xg5
+         vBBGTIMYtPK9Q==
+Date:   Sat, 11 Jun 2022 17:48:24 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     <eugen.hristev@microchip.com>, <lars@metafoo.de>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 15/16] iio: adc: at91-sama5d2_adc: add runtime pm
+ support
+Message-ID: <20220611174824.2d696a55@jic23-huawei>
+In-Reply-To: <20220609083213.1795019-16-claudiu.beznea@microchip.com>
+References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
+        <20220609083213.1795019-16-claudiu.beznea@microchip.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d4d18d3b-8b56-440c-2509-08da4bc9c766
-X-MS-TrafficTypeDiagnostic: DM6PR10MB2922:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB2922919B75DFB1FB305938B4A4A99@DM6PR10MB2922.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pQjpYWTG3ZTQNtinLSlFmP5JDZqYN3X5UZejnnId9XAhymXbxza1ao4XL3V24qW41oB/CQ4Gx4cg4ibg98BpSIDKhqLRX/w4lwn2NkE5rLlVvGlqULwRpHMR+E//cIuRNMhwnK55UGqMpWruD0HR9pxnAzqCX3dJRw7ZhAoM7SNU4SA4vbxdFO/TzY1/tzbt0J3PGpqwfpC+8x1NoFEBm1LczbZRrDVxpV/do4VYzob5q2NUk/TRuOssCOGyKsDDZiqk3VOzUSXTMOetNwiFpEsl4C/7DL67zqNm/YzYEEjValkMJMr30RbNeHK01IDTFRlx8YlbaFIP9QuEj/UEmDCn1xUvAPBtsQvDYIoI7l6sDdO0B9tEVZC07LxfBFpHA1kB6/YK3EQ6WnsY9vLUlpYocrw/M027iU77vk2cpeF7SNXnS5oHDVpJZFhEdWCgX7eyQHvzev3mpCPgO6ZjqR+HUSwbxuGQZrvpjckyZvkDrL/5ztABLIjj4XNefBk1hv+lOSILAkVAS2t4GcAeN695nI0R8M2yLW2HJGSsCxAKX9VT1gBU3Q7nNRuzVuGmMl9LdMVdpwnYyFyjPLuKYVynjRggrIkVFB4lEBO2fdEO6b2V6WE9HfyGS+blj9BfVxz7zv4GLJlgQbzCiXZQcHonpHtBxIPRqbvTHCdfm5nPaUE5XGEICryA1Kz0pF1GhWxvgaNMbmVW4d1wJij84A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39830400003)(396003)(366004)(136003)(346002)(1076003)(186003)(53546011)(52116002)(6506007)(41300700001)(6512007)(26005)(9686003)(83380400001)(38350700002)(38100700002)(5660300002)(8936002)(7416002)(44832011)(8676002)(4326008)(86362001)(33716001)(2906002)(66476007)(33656002)(316002)(508600001)(6486002)(66556008)(6916009)(54906003)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UUCqs/8RDwQpfCEKc83PjcX2DSdC8d+PxrPxZSS5FdvL+JqDZdRcsZBVs815?=
- =?us-ascii?Q?JyKLAZ/todWwmOTo+GqLEIffFptATklOafFuDPxdtbZN360qdIwCILeumJSW?=
- =?us-ascii?Q?SNwFCtyeub4PFwGARjQEyQxUKp4ls7F2qJjXvL03AFF5s0bGYAbsKMgex8db?=
- =?us-ascii?Q?VbgKgXVT2VoZkcPu9m+i3+eY7jJMZP6J6z/DZYIjiMKwRrXMyJLFC1d4/ndF?=
- =?us-ascii?Q?Q8KlFhybaxPI8yw2PqxipH0KNcseuS2C0kNDelk+etRGssmcO+RNsfbPZqMC?=
- =?us-ascii?Q?QdkqAZHTPCeNsxKpjxyW94XkfsEo/kt4HjS9asvbrsTSB23fgJOkgaLpgUW/?=
- =?us-ascii?Q?KHvfrTZR8rR9yVY/K4w1wTKvYAdoGuuZyBvsLedTvxx8w27BKTcXzH94qgSW?=
- =?us-ascii?Q?3CS+m9LB3kDMkPPOhHlfkLEguC8yWXoS3SFiLqbGiVYM7HsEwV98pqYU5gjM?=
- =?us-ascii?Q?9Pz0kzhpTYdWhTGC3DTEckPtM9GIThS9k9F/mcJg2zp2Nj0/51ptGqdhjejE?=
- =?us-ascii?Q?FtLJHKSCk8z3OhAepj/ui7QPI/FS+Kp4rZigGaaVm9ezgicA1a/BZ7xQH8lH?=
- =?us-ascii?Q?uzawEnkEK5kSVC1jDCvj4ALGSnxlpe/yt+yKIF/R8jUOo8KSY/+igKWb27mj?=
- =?us-ascii?Q?AIHMiWKnGUVe7AVtPXEyrUfxnqpuJAPUxbnN8vVlH5SUUXOXKeLZfXj96cQ1?=
- =?us-ascii?Q?gg+SgE7PMSQYp6uMW/9NPz3Qo725RLaAxZhDaejTzwXOxI6cMv4EhIq3US0V?=
- =?us-ascii?Q?ssa83ZRnnEtcIbyQDG2XPQOUlQghVSZQoMiBbz043fE46HopfhI6P+Rb95jZ?=
- =?us-ascii?Q?DA5mFRP0YeMr8QsGOTgHa6KxBSnDi94iImANBZFj5K9l1kGKLvt+ykjni8CZ?=
- =?us-ascii?Q?lSI9MobxKFLrLUsa+dQnLOTLHZuWakt53CCYC6XZQmnBurtveBboXczySCym?=
- =?us-ascii?Q?cY4efCjrD7Ksr5SQzScp+ykqgESdGdYIHYmBhA5q9gY14hlzsRsNqdPCssep?=
- =?us-ascii?Q?2oVWk5zWn1FDKcDkJi8YodjxIW40Tk8VKYmNi5ydJ4ykbtmpm8ToNofb0w0n?=
- =?us-ascii?Q?FXs6zjhO8/ow/4oNk3DuZZKAJv+GnuVyeVN8Mf2opmcCXHi3++GRhPp83SFD?=
- =?us-ascii?Q?ZCHDGtHguGnxoQVONMtXD9+RzRqBpRzgcqEtFdizw4oNOh7vupK1QnnSuLhc?=
- =?us-ascii?Q?J7EkCEkt3PvjBNIzzNsw5gXPll1/vauF8CNmuIOAs+UoPwPvuyokLV7eWHt7?=
- =?us-ascii?Q?VaY9/pxxJGEuNk+2J8cZacyTyA0nKkmeXxsY09vLWEa3OCgJuAdVgRjLAYKq?=
- =?us-ascii?Q?FS199rk9xvOzj38jYNeSRMzdskDjCDQAgPv9Z9Q1muNOk2gee97VY6Ba623u?=
- =?us-ascii?Q?X2fmCmhq8IzgHXUYJQWfQ0wnxzTYg5TZiGWfPKv8unGbHWBxlrbcX/aEiPa1?=
- =?us-ascii?Q?a6vRNVw7fv4N7uMORS3TwuS0mVf7FK2aDceS71qO8GFslvUBuSbjKAdipuqK?=
- =?us-ascii?Q?uM1BBHVvb/UEKoY4Ef8gqaz7z3wqMNGavDuKmrVZfgTRZMe9MseQZstRVrv9?=
- =?us-ascii?Q?4YLly63foeEvqG4reAqET0N+chzd/DMReD/7wIzr7ddoNRpXpnWvz5p5De5M?=
- =?us-ascii?Q?1XhYUPzogdSYqIl5SY63MJtL57x1xBaf6VEet8WdixzdDbVmSniZzhsf4rSl?=
- =?us-ascii?Q?Tp2JULXWrOBB6bxEy8DSHDxn/KrvTYqIsJDQ0fCeJczN65SLJHj+f36m5/n9?=
- =?us-ascii?Q?v5aefxHk7d9gvwV6gT7AFNP6qHfyMi4q7aSVodI24QSxAcxpWBiu?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4d18d3b-8b56-440c-2509-08da4bc9c766
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2022 16:45:23.4559
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UEt5olGnPZ6XmuHLrGSLaKkqornuaCbsOhirIcvnNCMMVJ08saxASPi3BwZRIyWokD+6t1v2BtmPrM46Y82VBmuMLazWYzjJjAgF+SUarhA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2922
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Thu, 9 Jun 2022 11:32:12 +0300
+Claudiu Beznea <claudiu.beznea@microchip.com> wrote:
 
-On Sat, Jun 11, 2022 at 12:34:59PM +0200, Andy Shevchenko wrote:
-> On Fri, Jun 10, 2022 at 7:57 PM Colin Foster
-> <colin.foster@in-advantage.com> wrote:
-> >
-> > There are a few Ocelot chips that contain the logic for this bus, but are
-> > controlled externally. Specifically the VSC7511, 7512, 7513, and 7514. In
-> > the externally controlled configurations these registers are not
-> > memory-mapped.
-> >
-> > Add support for these non-memory-mapped configurations.
+> Add runtime PM support by disabling/enabling ADC's peripheral clock.
+> On simple conversion the ADC's clock is kept enabled just while the
+> conversion is in progress. This includes also temperature conversion.
+> For triggers and touch conversions the ADC clock is kept enabled while
+> the triggers or touch are enabled.
 > 
-> ...
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+
+Various comments inline.
+
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/adc/at91-sama5d2_adc.c | 201 +++++++++++++++++++++++++----
+>  1 file changed, 173 insertions(+), 28 deletions(-)
 > 
-> > +       ocelot_platform_init_regmap_from_resource(pdev, 0, &mii_regmap, NULL,
-> > +                                                 &mscc_miim_regmap_config);
-> 
-> This is a bit non-standard, why not to follow the previously used API
-> design, i.e.
-> 
-> mii_regmap.map = ...
-> 
-> ?
+> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+> index 1a6788566969..5d9ad51d0920 100644
+> --- a/drivers/iio/adc/at91-sama5d2_adc.c
+> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/iio/triggered_buffer.h>
+>  #include <linux/nvmem-consumer.h>
+>  #include <linux/pinctrl/consumer.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/regulator/consumer.h>
+>  
+>  #include <dt-bindings/iio/adc/at91-sama5d2_adc.h>
+> @@ -600,6 +601,7 @@ struct at91_adc_state {
+>  	struct at91_adc_touch		touch_st;
+>  	struct at91_adc_temp		temp_st;
+>  	struct iio_dev			*indio_dev;
+> +	struct device			*dev;
+>  	/* Ensure naturally aligned timestamp */
+>  	u16				buffer[AT91_BUFFER_MAX_HWORDS] __aligned(8);
+>  	/*
+> @@ -844,10 +846,16 @@ static int at91_adc_config_emr(struct at91_adc_state *st,
+>  			       u32 oversampling_ratio, u32 trackx)
+>  {
+>  	/* configure the extended mode register */
+> -	unsigned int emr = at91_adc_readl(st, EMR);
+> +	unsigned int emr;
+>  	unsigned int osr_mask = st->soc_info.platform->osr_mask;
+>  	unsigned int osr_vals = st->soc_info.platform->osr_vals;
+> +	int ret;
+> +
+> +	ret = pm_runtime_resume_and_get(st->dev);
+> +	if (ret < 0)
+> +		return ret;
 
-I see your point. It looks like there's no reason to pass in &mii_regmap
-and it can just be returned.
+In this particular case, it might be cleaner to introduce a wrapper
+function that deals with the power management and then calls this one.
+Gets rid of the ugly gotos out of the switch statement.
 
-> 
-> ...
-> 
-> > +       ocelot_platform_init_regmap_from_resource(pdev, 1, &phy_regmap, &res,
-> > +                                                 &mscc_miim_phy_regmap_config);
-> 
-> Ditto.
-> 
-> Also here is the question how '_from_'  is aligned with '&res'. If
-> it's _from_ a resource then the resource is already a pointer.
+>  
+> +	emr = at91_adc_readl(st, EMR);
+>  	/* select oversampling per single trigger event */
+>  	emr |= AT91_SAMA5D2_EMR_ASTE(1);
+>  
+> @@ -857,32 +865,42 @@ static int at91_adc_config_emr(struct at91_adc_state *st,
+>  	/* select oversampling ratio from configuration */
+>  	switch (oversampling_ratio) {
+>  	case AT91_OSR_1SAMPLES:
+> -		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_1SAMPLES)))
+> -			return -EINVAL;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_1SAMPLES))) {
+> +			ret = -EINVAL;
+> +			goto pm_runtime_put;
+> +		}
+>  		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_1SAMPLES,
+>  					    osr_mask);
+>  		break;
+>  	case AT91_OSR_4SAMPLES:
+> -		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_4SAMPLES)))
+> -			return -EINVAL;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_4SAMPLES))) {
+> +			ret = -EINVAL;
+> +			goto pm_runtime_put;
+> +		}
+>  		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_4SAMPLES,
+>  					    osr_mask);
+>  		break;
+>  	case AT91_OSR_16SAMPLES:
+> -		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_16SAMPLES)))
+> -			return -EINVAL;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_16SAMPLES))) {
+> +			ret = -EINVAL;
+> +			goto pm_runtime_put;
+> +		}
+>  		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_16SAMPLES,
+>  					    osr_mask);
+>  		break;
+>  	case AT91_OSR_64SAMPLES:
+> -		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_64SAMPLES)))
+> -			return -EINVAL;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_64SAMPLES))) {
+> +			ret = -EINVAL;
+> +			goto pm_runtime_put;
+> +		}
+>  		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_64SAMPLES,
+>  					    osr_mask);
+>  		break;
+>  	case AT91_OSR_256SAMPLES:
+> -		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_256SAMPLES)))
+> -			return -EINVAL;
+> +		if (!(osr_vals & BIT(AT91_SAMA5D2_EMR_OSR_256SAMPLES))) {
+> +			ret = -EINVAL;
+> +			goto pm_runtime_put;
+> +		}
+>  		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_256SAMPLES,
+>  					    osr_mask);
+>  		break;
+> @@ -894,7 +912,10 @@ static int at91_adc_config_emr(struct at91_adc_state *st,
+>  
+>  	st->oversampling_ratio = oversampling_ratio;
+>  
+> -	return 0;
+> +pm_runtime_put:
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	pm_runtime_put_autosuspend(st->dev);
+> +	return ret;
+>  }
+>  
+>  static int at91_adc_adjust_val_osr(struct at91_adc_state *st, int *val)
+> @@ -947,15 +968,22 @@ static void at91_adc_adjust_val_osr_array(struct at91_adc_state *st, void *buf,
+>  static int at91_adc_configure_touch(struct at91_adc_state *st, bool state)
+>  {
+>  	u32 clk_khz = st->current_sample_rate / 1000;
+> -	int i = 0;
+> +	int i = 0, ret;
+>  	u16 pendbc;
+>  	u32 tsmr, acr;
+>  
+> -	if (!state) {
+> +	if (state) {
+> +		ret = pm_runtime_resume_and_get(st->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +	} else {
+>  		/* disabling touch IRQs and setting mode to no touch enabled */
+>  		at91_adc_writel(st, IDR,
+>  				AT91_SAMA5D2_IER_PEN | AT91_SAMA5D2_IER_NOPEN);
+>  		at91_adc_writel(st, TSMR, 0);
+> +
+> +		pm_runtime_mark_last_busy(st->dev);
+> +		pm_runtime_put_autosuspend(st->dev);
+>  		return 0;
+>  	}
+>  	/*
+> @@ -1100,8 +1128,16 @@ static int at91_adc_configure_trigger(struct iio_trigger *trig, bool state)
+>  {
+>  	struct iio_dev *indio = iio_trigger_get_drvdata(trig);
+>  	struct at91_adc_state *st = iio_priv(indio);
+> -	u32 status = at91_adc_readl(st, TRGR);
+> +	u32 status;
+> +	int ret;
+> +
+> +	if (state) {
+> +		ret = pm_runtime_resume_and_get(st->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+>  
+> +	status = at91_adc_readl(st, TRGR);
+>  	/* clear TRGMOD */
+>  	status &= ~AT91_SAMA5D2_TRGR_TRGMOD_MASK;
+>  
+> @@ -1111,6 +1147,11 @@ static int at91_adc_configure_trigger(struct iio_trigger *trig, bool state)
+>  	/* set/unset hw trigger */
+>  	at91_adc_writel(st, TRGR, status);
+>  
+> +	if (!state) {
+> +		pm_runtime_mark_last_busy(st->dev);
+> +		pm_runtime_put_autosuspend(st->dev);
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1268,11 +1309,15 @@ static int at91_adc_buffer_prepare(struct iio_dev *indio_dev)
+>  	if (!(iio_device_get_current_mode(indio_dev) & INDIO_ALL_TRIGGERED_MODES))
+>  		return -EINVAL;
+>  
+> +	ret = pm_runtime_resume_and_get(st->dev);
 
-Yes, this is probably worth a second look. During v8 you noted that I
-was repeating a lot of the same logic across several files, so I created
-ocelot_platform_init_regmap_from_resource.
+This seems unusual.  I'd normally expect to see runtime pm left on whenever
+a buffer is in use, but in this case you seem to let it autosuspend.
 
-The "gotcha" is while most of those scenarios have a required resource,
-the phy_regmap is optional - so a scenario where the resource doesn't
-exist could be considered valid.
+That 'might' be fine as you might hit it often enough that it stays up whilst
+doing DMA but it certainly seems odd and less than efficient.
+Or possibly the use of the trigger is enough to keep it up.
 
-Would it make sense to make the init_regmap_from_resource function
-return ERR_PTR(-ENOENT) if regs doesn't exist? That would clean up the
-API quite a bit:
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	/* we continue with the triggered buffer */
+>  	ret = at91_adc_dma_start(indio_dev);
+>  	if (ret) {
+>  		dev_err(&indio_dev->dev, "buffer prepare failed\n");
+> -		return ret;
+> +		goto pm_runtime_put;
+>  	}
+>  
+>  	for_each_set_bit(bit, indio_dev->active_scan_mask,
+> @@ -1295,12 +1340,16 @@ static int at91_adc_buffer_prepare(struct iio_dev *indio_dev)
+>  	if (at91_adc_buffer_check_use_irq(indio_dev, st))
+>  		at91_adc_writel(st, IER, AT91_SAMA5D2_IER_DRDY);
+>  
+> -	return 0;
+> +pm_runtime_put:
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	pm_runtime_put_autosuspend(st->dev);
+> +	return ret;
+>  }
+>  
+>  static int at91_adc_buffer_postdisable(struct iio_dev *indio_dev)
+>  {
+>  	struct at91_adc_state *st = iio_priv(indio_dev);
+> +	int ret;
+>  	u8 bit;
+>  
+>  	/* check if we are disabling triggered buffer or the touchscreen */
+> @@ -1311,6 +1360,10 @@ static int at91_adc_buffer_postdisable(struct iio_dev *indio_dev)
+>  	if (!(iio_device_get_current_mode(indio_dev) & INDIO_ALL_TRIGGERED_MODES))
+>  		return -EINVAL;
+>  
+> +	ret = pm_runtime_resume_and_get(st->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	/*
+>  	 * For each enable channel we must disable it in hardware.
+>  	 * In the case of DMA, we must read the last converted value
+> @@ -1346,6 +1399,9 @@ static int at91_adc_buffer_postdisable(struct iio_dev *indio_dev)
+>  	if (st->dma_st.dma_chan)
+>  		dmaengine_terminate_sync(st->dma_st.dma_chan);
+>  
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	pm_runtime_put_autosuspend(st->dev);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1534,12 +1590,17 @@ static void at91_adc_setup_samp_freq(struct iio_dev *indio_dev, unsigned freq,
+>  {
+>  	struct at91_adc_state *st = iio_priv(indio_dev);
+>  	unsigned f_per, prescal, startup, mr;
+> +	int ret;
+>  
+>  	f_per = clk_get_rate(st->per_clk);
+>  	prescal = (f_per / (2 * freq)) - 1;
+>  
+>  	startup = at91_adc_startup_time(startup_time, freq / 1000);
+>  
+> +	ret = pm_runtime_resume_and_get(st->dev);
+> +	if (ret < 0)
+> +		return;
+> +
+>  	mr = at91_adc_readl(st, MR);
+>  	mr &= ~(AT91_SAMA5D2_MR_STARTUP_MASK | AT91_SAMA5D2_MR_PRESCAL_MASK);
+>  	mr |= AT91_SAMA5D2_MR_STARTUP(startup);
+> @@ -1547,6 +1608,9 @@ static void at91_adc_setup_samp_freq(struct iio_dev *indio_dev, unsigned freq,
+>  	mr |= AT91_SAMA5D2_MR_TRACKTIM(tracktim);
+>  	at91_adc_writel(st, MR, mr);
+>  
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	pm_runtime_put_autosuspend(st->dev);
+> +
+>  	dev_dbg(&indio_dev->dev, "freq: %u, startup: %u, prescal: %u, tracktim=%u\n",
+>  		freq, startup, prescal, tracktim);
+>  	st->current_sample_rate = freq;
+> @@ -1684,6 +1748,10 @@ static int at91_adc_read_info_raw(struct iio_dev *indio_dev,
+>  	u16 tmp_val;
+>  	int ret;
+>  
+> +	ret = pm_runtime_resume_and_get(st->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	/*
+>  	 * Keep in mind that we cannot use software trigger or touchscreen
+>  	 * if external trigger is enabled
+> @@ -1695,7 +1763,7 @@ static int at91_adc_read_info_raw(struct iio_dev *indio_dev,
+>  
+>  	ret = iio_device_claim_direct_mode(indio_dev);
+>  	if (ret)
+> -		return ret;
+> +		goto pm_runtime_put;
+>  	if (lock)
+>  		mutex_lock(&st->lock);
+>  
+> @@ -1707,7 +1775,7 @@ static int at91_adc_read_info_raw(struct iio_dev *indio_dev,
+>  			mutex_unlock(&st->lock);
+>  		iio_device_release_direct_mode(indio_dev);
+>  
+> -		return ret;
+> +		goto pm_runtime_put;
+>  	}
+>  
+>  	/* in this case we have a voltage or temperature channel */
+> @@ -1753,6 +1821,11 @@ static int at91_adc_read_info_raw(struct iio_dev *indio_dev,
+>  		mutex_unlock(&st->lock);
+>  
+>  	iio_device_release_direct_mode(indio_dev);
+> +
+> +pm_runtime_put:
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	pm_runtime_put_autosuspend(st->dev);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -1804,6 +1877,10 @@ static int at91_adc_read_temp(struct iio_dev *indio_dev,
+>  	if (iio_buffer_enabled(indio_dev))
+>  		return -EBUSY;
+>  
+> +	ret = pm_runtime_resume_and_get(st->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	mutex_lock(&st->lock);
+>  
+>  	at91_adc_temp_sensor_configure(st, true);
+> @@ -1825,6 +1902,10 @@ static int at91_adc_read_temp(struct iio_dev *indio_dev,
+>  	/* Revert previous settings. */
+>  	at91_adc_temp_sensor_configure(st, false);
+>  	mutex_unlock(&st->lock);
+> +
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	pm_runtime_put_autosuspend(st->dev);
+> +
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -2363,13 +2444,19 @@ static int at91_adc_probe(struct platform_device *pdev)
+>  
+>  	at91_adc_temp_sensor_init(st, &pdev->dev);
+>  
+> -	at91_adc_hw_init(indio_dev);
+> -
+>  	platform_set_drvdata(pdev, indio_dev);
+> +	st->dev = &pdev->dev;
+> +	pm_runtime_set_autosuspend_delay(st->dev, 500);
+> +	pm_runtime_use_autosuspend(st->dev);
+> +	pm_runtime_set_active(st->dev);
+> +	pm_runtime_enable(st->dev);
+> +	pm_runtime_get_noresume(st->dev);
+> +
+> +	at91_adc_hw_init(indio_dev);
+>  
+>  	ret = at91_adc_buffer_and_trigger_init(&pdev->dev, indio_dev);
+>  	if (ret < 0)
+> -		goto per_clk_disable_unprepare;
+> +		goto err_pm_disable;
+>  
+>  	if (dma_coerce_mask_and_coherent(&indio_dev->dev, DMA_BIT_MASK(32)))
+>  		dev_info(&pdev->dev, "cannot set DMA mask to 32-bit\n");
+> @@ -2385,10 +2472,18 @@ static int at91_adc_probe(struct platform_device *pdev)
+>  	dev_info(&pdev->dev, "version: %x\n",
+>  		 readl_relaxed(st->base + st->soc_info.platform->layout->VERSION));
+>  
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	pm_runtime_put_autosuspend(st->dev);
+> +
+>  	return 0;
+>  
+>  dma_disable:
+>  	at91_adc_dma_disable(st);
+> +err_pm_disable:
+> +	pm_runtime_put_noidle(st->dev);
+> +	pm_runtime_disable(st->dev);
+> +	pm_runtime_set_suspended(st->dev);
+> +	pm_runtime_dont_use_autosuspend(st->dev);
+>  per_clk_disable_unprepare:
+>  	clk_disable_unprepare(st->per_clk);
+>  vref_disable:
+> @@ -2402,11 +2497,18 @@ static int at91_adc_remove(struct platform_device *pdev)
+>  {
+>  	struct iio_dev *indio_dev = platform_get_drvdata(pdev);
+>  	struct at91_adc_state *st = iio_priv(indio_dev);
+> +	int ret;
+> +
+> +	ret = pm_runtime_resume_and_get(st->dev);
+> +	if (ret < 0)
+> +		return ret;
 
-phy_regmap = ocelot_platform_init_regmap_from_resource(pdev, 1,
-                                                       &map_config);
-if (IS_ERR(phy_regmap) && phy_regmap != -ENOENT) {
-        dev_err(); ...
-}
+There isn't much useful that can be done with a return of error from
+a remove() function. Uwe Klein-Konig is busy removing all these returns
+(and eventually changing the prototypes to return void), so don't introduce a new one
+or Uwe will be grumpy :)
 
-It looks like none of the two functions that would get returned
-otherwise (devm_regmap_init or devm_regmap_init_mmio) would return that
-value...
+>  
+>  	iio_device_unregister(indio_dev);
+>  
+>  	at91_adc_dma_disable(st);
+>  
+> +	pm_runtime_disable(st->dev);
+> +	pm_runtime_put_noidle(st->dev);
+>  	clk_disable_unprepare(st->per_clk);
+>  
+>  	regulator_disable(st->vref);
+> @@ -2419,6 +2521,11 @@ static __maybe_unused int at91_adc_suspend(struct device *dev)
+>  {
+>  	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+>  	struct at91_adc_state *st = iio_priv(indio_dev);
+> +	int ret;
+> +
+> +	ret = pm_runtime_resume_and_get(st->dev);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	/*
+>  	 * Do a sofware reset of the ADC before we go to suspend.
+> @@ -2428,7 +2535,8 @@ static __maybe_unused int at91_adc_suspend(struct device *dev)
+>  	 */
+>  	at91_adc_writel(st, CR, AT91_SAMA5D2_CR_SWRST);
+>  
+> -	clk_disable_unprepare(st->per_clk);
+> +	pm_runtime_force_suspend(st->dev);
 
-> 
-> ...
-> 
-> >         if (res) {
-> > -               phy_regs = devm_ioremap_resource(dev, res);
-> > -               if (IS_ERR(phy_regs)) {
-> > -                       dev_err(dev, "Unable to map internal phy registers\n");
-> > -                       return PTR_ERR(phy_regs);
-> > -               }
-> > -
-> > -               phy_regmap = devm_regmap_init_mmio(dev, phy_regs,
-> > -                                                  &mscc_miim_phy_regmap_config);
-> >                 if (IS_ERR(phy_regmap)) {
-> >                         dev_err(dev, "Unable to create phy register regmap\n");
-> >                         return PTR_ERR(phy_regmap);
-> >                 }
-> 
-> This looks weird. You check an error here instead of the API you
-> called. It's a weird design, the rationale of which is doubtful and
-> has to be at least explained.
-
-I agree. With the changes I'm suggesting above this block of code would
-become:
-
-if (IS_ERR(phy_regmap)) {
-        if (phy_regmap == -ENOENT) {
-                phy_regmap = NULL;
-        } else {
-                dev_err(dev, "...");
-                return PTR_ERR(phy_regmap);
-        }
-}
-
-That seems easier to follow than the if(res) block...
+This confuses me a bit because we know we are already awake (because of
+the pm_runtime_resume_and_get() so we will definitely suspend here and
+I'm fairly sure that means we definitely resume in the _resume()
+below.  Basically our usage counters are I think off by one. If you
+could verify that it doesn't turn back on if we don't have the buffered
+enabled and were previously in runtime suspend state that would
+prove me wrong (which is more than possible - this stuff always gives
+me a headache)
 
 
-Thanks for the feedback!
+> +	clk_unprepare(st->per_clk);
+>  	regulator_disable(st->vref);
+>  	regulator_disable(st->reg);
+>  
+> @@ -2453,25 +2561,40 @@ static __maybe_unused int at91_adc_resume(struct device *dev)
+>  	if (ret)
+>  		goto reg_disable_resume;
+>  
+> -	ret = clk_prepare_enable(st->per_clk);
+> +	ret = clk_prepare(st->per_clk);
+>  	if (ret)
+>  		goto vref_disable_resume;
+>  
+> +	ret = pm_runtime_force_resume(st->dev);
+> +	if (ret < 0)
+> +		goto clk_unprepare_resume;
+> +
+>  	at91_adc_hw_init(indio_dev);
+>  
+>  	/* reconfiguring trigger hardware state */
+>  	if (!iio_buffer_enabled(indio_dev))
+(see below)
+	flip this check so the next block is indented givne
+	exit path will be shared (thus removing the goto).
+	if (iio_buffer_enabled(indio_dev)) {
+		/* check ...
 
-> 
-> > +       } else {
-> > +               phy_regmap = NULL;
-> >         }
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
+
+> -		return 0;
+> +		goto pm_runtime_put;
+>  
+>  	/* check if we are enabling triggered buffer or the touchscreen */
+>  	if (at91_adc_current_chan_is_touch(indio_dev))
+> -		return at91_adc_configure_touch(st, true);
+> +		ret = at91_adc_configure_touch(st, true);
+>  	else
+> -		return at91_adc_configure_trigger(st->trig, true);
+> +		ret = at91_adc_configure_trigger(st->trig, true);
+> +
+(see below)
+	
+		if (ret < 0)
+			goto pm_runtime_put;
+	}
+
+	pm_runtime_mark_last_busy(st->dev);
+	pm_runtime_put_autosuspend(st->dev);
+	return 0;
+			
+> +pm_runtime_put:
+
+I think this would be easier to follow if you break this up into the
+different cases.
+
+pm_runtime_put:
+	pm_runtime_mark_last_busy(st->dev);
+	pm_runtime_put_sync_suspend(st->dev);
+clk_unprepare_resume:
+	...
+
+> +	pm_runtime_mark_last_busy(st->dev);
+> +	if (ret < 0) {
+> +		pm_runtime_put_sync_suspend(st->dev);
+> +		goto clk_unprepare_resume;
+> +	} else {
+> +		pm_runtime_put_autosuspend(st->dev);
+> +	}
+>  
+>  	/* not needed but more explicit */
+>  	return 0;
+>  
+> +clk_unprepare_resume:
+> +	clk_unprepare(st->per_clk);
+>  vref_disable_resume:
+>  	regulator_disable(st->vref);
+>  reg_disable_resume:
+> @@ -2481,7 +2604,29 @@ static __maybe_unused int at91_adc_resume(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static SIMPLE_DEV_PM_OPS(at91_adc_pm_ops, at91_adc_suspend, at91_adc_resume);
+> +static int __maybe_unused at91_adc_runtime_suspend(struct device *dev)
+
+See below, but these no longer need to be marked __maybe_unused.
+
+> +{
+> +	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> +	struct at91_adc_state *st = iio_priv(indio_dev);
+> +
+> +	clk_disable(st->per_clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused at91_adc_runtime_resume(struct device *dev)
+> +{
+> +	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> +	struct at91_adc_state *st = iio_priv(indio_dev);
+> +
+> +	return clk_enable(st->per_clk);
+> +}
+> +
+> +static const struct dev_pm_ops __maybe_unused at91_adc_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(at91_adc_suspend, at91_adc_resume)
+> +	SET_RUNTIME_PM_OPS(at91_adc_runtime_suspend, at91_adc_runtime_resume,
+> +			   NULL)
+Use the new SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS() + drop the __maybe_unused.
+
+Squash the next patch into here so that the pm_ptr() magic will allow the compiler
+to clean these out if not used.
+
+Paul Cercueil recently did some work to simplify all this stuff.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/pm.h?id=0ae101fdd3297b7165755340e05386f1e1379709
+
+> +};
+>  
+>  static const struct of_device_id at91_adc_dt_match[] = {
+>  	{
+

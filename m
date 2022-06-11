@@ -2,58 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1302B5475DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F277D5475DC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237069AbiFKPAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 11:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S236930AbiFKPAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 11:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236868AbiFKPAT (ORCPT
+        with ESMTP id S236868AbiFKPAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 11:00:19 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866CF5A095
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654959618; x=1686495618;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/sGcbr6Om4nizcD1B7N2v+rlnT2Bo4o8raxiJd14DwU=;
-  b=OAN6UGNalZqX5oKu1+WW/cEXQpBtnMHhsClrGyUFiUKllrljEs1oz2i2
-   d+8HtW6D9J70Cw1Jmyp9HLhwjgcN0ELbPS9TII0aBOZOFqmmOD07sesoD
-   BEAZeMt42FRhv93Qnjs8z0fKtJbfeLafINTAlCMNTb+SQt5EjclQWIZCX
-   lhrbZEc89XtqjPzoSxc4N5fWlz19mZEkvZfZZswfg6RjI7z/dXkFljv9f
-   dYvWMArJ3vnVQR375o5nt2PalOT5y7aRgb3yiUO7wA0olQrzWIOcWWt8U
-   XZoopLh2OcmeElwD9cE1WcExZC6nY84LDxArOcWUMaR1yNzL0g/3C5ubV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="257727943"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="257727943"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:00:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="586796321"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Jun 2022 08:00:17 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o02b2-000IzN-Pg;
-        Sat, 11 Jun 2022 15:00:16 +0000
-Date:   Sat, 11 Jun 2022 22:59:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 26/29] arch/riscv/kvm/aia.c:324:2-3:
- Unneeded semicolon
-Message-ID: <202206112231.Oz0t7IEP-lkp@intel.com>
+        Sat, 11 Jun 2022 11:00:04 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A7A4F1C4;
+        Sat, 11 Jun 2022 08:00:00 -0700 (PDT)
+Received: from p508fd9f0.dip0.t-ipconnect.de ([80.143.217.240] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o02ag-0004qO-5R; Sat, 11 Jun 2022 16:59:54 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: rockchip: Fix SoQuartz CM4IO usb
+Date:   Sat, 11 Jun 2022 16:59:53 +0200
+Message-ID: <8819229.G0QQBjFxQf@phil>
+In-Reply-To: <CAMdYzYqRcrawKc-GsTgwnPuJBJoKTn9Arfpj_Vjnt+3DeT7k9w@mail.gmail.com>
+References: <20220610132601.160088-1-pgwipeout@gmail.com> <4178848.3VsfAaAtOV@phil> <CAMdYzYqRcrawKc-GsTgwnPuJBJoKTn9Arfpj_Vjnt+3DeT7k9w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,22 +46,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   9c50a2eb51ca70ba23cf9bc8cef121e8765b2c01
-commit: 4b5db34c607d39e59bdd3b0f37864643f5c31924 [26/29] RISC-V: KVM: Virtualize per-HART AIA CSRs
-config: riscv-randconfig-c024-20220611 (https://download.01.org/0day-ci/archive/20220611/202206112231.Oz0t7IEP-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
+Am Samstag, 11. Juni 2022, 15:53:41 CEST schrieb Peter Geis:
+> On Sat, Jun 11, 2022 at 9:50 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> >
+> > Am Freitag, 10. Juni 2022, 16:44:23 CEST schrieb Peter Geis:
+> > > On Fri, Jun 10, 2022 at 9:26 AM Peter Geis <pgwipeout@gmail.com> wrote:
+> > > >
+> > > > The SoQuartz CM4-IO should support otg mode, however it currently
+> > > > defaults to device mode when otg is enabled. Force it to host mode to
+> > > > retain the previous behavior.
+> > >
+> > > It would seem the role-switch issue is more widespread than originally
+> > > thought, affecting other boards where automatic control should work.
+> > > Please hold this patch while I investigate further.
+> >
+> > ok!
+> >
+> > I guess this also applies to
+> >         "arm64: dts: rockchip: Fix Quartz64-A dwc3 otg port behavior"?
+> 
+> No, on Quartz64 Model A it can't work, the requisite pin isn't connected.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+ok, so I can pick that other patch up :-) .
+
+> I think I've found the problem, I've requested a few people to test a fix.
+> Do you have a Model B or SoQuartz to test against (or any other rk356x
+> board that has the id pin hooked up)?
+
+The rk356x in my boardfarm is a Quartz-B ... though an very early model,
+so hopefully nothing changed on the board since then.
+
+Although there is nothing connected to usb right now and I only have
+remote access this weekend, so any usb tests would need to wait till next
+week on my end.
 
 
-cocci warnings: (new ones prefixed by >>)
->> arch/riscv/kvm/aia.c:324:2-3: Unneeded semicolon
-   arch/riscv/kvm/aia.c:357:2-3: Unneeded semicolon
-   arch/riscv/kvm/aia.c:383:2-3: Unneeded semicolon
-   arch/riscv/kvm/aia.c:235:2-3: Unneeded semicolon
+Heiko
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+> 
+> Thanks,
+> Peter
+> 
+> >
+> >
+> > Heiko
+> >
+> >
+> > > >
+> > > > Fixes: bc405bb3eeee ("arm64: dts: rockchip: enable otg/drd operation of usb_host0_xhci in rk356x")
+> > > >
+> > > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > > > index e00568a6be5c..56764fae9f9d 100644
+> > > > --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > > > @@ -169,6 +169,7 @@ &usb2phy0_otg {
+> > > >  };
+> > > >
+> > > >  &usb_host0_xhci {
+> > > > +       dr_mode = "host";
+> > > >         status = "okay";
+> > > >  };
+> > > >
+> > > > --
+> > > > 2.25.1
+> > > >
+> > >
+> >
+> >
+> >
+> >
+> 
+
+
+
+

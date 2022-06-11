@@ -2,73 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D29547125
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 03:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F467547128
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 03:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349309AbiFKBiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 21:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S1349621AbiFKBkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 21:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348886AbiFKBiM (ORCPT
+        with ESMTP id S236391AbiFKBkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 21:38:12 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D1219039
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:38:10 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id f16-20020a056602071000b00669bb12a6baso405233iox.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:38:09 -0700 (PDT)
+        Fri, 10 Jun 2022 21:40:47 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EBE3B60B0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:40:45 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id c2so947312edf.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QABc4YlIjdzNmKMejkI2eOzTrYOoWCevfbBdoFlAxVY=;
+        b=tN66Wmxq6Hr6WvGjsoZxrBmeFnAV9ZgYbZN1JIgrbr632Ee4mGX9hJcnFfJ0qiFvGP
+         DDmSK/N5LIftb1lz6YgdnbpZDVcN8PMieuG7AQ3LgMTSavBsMJP+zcbDRuJCEJFpFVrQ
+         GScpRWsBMbcNQ0T1RpSllFzSqtOhA0Qnmd5OYMq+TD66SubmiIvmyO9g6LOAqDP9LKUw
+         /3Wm7liPAogXEBFuJKHQlNIrLlgtntIYFTiljJokx0OBP7H2ikvR49WarrDBoK8fK/7r
+         AlT41+ZDbOek9HdLRNa0dt/rKYkrz1wgsgCoeFkpPDYJahuZh+lQasl2Vo5nkv2q2AI7
+         MjPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=fR2ebMThzKS+/nDQcBpwFSrDlBIp3UvgcJYb3PbbAIw=;
-        b=grUm5if2pgLY/kgoFTEmFrUTybwld6GjEZMoB1x9AThhBpjoHvkypFaARA6hk2HI9D
-         e9M9vPnhTq1w6FM1RNyhPEBF2z83DgVmx0UrZ8gMWBvxOccb38nt4d/uqY1HcBE6VH2H
-         HeBk/BCxxvH0Xr+OXPs6V7Go3g68VQTFfjFhdza5IP9bBPFYxrf3Hv1fhNp5Ux7rtpUr
-         cpXB7PsfW1zgr1Gh1a6++0ms7e9smd3tOySp26qwlS1pf2ZMOd9fiYKPr3cZIbG6JrFe
-         oAf3s3q/5CDiZh5tIHVrCwg6v8XjWq3RoZL8bY7ozrY5hpj5zqJcJiPFeuvBoT2pzQU2
-         JLIw==
-X-Gm-Message-State: AOAM531iYPwFHsHWzloeTd4PkAEhRtJ/a+bdZj/ZIE04q6rPQJSmO4Vy
-        tgLDcRaKIef9TXFiEeJvoz13+oTsdELYro43NFN4S44oaGZr
-X-Google-Smtp-Source: ABdhPJzL+X23HCba4RmJCnm+uyNL3hnyasFWHjv/yRO3dn4rArQg68rZabRDg3rSv8tpxImQQ8a5jPG4Z/qV4Si69zdeOH0i3d7x
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QABc4YlIjdzNmKMejkI2eOzTrYOoWCevfbBdoFlAxVY=;
+        b=w/AUjufjBfIrLkSc44KHHLG0tHMJscAagU+YwT65kZuNR3SFONiJHFvuk7HJ++eqg0
+         AP1mShPjfCrMtJJacqimOEZtr0tqYCyXvye3ZTmwRq6GU8mLpLl4nOmZvA/0lD+WJiNY
+         t33yim/RSP7cyK6RcEi6vb1771EDRqpZYTBQMoovlC0KvhesXeZhqAfCWbc+7joy4hbs
+         F2RXDOXopdY7ubrLkGzqodlMX+8SjWPcoO9Kc+mZyW+44+RdfLZ7dIqhGJMFeBYQAGp/
+         +/qqd8BPG+ABxzgflfo+ihTKmDyKgSNAP/dN2MB9XTit8A9ZnOP5ckRkmk09+z5PZQcY
+         Z3iQ==
+X-Gm-Message-State: AOAM530pbRiXrP0Fa/DgAcNo8ZgH+FMcuvvZcLpFS99RU8lLI2Meox+/
+        1XeuqdQaGmj4ET3Nlcc68vf086Y1uTdkGZPWOqc1Og==
+X-Google-Smtp-Source: ABdhPJwJ67aKbfxtJuYIk3/E8mMInJrcvazk99B9VaYCNnV5blyc4ttJlCMPqb+KYVwLq07H9N4E+z+cSW7FhQRtzeg=
+X-Received: by 2002:a05:6402:3490:b0:42f:b592:f364 with SMTP id
+ v16-20020a056402349000b0042fb592f364mr42426383edc.66.1654911643955; Fri, 10
+ Jun 2022 18:40:43 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2c0c:b0:669:c1a9:245c with SMTP id
- w12-20020a0566022c0c00b00669c1a9245cmr2243252iov.218.1654911489350; Fri, 10
- Jun 2022 18:38:09 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 18:38:09 -0700
-In-Reply-To: <20220611005547.1454-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000075231705e1221b38@google.com>
-Subject: Re: [syzbot] possible deadlock in bpf_trace_printk
-From:   syzbot <syzbot+c49e17557ddb5725583d@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20220610223703.3387691-1-swboyd@chromium.org>
+In-Reply-To: <20220610223703.3387691-1-swboyd@chromium.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Fri, 10 Jun 2022 18:40:33 -0700
+Message-ID: <CABXOdTfvuHLf=ahN4+iOewyLCNnOZMXS-S+4a_RUtLCC=9t_HA@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec: Always expose last resume result
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        patches@lists.linux.dev, Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        Evan Green <evgreen@chromium.org>,
+        Rajat Jain <rajatja@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jun 10, 2022 at 3:37 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> The last resume result exposing logic in cros_ec_sleep_event()
+> incorrectly requires S0ix support, which doesn't work on ARM based
+> systems where S0ix doesn't exist. That's because cros_ec_sleep_event()
+> only reports the last resume result when the EC indicates the last sleep
+> event was an S0ix resume. On ARM systems, the last sleep event is always
+> S3 resume, but the EC can still detect sleep hang events in case some
+> other part of the AP is blocking sleep.
+>
+> Always expose the last resume result if the EC supports it so that this
+> works on all devices regardless of S0ix support. This fixes sleep hang
+> detection on ARM based chromebooks like Trogdor.
+>
+> Cc: Evan Green <evgreen@chromium.org>
+> Cc: Rajat Jain <rajatja@chromium.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Fixes: 7235560ac77a ("platform/chrome: Add support for v1 of host sleep event")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>
+> I originally was going to check for S3 only with !ARCH_X86 but I can't
+> convince myself that it's any use to limit the check to s0ix in general.
+> This approach assumes the last resume result is valid if the command is
+> supported, regardless of whether or not the AP supports s0ix or not.
+> This seems to be the case at least on ARM, and looking at the EC
+> convinces me that CONFIG_POWER_SLEEP_FAILURE_DETECTION is only enabled
+> on x86 devices that have s0ix.
+>
+>  drivers/platform/chrome/cros_ec.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+> index b3e94cdf7d1a..881d3ad09be0 100644
+> --- a/drivers/platform/chrome/cros_ec.c
+> +++ b/drivers/platform/chrome/cros_ec.c
+> @@ -135,10 +135,10 @@ static int cros_ec_sleep_event(struct cros_ec_device *ec_dev, u8 sleep_event)
+>         buf.msg.command = EC_CMD_HOST_SLEEP_EVENT;
+>
+>         ret = cros_ec_cmd_xfer_status(ec_dev, &buf.msg);
+> -
+> -       /* For now, report failure to transition to S0ix with a warning. */
+> +       /* Report failure to transition to system wide suspend with a warning. */
+>         if (ret >= 0 && ec_dev->host_sleep_v1 &&
+> -           (sleep_event == HOST_SLEEP_EVENT_S0IX_RESUME)) {
+> +           (sleep_event == HOST_SLEEP_EVENT_S0IX_SUSPEND ||
+> +            sleep_event == HOST_SLEEP_EVENT_S3_RESUME)) {
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+I am sure I am missing something, but the description doesn't explain
+(to me) the switch from HOST_SLEEP_EVENT_S0IX_RESUME to
+HOST_SLEEP_EVENT_S0IX_SUSPEND.
 
-Reported-and-tested-by: syzbot+c49e17557ddb5725583d@syzkaller.appspotmail.com
+Thanks,
+Guenter
 
-Tested on:
-
-commit:         d678cbd2 xsk: Fix handling of invalid descriptors in X..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=13743f27f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fc5a30a131480a80
-dashboard link: https://syzkaller.appspot.com/bug?extid=c49e17557ddb5725583d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16922173f00000
-
-Note: testing is done by a robot and is best-effort only.
+>                 ec_dev->last_resume_result =
+>                         buf.u.resp1.resume_response.sleep_transitions;
+>
+>
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+> --
+> https://chromeos.dev
+>

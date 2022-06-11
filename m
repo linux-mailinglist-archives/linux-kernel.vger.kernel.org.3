@@ -2,154 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F941547729
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 20:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1BF54772E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 20:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiFKSqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 14:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S230466AbiFKSsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 14:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiFKSqe (ORCPT
+        with ESMTP id S229672AbiFKSs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 14:46:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D963F329;
-        Sat, 11 Jun 2022 11:46:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654973192; x=1686509192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kyT6KKWjC/OdmE81Ef78B9jpCvknrCcdviqYlOzkN2I=;
-  b=dPCjKtaMJCYzLrmviWFc7ufW8qG9ZMrQ1RvuAvnHlqI1+HhvVBbxdgX7
-   /ubTuIq8hrsP3CyGlop4p1/3IAaLWK0fFiMkz2uQXfCqBUqXjkd+DaE+s
-   UhzHwuQNojP031oY1GMGXgE2IUGcdOdFxQ5ph838dZVRFNi1jNFx0yl+i
-   zWAJIIse+lIZ2drYQ/MoYzqPVHltnIJ2qX2b7hVlep6djXwK2oteEyWU6
-   EGLBCbKLVJ72PirOJmmzcovOe0AMoKM5eajPZGSlO0dJTE4sJAocjZaig
-   XmO41jAsA26Q4wiI5oJ/BoQ/8qiJkLP8kP6qfkIizYJKaGJQEdC2btug3
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="266661910"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="266661910"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 11:46:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="760973379"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 11 Jun 2022 11:46:26 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o067t-000JCD-Fy;
-        Sat, 11 Jun 2022 18:46:25 +0000
-Date:   Sun, 12 Jun 2022 02:45:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v10 net-next 7/7] mfd: ocelot: add support for the
- vsc7512 chip via spi
-Message-ID: <202206120247.2zx79Zg9-lkp@intel.com>
-References: <20220610202330.799510-8-colin.foster@in-advantage.com>
+        Sat, 11 Jun 2022 14:48:29 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B8F46672;
+        Sat, 11 Jun 2022 11:48:25 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 25BIm5kL003581;
+        Sun, 12 Jun 2022 03:48:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 25BIm5kL003581
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654973286;
+        bh=OJU24WbqmimMYRsIh1ewIsGhAVbQLx3txvyBGLHeO1k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=yPWnpNrh1S682UMdCy2xRKV0nrfelc88TI16XUiek8cvMXVCNlTxhriiqQO+5ADC1
+         dg6rQzE95S0VmLCo3BAi+37VggRNO3qFuQOYznZiQ1C6WUOuoWrM3B5XcHWwxyQSBi
+         56lNT0/EEJwIClXLSEMv0e1JOTdzqZUoPKOJVDYO6325v8W4ETHVohlGhccGOYVXST
+         nsOYnfuN9hFINEuEoxEDpOMb2MGq9/0/1cezB/hYqTP7l62zbTytCoYFNcanmOOo1w
+         3G5bjTr1dxR6EO0ewir9ONz54qAFMyAmoZtie4zDQ0hmU7iWdP41qsvLni41w90wtu
+         NCC8bubAl31ww==
+X-Nifty-SrcIP: [209.85.221.54]
+Received: by mail-wr1-f54.google.com with SMTP id c21so2437729wrb.1;
+        Sat, 11 Jun 2022 11:48:05 -0700 (PDT)
+X-Gm-Message-State: AOAM530EDqZ9bqx6bFmc7UXJccoCaY6KJto6bpuQZ/mBcXPUa9aN+ZT3
+        v10+F3qbAf9DChkSfxFI2t2z34IX4vTDoUQpQ/k=
+X-Google-Smtp-Source: ABdhPJxbHanpX6AbHetOK3rMz1pMBQZREhQ/9hwWAadZPeVmpGmRxmrP9S3VU2JRwZBzpQMKmxbHB5lWZJPn+RgOjgM=
+X-Received: by 2002:a05:6000:156d:b0:210:3135:ce1c with SMTP id
+ 13-20020a056000156d00b002103135ce1cmr50144120wrz.409.1654973284279; Sat, 11
+ Jun 2022 11:48:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610202330.799510-8-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-4-masahiroy@kernel.org>
+In-Reply-To: <20220610183236.1272216-4-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 12 Jun 2022 03:47:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS-VYZ3G3-TmmTQSNuanGsufkoWTv32HNKdDkE+7-6mcg@mail.gmail.com>
+Message-ID: <CAK7LNAS-VYZ3G3-TmmTQSNuanGsufkoWTv32HNKdDkE+7-6mcg@mail.gmail.com>
+Subject: Re: [PATCH 3/7] kbuild: generate struct kernel_symbol by modpost
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
+On Sat, Jun 11, 2022 at 3:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
+> CONFIG_MODULE_REL_CRCS") made the module versioning implementation
+> arch-agnostic; now all the version CRCs are generated by modpost as C
+> code whether the EXPORT_SYMBOL() is placed in *.c or *.S.
+>
+> Doing similar for the entire data structure of EXPORT_SYMBOL() makes
+> further cleanups possible.
+>
+> This commit splits EXPORT_SYMBOL() compilation into two stages.
+>
+> When a source file is compiled, EXPORT_SYMBOL() is converted into a
+> dummy symbol in the .discard.export_symbol section.
+>
+> For example,
+>
+>     EXPORT_SYMBOL(foo);
+>     EXPORT_SYMBOL_NS_GPL(bar, BAR_NAMESPACE);
+>
+> will be expanded into the following assembly code:
+>
+>     .section .discard.export_symbol
+>     __export_symbol.foo:
+>         .asciz ""
+>     .previous
+>
+>     .section .discard.export_symbol
+>     __export_symbol_gpl.bar:
+>         .asciz "BAR_NAMESPACE"
+>     .previous
+>
+> They are just markers to tell modpost the name, license, and namespace
+> of the symbols. They will be dropped from the final vmlinux and modules
+> because the section name starts with ".discard.".
+>
+> Then, modpost extracts all the information of EXPORT_SYMBOL() from the
+> .discard.export_symbol section, then generates C code:
+>
+>     KSYMTAB_ENTRY(foo, "", "");
+>     KSYMTAB_ENTRY(bar, "_gpl", "BAR_NAMESPACE");
+>
+> KSYMTAB_ENTRY() is expanded to struct kernel_symbol that will be linked
+> to the vmlinux or a module.
+>
+> With this change, EXPORT_SYMBOL() works in the same way for *.c and *.S
+> files, providing the following benefits.
+>
+> [1] Deprecate EXPORT_DATA_SYMBOL()
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b97dcb85750b7e8bc5aaed5403ddf4b0552c7993
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220612/202206120247.2zx79Zg9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/60523f7239bade660c86be121bd29954c24f53df
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
-        git checkout 60523f7239bade660c86be121bd29954c24f53df
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/mfd/ocelot-core.c:118:40: error: initializer element is not a compile-time constant
-                   .of_reg = vsc7512_miim0_resources[0].start,
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   1 error generated.
 
 
-vim +118 drivers/mfd/ocelot-core.c
+Sorry, please let me take back this.
 
-   103	
-   104	static const struct mfd_cell vsc7512_devs[] = {
-   105		{
-   106			.name = "ocelot-pinctrl",
-   107			.of_compatible = "mscc,ocelot-pinctrl",
-   108			.num_resources = ARRAY_SIZE(vsc7512_pinctrl_resources),
-   109			.resources = vsc7512_pinctrl_resources,
-   110		}, {
-   111			.name = "ocelot-sgpio",
-   112			.of_compatible = "mscc,ocelot-sgpio",
-   113			.num_resources = ARRAY_SIZE(vsc7512_sgpio_resources),
-   114			.resources = vsc7512_sgpio_resources,
-   115		}, {
-   116			.name = "ocelot-miim0",
-   117			.of_compatible = "mscc,ocelot-miim",
- > 118			.of_reg = vsc7512_miim0_resources[0].start,
-   119			.use_of_reg = true,
-   120			.num_resources = ARRAY_SIZE(vsc7512_miim0_resources),
-   121			.resources = vsc7512_miim0_resources,
-   122		}, {
-   123			.name = "ocelot-miim1",
-   124			.of_compatible = "mscc,ocelot-miim",
-   125			.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
-   126			.of_reg = vsc7512_miim1_resources[0].start,
-   127			.use_of_reg = true,
-   128			.resources = vsc7512_miim1_resources,
-   129		},
-   130	};
-   131	
+I completely missed how linkage for ia64 works.
+I used inline assembly in C, so it would break ia64.
+
+Please ignore this patch.
+
+
+
+
+
+
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada

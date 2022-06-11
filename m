@@ -2,103 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C725476DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2F25476F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 19:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238675AbiFKRYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 13:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S233413AbiFKRmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 13:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiFKRYt (ORCPT
+        with ESMTP id S231331AbiFKRmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 13:24:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F403EAA9;
-        Sat, 11 Jun 2022 10:24:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9539BB80AE9;
-        Sat, 11 Jun 2022 17:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEFB1C34116;
-        Sat, 11 Jun 2022 17:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654968286;
-        bh=SDCYDjY3WJbmTI27Ho0/7Zfqxt3PHJ7jDyD8765WJCE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZtYi3BQBV3GRP8nI3TqjRnZmjlpZ2AtIMxOG/5riaE5t2Z5IZJYIBH/LwlaWYB+Bt
-         5EvFEBD2GUAMSS1++XM61sP0qhnz+573f3ECcuFOhiwikH5eiIkssBaiN7c8MACpqX
-         R4eRaJa/uwn9IBSOo+DbgTZ/i0ZcUYZ+cUwNib56pzWe+BDc7kVpscCyMzbsy3FrTu
-         /K1ehnbwBPstJ3fnwzUl3tHm8hQuxQyMdKIYTM8qcw3y49WBQ/L69UpIdfHcae31NN
-         29R1K/GuotB3t5WIWhf3KVC3pTXB7DyYjKpXL/g5ErM8avsTGEURUjO4Z4FBrpFzPq
-         WHv8kycFjH4HQ==
-Date:   Sat, 11 Jun 2022 18:33:54 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     <eugen.hristev@microchip.com>, <lars@metafoo.de>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 03/16] iio: adc: at91-sama5d2_adc: exit from write_raw()
- when buffers are enabled
-Message-ID: <20220611183354.08788921@jic23-huawei>
-In-Reply-To: <20220609083213.1795019-4-claudiu.beznea@microchip.com>
-References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
-        <20220609083213.1795019-4-claudiu.beznea@microchip.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 11 Jun 2022 13:42:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AD357986;
+        Sat, 11 Jun 2022 10:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cy4LqclDCzXO19Ll6jpbh9YluwE5VQrU+JF2sYO2jE0=; b=IxeQ9knTGfuPFY2EQO3cFHURNk
+        8Aq729adAtGTjemhV30dzAco9EIMZh7j/WvantcPtZcAMhMNIPxKuaGYOXVzVodW8cCJuFcGPJvdz
+        3QhZzc4YjmenhkYU1RNPeSB/3NQAUJLLXclhkJLs4g8y3YZhRxIr2xqWTvvmDLCWSIwJSDGoO3DUa
+        he3gxqAngeEH8UKmIFvz6Nw/8zGYCDk+w2n763osH8eOIwcEaK5uV3XAdM5oW25NaZpZG1a71zz9i
+        jzRYnpIMmls8+HfSypjUz43b/PCTd3Y7GlL9fnHttL5rcxmTekuN0llIvQl7xeqnMDThcspXRnPnR
+        mcBtAr5A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o058D-00FPYV-Al; Sat, 11 Jun 2022 17:42:41 +0000
+Date:   Sat, 11 Jun 2022 18:42:41 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        akpm@linux-foundation.org, axboe@kernel.dk,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
+ accessed in filemap_read()
+Message-ID: <YqTUEZ+Pa24p09Uc@casper.infradead.org>
+References: <20220602082129.2805890-1-yukuai3@huawei.com>
+ <YpkB1+PwIZ3AKUqg@casper.infradead.org>
+ <c49af4f7-5005-7cf1-8b58-a398294472ab@huawei.com>
+ <YqNWY46ZRoK6Cwbu@casper.infradead.org>
+ <YqNW8cYn9gM7Txg6@casper.infradead.org>
+ <c5f97e2f-8a48-2906-91a2-1d84629b3641@gmail.com>
+ <YqOOsHecZUWlHEn/@casper.infradead.org>
+ <dfa6d60d-0efd-f12d-9e71-a6cd24188bba@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dfa6d60d-0efd-f12d-9e71-a6cd24188bba@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 11:32:00 +0300
-Claudiu Beznea <claudiu.beznea@microchip.com> wrote:
-
-> When buffers are enabled conversion may start asynchronously thus
-> allowing changes on actual hardware could lead to bad behavior. Thus
-> do not allow changing oversampling ratio and sample frequency when
-> buffers are enabled.
-
-Less than desirable behavior perhaps, but broken?  I don't see this
-as a fix from what you have mentioned - though I'm not against it.
-(just drop the fixes tag)
-It is an ABI change, but unlikely to be one any sane code hits.
-
+On Sat, Jun 11, 2022 at 04:23:42PM +0800, Yu Kuai wrote:
+> > This is going to mark the folio as accessed multiple times if it's
+> > a multi-page folio.  How about this one?
+> > 
+> Hi, Matthew
 > 
-> Fixes: 5e1a1da0f8c9 ("iio: adc: at91-sama5d2_adc: add hw trigger and buffer support")
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  drivers/iio/adc/at91-sama5d2_adc.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
-> index a672a520cdc0..b76328da0cb2 100644
-> --- a/drivers/iio/adc/at91-sama5d2_adc.c
-> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
-> @@ -1644,6 +1644,9 @@ static int at91_adc_write_raw(struct iio_dev *indio_dev,
->  {
->  	struct at91_adc_state *st = iio_priv(indio_dev);
->  
-> +	if (iio_buffer_enabled(indio_dev))
-> +		return -EBUSY;
+> Thanks for the patch, it looks good to me.
 
-This is racy as nothing stops buffers being enabled after this point.
-Use the iio_device_claim_direct_mode() and release for this as they
-protect against the race.
+Did you test it?  This is clearly a little subtle ;-)
 
+> BTW, I still think the fix should be commit 06c0444290ce ("mm/filemap.c:
+> generic_file_buffered_read() now uses find_get_pages_contig").
 
-> +
->  	switch (mask) {
->  	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
->  		if ((val != AT91_OSR_1SAMPLES) && (val != AT91_OSR_4SAMPLES) &&
+Hmm, yes.  That code also has problems, but they're more subtle and
+probably don't amount to much.
+
+-       iocb->ki_pos += copied;
+-
+-       /*
+-        * When a sequential read accesses a page several times,
+-        * only mark it as accessed the first time.
+-        */
+-       if (iocb->ki_pos >> PAGE_SHIFT != ra->prev_pos >> PAGE_SHIFT)
+-               mark_page_accessed(page);
+-
+-       ra->prev_pos = iocb->ki_pos;
+
+This will mark the page accessed when we _exit_ a page.  So reading
+512-bytes at a time from offset 0, we'll mark page 0 as accessed on the
+first read (because the prev_pos is initialised to -1).  Then on the
+eighth read, we'll mark page 0 as accessed again (because ki_pos will
+now be 4096 and prev_pos is 3584).  We'll then read chunks of page 1
+without marking it as accessed, until we're about to step into page 2.
+
+Marking page 0 accessed twice is bad; it'll set the referenced bit the
+first time, and then the second time, it'll activate it.  So it'll be
+thought to be part of the workingset when it's really just been part of
+a streaming read.
+
+And the last page we read will never be marked accessed unless it
+happens to finish at the end of a page.
+
+Before Kent started his refactoring, I think it worked:
+
+-       pgoff_t prev_index;
+-       unsigned int prev_offset;
+...
+-       prev_index = ra->prev_pos >> PAGE_SHIFT;
+-       prev_offset = ra->prev_pos & (PAGE_SIZE-1);
+...
+-               if (prev_index != index || offset != prev_offset)
+-                       mark_page_accessed(page);
+-               prev_index = index;
+-               prev_offset = offset;
+...
+-       ra->prev_pos = prev_index;
+-       ra->prev_pos <<= PAGE_SHIFT;
+-       ra->prev_pos |= prev_offset;
+
+At least, I don't detect any bugs in this.
 

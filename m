@@ -2,320 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250D1547351
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59651547353
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiFKJhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 05:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
+        id S232555AbiFKJij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 05:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiFKJhU (ORCPT
+        with ESMTP id S232546AbiFKJid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 05:37:20 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D07532ECA;
-        Sat, 11 Jun 2022 02:37:19 -0700 (PDT)
-Received: from g550jk.localnet (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 88FD7CD394;
-        Sat, 11 Jun 2022 09:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1654940206; bh=Pv4FsvWvfgEkD1dHzfg4Gg5E6CXk8wuVq7wdUmNs0+g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ut+6n+0zCKmQUtRtdy98cgZCJw6OGK0W5R6FomNvWBHs7pGOXuyFH8c9TA+nw6aZC
-         TkEn3kAzPTqMWIe0qGlnp4IzPIymnNA6b+YNjvwB5dbCQ2D2/RzeDzu80hgGvJZcdT
-         zmKOjnPUJ9eQXSovO0kHSWylGDEuqIKBGtd9zYt8=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8953: add MDSS
-Date:   Sat, 11 Jun 2022 11:36:45 +0200
-Message-ID: <4716730.GXAFRqVoOG@g550jk>
-In-Reply-To: <c7ac47e0-20a2-3972-e760-61276964445c@linaro.org>
-References: <20220610225304.267508-1-luca@z3ntu.xyz> <20220610225304.267508-2-luca@z3ntu.xyz> <c7ac47e0-20a2-3972-e760-61276964445c@linaro.org>
+        Sat, 11 Jun 2022 05:38:33 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A941532ECA
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 02:38:32 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 25B9cJqT013061
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 18:38:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 25B9cJqT013061
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654940300;
+        bh=dvQLqE9CD0Sc31TfKaAdiORJwqPYnVIClrdVtOr8MuU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VQRRIgL3RaBwbAb8zlsjU/+y8z7S4bPBtkzV2F3eoVaSN2nqeiiouM3JjXiSZwPif
+         QrU11WA67/+x5QVZKqO8abfFxTxi9/K0zSLaujSd+f0t9XdHrKR/d7soaLwqc9mtUl
+         zNc9BaGaqIYr6DKiwp2p/YpKKy0QHEPfqfnbod0wI16QgGPIr6geIpNmJFNSoFKuZM
+         DjMhbcVfKcy+XPHyM64ao1YZQDhOzSRP+h36+NzP1yHrB8i30j94oXxeWyIeWGCkDK
+         hsQrBwU71+Mpny5s4+LmQyQCQ9CwvHcxbq557kQmVmb1FWMcQJuNpv5LAdwyOPmXqu
+         a9b28AwXa41qA==
+X-Nifty-SrcIP: [209.85.128.50]
+Received: by mail-wm1-f50.google.com with SMTP id z9so582025wmf.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 02:38:19 -0700 (PDT)
+X-Gm-Message-State: AOAM531sefQuD4CoFHhnGurqsWN4eyPtEEJ6DWRjOJo+osMLmDrEuqqg
+        6Jf++7GQXUmy52UNJ3QY7zPe2qAiPlpvcE9VLNg=
+X-Google-Smtp-Source: ABdhPJzZVNw7ql3vh1nekhMh6vBUEJO0ZE52meBw8QyxqYw1a6qL2nlFf1hcJ8FXJAo3pYzjIBY6d+gFSFhDl6mYWUo=
+X-Received: by 2002:a05:600c:35c2:b0:39b:fa1f:4f38 with SMTP id
+ r2-20020a05600c35c200b0039bfa1f4f38mr4083537wmq.22.1654940298310; Sat, 11 Jun
+ 2022 02:38:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220610071500.9656-1-Kuan-Ying.Lee@mediatek.com>
+In-Reply-To: <20220610071500.9656-1-Kuan-Ying.Lee@mediatek.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 11 Jun 2022 18:37:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATknxrmnAXKkz-XzkGn1kprPiQLrjKSdp4wKCRhPczcmA@mail.gmail.com>
+Message-ID: <CAK7LNATknxrmnAXKkz-XzkGn1kprPiQLrjKSdp4wKCRhPczcmA@mail.gmail.com>
+Subject: Re: [PATCH] scripts/gdb: change kernel config dumping method
+To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        chinwen.chang@mediatek.com, nicholas.tang@mediatek.com,
+        casper.li@mediatek.com, andrew.yang@mediatek.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Fri, Jun 10, 2022 at 4:15 PM Kuan-Ying Lee
+<Kuan-Ying.Lee@mediatek.com> wrote:
+>
+> MAGIC_START("IKCFG_ST") and MAGIC_END("IKCFG_ED") are moved out
+> from the kernel_config_data variable [1].
+>
+> Thus, we parse kernel_config_data directly instead of considering
+> offset of MAGIC_START and MAGIC_END.
+>
+> [1] https://lore.kernel.org/lkml/1550108893-21226-1-git-send-email-yamada.masahiro@socionext.com/
+>
+> Fixes: 13610aa908dc ("kernel/configs: use .incbin directive to embed config_data.gz")
+> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 
-thanks for the feedback!
 
-On Samstag, 11. Juni 2022 01:20:31 CEST Dmitry Baryshkov wrote:
-> On 11/06/2022 01:53, Luca Weiss wrote:
-> > From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > 
-> > Add the MDSS, MDP and DSI nodes that are found on msm8953 SoC.
-> > 
-> > IOMMU is not added because support for it isn't yet upstream and MDSS
-> > works fine without IOMMU on 8953.
-> > 
-> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> 
-> Looks good, few minor nits below.
-> 
-> > ---
-> > 
-> >   arch/arm64/boot/dts/qcom/msm8953.dtsi | 202 ++++++++++++++++++++++++++
-> >   1 file changed, 202 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> > b/arch/arm64/boot/dts/qcom/msm8953.dtsi index ffc3ec2cd3bc..a2aca3d05899
-> > 100644
-> > --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> > @@ -726,6 +726,208 @@ tcsr_phy_clk_scheme_sel: syscon@193f044 {
-> > 
-> >   			reg = <0x193f044 0x4>;
-> >   		
-> >   		};
-> > 
-> > +		mdss: mdss@1a00000 {
-> > +			compatible = "qcom,mdss";
-> > +
-> > +			reg = <0x1a00000 0x1000>,
-> > +			      <0x1ab0000 0x1040>;
-> > +			reg-names = "mdss_phys",
-> > +				    "vbif_phys";
-> > +
-> > +			power-domains = <&gcc MDSS_GDSC>;
-> > +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> > +
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <1>;
-> > +
-> > +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> > +				 <&gcc GCC_MDSS_AXI_CLK>,
-> > +				 <&gcc GCC_MDSS_VSYNC_CLK>;
-> 
-> Please also add GCC_MDSS_MDP_CLK at the end of this array. It might be
-> required to read HW_REV register.
+Thanks for the fix.
 
-I don't think if I add that clock with the name "core" (or similar) that it
-would be used by the driver:
-
-https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/msm/msm_mdss.c#L274-L302
-
-Regards
-Luca
-
-> 
-> > +			clock-names = "iface",
-> > +				      "bus",
-> > +				      "vsync";
-> > +
-> > +			#address-cells = <1>;
-> > +			#size-cells = <1>;
-> > +			ranges;
-> 
-> status = "disabled";
-> 
-> > +
-> > +			mdp: mdp@1a01000 {
-> > +				compatible = "qcom,mdp5";
-> > +				reg = <0x1a01000 0x89000>;
-> > +				reg-names = "mdp_phys";
-> > +
-> > +				interrupt-parent = <&mdss>;
-> > +				interrupts = <0>;
-> > +
-> > +				power-domains = <&gcc MDSS_GDSC>;
-> > +
-> > +				clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> > +					 <&gcc GCC_MDSS_AXI_CLK>,
-> > +					 <&gcc GCC_MDSS_MDP_CLK>,
-> > +					 <&gcc GCC_MDSS_VSYNC_CLK>;
-> > +				clock-names = "iface",
-> > +					      "bus",
-> > +					      "core",
-> > +					      "vsync";
-> > +
-> > +				// iommus = <&apps_iommu 0xc00 0>;
-> > +
-> > +				ports {
-> > +					#address-cells = <1>;
-> > +					#size-cells = <0>;
-> > +
-> > +					port@0 {
-> > +						reg = <0>;
-> > +						mdp5_intf1_out: endpoint {
-> > +							remote-endpoint = <&dsi0_in>;
-> > +						};
-> > +					};
-> > +
-> > +					port@1 {
-> > +						reg = <1>;
-> > +						mdp5_intf2_out: endpoint {
-> > +							remote-endpoint = <&dsi1_in>;
-> > +						};
-> > +					};
-> > +				};
-> > +			};
-> > +
-> > +			dsi0: dsi@1a94000 {
-> > +				compatible = "qcom,mdss-dsi-ctrl";
-> > +				reg = <0x1a94000 0x400>;
-> > +				reg-names = "dsi_ctrl";
-> > +
-> > +				interrupt-parent = <&mdss>;
-> > +				interrupts = <4>;
-> > +
-> > +				assigned-clocks = <&gcc BYTE0_CLK_SRC>,
-> > +						  <&gcc PCLK0_CLK_SRC>;
-> > +				assigned-clock-parents = <&dsi0_phy 0>,
-> > +							 <&dsi0_phy 1>;
-> > +
-> > +				clocks = <&gcc GCC_MDSS_MDP_CLK>,
-> > +					 <&gcc GCC_MDSS_AHB_CLK>,
-> > +					 <&gcc GCC_MDSS_AXI_CLK>,
-> > +					 <&gcc GCC_MDSS_BYTE0_CLK>,
-> > +					 <&gcc GCC_MDSS_PCLK0_CLK>,
-> > +					 <&gcc GCC_MDSS_ESC0_CLK>;
-> > +				clock-names = "mdp_core",
-> > +					      "iface",
-> > +					      "bus",
-> > +					      "byte",
-> > +					      "pixel",
-> > +					      "core";
-> > +
-> > +				phys = <&dsi0_phy>;
-> > +				phy-names = "dsi";
-> > +
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> 
-> status = "disabled";
-> 
-> > +
-> > +				ports {
-> > +					#address-cells = <1>;
-> > +					#size-cells = <0>;
-> > +
-> > +					port@0 {
-> > +						reg = <0>;
-> > +						dsi0_in: endpoint {
-> > +							remote-endpoint = <&mdp5_intf1_out>;
-> > +						};
-> > +					};
-> > +
-> > +					port@1 {
-> > +						reg = <1>;
-> > +						dsi0_out: endpoint {
-> > +						};
-> > +					};
-> > +				};
-> > +			};
-> > +
-> > +			dsi0_phy: dsi-phy@1a94400 {
-> > +				compatible = "qcom,dsi-phy-14nm-8953";
-> > +				reg = <0x1a94400 0x100>,
-> > +				      <0x1a94500 0x300>,
-> > +				      <0x1a94800 0x188>;
-> > +				reg-names = "dsi_phy",
-> > +					    "dsi_phy_lane",
-> > +					    "dsi_pll";
-> > +
-> > +				#clock-cells = <1>;
-> > +				#phy-cells = <0>;
-> 
-> status = "disabled";
-> 
-> > +
-> > +				clocks = <&gcc GCC_MDSS_AHB_CLK>, <&xo_board>;
-> > +				clock-names = "iface", "ref";
-> > +			};
-> > +
-> > +			dsi1: dsi@1a96000 {
-> > +				compatible = "qcom,mdss-dsi-ctrl";
-> > +				reg = <0x1a96000 0x400>;
-> > +				reg-names = "dsi_ctrl";
-> > +
-> > +				interrupt-parent = <&mdss>;
-> > +				interrupts = <5>;
-> > +
-> > +				assigned-clocks = <&gcc BYTE1_CLK_SRC>,
-> > +						  <&gcc PCLK1_CLK_SRC>;
-> > +				assigned-clock-parents = <&dsi1_phy 0>,
-> > +							 <&dsi1_phy 1>;
-> > +
-> > +				clocks = <&gcc GCC_MDSS_MDP_CLK>,
-> > +					 <&gcc GCC_MDSS_AHB_CLK>,
-> > +					 <&gcc GCC_MDSS_AXI_CLK>,
-> > +					 <&gcc GCC_MDSS_BYTE1_CLK>,
-> > +					 <&gcc GCC_MDSS_PCLK1_CLK>,
-> > +					 <&gcc GCC_MDSS_ESC1_CLK>;
-> > +				clock-names = "mdp_core",
-> > +					      "iface",
-> > +					      "bus",
-> > +					      "byte",
-> > +					      "pixel",
-> > +					      "core";
-> > +
-> > +				phys = <&dsi1_phy>;
-> > +				phy-names = "dsi";
-> > +
-> > +				status = "disabled";
-> > +
-> > +				ports {
-> > +					#address-cells = <1>;
-> > +					#size-cells = <0>;
-> > +
-> > +					port@0 {
-> > +						reg = <0>;
-> > +						dsi1_in: endpoint {
-> > +							remote-endpoint = <&mdp5_intf2_out>;
-> > +						};
-> > +					};
-> > +
-> > +					port@1 {
-> > +						reg = <1>;
-> > +						dsi1_out: endpoint {
-> > +						};
-> > +					};
-> > +				};
-> > +			};
-> > +
-> > +			dsi1_phy: dsi-phy@1a96400 {
-> > +				compatible = "qcom,dsi-phy-14nm-8953";
-> > +				reg = <0x1a96400 0x100>,
-> > +				      <0x1a96500 0x300>,
-> > +				      <0x1a96800 0x188>;
-> > +				reg-names = "dsi_phy",
-> > +					    "dsi_phy_lane",
-> > +					    "dsi_pll";
-> > +
-> > +				#clock-cells = <1>;
-> > +				#phy-cells = <0>;
-> > +
-> > +				clocks = <&gcc GCC_MDSS_AHB_CLK>, <&xo_board>;
-> > +				clock-names = "iface", "ref";
-> > +
-> > +				status = "disabled";
-> > +			};
-> > +		};
-> > +
-> > 
-> >   		spmi_bus: spmi@200f000 {
-> >   		
-> >   			compatible = "qcom,spmi-pmic-arb";
-> >   			reg = <0x200f000 0x1000>,
+Applied to linux-kbuild/fixes.
 
 
 
 
+> ---
+>  scripts/gdb/linux/config.py | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/scripts/gdb/linux/config.py b/scripts/gdb/linux/config.py
+> index 90e1565b1967..8843ab3cbadd 100644
+> --- a/scripts/gdb/linux/config.py
+> +++ b/scripts/gdb/linux/config.py
+> @@ -24,9 +24,9 @@ class LxConfigDump(gdb.Command):
+>              filename = arg
+>
+>          try:
+> -            py_config_ptr = gdb.parse_and_eval("kernel_config_data + 8")
+> -            py_config_size = gdb.parse_and_eval(
+> -                    "sizeof(kernel_config_data) - 1 - 8 * 2")
+> +            py_config_ptr = gdb.parse_and_eval("&kernel_config_data")
+> +            py_config_ptr_end = gdb.parse_and_eval("&kernel_config_data_end")
+> +            py_config_size = py_config_ptr_end - py_config_ptr
+>          except gdb.error as e:
+>              raise gdb.GdbError("Can't find config, enable CONFIG_IKCONFIG?")
+>
+> --
+> 2.18.0
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

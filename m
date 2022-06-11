@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09745547386
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D452547384
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiFKJ7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 05:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S231628AbiFKJ7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 05:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiFKJ6y (ORCPT
+        with ESMTP id S230255AbiFKJ6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 05:58:54 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F61DA57;
-        Sat, 11 Jun 2022 02:58:53 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id i29so1974839lfp.3;
-        Sat, 11 Jun 2022 02:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GocDLkOsBawPMPs9zxnh8PppBX+pbvR6afOC4S31yoY=;
-        b=doW1z+6hB6tGbJaAuf6+XaOYEYEK6Z4PL2eTxqpdP4QCs5ULJq/efSF+oyq3Kta73a
-         RVY49pzTCOeqGp2LS6PbBst7Rm/T4MNaqJL8E3G3mZAAtkp5WzS530bJOiLOSArgenC8
-         gHV4237SNtmyRZ7b7r8cDqRJpLkrhoSahvX5QAIoCTISXslz3wYp76JIYw1R6ie3ktDe
-         BaGh1hECtRYvyqmJ6kUoCAymsjbX0HnxzyBXrv8AZ7lOvN70LG1lfwzAyycdkyCdmQAS
-         pUA9Yh80WnXbf2V/dDnvUiHsU2kkMQXyMVQV7bm+IvSR/YbbQmv3os2P/pnqg+oxjM5x
-         9/Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GocDLkOsBawPMPs9zxnh8PppBX+pbvR6afOC4S31yoY=;
-        b=0SppDqUB/7m23GB/tHzihH01lgZ9tEzQgJwBZ/arZJYPZo2MnEe7BnQfINRt+Shb3M
-         zWe80ArrljkcPiGj1/gV+YCdvrWR2WPrslKE4yIcv2DMhRhiGBduazAH/rjf0wBMLoXV
-         2GT26iZWUMhnTyJToa01jsz9oI6ewdk0/SQUNbZu2xLRUmwMVJcr2gMnj0FoGvGyg43/
-         0l+wmFrXDOWT9SGLCPwf3cj3STdDe4DDSe7+T/Nt+L8XlKTSVTHX5nASEZIp8ggYxRiK
-         eqpCiAEnslqFevGmG2IyWapFr/q011CkRrjbVvB+7jZtZKlQxSpGH0is7apgsjtrwbzt
-         omVg==
-X-Gm-Message-State: AOAM532vxyCz2mh9PkrFgm81sOndAF803H1NnRDN1Uq7MD6BWZ2hjwKy
-        6hq60+vZzBsuFd6TKG5f/0A=
-X-Google-Smtp-Source: ABdhPJz7uF0meF9LfuCvFt6ei/jXgipBVoJLu6+lz1yX8HSTxLLS96KPAaoJdHDr0fQ15JO+Vjj15g==
-X-Received: by 2002:a05:6512:b95:b0:479:65bd:ac2f with SMTP id b21-20020a0565120b9500b0047965bdac2fmr13223105lfv.445.1654941532235;
-        Sat, 11 Jun 2022 02:58:52 -0700 (PDT)
-Received: from DESKTOP-GSFPEC9.localdomain (broadband-90-154-71-254.ip.moscow.rt.ru. [90.154.71.254])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056512055200b004785060bad6sm200634lfl.201.2022.06.11.02.58.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 05:58:53 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF2AB845;
         Sat, 11 Jun 2022 02:58:51 -0700 (PDT)
-From:   Konstantin Aladyshev <aladyshev22@gmail.com>
-Cc:     supreeth.venkatesh@amd.com, aladyshev22@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] ARM: dts: aspeed: ethanolx: Enable VUART
-Date:   Sat, 11 Jun 2022 12:58:28 +0300
-Message-Id: <20220611095828.1090-5-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220611095828.1090-1-aladyshev22@gmail.com>
-References: <20220611095828.1090-1-aladyshev22@gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654941531; x=1686477531;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LoUQFEJVS8iKP4KHv45pEyco3cBp3wRIOlEANLpEqfM=;
+  b=bgqfdzNy1BveqUBhjYb6qcGV+ohpGMNQ46SREXJwgR9RUHpNzE2Ow7hG
+   URzohwV8QilFj0qNop1kR2MKQB/6VW2ZeeIOyDhXp8dTGWp1Jhs3Au2X3
+   m0ok7U9ptNXNrs/AaxrKA8xH5Oy86aeXbLXxN7qBsCLMu2yUyymDPufrE
+   JnbmCd1ySdNk9tvJX7YkQHvrv5e50aa+dwnSPz3AwrtbL/dP+PA8L9Da7
+   8+thFf7xqYYz1Q9tgCAnmwN67ZuBEtHDy2JzZh76mWTNWSrksEX3pRc+s
+   R4GIO4QpKT5vh3UEgeCW5KemWxH96VDQBeaiBlei1S+0QAG93VJ0fOhE9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="257694015"
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="257694015"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 02:58:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="638638184"
+Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.255.31.17]) ([10.255.31.17])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 02:58:49 -0700
+Message-ID: <bf66a840-594a-d90a-2ca6-595e95c09514@linux.intel.com>
+Date:   Sat, 11 Jun 2022 17:58:46 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/6] Configurable VLAN mode for NCSI driver
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+References: <20220610165940.2326777-1-jiaqing.zhao@linux.intel.com>
+ <20220610130903.0386c0d9@kernel.org>
+ <3c9fa928-f416-3526-be23-12644d18db3b@linux.intel.com>
+ <20220610214506.74c3f89c@kernel.org>
+ <6f067302-74a8-702f-bf38-4477a805a528@linux.intel.com>
+ <20220610224407.4e58dc5a@kernel.org>
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+In-Reply-To: <20220610224407.4e58dc5a@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable virtual UART for BMC<->Host communication.
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts | 7 +++++++
- 1 file changed, 7 insertions(+)
+On 2022-06-11 13:44, Jakub Kicinski wrote:
+> On Sat, 11 Jun 2022 13:18:51 +0800 Jiaqing Zhao wrote:
+>> All ncsi devices uses the same driver as they uses same command set,
+>> so the driver doesn't know what modes are supported. And in current
+>> driver, the vlan related parameters are configured when registering
+>> the device, adding an ncsi-netlink command to do so seems to be
+>> unsuitable.
+> 
+> Maybe you could draw a diagram? NC-SI is a bit confusing.
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-index 428fa9f673f9..90feac5ec628 100644
---- a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-@@ -5,6 +5,7 @@
- 
- #include "aspeed-g5.dtsi"
- #include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
- 
- / {
- 	model = "AMD EthanolX BMC";
-@@ -264,6 +265,12 @@ &lpc_ctrl {
- 	status = "okay";
- };
- 
-+&vuart {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0x3f8>;
-+	aspeed,lpc-interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
-+};
-+
- &pwm_tacho {
- 	status = "okay";
- 	pinctrl-names = "default";
--- 
-2.25.1
+Yes I admit NC-SI is confusing as its design is not as straightforward
+as the MAC-PHY structure. In NC-SI, there are two macs like below.
 
+        Packets + NCSI commands                        Packets
+    MAC-------------------------External controller MAC---------PHY
+
+The NCSI commands are used to set the behavior of the External controller
+MAC, like it's MAC address filter, VLAN filters. Those filtered packets
+will be transferred back to the MAC.
+
+Unlike PHY has standard registers to determine its model and capabilities,
+NC-SI seems does not have such way.
+>> And adding a netlink command requires extra application in userspace
+>> to switch the mode. In my opinion, it would be more user-friendly to
+>> make it usable on boot.
+> 
+> Unfortunately convenience is not reason to start adding system config
+> into DT.
+
+Currently there is already a DT config "use-ncsi" is used to choose using
+MDIO PHY or NCSI stack in the MAC driver with NCSI support like ftgmac100.
+That's why I choose adding another DT option here.
+
+>> Netdev also does not work as the ncsi device itself does not have
+>> its own netdev, the netdev comes from the mac device. For different
+>> vlan modes, the netdev feature set of its parent mac device are the
+>> same.
+> 
+> You say that, yet the command handling already takes into account the
+> VLAN list:
+> 
+> 	if (list_empty(&ndp->vlan_vids)) {
+> 
+> which come from the MAC netdev. What's wrong with setting the filtering
+> mode based on NETIF_F_HW_VLAN_CTAG_FILTER ?
+
+When configuring the mac driver, there might be two net_device_ops sets
+for MDIO or NC-SI. When using NC-SI, some features need to be delegated
+to the external controller MAC, like VLAN hardware filtering, different
+ndo_vlan_rx_{add,kill}_vid callbacks need to be assigned.
+
+The filtering mode is an optional mode defined in NC-SI spec, some
+devices does not support it. In this case, to support VLAN, I would
+personally in favor of using the "Any VLAN" mode to let the external
+MAC pass all packets to the internal one, and let the internal MAC
+handle it either with its own hardware filter or software filter. In
+this case, the VLAN list in NC-SI driver (used for setting the external
+MAC filter) is not used.

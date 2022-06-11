@@ -2,96 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EB55470E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 03:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872335470DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 03:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346341AbiFKBUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 21:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S1344416AbiFKBMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 21:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiFKBUM (ORCPT
+        with ESMTP id S231406AbiFKBMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 21:20:12 -0400
-X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 18:20:09 PDT
-Received: from mx0.chaotikum.eu (mx0.chaotikum.eu [IPv6:2a01:4f8:c2c:ce71::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDF62FE5E;
-        Fri, 10 Jun 2022 18:20:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=chaotikum.eu; s=20200128.mx0; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Jof2nISM3ArkpDI9yHxnFylLSJTIlGSe7rzFagU23O8=; b=nGTDfRdNL2WxLsaHrlAoZiSglV
-        SmE1ofdhqv0I6YHqNx5B9UsGmDTdCFdJ+POjXdXcacckbTiplJvHWZWRkW6n6ij8GeaBhchGxG08t
-        S0nUNcs+clGL36gU/MnRAMsyL22bESMOa1SgotbpiVab2YWhVmMt8tKiATobnSIjkBg4tZGXfv7bY
-        FMXnQwkHlfhJuhEYVRcvMRA9Vwb54BrizFPtI9g+Y/E9zTJqfeQt8Ol9lQ8I3uvkVpWcHU3t5jVXj
-        m/mCyzWKg1+O2RjXHFnzTfJf9fREFynmKv4aeuT9E7RbILJ0W+ZO51rstMUdp+3/fE7+6qMv8L4s5
-        nYvTKk0QJoB0VN9JC2F1vOhR7DZOWNCav4wmnneYnrtCQlP8TrgffFXJ6JuvEsDqlXN5DidE3I7wN
-        VBugA7wZZvuPnbHV3abPbxmWU0jL1QuobpdZaBwME01bb4ru/7PF8XiRaVMBdJUJ7JedD9pS7Z6JO
-        HR+HyeKzTkFYE0mDQN7YNhGPWx4QtO3moPzUkmMnBhbdPzaT9y45IhJEuD092+FfnhWfdgyNs0NFu
-        NbWCQbyrIoLZdRRfwbMVggT6eqaVgS4mx9Vyy9r7n+0AW+2SaAGih8sPrny6XOec1etMoUOBlzJ55
-        KKl418RSdHQkWPcdHg4V1MXV5dVjxprjjLSytKCDE=;
-X-Spam-Action: add header
-X-Spam-Bar: ++++++
-X-Spam-Score: 6.7 (++++++)
-Received: from [2001:4dd0:4f8e:0:7ddf:a8d0:8763:a125] (port=51080 helo=naboo.chaotikum.eu)
-        by mx0.chaotikum.eu with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <qsx@chaotikum.eu>)
-        id 1nzpY2-0006bX-A2; Sat, 11 Jun 2022 03:04:48 +0200
-From:   Thomas Schneider <qsx@chaotikum.eu>
-To:     "Daniel J. Ogorchock" <djogorchock@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Schneider <qsx@chaotikum.eu>
-Subject: [PATCH] HID: nintendo: Set phys property of input device based on HID phys
-Date:   Sat, 11 Jun 2022 03:03:59 +0200
-Message-Id: <20220611010359.115555-1-qsx@chaotikum.eu>
-X-Mailer: git-send-email 2.35.1
+        Fri, 10 Jun 2022 21:12:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AB81001
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 18:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654909932; x=1686445932;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YkVAY5kVjUVtusvqvweHGO+n+u3CHpxTEhAo9kaMLts=;
+  b=Oa3WAopZ1WAhrehEeMKkMuTv6F7OhHcwI5H0ml8EgxMsZl9UUa7AWml7
+   Uf+yz8f4JiRzNkQ+RuUCX6/gTr1+vlDpHI8dv6nVvq3J1NHcwl567cQ9t
+   FLA4Jt3g7PSd7Xt9i6v6J/AoW/h1D9qqoDEXjXgC6jdjC+Wibvk4RP/J+
+   HrjwrScKG4rSS7+mIBx39OQx36rFerYdDcFniWyY9gzVTq1b/Lrl/rqZ6
+   e+huviNLEHGVPGpP+T7w4JY9NT09USIOXI/AjteUPD/TKH4v1EajB52GH
+   M9zczzNzo3mBCZUX54EKX/UlI1sbxwDvgrufchybsOg0N4ZYOZMUIoDlr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="278923704"
+X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
+   d="scan'208";a="278923704"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 18:12:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
+   d="scan'208";a="610960174"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 10 Jun 2022 18:12:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 86459F8; Sat, 11 Jun 2022 04:12:12 +0300 (EEST)
+Date:   Sat, 11 Jun 2022 04:12:12 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220611011212.ockffkv4h3fiwfdl@black.fi.intel.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
+ <c3b4f3ccf8ee547a588bf8a971064e4d62b6a44c.camel@intel.com>
+ <20220610180635.l44opq2votd3gxpl@black.fi.intel.com>
+ <5b56c88e477d879e5a0e3c15627cb05901a812f4.camel@intel.com>
+ <dda083610d4c8b8d8d0b09021345e9cc0cb35bbe.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dda083610d4c8b8d8d0b09021345e9cc0cb35bbe.camel@intel.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While the MAC address the uniq identifier is set to (cf. commit
-1425247383c5 ("HID: nintendo: set controller uniq to MAC")) is certainly
-unique, the physical location can be more helpful in user interfaces.  The
-underlying hid_device already provides a suitable value, so we can simply
-reuse this here.
+On Fri, Jun 10, 2022 at 10:18:23PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2022-06-10 at 11:08 -0700, Edgecombe, Richard P wrote:
+> > On Fri, 2022-06-10 at 21:06 +0300, Kirill A. Shutemov wrote:
+> > > On Fri, Jun 10, 2022 at 04:16:01PM +0000, Edgecombe, Rick P wrote:
+> > > > On Fri, 2022-06-10 at 17:35 +0300, Kirill A. Shutemov wrote:
+> > > > > +static int prctl_enable_tagged_addr(unsigned long nr_bits)
+> > > > > +{
+> > > > > +       struct mm_struct *mm = current->mm;
+> > > > > +
+> > > > > +       /* Already enabled? */
+> > > > > +       if (mm->context.lam_cr3_mask)
+> > > > > +               return -EBUSY;
+> > > > > +
+> > > > > +       /* LAM has to be enabled before spawning threads */
+> > > > > +       if (get_nr_threads(current) > 1)
+> > > > > +               return -EBUSY;
+> > > > 
+> > > > Does this work for vfork()? I guess the idea is that locking is
+> > > > not
+> > > > needed below because there is only one thread with the MM, but
+> > > > with
+> > > > vfork() another task could operate on the MM, call fork(), etc.
+> > > > I'm
+> > > > not
+> > > > sure...
+> > > 
+> > > I'm not sure I follow. vfork() blocks parent process until child
+> > > exit
+> > > or
+> > > execve(). I don't see how it is a problem.
+> > 
+> > Oh yea, you're right.
+> 
+> Actually, I guess vfork() only suspends the calling thread. So what if
+> you had:
+> 1. Parent spawns a bunch of threads
+> 2. vforks()
+> 3. Child enables LAM (it only has one thread, so succeeds)
+> 4. Child exits()
+> 5. Parent has some threads with LAM, and some not
 
-Signed-off-by: Thomas Schneider <qsx@chaotikum.eu>
----
- drivers/hid/hid-nintendo.c | 2 ++
- 1 file changed, 2 insertions(+)
+I think it is in "Don't do that" territory. It is very similar to cases
+described in "Caveats" section of the vfork(2) man-page.
 
-diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
-index 2204de889739..df9cd5d883c0 100644
---- a/drivers/hid/hid-nintendo.c
-+++ b/drivers/hid/hid-nintendo.c
-@@ -1634,6 +1634,7 @@ static int joycon_input_create(struct joycon_ctlr *ctlr)
- 	ctlr->input->id.version = hdev->version;
- 	ctlr->input->uniq = ctlr->mac_addr_str;
- 	ctlr->input->name = name;
-+	ctlr->input->phys = hdev->phys;
- 	input_set_drvdata(ctlr->input, ctlr);
- 
- 	/* set up sticks and buttons */
-@@ -1713,6 +1714,7 @@ static int joycon_input_create(struct joycon_ctlr *ctlr)
- 	ctlr->imu_input->id.version = hdev->version;
- 	ctlr->imu_input->uniq = ctlr->mac_addr_str;
- 	ctlr->imu_input->name = imu_name;
-+	ctlr->imu_input->phys = hdev->phys;
- 	input_set_drvdata(ctlr->imu_input, ctlr);
- 
- 	/* configure imu axes */
+> It's some weird userspace that doesn't deserve to have things work for
+> it, but I wonder if it could open up little races around untagging. As
+> an example, KVM might have a super narrow race where it checks for tags
+> in memslots using addr != untagged_addr(addr) before checking
+> access_ok(addr, ...). See __kvm_set_memory_region(). If mm-
+> >context.untag_mask got set in the middle, tagged memslots could be
+> added.
+
+Ultimately, a process which calls vfork(2) is in control of what happens
+to the new process until execve(2) or exit(2). So, yes it is very creative
+way to shoot yourself into leg, but I don't think it worth preventing.
+
+And I'm not sure how the fix would look like.
+
 -- 
-2.35.1
-
+ Kirill A. Shutemov

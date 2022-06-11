@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EED954737A
+	by mail.lfdr.de (Postfix) with ESMTP id 77C4754737B
 	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 11:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiFKJ6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 05:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S229691AbiFKJ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 05:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiFKJ6v (ORCPT
+        with ESMTP id S229641AbiFKJ6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 11 Jun 2022 05:58:51 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFE3B84F;
-        Sat, 11 Jun 2022 02:58:48 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id h23so1483981ljl.3;
-        Sat, 11 Jun 2022 02:58:48 -0700 (PDT)
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75691D324;
+        Sat, 11 Jun 2022 02:58:49 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id p18so1987846lfr.1;
+        Sat, 11 Jun 2022 02:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V8fgBWB6Fwlc80DQzKSjfadMQq9+v7sFm69/tgJcyx8=;
-        b=b+UduNbJq6kwMAPQgOSuaelsP440nPLKh4mZNI3OJpp2oPfpLd8jEkPyeaqxDaKLJu
-         g2to7UoslpP80cXn6z2d3qsl+M/hHOAvRJNxZpCs24LeofPfHiZO5kHpvvjZIGxkidUt
-         1depfTDbzezsOVlDTMpTQ5C0hPJXeIA5R5ddm522GuKkCuuweAHHWKKnTWzz1hMK3iUb
-         4fatkiOpOUAXZLb1MLbF8mYVW6Bf7KtMWmyEzdGU0yfP+aqpDPVUWDs9bScFm+qRwCSI
-         zrspBZcGZteC4lgw0N1VXd5yhxOfzhGrcnHTEKm31qag+MEqbBH4aYVq5EHw2vATzIGs
-         07hw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=C93TNgs3tEMkjRGIc4zQyQSLHKj4wajnsAJdSQ715T4=;
+        b=TC/HfOrVTyr9dht911B6WyEVEETgffYiwjSdsWhhNbTnqcUq/GmMnj85tfMJpHKJ54
+         8lTzTeJR1UQqQbJHSYxhunhJ1eaaS7dnT1NbiiMzzsgRDBKSjyvDJyCX6OwXzmmhHmh7
+         OcdG1D00tvereTAB6g317kOi36zTyygl1wiNErlzuIMhO3Dj8DapgNDRihg/tNuI3ds2
+         GrQ00+6wMB5J3loW4lWEVflR1QmKYbb627zhLEwgST10z2U5Q2wGWPYmNUAoCZZUWUi2
+         9y+Up1t5iqr8N0GanPfJiV2q/pHD8+I2JKuuecwTYih4E2G0N2YBuALQMclz2s05+H4d
+         c2+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V8fgBWB6Fwlc80DQzKSjfadMQq9+v7sFm69/tgJcyx8=;
-        b=d2tnrjm+u9knNv3xz0OWqCFxz/nFIB9WIEMJSBpPP+UmTEEQS/VixWrfqA/6zt+UwS
-         Yrd6MGHFnR5CkcmCEt9mEDx/eHrBr0upn5kg/+TRJr4tDghoRO7HETcz4mFdDLZ9L9V5
-         QzRhVEKvpYci6d9zN8X56RBIfEFs5Ry/LGs+QuOoIvPMJVgIgipa/0e9GrMbxX1L++jb
-         hh0pK8eqSA06kmddXA8SFbVtyErZ3yXxH8026Ya9AIkRNzk8ukoVWWeO3CTgNFn5jclv
-         q+zFMGPk8sTApZNeG98zMEia3P26ANR7xSeSj6nBaFRTvmMc3gAaJPyeuHPI0vtVmj/l
-         9D5Q==
-X-Gm-Message-State: AOAM530sco2WPuWxQoAbk0OLQOpp88901Ic4QsUgXlobv0X2Hq9j/FeO
-        a19Es5ZBxuPIpj44Kgjocc6aCNNvDeL0/ZXP
-X-Google-Smtp-Source: ABdhPJwzkJ9Xi37kvu4X5cJKh8Gn6rL6I+HOKpwZclM9Wm2twJohgXGGrRlhPOPl63T2tv3oattPFg==
-X-Received: by 2002:a2e:8686:0:b0:255:8474:f3af with SMTP id l6-20020a2e8686000000b002558474f3afmr20805147lji.402.1654941526941;
-        Sat, 11 Jun 2022 02:58:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=C93TNgs3tEMkjRGIc4zQyQSLHKj4wajnsAJdSQ715T4=;
+        b=5alDOfaTwS2H5NEyyFPo3Rz2tNfzbC1wiPDxy4TO/A6PCFQmpmmEKGoXxfktq9TEOv
+         /jW130JMZf8gJ+wfH84zgVevsx6JgQsHq+qJodjAgIwsN9w24wUdztqzET+hWgB16o1Y
+         UDCfz09XYAi3mY48bulxVKqrRVqFP9vx3TV6A1GbOI3S7L21+Ip4yBBXM2sUhwYc5hsf
+         CkaYhMGPJ3kJ9vg5Q9vdhW4Eas2WDjVN9xfb1F6TMm41fOEqbd4KeTkH9xjs53ZK4/Jl
+         guYzmuoUwQkxj5bCaYPuyj7G53nWtlgpbDCafcWaV/v3I1Zq3bdm8Tx7jNxBG4GEN5y0
+         rsWw==
+X-Gm-Message-State: AOAM532bIkooRFXpCLVohxEUsJL4vQ6RU0Rqfua6q9JOcLXLQehtmmEI
+        Wc/LTcf8ux+rZ6CxfiER+lg=
+X-Google-Smtp-Source: ABdhPJyW9Vpw8JSAMpHkEpi5Oft1TkEZC/FsxY6pbNdui2qL9dmT/mecCiJCFx6hLubZ/sI+6Y9bFg==
+X-Received: by 2002:ac2:4bd3:0:b0:479:3cfb:72e5 with SMTP id o19-20020ac24bd3000000b004793cfb72e5mr19651571lfq.516.1654941528155;
+        Sat, 11 Jun 2022 02:58:48 -0700 (PDT)
 Received: from DESKTOP-GSFPEC9.localdomain (broadband-90-154-71-254.ip.moscow.rt.ru. [90.154.71.254])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056512055200b004785060bad6sm200634lfl.201.2022.06.11.02.58.46
+        by smtp.gmail.com with ESMTPSA id h18-20020a056512055200b004785060bad6sm200634lfl.201.2022.06.11.02.58.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 02:58:46 -0700 (PDT)
+        Sat, 11 Jun 2022 02:58:47 -0700 (PDT)
 From:   Konstantin Aladyshev <aladyshev22@gmail.com>
 Cc:     supreeth.venkatesh@amd.com, aladyshev22@gmail.com,
         Rob Herring <robh+dt@kernel.org>,
@@ -56,10 +56,12 @@ Cc:     supreeth.venkatesh@amd.com, aladyshev22@gmail.com,
         Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] DTS changes for the AMD EthanolX CRB BMC
-Date:   Sat, 11 Jun 2022 12:58:24 +0300
-Message-Id: <20220611095828.1090-1-aladyshev22@gmail.com>
+Subject: [PATCH 1/4] ARM: dts: aspeed: ethanolx: Add correct label to flash device
+Date:   Sat, 11 Jun 2022 12:58:25 +0300
+Message-Id: <20220611095828.1090-2-aladyshev22@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220611095828.1090-1-aladyshev22@gmail.com>
+References: <20220611095828.1090-1-aladyshev22@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,17 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several patches for the DTS of the BMC on the AMD EthanolX CRB.
+The OpenBMC code update infrastructure requires BMC firmware flash
+drive to have a label "bmc".
 
-Konstantin Aladyshev (4):
-  ARM: dts: aspeed: ethanolx: Add correct label to flash device
-  ARM: dts: aspeed: ethanolx: Configure RTS/CTS for UART1
-  ARM: dts: aspeed: ethanolx: Use correct driver for the FRU EEPROM
-  ARM: dts: aspeed: ethanolx: Enable VUART
+Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
- arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
+diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
+index 6406a0f080ee..889b2fdd19cf 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
+@@ -58,6 +58,7 @@ &fmc {
+ 	flash@0 {
+ 		status = "okay";
+ 		m25p,fast-read;
++		label = "bmc";
+ 		#include "openbmc-flash-layout.dtsi"
+ 	};
+ };
 -- 
 2.25.1
 

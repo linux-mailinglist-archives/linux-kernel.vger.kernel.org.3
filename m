@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CA454770B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 20:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61EB547717
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 20:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234860AbiFKSH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 14:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S229750AbiFKSQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 14:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiFKSHX (ORCPT
+        with ESMTP id S229458AbiFKSQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 14:07:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0DD1929E;
-        Sat, 11 Jun 2022 11:07:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C4466120B;
-        Sat, 11 Jun 2022 18:07:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C115C34116;
-        Sat, 11 Jun 2022 18:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654970841;
-        bh=if2s9G1Ax2BNvHiItUquxbYsizofOQR/sGlUL2Ao4no=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nHoyyDhxr1VW9+AdFXDn4Zjtwxxo+8HxEJKJKwfVr8otx6sRmwlhDGEX8VPEAiyKa
-         T6ADzGPhOgxJsZRpSDdBGLXTyVMsYU/b4FQ1VBty6Y2O398CPl4vJX6lSALmWfHcPo
-         6CDVGVr0qrVGQ24EM0UjAwgSYHp47M+6x+7koLL+5aM1/IPRIwc/Y/cJtmdU4QmYAL
-         iGAXMK1+EwKFmnH6nsD6aUqecdl5cr1iIL/nJeY5RJxV9chn9PITM5Qdkz0HpEp6pM
-         kKswRq9Ymi0s23s6IS8EccCJeVTMg+qU9tnAl2azjD2B/+8xTZxLuAVYaF0xDktAHO
-         dDwnV/xIS+WxQ==
-Date:   Sat, 11 Jun 2022 19:16:29 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     <eugen.hristev@microchip.com>, <lars@metafoo.de>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/16] iio: adc: at91-sama5d2_adc: add support for
- temperature sensor
-Message-ID: <20220611191629.2a0f6d2f@jic23-huawei>
-In-Reply-To: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
-References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 11 Jun 2022 14:16:44 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A50A6D3BA
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 11:16:40 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-100eb6f7782so3274149fac.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 11:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kgRN1xEQcitAejCBLpzML1+JqkKMRkpU5jU1U59JtqE=;
+        b=JSzeQQNZSFvyTFEakgnEEc1U3Ooj9KJ/WvCXS0bFwd92LVCZ/A/lElrk/VaSc/FbUO
+         /wViRb+cDQhSRNLcI8pkoviXuMbZQz6l0Ke8ehmlTcJsupvN2jr5YvTbPL9ayvPuYtwe
+         w7Bd73fXXEcKPoQJdgYcbqepmPDYT5ckwjz26eiqYmkeXytwT65GGUo8qFw0bBql6Unv
+         tmy98DlvUK2XG28yo7bbnBpfaqx76zzuDQpfM0MyvrvaGoS09R8ztPNzxRKpMuCbvrJS
+         vO8UpjMF7l1lOt7pW+7839VwMJdR9IqbdUne3QRkZdwMJexDFESHpA0SJaSDEIvIyzkB
+         QTbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kgRN1xEQcitAejCBLpzML1+JqkKMRkpU5jU1U59JtqE=;
+        b=lLX+EZ8q2yhBCm0ML9sScraAoIrXgah/6I49visATqRCLWBq/0Sky7r/J+IleTwRZ/
+         ZyaWEtUCpvJZ/+K10WQBaNLTpA01CcDAp0k8p9rD66hhTa4N1PvOhCtQiR66jWAt88N5
+         e9XaIamzIzWYqwBDlbHam49c4b7i69BTzSNLCHNjrU2aDJXMHrXRJqWuv+z0sUEMeI2L
+         Vv4Yib2dwMa3SPaUswbxuSUV5wChyVJiNzi2wFsvvrkpTMnL9CKPFwxolFZTn8VHXH91
+         nSD7gZO5ysOO1cjvawkOIgaPgSgPUMG19u3KbdyK1e0w74ZOrATY8ouC99mZGauE0k4z
+         jwXw==
+X-Gm-Message-State: AOAM533Glsk6E3HiIUy9FR7d3g3gbtKYgkLmvcoTfB3DGj22tOmSwvAi
+        vtpLvEXdRaHKCETfp9mP8qTBRg==
+X-Google-Smtp-Source: ABdhPJxH6EjZpF1SBHn+LX+TQys5+EfxFofNkvijYQT6OUdvv/+GF69NEHAXWY+ttpQglZ7ZTOqnZg==
+X-Received: by 2002:a05:6870:889c:b0:f2:57f0:b7ef with SMTP id m28-20020a056870889c00b000f257f0b7efmr3130568oam.243.1654971399704;
+        Sat, 11 Jun 2022 11:16:39 -0700 (PDT)
+Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056870d68300b000f342119f41sm1352095oap.42.2022.06.11.11.16.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jun 2022 11:16:35 -0700 (PDT)
+Message-ID: <42e52572-726b-d94d-6523-7b42dbeecff1@kali.org>
+Date:   Sat, 11 Jun 2022 13:16:32 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH] drm/msm/gem: Drop early returns in close/purge vma
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220610172055.2337977-1-robdclark@gmail.com>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20220610172055.2337977-1-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,73 +79,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 11:31:57 +0300
-Claudiu Beznea <claudiu.beznea@microchip.com> wrote:
+Hi Rob,
 
-> Hi,
-> 
-> The following series add support for temperature sensor available on
-> SAMA7G5.
-> 
-> Temperature sensor available on SAMA7G5 provides 2 outputs VTEMP and VBG.
-> VTEMP is proportional to the absolute temperature voltage and VBG is a
-> quasi-temperature independent voltage. Both are necessary in computing
-> the temperature (for better accuracy). Also, for better accuracy the
-> following settings were imposed when measusing the temperature:
-> oversampling rate of 256, sampling frequency of 10MHz, a startup time of
-> 512 ticks, MR.tracktim=0xf, EMR.trackx=0x3.
-> 
-> For computing the temperature measured by ADC calibration data is
-> necessary. This is provided via OTP memory available on SAMA7G5.
-> 
-> Patches 1/16-3/16 provides some fixes.
-> Patches 3/16-12/16 prepares for the addition of temperature sensor
-> support.
-> Patch 13/16 adds the temperature sensor support.
-> 
-> Along with temperature sensor support I took the chance and added
-> runtime PM support in this series, too (handled in patch 15/16).
-> 
-> The rest of patches in this series are minor cleanups.
-> 
-> Thank you,
-> Claudiu Beznea
+On 6/10/22 12:20 PM, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Keep the warn, but drop the early return.  If we do manage to hit this
+> sort of issue, skipping the cleanup just makes things worse (dangling
+> drm_mm_nodes when the msm_gem_vma is freed, etc).  Whereas the worst
+> that happens if we tear down a mapping the GPU is accessing is that we
+> get GPU iova faults, but otherwise the world keeps spinning.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/gpu/drm/msm/msm_gem_vma.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
+> index 3c1dc9241831..c471aebcdbab 100644
+> --- a/drivers/gpu/drm/msm/msm_gem_vma.c
+> +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
+> @@ -62,8 +62,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+>   	unsigned size = vma->node.size;
+>   
+>   	/* Print a message if we try to purge a vma in use */
+> -	if (GEM_WARN_ON(msm_gem_vma_inuse(vma)))
+> -		return;
+> +	GEM_WARN_ON(msm_gem_vma_inuse(vma));
+>   
+>   	/* Don't do anything if the memory isn't mapped */
+>   	if (!vma->mapped)
+> @@ -128,8 +127,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
+>   void msm_gem_close_vma(struct msm_gem_address_space *aspace,
+>   		struct msm_gem_vma *vma)
+>   {
+> -	if (GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped))
+> -		return;
+> +	GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped);
+>   
+>   	spin_lock(&aspace->lock);
+>   	if (vma->iova)
 
-Hi CLaudiu,
+I've seen the splat on the Lenovo Yoga C630 here, and have tested this 
+patch, and as described, the splat still happens, but the system is 
+still able to be used.
 
-Those patches I haven't replied to individually look good to me.
-
-Thanks,
-
-Jonathan
-
-> 
-> Claudiu Beznea (16):
->   iio: adc: at91-sama5d2_adc: fix AT91_SAMA5D2_MR_TRACKTIM_MAX
->   iio: adc: at91-sama5d2_adc: lock around oversampling and sample freq
->   iio: adc: at91-sama5d2_adc: exit from write_raw() when buffers are
->     enabled
->   iio: adc: at91-sama5d2_adc: handle different EMR.OSR for different hw
->     versions
->   iio: adc: at91-sama5d2_adc: adjust osr based on specific platform data
->   iio: adc: at91-sama5d2_adc: add 64 and 256 oversampling ratio
->   iio: adc: at91-sama5d2_adc: simplify the code in
->     at91_adc_read_info_raw()
->   iio: adc: at91-sama5d2_adc: move oversampling storage in its function
->   iio: adc: at91-sama5d2_adc: update trackx on emr
->   iio: adc: at91-sama5d2_adc: add startup and tracktim as parameter for
->     at91_adc_setup_samp_freq()
->   iio: adc: at91-sama5d2_adc: add locking parameter to
->     at91_adc_read_info_raw()
->   dt-bindings: iio: adc: at91-sama5d2_adc: add id for temperature
->     channel
->   iio: adc: at91-sama5d2_adc: add support for temperature sensor
->   iio: adc: at91-sama5d2_adc: add empty line after functions
->   iio: adc: at91-sama5d2_adc: add runtime pm support
->   iio: adc: at91-sama5d2_adc: use pm_ptr()
-> 
->  drivers/iio/adc/at91-sama5d2_adc.c            | 633 +++++++++++++++---
->  .../dt-bindings/iio/adc/at91-sama5d2_adc.h    |   3 +
->  2 files changed, 548 insertions(+), 88 deletions(-)
-> 
+Tested-by: Steev Klimaszewski <steev@kali.org>
 

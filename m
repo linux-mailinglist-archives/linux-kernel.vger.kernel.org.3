@@ -2,141 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1AA54771F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 20:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7512D547720
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 20:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiFKS35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 14:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S230193AbiFKSc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 14:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiFKS34 (ORCPT
+        with ESMTP id S229672AbiFKScy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 14:29:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38A9331DF6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 11:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654972193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pcxlPosDuNYZLF+xkyfBuM18/wNn6c4mtAX4pgyPBoM=;
-        b=ePeFudFCCDGY04ZeegNWbbFJghLadIh6+WKyk8exsido+JdRHV4+Y2yrX+dw7y39z7XnyY
-        UWUe49kNumxWFaq/Z73TP8uv79OhRmyGNZ6vqsEWCVxX3Gw7DNCVnSYTastVcgiujNEixZ
-        LnKOBUpO9j6DgN+7UGvNkymEoynvD8o=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-PF_55YNENt67CvBYqOhIhg-1; Sat, 11 Jun 2022 14:29:51 -0400
-X-MC-Unique: PF_55YNENt67CvBYqOhIhg-1
-Received: by mail-wm1-f69.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso3235385wms.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 11:29:51 -0700 (PDT)
+        Sat, 11 Jun 2022 14:32:54 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DB02F65A
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 11:32:51 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id s6so3083919lfo.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 11:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Y/Q2290+YOhK1bDLGmt6qXPcRk6v5jqFwCfmxJNUbhg=;
+        b=dCtVTC9tTJH9oFz02XgCMQ8lPgmycesJKBImsDGNDzlhFS6zWOFAetpLNTPEJauTTb
+         CYE385ZktNV6TitUaCVqUc3IGDDAh2rdjhWjpdoJ72tAm4bQzosQWLDQsgD5w26AmBcS
+         ejBFyIExUHry+DT3HOcu354JG5VytsXWPOZczJr1hJGmPv3pN27UahMKj5jCH2vo7LpZ
+         d8j1D4FnN9ZH2TElMiYEvFzB6hXXIvnP+brnAK4ZdL4g3H7THeabtRi48y5ULOZlf+TO
+         P/L+6BUyLos9zYI7RUQJknwTutjTLKz+7axpxhfkunc3g8AZJX8/volSOlrlM3iS+89i
+         wWqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=pcxlPosDuNYZLF+xkyfBuM18/wNn6c4mtAX4pgyPBoM=;
-        b=GVtdEFQr7GAy2VguElSW8zo0zGrNNohSfM534kmR0Z2j70NajUwqCO5xetIC42m9Im
-         YwB/H/KmkBZ/jPiYUnn7Wqqt+ODyLFDcQscaBFYquIwkFVGsfWgoEHqW9hWP05Q5rawn
-         HOXxKPtIPtS71ujz55l6UP8QB9zpYKoZXOJt2WhnvOC4kw70HZ94pOiwO7EMZDq7X/7v
-         u+aQyuDLHAzIW6QVZ4S+GdGWHPcWiXSPf9xht/ypaDHoOFNutA0uKX5TmoIDaxz3gfcs
-         bpxItgiW5jU60z0tot+jRnCbeFd5/I6hO+NySFEaWgBKDDxXkopaOhnRKENIq9Lft8RW
-         0gQA==
-X-Gm-Message-State: AOAM533juM7vBbsguMvI02zbGMa3O0eH9t/Uu9UQf1PQ2fC//wUrUTbO
-        Qv5cUSzdrqMqBhoIHdH0xHlv+A7a31i0Zp/2xYM89H0gkPpXfTrZi4SKTysjf5/a4tDDQX7wq4y
-        IviS83I7e9thX3bsZc/v10XX0
-X-Received: by 2002:a05:600c:3790:b0:39c:7dc2:aea0 with SMTP id o16-20020a05600c379000b0039c7dc2aea0mr6010385wmr.112.1654972190627;
-        Sat, 11 Jun 2022 11:29:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzrYrnw+ck5JXVgLSNaYccrM3xEoJFNJyTxJ1A7dw5yPRd/CG4ZB1PEvF7LgsNSXQjVrBQLWQ==
-X-Received: by 2002:a05:600c:3790:b0:39c:7dc2:aea0 with SMTP id o16-20020a05600c379000b0039c7dc2aea0mr6010368wmr.112.1654972190341;
-        Sat, 11 Jun 2022 11:29:50 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c719:c400:dc43:2462:b7e5:dd7e? (p200300cbc719c400dc432462b7e5dd7e.dip0.t-ipconnect.de. [2003:cb:c719:c400:dc43:2462:b7e5:dd7e])
-        by smtp.gmail.com with ESMTPSA id p24-20020a05600c1d9800b0039c8a22554bsm728282wms.27.2022.06.11.11.29.49
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Y/Q2290+YOhK1bDLGmt6qXPcRk6v5jqFwCfmxJNUbhg=;
+        b=ygYDFXJcnVfodoK6MaTQoXxBl6HFFFr7P8tT8q1uvudmrhlGo7z/0Cuu5G9YgZYe0F
+         n6aJnjEIvYx4CUOZw2+1BUqrf//V2WttewY/SZlINskpvGiWbO4pY4B6lGYm0LiEAxUd
+         yU8PKt1DsuLPeOfoLyK5NpecLt1y7Df+MBi9I8EaJgXUvR0yB41giwc5EE/NLoeHNsnI
+         vduLrv/u9gU7MmguMp/lkF5xPh63tHg03pF0IgWf+wqAYnSw+hNPsWwKK0fVG9FoVJsM
+         wAV5Yd9G6CrihX8O39/jHFV7Azm4WfF/ECtSjD6qetspXZFAdJIE3+Eg7HM0YyqSaS/u
+         Wf6w==
+X-Gm-Message-State: AOAM53301RpVTQEYPydzQMWrHfx89ncWn/cbaOwN4yyAwFSMAUaAFP63
+        xwqK6O8bKGByS7W2cpPb3f/CSXNsvJl5zw==
+X-Google-Smtp-Source: ABdhPJymFrwkMTrhHRFUvL5FMxusP4kbC1Ig3W2VPrSrQ9wu9j/SjH2yBNxrM4FrRp0aFpKY0ggVrA==
+X-Received: by 2002:a05:6512:39d6:b0:478:fd24:36 with SMTP id k22-20020a05651239d600b00478fd240036mr29951762lfu.504.1654972369804;
+        Sat, 11 Jun 2022 11:32:49 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056512118100b00478efdea1e4sm344455lfr.64.2022.06.11.11.32.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jun 2022 11:29:49 -0700 (PDT)
-Message-ID: <bb120b4a-e6f6-de81-35f0-9803acf9b0be@redhat.com>
-Date:   Sat, 11 Jun 2022 20:29:47 +0200
+        Sat, 11 Jun 2022 11:32:49 -0700 (PDT)
+Message-ID: <1fc4f91c-8142-44dd-0f1d-a75420bf450d@openvz.org>
+Date:   Sat, 11 Jun 2022 21:32:47 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] mm: kmem: make mem_cgroup_from_obj() vmalloc()-safe
 Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        akpm@linux-foundation.org, minchan@kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org, jhubbard@nvidia.com, joaodias@google.com,
-        jgg@ziepe.ca
-References: <165490039431.944052.12458624139225785964.stgit@omen>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm: Re-allow pinning of zero pfns
-In-Reply-To: <165490039431.944052.12458624139225785964.stgit@omen>
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Shakeel Butt <shakeelb@google.com>
+References: <20220610180310.1725111-1-roman.gushchin@linux.dev>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <20220610180310.1725111-1-roman.gushchin@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.06.22 00:35, Alex Williamson wrote:
-> The commit referenced below subtly and inadvertently changed the logic
-> to disallow pinning of zero pfns.  This breaks device assignment with
-> vfio and potentially various other users of gup.  Exclude the zero page
-> test from the negation.
-
-I wonder which setups can reliably work with a long-term pin on a shared
-zeropage. In a MAP_PRIVATE mapping, any write access via the page tables
-will end up replacing the shared zeropage with an anonymous page.
-Something similar should apply in MAP_SHARED mappings, when lazily
-allocating disk blocks.
-
-In the future, we might trigger unsharing when taking a R/O pin for the
-shared zeropage, just like we do as of now upstream for shared anonymous
-pages (!PageAnonExclusive). And something similar could then be done
-when finding a !anon page in a MAP_SHARED mapping.
-
+On 6/10/22 21:03, Roman Gushchin wrote:
+> Currently mem_cgroup_from_obj() is not working properly with objects
+> allocated using vmalloc(). It creates problems in some cases, when
+> it's called for static objects belonging to  modules or generally
+> allocated using vmalloc().
 > 
-> Fixes: 1c563432588d ("mm: fix is_pinnable_page against a cma page")
+> This patch makes mem_cgroup_from_obj() safe to be called on objects
+> allocated using vmalloc().
+> 
+> It also introduces mem_cgroup_from_slab_obj(), which is a faster
+> version to use in places when we know the object is either a slab
+> object or a generic slab page (e.g. when adding an object to a lru
+> list).
+> 
+> Suggested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
 
-Having that said, it indeed looks like that was an unintended change.
+I've tested this patch together with my patch 
+"net: set proper memcg for net_init hooks allocations"
+and successfully booted test kernel on arm64 VM without
+any memcg-related warnings.
+[root@fedora ~]# uname -a
+Linux fedora 5.19.0-rc1-next-20220610+ #1 SMP Sat Jun 11 16:06:23 UTC 2022 aarch64 aarch64 aarch64 GNU/Linux
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Tested-by: Vasily Averin <vvs@openvz.org>
 
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
 > ---
+>  include/linux/memcontrol.h |  6 ++++
+>  mm/list_lru.c              |  2 +-
+>  mm/memcontrol.c            | 71 +++++++++++++++++++++++++++-----------
+>  3 files changed, 57 insertions(+), 22 deletions(-)
 > 
-> At least I assume this was inadvertent...  If there's a better fix,
-> please run with it as I'm out of the office the 1st half of next
-> week and would like to see this fixed ASAP.  Thanks!
-> 
->  include/linux/mm.h |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index bc8f326be0ce..781fae17177d 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1600,7 +1600,7 @@ static inline bool is_pinnable_page(struct page *page)
->  	if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
->  		return false;
->  #endif
-> -	return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
-> +	return !is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page));
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 0d7584e2f335..4d31ce55b1c0 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1761,6 +1761,7 @@ static inline int memcg_kmem_id(struct mem_cgroup *memcg)
 >  }
->  #else
->  static inline bool is_pinnable_page(struct page *page)
-> 
-> 
-
-
--- 
-Thanks,
-
-David / dhildenb
+>  
+>  struct mem_cgroup *mem_cgroup_from_obj(void *p);
+> +struct mem_cgroup *mem_cgroup_from_slab_obj(void *p);
+>  
+>  static inline void count_objcg_event(struct obj_cgroup *objcg,
+>  				     enum vm_event_item idx)
+> @@ -1858,6 +1859,11 @@ static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
+>  	return NULL;
+>  }
+>  
+> +static inline struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline void count_objcg_event(struct obj_cgroup *objcg,
+>  				     enum vm_event_item idx)
+>  {
+> diff --git a/mm/list_lru.c b/mm/list_lru.c
+> index ba76428ceece..a05e5bef3b40 100644
+> --- a/mm/list_lru.c
+> +++ b/mm/list_lru.c
+> @@ -71,7 +71,7 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
+>  	if (!list_lru_memcg_aware(lru))
+>  		goto out;
+>  
+> -	memcg = mem_cgroup_from_obj(ptr);
+> +	memcg = mem_cgroup_from_slab_obj(ptr);
+>  	if (!memcg)
+>  		goto out;
+>  
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 4093062c5c9b..8c408d681377 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -783,7 +783,7 @@ void __mod_lruvec_kmem_state(void *p, enum node_stat_item idx, int val)
+>  	struct lruvec *lruvec;
+>  
+>  	rcu_read_lock();
+> -	memcg = mem_cgroup_from_obj(p);
+> +	memcg = mem_cgroup_from_slab_obj(p);
+>  
+>  	/*
+>  	 * Untracked pages have no memcg, no lruvec. Update only the
+> @@ -2833,27 +2833,9 @@ int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
+>  	return 0;
+>  }
+>  
+> -/*
+> - * Returns a pointer to the memory cgroup to which the kernel object is charged.
+> - *
+> - * A passed kernel object can be a slab object or a generic kernel page, so
+> - * different mechanisms for getting the memory cgroup pointer should be used.
+> - * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
+> - * can not know for sure how the kernel object is implemented.
+> - * mem_cgroup_from_obj() can be safely used in such cases.
+> - *
+> - * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
+> - * cgroup_mutex, etc.
+> - */
+> -struct mem_cgroup *mem_cgroup_from_obj(void *p)
+> +static __always_inline
+> +struct mem_cgroup *mem_cgroup_from_obj_folio(struct folio *folio, void *p)
+>  {
+> -	struct folio *folio;
+> -
+> -	if (mem_cgroup_disabled())
+> -		return NULL;
+> -
+> -	folio = virt_to_folio(p);
+> -
+>  	/*
+>  	 * Slab objects are accounted individually, not per-page.
+>  	 * Memcg membership data for each individual object is saved in
+> @@ -2886,6 +2868,53 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
+>  	return page_memcg_check(folio_page(folio, 0));
+>  }
+>  
+> +/*
+> + * Returns a pointer to the memory cgroup to which the kernel object is charged.
+> + *
+> + * A passed kernel object can be a slab object, vmalloc object or a generic
+> + * kernel page, so different mechanisms for getting the memory cgroup pointer
+> + * should be used.
+> + *
+> + * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
+> + * can not know for sure how the kernel object is implemented.
+> + * mem_cgroup_from_obj() can be safely used in such cases.
+> + *
+> + * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
+> + * cgroup_mutex, etc.
+> + */
+> +struct mem_cgroup *mem_cgroup_from_obj(void *p)
+> +{
+> +	struct folio *folio;
+> +
+> +	if (mem_cgroup_disabled())
+> +		return NULL;
+> +
+> +	if (unlikely(is_vmalloc_addr(p)))
+> +		folio = page_folio(vmalloc_to_page(p));
+> +	else
+> +		folio = virt_to_folio(p);
+> +
+> +	return mem_cgroup_from_obj_folio(folio, p);
+> +}
+> +
+> +/*
+> + * Returns a pointer to the memory cgroup to which the kernel object is charged.
+> + * Similar to mem_cgroup_from_obj(), but faster and not suitable for objects,
+> + * allocated using vmalloc().
+> + *
+> + * A passed kernel object must be a slab object or a generic kernel page.
+> + *
+> + * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
+> + * cgroup_mutex, etc.
+> + */
+> +struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
+> +{
+> +	if (mem_cgroup_disabled())
+> +		return NULL;
+> +
+> +	return mem_cgroup_from_obj_folio(virt_to_folio(p), p);
+> +}
+> +
+>  static struct obj_cgroup *__get_obj_cgroup_from_memcg(struct mem_cgroup *memcg)
+>  {
+>  	struct obj_cgroup *objcg = NULL;
 

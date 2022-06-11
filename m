@@ -2,107 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFB254763D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EFC54763E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238952AbiFKPvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 11:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S238979AbiFKPwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 11:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiFKPvc (ORCPT
+        with ESMTP id S233786AbiFKPwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 11:51:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 618691A82A
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654962689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nhRp/pGhgveCjZGUs+5rCBmMFDNeRBkg8UfANY7q/7Q=;
-        b=WCA8x0pQiCiNe9Wo/4SSa2IutroB+6RAT2vfpjUBjSXOZXD/llXwS/OpsBDtEp0uHnUrnr
-        DnfXA6f+3q+O0joEjJjPS+2tFulIn86fCQ/XA3pURxQZ20Duh7KuIZVoRCEOVdzSyRDe9h
-        tbuv4dQoOUtgPe4QmERwhKSK6yU4100=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-uaSfLbnUOGO3s6DKS_bN5A-1; Sat, 11 Jun 2022 11:51:28 -0400
-X-MC-Unique: uaSfLbnUOGO3s6DKS_bN5A-1
-Received: by mail-ed1-f71.google.com with SMTP id k7-20020aa7d8c7000000b0042dd4a5a393so1478310eds.11
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:51:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nhRp/pGhgveCjZGUs+5rCBmMFDNeRBkg8UfANY7q/7Q=;
-        b=r6AxPlsDsF0TAEqMHIZFhfrkqwmQ3poXqfPF6uahUSdi7SzroNQBJfhKBdefuVN35A
-         R8DJxB3c9yRzeiBhe+wU0bNi8InjGhevkMU4NAYIqo7MShI4v/hzoouYTfomORlT21oz
-         2ccw6zOusEVbU/qqItk60k1YFxEAisGQvb5TkOGwhuU8liZGnRTr0UzTVFnhWwwrWjqD
-         eYqvMKo5rKfuUFnxvyWBUjWHJEIxaQfm9CY4x2RXAtlZ4kxpImAiM6HF34fpe5ntqRkI
-         o/P9miyPbxTVdCLEOX2kKHyLyH7yFfvdoHu5Yecv3J6F5N7RNcTfu9BY3bLzoPi8fbM7
-         ta8A==
-X-Gm-Message-State: AOAM5301VVe/wlWL58Cf51mRApJHSZp0tNSrwUcBt+qCEbzBCrLEFaUx
-        srp0ghj/FeFzuPE1VZKX/dngIUjO/HvYGPZFwZ4lVzyrvLV3eGNDhusvM7nNqicUMu+QihKXl/0
-        wObjzWMyXrUpaP2mUeTLuCpDk
-X-Received: by 2002:a05:6402:23a2:b0:42d:d5f1:d470 with SMTP id j34-20020a05640223a200b0042dd5f1d470mr43214823eda.365.1654962687347;
-        Sat, 11 Jun 2022 08:51:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7i/21cJ65P0sfonbSV4Xxlqt9fZPtGU+UdW0ennP9y/mw+amxh0Oy8KPFgQJlhQH/Z3jRXQ==
-X-Received: by 2002:a05:6402:23a2:b0:42d:d5f1:d470 with SMTP id j34-20020a05640223a200b0042dd5f1d470mr43214806eda.365.1654962687159;
-        Sat, 11 Jun 2022 08:51:27 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id lu33-20020a170906fae100b007041e969a8asm1189152ejb.97.2022.06.11.08.51.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jun 2022 08:51:24 -0700 (PDT)
-Message-ID: <a1e80ec8-67dc-bde4-8f17-5aa2b3b1a32a@redhat.com>
-Date:   Sat, 11 Jun 2022 17:51:19 +0200
+        Sat, 11 Jun 2022 11:52:22 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03024E6B
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:52:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654962741; x=1686498741;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hUZ65Rg3EEiHgzz4LA4Q3Vxkj3mq3OjDaPirGkBxR60=;
+  b=Y4angcpWru4vXyxSVnKJv00hYuweYre/eNyabWJv4/FYQtYKByJm4pkC
+   SD2MtOQkHsFCEDJduTXHyV+OBEAQQhyGkoQBEztLgeqdOD32ReDNMYmSf
+   TubIcP20a8h7ZolfHabIS/4SC3WCQ5CBSXqlDQ9iWUnK50oJEzmQgcvi/
+   zqnCXh7fCwLnfnmIOEBm3yVBbPuhmjKs1B17UkRpr2LkWfIlhHssyy7yi
+   kYhJwUDL6NlUs9mwRJJnId8YsL1rhK/MU06RkTDz2UOvPtGFq8xXxOY+3
+   K2ws224bEx8Y06bBiq5FezI0Eat5C1UIUtAymqp2RJEqlZlzuacqWWz4/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="277941065"
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="277941065"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:52:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="711363163"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 11 Jun 2022 08:52:20 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o03PP-000J2X-FP;
+        Sat, 11 Jun 2022 15:52:19 +0000
+Date:   Sat, 11 Jun 2022 23:51:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream-workaround 443/453]
+ arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used
+Message-ID: <202206112336.404YWKiT-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 000/144] KVM: selftests: Overhaul APIs, purge VCPU_ID
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Anup Patel <anup@brainfault.org>
-Cc:     KVM General <kvm@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Marc Zyngier <maz@kernel.org>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <21570ac1-e684-7983-be00-ba8b3f43a9ee@redhat.com>
- <CAAhSdy0_50KshS1rAcOjtFBUu=R7a0uXYa76vNibD_n7s=q6XA@mail.gmail.com>
- <CAAhSdy1N9vwX1aXkdVEvO=MLV7TEWKMB2jxpNNfzT2LUQ-Q01A@mail.gmail.com>
- <YqIKYOtQTvrGpmPV@google.com> <YqKRrK7SwO0lz/6e@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YqKRrK7SwO0lz/6e@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/22 02:34, Sean Christopherson wrote:
-> I pushed a new version that's based on the current kvm/queue, commit 5e9402ac128b.
-> arm and x86 look good (though I've yet to test on AMD).
-> 
-> Thomas,
-> If you get a chance, could you rerun the s390 tests?  The recent refactorings to
-> use TAP generated some fun conflicts.
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   64f3ddf316eab9398414b94e62a01d185e6e94c8
+commit: d4ee16fc8532473025338c594b8fbe6a6faa0887 [443/453] KVM: x86/mmu: update lpage_info on changing page_type
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220611/202206112336.404YWKiT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/d4ee16fc8532473025338c594b8fbe6a6faa0887
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout d4ee16fc8532473025338c594b8fbe6a6faa0887
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/ arch/x86/kvm/
 
-I did so, rebased over David's nested dirty_log_perf_test patches and 
-pushed to kvm/queue.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Paolo
+Note: the intel-tdx/kvm-upstream-workaround HEAD 64f3ddf316eab9398414b94e62a01d185e6e94c8 builds fine.
+      It only hurts bisectability.
 
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kvm/mmu/mmu.c:18:
+   In file included from arch/x86/kvm/irq.h:15:
+   In file included from include/linux/kvm_host.h:47:
+   include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   static int memfile_register_notifier(struct file *file, flags,
+                                                           ^
+                                                           int
+>> arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used [-Werror,-Wunused-but-set-variable]
+           enum kvm_page_type type;
+                              ^
+   2 errors generated.
+
+
+vim +/type +982 arch/x86/kvm/mmu/mmu.c
+
+7c45d6a017129b Xiaoyao Li     2021-08-31  977  
+09cbecc5a0e81f Xiaoyao Li     2022-05-25  978  static void split_page_type(gfn_t gfn, struct kvm_memory_slot *slot,
+09cbecc5a0e81f Xiaoyao Li     2022-05-25  979  			    enum pg_level level)
+7c45d6a017129b Xiaoyao Li     2021-08-31  980  {
+7c45d6a017129b Xiaoyao Li     2021-08-31  981  	struct kvm_page_attr *page_attr = page_attr_slot(gfn, slot, level);
+7c45d6a017129b Xiaoyao Li     2021-08-31 @982  	enum kvm_page_type type;
+7c45d6a017129b Xiaoyao Li     2021-08-31  983  	gfn_t base_gfn;
+7c45d6a017129b Xiaoyao Li     2021-08-31  984  
+7c45d6a017129b Xiaoyao Li     2021-08-31  985  	if (WARN_ON_ONCE(!kvm_page_type_valid(page_attr) || level <= PG_LEVEL_4K))
+7c45d6a017129b Xiaoyao Li     2021-08-31  986  		return;
+7c45d6a017129b Xiaoyao Li     2021-08-31  987  
+7c45d6a017129b Xiaoyao Li     2021-08-31  988  	base_gfn = gfn & ~(KVM_PAGES_PER_HPAGE(level) - 1);
+7c45d6a017129b Xiaoyao Li     2021-08-31  989  	type = page_attr->type;
+09cbecc5a0e81f Xiaoyao Li     2022-05-25  990  
+7c45d6a017129b Xiaoyao Li     2021-08-31  991  	/*
+7c45d6a017129b Xiaoyao Li     2021-08-31  992  	 * Set the type to KVM_PAGE_TYPE_MIXED in advance since when a large
+7c45d6a017129b Xiaoyao Li     2021-08-31  993  	 * page needs to be split means one of the 4K page of it needs to be
+7c45d6a017129b Xiaoyao Li     2021-08-31  994  	 * changed to oppsite type
+7c45d6a017129b Xiaoyao Li     2021-08-31  995  	 */
+d4ee16fc853247 Isaku Yamahata 2022-06-02  996  	page_type_set(page_attr, KVM_PAGE_TYPE_MIXED, base_gfn, slot, level);
+7c45d6a017129b Xiaoyao Li     2021-08-31  997  }
+7c45d6a017129b Xiaoyao Li     2021-08-31  998  
+
+:::::: The code at line 982 was first introduced by commit
+:::::: 7c45d6a017129b913c57fb0a2cc14a866f2434a4 KVM: MMU: Update page_attr->type when guest converts the page
+
+:::::: TO: Xiaoyao Li <xiaoyao.li@intel.com>
+:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

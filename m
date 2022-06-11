@@ -2,59 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72113547597
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 16:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9866B5475A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 16:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234987AbiFKOVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 10:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
+        id S235407AbiFKOas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 10:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiFKOVB (ORCPT
+        with ESMTP id S230379AbiFKOar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 10:21:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4903226C0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 07:21:01 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o01yy-0002Mo-Ig; Sat, 11 Jun 2022 16:20:56 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4CD9792E59;
-        Sat, 11 Jun 2022 14:20:55 +0000 (UTC)
-Date:   Sat, 11 Jun 2022 16:20:54 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220611142054.qdn6if6tpw4j3ztq@pengutronix.de>
-References: <20220602213544.68273-1-max@enpas.org>
- <CAMZ6RqLLn3tE6kPd+yyHURsbBU_jVKN=u4=YvhZVyAf_NyRqCQ@mail.gmail.com>
- <20220611151551.5024f51e.max@enpas.org>
- <20220611133608.3zdfb3nnl5445kr7@pengutronix.de>
- <20220611161713.5303549d.max@enpas.org>
+        Sat, 11 Jun 2022 10:30:47 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5A570921;
+        Sat, 11 Jun 2022 07:30:46 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id v14so1931322wra.5;
+        Sat, 11 Jun 2022 07:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=sD6DZtzCxz1XGT4WP0KYWyA1V0wDI+6N4mhrYaf6wNc=;
+        b=gvnIOjt4Yjh2RWXfj+r3iQqN9qQzZO9jZpNw7iJIHm91kYhMWKpONFiQTuAQvAOEa9
+         xj0ctN5tFYk4q/kwtDS0XATZ4INKq21QyU6qFaxs6T6scR6NmA7obRyBBfhKZYP7xqZo
+         3r2SgAtYkpfE5Fsdf0Ny8Pn3+ISy3mEkEjUC79EdrKSdOaBRg+tpddnimAI7hwq/sUqD
+         gr0HkaG38EEiPAC49r48WgO2dAHX9iBqGWQau3VLaUUC7rF9f8WUuOmn2ksr6s0pfyG/
+         7+iFC5adxxx70Aa74xmp0D9+JirD5g1T/FdytE4AtUg8gm+D7GF606CbHASxiXA2UVxI
+         h8hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=sD6DZtzCxz1XGT4WP0KYWyA1V0wDI+6N4mhrYaf6wNc=;
+        b=EjuDij0Ho1Tr3q8YvbisHHsJKyVvWA2aBbkV4z8+3V5tktoSEVgO8BLJnEmb4JlEpc
+         9QeZRJZfCB2Z8/uP93uwNOxspMkBDl7ER8iTS1ZhI9EH2VucTfHmqYcVVbllfIn8L5xx
+         uskn5koERzm0bTbS8T4+2gqtmf1hSYLjoa5lto0Wjk4xSWHZxQMEDD+M0wPi4rKtPSdQ
+         9EOKrDcqISpXk6T5Bq5hH5ULJY8QCeSh98UfyrSFuzxQpVqNo+RzDvFt6S1WMV99jwj5
+         P9jEYcmjHeApvKzCQTD76kPjjNlPoNctMTdBRnh1isZuehoKcWPG09W9cIN1L+gJ1WUN
+         quPQ==
+X-Gm-Message-State: AOAM530o7psdCxWcPp6+oa+RB2TLZQ8quNaFv99yLR9yzb0C6BFdy6Yb
+        ckb/K2OoThCCyiDssMPVcoc=
+X-Google-Smtp-Source: ABdhPJzBEpGcZhzolH3y0re0vAoAh7rSVG7272hENxhaAsPczjmKCuMzU2JQfTQY0ee/wUwmBvQHuQ==
+X-Received: by 2002:a5d:5885:0:b0:218:3d12:e0eb with SMTP id n5-20020a5d5885000000b002183d12e0ebmr32847579wrf.510.1654957844444;
+        Sat, 11 Jun 2022 07:30:44 -0700 (PDT)
+Received: from localhost (92.40.203.182.threembb.co.uk. [92.40.203.182])
+        by smtp.gmail.com with ESMTPSA id h12-20020a05600c2cac00b003942a244f40sm7233181wmc.25.2022.06.11.07.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 07:30:43 -0700 (PDT)
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com>
+ <YqDLflKTsYaupArl@sirena.org.uk>
+ <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
+ <YqN1iTyyiRx4/CMf@sirena.org.uk>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, gregkh@linuxfoundation.org,
+        lgirdwood@gmail.com, lars@metafoo.de, rafael@kernel.org,
+        quic_gurus@quicinc.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
+ register layouts
+Date:   Sat, 11 Jun 2022 15:22:30 +0100
+In-reply-to: <YqN1iTyyiRx4/CMf@sirena.org.uk>
+Message-ID: <xU4ZOVJZM7e2sDSZJ2mAJIBPI1teACp7@localhost>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p6gkmby2djvklmw2"
-Content-Disposition: inline
-In-Reply-To: <20220611161713.5303549d.max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,70 +80,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---p6gkmby2djvklmw2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Mark Brown <broonie@kernel.org> writes:
 
-On 11.06.2022 16:17:13, Max Staudt wrote:
-> On Sat, 11 Jun 2022 15:36:08 +0200
-> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->=20
-> > What about this change?
-> >=20
-> > diff --git a/drivers/net/can/dev/netlink.c
-> > b/drivers/net/can/dev/netlink.c index 7633d98e3912..667ddd28fcdc
-> > 100644 --- a/drivers/net/can/dev/netlink.c
-> > +++ b/drivers/net/can/dev/netlink.c
-> > @@ -176,7 +176,8 @@ static int can_changelink(struct net_device *dev,
-> > struct nlattr *tb[],
-> >                  * directly via do_set_bitrate(). Bail out if neither
-> >                  * is given.
-> >                  */
-> > -               if (!priv->bittiming_const && !priv->do_set_bittiming)
-> > +               if (!priv->bittiming_const && !priv->do_set_bittiming
-> > &&
-> > +                   !priv->bitrate_const)
-> >                         return -EOPNOTSUPP;
-> > =20
-> >                 memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]),
-> > sizeof(bt));
-> >=20
-> > If it works I'll make a patch and apply it to net-next/master so that
-> > you can base your series on this.
->=20
-> Yes, it seems to work fine, since the dummy function is empty, and it's
-> only ever used in this same function, and the pointer is guarded as
-> Vincent mentioned. So if a no-op do_set_bittiming() is okay, then not
-> having it at all is also okay.
+> On Fri, Jun 10, 2022 at 04:40:20PM +0100, Aidan MacDonald wrote:
+>> Mark Brown <broonie@kernel.org> writes:
+>> > On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
+>
+>> >> -	if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+>> >> +	if (chip->get_irq_reg) {
+>> >> +		reg = chip->get_irq_reg(base_reg, i);
+>> >> +	} else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+>
+>> > It seems like it would be cleaner and clearer to refactor things so that
+>> > we always have a get_irq_reg() with standard chips getting given a
+>> > default implementation which implements the current behaviour.
+>
+>> I don't think that is a good way to clean things up. I only intended
+>> get_irq_reg() to be a quick hack to solve a problem; in my opinion it
+>> would be a poor abstraction to base the API around.
+>
+> I'm not sure why you are proposing this change if you are so convinced
+> it's a bad idea.  If you want to propose a different rework go ahead,
+> but adding the new operation without any form of factoring out is an
+> issue.  At first glance your suggestion looked plausible.
 
-Having a no-op do_set_bittiming() just to make can_changelink() happy is
-not intended. :D
+This patch isn't a refactor and I don't think it's a bad idea when
+viewed as minimal solution to a problem, which was my intention.
+I just think it wouldn't be a good abstraction to refactor around.
+Thanks for your input anyhow.
 
-> Yes, I'd appreciate you patching this, and I'll rebase upon it :)
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---p6gkmby2djvklmw2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKkpMQACgkQrX5LkNig
-0138AAgAss00uGJ7iR7grrxcSEMAzajBxZeFb4iM2ce4gEtDmUbJzciFHekhgq3f
-PV/0Pm5+sxKXli1SiD9YWhqZqmxXMV3L7VbafPMh1bw64mPaoLdqm4C3smlNraPd
-EmOZ5K0jKrfkxKkuCu9GU0aY4RKY1TAPHWgP5RMAlwuFXMcHtP2mh7R8paGpnaRP
-pgIMZ+oi+MKI6yLq4jyPskQYOxMlUEZYfavbvwKp0kehQre3DlVHNN2OEPlqz4EM
-XSfGoIlwmHorYwMA4ZKZ7fc3jw3/ojHTd/uYuqwFgkfSVsiLl+p94D1b3HYkZ98+
-g0rpnBcmDlWtFlyytKvChGYZ8NDyjw==
-=PnUB
------END PGP SIGNATURE-----
-
---p6gkmby2djvklmw2--
+Just as a heads up, I'll be resending these regmap-irq patches in v3
+so the series stays self-contained while I work on refactoring. Feel
+free to ignore them if you don't want to take them.

@@ -2,258 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12EF5472AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 09:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7265472B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 09:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiFKHkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 03:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
+        id S231181AbiFKHqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 03:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiFKHka (ORCPT
+        with ESMTP id S229661AbiFKHqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 03:40:30 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8B5C5A
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 00:40:27 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LKqVV6jFJzDqhT;
-        Sat, 11 Jun 2022 15:40:02 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 11 Jun 2022 15:40:24 +0800
-CC:     <yangyicong@hisilicon.com>, Tim Chen <tim.c.chen@linux.intel.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
-        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
-        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
-        <john.garry@huawei.com>, <shenyang39@huawei.com>
-Subject: Re: [PATCH v4 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     Chen Yu <yu.c.chen@intel.com>
-References: <20220609120622.47724-1-yangyicong@hisilicon.com>
- <20220609120622.47724-3-yangyicong@hisilicon.com>
- <c3fa2b4f5884e5ad4efda48b1bb2ab4f7a2e532a.camel@linux.intel.com>
- <4ab2c422-04ae-3199-ae2a-357c3270cd05@huawei.com>
- <20220611030322.GA9562@chenyu5-mobl1>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <082e95f6-bcd4-e82f-f5d6-2aeafff43a5b@huawei.com>
-Date:   Sat, 11 Jun 2022 15:40:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Sat, 11 Jun 2022 03:46:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8CBB44
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 00:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654933570; x=1686469570;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oduHo1RFQ3stMxu/D+kXNU5eamN8lMTooY1qRApiuaY=;
+  b=ai/TSra+4HHrDc5Munln0w3/e5GugstT/v8pfwOf60r8xrcHyPcqkIi2
+   Ect2rCaSPsTAmukC4o9XnV63y6tg09dR4/LFtg8cIT/yUinV22O0LOl34
+   +m9vUXYwJDaIzyA6H3Jkbcn+1JJ73QCEDPYpXIqPdcP8r1ndi53wcQfH4
+   dKqQes4XdzoQz2Rqp52emnyWVznQEF0EQZrtMmcNg83boeVL55lpR6VfF
+   GNhOGkp0xYVq1TR5sGa/damlrhlr3exiKbB7VlHab6eJTrZ+v6hBXFpSX
+   QPACVOIkyfCzBdQUygNJvilImibAPmPBwq2EQPC5SwiMH/VweubfxcjG9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="276626490"
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="276626490"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 00:46:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="616816996"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 11 Jun 2022 00:46:08 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nzvot-000Iid-I1;
+        Sat, 11 Jun 2022 07:46:07 +0000
+Date:   Sat, 11 Jun 2022 15:45:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 30/57]
+ lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types
+ ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and
+ 'typeof (maxsize) *' (aka 'unsigned int *'))
+Message-ID: <202206111500.VcHCpPMw-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220611030322.GA9562@chenyu5-mobl1>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/11 11:03, Chen Yu wrote:
-> Hi Yicong,
-> On Fri, Jun 10, 2022 at 02:39:38PM +0800, Yicong Yang wrote:
->> On 2022/6/10 6:47, Tim Chen wrote:
->>> On Thu, 2022-06-09 at 20:06 +0800, Yicong Yang wrote:
->>>> From: Barry Song <song.bao.hua@hisilicon.com>
->>>>
->>>> For platforms having clusters like Kunpeng920, CPUs within the same cluster
->>>> have lower latency when synchronizing and accessing shared resources like
->>>> cache. Thus, this patch tries to find an idle cpu within the cluster of the
->>>> target CPU before scanning the whole LLC to gain lower latency.
->>>>
->>>> Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this patch
->>>> doesn't consider SMT for this moment.
->>>>
->>>> Testing has been done on Kunpeng920 by pinning tasks to one numa and two
->>>> numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
->>>>
->>>> With this patch, We noticed enhancement on tbench within one numa or cross
->>>> two numa.
->>>>
->>>> On numa 0:
->>>>                             5.19-rc1                patched
->>>> Hmean     1        350.27 (   0.00%)      406.88 *  16.16%*
->>>> Hmean     2        702.01 (   0.00%)      808.22 *  15.13%*
->>>> Hmean     4       1405.14 (   0.00%)     1614.34 *  14.89%*
->>>> Hmean     8       2830.53 (   0.00%)     3169.02 *  11.96%*
->>>> Hmean     16      5597.95 (   0.00%)     6224.20 *  11.19%*
->>>> Hmean     32     10537.38 (   0.00%)    10524.97 *  -0.12%*
->>>> Hmean     64      8366.04 (   0.00%)     8437.41 *   0.85%*
->>>> Hmean     128     7060.87 (   0.00%)     7150.25 *   1.27%*
->>>>
->>>> On numa 0-1:
->>>>                             5.19-rc1                patched
->>>> Hmean     1        346.11 (   0.00%)      408.47 *  18.02%*
->>>> Hmean     2        693.34 (   0.00%)      805.78 *  16.22%*
->>>> Hmean     4       1384.96 (   0.00%)     1602.49 *  15.71%*
->>>> Hmean     8       2699.45 (   0.00%)     3069.98 *  13.73%*
->>>> Hmean     16      5327.11 (   0.00%)     5688.19 *   6.78%*
->>>> Hmean     32     10019.10 (   0.00%)    11862.56 *  18.40%*
->>>> Hmean     64     13850.57 (   0.00%)    17748.54 *  28.14%*
->>>> Hmean     128    12498.25 (   0.00%)    15541.59 *  24.35%*
->>>> Hmean     256    11195.77 (   0.00%)    13854.06 *  23.74%*
->>>
->>> Yicong,
->>>
->>> Have you tried any workload where tasks don't share data
->>> with each other but have sleep/wakeup?  That's the case
->>> where we actually want to spread the tasks out among the clusters
->>> to void contention for L2 cache.
->>>
->>> Will be nice to make sure there's no regression there for
->>> such workload.
->>>
->>
->> Any certain workload you'd like me test? I'm willing to do :)
->>
->> I've tested this patch with MySQL as well (like in v2). This won't hurt
->> the MySQL case with SIS_PROP but observed some improvement with SIS_UTIL
->> posted in [1]. We leverage the nr to suppress redundant scanning in the
->> current approach and seems SIS_UTIL is more efficient in this case.
->>
->> 			 5.19-rc1		   patched	 patched+SIS_UTIL[1]
->> TPS-16threads		  6215.11	  6172.74 (-0.68%)	  6217.33 (0.04%)
->> QPS-16threads		124302.21	123454.68 (-0.68%)	124346.52 (0.04%)
->> avg-lat-16threads	     2.57	     2.59 (-0.65%)	     2.57 (0.00%)
->> TPS-24threads		  8726.40	  8690.87 (-0.41%)	  8833.08 (1.22%)
->> QPS-24threads		174527.88	173817.42 (-0.41%)	176661.54 (1.21%)
->> avg-lat-24threads	     2.75	     2.76 (-0.36%)	     2.71 (1.33%)
->> TPS-32threads		  9555.42	  9514.86 (-0.42%)	 10010.87 (4.77%)
->> QPS-32threads		191108.37	190297.28 (-0.42%)	200217.35 (4.55%)
->> avg-lat-32threads	     3.35	     3.36 (-0.30%)	     3.20 (4.58%)
->> TPS-64threads		 10290.10	 10324.75 (0.34%)	 10819.77 (5.15%)
->> QPS-64threads		205802.05	206494.95 (0.34%)	216395.40 (4.90%)
->> avg-lat-64threads	     6.22	     6.20 (0.38%)	     5.92 (4.88%)
->>
->>
-> Thanks for the testings. I'm refining the patch according to Mel's suggestion and
-> will send it out later. Some minor nits below. 
->>> Code itself looks good.
->>>
->>> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
->>>
->>
->> Thanks.
->>
->> [1] https://lore.kernel.org/lkml/20220428182442.659294-1-yu.c.chen@intel.com/
->>
->>>>
->>>> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
->>>> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
->>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>>> ---
->>>>  kernel/sched/fair.c | 44 +++++++++++++++++++++++++++++++++++++++++---
->>>>  1 file changed, 41 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>> index 77b2048a9326..6d173e196ad3 100644
->>>> --- a/kernel/sched/fair.c
->>>> +++ b/kernel/sched/fair.c
->>>> @@ -6327,6 +6327,40 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
->>>>  
->>>>  #endif /* CONFIG_SCHED_SMT */
->>>>  
->>>> +#ifdef CONFIG_SCHED_CLUSTER
->>>> +/*
->>>> + * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
->>>> + */
->>>> +static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
->>>> +			       int target, int *nr)
->>>> +{
->>>> +	struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
->>>> +	int cpu, idle_cpu;
->>>> +
->>>> +	/* TODO: Support SMT system with cluster topology */
->>>> +	if (!sched_smt_active() && sd) {
->>>> +		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
->>>> +			if (!--*nr)
->>>> +				break;
-> Maybe I understand it incorrectly, here we changed the value of nr. Then if
-> we did not find any idle CPU in the cluster, nr is set to 0. Then in the LLC scan,
-> since there is 'if (--nr <= 0)', the LLC scan terminates.
-> Is the policy like: if we can not find one idle CPU in the cluster, we give
-> up scan for one in the LLC?
-> [cut]
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
+commit: cce0a847405ef7d076fde956ba5dd1a4d7d901c2 [30/57] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
+config: arm-randconfig-r034-20220610 (https://download.01.org/0day-ci/archive/20220611/202206111500.VcHCpPMw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/cce0a847405ef7d076fde956ba5dd1a4d7d901c2
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout cce0a847405ef7d076fde956ba5dd1a4d7d901c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-We're still scanning in the LLC since cluster is within the LLC (on Kunpeng 920 cluster cpus
-share L3 Tag and on Jacobsville cluster cpus share L2, while on both platform LLC should be
-the L3 cache). So if we've run out of nr we should stop scanning the rest of LLC as well
-and ...
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->>>> +
->>>>  /*
->>>>   * Scan the LLC domain for idle CPUs; this is dynamically regulated by
-> If we add logic for cluster scan, might need to update the comment as well.
+All warnings (new ones prefixed by >>):
 
-...the comment here still stands.
+>> lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           return min(nr * PAGE_SIZE - offset, maxsize);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   lib/iov_iter.c:1628:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           return min(nr * PAGE_SIZE - offset, maxsize);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   2 warnings generated.
 
->>>>   * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
->>>> @@ -6375,6 +6409,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>>>  		time = cpu_clock(this);
->>>>  	}
->>>>  
->>>> +	idle_cpu = scan_cluster(p, cpus, target, &nr);
->>>> +	if ((unsigned int)idle_cpu < nr_cpumask_bits)
->>>> +		return idle_cpu;
->>>> +
->>>>  	for_each_cpu_wrap(cpu, cpus, target + 1) {
->>>>  		if (has_idle_core) {
->>>>  			i = select_idle_core(p, cpu, cpus, &idle_cpu);
->>>> @@ -6382,7 +6420,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>>>  				return i;
->>>>  
->>>>  		} else {
->>>> -			if (!--nr)
->>>> +			if (--nr <= 0)
-> May I know the reason to change this? I thought this could be a seperate patch.
-> 
 
-scan_cluster() may run out of nr (on Kunpeng 920 there're 4 cpus in one cluster and nr will be at least 4 with
-SIS_PROP) and we cannot stop scanning correctly without this change. So the change should be in this patch.
+vim +1464 lib/iov_iter.c
 
-Thanks,
-Yicong
+  1430	
+  1431	static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+  1432					     struct page **pages, size_t maxsize,
+  1433					     unsigned maxpages, size_t *_start_offset)
+  1434	{
+  1435		unsigned nr, offset;
+  1436		pgoff_t index, count;
+  1437		size_t size = maxsize;
+  1438		loff_t pos;
+  1439	
+  1440		if (!size || !maxpages)
+  1441			return 0;
+  1442	
+  1443		pos = i->xarray_start + i->iov_offset;
+  1444		index = pos >> PAGE_SHIFT;
+  1445		offset = pos & ~PAGE_MASK;
+  1446		*_start_offset = offset;
+  1447	
+  1448		count = 1;
+  1449		if (size > PAGE_SIZE - offset) {
+  1450			size -= PAGE_SIZE - offset;
+  1451			count += size >> PAGE_SHIFT;
+  1452			size &= ~PAGE_MASK;
+  1453			if (size)
+  1454				count++;
+  1455		}
+  1456	
+  1457		if (count > maxpages)
+  1458			count = maxpages;
+  1459	
+  1460		nr = iter_xarray_populate_pages(pages, i->xarray, index, count);
+  1461		if (nr == 0)
+  1462			return 0;
+  1463	
+> 1464		return min(nr * PAGE_SIZE - offset, maxsize);
+  1465	}
+  1466	
 
-> thanks,
-> Chenyu
->>>>  				return -1;
->>>>  			idle_cpu = __select_idle_cpu(cpu, p);
->>>>  			if ((unsigned int)idle_cpu < nr_cpumask_bits)
->>>> @@ -6481,7 +6519,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->>>>  	/*
->>>>  	 * If the previous CPU is cache affine and idle, don't be stupid:
->>>>  	 */
->>>> -	if (prev != target && cpus_share_cache(prev, target) &&
->>>> +	if (prev != target && cpus_share_resources(prev, target) &&
->>>>  	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
->>>>  	    asym_fits_capacity(task_util, prev))
->>>>  		return prev;
->>>> @@ -6507,7 +6545,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->>>>  	p->recent_used_cpu = prev;
->>>>  	if (recent_used_cpu != prev &&
->>>>  	    recent_used_cpu != target &&
->>>> -	    cpus_share_cache(recent_used_cpu, target) &&
->>>> +	    cpus_share_resources(recent_used_cpu, target) &&
->>>>  	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
->>>>  	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
->>>>  	    asym_fits_capacity(task_util, recent_used_cpu)) {
->>>
->>>
->>> .
->>>
-> .
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

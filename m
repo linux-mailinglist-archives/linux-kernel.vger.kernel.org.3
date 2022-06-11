@@ -2,114 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1745054725D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 08:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D99547260
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 08:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347629AbiFKGYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 02:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S229879AbiFKGaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 02:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiFKGYO (ORCPT
+        with ESMTP id S229462AbiFKGaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 02:24:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293D314095;
-        Fri, 10 Jun 2022 23:24:10 -0700 (PDT)
+        Sat, 11 Jun 2022 02:30:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99AC57
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 23:30:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654928650; x=1686464650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5fULlUWTJ0Mpiasmhrqi3Eiepoj/IWBoziXzyJOlRYA=;
-  b=M2uy9sCvqaTs2XQEi0HVTvu05MaEI3bBQmYmHvnD3t5ZSatZnbno8JE5
-   k3aYyilsqbup2aGrJZgU7LVnfERWdiRTkvTS4KURO+Olo/UH1oMRjWz0F
-   Wz5O2tn+pNb7lT+B9kd8LyqgcZWfueObEMRLk8wAgduD5wcUDAxPju2RL
-   xFTxV0Q0ydsgicf96S894qkirNjgNx8whwpUGA7wz/cOGEDDyIxB/HLJ+
-   QO0AcAM2fvmCy+eINdUu/eQ1hv4eZRQVSzTIyT6RQyBKuzmYjC9jSk/qB
-   Ou4t0xlQYdwekIqtthbLXdFK7IrzKBWyuy6VcPq0ndo+zP2dmnTe7LfTQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="260947526"
+  t=1654929007; x=1686465007;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/JcL4NSmDtGVHEob6BvGproumpfObpr/F3a4SlGqibs=;
+  b=bGp79h3Ak1OJ9BJvOeNpXQYKz2kJwMDgFkBCwKT7BMBdjpGypBETQ6H8
+   lHSM+tOBN7pJijguIY9kACSNUjujtaSjto425v/gCScMYUyNgHp/g1vgZ
+   QqEq1SUWiEvk2gSv2HM8y4HWzpjXGzdOvgwgQk+d6dwlockOoK5/ukdFf
+   XBL8UXX4nzYsqmzEHuKk3Z5UNBu5Txox8i4TYRMlb5MJchstEwZRiISEk
+   kN2uoA4nbe9MEqGOJr1jJ/zF7j4NLEYOn7JNoVC+URiBFhiRpcdh7Ozue
+   jZZLVKLGJCzo42EUt2nzA0qaGEsQTo2flfltzfrIbIHhF9GDmjviXvhtO
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="339580737"
 X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="260947526"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 23:24:09 -0700
+   d="scan'208";a="339580737"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 23:30:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="611036523"
+   d="scan'208";a="650272641"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 10 Jun 2022 23:24:04 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jun 2022 23:30:04 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nzuXU-000Ibz-1s;
-        Sat, 11 Jun 2022 06:24:04 +0000
-Date:   Sat, 11 Jun 2022 14:23:50 +0800
+        id 1nzudI-000IcD-5M;
+        Sat, 11 Jun 2022 06:30:04 +0000
+Date:   Sat, 11 Jun 2022 14:29:21 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v10 net-next 7/7] mfd: ocelot: add support for the
- vsc7512 chip via spi
-Message-ID: <202206111455.xaWNrJPX-lkp@intel.com>
-References: <20220610202330.799510-8-colin.foster@in-advantage.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/fpu] BUILD SUCCESS WITH WARNING
+ 43843d58393026fef4a43d192b641a4fabdc42bf
+Message-ID: <62a43641.DOzOFRfFtiROB5Nl%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610202330.799510-8-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/fpu
+branch HEAD: 43843d58393026fef4a43d192b641a4fabdc42bf  intel_idle: Add a new flag to initialize the AMX state
 
-I love your patch! Yet something to improve:
+Warning: (recently discovered and may have been fixed)
 
-[auto build test ERROR on net-next/master]
+arch/x86/kernel/fpu/core.c:863 fpu_idle_fpregs() warn: bitwise AND condition is false here
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b97dcb85750b7e8bc5aaed5403ddf4b0552c7993
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220611/202206111455.xaWNrJPX-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/60523f7239bade660c86be121bd29954c24f53df
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
-        git checkout 60523f7239bade660c86be121bd29954c24f53df
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Warning ids grouped by kconfigs:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+gcc_recent_errors
+`-- i386-randconfig-m021
+    `-- arch-x86-kernel-fpu-core.c-fpu_idle_fpregs()-warn:bitwise-AND-condition-is-false-here
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+elapsed time: 3538m
 
->> ERROR: modpost: "ocelot_platform_init_regmap_from_resource" [drivers/net/mdio/mdio-mscc-miim.ko] undefined!
+configs tested: 127
+configs skipped: 4
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arc                         haps_hs_defconfig
+mips                          rb532_defconfig
+riscv                               defconfig
+ia64                         bigsur_defconfig
+m68k                        m5272c3_defconfig
+sh                            titan_defconfig
+powerpc                 mpc837x_mds_defconfig
+mips                         tb0226_defconfig
+m68k                            q40_defconfig
+microblaze                      mmu_defconfig
+powerpc                      chrp32_defconfig
+powerpc                 mpc834x_itx_defconfig
+sh                           se7750_defconfig
+powerpc                 linkstation_defconfig
+powerpc64                           defconfig
+sh                          rsk7201_defconfig
+powerpc                 canyonlands_defconfig
+sh                          lboxre2_defconfig
+arm                       aspeed_g5_defconfig
+powerpc                   currituck_defconfig
+parisc64                         alldefconfig
+arm                        multi_v7_defconfig
+powerpc                       ppc64_defconfig
+sh                      rts7751r2d1_defconfig
+sh                   secureedge5410_defconfig
+powerpc                     tqm8541_defconfig
+powerpc                   motionpro_defconfig
+arm                          pxa3xx_defconfig
+sh                              ul2_defconfig
+xtensa                  cadence_csp_defconfig
+sh                               alldefconfig
+powerpc                      ep88xc_defconfig
+sh                   sh7770_generic_defconfig
+arc                    vdk_hs38_smp_defconfig
+um                           x86_64_defconfig
+ia64                             alldefconfig
+arc                              allyesconfig
+sh                            migor_defconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+arc                  randconfig-r043-20220608
+s390                 randconfig-r044-20220608
+riscv                randconfig-r042-20220608
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+powerpc                   bluestone_defconfig
+powerpc                 xes_mpc85xx_defconfig
+powerpc                 mpc8313_rdb_defconfig
+mips                           rs90_defconfig
+powerpc                    socrates_defconfig
+powerpc                     ppa8548_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                             mxs_defconfig
+powerpc                     kmeter1_defconfig
+arm                         shannon_defconfig
+powerpc                 mpc8560_ads_defconfig
+mips                        omega2p_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220608
+hexagon              randconfig-r045-20220608
 
 -- 
 0-DAY CI Kernel Test Service

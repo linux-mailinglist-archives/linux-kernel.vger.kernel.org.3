@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935BE54763A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFB254763D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 17:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238925AbiFKPus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 11:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
+        id S238952AbiFKPvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 11:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbiFKPur (ORCPT
+        with ESMTP id S233313AbiFKPvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 11:50:47 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7D2E8;
-        Sat, 11 Jun 2022 08:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Xv1QWDfN+pMOMjcRPK9HZ6apjXb/JqFW9eOeMHDl0ko=; b=6Z7MqSXb+AeT9JnALtIjBFGwGO
-        bEvIKhH2/5lWYoQ8bP+A4FMPGwo5Y2l0aPuqWPZrapsf2OYKQPRhmy5CmYu61dzoMrRLAsrXgM/oM
-        VeCnEeXlzXQYy4ihgqi+isJzGIWPPZ6mRyvESECh2JwYDBpUd4S9f8BIT0jrlJNvmO4Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o03Nj-006War-69; Sat, 11 Jun 2022 17:50:35 +0200
-Date:   Sat, 11 Jun 2022 17:50:35 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Kubecek <mkubecek@suse.cz>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: phy: add remote fault support
-Message-ID: <YqS5yxrRX4Y4LTWd@lunn.ch>
-References: <20220608093403.3999446-1-o.rempel@pengutronix.de>
+        Sat, 11 Jun 2022 11:51:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 618691A82A
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654962689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nhRp/pGhgveCjZGUs+5rCBmMFDNeRBkg8UfANY7q/7Q=;
+        b=WCA8x0pQiCiNe9Wo/4SSa2IutroB+6RAT2vfpjUBjSXOZXD/llXwS/OpsBDtEp0uHnUrnr
+        DnfXA6f+3q+O0joEjJjPS+2tFulIn86fCQ/XA3pURxQZ20Duh7KuIZVoRCEOVdzSyRDe9h
+        tbuv4dQoOUtgPe4QmERwhKSK6yU4100=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-516-uaSfLbnUOGO3s6DKS_bN5A-1; Sat, 11 Jun 2022 11:51:28 -0400
+X-MC-Unique: uaSfLbnUOGO3s6DKS_bN5A-1
+Received: by mail-ed1-f71.google.com with SMTP id k7-20020aa7d8c7000000b0042dd4a5a393so1478310eds.11
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 08:51:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nhRp/pGhgveCjZGUs+5rCBmMFDNeRBkg8UfANY7q/7Q=;
+        b=r6AxPlsDsF0TAEqMHIZFhfrkqwmQ3poXqfPF6uahUSdi7SzroNQBJfhKBdefuVN35A
+         R8DJxB3c9yRzeiBhe+wU0bNi8InjGhevkMU4NAYIqo7MShI4v/hzoouYTfomORlT21oz
+         2ccw6zOusEVbU/qqItk60k1YFxEAisGQvb5TkOGwhuU8liZGnRTr0UzTVFnhWwwrWjqD
+         eYqvMKo5rKfuUFnxvyWBUjWHJEIxaQfm9CY4x2RXAtlZ4kxpImAiM6HF34fpe5ntqRkI
+         o/P9miyPbxTVdCLEOX2kKHyLyH7yFfvdoHu5Yecv3J6F5N7RNcTfu9BY3bLzoPi8fbM7
+         ta8A==
+X-Gm-Message-State: AOAM5301VVe/wlWL58Cf51mRApJHSZp0tNSrwUcBt+qCEbzBCrLEFaUx
+        srp0ghj/FeFzuPE1VZKX/dngIUjO/HvYGPZFwZ4lVzyrvLV3eGNDhusvM7nNqicUMu+QihKXl/0
+        wObjzWMyXrUpaP2mUeTLuCpDk
+X-Received: by 2002:a05:6402:23a2:b0:42d:d5f1:d470 with SMTP id j34-20020a05640223a200b0042dd5f1d470mr43214823eda.365.1654962687347;
+        Sat, 11 Jun 2022 08:51:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx7i/21cJ65P0sfonbSV4Xxlqt9fZPtGU+UdW0ennP9y/mw+amxh0Oy8KPFgQJlhQH/Z3jRXQ==
+X-Received: by 2002:a05:6402:23a2:b0:42d:d5f1:d470 with SMTP id j34-20020a05640223a200b0042dd5f1d470mr43214806eda.365.1654962687159;
+        Sat, 11 Jun 2022 08:51:27 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id lu33-20020a170906fae100b007041e969a8asm1189152ejb.97.2022.06.11.08.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jun 2022 08:51:24 -0700 (PDT)
+Message-ID: <a1e80ec8-67dc-bde4-8f17-5aa2b3b1a32a@redhat.com>
+Date:   Sat, 11 Jun 2022 17:51:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608093403.3999446-1-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 000/144] KVM: selftests: Overhaul APIs, purge VCPU_ID
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Anup Patel <anup@brainfault.org>
+Cc:     KVM General <kvm@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Marc Zyngier <maz@kernel.org>
+References: <20220603004331.1523888-1-seanjc@google.com>
+ <21570ac1-e684-7983-be00-ba8b3f43a9ee@redhat.com>
+ <CAAhSdy0_50KshS1rAcOjtFBUu=R7a0uXYa76vNibD_n7s=q6XA@mail.gmail.com>
+ <CAAhSdy1N9vwX1aXkdVEvO=MLV7TEWKMB2jxpNNfzT2LUQ-Q01A@mail.gmail.com>
+ <YqIKYOtQTvrGpmPV@google.com> <YqKRrK7SwO0lz/6e@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YqKRrK7SwO0lz/6e@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> --- a/include/uapi/linux/ethtool.h
-> +++ b/include/uapi/linux/ethtool.h
-> @@ -1840,6 +1840,46 @@ static inline int ethtool_validate_duplex(__u8 duplex)
->  #define MASTER_SLAVE_STATE_SLAVE		3
->  #define MASTER_SLAVE_STATE_ERR			4
->  
-> +#define REMOTE_FAULT_CFG_UNSUPPORTED		0
-> +#define REMOTE_FAULT_CFG_UNKNOWN		1
-> +#define REMOTE_FAULT_CFG_NO_ERROR		2
-> +/* IEEE 802.3-2018 28.2.1.2.4 Fault without additional information */
-> +#define REMOTE_FAULT_CFG_ERROR			3
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 0 - RF Test */
-> +#define REMOTE_FAULT_CFG_TEST			4
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 1 - Link Loss */
-> +#define REMOTE_FAULT_CFG_LINK_LOSS		5
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 2 - Jabber */
-> +#define REMOTE_FAULT_CFG_JABBER			6
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 3 - Parallel Detection Fault */
-> +#define REMOTE_FAULT_CFG_PDF			7
-> +/* IEEE 802.3-2018 37.2.1.5.2 Offline */
-> +#define REMOTE_FAULT_CFG_OFFLINE		8
-> +/* IEEE 802.3-2018 37.2.1.5.3 Link_Failure */
-> +#define REMOTE_FAULT_CFG_LINK_FAIL		9
-> +/* IEEE 802.3-2018 37.2.1.5.4 Auto-Negotiation_Error */
-> +#define REMOTE_FAULT_CFG_AN_ERROR		10
-> +
-> +#define REMOTE_FAULT_STATE_UNSUPPORTED		0
-> +#define REMOTE_FAULT_STATE_UNKNOWN		1
-> +#define REMOTE_FAULT_STATE_NO_ERROR		2
-> +/* IEEE 802.3-2018 28.2.1.2.4 Fault without additional information */
-> +#define REMOTE_FAULT_STATE_ERROR		3
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 0 - RF Test */
-> +#define REMOTE_FAULT_STATE_TEST			4
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 1 - Link Loss */
-> +#define REMOTE_FAULT_STATE_LINK_LOSS		5
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 2 - Jabber */
-> +#define REMOTE_FAULT_STATE_JABBER		6
-> +/* IEEE 802.3-2018 28C.5 Message code 4: 3 - Parallel Detection Fault */
-> +#define REMOTE_FAULT_STATE_PDF			7
-> +/* IEEE 802.3-2018 37.2.1.5.2 Offline */
-> +#define REMOTE_FAULT_STATE_OFFLINE		8
-> +/* IEEE 802.3-2018 37.2.1.5.3 Link_Failure */
-> +#define REMOTE_FAULT_STATE_LINK_FAIL		9
-> +/* IEEE 802.3-2018 37.2.1.5.4 Auto-Negotiation_Error */
-> +#define REMOTE_FAULT_STATE_AN_ERROR		10
+On 6/10/22 02:34, Sean Christopherson wrote:
+> I pushed a new version that's based on the current kvm/queue, commit 5e9402ac128b.
+> arm and x86 look good (though I've yet to test on AMD).
+> 
+> Thomas,
+> If you get a chance, could you rerun the s390 tests?  The recent refactorings to
+> use TAP generated some fun conflicts.
 
-I'm not sure there is any value in having these values twice. They are
-expected to be identical, so one set should be enough.
+I did so, rebased over David's nested dirty_log_perf_test patches and 
+pushed to kvm/queue.
 
-	 Andrew
+Paolo
+

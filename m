@@ -2,124 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5252A5473E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 12:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23D75473EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 12:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbiFKKpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 06:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S232450AbiFKKqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 06:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiFKKpI (ORCPT
+        with ESMTP id S229609AbiFKKqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 06:45:08 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158A5EA1;
-        Sat, 11 Jun 2022 03:45:07 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id i131-20020a1c3b89000000b0039c6fd897b4so1762900wma.4;
-        Sat, 11 Jun 2022 03:45:07 -0700 (PDT)
+        Sat, 11 Jun 2022 06:46:18 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C319FCC
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 03:46:16 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id c2so2129964lfk.0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 03:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=a9ATP95JSYITDvtcZYgILfU969WEQUwCi9QMxQISlfw=;
-        b=bOBnz4yOrLBIRe9lNqLmJJYNnTUBHYxgfPjC/Q+c+by0cC6DrcHXWzzXAAQKsWs5Xy
-         7H5yh5q+cSCvj9FDMI2qYQwgyW+KWhJ5k4Zjat9u+hNJxzSFcF9q10k2J5+e+E3DNndL
-         lCeqaymyirCu8HVKMhERgx6kH5f/6tDGJgbu3uYRTJve23lgY17J/z/qiWTHFjMWeJuc
-         6jWKfE1WBzb6/qjzIx+YjukuvouZ/eHUhHYDqj4SV5vy3IZq76QEZ/fcBwqOS75Fi9ZM
-         L8426YwsgzDm0cHOigB5uFuAKuHESYnbHqM+qoIfxha1dqjpYNU0dW0RZF4Cu4SJ8mUb
-         LJzQ==
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=va6/lF6L6Ng8zl2J0isVPUb8pv9qoi2tKiUrpBsODPA=;
+        b=DjLgzQ27Ee07ihrkEXtl7JW/IRmTqDJodYVSEyOl8ZIznuzFzBdk9oqZMHdorpBtr8
+         syS/0JO2bowlxuPY8zX3+ul0eLzNyIVUFRTW57NNCDGKVOwLkWkZJ8ov4yX9MljDw15s
+         B1cwl1nzokQ9zDokzpNPPERUAATQQF+MUCRKA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=a9ATP95JSYITDvtcZYgILfU969WEQUwCi9QMxQISlfw=;
-        b=XidExkdP1ECg1oAUYLt3Vd969OjzBYlCs7UMNyT0CMRwGqIvUPZI7hNdgHyd3QXd4k
-         1AzksVtYq1nqJtkcvsyrGpn2N5XUYfxM4oKmFGPjk5rwKRhIxLEQfArlV4tDBBo+iTpV
-         AddCFEZw+l7e+f8QJYfAlxgEF48CWMpwA+nnERPRgJSPpSbC4f4IVCktQRRFsly8AUkT
-         0aeNXxZTgQ8qSY3OKTc2ovE4lSYLn778GgVPPMgs5w1+1LPbRlabeoldbv+RmX3IKg/R
-         FxdsEqY3DTt5yaeGSD+hW3qKlcFBN4eeB3pPiNn0EQP4HClDt3M77qysBMEEUiUCZOGS
-         8uaA==
-X-Gm-Message-State: AOAM5304Ic2/B4Rz2AEbGTcj5eNlQ6bKqSyvNqm41m9KSZkOy7J+YQUw
-        i6fdpYyloKlUFOl6whYtkko=
-X-Google-Smtp-Source: ABdhPJxjfvo6XrtQ+Hcu7hnFyGXxQzXmb+60Sxx8moqSaXPRMMOx26YUKe+ROCWhkMhCSBz3y1N/cg==
-X-Received: by 2002:a05:600c:4e8e:b0:39c:80ed:68ad with SMTP id f14-20020a05600c4e8e00b0039c80ed68admr4069701wmq.63.1654944305505;
-        Sat, 11 Jun 2022 03:45:05 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id 6-20020a05600c22c600b00397122e63b6sm2006978wmg.29.2022.06.11.03.45.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 03:45:05 -0700 (PDT)
-Date:   Sat, 11 Jun 2022 11:45:03 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Dominique Martinet <asmadeus@codewreck.org>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
-        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: mainline build failure due to 6c77676645ad ("iov_iter: Fix
- iter_xarray_get_pages{,_alloc}()")
-Message-ID: <YqRyL2sIqQNDfky2@debian>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=va6/lF6L6Ng8zl2J0isVPUb8pv9qoi2tKiUrpBsODPA=;
+        b=WtmG2/aOftu2Std1HqG4hA0a205gv83wHIGoiR9ZCr7YC8Z8tJgRsLadnL6DZC1w1c
+         lmOd7Raub8GdW03uoGFdBx5HSF+z9kawF7/dfVFSlAqczP/jSnyu5ZZfQgJ/Wyxxlrli
+         f7b9zdRUNM6x56YUtYknSmvMlgj/tOQIOiKeHGEs5pxn0fC3L7jrPbiXCVoSGTSwHuEY
+         77YUoBzO8HXpy4M8AnqnpMQLQVwXFJxHx2lm8ba3G0IqFmHbjKS0tg9gMLoJ4M8ql3lv
+         1Wz/XTgDFc63pPxSLpyei8PTpEJjMUhWchZYBv69PZ5WOdU7NpvzjWzANXYkPql0cymR
+         JiQg==
+X-Gm-Message-State: AOAM5331n/XZImv6LKeXi4gBWGasemx/HVr/5u19doDPhmGZS1zAlrUv
+        KSOFRC9adkhMaZyNzgJvJYzexaAKUvE3/h0Jy7kCTDJ24aFD0w==
+X-Google-Smtp-Source: ABdhPJzJtG4lYlUf2mQAOQTuBTkStm+krM95435xBeb4XDhxoNaH5AszJsK/Afk5u/5zMnyGTUJON3/oX3bWoqpdPL8=
+X-Received: by 2002:a05:6512:10c5:b0:479:2de0:561c with SMTP id
+ k5-20020a05651210c500b004792de0561cmr21354813lfg.536.1654944374938; Sat, 11
+ Jun 2022 03:46:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
+ <20220608165116.1575390-6-dario.binacchi@amarulasolutions.com> <eae65531-bf9f-4e2e-97ca-a79a8aa833fc@hartkopp.net>
+In-Reply-To: <eae65531-bf9f-4e2e-97ca-a79a8aa833fc@hartkopp.net>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Sat, 11 Jun 2022 12:46:04 +0200
+Message-ID: <CABGWkvroJG16AOu8BODhVu068jacjHWbkkY9TCF4PQ7rgANVXA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/13] can: slcan: simplify the device de-allocation
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Hi,
 
-The latest mainline kernel branch fails to build for "arm allmodconfig",
-"xtensa allmodconfig" and "csky allmodconfig" with the error:
+On Wed, Jun 8, 2022 at 10:38 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>
+> This patch (at least) needs some rework.
 
-In file included from ./include/linux/kernel.h:26,
-                 from ./include/linux/crypto.h:16,
-                 from ./include/crypto/hash.h:11,
-                 from lib/iov_iter.c:2:
-lib/iov_iter.c: In function 'iter_xarray_get_pages':
-./include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast [-Werror]
-   20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-      |                                   ^~
-./include/linux/minmax.h:26:18: note: in expansion of macro '__typecheck'
-   26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-      |                  ^~~~~~~~~~~
-./include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
-   36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-      |                               ^~~~~~~~~~
-./include/linux/minmax.h:45:25: note: in expansion of macro '__careful_cmp'
-   45 | #define min(x, y)       __careful_cmp(x, y, <)
-      |                         ^~~~~~~~~~~~~
-lib/iov_iter.c:1464:16: note: in expansion of macro 'min'
- 1464 |         return min(nr * PAGE_SIZE - offset, maxsize);
-      |                ^~~
-lib/iov_iter.c: In function 'iter_xarray_get_pages_alloc':
-./include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast [-Werror]
-   20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-      |                                   ^~
-./include/linux/minmax.h:26:18: note: in expansion of macro '__typecheck'
-   26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-      |                  ^~~~~~~~~~~
-./include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
-   36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-      |                               ^~~~~~~~~~
-./include/linux/minmax.h:45:25: note: in expansion of macro '__careful_cmp'
-   45 | #define min(x, y)       __careful_cmp(x, y, <)
-      |                         ^~~~~~~~~~~~~
-lib/iov_iter.c:1628:16: note: in expansion of macro 'min'
- 1628 |         return min(nr * PAGE_SIZE - offset, maxsize);
+Any suggestions are welcome. And double-checking the patch, I already have some
+changes to put in version 3.
+>
+> The patch cf124db566e6b036 ("net: Fix inconsistent teardown and release
+> of private netdev state.") from DaveM added some priv_destructor
+>
+>      dev->priv_destructor = sl_free_netdev;
+>
+> which is not taken into account in this patch.
+>
+> As written before I would like to discuss this change out of your patch
+> series "can: slcan: extend supported features" as it is no slcan feature
+> extension AND has to be synchronized with the drivers/net/slip/slip.c
+> implementation.
+
+Why do you need to synchronize it with  drivers/net/slip/slip.c
+implementation ?
+
+>
+> When it has not real benefit and introduces more code and may create
+> side effects, this beautification should probably be omitted at all.
+>
+
+I totally agree with you. I would have already dropped it if this patch
+didn't make sense. But since I seem to have understood that this is
+not the case, I do not understand why it cannot be improved in this
+series.
+
+The cover letter highlighted positive reactions to the series because
+the module had been requiring these kinds of changes for quite
+some time. So, why not take the opportunity to finalize this patch in
+this series even if it doesn't extend the supported features ?
+
+Anyway, I have some changes and tests to run before submitting version 3.
+If I don't get any hints before then, I'll drop it from the series.
+
+Thanks and regards,
+Dario
+
+> Thanks,
+> Oliver
+>
+> On 08.06.22 18:51, Dario Binacchi wrote:
+> > Since slcan_devs array contains the addresses of the created devices, I
+> > think it is more natural to use its address to remove it from the list.
+> > It is not necessary to store the index of the array that points to the
+> > device in the driver's private data.
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> > ---
+> >
+> > (no changes since v1)
+> >
+> >   drivers/net/can/slcan.c | 15 ++++++++++-----
+> >   1 file changed, 10 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+> > index 929cb55e08af..cf05c30b8da5 100644
+> > --- a/drivers/net/can/slcan.c
+> > +++ b/drivers/net/can/slcan.c
+> > @@ -432,11 +432,17 @@ static int slc_open(struct net_device *dev)
+> >
+> >   static void slc_dealloc(struct slcan *sl)
+> >   {
+> > -     int i = sl->dev->base_addr;
+> > +     unsigned int i;
+> >
+> > -     free_candev(sl->dev);
+> > -     if (slcan_devs)
+> > -             slcan_devs[i] = NULL;
+> > +     for (i = 0; i < maxdev; i++) {
+> > +             if (sl->dev == slcan_devs[i]) {
+> > +                     free_candev(sl->dev);
+> > +                     slcan_devs[i] = NULL;
+> > +                     return;
+> > +             }
+> > +     }
+> > +
+> > +     pr_err("slcan: can't free %s resources\n",  sl->dev->name);
+> >   }
+> >
+> >   static int slcan_change_mtu(struct net_device *dev, int new_mtu)
+> > @@ -533,7 +539,6 @@ static struct slcan *slc_alloc(void)
+> >
+> >       snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
+> >       dev->netdev_ops = &slc_netdev_ops;
+> > -     dev->base_addr  = i;
+> >       sl = netdev_priv(dev);
+> >
+> >       /* Initialize channel control data */
+> >
 
 
-git bisect pointed to 6c77676645ad ("iov_iter: Fix iter_xarray_get_pages{,_alloc}()")
 
-And, reverting it on top of mainline branch has fixed the build failure.
+-- 
 
---
-Regards
-Sudip
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

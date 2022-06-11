@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36835477A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 23:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173C65477AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 23:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbiFKVSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 17:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S232079AbiFKVVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 17:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiFKVSf (ORCPT
+        with ESMTP id S229861AbiFKVVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 17:18:35 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2648B56383
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 14:18:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 89D2DCE09B7
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 21:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922ADC34116;
-        Sat, 11 Jun 2022 21:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654982308;
-        bh=f+BBbnadECTW48EghM2NBCLoC+C8btrrrPx6BzWAz50=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=H3FUnd0gCNjutWOiPTNkyMKqzKmTYUT0s2hVMNe038IWwO6TYoiSVC0NmSt2gR+eR
-         F5JrUT+pm7ZOJqaUXU4oHQFWeSay6tvqFH1uWOi6WZK61176xaKXKdO/PvftO/dodn
-         FIXU+gG/QKjmkBeCbmXevkWj4X12IZc3KeCft6vw=
-Date:   Sat, 11 Jun 2022 14:18:27 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Shakeel Butt <shakeelb@google.com>
-Subject: Re: [PATCH] mm: kmem: make mem_cgroup_from_obj() vmalloc()-safe
-Message-Id: <20220611141827.51d663b8285cac7d4789ef0f@linux-foundation.org>
-In-Reply-To: <355332ef-838b-3847-5a95-de5017b0301d@openvz.org>
-References: <20220610180310.1725111-1-roman.gushchin@linux.dev>
-        <YqOJBy2kHRJj/uLB@carbon>
-        <355332ef-838b-3847-5a95-de5017b0301d@openvz.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 11 Jun 2022 17:21:46 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1B056391
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 14:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654982505; x=1686518505;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jAoJwbluCgt/kSBjQvcAdIJUWzr781/aoGpszolGa4k=;
+  b=UD51h//eqFb+Is03isJkOL6c5P7FSfyUXuOSEP0MBqt8x5B3jupDbKDF
+   SAwXS3TsePhm3U4+Ru7jMvJPHP76O0qIDFrw09ojIPAH9IjSyWCm4eL22
+   8aVohfoBeZtJxcyKCs5onI5/mfbcuBHXoRqgr32FXbwtaktHRZWMeTp2k
+   6hmjSYqxT3mi6uAU637Ns7lBboC76Pi7MxNBthoOmnM8EGh6HixT8jGGH
+   lAbuRUwlBkfombR8PK83aAJdebqlBxUcqNnA5hiv1CYNFE7kz6OBcmZSi
+   Nqjxh10cED9nZBbSGUsHaBaa+E8Emt0nDI54h8YopiwCgSxFt0qz5Svk9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="276719152"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="276719152"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 14:21:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="616956844"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 11 Jun 2022 14:21:44 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o08YB-000JJe-DE;
+        Sat, 11 Jun 2022 21:21:43 +0000
+Date:   Sun, 12 Jun 2022 05:21:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: WARNING: modpost: vmlinux.o(.text.unlikely+0x24dc): Section mismatch
+ in reference from the function find_next_bit() to the variable
+ .init.rodata:__setup_str_initcall_blacklist
+Message-ID: <202206120501.LD90ONuZ-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,18 +62,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Jun 2022 07:10:06 +0300 Vasily Averin <vvs@openvz.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0678afa6055d14799c1dc1eee47c8025eba56cab
+commit: 2c523550b9924f98299414253d8a1fef7c60ef2d lib/bitmap: add test for bitmap_{from,to}_arr64
+date:   8 days ago
+config: xtensa-randconfig-r001-20220612 (https://download.01.org/0day-ci/archive/20220612/202206120501.LD90ONuZ-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c523550b9924f98299414253d8a1fef7c60ef2d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2c523550b9924f98299414253d8a1fef7c60ef2d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-> > this patch is supposed to fix boot issues on arm introduced by
-> > the commit "net: set proper memcg for net_init hooks allocations".
-> > 
-> > But as no I don't see this commit in linux-next or any mm branches,
-> > so I'm not sure if it's in stable or not. So I didn't add the Fixes
-> > tag. If it isn't in stable yet, I'd just put the fix before the problematic
-> > commit.
-> 
-> Roman,
-> Andrew dropped "net: set proper memcg for net_init hooks allocations" few days ago,
-> but I hope he will re-apply it again after your patch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I did.  Thanks, all.
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+<< WARNING: modpost: vmlinux.o(.text.unlikely+0x24b0): Section mismatch in reference from the function bitmap_equal() to the variable .init.rodata:__setup_str_initcall_blacklist
+>> WARNING: modpost: vmlinux.o(.text.unlikely+0x24dc): Section mismatch in reference from the function find_next_bit() to the variable .init.rodata:__setup_str_initcall_blacklist
+The function find_next_bit() references
+the variable __initconst __setup_str_initcall_blacklist.
+This is often because find_next_bit lacks a __initconst
+annotation or the annotation of __setup_str_initcall_blacklist is wrong.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB3C5474F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74961547500
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 15:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbiFKNwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 09:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S233549AbiFKNyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 09:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbiFKNwU (ORCPT
+        with ESMTP id S231467AbiFKNxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 09:52:20 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D01A38B;
-        Sat, 11 Jun 2022 06:52:10 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id q15so774954wmj.2;
-        Sat, 11 Jun 2022 06:52:09 -0700 (PDT)
+        Sat, 11 Jun 2022 09:53:54 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299643FBEA;
+        Sat, 11 Jun 2022 06:53:53 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id u99so2987851ybi.11;
+        Sat, 11 Jun 2022 06:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wemWetgqZtPAak9UOZsCzxeIqqnM7f9u1LT1EZmm0AA=;
-        b=IXckhRk9dBamy/3k8VsroC/1aDkvrqGzOEB5L+4viH34purDQNt3KtuN/MLyivRP1f
-         MHWVgY3iWhdkKNaiVjBDHqHnQW34iSrQP+MQtuor8GVZcLfjZkT544djNfNSFrkxVQwN
-         gnh2QN9AgKvuZf0FnKxwkNcln+4SfzFEyt6HqiRipJLYEj3XM/yti9Hh0K04OC0aUVD9
-         APn6TlL2/QPkFT3lIs3teb+0Rk/lkr2hBL/m50uzcZM0gq+GmOPVPvmS5yVBhkR46hCf
-         I/UTWFcqTGp/qv084bemDvFTtCgR8HW8njAdpUe0a2QyvYcjwv7hXycAff3C22PGn4Cp
-         ZSlg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0XBD4QmluSTtyUUhL2fAA/t1LEvKNRF+9JYNqJ8wiI8=;
+        b=j7JU1GcRirXqAqhBo6OeURWiAC3D74b53mGfYrSAzXlaIm3zFbgt1F6+o01xvhyXZ1
+         C94ZDbBD0jmHdorQ8P9msuQBesAMwvJ21VoS1OMbd3SGH4Sk1ro5pfSmNOwXJl2B6VC/
+         peAifHJDHYiB8K1SPWFGJcworCOPsk5ScLudTy4b/gNRG1otBPKX0Wdk49XLT6LhVXLX
+         iQgVX0rwqMMYu3Qr6H+DmLmjcFunDj0f5xOWF7QNmFm0ngDYd0H6j/JCZbqUXseuT1fJ
+         ekwdD76N833+cNm6z8qZTqCPCTjKJUsV4LrRf0ATrP9/fKXTblDxnHnjiXNnayKDB9Gl
+         +kAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wemWetgqZtPAak9UOZsCzxeIqqnM7f9u1LT1EZmm0AA=;
-        b=StlkKWTjppCXkfsan6pluZjl3QqXd+CfqnvV1z4OFfifUWY484BJ3Gdadiu0FhSg7U
-         ovHJ+doiedZlXNuD1mSORhnC+QmqPDZKKF6xruFixcoOeTNfVDkGqZL5UBM1v2jfRfTO
-         WxzE+oXBCN+a2RVg7w9+gEKY+uI4ixlHRC36WaAaeATkNhd2QPYVqxmeE8XW1L+nW6n3
-         eutI5C+OpE9ft2nL+sLxfyLWh8gHlzv4xAbJviAhfoai1onK3Sx2uoAJaQLn3ySWiPEa
-         kx5KlWinWn0EtXttvAX/hmqMaG0tKiRX9raYY5VjBJnXJ18cxqWOa0MUHlOERRQRbA4O
-         7BvA==
-X-Gm-Message-State: AOAM533+goPCmR33yJYOrw4OTfJuToFR08lEuSe2AnwapLOwNnrSxC7j
-        GcfGQTi9E9PDde0rEN7pOg7aRot8mXw=
-X-Google-Smtp-Source: ABdhPJycO+r/EYhtyb9IIHZ0PRPblJucaFGjJrBITVdzY3qblPPpEgZ4tyz6NnNjNzbUnBd/S95LYw==
-X-Received: by 2002:a05:600c:1d1c:b0:39c:7ac8:1faa with SMTP id l28-20020a05600c1d1c00b0039c7ac81faamr5031020wms.202.1654955528462;
-        Sat, 11 Jun 2022 06:52:08 -0700 (PDT)
-Received: from localhost.localdomain (host-79-18-0-143.retail.telecomitalia.it. [79.18.0.143])
-        by smtp.gmail.com with ESMTPSA id r20-20020a05600c35d400b0039c1396b495sm2593224wmq.9.2022.06.11.06.52.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 06:52:07 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Filipe Manana <fdmanana@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
-Date:   Sat, 11 Jun 2022 15:52:03 +0200
-Message-Id: <20220611135203.27992-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0XBD4QmluSTtyUUhL2fAA/t1LEvKNRF+9JYNqJ8wiI8=;
+        b=Yz7mQYlegwziBOZTE/11fKvTB8UvVFXkmNJHSc8pIfRiRsX6NE6ZbQyqg5hFjQlaIf
+         idmHOD3DvSdq4flSqe26s80E+CVqdqXE9kzrQiQTDjOXb30pajyAKL9tI8MTvQW5f3jE
+         zw1UmgiXsqCHaa+eUZ8CGGarhPWfj2e95qlVFaH5kmNkfYYaNd/FkjB3R8P91bz114a4
+         LqRcvUgs3T/Dx40QtLyW76g698gFGntgnQ0fADY1ghPGuWz5Igtgmc8Q2BiDnAanDRsy
+         IYgzdIqmm4zlysZQJld1ruqD3j8O/VNCN8aMw8x3cn3R/HGq8w+7OGR5O0yMW68jlwpZ
+         kwiA==
+X-Gm-Message-State: AOAM532VXCiN7H736sCqVIQAVnOZBafl/60gzT8PzzAoWw501m2sVL58
+        5ICsIScZv7R70C6GSTjucbHfYWAQQh2+tkJ0EGY=
+X-Google-Smtp-Source: ABdhPJy6keycdZ2r43RjmcTwfJS0G4z+XhBO91RI5+nLiwpkdMfl+es9fjkSmAYV7Tv7HFAfPn6RP3634VPHNg2Kg/8=
+X-Received: by 2002:a25:b29d:0:b0:664:49bb:6a60 with SMTP id
+ k29-20020a25b29d000000b0066449bb6a60mr11334808ybj.173.1654955632361; Sat, 11
+ Jun 2022 06:53:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220610132601.160088-1-pgwipeout@gmail.com> <CAMdYzYqJ2S8K2NCH1uQ2xDjTfLmePPv5TzgeXZa0EG6XdGQzBQ@mail.gmail.com>
+ <4178848.3VsfAaAtOV@phil>
+In-Reply-To: <4178848.3VsfAaAtOV@phil>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sat, 11 Jun 2022 09:53:41 -0400
+Message-ID: <CAMdYzYqRcrawKc-GsTgwnPuJBJoKTn9Arfpj_Vjnt+3DeT7k9w@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: rockchip: Fix SoQuartz CM4IO usb
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,212 +72,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page(). With
-kmap_local_page(), the mapping is per thread, CPU local and not globally
-visible.
+On Sat, Jun 11, 2022 at 9:50 AM Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> Am Freitag, 10. Juni 2022, 16:44:23 CEST schrieb Peter Geis:
+> > On Fri, Jun 10, 2022 at 9:26 AM Peter Geis <pgwipeout@gmail.com> wrote:
+> > >
+> > > The SoQuartz CM4-IO should support otg mode, however it currently
+> > > defaults to device mode when otg is enabled. Force it to host mode to
+> > > retain the previous behavior.
+> >
+> > It would seem the role-switch issue is more widespread than originally
+> > thought, affecting other boards where automatic control should work.
+> > Please hold this patch while I investigate further.
+>
+> ok!
+>
+> I guess this also applies to
+>         "arm64: dts: rockchip: Fix Quartz64-A dwc3 otg port behavior"?
 
-Therefore, use kmap_local_page() / kunmap_local() in zstd.c because in
-this file the mappings are per thread and are not visible in other
-contexts; meanwhile refactor zstd_compress_pages() to comply with nested
-local mapping / unmapping ordering rules.
+No, on Quartz64 Model A it can't work, the requisite pin isn't connected.
+I think I've found the problem, I've requested a few people to test a fix.
+Do you have a Model B or SoQuartz to test against (or any other rk356x
+board that has the id pin hooked up)?
 
-Tested with xfstests on a QEMU + KVM 32 bits VM with 4GB of RAM and
-HIGHMEM64G enabled.
+Thanks,
+Peter
 
-Cc: Filipe Manana <fdmanana@kernel.org>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-Thanks to Ira Weiny for his invaluable help and persevering support.
-Thanks also to Filipe Manana for identifying a fundamental detail I had overlooked:
-https://lore.kernel.org/lkml/20220611093411.GA3779054@falcondesktop/ 
-
-tweed32:/usr/lib/xfstests # ./check -g compress
-FSTYP         -- btrfs
-PLATFORM      -- Linux/i686 tweed32 5.19.0-rc1-vanilla-debug+ #22 SMP PREEMPT_DYNAMIC Sat Jun 11 14:31:39 CEST 2022
-MKFS_OPTIONS  -- /dev/loop1
-MOUNT_OPTIONS -- /dev/loop1 /mnt/scratch
-
-btrfs/024 1s ...  0s
-btrfs/026 3s ...  3s
-btrfs/037 1s ...  1s
-btrfs/038 1s ...  0s
-btrfs/041 0s ...  1s
-btrfs/062 34s ...  35s
-btrfs/063 18s ...  18s
-btrfs/067 33s ...  32s
-btrfs/068 10s ...  10s
-btrfs/070       [not run] btrfs and this test needs 5 or more disks in SCRATCH_DEV_POOL
-btrfs/071       [not run] btrfs and this test needs 5 or more disks in SCRATCH_DEV_POOL
-btrfs/072 33s ...  33s
-btrfs/073 17s ...  15s
-btrfs/074 36s ...  32s
-btrfs/076 0s ...  0s
-btrfs/103 1s ...  1s
-btrfs/106 1s ...  1s
-btrfs/109 1s ...  0s
-btrfs/113 0s ...  1s
-btrfs/138 43s ...  46s
-btrfs/149 1s ...  1s
-btrfs/183 1s ...  1s
-btrfs/205 1s ...  1s
-btrfs/234 3s ...  3s
-btrfs/246 0s ...  0s
-btrfs/251 1s ...  1s
-Ran: btrfs/024 btrfs/026 btrfs/037 btrfs/038 btrfs/041 btrfs/062 btrfs/063 btrfs/067 btrfs/068 btrfs/070 btrfs/071 btrfs/072 btrfs/073 btrfs/074 btrfs/076 btrfs/103 btrfs/106 btrfs/109 btrfs/113 btrfs/138 btrfs/149 btrfs/183 btrfs/205 btrfs/234 btrfs/246 btrfs/251
-Not run: btrfs/070 btrfs/071
-Passed all 26 tests
-
- fs/btrfs/zstd.c | 42 +++++++++++++++++++++++-------------------
- 1 file changed, 23 insertions(+), 19 deletions(-)
-
-diff --git a/fs/btrfs/zstd.c b/fs/btrfs/zstd.c
-index 0fe31a6f6e68..4d50eb3edce5 100644
---- a/fs/btrfs/zstd.c
-+++ b/fs/btrfs/zstd.c
-@@ -391,6 +391,8 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 	*out_pages = 0;
- 	*total_out = 0;
- 	*total_in = 0;
-+	workspace->in_buf.src = NULL;
-+	workspace->out_buf.dst = NULL;
- 
- 	/* Initialize the stream */
- 	stream = zstd_init_cstream(&params, len, workspace->mem,
-@@ -403,7 +405,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 
- 	/* map in the first page of input data */
- 	in_page = find_get_page(mapping, start >> PAGE_SHIFT);
--	workspace->in_buf.src = kmap(in_page);
-+	workspace->in_buf.src = kmap_local_page(in_page);
- 	workspace->in_buf.pos = 0;
- 	workspace->in_buf.size = min_t(size_t, len, PAGE_SIZE);
- 
-@@ -415,7 +417,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 		goto out;
- 	}
- 	pages[nr_pages++] = out_page;
--	workspace->out_buf.dst = kmap(out_page);
-+	workspace->out_buf.dst = kmap_local_page(out_page);
- 	workspace->out_buf.pos = 0;
- 	workspace->out_buf.size = min_t(size_t, max_out, PAGE_SIZE);
- 
-@@ -450,9 +452,9 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 		if (workspace->out_buf.pos == workspace->out_buf.size) {
- 			tot_out += PAGE_SIZE;
- 			max_out -= PAGE_SIZE;
--			kunmap(out_page);
-+			kunmap_local(workspace->out_buf.dst);
- 			if (nr_pages == nr_dest_pages) {
--				out_page = NULL;
-+				workspace->out_buf.dst = NULL;
- 				ret = -E2BIG;
- 				goto out;
- 			}
-@@ -462,7 +464,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 				goto out;
- 			}
- 			pages[nr_pages++] = out_page;
--			workspace->out_buf.dst = kmap(out_page);
-+			workspace->out_buf.dst = kmap_local_page(out_page);
- 			workspace->out_buf.pos = 0;
- 			workspace->out_buf.size = min_t(size_t, max_out,
- 							PAGE_SIZE);
-@@ -477,15 +479,16 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 		/* Check if we need more input */
- 		if (workspace->in_buf.pos == workspace->in_buf.size) {
- 			tot_in += PAGE_SIZE;
--			kunmap(in_page);
-+			kunmap_local(workspace->out_buf.dst);
-+			kunmap_local((void *)workspace->in_buf.src);
- 			put_page(in_page);
--
- 			start += PAGE_SIZE;
- 			len -= PAGE_SIZE;
- 			in_page = find_get_page(mapping, start >> PAGE_SHIFT);
--			workspace->in_buf.src = kmap(in_page);
-+			workspace->in_buf.src = kmap_local_page(in_page);
- 			workspace->in_buf.pos = 0;
- 			workspace->in_buf.size = min_t(size_t, len, PAGE_SIZE);
-+			workspace->out_buf.dst = kmap_local_page(out_page);
- 		}
- 	}
- 	while (1) {
-@@ -510,9 +513,9 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 
- 		tot_out += PAGE_SIZE;
- 		max_out -= PAGE_SIZE;
--		kunmap(out_page);
-+		kunmap_local(workspace->out_buf.dst);
- 		if (nr_pages == nr_dest_pages) {
--			out_page = NULL;
-+			workspace->out_buf.dst = NULL;
- 			ret = -E2BIG;
- 			goto out;
- 		}
-@@ -522,7 +525,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- 			goto out;
- 		}
- 		pages[nr_pages++] = out_page;
--		workspace->out_buf.dst = kmap(out_page);
-+		workspace->out_buf.dst = kmap_local_page(out_page);
- 		workspace->out_buf.pos = 0;
- 		workspace->out_buf.size = min_t(size_t, max_out, PAGE_SIZE);
- 	}
-@@ -538,12 +541,12 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
- out:
- 	*out_pages = nr_pages;
- 	/* Cleanup */
--	if (in_page) {
--		kunmap(in_page);
-+	if (workspace->out_buf.dst)
-+		kunmap_local(workspace->out_buf.dst);
-+	if (workspace->in_buf.src) {
-+		kunmap_local((void *)workspace->in_buf.src);
- 		put_page(in_page);
- 	}
--	if (out_page)
--		kunmap(out_page);
- 	return ret;
- }
- 
-@@ -567,7 +570,7 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
- 		goto done;
- 	}
- 
--	workspace->in_buf.src = kmap(pages_in[page_in_index]);
-+	workspace->in_buf.src = kmap_local_page(pages_in[page_in_index]);
- 	workspace->in_buf.pos = 0;
- 	workspace->in_buf.size = min_t(size_t, srclen, PAGE_SIZE);
- 
-@@ -603,14 +606,15 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
- 			break;
- 
- 		if (workspace->in_buf.pos == workspace->in_buf.size) {
--			kunmap(pages_in[page_in_index++]);
-+			kunmap_local((void *)workspace->in_buf.src);
-+			page_in_index++;
- 			if (page_in_index >= total_pages_in) {
- 				workspace->in_buf.src = NULL;
- 				ret = -EIO;
- 				goto done;
- 			}
- 			srclen -= PAGE_SIZE;
--			workspace->in_buf.src = kmap(pages_in[page_in_index]);
-+			workspace->in_buf.src = kmap_local_page(pages_in[page_in_index]);
- 			workspace->in_buf.pos = 0;
- 			workspace->in_buf.size = min_t(size_t, srclen, PAGE_SIZE);
- 		}
-@@ -619,7 +623,7 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
- 	zero_fill_bio(cb->orig_bio);
- done:
- 	if (workspace->in_buf.src)
--		kunmap(pages_in[page_in_index]);
-+		kunmap_local((void *)workspace->in_buf.src);
- 	return ret;
- }
- 
--- 
-2.36.1
-
+>
+>
+> Heiko
+>
+>
+> > >
+> > > Fixes: bc405bb3eeee ("arm64: dts: rockchip: enable otg/drd operation of usb_host0_xhci in rk356x")
+> > >
+> > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > > ---
+> > >  arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > > index e00568a6be5c..56764fae9f9d 100644
+> > > --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+> > > @@ -169,6 +169,7 @@ &usb2phy0_otg {
+> > >  };
+> > >
+> > >  &usb_host0_xhci {
+> > > +       dr_mode = "host";
+> > >         status = "okay";
+> > >  };
+> > >
+> > > --
+> > > 2.25.1
+> > >
+> >
+>
+>
+>
+>

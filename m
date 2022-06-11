@@ -2,122 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C08A547782
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 22:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D08547785
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 22:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiFKU1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 16:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S231836AbiFKUar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 16:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbiFKU1i (ORCPT
+        with ESMTP id S229861AbiFKUap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 16:27:38 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9A86A431
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:27:36 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso2679042wms.3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 13:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nFNaxUZNCpwtJNNLY7AYmusKJ3kJUrDC+YV49C9O30c=;
-        b=xapK7w9Mp0+G8h+Q+vNaAd2AWR7BcAEpYzR8DL/+kEsxbCaf85qQyDgYBgZNCyeblC
-         S6XerCCZxg906asAmR3Fh9b2tzqOs/RBiEvevcBmWPiRAbqT02hfODBBQBi3ESm+pVRK
-         e1tLhsj1dUJHhRox9XtJXh3zlAY+pZfgEytKHCaNdsS7Zzlxr7JCtNQR7J+ABSv21R19
-         pBReugPHq6gGG9MT8IZzsET7UZY8m4mkqq+PU9mMJMfmICwyjj7S5bU8eD10l6znkA85
-         fZ4cyxy6Da6jdFJKp1KXcejnoDYR510PkphvLeQmhkn5OA5drmjkFJ4/YpAfMcnVDl0j
-         Z+ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nFNaxUZNCpwtJNNLY7AYmusKJ3kJUrDC+YV49C9O30c=;
-        b=oDgu0HKLVZyiO9ZUGsGf8qli+I+z4MbLHKcPwFuRKoM0e1JsKT8BAFfldhA5Kbxeia
-         nw9Z9H0CZ1dw94fhOpvNv8hkphzXT2kw1uMlg7vsEsG7jQoy5WsKuo2GhbolWqugW5FF
-         /8XBiUF4aOHi7jvRd6PpS58iQdfx2d1b8ee3bIBJaOu59DfeYSsR7QSW09WSxdYoE4f8
-         V3WmvmSaEoV9diCAzNWEkC2ibOMtumUyrXKvPP4P+tbS/pJ7QRb1Lipd0BQrn2xfdE3b
-         KZ8cNfZZqQpbnOlG6kkOa3r5I8ayuHOh6FiFCr6JHOt6NW/J6GExtnVlOrQQukg7BDaV
-         8meA==
-X-Gm-Message-State: AOAM5308s6VpiroyVq0giAkMz5PHf+wf9F1gMDd2jwnIwwlJjo0LFLju
-        v1XqW83deTQuoS1zjQemTuCcxg==
-X-Google-Smtp-Source: ABdhPJzdHDOInnFkPrwicvPSpk+IUUMH8dbzNdVQe+zzy7teM4yj2g7KQMQBM3gU+9RioHq3G08ENw==
-X-Received: by 2002:a7b:c341:0:b0:37b:ed90:7dad with SMTP id l1-20020a7bc341000000b0037bed907dadmr6234923wmj.138.1654979255002;
-        Sat, 11 Jun 2022 13:27:35 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:f2fe:1d3f:7d24:f28f])
-        by smtp.gmail.com with ESMTPSA id z18-20020a05600c0a1200b003973435c517sm3629501wmp.0.2022.06.11.13.27.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 13:27:34 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v5.19-rc2
-Date:   Sat, 11 Jun 2022 22:27:32 +0200
-Message-Id: <20220611202732.6602-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.34.1
+        Sat, 11 Jun 2022 16:30:45 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75296B656;
+        Sat, 11 Jun 2022 13:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654979443; x=1686515443;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=btdK/KTIo3K5kFVxw3S6KoQxkEXifhXgZQTDN1wwsOE=;
+  b=E01lrtBjS5jfRI4gxlCsSH1egCS6ifmQS/O7ihWBRauL3nIz7bEn93Ex
+   9L2k5j0oKAO9JZ3kVojUpRHuzao8601O88KHHUmpFbhlV3/ViN5fHVRDq
+   Xs8kqXWC4bbOsH7TC7lnxdZZDKnaz5rOYEuFqex5FbUOFwBMNxTlhmCJZ
+   QQj91IlBuDamZkMv3ON/C9mVidCaZuDNLxN8ckPKQzq/m/YTtS6L5cKxc
+   Jt+9BEf+XZxfR8at66m1mPEotNUp2Fh2dZcFnlxi7nMHIAo+zqhN7fYKj
+   6Kwy4aFQAS/aN/hFnxnvXIiEHdGLBZlll4KLW/WmDLOa2w0mNp3pSiR0s
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="277974906"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="277974906"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 13:30:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="672510836"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Jun 2022 13:30:42 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o07kn-000JGj-Fc;
+        Sat, 11 Jun 2022 20:30:41 +0000
+Date:   Sun, 12 Jun 2022 04:30:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ang Tien Sung <tien.sung.ang@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>, linux-doc@vger.kernel.org
+Subject: [dinguyen:svc_driver_updates_for_v4.20 1/6] htmldocs:
+ include/linux/firmware/intel/stratix10-svc-client.h:19: warning: This
+ comment starts with '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202206120445.FeU5wA93-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git svc_driver_updates_for_v4.20
+head:   107da326a0a3e7b6e81557c4225548db670a2647
+commit: 88f42ac48b89689a3e8673263c09ad77be157a09 [1/6] firmware: stratix10-svc: Add support for FCS
+reproduce: make htmldocs
 
-Here's a set of fixes for the upcoming rc. Most address the new warning we
-emit at build time when irq chips are not immutable with some additional
-tweaks to gpio-crystalcove from Andy and a small tweak to gpio-dwapd.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please pull!
-Bartosz Golaszewski
+All warnings (new ones prefixed by >>):
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+>> include/linux/firmware/intel/stratix10-svc-client.h:19: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+vim +19 include/linux/firmware/intel/stratix10-svc-client.h
 
-are available in the Git repository at:
+7ca5ce896524f5 Richard Gong          2018-11-13   8  
+e23bd83368af41 Mauro Carvalho Chehab 2021-01-14   9  /*
+7ca5ce896524f5 Richard Gong          2018-11-13  10   * Service layer driver supports client names
+7ca5ce896524f5 Richard Gong          2018-11-13  11   *
+7ca5ce896524f5 Richard Gong          2018-11-13  12   * fpga: for FPGA configuration
+6b50d882d38d5a Richard Gong          2018-11-13  13   * rsu: for remote status update
+7ca5ce896524f5 Richard Gong          2018-11-13  14   */
+7ca5ce896524f5 Richard Gong          2018-11-13  15  #define SVC_CLIENT_FPGA			"fpga"
+6b50d882d38d5a Richard Gong          2018-11-13  16  #define SVC_CLIENT_RSU			"rsu"
+88f42ac48b8968 Ang Tien Sung         2022-03-15  17  #define SVC_CLIENT_FCS			"fcs"
+88f42ac48b8968 Ang Tien Sung         2022-03-15  18  /**
+7ca5ce896524f5 Richard Gong          2018-11-13 @19   * Status of the sent command, in bit number
+7ca5ce896524f5 Richard Gong          2018-11-13  20   *
+7536ad8dbfcfd5 Richard Gong          2020-04-14  21   * SVC_STATUS_OK:
+7536ad8dbfcfd5 Richard Gong          2020-04-14  22   * Secure firmware accepts the request issued by one of service clients.
+7ca5ce896524f5 Richard Gong          2018-11-13  23   *
+7536ad8dbfcfd5 Richard Gong          2020-04-14  24   * SVC_STATUS_BUFFER_SUBMITTED:
+7536ad8dbfcfd5 Richard Gong          2020-04-14  25   * Service client successfully submits data buffer to secure firmware.
+7ca5ce896524f5 Richard Gong          2018-11-13  26   *
+7536ad8dbfcfd5 Richard Gong          2020-04-14  27   * SVC_STATUS_BUFFER_DONE:
+7ca5ce896524f5 Richard Gong          2018-11-13  28   * Secure firmware completes data process, ready to accept the
+7ca5ce896524f5 Richard Gong          2018-11-13  29   * next WRITE transaction.
+7ca5ce896524f5 Richard Gong          2018-11-13  30   *
+7536ad8dbfcfd5 Richard Gong          2020-04-14  31   * SVC_STATUS_COMPLETED:
+7536ad8dbfcfd5 Richard Gong          2020-04-14  32   * Secure firmware completes service request successfully. In case of
+7536ad8dbfcfd5 Richard Gong          2020-04-14  33   * FPGA configuration, FPGA should be in user mode.
+7ca5ce896524f5 Richard Gong          2018-11-13  34   *
+7536ad8dbfcfd5 Richard Gong          2020-04-14  35   * SVC_COMMAND_STATUS_BUSY:
+7536ad8dbfcfd5 Richard Gong          2020-04-14  36   * Service request is still in process.
+7ca5ce896524f5 Richard Gong          2018-11-13  37   *
+7536ad8dbfcfd5 Richard Gong          2020-04-14  38   * SVC_COMMAND_STATUS_ERROR:
+7536ad8dbfcfd5 Richard Gong          2020-04-14  39   * Error encountered during the process of the service request.
+6b50d882d38d5a Richard Gong          2018-11-13  40   *
+7536ad8dbfcfd5 Richard Gong          2020-04-14  41   * SVC_STATUS_NO_SUPPORT:
+7536ad8dbfcfd5 Richard Gong          2020-04-14  42   * Secure firmware doesn't support requested features such as RSU retry
+7536ad8dbfcfd5 Richard Gong          2020-04-14  43   * or RSU notify.
+7ca5ce896524f5 Richard Gong          2018-11-13  44   */
+7536ad8dbfcfd5 Richard Gong          2020-04-14  45  #define SVC_STATUS_OK			0
+7536ad8dbfcfd5 Richard Gong          2020-04-14  46  #define SVC_STATUS_BUFFER_SUBMITTED	1
+7536ad8dbfcfd5 Richard Gong          2020-04-14  47  #define SVC_STATUS_BUFFER_DONE		2
+7536ad8dbfcfd5 Richard Gong          2020-04-14  48  #define SVC_STATUS_COMPLETED		3
+7536ad8dbfcfd5 Richard Gong          2020-04-14  49  #define SVC_STATUS_BUSY			4
+7536ad8dbfcfd5 Richard Gong          2020-04-14  50  #define SVC_STATUS_ERROR		5
+7536ad8dbfcfd5 Richard Gong          2020-04-14  51  #define SVC_STATUS_NO_SUPPORT		6
+e9cb0497b1c801 Richard Gong          2019-11-04  52  
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.19-rc2
+:::::: The code at line 19 was first introduced by commit
+:::::: 7ca5ce896524f5292e610b27d168269e5ab74951 firmware: add Intel Stratix10 service layer driver
 
-for you to fetch changes up to 77006f6edc0e0f58617eb25e53731f78641e820d:
+:::::: TO: Richard Gong <richard.gong@intel.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-  gpio: dwapb: Don't print error on -EPROBE_DEFER (2022-06-10 14:26:15 +0200)
-
-----------------------------------------------------------------
-gpio fixes for v5.19-rc2
-
-- make irq_chip structs immutable in several Diolan and intel drivers to
-  get rid of the new warning we emit when fiddling with irq chips
-- don't print error messages on probe deferral in gpio-dwapb
-
-----------------------------------------------------------------
-Andy Shevchenko (7):
-      gpio: crystalcove: make irq_chip immutable
-      gpio: crystalcove: Use specific type and API for IRQ number
-      gpio: crystalcove: Join function declarations and long lines
-      gpio: wcove: make irq_chip immutable
-      gpio: merrifield: make irq_chip immutable
-      gpio: sch: make irq_chip immutable
-      gpio: dln2: make irq_chip immutable
-
-Bartosz Golaszewski (1):
-      Merge tag 'intel-gpio-v5.19-2' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current
-
-Serge Semin (1):
-      gpio: dwapb: Don't print error on -EPROBE_DEFER
-
- drivers/gpio/gpio-crystalcove.c | 70 ++++++++++++++++++++++-------------------
- drivers/gpio/gpio-dln2.c        | 23 ++++++++------
- drivers/gpio/gpio-dwapb.c       |  7 ++---
- drivers/gpio/gpio-merrifield.c  | 22 ++++++++-----
- drivers/gpio/gpio-sch.c         | 35 +++++++++++++--------
- drivers/gpio/gpio-wcove.c       | 10 ++++--
- 6 files changed, 99 insertions(+), 68 deletions(-)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

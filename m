@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7265472B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 09:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AA45472B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 09:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiFKHqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 03:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        id S231391AbiFKHtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 03:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiFKHqK (ORCPT
+        with ESMTP id S229661AbiFKHs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 03:46:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8CBB44
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 00:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654933570; x=1686469570;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oduHo1RFQ3stMxu/D+kXNU5eamN8lMTooY1qRApiuaY=;
-  b=ai/TSra+4HHrDc5Munln0w3/e5GugstT/v8pfwOf60r8xrcHyPcqkIi2
-   Ect2rCaSPsTAmukC4o9XnV63y6tg09dR4/LFtg8cIT/yUinV22O0LOl34
-   +m9vUXYwJDaIzyA6H3Jkbcn+1JJ73QCEDPYpXIqPdcP8r1ndi53wcQfH4
-   dKqQes4XdzoQz2Rqp52emnyWVznQEF0EQZrtMmcNg83boeVL55lpR6VfF
-   GNhOGkp0xYVq1TR5sGa/damlrhlr3exiKbB7VlHab6eJTrZ+v6hBXFpSX
-   QPACVOIkyfCzBdQUygNJvilImibAPmPBwq2EQPC5SwiMH/VweubfxcjG9
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="276626490"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="276626490"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 00:46:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="616816996"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Jun 2022 00:46:08 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzvot-000Iid-I1;
-        Sat, 11 Jun 2022 07:46:07 +0000
-Date:   Sat, 11 Jun 2022 15:45:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 30/57]
- lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types
- ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and
- 'typeof (maxsize) *' (aka 'unsigned int *'))
-Message-ID: <202206111500.VcHCpPMw-lkp@intel.com>
+        Sat, 11 Jun 2022 03:48:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B485B2937F
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 00:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654933736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=qyk9g0ELjVAhO4lsyGp9C9P5YSNZEspWcN+xPCYvwJY=;
+        b=bj+MYL2j5TwpOUPlKRSlCp585JtnbDXvqih5LqBen+jEtrZtPIYloCGHrZkZqsGVV63GSC
+        +NyCpgBW+2XqBHYZ99vKieluSQn4lPCAjA35l63dIKuYWJNk2qvmqBuU7heifUTJdnnrE9
+        FJIy7Q0cPMoxhaIfcGR1/aAHqjPaIFo=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-46-g4ZpthJKOzC_y10Pr393zQ-1; Sat, 11 Jun 2022 03:48:54 -0400
+X-MC-Unique: g4ZpthJKOzC_y10Pr393zQ-1
+Received: by mail-ed1-f69.google.com with SMTP id g8-20020a056402090800b00433940d207eso974915edz.1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 00:48:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=qyk9g0ELjVAhO4lsyGp9C9P5YSNZEspWcN+xPCYvwJY=;
+        b=ciny1xendt2HKN3qLNdI7OzxVQB/Km12y+Oj7FySMlqZFZaEAaaAKAJOWWmVFUfIqe
+         LzlY7QGSil9yLUuIO1oMQ9JMXCAMuXvDkp6OZAWMNjiJqlZcb+8DvQuI+DsBCJPc7prm
+         CIniPu4872dEpOufEEs9A5Aa6hwnZdP64a9IasaOBipW27f1aXbub2x99pqMM7o7D+EF
+         UlTI5tb+jL8aXWN3z3cdJ8oK89LTArJkhdX5zyM4cS19IT4mGymtsfKbAtQeEqEsW88V
+         GaNC6ZiRJeKBJkMmQZF80LtKwPpgJfYMHMUukx1VsEkDoiKa5xTfwmh9wEC6ex0CL9NX
+         6Brw==
+X-Gm-Message-State: AOAM533xAjvBO/ZdO4IsAhmTsvxMYnIjMGRR6JM1M1w2DzjSEJoWOKWb
+        mLJZSKUd1xynfXnx0DiaFhGWo6ZPvi6esBvSzQzK8TQKQ53BeOyWS656U5TKuaggvPA1R7j8Pn8
+        zY5cYf1sBk1aGYtMzrrGdjTMC
+X-Received: by 2002:a05:6402:2553:b0:431:6e08:56de with SMTP id l19-20020a056402255300b004316e0856demr31201060edb.406.1654933733331;
+        Sat, 11 Jun 2022 00:48:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwwLx5bFdq30xI5P4i3ZyKGrtOytrp9e+V51+s6ADqB5Q4i9rEt7pLobi3Np6OXDutzcfAAxQ==
+X-Received: by 2002:a05:6402:2553:b0:431:6e08:56de with SMTP id l19-20020a056402255300b004316e0856demr31201044edb.406.1654933733098;
+        Sat, 11 Jun 2022 00:48:53 -0700 (PDT)
+Received: from redhat.com ([212.116.178.142])
+        by smtp.gmail.com with ESMTPSA id zj11-20020a170907338b00b006ff0fe78cb7sm664853ejb.133.2022.06.11.00.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 00:48:52 -0700 (PDT)
+Date:   Sat, 11 Jun 2022 03:48:48 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dan.carpenter@oracle.com, elic@nvidia.com, fam.zheng@bytedance.com,
+        gautam.dawar@xilinx.com, jasowang@redhat.com,
+        johannes@sipsolutions.net, liubo03@inspur.com, mst@redhat.com,
+        oliver.sang@intel.com, pilgrimtao@gmail.com, si-wei.liu@oracle.com,
+        stable@vger.kernel.org,
+        syzbot+5b59d6d459306a556f54@syzkaller.appspotmail.com,
+        vincent.whitchurch@axis.com, wangxiang@cdjrlc.com,
+        xieyongji@bytedance.com
+Subject: [GIT PULL] virtio,vdpa: fixes
+Message-ID: <20220611034848-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,102 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
-commit: cce0a847405ef7d076fde956ba5dd1a4d7d901c2 [30/57] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
-config: arm-randconfig-r034-20220610 (https://download.01.org/0day-ci/archive/20220611/202206111500.VcHCpPMw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/cce0a847405ef7d076fde956ba5dd1a4d7d901c2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout cce0a847405ef7d076fde956ba5dd1a4d7d901c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-All warnings (new ones prefixed by >>):
+are available in the Git repository at:
 
->> lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   lib/iov_iter.c:1628:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   2 warnings generated.
+  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
 
+for you to fetch changes up to eacea844594ff338db06437806707313210d4865:
 
-vim +1464 lib/iov_iter.c
+  um: virt-pci: set device ready in probe() (2022-06-10 20:38:06 -0400)
 
-  1430	
-  1431	static ssize_t iter_xarray_get_pages(struct iov_iter *i,
-  1432					     struct page **pages, size_t maxsize,
-  1433					     unsigned maxpages, size_t *_start_offset)
-  1434	{
-  1435		unsigned nr, offset;
-  1436		pgoff_t index, count;
-  1437		size_t size = maxsize;
-  1438		loff_t pos;
-  1439	
-  1440		if (!size || !maxpages)
-  1441			return 0;
-  1442	
-  1443		pos = i->xarray_start + i->iov_offset;
-  1444		index = pos >> PAGE_SHIFT;
-  1445		offset = pos & ~PAGE_MASK;
-  1446		*_start_offset = offset;
-  1447	
-  1448		count = 1;
-  1449		if (size > PAGE_SIZE - offset) {
-  1450			size -= PAGE_SIZE - offset;
-  1451			count += size >> PAGE_SHIFT;
-  1452			size &= ~PAGE_MASK;
-  1453			if (size)
-  1454				count++;
-  1455		}
-  1456	
-  1457		if (count > maxpages)
-  1458			count = maxpages;
-  1459	
-  1460		nr = iter_xarray_populate_pages(pages, i->xarray, index, count);
-  1461		if (nr == 0)
-  1462			return 0;
-  1463	
-> 1464		return min(nr * PAGE_SIZE - offset, maxsize);
-  1465	}
-  1466	
+----------------------------------------------------------------
+virtio,vdpa: fixes
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Fixes all over the place, most notably fixes for latent
+bugs in drivers that got exposed by suppressing
+interrupts before DRIVER_OK, which in turn has been
+done by 8b4ec69d7e09 ("virtio: harden vring IRQ").
+
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+
+----------------------------------------------------------------
+Bo Liu (1):
+      virtio: Fix all occurences of the "the the" typo
+
+Dan Carpenter (2):
+      vdpa/mlx5: fix error code for deleting vlan
+      vdpa/mlx5: clean up indenting in handle_ctrl_vlan()
+
+Jason Wang (2):
+      virtio-rng: make device ready before making request
+      vdpa: make get_vq_group and set_group_asid optional
+
+Vincent Whitchurch (1):
+      um: virt-pci: set device ready in probe()
+
+Xiang wangx (1):
+      vdpa/mlx5: Fix syntax errors in comments
+
+Xie Yongji (2):
+      vringh: Fix loop descriptors check in the indirect cases
+      vduse: Fix NULL pointer dereference on sysfs access
+
+chengkaitao (1):
+      virtio-mmio: fix missing put_device() when vm_cmdline_parent registration failed
+
+ arch/um/drivers/virt-pci.c             |  7 ++++++-
+ drivers/char/hw_random/virtio-rng.c    |  2 ++
+ drivers/vdpa/mlx5/net/mlx5_vnet.c      |  9 +++++----
+ drivers/vdpa/vdpa_user/vduse_dev.c     |  7 +++----
+ drivers/vhost/vdpa.c                   |  2 ++
+ drivers/vhost/vringh.c                 | 10 ++++++++--
+ drivers/virtio/virtio_mmio.c           |  3 ++-
+ drivers/virtio/virtio_pci_modern_dev.c |  2 +-
+ include/linux/vdpa.h                   |  5 +++--
+ 9 files changed, 32 insertions(+), 15 deletions(-)
+

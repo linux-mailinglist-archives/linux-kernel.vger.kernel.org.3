@@ -2,52 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DE7547143
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 04:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3AD547156
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 04:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348166AbiFKCTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Jun 2022 22:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S1348922AbiFKCZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Jun 2022 22:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbiFKCTN (ORCPT
+        with ESMTP id S1348978AbiFKCXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Jun 2022 22:19:13 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC95934EC6B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:19:11 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id i16-20020a056e021d1000b002d3bbe39232so510942ila.20
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:19:11 -0700 (PDT)
+        Fri, 10 Jun 2022 22:23:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E0B3F4A0D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:23:14 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v19so1012243edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Jun 2022 19:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HvaEucNyttJ72r4dgkt1sbWCJsvBPyIh5zMt0LNXalY=;
+        b=D62jI1p8sOcmW+dGG367yCKI6736qfwlRYdRbtg+pQI3VQ/mZvhMkSh4muEy4yFzXi
+         1pifN6keFBPADAFAutLs2f+vKDRy3jOy1SmannYfmHY7tjbpoLbP8600CMqIboz22zit
+         FmdCeKC+IDyY3i3YwKCGDz5In1oYgHbIW3q58=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=tHVTwt2PWD/vy8v6ZvoCr74jkGvVIE7FZgcQ84tt83I=;
-        b=KxCNTEUmXAD00y21cOqSjqGle8hhTdXxTmFjTmoaJXkl1StBpTyNX3fQX6fjrrSPBN
-         YA0zC4zmFBE/npNY9vTxJS5W2r4V2bCVYgjk8Zn1Zj9uTJif5MGpCLGrOjqJSaNEDwDH
-         gIe5wBoL4VlGBXIuOOTv3f6wz7mM5zpvfwlHsrXVFedJBwsc9tomqBQJIUhp6WVwtIK6
-         eke2AdVNnUmqVyJoxEzNZyMfKDeQiY3h+o8zbp3skUGPcmo47YVYI/VR+lL0m4L6lADo
-         y9Gb4se52Esj+wSd3zNukt5GhQ2dKf4kJTwFYYLphdB8uSvM62NlGdoHOsVqFpkgdARi
-         Ju3w==
-X-Gm-Message-State: AOAM530EzbZV3l99f2udAgY9xZK4fsEo0/EjCthwF8M/E/dMonkgAqWT
-        NHqm14SLW14Y25hbiOkMDLoyiYaqiEYFd3jfFLGdgpdLxPAN
-X-Google-Smtp-Source: ABdhPJxn8Jwh13gBFKkfTlnqFbBzUky0CWR7V7toMn7uWTyhXx8Vo3XDtLyog5dr+WDD/RfKZueOv4/JX/jlt1DLbZ1w/OjWq3Yb
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HvaEucNyttJ72r4dgkt1sbWCJsvBPyIh5zMt0LNXalY=;
+        b=p2MYzB8sqDEon+eD7S2o5AlX1lQ8r9lvHIixCOhR5IzvVLC7nIxwmhhT2+vQXYGSXZ
+         b4v1VsB1B6fbre0UMn7VP5YduXIKdkBPUF4Do8V9TmVsQ2r0FkMFHrEqbEXFifo/Hi3h
+         K3bioWWNHkAbGN+4FWhKYSEDkh6yEnDJyLZigouUH4vcs4BAmRjAS4v1Xc/O4y6LIRV7
+         ZroPu2Qw1zmZu2jxVOOBk+khMZ+lWNCMZIyIbTeiLOtl7zXwC0hxAsdlkSCu3emzLzI3
+         WopeW1pFNPECo4+Gfgb8ikX++HZCBNjoRw/mbOjNVgm5fkamkgELWviSLnfteDQhJNtF
+         K9iA==
+X-Gm-Message-State: AOAM533gIe8TXg5/cfzDyZuAVjU8JD6sJ6DSIoX2DWgrmQl0/0Gqov7+
+        LMV7d1IQH58u4OaR9/Aej1lERNGsvvmuppTJ2CkQ+A==
+X-Google-Smtp-Source: ABdhPJz16+9kQdS9QDTB0tjL4FsLbUEsFaIS0ykQfnx5qpyFYyBQCn1i8W4mcCkA/y3viUzYkXAgYYv9JpSOTwgMdpQ=
+X-Received: by 2002:a50:eb91:0:b0:42d:c1d8:616a with SMTP id
+ y17-20020a50eb91000000b0042dc1d8616amr54940771edr.219.1654914192936; Fri, 10
+ Jun 2022 19:23:12 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9948:0:b0:669:a41d:6ee8 with SMTP id
- v8-20020a5d9948000000b00669a41d6ee8mr6745950ios.24.1654913950865; Fri, 10 Jun
- 2022 19:19:10 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 19:19:10 -0700
-In-Reply-To: <20220611015957.1549-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002cde2f05e122ae55@google.com>
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in sk_psock_stop
-From:   syzbot <syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20220608142723.103523089@infradead.org> <20220608144517.444659212@infradead.org>
+ <YqG6URbihTNCk9YR@alley> <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net> <YqHwOFg/WlMqe8/Z@alley>
+In-Reply-To: <YqHwOFg/WlMqe8/Z@alley>
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+Date:   Sat, 11 Jun 2022 11:23:02 +0900
+Message-ID: <CA+_sPaq_47C2PWnGU7WfGXMc03E1Nz+1=F-wZe0B2+ymqdm3Fg@mail.gmail.com>
+Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
+        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,20 +120,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 9, 2022 at 10:06 PM Petr Mladek <pmladek@suse.com> wrote:
+>
+> Makes sense. Feel free to use for this patch:
+>
+> Acked-by: Petr Mladek <pmladek@suse.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+140186ceba0c496183bc@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         ff539ac7 Add linux-next specific files for 20220609
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1462f61bf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5002042f00a8bce
-dashboard link: https://syzkaller.appspot.com/bug?extid=140186ceba0c496183bc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12a7d9bff00000
-
-Note: testing is done by a robot and is best-effort only.
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>

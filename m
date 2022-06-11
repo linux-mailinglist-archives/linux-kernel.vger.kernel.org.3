@@ -2,86 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734225475D7
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 16:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53365475D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Jun 2022 16:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbiFKOx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 10:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S236789AbiFKO4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 10:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236631AbiFKOxz (ORCPT
+        with ESMTP id S234101AbiFKO4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 10:53:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A1612090;
-        Sat, 11 Jun 2022 07:53:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36B4260FFA;
-        Sat, 11 Jun 2022 14:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49EFAC34116;
-        Sat, 11 Jun 2022 14:53:53 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ep5VjlLv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654959231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9pqfqYStan/I+ZPRU4QEBBVfKsXKknoHw/gVA4DBjss=;
-        b=ep5VjlLvDgxBMrb0h9f9JrT35RB1zn2rbsrUgslarBPtas7cBJ1ZLsk3D/xzDrpcfcYD0i
-        kqf+3Xt+sJ536d2iof0NVOp1/8L0rwGzD81sGSPt0Et3cvuthS3HcOGyG8+J2Z+quPIjlN
-        T81N5n3ZNav3mNQDOKb7Gk4l0MTowCU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8aa3d6ca (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 11 Jun 2022 14:53:50 +0000 (UTC)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3137316bb69so15581537b3.10;
-        Sat, 11 Jun 2022 07:53:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532oWWUMgPkyrZYAG4wSjbnkpZdazf929SFO6izSNHp2wF5LAXSb
-        OqStlJldFiC4Ui0Sm/ThfxKvWaNmYut658W+yUE=
-X-Google-Smtp-Source: ABdhPJwgmnQjNeYtkfIN6xGH9ZFfcVbNxRhMGQJjaIN0Dh1KWfZ5lVm1oeHb/OBW4MjKj2SuINtm8f6mvvXx4Gwkyek=
-X-Received: by 2002:a81:6c04:0:b0:313:c938:ba1b with SMTP id
- h4-20020a816c04000000b00313c938ba1bmr7414813ywc.231.1654959229974; Sat, 11
- Jun 2022 07:53:49 -0700 (PDT)
+        Sat, 11 Jun 2022 10:56:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145BDB481
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 07:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EesJp6Q28Dva5LrN482KPkK1Tg2M3LLR40lrcCvgAAk=; b=WMGh50naDvnyC2S29Ju83tWUBS
+        aEzMG9CJXl92X/gsKJ/OXv7EBMXs63k3gZkWiwavEUQAP2d24xo6/D3ReKv2dcJoMSMxQgQs+o0LD
+        AILEIcXZRk1OZZZw2FukdV8MKv4UyBBjUXFoW3RBMqmC+Q3b4nP5ENAHg8qq9fTf1U0atiy33QZTm
+        j6nsvfemD/IEUDObGwdIh5j8vLWLZTf9S0c/6EF7pqWiZLOZYVWBkO1+0QlkTk1g4HZeuC5Rv/uvi
+        dSQex/M7UvtgSHsmkF0kYUapzwb+n+/qldIAldWSIhK0aQFSDCBn+0iJzhT3zhgmBD2f1436NUzR+
+        WW10RAjA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o02X8-00FJxM-7v; Sat, 11 Jun 2022 14:56:14 +0000
+Date:   Sat, 11 Jun 2022 15:56:14 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        shameerali.kolothum.thodi@huawei.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: fix is_pinnable_page return value
+Message-ID: <YqStDm5sdDL6YXn8@casper.infradead.org>
+References: <20220611133442.15290-1-zhangfei.gao@linaro.org>
 MIME-Version: 1.0
-References: <20220611100447.5066-1-Jason@zx2c4.com> <20220611100447.5066-2-Jason@zx2c4.com>
- <6432586f-9eb9-ac71-7934-c48da09a928e@csgroup.eu> <CAHmME9rBWcdZtJCQ1WZAPOJtnA6u4w0ub4s4M+UW60gMSNgWrQ@mail.gmail.com>
- <YqSqqq0zC7yDOQib@zx2c4.com> <c94deb33-c28e-12c1-e3b1-aebd4249baa3@csgroup.eu>
-In-Reply-To: <c94deb33-c28e-12c1-e3b1-aebd4249baa3@csgroup.eu>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 11 Jun 2022 16:53:39 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pNGrSWNuYNV4jZCPiAk5NzNRt3LuZuBMhS-GVobaeiMQ@mail.gmail.com>
-Message-ID: <CAHmME9pNGrSWNuYNV4jZCPiAk5NzNRt3LuZuBMhS-GVobaeiMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] powerpc/microwatt: wire up rng during setup_arch
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220611133442.15290-1-zhangfei.gao@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Sat, Jun 11, 2022 at 09:34:42PM +0800, Zhangfei Gao wrote:
+> Commit 1c563432588d ("mm: fix is_pinnable_page against a cma page")
+> Changes from
+> return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
+>         is_zero_pfn(page_to_pfn(page));
+> to
+> return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
 
-On Sat, Jun 11, 2022 at 4:49 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Then you have:
->
-> arch/powerpc/platforms/powernv/powernv.h
-> arch/powerpc/platforms/pseries/pseries.h
->
-> and you can add
->
-> arch/powerpc/platforms/microwatt/microwatt.h
+Mailing lists can be read as well as written.
 
-Oh, terrific, thanks. I'll do that.
-
-Jason
+https://lore.kernel.org/linux-mm/165490039431.944052.12458624139225785964.stgit@omen/

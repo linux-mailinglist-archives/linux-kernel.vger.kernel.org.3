@@ -2,139 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEE5547A55
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E027C547A5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237043AbiFLNXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 09:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S233716AbiFLNbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 09:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236994AbiFLNXJ (ORCPT
+        with ESMTP id S233302AbiFLNbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 09:23:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A98C2F03B
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:23:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EC6B3CE0930
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 13:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F83C34115;
-        Sun, 12 Jun 2022 13:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655040183;
-        bh=0weVAGbcwRL32E/exKQbawtLkyMMFCwF+cP6B34Yq0k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=mUfsnRXlQerGGg8u3tDaTaDr5PYIahxuLMG8yL/WfouV9tyJgTWYqTWiCYAOd+PJL
-         HA3gtH+34spaHTjw07N/Ro8LEGbTCbIt0UUm/R9oKdZcuTlO1EjZS/hrrmVRXeFXxp
-         eeA+NPIu3/GnQkyLvuSd6kNCjE/xHv2Z3UAd+2bd1IrsiTT9Ji1QfR8Y95zP/jDciL
-         syGmb38Daw4vRmN/dSSI/kb+hXt98+G7QUhCkHmnOWk4iTZf2Zu6/agzRrzs89ckl7
-         k1tJGw6fDQDfq59ImeMuXrkxRaeyXqMhz9kQKx0wowLoEWBbmKHUeQhnJJvF3ISpSl
-         SvCsjLYcMHdLA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7C36F5C02F9; Sun, 12 Jun 2022 06:23:02 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 06:23:02 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     john.ogness@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org, pmladek@suse.com
-Subject: Re: [BUG] 8e274732115f ("printk: extend console_lock for per-console
- locking")
-Message-ID: <20220612132302.GA873785@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
+        Sun, 12 Jun 2022 09:31:10 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585A32A42B
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:31:09 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id u99so5949452ybi.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jZK9seyLhEtguREoqjcxM6GoxzolaKvu9wYtMvBrtBY=;
+        b=ZqoHvd7CG5KBmX1FLe+L8i01SEWKpCro85xP1dfO7EacPV8GIBBrZOMK7iuVRFVLVz
+         +jYGoyps1ep5Sa2Jm+hL8kSYMBMiBKkQW5sbeFvpQ26TZlIj0vXu/WlQ1GgBqclK4gPo
+         mf/hOTJAWp+YCGDDKjjmkzb2ycDw/S/Xw5HCE2HgbNkzj9avH1+tF3cRO20MmyamiqD3
+         0pbopRR3bGNm+6fZX+jXRb/fxIDRPKkCGrm0mVQHo+S7rjy27t0shoUZpZiPnF9/MlzR
+         YVHi0Onn/Hg+89vRd7Tx8SDiLSWIxyAiWrxJApmcueW/0ed1m4s3/OFmKvRnYAA1P6EE
+         /nZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jZK9seyLhEtguREoqjcxM6GoxzolaKvu9wYtMvBrtBY=;
+        b=CcLimHwNI/VagWtE94q5UgGWDZ8By/w62hqZGWY927rlhp+VpFyzgChBG2eQ6jYkF0
+         V6+TLwNEpqrsNKL8ZfCMZJ69di2DcMGaTWsi82EOCquoVhC09wiPNwqx18rOQCeL5smQ
+         KtwRo18Iab56Pg/ONa3v+JaLNTzderrxEdmnFoIwJhVhm0hOzUOOgzPjmuwofuZBEnuF
+         Jt3SzSIr5xIRWK8qDSyX9pAVOAmPRX+aO2xlD5Exmrk2bx2KIpcMJeb/VT3HjpCAc9cV
+         AkbouHKDcpPGMW7H8ZKFHZwDXJM3aAH8D37O63HthmaSBX8xr1CSk00qum3Opn4pZ9VS
+         OPcw==
+X-Gm-Message-State: AOAM53074bJTHRDk1+NABFdon1Ge/dpFLcEQdLsKqg7e84Ue06y5NtgX
+        fqCRZUmDhTR+pRKsGuyHDUUMh8Eg7gzcymEeZl5rJcs3
+X-Google-Smtp-Source: ABdhPJw2TF8/MHzEcpbFalBW81mspwFL/pUg0AgJtnIKYyonLvXFewSvngmSeTKGyuRMc78G4MQZlMJ+cz/EbR/4Xzs=
+X-Received: by 2002:a25:a066:0:b0:664:411a:1071 with SMTP id
+ x93-20020a25a066000000b00664411a1071mr16726400ybh.366.1655040668484; Sun, 12
+ Jun 2022 06:31:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
+ <87y1y48spg.fsf@jogness.linutronix.de> <CAMdYzYr-Wo713Y4qjboTpoK6GcrYfKCfRJAEizwXw6-=dymVzg@mail.gmail.com>
+ <YqVWL3gpfV9HJBLe@google.com>
+In-Reply-To: <YqVWL3gpfV9HJBLe@google.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sun, 12 Jun 2022 09:30:57 -0400
+Message-ID: <CAMdYzYoOcLhUpqOEmXQ7t90BOgYczfq0AxK5+JKQqrPo4NGgqw@mail.gmail.com>
+Subject: Re: [BUG] Threaded printk breaks early debugging
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:50:38PM -0700, Paul E. McKenney wrote:
-> Hello, John,
-> 
-> I have started getting rcutorture shutdown-time hangs when running
-> against recent mainline, and bisected back to the 8e274732115f ("printk:
-> extend console_lock for per-console locking") commit.  These hangs go
-> away (or at least their probability drops dramatically) if I build with
-> CONFIG_PREEMPTION=n -and- CONFIG_NO_HZ=y (not n!), at least assuming
-> that I also boot with "nohz_full=0-N".
-> 
-> Attempts to debug using rcutorture's "--gdb" argument result in
-> "[Inferior 1 (process 1) exited normally]", but with the same truncated
-> console-log output as when running without "--gdb".  This suggests
-> that the kernel really did run to completion and halt as expected,
-> but that the shutdown-time printk() output was lost.  Furthermore, if I
-> use the gdb "hbreak" command to set a breakpoint at kernel_power_off(),
-> it really does hit that breakpoint.  This would not happen in the case
-> of a kernel hang.
-> 
-> So, given that I can hit that breakpoint, what should I ask gdb to
-> show me?
-> 
-> Alternatively, this reproduces on a variety of x86 platforms, so you
-> should be able reproduce it as follows [1]:
-> 
-> 	git checkout v5.19-rc1
-> 	tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 2 --configs "TREE01" --gdb "CONFIG_DEBUG_INFO_NONE=n CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y" --trust-make
-> 
-> This builds a kernel, boots it, and then tells you how to launch gdb
-> (presumably in some other window).  Once you give launch gdb and give
-> it the suggested commands, the kernel runs for two minutes under qemu,
-> then shuts down.  I used the following gdb commands to set the breakpoint
-> and run the kernel:
-> 
-> 	target remote :1234  # suggested by the rcutorture script
-> 	hbreak kernel_power_off  # added by me
-> 	continue  # suggested by the rcutorture script
-> 
-> Or leave out the "gdb" if you prefer some other debugging approach.
+On Sat, Jun 11, 2022 at 10:57 PM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> On (22/06/10 11:34), Peter Geis wrote:
+> > > On 2022-06-10, Peter Geis <pgwipeout@gmail.com> wrote:
+> > > > However I've run into an issue debugging early boot issues. Anything
+> > > > that causes the kernel threading system to die (for example here, a
+> > > > NPE) causes the boot console to halt before it outputs the error.
+> > >
+> > > A null pointer exception should trigger a panic, which will cause printk
+> > > to enter direct mode for the oops. It should be just as effective as
+> > > before introducing the printing kthreads.
+> >
+> > This might be a side effect of the fact that this is on a low powered
+> > arm64 board. I noticed with threading enabled during large bursts the
+> > console drops an excessive amount of messages. It's especially
+> > apparent during the handover from earlycon to the normal console.
+>
+> How many CPUs does it have?
 
-And the patch below takes care of things in (admittedly quite light)
-testing thus far.  What it does is add ten seconds of pure delay before
-rcutorture shuts down the system.  Presumably, this delay gives printk()
-the time that it needs to flush its buffers.  In the configurations
-that I have tested thus far, anyway.
-
-So what should I be doing instead?
-
-o	console_flush_on_panic() seems like strong medicine, but might
-	be the right thing to do.  The bit about proceeding even though
-	it failed to acquire the lock doesn't look good for non-panic use.
-
-o	printk_trigger_flush() has an attractive name, but it looks
-	like it only just starts the flush rather than waiting for it
-	to finish.
-
-o	pr_flush(1000, true) looks quite interesting, and also seems to
-	work in a few quick tests, so I will continue playing with that.
-
-Right now, I am putting this immediately before the kernel/torture.c
-call to kernel_power_off().  I could argue that kernel_power_off()
-should flush the printk() buffers as part of a "clean system power_off",
-to quote the kernel_power_off() header comment.  Or is there some reason
-why kernel_power_off() should leave printk() buffers unflushed?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-diff --git a/kernel/torture.c b/kernel/torture.c
-index 789aeb0e1159c..bbdec930ea21f 100644
---- a/kernel/torture.c
-+++ b/kernel/torture.c
-@@ -651,6 +651,7 @@ static int torture_shutdown(void *arg)
- 		VERBOSE_TOROUT_STRING("No torture_shutdown_hook(), skipping.");
- 	if (ftrace_dump_at_shutdown)
- 		rcu_ftrace_dump(DUMP_ALL);
-+	schedule_timeout_uninterruptible(HZ * 10);
- 	kernel_power_off();	/* Shut down the system. */
- 	return 0;
- }
+Four and all are online when the error occurs.

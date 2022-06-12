@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFD35478F5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 06:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0795478F8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 07:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbiFLE5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 00:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S230133AbiFLFAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 01:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFLE5C (ORCPT
+        with ESMTP id S229528AbiFLFAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 00:57:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4C219C32
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 21:57:02 -0700 (PDT)
+        Sun, 12 Jun 2022 01:00:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB3C645B;
+        Sat, 11 Jun 2022 22:00:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D5CE60A5A
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 04:57:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A46F3C34115;
-        Sun, 12 Jun 2022 04:57:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DDAB60B42;
+        Sun, 12 Jun 2022 05:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4B6C34115;
+        Sun, 12 Jun 2022 05:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655009821;
-        bh=6n7SpCFndiSPCmzPBF8JaXynaNVK28eEuvgyLIxMrUw=;
+        s=korg; t=1655010039;
+        bh=aZel3g0siRMs9hpkSzONyBNEL3/uXvkfsBx22Gz+SpY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K9eFDnF98RsRAaGn5eNwM9ngABujmBcqHzCxb4p8c0yHku2dmwTCmdHM9JElvKFes
-         TvIItOeBsBr2ckU4iJk4vYvLcJRi7zVtLkABUXqTiWmbvuJaorozYqEXMzvwcJ4n7Q
-         EuX/zBCWhF53xEWCnQ++l6tMWaxhY9QpJD6DOs5c=
-Date:   Sun, 12 Jun 2022 06:56:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] staging: r8188eu: simplify some macros
-Message-ID: <YqVyGuACfuroV5ti@kroah.com>
-References: <cover.1654994517.git.namcaov@gmail.com>
- <a3438e13cf2c117ad74432cdca4be97e731e9b21.1654994517.git.namcaov@gmail.com>
+        b=iKJAz5rL98YIYN7Mo860AHcTlgAowtdfsN94Oa4K3Z10IBtqVOePW7FdngSDm/wKO
+         A7fv7DEDgw0uBc4kLi+Yqqf5s0YrtzFhmFXikYoC0MrwNtSdYaqurEXoAbBGszAkpk
+         vWlLtr35/nN1qppa33aWNMMBd3eXcyvWalR36a+Y=
+Date:   Sun, 12 Jun 2022 07:00:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] PM / wakeup: Unify device_init_wakeup() for PM_SLEEP and
+ !PM_SLEEP
+Message-ID: <YqVy9LMWXXIrhLdw@kroah.com>
+References: <YqNYSBQWtwVUSJ+d@kroah.com>
+ <20220610150628.GA599243@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a3438e13cf2c117ad74432cdca4be97e731e9b21.1654994517.git.namcaov@gmail.com>
+In-Reply-To: <20220610150628.GA599243@bhelgaas>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,126 +55,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 03:05:13AM +0200, Nam Cao wrote:
-> There are some macros which are not really useful, but make the code
-> harder to read. Replace these with clearer codes.
+On Fri, Jun 10, 2022 at 10:06:28AM -0500, Bjorn Helgaas wrote:
+> On Fri, Jun 10, 2022 at 04:42:16PM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Jun 06, 2022 at 10:51:58PM -0500, Bjorn Helgaas wrote:
+> > > From: Bjorn Helgaas <bhelgaas@google.com>
+> > > 
+> > > Previously the CONFIG_PM_SLEEP and !CONFIG_PM_SLEEP device_init_wakeup()
+> > > implementations differed in confusing ways:
+> > > 
+> > >   - The PM_SLEEP version checked for a NULL device pointer and returned
+> > >     -EINVAL, while the !PM_SLEEP version did not and would simply
+> > >     dereference a NULL pointer.
+> > > 
+> > >   - When called with "false", the !PM_SLEEP version cleared "capable" and
+> > >     "enable" in the opposite order of the PM_SLEEP version.  That was
+> > >     harmless because for !PM_SLEEP they're simple assignments, but it's
+> > >     unnecessary confusion.
+> > > 
+> > > Use a simplified version of the PM_SLEEP implementation for both cases.
+> > > 
+> > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > > ---
+> > >  drivers/base/power/wakeup.c | 30 ------------------------------
+> > >  include/linux/pm_wakeup.h   | 31 +++++++++++++++++++++++--------
+> > >  2 files changed, 23 insertions(+), 38 deletions(-)
+> > > 
+> > > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> > > index 11a4ffe91367..e3befa2c1b66 100644
+> > > --- a/drivers/base/power/wakeup.c
+> > > +++ b/drivers/base/power/wakeup.c
+> > > @@ -500,36 +500,6 @@ void device_set_wakeup_capable(struct device *dev, bool capable)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(device_set_wakeup_capable);
+> > >  
+> > > -/**
+> > > - * device_init_wakeup - Device wakeup initialization.
+> > > - * @dev: Device to handle.
+> > > - * @enable: Whether or not to enable @dev as a wakeup device.
+> > > - *
+> > > - * By default, most devices should leave wakeup disabled.  The exceptions are
+> > > - * devices that everyone expects to be wakeup sources: keyboards, power buttons,
+> > > - * possibly network interfaces, etc.  Also, devices that don't generate their
+> > > - * own wakeup requests but merely forward requests from one bus to another
+> > > - * (like PCI bridges) should have wakeup enabled by default.
+> > > - */
+> > > -int device_init_wakeup(struct device *dev, bool enable)
+> > > -{
+> > > -	int ret = 0;
+> > > -
+> > > -	if (!dev)
+> > > -		return -EINVAL;
+> > > -
+> > > -	if (enable) {
+> > > -		device_set_wakeup_capable(dev, true);
+> > > -		ret = device_wakeup_enable(dev);
+> > > -	} else {
+> > > -		device_wakeup_disable(dev);
+> > > -		device_set_wakeup_capable(dev, false);
+> > > -	}
+> > > -
+> > > -	return ret;
+> > > -}
+> > > -EXPORT_SYMBOL_GPL(device_init_wakeup);
+> > > -
+> > >  /**
+> > >   * device_set_wakeup_enable - Enable or disable a device to wake up the system.
+> > >   * @dev: Device to handle.
+> > > diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> > > index 196a157456aa..77f4849e3418 100644
+> > > --- a/include/linux/pm_wakeup.h
+> > > +++ b/include/linux/pm_wakeup.h
+> > > @@ -109,7 +109,6 @@ extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
+> > >  extern int device_wakeup_enable(struct device *dev);
+> > >  extern int device_wakeup_disable(struct device *dev);
+> > >  extern void device_set_wakeup_capable(struct device *dev, bool capable);
+> > > -extern int device_init_wakeup(struct device *dev, bool val);
+> > >  extern int device_set_wakeup_enable(struct device *dev, bool enable);
+> > >  extern void __pm_stay_awake(struct wakeup_source *ws);
+> > >  extern void pm_stay_awake(struct device *dev);
+> > > @@ -167,13 +166,6 @@ static inline int device_set_wakeup_enable(struct device *dev, bool enable)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > -static inline int device_init_wakeup(struct device *dev, bool val)
+> > > -{
+> > > -	device_set_wakeup_capable(dev, val);
+> > > -	device_set_wakeup_enable(dev, val);
+> > > -	return 0;
+> > > -}
+> > > -
+> > >  static inline bool device_may_wakeup(struct device *dev)
+> > >  {
+> > >  	return dev->power.can_wakeup && dev->power.should_wakeup;
+> > > @@ -217,4 +209,27 @@ static inline void pm_wakeup_hard_event(struct device *dev)
+> > >  	return pm_wakeup_dev_event(dev, 0, true);
+> > >  }
+> > >  
+> > > +/**
+> > > + * device_init_wakeup - Device wakeup initialization.
+> > > + * @dev: Device to handle.
+> > > + * @enable: Whether or not to enable @dev as a wakeup device.
+> > > + *
+> > > + * By default, most devices should leave wakeup disabled.  The exceptions are
+> > > + * devices that everyone expects to be wakeup sources: keyboards, power buttons,
+> > > + * possibly network interfaces, etc.  Also, devices that don't generate their
+> > > + * own wakeup requests but merely forward requests from one bus to another
+> > > + * (like PCI bridges) should have wakeup enabled by default.
+> > > + */
+> > > +static inline int device_init_wakeup(struct device *dev, bool enable)
+> > > +{
+> > > +	if (enable) {
+> > > +		device_set_wakeup_capable(dev, true);
+> > > +		return device_wakeup_enable(dev);
+> > > +	} else {
+> > > +		device_wakeup_disable(dev);
+> > > +		device_set_wakeup_capable(dev, false);
+> > > +		return 0;
+> > > +	}
+> > > +}
+> > > +
+> > 
+> > Why are you moving this to be inline?  Why not just drop the "other"
+> > version and stick with the .c version?
 > 
-> Signed-off-by: Nam Cao <namcaov@gmail.com>
-> ---
->  .../r8188eu/include/Hal8188ERateAdaptive.h    | 10 +++---
->  drivers/staging/r8188eu/include/basic_types.h | 31 -------------------
->  2 files changed, 5 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h b/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h
-> index 20d73ca781e8..79e4210c6b65 100644
-> --- a/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h
-> +++ b/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h
-> @@ -26,15 +26,15 @@
->  #define GET_TX_REPORT_TYPE1_RERTY_0(__paddr)			\
->  	le16_get_bits(*(__le16 *)__paddr, GENMASK(15, 0))
->  #define GET_TX_REPORT_TYPE1_RERTY_1(__paddr)			\
-> -	LE_BITS_TO_1BYTE(__paddr + 2, 0, 8)
-> +	((u8 *)__paddr)[2]
->  #define GET_TX_REPORT_TYPE1_RERTY_2(__paddr)			\
-> -	LE_BITS_TO_1BYTE(__paddr + 3, 0, 8)
-> +	((u8 *)__paddr)[3]
->  #define GET_TX_REPORT_TYPE1_RERTY_3(__paddr)			\
-> -	LE_BITS_TO_1BYTE(__paddr + 4, 0, 8)
-> +	((u8 *)__paddr)[4]
->  #define GET_TX_REPORT_TYPE1_RERTY_4(__paddr)			\
-> -	LE_BITS_TO_1BYTE(__paddr + 5, 0, 8)
-> +	((u8 *)__paddr)[5]
->  #define GET_TX_REPORT_TYPE1_DROP_0(__paddr)			\
-> -	LE_BITS_TO_1BYTE(__paddr + 6, 0, 8)
-> +	((u8 *)__paddr)[6]
->  /*  End rate adaptive define */
->  
->  int ODM_RAInfo_Init_all(struct odm_dm_struct *dm_odm);
-> diff --git a/drivers/staging/r8188eu/include/basic_types.h b/drivers/staging/r8188eu/include/basic_types.h
-> index ffb21170e898..c4b08fb82200 100644
-> --- a/drivers/staging/r8188eu/include/basic_types.h
-> +++ b/drivers/staging/r8188eu/include/basic_types.h
-> @@ -15,37 +15,6 @@ typedef void (*proc_t)(void *);
->  /*  TODO: Macros Below are Sync from SD7-Driver. It is necessary
->   * to check correctness */
->  
-> -/*
-> - *	Call endian free function when
-> - *		1. Read/write packet content.
-> - *		2. Before write integer to IO.
-> - *		3. After read integer from IO.
-> -*/
-> -
-> -/* Convert little data endian to host ordering */
-> -#define EF1BYTE(_val)		\
-> -	((u8)(_val))
-> -
-> -/* Create a bit mask  */
-> -#define BIT_LEN_MASK_8(__bitlen) \
-> -	(0xFF >> (8 - (__bitlen)))
-> -
-> -/*Description:
-> - * Return 4-byte value in host byte ordering from
-> - * 4-byte pointer in little-endian system.
-> - */
-> -#define LE_P1BYTE_TO_HOST_1BYTE(__pstart) \
-> -	(EF1BYTE(*((u8 *)(__pstart))))
-> -
-> -/*Description:
-> -Translate subfield (continuous bits in little-endian) of 4-byte
-> -value to host byte ordering.*/
-> -#define LE_BITS_TO_1BYTE(__pstart, __bitoffset, __bitlen) \
-> -	( \
-> -		(LE_P1BYTE_TO_HOST_1BYTE(__pstart) >> (__bitoffset)) & \
-> -		BIT_LEN_MASK_8(__bitlen) \
-> -	)
-> -
->  #define	N_BYTE_ALIGMENT(__value, __aligment) ((__aligment == 1) ? \
->  	(__value) : (((__value + __aligment - 1) / __aligment) * __aligment))
->  
-> -- 
-> 2.25.1
-> 
-> 
+> That would definitely be simpler but drivers/base/power/wakeup.c is
+> only built when CONFIG_PM_SLEEP=y, so a .c version there by itself
+> isn't sufficient.  I should have mentioned that in the commit log.
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Ah, missed that, sorry, nevermind :)

@@ -2,248 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C646547800
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 02:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844DF547803
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 02:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbiFLAY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 20:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S232750AbiFLA3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 20:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiFLAYy (ORCPT
+        with ESMTP id S232568AbiFLA3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 20:24:54 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4993C738
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 17:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654993493; x=1686529493;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s2yd087xkW4KLFMyvGWmmYjBvU3/+pjKWQHoBft3F4Q=;
-  b=fyd1KKWPEJPrk+NpWp4ne7APA9cbqTlHcuDI2ja8nP+u7bjhvR8Ye64C
-   97FScxkc4sfQOF6JOp69MZejhHzb45SAcvLIgfxYPuKwnNYK5oQDyciYz
-   xHR2LjD6MynVEoWQMxxmPVo1XpmOMrYZHrG0z54jSrCQTaQ+3w9AkkGFt
-   znfjvgMxqMeMTtDaKAXTXrDsI8g7Q84/n7Q0aihtDwNAn9vxPNEkAoJRM
-   IMSnz9fAKGr7OiR2iuV6J+a8LYru7H8Utw5o5VR0c6eB6RsxJ/Vagi08u
-   911VJzupmwcd9fyNN4neayVPWtf6xyqDH8Q0kDTo7NaPaG6gIBp1KsyB/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="257793932"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="257793932"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 17:24:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="725609642"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jun 2022 17:24:50 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0BPN-000JSg-J0;
-        Sun, 12 Jun 2022 00:24:49 +0000
-Date:   Sun, 12 Jun 2022 08:23:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared
-Message-ID: <202206120828.ShiYm445-lkp@intel.com>
+        Sat, 11 Jun 2022 20:29:10 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2E23D493
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 17:29:08 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d13so2215174plh.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 17:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=4Q/sbsBjkomwST4aTZhAsNeJKFvpu+xDtqloVlVfOLg=;
+        b=JHT7PZ9ZZD0j0KzlWn1RwU14sBn7aZS7dbhcrlfpPgaw+Pm9i+L53mxyqXA+etcCLo
+         bIy5Ka/dkbh/bBSRB9EIDLRS1NXIyo+RCP1WbDZBhnq6YJf+KuQDR3C1xbGN+tNPeq0K
+         /JjstYxp/3VPJqyUkQZbGGcj+IzJ8PJ0K+4tTmYIKz+u/oAKQKCWjflwYnOHZ1NJOPSc
+         jmbvReTpUJvjKf6m8vqFNCF633miLz3lDshZku1G7CVcjUaaqn8ePPy6Xzxt9U8E+F5w
+         rt1+HGoro/T6+lky7PGZ4b8YxIzzhOXwXoxys5li/Bkghr25/BQvQ3CCGVVEDJiDxkVI
+         K1Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:content-transfer-encoding;
+        bh=4Q/sbsBjkomwST4aTZhAsNeJKFvpu+xDtqloVlVfOLg=;
+        b=F83j/Xi5oB14O7xkkU1Fcy+12ZnN14ATonpWvl9OvKFd2sOXmm4zu+N03ux8osedHg
+         4qJLBnAMM/XUTGsZJwYH9MX+W2gf709sS6VlohINa6sZGeRlhEj1CF8tgHDEiSZ/vFKM
+         xyEuyjSjiRufIYQdQK4NGDnNHYvd2rutHQuPuzclOIvM2mG/yeqThBPreVEpTCkANAUS
+         cLpfcbQ6vXyD7pTy70a/TWo3mqj4de6Wh+PTKEnRXiZQyTVItKS2Zivmq1j9SNSHhVlt
+         K7n/6hiRbC/hkhQZCOkWE6o0K4XZ0Zt9A45e1jtVDkmaD0Elc8uo8koYJlJL2XZTp5Ex
+         PU+Q==
+X-Gm-Message-State: AOAM531px7tmQkbynbndlVwmtkcNmL6gbGyE3zXqRNtxpOewBQ0l+KF4
+        iwH7VUcVUu/rqu7BiXeV49M=
+X-Google-Smtp-Source: ABdhPJwG7NR6VywCVCaTxqTVKq3bRlmIc8jAY3iZWjGRRu0bFe8lbX7cLp/VZG43b6PGuNEY5xMFWw==
+X-Received: by 2002:a17:90b:3b4c:b0:1e8:5e4d:ed83 with SMTP id ot12-20020a17090b3b4c00b001e85e4ded83mr7492507pjb.19.1654993747443;
+        Sat, 11 Jun 2022 17:29:07 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id z10-20020a62d10a000000b0051f2b9f6439sm2255519pfg.14.2022.06.11.17.29.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 17:29:06 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sat, 11 Jun 2022 14:29:04 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [GIT PULL] wq fixes for v5.19-rc1
+Message-ID: <YqUzUBjG4N9pKlsv@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hello, Linus.
 
-First bad commit (maybe != root cause):
+First signed pull. Please let me know if anything doesn't look right.
+Thanks.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0678afa6055d14799c1dc1eee47c8025eba56cab
-commit: 6b8be804ff376f6657ccdf6b29974e7c793d88c4 m68knommu: fix 68000 CPU link with no platform selected
-date:   3 weeks ago
-config: m68k-randconfig-r025-20220612 (https://download.01.org/0day-ci/archive/20220612/202206120828.ShiYm445-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6b8be804ff376f6657ccdf6b29974e7c793d88c4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6b8be804ff376f6657ccdf6b29974e7c793d88c4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/68000/
+The following changes since commit e71e60cd74df9386c3f684c54888f2367050b831:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  Merge tag 'dma-mapping-5.19-2022-06-06' of git://git.infradead.org/users/hch/dma-mapping (2022-06-06 17:56:18 -0700)
 
-All errors (new ones prefixed by >>):
+are available in the Git repository at:
 
-   arch/m68k/68000/ints.c:77:6: warning: no previous prototype for 'process_int' [-Wmissing-prototypes]
-      77 | void process_int(int vec, struct pt_regs *fp)
-         |      ^~~~~~~~~~~
-   arch/m68k/68000/ints.c: In function 'process_int':
->> arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared (first use in this function)
-      82 |         unsigned long pend = ISR;
-         |                              ^~~
-   arch/m68k/68000/ints.c:82:30: note: each undeclared identifier is reported only once for each function it appears in
-   arch/m68k/68000/ints.c: In function 'intc_irq_unmask':
->> arch/m68k/68000/ints.c:135:9: error: 'IMR' undeclared (first use in this function)
-     135 |         IMR &= ~(1 << d->irq);
-         |         ^~~
-   arch/m68k/68000/ints.c: In function 'intc_irq_mask':
-   arch/m68k/68000/ints.c:140:9: error: 'IMR' undeclared (first use in this function)
-     140 |         IMR |= (1 << d->irq);
-         |         ^~~
-   arch/m68k/68000/ints.c: At top level:
-   arch/m68k/68000/ints.c:153:13: warning: no previous prototype for 'trap_init' [-Wmissing-prototypes]
-     153 | void __init trap_init(void)
-         |             ^~~~~~~~~
-   arch/m68k/68000/ints.c:172:13: warning: no previous prototype for 'init_IRQ' [-Wmissing-prototypes]
-     172 | void __init init_IRQ(void)
-         |             ^~~~~~~~
-   arch/m68k/68000/ints.c: In function 'init_IRQ':
->> arch/m68k/68000/ints.c:176:9: error: 'IVR' undeclared (first use in this function)
-     176 |         IVR = 0x40; /* Set DragonBall IVR (interrupt base) to 64 */
-         |         ^~~
-   arch/m68k/68000/ints.c:179:9: error: 'IMR' undeclared (first use in this function)
-     179 |         IMR = ~0;
-         |         ^~~
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git tags/wq-for-5.19-rc1-fixes
 
+for you to fetch changes up to 8bee9dd953b69c634d1c9a3241a8b357469ad4aa:
 
-vim +/ISR +82 arch/m68k/68000/ints.c
+  workqueue: Switch to new kerneldoc syntax for named variable macro argument (2022-06-11 14:16:42 -1000)
 
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   70  
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   71  /* The 68k family did not have a good way to determine the source
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   72   * of interrupts until later in the family.  The EC000 core does
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   73   * not provide the vector number on the stack, we vector everything
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   74   * into one vector and look in the blasted mask register...
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   75   * This code is designed to be fast, almost constant time, not clean!
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   76   */
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   77  void process_int(int vec, struct pt_regs *fp)
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   78  {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   79  	int irq;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   80  	int mask;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   81  
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  @82  	unsigned long pend = ISR;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   83  
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   84  	while (pend) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   85  		if (pend & 0x0000ffff) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   86  			if (pend & 0x000000ff) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   87  				if (pend & 0x0000000f) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   88  					mask = 0x00000001;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   89  					irq = 0;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   90  				} else {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   91  					mask = 0x00000010;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   92  					irq = 4;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   93  				}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   94  			} else {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   95  				if (pend & 0x00000f00) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   96  					mask = 0x00000100;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   97  					irq = 8;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   98  				} else {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   99  					mask = 0x00001000;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  100  					irq = 12;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  101  				}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  102  			}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  103  		} else {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  104  			if (pend & 0x00ff0000) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  105  				if (pend & 0x000f0000) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  106  					mask = 0x00010000;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  107  					irq = 16;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  108  				} else {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  109  					mask = 0x00100000;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  110  					irq = 20;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  111  				}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  112  			} else {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  113  				if (pend & 0x0f000000) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  114  					mask = 0x01000000;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  115  					irq = 24;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  116  				} else {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  117  					mask = 0x10000000;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  118  					irq = 28;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  119  				}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  120  			}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  121  		}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  122  
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  123  		while (! (mask & pend)) {
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  124  			mask <<=1;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  125  			irq++;
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  126  		}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  127  
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  128  		do_IRQ(irq, fp);
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  129  		pend &= ~mask;
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  130  	}
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  131  }
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  132  
-39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  133  static void intc_irq_unmask(struct irq_data *d)
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  134  {
-39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06 @135  	IMR &= ~(1 << d->irq);
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  136  }
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  137  
-39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  138  static void intc_irq_mask(struct irq_data *d)
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  139  {
-39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  140  	IMR |= (1 << d->irq);
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  141  }
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  142  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  143  static struct irq_chip intc_irq_chip = {
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  144  	.name		= "M68K-INTC",
-39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  145  	.irq_mask	= intc_irq_mask,
-39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  146  	.irq_unmask	= intc_irq_unmask,
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  147  };
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  148  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  149  /*
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  150   * This function should be called during kernel startup to initialize
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  151   * the machine vector table.
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  152   */
-622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  153  void __init trap_init(void)
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  154  {
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  155  	int i;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  156  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  157  	/* set up the vectors */
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  158  	for (i = 72; i < 256; ++i)
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  159  		_ramvec[i] = (e_vector) bad_interrupt;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  160  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  161  	_ramvec[32] = system_call;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  162  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  163  	_ramvec[65] = (e_vector) inthandler1;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  164  	_ramvec[66] = (e_vector) inthandler2;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  165  	_ramvec[67] = (e_vector) inthandler3;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  166  	_ramvec[68] = (e_vector) inthandler4;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  167  	_ramvec[69] = (e_vector) inthandler5;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  168  	_ramvec[70] = (e_vector) inthandler6;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  169  	_ramvec[71] = (e_vector) inthandler7;
-622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  170  }
-622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  171  
-622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  172  void __init init_IRQ(void)
-622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  173  {
-622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  174  	int i;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  175  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01 @176  	IVR = 0x40; /* Set DragonBall IVR (interrupt base) to 64 */
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  177  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  178  	/* turn off all interrupts */
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  179  	IMR = ~0;
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  180  
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  181  	for (i = 0; (i < NR_IRQS); i++) {
-0b98b1636cf2e1 arch/m68k/platform/68328/ints.c      Thomas Gleixner 2011-03-28  182  		irq_set_chip(i, &intc_irq_chip);
-0b98b1636cf2e1 arch/m68k/platform/68328/ints.c      Thomas Gleixner 2011-03-28  183  		irq_set_handler(i, handle_level_irq);
-1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  184  	}
-^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  185  }
-2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  186  
+----------------------------------------------------------------
+Workqueue fixes for v5.19-rc1
 
-:::::: The code at line 82 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+Tetsuo's patch to trigger build warnings if system-wide wq's are flushed
+along with a TP type update and trivial comment update.
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+----------------------------------------------------------------
+Jonathan Neuschäfer (1):
+      workqueue: Switch to new kerneldoc syntax for named variable macro argument
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Tetsuo Handa (1):
+      workqueue: Wrap flush_workqueue() using a macro
+
+Wonhyuk Yang (1):
+      workqueue: Fix type of cpu in trace event
+
+ include/linux/workqueue.h        | 66 ++++++++++++++++++++++++++++++++++------
+ include/trace/events/workqueue.h |  8 ++---
+ kernel/workqueue.c               | 16 +++++++---
+ 3 files changed, 73 insertions(+), 17 deletions(-)
+
+--
+tejun

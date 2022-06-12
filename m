@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55D3547B76
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635B5547B7B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbiFLSdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 14:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S233228AbiFLShj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 14:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbiFLSdP (ORCPT
+        with ESMTP id S230478AbiFLShh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 14:33:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43300DB2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 11:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655058793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FdK93Bs6pIhqQZAR3Lfyy5PxJORXQ5zTxPlLV5rbOn4=;
-        b=XU9oOaZwE3AKKFTKsJyWui+WVDumFP1UNZzcWplI6uKAoh40lj3/wAnpcwgiSwdUcDUfV0
-        PpOhPqdxHapl39ssqrrqtx4NQZ0Kq/fAVrqslSq0hTepBTYPnkcTKLekYVEC3Mn1IddH7D
-        iqX5IzksyQRwsZ/Rn18QehFG0496cws=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-262-S9FGuFeAOLaowJXG-QadEg-1; Sun, 12 Jun 2022 14:33:09 -0400
-X-MC-Unique: S9FGuFeAOLaowJXG-QadEg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D5B7101A54E;
-        Sun, 12 Jun 2022 18:33:09 +0000 (UTC)
-Received: from llong.com (unknown [10.22.8.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3729A40D282F;
-        Sun, 12 Jun 2022 18:33:09 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH 3/3] mm/kmemleak: Prevent soft lockup in first object iteration loop of kmemleak_scan()
-Date:   Sun, 12 Jun 2022 14:33:01 -0400
-Message-Id: <20220612183301.981616-4-longman@redhat.com>
-In-Reply-To: <20220612183301.981616-1-longman@redhat.com>
-References: <20220612183301.981616-1-longman@redhat.com>
+        Sun, 12 Jun 2022 14:37:37 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21622532E2;
+        Sun, 12 Jun 2022 11:37:34 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id a15so5741374lfb.9;
+        Sun, 12 Jun 2022 11:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nC0UTP8DRXmynVdBku/6hOPWOfi7VmddW1Od6mn5ECQ=;
+        b=GM8IQb6uDiETDnSJH8HJW7XwCKF964hAwlaV8Q/SOybZDkFwDcihd4BWzTbus6vSwV
+         zt+QPBw9/BCA91OFsUiVQ8JTaqNmHFT6Tdk1paoTJQ8uRBH0k0ci332kp4Gs4sXpQC/5
+         pmm2Rw6RGmQ1IzwsRqBB9UrMseUy5ebTlTIUXubsE3lFPRrLNcn15NKs1j/fjYM0L4HV
+         x3GtmCS4CVmeMFrJ6n3W82+nHXSsPy73NRJFAt/wywBA8VNK/y+GPcJN3rc0Ee7kJO6B
+         CP3MGy4Ap3X+s53K0MgFRzooc++eOPsG8L1es/4TdNOak8ljPrNHy1TAzIDwSUxCHquW
+         aWeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nC0UTP8DRXmynVdBku/6hOPWOfi7VmddW1Od6mn5ECQ=;
+        b=LN+ZKHAwtB4XNmpHDdO6Uqwi9dPPb1LRTc0DaejtyC+IQN54PZFP2/IdYMGBJ25k8Q
+         1+6XS9Of5NYLT/o88JkQa3ULpQLBKkcmJqPwPsQ68hLRQHEnWd8AQLAYrmhrM2EZOoJq
+         FuoWpxHR+FLBOJZxdODrr5530WuHcoKLOPd52Qe8gQOe4OVRGtLKggCbleVAXJcOZ2qN
+         72xmpYVUX/+fyQMeZD5YMGH0vwZxYn/9tiF6LhrdJzoMQ/nxtciMpcTXZMMRNh73A3yk
+         OpypTJXB4mOKBQu2MPApSCFKivcqwjWtBDpmtb5E51FAaIO5nDEj6j5jmn5alIGel/Ex
+         jJ1g==
+X-Gm-Message-State: AOAM5329rA0hh9YcpAcM1/tlzptSN+BNqx16fV/mND4XofWVlXpU1YdS
+        lQSPRQECQMqfiMvHBXzgxp2wo9zEWRs=
+X-Google-Smtp-Source: ABdhPJw9Q5IRxDV1xO1UNwdlc4gnU2JESARv7pgIPp/+IrgH9XdkqD2rwvKYTXJT9fGaZ08Ug8rBvQ==
+X-Received: by 2002:a05:6512:693:b0:479:892:3091 with SMTP id t19-20020a056512069300b0047908923091mr32966652lfe.122.1655059051704;
+        Sun, 12 Jun 2022 11:37:31 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.73.3])
+        by smtp.gmail.com with ESMTPSA id h9-20020ac24d29000000b004791b687257sm687885lfk.237.2022.06.12.11.37.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Jun 2022 11:37:31 -0700 (PDT)
+Subject: Re: [PATCH v2] ata: pata_pxa: handle failure of devm_ioremap()
+To:     Li Qiong <liqiong@nfschina.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yuzhe@nfschina.com, renyu@nfschina.com
+References: <20220612073222.18974-1-liqiong@nfschina.com>
+ <20220612125700.11740-1-liqiong@nfschina.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <fbbed055-fa60-cdee-589b-5d8c12672e94@gmail.com>
+Date:   Sun, 12 Jun 2022 21:37:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220612125700.11740-1-liqiong@nfschina.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first RCU-based object iteration loop has to put almost all the
-objects into the gray list and so cannot skip taking the object lock.
+On 6/12/22 3:57 PM, Li Qiong wrote:
 
-One way to avoid soft lockup is to insert occasional cond_resched()
-into the loop. This cannot be done while holding the RCU read lock
-which is to protect objects from removal. However, putting an object
-into the gray list means getting a reference to the object. That will
-prevent the object from removal as well without the need to hold the
-RCU read lock. So insert a cond_resched() call after every 64k objects
-are put into the gray list.
+> As the possible failure of the devm_ioremap(), the return value
+> could be NULL. Therefore it should be better to check it and
+> print error message, return '-ENOMEM' error code.
+> 
+> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> ---
+> v2:
+> - add driver's name (pata_pxa) to subject.
+> ---
+>  drivers/ata/pata_pxa.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/ata/pata_pxa.c b/drivers/ata/pata_pxa.c
+> index 985f42c4fd70..cd1a8f37f920 100644
+> --- a/drivers/ata/pata_pxa.c
+> +++ b/drivers/ata/pata_pxa.c
+> @@ -228,6 +228,11 @@ static int pxa_ata_probe(struct platform_device *pdev)
+>  	ap->ioaddr.bmdma_addr	= devm_ioremap(&pdev->dev, dma_res->start,
+>  						resource_size(dma_res));
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- mm/kmemleak.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+   Looking again into this driver, this statement doesn't make sense: dma_res
+points to a DMA resource, calling devm_ioremap() on it is just wrong... and
+'ap->ioaddr.bmdma_addr' doesn;t seem to be used anyways...
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 7dd64139a7c7..a7c42e134fa1 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1417,12 +1417,15 @@ static void kmemleak_scan(void)
- 	struct zone *zone;
- 	int __maybe_unused i;
- 	int new_leaks = 0;
-+	int gray_list_cnt = 0;
- 
- 	jiffies_last_scan = jiffies;
- 
- 	/* prepare the kmemleak_object's */
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(object, &object_list, object_list) {
-+		bool object_pinned = false;
-+
- 		raw_spin_lock_irq(&object->lock);
- #ifdef DEBUG
- 		/*
-@@ -1437,10 +1440,25 @@ static void kmemleak_scan(void)
- #endif
- 		/* reset the reference count (whiten the object) */
- 		object->count = 0;
--		if (color_gray(object) && get_object(object))
-+		if (color_gray(object) && get_object(object)) {
- 			list_add_tail(&object->gray_list, &gray_list);
-+			gray_list_cnt++;
-+			object_pinned = true;
-+		}
- 
- 		raw_spin_unlock_irq(&object->lock);
-+
-+		/*
-+		 * With object pinned by a positive reference count, it
-+		 * won't go away and we can safely release the RCU read
-+		 * lock and do a cond_resched() to avoid soft lockup every
-+		 * 64k objects.
-+		 */
-+		if (object_pinned && !(gray_list_cnt & 0xffff)) {
-+			rcu_read_unlock();
-+			cond_resched();
-+			rcu_read_lock();
-+		}
- 	}
- 	rcu_read_unlock();
- 
--- 
-2.31.1
-
+MBR, Sergey

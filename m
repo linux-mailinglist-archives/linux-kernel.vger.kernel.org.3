@@ -2,158 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226E8547CBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 00:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91E1547CBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 00:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbiFLWTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 18:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
+        id S237577AbiFLWTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 18:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbiFLWSF (ORCPT
+        with ESMTP id S238342AbiFLWSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 18:18:05 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEDA522DF
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 15:18:04 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a15so6188807lfb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 15:18:04 -0700 (PDT)
+        Sun, 12 Jun 2022 18:18:55 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F4C522DE;
+        Sun, 12 Jun 2022 15:18:54 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so1250867wml.2;
+        Sun, 12 Jun 2022 15:18:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=46m/yFN12v+/tGyvfx5NjV+uIzdQJx26Q/K1pY/PCVM=;
-        b=DEQdHA++K5bzRgkn4QEjF3mEYmZqg3ywfL5osb/u10O4idon923aJWZMo9ynh7YPv7
-         KBIcqoBVVRH/jseH0hSktXjDY1qY4h/H21tzc6/ijcrOqdNcpWeUZ03HP/CuCT5RyfXh
-         rNPZj3uGM7tmHVWLJUoSijuBTXf62bHZNV62OB/lnY85Ukv6zdein3OeWEQO8I8weJkD
-         hoFA4+Kj4YiVz9Cm5OhIAq4Ba49XaBCFiQty/cJTwh0GMFuEGg/EQVIk0QGR5EqMESXk
-         O+PM+WB2rhr89x6B2sEZQV1O7hPUIVflHdArjGQy6V+CtsS842NxhKzv1DnM4/cKe4IH
-         Bzng==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0thwiCYGeXFypOTTdMenKsaCFbmk82Gcr6TnyVmb8yA=;
+        b=pZWYIp2o5jCFoBnPd0Oq1Gia588evVxHniD8D40IWBC8rjn6+MwbMY2vvWTZkQ8ELf
+         ayB4JSMONkqNN7VeGju1hmlZRR0m2sSKiMaP+XmwJqFXqciSx4m+GaNm/jWmC7oGqO/r
+         mu4b9rEhjQ0syyFvpa7Nw6/4DP5P+Rp0sVZ831vnW3g6muxyXU3zoXPQ4SEiFX3P8Y6Q
+         1CzWe3z8uCDZVZUSivsoUYe9SzauxPeKc7ZPVywanIKFsLAMVTRaECmAB+9whak1VM7i
+         VmvScyZBYcWosp6d6+48KAcMdYRl4Hhv0s9XmheyVdG+dsLOIr/RcHJ5du0F7FiM2WSK
+         w3rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=46m/yFN12v+/tGyvfx5NjV+uIzdQJx26Q/K1pY/PCVM=;
-        b=77S0HoxbZFe88DQciibk9JrJ5HTK3jkN2G5oMLYhmd8LwtI44ePPE8vqJ6gdcXnEQD
-         bxi7iYQH9uTyJzj4fGdv6MtRu0CdXNKnqsTnkVdJEXLfmvqHY49x21X2JWKGfpDXb1LC
-         i0B6zR3i7IOQR3ZrxvBoKMkOsHmt0OEFyYFLTh5NJgExk8Kl5P/BWKZQ/5KnOJvdlOf6
-         cyX48VqDcNMX5yps98pH6lf9SaFrKFs+WsVgYOfkR2KlST5wxsYCjRVkHHfu1+GeyIOX
-         hKZL1YalCSVwq2E7D2t5V6ZPFWVc5Xx+yg+ZEvnjESeXxJpFPKy0oCeucD6CRr1TkGXn
-         ZptQ==
-X-Gm-Message-State: AOAM530ShYDVO/cgPPpZMIWvZE3/WFxjDt97rMA9LjwoVSwHwdYWT7Zc
-        oCsyCBM9jw9nBjHbzWh9mXOnFg==
-X-Google-Smtp-Source: ABdhPJzAEw8r+JXbUKN67FMRFiH/GJxkilOLXNvrrVydt2lmDCHxGH4yRZ0rjxLpI5VWEAwrFvmYLg==
-X-Received: by 2002:a05:6512:1324:b0:478:e688:f1e2 with SMTP id x36-20020a056512132400b00478e688f1e2mr34237075lfu.12.1655072282384;
-        Sun, 12 Jun 2022 15:18:02 -0700 (PDT)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id b23-20020a196717000000b0047255d21142sm742305lfc.113.2022.06.12.15.18.01
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0thwiCYGeXFypOTTdMenKsaCFbmk82Gcr6TnyVmb8yA=;
+        b=e5ejjc1PzaXpNpzHSWK7oswIEhdeu44Azz2mMGGqCJpJVGesnFzLjRoDIV2h5HzT+d
+         hP65uNDASKVprO5X6oEyaguHfj/faMDX+YrsbCvPpeSjzcqgkZdZK54tCdoTZILZrDX4
+         KcrwbZ2KuelWsbqCEahTvgvuiBjI6De5tMH731l1EqQRJUtOzmHmDKle3pAHtb/x8H6F
+         VNyv+fAzZs7NsC1mu3O1Q/Ay9mEQXgsuP1bQ1AFNQ/ucrSgLIB22JBW4dlXoUVf38fSu
+         mG56KvVV+DSpwlA1/LKZBgY+L5ZLWAmZqAzvWDmtBZMMUaN/leJO+s+ZfHO30oyeBWeC
+         UVig==
+X-Gm-Message-State: AOAM530TFLWHsRpJQA0keotAnwNphsyuK/8mh+HpTTnbRBxEj7b+qUpF
+        j98st6LC74FJU+sgZW1eF00=
+X-Google-Smtp-Source: ABdhPJy4r9gHhbJ80DPs5mRwEFIbQTdpXEVCPUijeTzMFrvkeKvn2p7VagcUJMQLXv58cR/kG7l4KA==
+X-Received: by 2002:a7b:cc0d:0:b0:381:220e:a3a0 with SMTP id f13-20020a7bcc0d000000b00381220ea3a0mr11181132wmh.59.1655072332987;
+        Sun, 12 Jun 2022 15:18:52 -0700 (PDT)
+Received: from krava ([83.240.60.46])
+        by smtp.gmail.com with ESMTPSA id s7-20020a5d4247000000b0021018642ff8sm6602167wrr.76.2022.06.12.15.18.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 15:18:02 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 00:18:01 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a779f0 support
-Message-ID: <YqZmGQuEEks8Yl/N@oden.dyn.berto.se>
-References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
- <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
+        Sun, 12 Jun 2022 15:18:52 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 13 Jun 2022 00:18:49 +0200
+To:     Blake Jones <blakejones@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] Add a "-m" option to "perf buildid-list".
+Message-ID: <YqZmSRS8UPQJzWFE@krava>
+References: <20220607191550.4141024-1-blakejones@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220607191550.4141024-1-blakejones@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-Thanks for your work.
-
-On 2022-06-10 22:17:01 +0200, Wolfram Sang wrote:
-> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
-> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
-> are not routed to the INTC-AP but to the ECM.
+On Tue, Jun 07, 2022 at 12:15:50PM -0700, Blake Jones wrote:
+> This new option displays all of the information needed to do external
+> BuildID-based symbolization of kernel stack traces, such as those collected
+> by bpf_get_stackid(). For each kernel module plus the main kernel, it
+> displays the BuildID, the start and end virtual addresses of that module's
+> text range (rounded out to page boundaries), and the pathname of the
+> module.
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
+> When run as a non-privileged user, the actual addresses of the modules'
+> text ranges are not available, so the tools displays "0, <text length>" for
+> kernel modules and "0, ffffffffffffffff" for the kernel itself.
+> 
+> This patch has been rebased as of this afternoon, but is otherwise
+> identical to the version I sent out last month.
+> 
+> Sample output:
+> 
+> root# perf buildid-list -m
+> cf6df852fd4da122d616153353cc8f560fd12fe0 ffffffffa5400000 ffffffffa6001e27 [kernel.kallsyms]
+> 1aa7209aa2acb067d66ed6cf7676d65066384d61 ffffffffc0087000 ffffffffc008b000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/sha512_generic.ko
+> 3857815b5bf0183697b68f8fe0ea06121644041e ffffffffc008c000 ffffffffc0098000 /lib/modules/5.15.15-1rodete2-amd64/kernel/arch/x86/crypto/sha512-ssse3.ko
+> 4081fde0bca2bc097cb3e9d1efcb836047d485f1 ffffffffc0099000 ffffffffc009f000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/acpi/button.ko
+> 1ef81ba4890552ea6b0314f9635fc43fc8cef568 ffffffffc00a4000 ffffffffc00aa000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/cryptd.ko
+> cc5c985506cb240d7d082b55ed260cbb851f983e ffffffffc00af000 ffffffffc00b6000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/i2c/busses/i2c-piix4.ko
+> [...]
+> 
+> Signed-off-by: Blake Jones <blakejones@google.com>
 > ---
+>  .../perf/Documentation/perf-buildid-list.txt  |  3 ++
+>  tools/perf/builtin-buildid-list.c             | 33 ++++++++++++++++++-
+>  tools/perf/util/dso.c                         | 23 +++++++++++++
+>  tools/perf/util/dso.h                         |  2 ++
+>  tools/perf/util/machine.c                     | 13 ++++++++
+>  tools/perf/util/machine.h                     |  5 +++
+>  6 files changed, 78 insertions(+), 1 deletion(-)
 > 
-> Change since V2:
-> * make interrupts not required for this SoC
-> 
-> Tested with:
-> make dtbs_check DT_SCHEMA_FILES=thermal/rcar-gen3-thermal.yaml
-> 
->  .../bindings/thermal/rcar-gen3-thermal.yaml   | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> index 72dc7eb27f8d..0f05f5c886c5 100644
-> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> @@ -8,9 +8,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Renesas R-Car Gen3 Thermal Sensor
->  
->  description:
-> -  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
-> -  sensors (THS) which are the analog circuits for measuring temperature (Tj)
-> -  inside the LSI.
-> +  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
-> +  control the thermal sensors (THS) which are the analog circuits for
-> +  measuring temperature (Tj) inside the LSI.
->  
->  maintainers:
->    - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-> @@ -27,6 +27,7 @@ properties:
->        - renesas,r8a77965-thermal # R-Car M3-N
->        - renesas,r8a77980-thermal # R-Car V3H
->        - renesas,r8a779a0-thermal # R-Car V3U
-> +      - renesas,r8a779f0-thermal # R-Car S4-8
->  
->    reg: true
->  
-> @@ -79,8 +80,16 @@ else:
->          - description: TSC1 registers
->          - description: TSC2 registers
->          - description: TSC3 registers
-> -  required:
-> -    - interrupts
-> +  if:
-> +    not:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - renesas,r8a779f0-thermal
-> +  then:
-> +    required:
-> +      - interrupts
->  
->  additionalProperties: false
->  
-> -- 
-> 2.35.1
-> 
+> diff --git a/tools/perf/Documentation/perf-buildid-list.txt b/tools/perf/Documentation/perf-buildid-list.txt
+> index 25c52efcc7f0..a82e92c2667d 100644
+> --- a/tools/perf/Documentation/perf-buildid-list.txt
+> +++ b/tools/perf/Documentation/perf-buildid-list.txt
+> @@ -33,6 +33,9 @@ OPTIONS
+>  -k::
+>  --kernel::
+>  	Show running kernel build id.
+> +-m::
+> +--modules::
+> +	Show buildid, start/end text address, and path of kernel and modules.
 
--- 
-Kind Regards,
-Niklas Söderlund
+why 'modules' ? it shows all maps (including kernel)
+so perhaps -m/--maps would be better?
+
+also please state that it's from running kernel
+
+SNIP
+
+> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> index 5ac13958d1bd..7c490b5ce449 100644
+> --- a/tools/perf/util/dso.c
+> +++ b/tools/perf/util/dso.c
+> @@ -1227,6 +1227,19 @@ void dso__set_long_name(struct dso *dso, const char *name, bool name_allocated)
+>  	dso__set_long_name_id(dso, name, NULL, name_allocated);
+>  }
+>  
+> +void dso__get_long_name(const struct dso *dso, char *name, size_t len)
+> +{
+> +	if (len == 0)
+> +		return;
+> +	if (dso->long_name == NULL) {
+> +		name[0] = '\0';
+> +		return;
+> +	}
+> +
+> +	strncpy(name, dso->long_name, len);
+> +	name[len - 1] = '\0';
+> +}
+> +
+>  void dso__set_short_name(struct dso *dso, const char *name, bool name_allocated)
+>  {
+>  	if (name == NULL)
+> @@ -1359,6 +1372,16 @@ void dso__set_build_id(struct dso *dso, struct build_id *bid)
+>  	dso->has_build_id = 1;
+>  }
+>  
+> +void dso__get_build_id(struct dso *dso, struct build_id *bid)
+> +{
+> +	if (dso->has_build_id) {
+> +		*bid = dso->bid;
+> +	} else {
+> +		bid->size = 0;
+> +		memset(bid->data, 0, sizeof(*bid->data));
+> +	}
+> +}
+
+any reason why not use the dso fields directly?
+
+thanks,
+jirka

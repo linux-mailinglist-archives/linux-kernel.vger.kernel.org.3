@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3C0547AD9
+	by mail.lfdr.de (Postfix) with ESMTP id C3D88547ADA
 	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 17:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237740AbiFLPoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 11:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
+        id S237766AbiFLPqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 11:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbiFLPoy (ORCPT
+        with ESMTP id S232165AbiFLPql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 11:44:54 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30EE2ED63
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 08:44:53 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id j7so3545401pjn.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 08:44:53 -0700 (PDT)
+        Sun, 12 Jun 2022 11:46:41 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FEA2ED58
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 08:46:40 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-f2a4c51c45so5533282fac.9
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 08:46:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sDXoUvF9HvlqoQcYGACYQ/XDUHt968ekXwv/rzATOLg=;
-        b=uYODikCP+VbMeXAeEkPfiA0/WPN47Gy8epeNTvX4VPR2T9patprusHUG4n0DD+88S6
-         L4MLSE8fLQzbNjPb9FApack4csETvvbZVFtpVI3fBAOCn/99ahV56lZTzPJMucV4FuFg
-         gcktDO51ig0rLKU3JSEm5n0t7X9UI/me+uvROdyhblDRomOf1j+RhVDOvUqZCQnVnqpO
-         ntNAJhRg89EH/2TpoZcnaStdB8ybLLvVDrr/IYhyyGUsME99RFklvLvFKIOcYgHDA63G
-         cabmuMvQjNfRSQsRA4JR15IgLuAGPIABm54VfNnayT7FT+CLWZJWiTwnHA5WzVVzwQPa
-         dVdA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gFGhJTRj1uRix8k4NcRcxZsEjBSZRJrH9xOtC+4dMro=;
+        b=LHR3XuTZezq5J3LpU1Xwzs4oexCkV1qGr3yjaYn1IyAndZZafxaNz4yTLcy8fw+2P4
+         b8HTUmDuSCa04RDdh+VP522e7JZZcGJvsdWNdxnVyS86SttQTC6XR+0DcmW44xoYCViz
+         lnu8fHNBYQNfsiHjC3FFAH8qK+Wt+c68u6v9PUQeiy5FZXfSYTvIq0dpBI+9piXIWz96
+         K4ypQR8T2Z4XOQerVEiZwRQACv0lRD6qD84+owBjOsmDcV+C5CUejQww8EZS5bHVKOHt
+         FAJ338cTmgpwV3AY2DC0ZLWTPlz38E4XmBOs/OMUUVII4ZizBOC/zJGAFxqzOJbr8LtP
+         Uk4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sDXoUvF9HvlqoQcYGACYQ/XDUHt968ekXwv/rzATOLg=;
-        b=kTqaQlSDPUADEZFHljen7BpBoZJ7ytMhTs+ZLfCi8JitwZdTp1N659LMA/OUsjN+dY
-         9G83p7NOHrmHWTBl7/z3lkeykqwAl51gQcOrVFrJ9LzNvRe0mmV9m+5WvPBNr3pLAuxr
-         SwteBtL+QqAQfGoH4UAoB93X+hIlAWBvMF0Mf98UKB0/ZRL1BqJxwREdXIl56GSyRRbi
-         lys5hmuy8zeEGODEececYIJnrT8XeiDJWtHvvul1Y8XdFoX9KGB6Tm0fibkvoqz7J5vf
-         6a25EsqS0DTMOXpJrCNXnlFE+Nr9XtHS+BRh5YNHyM3vXldfRoeIJ4NBm3ZWPd8vhDqF
-         Q1GQ==
-X-Gm-Message-State: AOAM5336nKEmRCWLXPqohXSXUqsx5LYzehXJiJ6E4hFPjZ18UE4phfE4
-        xAP9QKzYtaWTQPHXXoBxytVM33992bViiA==
-X-Google-Smtp-Source: ABdhPJxCoE6EY4u6oA+K5cxA2kNS0LpB6DJ9qb0GGxknSxzY5UxyIDF2pHUD34LJmFweEv5WPDQxGA==
-X-Received: by 2002:a17:902:ac8f:b0:163:fbb7:b057 with SMTP id h15-20020a170902ac8f00b00163fbb7b057mr55066011plr.67.1655048693203;
-        Sun, 12 Jun 2022 08:44:53 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:f58b:e20:6b56:4b57])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170903208a00b001689e31ff9dsm3243826plc.9.2022.06.12.08.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 08:44:52 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 23:44:47 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, joao.m.martins@oracle.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm/page_alloc: minor clean up for
- memmap_init_compound()
-Message-ID: <YqYJ771HRncznTy1@FVFYT0MHHV2J.googleapis.com>
-References: <20220611021352.13529-1-linmiaohe@huawei.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gFGhJTRj1uRix8k4NcRcxZsEjBSZRJrH9xOtC+4dMro=;
+        b=5GdBlfgLyLFIMDQwz++HpRmn0ZhVJ8eA30W1P2/RdeGUp70XChQQjzoafKXHPSU9Pe
+         KVOUPNXl9zo0QhN0tfWw9WYrD9GEEor8098hue01vsQYq1HYN1hjLmHfw817pDhW5pYM
+         0wm/KSVq8tJN/RVMxtK6UshR0/sQFmKbXPOv9JUz65fiAdFdYg7syhxkf/jwDM6aEvYm
+         oME0DL1+86W9ciuXubqedsN5iCMfe8GyKnMYQTm4z+EygcihK9KRkdFZmSnNvk0o0FK5
+         nd/3xGxRHq+lt68OplLuyllwAiQbQNo0cDXESRRSa4gXndttA3orkVVqjsR1EHgwkd8r
+         AvxA==
+X-Gm-Message-State: AOAM531ayqcUpL5xxQdpmbMN/BmEKtabh92Cg+RJBvjdjs6n5qzf+0hb
+        J44Mn0Njn8WoMw+NjKc297P3TkXMHptVV7DYG2g=
+X-Google-Smtp-Source: ABdhPJw0rkgm6LiSCFyhaHN7YyYA81hX5vSiVtOAIJt/AHuLMAm6BQNBv6sPpfkHyWTiA/+ERivry4VsuN/wnSftrpI=
+X-Received: by 2002:a05:6870:e245:b0:de:9321:9ea3 with SMTP id
+ d5-20020a056870e24500b000de93219ea3mr5120072oac.79.1655048799124; Sun, 12 Jun
+ 2022 08:46:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220611021352.13529-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:99a4:b0:a2:f157:f61d with HTTP; Sun, 12 Jun 2022
+ 08:46:38 -0700 (PDT)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <tw44015@gmail.com>
+Date:   Sun, 12 Jun 2022 07:46:38 -0800
+Message-ID: <CABtpmn2f63z6N8O_vzzD+i-Hu7e9ubcB-FcX-8zH=oPtFf3Azg@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:29 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9362]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [tw44015[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tw44015[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lilywilliam989[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 10:13:52AM +0800, Miaohe Lin wrote:
-> Since commit 5232c63f46fd ("mm: Make compound_pincount always available"),
-> compound_pincount_ptr is stored at first tail page now. So we should call
-> prep_compound_head() after the first tail page is initialized to take
-> advantage of the likelihood of that tail struct page being cached given
-> that we will read them right after in prep_compound_head().
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> ---
-> v2:
->   Don't move prep_compound_head() outside loop per Joao.
-> ---
->  mm/page_alloc.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 4c7d99ee58b4..048df5d78add 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6771,13 +6771,18 @@ static void __ref memmap_init_compound(struct page *head,
->  		set_page_count(page, 0);
->  
->  		/*
-> -		 * The first tail page stores compound_mapcount_ptr() and
-> -		 * compound_order() and the second tail page stores
-> -		 * compound_pincount_ptr(). Call prep_compound_head() after
-> -		 * the first and second tail pages have been initialized to
-> -		 * not have the data overwritten.
-> +		 * The first tail page stores compound_mapcount_ptr(),
-> +		 * compound_order() and compound_pincount_ptr(). Call
-> +		 * prep_compound_head() after the first tail page have
-> +		 * been initialized to not have the data overwritten.
-> +		 *
-> +		 * Note the idea to make this right after we initialize
-> +		 * the offending tail pages is trying to take advantage
-> +		 * of the likelihood of those tail struct pages being
-> +		 * cached given that we will read them right after in
-> +		 * prep_compound_head().
->  		 */
-> -		if (pfn == head_pfn + 2)
-> +		if (unlikely(pfn == head_pfn + 1))
->  			prep_compound_head(head, order);
+-- 
+Hello Dear,
 
-For me it is weird not to put this out of the loop. I saw the reason
-is because of the caching suggested by Joao. But I think this is not
-a hot path and putting it out of the loop may be more intuitive at least
-for me.  Maybe this optimization is unnecessary (maybe I am wrong).
-And it will be consistent with prep_compound_page() (at least it does
-not do the similar optimization) if we drop this optimization.
+My name is Dr Lily William from the United States.I am a French and
+American nationality
+(dual) living in the U.S and sometimes in France for Work Purpose.
 
-Hi Joao,
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
-I am wondering is it a significant optimization for zone device memory?
-I found this code existed from the 1st version you introduced.  So
-I suspect maybe you have some numbers, would you like to share with us?
+Thanks
 
-Thanks.
-
+With love
+Lily

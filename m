@@ -2,111 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470F55477F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 02:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2F55477FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 02:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbiFLABj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 20:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S232627AbiFLACm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 20:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiFLABh (ORCPT
+        with ESMTP id S230028AbiFLACl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 20:01:37 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12146A425;
-        Sat, 11 Jun 2022 17:01:36 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so2671295pjb.3;
-        Sat, 11 Jun 2022 17:01:36 -0700 (PDT)
+        Sat, 11 Jun 2022 20:02:41 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4F8B7D5;
+        Sat, 11 Jun 2022 17:02:39 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r71so2527996pgr.0;
+        Sat, 11 Jun 2022 17:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rrR2yAG5ZDoOc5RKGUSqko0qrkTdkFcvAE69IpskmQk=;
-        b=bxm/xiWQoxyLzg/Q6KDEDCwr+QZ3vIvSrbwYfyVTcvKPaoIxtp34y3V3YDIDleYI+W
-         QK/vtFXhrhy2ZhZRrycP2vEZ0ewJbEZQa3myf2dCw85jXBLROXvMLWRZoF/fWczBPjZo
-         VyxfUKhQsoA0rnjMKfSCfmGI0Wr6s0grg37+v8JpW7Qt5qxlMybuzGNZDIuyEE/IOcOB
-         ZgNge4Pw8ce200HQ49utHlg6PPmI0zIPFY74F3gyntOl3fRzU4XWnTI99vIItxdWSRrU
-         m9Sow0NKHDamMtXdKpPq42VO/pr8bh9twl6MVcv7pw6o8NfsGUyw20z3wYPPG1/b60NJ
-         0dHg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qlCbmERsrvq9foWWuo9aQIBttb9mEbAqhvDWRZ6oSQQ=;
+        b=LUOwWBl2WUW0c8E5DKEdURyPyWBcZLYrOlDkCtu43KdaPin/uxXePQLYVNje4MA1Zw
+         owrlkXxR6B2lhjeqQKH4mK/7U7pwELDvONjmE9WhNTBQzwG9D7VpD9bh/duwaVq085j1
+         aDcywihszdG0kFvWRmEwezOb0cTUXk4Hs3kbwbEEDW8jBsM/eSGqn6jFYxa5UkQcn+Np
+         fBJLv6P0wbyWx74goE79F22rQFjy+LEXk7THgs9oIEbbwWevkl3YJxQAUT7Fse4iWhXN
+         QvCJ6CjhV7poOfc+hHKYg71zYojOaecTVa169bHpnaKF5oRMRZH2fbodrwP3hUdI2Wfv
+         E+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=rrR2yAG5ZDoOc5RKGUSqko0qrkTdkFcvAE69IpskmQk=;
-        b=H3goDps9U2JRGibN4+AHv7y6p2/hguvAh6eaAr5hXTKVIpM/7ZGqvx0YxQPaYkWUAa
-         d8ChUaB/lagZF8evbPEPvY2fY/8vHbRsq2Edg8iRvdefH1vanim1G5+BcXL/fiGSWmwV
-         Hjtf02BCzAqMUeYDuF1ZCP7CtLU0gqtp5JmUnWGX+3w1RtoFfBN7eiETaqZAyEwV8NLv
-         p2YzoSEMDylGpd7ZmEDtWtwYjLu8NCoBDLPiXGpn1948nieYDLgdx7NkjST6SZfdb4Cp
-         V/snTGDJ9/XucwQZ33qqNf58smgmflXYSsy/e0iKCg4EDpa6ovQcXxDkDhMf12269ujs
-         2YAA==
-X-Gm-Message-State: AOAM533FxA7DeHuOMkA9M1sxHee+4ARZTEf5VInNcXPwvyJAIz5arl22
-        NKF0MJDw3huyEHXRu6Q8pSxCY0U/oKQ=
-X-Google-Smtp-Source: ABdhPJwzSAUVchKa+rTUGUJRkr60hBjUTrhIP0rYG8PQuiBVJ4d9X8ZgTMHK527r6yMU87IvTMLFEA==
-X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr51176328plg.111.1654992095656;
-        Sat, 11 Jun 2022 17:01:35 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-72.three.co.id. [180.214.233.72])
-        by smtp.gmail.com with ESMTPSA id a15-20020a62d40f000000b0051f2b9f9b05sm2146794pfh.76.2022.06.11.17.01.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 17:01:35 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v2] leds: Add leds-qcom-lpg entry to documentation table of contents
-Date:   Sun, 12 Jun 2022 07:01:25 +0700
-Message-Id: <20220612000125.9777-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        bh=qlCbmERsrvq9foWWuo9aQIBttb9mEbAqhvDWRZ6oSQQ=;
+        b=vpul7NaHBPBSuj9/ZOE1KOMevhZvho3sADL7+c9VkDyRQZE/ZtaSqKZOkwl1KNTOQm
+         cXjV3Og9ngj4lM+3aqAPjv7XmB9UNTiD1O149AYMczM07k/lTBEJrR34hKnIb4FtoM1I
+         PeGX/LafvwknvrQZNacm6qMDgD7mxPhgdNatIsjeip9rzmoOaoHYPa9m23Hhk0XZ3MQE
+         BzgKqrrbLWvYTJRuqbwEXXkzT0mq53r2ithAJZytWGIqR1hp5MhVON1LcX1mJamWK8s1
+         gGpWJiJh9HrlocTU9moXQqnPfq6OzIrI5hLy32tSvcqmuSIRy88SV2HYIwnMwxtcN3Do
+         Bi/Q==
+X-Gm-Message-State: AOAM531ZCRlKCNjSMv/lMxet0TNefJsANtHhHg6dzNeEySnKuij+BQ17
+        OauE7rRVvwAmWnZQvzIJsjc=
+X-Google-Smtp-Source: ABdhPJwXENdcrMLJ2Rp7LfygdsphfOJNXYIuLbOQkUMLMFtN5VNvw4MeGziCBzGp7jJvQ9OTvni6Cw==
+X-Received: by 2002:a63:9c4:0:b0:401:a7b6:ad18 with SMTP id 187-20020a6309c4000000b00401a7b6ad18mr12331093pgj.523.1654992158671;
+        Sat, 11 Jun 2022 17:02:38 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id b6-20020a62a106000000b0051826824d90sm2189885pff.177.2022.06.11.17.02.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jun 2022 17:02:37 -0700 (PDT)
+Message-ID: <84cdc48a-feb8-4aa5-7d96-a68f2c556e25@gmail.com>
+Date:   Sun, 12 Jun 2022 09:02:33 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] gpio: Fix kernel-doc comments to nested union
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Cc:     Joey Gouly <joey.gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+References: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After merging linux-leds tree to the mainline [1], htmldocs build produces
-a new warning:
+On Mon, 6 Jun 2022 13:44:24 +0900, Akira Yokosawa wrote:
+> Commit 48ec13d36d3f ("gpio: Properly document parent data union")
+> is supposed to have fixed a warning from "make htmldocs" regarding
+> kernel-doc comments to union members.  However, the same warning
+> still remains [1].
+> 
+> Fix the issue by following the example found in section "Nested
+> structs/unions" of Documentation/doc-guide/kernel-doc.rst.
+> 
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
+> Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/ [1]
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+Gentle ping to gpio maintainers.
 
-checking consistency... /home/bagas/repo/linux-stable/Documentation/leds/leds-qcom-lpg.rst: WARNING: document isn't included in any toctree
+I thought this fix would go through brgl's tree.
 
-The warning above is because leds-qcom-lpg.rst is missing in the table of
-contents.
+        Thanks, Akira
 
-Add the missing entry.
-
-[1]: https://lore.kernel.org/all/20220531200619.GA8906@duo.ucw.cz/
-
-Fixes: 24e2d05d1b6898 ("leds: Add driver for Qualcomm LPG")
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>
-Cc: linux-leds@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/leds/index.rst | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
-index e5d63b9400459c..014e009b076159 100644
---- a/Documentation/leds/index.rst
-+++ b/Documentation/leds/index.rst
-@@ -25,4 +25,5 @@ LEDs
-    leds-lp5562
-    leds-lp55xx
-    leds-mlxcpld
-+   leds-qcom-lpg
-    leds-sc27xx
-
-base-commit: 0678afa6055d14799c1dc1eee47c8025eba56cab
--- 
-An old man doll... just what I always wanted! - Clara
-
+> ---
+>  include/linux/gpio/driver.h | 29 ++++++++++++++++-------------
+>  1 file changed, 16 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index b1e0f1f8ee2e..54c3c6506503 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -167,21 +167,24 @@ struct gpio_irq_chip {
+>  	 */
+>  	irq_flow_handler_t parent_handler;
+>  
+> -	/**
+> -	 * @parent_handler_data:
+> -	 *
+> -	 * If @per_parent_data is false, @parent_handler_data is a single
+> -	 * pointer used as the data associated with every parent interrupt.
+> -	 *
+> -	 * @parent_handler_data_array:
+> -	 *
+> -	 * If @per_parent_data is true, @parent_handler_data_array is
+> -	 * an array of @num_parents pointers, and is used to associate
+> -	 * different data for each parent. This cannot be NULL if
+> -	 * @per_parent_data is true.
+> -	 */
+>  	union {
+> +		/**
+> +		 * @parent_handler_data:
+> +		 *
+> +		 * If @per_parent_data is false, @parent_handler_data is a
+> +		 * single pointer used as the data associated with every
+> +		 * parent interrupt.
+> +		 */
+>  		void *parent_handler_data;
+> +
+> +		/**
+> +		 * @parent_handler_data_array:
+> +		 *
+> +		 * If @per_parent_data is true, @parent_handler_data_array is
+> +		 * an array of @num_parents pointers, and is used to associate
+> +		 * different data for each parent. This cannot be NULL if
+> +		 * @per_parent_data is true.
+> +		 */
+>  		void **parent_handler_data_array;
+>  	};
+>  
+> 
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56

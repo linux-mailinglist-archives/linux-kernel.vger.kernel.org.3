@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CED8547879
+	by mail.lfdr.de (Postfix) with ESMTP id D944B54787A
 	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 06:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234095AbiFLESA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 00:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S234160AbiFLESi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 00:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFLER6 (ORCPT
+        with ESMTP id S229528AbiFLESg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 00:17:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187F454023
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 21:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655007477; x=1686543477;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xYTF9xrekhEG/loqk93CTSpre1JqjkwroBtQhH4zffE=;
-  b=Ke0cbbJEuk8LFbNzkvih4rWxQycIClfhmn3ATk3T2szJb1fF6bWsMMAa
-   TnBy9WgomrRLP0fPWT96n5Ma4FmDxOZCechfm+QOfKcXWklWqgOXCODeG
-   erBAuxo8uxvOALvrlFjdSf6/eD9DXm49SqoCgxUHjonZtjx7/DSze1wXm
-   1NW0+xRaI7Ey6LL6/FJ8J0ltG/MTS0P1pUR4YqqUaXG12J5A/5BltaiPK
-   zsNQoO4PrGs3BJXgSuI6s1cXn7xPN+lHbEBVk2Yh7qAoORGS8RVnZ+YKh
-   RlxGaiR/FYSq2fq40uLITMC2rkc2apFOTNtQXi6BDh8lq5fid/O8FFmXB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="258422392"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="258422392"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 21:17:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="534633461"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 11 Jun 2022 21:17:55 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0F2w-000Jaz-H8;
-        Sun, 12 Jun 2022 04:17:54 +0000
-Date:   Sun, 12 Jun 2022 12:17:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-5.19.y-rt-rebase 15/51] kernel/softirq.c:640:1:
- sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be
- static?
-Message-ID: <202206121239.4M5FVUYK-lkp@intel.com>
+        Sun, 12 Jun 2022 00:18:36 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6D354034;
+        Sat, 11 Jun 2022 21:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655007491;
+        bh=skbtjaGDK31d2tbbZZs0gIrNpUjqJPlvvjCkvRwoR1U=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=f+rVrp85dAFxbqMzCpoUU3ouBj2vZdB16dl2B4M2Mnqf3XR5WNfRDpMA2b2T1mZ//
+         LT01w3KXtQEVJN0VCEZyHUx+Pz9iiNRTeP8CNgh22vYqFxSglawQV6MxEwxV5LLqyb
+         BFli6nygvHmbZ875ri3gpC2vWNwtPPb+hl0VgNmU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1Ma20k-1oCGAh0tRE-00VvrH; Sun, 12 Jun 2022 06:18:11 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add Dell XPS 13 7390 to fan control whitelist
+Date:   Sun, 12 Jun 2022 06:18:06 +0200
+Message-Id: <20220612041806.11367-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tIQ+jBRsOqGXzOfoKNqR9BWepS73Ni1NYp++ahwD2S/nJIdD9AY
+ FN/K4Xin+aB3ZrqOUahnvXm+2RB3jYayZPwf6Mkfs0NzsZYGMGY+7Lb2OoCM/5EtlocPqJq
+ xUBoNLHDlzF1/HjKNVEwujc+wJtdQLYDbvklpr500c7RSRdVgjdriD/zClD9UIov4eBRYzy
+ JfhHWX5VRWlqSc0r07fXQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1jXk27D4EXY=:dD5KUasEpSaSrMN4FWTmu8
+ 6SHzYJOuU7UPlD8n034/Tnur3tmTgk2kVf1Fh3b0ipT2ENFAHLM+Mqo0ZrrpYCo7tTjO+3Gky
+ VqkDrCWWxNl00EsTY96BWCCQk8qC3gQQWOpZYCUWfk5G+6nSJoBBd/dvUytOQUBrNLog37usj
+ 9Pn0M7i64EL4+oSD7p3hljtlL9Z0HDMxtsbRz2s5nAGdllfCj3XK5w3nKjBnPGSMw4PY8rW4W
+ 2YCLCvTBmOVJU68qF6qUTUGLwHOplNryboe/Xr9ji46oFwe3m0nCG52sPqNXT8ST0ANHQSOfn
+ OLQW1B4EcOyoAwHo+6trewIEXIMUWeqlK6Rl8GV0sHrLAgfxh1Kor2E2d2h8WCdHQtXofcBiR
+ aFQllFJ1V4CcrOeoo3ogIUS1jHfTjE3vdJVuJ+2nKFFOe9nnjEM+XaL3AQt3ry/yerI0F94/S
+ RqC5CYsqISqQk9MvohAAs5DDcQwm4V/m59e5gnU51xjwO40990XGLMC5G/GeiZkvjjZr8sUJs
+ R5+iNfmfCMJkyrB8wJ1/V7Y1zU5aLjJ1/292n5rRqJiAlh9GqgpnQi2eiE/eCRFc3Z+mxGV05
+ OIsOQXlN/islY+o6NNSuRUa1IsyH6wvGA2qmGjItt6JEYgao5WznQTpFD9jpbbY7muMz4jbpe
+ 00ie3NlGc8x04+e3ljPlUzU8YpudXGYUi0EqAV+U0kQhNx78QomaE8NjrjdbWBH7BAMywLJVO
+ sW4rXK/GCLZEEme6khysNIDM9rIXA/xvaZgW023IGv2FkweFX0dM6m3eOQlASiSrekiFq4VM8
+ YXYi6XNye2RQz27q2zAnDq+MhelTwdn4TEdALu6YevskkflhseJo5aM+cV+HlDkESCVZ0DPVl
+ b6DLXG8inmL+qpvlP3fcPiulX086DSKXdDwDA9H4kSjMzEclZ44RzhoqJOOmsDQj5h+L1K44t
+ DnUwvgXGGub2o9AXVWefVc5cG0KZv8lD+Odantwa7uDsKb++HN1QwMgvR3uSoUAtzxoZIccyq
+ EApn//3RZSlJPv5LCrgE1t70r/zzVZX8NyECoWkYA5hmvE2rw1SNOC8xYhk8qy1IqgP8kZTi8
+ nWFX8IHl1NyvCqWHtPrJtC4PvVV9vnQxOYWVUvDd6rFtDZKRJeBcRK0Jw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,38 +67,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.19.y-rt-rebase
-head:   2a0438f3107478348ce5a998e511c82f0f32316e
-commit: 7c45ac654e3ff9d9e629823c40813117bb6968ff [15/51] rcutorture: Also force sched priority to timersd on boosting test.
-config: sparc64-randconfig-s032-20220612 (https://download.01.org/0day-ci/archive/20220612/202206121239.4M5FVUYK-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=7c45ac654e3ff9d9e629823c40813117bb6968ff
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-5.19.y-rt-rebase
-        git checkout 7c45ac654e3ff9d9e629823c40813117bb6968ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash
+A user reported that the program dell-bios-fan-control
+worked on his Dell XPS 13 7390 to switch off automatic
+fan control.
+Since it uses the same mechanism as the dell_smm_hwmon
+module, add this model to the fan control whitelist.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Compile-tested only.
 
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 071aa6f4e109..16c10ac84a91 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1365,6 +1365,14 @@ static const struct dmi_system_id i8k_whitelist_fan=
+_control[] __initconst =3D {
+ 		},
+ 		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+ 	},
++	{
++		.ident =3D "Dell XPS 13 7390",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS 13 7390"),
++		},
++		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
++	},
+ 	{ }
+ };
 
-vim +/__pcpu_scope_timersd +640 kernel/softirq.c
+=2D-
+2.30.2
 
-   639	
- > 640	DEFINE_PER_CPU(struct task_struct *, timersd);
-   641	static DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
-   642	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,50 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031B25479C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0F15479CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236115AbiFLKih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 06:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S236139AbiFLKjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 06:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234824AbiFLKif (ORCPT
+        with ESMTP id S236122AbiFLKjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 06:38:35 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F7165434
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 03:38:31 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id 199-20020a6b01d0000000b00669bf42cd4cso1420129iob.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 03:38:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=EXIXdjyPv3a9U68oHp7w8U1KtMEPqV32bzvRu3eXlpk=;
-        b=K2alKDKf3z2lgeSn+ZHePSN1XZQlsqYVb9Qw1+gl2mYW9jfh4Vt9pjyolho+mLloJl
-         B0uOwGyUC+loZp3yq/MYQCQRM3TkajZ0KpacuOJOzlWTrTtbtY/Yj1wqTWYDOvZP7zpL
-         fAmCaQNl3eFCfxI/hhS1fVfv+gt0vTfzAgRwoQgeXwwEODBziFyRF9Ozh3/D1RpbW6eP
-         q/KOBMPhJY6b0+k4QSuTJPSbHmmKIcxlZSwRdvXkeKQV1b/P6bIkkCqHNQQj9UgnVTDD
-         mgvvZ9BeVIL8VlVkAl3sFuebKZdFI3yu7o9xccM5j3pk26yS4OdsTG12aBlrdc49zPIC
-         6FoQ==
-X-Gm-Message-State: AOAM530mVrCO8DAOwoMgRugOcrlJCWAArIZpMda1H5YOmO54NIkm+x+g
-        wwVwiYjVTCJyf7B2yP2WWZmVeDHh6KnyUK7jr6MRrqH+Z3xI
-X-Google-Smtp-Source: ABdhPJzWPBBzWRZN/rkNmKgaEU1rHbPZsEPn7c+G/44TtepY4F/WNhf4l3KDskpOYzgXEetZsAXh3Ffr+NBqnrDubQFIz3+UA8io
+        Sun, 12 Jun 2022 06:39:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C147B6543D
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 03:39:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o0L0J-000760-Co; Sun, 12 Jun 2022 12:39:35 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 84B4D932DE;
+        Sun, 12 Jun 2022 10:39:32 +0000 (UTC)
+Date:   Sun, 12 Jun 2022 12:39:31 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 06/13] can: slcan: allow to send commands to the
+ adapter
+Message-ID: <20220612103931.3dugmcyn23udmve7@pengutronix.de>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-7-dario.binacchi@amarulasolutions.com>
+ <20220609071636.6tbspftu3yclip55@pengutronix.de>
+ <CABGWkvp1=DF1uok4ZoCRt1EqpdrgdcytG==Ex6zuWgT5mrvdwQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:31c2:b0:32e:167a:d887 with SMTP id
- n2-20020a05663831c200b0032e167ad887mr27657416jav.197.1655030310521; Sun, 12
- Jun 2022 03:38:30 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 03:38:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c0517405e13dc59e@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in __vma_adjust
-From:   syzbot <syzbot+68771c0e74f7bb7804e5@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rklhevn5ngclcgjp"
+Content-Disposition: inline
+In-Reply-To: <CABGWkvp1=DF1uok4ZoCRt1EqpdrgdcytG==Ex6zuWgT5mrvdwQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,189 +64,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--rklhevn5ngclcgjp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    6d0c80680317 Add linux-next specific files for 20220610
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=116194eff00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a30d6e3e814e5931
-dashboard link: https://syzkaller.appspot.com/bug?extid=68771c0e74f7bb7804e5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e632bbf00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103df80ff00000
+On 11.06.2022 23:43:47, Dario Binacchi wrote:
+> Hi Marc,
+>=20
+> On Thu, Jun 9, 2022 at 9:16 AM Marc Kleine-Budde <mkl@pengutronix.de> wro=
+te:
+> >
+> > On 07.06.2022 11:47:45, Dario Binacchi wrote:
+> > > This is a preparation patch for the upcoming support to change the
+> > > bitrate via ip tool, reset the adapter error states via the ethtool A=
+PI
+> > > and, more generally, send commands to the adapter.
+> > >
+> > > Since some commands (e. g. setting the bitrate) will be sent before
+> > > calling the open_candev(), the netif_running() will return false and =
+so
+> > > a new flag bit (i. e. SLF_XCMD) for serial transmission has to be add=
+ed.
+> > >
+> > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > I think this patch can be dropped, let me explain:
+> >
+> > You don't have to implement the do_set_bittiming callback. It's
+> > perfectly OK to set the bitrate during the ndo_open callback after
+> > open_candev().
+>=20
+> I developed what you suggested (i. e. remove the SLF_XCMD bit and set the
+> bitrate, as well as send the "F\r" and "O\r" commands, after calling
+> the open_candev(),
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+68771c0e74f7bb7804e5@syzkaller.appspotmail.com
+Note:
+Max Staudt noticed that you need a do_set_bittiming() callback if you
+have only fixed bitrates. I've create a patch that you can have fixed
+bit rate only an no do_set_bittiming() callback.
 
-==================================================================
-BUG: KASAN: use-after-free in __vma_adjust+0x18ee/0x1900 mm/mmap.c:763
-Read of size 8 at addr ffff88801fefe208 by task syz-executor408/3621
+| https://lore.kernel.org/all/20220611144248.3924903-1-mkl@pengutronix.de/
 
-CPU: 0 PID: 3621 Comm: syz-executor408 Not tainted 5.19.0-rc1-next-20220610-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- __vma_adjust+0x18ee/0x1900 mm/mmap.c:763
- vma_merge+0x590/0x870 mm/mmap.c:1119
- userfaultfd_release+0x4c5/0x670 fs/userfaultfd.c:888
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- ptrace_notify+0x114/0x140 kernel/signal.c:2353
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:249 [inline]
- syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
- __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f2d02e9ef59
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2d02e502f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: fffffffffffffe00 RBX: 00007f2d02f284a8 RCX: 00007f2d02e9ef59
-RDX: 000000000000003c RSI: 0000000020000180 RDI: 0000000000000003
-RBP: 00007f2d02f284a0 R08: 0000000000000001 R09: 0000000000000034
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f2d02e50300
-R13: 0000000000000001 R14: 00007f2d02e50400 R15: 0000000000022000
- </TASK>
+Or use the can-next/master branch as your base.
 
-Allocated by task 3619:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:750 [inline]
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3222 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
- kmem_cache_alloc+0x204/0x3b0 mm/slub.c:3239
- vm_area_dup+0x81/0x380 kernel/fork.c:466
- dup_mmap+0x656/0x1090 kernel/fork.c:640
- dup_mm+0x91/0x370 kernel/fork.c:1520
- copy_mm kernel/fork.c:1569 [inline]
- copy_process+0x3c95/0x7080 kernel/fork.c:2234
- kernel_clone+0xe7/0xab0 kernel/fork.c:2649
- __do_sys_clone+0xba/0x100 kernel/fork.c:2783
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> but now I can't send the close command ("C\r") during the ndo_stop() since
+> netif_running() returns false. The CAN framework clears netif_running() b=
+efore
+> calling the ndo_stop(). IMHO the SLF_XCMD bit then becomes necessary to
+> transmit the commands to the adapter from the ndo_open() and
+> ndo_stop() routines.
+> Any suggestions ?
 
-Freed by task 3621:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1727 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
- slab_free mm/slub.c:3507 [inline]
- kmem_cache_free+0xdd/0x5a0 mm/slub.c:3524
- __vma_adjust+0x9ab/0x1900 mm/mmap.c:886
- vma_merge+0x590/0x870 mm/mmap.c:1119
- userfaultfd_release+0x4c5/0x670 fs/userfaultfd.c:888
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- ptrace_notify+0x114/0x140 kernel/signal.c:2353
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:249 [inline]
- syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
- __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
+I see. Keep the setting of the bit rate in the ndo_open(), add the
+SLF_XCMD so that you can send messages in ndo_close().
 
-The buggy address belongs to the object at ffff88801fefe1b0
- which belongs to the cache vm_area_struct of size 152
-The buggy address is located 88 bytes inside of
- 152-byte region [ffff88801fefe1b0, ffff88801fefe248)
+Marc
 
-The buggy address belongs to the physical page:
-page:ffffea00007fbf80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1fefe
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea00009ed380 dead000000000003 ffff888140006b40
-raw: 0000000000000000 0000000000120012 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 3327, tgid 3327 (rm), ts 28524505479, free_ts 28520297867
- prep_new_page mm/page_alloc.c:2460 [inline]
- get_page_from_freelist+0xa64/0x3d10 mm/page_alloc.c:4279
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5500
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
- alloc_slab_page mm/slub.c:1797 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1942
- new_slab mm/slub.c:2002 [inline]
- ___slab_alloc+0x985/0xd90 mm/slub.c:3002
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
- slab_alloc_node mm/slub.c:3180 [inline]
- slab_alloc mm/slub.c:3222 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
- kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3239
- vm_area_dup+0x81/0x380 kernel/fork.c:466
- __split_vma+0x9f/0x530 mm/mmap.c:2273
- do_mas_align_munmap+0x2c0/0xf00 mm/mmap.c:2399
- do_mas_munmap+0x202/0x2c0 mm/mmap.c:2556
- mmap_region+0x219/0x1bf0 mm/mmap.c:2604
- do_mmap+0x825/0xf60 mm/mmap.c:1480
- vm_mmap_pgoff+0x1b7/0x290 mm/util.c:520
- ksys_mmap_pgoff+0x40d/0x5a0 mm/mmap.c:1526
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1375 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1425
- free_unref_page_prepare mm/page_alloc.c:3311 [inline]
- free_unref_page_list+0x184/0x1530 mm/page_alloc.c:3475
- release_pages+0xff1/0x2290 mm/swap.c:980
- tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:58
- tlb_flush_mmu_free mm/mmu_gather.c:255 [inline]
- tlb_flush_mmu mm/mmu_gather.c:262 [inline]
- tlb_finish_mmu+0x147/0x7e0 mm/mmu_gather.c:353
- exit_mmap+0x217/0x750 mm/mmap.c:3205
- __mmput+0x128/0x4c0 kernel/fork.c:1180
- mmput+0x5c/0x70 kernel/fork.c:1201
- exec_mmap fs/exec.c:1038 [inline]
- begin_new_exec+0xfbd/0x2e50 fs/exec.c:1297
- load_elf_binary+0x15a3/0x4ec0 fs/binfmt_elf.c:1002
- search_binary_handler fs/exec.c:1728 [inline]
- exec_binprm fs/exec.c:1769 [inline]
- bprm_execve fs/exec.c:1838 [inline]
- bprm_execve+0x7ef/0x1970 fs/exec.c:1800
- do_execveat_common+0x724/0x890 fs/exec.c:1943
- do_execve fs/exec.c:2017 [inline]
- __do_sys_execve fs/exec.c:2093 [inline]
- __se_sys_execve fs/exec.c:2088 [inline]
- __x64_sys_execve+0x8f/0xc0 fs/exec.c:2088
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Memory state around the buggy address:
- ffff88801fefe100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc
- ffff88801fefe180: fc fc fc fc fc fc fa fb fb fb fb fb fb fb fb fb
->ffff88801fefe200: fb fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc
-                      ^
- ffff88801fefe280: fc 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88801fefe300: 00 00 00 00 fc fc fc fc fc fc fc fc 00 00 00 00
-==================================================================
+--rklhevn5ngclcgjp
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKlwmEACgkQrX5LkNig
+013Eowf+KfCAs9Z0OKq+LFT5uWbL1qh9/1/auUskU/+EdODZkaDrh3bVZWFxQ0ZV
+6UuRs7QhWOdxz2kJ7Q87dKDtEiRIqhZPkeiByyd5mR3WbluTICxOoMUfjEE50p2T
+QQDTh+cfd5dSEy88SMxTt9aBKLasx90rkrSC30sPcdCvVKIXjWuyLbI2XdIKqygl
+Vga1xqQXZAKtAJNeMcNhdlfiXtYKp8/fjhhX0qdOxcuIomqrD5mv7wplk4Omq4IU
+F5p+PTHMaI26hvMQQtqhjM+5T/TCHfGCkYuw3X8jwRZV++mxNOd439YcCyLIw3Im
++gO8YIp3CoKam9k2szJKMC/z6+bZMw==
+=xvcS
+-----END PGP SIGNATURE-----
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--rklhevn5ngclcgjp--

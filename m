@@ -2,278 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04497547B93
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E164547B95
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbiFLSro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 14:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S233608AbiFLStu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 14:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiFLSrl (ORCPT
+        with ESMTP id S230478AbiFLSts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 14:47:41 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2109.outbound.protection.outlook.com [40.107.113.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DD519C02;
-        Sun, 12 Jun 2022 11:47:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gMzlntGMPL99Yg3zC5mhC2/aHUzh3kiHVA4RBHEhcxezpezKv2/Qnsi8lopP7+J1v+YOib2GbaDD87XC6miuejYCRZYOrHcE/xmh5BvRr5j/P+TwekEa5tP0UmQ/Sf0k8kRgoP0+mYzA9wQPko43edcHqU8HksjuD2ZKE6znRs/WR9aY2urkmjjEGEbBG5uWewe6th03sL7czX885Et5z0vg9rPAdWq8w7x1STtjLj3zu/7F7cAA0i78jhHmPrvr/CNGsUg5+kK7VdyupE55KSbQ8pDGvKlwJ1x4wTMeadSMVRW1js0mzZJLpoBuJZVoq0Ji3S9M0OFlkLfV7IREbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FAS/WqgaLI5ZDulXxSzgiEpfhXEF7f3M4bAAqAArLk4=;
- b=EssuTSkJ7Sbo5Mq/2DKsHKMJll6ZKftLJr4Xa0ju50iMNbi2sgYL/1CAsOdlsohihgQk/HujfZseAFOSi8eWsh+vMbEXC1yvfAYaeRFAT+EIKIVojNxFfIWNWgiNROGCOpTZjX4Bug29SWm47Fqqv3HG6vbi8Ir86pJ0OvtVgDDpBRybhybkYKOgeoQMPSzgZ/OvScgcCc0qejvXSHOm2SynAa/u0rblJdO4AOM9o59LWs2dogFunNQKR5HjsOvvuBuQuVkVmylwui64JmarTtOWfvzof/S2KS1IhEL3PbtHLPy42cY28vNDdQoHtlfWseUFyLh1FSHFBNVCrHbsOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
- dkim=pass header.d=zenithal.me; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FAS/WqgaLI5ZDulXxSzgiEpfhXEF7f3M4bAAqAArLk4=;
- b=Wo+gLqyNyDnddzH82pYitoOtU4RTo6dxLnEBqreKdbfU0ftIRxSeGC0WQEWuDbYHeLRK1xbzOSNDJE3jRWl60HD+CocLcCuDzx2UYlrURpk5+L4mEYECV2IE80yuSehgK4S8QownyTfsO4H4LIZlkyCZOP7cpn2QFyVn6JD8gZQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=zenithal.me;
-Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:c0::6) by
- OSZP286MB1063.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:111::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5332.13; Sun, 12 Jun 2022 18:47:38 +0000
-Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
- ([fe80::a162:2f17:bb41:c95]) by TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
- ([fe80::a162:2f17:bb41:c95%9]) with mapi id 15.20.5332.020; Sun, 12 Jun 2022
- 18:47:37 +0000
-Date:   Mon, 13 Jun 2022 02:47:31 +0800
-From:   "Hongren (Zenithal) Zheng" <i@zenithal.me>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-man@vger.kernel.org, Jiatai He <jiatai2021@iscas.ac.cn>,
-        Heiko Stuebner <heiko@sntech.de>, Conor.Dooley@microchip.com
-Subject: [PATCH v3 3/3] RISC-V: HWCAP: parse Bitmanip/Scalar Crypto HWCAP
- from DT
-Message-ID: <YqY0w6SeebuNP1vS@Sun>
-References: <YqYz+xDsXr/tNaNu@Sun>
+        Sun, 12 Jun 2022 14:49:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D08F5373C;
+        Sun, 12 Jun 2022 11:49:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D8E66101E;
+        Sun, 12 Jun 2022 18:49:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69AE8C34115;
+        Sun, 12 Jun 2022 18:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655059785;
+        bh=cfyOcuxLFukFeHQ+4I3fYlI7s2CihAB0D73dmmVDtK0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ffMHzYvoCorYoT70gusAFUkNE44TMUrubTZKHbsX7wFSFISB80dYvIfxXOjGUCtS1
+         qqOpUlJqJxBPs7scuDZFgnUvTyCIG+jKM21trtwH40URJqLNpMUATNcVYSRcNgtARr
+         6P0cXdlv1awTC+QK4shOTbJEHlbWvRoDbh4iyxhhTYcwRtcGFR5YaF/o8tHm7CgYjs
+         nR/WUbFJcPiRJChD0tOVyNGS25JFVzGrqTLAkbUpVEXiXrH9cWYC89SgW2GdGN8cHo
+         m3pIel+W6LOB73jNrcyg8h02jGsFiQ2C9/VuItH93wf1r6fNMwAYFkcOXRoLakycGG
+         dpPqLqH6ozMZQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F32D25C0266; Sun, 12 Jun 2022 11:49:44 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 11:49:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        rcu@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>, mtosatti@redhat.com,
+        sheng.yang@intel.com
+Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
+ readers from consuming CPU) cause qemu boot slow
+Message-ID: <20220612184944.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org>
+ <20220611165956.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_80D2801BC03B7006BB2230B6A1D5C69B9209@qq.com>
+ <20220612133631.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_2B7B5B8DBE69330DA041AEE36C1029826905@qq.com>
+ <20220612162029.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220612164002.GA1242564@paulmck-ThinkPad-P17-Gen-1>
+ <560f7d27-fe38-0db9-834a-50dda5fa6157@redhat.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqYz+xDsXr/tNaNu@Sun>
-X-Operating-System: Linux Sun 5.15.26
-X-Mailer: Mutt 2.2.1 (2022-02-19)
-X-ClientProxiedBy: SJ0PR03CA0156.namprd03.prod.outlook.com
- (2603:10b6:a03:338::11) To TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:c0::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 70804b8b-6f2e-46d5-0ba6-08da4ca4058f
-X-MS-TrafficTypeDiagnostic: OSZP286MB1063:EE_
-X-Microsoft-Antispam-PRVS: <OSZP286MB106301FB23EAE60E4901FD0DBCA89@OSZP286MB1063.JPNP286.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R6PZ0JP2buPdkCz77PUD6lOj1JoirIAMX11tQfZ3FUOZ2gDgX9X6vwAuoRacsbaa9aRa/7lldFd2OdSQ4a7wrJpx/Y4utCihd+iMb7U6rlOsT5nw77gg2W5slHX/N2ydX+bNCacAI31kT6LXavtkOHJLi/9uJHpcgdblzN+IvkuiaCek9/jOVs7VX1rW9C/bo4s4T5crDsMHhVHbqxdfZ2tcozNcMsfhoBDTR4WvT48VHArjsMuPks/+EpJv6dJ4o+o+ui2vzhYpm0y3UNxIuujwyDsLpcV2B6LLzgstLEmXxRGHe/Xfz3vKXneWyNtU/mFTOgKXJH7ABCQAj9tF0MLW+Xy9vYOEm2gE+p+dqU9jbyKd0jVd1HdJ48a0P8J/w9q+IgL2eqOcocx7rP3DBKm1QXfS02ksy1bMN6pR/RaUXPzV/I7fPEAuzWltnzB5FU8aDcQO62kPuTOV94vDb6p7faz9nDSQtCP2g8Y6MVxG6wT4iXDtaG0bRJDrsdWYnadp0cG1zA0vZKQjupplcxrRJKVEAUdXFPThRYnpZ7GMbyxkRVydQu2R/jqOeGp5efuoZn+yG221T/x6yK8b05JiVp+Yvw9M/rtnignphorqUXawtgEZ3/Lj9gvkPmbaG/E++ygWiAnJpSB+/PUGa4l27PwwRtGdNWhFrW57sM0hVsUjULcnERk4d8T+8Oo4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(39830400003)(366004)(346002)(396003)(41300700001)(41320700001)(6506007)(52116002)(9686003)(6512007)(6666004)(786003)(316002)(110136005)(54906003)(66946007)(66556008)(66476007)(33716001)(6486002)(86362001)(508600001)(38100700002)(186003)(83380400001)(8676002)(4326008)(2906002)(7416002)(5660300002)(8936002)(49092004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dw5oQjvfr2A0p1uBKG+AVBGhi6O/MDHhztqN14loJH17sf42qVvPECXtOLxD?=
- =?us-ascii?Q?bXBDQFMBOnrvZ/IO0BglTRzMIxr6ovYc2JXqgCENug7crq5l/EdYK/twCnPO?=
- =?us-ascii?Q?j6Kt/RvKpfEt/LWtJ7YqDYRZYvImor2JLqRpKAAokzG0zgxzWoo3zdZokywd?=
- =?us-ascii?Q?LDGxUYPIJXQ2p0A8yW9HhSOQl1oLiNYNFLhaiACxOjpBx89cnl+GcCKPqp8h?=
- =?us-ascii?Q?hzBTZQVOpOsR6cKCCydmg//EToqhAaSGLS5Tkm9pBN94X/fG4O51Hrv5DH0L?=
- =?us-ascii?Q?EJlB+MkxxhWpHUBreiD4ZH3bcp0Ji6nyDK+hMDl2YnKmihmCDvrzJcDy2QNL?=
- =?us-ascii?Q?fb1hGuPsPyR5FWqh3JU+35VToFveRnWIi9ZVzG7K8/6HGQNzG4IQWUvMfrX/?=
- =?us-ascii?Q?iaesEXxH83yCZiq7A14Tw8oMcQXQNuhfTt2U/1xrbBv8C4ZYuY8HYtu3sHks?=
- =?us-ascii?Q?c1i0RLUFw315qPj5rPkGrCve81qJl0Mpc27rgHyeRdyRWReBrufRbLkp9Mi5?=
- =?us-ascii?Q?tRLTGcxNoFnVeeEtJbLlNZJvHNr8wnGSoKHDYrG7yr1r8c9OsFciBGQTP6S2?=
- =?us-ascii?Q?OIAbmhskYKWyfqNToTxN7QOeYUJ9HmkkJ9mRJcRA9Q2S85J2PLa52HDA60YE?=
- =?us-ascii?Q?4TblfG9/bGAeJzVEH0yf45dvHKSN4wthQkFm3rsinPU6bPsograBMNdNEA0G?=
- =?us-ascii?Q?ugFjXGppW0CbPfo0UuklCssqVtWKjVlMH0g7fyiuRLTPhNlJlCLSvQ88VAN8?=
- =?us-ascii?Q?0ruPrkKAOLoW18hs9PPu7f237aTImqN/vuDKjiSQPZryaQMr70FsH6k7MW8l?=
- =?us-ascii?Q?k9mwg+Wogk036CNX67VTnPlCvYnFIzY8u/WmVc5OkXhc0q3gTEaPNJSlXE0B?=
- =?us-ascii?Q?FrKjp5uTBz9Et2exeFs/lCwAcR+ms8tJyuNHGD3Gft5e9E9/IyXshD1IMUbJ?=
- =?us-ascii?Q?DdtIdZfhD0YAyKeJ7laD9lJhCZgVYzZsQ2Uzxza0TKWZ9E6tcGqwQOXueu1B?=
- =?us-ascii?Q?IjaCAiDfR5jWI4BdZX8se470SJZeaVMYtyrm2U87K2y+fiC2n3Pe7KyrmCKS?=
- =?us-ascii?Q?Wrx7vxuX9oFjmSBWiWpVayO6BbVKm85Lsfvp2xAXER2taQOQRnzyiAkxTOQo?=
- =?us-ascii?Q?tEX7zUMJytHObd72tl4P/ehllHWJ+CF/BhQjWzBLULovHXx1t72KDDm/uN6X?=
- =?us-ascii?Q?MUOpCi05xTutTPxL6mrriRG0q8oXHAi3LF5+VLa8tlEPT6OBdcg4g18o0xsV?=
- =?us-ascii?Q?x+WG0xZYzfV31G0HM98DsIIRSwlVU4ObBfU6MCfAveQ63a1/rnfilp0C3ZQR?=
- =?us-ascii?Q?qQlxlHQ5C/7flZ4GgP1e5eh6QadswmQI8OMOtfk22jMJ5cCSvX53KfPr8o/P?=
- =?us-ascii?Q?vYlo4X85RNrQ7lU14mYHW5kXJD868VUpBlqTNIcf7ngJBNHetwCHXHaHCI/A?=
- =?us-ascii?Q?O6IPTidoQMadOxP869oE5Ci74wrAWQ+6bqzB7xJOkVB/WK+R+yG6Nu1Fpq+u?=
- =?us-ascii?Q?PtYBAho88qCMIcW+Npm3Zp2LvJTOTYjqdMV7CfgjYh6r9+pXRAIiRlIrK6Gm?=
- =?us-ascii?Q?r/TRbYbd6S09dXPjypTiHxIL7/7vHe7gke/Of5+fgHC7wCwB7p/sZZkf6iHc?=
- =?us-ascii?Q?kYVjIZiQSVH3PnckD/2k1sCCnc3GewTIUiVTKzejiiMqAXksCM2e+iWrwwJj?=
- =?us-ascii?Q?4NhwZElGiCHQr5emdF/aEfqFOSWIN4Zj5b0d3T86W9LdoSEDeXZTKVUVJ/cP?=
- =?us-ascii?Q?qX0PzxC3dQ=3D=3D?=
-X-OriginatorOrg: zenithal.me
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70804b8b-6f2e-46d5-0ba6-08da4ca4058f
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2022 18:47:37.8892
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Wsdr9D1IPhQ+ZYmfVBfl0DOxotLJF5v4MekOgUv+erehpNEEjIeU5us9IkctBaDO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB1063
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <560f7d27-fe38-0db9-834a-50dda5fa6157@redhat.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One viable way to detect Zb/Zk HWCAP is from the DT binding.
-No matter how the "M" mode things change, this way can
-always be an auxiliary way to detect it.
+On Sun, Jun 12, 2022 at 07:29:30PM +0200, Paolo Bonzini wrote:
+> On 6/12/22 18:40, Paul E. McKenney wrote:
+> > > Do these reserved memory regions really need to be allocated separately?
+> > > (For example, are they really all non-contiguous?  If not, that is, if
+> > > there are a lot of contiguous memory regions, could you sort the IORT
+> > > by address and do one ioctl() for each set of contiguous memory regions?)
+> > > 
+> > > Are all of these reserved memory regions set up before init is spawned?
+> > > 
+> > > Are all of these reserved memory regions set up while there is only a
+> > > single vCPU up and running?
+> > > 
+> > > Is the SRCU grace period really needed in this case?  (I freely confess
+> > > to not being all that familiar with KVM.)
+> > 
+> > Oh, and there was a similar many-requests problem with networking many
+> > years ago.  This was solved by adding a new syscall/ioctl()/whatever
+> > that permitted many requests to be presented to the kernel with a single
+> > system call.
+> > 
+> > Could a new ioctl() be introduced that requested a large number
+> > of these memory regions in one go so as to make each call to
+> > synchronize_rcu_expedited() cover a useful fraction of your 9000+
+> > requests?  Adding a few of the KVM guys on CC for their thoughts.
+> 
+> Unfortunately not.  Apart from this specific case, in general the calls to
+> KVM_SET_USER_MEMORY_REGION are triggered by writes to I/O registers in the
+> guest, and those writes then map to a ioctl.  Typically the guest sets up a
+> device at a time, and each setup step causes a synchronize_srcu()---and
+> expedited at that.
 
-Note that QEMU currently has "zba/zbb/zbc/zbs" in their device tree
-riscv,isa
+I was afraid of something like that...
 
-This also fixes the isa2hwcap way as using unsigned char
-for long extension is not viable. Note that the tolower function
-ensures functionality. For other no-hwcap extension (e.g. h, s, u),
-or ("|") with 0 has no effect on hwcap.
+> KVM has two SRCUs:
+> 
+> 1) kvm->irq_srcu is hardly relying on the "sleepable" part; it has readers
+> that are very very small, but it needs extremely fast detection of grace
+> periods; see commit 719d93cd5f5c ("kvm/irqchip: Speed up
+> KVM_SET_GSI_ROUTING", 2014-05-05) which split it off kvm->srcu.  Readers are
+> not so frequent.
+> 
+> 2) kvm->srcu is nastier because there are readers all the time.  The
+> read-side critical section are still short-ish, but they need the sleepable
+> part because they access user memory.
 
-Tested-by: Jiatai He <jiatai2021@iscas.ac.cn>
-Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
----
- arch/riscv/include/asm/elf.h   |  2 ++
- arch/riscv/include/asm/hwcap.h |  2 ++
- arch/riscv/kernel/cpufeature.c | 48 ++++++++++++++++++++++++++--------
- 3 files changed, 41 insertions(+), 11 deletions(-)
+Which one of these two is in play in this case?
 
-diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-index 14fc7342490b..cbf70c5ac1a4 100644
---- a/arch/riscv/include/asm/elf.h
-+++ b/arch/riscv/include/asm/elf.h
-@@ -65,7 +65,9 @@ extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
-  * but it's not easy, and we've already done it here.
-  */
- #define ELF_HWCAP	(elf_hwcap)
-+#define ELF_HWCAP2	(elf_hwcap2)
- extern unsigned long elf_hwcap;
-+extern unsigned long elf_hwcap2;
+> Writers are not frequent per se; the problem is they come in very large
+> bursts when a guest boots.  And while the whole boot path overall can be
+> quadratic, O(n) expensive calls to synchronize_srcu() can have a larger
+> impact on runtime than the O(n^2) parts, as demonstrated here.
+> 
+> Therefore, we operated on the assumption that the callers of
+> synchronized_srcu_expedited were _anyway_ busy running CPU-bound guest code
+> and the desire was to get past the booting phase as fast as possible.  If
+> the guest wants to eat host CPU it can "for(;;)" as much as it wants;
+> therefore, as long as expedited GPs didn't eat CPU *throughout the whole
+> system*, a preemptable busy wait in synchronize_srcu_expedited() were not
+> problematic.
+> 
+> This assumptions did match the SRCU code when kvm->srcu and kvm->irq_srcu
+> were was introduced (respectively in 2009 and 2014).  But perhaps they do
+> not hold anymore now that each SRCU is not as independent as it used to be
+> in those years, and instead they use workqueues instead?
+
+The problem was not internal to SRCU, but rather due to the fact
+that kernel live patching (KLP) had problems with the CPU-bound tasks
+resulting from repeated synchronize_rcu_expedited() invocations.  So I
+added heuristics to get the occasional sleep in there for KLP's benefit.
+Perhaps these heuristics need to be less aggressive about adding sleep.
+
+These heuristics have these aspects:
+
+1.	The longer readers persist in an expedited SRCU grace period,
+	the longer the wait between successive checks of the reader
+	state.  Roughly speaking, we wait as long as the grace period
+	has currently been in effect, capped at ten jiffies.
+
+2.	SRCU grace periods have several phases.  We reset so that each
+	phase starts by not waiting (new phase, new set of readers,
+	so don't penalize this set for the sins of the previous set).
+	But once we get to the point of adding delay, we add the
+	delay based on the beginning of the full grace period.
+
+Right now, the checking for grace-period length does not allow for the
+possibility that a grace period might start just before the jiffies
+counter gets incremented (because I didn't realize that anyone cared),
+so that is one possible thing to change.  I can also allow more no-delay
+checks per SRCU grace-period phase.
+
+Zhangfei, does something like the patch shown below help?
+
+Additional adjustments are likely needed to avoid re-breaking KLP,
+but we have to start somewhere...
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 50ba70f019dea..6a354368ac1d1 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+ 
+ #define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
+ #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
+-#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase consecutive no-delay instances.
++#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
+ #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
  
  /*
-  * This yields a string that ld.so will use to load implementation
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 02c454a12683..ef0349c5d303 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -17,12 +17,14 @@
-  * instruction set this cpu supports.
+@@ -522,12 +522,18 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
   */
- #define ELF_HWCAP		(elf_hwcap)
-+#define ELF_HWCAP2		(elf_hwcap2)
+ static unsigned long srcu_get_delay(struct srcu_struct *ssp)
+ {
++	unsigned long gpstart;
++	unsigned long j;
+ 	unsigned long jbase = SRCU_INTERVAL;
  
- enum {
- 	CAP_HWCAP = 1,
- };
- 
- extern unsigned long elf_hwcap;
-+extern unsigned long elf_hwcap2;
- 
- #define RISCV_ISA_EXT_a		('a' - 'a')
- #define RISCV_ISA_EXT_c		('c' - 'a')
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 0c2638365ec2..40a5ab3962f0 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -23,6 +23,7 @@
- #define NUM_ALPHA_EXTS ('z' - 'a' + 1)
- 
- unsigned long elf_hwcap __read_mostly;
-+unsigned long elf_hwcap2 __read_mostly;
- 
- /* Host ISA bitmap */
- static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
-@@ -74,21 +75,39 @@ void __init riscv_fill_hwcap(void)
- 	const char *isa;
- 	char print_str[NUM_ALPHA_EXTS + 1];
- 	int i, j;
--	static unsigned long isa2hwcap[256] = {0};
--
--	isa2hwcap['i'] = isa2hwcap['I'] = COMPAT_HWCAP_ISA_I;
--	isa2hwcap['m'] = isa2hwcap['M'] = COMPAT_HWCAP_ISA_M;
--	isa2hwcap['a'] = isa2hwcap['A'] = COMPAT_HWCAP_ISA_A;
--	isa2hwcap['f'] = isa2hwcap['F'] = COMPAT_HWCAP_ISA_F;
--	isa2hwcap['d'] = isa2hwcap['D'] = COMPAT_HWCAP_ISA_D;
--	isa2hwcap['c'] = isa2hwcap['C'] = COMPAT_HWCAP_ISA_C;
-+	static unsigned long isa2hwcap[RISCV_ISA_EXT_MAX] = {0};
-+
-+	/* HWCAP */
-+	isa2hwcap[RISCV_ISA_EXT_i] = COMPAT_HWCAP_ISA_I;
-+	isa2hwcap[RISCV_ISA_EXT_m] = COMPAT_HWCAP_ISA_M;
-+	isa2hwcap[RISCV_ISA_EXT_a] = COMPAT_HWCAP_ISA_A;
-+	isa2hwcap[RISCV_ISA_EXT_f] = COMPAT_HWCAP_ISA_F;
-+	isa2hwcap[RISCV_ISA_EXT_d] = COMPAT_HWCAP_ISA_D;
-+	isa2hwcap[RISCV_ISA_EXT_c] = COMPAT_HWCAP_ISA_C;
-+	/* HWCAP2 */
-+	isa2hwcap[RISCV_ISA_EXT_ZBA] = COMPAT_HWCAP2_ISA_ZBA;
-+	isa2hwcap[RISCV_ISA_EXT_ZBB] = COMPAT_HWCAP2_ISA_ZBB;
-+	isa2hwcap[RISCV_ISA_EXT_ZBC] = COMPAT_HWCAP2_ISA_ZBC;
-+	isa2hwcap[RISCV_ISA_EXT_ZBS] = COMPAT_HWCAP2_ISA_ZBS;
-+	isa2hwcap[RISCV_ISA_EXT_ZBKB] = COMPAT_HWCAP2_ISA_ZBKB;
-+	isa2hwcap[RISCV_ISA_EXT_ZBKC] = COMPAT_HWCAP2_ISA_ZBKC;
-+	isa2hwcap[RISCV_ISA_EXT_ZBKX] = COMPAT_HWCAP2_ISA_ZBKX;
-+	isa2hwcap[RISCV_ISA_EXT_ZKNE] = COMPAT_HWCAP2_ISA_ZKND;
-+	isa2hwcap[RISCV_ISA_EXT_ZKND] = COMPAT_HWCAP2_ISA_ZKNE;
-+	isa2hwcap[RISCV_ISA_EXT_ZKNH] = COMPAT_HWCAP2_ISA_ZKNH;
-+	isa2hwcap[RISCV_ISA_EXT_ZKSED] = COMPAT_HWCAP2_ISA_ZKSED;
-+	isa2hwcap[RISCV_ISA_EXT_ZKSH] = COMPAT_HWCAP2_ISA_ZKSH;
-+	isa2hwcap[RISCV_ISA_EXT_ZKR] = COMPAT_HWCAP2_ISA_ZKR;
-+	isa2hwcap[RISCV_ISA_EXT_ZKT] = COMPAT_HWCAP2_ISA_ZKT;
- 
- 	elf_hwcap = 0;
-+	elf_hwcap2 = 0;
- 
- 	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
- 
- 	for_each_of_cpu_node(node) {
- 		unsigned long this_hwcap = 0;
-+		unsigned long this_hwcap2 = 0;
- 		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
- 		const char *temp;
- 
-@@ -187,15 +206,17 @@ void __init riscv_fill_hwcap(void)
- #define SET_ISA_EXT_MAP(name, bit)						\
- 			do {							\
- 				if ((ext_end - ext == sizeof(name) - 1) &&	\
--				     !memcmp(ext, name, sizeof(name) - 1))	\
-+				     !memcmp(ext, name, sizeof(name) - 1)) {	\
-+					this_hwcap2 |= isa2hwcap[bit];		\
- 					set_bit(bit, this_isa);			\
-+				}						\
- 			} while (false)						\
- 
- 			if (unlikely(ext_err))
- 				continue;
- 			if (!ext_long) {
--				this_hwcap |= isa2hwcap[(unsigned char)(*ext)];
--				set_bit(*ext - 'a', this_isa);
-+				this_hwcap |= isa2hwcap[tolower(*ext) - 'a'];
-+				set_bit(tolower(*ext) - 'a', this_isa);
- 			} else {
- 				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
- 				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
-@@ -246,6 +267,11 @@ void __init riscv_fill_hwcap(void)
- 		else
- 			elf_hwcap = this_hwcap;
- 
-+		if (elf_hwcap2)
-+			elf_hwcap2 &= this_hwcap2;
-+		else
-+			elf_hwcap2 = this_hwcap2;
-+
- 		if (bitmap_empty(riscv_isa, RISCV_ISA_EXT_MAX))
- 			bitmap_copy(riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
- 		else
--- 
-2.35.1
-
+ 	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+ 		jbase = 0;
+-	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
+-		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
++	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
++		j = jiffies - 1;
++		gpstart = READ_ONCE(ssp->srcu_gp_start);
++		if (time_after(j, gpstart))
++			jbase += j - gpstart;
++	}
+ 	if (!jbase) {
+ 		WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+ 		if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)

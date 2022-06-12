@@ -2,737 +2,776 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DAC547CF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 01:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2611D547CF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 01:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237823AbiFLXgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 19:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S237876AbiFLXqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 19:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbiFLXgm (ORCPT
+        with ESMTP id S232350AbiFLXqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 19:36:42 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5F056B3F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 16:36:40 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id o7so8029951eja.1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 16:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=z6DUI1BS+xluR5dJXmFJ7vvNzWyJyRYpr1Lz3xMrsFg=;
-        b=G94iDnHjLUQniiBtUh/YlivTQ2GNun41jINygLl5zM854C4O7aI6cO1cp9KuVbAiko
-         cDZSRc4ittO6dZCrSMQISac4mvVGNAJ/ieR4oVqNicPA2N5N9da4TJnvcpMxtT8OxOAb
-         ooprVIS0bJzg+CXWeC03A04VWNdFYQtOHH26o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=z6DUI1BS+xluR5dJXmFJ7vvNzWyJyRYpr1Lz3xMrsFg=;
-        b=Ls00eYMqdjFF67sfuUPc4JS1SI795Co0JOuEmYhjgLTjBQoG4mFMJwhQ01dOPYXRC1
-         OgbI+QVCpDpQ7B9VLlHMDWkjcRL6XaeeSa7Jpej92Nf0lqTXxWgLvMDHzWSbxtr8dUVP
-         pP1iP/0ZXGnXGx7+lHHKAT/SIBU57ZDTylRezjhF2vUkJCSDr2gvW3eiIvJAGDA5Cvtw
-         AA6kwPkrK6XE0GjFvOE9dPtTf8DjXCQL53rIq0PCXcGQqL+SMUIUSWj02AuEGLDAfrNC
-         iaA6/V/RvbVEanQ9779srMMhdqI00tZwqYmZKfbJzMoQo/9LPWteU8wQ9cA4u7hIwCdb
-         jnZg==
-X-Gm-Message-State: AOAM531EYZbnkrdHP47HmYLjke6lqS/xyScozqweUauzCG9K+O8bBIzf
-        v8oUwsa2//cB1V0FCjr6vHVYiGLcRKqSAXd+
-X-Google-Smtp-Source: ABdhPJwmaSRic4QRyzgc5jSIjdF44TWgSNM+VB9BjKLBqSwDbyfp0Z0ywFAsFZWVa08ngzs30g5j/w==
-X-Received: by 2002:a17:906:729c:b0:715:702f:1e4a with SMTP id b28-20020a170906729c00b00715702f1e4amr7303400ejl.731.1655076998172;
-        Sun, 12 Jun 2022 16:36:38 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id za14-20020a170906878e00b00706c1327f4bsm3056199ejb.23.2022.06.12.16.36.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Jun 2022 16:36:37 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id e5so2085889wma.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 16:36:37 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ec9:b0:39c:69c7:715d with SMTP id
- g9-20020a05600c4ec900b0039c69c7715dmr11224813wmq.154.1655076997006; Sun, 12
- Jun 2022 16:36:37 -0700 (PDT)
-MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 12 Jun 2022 16:36:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiLDbZ9ch9vSLxrYBdr-bBujr5sehH_HszWzSah54UiQw@mail.gmail.com>
-Message-ID: <CAHk-=wiLDbZ9ch9vSLxrYBdr-bBujr5sehH_HszWzSah54UiQw@mail.gmail.com>
-Subject: Linux 5.19-rc2
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sun, 12 Jun 2022 19:46:20 -0400
+X-Greylist: delayed 53503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Jun 2022 16:46:17 PDT
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8FD22506;
+        Sun, 12 Jun 2022 16:46:17 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 5DE42C020; Mon, 13 Jun 2022 01:46:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655077575; bh=KOQAJGeSBAIgk3ukDBoTB7vytPgP1GjlIcTEfOHRoWQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TFheoy0CsWooFqvSK4/76QzRM3evDLCLnCmHJBCJiA6npb7/I7xC1hHE5bvXB3Xmt
+         HbFQYOfq15vWJaBImtZU0EHvL6tqGoQe/YiE0t+2xpAAcn/bKxswu/wXAHH+Pguw9F
+         1HJmin0GxyWuS0DYbigaHTlg5uL7S7OM8CQrQ85D4MntX7sfSw82QfJDFogwuhfYIK
+         aeM7uvu1tv9p05v/jkE5JUojSmekkutzFXSTKT/CvUbWaHyzzSzjW0lhhKuCn/YEUo
+         Lz69dPfNM3+OZQqZxbJrVoF/Ml3J0NlsSItYVLxyT4c382TIGLpLpXYvBYnWMjE1y1
+         PvcgyC9Ot+f8A==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 82B54C009;
+        Mon, 13 Jun 2022 01:46:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655077572; bh=KOQAJGeSBAIgk3ukDBoTB7vytPgP1GjlIcTEfOHRoWQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FAV871imIg1NYcDI9OTNCCgXpZSts/I0lZ25qTm0zdILRx5UlZEYHamAypeR4XDLi
+         84OtjfVm1SsB0htXglpN3S/K6F45d82lV9ndHf2FyIAyQIqL0Ldf8//cGN6ZinzBvD
+         vrq05ZJCuwVurJebz2qmd6TFYO0FJEpFSNFWZ9EU3WHUAOooI0+GndDCBlQ7/+P+my
+         Z2pOd+gx1QcATnEFJA+TbhLxT6jdEDUTC1x1gqayDC8RFXSYgAcO5mWK8hE7mmEtoi
+         MyMrPWK60uJ6gkkXAsBRL1fy2/urrNKjADCRrM/0AhTZ1AU2lWwSJdJ5/Qlo0BJCt+
+         s1AfwSv7OgoXA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 9d0a94b3;
+        Sun, 12 Jun 2022 23:46:04 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v2 04/06] 9p fid refcount: add p9_fid_get/put wrappers
+Date:   Mon, 13 Jun 2022 08:45:54 +0900
+Message-Id: <20220612234557.1559736-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220612085330.1451496-5-asmadeus@codewreck.org>
+References: <20220612085330.1451496-5-asmadeus@codewreck.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's Sunday afternoon, so it must be time for another release candidate.
+I was recently reminded that it is not clear that p9_client_clunk()
+was actually just decrementing refcount and clunking only when that
+reaches zero: make it clear through a set of helpers.
 
-As usual, rc2 is fairly small, and there isn't really a ton going on
-here. Fixes spread all over, and the diffstat is fairly flat apart
-from a few notable things that had bigger changes: some amdgpu fixes,
-the xen stub iommu driver, and some ceph and zonefs fixes. The rest is
-all pretty much one- or few-liners spread out mostly everywhere.
+This will also allow instrumenting refcounting better for debugging
+next patch, which is the reason these are not defined as static inline:
+we won't be able to add trace events there...
 
-And yes, because I expected the rc2 week to be fairly quiet, I did a
-system update on my workstation, and as a result I spent a day or two
-then sorting out most of the fallout from the resulting compiler
-upgrade to gcc-12. Some of it ended up being a bit heavy-handed, and
-we'll be tweaking things further. And some of it ends up being an
-actual compiler misfeature, but it's being discussed too and is
-limited to just one file on the 32-bit i386 side (and does not seem to
-result in any actual bad code, just excessive stack use).
-
-Anyway, nothing hugely scary going on, let's just keep testing and
-fixing things.
-
-                   Linus
-
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 ---
+v1 -> v2: p9_fid_get/put are now static inline in .h
+
+ fs/9p/fid.c             | 18 ++++++++--------
+ fs/9p/fid.h             |  2 +-
+ fs/9p/vfs_addr.c        |  4 ++--
+ fs/9p/vfs_dentry.c      |  4 ++--
+ fs/9p/vfs_dir.c         |  2 +-
+ fs/9p/vfs_file.c        |  4 ++--
+ fs/9p/vfs_inode.c       | 48 ++++++++++++++++++++---------------------
+ fs/9p/vfs_inode_dotl.c  | 42 ++++++++++++++++++------------------
+ fs/9p/vfs_super.c       |  6 +++---
+ fs/9p/xattr.c           |  8 +++----
+ include/net/9p/client.h | 18 ++++++++++++++++
+ net/9p/client.c         | 15 +++----------
+ 12 files changed, 90 insertions(+), 81 deletions(-)
+
+diff --git a/fs/9p/fid.c b/fs/9p/fid.c
+index e8fad28fc5bd..d792499349c4 100644
+--- a/fs/9p/fid.c
++++ b/fs/9p/fid.c
+@@ -56,7 +56,7 @@ static struct p9_fid *v9fs_fid_find_inode(struct inode *inode, kuid_t uid)
+ 	h = (struct hlist_head *)&inode->i_private;
+ 	hlist_for_each_entry(fid, h, ilist) {
+ 		if (uid_eq(fid->uid, uid)) {
+-			refcount_inc(&fid->count);
++			p9_fid_get(fid);
+ 			ret = fid;
+ 			break;
+ 		}
+@@ -104,7 +104,7 @@ static struct p9_fid *v9fs_fid_find(struct dentry *dentry, kuid_t uid, int any)
+ 		hlist_for_each_entry(fid, h, dlist) {
+ 			if (any || uid_eq(fid->uid, uid)) {
+ 				ret = fid;
+-				refcount_inc(&ret->count);
++				p9_fid_get(ret);
+ 				break;
+ 			}
+ 		}
+@@ -172,7 +172,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+ 		old_fid = fid;
+ 
+ 		fid = p9_client_walk(old_fid, 1, &dentry->d_name.name, 1);
+-		p9_client_clunk(old_fid);
++		p9_fid_put(old_fid);
+ 		goto fid_out;
+ 	}
+ 	up_read(&v9ses->rename_sem);
+@@ -194,7 +194,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+ 		if (IS_ERR(root_fid))
+ 			return root_fid;
+ 
+-		refcount_inc(&root_fid->count);
++		p9_fid_get(root_fid);
+ 		v9fs_fid_add(dentry->d_sb->s_root, root_fid);
+ 	}
+ 	/* If we are root ourself just return that */
+@@ -225,7 +225,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+ 				     old_fid == root_fid /* clone */);
+ 		/* non-cloning walk will return the same fid */
+ 		if (fid != old_fid) {
+-			p9_client_clunk(old_fid);
++			p9_fid_put(old_fid);
+ 			old_fid = fid;
+ 		}
+ 		if (IS_ERR(fid)) {
+@@ -240,11 +240,11 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+ 		spin_lock(&dentry->d_lock);
+ 		if (d_unhashed(dentry)) {
+ 			spin_unlock(&dentry->d_lock);
+-			p9_client_clunk(fid);
++			p9_fid_put(fid);
+ 			fid = ERR_PTR(-ENOENT);
+ 		} else {
+ 			__add_fid(dentry, fid);
+-			refcount_inc(&fid->count);
++			p9_fid_get(fid);
+ 			spin_unlock(&dentry->d_lock);
+ 		}
+ 	}
+@@ -301,7 +301,7 @@ struct p9_fid *v9fs_writeback_fid(struct dentry *dentry)
+ 	fid = clone_fid(ofid);
+ 	if (IS_ERR(fid))
+ 		goto error_out;
+-	p9_client_clunk(ofid);
++	p9_fid_put(ofid);
+ 	/*
+ 	 * writeback fid will only be used to write back the
+ 	 * dirty pages. We always request for the open fid in read-write
+@@ -310,7 +310,7 @@ struct p9_fid *v9fs_writeback_fid(struct dentry *dentry)
+ 	 */
+ 	err = p9_client_open(fid, O_RDWR);
+ 	if (err < 0) {
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 		fid = ERR_PTR(err);
+ 		goto error_out;
+ 	}
+diff --git a/fs/9p/fid.h b/fs/9p/fid.h
+index f7f33509e169..3168dfad510e 100644
+--- a/fs/9p/fid.h
++++ b/fs/9p/fid.h
+@@ -29,7 +29,7 @@ static inline struct p9_fid *v9fs_fid_clone(struct dentry *dentry)
+ 		return fid;
+ 
+ 	nfid = clone_fid(fid);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	return nfid;
+ }
+ #endif
+diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+index 8ce82ff1e40a..ed598160e0c6 100644
+--- a/fs/9p/vfs_addr.c
++++ b/fs/9p/vfs_addr.c
+@@ -60,7 +60,7 @@ static int v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
+ {
+ 	struct p9_fid *fid = file->private_data;
+ 
+-	refcount_inc(&fid->count);
++	p9_fid_get(fid);
+ 	rreq->netfs_priv = fid;
+ 	return 0;
+ }
+@@ -74,7 +74,7 @@ static void v9fs_req_cleanup(struct address_space *mapping, void *priv)
+ {
+ 	struct p9_fid *fid = priv;
+ 
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ }
+ 
+ /**
+diff --git a/fs/9p/vfs_dentry.c b/fs/9p/vfs_dentry.c
+index 1c609e99d280..f89f01734587 100644
+--- a/fs/9p/vfs_dentry.c
++++ b/fs/9p/vfs_dentry.c
+@@ -54,7 +54,7 @@ static void v9fs_dentry_release(struct dentry *dentry)
+ 	p9_debug(P9_DEBUG_VFS, " dentry: %pd (%p)\n",
+ 		 dentry, dentry);
+ 	hlist_for_each_safe(p, n, (struct hlist_head *)&dentry->d_fsdata)
+-		p9_client_clunk(hlist_entry(p, struct p9_fid, dlist));
++		p9_fid_put(hlist_entry(p, struct p9_fid, dlist));
+ 	dentry->d_fsdata = NULL;
+ }
+ 
+@@ -85,7 +85,7 @@ static int v9fs_lookup_revalidate(struct dentry *dentry, unsigned int flags)
+ 			retval = v9fs_refresh_inode_dotl(fid, inode);
+ 		else
+ 			retval = v9fs_refresh_inode(fid, inode);
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 
+ 		if (retval == -ENOENT)
+ 			return 0;
+diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
+index 958680f7f23e..000fbaae9b18 100644
+--- a/fs/9p/vfs_dir.c
++++ b/fs/9p/vfs_dir.c
+@@ -218,7 +218,7 @@ int v9fs_dir_release(struct inode *inode, struct file *filp)
+ 		spin_lock(&inode->i_lock);
+ 		hlist_del(&fid->ilist);
+ 		spin_unlock(&inode->i_lock);
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 	}
+ 
+ 	if ((filp->f_mode & FMODE_WRITE)) {
+diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
+index 2573c08f335c..8276f3af35d7 100644
+--- a/fs/9p/vfs_file.c
++++ b/fs/9p/vfs_file.c
+@@ -63,7 +63,7 @@ int v9fs_file_open(struct inode *inode, struct file *file)
+ 
+ 		err = p9_client_open(fid, omode);
+ 		if (err < 0) {
+-			p9_client_clunk(fid);
++			p9_fid_put(fid);
+ 			return err;
+ 		}
+ 		if ((file->f_flags & O_APPEND) &&
+@@ -98,7 +98,7 @@ int v9fs_file_open(struct inode *inode, struct file *file)
+ 	v9fs_open_fid_add(inode, fid);
+ 	return 0;
+ out_error:
+-	p9_client_clunk(file->private_data);
++	p9_fid_put(file->private_data);
+ 	file->private_data = NULL;
+ 	return err;
+ }
+diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+index 18c780ffd4b5..38186d1a1440 100644
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@ -399,7 +399,7 @@ void v9fs_evict_inode(struct inode *inode)
+ 	fscache_relinquish_cookie(v9fs_inode_cookie(v9inode), false);
+ 	/* clunk the fid stashed in writeback_fid */
+ 	if (v9inode->writeback_fid) {
+-		p9_client_clunk(v9inode->writeback_fid);
++		p9_fid_put(v9inode->writeback_fid);
+ 		v9inode->writeback_fid = NULL;
+ 	}
+ }
+@@ -568,7 +568,7 @@ static int v9fs_remove(struct inode *dir, struct dentry *dentry, int flags)
+ 	if (v9fs_proto_dotl(v9ses))
+ 		retval = p9_client_unlinkat(dfid, dentry->d_name.name,
+ 					    v9fs_at_to_dotl_flags(flags));
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 	if (retval == -EOPNOTSUPP) {
+ 		/* Try the one based on path */
+ 		v9fid = v9fs_fid_clone(dentry);
+@@ -632,14 +632,14 @@ v9fs_create(struct v9fs_session_info *v9ses, struct inode *dir,
+ 	if (IS_ERR(ofid)) {
+ 		err = PTR_ERR(ofid);
+ 		p9_debug(P9_DEBUG_VFS, "p9_client_walk failed %d\n", err);
+-		p9_client_clunk(dfid);
++		p9_fid_put(dfid);
+ 		return ERR_PTR(err);
+ 	}
+ 
+ 	err = p9_client_fcreate(ofid, name, perm, mode, extension);
+ 	if (err < 0) {
+ 		p9_debug(P9_DEBUG_VFS, "p9_client_fcreate failed %d\n", err);
+-		p9_client_clunk(dfid);
++		p9_fid_put(dfid);
+ 		goto error;
+ 	}
+ 
+@@ -651,7 +651,7 @@ v9fs_create(struct v9fs_session_info *v9ses, struct inode *dir,
+ 			p9_debug(P9_DEBUG_VFS,
+ 				   "p9_client_walk failed %d\n", err);
+ 			fid = NULL;
+-			p9_client_clunk(dfid);
++			p9_fid_put(dfid);
+ 			goto error;
+ 		}
+ 		/*
+@@ -662,20 +662,20 @@ v9fs_create(struct v9fs_session_info *v9ses, struct inode *dir,
+ 			err = PTR_ERR(inode);
+ 			p9_debug(P9_DEBUG_VFS,
+ 				   "inode creation failed %d\n", err);
+-			p9_client_clunk(dfid);
++			p9_fid_put(dfid);
+ 			goto error;
+ 		}
+ 		v9fs_fid_add(dentry, fid);
+ 		d_instantiate(dentry, inode);
+ 	}
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 	return ofid;
+ error:
+ 	if (ofid)
+-		p9_client_clunk(ofid);
++		p9_fid_put(ofid);
+ 
+ 	if (fid)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 
+ 	return ERR_PTR(err);
+ }
+@@ -707,7 +707,7 @@ v9fs_vfs_create(struct user_namespace *mnt_userns, struct inode *dir,
+ 		return PTR_ERR(fid);
+ 
+ 	v9fs_invalidate_inode_attr(dir);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 
+ 	return 0;
+ }
+@@ -743,7 +743,7 @@ static int v9fs_vfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+ 	}
+ 
+ 	if (fid)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 
+ 	return err;
+ }
+@@ -784,7 +784,7 @@ struct dentry *v9fs_vfs_lookup(struct inode *dir, struct dentry *dentry,
+ 	 */
+ 	name = dentry->d_name.name;
+ 	fid = p9_client_walk(dfid, 1, &name, 1);
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 	if (fid == ERR_PTR(-ENOENT))
+ 		inode = NULL;
+ 	else if (IS_ERR(fid))
+@@ -807,7 +807,7 @@ struct dentry *v9fs_vfs_lookup(struct inode *dir, struct dentry *dentry,
+ 		else if (!IS_ERR(res))
+ 			v9fs_fid_add(res, fid);
+ 		else
+-			p9_client_clunk(fid);
++			p9_fid_put(fid);
+ 	}
+ 	return res;
+ }
+@@ -890,7 +890,7 @@ v9fs_vfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 
+ error:
+ 	if (fid)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 	goto out;
+ }
+ 
+@@ -958,7 +958,7 @@ v9fs_vfs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+ 	dfid = v9fs_parent_fid(old_dentry);
+ 	olddirfid = clone_fid(dfid);
+ 	if (dfid && !IS_ERR(dfid))
+-		p9_client_clunk(dfid);
++		p9_fid_put(dfid);
+ 
+ 	if (IS_ERR(olddirfid)) {
+ 		retval = PTR_ERR(olddirfid);
+@@ -967,7 +967,7 @@ v9fs_vfs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+ 
+ 	dfid = v9fs_parent_fid(new_dentry);
+ 	newdirfid = clone_fid(dfid);
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 
+ 	if (IS_ERR(newdirfid)) {
+ 		retval = PTR_ERR(newdirfid);
+@@ -1019,13 +1019,13 @@ v9fs_vfs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+ 		d_move(old_dentry, new_dentry);
+ 	}
+ 	up_write(&v9ses->rename_sem);
+-	p9_client_clunk(newdirfid);
++	p9_fid_put(newdirfid);
+ 
+ clunk_olddir:
+-	p9_client_clunk(olddirfid);
++	p9_fid_put(olddirfid);
+ 
+ done:
+-	p9_client_clunk(oldfid);
++	p9_fid_put(oldfid);
+ 	return retval;
+ }
+ 
+@@ -1059,7 +1059,7 @@ v9fs_vfs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 		return PTR_ERR(fid);
+ 
+ 	st = p9_client_stat(fid);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	if (IS_ERR(st))
+ 		return PTR_ERR(st);
+ 
+@@ -1135,7 +1135,7 @@ static int v9fs_vfs_setattr(struct user_namespace *mnt_userns,
+ 	retval = p9_client_wstat(fid, &wstat);
+ 
+ 	if (use_dentry)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 
+ 	if (retval < 0)
+ 		return retval;
+@@ -1260,7 +1260,7 @@ static const char *v9fs_vfs_get_link(struct dentry *dentry,
+ 		return ERR_CAST(fid);
+ 
+ 	st = p9_client_stat(fid);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	if (IS_ERR(st))
+ 		return ERR_CAST(st);
+ 
+@@ -1307,7 +1307,7 @@ static int v9fs_vfs_mkspecial(struct inode *dir, struct dentry *dentry,
+ 		return PTR_ERR(fid);
+ 
+ 	v9fs_invalidate_inode_attr(dir);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	return 0;
+ }
+ 
+@@ -1363,7 +1363,7 @@ v9fs_vfs_link(struct dentry *old_dentry, struct inode *dir,
+ 		v9fs_refresh_inode(oldfid, d_inode(old_dentry));
+ 		v9fs_invalidate_inode_attr(dir);
+ 	}
+-	p9_client_clunk(oldfid);
++	p9_fid_put(oldfid);
+ 	return retval;
+ }
+ 
+diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
+index b6eb1160296c..09b124fe349c 100644
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@ -274,7 +274,7 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, struct dentry *dentry,
+ 	if (IS_ERR(ofid)) {
+ 		err = PTR_ERR(ofid);
+ 		p9_debug(P9_DEBUG_VFS, "p9_client_walk failed %d\n", err);
+-		p9_client_clunk(dfid);
++		p9_fid_put(dfid);
+ 		goto out;
+ 	}
+ 
+@@ -286,7 +286,7 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, struct dentry *dentry,
+ 	if (err) {
+ 		p9_debug(P9_DEBUG_VFS, "Failed to get acl values in creat %d\n",
+ 			 err);
+-		p9_client_clunk(dfid);
++		p9_fid_put(dfid);
+ 		goto error;
+ 	}
+ 	err = p9_client_create_dotl(ofid, name, v9fs_open_to_dotl_flags(flags),
+@@ -294,14 +294,14 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, struct dentry *dentry,
+ 	if (err < 0) {
+ 		p9_debug(P9_DEBUG_VFS, "p9_client_open_dotl failed in creat %d\n",
+ 			 err);
+-		p9_client_clunk(dfid);
++		p9_fid_put(dfid);
+ 		goto error;
+ 	}
+ 	v9fs_invalidate_inode_attr(dir);
+ 
+ 	/* instantiate inode and assign the unopened fid to the dentry */
+ 	fid = p9_client_walk(dfid, 1, &name, 1);
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 	if (IS_ERR(fid)) {
+ 		err = PTR_ERR(fid);
+ 		p9_debug(P9_DEBUG_VFS, "p9_client_walk failed %d\n", err);
+@@ -358,10 +358,10 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, struct dentry *dentry,
+ 
+ error:
+ 	if (fid)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ err_clunk_old_fid:
+ 	if (ofid)
+-		p9_client_clunk(ofid);
++		p9_fid_put(ofid);
+ 	goto out;
+ }
+ 
+@@ -458,9 +458,9 @@ static int v9fs_vfs_mkdir_dotl(struct user_namespace *mnt_userns,
+ 	v9fs_invalidate_inode_attr(dir);
+ error:
+ 	if (fid)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 	v9fs_put_acl(dacl, pacl);
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 	return err;
+ }
+ 
+@@ -489,7 +489,7 @@ v9fs_vfs_getattr_dotl(struct user_namespace *mnt_userns,
+ 	 */
+ 
+ 	st = p9_client_getattr_dotl(fid, P9_STATS_ALL);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	if (IS_ERR(st))
+ 		return PTR_ERR(st);
+ 
+@@ -603,7 +603,7 @@ int v9fs_vfs_setattr_dotl(struct user_namespace *mnt_userns,
+ 	retval = p9_client_setattr(fid, &p9attr);
+ 	if (retval < 0) {
+ 		if (use_dentry)
+-			p9_client_clunk(fid);
++			p9_fid_put(fid);
+ 		return retval;
+ 	}
+ 
+@@ -619,12 +619,12 @@ int v9fs_vfs_setattr_dotl(struct user_namespace *mnt_userns,
+ 		retval = v9fs_acl_chmod(inode, fid);
+ 		if (retval < 0) {
+ 			if (use_dentry)
+-				p9_client_clunk(fid);
++				p9_fid_put(fid);
+ 			return retval;
+ 		}
+ 	}
+ 	if (use_dentry)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 
+ 	return 0;
+ }
+@@ -771,9 +771,9 @@ v9fs_vfs_symlink_dotl(struct user_namespace *mnt_userns, struct inode *dir,
+ 
+ error:
+ 	if (fid)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 	return err;
+ }
+ 
+@@ -803,14 +803,14 @@ v9fs_vfs_link_dotl(struct dentry *old_dentry, struct inode *dir,
+ 
+ 	oldfid = v9fs_fid_lookup(old_dentry);
+ 	if (IS_ERR(oldfid)) {
+-		p9_client_clunk(dfid);
++		p9_fid_put(dfid);
+ 		return PTR_ERR(oldfid);
+ 	}
+ 
+ 	err = p9_client_link(dfid, oldfid, dentry->d_name.name);
+ 
+-	p9_client_clunk(dfid);
+-	p9_client_clunk(oldfid);
++	p9_fid_put(dfid);
++	p9_fid_put(oldfid);
+ 	if (err < 0) {
+ 		p9_debug(P9_DEBUG_VFS, "p9_client_link failed %d\n", err);
+ 		return err;
+@@ -826,7 +826,7 @@ v9fs_vfs_link_dotl(struct dentry *old_dentry, struct inode *dir,
+ 			return PTR_ERR(fid);
+ 
+ 		v9fs_refresh_inode_dotl(fid, d_inode(old_dentry));
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 	}
+ 	ihold(d_inode(old_dentry));
+ 	d_instantiate(dentry, d_inode(old_dentry));
+@@ -924,9 +924,9 @@ v9fs_vfs_mknod_dotl(struct user_namespace *mnt_userns, struct inode *dir,
+ 	}
+ error:
+ 	if (fid)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 	v9fs_put_acl(dacl, pacl);
+-	p9_client_clunk(dfid);
++	p9_fid_put(dfid);
+ 
+ 	return err;
+ }
+@@ -956,7 +956,7 @@ v9fs_vfs_get_link_dotl(struct dentry *dentry,
+ 	if (IS_ERR(fid))
+ 		return ERR_CAST(fid);
+ 	retval = p9_client_readlink(fid, &target);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	if (retval)
+ 		return ERR_PTR(retval);
+ 	set_delayed_call(done, kfree_link, target);
+diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
+index 97e23b4e6982..bf350fad9500 100644
+--- a/fs/9p/vfs_super.c
++++ b/fs/9p/vfs_super.c
+@@ -190,7 +190,7 @@ static struct dentry *v9fs_mount(struct file_system_type *fs_type, int flags,
+ 	return dget(sb->s_root);
+ 
+ clunk_fid:
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	v9fs_session_close(v9ses);
+ free_session:
+ 	kfree(v9ses);
+@@ -203,7 +203,7 @@ static struct dentry *v9fs_mount(struct file_system_type *fs_type, int flags,
+ 	 * attached the fid to dentry so it won't get clunked
+ 	 * automatically.
+ 	 */
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	deactivate_locked_super(sb);
+ 	return ERR_PTR(retval);
+ }
+@@ -270,7 +270,7 @@ static int v9fs_statfs(struct dentry *dentry, struct kstatfs *buf)
+ 	}
+ 	res = simple_statfs(dentry, buf);
+ done:
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	return res;
+ }
+ 
+diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
+index a824441b95a2..1f9298a4bd42 100644
+--- a/fs/9p/xattr.c
++++ b/fs/9p/xattr.c
+@@ -44,7 +44,7 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
+ 		if (err)
+ 			retval = err;
+ 	}
+-	p9_client_clunk(attr_fid);
++	p9_fid_put(attr_fid);
+ 	return retval;
+ }
+ 
+@@ -71,7 +71,7 @@ ssize_t v9fs_xattr_get(struct dentry *dentry, const char *name,
+ 	if (IS_ERR(fid))
+ 		return PTR_ERR(fid);
+ 	ret = v9fs_fid_xattr_get(fid, name, buffer, buffer_size);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 
+ 	return ret;
+ }
+@@ -98,7 +98,7 @@ int v9fs_xattr_set(struct dentry *dentry, const char *name,
+ 	if (IS_ERR(fid))
+ 		return PTR_ERR(fid);
+ 	ret = v9fs_fid_xattr_set(fid, name, value, value_len, flags);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	return ret;
+ }
+ 
+@@ -128,7 +128,7 @@ int v9fs_fid_xattr_set(struct p9_fid *fid, const char *name,
+ 			 retval);
+ 	else
+ 		p9_client_write(fid, 0, &from, &retval);
+-	err = p9_client_clunk(fid);
++	err = p9_fid_put(fid);
+ 	if (!retval && err)
+ 		retval = err;
+ 	return retval;
+diff --git a/include/net/9p/client.h b/include/net/9p/client.h
+index ec1d1706f43c..9fd38d674057 100644
+--- a/include/net/9p/client.h
++++ b/include/net/9p/client.h
+@@ -237,6 +237,24 @@ static inline int p9_req_try_get(struct p9_req_t *r)
+ 
+ int p9_req_put(struct p9_req_t *r);
+ 
++static inline struct p9_fid *p9_fid_get(struct p9_fid *fid)
++{
++	refcount_inc(&fid->count);
++
++	return fid;
++}
++
++static inline int p9_fid_put(struct p9_fid *fid)
++{
++	if (!fid || IS_ERR(fid))
++		return 0;
++
++	if (!refcount_dec_and_test(&fid->count))
++		return 0;
++
++	return p9_client_clunk(fid);
++}
++
+ void p9_client_cb(struct p9_client *c, struct p9_req_t *req, int status);
+ 
+ int p9_parse_header(struct p9_fcall *pdu, int32_t *size, int8_t *type,
+diff --git a/net/9p/client.c b/net/9p/client.c
+index 8bba0d9cf975..f3eb280c7d9d 100644
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -1228,7 +1228,7 @@ struct p9_fid *p9_client_walk(struct p9_fid *oldfid, uint16_t nwname,
+ 
+ clunk_fid:
+ 	kfree(wqids);
+-	p9_client_clunk(fid);
++	p9_fid_put(fid);
+ 	fid = NULL;
+ 
+ error:
+@@ -1459,15 +1459,6 @@ int p9_client_clunk(struct p9_fid *fid)
+ 	struct p9_req_t *req;
+ 	int retries = 0;
+ 
+-	if (!fid || IS_ERR(fid)) {
+-		pr_warn("%s (%d): Trying to clunk with invalid fid\n",
+-			__func__, task_pid_nr(current));
+-		dump_stack();
+-		return 0;
+-	}
+-	if (!refcount_dec_and_test(&fid->count))
+-		return 0;
+-
+ again:
+ 	p9_debug(P9_DEBUG_9P, ">>> TCLUNK fid %d (try %d)\n",
+ 		 fid->fid, retries);
+@@ -1519,7 +1510,7 @@ int p9_client_remove(struct p9_fid *fid)
+ 	p9_tag_remove(clnt, req);
+ error:
+ 	if (err == -ERESTARTSYS)
+-		p9_client_clunk(fid);
++		p9_fid_put(fid);
+ 	else
+ 		p9_fid_destroy(fid);
+ 	return err;
+@@ -2042,7 +2033,7 @@ struct p9_fid *p9_client_xattrwalk(struct p9_fid *file_fid,
+ 		 attr_fid->fid, *attr_size);
+ 	return attr_fid;
+ clunk_fid:
+-	p9_client_clunk(attr_fid);
++	p9_fid_put(attr_fid);
+ 	attr_fid = NULL;
+ error:
+ 	if (attr_fid && attr_fid != file_fid)
+-- 
+2.35.1
 
-Adam Ford (1):
-      ASoC: wm8962: Fix suspend while playing music
-
-Adrian Hunter (1):
-      mmc: block: Fix CQE recovery reset success
-
-Alejandro Tafalla (1):
-      arm64/sysreg: Fix typo in Enum element regex
-
-Alex Deucher (1):
-      drm/amdgpu: update VCN codec support for Yellow Carp
-
-Alexey Kardashevskiy (1):
-      KVM: Don't null dereference ops->destroy
-
-Alvin (1):
-      drm/amd/display: Don't clear ref_dtbclk value
-
-Alvin =C5=A0ipraga (1):
-      net: dsa: realtek: rtl8365mb: fix GMII caps for ports with internal P=
-HY
-
-Amadeusz S=C5=82awi=C5=84ski (1):
-      ASoC: SOF: Fix potential NULL pointer dereference
-
-Andre Przywara (1):
-      dt-bindings: display: arm,malidp: remove bogus RQOS property
-
-Andrea Mayer (1):
-      net: seg6: fix seg6_lookup_any_nexthop() to handle VRFs using flowi_l=
-3mdev
-
-Andy Shevchenko (7):
-      gpio: crystalcove: make irq_chip immutable
-      gpio: crystalcove: Use specific type and API for IRQ number
-      gpio: crystalcove: Join function declarations and long lines
-      gpio: wcove: make irq_chip immutable
-      gpio: merrifield: make irq_chip immutable
-      gpio: sch: make irq_chip immutable
-      gpio: dln2: make irq_chip immutable
-
-Aric Cyr (1):
-      drm/amd/display: 3.2.187
-
-Arnd Bergmann (1):
-      au1000_eth: stop using virt_to_bus()
-
-August Wikerfors (1):
-      platform/x86: gigabyte-wmi: Add support for B450M DS3H-CF
-
-Aurabindo Pillai (1):
-      drm/amd/display: remove stale config guards
-
-Bedant Patnaik (1):
-      platform/x86: hp-wmi: Use zero insize parameter only when supported
-
-Ben Chuang (1):
-      mmc: sdhci-pci-gli: Fix GL9763E runtime PM when the system
-resumes from suspend
-
-Ben Gardon (1):
-      KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty logging
-
-Bo Liu (1):
-      virtio: Fix all occurences of the "the the" typo
-
-Brian Norris (2):
-      drm/bridge: analogix_dp: Support PSR-exit to disable transition
-      drm/atomic: Force bridge self-refresh-exit on CRTC switch
-
-Cameron Berkenpas (1):
-      ALSA: hda/realtek: Fix for quirk to enable speaker output on the
-Lenovo Yoga DuetITL 2021
-
-Candice Li (1):
-      drm/amdgpu: Resolve RAS GFX error count issue after cold boot on Arct=
-urus
-
-Catalin Marinas (1):
-      arm64: Add kasan_hw_tags_enable() prototype to silence sparse
-
-Charles Keepax (6):
-      ASoC: cs42l52: Fix TLV scales for mixer controls
-      ASoC: cs35l36: Update digital volume TLV
-      ASoC: cs53l30: Correct number of volume levels on SX controls
-      ASoC: cs42l52: Correct TLV for Bypass Volume
-      ASoC: cs42l56: Correct typo in minimum level for SX volume controls
-      ASoC: cs42l51: Correct minimum value for SX volume control
-
-Chen Lin (1):
-      net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface
-netdev[napi]_alloc_frag
-
-Chengguang Xu (2):
-      scsi: ipr: Fix missing/incorrect resource cleanup in error case
-      scsi: pmcraid: Fix missing resource cleanup in error case
-
-Christian K=C3=B6nig (2):
-      drm/amdgpu: fix limiting AV1 to the first instance on VCN3
-      drm/amdgpu: always flush the TLB on gfx8
-
-Christoph Hellwig (3):
-      swiotlb: fix setting ->force_bounce
-      dm: fix bio_set allocation
-      block: remove bioset_init_from_src
-
-Christophe JAILLET (1):
-      stmmac: intel: Fix an error handling path in intel_eth_pci_probe()
-
-Chuck Lever (7):
-      NFSD: Fix potential use-after-free in nfsd_file_put()
-      SUNRPC: Trap RDMA segment overflows
-      SUNRPC: Fix the calculation of xdr->end in xdr_get_next_encode_buffer=
-()
-      SUNRPC: Optimize xdr_reserve_space()
-      SUNRPC: Clean up xdr_commit_encode()
-      SUNRPC: Clean up xdr_get_next_encode_buffer()
-      SUNRPC: Remove pointer type casts from xdr_get_next_encode_buffer()
-
-Damien Le Moal (3):
-      zonefs: fix handling of explicit_open option on mount
-      zonefs: Do not ignore explicit_open with active zone limit
-      zonefs: fix zonefs_iomap_begin() for reads
-
-Dan Carpenter (5):
-      ASoC: SOF: ipc-msg-injector: Propagate write errors correctly
-      ASoC: SOF: ipc-msg-injector: Fix reversed if statement
-      bpf: Use safer kvmalloc_array() where possible
-      vdpa/mlx5: fix error code for deleting vlan
-      vdpa/mlx5: clean up indenting in handle_ctrl_vlan()
-
-David Arcari (1):
-      platform/x86/intel: Fix pmt_crashlog array reference
-
-David Howells (5):
-      netfs: Fix gcc-12 warning by embedding vfs inode in netfs_i_context
-      certs: Convert spaces in certs/Makefile to a tab
-      afs: Fix some checker issues
-      netfs: Rename the netfs_io_request cleanup op and give it an op point=
-er
-      iov_iter: Fix iter_xarray_get_pages{,_alloc}()
-
-David Safford (1):
-      KEYS: trusted: tpm2: Fix migratable logic
-
-Dmitry Osipenko (2):
-      kernel/reboot: Use static handler for register_platform_power_off()
-      kernel/reboot: Fix powering off using a non-syscall code paths
-
-Duke Lee (1):
-      platform/x86/intel: hid: Add Surface Go to VGBS allow list
-
-Eric Dumazet (1):
-      bpf, arm64: Clear prog->jited_len along prog->jited
-
-Etienne van der Linde (1):
-      nfp: flower: restructure flow-key for gre+vlan combination
-
-Evan Quan (2):
-      drm/amd/pm: suppress compile warnings about possible unaligned access=
-es
-      drm/amdgpu: suppress the compile warning about 64 bit type
-
-Fei Qin (1):
-      nfp: avoid unnecessary check warnings in nfp_app_get_vf_config
-
-Feras Daoud (1):
-      net/mlx5: Rearm the FW tracer after each tracer event
-
-Florian Westphal (1):
-      netfilter: nat: really support inet nat without l3 address
-
-Gal Pressman (1):
-      net/mlx4_en: Fix wrong return value on ioctl EEPROM query failure
-
-Geert Uytterhoeven (1):
-      platform/mellanox: Spelling s/platfom/platform/
-
-George D Sworo (1):
-      platform/x86/intel: pmc: Support Intel Raptorlake P
-
-Guchun Chen (1):
-      Revert "drm/amdgpu: Ensure the DMA engine is deactivated during set u=
-ps"
-
-Hannes Reinecke (1):
-      ata: libata: drop 'sas_last_tag'
-
-He Ying (1):
-      powerpc/kasan: Silence KASAN warnings in __get_wchan()
-
-Helge Deller (1):
-      scsi: mpt3sas: Fix out-of-bounds compiler warning
-
-Huacai Chen (2):
-      LoongArch: Fix the !CONFIG_SMP build
-      LoongArch: Fix copy_thread() build errors
-
-Hui Wang (1):
-      ASoC: nau8822: Add operation for internal PLL off and on
-
-Hung, Cruise (1):
-      drm/amd/display: Fix DMUB outbox trace in S4 (#4465)
-
-Ilya (1):
-      drm/amd/display: Fix possible infinite loop in DP LT fallback
-
-Ilya Maximets (1):
-      net: openvswitch: fix misuse of the cached connection on tuple change=
-s
-
-James Smart (9):
-      scsi: lpfc: Correct BDE type for XMIT_SEQ64_WQE in lpfc_ct_reject_eve=
-nt()
-      scsi: lpfc: Resolve some cleanup issues following abort path refactor=
-ing
-      scsi: lpfc: Resolve some cleanup issues following SLI path refactorin=
-g
-      scsi: lpfc: Address NULL pointer dereference after starget_to_rport()
-      scsi: lpfc: Resolve NULL ptr dereference after an ELS LOGO is aborted
-      scsi: lpfc: Fix port stuck in bypassed state after LIP in PT2PT topol=
-ogy
-      scsi: lpfc: Add more logging of cmd and cqe information for
-aborted NVMe cmds
-      scsi: lpfc: Allow reduced polling rate for
-nvme_admin_async_event cmd completion
-      scsi: lpfc: Update lpfc version to 14.2.0.4
-
-Jan Beulich (1):
-      x86: drop bogus "cc" clobber from __try_cmpxchg_user_asm()
-
-Jason A. Donenfeld (8):
-      LoongArch: Remove MIPS comment about cycle counter
-      random: avoid checking crng_ready() twice in random_init()
-      random: mark bootloader randomness code as __init
-      random: account for arch randomness in bits
-      random: do not use jump labels before they are initialized
-      random: credit cpu and bootloader seeds by default
-      random: remove rng_has_arch_random()
-      wireguard: selftests: use maximum cpu features and allow rng seeding
-
-Jason Wang (2):
-      virtio-rng: make device ready before making request
-      vdpa: make get_vq_group and set_group_asid optional
-
-Jchao Sun (1):
-      writeback: Fix inode->i_io_list not be protected by inode->i_lock err=
-or
-
-Jeff Layton (1):
-      MAINTAINERS: reciprocal co-maintainership for file locking and nfsd
-
-Jeremy Soller (1):
-      ALSA: hda/realtek: Add quirk for HP Dev One
-
-Jesse Zhang (1):
-      drm/amdkfd:Fix fw version for 10.3.6
-
-Jiapeng Chong (1):
-      drm/amdgpu: make program_imu_rlc_ram static
-
-Jiasheng Jiang (1):
-      platform/x86: barco-p50-gpio: Add check for platform_driver_register
-
-Jonathan Corbet (1):
-      docs: Move the HTE documentation to driver-api/
-
-Jonathan Neusch=C3=A4fer (1):
-      workqueue: Switch to new kerneldoc syntax for named variable
-macro argument
-
-Jorge Lopez (1):
-      platform/x86: hp-wmi: Resolve WMI query failures on some devices
-
-Joseph Greathouse (1):
-      drm/amdgpu: Add MODE register to wave debug info in gfx11
-
-Juergen Gross (5):
-      kernel: add platform_has() infrastructure
-      virtio: replace arch_has_restricted_virtio_memory_access()
-      xen/grants: support allocating consecutive grants
-      xen/grant-dma-ops: Add option to restrict memory access under Xen
-      xen/virtio: Enable restricted memory access using Xen grant mappings
-
-Justin Stitt (1):
-      net: amd-xgbe: fix clang -Wformat warning
-
-Justin Swartz (1):
-      docs: usb: fix literal block marker in usbmon verification example
-
-Kevin Locke (1):
-      kbuild: avoid regex RS for POSIX awk
-
-Krishna Manikandan (1):
-      dt-bindings: msm: update maintainers list with proper id
-
-Krzysztof Kozlowski (1):
-      dt-bindings: vendor-prefixes: document deprecated Atheros
-
-Kuan-Ying Lee (1):
-      scripts/gdb: change kernel config dumping method
-
-Kuniyuki Iwashima (1):
-      af_unix: Fix a data-race in unix_dgram_peer_wake_me().
-
-Lang Yu (1):
-      drm/amdkfd: add pinned BOs to kfd_bo_list
-
-Leung, Martin (1):
-      drm/amd/display: revert Blank eDP on disable/enable drv
-
-Lina Wang (1):
-      selftests net: fix bpf build error
-
-Linus Torvalds (9):
-      cert host tools: Stop complaining about deprecated OpenSSL functions
-      drm: imx: fix compiler warning with gcc-12
-      gcc-12: disable '-Wdangling-pointer' warning for now
-      mellanox: mlx5: avoid uninitialized variable warning with gcc-12
-      gcc-12: disable '-Warray-bounds' universally for now
-      netfs: gcc-12: temporarily disable '-Wattribute-warning' for now
-      netfs: Further cleanups after struct netfs_inode wrapper introduced
-      iov_iter: fix build issue due to possible type mis-match
-      Linux 5.19-rc2
-
-Luca Ceresoli (1):
-      dt-bindings: update Luca Ceresoli's e-mail address
-
-Lukas Bulwahn (2):
-      MAINTAINERS: rectify entries for ARM DRM DRIVERS after dt conversion
-      MAINTAINERS: adjust MELLANOX ETHERNET INNOVA DRIVERS to TLS
-support removal
-
-Maciej Fijalkowski (1):
-      xsk: Fix handling of invalid descriptors in XSK TX batching API
-
-Marek Beh=C3=BAn (1):
-      net: dsa: mv88e6xxx: use BMSR_ANEGCOMPLETE bit for filling an_complet=
-e
-
-Marek Vasut (1):
-      drm/bridge: ti-sn65dsi83: Handle dsi_lanes =3D=3D 0 as invalid
-
-Mario Limonciello (1):
-      drm/amdkfd: Add GC 10.3.6 and 10.3.7 KFD definitions
-
-Marius Hoch (1):
-      Input: soc_button_array - also add Lenovo Yoga Tablet2 1051F to
-dmi_use_low_level_irq
-
-Mark Bloch (2):
-      net/mlx5: E-Switch, pair only capable devices
-      net/mlx5: fs, fail conflicting actions
-
-Mark Brown (5):
-      ASoC: es8328: Fix event generation for deemphasis control
-      ASoC: wm_adsp: Fix event generation for wm_adsp_fw_put()
-      arm64/sme: Fix tests for 0b1111 value ID registers
-      arm64/sme: Fix SVE/SME typo in ABI documentation
-      arm64/sme: Fix EFI save/restore
-
-Martin Faltesek (3):
-      nfc: st21nfca: fix incorrect validating logic in EVT_TRANSACTION
-      nfc: st21nfca: fix memory leaks in EVT_TRANSACTION handling
-      nfc: st21nfca: fix incorrect sizing calculations in EVT_TRANSACTION
-
-Masahiro Yamada (7):
-      powerpc/book3e: get rid of #include <generated/compile.h>
-      xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
-      scripts/nsdeps: adjust to the format change of *.mod files
-      net: mdio: unexport __init-annotated mdio_bus_init()
-      net: xfrm: unexport __init-annotated xfrm4_protocol_init()
-      net: ipv6: unexport __init-annotated seg6_hmac_init()
-      scripts/check-local-export: avoid 'wait $!' for process substitution
-
-Mathias Nyman (1):
-      Input: bcm5974 - set missing URB_NO_TRANSFER_DMA_MAP urb flag
-
-Matthew Wilcox (Oracle) (5):
-      quota: Prevent memory allocation recursion while holding dq_lock
-      filemap: Don't release a locked folio
-      filemap: Cache the value of vm_flags
-      mm/huge_memory: Fix xarray node memory leak
-      mm: Add kernel-doc for folio->mlock_count
-
-Mauro Carvalho Chehab (8):
-      dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
-      dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
-      dt-bindings: arm: update vexpress-config.yaml references
-      dt-bindings: reset: update st,stih407-powerdown.yaml references
-      dt-bindings: mfd: rk808: update rockchip,rk808.yaml reference
-      MAINTAINERS: update cortina,gemini-ethernet.yaml reference
-      MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
-      MAINTAINERS: update snps,axs10x-reset.yaml reference
-
-Maxim Levitsky (1):
-      KVM: SVM: fix tsc scaling cache logic
-
-Maxim Mikityanskiy (1):
-      tls: Rename TLS_INFO_ZC_SENDFILE to TLS_INFO_ZC_TX
-
-Miaoqian Lin (4):
-      ata: pata_octeon_cf: Fix refcount leak in octeon_cf_probe
-      net: ethernet: bgmac: Fix refcount leak in bcma_mdio_mii_register
-      net: dsa: lantiq_gswip: Fix refcount leak in gswip_gphy_fw_list
-      net: altera: Fix refcount leak in altera_tse_mdio_create
-
-Michael Ellerman (3):
-      powerpc: Don't select HAVE_IRQ_EXIT_ON_IRQ_STACK
-      powerpc/kasan: Force thread size increase with KASAN
-      powerpc/32: Fix overread/overwrite of thread_struct via ptrace
-
-Michael Shych (1):
-      platform/mellanox: Add static in struct declaration.
-
-Mike Snitzer (1):
-      dm: fix zoned locking imbalance due to needless check in clone_endio
-
-Mohammad Zafar Ziya (1):
-      drm/amdgpu/jpeg2: Add jpeg vmid update under IB submit
-
-Muchun Song (1):
-      tcp: use alloc_large_system_hash() to allocate table_perturb
-
-Nicholas Kazlauskas (2):
-      drm/amd/display: Pass the new context into disable OTG WA
-      Revert "drm/amd/display: Pass the new context into disable OTG WA"
-
-Oleksandr Tyshchenko (5):
-      arm/xen: Introduce xen_setup_dma_ops()
-      dt-bindings: Add xen,grant-dma IOMMU description for xen-grant DMA op=
-s
-      xen/grant-dma-iommu: Introduce stub IOMMU driver
-      xen/grant-dma-ops: Retrieve the ID of backend's domain for DT devices
-      arm/xen: Assign xen-grant DMA ops for xen-grant DMA devices
-
-Olivier Matz (2):
-      ixgbe: fix bcast packets Rx on VF after promisc removal
-      ixgbe: fix unexpected VLAN Rx in promisc mode on VF
-
-Pablo Neira Ayuso (6):
-      netfilter: nf_tables: use kfree_rcu(ptr, rcu) to release hooks
-in clean_net path
-      netfilter: nf_tables: delete flowtable hooks via transaction list
-      netfilter: nf_tables: always initialize flowtable hook list in transa=
-ction
-      netfilter: nf_tables: release new hooks on unsupported flowtable flag=
-s
-      netfilter: nf_tables: memleak flow rule from commit path
-      netfilter: nf_tables: bail out early if hardware offload is not suppo=
-rted
-
-Paolo Bonzini (2):
-      KVM: x86: do not set st->preempted when going back to user space
-      KVM: x86: do not report a vCPU as preempted outside instruction bound=
-aries
-
-Paul Blakey (1):
-      net/mlx5e: CT: Fix cleanup of CT before cleanup of TC ct rules
-
-Paul Mackerras (1):
-      powerpc/kasan: Mark more real-mode code as not to be instrumented
-
-Paulo Alcantara (1):
-      cifs: fix reconnect on smb3 mount types
-
-Peter Zijlstra (1):
-      cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-
-Philip Yang (3):
-      drm/amdkfd: Use mmget_not_zero in MMU notifier
-      drm/amdgpu: Update PDEs flush TLB if PTB/PDB moved
-      drm/amdkfd: Fix partial migration bugs
-
-Piotr Chmura (1):
-      platform/x86: gigabyte-wmi: Add Z690M AORUS ELITE AX DDR4 support
-
-Quentin Monnet (1):
-      MAINTAINERS: Add a maintainer for bpftool
-
-Randy Dunlap (1):
-      Input: raspberrypi-ts - add missing HAS_IOMEM dependency
-
-Rob Clark (1):
-      dma-debug: make things less spammy under memory pressure
-
-Rob Herring (4):
-      dt-bindings: mmc: Fix unevaluatedProperties warnings in examples
-      dt-bindings: nvme: apple,nvme-ans: Drop 'maxItems' from 'apple,sart'
-      dt-bindings: Drop more redundant 'maxItems/minItems' in if/then schem=
-as
-      dt-bindings: pinctrl: ralink: Fix 'enum' lists with duplicate entries
-
-Roger Knecht (1):
-      crc-itu-t: fix typo in CRC ITU-T polynomial comment
-
-Roman Li (1):
-      drm/amdgpu: fix aper_base for APU
-
-Russell King (Oracle) (2):
-      net: dsa: mv88e6xxx: fix BMSR error to be consistent with others
-      net: dsa: mv88e6xxx: correctly report serdes link failure
-
-Saeed Mahameed (1):
-      Revert "net/mlx5e: Allow relaxed ordering over VFs"
-
-Serge Semin (1):
-      gpio: dwapb: Don't print error on -EPROBE_DEFER
-
-Sergey Shtylyov (3):
-      ata: libata-core: fix NULL pointer deref in ata_host_alloc_pinfo()
-      ata: libata-transport: fix {dma|pio|xfer}_mode sysfs files
-      MAINTAINERS: add ATA sysfs file documentation to libata entry
-
-Seth Forshee (1):
-      entry/kvm: Exit to user mode when TIF_NOTIFY_SIGNAL is set
-
-Shaoqin Huang (1):
-      KVM: x86/mmu: Check every prev_roots in __kvm_mmu_free_obsolete_roots=
-()
-
-Shengjiu Wang (1):
-      ASoC: fsl_sai: Add support for i.MX8MN
-
-Sherry Wang (1):
-      drm/amd/display: Read Golden Settings Table from VBIOS
-
-Shyam Prasad N (2):
-      cifs: return errors during session setup during reconnects
-      cifs: populate empty hostnames for extra channels
-
-Simon Horman (1):
-      docs: arm: tcm: Fix typo in description of TCM and MMU usage
-
-Srinivasa Rao Mandadapu (1):
-      ASoC: qcom: lpass-platform: Update VMA access permissions in mmap cal=
-lback
-
-Stanley.Yang (1):
-      drm/amdgpu: fix ras supported check
-
-Steven Price (1):
-      drm/panfrost: Job should reference MMU not file_priv
-
-Sunil Khatri (1):
-      drm/amdgpu: enable tmz by default for GC 10.3.7
-
-Taehee Yoo (3):
-      amt: fix wrong usage of pskb_may_pull()
-      amt: fix possible null-ptr-deref in amt_rcv()
-      amt: fix wrong type string definition
-
-Takashi Iwai (2):
-      ALSA: usb-audio: Skip generic sync EP parse for secondary EP
-      ALSA: usb-audio: Set up (implicit) sync for Saffire 6
-
-Tan Tee Min (1):
-      net: phy: dp83867: retrigger SGMII AN when link change
-
-Tetsuo Handa (1):
-      workqueue: Wrap flush_workqueue() using a macro
-
-Thomas Zimmermann (1):
-      drm/ast: Support multiple outputs
-
-Toke H=C3=B8iland-J=C3=B8rgensen (2):
-      bpf: Fix calling global functions from BPF_PROG_TYPE_EXT programs
-      selftests/bpf: Add selftest for calling global functions from freplac=
-e
-
-Tyler Erickson (3):
-      scsi: sd: Fix interpretation of VPD B9h length
-      libata: fix reading concurrent positioning ranges log
-      libata: fix translation of concurrent positioning ranges
-
-Vaibhav Jain (1):
-      powerpc/papr_scm: don't requests stats with '0' sized stats buffer
-
-Vincent Whitchurch (1):
-      um: virt-pci: set device ready in probe()
-
-Vitaly Kuznetsov (1):
-      KVM: selftests: Make hyperv_clock selftest more stable
-
-Wang Yufen (2):
-      ipv6: Fix signed integer overflow in __ip6_append_data
-      ipv6: Fix signed integer overflow in l2tp_ip6_sendmsg
-
-Wentao Wang (1):
-      scsi: vmw_pvscsi: Expand vcpuHint to 16 bits
-
-Wesley Cheng (1):
-      dt-bindings: Update QCOM USB subsystem maintainer information
-
-Willem de Bruijn (1):
-      ip_gre: test csum_start instead of transport header
-
-Wonhyuk Yang (1):
-      workqueue: Fix type of cpu in trace event
-
-Xiang wangx (3):
-      fs: Fix syntax errors in comments
-      vdpa/mlx5: Fix syntax errors in comments
-      arm64/fpsimd: Fix typo in comment
-
-Xiaohui Zhang (1):
-      nfc: nfcmrvl: Fix memory leak in nfcmrvl_play_deferred
-
-Xie Yongji (2):
-      vringh: Fix loop descriptors check in the indirect cases
-      vduse: Fix NULL pointer dereference on sysfs access
-
-Yifan Zhang (1):
-      drm/amdgpu/mes: only invalid/prime icache when finish loading
-both pipe MES FWs.
-
-Yong Zhi (1):
-      ALSA: hda: MTL: add HD Audio PCI ID and HDMI codec vendor ID
-
-Yupeng Li (1):
-      MIPS: Loongson-3: fix compile mips cpu_hwmon as module build error.
-
-Zheng Zengkai (1):
-      Documentation/features: Update the arch support status files
-
-chengkaitao (1):
-      virtio-mmio: fix missing put_device() when vm_cmdline_parent
-registration failed
-
-hengzhou (1):
-      drm/amd/display: Wait DMCUB to idle state before reset.
-
-huangwenhui (2):
-      ALSA: hda/conexant - Fix loopback issue with CX20632
-      ALSA: hda/realtek - Add HW8326 support
-
-sunliming (2):
-      drm/amdgpu: fix a missing break in gfx_v11_0_handle_priv_fault
-      drm/amdgpu: make gfx_v11_0_rlc_stop static
-
-xliu (1):
-      ASoC: Intel: cirrus-common: fix incorrect channel mapping

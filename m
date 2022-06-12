@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5C3547A8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 16:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CE0547A90
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 16:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiFLOry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 10:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S237258AbiFLOtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 10:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbiFLOrv (ORCPT
+        with ESMTP id S232395AbiFLOtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 10:47:51 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81896C08;
-        Sun, 12 Jun 2022 07:47:50 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id b7so3763773ljr.6;
-        Sun, 12 Jun 2022 07:47:50 -0700 (PDT)
+        Sun, 12 Jun 2022 10:49:19 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6B3C08
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 07:49:15 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id n28so4230535edb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 07:49:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=stes9yCmLmnvhemwfBRoM/2A/BSzIcMjiRIJCZR/ru4=;
-        b=A9vLTVwKCgmOsrnnfPm1sR6ZpB9BFoWzwAnoIqUCxBKl+dnilCTqAg9Ezps9OHFCbl
-         9s/K/jr9gvROMAnogdVOGExNyBHF1H0b5LF7g9HXi4GXLEEptTgUZorGKG3nLWjOReP6
-         4ok7ULEoYeH1qvLaPdJ6tJLIfqYvyCBxcJEnv5xwOBUR3jEDeXvo+j5Hc0aLgMTwTxYJ
-         FhnGrDh3FZ1HMUl+sLMRg/nFPHqrBAuXXlGiG4OvmKBu2oC2MzlVpk10SxEMP7fq7+fB
-         7dLFQ5fKRWbipG4koXImxRHxO5byQdxinddEWr5o75JUp44GpkeZScv2YGX5Zh/j8Mse
-         N9nw==
+        d=pqrs.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rSYb7WFjE8zoNskNTn4KK0LTbD3WJCu9gXFXTJhr6NA=;
+        b=DpKtqRz965ab2i6y6lqT1h829jS37b9OM/X/HXYgxukSHjmHIso7zrHx2DNMvrGrbM
+         VXYrVXtBo7mNpOLdw3oONOrdh3if/xAl00j+2USQGua7DTIBh0weFfBbNQ6Xkqi7I30d
+         Sfc/jNM4SrtaeuXWdPhYm/ZoscHgexojfwbCo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=stes9yCmLmnvhemwfBRoM/2A/BSzIcMjiRIJCZR/ru4=;
-        b=AiMKFletnO2xWvo/ZhsDiq14zG5mnStx8ZVoVbO5ymvGXhwO7xlUoBNnCvqVn7bHd+
-         i+UaNDZ/wczl/H6k9/XDHJfnqGGOb3Bo4eIl4V0F2a0fzBQhBDGpLOpro8W9itN0s97F
-         GOCUkNAeAvBf3nQUBZrEc3qIt4moHY/kfUh1kd0K60Wik9S1kCMCqhvSD6ovKcTQ6apS
-         YOderHIPTHB3mSEVirP7Ef9ECa4RYSl9gaS+s4Jg4bZLtl5f5jwfj9qRIqnRE2V7gJvD
-         TDRphjXso3vsB1vi2mDbQt3q+sJDRW/GM/Wg08u4ffvjY5Rp/polija3myDTT3SiV8iQ
-         uMZg==
-X-Gm-Message-State: AOAM530ZfhShc1fyj16Swi9Z4qyxXP8CXBcQrjEBrW9zgTyza2ZQuyMz
-        /oc/k+Iy6xF03xipq3NV2t03XO9Ut/6Cl/zm4hxaqcZmW1WQdA==
-X-Google-Smtp-Source: ABdhPJxhxHcJTCiKVcoZLjWkOkx50wlOn1a/CLNHy8PxEygY0uZv7MV8uZTVUS1bB91/3urU48C1MkSuy9CSP+20/yQ=
-X-Received: by 2002:a2e:888b:0:b0:255:71aa:494e with SMTP id
- k11-20020a2e888b000000b0025571aa494emr27518804lji.179.1655045268479; Sun, 12
- Jun 2022 07:47:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rSYb7WFjE8zoNskNTn4KK0LTbD3WJCu9gXFXTJhr6NA=;
+        b=Fk0mq1MII6GBTMnetaoaM2Idz2/d0GRXv1abIwEyxwuCZ8g0ZxM6M2SOPdYFlIsaXk
+         +cD0bymTgIlwT7DszJHUckFg+pbeYnGRMOMnbHWOrOxPjZ94UnADehX6axm7yVFFQRkF
+         nBBLYT/lXIY1DTRRTovYxbUT3J5aCYpCMKWLSiv8JkqdAu9WmEbwtZd8AgIPlNlm2AMu
+         DU+vpreY1P+ZTdImvf94Vx7v5jynXow8kCVoPYMu0Y+vxgjyWNqCe25x/jPKUOGjbmCp
+         CwjEdPH/SiOlH3N0KckRR3m78gHSC8BLh/SBg2u5MCWi53k6BvzlgchQLTZBL6QAY+hC
+         1n6g==
+X-Gm-Message-State: AOAM533XRzn49/zGA4SoM1QjZnHt71AV3M+kC1nZbxcEGTOwrV5YbH33
+        z6gf4TFGx2UzFJ9zTyGqbBgzmw==
+X-Google-Smtp-Source: ABdhPJz6VW1bBC6PVZCZNV8EQxR11CGCL5uV9+5wD8r+5bBipMpMJseYJtMpdQiGB8ZncgAbn2qkYQ==
+X-Received: by 2002:a05:6402:50d2:b0:431:53c8:2356 with SMTP id h18-20020a05640250d200b0043153c82356mr41780544edb.300.1655045354020;
+        Sun, 12 Jun 2022 07:49:14 -0700 (PDT)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id cm20-20020a0564020c9400b004316f94ec4esm3257076edb.66.2022.06.12.07.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 07:49:13 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Archit Taneja <architt@codeaurora.org>
+Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 0/2] drm: bridge: adv7511: two fixes for CEC
+Date:   Sun, 12 Jun 2022 16:48:52 +0200
+Message-Id: <20220612144854.2223873-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220611101714.2623823-1-chenhuacai@loongson.cn> <CAHk-=wj9K=wHATkEVWyqZWzP_BP1bXDVtyEJacP6Da66HsVV2A@mail.gmail.com>
-In-Reply-To: <CAHk-=wj9K=wHATkEVWyqZWzP_BP1bXDVtyEJacP6Da66HsVV2A@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 12 Jun 2022 22:47:36 +0800
-Message-ID: <CAAhV-H69Hoe+e0VW--sLa7gZeVZuAz4yedPMG508XEGMrgK0wA@mail.gmail.com>
-Subject: Re: [GIT PULL] LoongArch fixes for v5.19-rc2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Linus,
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-On Sun, Jun 12, 2022 at 3:41 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sat, Jun 11, 2022 at 3:15 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > LoongArch fixes for v5.19-rc2
->
-> I've pulled this, but please next time add an actual note on what the fixes are.
->
-> Even if it's something simple like "Fix build errors and a stale
-> comment", which is what I made my merge commit say.
-Thank you for your comments, I will do this in future.
+Previously sent back in March, see here:
 
-Huacai
->
->                Linus
+https://lore.kernel.org/dri-devel/20220319145939.978087-1-alvin@pqrs.dk/
+
+No changes besides rebasing on today's drm-misc-fixes.
+
+Alvin Šipraga (2):
+  drm: bridge: adv7511: fix CEC power down control register offset
+  drm: bridge: adv7511: unregister cec i2c device after cec adapter
+
+ drivers/gpu/drm/bridge/adv7511/adv7511.h     | 5 +----
+ drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 4 ++--
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 5 ++---
+ 3 files changed, 5 insertions(+), 9 deletions(-)
+
+-- 
+2.36.1
+

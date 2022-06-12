@@ -2,88 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4B9547A5C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4C3547A60
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbiFLNbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 09:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
+        id S233659AbiFLNgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 09:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiFLNbp (ORCPT
+        with ESMTP id S229912AbiFLNge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 09:31:45 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D19632ECA
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:31:44 -0700 (PDT)
-Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25CDVaji053964;
-        Sun, 12 Jun 2022 22:31:36 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
- Sun, 12 Jun 2022 22:31:36 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 25CDVaO3053960
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 12 Jun 2022 22:31:36 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <6143d632-7c3a-35c5-1766-a3ae74c1c259@I-love.SAKURA.ne.jp>
-Date:   Sun, 12 Jun 2022 22:31:35 +0900
+        Sun, 12 Jun 2022 09:36:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5F84A93C;
+        Sun, 12 Jun 2022 06:36:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6C4060EE7;
+        Sun, 12 Jun 2022 13:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAA1C34115;
+        Sun, 12 Jun 2022 13:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655040992;
+        bh=pWDwNcvIidrGgS4/pNO+FanuGaNPZuY1PMIGuVsnnuI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=mBaqaTy+6bZ/qIqt08BuELqII8vPRHwyHUSf15JwTVIBZsoKT9hj9SQIpAaXuUO+b
+         ylim/3pWOunTvONVlhhnTqpuRDe1sP+coV171k0/iaR8tmr7PNKKUeAyRzo9jyu9FJ
+         ZsIL98lerhiU0y8aWD7mFtnZ2eCQM4iTDrpqYt3noBLHwdvE7a+rXS/rhHYGrr5a++
+         ANGmA330da6bmiZpXN8eyWYyHkoRLV3o4rmIRhR7i9lIX+AUJ1r4eKSym2qOaf14df
+         lmaFBiLPkSL/4oXD/F3mfFOYdYylXtv4t8QDPoL9W+Si1NOfMt1ccNXTi+AEfMpbSR
+         09Qza2sMU8hoQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D26265C02F9; Sun, 12 Jun 2022 06:36:31 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 06:36:31 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Zhangfei Gao <zhangfei.gao@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        rcu@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>
+Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
+ readers from consuming CPU) cause qemu boot slow
+Message-ID: <20220612133631.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org>
+ <20220611165956.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_80D2801BC03B7006BB2230B6A1D5C69B9209@qq.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: [PATCH v2] rapidio/tsi721: Replace flush_scheduled_work() with
- flush_work().
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <ad924306-d15c-9f1e-13dc-eaf674878022@I-love.SAKURA.ne.jp>
-In-Reply-To: <ad924306-d15c-9f1e-13dc-eaf674878022@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_80D2801BC03B7006BB2230B6A1D5C69B9209@qq.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since "struct tsi721_device" is per a device struct, I assume that
-tsi721_remove() needs to wait for only two works associated with that
-device. Therefore, wait for only these works using flush_work().
+On Sun, Jun 12, 2022 at 03:40:30PM +0800, zhangfei.gao@foxmail.com wrote:
+> Hi, Paul
+> 
+> On 2022/6/12 上午12:59, Paul E. McKenney wrote:
+> > On Sun, Jun 12, 2022 at 12:32:59AM +0800, Zhangfei Gao wrote:
+> > > Hi, Paul
+> > > 
+> > > When verifying qemu with acpi rmr feature on v5.19-rc1, the guest kernel
+> > > stuck for several minutes.
+> > Stuck for several minutes but then continues normally?  Or stuck for
+> > several minutes before you kill qemu?
+> 
+> qemu boot stuck for several minutes, then guest can bootup normally, just
+> slower.
+> > 
+> > And I have to ask...  What happened without the ACPI RMR feature?
+> If no ACPI, qemu boot quickly without stuck.
+> build/aarch64-softmmu/qemu-system-aarch64 -machine
+> virt,gic-version=3,iommu=smmuv3 \
+> -enable-kvm -cpu host -m 1024 \
+> -kernel Image -initrd mini-rootfs.cpio.gz -nographic -append \
+> "rdinit=init console=ttyAMA0 earlycon=pl011,0x9000000 kpti=off"
+> 
+> Adding acpi=force & -bios QEMU_EFI.fd, qemu boot stuck for several minutes.
+> 
+> By the way, my hardware platform is aarch64.
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-Changes in v2:
-  Use flush_work() instead of introducing a dedicated WQ.
+Thank you for the information!  The problem is excessive delay rather
+than a hang, and it is configuration-dependent.  Good to know!
 
-Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
-using a macro") for background.
+> Only change this can solve the stuck issue.
+> 
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -524,6 +524,10 @@ static unsigned long srcu_get_delay(struct srcu_struct
+> *ssp)
+>  {
+>         unsigned long jbase = SRCU_INTERVAL;
+> 
+> +       if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
+> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+> +               return 0;
+> +       return SRCU_INTERVAL;
 
- drivers/rapidio/devices/tsi721.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I am glad that you have a workaround for this problem, but this change
+would re-introduce the problem that commit 282d8998e997 ("srcu: Prevent
+expedited GPs and blocking readers from consuming CPU") was intended
+to fix.  For one example, your change can prevent kernel live patching
+from applying a patch.  So something else is needed.
 
-diff --git a/drivers/rapidio/devices/tsi721.c b/drivers/rapidio/devices/tsi721.c
-index b3134744fb55..0a42d6a2af24 100644
---- a/drivers/rapidio/devices/tsi721.c
-+++ b/drivers/rapidio/devices/tsi721.c
-@@ -2941,7 +2941,8 @@ static void tsi721_remove(struct pci_dev *pdev)
- 
- 	tsi721_disable_ints(priv);
- 	tsi721_free_irq(priv);
--	flush_scheduled_work();
-+	flush_work(&priv->idb_work);
-+	flush_work(&priv->pw_work);
- 	rio_unregister_mport(&priv->mport);
- 
- 	tsi721_unregister_dma(priv);
--- 
-2.18.4
+Does changing the value of SRCU_MAX_INTERVAL to (say) 3 decrease the delay
+significantly?  (This is not a fix, either, but instead a debug check.)
 
+Your change always returns zero if another SRCU grace period is needed.
+Let's look at the callers of srcu_get_delay():
 
+o	cleanup_srcu_struct() uses it to check whether there is an
+	expedited grace period pending, leaking the srcu_struct if so.
+	This should not affect boot delay.  (Unless you are invoking
+	init_srcu_struct() and cleanup_srcu_struct() really really
+	often.)
+
+o	srcu_gp_end() uses it to determine whether or not to allow
+	a one-jiffy delay before invoking callbacks at the end of
+	a grace period.
+
+o	srcu_funnel_gp_start() uses it to determine whether or not to
+	allow a one-jiffy delay before starting the process of checking
+	for the end of an SRCU grace period.
+
+o	try_check_zero() uses it to add an additional short delay
+	(instead of a long delay) between checks of reader state.
+
+o	process_srcu() uses it to calculate the long delay between
+	checks of reader state.
+
+These add one-jiffy delays, except for process_srcu(), which adds a delay
+of up to 10 jiffies.  Even given HZ=100 (as opposed to the HZ=1000 that
+I normally use), this requires thousands of such delays to add up to the
+several minutes that you are seeing.  (In theory, the delays could also
+be due to SRCU readers, except that in that case adjusting timeouts in
+the grace-period processing would not make things go faster.)
+
+So, does acpi=force & -bios QEMU_EFI.fd add SRCU grace periods?  If so,
+it would be very good make sure that this code is using SRCU efficiently.
+One way to check would be to put a printk() into synchronize_srcu(),
+though maintaining a counter and printing (say) every 1000th invocation
+might be easier on the console output.
+
+> > > And on 5.18, there is no such problem.
+> > > 
+> > > After revert this patch, the issue solved.
+> > > Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking readers from
+> > > consuming CPU)
+> > > 
+> > > 
+> > > qemu cmd:
+> > > build/aarch64-softmmu/qemu-system-aarch64 -machine
+> > > virt,gic-version=3,iommu=smmuv3 \
+> > > -enable-kvm -cpu host -m 1024 \
+> > > -kernel Image -initrd mini-rootfs.cpio.gz -nographic -append \
+> > > "rdinit=init console=ttyAMA0 earlycon=pl011,0x9000000 kpti=off acpi=force" \
+> > > -bios QEMU_EFI.fd
+> > > 
+> > > log:
+> > > InstallProtocolInterface: 5B1B31A1-9562-11D2-8E3F-00A0C969723B 7AA4D040
+> > > add-symbol-file /home/linaro/work/edk2/Build/ArmVirtQemu-AARCH64/DEBUG_GCC48/AARCH64/NetworkPkg/IScsiDxe/IScsiDxe/DEBUG/IScsiDxe.dll
+> > > 0x75459000
+> > > Loading driver at 0x00075458000 EntryPoint=0x00075459058 IScsiDxe.efi
+> > > InstallProtocolInterface: BC62157E-3E33-4FEC-9920-2D3B36D750DF 7AA4DE98
+> > > ProtectUefiImageCommon - 0x7AA4D040
+> > >    - 0x0000000075458000 - 0x000000000003F000
+> > > SetUefiImageMemoryAttributes - 0x0000000075458000 - 0x0000000000001000
+> > > (0x0000000000004008)
+> > > SetUefiImageMemoryAttributes - 0x0000000075459000 - 0x000000000003B000
+> > > (0x0000000000020008)
+> > > SetUefiImageMemoryAttributes - 0x0000000075494000 - 0x0000000000003000
+> > > (0x0000000000004008)
+> > > InstallProtocolInterface: 18A031AB-B443-4D1A-A5C0-0C09261E9F71 754952C8
+> > > InstallProtocolInterface: 107A772C-D5E1-11D4-9A46-0090273FC14D 75495358
+> > > InstallProtocolInterface: 6A7A5CFF-E8D9-4F70-BADA-75AB3025CE14 75495370
+> > > InstallProtocolInterface: 18A031AB-B443-4D1A-A5C0-0C09261E9F71 754952F8
+> > > InstallProtocolInterface: 107A772C-D5E1-11D4-9A46-0090273FC14D 75495358
+> > > InstallProtocolInterface: 6A7A5CFF-E8D9-4F70-BADA-75AB3025CE14 75495370
+> > > InstallProtocolInterface: 59324945-EC44-4C0D-B1CD-9DB139DF070C 75495348
+> > > InstallProtocolInterface: 09576E91-6D3F-11D2-8E39-00A0C969723B 754953E8
+> > > InstallProtocolInterface: 330D4706-F2A0-4E4F-A369-B66FA8D54385 7AA4D728
+> > > 
+> > > 
+> > > Not sure it is either reported or solved.
+> > This is the first I have heard of it, so thank you for reporting it.
+> > 
+> > Do you have a way of collecting something sysrq-t output?
+> Do you mean "echo t > /proc/sysrq-trigger",
+> There are too much output and kernel dump can not stop.
+
+OK.  What other tools do you have to work out what is happening during
+temporary hangs such as this one?
+
+The question to be answered: "Is there usually at least one task waiting
+in synchronize_srcu() during these hangs, and if so, which srcu_struct
+is passed to those synchronize_srcu() calls?"
+
+							Thanx, Paul

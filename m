@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D442547B71
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD50C547B86
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbiFLST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 14:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S231707AbiFLSnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 14:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiFLST1 (ORCPT
+        with ESMTP id S230245AbiFLSnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 14:19:27 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88804550D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 11:19:24 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id u12so7135265eja.8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 11:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aaWuX53My40+jJmZwcdQ+JP3bpinumZLKvCRFjTFyzo=;
-        b=IOy8TEnjiQFMkQi+bgqWPXX0QSSEFNHwibJ6tgSccEECgCo9CPmf4rw1Mqimn1F2ju
-         hhvzEhclpB4rmR+iSCH+yHmc0cnLKDrZm8tuu073KH66Ax1Eu8VnjryI4nC8dLIo/5zJ
-         yZe7gZU3ZdUHnkFawpebDzZZwbvbd1E8W1890=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aaWuX53My40+jJmZwcdQ+JP3bpinumZLKvCRFjTFyzo=;
-        b=RcUXPF7bOpS1E6QXRid882yQWpJ/qn8all+4tFIofyNgD+PuFn0dNDK+ng0LiLi9NM
-         E+lwPtBl19Kg1uy5C/WqwCiRNbi0q+MrWHr3IcHjdJe+jZMR4Y7JnUZ3dNDju2nzHG5O
-         gNg8IDBRkp50+6c66OXlmNXv1vw5M6HtXsssOEGeBhzuaMkBGjQLJqAI84J2URwPadU8
-         K1+Bppoj1S3K69H0y3bQ8PkWahqPB+G4W+tlYZBER3AnaBwSgm1TqDiaouqvtRJRima0
-         nct8JJprxk1Dof8EaIqrWSfHNSZE9mMZHYkb98xlrAqAOIn8q/7a5SgQpsl5d86Gy7A3
-         vs3A==
-X-Gm-Message-State: AOAM533IDMOXfTHrWGqO6GWkU9z9EJupxV+YZ18OyYKj2N6CBwfV6Xkr
-        tr4Jrmkgzx+iF0yGj7UnrWa9gnfJhJ7utUz+
-X-Google-Smtp-Source: ABdhPJyaGUbNPN9OU/zhD0QW+5JvTz/1CJ3QjjxBG/xc+oy6lcTt9rST+dWmSTGUWpn1/Qf7XS9N9A==
-X-Received: by 2002:a17:906:b15:b0:715:bf2e:df92 with SMTP id u21-20020a1709060b1500b00715bf2edf92mr3124879ejg.576.1655057963232;
-        Sun, 12 Jun 2022 11:19:23 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id ss19-20020a170907039300b006febde6d771sm2717761ejb.160.2022.06.12.11.19.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Jun 2022 11:19:22 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so1974537wms.3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 11:19:22 -0700 (PDT)
-X-Received: by 2002:a05:600c:4982:b0:39c:3c0d:437c with SMTP id
- h2-20020a05600c498200b0039c3c0d437cmr10509032wmp.38.1655057962092; Sun, 12
- Jun 2022 11:19:22 -0700 (PDT)
+        Sun, 12 Jun 2022 14:43:01 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1486E5C655
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 11:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
+         in-reply-to:references;
+        bh=guMf6OcVsQo+fLPJ8fpWWk/lWDBt604Wog1wB5emRic=;
+        b=AY+hPgxsiVnrj94ILi8pKd69FPYAd0XK3/azrmP4QWByfXS/WWxRi9MttWwGwgGSZWfRAhJaB4g4J
+         5urGIKO1NzIzqKajwwCEL1O72G+8lGeGT4WOXFo1MuVyMTsut6A+VybRpPIw5Kn14ebaQTguuLmCHe
+         UUYJfPq/vfQct/4NNW7Ua0WigFYSOIgjLp36BdvtA8KMDy5+ItTaSZsXPLmryNPbpLm0GsbbPT92Qf
+         r6QRqLcyZSIV/TEPxjsRBPbJU/v/OaornsmqNB04FwNdd1hPF/h500EPQgEubFVAos2NBCNoud7bpI
+         hyoiHyMfb00ZJKMOuM6JdFlTdGrixwQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000008,0.006650)], BW: [Enabled, t: (0.000026,0.000001), skipping (From == To)], RTDA: [Enabled, t: (0.117134), Hit: No, Details: v2.40.0; Id: 15.52k031.1g5cjj1ha.dhp1; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Sun, 12 Jun 2022 21:42:27 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     i.bornyakov@metrotek.ru
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: [PATCH v2 net-next] net: phy: marvell-88x2222: set proper phydev->port
+Date:   Sun, 12 Jun 2022 21:19:34 +0300
+Message-Id: <20220612181934.665-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405150305.151573-1-i.bornyakov@metrotek.ru>
+References: 
 MIME-Version: 1.0
-References: <YqUzUBjG4N9pKlsv@slm.duckdns.org>
-In-Reply-To: <YqUzUBjG4N9pKlsv@slm.duckdns.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 12 Jun 2022 11:19:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiZyO1CY77vfpJ1oCoKEC=oRvWgqqTfdv4jXiiM7wbjeQ@mail.gmail.com>
-Message-ID: <CAHk-=wiZyO1CY77vfpJ1oCoKEC=oRvWgqqTfdv4jXiiM7wbjeQ@mail.gmail.com>
-Subject: Re: [GIT PULL] wq fixes for v5.19-rc1
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 5:29 PM Tejun Heo <tj@kernel.org> wrote:
->
-> First signed pull. Please let me know if anything doesn't look right.
+phydev->port was not set and always reported as PORT_TP.
+Set phydev->port according to inserted SFP module.
 
-Signed tag looks fine.
+Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+---
+Changelog:
+  v1 -> v2: set port as PORT_NONE on SFP removal, instead of PORT_OTHER
 
-> Tetsuo's patch to trigger build warnings if system-wide wq's are flushed
+ drivers/net/phy/marvell-88x2222.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Have all the regular causes been fixed now? Because if everybody gets
-a warning, it's not useful.
+diff --git a/drivers/net/phy/marvell-88x2222.c b/drivers/net/phy/marvell-88x2222.c
+index d8b31d4d2a73..f070776ca904 100644
+--- a/drivers/net/phy/marvell-88x2222.c
++++ b/drivers/net/phy/marvell-88x2222.c
+@@ -490,6 +490,7 @@ static int mv2222_sfp_insert(void *upstream, const struct sfp_eeprom_id *id)
+ 	dev = &phydev->mdio.dev;
+ 
+ 	sfp_parse_support(phydev->sfp_bus, id, sfp_supported);
++	phydev->port = sfp_parse_port(phydev->sfp_bus, id, sfp_supported);
+ 	sfp_interface = sfp_select_interface(phydev->sfp_bus, sfp_supported);
+ 
+ 	dev_info(dev, "%s SFP module inserted\n", phy_modes(sfp_interface));
+@@ -526,6 +527,7 @@ static void mv2222_sfp_remove(void *upstream)
+ 
+ 	priv->line_interface = PHY_INTERFACE_MODE_NA;
+ 	linkmode_zero(priv->supported);
++	phydev->port = PORT_NONE;
+ }
+ 
+ static void mv2222_sfp_link_up(void *upstream)
+-- 
+2.35.1
 
-              Linus
+

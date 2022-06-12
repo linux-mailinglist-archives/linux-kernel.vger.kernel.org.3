@@ -2,140 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDC8547A61
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E37B547A65
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbiFLNh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 09:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S234502AbiFLNkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 09:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiFLNhy (ORCPT
+        with ESMTP id S229912AbiFLNkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 09:37:54 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72844AE00
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:37:52 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id k21-20020aa7d2d5000000b0042dcac48313so2510933edr.8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=gD+aT0qjgT75+iUPS1N/favvVXaDTEjoowGsau3TnVg=;
-        b=MSPvarkOsX0LkOL948d7Zkp4IuHkY9yYa2JR2ywB4/8nZmHd59Xt9OeuqNLMT5khXZ
-         9t+tE27/gVKzUegncZqVT7fed6rgwNOlw1PZ2sl3Pw7X9B+pinvcUZQD4dvHL9jP5R51
-         +E5nZFVlVH1oX3jLR8rgQtZ6jVnkVZnsvfmgz3yQgBtyowEhBGlUO+0r+Pix6nFAYhvy
-         tC0zLbk9AHHgculk8mEA2OvpKprUfCjRuD0S+P6EbBTs4LKI2JH34PpWf/x/MY40nQhu
-         WMCkRMWLpPDgJts9ysu+4MbJsTr96NHE78qYF3a6CJcor0y/TYbDRZxWKhL/r4A3lkoN
-         YnlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=gD+aT0qjgT75+iUPS1N/favvVXaDTEjoowGsau3TnVg=;
-        b=7uhByE+1r0Vx12AgcB62IuM23JWWXiqojwQqKi9+Ushdt6k/v9E6q3RTSkqda4PC4K
-         9B7Dy8cDcqNgdtAkG729zreVSh5k+B2tLFb3i8/7wZeU4+4XsS2vo1y4Vc9T6IfeHyfb
-         AggxG7Ew6tVGCKb0vFRc9PFJ2/PpmrfrwLui1rae/6u3fnM/PgxxNiC3NN+TRPcA63N9
-         34mrMs7rwnJ1u5eMp3cQF36lQJCWayhjb0ywjh0Bj/A3vN2qCVx5pMdf6A0RB9eN/G0s
-         nSN8PZalhiDd4MnUg0A2KPjB13IbIyFb8M4jTS5xUKDgSskua29N2MoZG9c13aZurzXd
-         3JYg==
-X-Gm-Message-State: AOAM5300mPtuQVoMoCmu3ZZBSu1OC0x5BOZzzyzL6s7/IHYwrlF7ZqRg
-        WcntB0cgLTEFkcJnpvjtKmN7FdLByvBm
-X-Google-Smtp-Source: ABdhPJzpvLxKS1lH6E8BDBPabpdz6zobQY98A0/hRmbF2WNnf6VDGrnJSg7K/nynMqWy6BJ09SxJCx69xpJR
-X-Received: from coin.lon.corp.google.com ([2a00:79e0:d:204:38ab:5d4a:6c0b:7372])
- (user=pterjan job=sendgmr) by 2002:a17:906:794e:b0:711:da52:c6c1 with SMTP id
- l14-20020a170906794e00b00711da52c6c1mr30012476ejo.463.1655041071040; Sun, 12
- Jun 2022 06:37:51 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 14:37:44 +0100
-In-Reply-To: <de4521a5-aeb6-6b92-358b-be910029c1b7@redhat.com>
-Message-Id: <20220612133744.4030602-1-pterjan@google.com>
-Mime-Version: 1.0
-References: <de4521a5-aeb6-6b92-358b-be910029c1b7@redhat.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2] vboxguest: Do not use devm for irq
-From:   Pascal Terjan <pterjan@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, Pascal Terjan <pterjan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 12 Jun 2022 09:40:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014784AE03
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655041210; x=1686577210;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UGM/ADNUwmGyFflTyjWzM7h6423qH4hEnlmOb9hXOPk=;
+  b=nwcrEzrDDtp6pbXJACNQKHCiy4hjScbTEQ9AShWfPcdbyopCL8EhXDrm
+   8DMXJtqWaWmaAd6ciPfttGvqiXTejakWRgasfOrcc4M9YNtKcmOs8Uh4S
+   eaNb+YT9fxXhQhvVg2k7v2SeXPJBy/W1mx7eOIc2zifj+2AjxwhgdVfXe
+   mYY89MwkktwH4jYmSuTerCV2PVUN27+fjC1HG6Qjnwp6FBx4KNGzt0lL6
+   JbiY0MUcg6pntJpt0WyIK5GwCXOsOLN4qqElWfL65VRzQyL7vOrB474Ej
+   HwH4tRhEjcYn5uLzic+0gSZOtAVSQf+cpv1t512Gt23i0oOVq6yye6gYe
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="258486303"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="258486303"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 06:40:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="639188705"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jun 2022 06:40:08 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0Np2-000Jwv-4h;
+        Sun, 12 Jun 2022 13:40:08 +0000
+Date:   Sun, 12 Jun 2022 21:40:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marek Vasut <marex@denx.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: [drm-misc:for-linux-next 9/10]
+ drivers/gpu/drm/msm/dp/dp_parser.c:110:5: error: use of undeclared
+ identifier 'data_lane_property'
+Message-ID: <202206122125.gkajULO7-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When relying on devm it doesn't get freed early enough which causes the
-following warning when unloading the module:
+tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
+head:   d643daaf1694b7565fbe3982b630e1c7b95f1600
+commit: 185443efa26a62b7d1401c89b83c89a1a2601350 [9/10] drm/msm: Convert to drm_of_get_data_lanes_count
+config: hexagon-randconfig-r045-20220612 (https://download.01.org/0day-ci/archive/20220612/202206122125.gkajULO7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6466c9abf3674bade1f6ee859f24ebc7aaf9cd88)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc for-linux-next
+        git checkout 185443efa26a62b7d1401c89b83c89a1a2601350
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
 
-[249348.837181] remove_proc_entry: removing non-empty directory 'irq/20', leaking at least 'vboxguest'
-[249348.837219] WARNING: CPU: 0 PID: 6708 at fs/proc/generic.c:715 remove_proc_entry+0x119/0x140
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[249348.837379] Call Trace:
-[249348.837385]  unregister_irq_proc+0xbd/0xe0
-[249348.837392]  free_desc+0x23/0x60
-[249348.837396]  irq_free_descs+0x4a/0x70
-[249348.837401]  irq_domain_free_irqs+0x160/0x1a0
-[249348.837452]  mp_unmap_irq+0x5c/0x60
-[249348.837458]  acpi_unregister_gsi_ioapic+0x29/0x40
-[249348.837463]  acpi_unregister_gsi+0x17/0x30
-[249348.837467]  acpi_pci_irq_disable+0xbf/0xe0
-[249348.837473]  pcibios_disable_device+0x20/0x30
-[249348.837478]  pci_disable_device+0xef/0x120
-[249348.837482]  vbg_pci_remove+0x6c/0x70 [vboxguest]
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Pascal Terjan <pterjan@google.com>
----
-v2: stop using devm rather than adding a manual devm_free_irq
+>> drivers/gpu/drm/msm/dp/dp_parser.c:110:5: error: use of undeclared identifier 'data_lane_property'
+                                   data_lane_property, DP_MAX_NUM_DP_LANES);
+                                   ^
+   1 error generated.
+--
+>> drivers/gpu/drm/msm/dsi/dsi_host.c:1676:14: error: call to undeclared function 'drm_of_get_data_lanes_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           num_lanes = drm_of_get_data_lanes_count(ep, 1, 4);
+                       ^
+   1 error generated.
 
- drivers/virt/vboxguest/vboxguest_linux.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
-index 6e8c0f1c1056..dec36934d679 100644
---- a/drivers/virt/vboxguest/vboxguest_linux.c
-+++ b/drivers/virt/vboxguest/vboxguest_linux.c
-@@ -360,8 +360,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 		goto err_vbg_core_exit;
- 	}
- 
--	ret = devm_request_irq(dev, pci->irq, vbg_core_isr, IRQF_SHARED,
--			       DEVICE_NAME, gdev);
-+	ret = request_irq(pci->irq, vbg_core_isr, IRQF_SHARED, DEVICE_NAME,
-+			  gdev);
- 	if (ret) {
- 		vbg_err("vboxguest: Error requesting irq: %d\n", ret);
- 		goto err_vbg_core_exit;
-@@ -371,7 +371,7 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	if (ret) {
- 		vbg_err("vboxguest: Error misc_register %s failed: %d\n",
- 			DEVICE_NAME, ret);
--		goto err_vbg_core_exit;
-+		goto err_free_irq;
- 	}
- 
- 	ret = misc_register(&gdev->misc_device_user);
-@@ -407,6 +407,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	misc_deregister(&gdev->misc_device_user);
- err_unregister_misc_device:
- 	misc_deregister(&gdev->misc_device);
-+err_free_irq:
-+	free_irq(pci->irq, gdev);
- err_vbg_core_exit:
- 	vbg_core_exit(gdev);
- err_disable_pcidev:
-@@ -423,6 +425,7 @@ static void vbg_pci_remove(struct pci_dev *pci)
- 	vbg_gdev = NULL;
- 	mutex_unlock(&vbg_gdev_mutex);
- 
-+	free_irq(pci->irq, gdev);
- 	device_remove_file(gdev->dev, &dev_attr_host_features);
- 	device_remove_file(gdev->dev, &dev_attr_host_version);
- 	misc_deregister(&gdev->misc_device_user);
+vim +/data_lane_property +110 drivers/gpu/drm/msm/dp/dp_parser.c
+
+c943b4948b5848 Chandan Uddaraju 2020-08-27  101  
+c943b4948b5848 Chandan Uddaraju 2020-08-27  102  static int dp_parser_misc(struct dp_parser *parser)
+c943b4948b5848 Chandan Uddaraju 2020-08-27  103  {
+c943b4948b5848 Chandan Uddaraju 2020-08-27  104  	struct device_node *of_node = parser->pdev->dev.of_node;
+185443efa26a62 Marek Vasut      2022-05-24  105  	int len;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  106  
+185443efa26a62 Marek Vasut      2022-05-24  107  	len = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
+c943b4948b5848 Chandan Uddaraju 2020-08-27  108  	if (len < 0) {
+c943b4948b5848 Chandan Uddaraju 2020-08-27  109  		DRM_WARN("Invalid property %s, default max DP lanes = %d\n",
+c943b4948b5848 Chandan Uddaraju 2020-08-27 @110  				data_lane_property, DP_MAX_NUM_DP_LANES);
+c943b4948b5848 Chandan Uddaraju 2020-08-27  111  		len = DP_MAX_NUM_DP_LANES;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  112  	}
+c943b4948b5848 Chandan Uddaraju 2020-08-27  113  
+c943b4948b5848 Chandan Uddaraju 2020-08-27  114  	parser->max_dp_lanes = len;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  115  	return 0;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  116  }
+c943b4948b5848 Chandan Uddaraju 2020-08-27  117  
+
+:::::: The code at line 110 was first introduced by commit
+:::::: c943b4948b5848fc0e07f875edbd35a973879e22 drm/msm/dp: add displayPort driver support
+
+:::::: TO: Chandan Uddaraju <chandanu@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@chromium.org>
+
 -- 
-2.36.1.476.g0c4daa206d-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

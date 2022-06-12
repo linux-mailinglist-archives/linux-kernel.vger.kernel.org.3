@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B702547914
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 08:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C9E547917
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 08:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbiFLGQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 02:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
+        id S234531AbiFLGlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 02:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiFLGQG (ORCPT
+        with ESMTP id S229664AbiFLGlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 02:16:06 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2A43917B
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 23:16:04 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id E465DC01B; Sun, 12 Jun 2022 08:16:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655014562; bh=nJDO7/qBIBucVpix5fyRM3Rkiiq7vw3tMCV118r+sj4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ibS4L0UCjxNSfiKLJvGRcjtTuXWAZ8IoSuX7hxFJnKoww4a4fLtSCYZUvWU19DF7K
-         QM5IiwpB+CA/OSiqklIYgDvjMzS8se2hu8F/cP1dx0SIhnmynJw0qRxVdQgG2wNwKI
-         rmDMSM7yzRjAF2dmKA1sGMsL4MOpkmVOHQvsSq6h6040E2r+dfRpVQD11gn0rmXPUM
-         rFOTM7VLMw/3n2HCS0GXEGjI3RQ0aXKq7XOrtyTEaPKhvmfzoKsvRW5ZlxyIjJzLqm
-         /KIf30X7o2MzLG1NP/eSLVMckgmRlzbcjgajYqbDpguYj/vV3LO1q1VilvwVjX7aNq
-         aG5aAaWz11EjQ==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id EC1C1C009;
-        Sun, 12 Jun 2022 08:15:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655014552; bh=nJDO7/qBIBucVpix5fyRM3Rkiiq7vw3tMCV118r+sj4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X+28B/h9frr/iIwfyqbvVHz1QbaByJJkfl4R/GL/wcIgt7ckMZS/CFhz7YH4vq7Ss
-         PsnGZi0JRVrsFJWWaK29bzbMODfEn6X84u29d//YYsURAbuqJlZUqD+UOeUtxhHbf8
-         oPjjlr62vnxAHHZpO5K0nYEao2ielnw9fQW1r7reRAOmr7lx3GmniWvMsA4YcMuLgv
-         JGChOQBJpesVbnDmv8Hk2GLpkH8uoG76W6mDjD2FyNds+u1J4VP6tikcIx0bLPuTsT
-         Q0NbGWSoBLbXqBIahpQijUAR3Im/fXUiK5niuM6xwygYbTM9dtkwRF4WhqOSRhn+gf
-         10we1yzNOll1Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id be16708e;
-        Sun, 12 Jun 2022 06:15:45 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Dominique Martinet <asmadeus@codewreck.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf parse: Allow names to start with digits
-Date:   Sun, 12 Jun 2022 15:15:08 +0900
-Message-Id: <20220612061508.1449636-1-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.35.1
+        Sun, 12 Jun 2022 02:41:00 -0400
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D795C4BB90
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 23:40:58 -0700 (PDT)
+Received: by mail-pj1-f66.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so1336451pjl.5
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 23:40:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZGrF/sve7KFTJf3GJ9QVEDMMBvkar/b8XuDD6PWfLjk=;
+        b=qJKDzgnW5w6YmHO2M5rSgf4FwprKlutZX1LGQBV/A+MnzFYw9M8FhoUBs/M9D+I9bR
+         ocNWzfgyeuP/h3x8K8Pm+901j+s+m7JRAjjte9t3/Zo37xLiK8DFZv3VRg9qb3cqnOFj
+         TGghmYGqKmssWYIJVAE5mlyN/MaDTZc2IJC5+5kkbe2kCShNlHOJuwypyezfYgo1prXg
+         AiBBkcUG8PePPUvucIRmCIpgP9ph1iHcfzhb0I6GA50IhiMNVV1ngv8lvErAutuWjr39
+         iXz+t/OKnUF+IcU5oyaapGVwbb8LMv+S0qWJJBc/nWA8D8IFjJ3Jf+90FFmbs92uGmQ2
+         q8GQ==
+X-Gm-Message-State: AOAM531Hk5sukHBoJ4GJQtK/WNlswJKlsob7nqM5Qm9CPHjN876MFmjd
+        PK8WpDUuqvNoevmoESE+h9uXzLYErQ==
+X-Google-Smtp-Source: ABdhPJwFLlxOzFRm3zYN+pfdVaQQ14/wpp5IKt/Iov6tYmXs3jpaO5Ajn67yFNmbIkCe3meGlR22Rg==
+X-Received: by 2002:a17:902:d2c1:b0:165:d4cd:e118 with SMTP id n1-20020a170902d2c100b00165d4cde118mr54076180plc.4.1655016058351;
+        Sat, 11 Jun 2022 23:40:58 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a000a0a00b0051c157f83e3sm2691628pfh.96.2022.06.11.23.40.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 23:40:58 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     Ramesh.Errabolu@amd.com, alexander.deucher@amd.com,
+        Felix.Kuehling@amd.com
+Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        sunliming@kylinos.cn, kelulanainsley@gmail.com,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/amdkfd: Add missing #if defined(CONFIG_HSA_AMD_P2P)
+Date:   Sun, 12 Jun 2022 14:40:50 +0800
+Message-Id: <20220612064050.1175083-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tracepoints can start with digits, although we don't have many of these:
+The variable 'i' in function kfd_dev_create_p2p_links is only used in
+codes that gaurded by '#if defined(CONFIG_HSA_AMD_P2P)' check. So adding
+CONFIG_HSA_AMD_P2P #ifdef check around variable 'i' too.
 
-$ rg -g '*.h' '\bTRACE_EVENT\([0-9]'
-net/mac802154/trace.h
-53:TRACE_EVENT(802154_drv_return_int,
-...
+Fixes the following w1 warning:
 
-net/ieee802154/trace.h
-66:TRACE_EVENT(802154_rdev_add_virtual_intf,
-...
+drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:1542:11: warning: variable 'i' set but not used [-Wunused-but-set-variable]
 
-include/trace/events/9p.h
-124:TRACE_EVENT(9p_client_req,
-...
-
-Just allow names to start with digits too so e.g. perf probe -e '9p:*'
-works
-
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
 ---
- tools/perf/util/parse-events.l | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_topology.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
-index 5b6e4b5249cf..4133d6950d29 100644
---- a/tools/perf/util/parse-events.l
-+++ b/tools/perf/util/parse-events.l
-@@ -211,7 +211,7 @@ bpf_source	[^,{}]+\.c[a-zA-Z0-9._]*
- num_dec		[0-9]+
- num_hex		0x[a-fA-F0-9]+
- num_raw_hex	[a-fA-F0-9]+
--name		[a-zA-Z_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
-+name		[a-zA-Z0-9_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
- name_tag	[\'][a-zA-Z_*?\[\]][a-zA-Z0-9_*?\-,\.\[\]:=]*[\']
- name_minus	[a-zA-Z_*?][a-zA-Z0-9\-_*?.:]*
- drv_cfg_term	[a-zA-Z0-9_\.]+(=[a-zA-Z0-9_*?\.:]+)?
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_topology.c b/drivers/gpu/drm/amd/amdkfd/kfd_topology.c
+index 304322ac39e6..4bfce71f7fa9 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_topology.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_topology.c
+@@ -1539,7 +1539,10 @@ static int kfd_dev_create_p2p_links(void)
+ {
+ 	struct kfd_topology_device *dev;
+ 	struct kfd_topology_device *new_dev;
+-	uint32_t i, k;
++	uint32_t k;
++#if defined(CONFIG_HSA_AMD_P2P)
++	uint32_t i = 0;
++#endif
+ 	int ret = 0;
+ 
+ 	k = 0;
+@@ -1553,7 +1556,6 @@ static int kfd_dev_create_p2p_links(void)
+ 		return 0;
+ 
+ 	k--;
+-	i = 0;
+ 
+ 	/* create in-direct links */
+ 	ret = kfd_create_indirect_link_prop(new_dev, k);
 -- 
-2.36.1
+2.25.1
 

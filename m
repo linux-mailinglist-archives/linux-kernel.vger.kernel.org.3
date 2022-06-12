@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E3D54796C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE80547960
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 10:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbiFLJBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 05:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S235138AbiFLI6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 04:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235287AbiFLJA7 (ORCPT
+        with ESMTP id S235287AbiFLI6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 05:00:59 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5864E51E6E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:55 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m125-20020a1ca383000000b0039c63fe5f64so1625334wme.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=oZewD39xI/d3cA2lrYzrzbuReF/vvOH6OKqzVd89Vi0=;
-        b=I7WHh5fScRUlNuotdc665LoLnMNVifFMFBlEzjUFcKf9gROoXJ845rIiW1Qk+PTxiR
-         PtbBonb26DI70Kx2ARKOD7D1WUmUHI/gQp3TkURjBlfMVEc24tG55CXut6lZKgTXhGkZ
-         xV/ndMmtPSnsvL4UM8x/2vxsNs0Yfbu6sQJzs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=oZewD39xI/d3cA2lrYzrzbuReF/vvOH6OKqzVd89Vi0=;
-        b=DupWr0NLqD8BH9KR+QT53BFnfnPHe+KhIFS0pBopY/2ushpqa5cH0i38P2u4mbQ3K/
-         wzqR2ZdGhyM3Np9b5lv/wBnB5GEXLE7gu3+nejX318pBNmhCGouI2k1B1f52sViHVEX1
-         EVuhz85zPylbHoBS0ceP265pREAelPCq3h2goJiDH2rjpJySVo+yymVz1PnSZNT2sUue
-         mp98ojtSU0sQ7xY14b0fOYSgxlmVy9TdEMSgR0FNajiAjfMt6NioXrec1jUBDa+BCQ8X
-         shGOLy/8TKZ8ycyye9lLDI1xyw5dZR9002YXyA87ZHWiKNgsPbO7xeOjbboXVXIMJ+5Q
-         QjvA==
-X-Gm-Message-State: AOAM5324rov4YJanotiBFr6YEZBvQ08uNhQREX7qMwzzMebEGY3u+PaU
-        hHUMfxytml3ZKcfQ2ayYMDPmaQ==
-X-Google-Smtp-Source: ABdhPJyRc2I34omfc6W/l7b3YpL+JA18yp8NmiSPvr3XlLpY4Wwvv7Z0CdG4SFGFbc7ui5FdZrlNTQ==
-X-Received: by 2002:a05:600c:1ca0:b0:39c:4dbd:e9ed with SMTP id k32-20020a05600c1ca000b0039c4dbde9edmr8452040wms.40.1655024453936;
-        Sun, 12 Jun 2022 02:00:53 -0700 (PDT)
-Received: from localhost.localdomain ([178.130.153.185])
-        by smtp.gmail.com with ESMTPSA id d34-20020a05600c4c2200b0039c5b4ab1b0sm4798603wmp.48.2022.06.12.02.00.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 Jun 2022 02:00:53 -0700 (PDT)
-From:   Joe Damato <jdamato@fastly.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        Sun, 12 Jun 2022 04:58:42 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108803FBCD
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 01:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=8949V5CkqyzJmj/F28orMCphXAq0WN6FhR9kVZMtcgQ=;
+        t=1655024321; x=1656233921; b=nhagWru/09LdxRa962Zudz0HTQ5L+kd3ndJwl/+yVFnD6C1
+        1HqMioOOIU7Cfa6EeFZH6+Rv3MmVykO5Til+bFxDxOtlb917RtqoroOyOYtCtDZqw7nwN42DxR1tk
+        Pjw8W0ud84oTK6wjSO/AaAXWDYQWcwSsSsC0tVTnqziLRRE2AfkcTaDrNghqGwAjecu5EzFF5nvPP
+        vEnoFKs5msOW7TmyWw5T6cgnV5LOcQCa//zce0AZW9Fp06lxOXnn+gR11kvuTvODHJE1tS3HVkCNQ
+        h7a/B9n845fYPVNTVuBqSaGQg030La0fjng2wI5wnU6a2u+LcN68sX5kCS3VHEuQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1o0JQL-003NzK-1O;
+        Sun, 12 Jun 2022 10:58:21 +0200
+Message-ID: <726db8fdf6c7fc271a825badbf1b07a5eebe6d36.camel@sipsolutions.net>
+Subject: Re: [PATCH] um: virt-pci: set device ready in probe()
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        kernel@axis.com, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>, linux-um@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Joe Damato <jdamato@fastly.com>
-Subject: [RFC,net-next v2 8/8] net: tcp: Support MSG_NTCOPY
-Date:   Sun, 12 Jun 2022 01:57:57 -0700
-Message-Id: <1655024280-23827-9-git-send-email-jdamato@fastly.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
-References: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
+Date:   Sun, 12 Jun 2022 10:58:20 +0200
+In-Reply-To: <20220610203029-mutt-send-email-mst@kernel.org>
+References: <20220610151203.3492541-1-vincent.whitchurch@axis.com>
+         <20220610203029-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support non-temporal copies in the TCP sendmsg path. Previously, the only
-way to enable non-temporal copies was to enable them for the entire
-interface (via ethtool).
+On Fri, 2022-06-10 at 20:34 -0400, Michael S. Tsirkin wrote:
+>=20
+> Also fixes this commit:
+>=20
+> commit 68f5d3f3b6543266b29e047cfaf9842333019b4c
+> Author: Johannes Berg <johannes.berg@intel.com>
+> Date:   Fri Mar 5 13:19:58 2021 +0100
+>=20
+>     um: add PCI over virtio emulation driver
 
-This change allows user programs to request non-temporal copies for
-specific sendmsg calls.
+Hm, why? It worked before the harden change.
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
----
- include/net/sock.h | 2 +-
- net/ipv4/tcp.c     | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+> BTW Johannes I think you need to spec this device and get
+> an ID - what's the plan for that? Current hack of punting
+> this to userspace isn't really any good long term.
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 0063e84..b666ecd 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2200,7 +2200,7 @@ static inline int skb_do_copy_data_nocache(struct sock *sk, struct sk_buff *skb,
- 		if (!csum_and_copy_from_iter_full(to, copy, &csum, from))
- 			return -EFAULT;
- 		skb->csum = csum_block_add(skb->csum, csum, offset);
--	} else if (sk->sk_route_caps & NETIF_F_NOCACHE_COPY) {
-+	} else if (sk->sk_route_caps & NETIF_F_NOCACHE_COPY || iov_iter_copy_is_nt(from)) {
- 		if (!copy_from_iter_full_nocache(to, copy, from))
- 			return -EFAULT;
- 	} else if (!copy_from_iter_full(to, copy, from))
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 14ebb4e..5b36e00 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1201,6 +1201,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 
- 	flags = msg->msg_flags;
- 
-+	msg_set_iter_copy_type(msg);
-+
- 	if (flags & MSG_ZEROCOPY && size && sock_flag(sk, SOCK_ZEROCOPY)) {
- 		skb = tcp_write_queue_tail(sk);
- 		uarg = msg_zerocopy_realloc(sk, size, skb_zcopy(skb));
--- 
-2.7.4
+Yeah, agree, it dropped off my radar (and the process is a bit
+cumbersome IMHO).
 
+But I'm not quite sure what you mean wrt. "punting to userspace", here
+in the virt-pci code I'm punting to the Kconfig :-)
+
+Did you just mix that up, or was there some additional userspace thing
+you're thinking of?
+
+The only userspace thing I can think of it is in virtio_uml where you
+have the ID on the command-line, but that's because it implements the
+virtio device bus over vhost-user which doesn't have ID discoverability
+in the protocol. That could also be fixed I guess, but it's a bit of a
+chicken & egg problem, if you don't have the ID and discovering it were
+not supported, you'd end up with an unusable device unless you specified
+the ID, in which case you don't need to discover it...
+
+johannes

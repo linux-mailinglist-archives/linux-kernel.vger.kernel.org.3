@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0F15479CC
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C2F5479D0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236139AbiFLKjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 06:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
+        id S236170AbiFLKoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 06:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236122AbiFLKjw (ORCPT
+        with ESMTP id S236009AbiFLKoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 06:39:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C147B6543D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 03:39:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o0L0J-000760-Co; Sun, 12 Jun 2022 12:39:35 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 84B4D932DE;
-        Sun, 12 Jun 2022 10:39:32 +0000 (UTC)
-Date:   Sun, 12 Jun 2022 12:39:31 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 06/13] can: slcan: allow to send commands to the
- adapter
-Message-ID: <20220612103931.3dugmcyn23udmve7@pengutronix.de>
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
- <20220607094752.1029295-7-dario.binacchi@amarulasolutions.com>
- <20220609071636.6tbspftu3yclip55@pengutronix.de>
- <CABGWkvp1=DF1uok4ZoCRt1EqpdrgdcytG==Ex6zuWgT5mrvdwQ@mail.gmail.com>
+        Sun, 12 Jun 2022 06:44:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8373E625B;
+        Sun, 12 Jun 2022 03:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655030648; x=1686566648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oY4m7/TA+RKNO4Qsg0G2e91Q7hQxCUmosIWjYQ/l6PU=;
+  b=PCwsomosCvftuoIGVb6uQs9Se/vjFsVMdYyO/sqQB3K/oLNkjU3EVvO9
+   ixOIJAcAzwGMsWHTs/2V5Wf94RiIHb0LVO6P4M9sAhBs5PvhsUhkLiAZ3
+   IdecYktAm3F0Hckr5X1Mlee2WDkFGf6aTkBw8LolLAwOjv6WDber+uqVX
+   efCiNnkag+XUrlIo08tZ1yrRtk5w8m+iT5lnKCLrafu4pjBREv1l5FIkF
+   7sXizNIfnkFW4D5Y/cniWTWajtb2YMIW1Y91fFAdD7wYtn+y5sON4SSv+
+   X+6/nTINZI3EDPnLtKo1W06IK1i3GkMxOhtv3eTJat4nLsL0/zkZQ6jj9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="279099711"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="279099711"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 03:44:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="611340376"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2022 03:44:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0L4e-000Jqt-Dd;
+        Sun, 12 Jun 2022 10:44:04 +0000
+Date:   Sun, 12 Jun 2022 18:43:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
+Cc:     kbuild-all@lists.01.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, mturquette@baylibre.com, linux@armlinux.org.uk,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Qin Jian <qinjian@cqplus1.com>
+Subject: Re: [PATCH v17 05/10] clk: Add Sunplus SP7021 clock driver
+Message-ID: <202206121806.C2ECo2lB-lkp@intel.com>
+References: <65ef2bf7fc393eb373b966fe839852bcd1bacad8.1654565776.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rklhevn5ngclcgjp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABGWkvp1=DF1uok4ZoCRt1EqpdrgdcytG==Ex6zuWgT5mrvdwQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <65ef2bf7fc393eb373b966fe839852bcd1bacad8.1654565776.git.qinjian@cqplus1.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,83 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Qin,
 
---rklhevn5ngclcgjp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Perhaps something to improve:
 
-On 11.06.2022 23:43:47, Dario Binacchi wrote:
-> Hi Marc,
->=20
-> On Thu, Jun 9, 2022 at 9:16 AM Marc Kleine-Budde <mkl@pengutronix.de> wro=
-te:
-> >
-> > On 07.06.2022 11:47:45, Dario Binacchi wrote:
-> > > This is a preparation patch for the upcoming support to change the
-> > > bitrate via ip tool, reset the adapter error states via the ethtool A=
-PI
-> > > and, more generally, send commands to the adapter.
-> > >
-> > > Since some commands (e. g. setting the bitrate) will be sent before
-> > > calling the open_candev(), the netif_running() will return false and =
-so
-> > > a new flag bit (i. e. SLF_XCMD) for serial transmission has to be add=
-ed.
-> > >
-> > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> >
-> > I think this patch can be dropped, let me explain:
-> >
-> > You don't have to implement the do_set_bittiming callback. It's
-> > perfectly OK to set the bitrate during the ndo_open callback after
-> > open_candev().
->=20
-> I developed what you suggested (i. e. remove the SLF_XCMD bit and set the
-> bitrate, as well as send the "F\r" and "O\r" commands, after calling
-> the open_candev(),
+[auto build test WARNING on pza/reset/next]
+[also build test WARNING on robh/for-next clk/clk-next tip/irq/core linus/master v5.19-rc1 next-20220610]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Note:
-Max Staudt noticed that you need a do_set_bittiming() callback if you
-have only fixed bitrates. I've create a patch that you can have fixed
-bit rate only an no do_set_bittiming() callback.
+url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220607-100746
+base:   https://git.pengutronix.de/git/pza/linux reset/next
+config: microblaze-randconfig-c024-20220612 (https://download.01.org/0day-ci/archive/20220612/202206121806.C2ECo2lB-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.3.0
 
-| https://lore.kernel.org/all/20220611144248.3924903-1-mkl@pengutronix.de/
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Or use the can-next/master branch as your base.
 
-> but now I can't send the close command ("C\r") during the ndo_stop() since
-> netif_running() returns false. The CAN framework clears netif_running() b=
-efore
-> calling the ndo_stop(). IMHO the SLF_XCMD bit then becomes necessary to
-> transmit the commands to the adapter from the ndo_open() and
-> ndo_stop() routines.
-> Any suggestions ?
+cocci warnings: (new ones prefixed by >>)
+>> drivers/clk/clk-sp7021.c:584:2-7: WARNING: invalid free of devm_ allocated data
 
-I see. Keep the setting of the bit rate in the ndo_open(), add the
-SLF_XCMD so that you can send messages in ndo_close().
+vim +584 drivers/clk/clk-sp7021.c
 
-Marc
+   550	
+   551	static struct clk_hw *sp_pll_register(struct device *dev, const char *name,
+   552					      const struct clk_parent_data *parent_data,
+   553					      void __iomem *reg, int pd_bit, int bp_bit,
+   554					      unsigned long brate, int shift, int width,
+   555					      unsigned long flags)
+   556	{
+   557		struct sp_pll *pll;
+   558		struct clk_hw *hw;
+   559		struct clk_init_data initd = {
+   560			.name = name,
+   561			.parent_data = parent_data,
+   562			.ops = (bp_bit >= 0) ? &sp_pll_ops : &sp_pll_sub_ops,
+   563			.num_parents = 1,
+   564			.flags = flags,
+   565		};
+   566		int ret;
+   567	
+   568		pll = devm_kzalloc(dev, sizeof(*pll), GFP_KERNEL);
+   569		if (!pll)
+   570			return ERR_PTR(-ENOMEM);
+   571	
+   572		pll->hw.init = &initd;
+   573		pll->reg = reg;
+   574		pll->pd_bit = pd_bit;
+   575		pll->bp_bit = bp_bit;
+   576		pll->brate = brate;
+   577		pll->div_shift = shift;
+   578		pll->div_width = width;
+   579		spin_lock_init(&pll->lock);
+   580	
+   581		hw = &pll->hw;
+   582		ret = devm_clk_hw_register(dev, hw);
+   583		if (ret) {
+ > 584			kfree(pll);
+   585			return ERR_PTR(ret);
+   586		}
+   587	
+   588		return hw;
+   589	}
+   590	
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---rklhevn5ngclcgjp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKlwmEACgkQrX5LkNig
-013Eowf+KfCAs9Z0OKq+LFT5uWbL1qh9/1/auUskU/+EdODZkaDrh3bVZWFxQ0ZV
-6UuRs7QhWOdxz2kJ7Q87dKDtEiRIqhZPkeiByyd5mR3WbluTICxOoMUfjEE50p2T
-QQDTh+cfd5dSEy88SMxTt9aBKLasx90rkrSC30sPcdCvVKIXjWuyLbI2XdIKqygl
-Vga1xqQXZAKtAJNeMcNhdlfiXtYKp8/fjhhX0qdOxcuIomqrD5mv7wplk4Omq4IU
-F5p+PTHMaI26hvMQQtqhjM+5T/TCHfGCkYuw3X8jwRZV++mxNOd439YcCyLIw3Im
-+gO8YIp3CoKam9k2szJKMC/z6+bZMw==
-=xvcS
------END PGP SIGNATURE-----
-
---rklhevn5ngclcgjp--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

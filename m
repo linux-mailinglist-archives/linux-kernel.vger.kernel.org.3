@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5478547870
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 06:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6E0547871
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 06:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbiFLEDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 00:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S233562AbiFLEGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 00:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFLEDN (ORCPT
+        with ESMTP id S229528AbiFLEGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 00:03:13 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18123982B;
-        Sat, 11 Jun 2022 21:03:12 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id s12so5128616ejx.3;
-        Sat, 11 Jun 2022 21:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pbFRE+VCdz/Mvat4l03Ru/M9ljAjH7/8wgRe5uPLKmA=;
-        b=JylIYtTShS/QVxxbVK6KZgGdN2BZID9npboqy/8nxih8wIBzeXClsDxln2BxALdDKo
-         s/rdJm9lAJOmYNN48gAD4YprUguICzlGaD2n5L+7N8UDtwFkb10xOgcJROs17fds/p0C
-         djKJtLrvwes1nNTxMct5KgVOoJHnvlGqfRffcNGB3xI2tq12ydBIJQHokfeodlOA/OOS
-         dYL3kFDEUOlRW3hG09rOFTU1ut9Ig2Vy409NhFVaCYhKZGXtR2Br5lyBBBhkA4Dy49q6
-         TzI1y3h5cFKs45EFz7cIirMCXSqmb9Tt9rLTkz+gaZA4p2T4AjtpmqQTeePPu2QxhL0S
-         e16Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pbFRE+VCdz/Mvat4l03Ru/M9ljAjH7/8wgRe5uPLKmA=;
-        b=flLrjLdRaiAQgM3Mc9ju5vCDgn6aR2ZkPPYoiOmu7XFMjopWbE0uJeUrz1PMvDlb8g
-         kMoFkeGd7lcVPHcTvEc/Mh4aM6yX6NT77LnnIqxFc72U5eIjzADWC/plMcK0/zCSZBIy
-         AgYuhu/7aSW7JmWMwEF7oiQw3Mdk7dcn7Nib6HmZbTK34ilvApyuP0yOBMMhRe3KgjRi
-         MB4IL747iIBhD1CynATIvcn4ubSRuUkU429OchsWfZB6QqSrfqo6kORBtSwtwq0AK4Jv
-         /qInlFtv27HGeYKMplioiBTBRrk1dcu23WDNRXlU/SeT8B5xfSwUbSrnXDRDTwSky+CI
-         bAcw==
-X-Gm-Message-State: AOAM530+3cWZt40z033rjF/9ePiCEjv/GH38iNPjWNqxLlIjyxPP9s/X
-        EHAPVB1EuUlWgF76qMDi0EXWV3uHgieuyzM2vLU=
-X-Google-Smtp-Source: ABdhPJy9n/qDVUSTdlF1vXGTql2S/bTRtKA5PHOMP6KIlAgDuGmiLNoP/0JDATNBnLXZHa3pJmlXULj0phEuLoDftkE=
-X-Received: by 2002:a17:907:1c19:b0:711:e5f9:2ec7 with SMTP id
- nc25-20020a1709071c1900b00711e5f92ec7mr23267565ejc.518.1655006591088; Sat, 11
- Jun 2022 21:03:11 -0700 (PDT)
+        Sun, 12 Jun 2022 00:06:43 -0400
+Received: from challenge-bot.com (challenge-bot.com [IPv6:2602:fffa:fff:108a:0:16:3e15:92b8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE113C704
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 21:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=challenge-bot.com; s=20180430; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9SNUBEiEZG/TlIslfoXSStsV4edMrmyoXOnBtvxh9ng=; b=UbKCQmj5Yd9IiEJfnbUJ48XnSS
+        +9GL6dTRsHKFNDRjGvUebLzxRPEjfqfOG+HajXYXb4T3p7yri7T+Na4OFSj89wY12IPeYphgmudIp
+        Mq0BTNt+iXzw6UVEregegw8SZHYL+fWzF6rTadIsdT2H4Dp6MNmkqx7S4svbLFc1syKE=;
+Received: from ozzloy by challenge-bot.com with local (Exim 4.92)
+        (envelope-from <ozzloy@challenge-bot.com>)
+        id 1o0Es2-0001iX-Of; Sat, 11 Jun 2022 21:06:38 -0700
+From:   daniel watson <ozzloy@challenge-bot.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Daniel Watson <ozzloy@challenge-bot.com>
+Subject: [PATCH] staging: r8188eu: put spaces after commas
+Date:   Sat, 11 Jun 2022 21:06:28 -0700
+Message-Id: <20220612040628.6433-1-ozzloy@challenge-bot.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220529180428.2577832-1-robdclark@gmail.com>
-In-Reply-To: <20220529180428.2577832-1-robdclark@gmail.com>
-From:   Chia-I Wu <olvaffe@gmail.com>
-Date:   Sat, 11 Jun 2022 21:02:59 -0700
-Message-ID: <CAPaKu7QDoZiPRDAptk7+cfv3Da+oXU7f0f4m6LQiwfzd=x=TuA@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/msm/adreno: Allow larger address space size
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Connor Abbott <cwabbott0@gmail.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Emma Anholt <emma@anholt.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 11:04 AM Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> The restriction to 4G was strictly to work around 64b math bug in some
-> versions of SQE firmware.  This appears to be fixed in a650+ SQE fw, so
-> allow a larger address space size on these devices.
->
-> Also, add a modparam override for debugging and igt.
->
-> v2: Send the right version of the patch (ie. the one that actually
->     compiles)
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
+From: Daniel Watson <ozzloy@challenge-bot.com>
+
+conform to kernel style by putting spaces after commas
+this was found by checkpatch
+
+Signed-off-by: Daniel Watson <ozzloy@challenge-bot.com>
+---
+ drivers/staging/r8188eu/include/rtw_iol.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/include/rtw_iol.h b/drivers/staging/r8188eu/include/rtw_iol.h
+index fb88ebc1dabb1..b39ecfb75ade0 100644
+--- a/drivers/staging/r8188eu/include/rtw_iol.h
++++ b/drivers/staging/r8188eu/include/rtw_iol.h
+@@ -50,13 +50,13 @@ int _rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr,
+ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path,
+ 			    u16 addr, u32 value, u32 mask);
+ #define rtw_IOL_append_WB_cmd(xmit_frame, addr, value, mask)		\
+-	_rtw_IOL_append_WB_cmd((xmit_frame), (addr), (value) ,(mask))
++	_rtw_IOL_append_WB_cmd((xmit_frame), (addr), (value), (mask))
+ #define rtw_IOL_append_WW_cmd(xmit_frame, addr, value, mask)		\
+-	_rtw_IOL_append_WW_cmd((xmit_frame), (addr), (value),(mask))
++	_rtw_IOL_append_WW_cmd((xmit_frame), (addr), (value), (mask))
+ #define rtw_IOL_append_WD_cmd(xmit_frame, addr, value, mask)		\
+ 	_rtw_IOL_append_WD_cmd((xmit_frame), (addr), (value), (mask))
+ #define rtw_IOL_append_WRF_cmd(xmit_frame, rf_path, addr, value, mask)	\
+-	_rtw_IOL_append_WRF_cmd((xmit_frame),(rf_path), (addr), (value), (mask))
++	_rtw_IOL_append_WRF_cmd((xmit_frame), (rf_path), (addr), (value), (mask))
+ 
+ u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame);
+ 
+-- 
+2.34.1
+

@@ -2,117 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB75C547AE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 17:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E374547AE8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 17:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234737AbiFLPyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 11:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S229726AbiFLP5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 11:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237876AbiFLPyu (ORCPT
+        with ESMTP id S230171AbiFLP5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 11:54:50 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4933818D;
-        Sun, 12 Jun 2022 08:54:45 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id o7so6799573eja.1;
-        Sun, 12 Jun 2022 08:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BkOhkCBf8L6W0qXjfkueWj/eTLwif/nqIH2509i56Dc=;
-        b=DCZIlrl3no93ZcB5AK79UcPT8IC1ngePkvS9mA5G5ZTiUnCY1KvfiXx13TlQhW6lyB
-         Z7CYatD000q9XAqjS/rL5b/vUg+6RgUeKpWNtzACWaOnwVl3CSMuh9s4AvVabho6g6OG
-         nQV1MoZZX2ssufbRyykH4nI1Pat/KUUYVpGVDWKquEkdDF12bQuw/62OjOClQsfS3SYq
-         Cw//QztzF9Fx8HeYB3pz7kOxce6vaBGPoKWyCLL/aKFJOcO9B8tXPyO3BCNvqXzc1LC1
-         qPs6ztNL8KvVnjN/sS4qQY0kxwKk1hxmGIOgq5cdMRX1fmGCxNUHkY7t+j36pKzJhqmN
-         answ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BkOhkCBf8L6W0qXjfkueWj/eTLwif/nqIH2509i56Dc=;
-        b=waJFcnm6/7aeE6/CCgg01e32QWGztogxB9hiUHq+zp4+/jQIlqu6G0ybEn7eahMKST
-         gYYf7gLeN7ciPC1i7Io+kJvq9LOcylkcmR/l4BzrmbgUNaaRgLDVAt6uisdBZSzx1XY/
-         DLDPOM9fm6ruQ9BjzP925/EHRDYNrzpgi+yrSYgr7swKW9gPpmWHeL6L1WFQt3eH+pdS
-         Ws/jg257MamFM3xuC+SE8avyCFqmVwQZQ0G9xTTL6ahD6RkdOR6HXmiJQSg6UodaAKbM
-         iZiSXU/RA4S839cAPZOCoWCY9zCwFwoEDQoGFn7dkTZBNFtmErzsQWUXlWBDDpMgf+NG
-         F2Ug==
-X-Gm-Message-State: AOAM531OHuMExUz9H4CGJCwYtKYCDGw6TDpuPPPEceVq8ANbYbVgOTz6
-        iJgsn982yBAlDW+HOwivyRQ=
-X-Google-Smtp-Source: ABdhPJzo+GfLnE3D16gIoyA3E5dYq4u+nH4Sw5omIc0Bob7QpLXW/EHxy2NWsFEZyk6fMNkZxn4yhQ==
-X-Received: by 2002:a17:906:4d50:b0:70d:afd4:1e63 with SMTP id b16-20020a1709064d5000b0070dafd41e63mr46025241ejv.618.1655049283717;
-        Sun, 12 Jun 2022 08:54:43 -0700 (PDT)
-Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id o1-20020a1709064f8100b006f3ef214de7sm2609459eju.77.2022.06.12.08.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 08:54:43 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] arm64: dts: rockchip: Add Hantro encoder node to rk356x
-Date:   Sun, 12 Jun 2022 17:53:46 +0200
-Message-Id: <20220612155346.16288-4-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220612155346.16288-1-frattaroli.nicolas@gmail.com>
-References: <20220612155346.16288-1-frattaroli.nicolas@gmail.com>
+        Sun, 12 Jun 2022 11:57:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B0C4249C
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 08:57:02 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o0PxR-0001Jc-9s; Sun, 12 Jun 2022 17:56:57 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C355B933A8;
+        Sun, 12 Jun 2022 15:56:54 +0000 (UTC)
+Date:   Sun, 12 Jun 2022 17:56:54 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <vincent.mailhol@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: Re: [PATCH v8] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220612155654.ij53kpw7cscj53nk@pengutronix.de>
+References: <20220612152601.142314-1-max@enpas.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u6qlpetz6nkzhgo7"
+Content-Disposition: inline
+In-Reply-To: <20220612152601.142314-1-max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RK3566 and RK3568 come with a dedicated Hantro instance solely for
-encoding. This patch adds a node for this to the device tree, along with
-a node for its MMU.
 
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+--u6qlpetz6nkzhgo7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index cc1c5a65c5e5..73a1403192e9 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -576,6 +576,26 @@ gpu: gpu@fde60000 {
- 		status = "disabled";
- 	};
- 
-+	vepu: video-codec@fdee0000 {
-+		compatible = "rockchip,rk3568-vepu";
-+		reg = <0x0 0xfdee0000 0x0 0x800>;
-+		interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
-+		clock-names = "aclk", "hclk";
-+		iommus = <&vepu_mmu>;
-+		power-domains = <&power RK3568_PD_RGA>;
-+	};
-+
-+	vepu_mmu: iommu@fdee0800 {
-+		compatible = "rockchip,rk3568-iommu";
-+		reg = <0x0 0xfdee0800 0x0 0x40>;
-+		interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
-+		clock-names = "aclk", "iface";
-+		power-domains = <&power RK3568_PD_RGA>;
-+		#iommu-cells = <0>;
-+	};
-+
- 	sdmmc2: mmc@fe000000 {
- 		compatible = "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc";
- 		reg = <0x0 0xfe000000 0x0 0x4000>;
--- 
-2.36.1
+On 12.06.2022 17:26:01, Max Staudt wrote:
+> This is the can327 driver. It does a surprisingly good job at turning
+> ELM327 based OBD-II interfaces into cheap CAN interfaces for simple
+> homebrew projects.
+>=20
+> Please see the included documentation for details and limitations:
+> Documentation/networking/device_drivers/can/can327.rst
+>=20
+> Cc: linux-can <linux-can@vger.kernel.org>
+> Signed-off-by: Max Staudt <max@enpas.org>
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+> After a through review (thanks to Vincent Mailhol), this is hopefully
+> the last version of the can327 upstreaming patch.
+>=20
+> Thanks to everyone involved!
 
+\o/
+
+> diff --git a/include/uapi/linux/tty.h b/include/uapi/linux/tty.h
+> index 9d0f06bfbac3..68aeae2addec 100644
+> --- a/include/uapi/linux/tty.h
+> +++ b/include/uapi/linux/tty.h
+> @@ -38,8 +38,9 @@
+>  #define N_NULL		27	/* Null ldisc used for error handling */
+>  #define N_MCTP		28	/* MCTP-over-serial */
+>  #define N_DEVELOPMENT	29	/* Manual out-of-tree testing */
+> +#define N_CAN327	30	/* ELM327 based OBD-II interfaces */
+> =20
+>  /* Always the newest line discipline + 1 */
+> -#define NR_LDISCS	30
+> +#define NR_LDISCS	31
+> =20
+>  #endif /* _UAPI_LINUX_TTY_H */
+
+Greg, do you want the include/uapi/linux/tty.h changes in a separate
+patch and upstream it?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--u6qlpetz6nkzhgo7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKmDMMACgkQrX5LkNig
+012Nhgf/d0YMmHkDyx7CJmUOEBa12XbaZdC4RDWbnlswO0wEafxHLjSedwnSZTjR
+Vigoe2+XwN0RL6u4Fx1HtCGri4uoKMlpdYYNzeRmwvCMR+RdxhYLyPGSTgsfPGvX
+V82lCaHFsdCCrBr0T72Da+ttD6LHU/QKINudFeyakXNDPhzJ1gaDPW7afD2ut8TX
+SqNx0waQZeloVZKmvH+Uu0UaEtdGMJXh2ZDwAUHThmfMkAAW90/KCPdxADCztQDM
++X3eEetjaeKZ/LfclTHGa8UHaZgPITp+/EkTBYpU5QiteZKXy/pDaTBLhT26el0q
+ydfm6Oe+TFNq5DxcZFhZ4+4MLLLE7Q==
+=tNBg
+-----END PGP SIGNATURE-----
+
+--u6qlpetz6nkzhgo7--

@@ -2,125 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFD9547C76
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 23:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364A0547C7B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 23:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbiFLV2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 17:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        id S236430AbiFLVco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 17:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236157AbiFLV2O (ORCPT
+        with ESMTP id S236104AbiFLVcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 17:28:14 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540D324F02
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 14:28:13 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7E26F825;
-        Sun, 12 Jun 2022 23:28:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655069291;
-        bh=wycngWnNii8KVlPbxJ+kxwurGQwoP5WgGiStwYu1zwQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JPTE4RYaFj2+s2MZYMDCiQrV+5tE9gzqS1HjsfrEzt4c33F2HJ3zLDVgIO7z+iLi8
-         XKiQ8e6PcM1lcxKFXXdfxqjrilyzIUYYDEt/ck/9S4tKhwtloLESFhccpOUWZVUqSE
-         l3vH+M/LLiEcLvrz2d0+FTy/cAkRsSirNY3Dn/gM=
-Date:   Mon, 13 Jun 2022 00:28:03 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Venkateshwar Rao Gannavarapu 
-        <venkateshwar.rao.gannavarapu@xilinx.com>, airlied@linux.ie,
-        vgannava@xilinx.com, dri-devel@lists.freedesktop.org,
+        Sun, 12 Jun 2022 17:32:39 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E49C646F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 14:32:35 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id w20so6083789lfa.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 14:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/ujlSvZDm+T5STICymqMakNld8PPtAbjGJ2W5jeIug0=;
+        b=kbmgGItjAlp3SzVQibq2g9TOmk2uX8rX0aE7LWdFf4pD5x4U1+EMfJVtjHtBCOFlWV
+         bF+WPyXewi5XxTk7PfGq+N4OXjG8a7BRIHKb4MQj777VSy5cGKUE0bnNl/Ry4cgA/vkF
+         Ui77ap/QIVXkni0Wr71bpIIrKY7GBWOq2WemuooTPjfarMpuWg9OBB5olsp2ucYIco9M
+         HRKj/H5IHhOsJLPnvjAn0zsIFskrMjBqgb9/lLNSOxonRhF2dr+u4HJSfiqeEkwN8biT
+         rA4nOZGQW7OgXeWEM25lF+9Tb1BTrIf+26NJ3TE2neyWhGdbDaqDF3yau+C6KVly6ZFK
+         KSqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/ujlSvZDm+T5STICymqMakNld8PPtAbjGJ2W5jeIug0=;
+        b=CICvpzPQMMCEvuQWc1rAaUX8KxMxLGcJulNhThTQ9GvWaQDJQUfNQ8x5q1UMyswZc5
+         hb0lGeI99ArwN2upuU6s6QmArAiBVUUo8Flb3UuGCF3igtGYKw5mzJ5TJ9g2ic8CUfRc
+         twDbc5OTXoxpqXElzUfqrN3tHLhmrMKQTP6+itphAZuH1Kt1Vb7n8HdnEpV9mfE0AvgF
+         shYFGiGF39ok7m5GZQlrsxi100QmJe9OGpyzIVXf3YJXba7mZsNW8xkKPGP+o0/fvKmW
+         iswgTQzjklwPA3t8DQCDiVovSis1oCSwV+MxyoG4hFerl/Z4yJWvUuApfPzqenIgIbWw
+         bfUg==
+X-Gm-Message-State: AOAM530dZwX00vU1NP5WFb0pO4DWKUR7cUJoEuMF+2YzVm4KKysBoH8J
+        HGFuOxs/FDhE+PzsyP/hxZlUGg==
+X-Google-Smtp-Source: ABdhPJw+E3i56vZWjOBGQ5brc5qFF0emikuDDV6rztL+Lu2qm6Za6v07zWTKVcC1NiVWqwnIca9/VA==
+X-Received: by 2002:a05:6512:131f:b0:47d:b9cd:1d1d with SMTP id x31-20020a056512131f00b0047db9cd1d1dmr6967123lfu.82.1655069553735;
+        Sun, 12 Jun 2022 14:32:33 -0700 (PDT)
+Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
+        by smtp.gmail.com with ESMTPSA id q28-20020ac2515c000000b00478df9f4d64sm729545lfd.227.2022.06.12.14.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 14:32:33 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 23:32:32 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [LINUX PATCH 2/2] drm: xlnx: dsi: driver for Xilinx DSI Tx
- subsystem
-Message-ID: <YqZaY8Jiprc69TQZ@pendragon.ideasonboard.com>
-References: <1652363593-45799-1-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
- <1652363593-45799-3-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
- <Yn47YsSH4fn/wjKN@ravnborg.org>
+Subject: Re: [PATCH v3] thermal: rcar_gen3_thermal: improve logging during
+ probe
+Message-ID: <YqZbcBmURzq/WRDP@oden.dyn.berto.se>
+References: <20220610200500.6727-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Yn47YsSH4fn/wjKN@ravnborg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220610200500.6727-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
+Hi Wolfram,
 
-One more comment.
+Thanks for your work.
 
-On Fri, May 13, 2022 at 01:05:06PM +0200, Sam Ravnborg wrote:
-> On Thu, May 12, 2022 at 07:23:13PM +0530, Venkateshwar Rao Gannavarapu wrote:
-> > The Xilinx MIPI DSI Tx Subsystem soft IP is used to display video
-> > data from AXI-4 stream interface.
-> > 
-> > It supports upto 4 lanes, optional register interface for the DPHY
-> > and multiple RGB color formats.
-> > This is a MIPI-DSI host driver and provides DSI bus for panels.
-> > This driver also helps to communicate with its panel using panel
-> > framework.
+On 2022-06-10 22:04:59 +0200, Wolfram Sang wrote:
+> When setting up a new board, a plain "Can't register thermal zone"
+> didn't help me much because the thermal zones in DT were all fine. I
+> just had a sensor entry too much in the parent TSC node. Reword the
+> failure/success messages to contain the sensor number to make it easier
+> to understand which sensor is affected. Example output now:
 > 
-> Thanks for submitting this driver. I have added a few comments in the
-> following that I hope you will find useful to improve the driver.
+> rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip points
+> rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip points
+> rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip points
+> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
 > 
-> > Signed-off-by: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
-> > ---
-> >  drivers/gpu/drm/xlnx/Kconfig    |  14 ++
-> >  drivers/gpu/drm/xlnx/Makefile   |   1 +
-> >  drivers/gpu/drm/xlnx/xlnx_dsi.c | 456 ++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 471 insertions(+)
-> >  create mode 100644 drivers/gpu/drm/xlnx/xlnx_dsi.c
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[snip]
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-> > diff --git a/drivers/gpu/drm/xlnx/xlnx_dsi.c b/drivers/gpu/drm/xlnx/xlnx_dsi.c
-> > new file mode 100644
-> > index 0000000..a5291f3
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/xlnx/xlnx_dsi.c
-
-[snip]
-
-> > +static const struct drm_bridge_funcs xlnx_dsi_bridge_funcs = {
-> > +	.mode_set	= xlnx_dsi_bridge_mode_set,
+> ---
 > 
-> From the documentation of the mode_set operation:
->  * This is deprecated, do not use!
->  * New drivers shall set their mode in the
->  * &drm_bridge_funcs.atomic_enable operation.
+> Change since v2:
 > 
-> Please adjust accordingly.
+> * don't add plural-'s' at runtime to allow for a greppable string
+>   (Thanks, Niklas!)
 > 
-> > +	.atomic_enable	= xlnx_dsi_bridge_enable,
-> > +	.atomic_disable	= xlnx_dsi_bridge_disable,
-> > +	.attach		= xlnx_dsi_bridge_attach,
-> > +	.detach		= xlnx_dsi_bridge_detach,
-> > +};
+>  drivers/thermal/rcar_gen3_thermal.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> For a new bridge please implement all the mandatory atomic operations.
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index ccdf8a24ddc7..cda7c52f2319 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -511,7 +511,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>  		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
+>  							    &rcar_gen3_tz_of_ops);
+>  		if (IS_ERR(zone)) {
+> -			dev_err(dev, "Can't register thermal zone\n");
+> +			dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
+>  			ret = PTR_ERR(zone);
+>  			goto error_unregister;
+>  		}
+> @@ -533,7 +533,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>  		if (ret < 0)
+>  			goto error_unregister;
+>  
+> -		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
+> +		dev_info(dev, "Sensor %u: Loaded %d trip points\n", i, ret);
+>  	}
+>  
+>  	if (!priv->num_tscs) {
+> -- 
+> 2.35.1
 > 
-> You will need at least:
-> 	.atomic_get_output_bus_fmts = xlnx_dsi_bridge_get_output_bus_fmts,
-
-As this DSI encoder will never be the last bridge in the chain (there
-should always be a panel or another bridge afterwards), I think this
-function can be skipped.
-
-> 	.atomic_get_input_bus_fmts = xlnx_dsi_bridge_get_input_bus_fmts,
-> 	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-> 	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-> 	.atomic_reset = drm_atomic_helper_bridge_reset,
-> };
-
-[snip]
 
 -- 
-Regards,
-
-Laurent Pinchart
+Kind Regards,
+Niklas Söderlund

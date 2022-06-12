@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32777547969
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBDB54796D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235501AbiFLJBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 05:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S235531AbiFLJBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 05:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbiFLJAv (ORCPT
+        with ESMTP id S235423AbiFLJA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 05:00:51 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A21517F8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:49 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso1611652wml.1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:49 -0700 (PDT)
+        Sun, 12 Jun 2022 05:00:59 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53D951E4F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:52 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so1602714wms.3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fastly.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=QEsnoS6fs7x7z63+N74TXGO62/r4Rll/JtLDyGKeftw=;
-        b=RyVH1BNMS71kJucK5zElSTO/iNUJtJ1wzfB62MK2wkxOOJQg/HG4FYnSYIx5b28jtI
-         c1Wk6gsCMqqP+0DlffzZlNALt2iyg5mxWghT7RpQ3Yotns8G4e/n7SJRzvMrjiCaxae/
-         PUMD95tfWDtLUEIwDO+4QJirah2khGY715i+g=
+        bh=ELhqEDOqgmC+TbLCt4NyDbvbHR56jry/w5HtXxvrUIM=;
+        b=PaZYXKu8oFHY0LGzLxFo66YYimisvTv48Bj8XCIKfLpjdtwA5eikvThJJwxRW5WgYG
+         m6/1fv09uv8Q9xhYBCq4o2+KLW3MutYdmX/1ljpZoq+2GlpOkiLdQGZWqnuj8+qoVTvB
+         T45fXPVb9A6z8tzB5O+p0Sm1B0o5nToqWufhY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=QEsnoS6fs7x7z63+N74TXGO62/r4Rll/JtLDyGKeftw=;
-        b=hwi7cQobWqNWP9l6IoP/vVZgioUgfJOhE48HpO2EV6SYwBnuMDixcUuNWh+A9hz3RW
-         9Gi2mCwzWVoR375r2ptizr5inmJQy36RGob9jnAgM97lmgVmXOYeN0GqAbuk1JOq4KKD
-         qRZKttDKqUDTaRbv26xkHtbxkKp/Kq1Ry3E82n7vIpwCQw575TzTqcWOJbMITsYHJXjc
-         gzvxt1hyzz3rvwT8n4ADLFggNkRFefjbd77PxbAsrGDsM116dKXYXc2qLtAmKadl2lp/
-         xj0Rq2esJDYn5t3ctmZtEaa1U1JxsneY3+YaPhp2e2MLVdmW8DPccFL3Z0BSdDkIYTj7
-         iBmQ==
-X-Gm-Message-State: AOAM533MxchnR5i7tXVQGfIjHY3Sl//lS10UGY7zM3FglgxFTNNAhsGY
-        Z3zwMgLgsrp3I5IbXmLyLJLWVA==
-X-Google-Smtp-Source: ABdhPJwXZyVpsGAIc5rt4KdnvnyW5tPEH0k/SyiM2mkjkdzxtxUdKAXvWaJOWLmn6Fb+SsUMSvmc1g==
-X-Received: by 2002:a05:600c:4e94:b0:39c:81fd:6594 with SMTP id f20-20020a05600c4e9400b0039c81fd6594mr8030223wmq.198.1655024448441;
-        Sun, 12 Jun 2022 02:00:48 -0700 (PDT)
+        bh=ELhqEDOqgmC+TbLCt4NyDbvbHR56jry/w5HtXxvrUIM=;
+        b=PqdJl+34xZa4j8qhab3ps/7MJZM2V0VYSaLKrgGvW4E0bz/dKPo1e6fSIcW3LXf+kI
+         5Vqmj38KhAePXtjV4c69xYf2B7VYhoVc5wAT+9tjtSAIhO2AK01dxOVU/MmbYwaNwyJ2
+         w46MAjZcPtgLB6l5FNwH7tZyJSvw+yVkio18caH7enRJlwwZYYvTzbwNcQiD/ZEKdFJw
+         HOOznIJMvB2IGAp7qy85vx1XokuVSitbLG2KGgWhpb60fxJVpMy/rW+Jg1NUbLyx3V2a
+         iA5E2Oc9HPx34zdQggk6Se/EeHPIsqRz2gGBp7AFB8gMN1al71BkIUORPqydwtUDOcQC
+         uNuQ==
+X-Gm-Message-State: AOAM532jimV11xLGim3v6Xkd9VM2afiawN7fBsrCKGSGG9iyLd058UBl
+        Afm2jrs5OXIWOz48z0ZY0PBGZQ==
+X-Google-Smtp-Source: ABdhPJzd9bkHYJC56LA9yvbOs3N/OrPbAmtYouTWcxhGPvju+dr0MxD3WT7YPW2C1hZk3nHzKsVgMA==
+X-Received: by 2002:a05:600c:4a28:b0:39c:4d97:37e2 with SMTP id c40-20020a05600c4a2800b0039c4d9737e2mr8439018wmp.31.1655024451149;
+        Sun, 12 Jun 2022 02:00:51 -0700 (PDT)
 Received: from localhost.localdomain ([178.130.153.185])
-        by smtp.gmail.com with ESMTPSA id d34-20020a05600c4c2200b0039c5b4ab1b0sm4798603wmp.48.2022.06.12.02.00.45
+        by smtp.gmail.com with ESMTPSA id d34-20020a05600c4c2200b0039c5b4ab1b0sm4798603wmp.48.2022.06.12.02.00.49
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 Jun 2022 02:00:47 -0700 (PDT)
+        Sun, 12 Jun 2022 02:00:49 -0700 (PDT)
 From:   Joe Damato <jdamato@fastly.com>
 To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Joe Damato <jdamato@fastly.com>
-Subject: [RFC,net-next v2 6/8] net: ip: Support MSG_NTCOPY
-Date:   Sun, 12 Jun 2022 01:57:55 -0700
-Message-Id: <1655024280-23827-7-git-send-email-jdamato@fastly.com>
+Subject: [RFC,net-next v2 7/8] net: udplite: Support MSG_NTCOPY
+Date:   Sun, 12 Jun 2022 01:57:56 -0700
+Message-Id: <1655024280-23827-8-git-send-email-jdamato@fastly.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
 References: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
@@ -69,29 +67,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support nontemporal copies of IP data when applications set the
-MSG_NTCOPY flag and checksumming is offloaded.
-
-ip_generic_getfrag is used by UDP and raw sockets, so this change
-effectively enables MSG_NTCOPY support for both.
+Support non-temporal copies of udp-lite data when applications set the
+MSG_NTCOPY.
 
 Signed-off-by: Joe Damato <jdamato@fastly.com>
 ---
- net/ipv4/ip_output.c | 1 +
+ include/net/udplite.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 00b4bf2..75c8627 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -933,6 +933,7 @@ ip_generic_getfrag(void *from, char *to, int offset, int len, int odd, struct sk
+diff --git a/include/net/udplite.h b/include/net/udplite.h
+index a3c5311..000677c5 100644
+--- a/include/net/udplite.h
++++ b/include/net/udplite.h
+@@ -21,6 +21,7 @@ static __inline__ int udplite_getfrag(void *from, char *to, int  offset,
+ 				      int len, int odd, struct sk_buff *skb)
+ {
  	struct msghdr *msg = from;
++	msg_set_iter_copy_type(msg);
+ 	return copy_from_iter_full(to, len, &msg->msg_iter) ? 0 : -EFAULT;
+ }
  
- 	if (skb->ip_summed == CHECKSUM_PARTIAL) {
-+		msg_set_iter_copy_type(msg);
- 		if (!copy_from_iter_full(to, len, &msg->msg_iter))
- 			return -EFAULT;
- 	} else {
 -- 
 2.7.4
 

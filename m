@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81DC547BE1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 21:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20661547BEA
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 21:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234305AbiFLTsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 15:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
+        id S234763AbiFLTzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 15:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234887AbiFLTs3 (ORCPT
+        with ESMTP id S234723AbiFLTzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 15:48:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9084B1E0;
-        Sun, 12 Jun 2022 12:48:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95095B80D07;
-        Sun, 12 Jun 2022 19:48:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F15CC3411C;
-        Sun, 12 Jun 2022 19:48:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655063305;
-        bh=KXksgttXApWUxueI4w47VhussaFvj+nyUo+8Y40qRHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o+mnDGryHLzqWNzwf1ovMKskjKN45NObTBD/y0/sxWV6Ripj4Q0tNNONtOJBw4pHN
-         2SmCcqe2sNKRtSoVHytQQCMkbWLesO4C77RUPIGby1dgjM5hITk6RIqf5wefRAHh7u
-         XYA55wyIXSy/gbibkjsVUL2zKmVnS6OXS2hWCt7uwPwE06PVi0XiT2zE64CaEAh3KS
-         5UGAnb3ILjBl8CkolUEmFXb0wSIXFoCh49Ft4AK1NxAnT9ae4AOlCuX8kyh17s+0/J
-         UyuIvyLErK+Er9NJsan6yadiFPN+DdGRcLLx0DTHmlNCyI4rFqA4bWd8RYV19ZnI86
-         9O7VD8OR4uJUw==
-Date:   Sun, 12 Jun 2022 21:48:18 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Linh Phung <linh.phung.jy@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: renesas: r8a779f0: Add thermal support
-Message-ID: <YqZDAiB/taLwmamr@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Linh Phung <linh.phung.jy@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220525151355.24175-1-wsa+renesas@sang-engineering.com>
+        Sun, 12 Jun 2022 15:55:05 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278A5A0AE
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 12:55:03 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 0TfnoXfr5OOQ10TfooLdpb; Sun, 12 Jun 2022 21:55:01 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 12 Jun 2022 21:55:01 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christian Lamparter <chunkeey@web.de>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] p54: Fix an error handling path in p54spi_probe()
+Date:   Sun, 12 Jun 2022 21:54:58 +0200
+Message-Id: <41d88dff4805800691bf4909b14c6122755f7e28.1655063685.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9VckkkDUpGs14q6a"
-Content-Disposition: inline
-In-Reply-To: <20220525151355.24175-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If an error occurs after a successful call to p54spi_request_firmware(), it
+must be undone by a corresponding release_firmware() as already done in
+the error handling path of p54spi_request_firmware() and in the .remove()
+function.
 
---9VckkkDUpGs14q6a
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add the missing call in the error handling path and update some goto
+label accordingly.
 
-On Wed, May 25, 2022 at 05:13:55PM +0200, Wolfram Sang wrote:
-> From: Linh Phung <linh.phung.jy@renesas.com>
->=20
-> Add support for 3 TSC nodes of thermal. The 4th node is for the control
-> domain and not for Linux.
->=20
-> Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
-> [wsa: rebased, fixed resource size, removed unused 4th node breaking prob=
-e]
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: cd8d3d321285 ("p54spi: p54spi driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/wireless/intersil/p54/p54spi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Eeks, this should have been:
+diff --git a/drivers/net/wireless/intersil/p54/p54spi.c b/drivers/net/wireless/intersil/p54/p54spi.c
+index f99b7ba69fc3..679ac164c994 100644
+--- a/drivers/net/wireless/intersil/p54/p54spi.c
++++ b/drivers/net/wireless/intersil/p54/p54spi.c
+@@ -650,14 +650,16 @@ static int p54spi_probe(struct spi_device *spi)
+ 
+ 	ret = p54spi_request_eeprom(hw);
+ 	if (ret)
+-		goto err_free_common;
++		goto err_release_firmaware;
+ 
+ 	ret = p54_register_common(hw, &priv->spi->dev);
+ 	if (ret)
+-		goto err_free_common;
++		goto err_release_firmaware;
+ 
+ 	return 0;
+ 
++err_release_firmaware:
++	release_firmware(priv->firmware);
+ err_free_common:
+ 	free_irq(gpio_to_irq(p54spi_gpio_irq), spi);
+ err_free_gpio_irq:
+-- 
+2.34.1
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Shall I resend?
-
-
---9VckkkDUpGs14q6a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKmQv0ACgkQFA3kzBSg
-KbbVCg/8Cd8FUd379dFfyawX25rCdr91g4PINDLdrzYMq44Cczpe+WohO/PRdBbY
-dyuYJ8arv9PtuFVpbNCKFB+r54wdKyrJIyiM3ubxAjrT5179COYDvdcruS2UwtEO
-jBArqrX7H1s0p9GaMe0UOrLf754fTe+7sHc3p8jyzlwR+bf62lhsQ+06jKG441Jx
-yEuK5YXj0zYdAVrijo9jj+LLvTTLmF5Kmwcur6adnLcLZ0bd4hSpSB5pPVQ5Grfn
-KGLnXuXWSa3+unSjco4tL4NwAlg44p/vVAKnUKgNbBppsg564Ig3fY4LWILwhacJ
-4/2hkkUFpIvrLK9fOMqBo9UOopGU6QCPjNj1Lz5iCycnfGStzcKUqNMDwSirDxUa
-OEDG5hBZJ8C6ufsXdXtlblVrv2BDHCPttTtd8FExTh1nwt7sj30kFoDGXB9JkKWP
-BRoMzwPhvB6dPa0MW5wXhDuFR6H687ZDO2C5n/Pnr1pDwTwS57K70iutSLoWwfeE
-0okGd1kDIELMu7yWjEa0cVsEQHXq+bQzNbb2M/2TBSJogdp+kTSCaSduSUCcJe45
-LcyMPyIzcTaWupRyQCC99s2tDPlqmRzlqDeA8AmBEVf8kG2ZTxcXErHV/R11f0QB
-4NKAO9Gc2GI+kHpv50N20zgYuTWuxx4CKRaJnGKCpIbuuzIz9xk=
-=OWtV
------END PGP SIGNATURE-----
-
---9VckkkDUpGs14q6a--

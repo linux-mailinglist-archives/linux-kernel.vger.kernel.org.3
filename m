@@ -2,61 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C63D547B1D
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 19:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A767547B20
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 19:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbiFLRET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 13:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
+        id S232122AbiFLRGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 13:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiFLRER (ORCPT
+        with ESMTP id S231707AbiFLRGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 13:04:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5577C3137C
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 10:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655053456; x=1686589456;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s0HDjSYBMcvQBnzmTmJjZHW0Z/MkYoA0719o+df8DbA=;
-  b=dUGkXAwBv0koLlyVkSvCeO4Pf+n7wlL+AV/MJGOUdVZjiqcsCr2+zvLd
-   EgJNz6yFCFZiyAkvhgD22yYKlbHmYKyQvmo0IGQ5gAqLnjxq66LMqZk/b
-   ntR8RnLcgP1mY6SKuXJvWmn7lnIL+/MiYylLgGzJ46DI0oXWhoTL7aohR
-   jxwTdMrvMNKOvBV80ZHDUIwtfI/VP0+TibHM1suFrDUAzzouOzFTh9YTE
-   Wx2CQzr9HL1b/ZUAayfuw2rrZAAm6d8jswB6/3n15imAdZhoDBHqWuKf5
-   kkZZ38UFjAsVjmWYUG9iZZOERuMvxCtlBCJIB9l+0RM4DMOjBAtYjUdlb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="278111400"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="278111400"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 10:04:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="639252278"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Jun 2022 10:04:14 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0R0X-000K5D-N3;
-        Sun, 12 Jun 2022 17:04:13 +0000
-Date:   Mon, 13 Jun 2022 01:03:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [linux-stable-rc:queue/5.15 165/165] lib/iov_iter.c:1466:9: warning:
- comparison of distinct pointer types ('typeof (nr * (1UL << 16) - offset) *'
- (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *'))
-Message-ID: <202206130107.hjrRK0jH-lkp@intel.com>
+        Sun, 12 Jun 2022 13:06:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC944093E
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 10:06:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id n10so6970726ejk.5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 10:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=e1j5oNyWe6LjPGibCsOkD4pe/7KGmuvi3WqbEeyX52A=;
+        b=axtd06CitJ9XTEQlj/DgAkzQO7gwwugoWwZY1AE+3Zgrmx9g1bJNWCNMLWlwF3iEl4
+         GhYCjZ1F7rhF6iZMCV3zMH+89SbmhW1HYE2LWqQReDf2b8zTolL4VWga094dShEhTncU
+         rXBUN7y3Juwybt8Udriw5j+nE2KAu+rQwc9it6aEmgN54efusB7QLYAaiLredlUnFdpx
+         o8Zp+1zZeXtNqmAXKQQzRBNOqMx9wixdGTeA+zOfuR7gU+lFX57Rn3kpULfWzeHw4sfP
+         riHzAZNZ4FYDkUtThXbRlJuV1Huhu/47lyl7C8BI7SiPecrv8yOniALBcDn26/A9LB+s
+         c3PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=e1j5oNyWe6LjPGibCsOkD4pe/7KGmuvi3WqbEeyX52A=;
+        b=v+9Fg7JRwW8KcF3tm+SQN5JtKRNEXutCtCm97dXQ3ylTghh7vHGxS2oT47XhYjyK6t
+         BKVHi840MsHDimoQHmkVJlfbP8KaS7261SyCacTXHW1cQbQj1GkqY8YnNu70lLJ1fDHU
+         kNwXMTXTFWgNAtyIrm5sjGaBWG8oPTo5ooMa/EVhDOsTkIp+oNPf1BvNJbDYeHLTGt19
+         nUEezk7+fvmddEMvre5ugR1wXYpj+gzPEw0z1RPHHqFU1XcKCMRs0rWT7OHGH2qTUPmV
+         Ii7WIfq+W1ZrBvuAqvVU98ap5Kb1w71l0rH1PVZP3+Ob4hOY+pwEUZGobA1Rxp9VFUVp
+         wZig==
+X-Gm-Message-State: AOAM533CNQzLi6t/kX0g8ZwJ316hiH6vm7zdiQmVKRiRkh8LSNNCM817
+        J3AurxRX0/yVE+H5yhO7sa6BBA==
+X-Google-Smtp-Source: ABdhPJywtatBoFfH74/PESsNXnL7SJhTfWWSGNB3lg0vls4R1pXgQ7dz3i5/bNXUiIxLtCTPyo5tTQ==
+X-Received: by 2002:a17:906:804a:b0:70c:1dac:9bb8 with SMTP id x10-20020a170906804a00b0070c1dac9bb8mr46957960ejw.92.1655053571275;
+        Sun, 12 Jun 2022 10:06:11 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id pv17-20020a170907209100b00704757b1debsm2675740ejb.9.2022.06.12.10.06.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Jun 2022 10:06:10 -0700 (PDT)
+Message-ID: <f1cc0f5a-12fb-28bc-7345-13ac2bf5b74d@linaro.org>
+Date:   Sun, 12 Jun 2022 19:06:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/3] ARM: dts: exynos: add function and color to aat1290
+ flash LED node in Galaxy S3
+Content-Language: en-US
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Simon Shields <simon@lineageos.org>,
+        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>
+References: <20220607085343.72414-1-krzysztof.kozlowski@linaro.org>
+ <20220607085343.72414-3-krzysztof.kozlowski@linaro.org>
+ <4a7f8ab6-c061-3861-5790-b6c0fbd7cad1@gmail.com>
+ <ef62a7bb-2217-2947-17dd-fc4a51acdea5@linaro.org>
+ <f1402a1d-a74d-f7b9-b9e2-fc3991781e64@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f1402a1d-a74d-f7b9-b9e2-fc3991781e64@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,100 +85,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
-head:   04983d84c84ee97abcab8bd9e6488790086cb082
-commit: 04983d84c84ee97abcab8bd9e6488790086cb082 [165/165] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
-config: hexagon-randconfig-r041-20220612 (https://download.01.org/0day-ci/archive/20220613/202206130107.hjrRK0jH-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6466c9abf3674bade1f6ee859f24ebc7aaf9cd88)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=04983d84c84ee97abcab8bd9e6488790086cb082
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.15
-        git checkout 04983d84c84ee97abcab8bd9e6488790086cb082
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On 12/06/2022 17:09, Jacek Anaszewski wrote:
+> On 6/10/22 12:14, Krzysztof Kozlowski wrote:
+>> On 09/06/2022 22:31, Jacek Anaszewski wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 6/7/22 10:53, Krzysztof Kozlowski wrote:
+>>>> Add common LED properties - the function and color - to aat1290 flash
+>>>> LED node in Galaxy S3.
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> ---
+>>>>    arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi b/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
+>>>> index 72901772fcad..d76f3678dcab 100644
+>>>> --- a/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
+>>>> +++ b/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
+>>>> @@ -7,6 +7,7 @@
+>>>>     */
+>>>>    
+>>>>    /dts-v1/;
+>>>> +#include <dt-bindings/leds/common.h>
+>>>>    #include "exynos4412-midas.dtsi"
+>>>>    
+>>>>    / {
+>>>> @@ -27,6 +28,8 @@ led-controller {
+>>>>    
+>>>>    		led {
+>>>>    			label = "flash";
+>>>> +			function = LED_FUNCTION_FLASH;
+>>>> +			color = <LED_COLOR_ID_WHITE>;
+>>>
+>>> Addition of these two properties will not change anything because
+>>> the label has precedence. It is deprecated, but if you introduce
+>>> function and color to the binding instead of the label, the resulting
+>>> LED class device name will change.
+>>
+>> Which is not necessarily what we want, right? Adding these properties is
+>> a proper description of hardware, regardless whether current Linux
+>> implementation uses them or not.
+> 
+> Actually I'd just drop label in addition to your change.
+> I don't think it would break anybody seriously - not expecting it has
+> any larger group of users and having uniformly constructed DTS files
+> in the mainline has greater value.
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+What about some PostmarketOSos, LineageOS and other OSes?
 
-All warnings (new ones prefixed by >>):
+Let me Cc here some folks - Simon, Martin, is the label in flash LED
+node anyhow important for you? Can it be dropped and replaced with
+function+color?
 
->> lib/iov_iter.c:1466:9: warning: comparison of distinct pointer types ('typeof (nr * (1UL << 16) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   lib/iov_iter.c:1630:9: warning: comparison of distinct pointer types ('typeof (nr * (1UL << 16) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   2 warnings generated.
+https://lore.kernel.org/all/20220607085343.72414-3-krzysztof.kozlowski@linaro.org/
 
-
-vim +1466 lib/iov_iter.c
-
-  1432	
-  1433	static ssize_t iter_xarray_get_pages(struct iov_iter *i,
-  1434					     struct page **pages, size_t maxsize,
-  1435					     unsigned maxpages, size_t *_start_offset)
-  1436	{
-  1437		unsigned nr, offset;
-  1438		pgoff_t index, count;
-  1439		size_t size = maxsize;
-  1440		loff_t pos;
-  1441	
-  1442		if (!size || !maxpages)
-  1443			return 0;
-  1444	
-  1445		pos = i->xarray_start + i->iov_offset;
-  1446		index = pos >> PAGE_SHIFT;
-  1447		offset = pos & ~PAGE_MASK;
-  1448		*_start_offset = offset;
-  1449	
-  1450		count = 1;
-  1451		if (size > PAGE_SIZE - offset) {
-  1452			size -= PAGE_SIZE - offset;
-  1453			count += size >> PAGE_SHIFT;
-  1454			size &= ~PAGE_MASK;
-  1455			if (size)
-  1456				count++;
-  1457		}
-  1458	
-  1459		if (count > maxpages)
-  1460			count = maxpages;
-  1461	
-  1462		nr = iter_xarray_populate_pages(pages, i->xarray, index, count);
-  1463		if (nr == 0)
-  1464			return 0;
-  1465	
-> 1466		return min(nr * PAGE_SIZE - offset, maxsize);
-  1467	}
-  1468	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

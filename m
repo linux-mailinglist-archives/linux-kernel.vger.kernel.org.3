@@ -2,125 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A942547912
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 08:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B702547914
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 08:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbiFLGLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 02:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
+        id S234499AbiFLGQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 02:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiFLGLP (ORCPT
+        with ESMTP id S229664AbiFLGQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 02:11:15 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90ADC5F67;
-        Sat, 11 Jun 2022 23:11:13 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id C69121E80D78;
-        Sun, 12 Jun 2022 14:10:11 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cuOdn4AlAeKG; Sun, 12 Jun 2022 14:10:09 +0800 (CST)
-Received: from [172.30.21.244] (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 7F34B1E80C8B;
-        Sun, 12 Jun 2022 14:10:08 +0800 (CST)
-Subject: Re: [PATCH] rcu: Handle failure of memory allocation functions
-To:     paulmck@kernel.org
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        hukun@nfschina.com, qixu@nfschina.com, yuzhe@nfschina.com,
-        renyu@nfschina.com
-References: <20220611093055.1473-1-liqiong@nfschina.com>
- <20220611163432.GM1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   liqiong <liqiong@nfschina.com>
-Message-ID: <e71a9031-68dc-93d0-7aff-e4060bb56a24@nfschina.com>
-Date:   Sun, 12 Jun 2022 14:11:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
-MIME-Version: 1.0
-In-Reply-To: <20220611163432.GM1790663@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 12 Jun 2022 02:16:06 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2A43917B
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 23:16:04 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id E465DC01B; Sun, 12 Jun 2022 08:16:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655014562; bh=nJDO7/qBIBucVpix5fyRM3Rkiiq7vw3tMCV118r+sj4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ibS4L0UCjxNSfiKLJvGRcjtTuXWAZ8IoSuX7hxFJnKoww4a4fLtSCYZUvWU19DF7K
+         QM5IiwpB+CA/OSiqklIYgDvjMzS8se2hu8F/cP1dx0SIhnmynJw0qRxVdQgG2wNwKI
+         rmDMSM7yzRjAF2dmKA1sGMsL4MOpkmVOHQvsSq6h6040E2r+dfRpVQD11gn0rmXPUM
+         rFOTM7VLMw/3n2HCS0GXEGjI3RQ0aXKq7XOrtyTEaPKhvmfzoKsvRW5ZlxyIjJzLqm
+         /KIf30X7o2MzLG1NP/eSLVMckgmRlzbcjgajYqbDpguYj/vV3LO1q1VilvwVjX7aNq
+         aG5aAaWz11EjQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id EC1C1C009;
+        Sun, 12 Jun 2022 08:15:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655014552; bh=nJDO7/qBIBucVpix5fyRM3Rkiiq7vw3tMCV118r+sj4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X+28B/h9frr/iIwfyqbvVHz1QbaByJJkfl4R/GL/wcIgt7ckMZS/CFhz7YH4vq7Ss
+         PsnGZi0JRVrsFJWWaK29bzbMODfEn6X84u29d//YYsURAbuqJlZUqD+UOeUtxhHbf8
+         oPjjlr62vnxAHHZpO5K0nYEao2ielnw9fQW1r7reRAOmr7lx3GmniWvMsA4YcMuLgv
+         JGChOQBJpesVbnDmv8Hk2GLpkH8uoG76W6mDjD2FyNds+u1J4VP6tikcIx0bLPuTsT
+         Q0NbGWSoBLbXqBIahpQijUAR3Im/fXUiK5niuM6xwygYbTM9dtkwRF4WhqOSRhn+gf
+         10we1yzNOll1Q==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id be16708e;
+        Sun, 12 Jun 2022 06:15:45 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Dominique Martinet <asmadeus@codewreck.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf parse: Allow names to start with digits
+Date:   Sun, 12 Jun 2022 15:15:08 +0900
+Message-Id: <20220612061508.1449636-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Tracepoints can start with digits, although we don't have many of these:
 
+$ rg -g '*.h' '\bTRACE_EVENT\([0-9]'
+net/mac802154/trace.h
+53:TRACE_EVENT(802154_drv_return_int,
+...
 
-在 2022年06月12日 00:34, Paul E. McKenney 写道:
-> On Sat, Jun 11, 2022 at 05:30:55PM +0800, Li Qiong wrote:
->> Add warning when these functions (eg:kmalloc,vmalloc) fail, handle the
->> failure.
->>
->> Signed-off-by: Li Qiong <liqiong@nfschina.com>
-> Good catch, thank you!  However...
->
->> ---
->>  kernel/rcu/rcutorture.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
->> index 7120165a9342..97f90e304ae3 100644
->> --- a/kernel/rcu/rcutorture.c
->> +++ b/kernel/rcu/rcutorture.c
->> @@ -1991,6 +1991,10 @@ static void rcu_torture_mem_dump_obj(void)
->>  
->>  	kcp = kmem_cache_create("rcuscale", 136, 8, SLAB_STORE_USER, NULL);
-> As long as we are checking, why not also check this one?
->
-> 							Thanx, Paul
+net/ieee802154/trace.h
+66:TRACE_EVENT(802154_rdev_add_virtual_intf,
+...
 
-Hi Paul,
-Yes,  the kmem_cache_create  would fail too. 
-I searched  "kernel" directory, found that It seems  all the code just check kmem_cache_alloc()，
-So, I ignored   kmem_cache_create() .  I will submit a v2 patch.
+include/trace/events/9p.h
+124:TRACE_EVENT(9p_client_req,
+...
 
-Thanks,
-Li Qiong
+Just allow names to start with digits too so e.g. perf probe -e '9p:*'
+works
 
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+---
+ tools/perf/util/parse-events.l | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->>  	rhp = kmem_cache_alloc(kcp, GFP_KERNEL);
->> +	if (WARN_ON_ONCE(!rhp)) {
->> +		kmem_cache_destroy(kcp);
->> +		return;
->> +	}
->>  	pr_alert("mem_dump_obj() slab test: rcu_torture_stats = %px, &rhp = %px, rhp = %px, &z = %px\n", stats_task, &rhp, rhp, &z);
->>  	pr_alert("mem_dump_obj(ZERO_SIZE_PTR):");
->>  	mem_dump_obj(ZERO_SIZE_PTR);
->> @@ -2007,6 +2011,8 @@ static void rcu_torture_mem_dump_obj(void)
->>  	kmem_cache_free(kcp, rhp);
->>  	kmem_cache_destroy(kcp);
->>  	rhp = kmalloc(sizeof(*rhp), GFP_KERNEL);
->> +	if (WARN_ON_ONCE(!rhp))
->> +		return;
->>  	pr_alert("mem_dump_obj() kmalloc test: rcu_torture_stats = %px, &rhp = %px, rhp = %px\n", stats_task, &rhp, rhp);
->>  	pr_alert("mem_dump_obj(kmalloc %px):", rhp);
->>  	mem_dump_obj(rhp);
->> @@ -2014,6 +2020,8 @@ static void rcu_torture_mem_dump_obj(void)
->>  	mem_dump_obj(&rhp->func);
->>  	kfree(rhp);
->>  	rhp = vmalloc(4096);
->> +	if (WARN_ON_ONCE(!rhp))
->> +		return;
->>  	pr_alert("mem_dump_obj() vmalloc test: rcu_torture_stats = %px, &rhp = %px, rhp = %px\n", stats_task, &rhp, rhp);
->>  	pr_alert("mem_dump_obj(vmalloc %px):", rhp);
->>  	mem_dump_obj(rhp);
->> -- 
->> 2.11.0
->>
+diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
+index 5b6e4b5249cf..4133d6950d29 100644
+--- a/tools/perf/util/parse-events.l
++++ b/tools/perf/util/parse-events.l
+@@ -211,7 +211,7 @@ bpf_source	[^,{}]+\.c[a-zA-Z0-9._]*
+ num_dec		[0-9]+
+ num_hex		0x[a-fA-F0-9]+
+ num_raw_hex	[a-fA-F0-9]+
+-name		[a-zA-Z_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
++name		[a-zA-Z0-9_*?\[\]][a-zA-Z0-9_*?.\[\]!]*
+ name_tag	[\'][a-zA-Z_*?\[\]][a-zA-Z0-9_*?\-,\.\[\]:=]*[\']
+ name_minus	[a-zA-Z_*?][a-zA-Z0-9\-_*?.:]*
+ drv_cfg_term	[a-zA-Z0-9_\.]+(=[a-zA-Z0-9_*?\.:]+)?
+-- 
+2.36.1
+

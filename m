@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C78C547863
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 05:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE3554786B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 05:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbiFLD0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 23:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S233146AbiFLD4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 23:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiFLDZ5 (ORCPT
+        with ESMTP id S229528AbiFLD4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 23:25:57 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D7066CBF;
-        Sat, 11 Jun 2022 20:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655004340; x=1686540340;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=Ht5tFAx/b0oY9oX+FB+kzZOocBM2sta/Sgzs8nZLw/o=;
-  b=rzxbAUh9KH/Kfdyv7IZaAtGLcSAhVYKPtLBYUJjB10XlXSDlIDQMOnpR
-   lspZo6f9h+kVQZdIP1eeViEmMZ0oAxOlZeyMs7/WDlHGb+/w7IfkGeScW
-   iWI7765Zd7oMXh+luwmDJOy4vyvX+O8h4KV1BoGbbxuw+My5InV30cQw3
-   A=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Jun 2022 20:25:39 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 20:25:39 -0700
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sat, 11 Jun 2022 20:25:39 -0700
-Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sat, 11 Jun 2022 20:25:36 -0700
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sboyd@kernel.org>
-CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
-        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>,
-        <maz@kernel.org>, "David Collins" <collinsd@codeaurora.org>
-Subject: [RESEND PATCH v6 10/10] spmi: pmic-arb: increase SPMI transaction timeout delay
-Date:   Sun, 12 Jun 2022 11:24:46 +0800
-Message-ID: <1655004286-11493-11-git-send-email-quic_fenglinw@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655004286-11493-1-git-send-email-quic_fenglinw@quicinc.com>
-References: <1655004286-11493-1-git-send-email-quic_fenglinw@quicinc.com>
+        Sat, 11 Jun 2022 23:56:50 -0400
+Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4A83B2B1;
+        Sat, 11 Jun 2022 20:56:49 -0700 (PDT)
+Received: by mail-pg1-f194.google.com with SMTP id y187so2750408pgd.3;
+        Sat, 11 Jun 2022 20:56:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZoaSUf1WFSjsOvPzlBjVzQMptxVWTVe23Qs0wJkHTIY=;
+        b=SdrhLUozjMkTO9thtIlaq7kMIP6XZF0IyCAzxR5hUcJRPtRABi3yyMxPjUcRLShXBf
+         5cJ6H+8Mjf5JKUWAyykMJBAKQpcdtltEK79njJLDTggHV5IDYoTAf47cmImeIkHS9sYO
+         nRebN9Snl8zJ0Fh5nPY5efX0MbFRJ4fN+rL/8n3hPxJJwqNYc4+wIVu/nVimiwcP1F5o
+         ibqHW4oijQ0sH4CK5EyEnrZY9GJFw+aavqrzlE+jBcU3aHfcgzGGUrdiyxOzCoM2kofS
+         C7nlpY6BtaY7Z6wEz9KeEAU+N4mnrHk3U4qY+nUtKvo4bKzH5zboqs45OKvx9LEI8mdF
+         JpWA==
+X-Gm-Message-State: AOAM530Z2yvV14wdWiSUWxlpV8wnhq+R/01oZGQd/FlFiwbU9XgYb5ZH
+        rOtm4XNGDLJHGBRCfX2FhWZkOOWohw==
+X-Google-Smtp-Source: ABdhPJxWn0fONySkSmipTk9dtvqhSDx6JppTqnAeeFggbEXAeWpX+9KP/0coNM8gSDD66P2C7jyj3w==
+X-Received: by 2002:a63:2160:0:b0:3fc:b8ac:1976 with SMTP id s32-20020a632160000000b003fcb8ac1976mr47086037pgm.453.1655006208625;
+        Sat, 11 Jun 2022 20:56:48 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id n15-20020aa7984f000000b0051bd3d55773sm2370518pfq.63.2022.06.11.20.56.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 20:56:48 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     isaku.yamahata@intel.com, pbonzini@redhat.com, seanjc@google.com,
+        mingo@kernel.org
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sunliming@kylinos.cn, kelulanainsley@gmail.com, x86@kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] KVM: x86/mmu: Remove unused "type" of split_page_type()
+Date:   Sun, 12 Jun 2022 11:56:41 +0800
+Message-Id: <20220612035641.1161945-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,31 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Collins <collinsd@codeaurora.org>
+The variable 'type' in split_page_type() is set but not used, so remove
+it.
 
-Increase the SPMI transaction timeout delay from 100 us to
-1000 us in order to account for the slower execution time
-found on some simulator targets.
+Fixes the following w1 warning:
 
-Signed-off-by: David Collins <collinsd@codeaurora.org>
-Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+arch/x86/kvm/mmu/mmu.c:982:28: warning: variable 'type' set but not used [-Wunused-but-set-variable]
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
 ---
- drivers/spmi/spmi-pmic-arb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/mmu/mmu.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-index 0496e5d..45f9344 100644
---- a/drivers/spmi/spmi-pmic-arb.c
-+++ b/drivers/spmi/spmi-pmic-arb.c
-@@ -91,7 +91,7 @@ enum pmic_arb_channel {
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 7b3df91a93cf..f4d577335f94 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -979,14 +979,12 @@ static void split_page_type(gfn_t gfn, struct kvm_memory_slot *slot,
+ 			    enum pg_level level)
+ {
+ 	struct kvm_page_attr *page_attr = page_attr_slot(gfn, slot, level);
+-	enum kvm_page_type type;
+ 	gfn_t base_gfn;
  
- /* Maximum number of support PMIC peripherals */
- #define PMIC_ARB_MAX_PERIPHS		512
--#define PMIC_ARB_TIMEOUT_US		100
-+#define PMIC_ARB_TIMEOUT_US		1000
- #define PMIC_ARB_MAX_TRANS_BYTES	(8)
+ 	if (WARN_ON_ONCE(!kvm_page_type_valid(page_attr) || level <= PG_LEVEL_4K))
+ 		return;
  
- #define PMIC_ARB_APID_MASK		0xFF
+ 	base_gfn = gfn & ~(KVM_PAGES_PER_HPAGE(level) - 1);
+-	type = page_attr->type;
+ 
+ 	/*
+ 	 * Set the type to KVM_PAGE_TYPE_MIXED in advance since when a large
 -- 
-2.7.4
+2.25.1
 

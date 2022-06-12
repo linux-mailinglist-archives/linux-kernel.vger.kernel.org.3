@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0767D547940
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 10:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B352654793F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 10:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234816AbiFLINC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 04:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S234838AbiFLINH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 04:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiFLIM5 (ORCPT
+        with ESMTP id S234801AbiFLINA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 04:12:57 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A628674D5
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 01:12:54 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gl15so5649938ejb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 01:12:54 -0700 (PDT)
+        Sun, 12 Jun 2022 04:13:00 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D21674D5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 01:12:59 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id u12so5614426eja.8
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 01:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jRyy5hKQd+kqHmg467ZxRJ79p2wfYhLJmjkerJiKcTo=;
-        b=EZWh2CfzXf2OHYzHXos2/i9pv35MMrNJlIFIh2ELSCd0L5dRJHCe8f5DSrLNHQQeLB
-         Ef9g2xV/rKGJqAF4H+hmSk5Zk0nd4yIMF+5BD83utIOiCqYuiOE1nmKMM2Vjxe9GLeGH
-         /uBErmAywS983NwgrXId47TdwnUCM2OougHxI/Fi1FHbTKuQBdQNGNXc3Q4cwkddQG/P
-         k7VCJMs1Kq57Sp2lK3rFiGmg8VJDqASCDVkEEyCLp7wLYr60bbcjrLzjYHQmsQerRkbZ
-         cLp2PvnMgQHEkPqKEWL1bbMWZGjpFq+IZ3vBR+yIbjk0fr9jWXJMLnLQWiDoFJNlAgxh
-         UoJw==
+        bh=XUhoNTZNrsEIdOu15ISZAAXLEM8PaGxpo0lgCC9aE40=;
+        b=DhlnZCj0oLT946aOSSCceCxFOezw9yscz0NjCzFT1taPIc0mrGbd+wiV+N7A7BRSt/
+         M3rWZu/VeugJuf4AcdN68G4dKeit9O0aqJtfFC6xEC4NIR1VDEc2529rw8bvdQ6x7rzX
+         r981SNcoGB1LIczlwR//joaQkMK+d8Xr9yJlw5Y40FlcjJywj1iVeSpFEnbemFkAhX01
+         lBD7YdpOcnjbUMa06hz3jYhyxeTrfVhNGupTRMYfoAiDYC4xUsiinZVZwHHV6gL81/vP
+         fFVzMyoyYbMqz/miVEyn+wmCqzCrtHDTeU5B8apgChszkX9z7FeHxMVhIjaQBD+AZuKY
+         xLUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jRyy5hKQd+kqHmg467ZxRJ79p2wfYhLJmjkerJiKcTo=;
-        b=D/AN2j721uQ6M9aCvF+F5tJ7mUv30dlwlv6CW4Dp1N20YcZb3nmCJ3/1MxXGD+WoIM
-         uSgp6DDC9lwA9iE7HtOJk7/2TFI6WWU5OnrPqw7RXq7zToFPc9K3UIdViF5muberunSV
-         O9RjKyNs0XUzL653d2NyrhqTiAvz1jGo4RmYNiwD3FcX6kv3bjOPkzqz8CUwtziIBTJD
-         PQEZEcxjzUj52dQTyLdkoBLWaGJriXikf8yFn3yMx814/KD2yt/9yXGltvAWdeJXoZWy
-         PK82Ey8B0rArCxdISAODKtt/ml0Pv47cC6XYTQwuluI0zAuWJMJZPyhHUU5lLfNDoe92
-         JEFg==
-X-Gm-Message-State: AOAM533zRKEvwSW11xKR4xWyO/AYWcjtu8YX6vdILl6+Z/vmIp7toC/G
-        yeozacr2oXwHw0KgoWPfU7I=
-X-Google-Smtp-Source: ABdhPJznElZmUF/q/STbgt+TqSWw58seYQ+n7Bl8UR6K9vjD0KVMJHYbspUN0iGR4mpp+A+xfHfzpw==
-X-Received: by 2002:a17:907:97d5:b0:706:76ba:f28f with SMTP id js21-20020a17090797d500b0070676baf28fmr46994279ejc.367.1655021572728;
-        Sun, 12 Jun 2022 01:12:52 -0700 (PDT)
+        bh=XUhoNTZNrsEIdOu15ISZAAXLEM8PaGxpo0lgCC9aE40=;
+        b=VYZM0sBUNJTGdffHgJNymbUu9sI4nyNZ31b33L29lFjpsWuJ2C3p3b7qjjLIw9r5pc
+         YgMZkum0zCsWoPqICrHssYy80bLguMu/0mY2JTZxSORodgVAnUq7tGtFif2yA3g7lhMj
+         ENFrGgaZYg+NBfRMrRer4J8axeH+/00DnX6Gw4KTfScHwxobVMSANKpTipIO3Xhf3VfE
+         Ntf5Eic3uZ9vpvf/ROkOvijwm1ex2ueT7LOSUL2nTxUCQQz/qsTbnAl+dHSvP9Gi+FG9
+         bdOsrckzymOSwpEZqJZ48BUw5yvx6Kerx/fxLxge9pSP7p1qzGjLBysv7FVPqsT9iG/5
+         tbPg==
+X-Gm-Message-State: AOAM531v/m16/y7lwA4OG6V9qFmZh/7BA9hiCJwFZdHQ3IS8vvMIQk9H
+        a211qgcE71Haz6i8s9BWvxvXKLmF5FE=
+X-Google-Smtp-Source: ABdhPJzvOmY7jP6600tRAUbA7A8owBl/VhRYX17MzGBERdvYcaVG8ZbPlUi0jAFQXEbcjXih+YXaRA==
+X-Received: by 2002:a17:906:6c82:b0:709:f868:97f6 with SMTP id s2-20020a1709066c8200b00709f86897f6mr49484659ejr.555.1655021577739;
+        Sun, 12 Jun 2022 01:12:57 -0700 (PDT)
 Received: from nam-dell.fritz.box ([2a02:8109:afbf:ed88:bcf1:6e8b:57bb:87f1])
-        by smtp.gmail.com with ESMTPSA id o18-20020a17090608d200b006ff802baf5dsm2130637eje.54.2022.06.12.01.12.52
+        by smtp.gmail.com with ESMTPSA id o18-20020a17090608d200b006ff802baf5dsm2130637eje.54.2022.06.12.01.12.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 01:12:52 -0700 (PDT)
+        Sun, 12 Jun 2022 01:12:57 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         namcaov@gmail.com, phil@philpotter.co.uk
-Subject: [PATCH v2 1/2] staging: r8188eu: replace LE_BITS_TO_1BYTE with clearer codes
-Date:   Sun, 12 Jun 2022 10:11:43 +0200
-Message-Id: <4cdacd703158029c0b0f706e3cf1eb8daf4121c0.1655019752.git.namcaov@gmail.com>
+Subject: [PATCH v2 2/2] staging: r8188eu: remove unused macros
+Date:   Sun, 12 Jun 2022 10:11:44 +0200
+Message-Id: <ea62e595714a7cc24204643b90045d0c088aea8c.1655019752.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1655019752.git.namcaov@gmail.com>
 References: <cover.1655019752.git.namcaov@gmail.com>
@@ -70,40 +70,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The statement LE_BITS_TO_1BYTE(__paddr + n, 0, 8) is not obvious on
-what it is doing, while in truth it is simply reading one byte.
-Replace these with clearer codes.
+The macro LE_BITS_TO_1BYTE and related macros are not used anywhere.
+Remove them.
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/staging/r8188eu/include/basic_types.h | 31 -------------------
+ 1 file changed, 31 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h b/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h
-index 20d73ca781e8..79e4210c6b65 100644
---- a/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h
-+++ b/drivers/staging/r8188eu/include/Hal8188ERateAdaptive.h
-@@ -26,15 +26,15 @@
- #define GET_TX_REPORT_TYPE1_RERTY_0(__paddr)			\
- 	le16_get_bits(*(__le16 *)__paddr, GENMASK(15, 0))
- #define GET_TX_REPORT_TYPE1_RERTY_1(__paddr)			\
--	LE_BITS_TO_1BYTE(__paddr + 2, 0, 8)
-+	((u8 *)__paddr)[2]
- #define GET_TX_REPORT_TYPE1_RERTY_2(__paddr)			\
--	LE_BITS_TO_1BYTE(__paddr + 3, 0, 8)
-+	((u8 *)__paddr)[3]
- #define GET_TX_REPORT_TYPE1_RERTY_3(__paddr)			\
--	LE_BITS_TO_1BYTE(__paddr + 4, 0, 8)
-+	((u8 *)__paddr)[4]
- #define GET_TX_REPORT_TYPE1_RERTY_4(__paddr)			\
--	LE_BITS_TO_1BYTE(__paddr + 5, 0, 8)
-+	((u8 *)__paddr)[5]
- #define GET_TX_REPORT_TYPE1_DROP_0(__paddr)			\
--	LE_BITS_TO_1BYTE(__paddr + 6, 0, 8)
-+	((u8 *)__paddr)[6]
- /*  End rate adaptive define */
+diff --git a/drivers/staging/r8188eu/include/basic_types.h b/drivers/staging/r8188eu/include/basic_types.h
+index cfd15ac1d9c0..0b71e2c6e41a 100644
+--- a/drivers/staging/r8188eu/include/basic_types.h
++++ b/drivers/staging/r8188eu/include/basic_types.h
+@@ -13,37 +13,6 @@ typedef void (*proc_t)(void *);
+ /*  TODO: Macros Below are Sync from SD7-Driver. It is necessary
+  * to check correctness */
  
- int ODM_RAInfo_Init_all(struct odm_dm_struct *dm_odm);
+-/*
+- *	Call endian free function when
+- *		1. Read/write packet content.
+- *		2. Before write integer to IO.
+- *		3. After read integer from IO.
+-*/
+-
+-/* Convert little data endian to host ordering */
+-#define EF1BYTE(_val)		\
+-	((u8)(_val))
+-
+-/* Create a bit mask  */
+-#define BIT_LEN_MASK_8(__bitlen) \
+-	(0xFF >> (8 - (__bitlen)))
+-
+-/*Description:
+- * Return 4-byte value in host byte ordering from
+- * 4-byte pointer in little-endian system.
+- */
+-#define LE_P1BYTE_TO_HOST_1BYTE(__pstart) \
+-	(EF1BYTE(*((u8 *)(__pstart))))
+-
+-/*Description:
+-Translate subfield (continuous bits in little-endian) of 4-byte
+-value to host byte ordering.*/
+-#define LE_BITS_TO_1BYTE(__pstart, __bitoffset, __bitlen) \
+-	( \
+-		(LE_P1BYTE_TO_HOST_1BYTE(__pstart) >> (__bitoffset)) & \
+-		BIT_LEN_MASK_8(__bitlen) \
+-	)
+-
+ #define	N_BYTE_ALIGMENT(__value, __aligment) ((__aligment == 1) ? \
+ 	(__value) : (((__value + __aligment - 1) / __aligment) * __aligment))
+ 
 -- 
 2.25.1
 

@@ -2,160 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF03547836
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 03:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC68754783B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 04:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbiFLBkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 21:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+        id S232883AbiFLCCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 22:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiFLBkp (ORCPT
+        with ESMTP id S229781AbiFLCCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 21:40:45 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9573D1DC;
-        Sat, 11 Jun 2022 18:40:45 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so2769078pjg.5;
-        Sat, 11 Jun 2022 18:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JnWxgn/1wqBRwYVI3n2SXvnPrpmM+qtla3r+d2WQynU=;
-        b=Wp1J1mEPkMnDJ9uFyBbVvXkDDFGThKdZFo4XBSUbeGBb1XMi/Nba9+YWQsHqzsjXhQ
-         BVvUpcXN+ZFDdJRrijX18mVohJqNPhaMxqofIpJqT6Bo1X5iAZKWzlSYYJVdblDWmSmH
-         4jDW10nWXt6ftDdqRLGAsgx6clhJ9EfVU2vS7o7wHsiq8H4fPX8vA99+Tivu9GgCGa5O
-         O1yReIu6YTCMFOcogHKTajWosve+mFV+k6ZBhBGhUZRpgJuAmWzVJWOk2wvqjTuD/5xr
-         0SBWcVfZAiI6PPWJQSU/YLPbtrPpvhOIgSeyDjifYPI8H8wq0wWK/VtoVHp3+Jvf3rwb
-         EFfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JnWxgn/1wqBRwYVI3n2SXvnPrpmM+qtla3r+d2WQynU=;
-        b=b5Jq14Txw1mMa/wRPYMTGwvW+zSQ+y1shtOO2nxAXuyPhYLpUV8kl8Tigwj+vv3Y72
-         8Rxcvclfp3KgtW8or1skXqFZCNDXfknY1DPfjsnmukde7sAt3g21xuF6r7c08KQfnqOh
-         V5pwoL0Wpdc9Ul9fYMYivh0w5fH9Z3161+HQuoFLhjvCj8zK2O3yXH73ZHQ9pfX9yYAl
-         8hIiNOm9JhGdwoEXh+J4a8T489iw1LKGFlu2K7Z0/MSYd0aKDwjArG7ZAJPCvInmibjr
-         h4fNWCBAaMJibk4tNVUzKkDOBlSvB4VvjxbHRjBwNyiOW2aXv/v6hZBRz4qFCYYCX826
-         pzjA==
-X-Gm-Message-State: AOAM532LG2sv1PiI5aUkRKBheGAsZn3GzX7Fx0CRJuScUZA3c5koABNN
-        tsXSUy+K2M8xinpFSGtdyUt+jvorvZ7f0xXfxwc=
-X-Google-Smtp-Source: ABdhPJy9nPVKya4joebimGvNZNnfOFgYEcrWQME+z0d/FfPUK+EOeejarp/2Ui5Bqfh80Ngbu2EITrkfTPu1lxdnAKU=
-X-Received: by 2002:a17:903:32d2:b0:166:3747:8465 with SMTP id
- i18-20020a17090332d200b0016637478465mr51207202plr.143.1654998044485; Sat, 11
- Jun 2022 18:40:44 -0700 (PDT)
+        Sat, 11 Jun 2022 22:02:46 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE74D110F;
+        Sat, 11 Jun 2022 19:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654999362; x=1686535362;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iKrCwgb9uS93jd0NsZKfGCrvtHPpYo5dR2R538MRcS8=;
+  b=WKULbeeQbrxnQxSgbwhW5IFNydULTA8Yeja5OZlbAKLztMEGgpFxaKMd
+   gU6pQn0HFl3fDkvsiDswGME7NsIF/VtSw1DhvJzXauet/+vpR2+6543PD
+   Tc/QkWoadmJie6p0AQPlkMghRc76WDAcxZF8y6q5lippypI7Pm/+GC2GC
+   SiTNMx3xWwIVBL1dF8ZW1vXjgzWpIZvSALqgNYRlXojjYhEI27GqnWq46
+   NICgFlaNEZ9ejTkMy5iTddZLIqtuV/vcDquiJqXF1BI8OK0i6lNFI8nt0
+   4+nqFeenzAj6XilPAIyrfT2+YLXd+h7JsHHBq9JmiRtxEOat93BTwxM43
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="276748766"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="276748766"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 19:02:40 -0700
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="638955602"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 19:02:39 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     joel@joelfernandes.org, paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] refscale: Convert test_lock spinlock to raw_spinlock
+Date:   Sun, 12 Jun 2022 10:02:25 +0800
+Message-Id: <20220612020225.3098239-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220610153829.446516-1-alvin@pqrs.dk> <20220610153829.446516-5-alvin@pqrs.dk>
-In-Reply-To: <20220610153829.446516-5-alvin@pqrs.dk>
-From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date:   Sat, 11 Jun 2022 22:40:33 -0300
-Message-ID: <CAJq09z5gdfZtdoh5i1Bp08M-S6UiATXzcYNMArHxvsi3ch===g@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 4/5] net: dsa: realtek: rtl8365mb: remove
- learn_limit_max private data member
-To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The variable is just assigned the value of a macro, so it can be
-> removed.
+In PREEMPT_RT kernel, the spinlock are replaced by sleepable rt_mutex.
+in a critical section where preemption is disabled this will trigger
+calltrace like the following:
 
-As I commented previously, the switches in this family with 10 ports
-do have a different value for RTL8365MB_LEARN_LIMIT_MAX.
-Once we add support for one of those models, we will somewhat revert this p=
-atch.
+BUG: scheduling while atomic: ref_scale_reade/76/0x00000002
+Preemption disabled at:
+ref_lock_section+0x16/0x80
+Call Trace:
+<TASK>
+dump_stack_lvl+0x5b/0x82
+dump_stack+0x10/0x12
+__schedule_bug.cold+0x9c/0xad
+__schedule+0x839/0xc00
+schedule_rtlock+0x22/0x40
+rtlock_slowlock_locked+0x460/0x1350
+rt_spin_lock+0x61/0xe0
+ref_lock_section+0x29/0x80
+rcu_scale_one_reader+0x52/0x60
+ref_scale_reader+0x28d/0x490
+kthread+0x128/0x150
+ret_from_fork+0x22/0x30
+</TASK>
 
-I believe learn_limit_max would fit better inside the new static
-chip_info structure.
+Convert spinlock to raw_spinlock to fix it.
 
-Regards,
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/refscale.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Luiz
+diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
+index 909644abee67..435c884c02b5 100644
+--- a/kernel/rcu/refscale.c
++++ b/kernel/rcu/refscale.c
+@@ -385,7 +385,7 @@ static struct ref_scale_ops rwsem_ops = {
+ };
+ 
+ // Definitions for global spinlock
+-static DEFINE_SPINLOCK(test_lock);
++static DEFINE_RAW_SPINLOCK(test_lock);
+ 
+ static void ref_lock_section(const int nloops)
+ {
+@@ -393,8 +393,8 @@ static void ref_lock_section(const int nloops)
+ 
+ 	preempt_disable();
+ 	for (i = nloops; i >= 0; i--) {
+-		spin_lock(&test_lock);
+-		spin_unlock(&test_lock);
++		raw_spin_lock(&test_lock);
++		raw_spin_unlock(&test_lock);
+ 	}
+ 	preempt_enable();
+ }
+@@ -405,9 +405,9 @@ static void ref_lock_delay_section(const int nloops, const int udl, const int nd
+ 
+ 	preempt_disable();
+ 	for (i = nloops; i >= 0; i--) {
+-		spin_lock(&test_lock);
++		raw_spin_lock(&test_lock);
+ 		un_delay(udl, ndl);
+-		spin_unlock(&test_lock);
++		raw_spin_unlock(&test_lock);
+ 	}
+ 	preempt_enable();
+ }
+@@ -427,8 +427,8 @@ static void ref_lock_irq_section(const int nloops)
+ 
+ 	preempt_disable();
+ 	for (i = nloops; i >= 0; i--) {
+-		spin_lock_irqsave(&test_lock, flags);
+-		spin_unlock_irqrestore(&test_lock, flags);
++		raw_spin_lock_irqsave(&test_lock, flags);
++		raw_spin_unlock_irqrestore(&test_lock, flags);
+ 	}
+ 	preempt_enable();
+ }
+@@ -440,9 +440,9 @@ static void ref_lock_irq_delay_section(const int nloops, const int udl, const in
+ 
+ 	preempt_disable();
+ 	for (i = nloops; i >= 0; i--) {
+-		spin_lock_irqsave(&test_lock, flags);
++		raw_spin_lock_irqsave(&test_lock, flags);
+ 		un_delay(udl, ndl);
+-		spin_unlock_irqrestore(&test_lock, flags);
++		raw_spin_unlock_irqrestore(&test_lock, flags);
+ 	}
+ 	preempt_enable();
+ }
+-- 
+2.25.1
 
-
-> Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
-> ---
->  drivers/net/dsa/realtek/rtl8365mb.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realte=
-k/rtl8365mb.c
-> index 3599fa5d9f14..676b88798976 100644
-> --- a/drivers/net/dsa/realtek/rtl8365mb.c
-> +++ b/drivers/net/dsa/realtek/rtl8365mb.c
-> @@ -563,7 +563,6 @@ struct rtl8365mb_port {
->   * @irq: registered IRQ or zero
->   * @chip_id: chip identifier
->   * @chip_ver: chip silicon revision
-> - * @learn_limit_max: maximum number of L2 addresses the chip can learn
->   * @cpu: CPU tagging and CPU port configuration for this chip
->   * @mib_lock: prevent concurrent reads of MIB counters
->   * @ports: per-port data
-> @@ -577,7 +576,6 @@ struct rtl8365mb {
->         int irq;
->         u32 chip_id;
->         u32 chip_ver;
-> -       u32 learn_limit_max;
->         struct rtl8365mb_cpu cpu;
->         struct mutex mib_lock;
->         struct rtl8365mb_port ports[RTL8365MB_MAX_NUM_PORTS];
-> @@ -1088,15 +1086,13 @@ static void rtl8365mb_port_stp_state_set(struct d=
-sa_switch *ds, int port,
->  static int rtl8365mb_port_set_learning(struct realtek_priv *priv, int po=
-rt,
->                                        bool enable)
->  {
-> -       struct rtl8365mb *mb =3D priv->chip_data;
-> -
->         /* Enable/disable learning by limiting the number of L2 addresses=
- the
->          * port can learn. Realtek documentation states that a limit of z=
-ero
->          * disables learning. When enabling learning, set it to the chip'=
-s
->          * maximum.
->          */
->         return regmap_write(priv->map, RTL8365MB_LUT_PORT_LEARN_LIMIT_REG=
-(port),
-> -                           enable ? mb->learn_limit_max : 0);
-> +                           enable ? RTL8365MB_LEARN_LIMIT_MAX : 0);
->  }
->
->  static int rtl8365mb_port_set_isolation(struct realtek_priv *priv, int p=
-ort,
-> @@ -2003,7 +1999,6 @@ static int rtl8365mb_detect(struct realtek_priv *pr=
-iv)
->                 mb->priv =3D priv;
->                 mb->chip_id =3D chip_id;
->                 mb->chip_ver =3D chip_ver;
-> -               mb->learn_limit_max =3D RTL8365MB_LEARN_LIMIT_MAX;
->                 mb->jam_table =3D rtl8365mb_init_jam_8365mb_vc;
->                 mb->jam_size =3D ARRAY_SIZE(rtl8365mb_init_jam_8365mb_vc)=
-;
->
-> --
-> 2.36.1
->

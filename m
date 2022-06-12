@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A767547B20
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 19:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9720547B25
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 19:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbiFLRGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 13:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S231280AbiFLRNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 13:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiFLRGO (ORCPT
+        with ESMTP id S229600AbiFLRNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 13:06:14 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC944093E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 10:06:12 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id n10so6970726ejk.5
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 10:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=e1j5oNyWe6LjPGibCsOkD4pe/7KGmuvi3WqbEeyX52A=;
-        b=axtd06CitJ9XTEQlj/DgAkzQO7gwwugoWwZY1AE+3Zgrmx9g1bJNWCNMLWlwF3iEl4
-         GhYCjZ1F7rhF6iZMCV3zMH+89SbmhW1HYE2LWqQReDf2b8zTolL4VWga094dShEhTncU
-         rXBUN7y3Juwybt8Udriw5j+nE2KAu+rQwc9it6aEmgN54efusB7QLYAaiLredlUnFdpx
-         o8Zp+1zZeXtNqmAXKQQzRBNOqMx9wixdGTeA+zOfuR7gU+lFX57Rn3kpULfWzeHw4sfP
-         riHzAZNZ4FYDkUtThXbRlJuV1Huhu/47lyl7C8BI7SiPecrv8yOniALBcDn26/A9LB+s
-         c3PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e1j5oNyWe6LjPGibCsOkD4pe/7KGmuvi3WqbEeyX52A=;
-        b=v+9Fg7JRwW8KcF3tm+SQN5JtKRNEXutCtCm97dXQ3ylTghh7vHGxS2oT47XhYjyK6t
-         BKVHi840MsHDimoQHmkVJlfbP8KaS7261SyCacTXHW1cQbQj1GkqY8YnNu70lLJ1fDHU
-         kNwXMTXTFWgNAtyIrm5sjGaBWG8oPTo5ooMa/EVhDOsTkIp+oNPf1BvNJbDYeHLTGt19
-         nUEezk7+fvmddEMvre5ugR1wXYpj+gzPEw0z1RPHHqFU1XcKCMRs0rWT7OHGH2qTUPmV
-         Ii7WIfq+W1ZrBvuAqvVU98ap5Kb1w71l0rH1PVZP3+Ob4hOY+pwEUZGobA1Rxp9VFUVp
-         wZig==
-X-Gm-Message-State: AOAM533CNQzLi6t/kX0g8ZwJ316hiH6vm7zdiQmVKRiRkh8LSNNCM817
-        J3AurxRX0/yVE+H5yhO7sa6BBA==
-X-Google-Smtp-Source: ABdhPJywtatBoFfH74/PESsNXnL7SJhTfWWSGNB3lg0vls4R1pXgQ7dz3i5/bNXUiIxLtCTPyo5tTQ==
-X-Received: by 2002:a17:906:804a:b0:70c:1dac:9bb8 with SMTP id x10-20020a170906804a00b0070c1dac9bb8mr46957960ejw.92.1655053571275;
-        Sun, 12 Jun 2022 10:06:11 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id pv17-20020a170907209100b00704757b1debsm2675740ejb.9.2022.06.12.10.06.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Jun 2022 10:06:10 -0700 (PDT)
-Message-ID: <f1cc0f5a-12fb-28bc-7345-13ac2bf5b74d@linaro.org>
-Date:   Sun, 12 Jun 2022 19:06:09 +0200
+        Sun, 12 Jun 2022 13:13:51 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C44FF1;
+        Sun, 12 Jun 2022 10:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1655054006;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=EocYAFQcyOsOHNYOtPDLZltnmSxJMwBedC8g9UxAB0k=;
+    b=VifFVmIundfqm0uooUDEEUUVEaM7dA7JvbG0/e+jIELhH9d9xCyc4b/adUQ/m4uRe/
+    zSXg1qF/7AVO2B5j2RnxQGsZq4xokCpBz1o970SEKHLnT+8tbn7bdjh4KmPiL2qQ+t+X
+    FNJlhlF3BG7xubZ0tslXSQjU0jytwy+1oNwOMS0Cl5QL0mR9aTzGbiLE69Y0VF+Mg7us
+    DBSYKIzeRAYnPZHoJ2mzUzjrVft7r/LDNw9GZVOSgpKq17JbtrdicluHz5mSN8tIMkoD
+    W+45JzdXuEa2aHRIQsSUnB4o9Z1LO1enT06hTPSxpFyK0TS+fdMT55zhirJVrWYeKJW2
+    XH7A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+Ofov4eKq4TnA="
+X-RZG-CLASS-ID: mo00
+Received: from [172.20.10.8]
+    by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
+    with ESMTPSA id R0691fy5CHDOKgn
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 12 Jun 2022 19:13:24 +0200 (CEST)
+Subject: Re: [PATCH v2 05/13] can: slcan: simplify the device de-allocation
+To:     Max Staudt <max@enpas.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
+ <20220608165116.1575390-6-dario.binacchi@amarulasolutions.com>
+ <eae65531-bf9f-4e2e-97ca-a79a8aa833fc@hartkopp.net>
+ <CABGWkvroJG16AOu8BODhVu068jacjHWbkkY9TCF4PQ7rgANVXA@mail.gmail.com>
+ <20220612182302.36bdd9b9.max@enpas.org>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <aee0c161-5418-ad56-ab33-66e34a4f2a0d@hartkopp.net>
+Date:   Sun, 12 Jun 2022 19:13:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 3/3] ARM: dts: exynos: add function and color to aat1290
- flash LED node in Galaxy S3
+In-Reply-To: <20220612182302.36bdd9b9.max@enpas.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Simon Shields <simon@lineageos.org>,
-        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>
-References: <20220607085343.72414-1-krzysztof.kozlowski@linaro.org>
- <20220607085343.72414-3-krzysztof.kozlowski@linaro.org>
- <4a7f8ab6-c061-3861-5790-b6c0fbd7cad1@gmail.com>
- <ef62a7bb-2217-2947-17dd-fc4a51acdea5@linaro.org>
- <f1402a1d-a74d-f7b9-b9e2-fc3991781e64@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f1402a1d-a74d-f7b9-b9e2-fc3991781e64@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,61 +74,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2022 17:09, Jacek Anaszewski wrote:
-> On 6/10/22 12:14, Krzysztof Kozlowski wrote:
->> On 09/06/2022 22:31, Jacek Anaszewski wrote:
->>> Hi Krzysztof,
->>>
->>> On 6/7/22 10:53, Krzysztof Kozlowski wrote:
->>>> Add common LED properties - the function and color - to aat1290 flash
->>>> LED node in Galaxy S3.
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>    arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi | 3 +++
->>>>    1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi b/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
->>>> index 72901772fcad..d76f3678dcab 100644
->>>> --- a/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
->>>> +++ b/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
->>>> @@ -7,6 +7,7 @@
->>>>     */
->>>>    
->>>>    /dts-v1/;
->>>> +#include <dt-bindings/leds/common.h>
->>>>    #include "exynos4412-midas.dtsi"
->>>>    
->>>>    / {
->>>> @@ -27,6 +28,8 @@ led-controller {
->>>>    
->>>>    		led {
->>>>    			label = "flash";
->>>> +			function = LED_FUNCTION_FLASH;
->>>> +			color = <LED_COLOR_ID_WHITE>;
->>>
->>> Addition of these two properties will not change anything because
->>> the label has precedence. It is deprecated, but if you introduce
->>> function and color to the binding instead of the label, the resulting
->>> LED class device name will change.
+
+
+On 12.06.22 18:23, Max Staudt wrote:
+> On Sat, 11 Jun 2022 12:46:04 +0200
+> Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+> 
+>>> As written before I would like to discuss this change out of your
+>>> patch series "can: slcan: extend supported features" as it is no
+>>> slcan feature extension AND has to be synchronized with the
+>>> drivers/net/slip/slip.c implementation.
 >>
->> Which is not necessarily what we want, right? Adding these properties is
->> a proper description of hardware, regardless whether current Linux
->> implementation uses them or not.
+>> Why do you need to synchronize it with  drivers/net/slip/slip.c
+>> implementation ?
 > 
-> Actually I'd just drop label in addition to your change.
-> I don't think it would break anybody seriously - not expecting it has
-> any larger group of users and having uniformly constructed DTS files
-> in the mainline has greater value.
+> Because slcan.c is a derivative of slip.c and the code still looks
+> *very* similar, so improvements in one file should be ported to the
+> other and vice versa. This has happened several times now.
+> 
+> 
+>>> When it has not real benefit and introduces more code and may create
+>>> side effects, this beautification should probably be omitted at all.
+>>>   
+>>
+>> I totally agree with you. I would have already dropped it if this
+>> patch didn't make sense. But since I seem to have understood that
+>> this is not the case, I do not understand why it cannot be improved
+>> in this series.
+> 
+> This series is mostly about adding netlink support. If there is a point
+> of contention about a beautification, it may be easier to discuss that
+> separately, so the netlink code can be merged while the beautification
+> is still being discussed.
+> 
+> 
+> On another note, the global array of slcan_devs is really unnecessary
+> and maintaining it is a mess - as seen in some of your patches, that
+> have to account for it in tons of places and get complicated because of
+> it.
+> 
+> slcan_devs is probably grandfathered from a very old kernel, since
+> slip.c is about 30 years old, so I suggest to remove it entirely. In
+> fact, it may be easier to patch slcan_devs away first, and that will
+> simplify your open/close patches - your decision :)
+> 
+> 
+> If you wish to implement the slcan_devs removal, here are some hints:
+> 
+> The private struct can just be allocated as part of struct can_priv in
+> slcan_open(), like so:
+> 
+>    struct net_device *dev;
+>    dev = alloc_candev(sizeof(struct slcan), 0);
+> 
+> And then accessed like so:
+> 
+>    struct slcan *sl = netdev_priv(dev);
+> 
+> Make sure to add struct can_priv as the first member of struct slcan:
+> 
+>    /* This must be the first member when using alloc_candev() */
+>    struct can_priv can;
+> 
+> 
+>> The cover letter highlighted positive reactions to the series because
+>> the module had been requiring these kinds of changes for quite
+>> some time. So, why not take the opportunity to finalize this patch in
+>> this series even if it doesn't extend the supported features ?
+> 
+> Because... I can only speak for myself, but I'd merge all the
+> unambiguous stuff first and discuss the difficult stuff later, if there
+> are no interdependencies :)
+> 
+> 
+> 
+> Max
 > 
 
-What about some PostmarketOSos, LineageOS and other OSes?
+Thanks for stepping in Max!
 
-Let me Cc here some folks - Simon, Martin, is the label in flash LED
-node anyhow important for you? Can it be dropped and replaced with
-function+color?
+Couldn't have summarized it better ;-)
 
-https://lore.kernel.org/all/20220607085343.72414-3-krzysztof.kozlowski@linaro.org/
+When I created slcan.c from slip.c this line discipline driver was just 
+oriented at the SLIP idea including the user space tools to attach the 
+network device to the serial tty.
+
+Therefore the driver took most of the mechanics (like the slcan_devs 
+array) and did *only* the 'struct canframe' to ASCII conversion (and 
+vice versa).
+
+@Dario: Implementing the CAN netlink API with open/close/bitrate-setting 
+is a nice improvement. Especially as you wrote that you took care about 
+the former/old API with slcan_attach/slcand.
 
 Best regards,
-Krzysztof
+Oliver

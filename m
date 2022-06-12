@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32FA547ACF
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 17:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857A4547AD3
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 17:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237690AbiFLP1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 11:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S236687AbiFLPdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 11:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237642AbiFLP1g (ORCPT
+        with ESMTP id S237740AbiFLPdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 11:27:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459BDBFF;
-        Sun, 12 Jun 2022 08:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655047651; x=1686583651;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K9OFPqxGEwRGtxLzZ1331X/UMwPNJzjvhOLMaQmmGI4=;
-  b=T8cGm9asOjViIBc/ywqfecH0KVlPoCtxCyiZtrHN4WyJ1XJ4OhwRRRaW
-   cUj8T4j+IYMBps4/W2HTXfNMOYqfktQDmSakoDZ78ppvAdv7KIrjUjjaA
-   KJb41elfckfyvSodoQ06sTDG4jpx2PgRzkNNIm7vlAFYYCxqb8VRBn/vs
-   DRJRzuRyDMxBd9QO0MMz+wCafv0ZkQCHCQOeG7L54ukmsKzzST/gV2KL4
-   roYm/cmAr1YFje680cs7NlBsWhZrI9q/u8+ATGuH5yhJbCY31lYHF5HJv
-   55BIOWqNr/5665/W0+jIJNK9rUq3oDx1TWAxWFAQSkn0wL631uVzUsvNz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="339752005"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="339752005"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 08:27:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="685585081"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Jun 2022 08:27:26 -0700
-Date:   Sun, 12 Jun 2022 23:31:13 +0800
-From:   Liu Zhao <zhao1.liu@linux.intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>,
-        =?gb2312?B?o6w=?= Zhao Liu <zhao1.liu@linux.intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-Subject: Re: [PATCH 2/3] RISC-V: KVM: Add extensible system instruction
- emulation framework
-Message-ID: <20220612153113.GA52224@liuzhao-OptiPlex-7080>
-References: <20220610050555.288251-1-apatel@ventanamicro.com>
- <20220610050555.288251-3-apatel@ventanamicro.com>
+        Sun, 12 Jun 2022 11:33:33 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30C71FCDD;
+        Sun, 12 Jun 2022 08:33:31 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LLdyL4Wxdz9tND;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id eknzzkiQ2Vxt; Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LLdyL3R5Fz9tFn;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5C6FF8B76D;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id bcVSCS3LNj_0; Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (po16064.idsi0.si.c-s.fr [192.168.6.194])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 24C0C8B767;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25CFXKk9070302
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sun, 12 Jun 2022 17:33:20 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25CFXKG7070301;
+        Sun, 12 Jun 2022 17:33:20 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] module: Fix "warning: variable 'exit' set but not used"
+Date:   Sun, 12 Jun 2022 17:33:20 +0200
+Message-Id: <a7e1cf121cc52969878d0450b273e7fa10043835.1655047991.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610050555.288251-3-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655047996; l=1716; s=20211009; h=from:subject:message-id; bh=LQHsvDZxdtPGyxK4kLcZMc4XILopXjVtdWTqz6awXSw=; b=YFO6mFFEmb/uqVSKc0m9nMFOGGjxNbXBbzNKiZoPPpTUrut+sQwptrE57lcDC5BfFQP0PuWGkT8h TAqf8Im6C7BPFSEV23+u+5daSNdSVVo0Xtj6bvzXX4/wj5QQ4T1G
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,168 +64,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:35:54AM +0530, Anup Patel wrote:
-> Date: Fri, 10 Jun 2022 10:35:54 +0530
-> From: Anup Patel <apatel@ventanamicro.com>
-> Subject: [PATCH 2/3] RISC-V: KVM: Add extensible system instruction
->  emulation framework
-> X-Mailer: git-send-email 2.34.1
-> 
-> We will be emulating more system instructions in near future with
-> upcoming AIA, PMU, Nested and other virtualization features.
-> 
-> To accommodate above, we add an extensible system instruction emulation
-> framework in vcpu_insn.c.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_vcpu_insn.h |  9 +++
->  arch/riscv/kvm/vcpu_insn.c             | 82 +++++++++++++++++++++++---
->  2 files changed, 82 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_insn.h b/arch/riscv/include/asm/kvm_vcpu_insn.h
-> index 4e3ba4e84d0f..3351eb61a251 100644
-> --- a/arch/riscv/include/asm/kvm_vcpu_insn.h
-> +++ b/arch/riscv/include/asm/kvm_vcpu_insn.h
-> @@ -18,6 +18,15 @@ struct kvm_mmio_decode {
->  	int return_handled;
->  };
->  
-> +/* Return values used by function emulating a particular instruction */
-> +enum kvm_insn_return {
-> +	KVM_INSN_EXIT_TO_USER_SPACE = 0,
-> +	KVM_INSN_CONTINUE_NEXT_SEPC,
-> +	KVM_INSN_CONTINUE_SAME_SEPC,
-> +	KVM_INSN_ILLEGAL_TRAP,
-> +	KVM_INSN_VIRTUAL_TRAP
-> +};
-> +
->  void kvm_riscv_vcpu_wfi(struct kvm_vcpu *vcpu);
->  int kvm_riscv_vcpu_virtual_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  				struct kvm_cpu_trap *trap);
-> diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-> index be756879c2ee..75ca62a7fba5 100644
-> --- a/arch/riscv/kvm/vcpu_insn.c
-> +++ b/arch/riscv/kvm/vcpu_insn.c
-> @@ -118,8 +118,24 @@
->  				 (s32)(((insn) >> 7) & 0x1f))
->  #define MASK_FUNCT3		0x7000
->  
-> -static int truly_illegal_insn(struct kvm_vcpu *vcpu,
-> -			      struct kvm_run *run,
-> +struct insn_func {
-> +	unsigned long mask;
-> +	unsigned long match;
-> +	/*
-> +	 * Possible return values are as follows:
-> +	 * 1) Returns < 0 for error case
-> +	 * 2) Returns 0 for exit to user-space
-> +	 * 3) Returns 1 to continue with next sepc
-> +	 * 4) Returns 2 to continue with same sepc
-> +	 * 5) Returns 3 to inject illegal instruction trap and continue
-> +	 * 6) Returns 4 to inject virtual instruction trap and continue
-> +	 *
-> +	 * Use enum kvm_insn_return for return values
-> +	 */
-> +	int (*func)(struct kvm_vcpu *vcpu, struct kvm_run *run, ulong insn);
-> +};
-> +
-> +static int truly_illegal_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  			      ulong insn)
->  {
->  	struct kvm_cpu_trap utrap = { 0 };
-> @@ -128,6 +144,24 @@ static int truly_illegal_insn(struct kvm_vcpu *vcpu,
->  	utrap.sepc = vcpu->arch.guest_context.sepc;
->  	utrap.scause = EXC_INST_ILLEGAL;
->  	utrap.stval = insn;
-> +	utrap.htval = 0;
-> +	utrap.htinst = 0;
-> +	kvm_riscv_vcpu_trap_redirect(vcpu, &utrap);
-> +
-> +	return 1;
-> +}
-> +
-> +static int truly_virtual_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> +			      ulong insn)
-> +{
-> +	struct kvm_cpu_trap utrap = { 0 };
-> +
-> +	/* Redirect trap to Guest VCPU */
-> +	utrap.sepc = vcpu->arch.guest_context.sepc;
-> +	utrap.scause = EXC_VIRTUAL_INST_FAULT;
-> +	utrap.stval = insn;
-> +	utrap.htval = 0;
-> +	utrap.htinst = 0;
->  	kvm_riscv_vcpu_trap_redirect(vcpu, &utrap);
->  
->  	return 1;
-> @@ -148,18 +182,48 @@ void kvm_riscv_vcpu_wfi(struct kvm_vcpu *vcpu)
->  	}
->  }
->  
-> -static int system_opcode_insn(struct kvm_vcpu *vcpu,
-> -			      struct kvm_run *run,
-> +static int wfi_insn(struct kvm_vcpu *vcpu, struct kvm_run *run, ulong insn)
-> +{
-> +	vcpu->stat.wfi_exit_stat++;
-> +	kvm_riscv_vcpu_wfi(vcpu);
-> +	return KVM_INSN_CONTINUE_NEXT_SEPC;
-> +}
-> +
-> +static const struct insn_func system_opcode_funcs[] = {
-> +	{
-> +		.mask  = INSN_MASK_WFI,
-> +		.match = INSN_MATCH_WFI,
-> +		.func  = wfi_insn,
-> +	},
-> +};
-> +
-> +static int system_opcode_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  			      ulong insn)
->  {
-> -	if ((insn & INSN_MASK_WFI) == INSN_MATCH_WFI) {
-> -		vcpu->stat.wfi_exit_stat++;
-> -		kvm_riscv_vcpu_wfi(vcpu);
-> +	int i, rc = KVM_INSN_ILLEGAL_TRAP;
-> +	const struct insn_func *ifn;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(system_opcode_funcs); i++) {
-> +		ifn = &system_opcode_funcs[i];
-> +		if ((insn & ifn->mask) == ifn->match) {
-> +			rc = ifn->func(vcpu, run, insn);
-> +			break;
-> +		}
-> +	}
-> +
-> +	switch (rc) {
-> +	case KVM_INSN_ILLEGAL_TRAP:
-> +		return truly_illegal_insn(vcpu, run, insn);
-> +	case KVM_INSN_VIRTUAL_TRAP:
-> +		return truly_virtual_insn(vcpu, run, insn);
-> +	case KVM_INSN_CONTINUE_NEXT_SEPC:
->  		vcpu->arch.guest_context.sepc += INSN_LEN(insn);
-> -		return 1;
-> +		break;
+When CONFIG_MODULE_UNLOAD is not selected, 'exit' is
+set but never used.
 
-Hi Anup,
-What about adding KVM_INSN_CONTINUE_SAME_SEPC and KVM_INSN_EXIT_TO_USER_SPACE
-cases here and set rc to 1?
-This is the explicit indication that both cases are handled.
+It is not possible to replace the #ifdef CONFIG_MODULE_UNLOAD by
+IS_ENABLED(CONFIG_MODULE_UNLOAD) because mod->exit doesn't exist
+when CONFIG_MODULE_UNLOAD is not selected.
 
-> +	default:
-> +		break;
->  	}
->  
-> -	return truly_illegal_insn(vcpu, run, insn);
-> +	return (rc <= 0) ? rc : 1;
->  }
->  
->  /**
-> -- 
-> 2.34.1
-> 
-> 
-> -- 
-> kvm-riscv mailing list
-> kvm-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kvm-riscv
+And because of the rcu_read_lock_sched() section it is not easy
+to regroup everything in a single #ifdef. Let's regroup partially
+and add missing #ifdef to completely opt out the use of
+'exit' when CONFIG_MODULE_UNLOAD is not selected.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ kernel/module/main.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fed58d30725d..0548151dd933 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2939,24 +2939,25 @@ static void cfi_init(struct module *mod)
+ {
+ #ifdef CONFIG_CFI_CLANG
+ 	initcall_t *init;
++#ifdef CONFIG_MODULE_UNLOAD
+ 	exitcall_t *exit;
++#endif
+ 
+ 	rcu_read_lock_sched();
+ 	mod->cfi_check = (cfi_check_fn)
+ 		find_kallsyms_symbol_value(mod, "__cfi_check");
+ 	init = (initcall_t *)
+ 		find_kallsyms_symbol_value(mod, "__cfi_jt_init_module");
+-	exit = (exitcall_t *)
+-		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
+-	rcu_read_unlock_sched();
+-
+ 	/* Fix init/exit functions to point to the CFI jump table */
+ 	if (init)
+ 		mod->init = *init;
+ #ifdef CONFIG_MODULE_UNLOAD
++	exit = (exitcall_t *)
++		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
+ 	if (exit)
+ 		mod->exit = *exit;
+ #endif
++	rcu_read_unlock_sched();
+ 
+ 	cfi_module_add(mod, mod_tree.addr_min);
+ #endif
+-- 
+2.35.3
+

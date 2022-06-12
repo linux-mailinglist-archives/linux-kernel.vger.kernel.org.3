@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F895479A7
+	by mail.lfdr.de (Postfix) with ESMTP id 246825479A5
 	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235871AbiFLJnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 05:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S235896AbiFLJq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 05:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiFLJnB (ORCPT
+        with ESMTP id S232302AbiFLJqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 05:43:01 -0400
-Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA0612D12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:42:58 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 04:42:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
-        s=2020-07; t=1655026977;
-        bh=IQ9prYlA/J6R6f9MDzLadU8e2oAyTtHh3QWFvqikGiM=;
-        h=Date:From:To:Message-ID:MIME-Version:Content-Type:
-         Content-Disposition:From:Subject:To:Date:Sender:Content-Type:
-         Content-Transfer-Encoding:Content-Disposition:Mime-Version:
-         Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
-        b=CMzxHsX+B6snFcxoNO0n6joRaeBTj2cXH2FcFUdR3KoMFyAOwZL9lD7kz/RJ5V05C
-         uXoBnrR18JUGTikNRw+vCLAhvUYPUcEg+sNvqlnzQFHuTmNuCW6jxPbgGPlyHBDFjX
-         q910ViQzV7B2df3jhBeRp1LaRE+1XJ6vuHLU5Om+HMz2S29nTX9oaZWTWdD7hEwQ5m
-         DQdrbTShRnUp6/x6hyJpRLXAhveaCXsshH1j9LFjNCyykZWZhKooooEC7KvyUaOTGq
-         gza5aljj1yDRWhB0jqR/oLnpgaJejpuRMi70maKCYDdUfUl8bRzPO92rJY3mwJ7Qlp
-         fuFWtryGfBFYg==
-From:   "Marty E. Plummer" <hanetzer@startmail.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, a.zummo@towertech.it
-Message-ID: <20220612094253.4rgbp3mcc44nffl6@proprietary-killer>
+        Sun, 12 Jun 2022 05:46:24 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C1436E18
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:46:22 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 0KAlob505OXCy0KAlocd3n; Sun, 12 Jun 2022 11:46:20 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 12 Jun 2022 11:46:20 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <9e232b74-6fb0-fd89-a043-71d5faf92cc6@wanadoo.fr>
+Date:   Sun, 12 Jun 2022 11:46:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_SUBJECT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
+ driver
+Content-Language: fr
+To:     ddrokosov@sberdevices.ru
+Cc:     andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
+        jic23@kernel.org, kernel@sberdevices.ru, lars@metafoo.de,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, stano.jakubek@gmail.com,
+        stephan@gerhold.net
+References: <20220525181532.6805-1-ddrokosov@sberdevices.ru>
+ <20220525181532.6805-3-ddrokosov@sberdevices.ru>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220525181532.6805-3-ddrokosov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,32 +52,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-alexandre.belloni@bootlin.com
-Bcc:
-Subject: RTC: utility function: days to year/month/days?
-Reply-To:
+Le 25/05/2022 à 20:15, Dmitry Rokosov a écrit :
+> MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
+> sensitivity consumer applications. It has dynamical user selectable full
+> scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurements
+> with output data rates from 1Hz to 1000Hz.
+> 
+> Datasheet can be found at following URL:
+> https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
+> 
+> This driver supports following MSA311 features:
+>      - IIO interface
+>      - Different power modes: NORMAL and SUSPEND (using pm_runtime)
+>      - ODR (Output Data Rate) selection
+>      - Scale and samp_freq selection
+>      - IIO triggered buffer, IIO reg access
+>      - NEW_DATA interrupt + trigger
+> 
+> Below features to be done:
+>      - Motion Events: ACTIVE, TAP, ORIENT, FREEFALL
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov-i4r8oA+eLlH99rHkP+FxIw@public.gmane.org>
+> ---
+>   MAINTAINERS                |    6 +
+>   drivers/iio/accel/Kconfig  |   13 +
+>   drivers/iio/accel/Makefile |    2 +
+>   drivers/iio/accel/msa311.c | 1525 ++++++++++++++++++++++++++++++++++++
+>   4 files changed, 1546 insertions(+)
+>   create mode 100644 drivers/iio/accel/msa311.c
 
-Hello.
+[...]
 
-I'm currently working on a rtc driver for my soc (HiSilicon Hi3521a, and
-at least one other, potentially more), and it stores time in the
-following registers:
-RTC_10MS_COUNT: 7 bits, 10ms increments
-RTC_S_COUNT, 6 bits, 1s increments
-RTC_M_COUNT, 6 bits, 1m increments
-RTC_H_COUNT, 5 bits, 1h increments
-RTC_D_COUNT_L, 8 bits, 1d increments, low bits
-RTC_D_COUNT_H, 8 bits, 1d increments, high bits
+> +static int msa311_probe(struct i2c_client *i2c)
+> +{
+> +	struct msa311_priv *msa311;
+> +	struct iio_dev *indio_dev;
+> +	struct device *dev = &i2c->dev;
+> +	int err;
+> +
+> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*msa311));
+> +	if (!indio_dev)
+> +		return dev_err_probe(dev, -ENOMEM,
+> +				     "iio device allocation failed\n");
+> +
+> +	msa311 = iio_priv(indio_dev);
+> +	msa311->i2c = i2c;
+> +	i2c_set_clientdata(i2c, indio_dev);
+> +
+> +	err = msa311_regmap_init(msa311);
+> +	if (err)
+> +		return err;
+> +
+> +	mutex_init(&msa311->lock);
+> +
+> +	err = devm_pm_runtime_enable(dev);
+> +	if (err)
+> +		return dev_err_probe(dev, err,
+> +				     "cannot enable runtime PM (%d)\n", err);
+> +
 
-No months or years. Is there any utility function one could use to
-convert 0-65535 days into year/month/days already in the kernel, or is
-that something I'll have to roll myself?
+Nit: dev_err_probe() already print the 'err' (in a human readable 
+maner), so unless the code itself is of any interest, it can be removed:
 
-Mail receipients taken from ./scripts/get_maintainers.pl -f
-drivers/rtc/rtc-core.h, so if I'm pinging someone I shouldn't, my
-apologies.
+i.e.:
++		return dev_err_probe(dev, err,
++				     "cannot enable runtime PM");
 
-Regards,
+This pattern is used in many places.
 
-Marty Plummer
+just my 2c.
+
+CJ
 

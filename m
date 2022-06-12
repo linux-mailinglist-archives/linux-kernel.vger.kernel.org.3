@@ -2,78 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495BB5479D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD1F5479D4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbiFLKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 06:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S236219AbiFLKwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 06:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiFLKql (ORCPT
+        with ESMTP id S230349AbiFLKwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 06:46:41 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A3E1929D;
-        Sun, 12 Jun 2022 03:46:41 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v14so3860873wra.5;
-        Sun, 12 Jun 2022 03:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=L7wZV8OxqYvAB1GlMd0evBeabIpJY4/r3rWWpYVpI+k=;
-        b=j5d2ONoPE99ch9Qamp9mZJ9tAlkbgXFGiyti1lJQ9Orcr5mO65tK0YNRGsJXmztmF6
-         FpAazgaTAhGgBs085+A+z1OCgdJ8Zm6mhuzCqGJGGo4BTFNZaBD9hZsM4PieOZ4Pe6Mj
-         5th68YqiO6JsSZJasJamO5Lu4dFGmOTOf/XJD26oSna4H7/u2xIQCTmoDBUf2P98Nk60
-         Ha1GqFVryGEDwBJUh0yzGsXPAo0wN3+ltg97fZX6j/54kAO7B/TxDaTeBhFqkDf32yRi
-         DiQvrtyiURqZbchBOGTT56qatDs5FyHczH0t1FhtiMMNR2h9pFjkwZGOX2TeI/SxAxc6
-         70IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=L7wZV8OxqYvAB1GlMd0evBeabIpJY4/r3rWWpYVpI+k=;
-        b=H79z13AA8oNyhehPBCRRUfJxfGstMwxnLVNsQUViUcJBsaNckaGT4miqPict61Ea50
-         fv8H1afS2/T1TnjHaGbYWQSijlqfVUeprNHri4PJhywV0dwOHb8uNuRZfVFNs0BPLeks
-         LPATCcyIy5wNsQWWnb0kKw57lE9V8Wi9/DaSthOXgyBhwA+pJK/p8T9m2Dmd8Aduwwyt
-         QWYq3VOcLD2qym+uf+0uD0nINJZd8rsJGgIS7WZEfg9r3wx/jKUaiDGXELG3Rb+NbkW+
-         4F1TqGP+WVT+J8Gk9BRJ8uQU2zb3JPjEpA/jOjxh8lsFtyncbFFTc/n+ip6lHO/lIrRq
-         EwQA==
-X-Gm-Message-State: AOAM532Issi4eokCI009iuhGsVD0Ps3X2XRowZjLIYByntMXZ72+Z5T2
-        iDR7l4ouR0u2dTMEUpOVhofcHcV7TA==
-X-Google-Smtp-Source: ABdhPJyfWcMdEp1K8Uu+ys4Lw7xJjNCyGiGgBhas1dUxVlhMcbo7zp1LDMCe1/zadnF58H4i8bXJ4A==
-X-Received: by 2002:a05:6000:1f09:b0:21a:5f3:316a with SMTP id bv9-20020a0560001f0900b0021a05f3316amr805820wrb.682.1655030799648;
-        Sun, 12 Jun 2022 03:46:39 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.248.224])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b0039c4ba160absm20880712wmq.2.2022.06.12.03.46.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 03:46:38 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 13:46:36 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     christophe.leroy@csgroup.eu
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] module: Fix selfAssignment cppcheck warning
-Message-ID: <YqXEDCzsYvDKsgQa@localhost.localdomain>
+        Sun, 12 Jun 2022 06:52:03 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 416FC1A812;
+        Sun, 12 Jun 2022 03:52:02 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id A4E162719CF1;
+        Sun, 12 Jun 2022 19:51:59 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.17.1/8.17.1/Debian-2) with ESMTPS id 25CApvdp038205
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sun, 12 Jun 2022 19:51:59 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.17.1/8.17.1/Debian-2) with ESMTPS id 25CApvBl063742
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sun, 12 Jun 2022 19:51:57 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.17.1/8.17.1/Submit) id 25CApulC063741;
+        Sun, 12 Jun 2022 19:51:56 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Christian Kellner <ckellner@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        Carlos Maiolino <cmaiolin@redhat.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Alexander Larsson <alexl@redhat.com>,
+        Colin Walters <walters@verbum.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 0/4] fat: add support for the renameat2
+ RENAME_EXCHANGE flag
+References: <20220610075721.1182745-1-javierm@redhat.com>
+Date:   Sun, 12 Jun 2022 19:51:56 +0900
+In-Reply-To: <20220610075721.1182745-1-javierm@redhat.com> (Javier Martinez
+        Canillas's message of "Fri, 10 Jun 2022 09:57:17 +0200")
+Message-ID: <874k0qyx0z.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -33,7 +33,8 @@
-> #ifdef CONFIG_STRICT_MODULE_RWX
-> # define strict_align(X) PAGE_ALIGN(X)
-> #else
-> -# define strict_align(X) (X)
-> +/* OR with zero to avoid cppcheck selfAssignment warning */
-> +# define strict_align(X) ((X) | 0)
->  #endif
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
-Can these myopic tools be taught to see around and notice second
-definition which does mutate variable so there is no self-assignment?
+> The series adds support for the renameat2 system call RENAME_EXCHANGE flag
+> (which allows to atomically replace two paths) to the vfat filesystem code.
+>
+> There are many use cases for this, but we are particularly interested in
+> making possible for vfat filesystems to be part of OSTree [0] deployments.
+>
+> Currently OSTree relies on symbolic links to make the deployment updates
+> an atomic transactional operation. But RENAME_EXCHANGE could be used [1]
+> to achieve a similar level of robustness when using a vfat filesystem.
+>
+> Patch #1 is just a preparatory patch to introduce the RENAME_EXCHANGE
+> support, patch #2 moves some code blocks in vfat_rename() to a set of
+> helper functions, that can be reused by tvfat_rename_exchange() that's
+> added by patch #3 and finally patch #4 adds some kselftests to test it.
+>
+> This is a v6 that addresses issues pointed out in v5:
+>
+> https://lkml.org/lkml/2022/6/9/361
+>
+> [0]: https://github.com/ostreedev/ostree
+> [1]: https://github.com/ostreedev/ostree/issues/1649
+
+Looks good this patchset.
+
+Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F9B54798A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBBC54798B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbiFLJWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 05:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S235727AbiFLJWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 05:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbiFLJWh (ORCPT
+        with ESMTP id S232696AbiFLJWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 05:22:37 -0400
+        Sun, 12 Jun 2022 05:22:36 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820002AF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44BAD10B;
         Sun, 12 Jun 2022 02:22:35 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id DDB92CD40F;
-        Sun, 12 Jun 2022 09:22:32 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 8084ECD419;
+        Sun, 12 Jun 2022 09:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1655025753; bh=a9nBPWablbRIJ2VamdiGHGVcR82c+DSpGM9XWM/NQ30=;
+        t=1655025754; bh=wtBEwHgxf1k3VKPNLzIL+M2+HCS54WwTAdfC55EoI9Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=yHNKr3+sIHi1NUiZD6d2dH/oc6q7T45P7rN35jqjHcIj3ci15klE0u0tjTrFpsla3
-         sZ/PF+9Mep/PFlnkYKquCEmb4Uljg5Pa9HHMsNaDr9u9UAvUAR3FIgAVrLrgL0Q43T
-         3ysLal+7+x97p5SZ9kkEtsFctJKCqxEQ+8dqrl9A=
+        b=OkRsSr+4F6L+MVvGWtvyrygNzovKELtMgXuIWQG84o5ff+rTc3HUSzVW5EwGHE4gx
+         Nyzwkl7C00WhhglGgZR9Nri3nTWpF2MnZBoCzAygUOlaO4GQ5bvBBQqwY0TdU6jT7m
+         OJqaYwVDnJhuxwXUw7WndxsCl63q0VND+rJoTpgo=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] arm64: dts: qcom: msm8953: add APPS IOMMU
-Date:   Sun, 12 Jun 2022 11:22:14 +0200
-Message-Id: <20220612092218.424809-3-luca@z3ntu.xyz>
+        Luca Weiss <luca@z3ntu.xyz>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sireesh Kodali <sireeshkodali1@gmail.com>,
+        James Willcox <jwillcox@squareup.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/4] drm/msm/mdp5: Add perf data for MDP v1.16
+Date:   Sun, 12 Jun 2022 11:22:15 +0200
+Message-Id: <20220612092218.424809-4-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220612092218.424809-1-luca@z3ntu.xyz>
 References: <20220612092218.424809-1-luca@z3ntu.xyz>
@@ -53,65 +58,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vladimir Lypak <vladimir.lypak@gmail.com>
 
-Add the nodes describing the iommu and its context banks that are found
-on msm8953 SoCs.
+Add the perf data for the mdp found in msm8953.
 
 Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
 Changes from v1:
-- new patch
+- pick up R-b tag
 
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 36 +++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index ffc3ec2cd3bc..961db3e23ee4 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -726,6 +726,42 @@ tcsr_phy_clk_scheme_sel: syscon@193f044 {
- 			reg = <0x193f044 0x4>;
- 		};
+diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+index 1bf9ff5dbabc..b17f868ffca8 100644
+--- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
++++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+@@ -837,6 +837,11 @@ static const struct mdp5_cfg_hw msm8x53_config = {
+ 			[2] = INTF_DSI,
+ 		},
+ 	},
++	.perf = {
++		.ab_inefficiency = 100,
++		.ib_inefficiency = 200,
++		.clk_inefficiency = 105
++	},
+ 	.max_clk = 400000000,
+ };
  
-+		apps_iommu: iommu@1e00000 {
-+			compatible = "qcom,msm8953-iommu", "qcom,msm-iommu-v1";
-+			ranges  = <0 0x1e20000 0x20000>;
-+
-+			clocks = <&gcc GCC_SMMU_CFG_CLK>,
-+				 <&gcc GCC_APSS_TCU_ASYNC_CLK>;
-+			clock-names = "iface", "bus";
-+
-+			qcom,iommu-secure-id = <17>;
-+
-+			#address-cells = <1>;
-+			#iommu-cells = <1>;
-+			#size-cells = <1>;
-+
-+			// vfe
-+			iommu-ctx@14000 {
-+				compatible = "qcom,msm-iommu-v1-ns";
-+				reg = <0x14000 0x1000>;
-+				interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+
-+			// mdp_0
-+			iommu-ctx@15000 {
-+				compatible = "qcom,msm-iommu-v1-ns";
-+				reg = <0x15000 0x1000>;
-+				interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+
-+			// venus_ns
-+			iommu-ctx@16000 {
-+				compatible = "qcom,msm-iommu-v1-ns";
-+				reg = <0x16000 0x1000>;
-+				interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+
- 		spmi_bus: spmi@200f000 {
- 			compatible = "qcom,spmi-pmic-arb";
- 			reg = <0x200f000 0x1000>,
 -- 
 2.36.1
 

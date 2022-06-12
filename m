@@ -2,138 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C2F5479D0
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495BB5479D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236170AbiFLKoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 06:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
+        id S236192AbiFLKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 06:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236009AbiFLKoJ (ORCPT
+        with ESMTP id S231658AbiFLKql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 06:44:09 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8373E625B;
-        Sun, 12 Jun 2022 03:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655030648; x=1686566648;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oY4m7/TA+RKNO4Qsg0G2e91Q7hQxCUmosIWjYQ/l6PU=;
-  b=PCwsomosCvftuoIGVb6uQs9Se/vjFsVMdYyO/sqQB3K/oLNkjU3EVvO9
-   ixOIJAcAzwGMsWHTs/2V5Wf94RiIHb0LVO6P4M9sAhBs5PvhsUhkLiAZ3
-   IdecYktAm3F0Hckr5X1Mlee2WDkFGf6aTkBw8LolLAwOjv6WDber+uqVX
-   efCiNnkag+XUrlIo08tZ1yrRtk5w8m+iT5lnKCLrafu4pjBREv1l5FIkF
-   7sXizNIfnkFW4D5Y/cniWTWajtb2YMIW1Y91fFAdD7wYtn+y5sON4SSv+
-   X+6/nTINZI3EDPnLtKo1W06IK1i3GkMxOhtv3eTJat4nLsL0/zkZQ6jj9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="279099711"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="279099711"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 03:44:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="611340376"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2022 03:44:05 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0L4e-000Jqt-Dd;
-        Sun, 12 Jun 2022 10:44:04 +0000
-Date:   Sun, 12 Jun 2022 18:43:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
-Cc:     kbuild-all@lists.01.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, mturquette@baylibre.com, linux@armlinux.org.uk,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: Re: [PATCH v17 05/10] clk: Add Sunplus SP7021 clock driver
-Message-ID: <202206121806.C2ECo2lB-lkp@intel.com>
-References: <65ef2bf7fc393eb373b966fe839852bcd1bacad8.1654565776.git.qinjian@cqplus1.com>
+        Sun, 12 Jun 2022 06:46:41 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A3E1929D;
+        Sun, 12 Jun 2022 03:46:41 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id v14so3860873wra.5;
+        Sun, 12 Jun 2022 03:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=L7wZV8OxqYvAB1GlMd0evBeabIpJY4/r3rWWpYVpI+k=;
+        b=j5d2ONoPE99ch9Qamp9mZJ9tAlkbgXFGiyti1lJQ9Orcr5mO65tK0YNRGsJXmztmF6
+         FpAazgaTAhGgBs085+A+z1OCgdJ8Zm6mhuzCqGJGGo4BTFNZaBD9hZsM4PieOZ4Pe6Mj
+         5th68YqiO6JsSZJasJamO5Lu4dFGmOTOf/XJD26oSna4H7/u2xIQCTmoDBUf2P98Nk60
+         Ha1GqFVryGEDwBJUh0yzGsXPAo0wN3+ltg97fZX6j/54kAO7B/TxDaTeBhFqkDf32yRi
+         DiQvrtyiURqZbchBOGTT56qatDs5FyHczH0t1FhtiMMNR2h9pFjkwZGOX2TeI/SxAxc6
+         70IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=L7wZV8OxqYvAB1GlMd0evBeabIpJY4/r3rWWpYVpI+k=;
+        b=H79z13AA8oNyhehPBCRRUfJxfGstMwxnLVNsQUViUcJBsaNckaGT4miqPict61Ea50
+         fv8H1afS2/T1TnjHaGbYWQSijlqfVUeprNHri4PJhywV0dwOHb8uNuRZfVFNs0BPLeks
+         LPATCcyIy5wNsQWWnb0kKw57lE9V8Wi9/DaSthOXgyBhwA+pJK/p8T9m2Dmd8Aduwwyt
+         QWYq3VOcLD2qym+uf+0uD0nINJZd8rsJGgIS7WZEfg9r3wx/jKUaiDGXELG3Rb+NbkW+
+         4F1TqGP+WVT+J8Gk9BRJ8uQU2zb3JPjEpA/jOjxh8lsFtyncbFFTc/n+ip6lHO/lIrRq
+         EwQA==
+X-Gm-Message-State: AOAM532Issi4eokCI009iuhGsVD0Ps3X2XRowZjLIYByntMXZ72+Z5T2
+        iDR7l4ouR0u2dTMEUpOVhofcHcV7TA==
+X-Google-Smtp-Source: ABdhPJyfWcMdEp1K8Uu+ys4Lw7xJjNCyGiGgBhas1dUxVlhMcbo7zp1LDMCe1/zadnF58H4i8bXJ4A==
+X-Received: by 2002:a05:6000:1f09:b0:21a:5f3:316a with SMTP id bv9-20020a0560001f0900b0021a05f3316amr805820wrb.682.1655030799648;
+        Sun, 12 Jun 2022 03:46:39 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.248.224])
+        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b0039c4ba160absm20880712wmq.2.2022.06.12.03.46.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 03:46:38 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 13:46:36 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     christophe.leroy@csgroup.eu
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] module: Fix selfAssignment cppcheck warning
+Message-ID: <YqXEDCzsYvDKsgQa@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <65ef2bf7fc393eb373b966fe839852bcd1bacad8.1654565776.git.qinjian@cqplus1.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qin,
+> @@ -33,7 +33,8 @@
+> #ifdef CONFIG_STRICT_MODULE_RWX
+> # define strict_align(X) PAGE_ALIGN(X)
+> #else
+> -# define strict_align(X) (X)
+> +/* OR with zero to avoid cppcheck selfAssignment warning */
+> +# define strict_align(X) ((X) | 0)
+>  #endif
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on pza/reset/next]
-[also build test WARNING on robh/for-next clk/clk-next tip/irq/core linus/master v5.19-rc1 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220607-100746
-base:   https://git.pengutronix.de/git/pza/linux reset/next
-config: microblaze-randconfig-c024-20220612 (https://download.01.org/0day-ci/archive/20220612/202206121806.C2ECo2lB-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.3.0
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-cocci warnings: (new ones prefixed by >>)
->> drivers/clk/clk-sp7021.c:584:2-7: WARNING: invalid free of devm_ allocated data
-
-vim +584 drivers/clk/clk-sp7021.c
-
-   550	
-   551	static struct clk_hw *sp_pll_register(struct device *dev, const char *name,
-   552					      const struct clk_parent_data *parent_data,
-   553					      void __iomem *reg, int pd_bit, int bp_bit,
-   554					      unsigned long brate, int shift, int width,
-   555					      unsigned long flags)
-   556	{
-   557		struct sp_pll *pll;
-   558		struct clk_hw *hw;
-   559		struct clk_init_data initd = {
-   560			.name = name,
-   561			.parent_data = parent_data,
-   562			.ops = (bp_bit >= 0) ? &sp_pll_ops : &sp_pll_sub_ops,
-   563			.num_parents = 1,
-   564			.flags = flags,
-   565		};
-   566		int ret;
-   567	
-   568		pll = devm_kzalloc(dev, sizeof(*pll), GFP_KERNEL);
-   569		if (!pll)
-   570			return ERR_PTR(-ENOMEM);
-   571	
-   572		pll->hw.init = &initd;
-   573		pll->reg = reg;
-   574		pll->pd_bit = pd_bit;
-   575		pll->bp_bit = bp_bit;
-   576		pll->brate = brate;
-   577		pll->div_shift = shift;
-   578		pll->div_width = width;
-   579		spin_lock_init(&pll->lock);
-   580	
-   581		hw = &pll->hw;
-   582		ret = devm_clk_hw_register(dev, hw);
-   583		if (ret) {
- > 584			kfree(pll);
-   585			return ERR_PTR(ret);
-   586		}
-   587	
-   588		return hw;
-   589	}
-   590	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Can these myopic tools be taught to see around and notice second
+definition which does mutate variable so there is no self-assignment?

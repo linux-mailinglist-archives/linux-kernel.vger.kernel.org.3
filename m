@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526C75479B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDDF5479B4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 12:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235948AbiFLKQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 06:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S235980AbiFLKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 06:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235937AbiFLKQL (ORCPT
+        with ESMTP id S235937AbiFLKRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 06:16:11 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AEB50477
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 03:16:10 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id s1so3788018wra.9
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 03:16:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=k6Ypp3ZqB6KZarZC5LJWvKaJPTAf+yT+cTJ0/3rPKyk=;
-        b=cpp2bXvvxq68gIC1sS892FUlU2qnq4Fx91fJxS+54meoPjgu7TIq3V054+tVzY5lS6
-         t5O4gXSv1KvmhQYf0RsHWPALWcQHBR7VFc9/L7G8v/PYrI4FcnyY+DecPNc9LTHjpdEz
-         y41HZJw30G3kjaSJbDMKpKqpGmLeeFLg54ZSt7TQM6raDdIIdppJMstC6hoyqXK0KPHn
-         3wgv3K2tbXA1zHyb4YjeQSNzA0sWuvUVDGVEA0tUgO+FQ1dpOzQyuqbLnbnHUQJylhbX
-         a1diXbo7tJmteKyjfwSTHY+uikDyZZFM7fbZkVjdk0DOPUL4/Q/NOAhak49zKNUll3cp
-         wYWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=k6Ypp3ZqB6KZarZC5LJWvKaJPTAf+yT+cTJ0/3rPKyk=;
-        b=u7+Ph/KNcFTH7QI5m9LFfe27K5nt8QKUlsLFYhIB+Ux9JeuwlcY+9sUeZeFLdu36fL
-         68bWKxqHMcTNr4NUNJr+wx8xtjgArfKtdU3espA+l1A52fePvUZscjXTtq3a4eL1lJ7Y
-         jZwUYs24I6QACHTaPvkjnnJFbiQ8uA+n5ix7/L9oX9ULgOnsAP/z9Nt9UtgdRPYaAFNe
-         ua3qXucVPoNu2xiG2YP8xbgWqFdwpAIMhM6lhKpIn/1rMD/QMY3yHF49jalLzZd0+58E
-         Y9q64bOcJMLBIqk0WCnNNCFFd73RVbGudTbzH1DoG9+DDx71I4HhD83njhJbOT0s2Y5U
-         e57w==
-X-Gm-Message-State: AOAM531qvGFSZNiGncqtJq/n7sRuMY4jA+otFNWWfhPAfDxX14MIlGLh
-        6i4sRisNKzXAQl6l4FSOcygPtc81QMEeuQ9gipw=
-X-Google-Smtp-Source: ABdhPJxMTMwTvxQ70LnJ/ZTbq18l2Z6fUUnUDjUM+uIy4+EZJbPx3bONPwlcnQf+qGvwANqcNMG7UMeU6OVzmdWojoI=
-X-Received: by 2002:a05:6000:1688:b0:218:47d6:5e46 with SMTP id
- y8-20020a056000168800b0021847d65e46mr31656319wrd.699.1655028968975; Sun, 12
- Jun 2022 03:16:08 -0700 (PDT)
+        Sun, 12 Jun 2022 06:17:45 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF613E84;
+        Sun, 12 Jun 2022 03:17:41 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LLVxw3l7Xz9tDN;
+        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XTndmNYRrRMU; Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LLVxw2dQPz9t9d;
+        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 427B78B76D;
+        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id zw5tKwdR51RN; Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.193])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 06EA68B767;
+        Sun, 12 Jun 2022 12:17:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25CAHUYV048681
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sun, 12 Jun 2022 12:17:30 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25CAHT59048680;
+        Sun, 12 Jun 2022 12:17:29 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] module: Fix selfAssignment cppcheck warning
+Date:   Sun, 12 Jun 2022 12:17:25 +0200
+Message-Id: <023c3097576650c1af77344be9937833bb303a6c.1655028735.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Sender: kingsleygoerge@gmail.com
-Received: by 2002:a05:6000:2ca:0:0:0:0 with HTTP; Sun, 12 Jun 2022 03:16:07
- -0700 (PDT)
-From:   "Mrs.Girdaladze Krummenacher" <goergekingsley@gmail.com>
-Date:   Sun, 12 Jun 2022 10:16:07 +0000
-X-Google-Sender-Auth: YwIN3JBOf2ratfocttlei4uX7ks
-Message-ID: <CAOSf3OS3H6+iD0OthrOYtQu4YJ2zqAGghOq91k0pNMc0hH2o_w@mail.gmail.com>
-Subject: Donation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.5 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655029044; l=2346; s=20211009; h=from:subject:message-id; bh=Cnody7fZ4v0eN7AnNtz5ncbw0xjUREFAKECK08Dh6Qc=; b=DiutiPtOwrPMsKZnyuojtmuBNjpId1BXFWTwR7weS4E+bLl1q+rvj7g3z1dUjIizcLZw8ZrzdCgv bu1qJ9+ABS6Py5C0PxwKUEulmxMe244Cc8J5sOO/DGgjps0ZQmc4
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Donation
-My Dear Friend?
-My name is Mrs.Girdaladze Krummenacher
-,
-Am a Western America but i lived in
-Liechtenstein for many years and
-now currently hospitalized in a private hospital here in Texas as a
-result of Throat cancer?
+cppcheck reports the following warnings:
 
-My purpose of writing to you is because I was led by the spirit of God to
-offer you the
-money that Me and My late husband I have private account?
+kernel/module/main.c:1455:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
+   mod->core_layout.size = strict_align(mod->core_layout.size);
+                         ^
+kernel/module/main.c:1489:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+   mod->init_layout.size = strict_align(mod->init_layout.size);
+                         ^
+kernel/module/main.c:1493:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+   mod->init_layout.size = strict_align(mod->init_layout.size);
+                         ^
+kernel/module/main.c:1504:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+   mod->init_layout.size = strict_align(mod->init_layout.size);
+                         ^
+kernel/module/main.c:1459:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+   mod->data_layout.size = strict_align(mod->data_layout.size);
+                         ^
+kernel/module/main.c:1463:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+   mod->data_layout.size = strict_align(mod->data_layout.size);
+                         ^
+kernel/module/main.c:1467:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+   mod->data_layout.size = strict_align(mod->data_layout.size);
+                         ^
 
-I=E2=80=99m 69 year old woman? It's an issue close incredibly to my heart, =
-as
-I'm one of those people: divorced, single and childless. My husband
-and I were together for many years, but were unable to have children?
-I=E2=80=99m offering
-you the sum of money as a donation for the work of God and
-charity and to take care of orphans and  help the less privileged.
+This is due to strict_align() being a no-op when
+CONFIG_STRICT_MODULE_RWX is not selected.
 
-May the good Lord bless you and your family?
-When I hear from you with this email address
-I will direct you on how to receive the money.
-Contact me through my email address  ( MrsGirdaladze1@outlook.com )
-Please pray for me and god bless you?
-Mrs.Girdaladze Krummenacher
+Change strict_align() to a bitwise OR with 0 in order to feint cppcheck.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ kernel/module/internal.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index bc5507ab8450..8396d5f5daa0 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -33,7 +33,8 @@
+ #ifdef CONFIG_STRICT_MODULE_RWX
+ # define strict_align(X) PAGE_ALIGN(X)
+ #else
+-# define strict_align(X) (X)
++/* OR with zero to avoid cppcheck selfAssignment warning */
++# define strict_align(X) ((X) | 0)
+ #endif
+ 
+ extern struct mutex module_mutex;
+-- 
+2.35.3
+

@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41F0547C96
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 23:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B52547C9C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 23:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236919AbiFLVk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 17:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
+        id S236285AbiFLVlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 17:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237094AbiFLVkV (ORCPT
+        with ESMTP id S237117AbiFLVkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 12 Jun 2022 17:40:21 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB96227CE5
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 14:40:08 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id n10so7703765ejk.5
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 14:40:08 -0700 (PDT)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8542A724
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 14:40:10 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kq6so7662738ejb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 14:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+67b1tOoWpv+tJyn4Sl0UQj6SwsqWBdWszhIl7nE8ec=;
-        b=ekzn2Eu7W1AGKvZCpWrysDJbHOiJnbUo5R4jIEGo8okB8OGLKdr/rfRpdjnuWmK+ka
-         YiTgErfTCPlZsW+I5ikMnhUtnvq0/m3pAZBJtOlPonAyNOitvDOYkoQUg9/7qskgVXLn
-         6gVg9KMBgvg65rnqlaTiqb9xP/PA+V64FdQos=
+        bh=AAKaIth+G/AmEuzfr70Dsvzk4FxXYLQFFVrvRHhl0zE=;
+        b=Qr//VDTJlM3yW6NMOsV6Ote3kssYtDIpQaISCw/bS+xF96jzFDXuevaWjaTtWkVcSK
+         vYCwdE4iWIVd8vDsjmjwW5ejgo2/mhUw09BsmMuB+Nxt2mmnRL+VB8nLL30uTe4MXkU7
+         dRU9p68g51DFLMOdk5sBrL8dgNnxp5yqS/Aec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+67b1tOoWpv+tJyn4Sl0UQj6SwsqWBdWszhIl7nE8ec=;
-        b=JsO9wrG1cOLYfVoXG8LjZSUbRPT9I72THkN/qXb/UTtbdu4Mr693NfAJMrUH3rhrD/
-         HubRhwuUca/p2Ls6Q1Xxs8zfzUYG5u1X9imxzxWSPvEJMCWx/fM8feUAO+VimtOHvxRs
-         B8FrBNqAcpo8NF/ewYtEyRuiHBiH69mg79t6QHztGiwiLONfB1S7714G5Vjnzl+SRFn4
-         Z1ChljdfF4YNgQZ5cuhPfIVzQMg0h4VjEci39Uh7qQxk/h44nsLuWgRpuZMfkSAdodl3
-         /Ddchgizjho/8gJFlcEVjkXySLVoZlP0dmp8OEHQeeaoLqycr1B7dkBHEaIIxmvwubEt
-         3faQ==
-X-Gm-Message-State: AOAM5323EhUG4nHsVW/QFsNJ8U0lxOl70iiTKAYVCCx+CQEqIdMMDTPL
-        m4UljKrneufSYak71XQs2fEvia3OSUG4hg==
-X-Google-Smtp-Source: ABdhPJx8A99lmpCxYG4hTnXx0Y2AcGM4m1iilOJ4B+3Xq/1ru2ssjotUbF7W+fslGMlGKgRxvp4d4w==
-X-Received: by 2002:a17:907:8a1d:b0:711:d86e:cc5 with SMTP id sc29-20020a1709078a1d00b00711d86e0cc5mr31921307ejc.237.1655070006888;
-        Sun, 12 Jun 2022 14:40:06 -0700 (PDT)
+        bh=AAKaIth+G/AmEuzfr70Dsvzk4FxXYLQFFVrvRHhl0zE=;
+        b=KtggBO25YFZzGakH4RB+PY4arLQe/2vz8mlCXWfO0zy8dJdSFV6ZPBnsXsY9Xr3YST
+         44A9NVovMbhZcBjfLa+rVh23vFtzswQIaDMSP01qpuwFx0EB7bVZqYJSouy/QMKg4U71
+         wouw1vDKo9DXWl6NIIB5rzZl4JpIXBK0xTmnYDPefEGrSDJ5Rx2HAy8OnLMVoenFdHgb
+         YZG/RfqwnLsTKYqd3ZTT0rW864L9pUeUAvbslS8956sONnsuyk/ZBqhzMLu3STmNz8Gu
+         QtWIPFzWw908283tKK5c0NRd2QwYWiPEgUjJbsimkFASDbCMqop7o6u6I/XjVKzojSiA
+         61IA==
+X-Gm-Message-State: AOAM531qbgzQmLtwYsdYPrzlg4HmCaNYjUxe9VPCydQoZZ0nusT13lGy
+        ImhmG0Vp0IXNOWanLNDRejmrOlpGAQM1qA==
+X-Google-Smtp-Source: ABdhPJw1gEsC80Io0jkEH7Fe3Uht5G0w201EyPmerbdjsm0uSmJLIrZjPwPByXsqXi4uCYhG/Egfhg==
+X-Received: by 2002:a17:906:1c9:b0:712:1115:42a5 with SMTP id 9-20020a17090601c900b00712111542a5mr15154695ejj.662.1655070010102;
+        Sun, 12 Jun 2022 14:40:10 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
-        by smtp.gmail.com with ESMTPSA id u10-20020a1709061daa00b00711d546f8a8sm2909398ejh.139.2022.06.12.14.40.03
+        by smtp.gmail.com with ESMTPSA id u10-20020a1709061daa00b00711d546f8a8sm2909398ejh.139.2022.06.12.14.40.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 14:40:06 -0700 (PDT)
+        Sun, 12 Jun 2022 14:40:09 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     michael@amarulasolutions.com,
@@ -58,9 +58,9 @@ Cc:     michael@amarulasolutions.com,
         Paolo Abeni <pabeni@redhat.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 07/13] can: slcan: set bitrate by CAN device driver API
-Date:   Sun, 12 Jun 2022 23:39:21 +0200
-Message-Id: <20220612213927.3004444-8-dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v3 08/13] can: slcan: send the open command to the adapter
+Date:   Sun, 12 Jun 2022 23:39:22 +0200
+Message-Id: <20220612213927.3004444-9-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
 References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,111 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It allows to set the bitrate via ip tool, as it happens for the other
-CAN device drivers. It still remains possible to set the bitrate via
-slcand or slcan_attach utilities. In case the ip tool is used, the
-driver will send the serial command to the adapter.
+In case the bitrate has been set via ip tool, this patch changes the
+driver to send the open command ("O\r") to the adapter.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
 
-Changes in v3:
-- Remove the slc_do_set_bittiming().
-- Set the bitrate in the ndo_open().
-- Replace -1UL with -1U in setting a fake value for the bitrate.
+(no changes since v2)
 
 Changes in v2:
-- Use the CAN framework support for setting fixed bit rates.
+- Improve the commit message.
 
- drivers/net/can/slcan.c | 39 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 36 insertions(+), 3 deletions(-)
+ drivers/net/can/slcan.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 4639a63c3af8..be3f7e5c685b 100644
+index be3f7e5c685b..9bbf8f363f58 100644
 --- a/drivers/net/can/slcan.c
 +++ b/drivers/net/can/slcan.c
-@@ -105,6 +105,11 @@ struct slcan {
- static struct net_device **slcan_devs;
- static DEFINE_SPINLOCK(slcan_lock);
- 
-+static const u32 slcan_bitrate_const[] = {
-+	10000, 20000, 50000, 100000, 125000,
-+	250000, 500000, 800000, 1000000
-+};
+@@ -495,14 +495,23 @@ static int slc_open(struct net_device *dev)
+ 			netdev_err(dev,
+ 				   "failed to send bitrate command 'C\\rS%d\\r'\n",
+ 				   s);
+-			close_candev(dev);
+-			return err;
++			goto cmd_transmit_failed;
++		}
 +
-  /************************************************************************
-   *			SLCAN ENCAPSULATION FORMAT			 *
-   ************************************************************************/
-@@ -440,6 +445,7 @@ static int slc_close(struct net_device *dev)
- 	netif_stop_queue(dev);
- 	close_candev(dev);
- 	sl->can.state = CAN_STATE_STOPPED;
-+	sl->can.bittiming.bitrate = 0;
- 	sl->rcount   = 0;
- 	sl->xleft    = 0;
- 	spin_unlock_bh(&sl->lock);
-@@ -451,7 +457,8 @@ static int slc_close(struct net_device *dev)
- static int slc_open(struct net_device *dev)
- {
- 	struct slcan *sl = netdev_priv(dev);
--	int err;
-+	unsigned char cmd[SLC_MTU];
-+	int err, s;
- 
- 	if (sl->tty == NULL)
- 		return -ENODEV;
-@@ -461,15 +468,39 @@ static int slc_open(struct net_device *dev)
- 	 * can.bittiming.bitrate is 0, causing open_candev() to fail.
- 	 * So let's set to a fake value.
- 	 */
--	sl->can.bittiming.bitrate = -1;
-+	if (sl->can.bittiming.bitrate == 0)
-+		sl->can.bittiming.bitrate = -1U;
-+
- 	err = open_candev(dev);
- 	if (err) {
- 		netdev_err(dev, "failed to open can device\n");
- 		return err;
++		err = slcan_transmit_cmd(sl, "O\r");
++		if (err) {
++			netdev_err(dev, "failed to send open command 'O\\r'\n");
++			goto cmd_transmit_failed;
+ 		}
  	}
  
--	sl->can.state = CAN_STATE_ERROR_ACTIVE;
- 	sl->flags &= BIT(SLF_INUSE);
-+
-+	if (sl->can.bittiming.bitrate != -1U) {
-+		for (s = 0; s < ARRAY_SIZE(slcan_bitrate_const); s++) {
-+			if (sl->can.bittiming.bitrate == slcan_bitrate_const[s])
-+				break;
-+		}
-+
-+		/* The CAN framework has already validate the bitrate value,
-+		 * so we can avoid to check if `s' has been properly set.
-+		 */
-+
-+		snprintf(cmd, sizeof(cmd), "C\rS%d\r", s);
-+		err = slcan_transmit_cmd(sl, cmd);
-+		if (err) {
-+			netdev_err(dev,
-+				   "failed to send bitrate command 'C\\rS%d\\r'\n",
-+				   s);
-+			close_candev(dev);
-+			return err;
-+		}
-+	}
-+
-+	sl->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	sl->can.state = CAN_STATE_ERROR_ACTIVE;
  	netif_start_queue(dev);
  	return 0;
++
++cmd_transmit_failed:
++	close_candev(dev);
++	return err;
  }
-@@ -583,6 +614,8 @@ static struct slcan *slc_alloc(void)
- 	/* Initialize channel control data */
- 	sl->magic = SLCAN_MAGIC;
- 	sl->dev	= dev;
-+	sl->can.bitrate_const = slcan_bitrate_const;
-+	sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
- 	spin_lock_init(&sl->lock);
- 	INIT_WORK(&sl->tx_work, slcan_transmit);
- 	init_waitqueue_head(&sl->xcmd_wait);
+ 
+ static void slc_dealloc(struct slcan *sl)
 -- 
 2.32.0
 

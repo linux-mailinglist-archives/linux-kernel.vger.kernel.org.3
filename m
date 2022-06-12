@@ -2,61 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CBC5479DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 13:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDEA5479E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 13:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbiFLLFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 07:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S236336AbiFLLMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 07:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbiFLLFI (ORCPT
+        with ESMTP id S233053AbiFLLME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 07:05:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1151336E12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 04:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655031907; x=1686567907;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+t7ZRUM3b9Dx/IpCyxXJBg7WxFmk+ae4VrziA9FVvCE=;
-  b=noVj/0dlmESMuau49WFgD+jpnsAVqZ/cUI8Mhs8P3bG7qWOSpcd3u9en
-   zEG1f9qS49nsXG7oAL//zJkzRBK13+as8CpmdEtJaiJIYnsNd4MltFJKo
-   nicc9ux2EimjuBgGQ89DJD+R6y74pEroU9EfRgXFqTffdnyQI9oo6OT13
-   +lv3XIJXr9OY6j/s+l7eD1EToIdo9j3W0SkE3Owbm2UttluLzjXt824pj
-   +Ld1jU3mS5ezUcoUFMtXw6Vw7QhSSWNZKN1DkV35tM73Ip/auE00LBjTR
-   8svL2jKNBVvSYPEYYiLgciVHNm5hzvH2ztSG6viL5n1B7YSvWbMDWaRNy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="258467048"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="258467048"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 04:05:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="829164642"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Jun 2022 04:05:05 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0LOy-000Jrd-R3;
-        Sun, 12 Jun 2022 11:05:04 +0000
-Date:   Sun, 12 Jun 2022 19:04:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huan Feng <huan.feng@starfivetech.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 21/54]
- drivers/char/hw_random/starfive-vic-rng.c:238:34: warning: unused variable
- 'vic_rng_dt_ids'
-Message-ID: <202206121938.SUJ1iMQj-lkp@intel.com>
+        Sun, 12 Jun 2022 07:12:04 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D533ED08;
+        Sun, 12 Jun 2022 04:12:01 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1o0LVf-0006Zc-A8; Sun, 12 Jun 2022 13:11:59 +0200
+Message-ID: <d4ea2dd2-2e89-d3a2-ee5c-f64bb1b8f576@leemhuis.info>
+Date:   Sun, 12 Jun 2022 13:11:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [bugzilla-daemon@kernel.org: [Bug 216109] New: Steam Deck fails
+ to boot when E820 entries clipped out of _CRS]
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220609224339.GA543225@bhelgaas>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220609224339.GA543225@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1655032321;e51f73e7;
+X-HE-SMSGID: 1o0LVf-0006Zc-A8
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,45 +45,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   906be7ef2fb9e2f1fcb740d3d506768cddfc52ca
-commit: b422a122c72a7448306ad60808c748d57b98da71 [21/54] drivers/hw_random: Add StarFive JH7100 Random Number Generator driver
-config: mips-randconfig-c004-20220611 (https://download.01.org/0day-ci/archive/20220612/202206121938.SUJ1iMQj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/esmil/linux/commit/b422a122c72a7448306ad60808c748d57b98da71
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout b422a122c72a7448306ad60808c748d57b98da71
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/char/hw_random/
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi, this is your Linux kernel regression tracker.
 
-All warnings (new ones prefixed by >>):
+On 10.06.22 00:43, Bjorn Helgaas wrote:
+> New regression in v5.19-rc1.
+> 
+> ----- Forwarded message from bugzilla-daemon@kernel.org -----
+> 
+> Subject: [Bug 216109] New: Steam Deck fails to boot when E820 entries clipped
+> 	out of _CRS
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=216109
+> 
+>            Summary: Steam Deck fails to boot when E820 entries clipped out
+>                     of _CRS
+>     Kernel Version: v5.19
+> 
+> Guilherme G. Piccoli reported that v5.18 boots fine on Steam Deck, but
+> v5.19-rc1 does not.  He bisected it to 4c5e242d3e93 ("x86/PCI: Clip only host
+> bridge windows for E820 regions") [1].
+>
+> A quirk similar to [2] that disables E820 clipping makes v5.19-rc1 work again.
+> 
+> The reason why v5.18 (which always does E820 clipping by default) works, while
+> v5.19-rc1 (which also does E820 clipping on this platform) does not has not
+> been explained yet.
+> 
+> [1] https://git.kernel.org/linus/4c5e242d3e93
+> [2] https://git.kernel.org/linus/d341838d776a
 
->> drivers/char/hw_random/starfive-vic-rng.c:238:34: warning: unused variable 'vic_rng_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id vic_rng_dt_ids[] = {
-                                    ^
-   1 warning generated.
+To be sure below issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
 
+#regzbot ^introduced 4c5e242d3e93
+#regzbot title x86/PCI/e820:Steam Deck fails to boot when E820 entries
+clipped out of _CRS
+#regzbot ignore-activity
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=216109
 
-vim +/vic_rng_dt_ids +238 drivers/char/hw_random/starfive-vic-rng.c
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
 
-   237	
- > 238	static const struct of_device_id vic_rng_dt_ids[] = {
-   239		{ .compatible = "starfive,vic-rng" },
-   240		{ }
-   241	};
-   242	MODULE_DEVICE_TABLE(of, vic_rng_dt_ids);
-   243	
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replied to), as the kernel's
+documentation call for; above page explains why this is important for
+tracked regressions.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

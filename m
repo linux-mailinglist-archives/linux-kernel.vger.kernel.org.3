@@ -2,151 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A191547B0E
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 18:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00996547B11
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 18:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231785AbiFLQX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 12:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S231451AbiFLQas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 12:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiFLQXz (ORCPT
+        with ESMTP id S229473AbiFLQaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 12:23:55 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586885E15D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 09:23:54 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so1003286wml.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 09:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
-        b=R/sEjCaZtQEnfPFaK+UnnTh0wg4bRV6svzZB+oS2hfNNJzpfcRRfcZmCJOP8EySmQd
-         g+xcBgfqADhJshLEY78CKFvKjnbnDQTiZlNPaYQ4krJN4DIZr0DcF9zio2w2kHV8Sq+E
-         bLM/i/SzIos3D8gnl2FjBUdtUwk4BOXJ/p4Gz7UFvasXpv6HXMR+5PupsiPSPR0TnZya
-         F4NsEqC4DRhyBo+zGRqyKs6C3D88H2ZM6iKWsmgHMRXInXx2VY+xkqjwHyZXLhqJ9DIi
-         GLX8O48hgFb+6agiYOXIOISy12Ll9TGb3KH9UckWOW5W3iIlklqwzjxaxwQD5RPR2Sdf
-         1JcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
-        b=lJMd1atp7SbOxbnRgS1/6re/E5PNM/FyRyvW/gaHGWp3aZTCt92lDCJRSw67pi88/b
-         UfLxNpfckiCy2UpcBwaU/UqNg2+7Ah8BSaD1lBMH2RhV9U52naMib3eAK2IC3luzi5hR
-         qIkSol1QqRv1eMHWIg8l3t+79qQ7rDH5lWt5gW3u2tzKc7Uc0vLEq5wbYmmtb8q0lNFN
-         NERmrudwckN8OxKnefXaZ3BU6Vnu4lMy47uojGnO5WIZQz21fUfiTt2eje1z2voBdXJo
-         oJqrtSWdpjIufijfNYQvRxsc49pDM2xw67CI2kp2/mDe+vs92z/1KJXK1yINrcCb3kBk
-         Avkg==
-X-Gm-Message-State: AOAM530CiBaTaK13mLk7sSXIP8H9unRA7ziTzR15sQeigABUIJNps+Nu
-        YR1sKv5cn03xz4x3IPMb7xhr0A==
-X-Google-Smtp-Source: ABdhPJyPL0K+xAMvnRb2ONEX1jWjnGDkkA7zHOBZU3POgTFS7NF7cqaibZCvN8D1E1ysUwm9U4xflg==
-X-Received: by 2002:a05:600c:2682:b0:39c:8ec6:57d9 with SMTP id 2-20020a05600c268200b0039c8ec657d9mr3559545wmt.99.1655051032703;
-        Sun, 12 Jun 2022 09:23:52 -0700 (PDT)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id bh8-20020a05600c3d0800b003942a244ee6sm6005715wmb.43.2022.06.12.09.23.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 09:23:51 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 17:23:47 +0100
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Bill Wendling <morbo@google.com>
-Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 08/12] cdrom: use correct format characters
-Message-ID: <YqYTExy0IpVbunBL@equinox>
-References: <20220609221702.347522-1-morbo@google.com>
- <20220609221702.347522-9-morbo@google.com>
+        Sun, 12 Jun 2022 12:30:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987F03DA55
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 09:30:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3329160FB0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 16:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924F2C34115;
+        Sun, 12 Jun 2022 16:30:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655051444;
+        bh=av4x1OtTbLOl2qaVByxmxj3YZ1Y0YhQeHKj8yiGOlRo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=euctpRUWaLEf17/tF2HcTJ6lMEKPe/F725SFt9VuJY21dUWD3CRUAceUgUixMa52V
+         7yecVLWwHVbzU23+CjcGD624tHpvMm336Q5zk/r9tasRpqH64N326Wf2o27JjhndqK
+         npyLpjJbX/6PXqDhwbr1IcqfAvJm7FFbK282hlLV7iVYPz2ouVP8S3abi+CqJrds9R
+         ZuinSpxZZgjzOVsxWYixQUHq5hgwicHyOYGKEwXf3Sk91pSYGVLWtCk6qv+tQz157a
+         mMQCbcoI7UYhCUkVuAXeW2NHFLQuol6NCDn0esuMTfO7LEv179hsbLt2LLJlbV5xoY
+         ktNcXqhZ3CgvA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 23B415C02F9; Sun, 12 Jun 2022 09:30:44 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 09:30:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org, pmladek@suse.com
+Subject: Re: [BUG] 8e274732115f ("printk: extend console_lock for per-console
+ locking")
+Message-ID: <20220612163044.GS1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
+ <20220612132302.GA873785@paulmck-ThinkPad-P17-Gen-1>
+ <87k09llvi9.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609221702.347522-9-morbo@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87k09llvi9.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 10:16:27PM +0000, Bill Wendling wrote:
-> From: Bill Wendling <isanbard@gmail.com>
+On Sun, Jun 12, 2022 at 06:09:10PM +0206, John Ogness wrote:
+> Hi Paul,
 > 
-> When compiling with -Wformat, clang emits the following warnings:
-> 
-> drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
->         ret = scnprintf(info + *pos, max_size - *pos, header);
->                                                       ^~~~~~
-> 
-> Use a string literal for the format string.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Bill Wendling <isanbard@gmail.com>
-> ---
->  drivers/cdrom/cdrom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-> index 416f723a2dbb..52b40120c76e 100644
-> --- a/drivers/cdrom/cdrom.c
-> +++ b/drivers/cdrom/cdrom.c
-> @@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
->  	struct cdrom_device_info *cdi;
->  	int ret;
->  
-> -	ret = scnprintf(info + *pos, max_size - *pos, header);
-> +	ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
->  	if (!ret)
->  		return 1;
->  
-> -- 
-> 2.36.1.255.ge46751e96f-goog
-> 
+> Thanks for looking into this! I am currently on vacation with family, so
+> my responses are limited. Some initial comments from me below...
 
-Hi Bill,
+First, this is not an emergency.  I have a good workaround that just got
+done passing significant rcutorture testing.  This means that I can port
+my RCU changes to v5.19-rc1/2 and get on with other testing.
 
-Thank you for the patch, much appreciated.
+So please ignore this for the rest of your time away, and have a great
+time with your family!!!
 
-Looking at this though, all callers of cdrom_print_info() provide 'header'
-as a string literal defined within the driver, when making the call.
-Therefore, I'm not convinced this change is necessary for cdrom.c -
-that said, in this particular use case I don't think it would hurt
-either.
+> On 2022-06-12, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > And the patch below takes care of things in (admittedly quite light)
+> > testing thus far.  What it does is add ten seconds of pure delay
+> > before rcutorture shuts down the system.  Presumably, this delay gives
+> > printk() the time that it needs to flush its buffers.  In the
+> > configurations that I have tested thus far, anyway.
+> >
+> > So what should I be doing instead?
+> >
+> > o	console_flush_on_panic() seems like strong medicine, but might
+> > 	be the right thing to do.  The bit about proceeding even though
+> > 	it failed to acquire the lock doesn't look good for non-panic
+> >       use.
+> 
+> For sure not this one.
+> 
+> > o	printk_trigger_flush() has an attractive name, but it looks
+> > 	like it only just starts the flush rather than waiting for it
+> > 	to finish.
+> 
+> Correct. It just triggers.
+> 
+> > o	pr_flush(1000, true) looks quite interesting, and also seems to
+> > 	work in a few quick tests, so I will continue playing with that.
+> 
+> This is only useful if the context is guaranteed may_sleep().
 
-I've followed the other responses on parts of this series, so I
-understand that a different solution is potentially in the works.
-Thought I'd respond anyway though out of courtesy.
+Which is the case when called from torture_shutdown().
 
-All the best,
-Phil (Uniform CDROM Maintainer)
+But it does seem to be common to invoke kernel_power_off() from things
+like interrupt handlers.  Which means that putting the pr_flush() in
+kernel_power_off() would be a bad idea given that we cannot detect
+non-preemptible regions of code with CONFIG_PREEMPT_NONE=y kernels.
+(That again!)
+
+So any fix within kernel_power_off() would be a bit "interesting".
+
+> What is _supposed_ to happen is that @system_state increases above
+> SYSTEM_RUNNING, which then causes direct printing to be used. So the
+> pr_emerg("Power down\n") in kernel_power_off() would directly flush all
+> remaining messages.
+> 
+> But if the threaded printers are already in the process of printing,
+> they block direct printing. That may be what we are seeing here.
+
+Given that rcutorture can be a bit chatty at shutdown time, my guess
+is that the threaded printers are already in the process of printing.
+
+> What I find particularly interesting is that it is not the kthread-patch
+> that is causing the issue.
+
+I do know that feeling!
+
+> I will have some time tonight to take a closer look.
+
+Please wait until you are back from your vacation.  Given that I now
+have a workaround, which might be as good a fix as there is, there is
+no need to interrupt your vacation.
+
+							Thanx, Paul

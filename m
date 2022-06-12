@@ -2,96 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53845547BF8
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 22:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773F0547BFA
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 22:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbiFLU1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 16:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S234942AbiFLUbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 16:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbiFLU1M (ORCPT
+        with ESMTP id S231891AbiFLUbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 16:27:12 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC071CFFD;
-        Sun, 12 Jun 2022 13:27:11 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id a15so4859567wrh.2;
-        Sun, 12 Jun 2022 13:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xvxzy223FFQJfshyxjElH9L36mSmmC81px6ACmnLyK8=;
-        b=CZxkQSy7UoHTCD4dneKKa+nLhgsUf6WHxNQ7ny3hMnYPuqHYG9gj1IHlYrwb6Yy9Xr
-         EnqQ6GwO8w6MoCEK9UMajyiM59RWdg61hC/B+rQXUIV+YwZBogMeCdA5uOtZqPoWv0OG
-         VuvSzy0c9q3/WUcGklPgeZ9FlsNSRDadjfS420dhp9/S4Ti1a1sdVfnSPjmhtJE+3ZBw
-         YPtt5CvNNtd8m6F1qCOM+Oxya9LXhVSD4ZyyRtI+BF1GYtvrofGrGfiEh1UHXzEcY1cS
-         5btNAbkIlKWE2qUNIP3dHTj0yOEF6HV4WU6qvMlu/Z1wCum/uOMD48OUima4rOX0suXM
-         2lag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xvxzy223FFQJfshyxjElH9L36mSmmC81px6ACmnLyK8=;
-        b=kDfs2fv8WqNmuz7eHTETEhAN4fd5NQWbt8pKwVvENPc32bG2ed1eNMsJRnA1YPaipH
-         kR1rzbsKkvBduZOV57JbgFkmUOcR+bEckhIpn93LlMeluTzpB7C9dq3q77uJsJs+6vmT
-         Hl3uRDzRAyRZz/GkL476p7A858wAVU1UVJet1BY4uITe8yuutS4uzR2OeAl2KzmjCj4Z
-         drgvy82FAAvR5a1a9XUfF0eYwxGnh1vber0ql1SkJmq2qzpbhp3vF+dDk7ovtGNQOK4Z
-         DI9nM/vfo4+GqdpV/ocHsTO/022XLIcdUks65l26t7FT6TRRi5jtr54Ty35OvjTm0baC
-         A2ag==
-X-Gm-Message-State: AOAM531mHqOtkHkVHz28KIuTfYUbiWqYYNQT0RC408xP6NGfW8+1W8iQ
-        OjcT0xr4BC5iaxpcPIpaZcM=
-X-Google-Smtp-Source: ABdhPJwU3NQ70vtIxzoTKWKSW7xmb948Lxhl6faZc7H2PRpuMapE/NaKLkv0PWTQkMWEelZsNk26Fg==
-X-Received: by 2002:a05:6000:184b:b0:219:bee5:6b75 with SMTP id c11-20020a056000184b00b00219bee56b75mr16118671wri.80.1655065629975;
-        Sun, 12 Jun 2022 13:27:09 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a10-20020a056000100a00b0020d106c0386sm6347382wrx.89.2022.06.12.13.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 13:27:08 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] lkdtm: cfi: use NULL for a null pointer rather than zero
-Date:   Sun, 12 Jun 2022 21:27:08 +0100
-Message-Id: <20220612202708.2754270-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Sun, 12 Jun 2022 16:31:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BBB13F96;
+        Sun, 12 Jun 2022 13:31:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8ECD5B80D07;
+        Sun, 12 Jun 2022 20:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 661B0C34115;
+        Sun, 12 Jun 2022 20:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655065908;
+        bh=AyOwRz/gKBKScbBHHI/YAvxa737PnezhWjLreCbZODo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a/z2IWkpd5qV4cXB2TknZUAP2iLaBhTIFTWqXbmHzugQvgU47X/gYznY5rgduL8uV
+         oqD5fyuvOCgbhCGLTMInBvip7PDzEopF+ENjU9x/mmwOKMKXHqLoXOQ0r0tT/pHn5g
+         dmCHhtFKopgQF3fYxhX+fa0I3MRPiwRECIoaV5YiRLgxVWPqr1jdgNxZnxgmq2iW8T
+         U47Ygdpr1XdHEhOZ7ZXBvXiqSu2CSytsTJptHm2hgYHVnFifR8ApohCOh8IRhDAUX0
+         HAMyepx9uPLj6SDKcJMewaVduj9JjzT/W/v1w2BORmO2vHURz/iK0oWEKjkm2TjCgM
+         7MSvhrJyZ1f2A==
+Date:   Mon, 13 Jun 2022 04:31:34 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        kernel-team@android.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [ANNOUNCE] erofs-utils: release 1.5
+Message-ID: <YqZNJpgQ+xLSHBqK@debian>
+Mail-Followup-To: linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        kernel-team@android.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a pointer being initialized with a zero, use NULL instead.
+Hi folks,
 
-Cleans up sparse warning:
-drivers/misc/lkdtm/cfi.c:100:27: warning: Using plain integer as NULL pointer
+A new version erofs-utils 1.5 is available at:
+git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git tags/v1.5
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/misc/lkdtm/cfi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It mainly includes the following changes:
+   - (fsck.erofs) support filesystem extraction (Igor Ostapenko);
+   - support ztailpacking inline feature for compressed files (Yue Hu);
+   - (dump.erofs) support listing directories;
+   - more liberofs APIs (including iterate APIs) (me, Kelvin Zhang);
+   - use mtime to allow more control over the timestamps (David Anderson);
+   - switch to GPL-2.0+ OR Apache-2.0 dual license for liberofs;
+   - various bugfixes and cleanups;
 
-diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-index 666a7f4bc137..71483cb1e422 100644
---- a/drivers/misc/lkdtm/cfi.c
-+++ b/drivers/misc/lkdtm/cfi.c
-@@ -97,7 +97,7 @@ static volatile int force_check;
- static void lkdtm_CFI_BACKWARD(void)
- {
- 	/* Use calculated gotos to keep labels addressable. */
--	void *labels[] = {0, &&normal, &&redirected, &&check_normal, &&check_redirected};
-+	void *labels[] = { NULL, &&normal, &&redirected, &&check_normal, &&check_redirected };
- 
- 	pr_info("Attempting unchecked stack return address redirection ...\n");
- 
--- 
-2.35.3
 
+A little bit delay this time for more than half a year.  This release
+mainly includes ztailpacking feature by Yue Hu which can inline the
+tail pcluster with its inode metadata thus save space and a tail I/O,
+it's highly recommended to be enabled if possible.
+
+Apart from that, fsck.erofs now supports extracting filesystem, thanks
+to Igor Ostapenko.  There are other changes listed above.
+
+
+In the end, I'd like to update the roadmap of EROFS since the last
+update for the coming year:
+
+https://lore.kernel.org/r/20211009061150.GA7479@hsiangkao-HP-ZHAN-66-Pro-G1
+
+Thankfully many of them are finished during the past year.
+
+
+1. Common stuffs:
+
+ - Switch to folios and enable large folios if possible in the next
+   cycles;
+
+ - Get rid of PG_error flag in Linux 5.20 (pending review);
+
+ - Explore byte-addressed rolling hash compression + deduplication since
+   on-disk format already supports such way but needs runtime tuning;
+
+ - LZ4 range dictionary support.  We don't have enough manpower on this
+   yet, but hopefully it can have some progress in the coming year;
+
+ - Further code cleanups.
+
+
+2. Container image use cases:
+
+ - Recently, we posted a article to introduce erofs over fscache
+   feature working with CNCF Dragonfly Nydus image service and give
+   some performance numbers.
+
+     https://d7y.io/blog/2022/06/06/evolution-of-nydus/
+
+   Our Alibaba kernel team are still working on several stuffs about
+   Nydus image service and fscache, including:
+
+    - Better flexible cache management, including repacking and blob
+      GC in order to make better use to the local cache database;
+
+    - Convert and run (e)stargz and others on the fly with fscache
+      feature.  In the future, different formats are also able to be
+      merged in one fs tree:
+      https://github.com/dragonflyoss/image-service/pull/486
+
+    - Runtime decompression support over fscache;
+
+    - Blob cache sharing within the same trusted domain;
+
+    - Page cache sharing between different files with the same chunk;
+
+    - Enhanced convergent encryption to share chunk data in a trusted
+      domain and runtime verification;
+
+    - And other fscache/cachefiles common improvements like fallback
+      format, multiple daemons/dirs, FSDAX, etc.
+
+ - Apart from Nydus, it's planned to introduce a native fscache daemon
+   integrated in erofs-utils to mount EROFS, (e)stargz images from
+   network as well as provide fscache interfaces as liberofs APIs.
+
+
+3. Embedded devices
+
+ - Yue Hu is currently working on a fragment-likewise feature, which
+   can merged tails or the whole files into a special inode in order to
+   minimize the space;
+
+ - Multi-threaded mkfs, fsck.erofs.  I know someone is working on this
+   but I'm not sure the current progress.  It's a bit delay but needs
+   to be resolved anyway.
+
+
+Thanks,
+Gao Xiang

@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD36547902
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 07:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7341254790F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 07:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbiFLFU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 01:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        id S234414AbiFLF7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 01:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFLFU2 (ORCPT
+        with ESMTP id S229528AbiFLF7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 01:20:28 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BFF47056;
-        Sat, 11 Jun 2022 22:20:23 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id z17so2978301pff.7;
-        Sat, 11 Jun 2022 22:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xj6/KX50FekJjTpLTPqTssqKYApqg9fngLCkTaEBqV8=;
-        b=k4Nhl0GsSp6+JAoBrZRfuXI0veblVRqtvhIWSgoXsHmyPmh3Ic2Hp/elgB71bj43AZ
-         tZa1OxcOtWK5C6ixfQ3D+mYJ58HxlSM4/lNPmkGSfhfsOEdeGcxPemx1+zHZu8hN6tRz
-         43zQaatbdYdUUghpbN9H0VvTVWeWt2yL402OJNfq2KXCeDSKLI24QiFTDJSfe8zZ/A6Z
-         64N9yrcd8BKrEYhBbSOCukjSYUKITrvTatOYge7RRvMFgjnBtvSfjfs+iF8vLVL5bkqS
-         TV1pbNp7KlJwEB7Ou1h6Gi346uVFuOpkDM23m2P/xhlBQg+ajSRf3L7xEiGwMH9WdTIv
-         3vUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xj6/KX50FekJjTpLTPqTssqKYApqg9fngLCkTaEBqV8=;
-        b=4JEFRfE0UTNtzkBCWb9M7Yva7rEap2+xZkoOxB1MnaE7IpMO9IGLoaYeMXZDkxN7Bt
-         JFY1SqaFCeS9mhp0TcWQRT/uWdOc/n8cOWe3LLTIgSPEKBM7sFB1IGuyGwHSuAU47XR1
-         gchxmiXFvodLk+FDEtyJEDnj2AySs42yNfWtnrNB4OgieoD68K7mH4Jq0q1bt4isQEnV
-         ZgY+gFaojp5irQvDOEPjE+5PaE21X0NQNQc8fz9UI+vSSywwSNxNGPDRxbwPLt8WCOKr
-         GVfmu3cO23eXLXMGxdpjYOOhCDM0XqVbXujfKL9fXuynwzR6FCSKWlVuV0goEn0RFcoA
-         wMtg==
-X-Gm-Message-State: AOAM531TmMLrvOg8Bq9BR2JHAUcsCwI19k1aKWj/XD7S8tZ8lEAU8CZc
-        rBRINAHFgM4sBwLEE5UrlH08tvnPyfIVQQ==
-X-Google-Smtp-Source: ABdhPJxJAYfx23k+RSV7iSzLgCe77PjpW4Of05oOjFh51dL6IK3ZQLZS71rBMDpG1a1ieluLnXfuGw==
-X-Received: by 2002:a63:7749:0:b0:404:1c03:9244 with SMTP id s70-20020a637749000000b004041c039244mr9027890pgc.145.1655011222465;
-        Sat, 11 Jun 2022 22:20:22 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b0016141e6c5acsm2330471plb.296.2022.06.11.22.20.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 22:20:22 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     mhiramat@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] lib/error-inject: Convert to DEFINE_SEQ_ATTRIBUTE
-Date:   Sun, 12 Jun 2022 13:20:15 +0800
-Message-Id: <20220612052015.23283-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Sun, 12 Jun 2022 01:59:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387AE60BAB
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 22:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655013539; x=1686549539;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JvuE46RlP1v/SThWWDPDAPBjmBvcAgsLTB8hiK3rSIc=;
+  b=Rcm29f15zAu07KzZ1ZD3PRfJbbJ2PiRgCu0+qSM58FN3RDcHvdEMEdTe
+   xNxxeQrd57hs+aKx1A/BazRfxnGJ/TutlGg0dErmUpVd/R5Dogu6uWeAf
+   sq5K6WWS9x8itKyLhrjVLxRwNrzZrghMzzdzZDON6xmkF5QWhS5jtuNXf
+   SzmJNEboKSgwCBh/cM9kXZWii0xfaKEkRauWAJshpPTgglKacLCD1V176
+   eNPyJDNDbgWKZ1dJzJXspjbzJhm9PIhPNrLgYF909vdAPBmWl9IV6g+DZ
+   L/ugMeAZll+N2ZvmwljL7KrJS3xXruuZiJrbaLhm/Xo1q/zWHNmuIJrS9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="261062119"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="261062119"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 22:58:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="672664733"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Jun 2022 22:58:57 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0Gci-000JeJ-IZ;
+        Sun, 12 Jun 2022 05:58:56 +0000
+Date:   Sun, 12 Jun 2022 13:58:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-5.19.y-rt-rebase 16/51] kernel/softirq.c:641:1:
+ sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not
+ declared. Should it be static?
+Message-ID: <202206121359.nWdmw9Ww-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use DEFINE_SEQ_ATTRIBUTE helper macro to simplify the code.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.19.y-rt-rebase
+head:   2a0438f3107478348ce5a998e511c82f0f32316e
+commit: 6695684acc6e0ab2b0a84ae59933797a0e148afc [16/51] tick: Fix timer storm since introduction of timersd
+config: sparc64-randconfig-s032-20220612 (https://download.01.org/0day-ci/archive/20220612/202206121359.nWdmw9Ww-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-30-g92122700-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=6695684acc6e0ab2b0a84ae59933797a0e148afc
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-5.19.y-rt-rebase
+        git checkout 6695684acc6e0ab2b0a84ae59933797a0e148afc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash
 
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- lib/error-inject.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/lib/error-inject.c b/lib/error-inject.c
-index 2ff5ef689d72..4a4f1278c419 100644
---- a/lib/error-inject.c
-+++ b/lib/error-inject.c
-@@ -197,24 +197,14 @@ static int ei_seq_show(struct seq_file *m, void *v)
- 	return 0;
- }
- 
--static const struct seq_operations ei_seq_ops = {
-+static const struct seq_operations ei_sops = {
- 	.start = ei_seq_start,
- 	.next  = ei_seq_next,
- 	.stop  = ei_seq_stop,
- 	.show  = ei_seq_show,
- };
- 
--static int ei_open(struct inode *inode, struct file *filp)
--{
--	return seq_open(filp, &ei_seq_ops);
--}
--
--static const struct file_operations debugfs_ei_ops = {
--	.open           = ei_open,
--	.read           = seq_read,
--	.llseek         = seq_lseek,
--	.release        = seq_release,
--};
-+DEFINE_SEQ_ATTRIBUTE(ei);
- 
- static int __init ei_debugfs_init(void)
- {
-@@ -224,7 +214,7 @@ static int __init ei_debugfs_init(void)
- 	if (!dir)
- 		return -ENOMEM;
- 
--	file = debugfs_create_file("list", 0444, dir, NULL, &debugfs_ei_ops);
-+	file = debugfs_create_file("list", 0444, dir, NULL, &ei_fops);
- 	if (!file) {
- 		debugfs_remove(dir);
- 		return -ENOMEM;
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
+>> kernel/softirq.c:641:1: sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not declared. Should it be static?
+
+vim +/__pcpu_scope_pending_timer_softirq +641 kernel/softirq.c
+
+   639	
+   640	DEFINE_PER_CPU(struct task_struct *, timersd);
+ > 641	DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
+   642	
+
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

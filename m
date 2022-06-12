@@ -2,240 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B0A547A8A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 16:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06468547A8C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 16:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237140AbiFLOnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 10:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S235936AbiFLOpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 10:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237186AbiFLOnl (ORCPT
+        with ESMTP id S234301AbiFLOpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 10:43:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF4BC11449
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 07:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655045018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Uacl4Gu2f17K+DWtcbsCPLU5Mxk2A2DFPC9sh1m+0eE=;
-        b=Qc6cqqO+ji+TdgS90IPUAAPmt+kFTldpEj1icQBgyxVA2Xmdy0587Jw/g3iPcUy4B7EEXa
-        J0tPT05TZoRC+8rIL4u71q1xfXm8Lgyt/etO1i5pSDRa5LOYKqrpp8lks113ra8FLUUcpd
-        kfX5zen5N3JwynNsfCXQAwBoBxO0kr4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-7V3xAowiMsWTw1V71knW3Q-1; Sun, 12 Jun 2022 10:43:37 -0400
-X-MC-Unique: 7V3xAowiMsWTw1V71knW3Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66707802E5B;
-        Sun, 12 Jun 2022 14:43:36 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F34E1121314;
-        Sun, 12 Jun 2022 14:43:33 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?q?Benoit=20Gr=C3=A9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Subject: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820 regions"
-Date:   Sun, 12 Jun 2022 16:43:25 +0200
-Message-Id: <20220612144325.85366-1-hdegoede@redhat.com>
+        Sun, 12 Jun 2022 10:45:13 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D903E0EE
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 07:45:11 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id v81so6246198ybe.0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 07:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nEdR+JbeZcNXqk7Oize93k4cETioRbi+nld4A68DmHI=;
+        b=HDA1tKvKCLx8xGKrKJIHKZH6CszMl5x397hw2tMs5e0A++sOMsZ818nKfFqwQsALO5
+         DNWqZy2w1iJpSmKxoriAD+OOx/RRRrQ7n4krIhcuyIW9Mav80M1OlqOxup8pd52elUDP
+         Vg9++E6KfiJAxIBgLfO4ZcChlEfjCCalCPUQCpJq05H9av94LvnoD/4l0SV/V2Coisk2
+         r13NvbVAb/qEBerdtWuAo/IRW5Pr0CAO7VDiWZId72k0avbBZrxO4k2maGqWYoYmWbrW
+         IKI+kmhLIGkWSzDS6012dED/nKIyGRF1WWoEw+orASaSmly+18xjmIdEXA4YjLrAJACq
+         TgxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nEdR+JbeZcNXqk7Oize93k4cETioRbi+nld4A68DmHI=;
+        b=5kBoFZV+tNswvI3WnYbJ5B8Bvx8crf5CKpHc3v7S2Ea+sQGpZAp0RN2xbZAwsi2B6r
+         DcnB2Hit5jr/RKRDROVpOiyPSbxDGCN62ILy0sAoaM61O7YS6NIPHRIbBuI4Ckjcd/7E
+         obIfDytdXFONH++nq5eONR8129+YWoaYPgjCIhvMrha5JRc8pXqU1Q4AoEozyFVXFs6C
+         rsVeE32/eq4KLbhza/rdDSjpsqosG4vtTpRq4e9peUaZVUyvYEvVEGnKf5NmdC2x0Hc7
+         wwuxBWocgEpUQOue+nc8FE/qXaOHp7lEdGYEEtd9deCLHLV6A/PUSbtiAFZZZVaqKrbE
+         eAUg==
+X-Gm-Message-State: AOAM531M1/gyCqNOXct4SmiSCZgTGmv7IC8VY+9d6n26LwOxyJhtw1jh
+        Y9XbrBM6MctA8be65c8rcKtHvk/6iWsgU20gtz4bsg==
+X-Google-Smtp-Source: ABdhPJyfdCfKcUXduNxctDUAwhfLi+QiaFlKyTIqzGi5M8U04rsK2Risq7tlWOaOA8yMzPUTlIsHF9ipmTILj0S4WbI=
+X-Received: by 2002:a25:d7d3:0:b0:664:d4d4:43e8 with SMTP id
+ o202-20020a25d7d3000000b00664d4d443e8mr1118381ybg.427.1655045110755; Sun, 12
+ Jun 2022 07:45:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220610180310.1725111-1-roman.gushchin@linux.dev>
+In-Reply-To: <20220610180310.1725111-1-roman.gushchin@linux.dev>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Sun, 12 Jun 2022 22:44:34 +0800
+Message-ID: <CAMZfGtV3eHB_Nh_crKgR4-oAvT=Lx-2F6F7xLhTN65Fmefdd0g@mail.gmail.com>
+Subject: Re: [PATCH] mm: kmem: make mem_cgroup_from_obj() vmalloc()-safe
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Vasily Averin <vvs@openvz.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Shakeel Butt <shakeelb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clipping the bridge windows directly from pci_acpi_root_prepare_resources()
-instead of clipping from arch_remove_reservations(), has a number of
-unforseen consequences.
+On Sat, Jun 11, 2022 at 2:04 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+>
+> Currently mem_cgroup_from_obj() is not working properly with objects
+> allocated using vmalloc(). It creates problems in some cases, when
+> it's called for static objects belonging to  modules or generally
+> allocated using vmalloc().
+>
+> This patch makes mem_cgroup_from_obj() safe to be called on objects
+> allocated using vmalloc().
+>
+> It also introduces mem_cgroup_from_slab_obj(), which is a faster
+> version to use in places when we know the object is either a slab
+> object or a generic slab page (e.g. when adding an object to a lru
+> list).
+>
+> Suggested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
 
-If there is an e820 reservation in the middle of a bridge window, then
-the smallest of the 2 remaining parts of the window will be also clipped
-off. Where as the previous code would clip regions requested by devices,
-rather then the entire window, leaving regions which were either entirely
-above or below a reservation in the middle of the window alone.
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-E.g. on the Steam Deck this leads to this log message:
-
-acpi PNP0A08:00: clipped [mem 0x80000000-0xf7ffffff window] to [mem 0xa0100000-0xf7ffffff window]
-
-which then gets followed by these log messages:
-
-pci 0000:00:01.2: can't claim BAR 14 [mem 0x80600000-0x806fffff]: no compatible bridge window
-pci 0000:00:01.3: can't claim BAR 14 [mem 0x80500000-0x805fffff]: no compatible bridge window
-
-and many more of these. Ultimately this leads to the Steam Deck
-no longer booting properly, so revert the change.
-
-Note this is not a clean revert, this revert keeps the later change
-to make the clipping dependent on a new pci_use_e820 bool, moving
-the checking of this bool to arch_remove_reservations().
-
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216109
-Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
-Reported-and-tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- arch/x86/include/asm/e820/api.h |  5 -----
- arch/x86/include/asm/pci_x86.h  |  8 ++++++++
- arch/x86/kernel/resource.c      | 14 +++++++++-----
- arch/x86/pci/acpi.c             |  8 +-------
- 4 files changed, 18 insertions(+), 17 deletions(-)
-
-diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
-index 5a39ed59b6db..e8f58ddd06d9 100644
---- a/arch/x86/include/asm/e820/api.h
-+++ b/arch/x86/include/asm/e820/api.h
-@@ -4,9 +4,6 @@
- 
- #include <asm/e820/types.h>
- 
--struct device;
--struct resource;
--
- extern struct e820_table *e820_table;
- extern struct e820_table *e820_table_kexec;
- extern struct e820_table *e820_table_firmware;
-@@ -46,8 +43,6 @@ extern void e820__register_nosave_regions(unsigned long limit_pfn);
- 
- extern int  e820__get_entry_type(u64 start, u64 end);
- 
--extern void remove_e820_regions(struct device *dev, struct resource *avail);
--
- /*
-  * Returns true iff the specified range [start,end) is completely contained inside
-  * the ISA region.
-diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
-index f52a886d35cf..70533fdcbf02 100644
---- a/arch/x86/include/asm/pci_x86.h
-+++ b/arch/x86/include/asm/pci_x86.h
-@@ -69,6 +69,8 @@ void pcibios_scan_specific_bus(int busn);
- 
- /* pci-irq.c */
- 
-+struct pci_dev;
-+
- struct irq_info {
- 	u8 bus, devfn;			/* Bus, device and function */
- 	struct {
-@@ -246,3 +248,9 @@ static inline void mmio_config_writel(void __iomem *pos, u32 val)
- # define x86_default_pci_init_irq	NULL
- # define x86_default_pci_fixup_irqs	NULL
- #endif
-+
-+#if defined(CONFIG_PCI) && defined(CONFIG_ACPI)
-+extern bool pci_use_e820;
-+#else
-+#define pci_use_e820 false
-+#endif
-diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
-index db2b350a37b7..bba1abd05bfe 100644
---- a/arch/x86/kernel/resource.c
-+++ b/arch/x86/kernel/resource.c
-@@ -1,7 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <linux/dev_printk.h>
- #include <linux/ioport.h>
-+#include <linux/printk.h>
- #include <asm/e820/api.h>
-+#include <asm/pci_x86.h>
- 
- static void resource_clip(struct resource *res, resource_size_t start,
- 			  resource_size_t end)
-@@ -24,14 +25,14 @@ static void resource_clip(struct resource *res, resource_size_t start,
- 		res->start = end + 1;
- }
- 
--void remove_e820_regions(struct device *dev, struct resource *avail)
-+static void remove_e820_regions(struct resource *avail)
- {
- 	int i;
- 	struct e820_entry *entry;
- 	u64 e820_start, e820_end;
- 	struct resource orig = *avail;
- 
--	if (!(avail->flags & IORESOURCE_MEM))
-+	if (!pci_use_e820)
- 		return;
- 
- 	for (i = 0; i < e820_table->nr_entries; i++) {
-@@ -41,7 +42,7 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
- 
- 		resource_clip(avail, e820_start, e820_end);
- 		if (orig.start != avail->start || orig.end != avail->end) {
--			dev_info(dev, "clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
-+			pr_info("clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
- 				 &orig, avail, e820_start, e820_end);
- 			orig = *avail;
- 		}
-@@ -55,6 +56,9 @@ void arch_remove_reservations(struct resource *avail)
- 	 * the low 1MB unconditionally, as this area is needed for some ISA
- 	 * cards requiring a memory range, e.g. the i82365 PCMCIA controller.
- 	 */
--	if (avail->flags & IORESOURCE_MEM)
-+	if (avail->flags & IORESOURCE_MEM) {
- 		resource_clip(avail, BIOS_ROM_BASE, BIOS_ROM_END);
-+
-+		remove_e820_regions(avail);
-+	}
- }
-diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
-index a4f43054bc79..2f82480fd430 100644
---- a/arch/x86/pci/acpi.c
-+++ b/arch/x86/pci/acpi.c
-@@ -8,7 +8,6 @@
- #include <linux/pci-acpi.h>
- #include <asm/numa.h>
- #include <asm/pci_x86.h>
--#include <asm/e820/api.h>
- 
- struct pci_root_info {
- 	struct acpi_pci_root_info common;
-@@ -20,7 +19,7 @@ struct pci_root_info {
- #endif
- };
- 
--static bool pci_use_e820 = true;
-+bool pci_use_e820 = true;
- static bool pci_use_crs = true;
- static bool pci_ignore_seg;
- 
-@@ -387,11 +386,6 @@ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
- 
- 	status = acpi_pci_probe_root_resources(ci);
- 
--	if (pci_use_e820) {
--		resource_list_for_each_entry(entry, &ci->resources)
--			remove_e820_regions(&device->dev, entry->res);
--	}
--
- 	if (pci_use_crs) {
- 		resource_list_for_each_entry_safe(entry, tmp, &ci->resources)
- 			if (resource_is_pcicfg_ioport(entry->res))
--- 
-2.36.0
-
+Thanks.

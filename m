@@ -2,33 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A32B5478B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 06:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A99D5478EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 06:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234218AbiFLEfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 00:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S234258AbiFLEz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 00:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFLEfE (ORCPT
+        with ESMTP id S229528AbiFLEzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 00:35:04 -0400
-Received: from smtp.gentoo.org (mail.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8331A666BE
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 21:35:03 -0700 (PDT)
-From:   Yixun Lan <dlan@gentoo.org>
-To:     linux-riscv@lists.infradead.org
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, Yixun Lan <dlan@gentoo.org>
-Subject: [PATCH] RISC-V: enable CONFIG_ARCH_KEEP_MEMBLOCK
-Date:   Sun, 12 Jun 2022 12:34:33 +0800
-Message-Id: <20220612043433.10469-1-dlan@gentoo.org>
-X-Mailer: git-send-email 2.35.1
+        Sun, 12 Jun 2022 00:55:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C0419C32
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 21:55:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DB5760B00
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 04:55:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806A0C34115;
+        Sun, 12 Jun 2022 04:55:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655009753;
+        bh=j+exlD5ZmlLNxT1KbEFefcTxveVGoTQlPXTT5epJRck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ltH7y7GteF+GFzn/o+6SxCQaBJsJ7E4zZtlTbGGum7FDMQnev/u26MScXqeDtTvin
+         +73NiswAQET7j0G3HjJcqeZLAiR4S0wQnXJM+KyA60W55GzNLW8Tfp0sZ+aN2UqUK6
+         ofeOzZ+PxgDI6yCNm6LxLiO+Un90OtjpzOxeVIkM=
+Date:   Sun, 12 Jun 2022 06:55:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     daniel watson <ozzloy@challenge-bot.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: put spaces after commas
+Message-ID: <YqVx12VsxlH1UaRt@kroah.com>
+References: <20220612040628.6433-1-ozzloy@challenge-bot.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220612040628.6433-1-ozzloy@challenge-bot.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -36,59 +52,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Preserve the memblock info while CONFIG_DEBUG_FS is enabled.
-So later, the information can be showed at:
-  /sys/kernel/debug/memblock/{memory,reserved}
+On Sat, Jun 11, 2022 at 09:06:28PM -0700, daniel watson wrote:
+> From: Daniel Watson <ozzloy@challenge-bot.com>
+> 
+> conform to kernel style by putting spaces after commas
+> this was found by checkpatch
+> 
+> Signed-off-by: Daniel Watson <ozzloy@challenge-bot.com>
+> ---
+>  drivers/staging/r8188eu/include/rtw_iol.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/include/rtw_iol.h b/drivers/staging/r8188eu/include/rtw_iol.h
+> index fb88ebc1dabb1..b39ecfb75ade0 100644
+> --- a/drivers/staging/r8188eu/include/rtw_iol.h
+> +++ b/drivers/staging/r8188eu/include/rtw_iol.h
+> @@ -50,13 +50,13 @@ int _rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr,
+>  int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path,
+>  			    u16 addr, u32 value, u32 mask);
+>  #define rtw_IOL_append_WB_cmd(xmit_frame, addr, value, mask)		\
+> -	_rtw_IOL_append_WB_cmd((xmit_frame), (addr), (value) ,(mask))
+> +	_rtw_IOL_append_WB_cmd((xmit_frame), (addr), (value), (mask))
+>  #define rtw_IOL_append_WW_cmd(xmit_frame, addr, value, mask)		\
+> -	_rtw_IOL_append_WW_cmd((xmit_frame), (addr), (value),(mask))
+> +	_rtw_IOL_append_WW_cmd((xmit_frame), (addr), (value), (mask))
+>  #define rtw_IOL_append_WD_cmd(xmit_frame, addr, value, mask)		\
+>  	_rtw_IOL_append_WD_cmd((xmit_frame), (addr), (value), (mask))
+>  #define rtw_IOL_append_WRF_cmd(xmit_frame, rf_path, addr, value, mask)	\
+> -	_rtw_IOL_append_WRF_cmd((xmit_frame),(rf_path), (addr), (value), (mask))
+> +	_rtw_IOL_append_WRF_cmd((xmit_frame), (rf_path), (addr), (value), (mask))
 
-Signed-off-by: Yixun Lan <dlan@gentoo.org>
+These #defines shouldn't even be needed, can you just remove them and
+rename the _rtw_IOL_append_WRF_cmd() function to be
+rtw_IOL_append_WRF_cmd() (and same for the others), as a patch series?
 
----
-Check mm/memblock.c:2120 for the code logic:
-   #if defined(CONFIG_DEBUG_FS) && defined(CONFIG_ARCH_KEEP_MEMBLOCK)
+thanks,
 
-I've tested on unmatched board, with this patch applied
-for example, we can see the memblock reserved info as:
-
- # cat /sys/kernel/debug/memblock/reserved
-   0: 0x0000000080000000..0x000000008007ffff
-   1: 0x0000000080200000..0x00000000823fffff
-   2: 0x0000000088000000..0x000000008800307f
-   3: 0x00000000ec000000..0x00000000ffffffff
-   4: 0x000000046d600000..0x000000047edfffff
-   5: 0x000000047ee2d000..0x000000047eeecfff
-   6: 0x000000047eeed440..0x000000047eeed947
-   7: 0x000000047eeed980..0x000000047eeede1f
-   8: 0x000000047eeede40..0x000000047eeedfc7
-   9: 0x000000047eeee000..0x000000047ef59fff
-  10: 0x000000047ef5c000..0x000000047efdd05f
-  11: 0x000000047efdd080..0x000000047efdd29f
-  12: 0x000000047efdd2c0..0x000000047efdd3df
-  13: 0x000000047efdd400..0x000000047efdd41f
-  14: 0x000000047efdd440..0x000000047efdd44f
-  15: 0x000000047efdd480..0x000000047efdd487
-  16: 0x000000047efdd4c0..0x000000047efdd525
-  17: 0x000000047efdd540..0x000000047efdd5a5
-  18: 0x000000047efdd5c0..0x000000047ffdfa47
-  19: 0x000000047ffdfa78..0x000000047ffdfaa8
-  20: 0x000000047ffdfab0..0x000000047ffdfade
-  21: 0x000000047ffdfae0..0x000000047ffdfb0e
-  22: 0x000000047ffdfb10..0x000000047ffeeffb
----
- arch/riscv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c22f58155948..e457c5855222 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -32,6 +32,7 @@ config RISCV
- 	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
- 	select ARCH_STACKWALK
--- 
-2.35.1
-
+greg k-h

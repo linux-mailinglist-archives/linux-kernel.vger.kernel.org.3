@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9720547B25
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 19:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D30547B2B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 19:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiFLRNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 13:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
+        id S231368AbiFLRWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 13:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiFLRNv (ORCPT
+        with ESMTP id S230101AbiFLRWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 13:13:51 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C44FF1;
-        Sun, 12 Jun 2022 10:13:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1655054006;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=EocYAFQcyOsOHNYOtPDLZltnmSxJMwBedC8g9UxAB0k=;
-    b=VifFVmIundfqm0uooUDEEUUVEaM7dA7JvbG0/e+jIELhH9d9xCyc4b/adUQ/m4uRe/
-    zSXg1qF/7AVO2B5j2RnxQGsZq4xokCpBz1o970SEKHLnT+8tbn7bdjh4KmPiL2qQ+t+X
-    FNJlhlF3BG7xubZ0tslXSQjU0jytwy+1oNwOMS0Cl5QL0mR9aTzGbiLE69Y0VF+Mg7us
-    DBSYKIzeRAYnPZHoJ2mzUzjrVft7r/LDNw9GZVOSgpKq17JbtrdicluHz5mSN8tIMkoD
-    W+45JzdXuEa2aHRIQsSUnB4o9Z1LO1enT06hTPSxpFyK0TS+fdMT55zhirJVrWYeKJW2
-    XH7A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+Ofov4eKq4TnA="
-X-RZG-CLASS-ID: mo00
-Received: from [172.20.10.8]
-    by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
-    with ESMTPSA id R0691fy5CHDOKgn
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 12 Jun 2022 19:13:24 +0200 (CEST)
-Subject: Re: [PATCH v2 05/13] can: slcan: simplify the device de-allocation
-To:     Max Staudt <max@enpas.org>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
- <20220608165116.1575390-6-dario.binacchi@amarulasolutions.com>
- <eae65531-bf9f-4e2e-97ca-a79a8aa833fc@hartkopp.net>
- <CABGWkvroJG16AOu8BODhVu068jacjHWbkkY9TCF4PQ7rgANVXA@mail.gmail.com>
- <20220612182302.36bdd9b9.max@enpas.org>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <aee0c161-5418-ad56-ab33-66e34a4f2a0d@hartkopp.net>
-Date:   Sun, 12 Jun 2022 19:13:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 12 Jun 2022 13:22:49 -0400
+Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C3B21832
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 10:22:47 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 9D6032016F;
+        Sun, 12 Jun 2022 19:22:45 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VRpeCVJMWiFT; Sun, 12 Jun 2022 19:22:45 +0200 (CEST)
+Received: from begin (anantes-655-1-33-15.w83-195.abo.wanadoo.fr [83.195.225.15])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 3799320168;
+        Sun, 12 Jun 2022 19:22:45 +0200 (CEST)
+Received: from samy by begin with local (Exim 4.95)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1o0RIS-000w8e-Ns;
+        Sun, 12 Jun 2022 19:22:44 +0200
+Date:   Sun, 12 Jun 2022 19:22:44 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, speakup@linux-speakup.org
+Subject: [PATCHv4] speakup: Generate speakupmap.h automatically
+Message-ID: <20220612172244.il3siyq7ueqnvah5@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        speakup@linux-speakup.org
 MIME-Version: 1.0
-In-Reply-To: <20220612182302.36bdd9b9.max@enpas.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,98 +53,539 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+speakupmap.h was not actually intended to be source code, speakupmap.map
+is.
 
+This resurrects the makemapdata.c and genmap.c tools to generate
+speakupmap.h automatically from the input and speakup headers, and the
+speakupmap.map keyboard mapping source file.
 
-On 12.06.22 18:23, Max Staudt wrote:
-> On Sat, 11 Jun 2022 12:46:04 +0200
-> Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
-> 
->>> As written before I would like to discuss this change out of your
->>> patch series "can: slcan: extend supported features" as it is no
->>> slcan feature extension AND has to be synchronized with the
->>> drivers/net/slip/slip.c implementation.
->>
->> Why do you need to synchronize it with  drivers/net/slip/slip.c
->> implementation ?
-> 
-> Because slcan.c is a derivative of slip.c and the code still looks
-> *very* similar, so improvements in one file should be ported to the
-> other and vice versa. This has happened several times now.
-> 
-> 
->>> When it has not real benefit and introduces more code and may create
->>> side effects, this beautification should probably be omitted at all.
->>>   
->>
->> I totally agree with you. I would have already dropped it if this
->> patch didn't make sense. But since I seem to have understood that
->> this is not the case, I do not understand why it cannot be improved
->> in this series.
-> 
-> This series is mostly about adding netlink support. If there is a point
-> of contention about a beautification, it may be easier to discuss that
-> separately, so the netlink code can be merged while the beautification
-> is still being discussed.
-> 
-> 
-> On another note, the global array of slcan_devs is really unnecessary
-> and maintaining it is a mess - as seen in some of your patches, that
-> have to account for it in tons of places and get complicated because of
-> it.
-> 
-> slcan_devs is probably grandfathered from a very old kernel, since
-> slip.c is about 30 years old, so I suggest to remove it entirely. In
-> fact, it may be easier to patch slcan_devs away first, and that will
-> simplify your open/close patches - your decision :)
-> 
-> 
-> If you wish to implement the slcan_devs removal, here are some hints:
-> 
-> The private struct can just be allocated as part of struct can_priv in
-> slcan_open(), like so:
-> 
->    struct net_device *dev;
->    dev = alloc_candev(sizeof(struct slcan), 0);
-> 
-> And then accessed like so:
-> 
->    struct slcan *sl = netdev_priv(dev);
-> 
-> Make sure to add struct can_priv as the first member of struct slcan:
-> 
->    /* This must be the first member when using alloc_candev() */
->    struct can_priv can;
-> 
-> 
->> The cover letter highlighted positive reactions to the series because
->> the module had been requiring these kinds of changes for quite
->> some time. So, why not take the opportunity to finalize this patch in
->> this series even if it doesn't extend the supported features ?
-> 
-> Because... I can only speak for myself, but I'd merge all the
-> unambiguous stuff first and discuss the difficult stuff later, if there
-> are no interdependencies :)
-> 
-> 
-> 
-> Max
-> 
+Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
-Thanks for stepping in Max!
+---
+difference with v3:
+- Fix out-of-tree builds
 
-Couldn't have summarized it better ;-)
+difference with v2:
+- Stuff utils.c into utils.h
+- Add .gitignore
 
-When I created slcan.c from slip.c this line discipline driver was just 
-oriented at the SLIP idea including the user space tools to attach the 
-network device to the serial tty.
+difference with v1:
+- Add missing dependency between main.c and speakupmap.h
 
-Therefore the driver took most of the mechanics (like the slcan_devs 
-array) and did *only* the 'struct canframe' to ASCII conversion (and 
-vice versa).
+ drivers/accessibility/speakup/.gitignore    |    4 
+ drivers/accessibility/speakup/Makefile      |   28 ++++
+ drivers/accessibility/speakup/genmap.c      |  162 ++++++++++++++++++++++++++++
+ drivers/accessibility/speakup/makemapdata.c |  125 +++++++++++++++++++++
+ drivers/accessibility/speakup/speakupmap.h  |   66 -----------
+ drivers/accessibility/speakup/utils.h       |  102 +++++++++++++++++
+ 6 files changed, 421 insertions(+), 66 deletions(-)
 
-@Dario: Implementing the CAN netlink API with open/close/bitrate-setting 
-is a nice improvement. Especially as you wrote that you took care about 
-the former/old API with slcan_attach/slcand.
-
-Best regards,
-Oliver
+--- a/drivers/accessibility/speakup/Makefile
++++ b/drivers/accessibility/speakup/Makefile
+@@ -30,3 +30,31 @@ speakup-y := \
+ 	thread.o \
+ 	varhandlers.o
+ speakup-$(CONFIG_SPEAKUP_SERIALIO) += serialio.o
++
++
++clean-files := mapdata.h speakupmap.h
++
++
++# Generate mapdata.h from headers
++hostprogs += makemapdata
++makemapdata-objs := makemapdata.o
++
++quiet_cmd_mkmap = MKMAP   $@
++      cmd_mkmap = TOPDIR=$(srctree) $(obj)/makemapdata > $@
++
++$(obj)/mapdata.h: $(obj)/makemapdata
++	$(call cmd,mkmap)
++
++
++# Generate speakupmap.h from mapdata.h
++hostprogs += genmap
++genmap-objs := genmap.o
++$(obj)/genmap.o: $(obj)/mapdata.h
++
++quiet_cmd_genmap = GENMAP  $@
++      cmd_genmap = $(obj)/genmap $< > $@
++
++$(obj)/speakupmap.h: $(src)/speakupmap.map $(obj)/genmap
++	$(call cmd,genmap)
++
++$(obj)/main.o: $(obj)/speakupmap.h
+--- /dev/null
++++ b/drivers/accessibility/speakup/genmap.c
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* genmap.c
++ * originally written by: Kirk Reiser.
++ *
++ ** Copyright (C) 2002  Kirk Reiser.
++ *  Copyright (C) 2003  David Borowski.
++ */
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <libgen.h>
++#include <string.h>
++#include <linux/version.h>
++#include <ctype.h>
++#include "utils.h"
++
++struct st_key_init {
++	char *name;
++	int value, shift;
++};
++
++static unsigned char key_data[MAXKEYVAL][16], *kp;
++
++#include "mapdata.h"
++
++static const char delims[] = "\t\n ";
++static char *cp;
++static int map_ver = 119; /* an arbitrary number so speakup can check */
++static int shift_table[17];
++static int max_states = 1, flags;
++/* flags reserved for later, maybe for individual console maps */
++
++static int get_shift_value(int state)
++{
++	int i;
++
++	for (i = 0; shift_table[i] != state; i++) {
++		if (shift_table[i] == -1) {
++			if (i >= 16)
++				oops("too many shift states", NULL);
++			shift_table[i] = state;
++			max_states = i+1;
++		break;
++	}
++	}
++	return i;
++}
++
++int
++main(int argc, char *argv[])
++{
++	int value, shift_state, i, spk_val = 0, lock_val = 0;
++	int max_key_used = 0, num_keys_used = 0;
++	struct st_key *this;
++	struct st_key_init *p_init;
++	char buffer[256];
++
++	bzero(key_table, sizeof(key_table));
++	bzero(key_data, sizeof(key_data));
++
++	shift_table[0] = 0;
++	for (i = 1; i <= 16; i++)
++		shift_table[i] = -1;
++
++	if (argc < 2) {
++		fputs("usage: genmap filename\n", stderr);
++		exit(1);
++	}
++
++	for (p_init = init_key_data; p_init->name[0] != '.'; p_init++)
++		add_key(p_init->name, p_init->value, p_init->shift);
++
++	open_input(NULL, argv[1]);
++	while (fgets(buffer, sizeof(buffer), infile)) {
++		lc++;
++		value = shift_state = 0;
++
++		cp = strtok(buffer, delims);
++		if (*cp == '#')
++			continue;
++
++		while (cp) {
++			if (*cp == '=')
++				break;
++			this = find_key(cp);
++			if (this == NULL)
++				oops("unknown key/modifier", cp);
++			if (this->shift == is_shift) {
++				if (value)
++					oops("modifiers must come first", cp);
++				shift_state += this->value;
++			} else if (this->shift == is_input)
++				value = this->value;
++			else
++				oops("bad modifier or key", cp);
++			cp = strtok(0, delims);
++		}
++		if (!cp)
++			oops("no = found", NULL);
++
++		cp = strtok(0, delims);
++		if (!cp)
++			oops("no speakup function after =", NULL);
++
++		this = find_key(cp);
++		if (this == NULL || this->shift != is_spk)
++			oops("invalid speakup function", cp);
++
++		i = get_shift_value(shift_state);
++		if (key_data[value][i]) {
++			while (--cp > buffer)
++				if (!*cp)
++					*cp = ' ';
++			oops("two functions on same key combination", cp);
++		}
++		key_data[value][i] = (char)this->value;
++		if (value > max_key_used)
++			max_key_used = value;
++	}
++	fclose(infile);
++
++	this = find_key("spk_key");
++	if (this)
++		spk_val = this->value;
++
++	this = find_key("spk_lock");
++	if (this)
++		lock_val = this->value;
++
++	for (lc = 1; lc <= max_key_used; lc++) {
++		kp = key_data[lc];
++		if (!memcmp(key_data[0], kp, 16))
++			continue;
++		num_keys_used++;
++		for (i = 0; i < max_states; i++) {
++			if (kp[i] != spk_val && kp[i] != lock_val)
++				continue;
++			shift_state = shift_table[i];
++			if (shift_state&16)
++				continue;
++			shift_state = get_shift_value(shift_state+16);
++			kp[shift_state] = kp[i];
++			/* fill in so we can process the key up, as spk bit will be set */
++		}
++	}
++
++	printf("\t%d, %d, %d,\n\t", map_ver, num_keys_used, max_states);
++	for (i = 0; i < max_states; i++)
++		printf("%d, ", shift_table[i]);
++	printf("%d,", flags);
++	for (lc = 1; lc <= max_key_used; lc++) {
++		kp = key_data[lc];
++		if (!memcmp(key_data[0], kp, 16))
++			continue;
++		printf("\n\t%d,", lc);
++		for (i = 0; i < max_states; i++)
++			printf(" %d,", (unsigned int)kp[i]);
++	}
++	printf("\n\t0, %d\n", map_ver);
++
++	exit(0);
++}
+--- /dev/null
++++ b/drivers/accessibility/speakup/makemapdata.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* makemapdata.c
++ * originally written by: Kirk Reiser.
++ *
++ ** Copyright (C) 2002  Kirk Reiser.
++ *  Copyright (C) 2003  David Borowski.
++ */
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <libgen.h>
++#include <string.h>
++#include <linux/version.h>
++#include <ctype.h>
++#include "utils.h"
++
++static char buffer[256];
++
++static int get_define(void)
++{
++	char *c;
++
++	while (fgets(buffer, sizeof(buffer)-1, infile)) {
++		lc++;
++		if (strncmp(buffer, "#define", 7))
++			continue;
++		c = buffer + 7;
++		while (*c == ' ' || *c == '\t')
++			c++;
++		def_name = c;
++		while (*c && *c != ' ' && *c != '\t' && *c != '\n')
++			c++;
++		if (!*c || *c == '\n')
++			continue;
++		*c++ = '\0';
++		while (*c == ' ' || *c == '\t' || *c == '(')
++			c++;
++		def_val = c;
++		while (*c && *c != '\n' && *c != ')')
++			c++;
++		*c++ = '\0';
++		return 1;
++	}
++	fclose(infile);
++	infile = 0;
++	return 0;
++}
++
++int
++main(int argc, char *argv[])
++{
++	int value, i;
++	struct st_key *this;
++	const char *dir_name;
++	char *cp;
++
++	dir_name = getenv("TOPDIR");
++	if (!dir_name)
++		dir_name = ".";
++	bzero(key_table, sizeof(key_table));
++	add_key("shift",	1, is_shift);
++	add_key("altgr",	2, is_shift);
++	add_key("ctrl",	4, is_shift);
++	add_key("alt",	8, is_shift);
++	add_key("spk", 16, is_shift);
++	add_key("double", 32, is_shift);
++
++	open_input(dir_name, "include/linux/input.h");
++	while (get_define()) {
++		if (strncmp(def_name, "KEY_", 4))
++			continue;
++		value = atoi(def_val);
++		if (value > 0 && value < MAXKEYVAL)
++			add_key(def_name, value, is_input);
++	}
++
++	open_input(dir_name, "include/uapi/linux/input-event-codes.h");
++	while (get_define()) {
++		if (strncmp(def_name, "KEY_", 4))
++			continue;
++		value = atoi(def_val);
++		if (value > 0 && value < MAXKEYVAL)
++			add_key(def_name, value, is_input);
++	}
++
++	open_input(dir_name, "drivers/accessibility/speakup/spk_priv_keyinfo.h");
++	while (get_define()) {
++		if (strlen(def_val) > 5) {
++			//if (def_val[0] == '(')
++			//	def_val++;
++			cp = strchr(def_val, '+');
++			if (!cp)
++				continue;
++			if (cp[-1] == ' ')
++				cp[-1] = '\0';
++			*cp++ = '\0';
++			this = find_key(def_val);
++			while (*cp == ' ')
++				cp++;
++			if (!this || *cp < '0' || *cp > '9')
++				continue;
++			value = this->value+atoi(cp);
++		} else if (!strncmp(def_val, "0x", 2))
++			sscanf(def_val+2, "%x", &value);
++		else if (*def_val >= '0' && *def_val <= '9')
++			value = atoi(def_val);
++		else
++			continue;
++		add_key(def_name, value, is_spk);
++	}
++
++	printf("struct st_key_init init_key_data[] = {\n");
++	for (i = 0; i < HASHSIZE; i++) {
++		this = &key_table[i];
++		if (!this->name)
++			continue;
++		do {
++			printf("\t{ \"%s\", %d, %d, },\n", this->name, this->value, this->shift);
++			this = this->next;
++		} while (this);
++	}
++	printf("\t{ \".\", 0, 0 }\n};\n");
++
++	exit(0);
++}
+--- a/drivers/accessibility/speakup/speakupmap.h
++++ /dev/null
+@@ -1,66 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-	119, 62, 6,
+-	0, 16, 20, 17, 32, 48, 0,
+-	2, 0, 78, 0, 0, 0, 0,
+-	3, 0, 79, 0, 0, 0, 0,
+-	4, 0, 76, 0, 0, 0, 0,
+-	5, 0, 77, 0, 0, 0, 0,
+-	6, 0, 74, 0, 0, 0, 0,
+-	7, 0, 75, 0, 0, 0, 0,
+-	9, 0, 5, 46, 0, 0, 0,
+-	10, 0, 4, 0, 0, 0, 0,
+-	11, 0, 0, 1, 0, 0, 0,
+-	12, 0, 27, 0, 33, 0, 0,
+-	19, 0, 47, 0, 0, 0, 0,
+-	21, 0, 29, 17, 0, 0, 0,
+-	22, 0, 15, 0, 0, 0, 0,
+-	23, 0, 14, 0, 0, 0, 28,
+-	24, 0, 16, 0, 0, 0, 0,
+-	25, 0, 30, 18, 0, 0, 0,
+-	28, 0, 3, 26, 0, 0, 0,
+-	35, 0, 31, 0, 0, 0, 0,
+-	36, 0, 12, 0, 0, 0, 0,
+-	37, 0, 11, 0, 0, 0, 22,
+-	38, 0, 13, 0, 0, 0, 0,
+-	39, 0, 32, 7, 0, 0, 0,
+-	40, 0, 23, 0, 0, 0, 0,
+-	44, 0, 44, 0, 0, 0, 0,
+-	49, 0, 24, 0, 0, 0, 0,
+-	50, 0, 9, 19, 6, 0, 0,
+-	51, 0, 8, 0, 0, 0, 36,
+-	52, 0, 10, 20, 0, 0, 0,
+-	53, 0, 25, 0, 0, 0, 0,
+-	55, 46, 1, 0, 0, 0, 0,
+-	58, 128, 128, 0, 0, 0, 0,
+-	59, 0, 45, 0, 0, 0, 0,
+-	60, 0, 40, 0, 0, 0, 0,
+-	61, 0, 41, 0, 0, 0, 0,
+-	62, 0, 42, 0, 0, 0, 0,
+-	63, 0, 34, 0, 0, 0, 0,
+-	64, 0, 35, 0, 0, 0, 0,
+-	65, 0, 37, 0, 0, 0, 0,
+-	66, 0, 38, 0, 0, 0, 0,
+-	67, 0, 66, 0, 39, 0, 0,
+-	68, 0, 67, 0, 0, 0, 0,
+-	71, 15, 19, 0, 0, 0, 0,
+-	72, 14, 29, 0, 0, 28, 0,
+-	73, 16, 17, 0, 0, 0, 0,
+-	74, 27, 33, 0, 0, 0, 0,
+-	75, 12, 31, 0, 0, 0, 0,
+-	76, 11, 21, 0, 0, 22, 0,
+-	77, 13, 32, 0, 0, 0, 0,
+-	78, 23, 43, 0, 0, 0, 0,
+-	79, 9, 20, 0, 0, 0, 0,
+-	80, 8, 30, 0, 0, 36, 0,
+-	81, 10, 18, 0, 0, 0, 0,
+-	82, 128, 128, 0, 0, 0, 0,
+-	83, 24, 25, 0, 0, 0, 0,
+-	87, 0, 68, 0, 0, 0, 0,
+-	88, 0, 69, 0, 0, 0, 0,
+-	96, 3, 26, 0, 0, 0, 0,
+-	98, 4, 5, 0, 0, 0, 0,
+-	99, 2, 0, 0, 0, 0, 0,
+-	104, 0, 6, 0, 0, 0, 0,
+-	109, 0, 7, 0, 0, 0, 0,
+-	125, 128, 128, 0, 0, 0, 0,
+-	0, 119
+--- /dev/null
++++ b/drivers/accessibility/speakup/utils.h
+@@ -0,0 +1,102 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/* utils.h
++ * originally written by: Kirk Reiser.
++ *
++ ** Copyright (C) 2002  Kirk Reiser.
++ *  Copyright (C) 2003  David Borowski.
++ */
++
++#include <stdio.h>
++
++#define MAXKEYS 512
++#define MAXKEYVAL 160
++#define HASHSIZE 101
++#define is_shift -3
++#define is_spk -2
++#define is_input -1
++
++struct st_key {
++	char *name;
++	struct st_key *next;
++	int value, shift;
++};
++
++struct st_key key_table[MAXKEYS];
++struct st_key *extra_keys = key_table+HASHSIZE;
++char *def_name, *def_val;
++FILE *infile;
++int lc;
++
++char filename[256];
++
++static inline void open_input(const char *dir_name, const char *name)
++{
++	if (dir_name)
++		snprintf(filename, sizeof(filename), "%s/%s", dir_name, name);
++	else
++		snprintf(filename, sizeof(filename), "%s", name);
++	infile = fopen(filename, "r");
++	if (infile == 0) {
++		fprintf(stderr, "can't open %s\n", filename);
++		exit(1);
++	}
++	lc = 0;
++}
++
++static inline int oops(const char *msg, const char *info)
++{
++	if (info == NULL)
++		info = "";
++	fprintf(stderr, "error: file %s line %d\n", filename, lc);
++	fprintf(stderr, "%s %s\n", msg, info);
++	exit(1);
++}
++
++static inline struct st_key *hash_name(char *name)
++{
++	u_char *pn = (u_char *)name;
++	int hash = 0;
++
++	while (*pn) {
++		hash = (hash * 17) & 0xfffffff;
++		if (isupper(*pn))
++			*pn = tolower(*pn);
++		hash += (int)*pn;
++		pn++;
++	}
++	hash %= HASHSIZE;
++	return &key_table[hash];
++}
++
++static inline struct st_key *find_key(char *name)
++{
++	struct st_key *this = hash_name(name);
++
++	while (this) {
++		if (this->name && !strcmp(name, this->name))
++			return this;
++		this = this->next;
++	}
++	return this;
++}
++
++static inline struct st_key *add_key(char *name, int value, int shift)
++{
++	struct st_key *this = hash_name(name);
++
++	if (extra_keys-key_table >= MAXKEYS)
++		oops("out of key table space, enlarge MAXKEYS", NULL);
++	if (this->name != NULL) {
++		while (this->next) {
++			if (!strcmp(name, this->name))
++				oops("attempt to add duplicate key", name);
++			this = this->next;
++		}
++		this->next = extra_keys++;
++		this = this->next;
++	}
++	this->name = strdup(name);
++	this->value = value;
++	this->shift = shift;
++	return this;
++}
+--- /dev/null
++++ b/drivers/accessibility/speakup/.gitignore
+@@ -0,0 +1,4 @@
++/makemapdata
++/mapdata.h
++/genmap
++/speakupmap.h

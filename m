@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08332547AA1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 17:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D83547AA5
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 17:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237353AbiFLPFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 11:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S237438AbiFLPIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 11:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiFLPFb (ORCPT
+        with ESMTP id S237487AbiFLPIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 11:05:31 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F1C5A168;
-        Sun, 12 Jun 2022 08:05:28 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id y19so6632428ejq.6;
-        Sun, 12 Jun 2022 08:05:28 -0700 (PDT)
+        Sun, 12 Jun 2022 11:08:25 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CA55EDD8;
+        Sun, 12 Jun 2022 08:08:23 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id h23so5345516lfe.4;
+        Sun, 12 Jun 2022 08:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=htFjsSXu7ZGxTjaP5i3din+9CWxv94Bctr84QoNiliY=;
-        b=APsLw00dy2F55yoY3iXIMcnELsihcXP/p6SNiyRSf5oZEwPYW3D+p0hDD/fhfBGpLe
-         213n/Vi5KHjD4mMgEBXf2SHm9ZkNEaPVqBySbH1z3UhGpTHYFKFPNey4vj/pQ1X6HLEG
-         CwJlDpgpTCvyl7Jilb5g9EBt7kK4A5jHct8fJEqfqx1dGEYyx4yqxwH5Hci+eZ5+6a1/
-         mwPrbmd2GM57MA2FANPMcQZRrQ+t0+ZzePfDQ0ZscrO4pnZjGmDSRDbNGdr3E+hjTEc+
-         vjADJaLYSq1uDbnUJWHDibDyKWaovFiZ9vlJy+aEvP/Vs+lyavPcbmcBUjdLyOjwTAEb
-         xhFg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=YSTRMk+mv8/8mRawNcAG/kPCu35wvaQcd0rlFYK138I=;
+        b=WZUvQkYJDroUcqOJ8upXuhmIANC6/o+ah0+qcs9McJPFpSN0c28tLw2Wmj64Ar8FrB
+         LUmQ5RVuPXK91F6HqDrQajzE/jegZD9LnAUwXt2DreIV7DUKsJUcjt+6TANGzeR//cjS
+         AHwa0iznhVsX48AqkojuRRGCeIrm5Wy/w2OVHxWjZHjImnWrfT4P4sixGHu+8R4KRdr0
+         JdCaqdEznAqgubv1Gd9OBKCCghkB/86+bGWuBx8YOq3ueTgxDtnwiVHeqZb4SMIt3FMj
+         15+lEWVqmCmha3PnTN3LkvMq4p3xOEP0HW3HLHRJPi+68EM2EsVL8D3VSbnfiA/xEGtj
+         WmGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=htFjsSXu7ZGxTjaP5i3din+9CWxv94Bctr84QoNiliY=;
-        b=O7tAG04umYANXFlsSIj9HYYWKh7UDtY1+oaOHFA05rUSNjw6DTIY/3D19ZrMmIxxtm
-         HtYFLmZAtFJxRi69vKAco96gLIpCJu/+w+3zahqvwQB4ieaZ7MOW5WdMqgh56p2N8txS
-         NdnO0wJNsBbwqpsWHCZC8QS8DHENAjUTZfiCS7tGM6OBQHMN18jpUlfCInFC+8IT94Yc
-         VFrw8HVN26qoIZjYZ3IgPgHCUSR6+kZGMEaXtgOvWqFIjGBgQIwtTBZsfcE8qxHeFGAM
-         vUnCOXC5DtngVxNm/EATzSmhBWdxe9szasFMMUrH15+NLOWjHkzehVLvJiI98jTR0nZx
-         U6Tw==
-X-Gm-Message-State: AOAM533sJnvD2MxxCcQEmw1mdwXfWoLl7HpKz3q4gz32LgxLB7z4W5sj
-        +7oRwth9EJEmzxsivYuI7Fw=
-X-Google-Smtp-Source: ABdhPJyi9sxjMamNlGeaPrfv21rrYPCrriGAL73CCnuOlTCxSIfRQCJRmSiN3kIcksZEs7Yydc4tvg==
-X-Received: by 2002:a17:906:8301:b0:6e4:896d:59b1 with SMTP id j1-20020a170906830100b006e4896d59b1mr47420520ejx.396.1655046326879;
-        Sun, 12 Jun 2022 08:05:26 -0700 (PDT)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id gv17-20020a170906f11100b006febc1e9fc8sm2553325ejb.47.2022.06.12.08.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 08:05:26 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] media: dt-binding: media: Add rockchip-vepu binding
-Date:   Sun, 12 Jun 2022 17:05:25 +0200
-Message-ID: <1885873.U9Vi27CkfU@archbook>
-In-Reply-To: <440a7dc6-7ec4-d7a9-0c56-3b3dc15b79d0@linaro.org>
-References: <20220514133604.174905-1-frattaroli.nicolas@gmail.com> <20220514133604.174905-2-frattaroli.nicolas@gmail.com> <440a7dc6-7ec4-d7a9-0c56-3b3dc15b79d0@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YSTRMk+mv8/8mRawNcAG/kPCu35wvaQcd0rlFYK138I=;
+        b=SqlONAoscFCoRsB6BP4mA6lJjbWvRuKQN+o0qVh77c8ZaEDq9K70ethmaz4258NnOD
+         A586qZGySiOBYdLptWcUBBp7fr3oSkY2WYYwYxmm1x+HHUzatID5E9LlBqRCJfIYp8Ru
+         n7XqR7UpjR3MjEzevLq8Nwfm1SnYGT045EXerkewiuhAbKzRM0pC3Eqox1Fj6+jkQicZ
+         fZJDIISzmOjX82cgaRqrUuAeYy7hfkq9seBf/Bfb9COi6mA4OUS1/Ca4kgDmFN0xMmr1
+         paJkG38RI39Ade4y1+rMRJgvCYNyVf5Pu0/pzXGA84kHWcjWHW5THf1cEDiT8Zgz2isj
+         ob9A==
+X-Gm-Message-State: AOAM533/URyYjd3chh7f8o3eCQ/2WizvHvFS7+lYXxvcMYSVLD8mkApQ
+        kCCd+BpNLkY1fl4gQz8FzfI=
+X-Google-Smtp-Source: ABdhPJyLgiK/n2xx4Qe5//vI4+DUPK3WLlmcmSPS95xxOHNSYLqB5p+YktGpTd9iX+kUMZKX3EvtNA==
+X-Received: by 2002:a05:6512:3d23:b0:478:fa1e:70fe with SMTP id d35-20020a0565123d2300b00478fa1e70femr33703531lfv.530.1655046502168;
+        Sun, 12 Jun 2022 08:08:22 -0700 (PDT)
+Received: from [192.168.0.131] ([194.183.54.57])
+        by smtp.gmail.com with ESMTPSA id g2-20020a056512118200b00477c164293csm640383lfr.79.2022.06.12.08.08.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Jun 2022 08:08:21 -0700 (PDT)
+Message-ID: <05c9128d-6228-40e5-ad69-1334a81d786e@gmail.com>
+Date:   Sun, 12 Jun 2022 17:08:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/3] dt-bindings: leds: skyworks,aat1290: convert to
+ dtschema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20220607085343.72414-1-krzysztof.kozlowski@linaro.org>
+ <d6d1642c-26b4-e4a8-5ae7-c4b952ae6c62@gmail.com>
+ <410c5c97-8ff7-2303-5e19-d6053d3779dd@linaro.org>
+From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
+In-Reply-To: <410c5c97-8ff7-2303-5e19-d6053d3779dd@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,139 +81,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+On 6/10/22 12:12, Krzysztof Kozlowski wrote:
+> On 09/06/2022 22:28, Jacek Anaszewski wrote:
+>> Hi Krzysztof,
+>>
+>> On 6/7/22 10:53, Krzysztof Kozlowski wrote:
+>>> Convert the Skyworks Solutions, Inc. AAT1290 Current Regulator bindings
+>>> to DT Schema.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> [...]
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/gpio/gpio.h>
+>>> +    #include <dt-bindings/leds/common.h>
+>>> +
+>>> +    // Ct = 220 nF, Rset = 160 kOhm
+>>> +    led-controller {
+>>> +        compatible = "skyworks,aat1290";
+>>> +        flen-gpios = <&gpj1 1 GPIO_ACTIVE_HIGH>;
+>>> +        enset-gpios = <&gpj1 2 GPIO_ACTIVE_HIGH>;
+>>> +
+>>> +        pinctrl-names = "default", "host", "isp";
+>>> +        pinctrl-0 = <&camera_flash_host>;
+>>> +        pinctrl-1 = <&camera_flash_host>;
+>>> +        pinctrl-2 = <&camera_flash_isp>;
+>>> +
+>>> +        led {
+>>> +            label = "flash";
+>>
+>> Why are you adding label? It is deprecated,
+> 
+> Eh, so it should be marked as deprecated:true, not just mentioned in the
+> description (common.yaml).
 
-On Samstag, 14. Mai 2022 22:41:29 CEST Krzysztof Kozlowski wrote:
-> On 14/05/2022 15:36, Nicolas Frattaroli wrote:
-> > The RK3568 and RK3566 have a Hantro VPU node solely dedicated to
-> > encoding. This patch adds a new binding to describe it, as it
-> > does not really fit the rockchip-vpu binding, since there is no
-> > decoder.
-> > 
-> > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > ---
-> >  .../bindings/media/rockchip-vepu.yaml         | 64 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  2 files changed, 65 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/rockchip-vepu.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/rockchip-vepu.yaml b/Documentation/devicetree/bindings/media/rockchip-vepu.yaml
-> > new file mode 100644
-> > index 000000000000..b7ba5bf3517a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/rockchip-vepu.yaml
-> 
-> Filename: vendor,device (not hyphen)
-> It would be actually better if it followed the first compatible, so
-> "rockchip,rk3568-vepu.yaml"
+I believe so.
 
-Thanks, will do.
+>> but has the precedence over
+>> new function and color for backwards compatibility, so it would make
+>> those unused by the driver now. Please drop the label from this example.
+> 
+> I synced the example with DTS, but I can drop it. No problem.
 
-> 
-> > @@ -0,0 +1,64 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +
-> > +%YAML 1.2
-> > +---
-> > +$id: "http://devicetree.org/schemas/media/rockchip-vepu.yaml#"
-> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > +
-> > +title: Hantro G1 VPU encoders implemented on Rockchip SoCs
-> > +
-> > +maintainers:
-> > +  - Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > +
-> > +description:
-> > +  Hantro G1 video encode-only accelerators present on Rockchip SoCs.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - rockchip,rk3568-vepu
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 2
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: aclk
-> > +      - const: hclk
-> 
-> Since these are new bindings, it would be good to follow DT convention
-> and not add common "clk" prefix to clocks. Just like DMA is "tx" not
-> "txdma". However clock names "a" and "h" are also not good and maybe
-> this is already shared implementation?
+Yeah, let's avoid further confusion.
 
-This is indeed a shared implementation. Theoretically I could change
-the driver for this one case but that seems pointless, especially
-since "aclk" and "hclk" are the usual clk names for AXI and AHB on
-ARM as far as I understand. I think I've been told before that those
-two clocks should always be called aclk and hclk.
-
-> 
-> > + 
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  iommus:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - clock-names
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +        #include <dt-bindings/clock/rk3568-cru.h>
-> 
-> Indentation starts at "|" (so four spaces)
-> 
-> > +        #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +        #include <dt-bindings/power/rk3568-power.h>
-> > +
-> > +        vepu: video-codec@fdee0000 {
-> 
-> four spaces.
-> 
-> > +                compatible = "rockchip,rk3568-vepu";
-> > +                reg = <0x0 0xfdee0000 0x0 0x800>;
-> > +                interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-> > +                clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
-> > +                clock-names = "aclk", "hclk";
-> > +                iommus = <&vepu_mmu>;
-> > +                power-domains = <&power RK3568_PD_RGA>;
-> > +        };
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 9ce78f2275dc..f901a42e5d0f 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -8637,6 +8637,7 @@ L:	linux-media@vger.kernel.org
-> >  L:	linux-rockchip@lists.infradead.org
-> >  S:	Maintained
-> >  F:	Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > +F:	Documentation/devicetree/bindings/media/rockchip-vepu.yaml
-> >  F:	Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> >  F:	drivers/staging/media/hantro/
-> >  
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Thank you for your feedback,
-Nicolas Frattaroli
-
-
-
+-- 
+Best regards,
+Jacek Anaszewski

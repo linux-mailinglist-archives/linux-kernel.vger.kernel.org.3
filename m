@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D67547966
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CC9547973
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 11:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235213AbiFLJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 05:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S235311AbiFLJAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 05:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbiFLJAd (ORCPT
+        with ESMTP id S235218AbiFLJAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 05:00:33 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732B50E27
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:32 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id q15so1478984wmj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:32 -0700 (PDT)
+        Sun, 12 Jun 2022 05:00:37 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C012549F3E
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:35 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id a15so3704917wrh.2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 02:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fastly.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=bL3IO7tvytV66ahctRHmGVdmaVmcbUuZxI0XVWFQ8ZA=;
-        b=JHL9c5Jj8+TTgAFrBdAvWEfZKv/K76qtcJfx/EIfmB2r7S2U8DofeGOLyDw8HLYCoZ
-         iEyWEAXSFpm/02ixoec9XeOeaeTauxgSIFJq3A3rcSBMTDyAGP8TcAI/kR3QMrDLsAlY
-         mNAl2/obbnT6h7TqFa+zV3mokxklPGO+7gk9o=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=MH4Lv8K62JKUOJxVHdgE/oEdWi4lVPPJtSl5KwJG+1g=;
+        b=p23NZpYkNV6Mw0OmtGi312n7HxeU9JJ/KfuYg25OWavQonbuxP2PlxFs7ZNZZmpppx
+         e8oH+SylS9UYulExeaAjCPDHKx7nTbs1/SxiYfEWenUQ605TBPwdT41rY6WtmUWw4NTE
+         mJsDBZYyuxn9oqyK0A9GWbS6xXQ3e+sQCMySI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=bL3IO7tvytV66ahctRHmGVdmaVmcbUuZxI0XVWFQ8ZA=;
-        b=Ff28NO4Qf5H4ynvTOwXuV/qRZXL4DuLcQuaDgMzGcUzf3boECGpRILdFV/9QH/MQUh
-         UOe1Itq5eUXQ3NN4O/d2Bg5cqlnxUdQi+r6nsKGIUx1zl69mw+L1NE8H3ltW/5jlIKpy
-         JNvmJkCkwfmL+d8vTh6dwClko34kBaW5U74/+jNRhREZb0lrotJLd2Qat5grVdNw2QCW
-         KtBreNxSz3rBZfHkeVrCDPCIjBgp3dkhtpg+EMNhCQDqY9XqiLAW42S0NCJfRMlWN7fU
-         ttWF4fd1zrR2Fg/davNsgBVWV6CHEAHKk1XJv0wl48lUKg2p66NUWPONtbcpR9pxtPg6
-         03vw==
-X-Gm-Message-State: AOAM531Ub3EWEignppmEsY7DMFKsGveCRlBD7xswsZZlyGYCdL0mxuJP
-        zLwLB3Tculm0SyxNSgc5v5SxLA==
-X-Google-Smtp-Source: ABdhPJz0MlOR5KOLHLztCe2inGcdIr3aFFxK6MlpKbF7oSDls4p59MWNYfguvq+Ya6qA/rIGL5MZww==
-X-Received: by 2002:a05:600c:2e48:b0:39c:55ba:e4e9 with SMTP id q8-20020a05600c2e4800b0039c55bae4e9mr8398234wmf.180.1655024430554;
-        Sun, 12 Jun 2022 02:00:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=MH4Lv8K62JKUOJxVHdgE/oEdWi4lVPPJtSl5KwJG+1g=;
+        b=O3D8XrJpvhkQbLEAy/DgLH0GOSr9s4jAY63yYIbChqrQzKdnAAK3r5MOEnfJYv3HaH
+         M2oMKHoqzeswjDw5pMoRzgcJ/7eRqdGMoEIe0JwOkNHOlrCGkltIZlfp6pfHdlUkNMX7
+         e/jwZUvX0ycU/Dtr0gy8F90D7+uwipW2Qpq3EcEvoMKJHhtN+0W2JnQKduj6azwLGgG6
+         viAtoRyP2aqLshQ/MS33axvY+gZ+1y/sC+TW9n/Om0tqH7utQd5HIyomKZhapww33xSr
+         /I4+Z2wEwhruhJtUvBJX9W2Dyu/zpKAt3KJZPc7EyFE+hK3C9fgWL4B02flGBng+/XKZ
+         sQmQ==
+X-Gm-Message-State: AOAM5324h4Xpqz3z1caIW6EwqKid8qc0cBo93WNDkK9FD8/1bUojc9O7
+        rwdHxcWO1ZQdivsMkjmADXJABw==
+X-Google-Smtp-Source: ABdhPJzPfVvDi7oTmyqgIAHJ2AcFuN31YYqfCHQZc8+YvM1Z23odoVoyM/EwdMd9H9m+5olvSCaDUQ==
+X-Received: by 2002:a5d:4c49:0:b0:210:353c:1c91 with SMTP id n9-20020a5d4c49000000b00210353c1c91mr52527060wrt.159.1655024434317;
+        Sun, 12 Jun 2022 02:00:34 -0700 (PDT)
 Received: from localhost.localdomain ([178.130.153.185])
-        by smtp.gmail.com with ESMTPSA id d34-20020a05600c4c2200b0039c5b4ab1b0sm4798603wmp.48.2022.06.12.02.00.25
+        by smtp.gmail.com with ESMTPSA id d34-20020a05600c4c2200b0039c5b4ab1b0sm4798603wmp.48.2022.06.12.02.00.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 Jun 2022 02:00:28 -0700 (PDT)
+        Sun, 12 Jun 2022 02:00:32 -0700 (PDT)
 From:   Joe Damato <jdamato@fastly.com>
-To:     x86@kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
 Cc:     Joe Damato <jdamato@fastly.com>
-Subject: [RFC,net-next,x86 v2 0/8] Nontemporal copies in sendmsg path
-Date:   Sun, 12 Jun 2022 01:57:49 -0700
-Message-Id: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
+Subject: [RFC,x86 v2 1/8] arch, x86, uaccess: Add nontemporal copy functions
+Date:   Sun, 12 Jun 2022 01:57:50 -0700
+Message-Id: <1655024280-23827-2-git-send-email-jdamato@fastly.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
+References: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,133 +66,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings:
+Add a generic non-temporal wrapper to uaccess which can be overridden by
+arches that support non-temporal copies.
 
-Welcome to RFC v2.
+An implementation is added for x86 which wraps an existing non-temporal
+copy in the kernel.
 
-This is my first series that touches more than 1 subsystem; hope I got the
-various subject lines and to/cc-lists correct.
+Signed-off-by: Joe Damato <jdamato@fastly.com>
+---
+ arch/x86/include/asm/uaccess_64.h | 6 ++++++
+ include/linux/uaccess.h           | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-Based on the feedback on RFC v1 [1], I've made a few changes:
-
-- Removed the indirect calls.
-- Simplified the code a bit by pushing logic down to a wrapper around
-  copyin.
-- Added support for the 'MSG_NTCOPY' flag to udp, udp-lite, tcp, and unix.
-
-I think this series is much closer to a v1 that can be submit for
-consideration, but wanted to test the waters with an RFC first :)
-
-This new set of code allows applications to request non-temporal copies on
-individual calls to sendmsg for several socket types, not just unix.
-
-The result is that:
-
-1. Users don't need to specify no cache copy for the entire interface as
-   they had been doing previously with ethtool. There is more fine grained
-   control of which sendmsgs are non-temporal. I think it makes sense for
-   this to be application specific (vs interface-wide) since applications
-   will have a better idea of which copy is appropriate.
-
-2. Previously, the ethool bit for enabling no-cache-copy only seems to have
-   affected TCP sockets, IIUC. This series supports UDP, UDP-Lite, TCP, and
-   Unix. This means the behavior and accessibility of non-temporal copies
-   is normalized bit more than it had been previously.
-
-The performance results on my AMD Zen2 test system are identical to the
-previous RFC, so I've included those results below.
-
-As you'll see below, NT copies in the unix write path have a large
-measureable impact on certain application architectures and CPUs.
-
-Initial benchmarks are extremely encouraging. I wrote a simple C program to
-benchmark this patchset, the program:
-  - Creates a unix socket pair
-  - Forks a child process
-  - The parent process writes to the unix socket using MSG_NTCOPY, or not,
-    depending on the command line flags
-  - The child process uses splice to move the data from the unix socket to
-    a pipe buffer, followed by a second splice call to move the data from
-    the pipe buffer to a file descriptor opened on /dev/null.
-  - taskset is used when launching the benchmark to ensure the parent and
-    child run on appropriate CPUs for various scenarios
-
-The source of the test program is available for examination [2] and results
-for three benchmarks I ran are provided below.
-
-Test system: AMD EPYC 7662 64-Core Processor,
-	     64 cores / 128 threads,
-	     512kb L2 per core shared by sibling CPUs,
-	     16mb L3 per NUMA zone,
-	     AMD specific settings: NPS=1 and L3 as NUMA enabled 
-
-Test: 1048576 byte object,
-      100,000 iterations,
-      512kb pipe buffer size,
-      512kb unix socket send buffer size
-
-Sample command lines for running the tests provided below. Note that the
-command line shows how to run a "normal" copy benchmark. To run the
-benchmark in MSG_NTCOPY mode, change command line argument 3 from 0 to 1.
-
-Test pinned to CPUs 1 and 2 which do *not* share an L2 cache, but do share
-an L3.
-
-Command line for "normal" copy:
-% time taskset -ac 1,2 ./unix-nt-bench 1048576 100000 0 524288 524288
-
-Mode			real time (sec.)		throughput (Mb/s)
-"Normal" copy		10.630				78,928
-MSG_NTCOPY		7.429				112,935 
-
-Same test as above, but pinned to CPUs 1 and 65 which share an L2 (512kb)
-and L3 cache (16mb).
-
-Command line for "normal" copy:
-% time taskset -ac 1,65 ./unix-nt-bench 1048576 100000 0 524288 524288
-
-Mode			real time (sec.)		throughput (Mb/s)
-"Normal" copy		12.532				66,941
-MSG_NTCOPY		9.445				88,826	
-
-Same test as above, pinned to CPUs 1 and 65, but with 128kb unix send
-buffer and pipe buffer sizes (to avoid spilling L2).
-
-Command line for "normal" copy:
-% time taskset -ac 1,65 ./unix-nt-bench 1048576 100000 0 131072 131072
-
-Mode			real time (sec.)		throughput (Mb/s)
-"Normal" copy		12.451				67,377
-MSG_NTCOPY		9.451				88,768
-
-Thanks,
-Joe
-
-[1]: https://patchwork.kernel.org/project/netdevbpf/cover/1652241268-46732-1-git-send-email-jdamato@fastly.com/
-[2]: https://gist.githubusercontent.com/jdamato-fsly/03a2f0cd4e71ebe0fef97f7f2980d9e5/raw/19cfd3aca59109ebf5b03871d952ea1360f3e982/unix-nt-copy-bench.c
-
-Joe Damato (8):
-  arch, x86, uaccess: Add nontemporal copy functions
-  iov_iter: Introduce iter_copy_type
-  iov_iter: add copyin_iovec helper
-  net: Add MSG_NTCOPY sendmsg flag
-  net: unix: Support MSG_NTCOPY
-  net: ip: Support MSG_NTCOPY
-  net: udplite: Support MSG_NTCOPY
-  net: tcp: Support MSG_NTCOPY
-
- arch/x86/include/asm/uaccess_64.h |  6 ++++++
- include/linux/socket.h            |  9 +++++++++
- include/linux/uaccess.h           |  6 ++++++
- include/linux/uio.h               | 17 +++++++++++++++++
- include/net/sock.h                |  2 +-
- include/net/udplite.h             |  1 +
- lib/iov_iter.c                    | 25 ++++++++++++++++++++-----
- net/ipv4/ip_output.c              |  1 +
- net/ipv4/tcp.c                    |  2 ++
- net/unix/af_unix.c                |  4 ++++
- 10 files changed, 67 insertions(+), 6 deletions(-)
-
+diff --git a/arch/x86/include/asm/uaccess_64.h b/arch/x86/include/asm/uaccess_64.h
+index 45697e0..ed41dba 100644
+--- a/arch/x86/include/asm/uaccess_64.h
++++ b/arch/x86/include/asm/uaccess_64.h
+@@ -65,6 +65,12 @@ extern long __copy_user_flushcache(void *dst, const void __user *src, unsigned s
+ extern void memcpy_page_flushcache(char *to, struct page *page, size_t offset,
+ 			   size_t len);
+ 
++static inline unsigned long
++__copy_from_user_nocache(void *dst, const void __user *src, unsigned long size)
++{
++	return (unsigned long)__copy_user_nocache(dst, src, (unsigned int) size, 0);
++}
++
+ static inline int
+ __copy_from_user_inatomic_nocache(void *dst, const void __user *src,
+ 				  unsigned size)
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index 5a328cf..6612c37 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -256,6 +256,12 @@ static inline size_t probe_subpage_writeable(char __user *uaddr, size_t size)
+ #ifndef ARCH_HAS_NOCACHE_UACCESS
+ 
+ static inline __must_check unsigned long
++__copy_from_user_nocache(void *to, const void __user *from, unsigned long n)
++{
++	return __copy_from_user(to, from, n);
++}
++
++static inline __must_check unsigned long
+ __copy_from_user_inatomic_nocache(void *to, const void __user *from,
+ 				  unsigned long n)
+ {
 -- 
 2.7.4
 

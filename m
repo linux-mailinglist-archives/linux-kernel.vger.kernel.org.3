@@ -2,189 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2103C547B73
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546DF547B75
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 20:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbiFLSWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 14:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S232884AbiFLSXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 14:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiFLSWN (ORCPT
+        with ESMTP id S232932AbiFLSX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 14:22:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DEE4550D;
-        Sun, 12 Jun 2022 11:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A057B80D03;
-        Sun, 12 Jun 2022 18:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064C0C34115;
-        Sun, 12 Jun 2022 18:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655058130;
-        bh=/VmeNYdZ+2E/C8yC4Y4wGmIDxkM7EHBtXhhyeRTeDVM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=TPMwT/npLzMaNSJJyqiSpa+MNyyL8c0IixelOABMbflNe7VuCsgrBpJXbFhah7zhV
-         Whz7tULi2XeLVHJxAlsrIRS83V4Tvvpy/k2i9HUaPJ75nipd4ARIn4oQSYRnBXoNFy
-         O4zEKsw4nxsbSLfMy3+AGn24ykwLVe+RrDRTQr7cV4LFJULdBqbqXFs5VFuAJBhyv1
-         NZt1CxEXQjCIH4ZEvNLzChDAtOG8yvXQ5mcYvLlZMfTUm9sK3QkrfW2zahtOO8+QaQ
-         LobUmvhuOn2Lsb/WZ0CJJTmrVIvAwTgq87pIM07F28X6pfTd8OzRFoLJ47wlmjfIRn
-         JgwuWXUO1oEGg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A4F9B5C0266; Sun, 12 Jun 2022 11:22:09 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 11:22:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     joel@joelfernandes.org, frederic@kernel.org, rcu@vger.kernel.org,
+        Sun, 12 Jun 2022 14:23:29 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE6B4093F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 11:23:26 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso6878496pjb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 11:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cNqVSGRpc6PfKoYS4rbiG4/6+kXDZAGCvWAhlJaU3Kw=;
+        b=YMFisgdNLzZga7LeDHFsel0PBi2qjOzYKpzMdIhTq1aOANcikyWVofLJI2f9AMEjYc
+         QPzj0+GPyGglElaRrF58vA3MILwmMHDRsXdEImkHYIeAwLw6ISjESX9EQA5QqogqOXai
+         78Q6Gy0wPTO2Py5eLl0/KQcan4I3LlA1ZWr2CHqkY+S5c0gTqJMYZvNFNjezysU22r0e
+         icyxWOq8gmkgoX4deafYBXV3o+VkADl5HyqNVjN5YB7fNp+mxrSijy2MXjTvvOUxCQp2
+         dP8hQB6TwnHUXQn2AjKvKotwratXUDuaMlDFDaXu5wR7pprIhTLhi42fhkTmLbAtsc7B
+         pzXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cNqVSGRpc6PfKoYS4rbiG4/6+kXDZAGCvWAhlJaU3Kw=;
+        b=6/xvscLmsTszo5Acw8Qy0dYTyPSUTR/FX2uxmYEPfSmZvOVcrDWSz0zqz+aMkEncHR
+         oFZv+0a8gTchJRg12f45vrfROg68LhNZtz5YwSScN/+S4QsI45kGGI0NHFuOM2tSUvFx
+         7m+PnOGlDlmS+qrl7KNW7xtAJdAHUbHcymyaMFNZUDpGCDCH8mC8k9d1I9KDRIMEbvGi
+         TCbSdegwNqz+F3+KI8Kj0BNy6/954C2h1AXfljvKznEPQS/IfakZSqp4SZ1hzVkYTSrA
+         ChKga9fKim2dfgooShS+L/H1/3LRXFdQ11Yiwq/hVMkWxByFYYHBK7vxPIm7Y5Gwk90T
+         I5qA==
+X-Gm-Message-State: AOAM530n7COWjKXgY1y00JD6uUjnYeae6rshInHZknEF8adrL3YuZ7Od
+        IQLEX05vhneSC4TTQbm6ksw/EAM6utOkbWgJ
+X-Google-Smtp-Source: ABdhPJzYmAUmYH3aWWXZAwMst6IYCfIpfDC8xFykWNs4Ly8KRfOCST6sCoeGaHejexQ32I7u5smTQw==
+X-Received: by 2002:a17:90b:3b45:b0:1e8:8688:219d with SMTP id ot5-20020a17090b3b4500b001e88688219dmr11329466pjb.231.1655058206407;
+        Sun, 12 Jun 2022 11:23:26 -0700 (PDT)
+Received: from ubuntu.localdomain ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id e17-20020a637451000000b003fb0354c43asm3666322pgn.32.2022.06.12.11.23.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 11:23:26 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] refscale: Convert test_lock spinlock to raw_spinlock
-Message-ID: <20220612182209.GT1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220612020225.3098239-1-qiang1.zhang@intel.com>
+Subject: [PATCH] mm: Remove unwanted initialization in vmemmap_populate_compound_pages()
+Date:   Sun, 12 Jun 2022 11:23:20 -0700
+Message-Id: <20220612182320.160651-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220612020225.3098239-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 10:02:25AM +0800, Zqiang wrote:
-> In PREEMPT_RT kernel, the spinlock are replaced by sleepable rt_mutex.
-> in a critical section where preemption is disabled this will trigger
-> calltrace like the following:
-> 
-> BUG: scheduling while atomic: ref_scale_reade/76/0x00000002
-> Preemption disabled at:
-> ref_lock_section+0x16/0x80
-> Call Trace:
-> <TASK>
-> dump_stack_lvl+0x5b/0x82
-> dump_stack+0x10/0x12
-> __schedule_bug.cold+0x9c/0xad
-> __schedule+0x839/0xc00
-> schedule_rtlock+0x22/0x40
-> rtlock_slowlock_locked+0x460/0x1350
-> rt_spin_lock+0x61/0xe0
-> ref_lock_section+0x29/0x80
-> rcu_scale_one_reader+0x52/0x60
-> ref_scale_reader+0x28d/0x490
-> kthread+0x128/0x150
-> ret_from_fork+0x22/0x30
-> </TASK>
-> 
-> Convert spinlock to raw_spinlock to fix it.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Remove unwanted initialization for the variable 'next'. This fixes the
+clang scan warning: Value stored to 'next' during its initialization is 
+never read [deadcode.DeadStores]
 
-Queued for review and testing, thank you!
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+ mm/sparse-vmemmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And as usual, wordsmithed, so could you please check for anything
-that I might have messed up?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 0c284371063996f09c0b5e3d0f4c7dff8e966d86
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Sun Jun 12 10:02:25 2022 +0800
-
-    refscale: Convert test_lock spinlock to raw_spinlock
-    
-    In kernels built with CONFIG_PREEMPT_RT=y, spinlocks are replaced by
-    rt_mutex, which can sleep.  This means that acquiring a non-raw spinlock
-    in a critical section where preemption is disabled can trigger the
-    following BUG:
-    
-    BUG: scheduling while atomic: ref_scale_reade/76/0x00000002
-    Preemption disabled at:
-    ref_lock_section+0x16/0x80
-    Call Trace:
-    <TASK>
-    dump_stack_lvl+0x5b/0x82
-    dump_stack+0x10/0x12
-    __schedule_bug.cold+0x9c/0xad
-    __schedule+0x839/0xc00
-    schedule_rtlock+0x22/0x40
-    rtlock_slowlock_locked+0x460/0x1350
-    rt_spin_lock+0x61/0xe0
-    ref_lock_section+0x29/0x80
-    rcu_scale_one_reader+0x52/0x60
-    ref_scale_reader+0x28d/0x490
-    kthread+0x128/0x150
-    ret_from_fork+0x22/0x30
-    </TASK>
-    
-    This commit therefore converts spinlock to raw_spinlock.
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
-index 909644abee67f..435c884c02b5c 100644
---- a/kernel/rcu/refscale.c
-+++ b/kernel/rcu/refscale.c
-@@ -385,7 +385,7 @@ static struct ref_scale_ops rwsem_ops = {
- };
+diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+index f4fa61dbbee3..3008aa7859e0 100644
+--- a/mm/sparse-vmemmap.c
++++ b/mm/sparse-vmemmap.c
+@@ -737,7 +737,7 @@ static int __meminit vmemmap_populate_compound_pages(unsigned long start_pfn,
  
- // Definitions for global spinlock
--static DEFINE_SPINLOCK(test_lock);
-+static DEFINE_RAW_SPINLOCK(test_lock);
+ 	size = min(end - start, pgmap_vmemmap_nr(pgmap) * sizeof(struct page));
+ 	for (addr = start; addr < end; addr += size) {
+-		unsigned long next = addr, last = addr + size;
++		unsigned long next, last = addr + size;
  
- static void ref_lock_section(const int nloops)
- {
-@@ -393,8 +393,8 @@ static void ref_lock_section(const int nloops)
- 
- 	preempt_disable();
- 	for (i = nloops; i >= 0; i--) {
--		spin_lock(&test_lock);
--		spin_unlock(&test_lock);
-+		raw_spin_lock(&test_lock);
-+		raw_spin_unlock(&test_lock);
- 	}
- 	preempt_enable();
- }
-@@ -405,9 +405,9 @@ static void ref_lock_delay_section(const int nloops, const int udl, const int nd
- 
- 	preempt_disable();
- 	for (i = nloops; i >= 0; i--) {
--		spin_lock(&test_lock);
-+		raw_spin_lock(&test_lock);
- 		un_delay(udl, ndl);
--		spin_unlock(&test_lock);
-+		raw_spin_unlock(&test_lock);
- 	}
- 	preempt_enable();
- }
-@@ -427,8 +427,8 @@ static void ref_lock_irq_section(const int nloops)
- 
- 	preempt_disable();
- 	for (i = nloops; i >= 0; i--) {
--		spin_lock_irqsave(&test_lock, flags);
--		spin_unlock_irqrestore(&test_lock, flags);
-+		raw_spin_lock_irqsave(&test_lock, flags);
-+		raw_spin_unlock_irqrestore(&test_lock, flags);
- 	}
- 	preempt_enable();
- }
-@@ -440,9 +440,9 @@ static void ref_lock_irq_delay_section(const int nloops, const int udl, const in
- 
- 	preempt_disable();
- 	for (i = nloops; i >= 0; i--) {
--		spin_lock_irqsave(&test_lock, flags);
-+		raw_spin_lock_irqsave(&test_lock, flags);
- 		un_delay(udl, ndl);
--		spin_unlock_irqrestore(&test_lock, flags);
-+		raw_spin_unlock_irqrestore(&test_lock, flags);
- 	}
- 	preempt_enable();
- }
+ 		/* Populate the head page vmemmap page */
+ 		pte = vmemmap_populate_address(addr, node, NULL, NULL);
+-- 
+2.25.1
+

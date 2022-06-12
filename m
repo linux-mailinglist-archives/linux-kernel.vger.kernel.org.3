@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E027C547A5F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4B9547A5C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 15:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbiFLNbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 09:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S233302AbiFLNbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 09:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbiFLNbK (ORCPT
+        with ESMTP id S229912AbiFLNbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 09:31:10 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585A32A42B
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:31:09 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id u99so5949452ybi.11
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jZK9seyLhEtguREoqjcxM6GoxzolaKvu9wYtMvBrtBY=;
-        b=ZqoHvd7CG5KBmX1FLe+L8i01SEWKpCro85xP1dfO7EacPV8GIBBrZOMK7iuVRFVLVz
-         +jYGoyps1ep5Sa2Jm+hL8kSYMBMiBKkQW5sbeFvpQ26TZlIj0vXu/WlQ1GgBqclK4gPo
-         mf/hOTJAWp+YCGDDKjjmkzb2ycDw/S/Xw5HCE2HgbNkzj9avH1+tF3cRO20MmyamiqD3
-         0pbopRR3bGNm+6fZX+jXRb/fxIDRPKkCGrm0mVQHo+S7rjy27t0shoUZpZiPnF9/MlzR
-         YVHi0Onn/Hg+89vRd7Tx8SDiLSWIxyAiWrxJApmcueW/0ed1m4s3/OFmKvRnYAA1P6EE
-         /nZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jZK9seyLhEtguREoqjcxM6GoxzolaKvu9wYtMvBrtBY=;
-        b=CcLimHwNI/VagWtE94q5UgGWDZ8By/w62hqZGWY927rlhp+VpFyzgChBG2eQ6jYkF0
-         V6+TLwNEpqrsNKL8ZfCMZJ69di2DcMGaTWsi82EOCquoVhC09wiPNwqx18rOQCeL5smQ
-         KtwRo18Iab56Pg/ONa3v+JaLNTzderrxEdmnFoIwJhVhm0hOzUOOgzPjmuwofuZBEnuF
-         Jt3SzSIr5xIRWK8qDSyX9pAVOAmPRX+aO2xlD5Exmrk2bx2KIpcMJeb/VT3HjpCAc9cV
-         AkbouHKDcpPGMW7H8ZKFHZwDXJM3aAH8D37O63HthmaSBX8xr1CSk00qum3Opn4pZ9VS
-         OPcw==
-X-Gm-Message-State: AOAM53074bJTHRDk1+NABFdon1Ge/dpFLcEQdLsKqg7e84Ue06y5NtgX
-        fqCRZUmDhTR+pRKsGuyHDUUMh8Eg7gzcymEeZl5rJcs3
-X-Google-Smtp-Source: ABdhPJw2TF8/MHzEcpbFalBW81mspwFL/pUg0AgJtnIKYyonLvXFewSvngmSeTKGyuRMc78G4MQZlMJ+cz/EbR/4Xzs=
-X-Received: by 2002:a25:a066:0:b0:664:411a:1071 with SMTP id
- x93-20020a25a066000000b00664411a1071mr16726400ybh.366.1655040668484; Sun, 12
- Jun 2022 06:31:08 -0700 (PDT)
+        Sun, 12 Jun 2022 09:31:45 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D19632ECA
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 06:31:44 -0700 (PDT)
+Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25CDVaji053964;
+        Sun, 12 Jun 2022 22:31:36 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
+ Sun, 12 Jun 2022 22:31:36 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 25CDVaO3053960
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 12 Jun 2022 22:31:36 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <6143d632-7c3a-35c5-1766-a3ae74c1c259@I-love.SAKURA.ne.jp>
+Date:   Sun, 12 Jun 2022 22:31:35 +0900
 MIME-Version: 1.0
-References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
- <87y1y48spg.fsf@jogness.linutronix.de> <CAMdYzYr-Wo713Y4qjboTpoK6GcrYfKCfRJAEizwXw6-=dymVzg@mail.gmail.com>
- <YqVWL3gpfV9HJBLe@google.com>
-In-Reply-To: <YqVWL3gpfV9HJBLe@google.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Sun, 12 Jun 2022 09:30:57 -0400
-Message-ID: <CAMdYzYoOcLhUpqOEmXQ7t90BOgYczfq0AxK5+JKQqrPo4NGgqw@mail.gmail.com>
-Subject: Re: [BUG] Threaded printk breaks early debugging
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: [PATCH v2] rapidio/tsi721: Replace flush_scheduled_work() with
+ flush_work().
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <ad924306-d15c-9f1e-13dc-eaf674878022@I-love.SAKURA.ne.jp>
+In-Reply-To: <ad924306-d15c-9f1e-13dc-eaf674878022@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 10:57 PM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (22/06/10 11:34), Peter Geis wrote:
-> > > On 2022-06-10, Peter Geis <pgwipeout@gmail.com> wrote:
-> > > > However I've run into an issue debugging early boot issues. Anything
-> > > > that causes the kernel threading system to die (for example here, a
-> > > > NPE) causes the boot console to halt before it outputs the error.
-> > >
-> > > A null pointer exception should trigger a panic, which will cause printk
-> > > to enter direct mode for the oops. It should be just as effective as
-> > > before introducing the printing kthreads.
-> >
-> > This might be a side effect of the fact that this is on a low powered
-> > arm64 board. I noticed with threading enabled during large bursts the
-> > console drops an excessive amount of messages. It's especially
-> > apparent during the handover from earlycon to the normal console.
->
-> How many CPUs does it have?
+Since "struct tsi721_device" is per a device struct, I assume that
+tsi721_remove() needs to wait for only two works associated with that
+device. Therefore, wait for only these works using flush_work().
 
-Four and all are online when the error occurs.
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+---
+Changes in v2:
+  Use flush_work() instead of introducing a dedicated WQ.
+
+Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
+using a macro") for background.
+
+ drivers/rapidio/devices/tsi721.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rapidio/devices/tsi721.c b/drivers/rapidio/devices/tsi721.c
+index b3134744fb55..0a42d6a2af24 100644
+--- a/drivers/rapidio/devices/tsi721.c
++++ b/drivers/rapidio/devices/tsi721.c
+@@ -2941,7 +2941,8 @@ static void tsi721_remove(struct pci_dev *pdev)
+ 
+ 	tsi721_disable_ints(priv);
+ 	tsi721_free_irq(priv);
+-	flush_scheduled_work();
++	flush_work(&priv->idb_work);
++	flush_work(&priv->pw_work);
+ 	rio_unregister_mport(&priv->mport);
+ 
+ 	tsi721_unregister_dma(priv);
+-- 
+2.18.4
+
+

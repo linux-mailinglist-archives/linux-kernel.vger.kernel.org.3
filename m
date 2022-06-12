@@ -2,48 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1808547B09
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 18:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A191547B0E
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 18:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiFLQXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 12:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S231785AbiFLQX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 12:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiFLQXK (ORCPT
+        with ESMTP id S229473AbiFLQXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 12:23:10 -0400
-Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92AB3579B6;
-        Sun, 12 Jun 2022 09:23:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id EAF23FF9E2;
-        Sun, 12 Jun 2022 16:23:07 +0000 (UTC)
-Date:   Sun, 12 Jun 2022 18:23:02 +0200
-From:   Max Staudt <max@enpas.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
+        Sun, 12 Jun 2022 12:23:55 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586885E15D
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 09:23:54 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so1003286wml.2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 09:23:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
+        b=R/sEjCaZtQEnfPFaK+UnnTh0wg4bRV6svzZB+oS2hfNNJzpfcRRfcZmCJOP8EySmQd
+         g+xcBgfqADhJshLEY78CKFvKjnbnDQTiZlNPaYQ4krJN4DIZr0DcF9zio2w2kHV8Sq+E
+         bLM/i/SzIos3D8gnl2FjBUdtUwk4BOXJ/p4Gz7UFvasXpv6HXMR+5PupsiPSPR0TnZya
+         F4NsEqC4DRhyBo+zGRqyKs6C3D88H2ZM6iKWsmgHMRXInXx2VY+xkqjwHyZXLhqJ9DIi
+         GLX8O48hgFb+6agiYOXIOISy12Ll9TGb3KH9UckWOW5W3iIlklqwzjxaxwQD5RPR2Sdf
+         1JcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
+        b=lJMd1atp7SbOxbnRgS1/6re/E5PNM/FyRyvW/gaHGWp3aZTCt92lDCJRSw67pi88/b
+         UfLxNpfckiCy2UpcBwaU/UqNg2+7Ah8BSaD1lBMH2RhV9U52naMib3eAK2IC3luzi5hR
+         qIkSol1QqRv1eMHWIg8l3t+79qQ7rDH5lWt5gW3u2tzKc7Uc0vLEq5wbYmmtb8q0lNFN
+         NERmrudwckN8OxKnefXaZ3BU6Vnu4lMy47uojGnO5WIZQz21fUfiTt2eje1z2voBdXJo
+         oJqrtSWdpjIufijfNYQvRxsc49pDM2xw67CI2kp2/mDe+vs92z/1KJXK1yINrcCb3kBk
+         Avkg==
+X-Gm-Message-State: AOAM530CiBaTaK13mLk7sSXIP8H9unRA7ziTzR15sQeigABUIJNps+Nu
+        YR1sKv5cn03xz4x3IPMb7xhr0A==
+X-Google-Smtp-Source: ABdhPJyPL0K+xAMvnRb2ONEX1jWjnGDkkA7zHOBZU3POgTFS7NF7cqaibZCvN8D1E1ysUwm9U4xflg==
+X-Received: by 2002:a05:600c:2682:b0:39c:8ec6:57d9 with SMTP id 2-20020a05600c268200b0039c8ec657d9mr3559545wmt.99.1655051032703;
+        Sun, 12 Jun 2022 09:23:52 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id bh8-20020a05600c3d0800b003942a244ee6sm6005715wmb.43.2022.06.12.09.23.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 09:23:51 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 17:23:47 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Bill Wendling <morbo@google.com>
+Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jan Kara <jack@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 05/13] can: slcan: simplify the device de-allocation
-Message-ID: <20220612182302.36bdd9b9.max@enpas.org>
-In-Reply-To: <CABGWkvroJG16AOu8BODhVu068jacjHWbkkY9TCF4PQ7rgANVXA@mail.gmail.com>
-References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
-        <20220608165116.1575390-6-dario.binacchi@amarulasolutions.com>
-        <eae65531-bf9f-4e2e-97ca-a79a8aa833fc@hartkopp.net>
-        <CABGWkvroJG16AOu8BODhVu068jacjHWbkkY9TCF4PQ7rgANVXA@mail.gmail.com>
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 08/12] cdrom: use correct format characters
+Message-ID: <YqYTExy0IpVbunBL@equinox>
+References: <20220609221702.347522-1-morbo@google.com>
+ <20220609221702.347522-9-morbo@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609221702.347522-9-morbo@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,75 +100,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Jun 2022 12:46:04 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
-
-> > As written before I would like to discuss this change out of your
-> > patch series "can: slcan: extend supported features" as it is no
-> > slcan feature extension AND has to be synchronized with the
-> > drivers/net/slip/slip.c implementation.  
+On Thu, Jun 09, 2022 at 10:16:27PM +0000, Bill Wendling wrote:
+> From: Bill Wendling <isanbard@gmail.com>
 > 
-> Why do you need to synchronize it with  drivers/net/slip/slip.c
-> implementation ?
-
-Because slcan.c is a derivative of slip.c and the code still looks
-*very* similar, so improvements in one file should be ported to the
-other and vice versa. This has happened several times now.
-
-
-> > When it has not real benefit and introduces more code and may create
-> > side effects, this beautification should probably be omitted at all.
-> >  
+> When compiling with -Wformat, clang emits the following warnings:
 > 
-> I totally agree with you. I would have already dropped it if this
-> patch didn't make sense. But since I seem to have understood that
-> this is not the case, I do not understand why it cannot be improved
-> in this series.
+> drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+>         ret = scnprintf(info + *pos, max_size - *pos, header);
+>                                                       ^~~~~~
+> 
+> Use a string literal for the format string.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Bill Wendling <isanbard@gmail.com>
+> ---
+>  drivers/cdrom/cdrom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> index 416f723a2dbb..52b40120c76e 100644
+> --- a/drivers/cdrom/cdrom.c
+> +++ b/drivers/cdrom/cdrom.c
+> @@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
+>  	struct cdrom_device_info *cdi;
+>  	int ret;
+>  
+> -	ret = scnprintf(info + *pos, max_size - *pos, header);
+> +	ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
+>  	if (!ret)
+>  		return 1;
+>  
+> -- 
+> 2.36.1.255.ge46751e96f-goog
+> 
 
-This series is mostly about adding netlink support. If there is a point
-of contention about a beautification, it may be easier to discuss that
-separately, so the netlink code can be merged while the beautification
-is still being discussed.
+Hi Bill,
 
+Thank you for the patch, much appreciated.
 
-On another note, the global array of slcan_devs is really unnecessary
-and maintaining it is a mess - as seen in some of your patches, that
-have to account for it in tons of places and get complicated because of
-it.
+Looking at this though, all callers of cdrom_print_info() provide 'header'
+as a string literal defined within the driver, when making the call.
+Therefore, I'm not convinced this change is necessary for cdrom.c -
+that said, in this particular use case I don't think it would hurt
+either.
 
-slcan_devs is probably grandfathered from a very old kernel, since
-slip.c is about 30 years old, so I suggest to remove it entirely. In
-fact, it may be easier to patch slcan_devs away first, and that will
-simplify your open/close patches - your decision :)
+I've followed the other responses on parts of this series, so I
+understand that a different solution is potentially in the works.
+Thought I'd respond anyway though out of courtesy.
 
-
-If you wish to implement the slcan_devs removal, here are some hints:
-
-The private struct can just be allocated as part of struct can_priv in
-slcan_open(), like so:
-
-  struct net_device *dev;
-  dev = alloc_candev(sizeof(struct slcan), 0);
-
-And then accessed like so:
-
-  struct slcan *sl = netdev_priv(dev);
-
-Make sure to add struct can_priv as the first member of struct slcan:
-
-  /* This must be the first member when using alloc_candev() */
-  struct can_priv can;
-
-
-> The cover letter highlighted positive reactions to the series because
-> the module had been requiring these kinds of changes for quite
-> some time. So, why not take the opportunity to finalize this patch in
-> this series even if it doesn't extend the supported features ?
-
-Because... I can only speak for myself, but I'd merge all the
-unambiguous stuff first and discuss the difficult stuff later, if there
-are no interdependencies :)
-
-
-
-Max
+All the best,
+Phil (Uniform CDROM Maintainer)

@@ -2,117 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92020547934
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 09:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71403547939
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 09:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234676AbiFLHfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 03:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S234784AbiFLH4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 03:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiFLHfc (ORCPT
+        with ESMTP id S234689AbiFLH4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 03:35:32 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D101039BA0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 00:35:29 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i16-20020a056e021d1000b002d3bbe39232so2540349ila.20
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 00:35:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=1Xgh0uMJ75AgI9MjY81mi9Hj4ZGB8BF+ScF7gj9/dZs=;
-        b=XZjt1UhZeYzFlZIlRz9ZXjpeZZeDdWiA+/wqCCKmeDZKctmLpgYG3SMojLdv7rEjvZ
-         9MyBqKiEBZHtOTUC9tZ0e0pmWi3tTU8ldIfb7O4zzTiTjmWCiKSk6wqyQXMW4ULrmIoA
-         9WibWcD8rEjxHkY+3KkyoIGuNRx1rJOQwGfOETR9+dkYBJGAZRLXHGAp0yFrQOhoNJnk
-         ywHDtxjHbMiBTfXtS9vYjV+2Lu2bgrJLvlYudSFkGlb+Lb0fTsACwcfqg7ycwdrvGdrA
-         l9gfNAdSslvNoHiTNpX3snNf5NX/LEb0t2/ZkAmZEQx0PkIjXsHyzgZ3FXwNkDwLcdtf
-         utsg==
-X-Gm-Message-State: AOAM530s1yEI6btTCk4KnvvOL03DQy5DJmShFMCI9KdCVQzY4eBTZUL1
-        EfYRMtJmX0oD5ah/AwAhlZYqugyM46JsKx4Mg81U8xdfwTOF
-X-Google-Smtp-Source: ABdhPJyFszkRlznaIKtJRNsItp2ig/3Ynjfye5LPspwE2oE45vUhET4fVhR5gtyI6VgYzWK2bJ0wpu5vhofFsGPNvpaD7ZJzJB39
+        Sun, 12 Jun 2022 03:56:36 -0400
+X-Greylist: delayed 738 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Jun 2022 00:56:34 PDT
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FCE5253C;
+        Sun, 12 Jun 2022 00:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1655020591;
+        bh=QMhylbueyCo/7BPY8vCWZuNj9P15lJcnsMLwPrTxgIo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=UZd2FHE1F+IinUYlsYdKm92mXcMCl5bn+9p9eHr98waT1agvQeg/66A32yDFXDJtN
+         6VsMXqCi67ELsLFgMe3zMb1u2/dAQTW4kGi4vjRQS3/zccqAKLC8ZynJnwFZfFu3hi
+         4QbRRH/KFYaDTFS8uqyGcTnGEp+gBiXjw1xW7XLE=
+Received: from [192.168.0.110] ([36.57.146.189])
+        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+        id A1EA6858; Sun, 12 Jun 2022 15:40:30 +0800
+X-QQ-mid: xmsmtpt1655019630tq8cebg5n
+Message-ID: <tencent_80D2801BC03B7006BB2230B6A1D5C69B9209@qq.com>
+X-QQ-XMAILINFO: M/NR0wiIuy706VL0L+2q/xRHRjEt+LTLGSrq12X/X6I6GuvNVXzfGrhtrmt2m3
+         NXBHBI+clMBVKXf9ug2O8EyuEztg5R5mYXpiPtjjB0fdk7CGLyl6uDfOgtRdiIWW7uDSjmUQ2GR1
+         +1Z+GSeHzveSIHt03d429k/Ca+6wK/1Z1oCCNCba0D9z0p++MMH8NZL2GYrIJjDbmt+fafsysRij
+         ZKb1WKAFf45VnVDcLbWTP/D2nCoXum0sy17e9jAnkX3HuQQm/KFdWFE0X7Dey3QTeVK4Py6sWUeF
+         MvGKMmgETJ4VEXId+cVT+lYuck1kTkOt2M9lnK1sMMtNY3skgf91IVRhB1aochvVBXTNQk8N9RHL
+         petbVIIAJ7FApQjxXhPI9XHotUbxs1ASzBkl/+7BXQO+7CnNkTV7BIwn/rqpBkXczNnIVb9cbpqd
+         6X6gaa3JBL+MVo94f3CcwM6TXDd+VFc+bCMbY7UUEdra0pyFXEQjQUb69bl8kAiEQqFrIMMwTe1y
+         ZfADUDs5eDBkMZeEfPnaEg6XW+ykdMiEFrrgkKkns9UY1MI0DkW/FGg5mc52jJ2sfF/ft06JsPTP
+         oUu7goW/+kalTQLowr00kUFEM8J/3o3X/ZigV2K7KLD5mm3iVSNHp/EIrSTWBEJTp3iDTdv1+l7Y
+         I5XIyR8vbM7XHoQQNYHOdmhotZwx9msgkR64NoEGRvxBCXQLximHslX5b0xmRojvlp/szii5Yj1i
+         LPUvTs/j9ZJbNOwhK9hYP5tliD5SRmqRq3rpPMXJZd8qbKo9CVYsADhROoMXX0RiNoaNEAQ27kWP
+         tvKlL4RreK/gKHHchVV1IaiB+7Yu99RsNWSDXi0wsN0gB0BCcP1ZO1BXRfrgdeXQy74rREUqva53
+         t8bm8UoyJSQu8UVsD4oOhdcRxxLCTNv852MYj+Q32FJMsh9H5VS+wLneJCu2+tWYxmaKbU8MGjEe
+         D1Pe2aLuQeCBlh92xYqw==
+Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
+ readers from consuming CPU) cause qemu boot slow
+To:     paulmck@kernel.org, Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        rcu@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>
+References: <20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org>
+ <20220611165956.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+X-OQ-MSGID: <c7b12b7c-43fc-2d3c-f563-bdc182eca756@foxmail.com>
+Date:   Sun, 12 Jun 2022 15:40:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:c24c:0:b0:2d1:cdd0:1959 with SMTP id
- k12-20020a92c24c000000b002d1cdd01959mr28765647ilo.39.1655019329229; Sun, 12
- Jun 2022 00:35:29 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 00:35:29 -0700
-In-Reply-To: <0000000000000a5eae05d8947adb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003719fc05e13b37e3@google.com>
-Subject: Re: [syzbot] WARNING in handle_exception_nmi (2)
-From:   syzbot <syzbot+4688c50a9c8e68e7aaa1@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220611165956.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi, Paul
 
-HEAD commit:    7a68065eb9cd Merge tag 'gpio-fixes-for-v5.19-rc2' of git:/..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=177df408080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
-dashboard link: https://syzkaller.appspot.com/bug?extid=4688c50a9c8e68e7aaa1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12087173f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16529343f00000
+On 2022/6/12 上午12:59, Paul E. McKenney wrote:
+> On Sun, Jun 12, 2022 at 12:32:59AM +0800, Zhangfei Gao wrote:
+>> Hi, Paul
+>>
+>> When verifying qemu with acpi rmr feature on v5.19-rc1, the guest kernel
+>> stuck for several minutes.
+> Stuck for several minutes but then continues normally?  Or stuck for
+> several minutes before you kill qemu?
+qemu boot stuck for several minutes, then guest can bootup normally, 
+just slower.
+>
+> And I have to ask...  What happened without the ACPI RMR feature?
+If no ACPI, qemu boot quickly without stuck.
+build/aarch64-softmmu/qemu-system-aarch64 -machine 
+virt,gic-version=3,iommu=smmuv3 \
+-enable-kvm -cpu host -m 1024 \
+-kernel Image -initrd mini-rootfs.cpio.gz -nographic -append \
+"rdinit=init console=ttyAMA0 earlycon=pl011,0x9000000 kpti=off"
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4688c50a9c8e68e7aaa1@syzkaller.appspotmail.com
+Adding acpi=force & -bios QEMU_EFI.fd, qemu boot stuck for several minutes.
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3609 at arch/x86/kvm/vmx/vmx.c:4896 handle_exception_nmi+0xfdc/0x1190 arch/x86/kvm/vmx/vmx.c:4896
-Modules linked in:
-CPU: 0 PID: 3609 Comm: syz-executor169 Not tainted 5.19.0-rc1-syzkaller-00303-g7a68065eb9cd #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:handle_exception_nmi+0xfdc/0x1190 arch/x86/kvm/vmx/vmx.c:4896
-Code: 0f 84 c8 f3 ff ff e8 33 5c 58 00 48 89 ef c7 85 84 0d 00 00 00 00 00 00 e8 21 35 ec ff 41 89 c4 e9 af f3 ff ff e8 14 5c 58 00 <0f> 0b e9 69 f6 ff ff e8 08 5c 58 00 be f5 ff ff ff bf 01 00 00 00
-RSP: 0018:ffffc9000309faf8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88801ba1d880 RSI: ffffffff8122171c RDI: 0000000000000001
-RBP: ffff88807cd88000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 00000000a0000975
-R13: ffff88807cd88248 R14: 0000000000000000 R15: 0000000080000300
-FS:  0000555556c8d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 00000000229ca000 CR4: 00000000003526e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 00000000b8fecd19 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __vmx_handle_exit arch/x86/kvm/vmx/vmx.c:6174 [inline]
- vmx_handle_exit+0x498/0x1950 arch/x86/kvm/vmx/vmx.c:6191
- vcpu_enter_guest arch/x86/kvm/x86.c:10361 [inline]
- vcpu_run arch/x86/kvm/x86.c:10450 [inline]
- kvm_arch_vcpu_ioctl_run+0x4208/0x66f0 arch/x86/kvm/x86.c:10654
- kvm_vcpu_ioctl+0x570/0xf30 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3944
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f56efaee199
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc37353158 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f56efaee199
-RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
-RBP: 00007f56efab1bf0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f56efab1c80
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
 
+By the way, my hardware platform is aarch64.
+
+Only change this can solve the stuck issue.
+
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -524,6 +524,10 @@ static unsigned long srcu_get_delay(struct 
+srcu_struct *ssp)
+  {
+         unsigned long jbase = SRCU_INTERVAL;
+
++       if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), 
+READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
++               return 0;
++       return SRCU_INTERVAL;
++
+
+>
+>> And on 5.18, there is no such problem.
+>>
+>> After revert this patch, the issue solved.
+>> Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking readers from
+>> consuming CPU)
+>>
+>>
+>> qemu cmd:
+>> build/aarch64-softmmu/qemu-system-aarch64 -machine
+>> virt,gic-version=3,iommu=smmuv3 \
+>> -enable-kvm -cpu host -m 1024 \
+>> -kernel Image -initrd mini-rootfs.cpio.gz -nographic -append \
+>> "rdinit=init console=ttyAMA0 earlycon=pl011,0x9000000 kpti=off acpi=force" \
+>> -bios QEMU_EFI.fd
+>>
+>> log:
+>> InstallProtocolInterface: 5B1B31A1-9562-11D2-8E3F-00A0C969723B 7AA4D040
+>> add-symbol-file /home/linaro/work/edk2/Build/ArmVirtQemu-AARCH64/DEBUG_GCC48/AARCH64/NetworkPkg/IScsiDxe/IScsiDxe/DEBUG/IScsiDxe.dll
+>> 0x75459000
+>> Loading driver at 0x00075458000 EntryPoint=0x00075459058 IScsiDxe.efi
+>> InstallProtocolInterface: BC62157E-3E33-4FEC-9920-2D3B36D750DF 7AA4DE98
+>> ProtectUefiImageCommon - 0x7AA4D040
+>>    - 0x0000000075458000 - 0x000000000003F000
+>> SetUefiImageMemoryAttributes - 0x0000000075458000 - 0x0000000000001000
+>> (0x0000000000004008)
+>> SetUefiImageMemoryAttributes - 0x0000000075459000 - 0x000000000003B000
+>> (0x0000000000020008)
+>> SetUefiImageMemoryAttributes - 0x0000000075494000 - 0x0000000000003000
+>> (0x0000000000004008)
+>> InstallProtocolInterface: 18A031AB-B443-4D1A-A5C0-0C09261E9F71 754952C8
+>> InstallProtocolInterface: 107A772C-D5E1-11D4-9A46-0090273FC14D 75495358
+>> InstallProtocolInterface: 6A7A5CFF-E8D9-4F70-BADA-75AB3025CE14 75495370
+>> InstallProtocolInterface: 18A031AB-B443-4D1A-A5C0-0C09261E9F71 754952F8
+>> InstallProtocolInterface: 107A772C-D5E1-11D4-9A46-0090273FC14D 75495358
+>> InstallProtocolInterface: 6A7A5CFF-E8D9-4F70-BADA-75AB3025CE14 75495370
+>> InstallProtocolInterface: 59324945-EC44-4C0D-B1CD-9DB139DF070C 75495348
+>> InstallProtocolInterface: 09576E91-6D3F-11D2-8E39-00A0C969723B 754953E8
+>> InstallProtocolInterface: 330D4706-F2A0-4E4F-A369-B66FA8D54385 7AA4D728
+>>
+>>
+>> Not sure it is either reported or solved.
+> This is the first I have heard of it, so thank you for reporting it.
+>
+> Do you have a way of collecting something sysrq-t output?
+Do you mean "echo t > /proc/sysrq-trigger",
+There are too much output and kernel dump can not stop.
+
+Thanks

@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B65F5477F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 01:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470F55477F9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 02:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbiFKXnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Jun 2022 19:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S232565AbiFLABj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Jun 2022 20:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiFKXnv (ORCPT
+        with ESMTP id S230028AbiFLABh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Jun 2022 19:43:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28EF5FED
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 16:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654991030; x=1686527030;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RT0p+2hDhajSJ1kH9e9JAI65ma613oxiWt/W9xAaIwU=;
-  b=EbrM0hHbWT/Njcor0PZ8ly60kRyS5sG5P3Rb2Qkz7+/sQ6uzg5jDi27X
-   zCZmanX+Fb9wPWyC7eMfRz+yOuLosr6hj3oNU8hTpaYAjoEvMjTKoLxLd
-   HT3U8lEKDz0PO0LK/jdF5a1t0W+LLlNHxyj9wM2bt6NUvwRMfH8flceGK
-   5IGquheUi/jqs798mQ8X/p6rNSU2SMOpeIVJhZqdhVK6Wdk8X+CwCEeNB
-   a3AXWGlldqGxJ77JmlX0/FrKkd77X5kEGPzNxOL88jvCbK55j2daA5bUo
-   ZNtv0gNMTdw09xIKixzjCXzOtRnZziGlw9suriHes3CranGxxvEI9QAzC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="276733999"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="276733999"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 16:43:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="685305514"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Jun 2022 16:43:48 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0Alg-000JQH-7W;
-        Sat, 11 Jun 2022 23:43:48 +0000
-Date:   Sun, 12 Jun 2022 07:43:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: drivers/dma/dw/rzn1-dmamux.c:105:34: warning: unused variable
- 'rzn1_dmac_match'
-Message-ID: <202206120706.vHMLJjkz-lkp@intel.com>
+        Sat, 11 Jun 2022 20:01:37 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12146A425;
+        Sat, 11 Jun 2022 17:01:36 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so2671295pjb.3;
+        Sat, 11 Jun 2022 17:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rrR2yAG5ZDoOc5RKGUSqko0qrkTdkFcvAE69IpskmQk=;
+        b=bxm/xiWQoxyLzg/Q6KDEDCwr+QZ3vIvSrbwYfyVTcvKPaoIxtp34y3V3YDIDleYI+W
+         QK/vtFXhrhy2ZhZRrycP2vEZ0ewJbEZQa3myf2dCw85jXBLROXvMLWRZoF/fWczBPjZo
+         VyxfUKhQsoA0rnjMKfSCfmGI0Wr6s0grg37+v8JpW7Qt5qxlMybuzGNZDIuyEE/IOcOB
+         ZgNge4Pw8ce200HQ49utHlg6PPmI0zIPFY74F3gyntOl3fRzU4XWnTI99vIItxdWSRrU
+         m9Sow0NKHDamMtXdKpPq42VO/pr8bh9twl6MVcv7pw6o8NfsGUyw20z3wYPPG1/b60NJ
+         0dHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rrR2yAG5ZDoOc5RKGUSqko0qrkTdkFcvAE69IpskmQk=;
+        b=H3goDps9U2JRGibN4+AHv7y6p2/hguvAh6eaAr5hXTKVIpM/7ZGqvx0YxQPaYkWUAa
+         d8ChUaB/lagZF8evbPEPvY2fY/8vHbRsq2Edg8iRvdefH1vanim1G5+BcXL/fiGSWmwV
+         Hjtf02BCzAqMUeYDuF1ZCP7CtLU0gqtp5JmUnWGX+3w1RtoFfBN7eiETaqZAyEwV8NLv
+         p2YzoSEMDylGpd7ZmEDtWtwYjLu8NCoBDLPiXGpn1948nieYDLgdx7NkjST6SZfdb4Cp
+         V/snTGDJ9/XucwQZ33qqNf58smgmflXYSsy/e0iKCg4EDpa6ovQcXxDkDhMf12269ujs
+         2YAA==
+X-Gm-Message-State: AOAM533FxA7DeHuOMkA9M1sxHee+4ARZTEf5VInNcXPwvyJAIz5arl22
+        NKF0MJDw3huyEHXRu6Q8pSxCY0U/oKQ=
+X-Google-Smtp-Source: ABdhPJwzSAUVchKa+rTUGUJRkr60hBjUTrhIP0rYG8PQuiBVJ4d9X8ZgTMHK527r6yMU87IvTMLFEA==
+X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr51176328plg.111.1654992095656;
+        Sat, 11 Jun 2022 17:01:35 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id a15-20020a62d40f000000b0051f2b9f9b05sm2146794pfh.76.2022.06.11.17.01.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 17:01:35 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v2] leds: Add leds-qcom-lpg entry to documentation table of contents
+Date:   Sun, 12 Jun 2022 07:01:25 +0700
+Message-Id: <20220612000125.9777-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel,
+After merging linux-leds tree to the mainline [1], htmldocs build produces
+a new warning:
 
-FYI, the error/warning still remains.
+checking consistency... /home/bagas/repo/linux-stable/Documentation/leds/leds-qcom-lpg.rst: WARNING: document isn't included in any toctree
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0678afa6055d14799c1dc1eee47c8025eba56cab
-commit: 134d9c52fca26d2d199516e915da00f0cc6adc73 dmaengine: dw: dmamux: Introduce RZN1 DMA router support
-date:   3 weeks ago
-config: hexagon-randconfig-r035-20220611 (https://download.01.org/0day-ci/archive/20220612/202206120706.vHMLJjkz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=134d9c52fca26d2d199516e915da00f0cc6adc73
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 134d9c52fca26d2d199516e915da00f0cc6adc73
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma/dw/
+The warning above is because leds-qcom-lpg.rst is missing in the table of
+contents.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Add the missing entry.
 
-All warnings (new ones prefixed by >>):
+[1]: https://lore.kernel.org/all/20220531200619.GA8906@duo.ucw.cz/
 
->> drivers/dma/dw/rzn1-dmamux.c:105:34: warning: unused variable 'rzn1_dmac_match' [-Wunused-const-variable]
-   static const struct of_device_id rzn1_dmac_match[] = {
-                                    ^
-   1 warning generated.
+Fixes: 24e2d05d1b6898 ("leds: Add driver for Qualcomm LPG")
+Acked-by: Pavel Machek <pavel@ucw.cz>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>
+Cc: linux-leds@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/leds/index.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
+index e5d63b9400459c..014e009b076159 100644
+--- a/Documentation/leds/index.rst
++++ b/Documentation/leds/index.rst
+@@ -25,4 +25,5 @@ LEDs
+    leds-lp5562
+    leds-lp55xx
+    leds-mlxcpld
++   leds-qcom-lpg
+    leds-sc27xx
 
-vim +/rzn1_dmac_match +105 drivers/dma/dw/rzn1-dmamux.c
-
-   104	
- > 105	static const struct of_device_id rzn1_dmac_match[] = {
-   106		{ .compatible = "renesas,rzn1-dma" },
-   107		{}
-   108	};
-   109	
-
+base-commit: 0678afa6055d14799c1dc1eee47c8025eba56cab
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara
+

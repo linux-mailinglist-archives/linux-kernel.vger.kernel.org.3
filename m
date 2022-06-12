@@ -2,294 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BE9547CDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 00:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150A6547CE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 00:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbiFLWsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 18:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S237544AbiFLWz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 18:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbiFLWs0 (ORCPT
+        with ESMTP id S232947AbiFLWz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 18:48:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CA317075
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 15:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655074104; x=1686610104;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i28I40WkVIL9oWMbQEEAeW4UCqB99p/S5O9WQxKDhJQ=;
-  b=Hpx6PPWJcqsmWCNR7AHMAyIvk4hZBe5wVuzYYT4J0HdcqrJnKI1iF12E
-   exlZFsVVEzp875+oeJAaR/SW8zSkpBAjCcUAjEPV/wXPc8q34kWlZrsss
-   T+f29Lyx+1vfxh2QEWSMm3+iQP4qDBwE0GMTn8Rjy6jG5hh3mxufbW99E
-   eyhP/VXmOQunEYHIvpv23RFOSW1NjsS4bZ/yXjKECmbP2Ur01eGeewRBW
-   ebbw24Im+eNih+JMpNJ60yqSYusdaYLnUCwIpbnmyweu/DE6OythKeqhZ
-   p7RTBhUlCgKu9/Q6Tg0Za5REV5YL/VOp+P3f1Oq51whetCf8rwcC/PbLj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="257940547"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="257940547"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 15:48:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="639352053"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Jun 2022 15:48:22 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0WNa-000KI1-1n;
-        Sun, 12 Jun 2022 22:48:22 +0000
-Date:   Mon, 13 Jun 2022 06:48:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: drivers/thunderbolt/test.c:851 tb_test_path_not_bonded_lane0()
- error: potential null dereference 'path'.  (tb_path_alloc returns null)
-Message-ID: <202206130649.daXawSPB-lkp@intel.com>
+        Sun, 12 Jun 2022 18:55:58 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50077.outbound.protection.outlook.com [40.107.5.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB7831DFA;
+        Sun, 12 Jun 2022 15:55:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a6zSMsKz0kDSUZozXJx06u22+1Vawza1sv0EM6Js6lDS/WBrhSSfzgyJac7doo2wBCD/g/TeArfavKKosNdfcVVTgDtryerPB4u5do1m7RcVEeMyVefSdjc8XuoxsoOgPXJE+BuKZLW/MrPA85OK27OwwwPuzhJxsAejQpPNuyDjO/6TEc47ZtI15nlDR4h8P2RQ4Snu5BxKhe5/UbQiDkdxsVKUhv4Z3wKbDFvZ9swGVAOrqWkuU16T/w2YtjII/aFzT8+mAzObvY6W/pGc4oL/yKDJsNCt9UgLK8yr2cfhMk+C10WCb2ZXL3RekUT+HnrwDwTVpujOvIq3V4zI3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H9ssOjzLivbjJf8r+jQBz8mCy8a2eiS7Ws6EoGzjKYM=;
+ b=nR0TC5rNSlU3tNccy183kLxpL2P3Rf+nG/SCH9y9XbrFN4bLs0acf1qxxeNXWICE32yZ3IN7S23P3bBficvnKT5XPvCGtiJhPFQmvxRtWROuoDtVT9dTZUaxKCh5YadG7EhMwm9x76/0JnXmWWOR+Pk+n6qPiypJ8zLbupaLJpNTaxXQymDvvVdtgywJQ/yyu/KOBiwer4Mx4btcVzucGJqMZI8xsShHXlViQo8Zf1TDYaTu66YqahcrBW4q7P2peOQuLz/1y1N3rlZcnBXpQO+/rFDp1JIWEL7hE4Uf4huyfm507dTESjPJZ1JcUpavdw7gNHneZmoheJMxlqqC4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H9ssOjzLivbjJf8r+jQBz8mCy8a2eiS7Ws6EoGzjKYM=;
+ b=JLHF3Ymtq02ErYDD42MZMkODhvXd/9jXzY9CrFCyH5O7gLTcxjwZ1NWCu++X3hr/J2W8SZjJgO/YsdcG6ubioi8Svl07geLrZc9dJGseNjeFJM9hVrEZxiz5PUHOlYXtZmoPFYyG4SsTm1aheQY05RcAmrOSWtiknoCcPg+LCxs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from AS4PR04MB9244.eurprd04.prod.outlook.com (2603:10a6:20b:4e3::9)
+ by DBBPR04MB7803.eurprd04.prod.outlook.com (2603:10a6:10:1e5::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.20; Sun, 12 Jun
+ 2022 22:55:53 +0000
+Received: from AS4PR04MB9244.eurprd04.prod.outlook.com
+ ([fe80::60ed:7367:9545:512f]) by AS4PR04MB9244.eurprd04.prod.outlook.com
+ ([fe80::60ed:7367:9545:512f%9]) with mapi id 15.20.5332.020; Sun, 12 Jun 2022
+ 22:55:53 +0000
+Message-ID: <0859ab90-4cb4-a2d0-c3af-84a372742634@oss.nxp.com>
+Date:   Mon, 13 Jun 2022 01:55:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] media: imx-jpeg: Align upwards buffer size
+Content-Language: en-US
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220530074919.14982-1-ming.qian@nxp.com>
+From:   "mirela.rabulea@oss.nxp.com" <mirela.rabulea@oss.nxp.com>
+In-Reply-To: <20220530074919.14982-1-ming.qian@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR08CA0113.eurprd08.prod.outlook.com
+ (2603:10a6:800:d4::15) To AS4PR04MB9244.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4e3::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ead5b00b-35b7-4b41-2dca-08da4cc6b3fa
+X-MS-TrafficTypeDiagnostic: DBBPR04MB7803:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DBBPR04MB7803B0A19A5139C7C3DDD1E5CEA89@DBBPR04MB7803.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jzoXga7Xv6NtFpmOJbgnYGhVOSRelsZ7M/j/WRLQKa4LlHXIyzkAM0kDHqzU0KSiCmU8vqxhrccLj32SjNBXAaG4vRtr1aHJlmxq6OiGTQ3Tgu4M+yQflmi2c4K+79OJynhp8vS8NPS3pzSmwEzBzbiSZIowbb82MPjx/Ope5B8EIgjhXkZd9hGDQj0ubCVF0yid7QuttyBGAqB4pbZ4LoDU6SvCzC688U4sa5YhTH6HjCqHeEZPV4oXMtNCwlYJnNj2McAC29tv6hvLJw+8KkCbBGAiDOosJIV5gvXSsdU280enpxnwkPqUObn9TagT/q4tUjvQZRNtk5imFtTYTLwFqBxkoEeyQ2UZR5bYCyj+7zwbIJxig3WNIfvskyhcZv50FyxdibV923Qbj2680HQcCUydHHMpJlgiYie/qL1FTDHF0GkzOwwhYXwKdxZbhtBkcai4SVShSgvrPms4W+vZWDsaAHJBhmrqxWTmknC3aM0DjWwv6T0Sq/R+9MzDcIBHqEZKxE6SZf3+72Xb4bd3pyWbpBl3vsdViNBjPBPJgi3ezZ0vZrpMZMw08/HnEK04v+bsWK7N4V3OuOJJYq1ILF0sJYazN5ADQf3EuoJk+7F+Jj+VK6+O4b69JZ8XfMRzJnMzahQy3pF1o5KL936OLtifLgrbDWGT5Opr7Yy6lH2mw2AdBW6SzdZXrDasn3XAeffSTUi6Z2H6F819j2b6Xb5mj3P0h+ijnycUkDzRWAz4nS5osIZuODLmYSMs
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9244.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(31696002)(26005)(53546011)(6506007)(52116002)(6512007)(316002)(66946007)(66556008)(66476007)(6486002)(2616005)(86362001)(508600001)(38100700002)(38350700002)(186003)(83380400001)(4326008)(2906002)(8676002)(31686004)(5660300002)(8936002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWlOUWh3cnRpYzR5bFhqQlNNVld0a3R3cHlTbTIrbHU1bERvTEtPN2xHSzFi?=
+ =?utf-8?B?YmhFYnhYMEM5bldYQWZKOTFFTVNkMFRaWmJkTU5TUjh1MW0rU2VnQ3NJeUJX?=
+ =?utf-8?B?cU4weHhxKzdhZ0EySGVNQzNGa1ZvRjhabTNuQVErb1RuckpBY3JCSWtWaHpQ?=
+ =?utf-8?B?RjVDQ0ViRXhDdElUNEtDK0FzMGl6NDFnT0Y4anU4cUNvSEdmVjJ5VytQdFFs?=
+ =?utf-8?B?QjVlTXoyR1BZRWdMYmF1d1U3UXpkYWNmYVgyMG8vZk9sbkwvcmtxUC8xUXpH?=
+ =?utf-8?B?Q21TanVRSXpFQTNSRWpHMXplZFJNRFd3M2RoaitJYVI2enZWM0hNNFNnYllC?=
+ =?utf-8?B?MFNOV0k3aml6c2pHa0ljcnU3d0ZucWNmanc1K09zZWMrU1NHNzl5QW5JbDFK?=
+ =?utf-8?B?ZXFrSlNtWGZlMEtDSTczSlhOQjZQRTNzUG9BRXRoUTd6YkJBRkY5WTA5Ni8r?=
+ =?utf-8?B?VXRTZW9qUEdIOElvYWEvNzJHSk03OHlPOEJqbUxZVE93K2tDbm1jSmU2U2No?=
+ =?utf-8?B?VlZBZ283ejhHVUtOYk5ndWViSENFY3FlVDJjRzZTVFFZTkJNaHBBM3RiZVZD?=
+ =?utf-8?B?OFEzNXlnY3QwV3hGcitDQlBEVzZZU1hvWDlJY1J1WWRHSDAvUE13a2craEJH?=
+ =?utf-8?B?SmtZRThMYmdmbGxkL3JNL0xVU0dOYUNOTGN0eVpOWmdYb2V0Wm5US0k1WTcx?=
+ =?utf-8?B?akJNZ1orNkZZczNzZW92Mm9xMmtxV3VhYVc3Y3lCRDEvOTJzN1J6R1grQzBR?=
+ =?utf-8?B?YmV3T253TzgzTWQ0K0d4Mml0cnFsa3o1Zjg5dks5Mll5UTBUd2p0cUs4bTVn?=
+ =?utf-8?B?clR0bXR4YXJNOXBsbTJUZWw0VXMwWnZTRzJJQUpYb2Y2cVpGV29lVEw1bmcx?=
+ =?utf-8?B?Y3Z1d000L1VjQkM4Q21WRnUraXE5WkI5ZHc4Q3I5Zm56S25QaGlPUmkrZXdp?=
+ =?utf-8?B?TUhzQ3Y0YzJNeDB2ZnZTRmgvTi9iaEJEUHE5djZTeDRLQUcxQmdGSDAwZ25P?=
+ =?utf-8?B?ZWZBR2FOQ1BmdFlpOGIxYmpyUHBKUmdWcU5YRjJmblBSQ3c2UnozRDg0YXB5?=
+ =?utf-8?B?M1hIZFA5dDNNZTJzVkxYYmpWZDd0dXlHT09vZ2NQZzQ3Q3hIeGNQaHVYKzRZ?=
+ =?utf-8?B?V2tFcjRFc1huUEQzcHRlNW5USzlWSEdPbWZqT09oUnlpWldlaHBPSm9PZEw4?=
+ =?utf-8?B?eVRHVE14ZEl4V3RmbjRodlpzRHZCVTRoT2x5aVVUTlZ6Nzk2aGYzbVdFYUt4?=
+ =?utf-8?B?Vnphd1hKRy8rcHFFdkNiZ1l1VHk1UWIrNFMwSjg0OXhjSG1UTU8yMkNQVXMy?=
+ =?utf-8?B?bGVrQ1A3VHNIUUtrc0Nxc212WEVRK2RBWVJLZGZHZGFEcGIzVW1UdGVJRnVU?=
+ =?utf-8?B?MVh5UFIxdExSSmM2UHp6UXU4SG9sUDRoZlhIaUM2WndxTXZQTFlpVHE0U0k3?=
+ =?utf-8?B?dmptR25Ic3RHNEprMEtlc25UM1luNXRpWEl4TzVZc0U1M0IrMWc4d3JXcE5J?=
+ =?utf-8?B?WEFLYmcyNUZyWUpTem1vcFRKaU13UU5heE4yTEtNNCtHazkwODdJUi9rNE05?=
+ =?utf-8?B?QmRqMWlkYndVUGlDeXExTnFZZks1TkgzTm1JRk0wTXdiQTFkTlkrYXFvVngr?=
+ =?utf-8?B?SWlqZnA0MGU2dHZOdndGbFp5UnpDa0lrakxkakJqSzRrOXZ5bVh3NWY1Uysx?=
+ =?utf-8?B?czJWZVEzZlRPTU9SQjlQWDNwcUpmdlNzR0E0bXdFeG15enM0MU9RWjVRT1Zy?=
+ =?utf-8?B?VEVtMXB3LzlvSEVjWkJKdjFDUEFRR2FvQXRCNnZTKzgzWERBbWw5OStDT2t4?=
+ =?utf-8?B?QStkZG56TGtsRW0wa1B6L0VVVytWODM5RDZseUI1clZsLzdXUlNQTE93TUQ1?=
+ =?utf-8?B?dVdDdFp6MVk0U2pzWlZXcU0xV1o4S2M0dmdmK3Q4K0h0RDZENzAxYkJNdkdU?=
+ =?utf-8?B?YThuUVRsVHhHNTR1bk9EUHJ4N3dLN3hDRXdQWEJzN3RSb3VBVlp5UXBnNzBM?=
+ =?utf-8?B?OE9WZ2tzOVg5ZjRIdXpPMi9MQVN4MGNGK3g4UENnVjhPYktuRTdia29OZlE1?=
+ =?utf-8?B?UStjS21TRnptWTlReFd6VHJyMmQ1OHQwK3g1cXhNM2o3NStFbTgreHV0dzVY?=
+ =?utf-8?B?a05uSUNUeWM1TFAvbWlGbjhRTlJJVHdVMUNNRHRoQVd4c1ZxWjYyZU1QV25O?=
+ =?utf-8?B?d0ZsTG9SellYWmVWWitVL2l2NVlGZzlBc2FLTlA3MnErYytsK0tDZFptQ2FS?=
+ =?utf-8?B?NnYvOHZNd0s2Q0x6bUlCaXgzWUx0bklGdFA4aTZsSzI4dGRZNGxXdTRtSGF2?=
+ =?utf-8?B?VmZ4L2JXNGtmN2Vva05XVEUzbGFKRzRma25qTHFvS3FkVXpPdkdPenJXR0tt?=
+ =?utf-8?Q?G85Y5DYVvxhSpapM=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ead5b00b-35b7-4b41-2dca-08da4cc6b3fa
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9244.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2022 22:55:53.7160
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M+zhNN4hH+ZpbzHXHB7hEHLtdMThglOp4AERYwodwrKfVsWigD/M64IYOdudxLSwr293aprArNQ1TeEld6CF5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7803
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   997952851843935024962b51fc36c61b3c2d1ed4
-commit: 7aadf84333572fa011ada2dbf469295b84587739 thunderbolt: test: use NULL macros
-date:   10 weeks ago
-config: parisc-randconfig-m031-20220608 (https://download.01.org/0day-ci/archive/20220613/202206130649.daXawSPB-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
+Hi Ming,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 30.05.2022 10:49, Ming Qian wrote:
+> The hardware can support any image size WxH,
+> with arbitrary W (image width) and H (image height) dimensions.
+> 
+> Align upwards buffer size for both encoder and decoder.
+> and leave the picture resolution unchanged.
+> 
+> For decoder, the risk of memory out of bounds can be avoided.
+> For both encoder and decoder, the driver will lift the limitation of
+> resolution alignment.
+> 
+> For example, the decoder can support jpeg whose resolution is 227x149
 
-smatch warnings:
-drivers/thunderbolt/test.c:851 tb_test_path_not_bonded_lane0() error: potential null dereference 'path'.  (tb_path_alloc returns null)
-drivers/thunderbolt/test.c:913 tb_test_path_not_bonded_lane1() error: potential null dereference 'path'.  (tb_path_alloc returns null)
-drivers/thunderbolt/test.c:993 tb_test_path_not_bonded_lane1_chain() error: potential null dereference 'path'.  (tb_path_alloc returns null)
-drivers/thunderbolt/test.c:1073 tb_test_path_not_bonded_lane1_chain_reverse() error: potential null dereference 'path'.  (tb_path_alloc returns null)
-drivers/thunderbolt/test.c:1165 tb_test_path_mixed_chain() error: potential null dereference 'path'.  (tb_path_alloc returns null)
-drivers/thunderbolt/test.c:1257 tb_test_path_mixed_chain_reverse() error: potential null dereference 'path'.  (tb_path_alloc returns null)
+I doubt 227x149 is working. I have tried 127x127, with your patch 
+applied, both on encoder and decoder, the image does not look ok. The 
+126x127 seems to work. Having an odd resolution seems strange, I see not 
+even gstreamer supports it (tried videotestsrc & filesink with BGR, 
+127x128 produces a 128x128 size).
 
-vim +/path +851 drivers/thunderbolt/test.c
+We need to gain more clarity on this one.
+And when we do, if we really can support any arbitrary resolution, from 
+both the jpeg core and wrapper point of view, we have stuff to clean up.
+The assumption that I started with was, as stated in the comments:
+  * The alignment requirements for the resolution depend on the format,
+  * multiple of 16 resolutions should work for all formats.
+  * Special workarounds are made in the driver to support NV12 1080p.
+With h_align/v_align defined in mxc_formats[].
 
-54509f5005cacc Mika Westerberg 2020-04-29   811  
-54509f5005cacc Mika Westerberg 2020-04-29   812  static void tb_test_path_not_bonded_lane0(struct kunit *test)
-54509f5005cacc Mika Westerberg 2020-04-29   813  {
-54509f5005cacc Mika Westerberg 2020-04-29   814  	/*
-54509f5005cacc Mika Westerberg 2020-04-29   815  	 * PCIe path from host to device using lane 0.
-54509f5005cacc Mika Westerberg 2020-04-29   816  	 *
-54509f5005cacc Mika Westerberg 2020-04-29   817  	 *   [Host]
-54509f5005cacc Mika Westerberg 2020-04-29   818  	 *   3 |: 4
-54509f5005cacc Mika Westerberg 2020-04-29   819  	 *   1 |: 2
-54509f5005cacc Mika Westerberg 2020-04-29   820  	 *  [Device]
-54509f5005cacc Mika Westerberg 2020-04-29   821  	 */
-54509f5005cacc Mika Westerberg 2020-04-29   822  	static const struct hop_expectation test_data[] = {
-54509f5005cacc Mika Westerberg 2020-04-29   823  		{
-54509f5005cacc Mika Westerberg 2020-04-29   824  			.route = 0x0,
-54509f5005cacc Mika Westerberg 2020-04-29   825  			.in_port = 9,
-54509f5005cacc Mika Westerberg 2020-04-29   826  			.in_type = TB_TYPE_PCIE_DOWN,
-54509f5005cacc Mika Westerberg 2020-04-29   827  			.out_port = 3,
-54509f5005cacc Mika Westerberg 2020-04-29   828  			.out_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   829  		},
-54509f5005cacc Mika Westerberg 2020-04-29   830  		{
-54509f5005cacc Mika Westerberg 2020-04-29   831  			.route = 0x3,
-54509f5005cacc Mika Westerberg 2020-04-29   832  			.in_port = 1,
-54509f5005cacc Mika Westerberg 2020-04-29   833  			.in_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   834  			.out_port = 9,
-54509f5005cacc Mika Westerberg 2020-04-29   835  			.out_type = TB_TYPE_PCIE_UP,
-54509f5005cacc Mika Westerberg 2020-04-29   836  		},
-54509f5005cacc Mika Westerberg 2020-04-29   837  	};
-54509f5005cacc Mika Westerberg 2020-04-29   838  	struct tb_switch *host, *dev;
-54509f5005cacc Mika Westerberg 2020-04-29   839  	struct tb_port *down, *up;
-54509f5005cacc Mika Westerberg 2020-04-29   840  	struct tb_path *path;
-54509f5005cacc Mika Westerberg 2020-04-29   841  	int i;
-54509f5005cacc Mika Westerberg 2020-04-29   842  
-54509f5005cacc Mika Westerberg 2020-04-29   843  	host = alloc_host(test);
-54509f5005cacc Mika Westerberg 2020-04-29   844  	dev = alloc_dev_default(test, host, 0x3, false);
-54509f5005cacc Mika Westerberg 2020-04-29   845  
-54509f5005cacc Mika Westerberg 2020-04-29   846  	down = &host->ports[9];
-54509f5005cacc Mika Westerberg 2020-04-29   847  	up = &dev->ports[9];
-54509f5005cacc Mika Westerberg 2020-04-29   848  
-54509f5005cacc Mika Westerberg 2020-04-29   849  	path = tb_path_alloc(NULL, down, 8, up, 8, 0, "PCIe Down");
-7aadf84333572f Ricardo Ribalda 2022-02-11   850  	KUNIT_ASSERT_NOT_NULL(test, path);
-8f0877c26e4b69 David Gow       2021-05-13  @851  	KUNIT_ASSERT_EQ(test, path->path_length, ARRAY_SIZE(test_data));
-54509f5005cacc Mika Westerberg 2020-04-29   852  	for (i = 0; i < ARRAY_SIZE(test_data); i++) {
-54509f5005cacc Mika Westerberg 2020-04-29   853  		const struct tb_port *in_port, *out_port;
-54509f5005cacc Mika Westerberg 2020-04-29   854  
-54509f5005cacc Mika Westerberg 2020-04-29   855  		in_port = path->hops[i].in_port;
-54509f5005cacc Mika Westerberg 2020-04-29   856  		out_port = path->hops[i].out_port;
-54509f5005cacc Mika Westerberg 2020-04-29   857  
-54509f5005cacc Mika Westerberg 2020-04-29   858  		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
-54509f5005cacc Mika Westerberg 2020-04-29   859  		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
-824945a5b0ff82 David Gow       2021-06-24   860  		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-824945a5b0ff82 David Gow       2021-06-24   861  				test_data[i].in_type);
-54509f5005cacc Mika Westerberg 2020-04-29   862  		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
-54509f5005cacc Mika Westerberg 2020-04-29   863  		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
-824945a5b0ff82 David Gow       2021-06-24   864  		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-824945a5b0ff82 David Gow       2021-06-24   865  				test_data[i].out_type);
-54509f5005cacc Mika Westerberg 2020-04-29   866  	}
-54509f5005cacc Mika Westerberg 2020-04-29   867  	tb_path_free(path);
-54509f5005cacc Mika Westerberg 2020-04-29   868  }
-54509f5005cacc Mika Westerberg 2020-04-29   869  
-54509f5005cacc Mika Westerberg 2020-04-29   870  static void tb_test_path_not_bonded_lane1(struct kunit *test)
-54509f5005cacc Mika Westerberg 2020-04-29   871  {
-54509f5005cacc Mika Westerberg 2020-04-29   872  	/*
-54509f5005cacc Mika Westerberg 2020-04-29   873  	 * DP Video path from host to device using lane 1. Paths like
-54509f5005cacc Mika Westerberg 2020-04-29   874  	 * these are only used with Thunderbolt 1 devices where lane
-54509f5005cacc Mika Westerberg 2020-04-29   875  	 * bonding is not possible. USB4 specifically does not allow
-54509f5005cacc Mika Westerberg 2020-04-29   876  	 * paths like this (you either use lane 0 where lane 1 is
-54509f5005cacc Mika Westerberg 2020-04-29   877  	 * disabled or both lanes are bonded).
-54509f5005cacc Mika Westerberg 2020-04-29   878  	 *
-54509f5005cacc Mika Westerberg 2020-04-29   879  	 *   [Host]
-54509f5005cacc Mika Westerberg 2020-04-29   880  	 *   1 :| 2
-54509f5005cacc Mika Westerberg 2020-04-29   881  	 *   1 :| 2
-54509f5005cacc Mika Westerberg 2020-04-29   882  	 *  [Device]
-54509f5005cacc Mika Westerberg 2020-04-29   883  	 */
-54509f5005cacc Mika Westerberg 2020-04-29   884  	static const struct hop_expectation test_data[] = {
-54509f5005cacc Mika Westerberg 2020-04-29   885  		{
-54509f5005cacc Mika Westerberg 2020-04-29   886  			.route = 0x0,
-54509f5005cacc Mika Westerberg 2020-04-29   887  			.in_port = 5,
-54509f5005cacc Mika Westerberg 2020-04-29   888  			.in_type = TB_TYPE_DP_HDMI_IN,
-54509f5005cacc Mika Westerberg 2020-04-29   889  			.out_port = 2,
-54509f5005cacc Mika Westerberg 2020-04-29   890  			.out_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   891  		},
-54509f5005cacc Mika Westerberg 2020-04-29   892  		{
-54509f5005cacc Mika Westerberg 2020-04-29   893  			.route = 0x1,
-54509f5005cacc Mika Westerberg 2020-04-29   894  			.in_port = 2,
-54509f5005cacc Mika Westerberg 2020-04-29   895  			.in_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   896  			.out_port = 13,
-54509f5005cacc Mika Westerberg 2020-04-29   897  			.out_type = TB_TYPE_DP_HDMI_OUT,
-54509f5005cacc Mika Westerberg 2020-04-29   898  		},
-54509f5005cacc Mika Westerberg 2020-04-29   899  	};
-54509f5005cacc Mika Westerberg 2020-04-29   900  	struct tb_switch *host, *dev;
-54509f5005cacc Mika Westerberg 2020-04-29   901  	struct tb_port *in, *out;
-54509f5005cacc Mika Westerberg 2020-04-29   902  	struct tb_path *path;
-54509f5005cacc Mika Westerberg 2020-04-29   903  	int i;
-54509f5005cacc Mika Westerberg 2020-04-29   904  
-54509f5005cacc Mika Westerberg 2020-04-29   905  	host = alloc_host(test);
-54509f5005cacc Mika Westerberg 2020-04-29   906  	dev = alloc_dev_default(test, host, 0x1, false);
-54509f5005cacc Mika Westerberg 2020-04-29   907  
-54509f5005cacc Mika Westerberg 2020-04-29   908  	in = &host->ports[5];
-54509f5005cacc Mika Westerberg 2020-04-29   909  	out = &dev->ports[13];
-54509f5005cacc Mika Westerberg 2020-04-29   910  
-54509f5005cacc Mika Westerberg 2020-04-29   911  	path = tb_path_alloc(NULL, in, 9, out, 9, 1, "Video");
-7aadf84333572f Ricardo Ribalda 2022-02-11   912  	KUNIT_ASSERT_NOT_NULL(test, path);
-8f0877c26e4b69 David Gow       2021-05-13  @913  	KUNIT_ASSERT_EQ(test, path->path_length, ARRAY_SIZE(test_data));
-54509f5005cacc Mika Westerberg 2020-04-29   914  	for (i = 0; i < ARRAY_SIZE(test_data); i++) {
-54509f5005cacc Mika Westerberg 2020-04-29   915  		const struct tb_port *in_port, *out_port;
-54509f5005cacc Mika Westerberg 2020-04-29   916  
-54509f5005cacc Mika Westerberg 2020-04-29   917  		in_port = path->hops[i].in_port;
-54509f5005cacc Mika Westerberg 2020-04-29   918  		out_port = path->hops[i].out_port;
-54509f5005cacc Mika Westerberg 2020-04-29   919  
-54509f5005cacc Mika Westerberg 2020-04-29   920  		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
-54509f5005cacc Mika Westerberg 2020-04-29   921  		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
-824945a5b0ff82 David Gow       2021-06-24   922  		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-824945a5b0ff82 David Gow       2021-06-24   923  				test_data[i].in_type);
-54509f5005cacc Mika Westerberg 2020-04-29   924  		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
-54509f5005cacc Mika Westerberg 2020-04-29   925  		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
-824945a5b0ff82 David Gow       2021-06-24   926  		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-824945a5b0ff82 David Gow       2021-06-24   927  				test_data[i].out_type);
-54509f5005cacc Mika Westerberg 2020-04-29   928  	}
-54509f5005cacc Mika Westerberg 2020-04-29   929  	tb_path_free(path);
-54509f5005cacc Mika Westerberg 2020-04-29   930  }
-54509f5005cacc Mika Westerberg 2020-04-29   931  
-54509f5005cacc Mika Westerberg 2020-04-29   932  static void tb_test_path_not_bonded_lane1_chain(struct kunit *test)
-54509f5005cacc Mika Westerberg 2020-04-29   933  {
-54509f5005cacc Mika Westerberg 2020-04-29   934  	/*
-54509f5005cacc Mika Westerberg 2020-04-29   935  	 * DP Video path from host to device 3 using lane 1.
-54509f5005cacc Mika Westerberg 2020-04-29   936  	 *
-54509f5005cacc Mika Westerberg 2020-04-29   937  	 *    [Host]
-54509f5005cacc Mika Westerberg 2020-04-29   938  	 *    1 :| 2
-54509f5005cacc Mika Westerberg 2020-04-29   939  	 *    1 :| 2
-54509f5005cacc Mika Westerberg 2020-04-29   940  	 *  [Device #1]
-54509f5005cacc Mika Westerberg 2020-04-29   941  	 *    7 :| 8
-54509f5005cacc Mika Westerberg 2020-04-29   942  	 *    1 :| 2
-54509f5005cacc Mika Westerberg 2020-04-29   943  	 *  [Device #2]
-54509f5005cacc Mika Westerberg 2020-04-29   944  	 *    5 :| 6
-54509f5005cacc Mika Westerberg 2020-04-29   945  	 *    1 :| 2
-54509f5005cacc Mika Westerberg 2020-04-29   946  	 *  [Device #3]
-54509f5005cacc Mika Westerberg 2020-04-29   947  	 */
-54509f5005cacc Mika Westerberg 2020-04-29   948  	static const struct hop_expectation test_data[] = {
-54509f5005cacc Mika Westerberg 2020-04-29   949  		{
-54509f5005cacc Mika Westerberg 2020-04-29   950  			.route = 0x0,
-54509f5005cacc Mika Westerberg 2020-04-29   951  			.in_port = 5,
-54509f5005cacc Mika Westerberg 2020-04-29   952  			.in_type = TB_TYPE_DP_HDMI_IN,
-54509f5005cacc Mika Westerberg 2020-04-29   953  			.out_port = 2,
-54509f5005cacc Mika Westerberg 2020-04-29   954  			.out_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   955  		},
-54509f5005cacc Mika Westerberg 2020-04-29   956  		{
-54509f5005cacc Mika Westerberg 2020-04-29   957  			.route = 0x1,
-54509f5005cacc Mika Westerberg 2020-04-29   958  			.in_port = 2,
-54509f5005cacc Mika Westerberg 2020-04-29   959  			.in_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   960  			.out_port = 8,
-54509f5005cacc Mika Westerberg 2020-04-29   961  			.out_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   962  		},
-54509f5005cacc Mika Westerberg 2020-04-29   963  		{
-54509f5005cacc Mika Westerberg 2020-04-29   964  			.route = 0x701,
-54509f5005cacc Mika Westerberg 2020-04-29   965  			.in_port = 2,
-54509f5005cacc Mika Westerberg 2020-04-29   966  			.in_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   967  			.out_port = 6,
-54509f5005cacc Mika Westerberg 2020-04-29   968  			.out_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   969  		},
-54509f5005cacc Mika Westerberg 2020-04-29   970  		{
-54509f5005cacc Mika Westerberg 2020-04-29   971  			.route = 0x50701,
-54509f5005cacc Mika Westerberg 2020-04-29   972  			.in_port = 2,
-54509f5005cacc Mika Westerberg 2020-04-29   973  			.in_type = TB_TYPE_PORT,
-54509f5005cacc Mika Westerberg 2020-04-29   974  			.out_port = 13,
-54509f5005cacc Mika Westerberg 2020-04-29   975  			.out_type = TB_TYPE_DP_HDMI_OUT,
-54509f5005cacc Mika Westerberg 2020-04-29   976  		},
-54509f5005cacc Mika Westerberg 2020-04-29   977  	};
-54509f5005cacc Mika Westerberg 2020-04-29   978  	struct tb_switch *host, *dev1, *dev2, *dev3;
-54509f5005cacc Mika Westerberg 2020-04-29   979  	struct tb_port *in, *out;
-54509f5005cacc Mika Westerberg 2020-04-29   980  	struct tb_path *path;
-54509f5005cacc Mika Westerberg 2020-04-29   981  	int i;
-54509f5005cacc Mika Westerberg 2020-04-29   982  
-54509f5005cacc Mika Westerberg 2020-04-29   983  	host = alloc_host(test);
-54509f5005cacc Mika Westerberg 2020-04-29   984  	dev1 = alloc_dev_default(test, host, 0x1, false);
-54509f5005cacc Mika Westerberg 2020-04-29   985  	dev2 = alloc_dev_default(test, dev1, 0x701, false);
-54509f5005cacc Mika Westerberg 2020-04-29   986  	dev3 = alloc_dev_default(test, dev2, 0x50701, false);
-54509f5005cacc Mika Westerberg 2020-04-29   987  
-54509f5005cacc Mika Westerberg 2020-04-29   988  	in = &host->ports[5];
-54509f5005cacc Mika Westerberg 2020-04-29   989  	out = &dev3->ports[13];
-54509f5005cacc Mika Westerberg 2020-04-29   990  
-54509f5005cacc Mika Westerberg 2020-04-29   991  	path = tb_path_alloc(NULL, in, 9, out, 9, 1, "Video");
-7aadf84333572f Ricardo Ribalda 2022-02-11   992  	KUNIT_ASSERT_NOT_NULL(test, path);
-8f0877c26e4b69 David Gow       2021-05-13  @993  	KUNIT_ASSERT_EQ(test, path->path_length, ARRAY_SIZE(test_data));
-54509f5005cacc Mika Westerberg 2020-04-29   994  	for (i = 0; i < ARRAY_SIZE(test_data); i++) {
-54509f5005cacc Mika Westerberg 2020-04-29   995  		const struct tb_port *in_port, *out_port;
-54509f5005cacc Mika Westerberg 2020-04-29   996  
-54509f5005cacc Mika Westerberg 2020-04-29   997  		in_port = path->hops[i].in_port;
-54509f5005cacc Mika Westerberg 2020-04-29   998  		out_port = path->hops[i].out_port;
-54509f5005cacc Mika Westerberg 2020-04-29   999  
-54509f5005cacc Mika Westerberg 2020-04-29  1000  		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
-54509f5005cacc Mika Westerberg 2020-04-29  1001  		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
-824945a5b0ff82 David Gow       2021-06-24  1002  		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-824945a5b0ff82 David Gow       2021-06-24  1003  				test_data[i].in_type);
-54509f5005cacc Mika Westerberg 2020-04-29  1004  		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
-54509f5005cacc Mika Westerberg 2020-04-29  1005  		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
-824945a5b0ff82 David Gow       2021-06-24  1006  		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-824945a5b0ff82 David Gow       2021-06-24  1007  				test_data[i].out_type);
-54509f5005cacc Mika Westerberg 2020-04-29  1008  	}
-54509f5005cacc Mika Westerberg 2020-04-29  1009  	tb_path_free(path);
-54509f5005cacc Mika Westerberg 2020-04-29  1010  }
-54509f5005cacc Mika Westerberg 2020-04-29  1011  
+Regards,
+Mirela
 
-:::::: The code at line 851 was first introduced by commit
-:::::: 8f0877c26e4b695f824c5dbcc4b964ce238328aa thunderbolt: test: Remove some casts which are no longer required
-
-:::::: TO: David Gow <davidgow@google.com>
-:::::: CC: Shuah Khan <skhan@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> the encoder can support nv12 1080P, won't change it to 1920x1072.
+> 
+> Fixes: 2db16c6ed72ce ("media: imx-jpeg: Add V4L2 driver for i.MX8 JPEG Encoder/Decoder")
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> ---
+> v2
+> - add Fixes tag
+>   .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 88 ++++++++-----------
+>   1 file changed, 37 insertions(+), 51 deletions(-)
+> 
+> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> index c0fd030d0f19..9a1c8df522ed 100644
+> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> @@ -894,8 +894,8 @@ static void mxc_jpeg_config_enc_desc(struct vb2_buffer *out_buf,
+>   	jpeg->slot_data[slot].cfg_stream_size =
+>   			mxc_jpeg_setup_cfg_stream(cfg_stream_vaddr,
+>   						  q_data->fmt->fourcc,
+> -						  q_data->w_adjusted,
+> -						  q_data->h_adjusted);
+> +						  q_data->w,
+> +						  q_data->h);
+>   
+>   	/* chain the config descriptor with the encoding descriptor */
+>   	cfg_desc->next_descpt_ptr = desc_handle | MXC_NXT_DESCPT_EN;
+> @@ -977,7 +977,7 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
+>   				      &q_data_cap->h_adjusted,
+>   				      q_data_cap->h_adjusted, /* adjust up */
+>   				      MXC_JPEG_MAX_HEIGHT,
+> -				      q_data_cap->fmt->v_align,
+> +				      0,
+>   				      0);
+>   
+>   		/* setup bytesperline/sizeimage for capture queue */
+> @@ -1161,18 +1161,30 @@ static int mxc_jpeg_queue_setup(struct vb2_queue *q,
+>   {
+>   	struct mxc_jpeg_ctx *ctx = vb2_get_drv_priv(q);
+>   	struct mxc_jpeg_q_data *q_data = NULL;
+> +	struct mxc_jpeg_q_data tmp_q;
+>   	int i;
+>   
+>   	q_data = mxc_jpeg_get_q_data(ctx, q->type);
+>   	if (!q_data)
+>   		return -EINVAL;
+>   
+> +	tmp_q.fmt = q_data->fmt;
+> +	tmp_q.w = q_data->w_adjusted;
+> +	tmp_q.h = q_data->h_adjusted;
+> +	for (i = 0; i < MXC_JPEG_MAX_PLANES; i++) {
+> +		tmp_q.bytesperline[i] = q_data->bytesperline[i];
+> +		tmp_q.sizeimage[i] = q_data->sizeimage[i];
+> +	}
+> +	mxc_jpeg_sizeimage(&tmp_q);
+> +	for (i = 0; i < MXC_JPEG_MAX_PLANES; i++)
+> +		tmp_q.sizeimage[i] = max(tmp_q.sizeimage[i], q_data->sizeimage[i]);
+> +
+>   	/* Handle CREATE_BUFS situation - *nplanes != 0 */
+>   	if (*nplanes) {
+>   		if (*nplanes != q_data->fmt->colplanes)
+>   			return -EINVAL;
+>   		for (i = 0; i < *nplanes; i++) {
+> -			if (sizes[i] < q_data->sizeimage[i])
+> +			if (sizes[i] < tmp_q.sizeimage[i])
+>   				return -EINVAL;
+>   		}
+>   		return 0;
+> @@ -1181,7 +1193,7 @@ static int mxc_jpeg_queue_setup(struct vb2_queue *q,
+>   	/* Handle REQBUFS situation */
+>   	*nplanes = q_data->fmt->colplanes;
+>   	for (i = 0; i < *nplanes; i++)
+> -		sizes[i] = q_data->sizeimage[i];
+> +		sizes[i] = tmp_q.sizeimage[i];
+>   
+>   	return 0;
+>   }
+> @@ -1381,11 +1393,6 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+>   	}
+>   	q_data_out->w = header.frame.width;
+>   	q_data_out->h = header.frame.height;
+> -	if (header.frame.width % 8 != 0 || header.frame.height % 8 != 0) {
+> -		dev_err(dev, "JPEG width or height not multiple of 8: %dx%d\n",
+> -			header.frame.width, header.frame.height);
+> -		return -EINVAL;
+> -	}
+>   	if (header.frame.width > MXC_JPEG_MAX_WIDTH ||
+>   	    header.frame.height > MXC_JPEG_MAX_HEIGHT) {
+>   		dev_err(dev, "JPEG width or height should be <= 8192: %dx%d\n",
+> @@ -1748,22 +1755,17 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f, const struct mxc_jpeg_fmt *fm
+>   	pix_mp->num_planes = fmt->colplanes;
+>   	pix_mp->pixelformat = fmt->fourcc;
+>   
+> -	/*
+> -	 * use MXC_JPEG_H_ALIGN instead of fmt->v_align, for vertical
+> -	 * alignment, to loosen up the alignment to multiple of 8,
+> -	 * otherwise NV12-1080p fails as 1080 is not a multiple of 16
+> -	 */
+> +	pix_mp->width = w;
+> +	pix_mp->height = h;
+>   	v4l_bound_align_image(&w,
+> -			      MXC_JPEG_MIN_WIDTH,
+> -			      w, /* adjust downwards*/
+> +			      w, /* adjust upwards*/
+> +			      MXC_JPEG_MAX_WIDTH,
+>   			      fmt->h_align,
+>   			      &h,
+> -			      MXC_JPEG_MIN_HEIGHT,
+> -			      h, /* adjust downwards*/
+> -			      MXC_JPEG_H_ALIGN,
+> +			      h, /* adjust upwards*/
+> +			      MXC_JPEG_MAX_HEIGHT,
+> +			      0,
+>   			      0);
+> -	pix_mp->width = w; /* negotiate the width */
+> -	pix_mp->height = h; /* negotiate the height */
+>   
+>   	/* get user input into the tmp_q */
+>   	tmp_q.w = w;
+> @@ -1889,35 +1891,19 @@ static int mxc_jpeg_s_fmt(struct mxc_jpeg_ctx *ctx,
+>   
+>   	q_data->w_adjusted = q_data->w;
+>   	q_data->h_adjusted = q_data->h;
+> -	if (jpeg->mode == MXC_JPEG_DECODE) {
+> -		/*
+> -		 * align up the resolution for CAST IP,
+> -		 * but leave the buffer resolution unchanged
+> -		 */
+> -		v4l_bound_align_image(&q_data->w_adjusted,
+> -				      q_data->w_adjusted,  /* adjust upwards */
+> -				      MXC_JPEG_MAX_WIDTH,
+> -				      q_data->fmt->h_align,
+> -				      &q_data->h_adjusted,
+> -				      q_data->h_adjusted, /* adjust upwards */
+> -				      MXC_JPEG_MAX_HEIGHT,
+> -				      q_data->fmt->v_align,
+> -				      0);
+> -	} else {
+> -		/*
+> -		 * align down the resolution for CAST IP,
+> -		 * but leave the buffer resolution unchanged
+> -		 */
+> -		v4l_bound_align_image(&q_data->w_adjusted,
+> -				      MXC_JPEG_MIN_WIDTH,
+> -				      q_data->w_adjusted, /* adjust downwards*/
+> -				      q_data->fmt->h_align,
+> -				      &q_data->h_adjusted,
+> -				      MXC_JPEG_MIN_HEIGHT,
+> -				      q_data->h_adjusted, /* adjust downwards*/
+> -				      q_data->fmt->v_align,
+> -				      0);
+> -	}
+> +	/*
+> +	 * align up the resolution for CAST IP,
+> +	 * but leave the buffer resolution unchanged
+> +	 */
+> +	v4l_bound_align_image(&q_data->w_adjusted,
+> +			      q_data->w_adjusted,  /* adjust upwards */
+> +			      MXC_JPEG_MAX_WIDTH,
+> +			      q_data->fmt->h_align,
+> +			      &q_data->h_adjusted,
+> +			      q_data->h_adjusted, /* adjust upwards */
+> +			      MXC_JPEG_MAX_HEIGHT,
+> +			      q_data->fmt->v_align,
+> +			      0);
+>   
+>   	for (i = 0; i < pix_mp->num_planes; i++) {
+>   		q_data->bytesperline[i] = pix_mp->plane_fmt[i].bytesperline;

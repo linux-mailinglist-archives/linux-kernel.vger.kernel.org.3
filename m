@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FFD547911
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 08:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A942547912
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Jun 2022 08:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbiFLGKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 02:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S234491AbiFLGLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 02:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiFLGKA (ORCPT
+        with ESMTP id S229664AbiFLGLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 02:10:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8025F67
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Jun 2022 23:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655014198; x=1686550198;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oLbiUOZopeInA8S4lQs0z237IvCpPOLzuGPfGifNygg=;
-  b=U+wrytYUvBSG1T6B+LJnjvsBD0DD/jK1f+ap3QPM6RoY/8xCHPfCaz+G
-   42oz9Stb+sDna9DA2sUEAdaHSmCd1NO9KfegbWOayqWi/aGVmb0LTldlp
-   Ji2re7sVF3g+ZeCSeEA12A1l06j4SOT3Rg40uks01IUtSztPlPLTdxONA
-   9oi4290w1UUgGsiFV5WdoeboajD5BMW5W2+G6RBAeU/ybAcuxerlDbxSF
-   RIsRa+Tq9EIqzio5QK596V4GNGrxrZ102EvgLPxAnXt+gl21GuHg1oyQf
-   QENyWyVWWKTTycm3YBSjg8itxcDZVlYMi6Ffp1F2ynM6F6L28ZDiABMkl
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="276770410"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="276770410"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 23:09:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="639048125"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2022 23:09:57 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0GnM-000Jef-Np;
-        Sun, 12 Jun 2022 06:09:56 +0000
-Date:   Sun, 12 Jun 2022 14:09:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 1/15] lib/vsprintf.c:1802:30: sparse:
- sparse: cast to restricted __le32
-Message-ID: <202206121446.ZweYouna-lkp@intel.com>
+        Sun, 12 Jun 2022 02:11:15 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90ADC5F67;
+        Sat, 11 Jun 2022 23:11:13 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id C69121E80D78;
+        Sun, 12 Jun 2022 14:10:11 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cuOdn4AlAeKG; Sun, 12 Jun 2022 14:10:09 +0800 (CST)
+Received: from [172.30.21.244] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 7F34B1E80C8B;
+        Sun, 12 Jun 2022 14:10:08 +0800 (CST)
+Subject: Re: [PATCH] rcu: Handle failure of memory allocation functions
+To:     paulmck@kernel.org
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        hukun@nfschina.com, qixu@nfschina.com, yuzhe@nfschina.com,
+        renyu@nfschina.com
+References: <20220611093055.1473-1-liqiong@nfschina.com>
+ <20220611163432.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   liqiong <liqiong@nfschina.com>
+Message-ID: <e71a9031-68dc-93d0-7aff-e4060bb56a24@nfschina.com>
+Date:   Sun, 12 Jun 2022 14:11:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220611163432.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,102 +60,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   0a0b49938a3205cb2b05078117b87673c37ed319
-commit: c176ff25243d5b90752858715fa622f4c78f1cb2 [1/15] lib/vsprintf: Add support for generic FOURCCs by extending %p4cc
-config: h8300-randconfig-s031-20220612 (https://download.01.org/0day-ci/archive/20220612/202206121446.ZweYouna-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://github.com/AsahiLinux/linux/commit/c176ff25243d5b90752858715fa622f4c78f1cb2
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout c176ff25243d5b90752858715fa622f4c78f1cb2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
->> lib/vsprintf.c:1802:30: sparse: sparse: cast to restricted __le32
->> lib/vsprintf.c:1802:30: sparse: sparse: cast to restricted __le32
->> lib/vsprintf.c:1802:30: sparse: sparse: cast to restricted __le32
->> lib/vsprintf.c:1802:30: sparse: sparse: cast to restricted __le32
->> lib/vsprintf.c:1802:30: sparse: sparse: cast to restricted __le32
->> lib/vsprintf.c:1802:30: sparse: sparse: cast to restricted __le32
->> lib/vsprintf.c:1805:30: sparse: sparse: cast to restricted __be32
+在 2022年06月12日 00:34, Paul E. McKenney 写道:
+> On Sat, Jun 11, 2022 at 05:30:55PM +0800, Li Qiong wrote:
+>> Add warning when these functions (eg:kmalloc,vmalloc) fail, handle the
+>> failure.
+>>
+>> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> Good catch, thank you!  However...
+>
+>> ---
+>>  kernel/rcu/rcutorture.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+>> index 7120165a9342..97f90e304ae3 100644
+>> --- a/kernel/rcu/rcutorture.c
+>> +++ b/kernel/rcu/rcutorture.c
+>> @@ -1991,6 +1991,10 @@ static void rcu_torture_mem_dump_obj(void)
+>>  
+>>  	kcp = kmem_cache_create("rcuscale", 136, 8, SLAB_STORE_USER, NULL);
+> As long as we are checking, why not also check this one?
+>
+> 							Thanx, Paul
 
-vim +1802 lib/vsprintf.c
+Hi Paul,
+Yes,  the kmem_cache_create  would fail too. 
+I searched  "kernel" directory, found that It seems  all the code just check kmem_cache_alloc()，
+So, I ignored   kmem_cache_create() .  I will submit a v2 patch.
 
-  1776	
-  1777	static noinline_for_stack
-  1778	char *fourcc_string(char *buf, char *end, const u32 *fourcc,
-  1779			    struct printf_spec spec, const char *fmt)
-  1780	{
-  1781		char output[sizeof("0123 little-endian (0x01234567)")];
-  1782		char *p = output;
-  1783		unsigned int i;
-  1784		bool pix_fmt = false;
-  1785		u32 orig, val;
-  1786	
-  1787		if (fmt[1] != 'c')
-  1788			return error_string(buf, end, "(%p4?)", spec);
-  1789	
-  1790		if (check_pointer(&buf, end, fourcc, spec))
-  1791			return buf;
-  1792	
-  1793		orig = get_unaligned(fourcc);
-  1794		switch (fmt[2]) {
-  1795		case 'h':
-  1796			val = orig;
-  1797			break;
-  1798		case 'r':
-  1799			val = orig = swab32(orig);
-  1800			break;
-  1801		case 'l':
-> 1802			val = orig = le32_to_cpu(orig);
-  1803			break;
-  1804		case 'b':
-> 1805			val = orig = be32_to_cpu(orig);
-  1806			break;
-  1807		case 'c':
-  1808			/* Pixel formats are printed LSB-first */
-  1809			val = swab32(orig & ~BIT(31));
-  1810			pix_fmt = true;
-  1811			break;
-  1812		default:
-  1813			return error_string(buf, end, "(%p4?)", spec);
-  1814		}
-  1815	
-  1816		for (i = 0; i < sizeof(u32); i++) {
-  1817			unsigned char c = val >> ((3 - i) * 8);
-  1818	
-  1819			/* Print non-control ASCII characters as-is, dot otherwise */
-  1820			*p++ = isascii(c) && isprint(c) ? c : '.';
-  1821		}
-  1822	
-  1823		if (pix_fmt) {
-  1824			*p++ = ' ';
-  1825			strcpy(p, orig & BIT(31) ? "big-endian" : "little-endian");
-  1826			p += strlen(p);
-  1827		}
-  1828	
-  1829		*p++ = ' ';
-  1830		*p++ = '(';
-  1831		p = special_hex_number(p, output + sizeof(output) - 2, orig, sizeof(u32));
-  1832		*p++ = ')';
-  1833		*p = '\0';
-  1834	
-  1835		return string(buf, end, output, spec);
-  1836	}
-  1837	
+Thanks,
+Li Qiong
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+>
+>>  	rhp = kmem_cache_alloc(kcp, GFP_KERNEL);
+>> +	if (WARN_ON_ONCE(!rhp)) {
+>> +		kmem_cache_destroy(kcp);
+>> +		return;
+>> +	}
+>>  	pr_alert("mem_dump_obj() slab test: rcu_torture_stats = %px, &rhp = %px, rhp = %px, &z = %px\n", stats_task, &rhp, rhp, &z);
+>>  	pr_alert("mem_dump_obj(ZERO_SIZE_PTR):");
+>>  	mem_dump_obj(ZERO_SIZE_PTR);
+>> @@ -2007,6 +2011,8 @@ static void rcu_torture_mem_dump_obj(void)
+>>  	kmem_cache_free(kcp, rhp);
+>>  	kmem_cache_destroy(kcp);
+>>  	rhp = kmalloc(sizeof(*rhp), GFP_KERNEL);
+>> +	if (WARN_ON_ONCE(!rhp))
+>> +		return;
+>>  	pr_alert("mem_dump_obj() kmalloc test: rcu_torture_stats = %px, &rhp = %px, rhp = %px\n", stats_task, &rhp, rhp);
+>>  	pr_alert("mem_dump_obj(kmalloc %px):", rhp);
+>>  	mem_dump_obj(rhp);
+>> @@ -2014,6 +2020,8 @@ static void rcu_torture_mem_dump_obj(void)
+>>  	mem_dump_obj(&rhp->func);
+>>  	kfree(rhp);
+>>  	rhp = vmalloc(4096);
+>> +	if (WARN_ON_ONCE(!rhp))
+>> +		return;
+>>  	pr_alert("mem_dump_obj() vmalloc test: rcu_torture_stats = %px, &rhp = %px, rhp = %px\n", stats_task, &rhp, rhp);
+>>  	pr_alert("mem_dump_obj(vmalloc %px):", rhp);
+>>  	mem_dump_obj(rhp);
+>> -- 
+>> 2.11.0
+>>

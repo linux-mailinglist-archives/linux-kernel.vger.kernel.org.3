@@ -2,149 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8097549BA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3597549BAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242033AbiFMShQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S238379AbiFMShU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240410AbiFMSg4 (ORCPT
+        with ESMTP id S245712AbiFMShC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:36:56 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837FAD19DB;
-        Mon, 13 Jun 2022 07:56:48 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id z11so4428822ilq.6;
-        Mon, 13 Jun 2022 07:56:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4w68Oz0WdFsRRgldOeQ5Pjd1X1lKelGqv7XShi7EebQ=;
-        b=tQRQw+ZKC4nLkjqSmYpRe6lrz0kIkHSuUhx6dO0LL6TVAWJ9sp8i3RTs3JDi+3cXKq
-         KdUjvP86041Nw4jQuzDPLlKYWL6prjsOYoXRBvQhPrJXDZkgrCxnVjkTeWimxH6bi2d8
-         MBSrgBApTkEDcph3n6OTukEBXh31t/ZXld9Ip+u2L5rUl1DaA9R+Fb/wQcQD8WCCjx1M
-         1Xp0sESDOnvgfRnWUM0B4d9kJ2c8YqFsBRLbXh/btWbBpV1o7npQQtAGmftJu3/PONU0
-         GPnN1BHy1MNwNI/Zi21db6HFLXShUF7+RFLWeQSPCQx0MaUR3KSZM8Kua9B/sCQh3YdM
-         I5cg==
-X-Gm-Message-State: AJIora+safhQIuaZPIrD36ZaG0VKUL1LFEiSfeBHzAQukbSEOQ19OKkS
-        uiSbxppNGP61cRhSDBl/cQ==
-X-Google-Smtp-Source: AGRyM1tWaOAHYCw0bAjRAC2vQHsWf0/Hg8K6igY8vBjeklRkX102W/LDsyxB1xqMjijSwT+p/hfpyA==
-X-Received: by 2002:a05:6e02:158a:b0:2d3:f1c0:6b68 with SMTP id m10-20020a056e02158a00b002d3f1c06b68mr128574ilu.38.1655132207733;
-        Mon, 13 Jun 2022 07:56:47 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.251])
-        by smtp.googlemail.com with ESMTPSA id r13-20020a056638044d00b003318c717b59sm3610860jap.39.2022.06.13.07.56.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 07:56:47 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: perf: Convert Arm CCN to DT schema
-Date:   Mon, 13 Jun 2022 08:55:54 -0600
-Message-Id: <20220613145554.3727354-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 13 Jun 2022 14:37:02 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7695D2452;
+        Mon, 13 Jun 2022 07:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=kgaOivgVuvl4d3T7CdI1Azd7OrRQH+RXo0cFw9RJT0A=; b=vTPQmgu4pXETpWR2FDU/YUpQJ/
+        yWyuh6FtLojBT7/urS3VWhyK0anC/w0ol6jnZKvZTUTF144Ff5aBbZAPEibZNQGKwIv+QfmlQkcHg
+        mMI2vk8fqokyNWjX4Ofc8+PMPtGEPAI5RLTJHHsDa05vUNdcxr7sdY5GZHF5YI8dmNag=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o0lUb-006kmW-Sz; Mon, 13 Jun 2022 16:56:37 +0200
+Date:   Mon, 13 Jun 2022 16:56:37 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Kubecek <mkubecek@suse.cz>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: phy: add remote fault support
+Message-ID: <YqdQJepq3Klvr5n5@lunn.ch>
+References: <20220608093403.3999446-1-o.rempel@pengutronix.de>
+ <YqS+zYHf6eHMWJlD@lunn.ch>
+ <20220613125552.GA4536@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613125552.GA4536@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Arm CCN performance monitors binding to DT schema format.
+> If I see it correctly, there is no way to notify about remote fault when
+> the link is up. The remote fault bit is transferred withing Link Code
+> Word as part of FLP burst. At least in this part of specification.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/perf/arm,ccn.yaml     | 40 +++++++++++++++++++
- .../devicetree/bindings/perf/arm-ccn.txt      | 23 -----------
- 2 files changed, 40 insertions(+), 23 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/perf/arm,ccn.yaml
- delete mode 100644 Documentation/devicetree/bindings/perf/arm-ccn.txt
+Thanks for looking at the specification. So ksetting does seem like
+the right API.
 
-diff --git a/Documentation/devicetree/bindings/perf/arm,ccn.yaml b/Documentation/devicetree/bindings/perf/arm,ccn.yaml
-new file mode 100644
-index 000000000000..0b0bb2091016
---- /dev/null
-+++ b/Documentation/devicetree/bindings/perf/arm,ccn.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/perf/arm,ccn.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ARM CCN (Cache Coherent Network) Performance Monitors
-+
-+maintainers:
-+  - Robin Murphy <robin.murphy@arm.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - arm,ccn-502
-+      - arm,ccn-504
-+      - arm,ccn-508
-+      - arm,ccn-512
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ccn@20000000 {
-+        compatible = "arm,ccn-504";
-+        reg = <0x20000000 0x1000000>;
-+        interrupts = <0 181 4>;
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/perf/arm-ccn.txt b/Documentation/devicetree/bindings/perf/arm-ccn.txt
-deleted file mode 100644
-index 1c53b5aa3317..000000000000
---- a/Documentation/devicetree/bindings/perf/arm-ccn.txt
-+++ /dev/null
-@@ -1,23 +0,0 @@
--* ARM CCN (Cache Coherent Network)
--
--Required properties:
--
--- compatible: (standard compatible string) should be one of:
--	"arm,ccn-502"
--	"arm,ccn-504"
--	"arm,ccn-508"
--	"arm,ccn-512"
--
--- reg: (standard registers property) physical address and size
--	(16MB) of the configuration registers block
--
--- interrupts: (standard interrupt property) single interrupt
--	generated by the control block
--
--Example:
--
--	ccn@2000000000 {
--		compatible = "arm,ccn-504";
--		reg = <0x20 0x00000000 0 0x1000000>;
--		interrupts = <0 181 4>;
--	};
--- 
-2.34.1
+Sorry, i won't have time to look at the specification until tomorrow.
+The next question is, is it a separate value, or as more link mode
+bits? Or a mixture of both? Is there a capability bit somewhere to
+indicate this PHY can advertise a remote fault? That would suggest we
+want a ETHTOOL_LINK_MODE_REMOTE_FAULT_BIT, which we can set in
+supported and maybe see in lpa? Set it in advertising when indicating
+a fault. The actual fault value could then be in a separate value
+which gets written to the extended page? Does 802.3 allow a remote
+fault to be indicated but without the reason?
 
+> So receiving remote fault information via linkstate and send remote fault via
+> ksetting?
+
+We could also just broadcast the results of a ksetting get to
+userspace?
+
+I don't have easy access to a machine at the moment. What does
+
+ip monitor all
+
+show when a link is configured up, but autoneg fails? And when autoneg
+is successful but indicates a remote fault? Are there any existing
+messages sent to userspace?
+
+> The next logical question is, if a remote fault is RX'ed (potentially with a
+> reason) who will react on this. There might be different policies on how to
+> react on same reason.
+
+Policy goes in userspace, is the general rule.
+
+The only exception might be, if we decide to make use of one of these
+to silence the link to allow cabling testing. We probably want the
+kernel to try to do that.
+
+       Andrew

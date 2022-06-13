@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18666548EEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7E35490E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382783AbiFMOGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S1354425AbiFMM0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380650AbiFMN7P (ORCPT
+        with ESMTP id S1355142AbiFMMXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:59:15 -0400
+        Mon, 13 Jun 2022 08:23:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCFB8CB0C;
-        Mon, 13 Jun 2022 04:37:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB2627B1A;
+        Mon, 13 Jun 2022 04:04:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E86BB80ECD;
-        Mon, 13 Jun 2022 11:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98376C341CA;
-        Mon, 13 Jun 2022 11:37:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2153AB80D3A;
+        Mon, 13 Jun 2022 11:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80247C34114;
+        Mon, 13 Jun 2022 11:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120268;
-        bh=5VPL2/1bkl9jXXVKmVh+xc8MykmN4fK3LfZL1Bkf4e0=;
+        s=korg; t=1655118261;
+        bh=aRZPBIfUmeY/7zsPHU6zZqXyFI7wRPCiXmi7Q4AB3YU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dd17P+xgkyDccBPXMLhQmCsvRR1BQFIqtAq5Fo86wl8NPB1BVeEBGOjf9lZL6QbiQ
-         Ua0dc3e5E15+0ryj83jbR+0h7fmNJMguzLUATeOFUqsNbQuR3hPkCwc9SM0JRHXjE5
-         fe1jAxjMVh7g/5bO2kpUTZ4lWC/6gDR82PfZvr4E=
+        b=k6AybMaHB9JNLG6c64ILDAMNDTnb9aLqbfWRv/7xHoeQbv0h9fERRK2HcIOC0JB7U
+         rS4+vikbGIfzV3KqEUohH4JjMQYh+kYPaz/BLspFNpX8wRnggrQkgAJ9CdNXQOmMPR
+         zAmoJVUqioXlInhPW6hNgJwtneg5gcaj1odGTVD4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <nspmangalore@gmail.com>,
-        Lars Persson <larper@axis.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 282/339] cifs: fix potential deadlock in direct reclaim
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 4.19 283/287] Input: bcm5974 - set missing URB_NO_TRANSFER_DMA_MAP urb flag
 Date:   Mon, 13 Jun 2022 12:11:47 +0200
-Message-Id: <20220613094935.188365407@linuxfoundation.org>
+Message-Id: <20220613094932.576208506@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,644 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Whitchurch <vincent.whitchurch@axis.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit cc391b694ff085f62f133e6b8f864d43a8e69dfd ]
+commit c42e65664390be7c1ef3838cd84956d3a2739d60 upstream.
 
-The srv_mutex is used during writeback so cifs should ensure that
-allocations done when that mutex is held are done with GFP_NOFS, to
-avoid having direct reclaim ending up waiting for the same mutex and
-causing a deadlock.  This is detected by lockdep with the splat below:
+The bcm5974 driver does the allocation and dma mapping of the usb urb
+data buffer, but driver does not set the URB_NO_TRANSFER_DMA_MAP flag
+to let usb core know the buffer is already mapped.
 
- ======================================================
- WARNING: possible circular locking dependency detected
- 5.18.0 #70 Not tainted
- ------------------------------------------------------
- kswapd0/49 is trying to acquire lock:
- ffff8880195782e0 (&tcp_ses->srv_mutex){+.+.}-{3:3}, at: compound_send_recv
+usb core tries to map the already mapped buffer, causing a warning:
+"xhci_hcd 0000:00:14.0: rejecting DMA map of vmalloc memory"
 
- but task is already holding lock:
- ffffffffa98e66c0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat
+Fix this by setting the URB_NO_TRANSFER_DMA_MAP, letting usb core
+know buffer is already mapped by bcm5974 driver
 
- which lock already depends on the new lock.
-
- the existing dependency chain (in reverse order) is:
-
- -> #1 (fs_reclaim){+.+.}-{0:0}:
-        fs_reclaim_acquire
-        kmem_cache_alloc_trace
-        __request_module
-        crypto_alg_mod_lookup
-        crypto_alloc_tfm_node
-        crypto_alloc_shash
-        cifs_alloc_hash
-        smb311_crypto_shash_allocate
-        smb311_update_preauth_hash
-        compound_send_recv
-        cifs_send_recv
-        SMB2_negotiate
-        smb2_negotiate
-        cifs_negotiate_protocol
-        cifs_get_smb_ses
-        cifs_mount
-        cifs_smb3_do_mount
-        smb3_get_tree
-        vfs_get_tree
-        path_mount
-        __x64_sys_mount
-        do_syscall_64
-        entry_SYSCALL_64_after_hwframe
-
- -> #0 (&tcp_ses->srv_mutex){+.+.}-{3:3}:
-        __lock_acquire
-        lock_acquire
-        __mutex_lock
-        mutex_lock_nested
-        compound_send_recv
-        cifs_send_recv
-        SMB2_write
-        smb2_sync_write
-        cifs_write
-        cifs_writepage_locked
-        cifs_writepage
-        shrink_page_list
-        shrink_lruvec
-        shrink_node
-        balance_pgdat
-        kswapd
-        kthread
-        ret_from_fork
-
- other info that might help us debug this:
-
-  Possible unsafe locking scenario:
-
-        CPU0                    CPU1
-        ----                    ----
-   lock(fs_reclaim);
-                                lock(&tcp_ses->srv_mutex);
-                                lock(fs_reclaim);
-   lock(&tcp_ses->srv_mutex);
-
-  *** DEADLOCK ***
-
- 1 lock held by kswapd0/49:
-  #0: ffffffffa98e66c0 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat
-
- stack backtrace:
- CPU: 2 PID: 49 Comm: kswapd0 Not tainted 5.18.0 #70
- Call Trace:
-  <TASK>
-  dump_stack_lvl
-  dump_stack
-  print_circular_bug.cold
-  check_noncircular
-  __lock_acquire
-  lock_acquire
-  __mutex_lock
-  mutex_lock_nested
-  compound_send_recv
-  cifs_send_recv
-  SMB2_write
-  smb2_sync_write
-  cifs_write
-  cifs_writepage_locked
-  cifs_writepage
-  shrink_page_list
-  shrink_lruvec
-  shrink_node
-  balance_pgdat
-  kswapd
-  kthread
-  ret_from_fork
-  </TASK>
-
-Fix this by using the memalloc_nofs_save/restore APIs around the places
-where the srv_mutex is held.  Do this in a wrapper function for the
-lock/unlock of the srv_mutex, and rename the srv_mutex to avoid missing
-call sites in the conversion.
-
-Note that there is another lockdep warning involving internal crypto
-locks, which was masked by this problem and is visible after this fix,
-see the discussion in this thread:
-
- https://lore.kernel.org/all/20220523123755.GA13668@axis.com/
-
-Link: https://lore.kernel.org/r/CANT5p=rqcYfYMVHirqvdnnca4Mo+JQSw5Qu12v=kPfpk5yhhmg@mail.gmail.com/
-Reported-by: Shyam Prasad N <nspmangalore@gmail.com>
-Suggested-by: Lars Persson <larper@axis.com>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: stable@vger.kernel.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215890
+Link: https://lore.kernel.org/r/20220606113636.588955-1-mathias.nyman@linux.intel.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/cifs_swn.c    |  4 ++--
- fs/cifs/cifsencrypt.c |  8 ++++----
- fs/cifs/cifsglob.h    | 20 +++++++++++++++++++-
- fs/cifs/connect.c     | 26 +++++++++++++-------------
- fs/cifs/dfs_cache.c   |  4 ++--
- fs/cifs/sess.c        |  6 +++---
- fs/cifs/smb1ops.c     |  6 +++---
- fs/cifs/smb2pdu.c     |  6 +++---
- fs/cifs/smbdirect.c   |  4 ++--
- fs/cifs/transport.c   | 40 ++++++++++++++++++++--------------------
- 10 files changed, 71 insertions(+), 53 deletions(-)
+ drivers/input/mouse/bcm5974.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/fs/cifs/cifs_swn.c b/fs/cifs/cifs_swn.c
-index 180c234c2f46..1e4c7cc5287f 100644
---- a/fs/cifs/cifs_swn.c
-+++ b/fs/cifs/cifs_swn.c
-@@ -465,7 +465,7 @@ static int cifs_swn_reconnect(struct cifs_tcon *tcon, struct sockaddr_storage *a
- 	int ret = 0;
+--- a/drivers/input/mouse/bcm5974.c
++++ b/drivers/input/mouse/bcm5974.c
+@@ -956,17 +956,22 @@ static int bcm5974_probe(struct usb_inte
+ 	if (!dev->tp_data)
+ 		goto err_free_bt_buffer;
  
- 	/* Store the reconnect address */
--	mutex_lock(&tcon->ses->server->srv_mutex);
-+	cifs_server_lock(tcon->ses->server);
- 	if (cifs_sockaddr_equal(&tcon->ses->server->dstaddr, addr))
- 		goto unlock;
+-	if (dev->bt_urb)
++	if (dev->bt_urb) {
+ 		usb_fill_int_urb(dev->bt_urb, udev,
+ 				 usb_rcvintpipe(udev, cfg->bt_ep),
+ 				 dev->bt_data, dev->cfg.bt_datalen,
+ 				 bcm5974_irq_button, dev, 1);
  
-@@ -501,7 +501,7 @@ static int cifs_swn_reconnect(struct cifs_tcon *tcon, struct sockaddr_storage *a
- 	cifs_signal_cifsd_for_reconnect(tcon->ses->server, false);
- 
- unlock:
--	mutex_unlock(&tcon->ses->server->srv_mutex);
-+	cifs_server_unlock(tcon->ses->server);
- 
- 	return ret;
- }
-diff --git a/fs/cifs/cifsencrypt.c b/fs/cifs/cifsencrypt.c
-index 0912d8bbbac1..663cb9db4908 100644
---- a/fs/cifs/cifsencrypt.c
-+++ b/fs/cifs/cifsencrypt.c
-@@ -236,9 +236,9 @@ int cifs_verify_signature(struct smb_rqst *rqst,
- 					cpu_to_le32(expected_sequence_number);
- 	cifs_pdu->Signature.Sequence.Reserved = 0;
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 	rc = cifs_calc_signature(rqst, server, what_we_think_sig_should_be);
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	if (rc)
- 		return rc;
-@@ -626,7 +626,7 @@ setup_ntlmv2_rsp(struct cifs_ses *ses, const struct nls_table *nls_cp)
- 
- 	memcpy(ses->auth_key.response + baselen, tiblob, tilen);
- 
--	mutex_lock(&ses->server->srv_mutex);
-+	cifs_server_lock(ses->server);
- 
- 	rc = cifs_alloc_hash("hmac(md5)",
- 			     &ses->server->secmech.hmacmd5,
-@@ -678,7 +678,7 @@ setup_ntlmv2_rsp(struct cifs_ses *ses, const struct nls_table *nls_cp)
- 		cifs_dbg(VFS, "%s: Could not generate md5 hash\n", __func__);
- 
- unlock:
--	mutex_unlock(&ses->server->srv_mutex);
-+	cifs_server_unlock(ses->server);
- setup_ntlmv2_rsp_ret:
- 	kfree(tiblob);
- 
-diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-index 5024b6792dab..e7503c1131a3 100644
---- a/fs/cifs/cifsglob.h
-+++ b/fs/cifs/cifsglob.h
-@@ -16,6 +16,7 @@
- #include <linux/mempool.h>
- #include <linux/workqueue.h>
- #include <linux/utsname.h>
-+#include <linux/sched/mm.h>
- #include <linux/netfs.h>
- #include "cifs_fs_sb.h"
- #include "cifsacl.h"
-@@ -621,7 +622,8 @@ struct TCP_Server_Info {
- 	unsigned int in_flight;  /* number of requests on the wire to server */
- 	unsigned int max_in_flight; /* max number of requests that were on wire */
- 	spinlock_t req_lock;  /* protect the two values above */
--	struct mutex srv_mutex;
-+	struct mutex _srv_mutex;
-+	unsigned int nofs_flag;
- 	struct task_struct *tsk;
- 	char server_GUID[16];
- 	__u16 sec_mode;
-@@ -736,6 +738,22 @@ struct TCP_Server_Info {
- #endif
- };
- 
-+static inline void cifs_server_lock(struct TCP_Server_Info *server)
-+{
-+	unsigned int nofs_flag = memalloc_nofs_save();
++		dev->bt_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
++	}
 +
-+	mutex_lock(&server->_srv_mutex);
-+	server->nofs_flag = nofs_flag;
-+}
+ 	usb_fill_int_urb(dev->tp_urb, udev,
+ 			 usb_rcvintpipe(udev, cfg->tp_ep),
+ 			 dev->tp_data, dev->cfg.tp_datalen,
+ 			 bcm5974_irq_trackpad, dev, 1);
+ 
++	dev->tp_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
 +
-+static inline void cifs_server_unlock(struct TCP_Server_Info *server)
-+{
-+	unsigned int nofs_flag = server->nofs_flag;
-+
-+	mutex_unlock(&server->_srv_mutex);
-+	memalloc_nofs_restore(nofs_flag);
-+}
-+
- struct cifs_credits {
- 	unsigned int value;
- 	unsigned int instance;
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index aa2d4c49e2a5..4a0b44052c35 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -148,7 +148,7 @@ static void cifs_resolve_server(struct work_struct *work)
- 	struct TCP_Server_Info *server = container_of(work,
- 					struct TCP_Server_Info, resolve.work);
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 
- 	/*
- 	 * Resolve the hostname again to make sure that IP address is up-to-date.
-@@ -159,7 +159,7 @@ static void cifs_resolve_server(struct work_struct *work)
- 				__func__, rc);
- 	}
- 
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- }
- 
- /*
-@@ -267,7 +267,7 @@ cifs_abort_connection(struct TCP_Server_Info *server)
- 
- 	/* do not want to be sending data on a socket we are freeing */
- 	cifs_dbg(FYI, "%s: tearing down socket\n", __func__);
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 	if (server->ssocket) {
- 		cifs_dbg(FYI, "State: 0x%x Flags: 0x%lx\n", server->ssocket->state,
- 			 server->ssocket->flags);
-@@ -296,7 +296,7 @@ cifs_abort_connection(struct TCP_Server_Info *server)
- 		mid->mid_flags |= MID_DELETED;
- 	}
- 	spin_unlock(&GlobalMid_Lock);
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	cifs_dbg(FYI, "%s: issuing mid callbacks\n", __func__);
- 	list_for_each_entry_safe(mid, nmid, &retry_list, qhead) {
-@@ -306,9 +306,9 @@ cifs_abort_connection(struct TCP_Server_Info *server)
- 	}
- 
- 	if (cifs_rdma_enabled(server)) {
--		mutex_lock(&server->srv_mutex);
-+		cifs_server_lock(server);
- 		smbd_destroy(server);
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 	}
- }
- 
-@@ -359,7 +359,7 @@ static int __cifs_reconnect(struct TCP_Server_Info *server,
- 
- 	do {
- 		try_to_freeze();
--		mutex_lock(&server->srv_mutex);
-+		cifs_server_lock(server);
- 
- 		if (!cifs_swn_set_server_dstaddr(server)) {
- 			/* resolve the hostname again to make sure that IP address is up-to-date */
-@@ -372,7 +372,7 @@ static int __cifs_reconnect(struct TCP_Server_Info *server,
- 		else
- 			rc = generic_ip_connect(server);
- 		if (rc) {
--			mutex_unlock(&server->srv_mutex);
-+			cifs_server_unlock(server);
- 			cifs_dbg(FYI, "%s: reconnect error %d\n", __func__, rc);
- 			msleep(3000);
- 		} else {
-@@ -383,7 +383,7 @@ static int __cifs_reconnect(struct TCP_Server_Info *server,
- 				server->tcpStatus = CifsNeedNegotiate;
- 			spin_unlock(&cifs_tcp_ses_lock);
- 			cifs_swn_reset_server_dstaddr(server);
--			mutex_unlock(&server->srv_mutex);
-+			cifs_server_unlock(server);
- 			mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
- 		}
- 	} while (server->tcpStatus == CifsNeedReconnect);
-@@ -488,12 +488,12 @@ static int reconnect_dfs_server(struct TCP_Server_Info *server)
- 
- 	do {
- 		try_to_freeze();
--		mutex_lock(&server->srv_mutex);
-+		cifs_server_lock(server);
- 
- 		rc = reconnect_target_unlocked(server, &tl, &target_hint);
- 		if (rc) {
- 			/* Failed to reconnect socket */
--			mutex_unlock(&server->srv_mutex);
-+			cifs_server_unlock(server);
- 			cifs_dbg(FYI, "%s: reconnect error %d\n", __func__, rc);
- 			msleep(3000);
- 			continue;
-@@ -510,7 +510,7 @@ static int reconnect_dfs_server(struct TCP_Server_Info *server)
- 			server->tcpStatus = CifsNeedNegotiate;
- 		spin_unlock(&cifs_tcp_ses_lock);
- 		cifs_swn_reset_server_dstaddr(server);
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		mod_delayed_work(cifsiod_wq, &server->reconnect, 0);
- 	} while (server->tcpStatus == CifsNeedReconnect);
- 
-@@ -1565,7 +1565,7 @@ cifs_get_tcp_session(struct smb3_fs_context *ctx,
- 	init_waitqueue_head(&tcp_ses->response_q);
- 	init_waitqueue_head(&tcp_ses->request_q);
- 	INIT_LIST_HEAD(&tcp_ses->pending_mid_q);
--	mutex_init(&tcp_ses->srv_mutex);
-+	mutex_init(&tcp_ses->_srv_mutex);
- 	memcpy(tcp_ses->workstation_RFC1001_name,
- 		ctx->source_rfc1001_name, RFC1001_NAME_LEN_WITH_NULL);
- 	memcpy(tcp_ses->server_RFC1001_name,
-diff --git a/fs/cifs/dfs_cache.c b/fs/cifs/dfs_cache.c
-index c5dd6f7305bd..aa7d00b5b3e7 100644
---- a/fs/cifs/dfs_cache.c
-+++ b/fs/cifs/dfs_cache.c
-@@ -1327,9 +1327,9 @@ static bool target_share_equal(struct TCP_Server_Info *server, const char *s1, c
- 		cifs_dbg(VFS, "%s: failed to convert address \'%s\'. skip address matching.\n",
- 			 __func__, ip);
- 	} else {
--		mutex_lock(&server->srv_mutex);
-+		cifs_server_lock(server);
- 		match = cifs_match_ipaddr((struct sockaddr *)&server->dstaddr, &sa);
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 	}
- 
- 	kfree(ip);
-diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
-index 1a0995bb5d90..20f3abc40267 100644
---- a/fs/cifs/sess.c
-+++ b/fs/cifs/sess.c
-@@ -1093,14 +1093,14 @@ sess_establish_session(struct sess_data *sess_data)
- 	struct cifs_ses *ses = sess_data->ses;
- 	struct TCP_Server_Info *server = sess_data->server;
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 	if (!server->session_estab) {
- 		if (server->sign) {
- 			server->session_key.response =
- 				kmemdup(ses->auth_key.response,
- 				ses->auth_key.len, GFP_KERNEL);
- 			if (!server->session_key.response) {
--				mutex_unlock(&server->srv_mutex);
-+				cifs_server_unlock(server);
- 				return -ENOMEM;
- 			}
- 			server->session_key.len =
-@@ -1109,7 +1109,7 @@ sess_establish_session(struct sess_data *sess_data)
- 		server->sequence_number = 0x2;
- 		server->session_estab = true;
- 	}
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	cifs_dbg(FYI, "CIFS session established successfully\n");
- 	return 0;
-diff --git a/fs/cifs/smb1ops.c b/fs/cifs/smb1ops.c
-index c71c9a44bef4..2e20ee4dab7b 100644
---- a/fs/cifs/smb1ops.c
-+++ b/fs/cifs/smb1ops.c
-@@ -38,10 +38,10 @@ send_nt_cancel(struct TCP_Server_Info *server, struct smb_rqst *rqst,
- 	in_buf->WordCount = 0;
- 	put_bcc(0, in_buf);
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 	rc = cifs_sign_smb(in_buf, server, &mid->sequence_number);
- 	if (rc) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		return rc;
- 	}
- 
-@@ -55,7 +55,7 @@ send_nt_cancel(struct TCP_Server_Info *server, struct smb_rqst *rqst,
- 	if (rc < 0)
- 		server->sequence_number--;
- 
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	cifs_dbg(FYI, "issued NT_CANCEL for mid %u, rc = %d\n",
- 		 get_mid(in_buf), rc);
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index f5321a3500f3..cf10b93fb41a 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -1369,13 +1369,13 @@ SMB2_sess_establish_session(struct SMB2_sess_data *sess_data)
- 	struct cifs_ses *ses = sess_data->ses;
- 	struct TCP_Server_Info *server = sess_data->server;
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 	if (server->ops->generate_signingkey) {
- 		rc = server->ops->generate_signingkey(ses, server);
- 		if (rc) {
- 			cifs_dbg(FYI,
- 				"SMB3 session key generation failed\n");
--			mutex_unlock(&server->srv_mutex);
-+			cifs_server_unlock(server);
- 			return rc;
- 		}
- 	}
-@@ -1383,7 +1383,7 @@ SMB2_sess_establish_session(struct SMB2_sess_data *sess_data)
- 		server->sequence_number = 0x2;
- 		server->session_estab = true;
- 	}
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	cifs_dbg(FYI, "SMB2/3 session established successfully\n");
- 	return rc;
-diff --git a/fs/cifs/smbdirect.c b/fs/cifs/smbdirect.c
-index 31ef64eb7fbb..35829d2a0918 100644
---- a/fs/cifs/smbdirect.c
-+++ b/fs/cifs/smbdirect.c
-@@ -1382,9 +1382,9 @@ void smbd_destroy(struct TCP_Server_Info *server)
- 	log_rdma_event(INFO, "freeing mr list\n");
- 	wake_up_interruptible_all(&info->wait_mr);
- 	while (atomic_read(&info->mr_used_count)) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		msleep(1000);
--		mutex_lock(&server->srv_mutex);
-+		cifs_server_lock(server);
- 	}
- 	destroy_mr_list(info);
- 
-diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index c667e6ddfe2f..71750cf7bf55 100644
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -822,7 +822,7 @@ cifs_call_async(struct TCP_Server_Info *server, struct smb_rqst *rqst,
- 	} else
- 		instance = exist_credits->instance;
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 
- 	/*
- 	 * We can't use credits obtained from the previous session to send this
-@@ -830,14 +830,14 @@ cifs_call_async(struct TCP_Server_Info *server, struct smb_rqst *rqst,
- 	 * return -EAGAIN in such cases to let callers handle it.
- 	 */
- 	if (instance != server->reconnect_instance) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		add_credits_and_wake_if(server, &credits, optype);
- 		return -EAGAIN;
- 	}
- 
- 	mid = server->ops->setup_async_request(server, rqst);
- 	if (IS_ERR(mid)) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		add_credits_and_wake_if(server, &credits, optype);
- 		return PTR_ERR(mid);
- 	}
-@@ -868,7 +868,7 @@ cifs_call_async(struct TCP_Server_Info *server, struct smb_rqst *rqst,
- 		cifs_delete_mid(mid);
- 	}
- 
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	if (rc == 0)
- 		return 0;
-@@ -1109,7 +1109,7 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
- 	 * of smb data.
- 	 */
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 
- 	/*
- 	 * All the parts of the compound chain belong obtained credits from the
-@@ -1119,7 +1119,7 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
- 	 * handle it.
- 	 */
- 	if (instance != server->reconnect_instance) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		for (j = 0; j < num_rqst; j++)
- 			add_credits(server, &credits[j], optype);
- 		return -EAGAIN;
-@@ -1131,7 +1131,7 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
- 			revert_current_mid(server, i);
- 			for (j = 0; j < i; j++)
- 				cifs_delete_mid(midQ[j]);
--			mutex_unlock(&server->srv_mutex);
-+			cifs_server_unlock(server);
- 
- 			/* Update # of requests on wire to server */
- 			for (j = 0; j < num_rqst; j++)
-@@ -1163,7 +1163,7 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
- 		server->sequence_number -= 2;
- 	}
- 
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	/*
- 	 * If sending failed for some reason or it is an oplock break that we
-@@ -1190,9 +1190,9 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
- 	if ((ses->status == CifsNew) || (optype & CIFS_NEG_OP) || (optype & CIFS_SESS_OP)) {
- 		spin_unlock(&cifs_tcp_ses_lock);
- 
--		mutex_lock(&server->srv_mutex);
-+		cifs_server_lock(server);
- 		smb311_update_preauth_hash(ses, server, rqst[0].rq_iov, rqst[0].rq_nvec);
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 
- 		spin_lock(&cifs_tcp_ses_lock);
- 	}
-@@ -1266,9 +1266,9 @@ compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
- 			.iov_len = resp_iov[0].iov_len
- 		};
- 		spin_unlock(&cifs_tcp_ses_lock);
--		mutex_lock(&server->srv_mutex);
-+		cifs_server_lock(server);
- 		smb311_update_preauth_hash(ses, server, &iov, 1);
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		spin_lock(&cifs_tcp_ses_lock);
- 	}
- 	spin_unlock(&cifs_tcp_ses_lock);
-@@ -1385,11 +1385,11 @@ SendReceive(const unsigned int xid, struct cifs_ses *ses,
- 	   and avoid races inside tcp sendmsg code that could cause corruption
- 	   of smb data */
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 
- 	rc = allocate_mid(ses, in_buf, &midQ);
- 	if (rc) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		/* Update # of requests on wire to server */
- 		add_credits(server, &credits, 0);
- 		return rc;
-@@ -1397,7 +1397,7 @@ SendReceive(const unsigned int xid, struct cifs_ses *ses,
- 
- 	rc = cifs_sign_smb(in_buf, server, &midQ->sequence_number);
- 	if (rc) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		goto out;
- 	}
- 
-@@ -1411,7 +1411,7 @@ SendReceive(const unsigned int xid, struct cifs_ses *ses,
- 	if (rc < 0)
- 		server->sequence_number -= 2;
- 
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	if (rc < 0)
- 		goto out;
-@@ -1530,18 +1530,18 @@ SendReceiveBlockingLock(const unsigned int xid, struct cifs_tcon *tcon,
- 	   and avoid races inside tcp sendmsg code that could cause corruption
- 	   of smb data */
- 
--	mutex_lock(&server->srv_mutex);
-+	cifs_server_lock(server);
- 
- 	rc = allocate_mid(ses, in_buf, &midQ);
- 	if (rc) {
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		return rc;
- 	}
- 
- 	rc = cifs_sign_smb(in_buf, server, &midQ->sequence_number);
- 	if (rc) {
- 		cifs_delete_mid(midQ);
--		mutex_unlock(&server->srv_mutex);
-+		cifs_server_unlock(server);
- 		return rc;
- 	}
- 
-@@ -1554,7 +1554,7 @@ SendReceiveBlockingLock(const unsigned int xid, struct cifs_tcon *tcon,
- 	if (rc < 0)
- 		server->sequence_number -= 2;
- 
--	mutex_unlock(&server->srv_mutex);
-+	cifs_server_unlock(server);
- 
- 	if (rc < 0) {
- 		cifs_delete_mid(midQ);
--- 
-2.35.1
-
+ 	/* create bcm5974 device */
+ 	usb_make_path(udev, dev->phys, sizeof(dev->phys));
+ 	strlcat(dev->phys, "/input0", sizeof(dev->phys));
 
 

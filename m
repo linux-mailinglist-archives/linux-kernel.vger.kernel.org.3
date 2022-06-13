@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CA0549414
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D41F548D55
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344734AbiFMKbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S1348955AbiFMMex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244492AbiFMK0k (ORCPT
+        with ESMTP id S1355547AbiFMMbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:26:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F26245BC;
-        Mon, 13 Jun 2022 03:19:47 -0700 (PDT)
+        Mon, 13 Jun 2022 08:31:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62755BD13;
+        Mon, 13 Jun 2022 04:07:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8631B6066C;
-        Mon, 13 Jun 2022 10:19:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92720C34114;
-        Mon, 13 Jun 2022 10:19:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59EF5B80EB0;
+        Mon, 13 Jun 2022 11:07:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADDE2C3411C;
+        Mon, 13 Jun 2022 11:07:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115585;
-        bh=LauyIngqKhHgUdFrZjftbaUlMZvP3vHjbGSVAmxtyFI=;
+        s=korg; t=1655118425;
+        bh=HAzjpiMC6LJC5Y3D7M5xTGRwEvuLG45qeLx3lctfkFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MC2dYi8OE+2G8gAeEsCjUJOt/tCEJNIkjTGFjmTLig7igsD8Er9YtVJriMkE5lGT/
-         BygtkYS5IJZdubakmteLeZUsJeh+Z+rllTVT0czjhW+CAt7ZeH9g+8v6Vw26h8x8TE
-         rkIeeoMrgcMND6XFdo3wilO3z1PYNmJCK1iN3JYc=
+        b=OnEc8R6ap0eoeUnH4RCrElIsw8GcRHmRKtDq5NUZuOGQanOZRGRKK5NSuvY5JZ5HH
+         dHDd0U67igJOMYXroc3S1qn236sQ6EMDqNJSwwPBl7Tffg8is4GmAAMszQsRiKHInH
+         TcfT5JDOa99rPHPFCbawfkkilGJXAhfvwS2drr7g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 138/167] iio: dummy: iio_simple_dummy: check the return value of kstrdup()
+Subject: [PATCH 5.10 052/172] net: ethernet: ti: am65-cpsw-nuss: Fix some refcount leaks
 Date:   Mon, 13 Jun 2022 12:10:12 +0200
-Message-Id: <20220613094913.234307301@linuxfoundation.org>
+Message-Id: <20220613094902.907052077@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,86 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit ba93642188a6fed754bf7447f638bc410e05a929 ]
+[ Upstream commit 5dd89d2fc438457811cbbec07999ce0d80051ff5 ]
 
-kstrdup() is also a memory allocation-related function, it returns NULL
-when some memory errors happen. So it is better to check the return
-value of it so to catch the memory error in time. Besides, there should
-have a kfree() to clear up the allocation if we get a failure later in
-this function to prevent memory leak.
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+am65_cpsw_init_cpts() and am65_cpsw_nuss_probe() don't release
+the refcount in error case.
+Add missing of_node_put() to avoid refcount leak.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Link: https://lore.kernel.org/r/tencent_C920CFCC33B9CC1C63141FE1334A39FF8508@qq.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: b1f66a5bee07 ("net: ethernet: ti: am65-cpsw-nuss: enable packet timestamping support")
+Fixes: 93a76530316a ("net: ethernet: ti: introduce am65x/j721e gigabit eth subsystem driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/dummy/iio_simple_dummy.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/dummy/iio_simple_dummy.c b/drivers/iio/dummy/iio_simple_dummy.c
-index ad3410e528b6..7fef76f0b5c7 100644
---- a/drivers/iio/dummy/iio_simple_dummy.c
-+++ b/drivers/iio/dummy/iio_simple_dummy.c
-@@ -572,10 +572,9 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	struct iio_sw_device *swd;
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 0805edef5625..059d68d48f1e 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -1716,6 +1716,7 @@ static int am65_cpsw_init_cpts(struct am65_cpsw_common *common)
+ 	if (IS_ERR(cpts)) {
+ 		int ret = PTR_ERR(cpts);
  
- 	swd = kzalloc(sizeof(*swd), GFP_KERNEL);
--	if (!swd) {
--		ret = -ENOMEM;
--		goto error_kzalloc;
--	}
-+	if (!swd)
-+		return ERR_PTR(-ENOMEM);
-+
- 	/*
- 	 * Allocate an IIO device.
- 	 *
-@@ -587,7 +586,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	indio_dev = iio_device_alloc(sizeof(*st));
- 	if (!indio_dev) {
- 		ret = -ENOMEM;
--		goto error_ret;
-+		goto error_free_swd;
- 	}
++		of_node_put(node);
+ 		if (ret == -EOPNOTSUPP) {
+ 			dev_info(dev, "cpts disabled\n");
+ 			return 0;
+@@ -2064,9 +2065,9 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
+ 	if (!node)
+ 		return -ENOENT;
+ 	common->port_num = of_get_child_count(node);
++	of_node_put(node);
+ 	if (common->port_num < 1 || common->port_num > AM65_CPSW_MAX_PORTS)
+ 		return -ENOENT;
+-	of_node_put(node);
  
- 	st = iio_priv(indio_dev);
-@@ -618,6 +617,10 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	 *    indio_dev->name = spi_get_device_id(spi)->name;
- 	 */
- 	indio_dev->name = kstrdup(name, GFP_KERNEL);
-+	if (!indio_dev->name) {
-+		ret = -ENOMEM;
-+		goto error_free_device;
-+	}
- 
- 	/* Provide description of available channels */
- 	indio_dev->channels = iio_dummy_channels;
-@@ -634,7 +637,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 
- 	ret = iio_simple_dummy_events_register(indio_dev);
- 	if (ret < 0)
--		goto error_free_device;
-+		goto error_free_name;
- 
- 	ret = iio_simple_dummy_configure_buffer(indio_dev);
- 	if (ret < 0)
-@@ -651,11 +654,12 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	iio_simple_dummy_unconfigure_buffer(indio_dev);
- error_unregister_events:
- 	iio_simple_dummy_events_unregister(indio_dev);
-+error_free_name:
-+	kfree(indio_dev->name);
- error_free_device:
- 	iio_device_free(indio_dev);
--error_ret:
-+error_free_swd:
- 	kfree(swd);
--error_kzalloc:
- 	return ERR_PTR(ret);
- }
- 
+ 	if (common->port_num != 1)
+ 		return -EOPNOTSUPP;
 -- 
 2.35.1
 

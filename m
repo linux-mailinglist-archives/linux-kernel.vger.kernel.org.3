@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FD754805C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80389548095
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239280AbiFMH04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 03:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S234150AbiFMH2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 03:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiFMH0x (ORCPT
+        with ESMTP id S239350AbiFMH23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:26:53 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A481AD8B;
-        Mon, 13 Jun 2022 00:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655105212; x=1686641212;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=cvLueTdmhN3hJgNVAvOLkfvWJp0QJnKpGRgdoW7g6VE=;
-  b=nfRSQvRQpDQv+Q6YJ1mC2M6tWlpno4GogSkgD2LFC2EPr11am+Zanjvv
-   Ol0LQQRe3DAyQvVUn1qhyTU4/O1e6NFafDX9xJN+GMOJdkEV6gcBJqtiV
-   IAxIY2BvR55bJ6U77VsmuK8TF+ydQnny8YGaFNUnRQj22bvwQUdio40Gg
-   wmUH/feKABVAPrnWmaF/D1b+qMSUJsZd0BoE6cZxOQpr/TBH5xWInwfBd
-   XklN/4kvpUWufsOHSYe1CzKRntGlpiSlbw3SWYAtquO+Uvu9aWOKyjoD+
-   fsf0IuXsk9FzpL7BOBYvyv/uULNkANGXGttH8ee58lbxngDGWEZcUjMrs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="275728700"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="275728700"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 00:26:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="582101815"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga007.jf.intel.com with ESMTP; 13 Jun 2022 00:26:52 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 13 Jun 2022 00:26:51 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 13 Jun 2022 00:26:51 -0700
-Received: from fmsmsx612.amr.corp.intel.com ([10.18.126.92]) by
- fmsmsx612.amr.corp.intel.com ([10.18.126.92]) with mapi id 15.01.2308.027;
- Mon, 13 Jun 2022 00:26:51 -0700
-From:   "Sang, Oliver" <oliver.sang@intel.com>
-To:     "Qiang, Chenyi" <chenyi.qiang@intel.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Chen, Farrah" <farrah.chen@intel.com>,
-        "Wei, Danmei" <danmei.wei@intel.com>,
-        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
-        "Hao, Xudong" <xudong.hao@intel.com>
-Subject: RE: [KVM]  a5202946dc: kernel-selftests.kvm.make_fail
-Thread-Topic: [KVM]  a5202946dc: kernel-selftests.kvm.make_fail
-Thread-Index: AQHYfsSs2wejXgf5QkCfnMMhu7wPqK1NLIaA///Dp1A=
-Date:   Mon, 13 Jun 2022 07:26:51 +0000
-Message-ID: <d16188160405497a9ea9b206e4178730@intel.com>
-References: <20220613012644.GA7252@xsang-OptiPlex-9020>
- <SA2PR11MB50525D04633E934148F8132781AB9@SA2PR11MB5052.namprd11.prod.outlook.com>
-In-Reply-To: <SA2PR11MB50525D04633E934148F8132781AB9@SA2PR11MB5052.namprd11.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 13 Jun 2022 03:28:29 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128C81B796
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:28:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655105307; x=1686641307;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ioVbeCZUDKKWK4KyDAA+d0UWPzUSkKFLUq/QnEjSJTk=;
+  b=RImUlLsNqviQRPAeBqTx9Dt8YgWGmBG9usx1fktRkD0YuuUmkODhaQ9e
+   mNs6HIViNEnaRX1Xldbmw/dysMDZNuJB7wz3m8wgtoEX8AchlH088Wn3+
+   K5OdKdlj81PUN6wPIt7XmCUZ5TPOCvzz22+mIcjbe49HLIYmy7LeeY6fH
+   +Ohbk0jw1qXxluUpZ2CxRq05nbcoETnN6M4OnNak1RCovExqjSG27AqAm
+   LaIgmLipRqKLbxZ51vEma3e8KdnI2cy7fLJBOxR2egIKUGABSAApGo9U2
+   /46sRKaHBbJMpZH6n7vBVn1s/qZn5rws2Kxgb5f7sMJniDik8GWJtYb82
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,296,1647273600"; 
+   d="scan'208";a="207827390"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Jun 2022 15:28:26 +0800
+IronPort-SDR: il2CxPHQH8sipLpRb5XPeRbUufCAoHr36s8MS4FyUB3MUDf6NoQjcy0YUDNh3XFV6LX0zhQVL9
+ oWeI6qxUatN/+gflWHG4qjWRSkSsoHjKUZ5yqngKNqaUR5bEhJs+1bNi5WLPe/R+dj5yfzwdVB
+ NPVpM8Jvdw0lXxDl5p3ORN5i4S8BSsHpO9iv/ZFWDuVYpjA82eqdDhakVqDa3C9ZC397A+NSVh
+ Vc/xCy/uLZZH7zgS8nmJ7KR7M/3c3p5Bn78BbM4KUVFdSjevFoiMxRmb1BAQiTkvq4TS50ldRk
+ IGF4QhIvHpn6AY2+rIEUArJz
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Jun 2022 23:51:31 -0700
+IronPort-SDR: deZfY/IP09941omncvavWD/JItkA5IgD4EST8rDJpcxQG9zfP61xX+lihOX2XC3mjh+XmT4dPy
+ qHTJDt3WM9r23875YXQhEAxQA0SlHUJo8t2rHBM0VRA5kcxzslsstgl4Tisu2UOSNFIavNqxz6
+ GlwYtfuHf6d3qEtVVqA6NWal8IBNdkrxoIXbOXDLX8H+tZMPpERiy9Gryw8CKfUYlFU3O5BvT2
+ MdUenuvofIOOsSHKMJakV2dc0KjD+qsQZJ1HEgVmmKwKoEZIQ3EiMOB035UbSKtdqQ1jWd3Zzn
+ IUc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Jun 2022 00:28:28 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LM38C40cTz1SVp2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:28:27 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655105307; x=1657697308; bh=ioVbeCZUDKKWK4KyDAA+d0UWPzUSkKFLUq/
+        QnEjSJTk=; b=ZLIYkurlcWMcd3KRU8iJpMcCMEwUiAuiT7HdDS0pSkufNRpAsuu
+        DP9quFszcuFbJ734A5HH37ieeQqs0DsDRhFa44O6jdNOZPFRo0goGWOmQ8mz2HhY
+        karvD8eXhDBOfvaloELwy4CaEFmTKt9CXW/EnfqBN1SNjam9jr85xzIzgq9E/MWE
+        PmiPeO9lv2gyQqzAWZNh9E/RDrNDJ9z4QUHZm86/j4RTHhkzdcmTRwvg+ydz7vvZ
+        KkL+YhauXYZkLq6x2F9XQ3uV05d0aBL404BKw0LXCiW09ECGL2CYJoJWNE+UOQdi
+        meUCdkhRDlK4KHcOaT6/dIBdA+c3D4UBrTg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id cufNTEzT0Tjk for <linux-kernel@vger.kernel.org>;
+        Mon, 13 Jun 2022 00:28:27 -0700 (PDT)
+Received: from [10.225.163.77] (unknown [10.225.163.77])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LM3895YRtz1Rvlc;
+        Mon, 13 Jun 2022 00:28:25 -0700 (PDT)
+Message-ID: <671ce4c0-77b0-5d39-5f65-dce6e47ac48e@opensource.wdc.com>
+Date:   Mon, 13 Jun 2022 16:28:24 +0900
 MIME-Version: 1.0
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/4] pm8001 driver improvements
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jinpu.wang@cloud.ionos.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hare@suse.de, Ajish.Koshy@microchip.com
+References: <1654879602-33497-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1654879602-33497-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,72 +99,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQ2hlbnlpLA0KDQo+IEZyb206IFFpYW5nLCBDaGVueWkgPGNoZW55aS5xaWFuZ0BpbnRlbC5j
-b20+DQo+IFNlbnQ6IE1vbmRheSwgSnVuZSAxMywgMjAyMiAxMjowMiBQTQ0KPiANCj4gSGkgT2xp
-dmVyDQo+IA0KPiBJIGZvdW5kIHRoaXMgaXNzdWUgaXMgYWxyZWFkeSBmaXhlZCBieSBTZWFuIGlu
-IHF1ZXVlIGJyYW5jaC4gVGhhbmtzIGZvciB5b3VyDQo+IHRlc3RpbmcgYW5kIHJlcG9ydC4NCg0K
-VGhhbmtzIGEgbG90IGZvciBpbmZvcm1hdGlvbiENCg0KPiANCj4gVGhhbmtzDQo+IENoZW55aQ0K
-PiANCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU2FuZywgT2xpdmVyIDxv
-bGl2ZXIuc2FuZ0BpbnRlbC5jb20+DQo+IFNlbnQ6IE1vbmRheSwgSnVuZSAxMywgMjAyMiA5OjI3
-IEFNDQo+IFRvOiBRaWFuZywgQ2hlbnlpIDxjaGVueWkucWlhbmdAaW50ZWwuY29tPg0KPiBDYzog
-UGFvbG8gQm9uemluaSA8cGJvbnppbmlAcmVkaGF0LmNvbT47IENocmlzdG9waGVyc29uLCwgU2Vh
-bg0KPiA8c2VhbmpjQGdvb2dsZS5jb20+OyBMS01MIDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
-b3JnPjsNCj4ga3ZtQHZnZXIua2VybmVsLm9yZzsgSHUsIFJvYmVydCA8cm9iZXJ0Lmh1QGludGVs
-LmNvbT47IENoZW4sIEZhcnJhaA0KPiA8ZmFycmFoLmNoZW5AaW50ZWwuY29tPjsgV2VpLCBEYW5t
-ZWkgPGRhbm1laS53ZWlAaW50ZWwuY29tPjsNCj4gbGtwQGxpc3RzLjAxLm9yZzsgbGtwIDxsa3BA
-aW50ZWwuY29tPjsgSGFvLCBYdWRvbmcgPHh1ZG9uZy5oYW9AaW50ZWwuY29tPg0KPiBTdWJqZWN0
-OiBbS1ZNXSBhNTIwMjk0NmRjOiBrZXJuZWwtc2VsZnRlc3RzLmt2bS5tYWtlX2ZhaWwNCj4gDQo+
-IA0KPiANCj4gR3JlZXRpbmcsDQo+IA0KPiBGWUksIHdlIG5vdGljZWQgdGhlIGZvbGxvd2luZyBj
-b21taXQgKGJ1aWx0IHdpdGggZ2NjLTExKToNCj4gDQo+IGNvbW1pdDogYTUyMDI5NDZkYzdiMjBi
-ZjJhYmUxYmQzNWFkZjJmNDZhYTE1NWFjMCAoIktWTTogc2VsZnRlc3RzOiBBZGQgYQ0KPiB0ZXN0
-IHRvIGdldC9zZXQgdHJpcGxlIGZhdWx0IGV2ZW50IikgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9j
-Z2l0L3ZpcnQva3ZtL2t2bS5naXQNCj4gbGJyLWZvci13ZWlqaWFuZw0KPiANCj4gaW4gdGVzdGNh
-c2U6IGtlcm5lbC1zZWxmdGVzdHMNCj4gdmVyc2lvbjoga2VybmVsLXNlbGZ0ZXN0cy14ODZfNjQt
-ZDg4OWIxNTEtMV8yMDIyMDYwOA0KPiB3aXRoIGZvbGxvd2luZyBwYXJhbWV0ZXJzOg0KPiANCj4g
-CWdyb3VwOiBrdm0NCj4gCXVjb2RlOiAweGVjDQo+IA0KPiB0ZXN0LWRlc2NyaXB0aW9uOiBUaGUg
-a2VybmVsIGNvbnRhaW5zIGEgc2V0IG9mICJzZWxmIHRlc3RzIiB1bmRlciB0aGUNCj4gdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvIGRpcmVjdG9yeS4gVGhlc2UgYXJlIGludGVuZGVkIHRvIGJlIHNt
-YWxsIHVuaXQgdGVzdHMgdG8NCj4gZXhlcmNpc2UgaW5kaXZpZHVhbCBjb2RlIHBhdGhzIGluIHRo
-ZSBrZXJuZWwuDQo+IHRlc3QtdXJsOiBodHRwczovL3d3dy5rZXJuZWwub3JnL2RvYy9Eb2N1bWVu
-dGF0aW9uL2tzZWxmdGVzdC50eHQNCj4gDQo+IA0KPiBvbiB0ZXN0IG1hY2hpbmU6IDggdGhyZWFk
-cyBJbnRlbChSKSBDb3JlKFRNKSBpNy02NzAwIENQVSBAIDMuNDBHSHogd2l0aCAyOEcNCj4gbWVt
-b3J5DQo+IA0KPiBjYXVzZWQgYmVsb3cgY2hhbmdlcyAocGxlYXNlIHJlZmVyIHRvIGF0dGFjaGVk
-IGRtZXNnL2ttc2cgZm9yIGVudGlyZQ0KPiBsb2cvYmFja3RyYWNlKToNCj4gDQo+IA0KPiANCj4g
-DQo+IElmIHlvdSBmaXggdGhlIGlzc3VlLCBraW5kbHkgYWRkIGZvbGxvd2luZyB0YWcNCj4gUmVw
-b3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxvbGl2ZXIuc2FuZ0BpbnRlbC5jb20+DQo+IA0K
-PiANCj4gDQo+IGdjYyAtV2FsbCAtV3N0cmljdC1wcm90b3R5cGVzIC1XdW5pbml0aWFsaXplZCAt
-TzIgLWcgLXN0ZD1nbnU5OSAtZm5vLXN0YWNrLQ0KPiBwcm90ZWN0b3IgLWZuby1QSUUgLUkuLi8u
-Li8uLi8uLi90b29scy9pbmNsdWRlIC1JLi4vLi4vLi4vLi4vdG9vbHMvYXJjaC94ODYvaW5jbHVk
-ZSAtDQo+IEkuLi8uLi8uLi8uLi91c3IvaW5jbHVkZS8gLUlpbmNsdWRlIC1JeDg2XzY0IC1JaW5j
-bHVkZS94ODZfNjQgLUkuLiAgICAtcHRocmVhZCAgLW5vLXBpZQ0KPiB4ODZfNjQvdHJpcGxlX2Zh
-dWx0X2V2ZW50X3Rlc3QuYyAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMt
-DQo+IGtzZWxmdGVzdHMtDQo+IGE1MjAyOTQ2ZGM3YjIwYmYyYWJlMWJkMzVhZGYyZjQ2YWExNTVh
-YzAvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL2xpYmsNCj4gdm0uYSAgLW8gL3Vzci9zcmMv
-cGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtDQo+IGE1MjAyOTQ2ZGM3
-YjIwYmYyYWJlMWJkMzVhZGYyZjQ2YWExNTVhYzAvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3Zt
-L3g4Ng0KPiBfNjQvdHJpcGxlX2ZhdWx0X2V2ZW50X3Rlc3QNCj4geDg2XzY0L3RyaXBsZV9mYXVs
-dF9ldmVudF90ZXN0LmM6IEluIGZ1bmN0aW9uIOKAmG1haW7igJk6DQo+IHg4Nl82NC90cmlwbGVf
-ZmF1bHRfZXZlbnRfdGVzdC5jOjUwOjEwOiBlcnJvcjoNCj4g4oCYS1ZNX0NBUF9UUklQTEVfRkFV
-TFRfRVZFTlTigJkgdW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pOyBkaWQg
-eW91DQo+IG1lYW4g4oCYS1ZNX0NBUF9YODZfVFJJUExFX0ZBVUxUX0VWRU5U4oCZPw0KPiAgICA1
-MCB8ICAgLmNhcCA9IEtWTV9DQVBfVFJJUExFX0ZBVUxUX0VWRU5ULA0KPiAgICAgICB8ICAgICAg
-ICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+ICAgICAgIHwgICAgICAgICAgS1ZNX0NB
-UF9YODZfVFJJUExFX0ZBVUxUX0VWRU5UDQo+IHg4Nl82NC90cmlwbGVfZmF1bHRfZXZlbnRfdGVz
-dC5jOjUwOjEwOiBub3RlOiBlYWNoIHVuZGVjbGFyZWQgaWRlbnRpZmllciBpcw0KPiByZXBvcnRl
-ZCBvbmx5IG9uY2UgZm9yIGVhY2ggZnVuY3Rpb24gaXQgYXBwZWFycyBpbg0KPiBtYWtlOiAqKiog
-Wy4uL2xpYi5tazoxNTI6IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1r
-c2VsZnRlc3RzLQ0KPiBhNTIwMjk0NmRjN2IyMGJmMmFiZTFiZDM1YWRmMmY0NmFhMTU1YWMwL3Rv
-b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2bS94ODYNCj4gXzY0L3RyaXBsZV9mYXVsdF9ldmVudF90
-ZXN0XSBFcnJvciAxDQo+IG1ha2U6IExlYXZpbmcgZGlyZWN0b3J5ICcvdXNyL3NyYy9wZXJmX3Nl
-bGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy0NCj4gYTUyMDI5NDZkYzdiMjBiZjJh
-YmUxYmQzNWFkZjJmNDZhYTE1NWFjMC90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0nDQo+IA0K
-PiANCj4gDQo+IFRvIHJlcHJvZHVjZToNCj4gDQo+ICAgICAgICAgZ2l0IGNsb25lIGh0dHBzOi8v
-Z2l0aHViLmNvbS9pbnRlbC9sa3AtdGVzdHMuZ2l0DQo+ICAgICAgICAgY2QgbGtwLXRlc3RzDQo+
-ICAgICAgICAgc3VkbyBiaW4vbGtwIGluc3RhbGwgam9iLnlhbWwgICAgICAgICAgICMgam9iIGZp
-bGUgaXMgYXR0YWNoZWQgaW4gdGhpcyBlbWFpbA0KPiAgICAgICAgIGJpbi9sa3Agc3BsaXQtam9i
-IC0tY29tcGF0aWJsZSBqb2IueWFtbCAjIGdlbmVyYXRlIHRoZSB5YW1sIGZpbGUgZm9yIGxrcCBy
-dW4NCj4gICAgICAgICBzdWRvIGJpbi9sa3AgcnVuIGdlbmVyYXRlZC15YW1sLWZpbGUNCj4gDQo+
-ICAgICAgICAgIyBpZiBjb21lIGFjcm9zcyBhbnkgZmFpbHVyZSB0aGF0IGJsb2NrcyB0aGUgdGVz
-dCwNCj4gICAgICAgICAjIHBsZWFzZSByZW1vdmUgfi8ubGtwIGFuZCAvbGtwIGRpciB0byBydW4g
-ZnJvbSBhIGNsZWFuIHN0YXRlLg0KPiANCj4gDQo+IA0KPiAtLQ0KPiAwLURBWSBDSSBLZXJuZWwg
-VGVzdCBTZXJ2aWNlDQo+IGh0dHBzOi8vMDEub3JnL2xrcA0KPiANCj4gDQoNCg==
+On 6/11/22 01:46, John Garry wrote:
+> This small series includes the following:
+> - Rework how some shost values are set
+> - Fix a longstanding bug that the driver attempts to use tags before they
+>   are configured
+> - Stop using {set, clear}_bit()
+> - Expose HW queues
+> 
+> Any testing would be appreciated as this driver is still broken for my
+> arm64 system, i.e. just broken.
+> 
+> John Garry (4):
+>   scsi: pm8001: Rework shost initial values
+>   scsi: pm8001: Setup tags before using them
+>   scsi: pm8001: Use non-atomic bitmap ops for tag alloc + free
+>   scsi: pm8001: Expose HW queues for pm80xx hw
+> 
+>  drivers/scsi/pm8001/pm8001_hwi.c  |  5 +++
+>  drivers/scsi/pm8001/pm8001_init.c | 73 +++++++++++++++++++++----------
+>  drivers/scsi/pm8001/pm8001_sas.c  | 10 +++--
+>  drivers/scsi/pm8001/pm8001_sas.h  |  3 ++
+>  drivers/scsi/pm8001/pm80xx_hwi.c  | 46 +++++++++++++++----
+>  5 files changed, 101 insertions(+), 36 deletions(-)
+> 
+
+Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+-- 
+Damien Le Moal
+Western Digital Research

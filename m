@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2585486F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091E354879B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352536AbiFMLSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
+        id S1353161AbiFMLTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352769AbiFMLOU (ORCPT
+        with ESMTP id S1353020AbiFMLO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:14:20 -0400
+        Mon, 13 Jun 2022 07:14:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABCF369FD;
-        Mon, 13 Jun 2022 03:36:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0987812746;
+        Mon, 13 Jun 2022 03:37:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45FC7B80EA3;
-        Mon, 13 Jun 2022 10:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997D6C34114;
-        Mon, 13 Jun 2022 10:36:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B989B80EA8;
+        Mon, 13 Jun 2022 10:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF05C34114;
+        Mon, 13 Jun 2022 10:37:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116613;
-        bh=SPVE0E2YJ48XYj0xRu3cSmgM4bWdPP+ZLndDgMbsIJA=;
+        s=korg; t=1655116649;
+        bh=XE5/EVRSg6NpBQhjHcwkPbKJ4X8rD9rKcac31Ohdi5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fxbwhi9dXGwNHL4S6BUrEUvTAJaTl+AaMOW+TtEKWvA14BP+FdPPgtFH/UqzRbw4I
-         vG04az2CcYrENeJW48YCZF1CDAAvRpH72HvhXzFv/f/iz3NwZIYx73/3dEVkoYnn/4
-         4hEKB+HIXUBVN7klFr77Fz880QlFw+WijQ723ZlM=
+        b=HXR7bPnxdlnhYw1qZUQotZ07eZ6OiPG5ryLgmlEzw9REtM1baUNqj5mUHG5cQ+ZtX
+         QtdZ+jPD8+RbCbN/0B1TcGDLz4NwsjC1kWWgzn9FYQKMQ3GBgUEkx40roPQ8Rcga0z
+         dGWnjuWS0EKnQVpXd4sA9/zfps2hrm3gZIepWEuc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 122/411] x86/mm: Cleanup the control_va_addr_alignment() __setup handler
-Date:   Mon, 13 Jun 2022 12:06:35 +0200
-Message-Id: <20220613094932.332538524@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 127/411] media: uvcvideo: Fix missing check to determine if element is found in list
+Date:   Mon, 13 Jun 2022 12:06:40 +0200
+Message-Id: <20220613094932.481758162@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,57 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 1ef64b1e89e6d4018da46e08ffc32779a31160c7 ]
+[ Upstream commit 261f33388c29f6f3c12a724e6d89172b7f6d5996 ]
 
-Clean up control_va_addr_alignment():
+The list iterator will point to a bogus position containing HEAD if
+the list is empty or the element is not found in list. This case
+should be checked before any use of the iterator, otherwise it will
+lead to a invalid memory access. The missing check here is before
+"pin = iterm->id;", just add check here to fix the security bug.
 
-a. Make '=' required instead of optional (as documented).
-b. Print a warning if an invalid option value is used.
-c. Return 1 from the __setup handler when an invalid option value is
-   used. This prevents the kernel from polluting init's (limited)
-   environment space with the entire string.
+In addition, the list iterator value will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the element is not found in list, considering
+the (mis)use here: "if (iterm == NULL".
 
-Fixes: dfb09f9b7ab0 ("x86, amd: Avoid cache aliasing penalties on AMD family 15h")
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Link: https://lore.kernel.org/r/20220315001045.7680-1-rdunlap@infradead.org
+Use a new value 'it' as the list iterator, while use the old value
+'iterm' as a dedicated pointer to point to the found element, which
+1. can fix this bug, due to 'iterm' is NULL only if it's not found.
+2. do not need to change all the uses of 'iterm' after the loop.
+3. can also limit the scope of the list iterator 'it' *only inside*
+   the traversal loop by simply declaring 'it' inside the loop in the
+   future, as usage of the iterator outside of the list_for_each_entry
+   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
+
+Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/sys_x86_64.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index f7476ce23b6e..42e31358a9d3 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -70,9 +70,6 @@ static int __init control_va_addr_alignment(char *str)
- 	if (*str == 0)
- 		return 1;
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 3126ee9e965c..96ef64b6a232 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -859,29 +859,31 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
+ 	struct uvc_video_chain *chain = handle->chain;
+ 	const struct uvc_entity *selector = chain->selector;
+ 	struct uvc_entity *iterm = NULL;
++	struct uvc_entity *it;
+ 	u32 index = input->index;
+-	int pin = 0;
  
--	if (*str == '=')
--		str++;
--
- 	if (!strcmp(str, "32"))
- 		va_align.flags = ALIGN_VA_32;
- 	else if (!strcmp(str, "64"))
-@@ -82,11 +79,11 @@ static int __init control_va_addr_alignment(char *str)
- 	else if (!strcmp(str, "on"))
- 		va_align.flags = ALIGN_VA_32 | ALIGN_VA_64;
- 	else
--		return 0;
-+		pr_warn("invalid option value: 'align_va_addr=%s'\n", str);
+ 	if (selector == NULL ||
+ 	    (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
+ 		if (index != 0)
+ 			return -EINVAL;
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (UVC_ENTITY_IS_ITERM(it)) {
++				iterm = it;
+ 				break;
++			}
+ 		}
+-		pin = iterm->id;
+ 	} else if (index < selector->bNrInPins) {
+-		pin = selector->baSourceID[index];
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (!UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (!UVC_ENTITY_IS_ITERM(it))
+ 				continue;
+-			if (iterm->id == pin)
++			if (it->id == selector->baSourceID[index]) {
++				iterm = it;
+ 				break;
++			}
+ 		}
+ 	}
  
- 	return 1;
- }
--__setup("align_va_addr", control_va_addr_alignment);
-+__setup("align_va_addr=", control_va_addr_alignment);
+-	if (iterm == NULL || iterm->id != pin)
++	if (iterm == NULL)
+ 		return -EINVAL;
  
- SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
- 		unsigned long, prot, unsigned long, flags,
+ 	memset(input, 0, sizeof(*input));
 -- 
 2.35.1
 

@@ -2,145 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65CE549FA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0C1549FA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiFMUl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S234521AbiFMUlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242261AbiFMUk7 (ORCPT
+        with ESMTP id S244080AbiFMUlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:40:59 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FBB45B887
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:38:11 -0700 (PDT)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id BDFC520C154C;
-        Mon, 13 Jun 2022 12:38:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BDFC520C154C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1655149091;
-        bh=Nlhe89f21s2Nn6sZlzNNWxjIOhCd8EeCNee7Yy+xEvU=;
+        Mon, 13 Jun 2022 16:41:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E253EAA2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:38:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 820FAB81260
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DBFC34114;
+        Mon, 13 Jun 2022 19:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655149105;
+        bh=IlyREGSSiPBcDabHaDrw79yO/FNKivARjh643g+g8bg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ikjQZmtHOZ+WLe7eXSv06sgC+WIMy6qYOHsYl7R3s+ezYufbTNoh1MQu0ZSQzrnng
-         xYlX8CztPE8odeMby13fHDEYRtASMSs4m0XSf4+JW3cYWTVZbxjIdlxMwQbapVww7H
-         VaYAyOL+V7jxcNjtFFJJebiJadQAYuPPUzUWKM6k=
-Date:   Mon, 13 Jun 2022 14:38:07 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Jianyong Wu <jianyong.wu@arm.com>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] 9p: Fix refcounting during full path walks for
- fid lookups
-Message-ID: <20220613193807.GF7401@sequoia>
-References: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
- <20220527000003.355812-2-tyhicks@linux.microsoft.com>
- <YqUifCFPTG8Qmn7a@codewreck.org>
+        b=HKxskh0FzKAYavUnvpmvVGz58e6f02/DD31IMhs0e3QIy8kF25+Q4kZED2OAA/JyF
+         kFWE3kXI/WQ672dssR7JZHVNhWnRLQ4eHQJhTZ6siEiLoiAcet93ZVbgAddfCH8Mak
+         Yw4qwxLr/B/BBkNU8uqSjigM70N4wk5/BUbMdfL8=
+Date:   Mon, 13 Jun 2022 21:38:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc:     Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
+Subject: Re: RFC: repeated insmod/rmmod and DEBUG_KOBJECT_RELEASE - do we
+ care?
+Message-ID: <YqeSLvnLo2CX+oTp@kroah.com>
+References: <20220613110239.GA69975@windriver.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqUifCFPTG8Qmn7a@codewreck.org>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220613110239.GA69975@windriver.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-12 08:17:16, Dominique Martinet wrote:
-> Tyler Hicks wrote on Thu, May 26, 2022 at 06:59:59PM -0500:
-> > Decrement the refcount of the parent dentry's fid after walking
-> > each path component during a full path walk for a lookup. Failure to do
-> > so can lead to fids that are not clunked until the filesystem is
-> > unmounted, as indicated by this warning:
-> > 
-> >  9pnet: found fid 3 not clunked
-> > 
-> > The improper refcounting after walking resulted in open(2) returning
-> > -EIO on any directories underneath the mount point when using the virtio
-> > transport. When using the fd transport, there's no apparent issue until
-> > the filesytem is unmounted and the warning above is emitted to the logs.
-> > 
-> > In some cases, the user may not yet be attached to the filesystem and a
-> > new root fid, associated with the user, is created and attached to the
-> > root dentry before the full path walk is performed. Increment the new
-> > root fid's refcount to two in that situation so that it can be safely
-> > decremented to one after it is used for the walk operation. The new fid
-> > will still be attached to the root dentry when
-> > v9fs_fid_lookup_with_uid() returns so a final refcount of one is
-> > correct/expected.
-> > 
-> > Fixes: 6636b6dcc3db ("9p: add refcount to p9_fid struct")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > ---
-> >  fs/9p/fid.c | 17 +++++------------
-> >  1 file changed, 5 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/fs/9p/fid.c b/fs/9p/fid.c
-> > index 79df61fe0e59..5a469b79c1ee 100644
-> > --- a/fs/9p/fid.c
-> > +++ b/fs/9p/fid.c
-> > @@ -152,7 +152,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
-> >  	const unsigned char **wnames, *uname;
-> >  	int i, n, l, clone, access;
-> >  	struct v9fs_session_info *v9ses;
-> > -	struct p9_fid *fid, *old_fid = NULL;
-> > +	struct p9_fid *fid, *old_fid;
-> >  
-> >  	v9ses = v9fs_dentry2v9ses(dentry);
-> >  	access = v9ses->flags & V9FS_ACCESS_MASK;
-> > @@ -194,13 +194,12 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
-> >  		if (IS_ERR(fid))
-> >  			return fid;
-> >  
-> > +		refcount_inc(&fid->count);
-> >  		v9fs_fid_add(dentry->d_sb->s_root, fid);
-> >  	}
-> >  	/* If we are root ourself just return that */
-> > -	if (dentry->d_sb->s_root == dentry) {
-> > -		refcount_inc(&fid->count);
-> > +	if (dentry->d_sb->s_root == dentry)
-> >  		return fid;
-> > -	}
-> >  	/*
-> >  	 * Do a multipath walk with attached root.
-> >  	 * When walking parent we need to make sure we
-> > @@ -212,6 +211,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
-> >  		fid = ERR_PTR(n);
-> >  		goto err_out;
-> >  	}
-> > +	old_fid = fid;
-> >  	clone = 1;
-> >  	i = 0;
-> >  	while (i < n) {
-> > @@ -221,15 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
-> >  		 * walk to ensure none of the patch component change
-> >  		 */
-> >  		fid = p9_client_walk(fid, l, &wnames[i], clone);
-> > +		p9_client_clunk(old_fid);
+On Mon, Jun 13, 2022 at 07:02:39AM -0400, Paul Gortmaker wrote:
+> If a person has CONFIG_DEBUG_KOBJECT_RELEASE enabled, and runs a rather
+> questionable test suite doing a repeated modprobe followed by modprobe -r
+> it will eventually trigger a duplicate sysfs name warning:
 > 
-> hmm, if we're not cloning then fid == old_fid and the refcount is not
-> increased? (I think... I didn't even realize/remember that walk had a
-> no-clone mode, sorry.)
+> [ 1427.032646] kobject: 'usbserial_generic' (00000000c91a1c2c): kobject_release, parent 00000000890627c7 (delayed 4000)
+> [...]
+> [ 1430.110659] kobject: 'usbserial_generic' (00000000a633d9a5): kobject_add_internal: parent: 'drivers', set: 'drivers'
+> [ 1430.110667] sysfs: cannot create duplicate filename '/bus/usb/drivers/usbserial_generic'
+> [ 1430.110671] CPU: 2 PID: 1102 Comm: modprobe Not tainted 5.15.38 #7
+> [ 1430.110678] Call Trace:
+> [ 1430.110685]  dump_stack_lvl+0x33/0x42
+> [ 1430.110693]  sysfs_warn_dup+0x51/0x60         <----------
+> [ 1430.110699]  sysfs_create_dir_ns+0xb8/0xd0
 > 
-> So we'd only need to clunk if old fid here if we're cloning (old fid is
-> the initial root fid), but I'm not sure how to test this path as I
-> couldn't think of any pattern that'd trigger a multi-level lookup,
-> so I'm not 100% sure; I'll try a bit more.
+> For context to lkml readers, CONFIG_DEBUG_KOBJECT_RELEASE inserts a
+> random delay of between 2 and 5 seconds before freeing a kobject.
+> 
+> In the above case, the free was delayed 4s by the DEBUG option, but we tried
+> to reconstruct the same sysfs entry in just 3s elapsed and hence it triggered
+> the namespace collision warning. 
+> 
+> I'm not convinced this warrants fixing, given the contrived nature of the
+> root only test, but I did at least want to get it on record, so maybe it
+> saves someone else some research time, given a similar report.
 
-Yes, you're correct. Nice catch!
+It's come up many many times in the past years, sorry you hit it again
+without realizing it.
 
-Tyler
+> We could I guess, within the CONFIG_DEBUG_KOBJECT_RELEASE ifdef'd code use
+> kobject_rename() to add a "-zombie" suffix or something like that, but then
+> it might mask name space collisions people *do* want to see?
 
-> 
-> -- 
-> Dominique
-> 
+That wouldn't work as you would have rename collisions as well.
+
+And that warning is just that, a warning that you did something foolish
+so the kernel is trying to say "don't do that".  And doing a
+modprobe/rmmod constantly is a huge "don't do that" hint.
+
+> As per above it was seen with usb-serial, but I suspect any driver with a
+> sysfs kobject could reproduce the issue.  I also didn't reproduce on the
+> latest kernel but I can't imagine anything has changed in this area.
+
+Yes, the module handling code has changed a bit, so it might have solved
+some of these things.  But the root cause is still there, you are doing
+something odd/broken and the kernel warned you about it :)
+
+thanks,
+
+greg k-h

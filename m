@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3B4548BAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065B35489D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384435AbiFMO3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S1343575AbiFMKdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383945AbiFMOYV (ORCPT
+        with ESMTP id S1346516AbiFMKaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0FD4754C;
-        Mon, 13 Jun 2022 04:45:59 -0700 (PDT)
+        Mon, 13 Jun 2022 06:30:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A2A21E30;
+        Mon, 13 Jun 2022 03:21:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E903161342;
-        Mon, 13 Jun 2022 11:45:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0387AC34114;
-        Mon, 13 Jun 2022 11:45:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84D1EB80E93;
+        Mon, 13 Jun 2022 10:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB8A2C34114;
+        Mon, 13 Jun 2022 10:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120758;
-        bh=0jB2z96a6LSu67IHQAKyAMUPW2+I+OojdBhLInxl6R8=;
+        s=korg; t=1655115679;
+        bh=S2nyjzDsl6Qa9SKaZ1k8jiwAYyN6hsEchmkf/gZk/wI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s08PywlfGltzerpM4FHXhvgMulvY2wHR9DEa9Oq40T3y+vKymEs5XKjdrRJdtELHE
-         H84xy+++lpkRiCo1r3/ZLwFBqqlrrDgqL19pAyyzUFmeGKXFvjMOapHp2ZUqRp19mo
-         /mFYUXLyPHLGDttceHW6T/iTpSoS1VdXMW+jApFo=
+        b=UYRuPrOqFzSHvJNicUREVmj1n3y78i+rzobHmFxepfwGUIsDKg5bA/ySynEuNRPa/
+         7bYvi+udlcwYTMcyXbzbK+3bp8wMIHWZ9Pl/EhU6TCzunmUhwkMzBmc0jh+b0zYBRH
+         W1865mb90dYVt5YhQGf5GEepY4p22XM79nwnt5Gk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jun Miao <jun.miao@intel.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 139/298] tracing: Fix sleeping function called from invalid context on RT kernel
+        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 4.9 159/167] cifs: return errors during session setup during reconnects
 Date:   Mon, 13 Jun 2022 12:10:33 +0200
-Message-Id: <20220613094929.158829990@linuxfoundation.org>
+Message-Id: <20220613094918.253916137@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,92 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jun Miao <jun.miao@intel.com>
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-[ Upstream commit 12025abdc8539ed9d5014e2d647a3fd1bd3de5cd ]
+commit 8ea21823aa584b55ba4b861307093b78054b0c1b upstream.
 
-When setting bootparams="trace_event=initcall:initcall_start tp_printk=1" in the
-cmdline, the output_printk() was called, and the spin_lock_irqsave() was called in the
-atomic and irq disable interrupt context suitation. On the PREEMPT_RT kernel,
-these locks are replaced with sleepable rt-spinlock, so the stack calltrace will
-be triggered.
-Fix it by raw_spin_lock_irqsave when PREEMPT_RT and "trace_event=initcall:initcall_start
-tp_printk=1" enabled.
+During reconnects, we check the return value from
+cifs_negotiate_protocol, and have handlers for both success
+and failures. But if that passes, and cifs_setup_session
+returns any errors other than -EACCES, we do not handle
+that. This fix adds a handler for that, so that we don't
+go ahead and try a tree_connect on a failed session.
 
- BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
- in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
- preempt_count: 2, expected: 0
- RCU nest depth: 0, expected: 0
- Preemption disabled at:
- [<ffffffff8992303e>] try_to_wake_up+0x7e/0xba0
- CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt17+ #19 34c5812404187a875f32bee7977f7367f9679ea7
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x60/0x8c
-  dump_stack+0x10/0x12
-  __might_resched.cold+0x11d/0x155
-  rt_spin_lock+0x40/0x70
-  trace_event_buffer_commit+0x2fa/0x4c0
-  ? map_vsyscall+0x93/0x93
-  trace_event_raw_event_initcall_start+0xbe/0x110
-  ? perf_trace_initcall_finish+0x210/0x210
-  ? probe_sched_wakeup+0x34/0x40
-  ? ttwu_do_wakeup+0xda/0x310
-  ? trace_hardirqs_on+0x35/0x170
-  ? map_vsyscall+0x93/0x93
-  do_one_initcall+0x217/0x3c0
-  ? trace_event_raw_event_initcall_level+0x170/0x170
-  ? push_cpu_stop+0x400/0x400
-  ? cblist_init_generic+0x241/0x290
-  kernel_init_freeable+0x1ac/0x347
-  ? _raw_spin_unlock_irq+0x65/0x80
-  ? rest_init+0xf0/0xf0
-  kernel_init+0x1e/0x150
-  ret_from_fork+0x22/0x30
-  </TASK>
-
-Link: https://lkml.kernel.org/r/20220419013910.894370-1-jun.miao@intel.com
-
-Signed-off-by: Jun Miao <jun.miao@intel.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/cifs/smb2pdu.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 8bc7beea10c7..b741704dcd46 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -2827,7 +2827,7 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
- }
- EXPORT_SYMBOL_GPL(trace_event_buffer_lock_reserve);
- 
--static DEFINE_SPINLOCK(tracepoint_iter_lock);
-+static DEFINE_RAW_SPINLOCK(tracepoint_iter_lock);
- static DEFINE_MUTEX(tracepoint_printk_mutex);
- 
- static void output_printk(struct trace_event_buffer *fbuffer)
-@@ -2855,14 +2855,14 @@ static void output_printk(struct trace_event_buffer *fbuffer)
- 
- 	event = &fbuffer->trace_file->event_call->event;
- 
--	spin_lock_irqsave(&tracepoint_iter_lock, flags);
-+	raw_spin_lock_irqsave(&tracepoint_iter_lock, flags);
- 	trace_seq_init(&iter->seq);
- 	iter->ent = fbuffer->entry;
- 	event_call->event.funcs->trace(iter, 0, event);
- 	trace_seq_putc(&iter->seq, 0);
- 	printk("%s", iter->seq.buffer);
- 
--	spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
-+	raw_spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
- }
- 
- int tracepoint_printk_sysctl(struct ctl_table *table, int write,
--- 
-2.35.1
-
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -265,6 +265,9 @@ smb2_reconnect(__le16 smb2_command, stru
+ 			rc = -EHOSTDOWN;
+ 			mutex_unlock(&tcon->ses->session_mutex);
+ 			goto failed;
++		} else if (rc) {
++			mutex_unlock(&ses->session_mutex);
++			goto out;
+ 		}
+ 	}
+ 	if (rc || !tcon->need_reconnect) {
 
 

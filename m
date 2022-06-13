@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AC054A13F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3A154A138
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352190AbiFMVTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S1348080AbiFMVS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242616AbiFMVSO (ORCPT
+        with ESMTP id S1352090AbiFMVSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:18:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30C7194;
-        Mon, 13 Jun 2022 14:00:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A19BDB815A5;
-        Mon, 13 Jun 2022 21:00:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2B4C3411F;
-        Mon, 13 Jun 2022 21:00:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655154047;
-        bh=7cR/HIM39RZS+/Gct0Pn2ccowEs6vcCKYQXInEktR40=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OYLawBgGrChJgJnwK1oOYSdZnfgpnca8149uZFLeuqxofoDISTLKvJIx9JzswvwMH
-         tGCHsP70MdAvqXEQpJ+bIQrjRVs1P7GdiLh8S8wUk7STzYwW80H8V986q5KOY1QttW
-         rYrVcXdtyFKIUYe1HB1CajzBp0gF4Ik5AHZuquxLNapAbACU/AhKa+dXKC+d8hMuP1
-         F0Nkpb1AehPsFLM8e49OXdq25D9F5XHrDjquBQQtHoejofytcHIZBeNZPsO6k5yvUE
-         5oBfneOfSetCnZOE3RmuL5GItEIlt5wwVG6UoAf4cevBW9AI2BffpAA++LRcAHZr/p
-         uZAVPoOf6wBlg==
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     jarkko.nikula@linux.intel.com
-Cc:     dinguyen@kernel.org, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCHv3 2/2] dt-bindings: i2c: dw: Add Intel's SoCFPGA I2C controller
-Date:   Mon, 13 Jun 2022 16:00:32 -0500
-Message-Id: <20220613210032.773826-2-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220613210032.773826-1-dinguyen@kernel.org>
-References: <20220613210032.773826-1-dinguyen@kernel.org>
+        Mon, 13 Jun 2022 17:18:20 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C60B12082;
+        Mon, 13 Jun 2022 14:00:58 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id hh4so4780893qtb.10;
+        Mon, 13 Jun 2022 14:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gWdErLqInvM1ccInRYlKQ/aTN1Wa+cjq/iTF3o1VN9I=;
+        b=bwIHsfewcGBOdBcc4rM9cpENx12C9rDMD5KZHB4fAEQ0jH9IzRN3Dwvr09S3VKJqvk
+         Es8clTWrPeBKgS6xy/z1URARKdS6mjSErjKmkU+FWHmnd7pO02dQD8/gYhYero6NlcWt
+         4l6GBn0FcjAP/gkAmdbj5oQmu9q3Mk/vbYK/1Qnn1Ip6Zs1EPyCLwbiBusqamrJscW6v
+         PtrI6E0EeSMq7nAckFG9FI5ftWlkP/sah696iveqSZwnP9nzEFC3LkCjMgJcwMvuM49K
+         YsjspgYUNaZ3fCT5rnHdeEjNwCX1oJYeXB13oecOzikt5rmLP29UawZa4c09dN16fRHE
+         Sc9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gWdErLqInvM1ccInRYlKQ/aTN1Wa+cjq/iTF3o1VN9I=;
+        b=xyW39CT16w68Fn+dCpYfiQ7Jc1TCwDRSCYmFeLBdS6viDPZ3Pg5OtYIRu7PkYD+lPW
+         6EdyyP8QSNnHqRcHwwczAurEaBCOGInYJRr3LlS1XvA+pziY0x6Zrpfo2G6zCnt/lyFZ
+         fG7ybJ8OWvP/Dtv8iEhDEezHWQNEQE+TrhvITEAMI6E6F1dLNi1XirXjV0YlCV/O+g+d
+         DdNoT7K3hUfIMcdgSqXJVS/gUUHkZyFkXOJZSn6OiTQhpI7x6EMhILELsdGqyAjRsrWh
+         jFA/bz04+bmyYCyG3n1CY+ygOUFtBFoswoxLWYZvOp3c/5Ds76n/6+eIpu9shF0k/PBP
+         qIWw==
+X-Gm-Message-State: AOAM531PazIdoIrmALqhc5ADwQZhzbSgqJEsAnkAvpfBk+Gm5d3CTWhu
+        xRgUV61P3walXuo5Q7gyG1E=
+X-Google-Smtp-Source: ABdhPJw/GpF9MPk9/djp9w3tlTLFzalidGv3+Xfed7VOMHSvwTI2pZM9UEx9e3K1b3XAttVm4dg/8Q==
+X-Received: by 2002:ac8:7fc1:0:b0:304:ed32:4463 with SMTP id b1-20020ac87fc1000000b00304ed324463mr1562341qtk.504.1655154057141;
+        Mon, 13 Jun 2022 14:00:57 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y11-20020ac87c8b000000b00304eb8e880dsm5532781qtv.23.2022.06.13.14.00.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 14:00:56 -0700 (PDT)
+Message-ID: <4d56c202-ed90-4385-6075-568ab7c8aa5c@gmail.com>
+Date:   Mon, 13 Jun 2022 14:00:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220613181847.216528857@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220613181847.216528857@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C pins on Intel's SoCFPGA platform are not connected to GPIOs and
-thus cannot be recovered by the standard GPIO method.
+On 6/13/22 11:19, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.47 release.
+> There are 251 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Jun 2022 18:18:03 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.47-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Document the "intel,socfpga-i2c" binding.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
----
-v3: no changes
-v2: Added Acked-by
----
- Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-index d9293c57f573..a130059e97ab 100644
---- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-@@ -33,6 +33,8 @@ properties:
-           - const: snps,designware-i2c
-       - description: Baikal-T1 SoC System I2C controller
-         const: baikal,bt1-sys-i2c
-+      - description: Intel's SoCFPGA I2C controller
-+        const: intel,socfpga-i2c
- 
-   reg:
-     minItems: 1
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
-
+Florian

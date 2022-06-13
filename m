@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD00F5486A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B708548851
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377480AbiFMN1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:27:12 -0400
+        id S1377554AbiFMN2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:28:32 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376278AbiFMNYx (ORCPT
+        with ESMTP id S1358927AbiFMN0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:24:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3E63C736;
-        Mon, 13 Jun 2022 04:24:17 -0700 (PDT)
+        Mon, 13 Jun 2022 09:26:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECFF6CAB0;
+        Mon, 13 Jun 2022 04:24:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE082B80E93;
-        Mon, 13 Jun 2022 11:24:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F2FC3411C;
-        Mon, 13 Jun 2022 11:24:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E578A60B6E;
+        Mon, 13 Jun 2022 11:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F019FC34114;
+        Mon, 13 Jun 2022 11:24:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119454;
-        bh=cgRqJ602WtDp1oRr9ZMXmyJhbDwJiUrgtiitxn7pP48=;
+        s=korg; t=1655119471;
+        bh=Mi4RI/owKtfMDeXHYwCoLe6+6tQevtazNezpbDFRK8Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OY3XWS2ofPtDMZ/LMH1h4SBLRtYyOJEvzWjfShmBNkY55CQSGnhE1vgIO/+wKbDBZ
-         Gq5NcjNMxhtwb1Go0HTQLIRuBsC8m59y0QhoxLvTKTK+WyDbFNuJ4JHagoGVD4X8pP
-         lHLp7oroX3gvCtRZMGiBGaUaSRd/bF+5IDiRtRro=
+        b=t3CgH6eUMGlTzeGWQlEj2Q0tDDby3d1TDkiZe/IMJS18aQLTzteI6jAWFro1uhwO4
+         flzvAPocgoj7/hKUln61FN7LxFBkHYZuOQEplp+041FDz1CgIWBW/L6axOnaJ5Bf4r
+         PMcpjO7QZ8J8LMSmBTgRoq+vyaLb344s9NwyxRN8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 003/339] iio: adc: ad7124: Remove shift from scan_type
-Date:   Mon, 13 Jun 2022 12:07:08 +0200
-Message-Id: <20220613094926.608261494@linuxfoundation.org>
+Subject: [PATCH 5.18 009/339] tty: goldfish: Use tty_port_destroy() to destroy port
+Date:   Mon, 13 Jun 2022 12:07:14 +0200
+Message-Id: <20220613094926.790572781@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -56,34 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandru Tachici <alexandru.tachici@analog.com>
+From: Wang Weiyang <wangweiyang2@huawei.com>
 
-[ Upstream commit fe78ccf79b0e29fd6d8dc2e2c3b0dbeda4ce3ad8 ]
+[ Upstream commit 507b05063d1b7a1fcb9f7d7c47586fc4f3508f98 ]
 
-The 24 bits data is stored in 32 bits in BE. There
-is no need to shift it. This confuses user-space apps.
+In goldfish_tty_probe(), the port initialized through tty_port_init()
+should be destroyed in error paths.In goldfish_tty_remove(), qtty->port
+also should be destroyed or else might leak resources.
 
-Fixes: b3af341bbd966 ("iio: adc: Add ad7124 support")
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-Link: https://lore.kernel.org/r/20220322105029.86389-2-alexandru.tachici@analog.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fix the above by calling tty_port_destroy().
+
+Fixes: 666b7793d4bf ("goldfish: tty driver")
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
+Link: https://lore.kernel.org/r/20220328115844.86032-1-wangweiyang2@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/ad7124.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/tty/goldfish.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iio/adc/ad7124.c b/drivers/iio/adc/ad7124.c
-index c47ead15f6e5..3752b2c88959 100644
---- a/drivers/iio/adc/ad7124.c
-+++ b/drivers/iio/adc/ad7124.c
-@@ -188,7 +188,6 @@ static const struct iio_chan_spec ad7124_channel_template = {
- 		.sign = 'u',
- 		.realbits = 24,
- 		.storagebits = 32,
--		.shift = 8,
- 		.endianness = IIO_BE,
- 	},
- };
+diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+index 9e8ccb8ed6d6..c7968aecd870 100644
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -405,6 +405,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+ err_tty_register_device_failed:
+ 	free_irq(irq, qtty);
+ err_dec_line_count:
++	tty_port_destroy(&qtty->port);
+ 	goldfish_tty_current_line_count--;
+ 	if (goldfish_tty_current_line_count == 0)
+ 		goldfish_tty_delete_driver();
+@@ -426,6 +427,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
+ 	iounmap(qtty->base);
+ 	qtty->base = NULL;
+ 	free_irq(qtty->irq, pdev);
++	tty_port_destroy(&qtty->port);
+ 	goldfish_tty_current_line_count--;
+ 	if (goldfish_tty_current_line_count == 0)
+ 		goldfish_tty_delete_driver();
 -- 
 2.35.1
 

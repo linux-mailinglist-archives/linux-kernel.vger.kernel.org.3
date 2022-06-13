@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B098F549572
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECF8548A9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381722AbiFMOEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S1376963AbiFMNXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381300AbiFMN4V (ORCPT
+        with ESMTP id S1376980AbiFMNTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:56:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF608A049;
-        Mon, 13 Jun 2022 04:36:50 -0700 (PDT)
+        Mon, 13 Jun 2022 09:19:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F6E692BD;
+        Mon, 13 Jun 2022 04:23:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84FA3B80EC7;
-        Mon, 13 Jun 2022 11:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEEB7C3411F;
-        Mon, 13 Jun 2022 11:36:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0BA460F8C;
+        Mon, 13 Jun 2022 11:22:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF94BC34114;
+        Mon, 13 Jun 2022 11:22:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120207;
-        bh=gXYvlZnPFUNaM7G9ja0Y0pLazVMlcUftyKWO1ibNkxM=;
+        s=korg; t=1655119347;
+        bh=dGSOQsi//NDJceKRzTdm937m9iBGzCOIme+ahMgLDsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=se6vbjxvqz6sPPJM7qpusnwiYJde+BL6HrvJBBOJMh5dXC8TiWtedd72E/RdKdKMY
-         2mooWW7qsyf0x86qG/5uVheNXpup2vwvTCoVBCOXIvgRGQodXq3Xzki2ni9X0K/O9B
-         adO5Fp2QthsBF6wqDEJgpcHnRNHlKzGZ359evh28=
+        b=xYiU9jCD5KyOXqAgz+Ip009SuJsWW0+Dg4wB3MA4DFD+KreZFfC5SGLlFSe3OO+uR
+         xfOwGyB0xmJqgLw8oCm7v14Aw/7LEh907lgjKm2mNG3Ko6ryqMS8+RARzy0OYab3g9
+         qlvarXyFZEiJFFdHzseXovX1Tvq22NkcitbdWLzI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 269/339] drm/amd/pm: correct the metrics version for SMU 11.0.11/12/13
-Date:   Mon, 13 Jun 2022 12:11:34 +0200
-Message-Id: <20220613094934.804918162@linuxfoundation.org>
+        stable@vger.kernel.org, Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 193/247] md: protect md_unregister_thread from reentrancy
+Date:   Mon, 13 Jun 2022 12:11:35 +0200
+Message-Id: <20220613094928.804432025@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,97 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Quan <evan.quan@amd.com>
+From: Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
 
-[ Upstream commit 396beb91a9eb86cbfa404e4220cca8f3ada70777 ]
+[ Upstream commit 1e267742283a4b5a8ca65755c44166be27e9aa0f ]
 
-Correct the metrics version used for SMU 11.0.11/12/13.
-Fixes misreported GPU metrics (e.g., fan speed, etc.) depending
-on which version of SMU firmware is loaded.
+Generally, the md_unregister_thread is called with reconfig_mutex, but
+raid_message in dm-raid doesn't hold reconfig_mutex to unregister thread,
+so md_unregister_thread can be called simulitaneously from two call sites
+in theory.
 
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1925
-Signed-off-by: Evan Quan <evan.quan@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Then after previous commit which remove the protection of reconfig_mutex
+for md_unregister_thread completely, the potential issue could be worse
+than before.
+
+Let's take pers_lock at the beginning of function to ensure reentrancy.
+
+Reported-by: Donald Buczek <buczek@molgen.mpg.de>
+Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../amd/pm/swsmu/smu11/sienna_cichlid_ppt.c   | 57 ++++++++++++++-----
- 1 file changed, 44 insertions(+), 13 deletions(-)
+ drivers/md/md.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-index 38f04836c82f..7a1e225fb823 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-@@ -586,12 +586,28 @@ static int sienna_cichlid_get_smu_metrics_data(struct smu_context *smu,
- 	uint16_t average_gfx_activity;
- 	int ret = 0;
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index b553654cbebc..bf1c5c0e472e 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -7942,17 +7942,22 @@ EXPORT_SYMBOL(md_register_thread);
  
--	if ((smu->adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
--		(smu->smc_fw_version >= 0x3A4900))
--		use_metrics_v3 = true;
--	else if ((smu->adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
--		(smu->smc_fw_version >= 0x3A4300))
--		use_metrics_v2 =  true;
-+	switch (smu->adev->ip_versions[MP1_HWIP][0]) {
-+	case IP_VERSION(11, 0, 7):
-+		if (smu->smc_fw_version >= 0x3A4900)
-+			use_metrics_v3 = true;
-+		else if (smu->smc_fw_version >= 0x3A4300)
-+			use_metrics_v2 = true;
-+		break;
-+	case IP_VERSION(11, 0, 11):
-+		if (smu->smc_fw_version >= 0x412D00)
-+			use_metrics_v2 = true;
-+		break;
-+	case IP_VERSION(11, 0, 12):
-+		if (smu->smc_fw_version >= 0x3B2300)
-+			use_metrics_v2 = true;
-+		break;
-+	case IP_VERSION(11, 0, 13):
-+		if (smu->smc_fw_version >= 0x491100)
-+			use_metrics_v2 = true;
-+		break;
-+	default:
-+		break;
+ void md_unregister_thread(struct md_thread **threadp)
+ {
+-	struct md_thread *thread = *threadp;
+-	if (!thread)
+-		return;
+-	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
+-	/* Locking ensures that mddev_unlock does not wake_up a
++	struct md_thread *thread;
++
++	/*
++	 * Locking ensures that mddev_unlock does not wake_up a
+ 	 * non-existent thread
+ 	 */
+ 	spin_lock(&pers_lock);
++	thread = *threadp;
++	if (!thread) {
++		spin_unlock(&pers_lock);
++		return;
 +	}
+ 	*threadp = NULL;
+ 	spin_unlock(&pers_lock);
  
- 	ret = smu_cmn_get_metrics_table(smu,
- 					NULL,
-@@ -3701,13 +3717,28 @@ static ssize_t sienna_cichlid_get_gpu_metrics(struct smu_context *smu,
- 	uint16_t average_gfx_activity;
- 	int ret = 0;
- 
--	if ((adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
--		(smu->smc_fw_version >= 0x3A4900))
--		use_metrics_v3 = true;
--	else if ((adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
--		(smu->smc_fw_version >= 0x3A4300))
--		use_metrics_v2 = true;
--
-+	switch (smu->adev->ip_versions[MP1_HWIP][0]) {
-+	case IP_VERSION(11, 0, 7):
-+		if (smu->smc_fw_version >= 0x3A4900)
-+			use_metrics_v3 = true;
-+		else if (smu->smc_fw_version >= 0x3A4300)
-+			use_metrics_v2 = true;
-+		break;
-+	case IP_VERSION(11, 0, 11):
-+		if (smu->smc_fw_version >= 0x412D00)
-+			use_metrics_v2 = true;
-+		break;
-+	case IP_VERSION(11, 0, 12):
-+		if (smu->smc_fw_version >= 0x3B2300)
-+			use_metrics_v2 = true;
-+		break;
-+	case IP_VERSION(11, 0, 13):
-+		if (smu->smc_fw_version >= 0x491100)
-+			use_metrics_v2 = true;
-+		break;
-+	default:
-+		break;
-+	}
- 
- 	ret = smu_cmn_get_metrics_table(smu,
- 					&metrics_external,
++	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
+ 	kthread_stop(thread->tsk);
+ 	kfree(thread);
+ }
 -- 
 2.35.1
 

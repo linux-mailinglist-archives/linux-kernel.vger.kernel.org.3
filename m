@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D000B549552
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF5E548A28
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377260AbiFMNZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S240846AbiFMOmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376298AbiFMNVO (ORCPT
+        with ESMTP id S1385651AbiFMOkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:21:14 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E26E6B035;
-        Mon, 13 Jun 2022 04:23:41 -0700 (PDT)
+        Mon, 13 Jun 2022 10:40:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861DCAFAE3;
+        Mon, 13 Jun 2022 04:50:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EB4F4CE116E;
-        Mon, 13 Jun 2022 11:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0983C34114;
-        Mon, 13 Jun 2022 11:23:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B00E61499;
+        Mon, 13 Jun 2022 11:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F939C34114;
+        Mon, 13 Jun 2022 11:50:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119416;
-        bh=2kdVZxq7QhwiMhHg48ux5Jq1HvMBVruEQH6DiUTxjWA=;
+        s=korg; t=1655121015;
+        bh=KcOo1oA3ujYCM/X6/pxf5zQ0h3TH3jWllfC3FvL+cl8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L3q7P9/mzssLMznn+O2Fnm0Igy5ZwoI46Mayh6es4A3CQDwB5X5O1j4GnTwX6iewL
-         o6EIA3gtJYmi6rm1iE7BdYUtq2P9utnU4YmbD3FEHvfUI4Uf3exB87JPlbBX9/+NP7
-         3NQPzMC1vwLVdJmO2bu5+spaO7qS6gODGTMh0jyI=
+        b=x9+JEyKa8yVKLWmkkWhBksC0qFdBkIviGLzwgq+wFJHZYgug6X83dp0T/pb2gnT7W
+         qsxM2ueJ9ur1zUvCPnSwucurDezU+0hjhpfVL09ss/u6ZFF6wjxBxRW9yg46gQLjGa
+         lT0lj6koZHGdmIY6Nr9ta2JNZaGvgfxOdoE+xLJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Olivier Matz <olivier.matz@6wind.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 231/247] ixgbe: fix unexpected VLAN Rx in promisc mode on VF
-Date:   Mon, 13 Jun 2022 12:12:13 +0200
-Message-Id: <20220613094929.951843152@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 240/298] jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
+Date:   Mon, 13 Jun 2022 12:12:14 +0200
+Message-Id: <20220613094932.366639764@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,65 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olivier Matz <olivier.matz@6wind.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit 7bb0fb7c63df95d6027dc50d6af3bc3bbbc25483 upstream.
+[ Upstream commit 656d054e0a15ec327bd82801ccd58201e59f6896 ]
 
-When the promiscuous mode is enabled on a VF, the IXGBE_VMOLR_VPE
-bit (VLAN Promiscuous Enable) is set. This means that the VF will
-receive packets whose VLAN is not the same than the VLAN of the VF.
+When building x86_64 with JUMP_LABEL=n it's possible for
+instrumentation to sneak into noinstr:
 
-For instance, in this situation:
+vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
 
-┌────────┐    ┌────────┐    ┌────────┐
-│        │    │        │    │        │
-│        │    │        │    │        │
-│     VF0├────┤VF1  VF2├────┤VF3     │
-│        │    │        │    │        │
-└────────┘    └────────┘    └────────┘
-   VM1           VM2           VM3
+Switch to arch_ prefixed atomic to avoid the explicit instrumentation.
 
-vf 0:  vlan 1000
-vf 1:  vlan 1000
-vf 2:  vlan 1001
-vf 3:  vlan 1001
-
-If we tcpdump on VF3, we see all the packets, even those transmitted
-on vlan 1000.
-
-This behavior prevents to bridge VF1 and VF2 in VM2, because it will
-create a loop: packets transmitted on VF1 will be received by VF2 and
-vice-versa, and bridged again through the software bridge.
-
-This patch remove the activation of VLAN Promiscuous when a VF enables
-the promiscuous mode. However, the IXGBE_VMOLR_UPE bit (Unicast
-Promiscuous) is kept, so that a VF receives all packets that has the
-same VLAN, whatever the destination MAC address.
-
-Fixes: 8443c1a4b192 ("ixgbe, ixgbevf: Add new mbox API xcast mode")
-Cc: stable@vger.kernel.org
-Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: Olivier Matz <olivier.matz@6wind.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    4 ++--
+ include/linux/jump_label.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-@@ -1181,9 +1181,9 @@ static int ixgbe_update_vf_xcast_mode(st
- 			return -EPERM;
- 		}
+diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
+index 48b9b2a82767..019e55c13248 100644
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -261,9 +261,9 @@ extern void static_key_disable_cpuslocked(struct static_key *key);
+ #include <linux/atomic.h>
+ #include <linux/bug.h>
  
--		disable = 0;
-+		disable = IXGBE_VMOLR_VPE;
- 		enable = IXGBE_VMOLR_BAM | IXGBE_VMOLR_ROMPE |
--			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE | IXGBE_VMOLR_VPE;
-+			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
+-static inline int static_key_count(struct static_key *key)
++static __always_inline int static_key_count(struct static_key *key)
+ {
+-	return atomic_read(&key->enabled);
++	return arch_atomic_read(&key->enabled);
+ }
+ 
+ static __always_inline void jump_label_init(void)
+-- 
+2.35.1
+
 
 

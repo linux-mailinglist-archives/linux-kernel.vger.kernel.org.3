@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D511954988A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBC8548F5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiFMNCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S1359451AbiFMMJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358206AbiFMMzG (ORCPT
+        with ESMTP id S1358445AbiFMMDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA0D3586E;
-        Mon, 13 Jun 2022 04:14:41 -0700 (PDT)
+        Mon, 13 Jun 2022 08:03:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E965CFD0E;
+        Mon, 13 Jun 2022 03:57:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44C7FB80D31;
-        Mon, 13 Jun 2022 11:14:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ACDC34114;
-        Mon, 13 Jun 2022 11:14:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11EFCB80EA3;
+        Mon, 13 Jun 2022 10:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7919CC3411C;
+        Mon, 13 Jun 2022 10:57:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118879;
-        bh=eLctX8eHUcChWaLRtJGU7lck7K7zOeKgJQ65eAtaEQ8=;
+        s=korg; t=1655117840;
+        bh=h5qBBZGdIy+62MDWN8vJ6vp9pIMO7VOh3HChzw0qZJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BcVkya3cVD4a/tNQQo/Plm41VFNuOfmuxRNwWoYwZyGREpB0+t4UEkhyl5EQP8cIR
-         pXeiLYI7qkm4GxVoMLrCQKNZWzdAMusTZeorvyeR2OU+MuQK01hv3XJzKSG0Gcf+NB
-         DqAtV5tEhklpqYCIJn61UA/wqJ2TeC01j2W9lYBs=
+        b=xZB70Gt52I1CCtfbU2PgvTAu/Y0cgYgk1obbMHGjIM0SE2ajDXXZzq//WSOtO+tQI
+         R2dWtUyGSgoiODzhl0aRbpKapMlORBbs7Y1keV03LHwyU9089sT56z5UP5JhD0eoNb
+         VOnoBH7SVkOcP7Ik3HRlY1SO29y0sAEttr/VofcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@st.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 061/247] serial: stm32-usart: Correct CSIZE, bits, and parity
+        stable@vger.kernel.org, "D. Ziegfeld" <dzigg@posteo.de>,
+        =?UTF-8?q?J=C3=B6rg-Volker=20Peetz?= <jvpeetz@web.de>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 139/287] iommu/amd: Increase timeout waiting for GA log enablement
 Date:   Mon, 13 Jun 2022 12:09:23 +0200
-Message-Id: <20220613094924.807444363@linuxfoundation.org>
+Message-Id: <20220613094928.092312914@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Joerg Roedel <jroedel@suse.de>
 
-[ Upstream commit 1deeda8d2877c18bc2b9eeee10dd6d2628852848 ]
+[ Upstream commit 42bb5aa043382f09bef2cc33b8431be867c70f8e ]
 
-Add CSIZE sanitization for unsupported CSIZE configurations. In
-addition, if parity is asked for but CSx was unsupported, the sensible
-result is CS8+parity which requires setting USART_CR1_M0 like with 9
-bits.
+On some systems it can take a long time for the hardware to enable the
+GA log of the AMD IOMMU. The current wait time is only 0.1ms, but
+testing showed that it can take up to 14ms for the GA log to enter
+running state after it has been enabled.
 
-Incorrect CSIZE results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+Sometimes the long delay happens when booting the system, sometimes
+only on resume. Adjust the timeout accordingly to not print a warning
+when hardware takes a longer than usual.
 
-Fixes: c8a9d043947b (serial: stm32: fix word length configuration)
-Cc: Erwan Le Ray <erwan.leray@st.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-9-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+There has already been an attempt to fix this with commit
+
+	9b45a7738eec ("iommu/amd: Fix loop timeout issue in iommu_ga_log_enable()")
+
+But that commit was based on some wrong math and did not fix the issue
+in all cases.
+
+Cc: "D. Ziegfeld" <dzigg@posteo.de>
+Cc: Jörg-Volker Peetz <jvpeetz@web.de>
+Fixes: 8bda0cfbdc1a ("iommu/amd: Detect and initialize guest vAPIC log")
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20220520102214.12563-1-joro@8bytes.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/stm32-usart.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/iommu/amd_iommu_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 810a1b0b6520..10e9f983de62 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -807,13 +807,22 @@ static void stm32_usart_set_termios(struct uart_port *port,
- 	 * CS8 or (CS7 + parity), 8 bits word aka [M1:M0] = 0b00
- 	 * M0 and M1 already cleared by cr1 initialization.
- 	 */
--	if (bits == 9)
-+	if (bits == 9) {
- 		cr1 |= USART_CR1_M0;
--	else if ((bits == 7) && cfg->has_7bits_data)
-+	} else if ((bits == 7) && cfg->has_7bits_data) {
- 		cr1 |= USART_CR1_M1;
--	else if (bits != 8)
-+	} else if (bits != 8) {
- 		dev_dbg(port->dev, "Unsupported data bits config: %u bits\n"
- 			, bits);
-+		cflag &= ~CSIZE;
-+		cflag |= CS8;
-+		termios->c_cflag = cflag;
-+		bits = 8;
-+		if (cflag & PARENB) {
-+			bits++;
-+			cr1 |= USART_CR1_M0;
-+		}
-+	}
+diff --git a/drivers/iommu/amd_iommu_init.c b/drivers/iommu/amd_iommu_init.c
+index 76ae6968801e..1c61cd0b1d55 100644
+--- a/drivers/iommu/amd_iommu_init.c
++++ b/drivers/iommu/amd_iommu_init.c
+@@ -90,7 +90,7 @@
+ #define ACPI_DEVFLAG_LINT1              0x80
+ #define ACPI_DEVFLAG_ATSDIS             0x10000000
  
- 	if (ofs->rtor != UNDEF_REG && (stm32_port->rx_ch ||
- 				       (stm32_port->fifoen &&
+-#define LOOP_TIMEOUT	100000
++#define LOOP_TIMEOUT	2000000
+ /*
+  * ACPI table definitions
+  *
 -- 
 2.35.1
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B90549403
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A4D548A82
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359872AbiFMNRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        id S1380214AbiFMOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359330AbiFMNJt (ORCPT
+        with ESMTP id S1380623AbiFMNyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:09:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1806928E0E;
-        Mon, 13 Jun 2022 04:20:14 -0700 (PDT)
+        Mon, 13 Jun 2022 09:54:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05AE8022E;
+        Mon, 13 Jun 2022 04:35:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25960B80D3A;
-        Mon, 13 Jun 2022 11:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D6CDC3411C;
-        Mon, 13 Jun 2022 11:20:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CB27612AB;
+        Mon, 13 Jun 2022 11:35:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2CBC3411C;
+        Mon, 13 Jun 2022 11:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119211;
-        bh=FgqMBOq8e9O8lSu4ZhdMaLrDjbWyv3KnilifVjuSL5M=;
+        s=korg; t=1655120124;
+        bh=cTkwBkxT7ouNekw9/kv5tZUyoN0QYLavScQ60CsGa8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c5o0hxYh+q/PLksCLYB/zYbTov6FIVF4HiYoclJkL4Hs/0tcqjD/NXMHeTiqYkdMU
-         lKo9dHGZ+tZ2mANKQiwFpLzGUOo54TkGaDBtPCibBKsGlQRYKjUrqscgsLITU/ByLM
-         x/Lw1a7FJt5hOKIFgZF0oHqJWDJHoIzEPECB6xAA=
+        b=X+F+zjO1n6L3erMavJbh59ChRtduIo7OipXtuuxlsoXuSR2DCM7Sxr2zOKw7vUoIZ
+         y622jhenJqyOYgayHTqukWesGif43mgdixjCs5pXBniN8RFfTeqDVw4gfwrc8hSoBn
+         YLY2n0aUAioEuxmVWbKWxKsEPCc09o7YL9BA0yHk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Changbin Du <changbin.du@gmail.com>,
+        stable@vger.kernel.org, Oder Chiou <oder_chiou@realtek.com>,
+        Sameer Pujar <spujar@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 181/247] sysrq: do not omit current cpu when showing backtrace of all active CPUs
+Subject: [PATCH 5.18 258/339] ASoC: rt5640: Do not manipulate pin "Platform Clock" if the "Platform Clock" is not in the DAPM
 Date:   Mon, 13 Jun 2022 12:11:23 +0200
-Message-Id: <20220613094928.443535363@linuxfoundation.org>
+Message-Id: <20220613094934.478111309@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,88 +56,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changbin Du <changbin.du@gmail.com>
+From: Oder Chiou <oder_chiou@realtek.com>
 
-[ Upstream commit 5390e7f46b9d5546d45a83e6463bc656678b1d0e ]
+[ Upstream commit 832296804bc7171730884e78c761c29f6d258e13 ]
 
-The backtrace of current CPU also should be printed as it is active. This
-change add stack trace for current CPU and print a hint for idle CPU for
-the generic workqueue based printing. (x86 already does this)
+The pin "Platform Clock" was only used by the Intel Byt CR platform. In the
+others, the error log will be informed. The patch will set the flag to
+avoid the pin "Platform Clock" manipulated by the other platforms.
 
-Now it looks like below:
-[  279.401567] sysrq: Show backtrace of all active CPUs
-[  279.407234] sysrq: CPU5:
-[  279.407505] Call Trace:
-[  279.408789] [<ffffffff8000606c>] dump_backtrace+0x2c/0x3a
-[  279.411698] [<ffffffff800060ac>] show_stack+0x32/0x3e
-[  279.411809] [<ffffffff80542258>] sysrq_handle_showallcpus+0x4c/0xc6
-[  279.411929] [<ffffffff80542f16>] __handle_sysrq+0x106/0x26c
-[  279.412034] [<ffffffff805436a8>] write_sysrq_trigger+0x64/0x74
-[  279.412139] [<ffffffff8029cd48>] proc_reg_write+0x8e/0xe2
-[  279.412252] [<ffffffff8021a8f8>] vfs_write+0x90/0x2be
-[  279.412362] [<ffffffff8021acd2>] ksys_write+0xa6/0xce
-[  279.412467] [<ffffffff8021ad24>] sys_write+0x2a/0x38
-[  279.412689] [<ffffffff80003ff8>] ret_from_syscall+0x0/0x2
-[  279.417173] sysrq: CPU6: backtrace skipped as idling
-[  279.417185] sysrq: CPU4: backtrace skipped as idling
-[  279.417187] sysrq: CPU0: backtrace skipped as idling
-[  279.417181] sysrq: CPU7: backtrace skipped as idling
-[  279.417190] sysrq: CPU1: backtrace skipped as idling
-[  279.417193] sysrq: CPU3: backtrace skipped as idling
-[  279.417219] sysrq: CPU2:
-[  279.419179] Call Trace:
-[  279.419440] [<ffffffff8000606c>] dump_backtrace+0x2c/0x3a
-[  279.419782] [<ffffffff800060ac>] show_stack+0x32/0x3e
-[  279.420015] [<ffffffff80542b30>] showacpu+0x5c/0x96
-[  279.420317] [<ffffffff800ba71c>] flush_smp_call_function_queue+0xd6/0x218
-[  279.420569] [<ffffffff800bb438>] generic_smp_call_function_single_interrupt+0x14/0x1c
-[  279.420798] [<ffffffff800079ae>] handle_IPI+0xaa/0x13a
-[  279.421024] [<ffffffff804dcb92>] riscv_intc_irq+0x56/0x70
-[  279.421274] [<ffffffff80a05b70>] generic_handle_arch_irq+0x6a/0xfa
-[  279.421518] [<ffffffff80004006>] ret_from_exception+0x0/0x10
-[  279.421750] [<ffffffff80096492>] rcu_idle_enter+0x16/0x1e
-
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
-Link: https://lore.kernel.org/r/20220117154300.2808-1-changbin.du@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Oder Chiou <oder_chiou@realtek.com>
+Reported-by: Sameer Pujar <spujar@nvidia.com>
+Link: https://lore.kernel.org/r/20220516103055.20003-1-oder_chiou@realtek.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/sysrq.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ sound/soc/codecs/rt5640.c             | 11 +++++++++--
+ sound/soc/codecs/rt5640.h             |  2 ++
+ sound/soc/intel/boards/bytcr_rt5640.c |  2 ++
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index c911196ac893..6b445ece8339 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -232,8 +232,10 @@ static void showacpu(void *dummy)
- 	unsigned long flags;
+diff --git a/sound/soc/codecs/rt5640.c b/sound/soc/codecs/rt5640.c
+index 30c2e7cb7ed2..3559d9ecfa07 100644
+--- a/sound/soc/codecs/rt5640.c
++++ b/sound/soc/codecs/rt5640.c
+@@ -2094,12 +2094,14 @@ EXPORT_SYMBOL_GPL(rt5640_sel_asrc_clk_src);
+ void rt5640_enable_micbias1_for_ovcd(struct snd_soc_component *component)
+ {
+ 	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
++	struct rt5640_priv *rt5640 = snd_soc_component_get_drvdata(component);
  
- 	/* Idle CPUs have no interesting backtrace. */
--	if (idle_cpu(smp_processor_id()))
-+	if (idle_cpu(smp_processor_id())) {
-+		pr_info("CPU%d: backtrace skipped as idling\n", smp_processor_id());
- 		return;
-+	}
- 
- 	raw_spin_lock_irqsave(&show_lock, flags);
- 	pr_info("CPU%d:\n", smp_processor_id());
-@@ -260,10 +262,13 @@ static void sysrq_handle_showallcpus(int key)
- 
- 		if (in_hardirq())
- 			regs = get_irq_regs();
--		if (regs) {
--			pr_info("CPU%d:\n", smp_processor_id());
-+
-+		pr_info("CPU%d:\n", smp_processor_id());
-+		if (regs)
- 			show_regs(regs);
--		}
-+		else
-+			show_stack(NULL, NULL, KERN_INFO);
-+
- 		schedule_work(&sysrq_showallcpus);
- 	}
+ 	snd_soc_dapm_mutex_lock(dapm);
+ 	snd_soc_dapm_force_enable_pin_unlocked(dapm, "LDO2");
+ 	snd_soc_dapm_force_enable_pin_unlocked(dapm, "MICBIAS1");
+ 	/* OVCD is unreliable when used with RCCLK as sysclk-source */
+-	snd_soc_dapm_force_enable_pin_unlocked(dapm, "Platform Clock");
++	if (rt5640->use_platform_clock)
++		snd_soc_dapm_force_enable_pin_unlocked(dapm, "Platform Clock");
+ 	snd_soc_dapm_sync_unlocked(dapm);
+ 	snd_soc_dapm_mutex_unlock(dapm);
  }
+@@ -2108,9 +2110,11 @@ EXPORT_SYMBOL_GPL(rt5640_enable_micbias1_for_ovcd);
+ void rt5640_disable_micbias1_for_ovcd(struct snd_soc_component *component)
+ {
+ 	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
++	struct rt5640_priv *rt5640 = snd_soc_component_get_drvdata(component);
+ 
+ 	snd_soc_dapm_mutex_lock(dapm);
+-	snd_soc_dapm_disable_pin_unlocked(dapm, "Platform Clock");
++	if (rt5640->use_platform_clock)
++		snd_soc_dapm_disable_pin_unlocked(dapm, "Platform Clock");
+ 	snd_soc_dapm_disable_pin_unlocked(dapm, "MICBIAS1");
+ 	snd_soc_dapm_disable_pin_unlocked(dapm, "LDO2");
+ 	snd_soc_dapm_sync_unlocked(dapm);
+@@ -2535,6 +2539,9 @@ static void rt5640_enable_jack_detect(struct snd_soc_component *component,
+ 		rt5640->jd_gpio_irq_requested = true;
+ 	}
+ 
++	if (jack_data && jack_data->use_platform_clock)
++		rt5640->use_platform_clock = jack_data->use_platform_clock;
++
+ 	ret = request_irq(rt5640->irq, rt5640_irq,
+ 			  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+ 			  "rt5640", rt5640);
+diff --git a/sound/soc/codecs/rt5640.h b/sound/soc/codecs/rt5640.h
+index 9e49b9a0ccaa..505c93514051 100644
+--- a/sound/soc/codecs/rt5640.h
++++ b/sound/soc/codecs/rt5640.h
+@@ -2155,11 +2155,13 @@ struct rt5640_priv {
+ 	bool jd_inverted;
+ 	unsigned int ovcd_th;
+ 	unsigned int ovcd_sf;
++	bool use_platform_clock;
+ };
+ 
+ struct rt5640_set_jack_data {
+ 	int codec_irq_override;
+ 	struct gpio_desc *jd_gpio;
++	bool use_platform_clock;
+ };
+ 
+ int rt5640_dmic_enable(struct snd_soc_component *component,
+diff --git a/sound/soc/intel/boards/bytcr_rt5640.c b/sound/soc/intel/boards/bytcr_rt5640.c
+index f81ae742faa7..75ec4a9322bb 100644
+--- a/sound/soc/intel/boards/bytcr_rt5640.c
++++ b/sound/soc/intel/boards/bytcr_rt5640.c
+@@ -1191,12 +1191,14 @@ static int byt_rt5640_init(struct snd_soc_pcm_runtime *runtime)
+ {
+ 	struct snd_soc_card *card = runtime->card;
+ 	struct byt_rt5640_private *priv = snd_soc_card_get_drvdata(card);
++	struct rt5640_set_jack_data *jack_data = &priv->jack_data;
+ 	struct snd_soc_component *component = asoc_rtd_to_codec(runtime, 0)->component;
+ 	const struct snd_soc_dapm_route *custom_map = NULL;
+ 	int num_routes = 0;
+ 	int ret;
+ 
+ 	card->dapm.idle_bias_off = true;
++	jack_data->use_platform_clock = true;
+ 
+ 	/* Start with RC clk for jack-detect (we disable MCLK below) */
+ 	if (byt_rt5640_quirk & BYT_RT5640_MCLK_EN)
 -- 
 2.35.1
 

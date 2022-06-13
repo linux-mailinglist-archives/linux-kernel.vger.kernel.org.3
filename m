@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CCE549005
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944FE5497F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377738AbiFMNhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S1378084AbiFMNhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378846AbiFMNcL (ORCPT
+        with ESMTP id S1378864AbiFMNcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:32:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F65371DBC;
-        Mon, 13 Jun 2022 04:26:49 -0700 (PDT)
+        Mon, 13 Jun 2022 09:32:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB5D7220D;
+        Mon, 13 Jun 2022 04:26:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9640B80E93;
-        Mon, 13 Jun 2022 11:26:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2484BC34114;
-        Mon, 13 Jun 2022 11:26:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E754B61037;
+        Mon, 13 Jun 2022 11:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B37C3411E;
+        Mon, 13 Jun 2022 11:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119606;
-        bh=iFng9JkIeZc/j7oQjmXHafZbwRf9aTmSNFrPkBm4l1w=;
+        s=korg; t=1655119609;
+        bh=58t3a21QM1+D/RKpGEpYCld2O32dL7KkNcO/l5AN8Pg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TU86PyI1smwg2VlpRh6sIfFglhq/Mb4vNX706x0t/+03jsHrrfw6Z6POltnxEODnm
-         DVE5TflDHIS4vgiCpk/piHXvTQDp1hUTZJFRs4ARFwMuA+0J2fJR0xmLIIYUVG6VPc
-         KsiEYWEWX5qDv734VIpimcYyjHLls5xszbLtnrOU=
+        b=Nljk96P+1zVyFUx4H44R/+s6TVHn6IrIMB5GiSG80/l4b+2BeekZGYn4OPmlMIrOv
+         IymGtdiabezPPotfi4m0aeJxBvK4j67YZtGDjyTan95shCT8Vft4mVtwtfy/w2DWGj
+         7YoiVyOue8kiWU6y8LYH/pwA7Sykqhdz7ezht5VM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@st.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 074/339] serial: stm32-usart: Correct CSIZE, bits, and parity
-Date:   Mon, 13 Jun 2022 12:08:19 +0200
-Message-Id: <20220613094928.765066968@linuxfoundation.org>
+Subject: [PATCH 5.18 075/339] firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle
+Date:   Mon, 13 Jun 2022 12:08:20 +0200
+Message-Id: <20220613094928.795518336@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -55,59 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1deeda8d2877c18bc2b9eeee10dd6d2628852848 ]
+[ Upstream commit 660ba678f9998aca6db74f2dd912fa5124f0fa31 ]
 
-Add CSIZE sanitization for unsupported CSIZE configurations. In
-addition, if parity is asked for but CSx was unsupported, the sensible
-result is CS8+parity which requires setting USART_CR1_M0 like with 9
-bits.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()
 
-Incorrect CSIZE results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
 
-Fixes: c8a9d043947b (serial: stm32: fix word length configuration)
-Cc: Erwan Le Ray <erwan.leray@st.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-9-ilpo.jarvinen@linux.intel.com
+Fix this issue by calling kobject_put().
+
+Fixes: 948af1f0bbc8 ("firmware: Basic dmi-sysfs support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220511071421.9769-1-linmq006@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/stm32-usart.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/firmware/dmi-sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 87b5cd4c9743..3c551fd4f3ff 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -1037,13 +1037,22 @@ static void stm32_usart_set_termios(struct uart_port *port,
- 	 * CS8 or (CS7 + parity), 8 bits word aka [M1:M0] = 0b00
- 	 * M0 and M1 already cleared by cr1 initialization.
- 	 */
--	if (bits == 9)
-+	if (bits == 9) {
- 		cr1 |= USART_CR1_M0;
--	else if ((bits == 7) && cfg->has_7bits_data)
-+	} else if ((bits == 7) && cfg->has_7bits_data) {
- 		cr1 |= USART_CR1_M1;
--	else if (bits != 8)
-+	} else if (bits != 8) {
- 		dev_dbg(port->dev, "Unsupported data bits config: %u bits\n"
- 			, bits);
-+		cflag &= ~CSIZE;
-+		cflag |= CS8;
-+		termios->c_cflag = cflag;
-+		bits = 8;
-+		if (cflag & PARENB) {
-+			bits++;
-+			cr1 |= USART_CR1_M0;
-+		}
-+	}
+diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+index 3a353776bd34..66727ad3361b 100644
+--- a/drivers/firmware/dmi-sysfs.c
++++ b/drivers/firmware/dmi-sysfs.c
+@@ -604,7 +604,7 @@ static void __init dmi_sysfs_register_handle(const struct dmi_header *dh,
+ 				    "%d-%d", dh->type, entry->instance);
  
- 	if (ofs->rtor != UNDEF_REG && (stm32_port->rx_ch ||
- 				       (stm32_port->fifoen &&
+ 	if (*ret) {
+-		kfree(entry);
++		kobject_put(&entry->kobj);
+ 		return;
+ 	}
+ 
 -- 
 2.35.1
 

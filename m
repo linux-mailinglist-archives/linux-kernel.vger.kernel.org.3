@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E55C549C8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE1C549C93
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346572AbiFMTAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S1346740AbiFMTBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345547AbiFMTAV (ORCPT
+        with ESMTP id S1346266AbiFMTAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 15:00:21 -0400
 Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCE399699
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:19:47 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id y66-20020a62ce45000000b0051bb4d19f5fso2529074pfg.18
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:19:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A539969A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:19:49 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id x19-20020aa78f13000000b0051bdda60a06so2547734pfr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=sy+hmtF7QKGhId1UgWThmfgFGGqtRHfIUJnJ5VlAWU0=;
-        b=qrtFAHt9rp+72ySJkfHU7Fg5FmipHO1J6AWR5Swn2IiWMy2/NArZiMfakO3QjNb3B0
-         GmjpctXxY4ozxNYdvp2wSgh09QgpjtMaIgjT1WIg90tbaktKV7yTsGpfOd2gaYI5xuQB
-         kGPRBBtzQvy8WGwGe5wa2B0nZj5Gmc40dfzLhCPC8caKQnFlajkHevIoUpRhYJibO5Yl
-         EIYL+U9VCoXKvpNF+1UjtfJlpK2J9aIlGi4gJmeGivVGYEa5j7asTZ0KmZ07pF5+Nhdr
-         UXk7SGoTA0wkvw/PdN+7adsuXp6nExu+mo4SCI5aThjSUedxIF1z2QFwdQB0Hg2Pnasc
-         E7jg==
+        bh=WzGiy8MvhiIUMi0s+wtsSIHmWc5cSwuMnyGQLZRW9iE=;
+        b=TmRZ8aVm8k7OvscC44C/b2jeDc4I79KMJqDidpu3fidjaRCDoHLjhsWb/Vr5AiMZTf
+         cYPhbxDt12l+cE3KFcvcEa5obW/XZsdbPKAx+2BliPFQIyKy0DePwMuknXTWQMVRf6Ed
+         QJw6IZfHxdVp+FEa2WnNHrxENVPpEzIH9VjXFoZZf+wPZH221AWWvXkvQv4YHeG+Ek44
+         bV8JTq23EsoRQyFSXipy4q7+fnGnu62yHj3vPpOCKUxgyJ8th5exzKEnDGvmoDc5arLu
+         JXgJLz6cmOKwTiyYPTkjsG80WWC99rp/aWetKZjQ6LK9KpqGhuP0AWxY6XgkEMzTYIWA
+         Onlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=sy+hmtF7QKGhId1UgWThmfgFGGqtRHfIUJnJ5VlAWU0=;
-        b=LuTT+xI8AuqF/hew1qjqNSLUWs9lafuxC3ns6PeRPSUqSHEJSu3qJW+Ctzx+/bVYGV
-         zWE803/OPr0bltt/jqOgkRvrsvN8ysaspC5rdop0ssddU/C3JF9za6WMTz8ulbZwDwiP
-         XwfWFUBgJjsk7VIDTzbzyrXYp89eqh2seNfOVYvvtx7VnGpnrF8vjDEPOnnv9h4a7VHq
-         yEbUE5NEjp/0ddRqvTpKiHPMnQC3WtJL5mNiDNSD7tDoEbuk8nl80gXEX80rPEYLFrpW
-         DpTvppbrj2sDmoIjORsaVxve8Rm76SAiFTJKE0OSWcM/3BFGezJocw6ff16iW/pyg4i4
-         LQGA==
-X-Gm-Message-State: AJIora8kpIQJndxL1zq4fpH8J3XPg45c44DvGgw8fJKpnybICyCf9YkC
-        CuKoTnFECtBkM/P6YqVo7Lj0ZBrLRnc=
-X-Google-Smtp-Source: AGRyM1vE38OcLZYRVPHib6kgCVJ/M2iTypkcdODR6DxYQT/Af3g0vj733jESj1NcLT/9Rd2w3OiIJl6JOxs=
+        bh=WzGiy8MvhiIUMi0s+wtsSIHmWc5cSwuMnyGQLZRW9iE=;
+        b=mG0Yl5ry13ENxrafmaIzH+GDEdcivtJONjgbkiHTvCzdvSAa52yNTWPYepbLSAneY7
+         q2BBhPWEjg5oCPDUkVoyB7lBUv6CZUozoy4UfvC8iaNHZg7gCWCy0EXgdHRLAwqvyyo1
+         ReZn4xFfMUkGM+qhGjccrrIrduc9TZG8Xz99IVmIHNesNsI6cCMlXxg/kLvilhYlRt0V
+         iKOK/nb8y3CRrwQjmY29G2IW6K0fE0OZlWR0YwwYcaGi+RLVskmWjLfBqbZNIkR9hQnv
+         2uf3L79CcJbKMfLtEPtzDgIx+MDzNLzlQyZpLb7v0SRbSY4h3IgfmQGCZ+UmP3SuOXl+
+         EW1g==
+X-Gm-Message-State: AJIora83Ko79LTOfF0OpEVVxzZyn72kBye38WzsovtIfLmZL7eveB4fV
+        wNWnm5eMq/iyth5ECXRc6XOGwnTlZDg=
+X-Google-Smtp-Source: AGRyM1tYM/Hx79fv6bDuIWPkGeu+wRbTZRlEQXOt3Rbnug4Kp1EytPfKuwr/kETntYYPlu30Xh55c7O7jd4=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:d50f:b0:166:41a8:abf5 with SMTP id
- b15-20020a170902d50f00b0016641a8abf5mr100470plg.17.1655137186866; Mon, 13 Jun
- 2022 09:19:46 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:d551:b0:168:93b6:a94a with SMTP id
+ z17-20020a170902d55100b0016893b6a94amr77699plf.149.1655137188739; Mon, 13 Jun
+ 2022 09:19:48 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Mon, 13 Jun 2022 16:19:39 +0000
+Date:   Mon, 13 Jun 2022 16:19:40 +0000
 In-Reply-To: <20220613161942.1586791-1-seanjc@google.com>
-Message-Id: <20220613161942.1586791-2-seanjc@google.com>
+Message-Id: <20220613161942.1586791-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220613161942.1586791-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 1/4] KVM: selftests: Add a missing apostrophe in comment to
- show ownership
+Subject: [PATCH 2/4] KVM: selftests: Call a dummy helper in VM/vCPU ioctls()
+ to enforce type
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Andrew Jones <drjones@redhat.com>, kvm@vger.kernel.org,
@@ -63,36 +63,110 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an apostrophe in a comment about it being the caller's, not callers,
-responsibility to free an object.
+Replace the goofy static_assert on the size of the @vm/@vcpu parameters
+with a call to a dummy helper, i.e. let the compiler naturally complain
+about an incompatible type instead of homebrewing a poor replacement.
 
 Reported-by: Andrew Jones <drjones@redhat.com>
-Fixes: 768e9a61856b ("KVM: selftests: Purge vm+vcpu_id == vcpu silliness")
+Fixes: fcba483e8246 ("KVM: selftests: Sanity check input to ioctls() at build time")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/kvm/include/kvm_util_base.h     | 57 ++++++++++---------
+ 1 file changed, 31 insertions(+), 26 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 39f2f5f1338f..0c550fb0dab2 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1434,7 +1434,7 @@ void vcpu_run_complete_io(struct kvm_vcpu *vcpu)
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index cdaea2383543..7ebfc8c7de17 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -186,50 +186,55 @@ static inline bool kvm_has_cap(long cap)
+ 	ioctl(fd, cmd, arg);							\
+ })
+ 
+-#define __kvm_ioctl(kvm_fd, cmd, arg)						\
++#define __kvm_ioctl(kvm_fd, cmd, arg)				\
+ 	kvm_do_ioctl(kvm_fd, cmd, arg)
+ 
+ 
+-#define _kvm_ioctl(kvm_fd, cmd, name, arg)					\
+-({										\
+-	int ret = __kvm_ioctl(kvm_fd, cmd, arg);				\
+-										\
+-	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));			\
++#define _kvm_ioctl(kvm_fd, cmd, name, arg)			\
++({								\
++	int ret = __kvm_ioctl(kvm_fd, cmd, arg);		\
++								\
++	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));	\
+ })
+ 
+ #define kvm_ioctl(kvm_fd, cmd, arg) \
+ 	_kvm_ioctl(kvm_fd, cmd, #cmd, arg)
+ 
+-#define __vm_ioctl(vm, cmd, arg)						\
+-({										\
+-	static_assert(sizeof(*(vm)) == sizeof(struct kvm_vm), "");		\
+-	kvm_do_ioctl((vm)->fd, cmd, arg);					\
++static __always_inline void static_assert_is_vm(struct kvm_vm *vm) { }
++
++#define __vm_ioctl(vm, cmd, arg)				\
++({								\
++	static_assert_is_vm(vm);				\
++	kvm_do_ioctl((vm)->fd, cmd, arg);			\
+ })
+ 
+-#define _vm_ioctl(vm, cmd, name, arg)						\
+-({										\
+-	int ret = __vm_ioctl(vm, cmd, arg);					\
+-										\
+-	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));			\
++#define _vm_ioctl(vm, cmd, name, arg)				\
++({								\
++	int ret = __vm_ioctl(vm, cmd, arg);			\
++								\
++	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));	\
+ })
+ 
+-#define vm_ioctl(vm, cmd, arg)							\
++#define vm_ioctl(vm, cmd, arg)					\
+ 	_vm_ioctl(vm, cmd, #cmd, arg)
+ 
+-#define __vcpu_ioctl(vcpu, cmd, arg)						\
+-({										\
+-	static_assert(sizeof(*(vcpu)) == sizeof(struct kvm_vcpu), "");		\
+-	kvm_do_ioctl((vcpu)->fd, cmd, arg);					\
++
++static __always_inline void static_assert_is_vcpu(struct kvm_vcpu *vcpu) { }
++
++#define __vcpu_ioctl(vcpu, cmd, arg)				\
++({								\
++	static_assert_is_vcpu(vcpu);				\
++	kvm_do_ioctl((vcpu)->fd, cmd, arg);			\
+ })
+ 
+-#define _vcpu_ioctl(vcpu, cmd, name, arg)					\
+-({										\
+-	int ret = __vcpu_ioctl(vcpu, cmd, arg);					\
+-										\
+-	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));			\
++#define _vcpu_ioctl(vcpu, cmd, name, arg)			\
++({								\
++	int ret = __vcpu_ioctl(vcpu, cmd, arg);			\
++								\
++	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));	\
+ })
+ 
+-#define vcpu_ioctl(vcpu, cmd, arg)						\
++#define vcpu_ioctl(vcpu, cmd, arg)				\
+ 	_vcpu_ioctl(vcpu, cmd, #cmd, arg)
+ 
  /*
-  * Get the list of guest registers which are supported for
-  * KVM_GET_ONE_REG/KVM_SET_ONE_REG ioctls.  Returns a kvm_reg_list pointer,
-- * it is the callers responsibility to free the list.
-+ * it is the caller's responsibility to free the list.
-  */
- struct kvm_reg_list *vcpu_get_reg_list(struct kvm_vcpu *vcpu)
- {
 -- 
 2.36.1.476.g0c4daa206d-goog
 

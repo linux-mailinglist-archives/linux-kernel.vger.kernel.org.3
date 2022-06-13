@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0ADB5497CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9B2548D34
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353477AbiFMLbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S1357587AbiFMLyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352285AbiFMLV1 (ORCPT
+        with ESMTP id S1356093AbiFMLtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:21:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE44C3C4A5;
-        Mon, 13 Jun 2022 03:42:06 -0700 (PDT)
+        Mon, 13 Jun 2022 07:49:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F5C24597;
+        Mon, 13 Jun 2022 03:53:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7537961217;
-        Mon, 13 Jun 2022 10:42:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5BCC34114;
-        Mon, 13 Jun 2022 10:42:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B459B80EA3;
+        Mon, 13 Jun 2022 10:53:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E9FC34114;
+        Mon, 13 Jun 2022 10:53:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116925;
-        bh=nuoO4moBmrAVmTFd9DML1WfHpsxKMChhxHXKm92I5I8=;
+        s=korg; t=1655117629;
+        bh=hF5zkt/Jx8jXycD1YJ87TiWOnvd+ShFZyFFjcRf1zRk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2fzd0Ht1Vt5AeSkn8+kIV8U/2tkuZ82tFXykbsFnACpTelSiNQP3Cwvyt2PlIDDoO
-         I1va1vJJvD4kWxipDw6Ti0+HCt6Y+bp7Ip2JNLFLk3me2kO3GFB2bAyvvjUtYVEwrx
-         8dKxOzlaVI1MEC20F0pFcbehUCiKKoDLVuVfoYD4=
+        b=KFfhNorXHOvWK/ZmjEz2bo1hlmtBl+dxvu3cdDJ+zmkZ/3KkCMsCcWWu+ACqDOT8w
+         iPgj3AJwhGvQnKAh1HS/J+i2Yw31SuNjm9FF2BQKFh3HYqkQITEEmS+oUfbx5DhtTo
+         J8SUUG18aNks0lAyqb57FpDEsrULc04ujpfnJVL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Ye Bin <yebin10@huawei.com>, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 225/411] ext4: fix bug_on in ext4_writepages
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 074/287] ath9k_htc: fix potential out of bounds access with invalid rxstatus->rs_keyix
 Date:   Mon, 13 Jun 2022 12:08:18 +0200
-Message-Id: <20220613094935.392585940@linuxfoundation.org>
+Message-Id: <20220613094926.117409090@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,107 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit ef09ed5d37b84d18562b30cf7253e57062d0db05 upstream.
+[ Upstream commit 2dc509305cf956381532792cb8dceef2b1504765 ]
 
-we got issue as follows:
-EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inode.c:2708!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-RIP: 0010:ext4_writepages+0x1977/0x1c10
-RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_writepages+0x130/0x3a0
- filemap_fdatawrite_wbc+0x83/0xa0
- filemap_flush+0xab/0xe0
- ext4_alloc_da_blocks+0x51/0x120
- __ext4_ioctl+0x1534/0x3210
- __x64_sys_ioctl+0x12c/0x170
- do_syscall_64+0x3b/0x90
+The "rxstatus->rs_keyix" eventually gets passed to test_bit() so we need to
+ensure that it is within the bitmap.
 
-It may happen as follows:
-1. write inline_data inode
-vfs_write
-  new_sync_write
-    ext4_file_write_iter
-      ext4_buffered_write_iter
-        generic_perform_write
-          ext4_da_write_begin
-            ext4_da_write_inline_data_begin -> If inline data size too
-            small will allocate block to write, then mapping will has
-            dirty page
-                ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-2. fallocate
-do_vfs_ioctl
-  ioctl_preallocate
-    vfs_fallocate
-      ext4_fallocate
-        ext4_convert_inline_data
-          ext4_convert_inline_data_nolock
-            ext4_map_blocks -> fail will goto restore data
-            ext4_restore_inline_data
-              ext4_create_inline_data
-              ext4_write_inline_data
-              ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-3. writepages
-__ext4_ioctl
-  ext4_alloc_da_blocks
-    filemap_flush
-      filemap_fdatawrite_wbc
-        do_writepages
-          ext4_writepages
-            if (ext4_has_inline_data(inode))
-              BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
+drivers/net/wireless/ath/ath9k/common.c:46 ath9k_cmn_rx_accept()
+error: passing untrusted data 'rx_stats->rs_keyix' to 'test_bit()'
 
-The root cause of this issue is we destory inline data until call
-ext4_writepages under delay allocation mode.  But there maybe already
-convert from inline to extent.  To solve this issue, we call
-filemap_flush first..
-
-Cc: stable@kernel.org
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220516122634.1690462-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4ed1a8d4a257 ("ath9k_htc: use ath9k_cmn_rx_accept")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220409061225.GA5447@kili
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inline.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -2013,6 +2013,18 @@ int ext4_convert_inline_data(struct inod
- 	if (!ext4_has_inline_data(inode)) {
- 		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
- 		return 0;
-+	} else if (!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)) {
-+		/*
-+		 * Inode has inline data but EXT4_STATE_MAY_INLINE_DATA is
-+		 * cleared. This means we are in the middle of moving of
-+		 * inline data to delay allocated block. Just force writeout
-+		 * here to finish conversion.
-+		 */
-+		error = filemap_flush(inode->i_mapping);
-+		if (error)
-+			return error;
-+		if (!ext4_has_inline_data(inode))
-+			return 0;
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+index d567fbe79cff..3cd3f3ca1000 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+@@ -1005,6 +1005,14 @@ static bool ath9k_rx_prepare(struct ath9k_htc_priv *priv,
+ 		goto rx_next;
  	}
  
- 	needed_blocks = ext4_writepage_trans_blocks(inode);
++	if (rxstatus->rs_keyix >= ATH_KEYMAX &&
++	    rxstatus->rs_keyix != ATH9K_RXKEYIX_INVALID) {
++		ath_dbg(common, ANY,
++			"Invalid keyix, dropping (keyix: %d)\n",
++			rxstatus->rs_keyix);
++		goto rx_next;
++	}
++
+ 	/* Get the RX status information */
+ 
+ 	memset(rx_status, 0, sizeof(struct ieee80211_rx_status));
+-- 
+2.35.1
+
 
 

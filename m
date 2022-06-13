@@ -2,165 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69505481C9
+	by mail.lfdr.de (Postfix) with ESMTP id 17A185481C7
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239891AbiFMIQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
+        id S236461AbiFMIUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239810AbiFMIQv (ORCPT
+        with ESMTP id S233189AbiFMIUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:16:51 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58AD13D20;
-        Mon, 13 Jun 2022 01:16:50 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id g25so9607194ejh.9;
-        Mon, 13 Jun 2022 01:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sX3VNzAmkYzYiqkFhxZchgXDARr628j7uPugdvraEco=;
-        b=Hkwr/8vIIXL5Mip8iO4G4zSC+ar+w5ErL+9CwekPh9QYH2qjWB6EiXfLYOWiDwwRrc
-         xkRYPUR51bdxfw1B+LF6b/efmygJuHEPYCdsJRIxwH4bRin4O0794/gYtYNyOvVqvvcK
-         Dq0kS2hy3ByK32doeyvTQmaPVfGC+I4/z+wM/bJ3lUfu98dP+P+QMZ85bzDvyqSXGX/L
-         wr6HKiimrQXasbAeW1BTuAFa/dcadKri1AEk7q5Ztq1T0WQTyZGHWho/QkGY7DSCAAT1
-         JUcZaaO/Wr9DNZirpYsfWdMcGd4SCLcvuo/Lmwi31lrjOtIwS3bG0MYdfkc9IcvsKqqy
-         lcaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=sX3VNzAmkYzYiqkFhxZchgXDARr628j7uPugdvraEco=;
-        b=cn5uka6eCGM2yiXWga3pUgA1/4xv6Luqesr/xOYjbAL3iqweMZLGlLuA5ZQX/qwHzO
-         IRPljrmrB3cMNG1P8Ixixe4SwwZxM6FlHSvNnCRiBxQGfLHYoUSlieXYLVDyVjaw5rcQ
-         PGytAe7AhKI4ZPxwyIb0E99lHE4/gpGnYndRmJia983ORrTmyw1zgMNRdlTA/pJ+gtuD
-         DJWIsjjNmHQEx6r6d5fe5niBzGsd4Du//4izHaSMl0Oc/PvYdUcMVnNjUBbnBTt0GL91
-         nyoYsxXA4yZlvwoMVIh5jHXy+aI8eEdVLtymj9FG7FvPbMnc2RrEHOZ/MTa30CapfzNe
-         Onyw==
-X-Gm-Message-State: AOAM531ytvHndYYS2zVEQEvKI5Lc7auT9xHkwclSockYfjY7RKNnaoIt
-        IE8+Dtyoc5B/OQ5NNoH7wG0=
-X-Google-Smtp-Source: ABdhPJwxwsPJ+0RsHyGuX9PvEr4j71MqXSuHPr4kTLQFvDVZMWdBiEtg0GVEXKn4ubv+3k/XkujCKw==
-X-Received: by 2002:a17:906:5347:b0:712:24cb:b414 with SMTP id j7-20020a170906534700b0071224cbb414mr12953423ejo.341.1655108209302;
-        Mon, 13 Jun 2022 01:16:49 -0700 (PDT)
-Received: from felia.fritz.box (200116b8260df50089ef6db2443adc92.dip.versatel-1u1.de. [2001:16b8:260d:f500:89ef:6db2:443a:dc92])
-        by smtp.gmail.com with ESMTPSA id x15-20020aa7d38f000000b0042dd1584e74sm4397781edq.90.2022.06.13.01.16.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 01:16:48 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Joe Perches <joe@perches.com>,
-        linux-clk@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 2/2] dt-bindings: clock: Move versaclock.h to dt-bindings/clock
-Date:   Mon, 13 Jun 2022 10:16:32 +0200
-Message-Id: <20220613081632.2159-3-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220613081632.2159-1-lukas.bulwahn@gmail.com>
-References: <20220613081632.2159-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Jun 2022 04:20:00 -0400
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E9C1EAE5;
+        Mon, 13 Jun 2022 01:19:58 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 25D8Hqcs011074;
+        Mon, 13 Jun 2022 17:17:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 25D8Hqcs011074
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1655108273;
+        bh=CmhbukpBhZs7hao25rQlICLG+Ns0/87DXmi5jDvd2iE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hBKp+jS9P7HmrcT7zp7l6kQNJUNh88ugzYtEluVI0KDn7TlAkLIDc8ju3Mi1RuIeH
+         N5S8Z6ThORDDGC/9XFYl+0Zod6QhGHMSD7Ds4vB+DnLevHTpIi8lZcB6NtoxMxRfbX
+         bTCLu7klIZirLYKtICeNotC+RVxKTvmM+qAH2v7jrhz5zjVquH0z4tSbw+U510lBrN
+         oh5JlCQJy7sMEamM1ncpm4+yIe8e/puiVt2+HU+ka2BNfHM9hZY2hio62Oy2Ir1vVO
+         UwKckHWfho3ccbl9oir28ZefJYO1uSj4xgWcjC4wI3buDWwwhHoYScccyxw7eWa4K2
+         IFrRwCAKfKCZg==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthias Maennich <maennich@google.com>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] doc: module: update file references
+Date:   Mon, 13 Jun 2022 17:17:40 +0900
+Message-Id: <20220613081741.1699713-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the clock related dt-binding header files are located in
-dt-bindings/clock folder. It would be good to keep all the similar
-header files at a single location.
+Adjust documents to the file moves made by commit cfc1d277891e ("module:
+Move all into module/").
 
-This was discovered while investigating the state of ownership of the
-files in include/dt-bindings/ according to the MAINTAINERS file.
-
-This change here is similar to commit 8e28918a85a0 ("dt-bindings: clock:
-Move ti-dra7-atl.h to dt-bindings/clock") and commit 35d35aae8177
-("dt-bindings: clock: Move at91.h to dt-bindigs/clock").
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- Documentation/devicetree/bindings/clock/idt,versaclock5.yaml | 4 ++--
- arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi    | 2 +-
- arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi          | 2 +-
- drivers/clk/clk-versaclock5.c                                | 2 +-
- include/dt-bindings/{clk => clock}/versaclock.h              | 0
- 5 files changed, 5 insertions(+), 5 deletions(-)
- rename include/dt-bindings/{clk => clock}/versaclock.h (100%)
 
-diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-index 7c331bfbe370..c1b838524064 100644
---- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-+++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-@@ -108,7 +108,7 @@ patternProperties:
-     properties:
-       idt,mode:
-         description:
--          The output drive mode. Values defined in dt-bindings/clk/versaclock.h
-+          The output drive mode. Values defined in dt-bindings/clock/versaclock.h
-         $ref: /schemas/types.yaml#/definitions/uint32
-         minimum: 0
-         maximum: 6
-@@ -151,7 +151,7 @@ additionalProperties: false
+I did not touch
+
+  Documentation/translations/zh_CN/core-api/kernel-api.rst
+
+because I cannot modify it.
+
+ Documentation/core-api/kernel-api.rst                  |  2 +-
+ Documentation/core-api/symbol-namespaces.rst           |  4 ++--
+ Documentation/livepatch/module-elf-format.rst          | 10 +++++-----
+ .../translations/it_IT/core-api/symbol-namespaces.rst  |  6 +++---
+ .../translations/zh_CN/core-api/symbol-namespaces.rst  |  2 +-
+ 5 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
+index d6b3f94b9f1f..0793c400d4b0 100644
+--- a/Documentation/core-api/kernel-api.rst
++++ b/Documentation/core-api/kernel-api.rst
+@@ -223,7 +223,7 @@ Module Loading
+ Inter Module support
+ --------------------
  
- examples:
-   - |
--    #include <dt-bindings/clk/versaclock.h>
-+    #include <dt-bindings/clock/versaclock.h>
+-Refer to the file kernel/module.c for more information.
++Refer to the files in kernel/module/ for more information.
  
-     /* 25MHz reference crystal */
-     ref25: ref25m {
-diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-index 63e7a39e100e..8166e3c1ff4e 100644
---- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-+++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-@@ -5,7 +5,7 @@
+ Hardware Interfaces
+ ===================
+diff --git a/Documentation/core-api/symbol-namespaces.rst b/Documentation/core-api/symbol-namespaces.rst
+index 5ad9e0abe42c..12e4aecdae94 100644
+--- a/Documentation/core-api/symbol-namespaces.rst
++++ b/Documentation/core-api/symbol-namespaces.rst
+@@ -51,8 +51,8 @@ namespace ``USB_STORAGE``, use::
+ The corresponding ksymtab entry struct ``kernel_symbol`` will have the member
+ ``namespace`` set accordingly. A symbol that is exported without a namespace will
+ refer to ``NULL``. There is no default namespace if none is defined. ``modpost``
+-and kernel/module.c make use the namespace at build time or module load time,
+-respectively.
++and kernel/module/main.c make use the namespace at build time or module load
++time, respectively.
  
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
--#include <dt-bindings/clk/versaclock.h>
-+#include <dt-bindings/clock/versaclock.h>
+ 2.2 Using the DEFAULT_SYMBOL_NAMESPACE define
+ =============================================
+diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
+index dbe9b400e39f..7347638895a0 100644
+--- a/Documentation/livepatch/module-elf-format.rst
++++ b/Documentation/livepatch/module-elf-format.rst
+@@ -210,11 +210,11 @@ module->symtab.
+ =====================================
+ Normally, a stripped down copy of a module's symbol table (containing only
+ "core" symbols) is made available through module->symtab (See layout_symtab()
+-in kernel/module.c). For livepatch modules, the symbol table copied into memory
+-on module load must be exactly the same as the symbol table produced when the
+-patch module was compiled. This is because the relocations in each livepatch
+-relocation section refer to their respective symbols with their symbol indices,
+-and the original symbol indices (and thus the symtab ordering) must be
++in kernel/module/kallsyms.c). For livepatch modules, the symbol table copied
++into memory on module load must be exactly the same as the symbol table produced
++when the patch module was compiled. This is because the relocations in each
++livepatch relocation section refer to their respective symbols with their symbol
++indices, and the original symbol indices (and thus the symtab ordering) must be
+ preserved in order for apply_relocate_add() to find the right symbol.
  
- / {
- 	backlight_lvds: backlight-lvds {
-diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-index f5c1d74b738b..d3fc8ffd5b4c 100644
---- a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-+++ b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-@@ -4,7 +4,7 @@
-  */
+ For example, take this particular rela from a livepatch module:::
+diff --git a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
+index 42f5d04e38ec..0f6898860d6d 100644
+--- a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
++++ b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
+@@ -50,9 +50,9 @@ Di conseguenza, nella tabella dei simboli del kernel ci sarà una voce
+ rappresentata dalla struttura ``kernel_symbol`` che avrà il campo
+ ``namespace`` (spazio dei nomi) impostato. Un simbolo esportato senza uno spazio
+ dei nomi avrà questo campo impostato a ``NULL``. Non esiste uno spazio dei nomi
+-di base. Il programma ``modpost`` e il codice in kernel/module.c usano lo spazio
+-dei nomi, rispettivamente, durante la compilazione e durante il caricamento
+-di un modulo.
++di base. Il programma ``modpost`` e il codice in kernel/module/main.c usano lo
++spazio dei nomi, rispettivamente, durante la compilazione e durante il
++caricamento di un modulo.
  
- #include <dt-bindings/gpio/gpio.h>
--#include <dt-bindings/clk/versaclock.h>
-+#include <dt-bindings/clock/versaclock.h>
+ 2.2 Usare il simbolo di preprocessore DEFAULT_SYMBOL_NAMESPACE
+ ==============================================================
+diff --git a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
+index 6abf7ed534ca..bb16f0611046 100644
+--- a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
++++ b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
+@@ -52,7 +52,7 @@
  
- / {
- 	memory@48000000 {
-diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
-index e7be3e54b9be..b8c556dbeba0 100644
---- a/drivers/clk/clk-versaclock5.c
-+++ b/drivers/clk/clk-versaclock5.c
-@@ -24,7 +24,7 @@
- #include <linux/regmap.h>
- #include <linux/slab.h>
+ 相应的 ksymtab 条目结构体 ``kernel_symbol`` 将有相应的成员 ``命名空间`` 集。
+ 导出时未指明命名空间的符号将指向 ``NULL`` 。如果没有定义命名空间，则默认没有。
+-``modpost`` 和kernel/module.c分别在构建时或模块加载时使用名称空间。
++``modpost`` 和kernel/module/main.c分别在构建时或模块加载时使用名称空间。
  
--#include <dt-bindings/clk/versaclock.h>
-+#include <dt-bindings/clock/versaclock.h>
- 
- /* VersaClock5 registers */
- #define VC5_OTP_CONTROL				0x00
-diff --git a/include/dt-bindings/clk/versaclock.h b/include/dt-bindings/clock/versaclock.h
-similarity index 100%
-rename from include/dt-bindings/clk/versaclock.h
-rename to include/dt-bindings/clock/versaclock.h
+ 2.2 使用DEFAULT_SYMBOL_NAMESPACE定义
+ ====================================
 -- 
-2.17.1
+2.32.0
 

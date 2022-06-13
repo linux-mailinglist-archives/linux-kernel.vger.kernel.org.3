@@ -2,195 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579EC547E58
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 06:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB71547E5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 06:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbiFMEGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 00:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S233815AbiFMELf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 00:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233424AbiFMEF6 (ORCPT
+        with ESMTP id S233238AbiFMELd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 00:05:58 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B089C33E2A;
-        Sun, 12 Jun 2022 21:05:57 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 5C13120C14B6; Sun, 12 Jun 2022 21:05:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5C13120C14B6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1655093157;
-        bh=OL4J6G5DoKiCFjbJIJdnY6JEGUYMVeDJ3rWYo0ANvVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C5lseU7fiK463tZHyUT6vmNnpI8H3p6IxjwPgid5F9VtRUUh9RhNb4V/Oms27MNbi
-         aJIacWYehPfQPd++sYNYBnb1J9pENx9o9ueKbSbU4RWOD8Zt/o4p83bGjppXeehmov
-         NNhHy6uHu/P8sNoAK5+Hi7uKVxGd9WrRR/b+6rCg=
-Date:   Sun, 12 Jun 2022 21:05:57 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: storvsc: Correct sysfs parameters as per Hyper-V
- storvsc requirement
-Message-ID: <20220613040557.GA5467@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1654878824-25691-1-git-send-email-ssengar@linux.microsoft.com>
- <20220610163714.GA25982@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <PH0PR21MB3025818CA2E6D9641B878A7AD7AB9@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Mon, 13 Jun 2022 00:11:33 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD5436140
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 21:11:25 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220613041120epoutp0165dbf4eb8bc19d8fb7f17caaca28975e~4EsBE7eZF1153811538epoutp01I
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:11:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220613041120epoutp0165dbf4eb8bc19d8fb7f17caaca28975e~4EsBE7eZF1153811538epoutp01I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655093480;
+        bh=SBIzwu2YUiz3ad3PTWMRf8V68ma4mBuWe6+GzoVy6tQ=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=oFe3RwefKg49yife0cAdY7/3lWtS2Bt9bSvgnmsYmRPobV5ei1ZGszjat/8E6afe7
+         TnpsMJBbd+JYrZEC0Wkin1wprEbAYjJLO6idU2mPkomnwYk/LnDHwSz7qg4vpTbzfU
+         KwtQqdMtSaXARXhvxwp7cODzgSt/XmwyjqT9S5qY=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220613041119epcas5p4fb6d5c475f361ed67e82169634ae88de~4EsAtPA9G3176031760epcas5p4l;
+        Mon, 13 Jun 2022 04:11:19 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4LLymj1cVwz4x9Q7; Mon, 13 Jun
+        2022 04:11:17 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        24.29.09762.0E8B6A26; Mon, 13 Jun 2022 13:11:12 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220613041111epcas5p426ea95c3b26a5507b1a0d23e82b926a0~4Er5jzrxA3176031760epcas5p4E;
+        Mon, 13 Jun 2022 04:11:11 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220613041111epsmtrp204ced861682ba2d541e6a8ecdbd82e91~4Er5i7Fte0853108531epsmtrp2W;
+        Mon, 13 Jun 2022 04:11:11 +0000 (GMT)
+X-AuditID: b6c32a4b-1fdff70000002622-1a-62a6b8e021c4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0D.2C.08924.FD8B6A26; Mon, 13 Jun 2022 13:11:11 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220613041110epsmtip1abf95802df5da28f86f4b5d9be1a280e~4Er4JxrwH1718617186epsmtip1X;
+        Mon, 13 Jun 2022 04:11:10 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Colin Ian King'" <colin.i.king@gmail.com>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Andi Shyti'" <andi@etezian.org>,
+        "'Mark Brown'" <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20220612203428.2754823-1-colin.i.king@gmail.com>
+Subject: RE: [PATCH][next] spi: s3c64xx: set pointers to null using NULL
+ rather than 0
+Date:   Mon, 13 Jun 2022 09:41:09 +0530
+Message-ID: <006901d87edb$9dbd5c00$d9381400$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025818CA2E6D9641B878A7AD7AB9@PH0PR21MB3025.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQEk9w57DWWeRR+saBNtUt2pHf6gBQH2xDQurqQSkYA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmpu6DHcuSDCZs5bdY/OM5k8XUh0/Y
+        LCa1f2G12HpL2mLv663sFpseX2O1uLxrDpvFjPP7mCwaP95kd+D0uL7kE7PHzll32T02repk
+        87hzbQ+bx+Yl9R6fN8kFsEVl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl
+        5qbaKrn4BOi6ZeYA3aSkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAp0CtOzC0u
+        zUvXy0stsTI0MDAyBSpMyM64+fcHa8EugYpD04MbGN/wdjFyckgImEgcn97B2MXIxSEksJtR
+        4sflk1DOJ0aJX3+fMYNUCQl8ZpSYPaG4i5EDrGPXn2KIml2MEssPTYSqecko0b46GsRmE9CV
+        2LG4jQ2kSERgIZNE/6V77CAJZgFXiTtn7rGC2JwCdhJnVnUxgtjCAhESfb07mEBsFgFViX07
+        LoHFeQUsJRZcmskOYQtKnJz5hAVijrzE9rdzmCFeUJD4+XQZ2EwRASuJJd3LoHaJS7w8eoQd
+        5AgJgZUcEtsmP2WBaHCRePn9OhOELSzx6vgWdghbSuLzu71sEF96SCz6IwURzpB4u3w9I4Rt
+        L3HgyhwWkBJmAU2J9bv0IVbxSfT+fsIE0ckr0dEmBFGtKtH87irUUmmJid3drBC2h8T6Ld/Z
+        JzAqzkLy2Cwkj81C8sAshGULGFlWMUqmFhTnpqcWmxYY56WWwyM7OT93EyM4uWp572B89OCD
+        3iFGJg7GQ4wSHMxKIrwBtxclCfGmJFZWpRblxxeV5qQWH2I0BYb2RGYp0eR8YHrPK4k3NLE0
+        MDEzMzOxNDYzVBLnFfjfmCQkkJ5YkpqdmlqQWgTTx8TBKdXANO3YmRMnb9o8dUq/vVxcNPOD
+        u2zvKjO9tSr+2VrbZ8iu+78qOHRy8a599ydtPHPUlHXjD6/9Li2Cimmx5sfmTGC1ebZobdO8
+        SsG2E6v6/jB82RDg6zu5z+7X7tzp5+Kl/zuV/RU5tmP6id4NS8vDRKR1TC/pRCxZdkLg0rFl
+        hy5rlEVfD6v0tpRntelWP3vgS6ePc9BDK24XufenHDeXp+kVXXUNWWPOmLiTa5XiG4+1fAd9
+        wnTt/81Yu0HBaPmq+40vk25dPRu+4nj+tpVHW34sZGT20b4ouZ418kIi1wOBmtZqjzbB9HOM
+        yV3rVRgsO3dNazXZY3bCq5z11tFOy21LNHQOOB42uvc9od3tghJLcUaioRZzUXEiAL/f+a83
+        BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjkeLIzCtJLcpLzFFi42LZdlhJTvf+jmVJBkeXm1ks/vGcyWLqwyds
+        FpPav7BabL0lbbH39VZ2i02Pr7FaXN41h81ixvl9TBaNH2+yO3B6XF/yidlj56y77B6bVnWy
+        edy5tofNY/OSeo/Pm+QC2KK4bFJSczLLUov07RK4Mm7+/cFasEug4tD04AbGN7xdjBwcEgIm
+        Erv+FHcxcnIICexglHi1vBTElhCQlri+cQI7hC0ssfLfcyCbC6jmOaPE/+XT2UASbAK6EjsW
+        t7GBJEQEljNJbP27nhkkwSzgLjGtaScjxNR+RomTlwJBbE4BO4kzq7rA4sICYRLzz/aDDWIR
+        UJXYt+MSWJxXwFJiwaWZ7BC2oMTJmU9YIGZqS/Q+bGWEsOUltr+dwwxxnYLEz6fLWEFsEQEr
+        iSXdy9ghasQlXh49wj6BUXgWklGzkIyahWTULCQtCxhZVjFKphYU56bnFhsWGOWllusVJ+YW
+        l+al6yXn525iBEeZltYOxj2rPugdYmTiYDzEKMHBrCTCG3B7UZIQb0piZVVqUX58UWlOavEh
+        RmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTK4lx2q+ufLqTlhU+2Kt2cGoL0fv/A4/
+        +uaoljnXBJdEe84NqutaeoM0tk+dmr61eK8q11buw+sXsbi9uFnz2MTjyR2tINFaNV2FXINF
+        0rILS4QaFsZKpj+70VXktM43+IZO4elrtxZG7Q9o+5J58vPXCAu1HZ9Tf4e7VhWcFHyaUMmb
+        H3Xpy1I98XcvazI1uz6smr48etqk7X8Xn9kx9dO12tefot/bXMvq75S5p613ynbPqv7uOI+y
+        pgARpcoXT/Vfd1RoPrnkrxAYZBRf9eHFvrM/F0xofT3ZbpZdr/jq4q+b9l7aqOyn4/vLbkbt
+        uoNb6/Pef7i40szHRtOyU11jf8mb/pxqoXoZ160afkosxRmJhlrMRcWJAJvB7mohAwAA
+X-CMS-MailID: 20220613041111epcas5p426ea95c3b26a5507b1a0d23e82b926a0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220612203434epcas5p3f44780ebc5f34f5fd3f55362cbe21a2e
+References: <CGME20220612203434epcas5p3f44780ebc5f34f5fd3f55362cbe21a2e@epcas5p3.samsung.com>
+        <20220612203428.2754823-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Michael for review, please find my comments inline
 
-On Mon, Jun 13, 2022 at 02:49:09AM +0000, Michael Kelley (LINUX) wrote:
-> From: Saurabh Singh Sengar <ssengar@linux.microsoft.com> Sent: Friday, June 10, 2022 9:37 AM
-> > 
-> > CC : linux-scsi@vger.kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com
-> > 
-> > On Fri, Jun 10, 2022 at 09:33:44AM -0700, Saurabh Sengar wrote:
-> > > This patch corrects 3 parameters:
-> > > 1. Correct the sysfs entry for maximum hardware transfer limit of single
-> > >    transfer (max_hw_sectors_kb) by setting max_sectors, this was set to
-> > >    default value 512kb before.
-> > > 2. Correct SGL memory offset alignment as per Hyper-V page size.
-> > > 3. Correct sg_tablesize which accounts for max SGL segments entries in a
-> > >    single SGL.
-> 
-> I think a richer explanation in the commit message is warranted.
-> Something like:
-> 
->   Current code is based on the idea that the max number of SGL entries also
->   determines the max size of an I/O request.  While this idea was true in older
->   versions of the storvsc driver when SGL entry length was limited to 4 Kbytes,
->   commit 3d9c3dcc58e9 ("scsi: storvsc: Enable scatter list entry lengths > 4Kbytes")
->   removed that limitation.  It's now theoretically possible for the block
->   layer to send requests that exceed the maximum size supported by Hyper-V.
->   This problem doesn't currently happen in practice because the block layer
->   defaults to a 512 Kbyte maximum, while Hyper-V in Azure supports 2 Mbyte
->   I/O sizes.  But some future configuration of Hyper-V could have a smaller
->   max I/O size, and the block layer could exceed that max.
-> 
->   Fix this by correctly setting max_sectors as well as sg_tablesize to reflect
->   the maximum I/O size that Hyper-V reports.  While allowing larger I/O sizes
->   larger than the block layer default of 512 Kbytes doesn't provide any
->   noticeable performance benefit in the tests we ran, it's still appropriate
->   to report the correct underlying Hyper-V capabilities to the Linux block layer.
-> 
->   Also tweak the virt_boundary_mask to reflect that the needed alignment
->   derives from Hyper-V communication using a 4 Kbyte page size, and not
->   on the guest page size, which might be bigger (on ARM64, for example).
-> 
-> I don't think the title of the commit should focus on sysfs.  This
-> commit is about correctly reporting Hyper-V I/O size limits; the sysfs
-> entries just provide visibility into the values.
-> 
-> And given that the problem was introduced by the above mentioned
-> commit, it would be appropriate to add a "Fixes:" tag.
 
-[SS] : Thanks, will fix this
-> 
-> > >
-> > > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > > ---
-> > >  drivers/scsi/storvsc_drv.c | 28 ++++++++++++++++++++++++----
-> > >  1 file changed, 24 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-> > > index ca3530982e52..3e032660ae36 100644
-> > > --- a/drivers/scsi/storvsc_drv.c
-> > > +++ b/drivers/scsi/storvsc_drv.c
-> > > @@ -1844,7 +1844,7 @@ static struct scsi_host_template scsi_driver = {
-> > >  	.cmd_per_lun =		2048,
-> > >  	.this_id =		-1,
-> > >  	/* Ensure there are no gaps in presented sgls */
-> > > -	.virt_boundary_mask =	PAGE_SIZE-1,
-> > > +	.virt_boundary_mask =	HV_HYP_PAGE_SIZE - 1,
-> > >  	.no_write_same =	1,
-> > >  	.track_queue_depth =	1,
-> > >  	.change_queue_depth =	storvsc_change_queue_depth,
-> > > @@ -1969,11 +1969,31 @@ static int storvsc_probe(struct hv_device *device,
-> > >  	/* max cmd length */
-> > >  	host->max_cmd_len = STORVSC_MAX_CMD_LEN;
-> > >
-> > > +	/* max_hw_sectors_kb */
-> > > +	host->max_sectors = (stor_device->max_transfer_bytes) >> 9;
-> > >  	/*
-> > > -	 * set the table size based on the info we got
-> > > -	 * from the host.
-> > > +	 * There are 2 requirements for Hyper-V storvsc sgl segments,
-> > > +	 * based on which the below calculation for max segments is
-> > > +	 * done:
-> > > +	 *
-> > > +	 * 1. Except for the first and last sgl segment, all sgl segments
-> > > +	 *    should be align to HV_HYP_PAGE_SIZE, that also means the
-> > > +	 *    maximum number of segments in a sgl can be calculated by
-> > > +	 *    dividing the total max transfer length by HV_HYP_PAGE_SIZE.
-> > > +	 *
-> > > +	 * 2. Except for the first and last, each entry in the SGL must
-> > > +	 *    have an offset that is a multiple of HV_HYP_PAGE_SIZE,
-> > > +	 *    whereas the complete length of transfer may not be aligned
-> > > +	 *    to HV_HYP_PAGE_SIZE always. This can result in 2 cases:
-> > > +	 *    Example for unaligned case: Let's say the total transfer
-> > > +	 *    length is 6 KB, the max segments will be 3 (1,4,1).
-> > > +	 *    Example for aligned case: Let's say the total transfer length
-> > > +	 *    is 8KB, then max segments will still be 3(2,4,2) and not 4.
-> > > +	 *    4 (read next higher value) segments will only be required
-> > > +	 *    once the length is at least 2 bytes more then 8KB (read any
-> > > +	 *    HV_HYP_PAGE_SIZE aligned length).
-> > >  	 */
-> > > -	host->sg_tablesize = (stor_device->max_transfer_bytes >> PAGE_SHIFT);
-> > > +	host->sg_tablesize = ((stor_device->max_transfer_bytes - 2) >> HV_HYP_PAGE_SHIFT) + 2;
-> 
-> This calculation covers all possible I/O request sizes up to and including
-> the value of max_transfer_bytes, even if max_transfer_bytes is some
-> weird number that's not a multiple of 512.   So I think it works as
-> intended.
-> 
-> But setting host->max_sectors means that storvsc won't see an I/O request
-> with a weird size, and some of the cases handled by the calculation don't
-> actually occur.  You could use a simpler calculation that's a bit easier to
-> understand:
-> 
-> host->sg_tablesize = (stor_device->max_transfer_bytes >> HV_HYP_PAGE_SIZE) + 1;
-> 
-> The "+1" handles the unaligned case you mention above.
+>-----Original Message-----
+>From: Colin Ian King [mailto:colin.i.king@gmail.com]
+>Sent: Monday, June 13, 2022 2:04 AM
+>To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Andi Shyti
+><andi@etezian.org>; Mark Brown <broonie@kernel.org>; Alim Akhtar
+><alim.akhtar@samsung.com>; linux-spi@vger.kernel.org; linux-samsung-
+>soc@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+>Cc: kernel-janitors@vger.kernel.org; linux-kernel@vger.kernel.org
+>Subject: [PATCH][next] spi: s3c64xx: set pointers to null using NULL rather
+>than 0
+>
+>There are pointers being set to null using use. Use NULL instead.
+>
+Nit: s/using use / using zero
 
-[SS] : As per my understanding this may give incorrect result for unaligned cases. Lets take an
-example of 6KB, "stor_device->max_transfer_bytes >> HV_HYP_PAGE_SIZE" will give only 1, and then
-host->sq_tablesize will get final value as 2. Where as there is a possibility of 3 segments
-1. 1KB
-2. 4KB
-3. 1KB
+>Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>---
 
-Please correct me if this scenario is not possible.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-- Saurabh
+> drivers/spi/spi-s3c64xx.c | 10 +++++-----
+> 1 file changed, 5 insertions(+), 5 deletions(-)
+>
+>diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c index
+>0ce58105dbac..819b660dae82 100644
+>--- a/drivers/spi/spi-s3c64xx.c
+>+++ b/drivers/spi/spi-s3c64xx.c
+>@@ -354,7 +354,7 @@ static int s3c64xx_spi_prepare_transfer(struct
+>spi_master *spi)
+> 	sdd->rx_dma.ch = dma_request_chan(&sdd->pdev->dev, "rx");
+> 	if (IS_ERR(sdd->rx_dma.ch)) {
+> 		dev_err(&sdd->pdev->dev, "Failed to get RX DMA
+>channel\n");
+>-		sdd->rx_dma.ch = 0;
+>+		sdd->rx_dma.ch = NULL;
+> 		return 0;
+> 	}
+>
+>@@ -362,8 +362,8 @@ static int s3c64xx_spi_prepare_transfer(struct
+>spi_master *spi)
+> 	if (IS_ERR(sdd->tx_dma.ch)) {
+> 		dev_err(&sdd->pdev->dev, "Failed to get TX DMA
+>channel\n");
+> 		dma_release_channel(sdd->rx_dma.ch);
+>-		sdd->tx_dma.ch = 0;
+>-		sdd->rx_dma.ch = 0;
+>+		sdd->tx_dma.ch = NULL;
+>+		sdd->rx_dma.ch = NULL;
+> 		return 0;
+> 	}
+>
+>@@ -808,8 +808,8 @@ static int s3c64xx_spi_transfer_one(struct spi_master
+>*master,
+> 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
+> 		dma_release_channel(sdd->rx_dma.ch);
+> 		dma_release_channel(sdd->tx_dma.ch);
+>-		sdd->rx_dma.ch = 0;
+>-		sdd->tx_dma.ch = 0;
+>+		sdd->rx_dma.ch = NULL;
+>+		sdd->tx_dma.ch = NULL;
+> 	}
+>
+> 	return status;
+>--
+>2.35.3
 
-> 
-> Michael
-> 
-> > >  	/*
-> > >  	 * For non-IDE disks, the host supports multiple channels.
-> > >  	 * Set the number of HW queues we are supporting.
-> > > --
-> > > 2.25.1
+

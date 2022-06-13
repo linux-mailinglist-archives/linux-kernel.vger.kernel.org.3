@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0025495EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069E6549512
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358154AbiFMMB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S1383402AbiFMOPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357821AbiFML5l (ORCPT
+        with ESMTP id S1382746AbiFMOGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:57:41 -0400
+        Mon, 13 Jun 2022 10:06:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165124DF60;
-        Mon, 13 Jun 2022 03:56:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201519728B;
+        Mon, 13 Jun 2022 04:41:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F801B80D3A;
-        Mon, 13 Jun 2022 10:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89C3C34114;
-        Mon, 13 Jun 2022 10:56:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA1C3B80EE0;
+        Mon, 13 Jun 2022 11:41:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282BAC3411B;
+        Mon, 13 Jun 2022 11:41:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117777;
-        bh=YVVPUSoDaXsYIq+Ui4oa02D/zRSv0Ui66rsUZ8ecm0o=;
+        s=korg; t=1655120474;
+        bh=dus5GhVCCGRZl6vw1Z0GLTyGcpHSSBRD+KW0xEHSI3c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T854+IHBMdh71DG0EzSFe8Zc3qEwgyr/qSdRHn0eqiAKexv8Ui+vgZy0OumydJM2v
-         lSL2+N/Zjjuviyf++nfLJElFjP+Am4PavfTHlnraZGuhPgpL27sn0W8FYShPr9zQJc
-         qm48vntVyI9jPXhXJLHp2iNr2PwMLc1StboBQHJ8=
+        b=NDAy/CXsZC4ChUTrw4he5Tz5VUv0ViluIm92081UkaheYPIpITv8lM48QOPad1g7f
+         Ew40tVq2K8qL4ZmjknrlRHPbWZHcxaSB45AMtcF8CDpxI9UWA0YZOQbfBhWJ/A3LkC
+         tj5NJIrGwYocQORJGZsbtyXzGsYTLDDBbkpdiPkc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
+        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 116/287] mfd: ipaq-micro: Fix error check return value of platform_get_irq()
+Subject: [PATCH 5.17 046/298] coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier
 Date:   Mon, 13 Jun 2022 12:09:00 +0200
-Message-Id: <20220613094927.395602930@linuxfoundation.org>
+Message-Id: <20220613094926.342216220@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-[ Upstream commit 3b49ae380ce1a3054e0c505dd9a356b82a5b48e8 ]
+[ Upstream commit 1adff542d67a2ed1120955cb219bfff8a9c53f59 ]
 
-platform_get_irq() return negative value on failure, so null check of
-irq is incorrect. Fix it by comparing whether it is less than zero.
+The panic notifier infrastructure executes registered callbacks when
+a panic event happens - such callbacks are executed in atomic context,
+with interrupts and preemption disabled in the running CPU and all other
+CPUs disabled. That said, mutexes in such context are not a good idea.
 
-Fixes: dcc21cc09e3c ("mfd: Add driver for Atmel Microcontroller on iPaq h3xxx")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220412085305.2533030-1-lv.ruyi@zte.com.cn
+This patch replaces a regular mutex with a mutex_trylock safer approach;
+given the nature of the mutex used in the driver, it should be pretty
+uncommon being unable to acquire such mutex in the panic path, hence
+no functional change should be observed (and if it is, that would be
+likely a deadlock with the regular mutex).
+
+Fixes: 2227b7c74634 ("coresight: add support for CPU debug module")
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Link: https://lore.kernel.org/r/20220427224924.592546-10-gpiccoli@igalia.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/ipaq-micro.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwtracing/coresight/coresight-cpu-debug.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
-index cd762d08f116..2ba0e2d575c0 100644
---- a/drivers/mfd/ipaq-micro.c
-+++ b/drivers/mfd/ipaq-micro.c
-@@ -410,7 +410,7 @@ static int __init micro_probe(struct platform_device *pdev)
- 	micro_reset_comm(micro);
+diff --git a/drivers/hwtracing/coresight/coresight-cpu-debug.c b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+index 8845ec4b4402..1874df7c6a73 100644
+--- a/drivers/hwtracing/coresight/coresight-cpu-debug.c
++++ b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+@@ -380,9 +380,10 @@ static int debug_notifier_call(struct notifier_block *self,
+ 	int cpu;
+ 	struct debug_drvdata *drvdata;
  
- 	irq = platform_get_irq(pdev, 0);
--	if (!irq)
-+	if (irq < 0)
- 		return -EINVAL;
- 	ret = devm_request_irq(&pdev->dev, irq, micro_serial_isr,
- 			       IRQF_SHARED, "ipaq-micro",
+-	mutex_lock(&debug_lock);
++	/* Bail out if we can't acquire the mutex or the functionality is off */
++	if (!mutex_trylock(&debug_lock))
++		return NOTIFY_DONE;
+ 
+-	/* Bail out if the functionality is disabled */
+ 	if (!debug_enable)
+ 		goto skip_dump;
+ 
+@@ -401,7 +402,7 @@ static int debug_notifier_call(struct notifier_block *self,
+ 
+ skip_dump:
+ 	mutex_unlock(&debug_lock);
+-	return 0;
++	return NOTIFY_DONE;
+ }
+ 
+ static struct notifier_block debug_notifier = {
 -- 
 2.35.1
 

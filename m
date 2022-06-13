@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A67054944C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EB154942C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356630AbiFMLuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S1353521AbiFML1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356879AbiFMLpJ (ORCPT
+        with ESMTP id S1353096AbiFMLTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:45:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47DE49252;
-        Mon, 13 Jun 2022 03:51:23 -0700 (PDT)
+        Mon, 13 Jun 2022 07:19:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B770C3A193;
+        Mon, 13 Jun 2022 03:40:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3C77611B3;
-        Mon, 13 Jun 2022 10:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E3D5C34114;
-        Mon, 13 Jun 2022 10:51:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D98B6611E6;
+        Mon, 13 Jun 2022 10:40:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB6DAC34114;
+        Mon, 13 Jun 2022 10:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117482;
-        bh=262NN7HEnh2igmL4l1gAU+SUwZl24FoHE7oXfKo85Lc=;
+        s=korg; t=1655116857;
+        bh=j6T9aUTHchhFID0D3XbRd4u4Z4N5xnyzCw2fslzLvxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KgDqOq13hqbYLM/srQW6uLErmPKW6rsHEDhCLZITKsP7KTaBPVua9mMV2VelnuXXL
-         EpOySAEPwi1Po1Nlr5HrYFS3dBQdw7mrWPDxk9FTqQTGk4gTSHG3S0K5eNlwv/AYkB
-         6ehiehwOmC/7HrUkm1jYh0Oanm4vRyxpPSuZhwjI=
+        b=SGAFG2HH3iqwxkaVDG/gYumtWwVWTbQ813fPY+qvX/ejVpSztotnrgABE9c9jfDsq
+         WLErpxUVfz0hURq9dJYkpM0z86Vtle9pE/7L0oID+yuOOldzputHUYPF4aOVoXJw5c
+         mXHC9w4QuKqakKk2F4Zj3kwJrTsK/0csQjQxHf7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 047/287] ARM: OMAP1: clock: Fix UART rate reporting algorithm
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 198/411] i2c: at91: use dma safe buffers
 Date:   Mon, 13 Jun 2022 12:07:51 +0200
-Message-Id: <20220613094925.294771874@linuxfoundation.org>
+Message-Id: <20220613094934.598728005@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 338d5d476cde853dfd97378d20496baabc2ce3c0 ]
+[ Upstream commit 03fbb903c8bf7e53e101e8d9a7b261264317c411 ]
 
-Since its introduction to the mainline kernel, omap1_uart_recalc() helper
-makes incorrect use of clk->enable_bit as a ready to use bitmap mask while
-it only provides the bit number.  Fix it.
+The supplied buffer might be on the stack and we get the following error
+message:
+[    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
 
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Acked-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
+necessary.
+
+Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-omap1/clock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm/mach-omap1/clock.c b/arch/arm/mach-omap1/clock.c
-index fa512413a471..b277409f303a 100644
---- a/arch/arm/mach-omap1/clock.c
-+++ b/arch/arm/mach-omap1/clock.c
-@@ -44,7 +44,7 @@ static DEFINE_SPINLOCK(clockfw_lock);
- unsigned long omap1_uart_recalc(struct clk *clk)
- {
- 	unsigned int val = __raw_readl(clk->enable_reg);
--	return val & clk->enable_bit ? 48000000 : 12000000;
-+	return val & 1 << clk->enable_bit ? 48000000 : 12000000;
- }
+diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+index a3fcc35ffd3b..44502024cc10 100644
+--- a/drivers/i2c/busses/i2c-at91-master.c
++++ b/drivers/i2c/busses/i2c-at91-master.c
+@@ -609,6 +609,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+ 	unsigned int_addr_flag = 0;
+ 	struct i2c_msg *m_start = msg;
+ 	bool is_read;
++	u8 *dma_buf;
  
- unsigned long omap1_sossi_recalc(struct clk *clk)
+ 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+ 
+@@ -656,7 +657,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+ 	dev->msg = m_start;
+ 	dev->recv_len_abort = false;
+ 
++	if (dev->use_dma) {
++		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
++		if (!dma_buf) {
++			ret = -ENOMEM;
++			goto out;
++		}
++		dev->buf = dma_buf;
++	}
++
+ 	ret = at91_do_twi_transfer(dev);
++	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+ 
+ 	ret = (ret < 0) ? ret : num;
+ out:
 -- 
 2.35.1
 

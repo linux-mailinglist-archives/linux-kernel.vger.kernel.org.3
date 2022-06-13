@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3350F5496A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF619548CEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377863AbiFMNg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+        id S1345983AbiFMKgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378771AbiFMNcF (ORCPT
+        with ESMTP id S1346939AbiFMKej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:32:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A5D71A2C;
-        Mon, 13 Jun 2022 04:26:37 -0700 (PDT)
+        Mon, 13 Jun 2022 06:34:39 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44FB2709;
+        Mon, 13 Jun 2022 03:22:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64109B80E59;
-        Mon, 13 Jun 2022 11:26:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6BFBC34114;
-        Mon, 13 Jun 2022 11:26:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D7A4DCE0EEB;
+        Mon, 13 Jun 2022 10:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0931C34114;
+        Mon, 13 Jun 2022 10:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119595;
-        bh=DWggWnX2xNbDWS0Nu1a/WLOOSmvEs+6Jfo+l1xZDVc0=;
+        s=korg; t=1655115748;
+        bh=kvByzdNQK2btTZ+fpFAvasfh10IP/7TU2FF2HCwqQdA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OoclWpu94Jrbkz27YSDuFT1kpxDuW+rD57YLXUh4JqaZcK9yo/P7EsiVuIwQFlTzb
-         B7xOrpgw/iBKNtiDa9izmr41dtqXD8oIX8EYhZAK/YClHmtk7bmc2tiDMW5kiGFz5p
-         Zhz9cbq1DXVNOgSmvAzmmpW+Dq+JAH51cRpaQhR4=
+        b=TX5y2osss+UgMqQXxVp938QSQNuslBwFTosBGROq2+cEsK2EfNBe1TCGcaS6czO9F
+         S2tOABfQXGqws2vO1aSc/Hv1Eu9WIIa90QD9YZ+MBYPypbSrBPkPbjdCEU1i+5A0hH
+         j6G44rbyp5Ddcw9keKP6K86C7aYcxe8lVcs6N088=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        stable@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 050/339] watchdog: rzg2l_wdt: Fix reset control imbalance
+Subject: [PATCH 4.14 017/218] media: venus: hfi: avoid null dereference in deinit
 Date:   Mon, 13 Jun 2022 12:07:55 +0200
-Message-Id: <20220613094928.040482334@linuxfoundation.org>
+Message-Id: <20220613094912.414041489@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Luca Weiss <luca.weiss@fairphone.com>
 
-[ Upstream commit 33d04d0fdba9fae18c7d58364643d2c606a43dba ]
+[ Upstream commit 86594f6af867b5165d2ba7b5a71fae3a5961e56c ]
 
-Both rzg2l_wdt_probe() and rzg2l_wdt_start() calls reset_control_
-deassert() which results in a reset control imbalance.
+If venus_probe fails at pm_runtime_put_sync the error handling first
+calls hfi_destroy and afterwards hfi_core_deinit. As hfi_destroy sets
+core->ops to NULL, hfi_core_deinit cannot call the core_deinit function
+anymore.
 
-This patch fixes reset control imbalance by removing reset_control_
-deassert() from rzg2l_wdt_start() and replaces reset_control_assert with
-reset_control_reset in rzg2l_wdt_stop() as watchdog module can be stopped
-only by a module reset. This change will allow us to restart WDT after
-stop() by configuring WDT timeout and enable registers.
+Avoid this null pointer derefence by skipping the call when necessary.
 
-Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220225175320.11041-5-biju.das.jz@bp.renesas.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/rzg2l_wdt.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/qcom/venus/hfi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 48dfe6e5e64f..88274704b260 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -88,7 +88,6 @@ static int rzg2l_wdt_start(struct watchdog_device *wdev)
- {
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+diff --git a/drivers/media/platform/qcom/venus/hfi.c b/drivers/media/platform/qcom/venus/hfi.c
+index ba29fd4d4984..7d1d3e64007c 100644
+--- a/drivers/media/platform/qcom/venus/hfi.c
++++ b/drivers/media/platform/qcom/venus/hfi.c
+@@ -117,6 +117,9 @@ int hfi_core_deinit(struct venus_core *core, bool blocking)
+ 		mutex_lock(&core->lock);
+ 	}
  
--	reset_control_deassert(priv->rstc);
- 	pm_runtime_get_sync(wdev->parent);
++	if (!core->ops)
++		goto unlock;
++
+ 	ret = core->ops->core_deinit(core);
  
- 	/* Initialize time out */
-@@ -108,7 +107,7 @@ static int rzg2l_wdt_stop(struct watchdog_device *wdev)
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
- 
- 	pm_runtime_put(wdev->parent);
--	reset_control_assert(priv->rstc);
-+	reset_control_reset(priv->rstc);
- 
- 	return 0;
- }
+ 	if (!ret)
 -- 
 2.35.1
 

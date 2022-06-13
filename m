@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBC2548BE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50307548CFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244241AbiFMK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S1354887AbiFMLhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245249AbiFMKY2 (ORCPT
+        with ESMTP id S1354904AbiFMLaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:24:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E49123BCA;
-        Mon, 13 Jun 2022 03:18:42 -0700 (PDT)
+        Mon, 13 Jun 2022 07:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6167403C9;
+        Mon, 13 Jun 2022 03:46:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 442D4CE0EEB;
-        Mon, 13 Jun 2022 10:18:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32396C34114;
-        Mon, 13 Jun 2022 10:18:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 758396125A;
+        Mon, 13 Jun 2022 10:46:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E73C36AFE;
+        Mon, 13 Jun 2022 10:45:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115519;
-        bh=96ceQgJASxyzZfSQvr0juwSMRmN1lL3Esf2pvX28VOk=;
+        s=korg; t=1655117159;
+        bh=hjl61t7EgsWIOT99ZOn/GGNLbHz51dbwZfiOjuqeF+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NfPsVR/eXfzQd9CrKpPik8BhSVdmtZcMwuNhQqI6nYomP0psTCyTDcgWvhsAYcg9e
-         gfMW/HRhOxC73SWlssvkdDEF8YaZ7CYmcY1IgUCpRvcuCzT7lXBGrTJ2tl6ZYdtuvk
-         zz7Zre98i42sPRhtWbluacjj4jdfiRyZqmgLfYY8=
+        b=VkqvoPlZWXJkbuD7cjGp3h7tCp/4gmw+NjkD9B6idDCBPJi/JfY8aZ+nR3ctBJi1P
+         5phb8cTpyNXPNDl+693o0g6e/Hh5LfReF8N4q8onbWe+uIv+Glaf/bRNXXN+GY8emu
+         rf2WxbmErgPtwV/Kq+d9DW5MIrN8HWlPBjmuRIKM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 4.9 106/167] MIPS: IP27: Remove incorrect `cpu_has_fpu override
+        stable@vger.kernel.org,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 307/411] serial: 8250_fintek: Check SER_RS485_RTS_* only with RS485
 Date:   Mon, 13 Jun 2022 12:09:40 +0200
-Message-Id: <20220613094905.610346751@linuxfoundation.org>
+Message-Id: <20220613094937.956869232@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 424c3781dd1cb401857585331eaaa425a13f2429 upstream.
+[ Upstream commit af0179270977508df6986b51242825d7edd59caf ]
 
-Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
-kernel parameter non-functional, and also causes a link error:
+SER_RS485_RTS_ON_SEND and SER_RS485_RTS_AFTER_SEND relate to behavior
+within RS485 operation. The driver checks if they have the same value
+which is not possible to realize with the hardware. The check is taken
+regardless of SER_RS485_ENABLED flag and -EINVAL is returned when the
+check fails, which creates problems.
 
-ld: arch/mips/kernel/traps.o: in function `trap_init':
-./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
+This check makes it unnecessarily complicated to turn RS485 mode off as
+simple zeroed serial_rs485 struct will trigger that equal values check.
+In addition, the driver itself memsets its rs485 structure to zero when
+RS485 is disabled but if userspace would try to make an TIOCSRS485
+ioctl() call with the very same struct, it would end up failing with
+-EINVAL which doesn't make much sense.
 
-where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
+Resolve the problem by moving the check inside SER_RS485_ENABLED block.
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
-Fixes: 0ebb2f4159af ("MIPS: IP27: Update/restructure CPU overrides")
-Cc: stable@vger.kernel.org # v4.2+
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 7ecc77011c6f ("serial: 8250_fintek: Return -EINVAL on invalid configuration")
+Cc: Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/035c738-8ea5-8b17-b1d7-84a7b3aeaa51@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/tty/serial/8250/8250_fintek.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
-+++ b/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
-@@ -28,7 +28,6 @@
- #define cpu_has_6k_cache		0
- #define cpu_has_8k_cache		0
- #define cpu_has_tx39_cache		0
--#define cpu_has_fpu			1
- #define cpu_has_nofpuex			0
- #define cpu_has_32fpr			1
- #define cpu_has_counter			1
+diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
+index e24161004ddc..9b1cddbfc75c 100644
+--- a/drivers/tty/serial/8250/8250_fintek.c
++++ b/drivers/tty/serial/8250/8250_fintek.c
+@@ -197,12 +197,12 @@ static int fintek_8250_rs485_config(struct uart_port *port,
+ 	if (!pdata)
+ 		return -EINVAL;
+ 
+-	/* Hardware do not support same RTS level on send and receive */
+-	if (!(rs485->flags & SER_RS485_RTS_ON_SEND) ==
+-			!(rs485->flags & SER_RS485_RTS_AFTER_SEND))
+-		return -EINVAL;
+ 
+ 	if (rs485->flags & SER_RS485_ENABLED) {
++		/* Hardware do not support same RTS level on send and receive */
++		if (!(rs485->flags & SER_RS485_RTS_ON_SEND) ==
++		    !(rs485->flags & SER_RS485_RTS_AFTER_SEND))
++			return -EINVAL;
+ 		memset(rs485->padding, 0, sizeof(rs485->padding));
+ 		config |= RS485_URA;
+ 	} else {
+-- 
+2.35.1
+
 
 

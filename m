@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3A154A138
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C6E54A13B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348080AbiFMVS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
+        id S234423AbiFMVTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352090AbiFMVSU (ORCPT
+        with ESMTP id S1352565AbiFMVSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:18:20 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C60B12082;
-        Mon, 13 Jun 2022 14:00:58 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id hh4so4780893qtb.10;
-        Mon, 13 Jun 2022 14:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gWdErLqInvM1ccInRYlKQ/aTN1Wa+cjq/iTF3o1VN9I=;
-        b=bwIHsfewcGBOdBcc4rM9cpENx12C9rDMD5KZHB4fAEQ0jH9IzRN3Dwvr09S3VKJqvk
-         Es8clTWrPeBKgS6xy/z1URARKdS6mjSErjKmkU+FWHmnd7pO02dQD8/gYhYero6NlcWt
-         4l6GBn0FcjAP/gkAmdbj5oQmu9q3Mk/vbYK/1Qnn1Ip6Zs1EPyCLwbiBusqamrJscW6v
-         PtrI6E0EeSMq7nAckFG9FI5ftWlkP/sah696iveqSZwnP9nzEFC3LkCjMgJcwMvuM49K
-         YsjspgYUNaZ3fCT5rnHdeEjNwCX1oJYeXB13oecOzikt5rmLP29UawZa4c09dN16fRHE
-         Sc9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gWdErLqInvM1ccInRYlKQ/aTN1Wa+cjq/iTF3o1VN9I=;
-        b=xyW39CT16w68Fn+dCpYfiQ7Jc1TCwDRSCYmFeLBdS6viDPZ3Pg5OtYIRu7PkYD+lPW
-         6EdyyP8QSNnHqRcHwwczAurEaBCOGInYJRr3LlS1XvA+pziY0x6Zrpfo2G6zCnt/lyFZ
-         fG7ybJ8OWvP/Dtv8iEhDEezHWQNEQE+TrhvITEAMI6E6F1dLNi1XirXjV0YlCV/O+g+d
-         DdNoT7K3hUfIMcdgSqXJVS/gUUHkZyFkXOJZSn6OiTQhpI7x6EMhILELsdGqyAjRsrWh
-         jFA/bz04+bmyYCyG3n1CY+ygOUFtBFoswoxLWYZvOp3c/5Ds76n/6+eIpu9shF0k/PBP
-         qIWw==
-X-Gm-Message-State: AOAM531PazIdoIrmALqhc5ADwQZhzbSgqJEsAnkAvpfBk+Gm5d3CTWhu
-        xRgUV61P3walXuo5Q7gyG1E=
-X-Google-Smtp-Source: ABdhPJw/GpF9MPk9/djp9w3tlTLFzalidGv3+Xfed7VOMHSvwTI2pZM9UEx9e3K1b3XAttVm4dg/8Q==
-X-Received: by 2002:ac8:7fc1:0:b0:304:ed32:4463 with SMTP id b1-20020ac87fc1000000b00304ed324463mr1562341qtk.504.1655154057141;
-        Mon, 13 Jun 2022 14:00:57 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y11-20020ac87c8b000000b00304eb8e880dsm5532781qtv.23.2022.06.13.14.00.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 14:00:56 -0700 (PDT)
-Message-ID: <4d56c202-ed90-4385-6075-568ab7c8aa5c@gmail.com>
-Date:   Mon, 13 Jun 2022 14:00:53 -0700
+        Mon, 13 Jun 2022 17:18:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B91DD8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 14:01:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA242612AC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 21:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FAC3C3411C;
+        Mon, 13 Jun 2022 21:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655154112;
+        bh=vcKhLJGty8fRjACIP56lec3c1EKA3zWGxjiI4GHW7hE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=N61NkFAnobZGU9JICOgwqYhN4nDjiVuFw+blY5ECbPgDZfZYymS4/kjTl+NAdwonV
+         SKJWaDjlZL3LtEN9PlwOCOlmq2up8jeENuMESIkM7ytyV6s3X7MpEJ83hbjMY8BJTP
+         i6/X2JQB0hgmNUz+Wq8cu7kE0n1jZ5cKnFZ/XritiMvTWAUqWszooEKTDYnQb9OIMV
+         Irn3ILHUsGOsayNPoJOFP0gKo/XX14Ud2VeK3AuzSpDrNm6Zrt/vX2dVZa+spK9SMy
+         KivWf+TnmoH9n4KlJ7QAUSsHVxytknolmH69TxrHQToRFlN78VSYWAGkvBazJOxObN
+         Vo3iczqtuU+wQ==
+Message-ID: <9a7e0b6087540c9f868d60cbfc88ccefa8070a1b.camel@kernel.org>
+Subject: Re: [PATCH v4 1/3] tracing: eprobe: remove duplicate is_good_name()
+ operation
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+Date:   Mon, 13 Jun 2022 16:01:49 -0500
+In-Reply-To: <1654171861-24014-2-git-send-email-quic_linyyuan@quicinc.com>
+References: <1654171861-24014-1-git-send-email-quic_linyyuan@quicinc.com>
+         <1654171861-24014-2-git-send-email-quic_linyyuan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220613181847.216528857@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220613181847.216528857@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 11:19, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.47 release.
-> There are 251 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Jun 2022 18:18:03 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.47-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+SGkgTGluaHUsCgpPbiBUaHUsIDIwMjItMDYtMDIgYXQgMjA6MTAgKzA4MDAsIExpbnl1IFl1YW4g
+d3JvdGU6Cj4gdHJhY2Vwcm9iZV9wYXJzZV9ldmVudF9uYW1lKCkgYWxyZWFkeSB2YWxpZGF0ZSBn
+cm91cCBhbmQgZXZlbnQgbmFtZSwKPiB0aGVyZSBpcyBubyBuZWVkIHRvIGNhbGwgaXNfZ29vZF9u
+YW1lKCkgYWZ0ZXIgaXQuCj4gCj4gU2lnbmVkLW9mZi1ieTogTGlueXUgWXVhbiA8cXVpY19saW55
+eXVhbkBxdWljaW5jLmNvbT4KPiAtLS0KPiB2MjogZHJvcCB2MSBjaGFuZ2UgYXMgaXQgaXMgTkFD
+Sy4KPiDCoMKgwqAgYWRkIGl0IHRvIHJlbW92ZSBkdXBsaWNhdGUgaXNfZ29vZF9uYW1lKCkuCj4g
+djM6IG1vdmUgaXQgYXMgZmlyc3QgcGF0Y2guCj4gdjQ6IG5vIGNoYW5nZQo+IAo+IMKga2VybmVs
+L3RyYWNlL3RyYWNlX2Vwcm9iZS5jIHwgNCAtLS0tCj4gwqAxIGZpbGUgY2hhbmdlZCwgNCBkZWxl
+dGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEva2VybmVsL3RyYWNlL3RyYWNlX2Vwcm9iZS5jCj4g
+Yi9rZXJuZWwvdHJhY2UvdHJhY2VfZXByb2JlLmMKPiBpbmRleCA3ZDQ0Nzg1Li4xN2Q2NGUzIDEw
+MDY0NAo+IC0tLSBhL2tlcm5lbC90cmFjZS90cmFjZV9lcHJvYmUuYwo+ICsrKyBiL2tlcm5lbC90
+cmFjZS90cmFjZV9lcHJvYmUuYwo+IEBAIC04NzgsMTYgKzg3OCwxMiBAQCBzdGF0aWMgaW50IF9f
+dHJhY2VfZXByb2JlX2NyZWF0ZShpbnQgYXJnYywKPiBjb25zdCBjaGFyICphcmd2W10pCj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzYW5pdGl6ZV9ldmVudF9uYW1lKGJ1ZjEpOwo+
+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXZlbnQgPSBidWYxOwo+IMKgwqDCoMKg
+wqDCoMKgwqB9Cj4gLcKgwqDCoMKgwqDCoMKgaWYgKCFpc19nb29kX25hbWUoZXZlbnQpIHx8ICFp
+c19nb29kX25hbWUoZ3JvdXApKQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3Rv
+IHBhcnNlX2Vycm9yOwoKdHJhY2Vwcm9iZV9wYXJzZV9ldmVudF9uYW1lKCkgaXMgb25seSBjYWxs
+ZWQgaWYgKGV2ZW50KS4gIEluIHRoZQohZXZlbnTCoGNhc2UsIHdvdWxkbid0IHRoZSBpc19nb29k
+X25hbWUoKSBjaGVja3Mgc3RpbGwgYmUgbmVlZGVkIChzaW5jZQppbiB0aGF0IGNhc2UgYnVmMSBp
+cyBhc3NpZ25lZCB0byBldmVudCk/Cgo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoHN5c19ldmVudCA9
+IGFyZ3ZbMV07Cj4gwqDCoMKgwqDCoMKgwqDCoHJldCA9IHRyYWNlcHJvYmVfcGFyc2VfZXZlbnRf
+bmFtZSgmc3lzX2V2ZW50LCAmc3lzX25hbWUsCj4gYnVmMiwKPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHN5c19ldmVudCAtIGFyZ3ZbMV0pOwo+IMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0IHx8
+ICFzeXNfbmFtZSkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gcGFyc2Vf
+ZXJyb3I7Cj4gLcKgwqDCoMKgwqDCoMKgaWYgKCFpc19nb29kX25hbWUoc3lzX2V2ZW50KSB8fCAh
+aXNfZ29vZF9uYW1lKHN5c19uYW1lKSkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+Z290byBwYXJzZV9lcnJvcjsKCkkgYWdyZWUgdGhpcyBvbmUgaXNuJ3QgbmVlZGVkLgoKVGhhbmtz
+LAoKVG9tCgo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoG11dGV4X2xvY2soJmV2ZW50X211dGV4KTsK
+PiDCoMKgwqDCoMKgwqDCoMKgZXZlbnRfY2FsbCA9IGZpbmRfYW5kX2dldF9ldmVudChzeXNfbmFt
+ZSwgc3lzX2V2ZW50KTsKCg==
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian

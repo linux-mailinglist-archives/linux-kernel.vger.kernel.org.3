@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA8A5497DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC60548C0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381149AbiFMOEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S1353103AbiFMMvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381406AbiFMN4d (ORCPT
+        with ESMTP id S1355112AbiFMMuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:56:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B04880D8;
-        Mon, 13 Jun 2022 04:36:59 -0700 (PDT)
+        Mon, 13 Jun 2022 08:50:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B44B34B8C;
+        Mon, 13 Jun 2022 04:12:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E058161306;
-        Mon, 13 Jun 2022 11:36:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3591C34114;
-        Mon, 13 Jun 2022 11:36:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 75846CE1174;
+        Mon, 13 Jun 2022 11:12:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795D4C3411C;
+        Mon, 13 Jun 2022 11:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120218;
-        bh=sh2G4X4wFqnK2Zl2sU5zgIcGPX5ExeSw9GC5WbGyQy0=;
+        s=korg; t=1655118727;
+        bh=3K7C41fTffbQ/v6QxeTjmJCyuQRwcrtVfBjKF8Xfi4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XBu+/JQmXQrQsaoov7l9kcRz/1GdruZhCHd3vph0EZUfpS5SAsZmezesQNIVl3wJL
-         3bXtoyS45bmO5tug0I112IDrlds4sNmGUyckcxsUnqGks4s74UI59J7bYCKPIvv2Ei
-         f5nx4guMOdNPfWPw1yRDl4SLnXtwkExST4cMVcGw=
+        b=d0NTo85IY1kBa9tQNQlz7y5cT6r+t1weeO0Dvhtm4zA5FRwDotQ1uaonJmw+anJTl
+         bcwUkg05a0znsoEs7+mKGSGc8xbhHwCJW4QVFNh1Q+tq2wSeMXv/1wx3YF1zTSfewb
+         U/OR9Xmxas0UkDBkW658odOA0arbo51b5l+keObM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        =?UTF-8?q?Andr=C3=A9=20Kapelrud?= <a.kapelrud@gmail.com>
-Subject: [PATCH 5.18 293/339] ALSA: usb-audio: Skip generic sync EP parse for secondary EP
+        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 158/172] nfc: st21nfca: fix incorrect validating logic in EVT_TRANSACTION
 Date:   Mon, 13 Jun 2022 12:11:58 +0200
-Message-Id: <20220613094935.520691896@linuxfoundation.org>
+Message-Id: <20220613094923.045555834@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Martin Faltesek <mfaltesek@google.com>
 
-commit efb75df105e82f076a85b9f2d81410428bcb55fc upstream.
+commit 77e5fe8f176a525523ae091d6fd0fbb8834c156d upstream.
 
-When ep_idx is already non-zero, it means usually a capture stream
-that is set up explicity by a fixed-format quirk, and applying the
-check for generic (non-implicit-fb) sync EPs might hit incorrectly,
-resulting in a bogus sync endpoint for the capture stream.
+The first validation check for EVT_TRANSACTION has two different checks
+tied together with logical AND. One is a check for minimum packet length,
+and the other is for a valid aid_tag. If either condition is true (fails),
+then an error should be triggered.  The fix is to change && to ||.
 
-This patch adds a check for the ep_idx and skip if it's a secondary
-endpoint.  It's a part of the fixes for regressions on Saffire 6.
-
-Fixes: 7b0efea4baf0 ("ALSA: usb-audio: Add missing ep_idx in fixed EP quirks")
-Reported-and-tested-by: André Kapelrud <a.kapelrud@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220606160910.6926-2-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Faltesek <mfaltesek@google.com>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/pcm.c |    2 +-
+ drivers/nfc/st21nfca/se.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/usb/pcm.c
-+++ b/sound/usb/pcm.c
-@@ -304,7 +304,7 @@ int snd_usb_audioformat_set_sync_ep(stru
- 	 * Generic sync EP handling
- 	 */
+--- a/drivers/nfc/st21nfca/se.c
++++ b/drivers/nfc/st21nfca/se.c
+@@ -319,7 +319,7 @@ int st21nfca_connectivity_event_received
+ 		 * AID		81	5 to 16
+ 		 * PARAMETERS	82	0 to 255
+ 		 */
+-		if (skb->len < NFC_MIN_AID_LENGTH + 2 &&
++		if (skb->len < NFC_MIN_AID_LENGTH + 2 ||
+ 		    skb->data[0] != NFC_EVT_TRANSACTION_AID_TAG)
+ 			return -EPROTO;
  
--	if (altsd->bNumEndpoints < 2)
-+	if (fmt->ep_idx > 0 || altsd->bNumEndpoints < 2)
- 		return 0;
- 
- 	is_playback = !(get_endpoint(alts, 0)->bEndpointAddress & USB_DIR_IN);
 
 

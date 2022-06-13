@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42798548ECD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2EB548A45
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377077AbiFMNUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S1353291AbiFMMQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357448AbiFMNHl (ORCPT
+        with ESMTP id S1354890AbiFMMNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:07:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9534C381BD;
-        Mon, 13 Jun 2022 04:18:48 -0700 (PDT)
+        Mon, 13 Jun 2022 08:13:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0FD53C40;
+        Mon, 13 Jun 2022 04:01:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75525B80EB1;
-        Mon, 13 Jun 2022 11:18:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BD8C34114;
-        Mon, 13 Jun 2022 11:18:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCA3F613E9;
+        Mon, 13 Jun 2022 11:01:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFFFC3411E;
+        Mon, 13 Jun 2022 11:01:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119122;
-        bh=sEV7WN5gvPYHUR2+AlgrOnDLO7J8h7aP7imPvjQ0UJA=;
+        s=korg; t=1655118077;
+        bh=/gEi9uoEGtw9vFKpk5iTBlPbocY+K5T7zTqsewRdOx8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mtZQAd3VX+XjxFWIWZ2l4kERedIi+tNEaDxNOebs61qMS+m2/w3WpC2b5/Bg6UhWZ
-         sNmELhkGrMycbbgum39Yn0Y+ZqM/DGVsiRnozQo6baSvhdxHpnCL8NbUK4wnZXge7n
-         0a24iQwGZSacEdKm2lJrakfOGhOpVy6TikImI4dE=
+        b=oHSwCJI1ehiwbViH2s20jWthrXw9vmLSgpAjEgkm8yz0jGhBS4ExXikFzfmlMA5dp
+         p5ChUlihtWCbdLmFLUMzg6jWTOV6iSfQtg+y8c8Y3JXnXDipqVoysu6g898BMGd7sj
+         qHo53FwfhpZZ9jhR33bzPAqRO1T2vBovyIDGnOV0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
+        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 149/247] xsk: Fix handling of invalid descriptors in XSK TX batching API
+Subject: [PATCH 4.19 227/287] mips: cpc: Fix refcount leak in mips_cpc_default_phys_base
 Date:   Mon, 13 Jun 2022 12:10:51 +0200
-Message-Id: <20220613094927.474546705@linuxfoundation.org>
+Message-Id: <20220613094930.898195079@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,83 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Gong Yuanjun <ruc_gongyuanjun@163.com>
 
-[ Upstream commit d678cbd2f867a564a3c5b276c454e873f43f02f8 ]
+[ Upstream commit 4107fa700f314592850e2c64608f6ede4c077476 ]
 
-xdpxceiver run on a AF_XDP ZC enabled driver revealed a problem with XSK
-Tx batching API. There is a test that checks how invalid Tx descriptors
-are handled by AF_XDP. Each valid descriptor is followed by invalid one
-on Tx side whereas the Rx side expects only to receive a set of valid
-descriptors.
+Add the missing of_node_put() to release the refcount incremented
+by of_find_compatible_node().
 
-In current xsk_tx_peek_release_desc_batch() function, the amount of
-available descriptors is hidden inside xskq_cons_peek_desc_batch(). This
-can be problematic in cases where invalid descriptors are present due to
-the fact that xskq_cons_peek_desc_batch() returns only a count of valid
-descriptors. This means that it is impossible to properly update XSK
-ring state when calling xskq_cons_release_n().
-
-To address this issue, pull out the contents of
-xskq_cons_peek_desc_batch() so that callers (currently only
-xsk_tx_peek_release_desc_batch()) will always be able to update the
-state of ring properly, as total count of entries is now available and
-use this value as an argument in xskq_cons_release_n(). By
-doing so, xskq_cons_peek_desc_batch() can be dropped altogether.
-
-Fixes: 9349eb3a9d2a ("xsk: Introduce batched Tx descriptor interfaces")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Link: https://lore.kernel.org/bpf/20220607142200.576735-1-maciej.fijalkowski@intel.com
+Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xsk.c       | 5 +++--
- net/xdp/xsk_queue.h | 8 --------
- 2 files changed, 3 insertions(+), 10 deletions(-)
+ arch/mips/kernel/mips-cpc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 404cbfde2f84..b9e70931c794 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -388,7 +388,8 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
- 		goto out;
+diff --git a/arch/mips/kernel/mips-cpc.c b/arch/mips/kernel/mips-cpc.c
+index fcf9af492d60..cf46502c605e 100644
+--- a/arch/mips/kernel/mips-cpc.c
++++ b/arch/mips/kernel/mips-cpc.c
+@@ -31,6 +31,7 @@ phys_addr_t __weak mips_cpc_default_phys_base(void)
+ 	cpc_node = of_find_compatible_node(of_root, NULL, "mti,mips-cpc");
+ 	if (cpc_node) {
+ 		err = of_address_to_resource(cpc_node, 0, &res);
++		of_node_put(cpc_node);
+ 		if (!err)
+ 			return res.start;
  	}
- 
--	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, pool, max_entries);
-+	max_entries = xskq_cons_nb_entries(xs->tx, max_entries);
-+	nb_pkts = xskq_cons_read_desc_batch(xs->tx, pool, max_entries);
- 	if (!nb_pkts) {
- 		xs->tx->queue_empty_descs++;
- 		goto out;
-@@ -404,7 +405,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
- 	if (!nb_pkts)
- 		goto out;
- 
--	xskq_cons_release_n(xs->tx, nb_pkts);
-+	xskq_cons_release_n(xs->tx, max_entries);
- 	__xskq_cons_release(xs->tx);
- 	xs->sk.sk_write_space(&xs->sk);
- 
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index b721795fe50c..491a18c1f786 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -278,14 +278,6 @@ static inline bool xskq_cons_peek_desc(struct xsk_queue *q,
- 	return xskq_cons_read_desc(q, desc, pool);
- }
- 
--static inline u32 xskq_cons_peek_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
--					    u32 max)
--{
--	u32 entries = xskq_cons_nb_entries(q, max);
--
--	return xskq_cons_read_desc_batch(q, pool, entries);
--}
--
- /* To improve performance in the xskq_cons_release functions, only update local state here.
-  * Reflect this to global state when we get new entries from the ring in
-  * xskq_cons_get_entries() and whenever Rx or Tx processing are completed in the NAPI loop.
 -- 
 2.35.1
 

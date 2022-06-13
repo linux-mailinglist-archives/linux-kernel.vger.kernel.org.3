@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248CD548C2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01AB54952A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386126AbiFMOu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
+        id S1386070AbiFMOul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385719AbiFMOqA (ORCPT
+        with ESMTP id S1386431AbiFMOqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:46:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B337CBF10A;
-        Mon, 13 Jun 2022 04:52:31 -0700 (PDT)
+        Mon, 13 Jun 2022 10:46:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B376DBF10C;
+        Mon, 13 Jun 2022 04:52:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3DD9B80EDF;
-        Mon, 13 Jun 2022 11:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA20C3411B;
-        Mon, 13 Jun 2022 11:52:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23F06614F8;
+        Mon, 13 Jun 2022 11:52:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D0E9C3411B;
+        Mon, 13 Jun 2022 11:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121148;
-        bh=86SmpAOTY/uHhFc2jJgfW40YqwYoMfE/xS3zwZhDdvw=;
+        s=korg; t=1655121151;
+        bh=AxhBKUCtCxlJS5f8zHw6zkgvS9rbDdVZWXrRtpuA1Jw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OTXbc+J/TDzx7GPVEkkTO+msMtMVLuxCS6G9YDCoIONH1jpofVzU3aixg6GfrjX0x
-         QupLvGN0kWKAX/arRhbwVXRSrxbl+ZAakwXVo2518oLU002B6BNR9c4X/3Zuh+iadR
-         TQcL+ni+Y943tMuqLKDjaIoKwf4QJvR4sTbS44NI=
+        b=FgqzzKxq1bU4FG9sGcv9wtGpm48NLwWlvY2QzQ5eQizbb61TKEipdw/HDy6spF0tF
+         JqthX2GgZZ94JTnIS4OiX+uf/APR1NjvW7kJuAX/2Drp6NHQZaOwcLia+nClWaThNo
+         vO7WHRgk5p29BCMLU1BozMnJWkpZnkeDj+k/8HKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ariel Miculas <ariel.miculas@belden.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.17 289/298] powerpc/32: Fix overread/overwrite of thread_struct via ptrace
-Date:   Mon, 13 Jun 2022 12:13:03 +0200
-Message-Id: <20220613094933.844391185@linuxfoundation.org>
+        stable@vger.kernel.org,
+        KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 5.17 290/298] drm/ast: Create threshold values for AST2600
+Date:   Mon, 13 Jun 2022 12:13:04 +0200
+Message-Id: <20220613094933.875504290@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -55,119 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
 
-commit 8e1278444446fc97778a5e5c99bca1ce0bbc5ec9 upstream.
+commit bcc77411e8a65929655cef7b63a36000724cdc4b upstream.
 
-The ptrace PEEKUSR/POKEUSR (aka PEEKUSER/POKEUSER) API allows a process
-to read/write registers of another process.
+The threshold value is used for AST2600 only.
 
-To get/set a register, the API takes an index into an imaginary address
-space called the "USER area", where the registers of the process are
-laid out in some fashion.
-
-The kernel then maps that index to a particular register in its own data
-structures and gets/sets the value.
-
-The API only allows a single machine-word to be read/written at a time.
-So 4 bytes on 32-bit kernels and 8 bytes on 64-bit kernels.
-
-The way floating point registers (FPRs) are addressed is somewhat
-complicated, because double precision float values are 64-bit even on
-32-bit CPUs. That means on 32-bit kernels each FPR occupies two
-word-sized locations in the USER area. On 64-bit kernels each FPR
-occupies one word-sized location in the USER area.
-
-Internally the kernel stores the FPRs in an array of u64s, or if VSX is
-enabled, an array of pairs of u64s where one half of each pair stores
-the FPR. Which half of the pair stores the FPR depends on the kernel's
-endianness.
-
-To handle the different layouts of the FPRs depending on VSX/no-VSX and
-big/little endian, the TS_FPR() macro was introduced.
-
-Unfortunately the TS_FPR() macro does not take into account the fact
-that the addressing of each FPR differs between 32-bit and 64-bit
-kernels. It just takes the index into the "USER area" passed from
-userspace and indexes into the fp_state.fpr array.
-
-On 32-bit there are 64 indexes that address FPRs, but only 32 entries in
-the fp_state.fpr array, meaning the user can read/write 256 bytes past
-the end of the array. Because the fp_state sits in the middle of the
-thread_struct there are various fields than can be overwritten,
-including some pointers. As such it may be exploitable.
-
-It has also been observed to cause systems to hang or otherwise
-misbehave when using gdbserver, and is probably the root cause of this
-report which could not be easily reproduced:
-  https://lore.kernel.org/linuxppc-dev/dc38afe9-6b78-f3f5-666b-986939e40fc6@keymile.com/
-
-Rather than trying to make the TS_FPR() macro even more complicated to
-fix the bug, or add more macros, instead add a special-case for 32-bit
-kernels. This is more obvious and hopefully avoids a similar bug
-happening again in future.
-
-Note that because 32-bit kernels never have VSX enabled the code doesn't
-need to consider TS_FPRWIDTH/OFFSET at all. Add a BUILD_BUG_ON() to
-ensure that 32-bit && VSX is never enabled.
-
-Fixes: 87fec0514f61 ("powerpc: PTRACE_PEEKUSR/PTRACE_POKEUSER of FPR registers in little endian builds")
-Cc: stable@vger.kernel.org # v3.13+
-Reported-by: Ariel Miculas <ariel.miculas@belden.com>
-Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220609133245.573565-1-mpe@ellerman.id.au
+Signed-off-by: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220117083643.41493-1-kuohsiang_chou@aspeedtech.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/ptrace/ptrace-fpu.c |   20 ++++++++++++++------
- arch/powerpc/kernel/ptrace/ptrace.c     |    3 +++
- 2 files changed, 17 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/ast/ast_mode.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/arch/powerpc/kernel/ptrace/ptrace-fpu.c
-+++ b/arch/powerpc/kernel/ptrace/ptrace-fpu.c
-@@ -17,9 +17,13 @@ int ptrace_get_fpr(struct task_struct *c
- 
- #ifdef CONFIG_PPC_FPU_REGS
- 	flush_fp_to_thread(child);
--	if (fpidx < (PT_FPSCR - PT_FPR0))
--		memcpy(data, &child->thread.TS_FPR(fpidx), sizeof(long));
--	else
-+	if (fpidx < (PT_FPSCR - PT_FPR0)) {
-+		if (IS_ENABLED(CONFIG_PPC32))
-+			// On 32-bit the index we are passed refers to 32-bit words
-+			*data = ((u32 *)child->thread.fp_state.fpr)[fpidx];
-+		else
-+			memcpy(data, &child->thread.TS_FPR(fpidx), sizeof(long));
-+	} else
- 		*data = child->thread.fp_state.fpscr;
- #else
- 	*data = 0;
-@@ -39,9 +43,13 @@ int ptrace_put_fpr(struct task_struct *c
- 
- #ifdef CONFIG_PPC_FPU_REGS
- 	flush_fp_to_thread(child);
--	if (fpidx < (PT_FPSCR - PT_FPR0))
--		memcpy(&child->thread.TS_FPR(fpidx), &data, sizeof(long));
--	else
-+	if (fpidx < (PT_FPSCR - PT_FPR0)) {
-+		if (IS_ENABLED(CONFIG_PPC32))
-+			// On 32-bit the index we are passed refers to 32-bit words
-+			((u32 *)child->thread.fp_state.fpr)[fpidx] = data;
-+		else
-+			memcpy(&child->thread.TS_FPR(fpidx), &data, sizeof(long));
-+	} else
- 		child->thread.fp_state.fpscr = data;
- #endif
- 
---- a/arch/powerpc/kernel/ptrace/ptrace.c
-+++ b/arch/powerpc/kernel/ptrace/ptrace.c
-@@ -445,4 +445,7 @@ void __init pt_regs_check(void)
- 	 * real registers.
- 	 */
- 	BUILD_BUG_ON(PT_DSCR < sizeof(struct user_pt_regs) / sizeof(unsigned long));
-+
-+	// ptrace_get/put_fpr() rely on PPC32 and VSX being incompatible
-+	BUILD_BUG_ON(IS_ENABLED(CONFIG_PPC32) && IS_ENABLED(CONFIG_VSX));
- }
+--- a/drivers/gpu/drm/ast/ast_mode.c
++++ b/drivers/gpu/drm/ast/ast_mode.c
+@@ -471,7 +471,10 @@ static void ast_set_color_reg(struct ast
+ static void ast_set_crtthd_reg(struct ast_private *ast)
+ {
+ 	/* Set Threshold */
+-	if (ast->chip == AST2300 || ast->chip == AST2400 ||
++	if (ast->chip == AST2600) {
++		ast_set_index_reg(ast, AST_IO_CRTC_PORT, 0xa7, 0xe0);
++		ast_set_index_reg(ast, AST_IO_CRTC_PORT, 0xa6, 0xa0);
++	} else if (ast->chip == AST2300 || ast->chip == AST2400 ||
+ 	    ast->chip == AST2500) {
+ 		ast_set_index_reg(ast, AST_IO_CRTC_PORT, 0xa7, 0x78);
+ 		ast_set_index_reg(ast, AST_IO_CRTC_PORT, 0xa6, 0x60);
 
 

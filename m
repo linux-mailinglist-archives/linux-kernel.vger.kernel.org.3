@@ -2,125 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F06549D0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE680549D13
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241399AbiFMTLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S240214AbiFMTLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349335AbiFMTIq (ORCPT
+        with ESMTP id S1351578AbiFMTKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:08:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52AD450056
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655139986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s7hhCYT7OGqCx5nH+qXS1ao3TYt75AzmKiJLPQv1MlY=;
-        b=JCNYakseNPAMc4eW8hchL1OFesd1TBNMpPoMv7uvihz0fkB1M9F7E4jLhiLlEeK/CG6LdC
-        RtE2a0wE2PanIIMwrC82ha3PF2aUIch2DgL6Wx7ft/W1XE53EnLC69nv/3u2vrV6ps2Ubl
-        klcF5rd/yCUcSa41yHAq86Q+nURLRbE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-u9ZkP3_qMFWE3PS8XzGi6A-1; Mon, 13 Jun 2022 13:06:22 -0400
-X-MC-Unique: u9ZkP3_qMFWE3PS8XzGi6A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3825D801756;
-        Mon, 13 Jun 2022 17:06:21 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 68A6F2026D64;
-        Mon, 13 Jun 2022 17:06:20 +0000 (UTC)
-Message-ID: <c91a8c45-123d-dbae-b07c-83772add082d@redhat.com>
-Date:   Mon, 13 Jun 2022 13:06:20 -0400
+        Mon, 13 Jun 2022 15:10:11 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C491CD124
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:08:48 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id w2so10908019ybi.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:08:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=kLf57Tpjp3cAr7DQ8FxGnPCa1UEL1ZCvBKa8SNzGeS8=;
+        b=QdaF12IWJPb8iXESj+p+bq8Ipb9mq90eadTysAvh08qeAsZOpUu3lHRfNjryf4LMJb
+         NK2Uioe98EPRsJWTIb0WMi8FHySgC7l0cqa/bAS5YtFebpUoP1Cxy+aiK83z/5R0L8V7
+         opIrjNiNFfnWwhQSGawjG/kze4mz/lv2A+mz2l0XwOqQakbWcTlofmZpiWoqufFCo1Xg
+         RYNNZ+0V3BPUFUtGrJKzOX2kpFnLRKyvI8DNWS0t9yQ5DwX13nF9v1/vOe23FhvPATix
+         7FNMjmTAYy5vFUNtsH4IzH+g9jsnWEjAwD9Aq952NGgWSUEACmqRGPAmdtcWFWydDqJy
+         vITg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=kLf57Tpjp3cAr7DQ8FxGnPCa1UEL1ZCvBKa8SNzGeS8=;
+        b=tg2aIzPJitrRmIkYkHDK60nNKZDdFWCp2FvbOs3qEA3a/BHxSYceUFYQgODjCf4LL/
+         qQJdMTgv4gUXZ6b9PLNiGVgGIAt+Q81EwHBcAI31QWIxJo67CLhblnprEc5m5DqNKMvY
+         lFKtB+XrXq+tyW5A2BE980R9PWENNQrK1Eg/Lw6YU5doz4aVvVw6CNOOYUUCe/r+jKcq
+         Gldh0CSwgWwck0iEl+WRoOADYD1N47rH/dFk6B1EuDEsc2CGwLwhBPjMRNZ3tf8brZnV
+         QD1JSxVJajWL7tVifRqrBt3HzhmC0k2OJ/O3ijDv4wPNPNcm8O+JPPjekgNqMulPR4VN
+         v6Zg==
+X-Gm-Message-State: AJIora8pW2dRI8kmX8JB7m0WJH3rmP7J5Z2/8SHmW7fY3LfO4Osk8Tgq
+        fB92jw5/OJzZyr30GC6B4Y63oa5Mj5LygkdWYsE=
+X-Google-Smtp-Source: AGRyM1tRsIJ5jaCyhpl8CgxQ4TM9f8FzBH+EY86F5dKMxqzlUrZWDBNLooyRNWz+8TDmv57vBl03Lgely6m6A+Np+Lo=
+X-Received: by 2002:a25:d209:0:b0:663:e1c3:8b55 with SMTP id
+ j9-20020a25d209000000b00663e1c38b55mr638777ybg.320.1655140127621; Mon, 13 Jun
+ 2022 10:08:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
- <8d7ddb5a-0d0b-3f2e-e049-900360e95fc6@redhat.com>
-In-Reply-To: <8d7ddb5a-0d0b-3f2e-e049-900360e95fc6@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Sender: mrs.christiana.and.sons@gmail.com
+Received: by 2002:a05:7010:4349:b0:2d9:dc8d:9edc with HTTP; Mon, 13 Jun 2022
+ 10:08:47 -0700 (PDT)
+From:   Jackie Grayson <jackiegrayson08@gmail.com>
+Date:   Mon, 13 Jun 2022 05:08:47 -1200
+X-Google-Sender-Auth: 1HYkm7jWGO93ikTXtbHd6LocE5M
+Message-ID: <CANV73fAjR0zQFMq+3wETy_ygfNgBcVEa0B1crfTgi=TAegU9Zw@mail.gmail.com>
+Subject: Greethings my beloved
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.2 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 09:18, Waiman Long wrote:
-> On 6/12/22 23:12, Tejun Heo wrote:
->> Hello,
->>
->> On Sun, Jun 12, 2022 at 11:02:38PM -0400, Waiman Long wrote:
->>> That is the behavior enforced by setting the CPU_EXCLUSIVE bit in 
->>> cgroup v1.
->>> I haven't explicitly change it to make it different in cgroup v2. 
->>> The major
->>> reason is that I don't want change to one cpuset to affect a sibling
->>> partition as it may make the code more complicate to validate if a 
->>> partition
->>> is valid.
->> If at all possible, I'd really like to avoid situations where a 
->> parent can't
->> withdraw resources due to something that a descendant does.
->
-> No, it doesn't affect parent at all. It just limit whats the siblings 
-> can do due to their mutual constraint. If this is what the confusion 
-> is about, I will try to reword the doc text.
+Gooday my dear,
 
-I am planning to make the following change to the documentation patch. 
-Please let me know if that can clarify the confusion, if any.
+  I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life,I am Mrs,Grayson Jackie,a widow,I am suffering
+from a long time brain tumor, It has defiled all forms of medical
+treatment, and right now I have about a few months to leave, according
+to medical experts.
 
-Thanks,
-Longman
+   The situation has gotten complicated recently with my inability to
+hear proper, am communicating with you with the help of the chief
+nurse herein the hospital, from all indication my conditions is really
+deteriorating and it is quite obvious that, according to my doctors
+they have advised me that I may not live too long, Because this
+illness has gotten to a very bad stage. I plead that you will not
+expose or betray this trust and confidence that I am about to repose
+on you for the mutual benefit of the orphans and the less privilege. I
+have some funds I inherited from my late husband, the sum of
+($11,500,000.00 Dollars).Having known my condition, I decided to
+donate this fund to you believing that you will utilize it the way i
+am going to instruct herein.
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst 
-b/Documentation/admin-guid>
-index 9184a09e0fc9..9cbfa25dab97 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2176,7 +2175,8 @@ Cpuset Interface Files
-
-         For a valid partition root or an invalid partition root with
-         the exclusivity rule enabled, changes made to "cpuset.cpus"
--       that violate the exclusivity rule will not be allowed.
-+       that violate the exclusivity rule with its siblings will not
-+       be allowed.
-
-         A valid non-root parent partition may distribute out all its CPUs
-         to its child partitions when there is no task associated with it.
-
+   I need you to assist me and reclaim this money and use it for
+Charity works, for orphanages and gives justice and help to the poor,
+needy and widows says The Lord." Jeremiah 22:15-16.=E2=80=9C and also build
+schools for less privilege that will be named after my late husband if
+possible and to promote the word of God and the effort that the house
+of God is maintained. I do not want a situation where this money will
+be used in an ungodly manner. That's why I'm taking this decision. I'm
+not afraid of death, so I know where I'm going. I accept this decision
+because I do not have any child who will inherit this money after I
+die. Please I want your sincerely and urgent answer to know if you
+will be able to execute this project for the glory of God, and I will
+give you more information on how the fund will be transferred to your
+bank account. May the grace, peace, love and the truth in the Word of
+God be with you and all those that you love and care for.
+I'm waiting for your immediate reply,
+Best Regards,
+Mrs,Grayson Jackie,
+Writting From the hospital,
+May God Bless you,

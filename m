@@ -2,124 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7690547FFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7142548008
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiFMG5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 02:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S232442AbiFMG66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 02:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiFMG47 (ORCPT
+        with ESMTP id S230204AbiFMG64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 02:56:59 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D122140F8;
-        Sun, 12 Jun 2022 23:56:52 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25D5DFNr037410;
-        Mon, 13 Jun 2022 06:56:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=sg4r/3HlNtUZCzfEQKxVVhzIMzc01uTkxBUOjFJpuKA=;
- b=NTLr3Rw9NouBrw7ClKulUEjebkO6A5itEqempmqPPPMIe5WxzTU1RSeuSNqgfcQn+Qel
- mpyWvvRoLkX7BBylqpkYunkyAsl/lIGSSHiWYnubBtx0gSiorItaeUnSnErhVKh1TYVb
- G6DM9VtcvymwPUdxADeoOwB370fMvCzk3ag/yA/bfNUIAGHLBm5gy/BIuEuLSd+rfBFo
- ScYM+CzYJZsSDOfTyT1jJMuHuhBoFfgAdXkwemiKCqxo5iqi4dpnLscBe+et+zL7PfDK
- I9Adon6TD+u/6m2HYQfxfvzeSbDXAYku8Dd0+d8W7hGVcYHuGVi7UIhMuQ6Gzx7IjLiC uQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gn53qhkpg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 06:56:29 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25D6oulj030905;
-        Mon, 13 Jun 2022 06:56:28 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3gmjp8srqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 06:56:28 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25D6uOd822544728
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Jun 2022 06:56:24 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DB10811C052;
-        Mon, 13 Jun 2022 06:56:24 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FC3B11C050;
-        Mon, 13 Jun 2022 06:56:24 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.171.48.106])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 13 Jun 2022 06:56:24 +0000 (GMT)
-Date:   Mon, 13 Jun 2022 08:56:22 +0200
-From:   Sumanth Korikkar <sumanthk@linux.ibm.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-ext4@vger.kernel.org, gerald.schaefer@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org
-Subject: Re: [PATCH 06/10] hugetlbfs: Convert remove_inode_hugepages() to use
- filemap_get_folios()
-Message-ID: <YqbflvrB9oEZ1whX@localhost.localdomain>
-References: <20220605193854.2371230-7-willy@infradead.org>
- <20220610155205.3111213-1-sumanthk@linux.ibm.com>
- <YqO08Dsq8ZcAcWDQ@casper.infradead.org>
+        Mon, 13 Jun 2022 02:58:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3154515A2F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655103534;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EVnz/ho9DxlrFHm52CHqQgxEWsPvPMc4vPlhnhiZBWs=;
+        b=LfCAHDprYOxWTv+geGXosGNsTYZJxtTbJvBGSh+Ee4gMNwfNDJ7j5zCBHG43RaHqa2Rsux
+        Wmj4IS34NhZo9aiz9nQf+JJjRjB3Ig3Mlt9ZEchkP9ogaErdDfqw7/Fry9e+t49Ouf6WTD
+        3DEAs6R6KTLmSDCHHF2svnMxiCBw/yw=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-5h83uJXrN0eGCW8YTLYLhg-1; Mon, 13 Jun 2022 02:58:52 -0400
+X-MC-Unique: 5h83uJXrN0eGCW8YTLYLhg-1
+Received: by mail-lf1-f70.google.com with SMTP id c21-20020a056512105500b00479762353a4so2662668lfb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:58:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EVnz/ho9DxlrFHm52CHqQgxEWsPvPMc4vPlhnhiZBWs=;
+        b=2XrN4ItVJ/LUA7WNAUqXszEfWC3OuXOFacfP8pJj/khbmkPpLNjiWNlydyLTy9vZ8n
+         OmKUroueUR1OILCR/S/M9D2L//x68rJ6RWj8HJpvt1U8PyJm7S8WYcgGr0OEKLT76gpc
+         X7f33dvoU7ZqTEgzM8fhMunO+6VZaqVDvVx04aI+WkBkL2e+MBeny0Urq7B2/erzvHKU
+         fcGld12lOLOHQeo/L3BJqZ1SbAdOtd630NIN5oI+VEzBqpj1hAO2llvSKf86JM4lklkP
+         J4ILvu2GPiyQNxF5Bdo/1v17Xaw9e1qXzoCtNfV+rKPZpUdN6SMmlibqTnMSX6xv6BQn
+         N26A==
+X-Gm-Message-State: AOAM530mO/OKDjFlvXtw0ayH0Ut5jyNRNu+6/u42uGgmKBdELBHZqrN8
+        ABkCkydW3BWalJNVa6WiFMctzihE0zpMRgqvLmh0OVMFpzXgs9DUiHOU8rTuzGgpSxondtXPcBo
+        ceueVNx9K1g0N2dD17gVH6JMF7t5Ff4TBji2vvvzw
+X-Received: by 2002:a19:4352:0:b0:479:5d1:3fef with SMTP id m18-20020a194352000000b0047905d13fefmr35820400lfj.411.1655103531237;
+        Sun, 12 Jun 2022 23:58:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz6a6LGXWm3OgZYwL88xfGuElhH3ga+oNuMA0idjWqNAatJRR7eeOfCIdun56jsCfdiFaoecI4ffL1BftQm+y0=
+X-Received: by 2002:a19:4352:0:b0:479:5d1:3fef with SMTP id
+ m18-20020a194352000000b0047905d13fefmr35820387lfj.411.1655103531042; Sun, 12
+ Jun 2022 23:58:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqO08Dsq8ZcAcWDQ@casper.infradead.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: avIoxhTFiSlJjY2R9CmSKMJMnKj8Jgxi
-X-Proofpoint-ORIG-GUID: avIoxhTFiSlJjY2R9CmSKMJMnKj8Jgxi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-13_02,2022-06-09_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 adultscore=0 mlxlogscore=774
- lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206130029
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610151203.3492541-1-vincent.whitchurch@axis.com>
+In-Reply-To: <20220610151203.3492541-1-vincent.whitchurch@axis.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 13 Jun 2022 14:58:40 +0800
+Message-ID: <CACGkMEsf5p=JvHHjd_jtEwtdQijTR7ZAwetEuSG-oprF6RBsVA@mail.gmail.com>
+Subject: Re: [PATCH] um: virt-pci: set device ready in probe()
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>, kernel@axis.com,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-um@lists.infradead.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:17:36PM +0100, Matthew Wilcox wrote:
-> On Fri, Jun 10, 2022 at 05:52:05PM +0200, Sumanth Korikkar wrote:
-> > To reproduce:
-> > * clone libhugetlbfs:
-> > * Execute, PATH=$PATH:"obj64/" LD_LIBRARY_PATH=../obj64/ alloc-instantiate-race shared
-> 
-> ... it's a lot harder to set up hugetlb than that ...
-> 
-> anyway, i figured it out without being able to run the reproducer.
-> 
-> Can you try this?
-> 
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index a30587f2e598..8ef861297ffb 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -2160,7 +2160,11 @@ unsigned filemap_get_folios(struct address_space *mapping, pgoff_t *start,
->  		if (xa_is_value(folio))
->  			continue;
->  		if (!folio_batch_add(fbatch, folio)) {
-> -			*start = folio->index + folio_nr_pages(folio);
-> +			unsigned long nr = folio_nr_pages(folio);
+On Fri, Jun 10, 2022 at 11:12 PM Vincent Whitchurch
+<vincent.whitchurch@axis.com> wrote:
+>
+> Call virtio_device_ready() to make this driver work after commit
+> b4ec69d7e09 ("virtio: harden vring IRQ"), since the driver uses the
+> virtqueues in the probe function.  (The virtio core sets the device
+> ready when probe returns.)
+>
+> Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+>  arch/um/drivers/virt-pci.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/um/drivers/virt-pci.c b/arch/um/drivers/virt-pci.c
+> index 5c092a9153ea..027847023184 100644
+> --- a/arch/um/drivers/virt-pci.c
+> +++ b/arch/um/drivers/virt-pci.c
+> @@ -544,6 +544,8 @@ static int um_pci_init_vqs(struct um_pci_device *dev)
+>         dev->cmd_vq = vqs[0];
+>         dev->irq_vq = vqs[1];
+>
+> +       virtio_device_ready(dev->vdev);
 > +
-> +			if (folio_test_hugetlb(folio))
-> +				nr = 1;
-> +			*start = folio->index + nr;
->  			goto out;
->  		}
->  	}
+>         for (i = 0; i < NUM_IRQ_MSGS; i++) {
+>                 void *msg = kzalloc(MAX_IRQ_MSG_SIZE, GFP_KERNEL);
+>
+> @@ -587,7 +589,7 @@ static int um_pci_virtio_probe(struct virtio_device *vdev)
+>         dev->irq = irq_alloc_desc(numa_node_id());
+>         if (dev->irq < 0) {
+>                 err = dev->irq;
+> -               goto error;
+> +               goto err_reset;
+>         }
+>         um_pci_devices[free].dev = dev;
+>         vdev->priv = dev;
+> @@ -604,6 +606,9 @@ static int um_pci_virtio_probe(struct virtio_device *vdev)
+>
+>         um_pci_rescan();
+>         return 0;
+> +err_reset:
+> +       virtio_reset_device(vdev);
+> +       vdev->config->del_vqs(vdev);
 
-Yes, With the patch, The above tests works fine. 
+This part seems to be an independent fix.
 
---
-Thanks,
-Sumanth
+Thanks
+
+>  error:
+>         mutex_unlock(&um_pci_mtx);
+>         kfree(dev);
+> --
+> 2.34.1
+>
+

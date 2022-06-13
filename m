@@ -2,177 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3C1549C24
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE80549C29
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345031AbiFMSts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S239611AbiFMSvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344563AbiFMSt2 (ORCPT
+        with ESMTP id S1344062AbiFMSum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:49:28 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949B4E86C4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:47:34 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id v7so4545573ilo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:47:34 -0700 (PDT)
+        Mon, 13 Jun 2022 14:50:42 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E822EE8D4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:50:58 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id p63so4301517qkd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3y6nQUpREDLkWe7yKa0UAwuMqX3hq5w915YYWK2imJA=;
-        b=dfO6y+K+eEEw+nHowr64bloavX1KPc8PRVoqFmcf+aWlEilrashyB632gGEfGmOFM9
-         0Njo5NPQAdGI+1e5XMn/E5nBtdPPM/qly7ovhx5ErL+dbsJzsDFyxvy+fEpPJ76/XBGc
-         b2lqU9w7djr5BM+e32FltdjMLXCOi/ORouMImp327Cv13MIbMaTq2UV3+cXHKQWJkyZo
-         xgIVLQwWEzDwTIvKlR4H8e1Wr5Wjnuzqopjykh6Yzh0TsCY2ZIGeOtEjstO9A7mENRnd
-         4OuDRZBLbOCOomiXN2LhWoWm3LdGF+nAVQX9ZWmfil2DR5tnPU+p8qzfPW0SOCPfQKg1
-         ySXQ==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H0T+Ju0FY0ctldM76CfR3ifPomNMCFqKjz28sSDHzOo=;
+        b=CRP/awNTFqsFKDaZFcnWqTMwOfEC1FNH1yVjUL6uKl/vBwqyravouD90Jv5QMA7cm0
+         qW1ubwVfAbdEKIgaIf3TK6U+mPjYw2RqW26CSKTQ6fC0Wqi238uRtSPqXUhgp/c8YXWC
+         +03V571nkBn5BKJFt7qABBhZxie8tWshu/fvvWYkfhJZytIailOGrLJr/gwJui+pfRc+
+         Qgca9fqO+EGc5a20FwGUwksH4Razm9mopNFgEWMomWdAzJ4KtEMQd9dBOwqaMQyrSkHq
+         NX8JdM6Y3zmdpzIr8nLxJDt6mLdZtiG5mXqVQWfsIl1ollke0vCuWEAf0iyLrFdVg+d+
+         zLjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3y6nQUpREDLkWe7yKa0UAwuMqX3hq5w915YYWK2imJA=;
-        b=4zLfLC6E13ES1Imedi1We+lomTfJj+wGvOB3//pwnqJ7wYtkMkcgRe9qGqHYe+JTuK
-         UFy0wo212+NwKamlNRFLyFOGOdpEy3fPgf6TbREKbsEPkbQUsk6d3ccXDP8ESPjREJNH
-         N6WCQG6ctVbajzA0ewwK08WhWjcjy/KZUQW77KdXe76ZfUA7hyhMElxBPi9DZmnxMEef
-         lxUMneA0RQcrn6aPLJIVxARV5j/xnzoQY1bYlaR/CSOLshWtr9iAjdD5grxrSiXjU25h
-         myZM3St7AoCPkOOlPpTmHec8IeTMh94nm16RBWX5ab14rJTGFU3+y/l5WsqUBW5p1+YP
-         4oGA==
-X-Gm-Message-State: AJIora/8MvBtDH56yhKJm/bOtYPr4oJJB1OFf8jhy7bIFx7eQZfeVGzr
-        4NmUkRteGJZlnf9VLWYAIjn/uygN2arM2ObraAdkmg==
-X-Google-Smtp-Source: AGRyM1utYZtUJPmmO0YH5rQY1H+QkoLxHbX0qkfAdMz/XCRVb0XG2N2qMO4MC8xySY77TbTFJmHmuYWkYpRBCT9nKZ4=
-X-Received: by 2002:a92:ca0e:0:b0:2d3:dc52:35e9 with SMTP id
- j14-20020a92ca0e000000b002d3dc5235e9mr272117ils.44.1655135253763; Mon, 13 Jun
- 2022 08:47:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H0T+Ju0FY0ctldM76CfR3ifPomNMCFqKjz28sSDHzOo=;
+        b=kj8MgEYkHCPmn5wjUBdzZO/O7cjVqVB43AmpPVLWrLclPBynTq4xSYJp93xMz6TZj2
+         CUBtdJq0HFsda3eRzg6qHdrW63PRJiTq3jD77cCHBFNCW0eniS/K0u5nVRrxyxrowvOV
+         DXp/6gAOqZiWa4W6D1p7u0WPzEo+prR044pOvH1WmATaYMU0V//0fBPglZgClePMGkCE
+         6wA6Nqdk2FMKEfUPWS3koDq3l2N5YdK/9kQVsDzQehqg5jBUlbPUOSQcTnuWvBLIV+eG
+         U47TK9dLtWTnaQYj0wKvKuiL+YPgAExkb9mQDkuoLmPecM54koOL9PZ23rFU2lfJ4DiB
+         5XHQ==
+X-Gm-Message-State: AOAM531HVMP0C3w1JmadNmANLw1mNR2DJ+kCi4b4cJEP9Ap+WRb/n15X
+        kAVES8B0ZEK1xI7bHowY6nhnTw==
+X-Google-Smtp-Source: ABdhPJz6KlDsQy5A8f6VgC3uqf5VsQ54EDxPFTNE5iUKh8DjJ8U/91+syvnkllo6PVOdof4Zs7pmGQ==
+X-Received: by 2002:a05:620a:4e9:b0:6a7:8357:303d with SMTP id b9-20020a05620a04e900b006a78357303dmr467386qkh.105.1655135457443;
+        Mon, 13 Jun 2022 08:50:57 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:2c45])
+        by smtp.gmail.com with ESMTPSA id j4-20020a05620a0a4400b006a684c87f4bsm6839593qka.68.2022.06.13.08.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 08:50:57 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 11:50:56 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
+Message-ID: <Yqdc4DE8gYJ3zesO@cmpxchg.org>
+References: <YqDGYjgjcS5OoS3P@cmpxchg.org>
+ <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
+ <YqDncfLeEeBaosrY@cmpxchg.org>
+ <02ee2c97-3bca-8eb6-97d8-1f8743619453@linux.ibm.com>
+ <YqH74WaUzJlb+smt@cmpxchg.org>
+ <20220609152243.00000332@Huawei.com>
+ <YqJa4N/VlS4zN4vf@cmpxchg.org>
+ <20220610105708.0000679b@Huawei.com>
+ <YqdEEhJFr3SlfvSJ@cmpxchg.org>
+ <4297bd21-e984-9d78-2bca-e70c11749a72@linux.ibm.com>
 MIME-Version: 1.0
-References: <Yp59WCODvEDbpxOY@sol.localdomain> <CANp29Y7yEocOnLMhE_hc37L8wAzpvON9hwpjvuBLoMdQzhw+xA@mail.gmail.com>
- <Yp/wGYVsKR8M9eXI@sol.localdomain>
-In-Reply-To: <Yp/wGYVsKR8M9eXI@sol.localdomain>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 13 Jun 2022 17:47:22 +0200
-Message-ID: <CANp29Y7Y-5KY8D8=tFQfYF_aHwNOh8pz3sumLuKM930EHW7msg@mail.gmail.com>
-Subject: Re: Auto-invalidating old syzbot reports?
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4297bd21-e984-9d78-2bca-e70c11749a72@linux.ibm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 2:41 AM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Tue, Jun 07, 2022 at 04:37:42PM +0200, 'Aleksandr Nogikh' via syzkaller wrote:
-> > Hi Eric,
-> >
-> > Thanks for contacting us!
-> > These are very interesting points.
-> >
-> > Syzbot indeed only closes old bugs without a reproducer, because if we
-> > have a repro, then we can periodically do a fix bisection. And yes,
-> > this mechanism unfortunately does not always work perfectly.
-> >
-> > I think we could split the problem you described into two parts.
-> > 1) Some bugs that are "open" on the dashboard are actually no longer
-> > relevant and should be closed.
-> >
-> > If you know some old opened bugs with repro, which are actually
-> > already fixed, could you please share them? It would be helpful to
-> > figure out the exact reason why they are still open.
-> > There are some cases when we can close bugs with a repro without
-> > losing too much -- e.g. for bugs from -next there was a discussion in
-> > https://github.com/google/syzkaller/issues/1957.
-> > Also, if the fix bisection fails, but the repro no longer triggers the
-> > crash on the HEAD, then we could probably "cancel" the repro and let
-> > the bug be auto-closed (actually, auto-invalidated) later?
-> >
->
-> Just to give the first definitive example I could find,
-> https://syzkaller.appspot.com/bug?id=06c43cd0a71aec08de8ea55ca5cda816c45ab4e0
-> ("KMSAN: uninit-value in _mix_pool_bytes") is a 3-year old bug that is still
-> open even though it was fixed by commit f45a4248ea4c ("net: usb: rtl8150: set
-> random MAC address when set_ethernet_addr() fails").
+On Mon, Jun 13, 2022 at 07:53:03PM +0530, Aneesh Kumar K V wrote:
+> On 6/13/22 7:35 PM, Johannes Weiner wrote:
+> > On Fri, Jun 10, 2022 at 10:57:08AM +0100, Jonathan Cameron wrote:
+> > > I'm not sure completely read only is flexible enough (though mostly RO is fine)
+> > > as we keep sketching out cases where any attempt to do things automatically
+> > > does the wrong thing and where we need to add an extra tier to get
+> > > everything to work.  Short of having a lot of tiers I'm not sure how
+> > > we could have the default work well.  Maybe a lot of "tiers" is fine
+> > > though perhaps we need to rename them if going this way and then they
+> > > don't really work as current concept of tier.
+> > > 
+> > > Imagine a system with subtle difference between different memories such
+> > > as 10% latency increase for same bandwidth.  To get an advantage from
+> > > demoting to such a tier will require really stable usage and long
+> > > run times. Whilst you could design a demotion scheme that takes that
+> > > into account, I think we are a long way from that today.
+> > 
+> > Good point: there can be a clear hardware difference, but it's a
+> > policy choice whether the MM should treat them as one or two tiers.
+> > 
+> > What do you think of a per-driver/per-device (overridable) distance
+> > number, combined with a configurable distance cutoff for what
+> > constitutes separate tiers. E.g. cutoff=20 means two devices with
+> > distances of 10 and 20 respectively would be in the same tier, devices
+> > with 10 and 100 would be in separate ones. The kernel then generates
+> > and populates the tiers based on distances and grouping cutoff, and
+> > populates the memtier directory tree and nodemasks in sysfs.
+> > 
+> 
+> Right now core/generic code doesn't get involved in building tiers. It just
+> defines three tiers where drivers could place the respective devices they
+> manage. The above suggestion would imply we are moving quite a lot of policy
+> decision logic into the generic code?.
 
-Thanks for providing the example!
-Yes, KMSAN bugs are unfortunately a bit special at the moment - we
-cannot do a proper fix bisection because the KMSAN repo is regularly
-rebased. Correct Reported-by tag and manual fix reporting (#syz fix)
-are right now the only ways to get KMSAN bugs closed.
+No. The driver still chooses its own number, just from a wider
+range. The only policy in generic code is the distance cutoff for
+which devices are grouped into tiers together.
 
-For this particular bug the problem was that the fixing commit
-referenced (Reported-by:
-syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com) another bug
-(https://syzkaller.appspot.com/bug?extid=abbc768b560c84d92fd3).
+> At some point, we will have to depend on more attributes other than
+> distance(may be HMAT?) and each driver should have the flexibility to place
+> the device it is managing in a specific tier? By then we may decide to
+> support more than 3 static tiers which the core kernel currently does.
 
->
-> From working on syzbot reports in the past, I can say that the "already fixed"
-> case for old reports is very common.  It is hard and time-consuming to actually
-> identify them as such though, since it requires root-causing the bug.  If it was
-> quick and easy to do so, there wouldn't be hundreds of such open reports...
->
-> > 2) Some bugs were reported to the mailing lists, but became forgotten.
-> >
-> > We could periodically take maintainers as per the latest commit and
-> > send a reminder email to them. What do you think, would people go mad
-> > if we did that for each bug e.g. every 6 months? :) Only if the bug
-> > still happens on syzbot, of course.
->
-> That is greatly needed, but to get there we first need to get past the
-> assumption that every syzbot report will get properly handled by humans and thus
-> should never be automatically closed.  That assumption has been tried for the
-> last 5 years, and unfortunately it isn't working.  (If responding to syzbot
-> reports was being properly funded, it would be possible, but it's not.)  It
-> looks like you agree, as per your suggestion that only crashes that still happen
-> in syzbot should be reminded about.  I think syzbot actually needs to go further
-> and close the old bug reports, not merely suppress reminders about them...
+If we start with a larger possible range of "distance" values right
+away, we can still let the drivers ballpark into 3 tiers for now (100,
+200, 300). But it will be easier to take additional metrics into
+account later and fine tune accordingly (120, 260, 90 etc.) without
+having to update all the other drivers as well.
 
-I've filed an issue about making syzbot periodically re-test the
-reproducers. If the repro doesn't trigger a bug anymore, syzkaller
-will pretend there's no repro and close the bug once crashes are not
-happening anymore. This should hopefully resolve the problem with old
-irrelevant bugs.
-https://github.com/google/syzkaller/issues/3193
+> If the kernel still can't make the right decision, userspace could rearrange
+> them in any order using rank values. Without something like rank, if
+> userspace needs to fix things up,  it gets hard with device
+> hotplugging. ie, the userspace policy could be that any new PMEM tier device
+> that is hotplugged, park it with a very low-rank value and hence lowest in
+> demotion order by default. (echo 10 >
+> /sys/devices/system/memtier/memtier2/rank) . After that userspace could
+> selectively move the new devices to the correct memory tier?
 
->
-> In any case, reminders *must* include the latest crash details in a way that
-> clearly shows that the bug is still relevant.
+I had touched on this in the other email.
 
-That's a good point, thanks!
+This doesn't work if two drivers that should have separate policies
+collide into the same tier - which is very likely with just 3 tiers.
+So it seems to me the main usecase for having a rank tunable falls
+apart rather quickly until tiers are spaced out more widely. And it
+does so at the cost of an, IMO, tricky to understand interface.
 
->
-> > At some point we were also considering sending aggregated reminders
-> > (e.g. sth like "we still have X open bugs for the subsystem you
-> > maintain/have actively contributed to, here they are:"), but to do
-> > that, we first need to learn how to more or less reliably classify the
-> > bugs into the subsystems.
->
-> Well syzbot already identifies subsystems via the stack trace; it's just not as
-> good as a human expert, and probably never will be since the correct subsystem
-> can be very non-obvious.  For a short time, I was actually manually classifying
-> the subsystems for syzbot reports and sending out reminders --- see
-> https://lore.kernel.org/linux-kernel/?q=%22open+syzbot+bugs%22 --- but I gave up
-> due to lack of support from my job for doing that work, combined with receiving
-> somewhat less engagement than I had hoped.
+In the other email I had suggested the ability to override not just
+the per-device distance, but also the driver default for new devices
+to handle the hotplug situation.
 
-Hmm, yes, maybe we can indeed give even the existing subsystem
-detection mechanism a try.
-And it looks like it's better to only send grouped reminders -- given
-how much negative reaction one can see under your link(s), I wonder
-what would there be if we send per-bug reminders :)
+This should be less policy than before. Driver default and per-device
+distances (both overridable) combined with one tunable to set the
+range of distances that get grouped into tiers.
 
-Hopefully I'll be able to get to the implementation in some foreseeable future.
+With these parameters alone, you can generate an ordered list of tiers
+and their devices. The tier numbers make sense, and no rank is needed.
 
->
-> Perhaps the best solution would be to crowdsource by providing a self-service
-> "#syz subsystem $FOO" command.
->
-> - Eric
+Do you still need the ability to move nodes by writing nodemasks? I
+don't think so. Assuming you would never want to have an actually
+slower device in a higher tier than a faster device, the only time
+you'd want to move a device is when the device's distance value is
+wrong. So you override that (until you update to a fixed kernel).

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C61548FE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD80548B6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbiFMKRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S244934AbiFMKmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbiFMKRJ (ORCPT
+        with ESMTP id S1348594AbiFMKjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:17:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7221FA7C;
-        Mon, 13 Jun 2022 03:15:33 -0700 (PDT)
+        Mon, 13 Jun 2022 06:39:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222E8D111;
+        Mon, 13 Jun 2022 03:23:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27E1761497;
-        Mon, 13 Jun 2022 10:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB29C3411C;
-        Mon, 13 Jun 2022 10:15:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5664B80E2D;
+        Mon, 13 Jun 2022 10:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B30FC3411C;
+        Mon, 13 Jun 2022 10:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115324;
-        bh=FUexYxaRsvee6a4Kuwpw9ly8fry/guwfgp+ZPHLQiCg=;
+        s=korg; t=1655115806;
+        bh=/953q/88NYY7KN6eDC1zjmV2cIOg6xVZnzsRPJMRLv8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J7koFNiYAfQeCsKu6Fdn2R2bTpYdeIjFoVnUgDmRLtgo0MnQjM/MhjeVdovUOhp1U
-         +IxUXjmkEfQA2F+bc58fhWGk8DJpezLbYPLeJhA6PkPwoxDkFPdqffdkB10/xo4Aic
-         DdGVluJgX2w5Yeid1eUxrniBJr8Pe+F6TXJjRKeQ=
+        b=nA50QsVbOq6F56GLg+Fv6STpwS58uL5G1MNEDvU9/D7aKRLKyAAZnP3mpWEbG/6Nv
+         MQQJRnmn9hyKEKgay9olJPMewWjKgFr4k7bUJ5xs1ghdsjx86nlBuORWoGxt7SuK1H
+         aoaoWO5PUg0cDv0qMA+ikwuWu3lSsdWzYC//KNL8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 023/167] ASoC: rt5645: Fix errorenous cleanup order
-Date:   Mon, 13 Jun 2022 12:08:17 +0200
-Message-Id: <20220613094846.270358417@linuxfoundation.org>
+Subject: [PATCH 4.14 040/218] ARM: dts: exynos: add atmel,24c128 fallback to Samsung EEPROM
+Date:   Mon, 13 Jun 2022 12:08:18 +0200
+Message-Id: <20220613094917.837386926@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 2def44d3aec59e38d2701c568d65540783f90f2f ]
+[ Upstream commit f038e8186fbc5723d7d38c6fa1d342945107347e ]
 
-There is a logic error when removing rt5645 device as the function
-rt5645_i2c_remove() first cancel the &rt5645->jack_detect_work and
-delete the &rt5645->btn_check_timer latter. However, since the timer
-handler rt5645_btn_check_callback() will re-queue the jack_detect_work,
-this cleanup order is buggy.
+The Samsung s524ad0xd1 EEPROM should use atmel,24c128 fallback,
+according to the AT24 EEPROM bindings.
 
-That is, once the del_timer_sync in rt5645_i2c_remove is concurrently
-run with the rt5645_btn_check_callback, the canceled jack_detect_work
-will be rescheduled again, leading to possible use-after-free.
-
-This patch fix the issue by placing the del_timer_sync function before
-the cancel_delayed_work_sync.
-
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220516092035.28283-1-linma@zju.edu.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220426183443.243113-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rt5645.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm/boot/dts/exynos5250-smdk5250.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
-index 1ac96ef9ee20..703b26ec4e15 100644
---- a/sound/soc/codecs/rt5645.c
-+++ b/sound/soc/codecs/rt5645.c
-@@ -3878,6 +3878,12 @@ static int rt5645_i2c_remove(struct i2c_client *i2c)
- 	if (i2c->irq)
- 		free_irq(i2c->irq, rt5645);
+diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+index a3c4b9e03fbf..dc539a4eb27a 100644
+--- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
++++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+@@ -128,7 +128,7 @@
+ 	samsung,i2c-max-bus-freq = <20000>;
  
-+	/*
-+	 * Since the rt5645_btn_check_callback() can queue jack_detect_work,
-+	 * the timer need to be delted first
-+	 */
-+	del_timer_sync(&rt5645->btn_check_timer);
-+
- 	cancel_delayed_work_sync(&rt5645->jack_detect_work);
- 	cancel_delayed_work_sync(&rt5645->rcclock_work);
+ 	eeprom@50 {
+-		compatible = "samsung,s524ad0xd1";
++		compatible = "samsung,s524ad0xd1", "atmel,24c128";
+ 		reg = <0x50>;
+ 	};
+ 
+@@ -287,7 +287,7 @@
+ 	samsung,i2c-max-bus-freq = <20000>;
+ 
+ 	eeprom@51 {
+-		compatible = "samsung,s524ad0xd1";
++		compatible = "samsung,s524ad0xd1", "atmel,24c128";
+ 		reg = <0x51>;
+ 	};
  
 -- 
 2.35.1

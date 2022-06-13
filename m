@@ -2,117 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B90549B99
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3298549C22
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241655AbiFMSfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S242227AbiFMStG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245179AbiFMSej (ORCPT
+        with ESMTP id S1345365AbiFMSs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:34:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5CAD84
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:44:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41229614F9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9142BC3411C;
-        Mon, 13 Jun 2022 15:44:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655135088;
-        bh=y53efzXikHFm/H91hlXuqUbgkorGqWK8cDWFahm+awA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=vAG886PEu0K2LJBZOY10ZX6Zry38qoxAEMO2BeOohNJob32HoJtseFMZLZTpBVk/n
-         qjFPHhxFQtV4qRn3A+bW5SkuLsS02zpcBs4fMfqJepdVO9imeuOOUkg5O24vdzh45j
-         H5h2gBGEHmxRdClzEr11CLwvkZZRAdbRAUrnP9o9qQAeogwhy8DnTKCkXsLzarviun
-         7WrCtY/kiW/GiAS1+ZgiHyut4xgo6w3Oz447rIv3IGutO0iHNVUSlDfaMOc1Gs1tUg
-         LYNwsxJ8vFU5zox+ryBzglQA55paI+9wT5NUIJMYnXa5/7IVEGjdNSpVaIYm4/c24F
-         luM3hbPNRmAnw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 341905C0510; Mon, 13 Jun 2022 08:44:48 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 08:44:48 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org,
-        pmladek@suse.com, Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [BUG] 8e274732115f ("printk: extend console_lock for per-console
- locking")
-Message-ID: <20220613154448.GE1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
- <87v8t5l39z.fsf@jogness.linutronix.de>
- <20220613042937.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
- <87tu8pgcj0.fsf@jogness.linutronix.de>
+        Mon, 13 Jun 2022 14:48:28 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id BD9A3E64E7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:46:37 -0700 (PDT)
+Received: (qmail 603976 invoked by uid 1000); 13 Jun 2022 11:46:36 -0400
+Date:   Mon, 13 Jun 2022 11:46:36 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH] tools/memory-model: Clarify LKMM's limitations in
+ litmus-tests.txt
+Message-ID: <Yqdb3CZ8bKtbWZ+z@rowland.harvard.edu>
+References: <20220613122744.373516-1-paul.heidekrueger@in.tum.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <87tu8pgcj0.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220613122744.373516-1-paul.heidekrueger@in.tum.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 11:10:19AM +0206, John Ogness wrote:
-> On 2022-06-12, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> >> As I suspected, the final printk's cannot direct print because the
-> >> kthread was printing. Using the below patch did seem to address your
-> >> problem. But this is probably not the way forward.
-> >
-> > When I apply it, I still lose output, perhaps due to different timing?
-> > Doing the pr_flush(1000, true) just before the call to kernel_power_off()
-> > has been working quite well thus far, though.
+On Mon, Jun 13, 2022 at 12:27:44PM +0000, Paul Heidekrüger wrote:
+> As discussed, clarify LKMM not recognizing certain kinds of orderings.
+> In particular, highlight the fact that LKMM might deliberately make
+> weaker guarantees than compilers and architectures.
 > 
-> Your pr_flush() is appropriate for your RCU tests, but this is a problem
-> in general that needs to be addressed. I suppose we should start a new
-> thread for that. ;-)
+> Link: https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tum.de/T/#u
+> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> Cc: Martin Fink <martin.fink@in.tum.de>
+> ---
+>  .../Documentation/litmus-tests.txt            | 29 ++++++++++++-------
+>  1 file changed, 19 insertions(+), 10 deletions(-)
 > 
-> During development we experimented with the idea of kthreads pausing
-> themselves whenever direct printing is activated. It was racey because
-> there are situations when direct printing is only temporarily active and
-> it was hard to coordinate who prints when direct printing becomes
-> inactive again. So we dropped that idea. However, in this situation the
-> system will not be disabling direct printing.
-> 
-> @Paul, can you try the below change instead? Until this has been
-> officially solved, you probably want to keep your pr_flush()
-> solution. (After all, that is exactly what pr_flush() is for.) But it
-> would be helpful if you could run this last test for us.
-> 
-> @Petr, I like the idea of the kthreads getting out of the way rather
-> than trying to direct print themselves (for this situation). It still
-> isn't optimal because that final pr_emerg("Power down\n") might come
-> before the kthread has finished its current line. But in that case the
-> kthread may not have much a chance to finish the printing anyway.
-> 
-> John Ogness
-> 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index ea3dd55709e7..45c6c2b0b104 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3729,7 +3729,9 @@ static bool printer_should_wake(struct console *con, u64 seq)
->  		return true;
+> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
+> index 8a9d5d2787f9..623059eff84e 100644
+> --- a/tools/memory-model/Documentation/litmus-tests.txt
+> +++ b/tools/memory-model/Documentation/litmus-tests.txt
+> @@ -946,22 +946,31 @@ Limitations of the Linux-kernel memory model (LKMM) include:
+>  	carrying a dependency, then the compiler can break that dependency
+>  	by substituting a constant of that value.
 >  
->  	if (con->blocked ||
-> -	    console_kthreads_atomically_blocked()) {
-> +	    console_kthreads_atomically_blocked() ||
-> +	    system_state > SYSTEM_RUNNING ||
-> +	    oops_in_progress) {
->  		return false;
->  	}
+> -	Conversely, LKMM sometimes doesn't recognize that a particular
+> -	optimization is not allowed, and as a result, thinks that a
+> -	dependency is not present (because the optimization would break it).
+> -	The memory model misses some pretty obvious control dependencies
+> -	because of this limitation.  A simple example is:
+> +	Conversely, LKMM will sometimes overstate the amount of reordering
+> +	done by architectures and compilers, leading it to missing some
+> +	pretty obvious orderings.  A simple example is:
 
-And this one works for me, thank you!!!
+I don't like the word "overstate" here.  How about instead:
 
-On to Petr's patch...
+	LKMM will sometimes overestimate the amount of reordering
+	CPUs and compilers can carry out, leading it to miss some
+	pretty obvious cases of ordering.
 
-							Thanx, Paul
+>  
+>  		r1 = READ_ONCE(x);
+>  		if (r1 == 0)
+>  			smp_mb();
+>  		WRITE_ONCE(y, 1);
+>  
+> -	There is a control dependency from the READ_ONCE to the WRITE_ONCE,
+> -	even when r1 is nonzero, but LKMM doesn't realize this and thinks
+> -	that the write may execute before the read if r1 != 0.  (Yes, that
+> -	doesn't make sense if you think about it, but the memory model's
+> -	intelligence is limited.)
+> +	There is no dependency from the WRITE_ONCE() to the READ_ONCE(),
+
+You mean "from the READ_ONCE() to the WRITE_ONCE()".
+
+> +	and as a result, LKMM does not assume ordering.  However, the
+
+... does not claim that the load is ordered before the store.
+
+> +	smp_mb() in the if branch will prevent architectures from
+> +	reordering the WRITE_ONCE() ahead of the READ_ONCE() but only if r1
+
+Architectures don't do reordering; CPUs do.  In any case this sentence 
+is wrong; the presence of the "if" statement is what prevents the 
+reordering.  CPUs will never reorder a store before a conditional 
+branch, even if the store gets executed on both branches of the 
+conditional.
+
+By contrast, the smp_mb() in one of the branches prevents _compilers_ 
+from moving the store before the conditional.
+
+> +	is 0.  This, by definition, is not a control dependency, yet
+> +	ordering is guaranteed in some cases, depending on the READ_ONCE(),
+> +	which LKMM doesn't recognize.
+
+Say instead:
+
+	However, even though no dependency is present, the WRITE_ONCE() 
+	will not be executed before the READ_ONCE().  There are two
+	reasons for this:
+
+		The presence of the smp_mb() in one of the branches
+		prevents the compiler from moving the WRITE_ONCE()
+		up before the "if" statement, since the compiler has
+		to assume that r1 will sometimes be 0 (but see the
+		comment below);
+
+		CPUs do not execute stores before po-earlier conditional
+		branches, even in cases where the store occurs after the
+		two arms of the branch have recombined.
+
+> +
+> +	It is clear that it is not dangerous in the slightest for LKMM to
+> +	make weaker guarantees than architectures.  In fact, it is
+> +	desirable, as it gives compilers room for making optimizations.
+> +	For instance, because a value of 0 triggers undefined behavior
+
+"because a value of 0 triggers undefined behavior" implies that 
+undefined behavior will always occur.  Instead say:
+
+	For instance, suppose that a 0 value in r1 would trigger
+	undefined behavior later on.  Then a clever compiler...
+
+> +	elsewhere, a clever compiler might deduce that r1 can never be 0 in
+> +	the if condition.  As a result, said clever compiler might deem it
+> +	safe to optimize away the smp_mb(), eliminating the branch and
+> +	any ordering an architecture would guarantee otherwise.
+
+Alan
+
+>  
+>  2.	Multiple access sizes for a single variable are not supported,
+>  	and neither are misaligned or partially overlapping accesses.
+> -- 
+> 2.35.1
+> 

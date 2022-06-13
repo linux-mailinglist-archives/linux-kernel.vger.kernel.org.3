@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA428548E54
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92BE548A71
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350150AbiFMLBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S1355533AbiFMMd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350218AbiFMKyp (ORCPT
+        with ESMTP id S1353000AbiFMMaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73253CE8;
-        Mon, 13 Jun 2022 03:30:23 -0700 (PDT)
+        Mon, 13 Jun 2022 08:30:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780255B3E9;
+        Mon, 13 Jun 2022 04:07:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9388B80E5E;
-        Mon, 13 Jun 2022 10:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC53C34114;
-        Mon, 13 Jun 2022 10:30:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D79E2CE1177;
+        Mon, 13 Jun 2022 11:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 895AAC34114;
+        Mon, 13 Jun 2022 11:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116220;
-        bh=PVI05kPBXQYxAUafjp6oKDIM1E+3bVSwSqCRqIipfZA=;
+        s=korg; t=1655118422;
+        bh=TbIVwNAzOSKxF5R/qnhW5wcuDO7VyITaYh+xHBnqW6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N+ovfpKbC0jxTmfSjmVRSiZ76d+j79eB4ePCiQDce/xNKwBpgQd9/tMCqadbr2p2N
-         xjWF8lEC9NoF0Qg0i2bS7GQ+Wgor1FbQKsqoDZ7qRLZq3WpQFJBAH7R6mN0+C54WLo
-         TQmzKdTBGtXEXJv47KO7BPbaMplCINcop6eUJBRc=
+        b=PLiRvGOhT+ZxdI9pCVXwLkoYzZJH0PshGxQQ/AT9R51tsjNjq6r3YErMsiSHvP9U+
+         rUrOiKHrwP3ISLS7FFY2X1oq/b5oICZ0UafWFEnOqdHtjhlXg5muy6gv0OnHgvNfew
+         jbYhdSWCZh6XQplk/cU9nJ6n5JuX4NLY7iV0MNtI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 153/218] serial: txx9: Dont allow CS5-6
+Subject: [PATCH 5.10 051/172] net: ethernet: mtk_eth_soc: out of bounds read in mtk_hwlro_get_fdir_entry()
 Date:   Mon, 13 Jun 2022 12:10:11 +0200
-Message-Id: <20220613094925.233523219@linuxfoundation.org>
+Message-Id: <20220613094902.670036675@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 79ac88655dc0551e3571ad16bdabdbe65d61553e ]
+[ Upstream commit e7e7104e2d5ddf3806a28695670f21bef471f1e1 ]
 
-Only CS7 and CS8 are supported but CSIZE is not sanitized with
-CS5 or CS6 to CS8.
+The "fsp->location" variable comes from user via ethtool_get_rxnfc().
+Check that it is valid to prevent an out of bounds read.
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
-
-Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-5-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7aab747e5563 ("net: ethernet: mediatek: add ethtool functions to configure RX flows of HW LRO")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial_txx9.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
-index ba77e72057a9..5d41884f5012 100644
---- a/drivers/tty/serial/serial_txx9.c
-+++ b/drivers/tty/serial/serial_txx9.c
-@@ -652,6 +652,8 @@ serial_txx9_set_termios(struct uart_port *port, struct ktermios *termios,
- 	case CS6:	/* not supported */
- 	case CS8:
- 		cval |= TXX9_SILCR_UMODE_8BIT;
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
- 		break;
- 	}
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index 7d7dc0754a3a..789642647cd3 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1966,6 +1966,9 @@ static int mtk_hwlro_get_fdir_entry(struct net_device *dev,
+ 	struct ethtool_rx_flow_spec *fsp =
+ 		(struct ethtool_rx_flow_spec *)&cmd->fs;
  
++	if (fsp->location >= ARRAY_SIZE(mac->hwlro_ip))
++		return -EINVAL;
++
+ 	/* only tcp dst ipv4 is meaningful, others are meaningless */
+ 	fsp->flow_type = TCP_V4_FLOW;
+ 	fsp->h_u.tcp_ip4_spec.ip4dst = ntohl(mac->hwlro_ip[fsp->location]);
 -- 
 2.35.1
 

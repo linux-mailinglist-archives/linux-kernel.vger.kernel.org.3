@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B4C549653
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877B0548F7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356671AbiFMLwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S1357281AbiFMLxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357560AbiFMLqV (ORCPT
+        with ESMTP id S1356738AbiFMLt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:46:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5721C13E27;
-        Mon, 13 Jun 2022 03:52:48 -0700 (PDT)
+        Mon, 13 Jun 2022 07:49:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3834D27D;
+        Mon, 13 Jun 2022 03:53:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF68BB80D3A;
-        Mon, 13 Jun 2022 10:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17307C34114;
-        Mon, 13 Jun 2022 10:52:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E125E61257;
+        Mon, 13 Jun 2022 10:53:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04136C34114;
+        Mon, 13 Jun 2022 10:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117566;
-        bh=f5PpVOOP3sRfv4brxVzINldqUAaGx0LXGTxUjPP4kic=;
+        s=korg; t=1655117596;
+        bh=+7WXVu5kP53VqQA0ADTMHnERl1ovLtqDxs2TO4AWIFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bSTVZBB91Yz9zSHydNDsN6M8hYNk74vAUaiYf2yo5N76CjT0J8S/FFIZRXQNN+R1J
-         CEcsu+83ozYeWd8DlHSQztJcb8VveOHv32g6nG1wIBgQNqR02H4vKXUPpITCvHH6Fv
-         Rnss52rhL9se6ePb5rVhSTyeqlmcyM2d8IATGRiY=
+        b=TK12bFLO8/tkMZbx/d7FijM1zEkPee/R5721vy8ag6v0ZXVS0UXaEkVVc1ygfpL9B
+         cEBpcEEdFsZYGFiKlUqMWH7WN4T5i6Q4HfpT4+PcDLNusaEQnsfNZu3fhmyw5YYmaG
+         wFi8fF4gAKFwzumUy7hX2BlNH8wFUuE2Twfb6/6Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenli Looi <wlooi@ucalgary.ca>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 058/287] ath9k: fix ar9003_get_eepmisc
-Date:   Mon, 13 Jun 2022 12:08:02 +0200
-Message-Id: <20220613094925.628008225@linuxfoundation.org>
+Subject: [PATCH 4.19 059/287] drm/edid: fix invalid EDID extension block filtering
+Date:   Mon, 13 Jun 2022 12:08:03 +0200
+Message-Id: <20220613094925.659106949@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
 References: <20220613094923.832156175@linuxfoundation.org>
@@ -56,35 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wenli Looi <wlooi@ucalgary.ca>
+From: Jani Nikula <jani.nikula@intel.com>
 
-[ Upstream commit 9aaff3864b603408c02c629957ae8d8ff5d5a4f2 ]
+[ Upstream commit 3aefc722ff52076407203b6af9713de567993adf ]
 
-The current implementation is reading the wrong eeprom type.
+The invalid EDID block filtering uses the number of valid EDID
+extensions instead of all EDID extensions for looping the extensions in
+the copy. This is fine, by coincidence, if all the invalid blocks are at
+the end of the EDID. However, it's completely broken if there are
+invalid extensions in the middle; the invalid blocks are included and
+valid blocks are excluded.
 
-Fixes: d8ec2e2a63e8 ("ath9k: Add an eeprom_ops callback for retrieving the eepmisc value")
-Signed-off-by: Wenli Looi <wlooi@ucalgary.ca>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220320233010.123106-5-wlooi@ucalgary.ca
+Fix it by modifying the base block after, not before, the copy.
+
+Fixes: 14544d0937bf ("drm/edid: Only print the bad edid when aborting")
+Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220330170426.349248-1-jani.nikula@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/ar9003_eeprom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/drm_edid.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-index 4d45d5a8ad2e..db583a6aeb0c 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-@@ -5615,7 +5615,7 @@ unsigned int ar9003_get_paprd_scale_factor(struct ath_hw *ah,
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index ef26095719c5..28ea3d260bea 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -1709,9 +1709,6 @@ struct edid *drm_do_get_edid(struct drm_connector *connector,
  
- static u8 ar9003_get_eepmisc(struct ath_hw *ah)
- {
--	return ah->eeprom.map4k.baseEepHeader.eepMisc;
-+	return ah->eeprom.ar9300_eep.baseEepHeader.opCapFlags.eepMisc;
- }
+ 		connector_bad_edid(connector, edid, edid[0x7e] + 1);
  
- const struct eeprom_ops eep_ar9300_ops = {
+-		edid[EDID_LENGTH-1] += edid[0x7e] - valid_extensions;
+-		edid[0x7e] = valid_extensions;
+-
+ 		new = kmalloc_array(valid_extensions + 1, EDID_LENGTH,
+ 				    GFP_KERNEL);
+ 		if (!new)
+@@ -1728,6 +1725,9 @@ struct edid *drm_do_get_edid(struct drm_connector *connector,
+ 			base += EDID_LENGTH;
+ 		}
+ 
++		new[EDID_LENGTH - 1] += new[0x7e] - valid_extensions;
++		new[0x7e] = valid_extensions;
++
+ 		kfree(edid);
+ 		edid = new;
+ 	}
 -- 
 2.35.1
 

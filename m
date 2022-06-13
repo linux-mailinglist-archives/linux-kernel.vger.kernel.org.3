@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED15C5492F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982E4548A1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358403AbiFMNER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
+        id S1355169AbiFMLhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355492AbiFMM4E (ORCPT
+        with ESMTP id S1354891AbiFMLaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:56:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E7D12D0D;
-        Mon, 13 Jun 2022 04:17:04 -0700 (PDT)
+        Mon, 13 Jun 2022 07:30:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4AD3FDB9;
+        Mon, 13 Jun 2022 03:45:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B79A260B60;
-        Mon, 13 Jun 2022 11:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DADC34114;
-        Mon, 13 Jun 2022 11:17:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CDFBB80D3A;
+        Mon, 13 Jun 2022 10:45:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4BBC3411C;
+        Mon, 13 Jun 2022 10:45:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119023;
-        bh=EFH/jpz6Y7HbXvroxBQ+an5CCn0BgHUFSg7kxrGjx/s=;
+        s=korg; t=1655117157;
+        bh=708efDuyk1Yx3SlD1A/DeMWSuKhHjD/LGlxnQ2I926Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VSZyhebbLLKQ59ZhT0eFMw/ptpAJgdvH2JxmaF72eF3tghJQfhyMsQEtlO560Iw06
-         w5j48UeFqUxA56CUE5YPXAJ9xrn1ACbe9Tl10M1mqU6pWFdHawJONsiusq5Os6eyzr
-         bDJNEbglAt0hZnOqqiPucglUi+J9WWqJrFqyYitM=
+        b=X2ktQ586MH9Dnd42PS4D8yDmd8DBAkUeArrnM31bOMVGlDH4Wr1pI2nrjpW+SRAj2
+         +vn5ShWHotA/g354FqUjYsKVRF8wIngzHpXcd52cehD02z7VCqFpyT/AB7goqexEPW
+         mL5hgRILy9xW6nP8bnhEEKwOi7SFTYaxM3n5FPmw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Petr Mladek <pmladek@suse.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        John Ogness <john.ogness@linutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 076/247] modpost: fix removing numeric suffixes
-Date:   Mon, 13 Jun 2022 12:09:38 +0200
-Message-Id: <20220613094925.262644048@linuxfoundation.org>
+Subject: [PATCH 5.4 306/411] serial: meson: acquire port->lock in startup()
+Date:   Mon, 13 Jun 2022 12:09:39 +0200
+Message-Id: <20220613094937.926453083@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,56 +59,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit b5beffa20d83c4e15306c991ffd00de0d8628338 ]
+[ Upstream commit 589f892ac8ef244e47c5a00ffd8605daa1eaef8e ]
 
-With the `-z unique-symbol` linker flag or any similar mechanism,
-it is possible to trigger the following:
+The uart_ops startup() callback is called without interrupts
+disabled and without port->lock locked, relatively late during the
+boot process (from the call path of console_on_rootfs()). If the
+device is a console, it was already previously registered and could
+be actively printing messages.
 
-ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
+Since the startup() callback is reading/writing registers used by
+the console write() callback (AML_UART_CONTROL), its access must
+be synchronized using the port->lock. Currently it is not.
 
-The reason is that for now the condition from remove_dot():
+The startup() callback is the only function that explicitly enables
+interrupts. Without the synchronization, it is possible that
+interrupts become accidentally permanently disabled.
 
-if (m && (s[n + m] == '.' || s[n + m] == 0))
+CPU0                           CPU1
+meson_serial_console_write     meson_uart_startup
+--------------------------     ------------------
+spin_lock(port->lock)
+val = readl(AML_UART_CONTROL)
+uart_console_write()
+                               writel(INT_EN, AML_UART_CONTROL)
+writel(val, AML_UART_CONTROL)
+spin_unlock(port->lock)
 
-which was designed to test if it's a dot or a '\0' after the suffix
-is never satisfied.
-This is due to that `s[n + m]` always points to the last digit of a
-numeric suffix, not on the symbol next to it (from a custom debug
-print added to modpost):
+Add port->lock synchronization to meson_uart_startup() to avoid
+racing with meson_serial_console_write().
 
-param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+Also add detailed comments to meson_uart_reset() explaining why it
+is *not* using port->lock synchronization.
 
-So it's off-by-one and was like that since 2014.
-
-Fix this for the sake of any potential upcoming features, but don't
-bother stable-backporting, as it's well hidden -- apart from that
-LD flag, it can be triggered only with GCC LTO which never landed
-upstream.
-
-Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
+Fixes: ff7693d079e5 ("ARM: meson: serial: add MesonX SoC on-chip uart driver")
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Link: https://lore.kernel.org/r/20220508103547.626355-1-john.ogness@linutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/mod/modpost.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/meson_uart.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index ca491aa2b376..7a5bddb8913e 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1971,7 +1971,7 @@ static char *remove_dot(char *s)
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index fbc5bc022a39..849ce8c1ef39 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -256,6 +256,14 @@ static const char *meson_uart_type(struct uart_port *port)
+ 	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
+ }
  
- 	if (n && s[n]) {
- 		size_t m = strspn(s + n + 1, "0123456789");
--		if (m && (s[n + m] == '.' || s[n + m] == 0))
-+		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
- 			s[n] = 0;
++/*
++ * This function is called only from probe() using a temporary io mapping
++ * in order to perform a reset before setting up the device. Since the
++ * temporarily mapped region was successfully requested, there can be no
++ * console on this port at this time. Hence it is not necessary for this
++ * function to acquire the port->lock. (Since there is no console on this
++ * port at this time, the port->lock is not initialized yet.)
++ */
+ static void meson_uart_reset(struct uart_port *port)
+ {
+ 	u32 val;
+@@ -270,9 +278,12 @@ static void meson_uart_reset(struct uart_port *port)
  
- 		/* strip trailing .lto */
+ static int meson_uart_startup(struct uart_port *port)
+ {
++	unsigned long flags;
+ 	u32 val;
+ 	int ret = 0;
+ 
++	spin_lock_irqsave(&port->lock, flags);
++
+ 	val = readl(port->membase + AML_UART_CONTROL);
+ 	val |= AML_UART_CLEAR_ERR;
+ 	writel(val, port->membase + AML_UART_CONTROL);
+@@ -288,6 +299,8 @@ static int meson_uart_startup(struct uart_port *port)
+ 	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
+ 	writel(val, port->membase + AML_UART_MISC);
+ 
++	spin_unlock_irqrestore(&port->lock, flags);
++
+ 	ret = request_irq(port->irq, meson_uart_interrupt, 0,
+ 			  port->name, port);
+ 
 -- 
 2.35.1
 

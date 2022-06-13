@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E34B54986B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DCE548B57
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377887AbiFMNkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S242258AbiFMKSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378087AbiFMNhS (ORCPT
+        with ESMTP id S241974AbiFMKRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:37:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1E83630D;
-        Mon, 13 Jun 2022 04:27:23 -0700 (PDT)
+        Mon, 13 Jun 2022 06:17:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739EDCE2A;
+        Mon, 13 Jun 2022 03:15:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACE5761225;
-        Mon, 13 Jun 2022 11:27:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CB4C3411C;
-        Mon, 13 Jun 2022 11:27:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65954B80E5C;
+        Mon, 13 Jun 2022 10:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5E4C34114;
+        Mon, 13 Jun 2022 10:15:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119642;
-        bh=uo0lwWJaTQsbH8CNcVD3Nc5hC4tDjxOrZxt2j38czqY=;
+        s=korg; t=1655115330;
+        bh=XCrqjfc7I0Avaka7xzYkfiK9KH0nx9ROGhToQyIvzI0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QKGIA348tCBdukOZO2D20sOQ1Qb3HSARkDKzhO4iRbOgq+zxkNjQL3IZWJjZo+EsQ
-         vdtr8ZFSGegbuh+EqLqZk2dCFT9OIZekFmtfxD/8wn3x3zh39DetmZ6fnmY40UBmtR
-         S9vBbUFnvVCikY5Kdv/tGncpXeFNNTCER5kDQzHw=
+        b=kWhXGrToMfm4IeDcs6YAUDLjkGlt1VNvoK3k0jyZ+Kb0cf3QpnJf557rvwWWv0Hd/
+         P404vSujyFcIWNtG493HSskjS22LPqQVRtvrJOXLvIe6rBooMW2Le9YZf7FqOysOxd
+         4LfFrRArT46D+Fco367o4QVHZ/WBJ7WF46T7dE7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 086/339] amt: fix return value of amt_update_handler()
+Subject: [PATCH 4.9 037/167] ASoC: mediatek: Fix error handling in mt8173_max98090_dev_probe
 Date:   Mon, 13 Jun 2022 12:08:31 +0200
-Message-Id: <20220613094929.125482154@linuxfoundation.org>
+Message-Id: <20220613094849.570315113@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit ac1dbf55981b88d64312858ea06e3e63001f085d ]
+[ Upstream commit 4f4e0454e226de3bf4efd7e7924d1edc571c52d5 ]
 
-If a relay receives an update message, it lookup a tunnel.
-and if there is no tunnel for that message, it should be treated
-as an error, not a success.
-But amt_update_handler() returns false, which means success.
+Call of_node_put(platform_node) to avoid refcount leak in
+the error path.
 
-Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 94319ba10eca ("ASoC: mediatek: Use platform_of_node for machine drivers")
+Fixes: 493433785df0 ("ASoC: mediatek: mt8173: fix device_node leak")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220404092903.26725-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/amt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/mediatek/mt8173/mt8173-max98090.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index de4ea518c793..d376ed89f836 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -2423,7 +2423,7 @@ static bool amt_update_handler(struct amt_dev *amt, struct sk_buff *skb)
- 		}
+diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+index cab30cb48366..85bf9eafda49 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
++++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+@@ -170,7 +170,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
+ 	if (!codec_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
  	}
+ 	for (i = 0; i < card->num_links; i++) {
+ 		if (mt8173_max98090_dais[i].codec_name)
+@@ -185,6 +186,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
+ 			__func__, ret);
  
--	return false;
-+	return true;
- 
- report:
- 	iph = ip_hdr(skb);
+ 	of_node_put(codec_node);
++
++put_platform_node:
+ 	of_node_put(platform_node);
+ 	return ret;
+ }
 -- 
 2.35.1
 

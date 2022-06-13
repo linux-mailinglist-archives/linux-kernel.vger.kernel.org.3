@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4D654A095
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B966154A016
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351491AbiFMU5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S1351336AbiFMUss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352294AbiFMUyW (ORCPT
+        with ESMTP id S1351032AbiFMUrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:54:22 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261F82AE21;
-        Mon, 13 Jun 2022 13:23:00 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-fe539f9afbso9904269fac.5;
-        Mon, 13 Jun 2022 13:23:00 -0700 (PDT)
+        Mon, 13 Jun 2022 16:47:06 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DAA37BCD;
+        Mon, 13 Jun 2022 13:01:11 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id i25so4723083qtq.0;
+        Mon, 13 Jun 2022 13:01:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eU3DLuUn9fCOPEhfzrbg7JSzV8OW8CVvXW+e7KmEHk0=;
+        b=DSxrLsSpuUfF9kM5thQWDoAgIzl5K2oZb3HltNBhhmEA6jYylOhyuTlrOtC8I/E3DE
+         HpEX9WexZW9gyKUV/E5ty7TviUbFWcUYxsAHs0uWzTGv0rMmH0Z6SRex82Xf+kmaAmfV
+         SFh8N32a0HO0La2vduHNvGTQ84k62IiiSA7NvvK5rbQPEr13D0qyedsAO+72Rn5xGmI7
+         WgrWnnfqHeLw9e5LrNz3dHGhj/TZ5ARERtbNbfA6fZgmHc7vd/L3zo8lbUzx/no3/NwQ
+         9pxdHtQU6ToQ4+JNSUOZnWl5bQUfXNeZKTMamRoxouzyooX6nQ+kNGOfiVLTmZugLhVG
+         t/0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hQtdW3mNzOqqAz0EIGKInm9VroMOpphYtVs06PrJmgg=;
-        b=sgWVxLxxBXD+0AClpuxc1bxB4LHbDwNmCNptgoJ+TE2iBMgj58gnu2+moAuzI0j+1b
-         9H67WcjRqwFE1si0Kq8C3fCgmPqLZwVG/xDOfjBeSIz5Je+1PcRyeyrWvdQJ4E2fRN6Q
-         ZdB0nEFVG5PH0iH0VW/egDcppdTLnVQBmmiozxyuoiT4Z/oKQMyeMECeoXuSdl1Cqk22
-         gwfFu/6DV0pHWVfGPZDnIRD/i1QqcRyEVN7/uk+XVle9EWwiXsvQEuz4OtQ6b8kIpzjQ
-         a7AITtbtscu11vY+xHVQOfPnxvkhb68hbnIPVhsK3I0ZjxupYWXVPFxx6tdXbdLcywhB
-         TmMA==
-X-Gm-Message-State: AJIora/l4nlkCUuFDm8x6g1AxwnSbRrQiJmmKngzVDZvTbUApbB7OGU/
-        0gRxOhgA+qrcfYmvlHEZxw==
-X-Google-Smtp-Source: AGRyM1vrWgRbbtIgkaNRth576iwAsSlwfWEsZWYqAZSEG7WmXUmtS7T2Ef2c7HYaOgH45FwPN+G1dA==
-X-Received: by 2002:a05:6870:c38c:b0:f1:ce0b:4dd3 with SMTP id g12-20020a056870c38c00b000f1ce0b4dd3mr349702oao.12.1655151779463;
-        Mon, 13 Jun 2022 13:22:59 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:20d2:bb97:4381:7341:60ed:a4a1])
-        by smtp.gmail.com with ESMTPSA id e14-20020a056871044e00b000f3347daaa6sm4490557oag.9.2022.06.13.13.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 13:22:59 -0700 (PDT)
-Received: (nullmailer pid 4178168 invoked by uid 1000);
-        Mon, 13 Jun 2022 20:00:32 -0000
-Date:   Mon, 13 Jun 2022 14:00:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/18] PCI: dwc: Add unroll iATU space support to the
- regions disable method
-Message-ID: <20220613200032.GA4174748-robh@kernel.org>
-References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
- <20220610082535.12802-3-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eU3DLuUn9fCOPEhfzrbg7JSzV8OW8CVvXW+e7KmEHk0=;
+        b=3VkjDrKE6Po4vgXbwkGwzPEQCF3Pea5QWXmtHX3JVjzcPAlTq5hF2QPCNFskfK+l51
+         xp3SaXqc7cSefksKyk5nWjx6esstQJtVwbGKUhJc1HPOUzj2+NXm6RQeLmODneCBcM7z
+         jvHma5gVdizv9KVnkVfhMjO9mUACpiDkJbw+jmIoNdu8ebPGbydgSnbLnDj3kfMUM1fw
+         PRh8DdGmACGpA2dFVGzFseps0YVe3j39ZQMSFx8rv3KRMov7NwgPbmmpydDFkuBhmQcA
+         BgH9B+W9j6A+zVsJTrnFFuzZQn9rmt3G0x4kmlC8ECcw2lbK680Vh5Aa+xUrhuVVvXhE
+         b3mg==
+X-Gm-Message-State: AOAM533zTZYDwqFhxNnvLUQELzVTTdNPh+W8lMkpvksskLyeQ+AI5007
+        LddMHk5qqFanLSzgMBDorq0nfjKOq8Q=
+X-Google-Smtp-Source: ABdhPJxA8LjkglFi0lI/OcvxwAVgmNVVtpC89YokY919Nl9Qm9M0JH904UxKIkzKBLobFiaztRpX0w==
+X-Received: by 2002:ac8:5d86:0:b0:305:2b38:af7c with SMTP id d6-20020ac85d86000000b003052b38af7cmr1290499qtx.497.1655150470303;
+        Mon, 13 Jun 2022 13:01:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id l188-20020a37bbc5000000b006a6bbc2725esm7097561qkf.118.2022.06.13.13.01.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 13:01:09 -0700 (PDT)
+Message-ID: <2741d09d-679f-7c10-e6ad-4f0e6692ad0c@gmail.com>
+Date:   Mon, 13 Jun 2022 13:01:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610082535.12802-3-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.10 000/173] 5.10.122-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220613181850.655683495@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220613181850.655683495@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:25:18AM +0300, Serge Semin wrote:
-> The dw_pcie_disable_atu() method was introduced in the commit f8aed6ec624f
-> ("PCI: dwc: designware: Add EP mode support"). Since then it hasn't
-> changed at all.  For all that time the method has supported the viewport
-> version of the iATU CSRs only. Basically it works for the DW PCIe IP-cores
-> older than v4.80a since the newer controllers are equipped with the
-> unrolled iATU/eDMA space. It means the methods using it like
-> pci_epc_ops.clear_bar and pci_epc_ops.unmap_addr callbacks just don't work
-> correctly for the DW PCIe controllers with unrolled iATU CSRs. The same
-> concerns the dw_pcie_setup_rc() method, which disables the outbound iATU
-> entries before re-initializing them.
+On 6/13/22 11:19, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.122 release.
+> There are 173 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> So in order to fix the problems denoted above let's convert the
-> dw_pcie_disable_atu() method to disabling the iATU inbound and outbound
-> regions in the unrolled iATU CSRs in case the DW PCIe controller has been
-> synthesized with the ones support. The former semantics will be remained
-> for the controller having iATU mapped over the viewport.
+> Responses should be made by Wed, 15 Jun 2022 18:18:23 +0000.
+> Anything received after that time might be too late.
 > 
-> Fixes: f8aed6ec624f ("PCI: dwc: designware: Add EP mode support")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.122-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> ---
+> thanks,
 > 
-> Changelog v3:
-> - Convert region variable type to u32 in order to fix the implicit type
->   conversion peculiarity. (@kbot)
-> ---
->  drivers/pci/controller/dwc/pcie-designware.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
+> greg k-h
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

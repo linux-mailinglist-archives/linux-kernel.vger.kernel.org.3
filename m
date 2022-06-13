@@ -2,421 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D012548369
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684AB54837C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbiFMJSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S240351AbiFMJTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbiFMJSt (ORCPT
+        with ESMTP id S229510AbiFMJTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:18:49 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EF214D04;
-        Mon, 13 Jun 2022 02:18:47 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 25so6219462edw.8;
-        Mon, 13 Jun 2022 02:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1k2fUp9A1ltIjuKvUKT9uCqeCoRnTxbZP1WFA5kZJWM=;
-        b=UXr9cH5/mXYcijcguNeN9cOm3Ci0I9IH3ZduVvMrm0bRKN9XAPhQ8uI81iEQgAp4zX
-         UIylnG0dQwMb1ifyhwrUQ/bkELAMAkYsuok9w04bpHQR/P4CErnsMV2S+jZGo0j7zvB+
-         dTJlc8twkhTlAJq78Jx7C2PRzVG7LBk7zmbI5qwlB+0shNF7rduD5oWIdSerPBzCrD4k
-         cA0U6+WibbltsB9x+l/3bo4ImaptxuhbyR/ZYWuJJm+lgQE+B3aAxx+ZgjpQ9K7wTYBx
-         fVCJzdVhP5jZ2XcL8o4H9YKkq2zWngoQK7SWgph585T+bEFlQ5L1WELoIpSATt9JY8dZ
-         wPvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1k2fUp9A1ltIjuKvUKT9uCqeCoRnTxbZP1WFA5kZJWM=;
-        b=bEHiDiDP/AcmoMIJ6fxrJEzTrVqOS68nUx6j3+CtSvdODZgBGm+OpSq7cfLo9iN09x
-         xx4jBrn/yyCobmwcjZxxQwK45aUYZflv8BsNR/3pxVCWwPClngFrpVzvmRs8qTcxNpvw
-         N9s2DGaDJXHy0jGCik9Lb0yh2oi3+/ouPtvtmzTLHhl+PUf/MApDUlSAXx5yR8zeYV79
-         5A8Woyp33YMIAA7OjxvggH6yj71YRjhVx3bz7UuSRlk/mgQ6FbLfFlGC4JWAWXAS3y2f
-         /XHpE+Xfh2u0EOse7H/ts1SUdedsLzMnSwbyPCILnNZoc1utJgvv5inW1ziO/gOrEKST
-         yTKg==
-X-Gm-Message-State: AOAM532IYpvY1bCdzBRXd5NPFbQOLhAwTSOX1uyzlq6luE6BZVCaI1O5
-        HYLqmWfEY1sqCftO8Xer4Bo=
-X-Google-Smtp-Source: ABdhPJwecP3QpAef5xF6I6tlLg1MdBJzM22oelHpZUmR1evD9UWuFf8vDAyYB400TvDG8sCsc6Fx3Q==
-X-Received: by 2002:a05:6402:684:b0:431:503e:76e6 with SMTP id f4-20020a056402068400b00431503e76e6mr44837727edy.308.1655111925327;
-        Mon, 13 Jun 2022 02:18:45 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id gl6-20020a170906e0c600b006fec63e564bsm3601493ejb.30.2022.06.13.02.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 02:18:44 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 12:18:43 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [RFC Patch net-next v2 02/15] net: dsa: microchip: move switch
- chip_id detection to ksz_common
-Message-ID: <20220613091843.yil3swd55w7kwr5s@skbuf>
-References: <20220530104257.21485-1-arun.ramadoss@microchip.com>
- <20220530104257.21485-3-arun.ramadoss@microchip.com>
+        Mon, 13 Jun 2022 05:19:22 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C7B14D12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:19:19 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM5XJ6xhrzRj13;
+        Mon, 13 Jun 2022 17:16:00 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 17:19:12 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 17:19:12 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Pitre <nico@fluxnic.net>
+Subject: [PATCH v2] ARM: Mark the FDT_FIXED sections as shareable
+Date:   Mon, 13 Jun 2022 17:19:01 +0800
+Message-ID: <20220613091901.730-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530104257.21485-3-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 04:12:44PM +0530, Arun Ramadoss wrote:
-> KSZ87xx and KSZ88xx have chip_id representation at reg location 0. And
-> KSZ9477 compatible switch and LAN937x switch have same chip_id detection
-> at location 0x01 and 0x02. To have the common switch detect
-> functionality for ksz switches, ksz_switch_detect function is
-> introduced.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
->  drivers/net/dsa/microchip/ksz8795.c     | 46 ---------------
->  drivers/net/dsa/microchip/ksz8795_reg.h | 13 -----
->  drivers/net/dsa/microchip/ksz9477.c     | 21 -------
->  drivers/net/dsa/microchip/ksz9477_reg.h |  1 -
->  drivers/net/dsa/microchip/ksz_common.c  | 78 +++++++++++++++++++++++--
->  drivers/net/dsa/microchip/ksz_common.h  | 19 +++++-
->  6 files changed, 92 insertions(+), 86 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index 12a599d5e61a..927db57d02db 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -1424,51 +1424,6 @@ static u32 ksz8_get_port_addr(int port, int offset)
->  	return PORT_CTRL_ADDR(port, offset);
->  }
->  
-> -static int ksz8_switch_detect(struct ksz_device *dev)
-> -{
-> -	u8 id1, id2;
-> -	u16 id16;
-> -	int ret;
-> -
-> -	/* read chip id */
-> -	ret = ksz_read16(dev, REG_CHIP_ID0, &id16);
-> -	if (ret)
-> -		return ret;
-> -
-> -	id1 = id16 >> 8;
-> -	id2 = id16 & SW_CHIP_ID_M;
-> -
-> -	switch (id1) {
-> -	case KSZ87_FAMILY_ID:
-> -		if ((id2 != CHIP_ID_94 && id2 != CHIP_ID_95))
-> -			return -ENODEV;
-> -
-> -		if (id2 == CHIP_ID_95) {
-> -			u8 val;
-> -
-> -			id2 = 0x95;
-> -			ksz_read8(dev, REG_PORT_STATUS_0, &val);
+commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
+region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
+which contains fdt. But it only reserves the exact physical memory that
+fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
+speculative read access can bring the RAM content from non-fdt zone into
+cache, PIPT makes it to be hit by subsequently read access through
+shareable mapping(such as linear mapping), and the cache consistency
+between cores is lost due to non-shareable property.
 
-Could you replace all remaining occurrences of REG_PORT_STATUS_0 and
-PORT_FIBER_MODE with KSZ8_PORT_STATUS_0 and KSZ8_PORT_FIBER_MODE?
-It would be good to not have multiple definitions for the same thing.
+|<---------FDT_FIXED_SIZE------>|
+|                               |
+ -------------------------------
+| <non-fdt> | <fdt> | <non-fdt> |
+ -------------------------------
 
-> -			if (val & PORT_FIBER_MODE)
-> -				id2 = 0x65;
-> -		} else if (id2 == CHIP_ID_94) {
-> -			id2 = 0x94;
-> -		}
-> -		break;
-> -	case KSZ88_FAMILY_ID:
-> -		if (id2 != CHIP_ID_63)
-> -			return -ENODEV;
-> -		break;
-> -	default:
-> -		dev_err(dev->dev, "invalid family id: %d\n", id1);
-> -		return -ENODEV;
-> -	}
-> -	id16 &= ~0xff;
-> -	id16 |= id2;
-> -	dev->chip_id = id16;
-> -
-> -	return 0;
-> -}
-> -
->  static int ksz8_switch_init(struct ksz_device *dev)
->  {
->  	struct ksz8 *ksz8 = dev->priv;
-> @@ -1522,7 +1477,6 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
->  	.freeze_mib = ksz8_freeze_mib,
->  	.port_init_cnt = ksz8_port_init_cnt,
->  	.shutdown = ksz8_reset_switch,
-> -	.detect = ksz8_switch_detect,
->  	.init = ksz8_switch_init,
->  	.exit = ksz8_switch_exit,
->  };
-> diff --git a/drivers/net/dsa/microchip/ksz8795_reg.h b/drivers/net/dsa/microchip/ksz8795_reg.h
-> index 4109433b6b6c..50cdc2a09f5a 100644
-> --- a/drivers/net/dsa/microchip/ksz8795_reg.h
-> +++ b/drivers/net/dsa/microchip/ksz8795_reg.h
-> @@ -14,23 +14,10 @@
->  #define KS_PRIO_M			0x3
->  #define KS_PRIO_S			2
->  
-> -#define REG_CHIP_ID0			0x00
-> -
-> -#define KSZ87_FAMILY_ID			0x87
-> -#define KSZ88_FAMILY_ID			0x88
-> -
-> -#define REG_CHIP_ID1			0x01
-> -
-> -#define SW_CHIP_ID_M			0xF0
-> -#define SW_CHIP_ID_S			4
->  #define SW_REVISION_M			0x0E
->  #define SW_REVISION_S			1
->  #define SW_START			0x01
->  
-> -#define CHIP_ID_94			0x60
-> -#define CHIP_ID_95			0x90
-> -#define CHIP_ID_63			0x30
-> -
->  #define KSZ8863_REG_SW_RESET		0x43
->  
->  #define KSZ8863_GLOBAL_SOFTWARE_RESET	BIT(4)
-> diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> index 7afc06681c02..7d3c8f6908b6 100644
-> --- a/drivers/net/dsa/microchip/ksz9477.c
-> +++ b/drivers/net/dsa/microchip/ksz9477.c
-> @@ -1360,23 +1360,6 @@ static u32 ksz9477_get_port_addr(int port, int offset)
->  	return PORT_CTRL_ADDR(port, offset);
->  }
->  
-> -static int ksz9477_switch_detect(struct ksz_device *dev)
-> -{
-> -	u32 id32;
-> -	int ret;
-> -
-> -	/* read chip id */
-> -	ret = ksz_read32(dev, REG_CHIP_ID0__1, &id32);
-> -	if (ret)
-> -		return ret;
-> -
-> -	dev_dbg(dev->dev, "Switch detect: ID=%08x\n", id32);
-> -
-> -	dev->chip_id = id32 & 0x00FFFF00;
-> -
-> -	return 0;
-> -}
-> -
->  static int ksz9477_switch_init(struct ksz_device *dev)
->  {
->  	u8 data8;
-> @@ -1407,8 +1390,6 @@ static int ksz9477_switch_init(struct ksz_device *dev)
->  	dev->features = GBIT_SUPPORT;
->  
->  	if (dev->chip_id == KSZ9893_CHIP_ID) {
-> -		/* Chip is from KSZ9893 design. */
-> -		dev_info(dev->dev, "Found KSZ9893\n");
->  		dev->features |= IS_9893;
->  
->  		/* Chip does not support gigabit. */
-> @@ -1416,7 +1397,6 @@ static int ksz9477_switch_init(struct ksz_device *dev)
->  			dev->features &= ~GBIT_SUPPORT;
->  		dev->phy_port_cnt = 2;
->  	} else {
-> -		dev_info(dev->dev, "Found KSZ9477 or compatible\n");
->  		/* Chip uses new XMII register definitions. */
->  		dev->features |= NEW_XMII;
->  
-> @@ -1443,7 +1423,6 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
->  	.freeze_mib = ksz9477_freeze_mib,
->  	.port_init_cnt = ksz9477_port_init_cnt,
->  	.shutdown = ksz9477_reset_switch,
-> -	.detect = ksz9477_switch_detect,
->  	.init = ksz9477_switch_init,
->  	.exit = ksz9477_switch_exit,
->  };
-> diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
-> index 7a2c8d4767af..077e35ab11b5 100644
-> --- a/drivers/net/dsa/microchip/ksz9477_reg.h
-> +++ b/drivers/net/dsa/microchip/ksz9477_reg.h
-> @@ -25,7 +25,6 @@
->  
->  #define REG_CHIP_ID2__1			0x0002
->  
-> -#define CHIP_ID_63			0x63
->  #define CHIP_ID_66			0x66
->  #define CHIP_ID_67			0x67
->  #define CHIP_ID_77			0x77
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index 9ca8c8d7740f..9057cdb5971c 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -930,6 +930,72 @@ void ksz_port_stp_state_set(struct dsa_switch *ds, int port,
->  }
->  EXPORT_SYMBOL_GPL(ksz_port_stp_state_set);
->  
-> +static int ksz_switch_detect(struct ksz_device *dev)
-> +{
-> +	u8 id1, id2;
-> +	u16 id16;
-> +	u32 id32;
-> +	int ret;
-> +
-> +	/* read chip id */
-> +	ret = ksz_read16(dev, REG_CHIP_ID0, &id16);
-> +	if (ret)
-> +		return ret;
-> +
-> +	id1 = FIELD_GET(SW_FAMILY_ID_M, id16);
-> +	id2 = FIELD_GET(SW_CHIP_ID_M, id16);
-> +
-> +	switch (id1) {
-> +	case KSZ87_FAMILY_ID:
-> +		if (id2 == CHIP_ID_95) {
-> +			u8 val;
-> +
-> +			dev->chip_id = KSZ8795_CHIP_ID;
-> +
-> +			ksz_read8(dev, KSZ8_PORT_STATUS_0, &val);
-> +			if (val & KSZ8_PORT_FIBER_MODE)
-> +				dev->chip_id = KSZ8765_CHIP_ID;
-> +		} else if (id2 == CHIP_ID_94) {
-> +			dev->chip_id = KSZ8794_CHIP_ID;
-> +		} else {
-> +			return -ENODEV;
-> +		}
-> +		break;
-> +	case KSZ88_FAMILY_ID:
-> +		if (id2 == CHIP_ID_63)
-> +			dev->chip_id = KSZ8830_CHIP_ID;
-> +		else
-> +			return -ENODEV;
-> +		break;
-> +	default:
-> +		ret = ksz_read32(dev, REG_CHIP_ID0, &id32);
-> +		if (ret)
-> +			return ret;
-> +
-> +		dev->chip_rev = FIELD_GET(SW_REV_ID_M, id32);
-> +		id32 &= ~0xFF;
-> +
-> +		switch (id32) {
-> +		case KSZ9477_CHIP_ID:
-> +		case KSZ9897_CHIP_ID:
-> +		case KSZ9893_CHIP_ID:
-> +		case KSZ9567_CHIP_ID:
-> +		case LAN9370_CHIP_ID:
-> +		case LAN9371_CHIP_ID:
-> +		case LAN9372_CHIP_ID:
-> +		case LAN9373_CHIP_ID:
-> +		case LAN9374_CHIP_ID:
-> +			dev->chip_id = id32;
-> +			break;
-> +		default:
-> +			dev_err(dev->dev,
-> +				"unsupported switch detected %x)\n", id32);
-> +			return -ENODEV;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
->  struct ksz_device *ksz_switch_alloc(struct device *base, void *priv)
->  {
->  	struct dsa_switch *ds;
-> @@ -986,10 +1052,9 @@ int ksz_switch_register(struct ksz_device *dev,
->  	mutex_init(&dev->alu_mutex);
->  	mutex_init(&dev->vlan_mutex);
->  
-> -	dev->dev_ops = ops;
-> -
-> -	if (dev->dev_ops->detect(dev))
-> -		return -EINVAL;
-> +	ret = ksz_switch_detect(dev);
-> +	if (ret)
-> +		return ret;
->  
->  	info = ksz_lookup_info(dev->chip_id);
->  	if (!info)
-> @@ -998,10 +1063,15 @@ int ksz_switch_register(struct ksz_device *dev,
->  	/* Update the compatible info with the probed one */
->  	dev->info = info;
->  
-> +	dev_info(dev->dev, "found switch: %s, rev %i\n",
-> +		 dev->info->dev_name, dev->chip_rev);
-> +
->  	ret = ksz_check_device_id(dev);
->  	if (ret)
->  		return ret;
->  
-> +	dev->dev_ops = ops;
-> +
->  	ret = dev->dev_ops->init(dev);
->  	if (ret)
->  		return ret;
-> diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-> index 8500eaedad67..d16c095cdefb 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.h
-> +++ b/drivers/net/dsa/microchip/ksz_common.h
-> @@ -90,6 +90,7 @@ struct ksz_device {
->  
->  	/* chip specific data */
->  	u32 chip_id;
-> +	u8 chip_rev;
->  	int cpu_port;			/* port connected to CPU */
->  	int phy_port_cnt;
->  	phy_interface_t compat_interface;
-> @@ -182,7 +183,6 @@ struct ksz_dev_ops {
->  	void (*freeze_mib)(struct ksz_device *dev, int port, bool freeze);
->  	void (*port_init_cnt)(struct ksz_device *dev, int port);
->  	int (*shutdown)(struct ksz_device *dev);
-> -	int (*detect)(struct ksz_device *dev);
->  	int (*init)(struct ksz_device *dev);
->  	void (*exit)(struct ksz_device *dev);
->  };
-> @@ -353,6 +353,23 @@ static inline void ksz_regmap_unlock(void *__mtx)
->  #define PORT_RX_ENABLE			BIT(1)
->  #define PORT_LEARN_DISABLE		BIT(0)
->  
-> +/* Switch ID Defines */
-> +#define REG_CHIP_ID0			0x00
-> +
-> +#define SW_FAMILY_ID_M			GENMASK(15, 8)
-> +#define KSZ87_FAMILY_ID			0x87
-> +#define KSZ88_FAMILY_ID			0x88
-> +
-> +#define KSZ8_PORT_STATUS_0		0x08
-> +#define KSZ8_PORT_FIBER_MODE		BIT(7)
-> +
-> +#define SW_CHIP_ID_M			GENMASK(7, 4)
-> +#define CHIP_ID_94			0x6
-> +#define CHIP_ID_95			0x9
+1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
+   into the cache.
+2. CoreB write <non-fdt> to update data through linear mapping. CoreA
+   received the notification to invalid the corresponding cachelines, but
+   the property non-shareable makes it to be ignored.
+3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
+   is read.
 
-KSZ87_CHIP_ID_xxx maybe?
+To eliminate this risk, add a new memory type MT_MEMORY_RO. Compared to
+MT_ROM, it is shareable and non-executable.
 
-> +#define CHIP_ID_63			0x3
+Here's an example:
+  list_del corruption. prev->next should be c0ecbf74, but was c08410dc
+  kernel BUG at lib/list_debug.c:53!
+  ... ...
+  PC is at __list_del_entry_valid+0x58/0x98
+  LR is at __list_del_entry_valid+0x58/0x98
+  psr: 60000093
+  sp : c0ecbf30  ip : 00000000  fp : 00000001
+  r10: c08410d0  r9 : 00000001  r8 : c0825e0c
+  r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
+  r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
+  ... ...
+  Stack: (0xc0ecbf30 to 0xc0ecc000)
+  bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
+  bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
+  bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
+  ... ...                                           <  next     prev  >
+  (__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
+  (__list_del_entry) from (finish_swait+0x60/0x7c)
+  (finish_swait) from (rcu_gp_kthread+0x560/0xa20)
+  (rcu_gp_kthread) from (kthread+0x14c/0x15c)
+  (kthread) from (ret_from_fork+0x14/0x24)
 
-And KSZ88_CHIP_ID_63.
+The faulty list node to be deleted is a local variable, its address is
+c0ecbf74. The dumped stack shows that 'prev' = c0ecbf74, but its value
+before lib/list_debug.c:53 is c08410dc. A large amount of printing results
+in swapping out the cacheline containing the old data(MT_ROM mapping is
+read only, so the cacheline cannot be dirty), and the subsequent dump
+operation obtains new data from the DDR.
 
-> +
-> +#define SW_REV_ID_M			GENMASK(7, 4)
-> +
->  /* Regmap tables generation */
->  #define KSZ_SPI_OP_RD		3
->  #define KSZ_SPI_OP_WR		2
-> -- 
-> 2.36.1
-> 
+Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ arch/arm/include/asm/mach/map.h |  1 +
+ arch/arm/mm/mmu.c               | 15 ++++++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+v1 --> v2:
+As Ard Biesheuvel's suggestion, add a new memory type MT_MEMORY_RO instead of
+add a new memory type MT_ROM_XIP.
+
+diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
+index 92282558caf7cdb..2b8970d8e5a2ff8 100644
+--- a/arch/arm/include/asm/mach/map.h
++++ b/arch/arm/include/asm/mach/map.h
+@@ -27,6 +27,7 @@ enum {
+ 	MT_HIGH_VECTORS,
+ 	MT_MEMORY_RWX,
+ 	MT_MEMORY_RW,
++	MT_MEMORY_RO,
+ 	MT_ROM,
+ 	MT_MEMORY_RWX_NONCACHED,
+ 	MT_MEMORY_RW_DTCM,
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+index 5e2be37a198e29e..cd17e324aa51ea6 100644
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -296,6 +296,13 @@ static struct mem_type mem_types[] __ro_after_init = {
+ 		.prot_sect = PMD_TYPE_SECT | PMD_SECT_AP_WRITE,
+ 		.domain    = DOMAIN_KERNEL,
+ 	},
++	[MT_MEMORY_RO] = {
++		.prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
++			     L_PTE_XN | L_PTE_RDONLY,
++		.prot_l1   = PMD_TYPE_TABLE,
++		.prot_sect = PMD_TYPE_SECT,
++		.domain    = DOMAIN_KERNEL,
++	},
+ 	[MT_ROM] = {
+ 		.prot_sect = PMD_TYPE_SECT,
+ 		.domain    = DOMAIN_KERNEL,
+@@ -489,6 +496,7 @@ static void __init build_mem_type_table(void)
+ 
+ 			/* Also setup NX memory mapping */
+ 			mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_XN;
++			mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_XN;
+ 		}
+ 		if (cpu_arch >= CPU_ARCH_ARMv7 && (cr & CR_TRE)) {
+ 			/*
+@@ -568,6 +576,7 @@ static void __init build_mem_type_table(void)
+ 		mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+ 		mem_types[MT_MINICLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+ 		mem_types[MT_CACHECLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
++		mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+ #endif
+ 
+ 		/*
+@@ -587,6 +596,8 @@ static void __init build_mem_type_table(void)
+ 			mem_types[MT_MEMORY_RWX].prot_pte |= L_PTE_SHARED;
+ 			mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_S;
+ 			mem_types[MT_MEMORY_RW].prot_pte |= L_PTE_SHARED;
++			mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_S;
++			mem_types[MT_MEMORY_RO].prot_pte |= L_PTE_SHARED;
+ 			mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
+ 			mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= PMD_SECT_S;
+ 			mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |= L_PTE_SHARED;
+@@ -647,6 +658,8 @@ static void __init build_mem_type_table(void)
+ 	mem_types[MT_MEMORY_RWX].prot_pte |= kern_pgprot;
+ 	mem_types[MT_MEMORY_RW].prot_sect |= ecc_mask | cp->pmd;
+ 	mem_types[MT_MEMORY_RW].prot_pte |= kern_pgprot;
++	mem_types[MT_MEMORY_RO].prot_sect |= ecc_mask | cp->pmd;
++	mem_types[MT_MEMORY_RO].prot_pte |= kern_pgprot;
+ 	mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
+ 	mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
+ 	mem_types[MT_ROM].prot_sect |= cp->pmd;
+@@ -1360,7 +1373,7 @@ static void __init devicemaps_init(const struct machine_desc *mdesc)
+ 		map.pfn = __phys_to_pfn(__atags_pointer & SECTION_MASK);
+ 		map.virtual = FDT_FIXED_BASE;
+ 		map.length = FDT_FIXED_SIZE;
+-		map.type = MT_ROM;
++		map.type = MT_MEMORY_RO;
+ 		create_mapping(&map);
+ 	}
+ 
+-- 
+2.25.1
 

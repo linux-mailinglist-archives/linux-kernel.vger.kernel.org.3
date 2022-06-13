@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F64548878
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B0C548DAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344294AbiFMKb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S1379369AbiFMNw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345167AbiFMK3b (ORCPT
+        with ESMTP id S1379949AbiFMNpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:29:31 -0400
+        Mon, 13 Jun 2022 09:45:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C824825EAC;
-        Mon, 13 Jun 2022 03:20:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6111263E;
+        Mon, 13 Jun 2022 04:32:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A1B60C5D;
-        Mon, 13 Jun 2022 10:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F26CFC34114;
-        Mon, 13 Jun 2022 10:20:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0AF5612AC;
+        Mon, 13 Jun 2022 11:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9723C34114;
+        Mon, 13 Jun 2022 11:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115638;
-        bh=FbHW7wJdsutLxte77RD+vKYaOV2opqcOLhcyd1Y6Q4U=;
+        s=korg; t=1655119970;
+        bh=GEl7BdXUTL8gy1bVosmWG6EdlMfz8WLs1WYhopPFKH8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qvUqq0TA9v6BzSBDOJmfPPXRQllP34E9Nv/zSHxGpj3IrloPKZmwh//K0HVwm/QZL
-         E6LE8CIm9QNQxMEihkbE30MPKU+8Wu+yCuGcFPrtRkLOO+UPO/8dRId5mkX+k/6zI6
-         NMFKeCnh+6JgRws65aeNzRPUdIYE3JhNMU+yI0V4=
+        b=xaBnXw+wBXS9wH/DEo76C1GDSVSvok5kJ9/fs3c9NBqDVT8A8lqIPcOfli/0ySFjT
+         bJO2R2gqaCPKWCViC/pcovyKhRoCj+vNnX7yr65srl2ngnDB1wRKhRgLHzkzNkDAEw
+         yb37TA08fupbM4XIA/n+LeWlPlmBfcFr7Ggojk6s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 147/167] usb: dwc2: gadget: dont reset gadgets driver->bus
+Subject: [PATCH 5.18 196/339] stmmac: intel: Fix an error handling path in intel_eth_pci_probe()
 Date:   Mon, 13 Jun 2022 12:10:21 +0200
-Message-Id: <20220613094915.386585005@linuxfoundation.org>
+Message-Id: <20220613094932.612918234@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 3120aac6d0ecd9accf56894aeac0e265f74d3d5a ]
+[ Upstream commit 5e74a4b3ec1816e3bbfd715d46ae29d2508079cb ]
 
-UDC driver should not touch gadget's driver internals, especially it
-should not reset driver->bus. This wasn't harmful so far, but since
-commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets") gadget
-subsystem got it's own bus and messing with ->bus triggers the
-following NULL pointer dereference:
+When the managed API is used, there is no need to explicitly call
+pci_free_irq_vectors().
 
-dwc2 12480000.hsotg: bound driver g_ether
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[00000000] *pgd=00000000
-Internal error: Oops: 5 [#1] SMP ARM
-Modules linked in: ...
-CPU: 0 PID: 620 Comm: modprobe Not tainted 5.18.0-rc5-next-20220504 #11862
-Hardware name: Samsung Exynos (Flattened Device Tree)
-PC is at module_add_driver+0x44/0xe8
-LR is at sysfs_do_create_link_sd+0x84/0xe0
-...
-Process modprobe (pid: 620, stack limit = 0x(ptrval))
-...
- module_add_driver from bus_add_driver+0xf4/0x1e4
- bus_add_driver from driver_register+0x78/0x10c
- driver_register from usb_gadget_register_driver_owner+0x40/0xb4
- usb_gadget_register_driver_owner from do_one_initcall+0x44/0x1e0
- do_one_initcall from do_init_module+0x44/0x1c8
- do_init_module from load_module+0x19b8/0x1b9c
- load_module from sys_finit_module+0xdc/0xfc
- sys_finit_module from ret_fast_syscall+0x0/0x54
-Exception stack(0xf1771fa8 to 0xf1771ff0)
-...
-dwc2 12480000.hsotg: new device is high-speed
----[ end trace 0000000000000000 ]---
+This looks to be a left-over from the commit in the Fixes tag. Only the
+.remove() function had been updated.
 
-Fix this by removing driver->bus entry reset.
+So remove this unused function call and update goto label accordingly.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/20220505104618.22729-1-m.szyprowski@samsung.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8accc467758e ("stmmac: intel: use managed PCI function on probe and resume")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
+Link: https://lore.kernel.org/r/1ac9b6787b0db83b0095711882c55c77c8ea8da0.1654462241.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 65bcbbad6d54..44bab6727b43 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3445,7 +3445,6 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+index 0b0be0898ac5..f6d8109e7edc 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+@@ -1072,13 +1072,11 @@ static int intel_eth_pci_probe(struct pci_dev *pdev,
  
- 	WARN_ON(hsotg->driver);
+ 	ret = stmmac_dvr_probe(&pdev->dev, plat, &res);
+ 	if (ret) {
+-		goto err_dvr_probe;
++		goto err_alloc_irq;
+ 	}
  
--	driver->driver.bus = NULL;
- 	hsotg->driver = driver;
- 	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
- 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+ 	return 0;
+ 
+-err_dvr_probe:
+-	pci_free_irq_vectors(pdev);
+ err_alloc_irq:
+ 	clk_disable_unprepare(plat->stmmac_clk);
+ 	clk_unregister_fixed_rate(plat->stmmac_clk);
 -- 
 2.35.1
 

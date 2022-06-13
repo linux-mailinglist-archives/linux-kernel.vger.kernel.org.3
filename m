@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D70F54941F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D12549830
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354815AbiFMLeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S1382314AbiFMON7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354370AbiFML3X (ORCPT
+        with ESMTP id S1382666AbiFMOGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D012314F;
-        Mon, 13 Jun 2022 03:43:37 -0700 (PDT)
+        Mon, 13 Jun 2022 10:06:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF61972A1;
+        Mon, 13 Jun 2022 04:41:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2850FB80D3B;
-        Mon, 13 Jun 2022 10:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5905EC34114;
-        Mon, 13 Jun 2022 10:43:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7DC7B80ECD;
+        Mon, 13 Jun 2022 11:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E41C34114;
+        Mon, 13 Jun 2022 11:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117014;
-        bh=1deBv8pWO4EhlblSV+d3qc0OS1zA34siQuYQ1ppkR98=;
+        s=korg; t=1655120466;
+        bh=wVkcYHc5vMhIs7MOXoo85jAoir9Esaq47MytOfsNKtA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bxcBibQvBElkkDbmkwCo0mKwVVL7xeDVGL6wQvvKMOetj2sXXnNDgMa1XkYOpE91L
-         DByhTGyRmlM32GoRTTmCZdry1hjZ/FNY1zetXQ5d42WpBBcO1mXtgzDM7jQWApo0sU
-         Qaa1q5VTBEjJpJq69E7Xpnl0NI1em+K3xS2iRwrs=
+        b=UAr9UHEhlnA4/0msg5CZHT/h+rD0bSkhCBnr8+Wg+eVLH47SBF83K9JG4W6eqzw2U
+         aCGMl22E4bsuwsKNGxBab7alb925zZRkqhLsoUrVF9CKiI9lITL5WjL9Ligccu2vOV
+         TSmfI/scOwIP5f5R69mg5eSQL0iX4bSVBVVti/7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe de Dinechin <christophe@dinechin.org>,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Segall <bsegall@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 5.4 256/411] nodemask.h: fix compilation error with GCC12
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 035/298] misc/pvpanic: Convert regular spinlock into trylock on panic path
 Date:   Mon, 13 Jun 2022 12:08:49 +0200
-Message-Id: <20220613094936.441817314@linuxfoundation.org>
+Message-Id: <20220613094925.996414608@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,92 +60,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe de Dinechin <dinechin@redhat.com>
+From: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-commit 37462a920392cb86541650a6f4121155f11f1199 upstream.
+[ Upstream commit e918c10265ef2bc82ce8a6fed6d8123d09ec1db3 ]
 
-With gcc version 12.0.1 20220401 (Red Hat 12.0.1-0), building with
-defconfig results in the following compilation error:
+The pvpanic driver relies on panic notifiers to execute a callback
+on panic event. Such function is executed in atomic context - the
+panic function disables local IRQs, preemption and all other CPUs
+that aren't running the panic code.
 
-|   CC      mm/swapfile.o
-| mm/swapfile.c: In function `setup_swap_info':
-| mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds
-|  of `struct plist_node[]' [-Werror=array-bounds]
-|  2291 |                                 p->avail_lists[i].prio = 1;
-|       |                                 ~~~~~~~~~~~~~~^~~
-| In file included from mm/swapfile.c:16:
-| ./include/linux/swap.h:292:27: note: while referencing `avail_lists'
-|   292 |         struct plist_node avail_lists[]; /*
-|       |                           ^~~~~~~~~~~
+With that said, it's dangerous to use regular spinlocks in such path,
+as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
+This patch fixes that by replacing regular spinlocks with the trylock
+safer approach.
 
-This is due to the compiler detecting that the mask in
-node_states[__state] could theoretically be zero, which would lead to
-first_node() returning -1 through find_first_bit.
+It also fixes an old comment (about a long gone framebuffer code) and
+the notifier priority - we should execute hypervisor notifiers early,
+deferring this way the panic action to the hypervisor, as expected by
+the users that are setting up pvpanic.
 
-I believe that the warning/error is legitimate.  I first tried adding a
-test to check that the node mask is not emtpy, since a similar test exists
-in the case where MAX_NUMNODES == 1.
-
-However, adding the if statement causes other warnings to appear in
-for_each_cpu_node_but, because it introduces a dangling else ambiguity.
-And unfortunately, GCC is not smart enough to detect that the added test
-makes the case where (node) == -1 impossible, so it still complains with
-the same message.
-
-This is why I settled on replacing that with a harmless, but relatively
-useless (node) >= 0 test.  Based on the warning for the dangling else, I
-also decided to fix the case where MAX_NUMNODES == 1 by moving the
-condition inside the for loop.  It will still only be tested once.  This
-ensures that the meaning of an else following for_each_node_mask or
-derivatives would not silently have a different meaning depending on the
-configuration.
-
-Link: https://lkml.kernel.org/r/20220414150855.2407137-3-dinechin@redhat.com
-Signed-off-by: Christophe de Dinechin <christophe@dinechin.org>
-Signed-off-by: Christophe de Dinechin <dinechin@redhat.com>
-Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: b3c0f8774668 ("misc/pvpanic: probe multiple instances")
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Mihai Carabas <mihai.carabas@oracle.com>
+Cc: Shile Zhang <shile.zhang@linux.alibaba.com>
+Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
+Cc: zhenwei pi <pizhenwei@bytedance.com>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Link: https://lore.kernel.org/r/20220427224924.592546-6-gpiccoli@igalia.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/nodemask.h |   13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/misc/pvpanic/pvpanic.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -375,14 +375,13 @@ static inline void __nodes_fold(nodemask
+diff --git a/drivers/misc/pvpanic/pvpanic.c b/drivers/misc/pvpanic/pvpanic.c
+index 4b8f1c7d726d..049a12006348 100644
+--- a/drivers/misc/pvpanic/pvpanic.c
++++ b/drivers/misc/pvpanic/pvpanic.c
+@@ -34,7 +34,9 @@ pvpanic_send_event(unsigned int event)
+ {
+ 	struct pvpanic_instance *pi_cur;
+ 
+-	spin_lock(&pvpanic_lock);
++	if (!spin_trylock(&pvpanic_lock))
++		return;
++
+ 	list_for_each_entry(pi_cur, &pvpanic_list, list) {
+ 		if (event & pi_cur->capability & pi_cur->events)
+ 			iowrite8(event, pi_cur->base);
+@@ -55,9 +57,13 @@ pvpanic_panic_notify(struct notifier_block *nb, unsigned long code, void *unused
+ 	return NOTIFY_DONE;
  }
  
- #if MAX_NUMNODES > 1
--#define for_each_node_mask(node, mask)			\
--	for ((node) = first_node(mask);			\
--		(node) < MAX_NUMNODES;			\
--		(node) = next_node((node), (mask)))
-+#define for_each_node_mask(node, mask)				    \
-+	for ((node) = first_node(mask);				    \
-+	     (node >= 0) && (node) < MAX_NUMNODES;		    \
-+	     (node) = next_node((node), (mask)))
- #else /* MAX_NUMNODES == 1 */
--#define for_each_node_mask(node, mask)			\
--	if (!nodes_empty(mask))				\
--		for ((node) = 0; (node) < 1; (node)++)
-+#define for_each_node_mask(node, mask)                                  \
-+	for ((node) = 0; (node) < 1 && !nodes_empty(mask); (node)++)
- #endif /* MAX_NUMNODES */
++/*
++ * Call our notifier very early on panic, deferring the
++ * action taken to the hypervisor.
++ */
+ static struct notifier_block pvpanic_panic_nb = {
+ 	.notifier_call = pvpanic_panic_notify,
+-	.priority = 1, /* let this called before broken drm_fb_helper() */
++	.priority = INT_MAX,
+ };
  
- /*
+ static void pvpanic_remove(void *param)
+-- 
+2.35.1
+
 
 

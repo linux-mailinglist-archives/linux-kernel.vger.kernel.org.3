@@ -2,155 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A663C549F22
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235A6549F24
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbiFMUbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S229991AbiFMUbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiFMUaR (ORCPT
+        with ESMTP id S1351417AbiFMUa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:30:17 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1347251327
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:20:38 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id i186so6825540vsc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KNf+Ql/j9M3Vn23KbuohSdFzXJiSMm4FbEkJFMkKX04=;
-        b=LFD5f5sGzeRtIHpKCfZF5wyqKqG9bfNsj60uXrN7M1R800Eu/YEdpUvb+X/6ArMBxW
-         Ku4q3Q8JCrCQTy/4/lL8iTtejcGpM5xZGS70hxdwKfJB6rQX+4h7sqMk3+/tsxmo3ex4
-         jN3O0CzCqLLdmbxGM8dWsgJ6CiqkB0/A2dzGZKxHwqBMWYQr8XoVivSwoQCVU6bty/k5
-         679ip2+IHOsWfc6TYV6iCERLi8u72VacjBPrVSyd3r3lDt1u9NeDyC7/WNWLI5Wvv4Yd
-         yK4tIN45bP9H8vdItANiRJ0UFtTyToSY2dWApATFmfNgJ5lLKhn0OgPh3QXOihRozuvQ
-         IGGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KNf+Ql/j9M3Vn23KbuohSdFzXJiSMm4FbEkJFMkKX04=;
-        b=RLhCF6QD/m5M8cFdyepfDqZYAA1xXAkI1FMX4ZEySGBIVru2BX9LKKTW6/X71vmH8J
-         XhQm1extSU2qXkAVuk/AHt7X2S8poYkCN2HmERc7sWJas7cjMtUW76fDyzWrMquHj3YL
-         q6utpC0HEubkkLx7oTqbM+ArNEFJy0WFkzyjdWsUsxvDK4S7cbP+Vyw9QDAQQQPLKl9v
-         Vyfr3K9CB1Qk+L96+H6j1IjGMR6WYRiODJ3fEYomdzm8mXjKLq1dOD1ri4mYab02/fe+
-         VtXj2HMgGxsOVbubpX1MzoSNqhyyvDP3wykRxOrrZ23Uui/H8ck78OhKse6EILTWZZ3n
-         4VWQ==
-X-Gm-Message-State: AJIora9mLZCT+vwn9JDe1MBHFWsUbIAHAHLAroGIUvQsCbxcS7jJsA1j
-        cYgGPLIa1sFV7lPqMRe+SmGWaM0PPhrYKScGmG6ou/bM6Sw=
-X-Google-Smtp-Source: AGRyM1sna9Eq4Osr5KmST24hrtbVcR20wkRP0EMEDMdi9yusF90SuIPxvSPYkdr5Ll1OxtmtIw4/8zG9xxDp0VS2veo=
-X-Received: by 2002:a05:6102:2328:b0:349:ed98:2b96 with SMTP id
- b8-20020a056102232800b00349ed982b96mr525017vsa.57.1655148037073; Mon, 13 Jun
- 2022 12:20:37 -0700 (PDT)
+        Mon, 13 Jun 2022 16:30:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3901D10F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655148093; x=1686684093;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pVQTfp5IU2YdV+5jfNxCHCOaYYaOvPBvgBMV8BSutKI=;
+  b=k0sxJENowsNkKMkbUjmUO8CtSRDypwV5Zd0jWr8vClhr8GdwPBCFpVH2
+   hpZtp+ZGjIwXjvpWdq3l7iaQS1ZI/2PBJ0t4KHkoOvbEVict+i3MFw6+J
+   JVGHltfHPAY7k6aSgn3JD3GD17ZdPpZ17iyxSgn/fr6cOyuN4FgZyyTJC
+   iRMSnumf07l8hzyPOht/tcTxAhGEQl6uOiwXjrP5FmPXtGOyxsvW5L7jy
+   40bqOue+G8+f7x+YOyQr4sYHrgdABgeuO9XLQZ4hp2Fnoaa1XrIux+FTe
+   ddxdUPWf9jw8Xy+LNcHRC8HMk+sfhlzMb/oIWRZxutRV98UjcUyVqJQUL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="340058361"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="340058361"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 12:21:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="726419999"
+Received: from kyogendr-mobl.amr.corp.intel.com (HELO [10.212.95.68]) ([10.212.95.68])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 12:21:31 -0700
+Message-ID: <15ef4ec4-14ae-27fc-919d-b0933454455f@linux.intel.com>
+Date:   Mon, 13 Jun 2022 14:21:31 -0500
 MIME-Version: 1.0
-References: <20220613112937.65428-1-wang.yi59@zte.com.cn>
-In-Reply-To: <20220613112937.65428-1-wang.yi59@zte.com.cn>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Mon, 13 Jun 2022 12:20:26 -0700
-Message-ID: <CAAH8bW8wD_hsOqtWa-g_1SNWNi7GHzsu9RvL8feY069JPKFWBA@mail.gmail.com>
-Subject: Re: [PATCH] bitmap: fix a unproper remap when mpol_rebind_nodemask()
-To:     Yi Wang <wang.yi59@zte.com.cn>
-Cc:     andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
-        wang.liang82@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] soundwire: intel: uniquify debug message
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     alsa-devel@alsa-project.org, vinod.koul@linaro.org, tiwai@suse.de,
+        linux-kernel@vger.kernel.org, vkoul@kernel.org, broonie@kernel.org,
+        srinivas.kandagatla@linaro.org, sanyog.r.kale@intel.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        bard.liao@intel.com
+References: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
+ <20220610023537.27223-2-yung-chuan.liao@linux.intel.com>
+ <YqLVwqx9/Pos8T06@kroah.com>
+ <b86e6cbd-3488-a239-d765-cf01bf0d4f70@linux.intel.com>
+ <YqRCKtLGYlRQQ+DU@kroah.com>
+ <7328fbb2-06af-99c8-5e7f-9d22f8c4e4f6@linux.intel.com>
+ <YqdyErIYYk85NV41@kroah.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <YqdyErIYYk85NV41@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 4:31 AM Yi Wang <wang.yi59@zte.com.cn> wrote:
->
-> Consider one situation:
->
-> The app have two vmas which mbind() to node 1 and node3 respectively,
-> and its cpuset.mems is 0-3, now set its cpuset.mems to 1,3, according
-> to current bitmap_remap(), we got:
->
->     1 => 3
->     3 => 3
->
-> This maybe confused because node 1,3 have already in the new settiing
-> region but both nodes are binded to the same node 3 now.
->
-> Actually we found the situation on a very old libvirt and qemu, but
-> this can be easily reproduced in the current kernel, so we try to fix
-> it.
->
-> A possible fix way is to ignore the bits in @src have already existed
-> in @new.
->
-> Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
-> ---
->  lib/bitmap.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/lib/bitmap.c b/lib/bitmap.c
-> index b18e31ea6e66..b77bf1b3852e 100644
-> --- a/lib/bitmap.c
-> +++ b/lib/bitmap.c
-> @@ -1006,8 +1006,8 @@ unsigned int bitmap_ord_to_pos(const unsigned long *buf, unsigned int ord, unsig
->   * @dst point to the same location, then this routine copies @src
->   * to @dst.
->   *
-> - * The positions of unset bits in @old are mapped to themselves
-> - * (the identify map).
-> + * The positions of unset bits in @old or bits in @src have already
-> + * existed in @new are mapped to themselves (the identify map).
->   *
->   * Apply the above specified mapping to @src, placing the result in
->   * @dst, clearing any bits previously set in @dst.
-> @@ -1033,7 +1033,7 @@ void bitmap_remap(unsigned long *dst, const unsigned long *src,
->         for_each_set_bit(oldbit, src, nbits) {
->                 int n = bitmap_pos_to_ord(old, oldbit, nbits);
->
-> -               if (n < 0 || w == 0)
-> +               if (n < 0 || w == 0 || test_bit(oldbit, new))
->                         set_bit(oldbit, dst);   /* identity map */
->                 else
->                         set_bit(bitmap_ord_to_pos(new, n % w, nbits), dst);
-> --
-> 2.33.0.rc0.dirty
 
-Regarding the original problem - can you please confirm that
-it's reproduced on current kernels, show the execution path etc.
-From what I see on modern kernel, the only user of nodes_remap()
-is mpol_rebind_nodemask(). Is that the correct path?
+>>>>>> @@ -1549,8 +1549,8 @@ static int __maybe_unused intel_pm_prepare(struct device *dev)
+>>>>>>  	int ret;
+>>>>>>  
+>>>>>>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
+>>>>>> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
+>>>>>> -			bus->link_id);
+>>>>>> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
+>>>>>> +			__func__, bus->link_id);
+>>>>>
+>>>>> Not needed, it is provided automatically if you ask the kernel for this.
+>>>>> Same for all other instances in this patch.
+>>>>
+>>>> provided how? Your comment is a bit cryptic here.
+>>>
+>>> the dynamic debug code in the kernel already adds the function name
+>>> where the message was sent from, if you want to know this in userspace.
+>>> Please read the documentation for details (I think the key is the 'f'
+>>> flag to be enabled in userspace).
+>>>
+>>> So adding __func__ to dev_dbg() calls are redundant and never needed.
+>>
+>> Oh wow, I had no idea - and I am not the only one :-)
+>>
+>> Here's what I get with a grep on the kernel code
+>>
+>> git grep __func__ | grep dev_dbg | wc -l
+>>
+>> 3122
+>>
+>>
+>> Doing this for sound/ gives me 356, and that's for single-line logs only.
+>>
+>> There's clearly something that was missed by tons of people.
+> 
+> Yes, it's not commonly known so cleanups are always welcome.  Perhaps
+> some of those usages predate the feature being added as well.
 
-Anyways, as per name, bitmap_remap() is intended to change bit
-positions, and it doesn't look wrong if it does so.
+Yep, looks like no one in our team knew about this. We've changed our
+scripts and I started cleaning this up, changes will be posted upstream
+soon.
 
-This is not how the function is supposed to work. For example,
-        old: 00111000
-        new: 00011100
+https://github.com/thesofproject/linux/pull/3695
 
-means:
-        old: 00111 000
-             || \\\|||
-        new: 000 11100
-
-And after this patch it would be:
-        old: 001 11000
-             || \|||||
-        new: 000 11100
-
-Which is not the same, right?
-
-If mpol_rebind() wants to keep previous relations, then according to
-the comment:
- * The positions of unset bits in @old are mapped to themselves
- * (the identify map).
-
-, you can just clear @old bits that already have good relations
-you'd like to preserve.
-
-Thanks,
-Yury
+This patch will be reverted in our tree, completely unnecessary indeed.

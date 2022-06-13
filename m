@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33309549314
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E1D5496F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381297AbiFMOIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S1382374AbiFMOOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380985AbiFMODV (ORCPT
+        with ESMTP id S1380867AbiFMODX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:03:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BAD8FFB6;
-        Mon, 13 Jun 2022 04:38:26 -0700 (PDT)
+        Mon, 13 Jun 2022 10:03:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA898FFBE;
+        Mon, 13 Jun 2022 04:38:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1195B80ECE;
-        Mon, 13 Jun 2022 11:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121FCC34114;
-        Mon, 13 Jun 2022 11:38:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A9C2B80EC6;
+        Mon, 13 Jun 2022 11:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC312C34114;
+        Mon, 13 Jun 2022 11:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120303;
-        bh=eSd1ELFsAoy1oMuc2JFhD/6t5LSqKBh+HAHIcUu/rcE=;
+        s=korg; t=1655120306;
+        bh=mWme0B+Y9j89HzNHz5kBs6pMKkO05ChqT2k1l2qX2Fk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qAHWOzl2ur08n/jPOAim6QO9PyiVR1qSvbwcwxeclPSssqbo1mA/BW6jvRvR0Oh1O
-         UrK5LQca5yAWpTszyCipHb1+3OOVz1YlZyHmEq3YN4lUlJo4ayCWU8T+hOmGAW+uur
-         tFtJFe7atnoJ4+0IWRk/5XEdaHBgyA4E4NINWGNA=
+        b=dG/MFrL/HmmyRtYu0WU+UKAaoUfu+cOSBbBy1JKsMB+TetiD7umw8Ds542yc0OdFY
+         fcjbjNuFfVnARetL8omEbM11So3TtWl+YcKrWL065rCYaDZwbRPfHhQeO/H4WZImLJ
+         WJr+tzLO2ldKeRDmrqLq/ZTkji9IMjBXeDqkP0js=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 5.18 323/339] vduse: Fix NULL pointer dereference on sysfs access
-Date:   Mon, 13 Jun 2022 12:12:28 +0200
-Message-Id: <20220613094936.543634199@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.18 324/339] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
+Date:   Mon, 13 Jun 2022 12:12:29 +0200
+Message-Id: <20220613094936.573277604@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -55,68 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit b27ee76c74dc831d6e092eaebc2dfc9c0beed1c9 upstream.
+commit 32d4fd5751eadbe1823a37eb38df85ec5c8e6207 upstream.
 
-The control device has no drvdata. So we will get a
-NULL pointer dereference when accessing control
-device's msg_timeout attribute via sysfs:
+Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
+Xeons") wrecked intel_idle in two ways:
 
-[ 132.841881][ T3644] BUG: kernel NULL pointer dereference, address: 00000000000000f8
-[ 132.850619][ T3644] RIP: 0010:msg_timeout_show (drivers/vdpa/vdpa_user/vduse_dev.c:1271)
-[ 132.869447][ T3644] dev_attr_show (drivers/base/core.c:2094)
-[ 132.870215][ T3644] sysfs_kf_seq_show (fs/sysfs/file.c:59)
-[ 132.871164][ T3644] ? device_remove_bin_file (drivers/base/core.c:2088)
-[ 132.872082][ T3644] kernfs_seq_show (fs/kernfs/file.c:164)
-[ 132.872838][ T3644] seq_read_iter (fs/seq_file.c:230)
-[ 132.873578][ T3644] ? __vmalloc_area_node (mm/vmalloc.c:3041)
-[ 132.874532][ T3644] kernfs_fop_read_iter (fs/kernfs/file.c:238)
-[ 132.875513][ T3644] __kernel_read (fs/read_write.c:440 (discriminator 1))
-[ 132.876319][ T3644] kernel_read (fs/read_write.c:459)
-[ 132.877129][ T3644] kernel_read_file (fs/kernel_read_file.c:94)
-[ 132.877978][ T3644] kernel_read_file_from_fd (include/linux/file.h:45 fs/kernel_read_file.c:186)
-[ 132.879019][ T3644] __do_sys_finit_module (kernel/module.c:4207)
-[ 132.879930][ T3644] __ia32_sys_finit_module (kernel/module.c:4189)
-[ 132.880930][ T3644] do_int80_syscall_32 (arch/x86/entry/common.c:112 arch/x86/entry/common.c:132)
-[ 132.881847][ T3644] entry_INT80_compat (arch/x86/entry/entry_64_compat.S:419)
+ - must not have tracing in idle functions
+ - must return with IRQs disabled
 
-To fix it, don't create the unneeded attribute for
-control device anymore.
+Additionally, it added a branch for no good reason.
 
-Fixes: c8a6153b6c59 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Message-Id: <20220426073656.229-1-xieyongji@bytedance.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+[ rjw: Moved the intel_idle() kerneldoc comment next to the function ]
+Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vdpa/vdpa_user/vduse_dev.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/idle/intel_idle.c |   32 +++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
 
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -1344,9 +1344,9 @@ static int vduse_create_dev(struct vduse
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -115,6 +115,18 @@ static unsigned int mwait_substates __in
+ #define flg2MWAIT(flags) (((flags) >> 24) & 0xFF)
+ #define MWAIT2flg(eax) ((eax & 0xFF) << 24)
  
- 	dev->minor = ret;
- 	dev->msg_timeout = VDUSE_MSG_DEFAULT_TIMEOUT;
--	dev->dev = device_create(vduse_class, NULL,
--				 MKDEV(MAJOR(vduse_major), dev->minor),
--				 dev, "%s", config->name);
-+	dev->dev = device_create_with_groups(vduse_class, NULL,
-+				MKDEV(MAJOR(vduse_major), dev->minor),
-+				dev, vduse_dev_groups, "%s", config->name);
- 	if (IS_ERR(dev->dev)) {
- 		ret = PTR_ERR(dev->dev);
- 		goto err_dev;
-@@ -1595,7 +1595,6 @@ static int vduse_init(void)
- 		return PTR_ERR(vduse_class);
++static __always_inline int __intel_idle(struct cpuidle_device *dev,
++					struct cpuidle_driver *drv, int index)
++{
++	struct cpuidle_state *state = &drv->states[index];
++	unsigned long eax = flg2MWAIT(state->flags);
++	unsigned long ecx = 1; /* break on interrupt flag */
++
++	mwait_idle_with_hints(eax, ecx);
++
++	return index;
++}
++
+ /**
+  * intel_idle - Ask the processor to enter the given idle state.
+  * @dev: cpuidle device of the target CPU.
+@@ -132,16 +144,19 @@ static unsigned int mwait_substates __in
+ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+ 				struct cpuidle_driver *drv, int index)
+ {
+-	struct cpuidle_state *state = &drv->states[index];
+-	unsigned long eax = flg2MWAIT(state->flags);
+-	unsigned long ecx = 1; /* break on interrupt flag */
++	return __intel_idle(dev, drv, index);
++}
  
- 	vduse_class->devnode = vduse_devnode;
--	vduse_class->dev_groups = vduse_dev_groups;
+-	if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
+-		local_irq_enable();
++static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
++				    struct cpuidle_driver *drv, int index)
++{
++	int ret;
  
- 	ret = alloc_chrdev_region(&vduse_major, 0, VDUSE_DEV_MAX, "vduse");
- 	if (ret)
+-	mwait_idle_with_hints(eax, ecx);
++	raw_local_irq_enable();
++	ret = __intel_idle(dev, drv, index);
++	raw_local_irq_disable();
+ 
+-	return index;
++	return ret;
+ }
+ 
+ /**
+@@ -1668,6 +1683,9 @@ static void __init intel_idle_init_cstat
+ 		/* Structure copy. */
+ 		drv->states[drv->state_count] = cpuidle_state_table[cstate];
+ 
++		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_IRQ_ENABLE)
++			drv->states[drv->state_count].enter = intel_idle_irq;
++
+ 		if ((disabled_states_mask & BIT(drv->state_count)) ||
+ 		    ((icpu->use_acpi || force_use_acpi) &&
+ 		     intel_idle_off_by_default(mwait_hint) &&
 
 

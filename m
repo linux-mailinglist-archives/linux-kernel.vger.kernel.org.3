@@ -2,180 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733CF549952
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAF5549951
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237305AbiFMQyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 12:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
+        id S239246AbiFMQyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 12:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242039AbiFMQxY (ORCPT
+        with ESMTP id S243147AbiFMQxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 12:53:24 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471571F4FDB
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:38:26 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gd1so5826043pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=EgVDRPRugv4ujo5MlXy46Y2xsAkIKPNhty2/8oM5/Wg=;
-        b=KwqgjGM0eBdCdkcc6qQNpnbNsPwCU6a14MiuQNhI/ngLn7bWw730F9pp1vXj0oUSeG
-         GklcOhBQcFP/D3PB1eocetgio7EJTVh8pb5bpI22DnwoYKT0d0oL4bhwqU4yt+UCBjuT
-         nukW77qWFdanU0gL6XpROUqvobtjGKkzfQsvYuP1B5bMhTVFvLblRX8ZOsNbvMK6GlRc
-         PJzWZK0/ShNOWJwX+7xKAPEy8ZfSaKeIv5Eo3ftGGjqJARoLp9k259VT6PbtS6Y6Yf/y
-         9TDpw0C3ugdLyqSRQv6JlH769XJ6SZU4NNvWKvGLwkR1YScWTqZLfieoGhteF7sNRXh0
-         +cnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=EgVDRPRugv4ujo5MlXy46Y2xsAkIKPNhty2/8oM5/Wg=;
-        b=dyH5PPflFnscLuMum4n//GPLcl7/lJ9hQGgDWPblPjOKlw2XEZAWwnhFw/FOwhZjTL
-         zsGgwXomSSqZR13iBQ1dMaFhZ/VNzlvWe3usBzHI0x6voHGgYRFh5sY2fk+mgfOrIK77
-         8aJvHc8HNvh5DIxiNlv9dqwUK50PO5X/a5H83/2ZYalIH2MPqH8i720iHE2Vj+Ff4Y57
-         F8j/05WOirGbrqJoRbyNBBVE5ypBroT/4+GIDWCrbhUnrBI5vZplbj3yZN5tHhqN2oWr
-         81gi8SKYHWPEoW9I7tvcS26yIHvfha10Kj7KfSskWTojkUsGgRxSunVxW9cczm3hJLdd
-         URHQ==
-X-Gm-Message-State: AJIora8R8V6Pizr+Vc3IRwjg/DAh+9SzWkqtRIDkDs3cjHsVShoJoE4Q
-        VWSSDv2NImrQ0ilFFb5RqUTgSw==
-X-Google-Smtp-Source: AGRyM1uZW1amWfrjvJhQD8uNTN5nzx0Vj+9UGzYAKdiNwSSw4GtdS1C2c35xiXNlAnRcP30G4NIapg==
-X-Received: by 2002:a17:902:f54e:b0:166:3b30:457c with SMTP id h14-20020a170902f54e00b001663b30457cmr126340plf.1.1655131105550;
-        Mon, 13 Jun 2022 07:38:25 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b0015e8d4eb208sm5233408pla.82.2022.06.13.07.38.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 07:38:25 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 14:38:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 144/144] KVM: selftests: Sanity check input to
- ioctls() at build time
-Message-ID: <YqdL3R/ep3b0XoCo@google.com>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <20220603004331.1523888-145-seanjc@google.com>
- <20220610184953.34yn2eq2mmm7cp4n@gator>
+        Mon, 13 Jun 2022 12:53:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607491F5899
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wypwNo31pEoKbTgQWNWX70zzoyNQ9oMUPSN5tbzhBBg=; b=QOaOTcl7RlOJ50kzhpL16tQ+O/
+        AUGcSiZNJDKL/1WyLtbcDrKtQMC2cyooJMJuZxTrE1Xl/cdIKus7LrijAyhz6AUPw04LvqqM9NWkt
+        oYO7Qz6zBrX7qU+V7BVnfke89MVmym3N+9IKpWN1nKkRAyjINSISNTciDPkgnF5mU+PCm1KwTUu3D
+        f+rj2u+rdOcElXQclEB67mG8hF/YLMZYrCAH76Ca1Ct9lcpatDkLDwuYMz4brQooSGZXNTsuECMjj
+        oXT92E73xUbgX4TeOGQsYzmRqntv6I4nbTq4iIQvIdboy8wIyz4D4vy38mHuVE9Ghouu0s17rP9TR
+        AL6C7Rxg==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o0lDE-00Gv6S-NB; Mon, 13 Jun 2022 14:38:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 558FB30023F;
+        Mon, 13 Jun 2022 16:38:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3E12E2029F884; Mon, 13 Jun 2022 16:38:40 +0200 (CEST)
+Date:   Mon, 13 Jun 2022 16:38:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, alexey.budankov@linux.intel.com,
+        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
+        santosh.shukla@amd.com
+Subject: Re: [RFC v2] perf: Rewrite core context handling
+Message-ID: <YqdL8LsOvxNqhz/v@hirez.programming.kicks-ass.net>
+References: <20220113134743.1292-1-ravi.bangoria@amd.com>
+ <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610184953.34yn2eq2mmm7cp4n@gator>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022, Andrew Jones wrote:
-> On Fri, Jun 03, 2022 at 12:43:31AM +0000, Sean Christopherson wrote:
-> > Add a static assert to the KVM/VM/vCPU ioctl() helpers to verify that the
-> > size of the argument provided matches the expected size of the IOCTL.
-> > Because ioctl() ultimately takes a "void *", it's all too easy to pass in
-> > garbage and not detect the error until runtime.  E.g. while working on a
-> > CPUID rework, selftests happily compiled when vcpu_set_cpuid()
-> > unintentionally passed the cpuid() function as the parameter to ioctl()
-> > (a local "cpuid" parameter was removed, but its use was not replaced with
-> > "vcpu->cpuid" as intended).
-> > 
-> > Tweak a variety of benign issues that aren't compatible with the sanity
-> > check, e.g. passing a non-pointer for ioctls().
-> > 
-> > Note, static_assert() requires a string on older versions of GCC.  Feed
-> > it an empty string to make the compiler happy.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  .../selftests/kvm/include/kvm_util_base.h     | 61 +++++++++++++------
-> >  .../selftests/kvm/lib/aarch64/processor.c     |  2 +-
-> >  tools/testing/selftests/kvm/lib/guest_modes.c |  2 +-
-> >  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +--------
-> >  tools/testing/selftests/kvm/s390x/resets.c    |  6 +-
-> >  .../selftests/kvm/x86_64/mmio_warning_test.c  |  2 +-
-> >  .../kvm/x86_64/pmu_event_filter_test.c        |  2 +-
-> >  .../selftests/kvm/x86_64/xen_shinfo_test.c    |  6 +-
-> >  8 files changed, 56 insertions(+), 54 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > index 04ddab322b6b..0eaf0c9b7612 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > @@ -180,29 +180,56 @@ static inline bool kvm_has_cap(long cap)
-> >  #define __KVM_IOCTL_ERROR(_name, _ret)	__KVM_SYSCALL_ERROR(_name, _ret)
-> >  #define KVM_IOCTL_ERROR(_ioctl, _ret) __KVM_IOCTL_ERROR(#_ioctl, _ret)
-> >  
-> > -#define __kvm_ioctl(kvm_fd, cmd, arg) \
-> > -	ioctl(kvm_fd, cmd, arg)
-> > +#define kvm_do_ioctl(fd, cmd, arg)						\
-> > +({										\
-> > +	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd), "");	\
-> > +	ioctl(fd, cmd, arg);							\
-> > +})
-> >  
-> > -static inline void _kvm_ioctl(int kvm_fd, unsigned long cmd, const char *name,
-> > -			      void *arg)
-> > -{
-> > -	int ret = __kvm_ioctl(kvm_fd, cmd, arg);
-> > +#define __kvm_ioctl(kvm_fd, cmd, arg)						\
-> > +	kvm_do_ioctl(kvm_fd, cmd, arg)
-> >  
-> > -	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(name, ret));
-> > -}
-> > +
-> 
-> While we've gained the static asserts we've also lost the type checking
-> that the inline functions provided. Is there anyway we can bring them back
-> with more macro tricks?
+On Mon, Jun 13, 2022 at 04:35:11PM +0200, Peter Zijlstra wrote:
 
-Gah, I overthought this.  It doesn't even require macros, just a dummy helper.
-I wasn't trying to use static_assert() to enforce the type check, which is how I
-ended up with the sizeof() ugliness (not the one above).  But it's far easier to
-let the compiler do the checking.
+Another one of those lockdep splats:
 
-I'll send a small fixup series to address this and your other feedback.
-
-static __always_inline void static_assert_is_vm(struct kvm_vm *vm) { }
-
-#define __vm_ioctl(vm, cmd, arg)				\
-({								\
-	static_assert_is_vm(vm);				\
-	kvm_do_ioctl((vm)->fd, cmd, arg);			\
-})
-
-static __always_inline void static_assert_is_vcpu(struct kvm_vcpu *vcpu) { }
-
-#define __vcpu_ioctl(vcpu, cmd, arg)				\
-({								\
-	static_assert_is_vcpu(vcpu);				\
-	kvm_do_ioctl((vcpu)->fd, cmd, arg);			\
-})
+> @@ -12147,42 +12256,37 @@ SYSCALL_DEFINE5(perf_event_open,
+>  	if (pmu->task_ctx_nr == perf_sw_context)
+>  		event->event_caps |= PERF_EV_CAP_SOFTWARE;
+>  
+> -	if (group_leader) {
+> -		if (is_software_event(event) &&
+> -		    !in_software_context(group_leader)) {
+> -			/*
+> -			 * If the event is a sw event, but the group_leader
+> -			 * is on hw context.
+> -			 *
+> -			 * Allow the addition of software events to hw
+> -			 * groups, this is safe because software events
+> -			 * never fail to schedule.
+> -			 */
+> -			pmu = group_leader->ctx->pmu;
+> -		} else if (!is_software_event(event) &&
+> -			   is_software_event(group_leader) &&
+> -			   (group_leader->group_caps & PERF_EV_CAP_SOFTWARE)) {
+> -			/*
+> -			 * In case the group is a pure software group, and we
+> -			 * try to add a hardware event, move the whole group to
+> -			 * the hardware context.
+> -			 */
+> -			move_group = 1;
+> -		}
+> -	}
+> -
+>  	/*
+>  	 * Get the target context (task or percpu):
+>  	 */
+> -	ctx = find_get_context(pmu, task, event);
+> +	ctx = find_get_context(task, event);
+>  	if (IS_ERR(ctx)) {
+>  		err = PTR_ERR(ctx);
+>  		goto err_alloc;
+>  	}
+>  
+> -	/*
+> -	 * Look up the group leader (we will attach this event to it):
+> -	 */
+> +	mutex_lock(&ctx->mutex);
+> +
+> +	if (ctx->task == TASK_TOMBSTONE) {
+> +		err = -ESRCH;
+> +		goto err_locked;
+> +	}
+> +
+> +	if (!task) {
+> +		/*
+> +		 * Check if the @cpu we're creating an event for is online.
+> +		 *
+> +		 * We use the perf_cpu_context::ctx::mutex to serialize against
+> +		 * the hotplug notifiers. See perf_event_{init,exit}_cpu().
+> +		 */
+> +		struct perf_cpu_context *cpuctx = per_cpu_ptr(&cpu_context, event->cpu);
+> +
+> +		if (!cpuctx->online) {
+> +			err = -ENODEV;
+> +			goto err_locked;
+> +		}
+> +	}
+> +
+>  	if (group_leader) {
+>  		err = -EINVAL;
+>  
 
 
-In file included from include/kvm_util.h:10,
-                 from lib/x86_64/processor.c:9:
-lib/x86_64/processor.c: In function ‘_vcpu_set_msr’:
-lib/x86_64/processor.c:831:33: error: passing argument 1 of ‘static_assert_is_vcpu’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-  831 |         return __vcpu_ioctl(vcpu->vm, KVM_SET_MSRS, &buffer.header);
-      |                             ~~~~^~~~
-      |                                 |
-      |                                 struct kvm_vm *
-include/kvm_util_base.h:232:31: note: in definition of macro ‘__vcpu_ioctl’
-  232 |         static_assert_is_vcpu(vcpu);                            \
-      |                               ^~~~
-include/kvm_util_base.h:225:68: note: expected ‘struct kvm_vcpu *’ but argument is of type ‘struct kvm_vm *’
-  225 | static __always_inline void static_assert_is_vcpu(struct kvm_vcpu *vcpu)
-      |                                                   ~~~~~~~~~~~~~~~~~^~~~
-cc1: all warnings being treated as errors
+pulling up the ctx->mutex makes things simpler, but also violates the
+locking order vs exec_update_lock.
 
+Pull that lock up as well...
+
+---
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -12254,13 +12254,29 @@ SYSCALL_DEFINE5(perf_event_open,
+ 	if (pmu->task_ctx_nr == perf_sw_context)
+ 		event->event_caps |= PERF_EV_CAP_SOFTWARE;
+ 
++	if (task) {
++		err = down_read_interruptible(&task->signal->exec_update_lock);
++		if (err)
++			goto err_alloc;
++
++		/*
++		 * We must hold exec_update_lock across this and any potential
++		 * perf_install_in_context() call for this new event to
++		 * serialize against exec() altering our credentials (and the
++		 * perf_event_exit_task() that could imply).
++		 */
++		err = -EACCES;
++		if (!perf_check_permission(&attr, task))
++			goto err_cred;
++	}
++
+ 	/*
+ 	 * Get the target context (task or percpu):
+ 	 */
+ 	ctx = find_get_context(task, event);
+ 	if (IS_ERR(ctx)) {
+ 		err = PTR_ERR(ctx);
+-		goto err_alloc;
++		goto err_cred;
+ 	}
+ 
+ 	mutex_lock(&ctx->mutex);
+@@ -12358,58 +12374,14 @@ SYSCALL_DEFINE5(perf_event_open,
+ 			goto err_context;
+ 	}
+ 
+-	event_file = anon_inode_getfile("[perf_event]", &perf_fops, event, f_flags);
+-	if (IS_ERR(event_file)) {
+-		err = PTR_ERR(event_file);
+-		event_file = NULL;
+-		goto err_context;
+-	}
+-
+-	if (task) {
+-		err = down_read_interruptible(&task->signal->exec_update_lock);
+-		if (err)
+-			goto err_file;
+-
+-		/*
+-		 * We must hold exec_update_lock across this and any potential
+-		 * perf_install_in_context() call for this new event to
+-		 * serialize against exec() altering our credentials (and the
+-		 * perf_event_exit_task() that could imply).
+-		 */
+-		err = -EACCES;
+-		if (!perf_check_permission(&attr, task))
+-			goto err_cred;
+-	}
+-
+-	if (ctx->task == TASK_TOMBSTONE) {
+-		err = -ESRCH;
+-		goto err_locked;
+-	}
+-
+ 	if (!perf_event_validate_size(event)) {
+ 		err = -E2BIG;
+-		goto err_locked;
+-	}
+-
+-	if (!task) {
+-		/*
+-		 * Check if the @cpu we're creating an event for is online.
+-		 *
+-		 * We use the perf_cpu_context::ctx::mutex to serialize against
+-		 * the hotplug notifiers. See perf_event_{init,exit}_cpu().
+-		 */
+-		struct perf_cpu_context *cpuctx =
+-			container_of(ctx, struct perf_cpu_context, ctx);
+-
+-		if (!cpuctx->online) {
+-			err = -ENODEV;
+-			goto err_locked;
+-		}
++		goto err_context;
+ 	}
+ 
+ 	if (perf_need_aux_event(event) && !perf_get_aux_event(event, group_leader)) {
+ 		err = -EINVAL;
+-		goto err_locked;
++		goto err_context;
+ 	}
+ 
+ 	/*
+@@ -12418,11 +12390,18 @@ SYSCALL_DEFINE5(perf_event_open,
+ 	 */
+ 	if (!exclusive_event_installable(event, ctx)) {
+ 		err = -EBUSY;
+-		goto err_cred;
++		goto err_context;
+ 	}
+ 
+ 	WARN_ON_ONCE(ctx->parent_ctx);
+ 
++	event_file = anon_inode_getfile("[perf_event]", &perf_fops, event, f_flags);
++	if (IS_ERR(event_file)) {
++		err = PTR_ERR(event_file);
++		event_file = NULL;
++		goto err_context;
++	}
++
+ 	/*
+ 	 * This is the point on no return; we cannot fail hereafter. This is
+ 	 * where we start modifying current state.
+@@ -12500,17 +12479,15 @@ SYSCALL_DEFINE5(perf_event_open,
+ 	fd_install(event_fd, event_file);
+ 	return event_fd;
+ 
+-err_cred:
+-	if (task)
+-		up_read(&task->signal->exec_update_lock);
+-err_file:
+-	fput(event_file);
+ err_context:
+ 	/* event->pmu_ctx freed by free_event() */
+ err_locked:
+ 	mutex_unlock(&ctx->mutex);
+ 	perf_unpin_context(ctx);
+ 	put_ctx(ctx);
++err_cred:
++	if (task)
++		up_read(&task->signal->exec_update_lock);
+ err_alloc:
+ 	/*
+ 	 * If event_file is set, the fput() above will have called ->release()

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA535498FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9DC548ABA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358139AbiFML7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S235773AbiFMKTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357049AbiFMLwp (ORCPT
+        with ESMTP id S242282AbiFMKSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:52:45 -0400
+        Mon, 13 Jun 2022 06:18:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF71220CE;
-        Mon, 13 Jun 2022 03:55:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0896ADF00;
+        Mon, 13 Jun 2022 03:16:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7472260EFE;
-        Mon, 13 Jun 2022 10:55:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8884CC34114;
-        Mon, 13 Jun 2022 10:55:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99A0E614BF;
+        Mon, 13 Jun 2022 10:16:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A144FC34114;
+        Mon, 13 Jun 2022 10:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117727;
-        bh=sELfsL7R04gHFsBTxos23N12m385pyivDoZwxC2LLS4=;
+        s=korg; t=1655115366;
+        bh=iT6aY+Ql7xXTk66FgNAFEfbUcnt+A+eNFO9WQN8pcgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x8/+wDH8G5Kr5xvfwhJ2/L0OLEjaC7MTL2addS0Y0hgQSva0Ol60XTzVc62zdQg4h
-         ojsPpXrXuMXH4W7/6saN/zV1adA+M3hmE3LQxpnpHwGWDHtv09K21cmP8+IBZu/flZ
-         jHf2mLXIWE6yILdG7gl7Geuvc90vKs4/mdVBXm6M=
+        b=zGmh/rOcejdUc6pYlVW8+/W91xTotb6A9Ac+jKSUaWJtw+akHScHYhlzQvrjBAsLw
+         zprYc4yyZ5izwsE6WS+y28lKZH4SxHWk7SLLeYN1RQ/o+WLjUxjRBHK+LwtaDpEbKC
+         O3oEdJ5rjAuW5ev0C6Ly0Z+0qLOib8r3Ie9hT77k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
-Subject: [PATCH 4.19 098/287] media: pvrusb2: fix array-index-out-of-bounds in pvr2_i2c_core_init
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 048/167] drm/msm/hdmi: check return value after calling platform_get_resource_byname()
 Date:   Mon, 13 Jun 2022 12:08:42 +0200
-Message-Id: <20220613094926.851868115@linuxfoundation.org>
+Message-Id: <20220613094852.247380218@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,56 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 471bec68457aaf981add77b4f590d65dd7da1059 ]
+[ Upstream commit a36e506711548df923ceb7ec9f6001375be799a5 ]
 
-Syzbot reported that -1 is used as array index. The problem was in
-missing validation check.
+It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
+we need check the return value.
 
-hdw->unit_number is initialized with -1 and then if init table walk fails
-this value remains unchanged. Since code blindly uses this member for
-array indexing adding sanity check is the easiest fix for that.
-
-hdw->workpoll initialization moved upper to prevent warning in
-__flush_work.
-
-Reported-and-tested-by: syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
-
-Fixes: d855497edbfb ("V4L/DVB (4228a): pvrusb2 to kernel 2.6.18")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: c6a57a50ad56 ("drm/msm/hdmi: add hdmi hdcp support (V3)")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/482992/
+Link: https://lore.kernel.org/r/20220422032227.2991553-1-yangyingliang@huawei.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/hdmi/hdmi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 21ccbbd70dce..bbb5ff16abd6 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2561,6 +2561,11 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	} while (0);
- 	mutex_unlock(&pvr2_unit_mtx);
- 
-+	INIT_WORK(&hdw->workpoll, pvr2_hdw_worker_poll);
-+
-+	if (hdw->unit_number == -1)
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
+index a968cad509c2..48ab46726707 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+@@ -148,6 +148,10 @@ static struct hdmi *msm_hdmi_init(struct platform_device *pdev)
+ 	/* HDCP needs physical address of hdmi register */
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+ 		config->mmio_name);
++	if (!res) {
++		ret = -EINVAL;
 +		goto fail;
-+
- 	cnt1 = 0;
- 	cnt2 = scnprintf(hdw->name+cnt1,sizeof(hdw->name)-cnt1,"pvrusb2");
- 	cnt1 += cnt2;
-@@ -2572,8 +2577,6 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	if (cnt1 >= sizeof(hdw->name)) cnt1 = sizeof(hdw->name)-1;
- 	hdw->name[cnt1] = 0;
++	}
+ 	hdmi->mmio_phy_addr = res->start;
  
--	INIT_WORK(&hdw->workpoll,pvr2_hdw_worker_poll);
--
- 	pvr2_trace(PVR2_TRACE_INIT,"Driver unit number is %d, name is %s",
- 		   hdw->unit_number,hdw->name);
- 
+ 	hdmi->qfprom_mmio = msm_ioremap(pdev,
 -- 
 2.35.1
 

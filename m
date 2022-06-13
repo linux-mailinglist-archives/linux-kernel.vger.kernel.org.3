@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB260548F30
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EDB549726
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351978AbiFMLMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S1351608AbiFMLLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352298AbiFMLJm (ORCPT
+        with ESMTP id S1351576AbiFMLGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:09:42 -0400
+        Mon, 13 Jun 2022 07:06:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE9A33EBE;
-        Mon, 13 Jun 2022 03:35:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9153335F;
+        Mon, 13 Jun 2022 03:35:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB85D60F9A;
-        Mon, 13 Jun 2022 10:35:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B014C34114;
-        Mon, 13 Jun 2022 10:35:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3BE561018;
+        Mon, 13 Jun 2022 10:35:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A46BC34114;
+        Mon, 13 Jun 2022 10:34:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116541;
-        bh=BXV0HBAPykyP1T+a+S3U3NYwDhtksz1cPmQxAWNQ248=;
+        s=korg; t=1655116500;
+        bh=qOVzcPFsMGm4txDxzbRtTtKwNnOjmHxSlt3BmOqhZp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sZMB7btbGuBnnk2rZc4bH10d2d7gMadvaw9E6E3X7S4hYQoP5I8xImhjVjuctbOKc
-         2JNYN9ZwPVDq8RSh2yydWBCPJ3GVqVC8tf2gJodGqMFMJ9oYwxOjyr/dIilctKBV34
-         bIiS6rHRr00lDw0qcUkd3lsJeoqoOryBQgUS8Fmk=
+        b=pVCUwqXMu/wM3laIOvysQcw+Yr2ItW9zRkMaeojgYgE0topSSSHVf12h22tqSFeg3
+         LUCWeGpCbWlZeyox07KO88Gtpx7hGdkoXDq1UxdOV4IOvu+uiIh9hp701ZbArxPcEV
+         hrXZNjNbm5Ns0xWspIHQ/GjwTi9K2e2F503hM3xo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 095/411] NFC: NULL out the dev->rfkill to prevent UAF
-Date:   Mon, 13 Jun 2022 12:06:08 +0200
-Message-Id: <20220613094931.530732331@linuxfoundation.org>
+Subject: [PATCH 5.4 097/411] drbd: fix duplicate array initializer
+Date:   Mon, 13 Jun 2022 12:06:10 +0200
+Message-Id: <20220613094931.589825563@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -56,148 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 1b0e81416a24d6e9b8c2341e22e8bf48f8b8bfc9 ]
+[ Upstream commit 33cb0917bbe241dd17a2b87ead63514c1b7e5615 ]
 
-Commit 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-assumes the device_is_registered() in function nfc_dev_up() will help
-to check when the rfkill is unregistered. However, this check only
-take effect when device_del(&dev->dev) is done in nfc_unregister_device().
-Hence, the rfkill object is still possible be dereferenced.
+There are two initializers for P_RETRY_WRITE:
 
-The crash trace in latest kernel (5.18-rc2):
+drivers/block/drbd/drbd_main.c:3676:22: warning: initialized field overwritten [-Woverride-init]
 
-[   68.760105] ==================================================================
-[   68.760330] BUG: KASAN: use-after-free in __lock_acquire+0x3ec1/0x6750
-[   68.760756] Read of size 8 at addr ffff888009c93018 by task fuzz/313
-[   68.760756]
-[   68.760756] CPU: 0 PID: 313 Comm: fuzz Not tainted 5.18.0-rc2 #4
-[   68.760756] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[   68.760756] Call Trace:
-[   68.760756]  <TASK>
-[   68.760756]  dump_stack_lvl+0x57/0x7d
-[   68.760756]  print_report.cold+0x5e/0x5db
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  kasan_report+0xbe/0x1c0
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  __lock_acquire+0x3ec1/0x6750
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? register_lock_class+0x18d0/0x18d0
-[   68.760756]  lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? mutex_lock_io_nested+0x12c0/0x12c0
-[   68.760756]  ? nla_get_range_signed+0x540/0x540
-[   68.760756]  ? _raw_spin_lock_irqsave+0x4e/0x50
-[   68.760756]  _raw_spin_lock_irqsave+0x39/0x50
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  rfkill_blocked+0xe/0x60
-[   68.760756]  nfc_dev_up+0x84/0x260
-[   68.760756]  nfc_genl_dev_up+0x90/0xe0
-[   68.760756]  genl_family_rcv_msg_doit+0x1f4/0x2f0
-[   68.760756]  ? genl_family_rcv_msg_attrs_parse.constprop.0+0x230/0x230
-[   68.760756]  ? security_capable+0x51/0x90
-[   68.760756]  genl_rcv_msg+0x280/0x500
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? nfc_genl_dev_down+0xe0/0xe0
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  netlink_rcv_skb+0x11b/0x340
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? netlink_ack+0x9c0/0x9c0
-[   68.760756]  ? netlink_deliver_tap+0x136/0xb00
-[   68.760756]  genl_rcv+0x1f/0x30
-[   68.760756]  netlink_unicast+0x430/0x710
-[   68.760756]  ? memset+0x20/0x40
-[   68.760756]  ? netlink_attachskb+0x740/0x740
-[   68.760756]  ? __build_skb_around+0x1f4/0x2a0
-[   68.760756]  netlink_sendmsg+0x75d/0xc00
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  sock_sendmsg+0xdf/0x110
-[   68.760756]  __sys_sendto+0x19e/0x270
-[   68.760756]  ? __ia32_sys_getpeername+0xa0/0xa0
-[   68.760756]  ? fd_install+0x178/0x4c0
-[   68.760756]  ? fd_install+0x195/0x4c0
-[   68.760756]  ? kernel_fpu_begin_mask+0x1c0/0x1c0
-[   68.760756]  __x64_sys_sendto+0xd8/0x1b0
-[   68.760756]  ? lockdep_hardirqs_on+0xbf/0x130
-[   68.760756]  ? syscall_enter_from_user_mode+0x1d/0x50
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756] RIP: 0033:0x7f67fb50e6b3
-...
-[   68.760756] RSP: 002b:00007f67fa91fe90 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
-[   68.760756] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f67fb50e6b3
-[   68.760756] RDX: 000000000000001c RSI: 0000559354603090 RDI: 0000000000000003
-[   68.760756] RBP: 00007f67fa91ff00 R08: 00007f67fa91fedc R09: 000000000000000c
-[   68.760756] R10: 0000000000000000 R11: 0000000000000293 R12: 00007ffe824d496e
-[   68.760756] R13: 00007ffe824d496f R14: 00007f67fa120000 R15: 0000000000000003
+Remove the first one since it was already ignored by the compiler
+and reorder the list to match the enum definition. As P_ZEROES had
+no entry, add that one instead.
 
-[   68.760756]  </TASK>
-[   68.760756]
-[   68.760756] Allocated by task 279:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  __kasan_kmalloc+0x81/0xa0
-[   68.760756]  rfkill_alloc+0x7f/0x280
-[   68.760756]  nfc_register_device+0xa3/0x1a0
-[   68.760756]  nci_register_device+0x77a/0xad0
-[   68.760756]  nfcmrvl_nci_register_dev+0x20b/0x2c0
-[   68.760756]  nfcmrvl_nci_uart_open+0xf2/0x1dd
-[   68.760756]  nci_uart_tty_ioctl+0x2c3/0x4a0
-[   68.760756]  tty_ioctl+0x764/0x1310
-[   68.760756]  __x64_sys_ioctl+0x122/0x190
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756]
-[   68.760756] Freed by task 314:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  kasan_set_track+0x21/0x30
-[   68.760756]  kasan_set_free_info+0x20/0x30
-[   68.760756]  __kasan_slab_free+0x108/0x170
-[   68.760756]  kfree+0xb0/0x330
-[   68.760756]  device_release+0x96/0x200
-[   68.760756]  kobject_put+0xf9/0x1d0
-[   68.760756]  nfc_unregister_device+0x77/0x190
-[   68.760756]  nfcmrvl_nci_unregister_dev+0x88/0xd0
-[   68.760756]  nci_uart_tty_close+0xdf/0x180
-[   68.760756]  tty_ldisc_kill+0x73/0x110
-[   68.760756]  tty_ldisc_hangup+0x281/0x5b0
-[   68.760756]  __tty_hangup.part.0+0x431/0x890
-[   68.760756]  tty_release+0x3a8/0xc80
-[   68.760756]  __fput+0x1f0/0x8c0
-[   68.760756]  task_work_run+0xc9/0x170
-[   68.760756]  exit_to_user_mode_prepare+0x194/0x1a0
-[   68.760756]  syscall_exit_to_user_mode+0x19/0x50
-[   68.760756]  do_syscall_64+0x48/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-This patch just add the null out of dev->rfkill to make sure such
-dereference cannot happen. This is safe since the device_lock() already
-protect the check/write from data race.
-
-Fixes: 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 036b17eaab93 ("drbd: Receiving part for the PROTOCOL_UPDATE packet")
+Fixes: f31e583aa2c2 ("drbd: introduce P_ZEROES (REQ_OP_WRITE_ZEROES on the "wire")")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Link: https://lore.kernel.org/r/20220406190715.1938174-2-christoph.boehmwalder@linbit.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/nfc/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/block/drbd/drbd_main.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/net/nfc/core.c b/net/nfc/core.c
-index 63701a980ee1..2d4729d1f0eb 100644
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -1159,6 +1159,7 @@ void nfc_unregister_device(struct nfc_dev *dev)
- 	if (dev->rfkill) {
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
-+		dev->rfkill = NULL;
- 	}
- 	dev->shutting_down = true;
- 	device_unlock(&dev->dev);
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index ba10fa24fa1f..5ece2fd70d9c 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -3709,9 +3709,8 @@ const char *cmdname(enum drbd_packet cmd)
+ 	 * when we want to support more than
+ 	 * one PRO_VERSION */
+ 	static const char *cmdnames[] = {
++
+ 		[P_DATA]	        = "Data",
+-		[P_WSAME]	        = "WriteSame",
+-		[P_TRIM]	        = "Trim",
+ 		[P_DATA_REPLY]	        = "DataReply",
+ 		[P_RS_DATA_REPLY]	= "RSDataReply",
+ 		[P_BARRIER]	        = "Barrier",
+@@ -3722,7 +3721,6 @@ const char *cmdname(enum drbd_packet cmd)
+ 		[P_DATA_REQUEST]	= "DataRequest",
+ 		[P_RS_DATA_REQUEST]     = "RSDataRequest",
+ 		[P_SYNC_PARAM]	        = "SyncParam",
+-		[P_SYNC_PARAM89]	= "SyncParam89",
+ 		[P_PROTOCOL]            = "ReportProtocol",
+ 		[P_UUIDS]	        = "ReportUUIDs",
+ 		[P_SIZES]	        = "ReportSizes",
+@@ -3730,6 +3728,7 @@ const char *cmdname(enum drbd_packet cmd)
+ 		[P_SYNC_UUID]           = "ReportSyncUUID",
+ 		[P_AUTH_CHALLENGE]      = "AuthChallenge",
+ 		[P_AUTH_RESPONSE]	= "AuthResponse",
++		[P_STATE_CHG_REQ]       = "StateChgRequest",
+ 		[P_PING]		= "Ping",
+ 		[P_PING_ACK]	        = "PingAck",
+ 		[P_RECV_ACK]	        = "RecvAck",
+@@ -3740,24 +3739,26 @@ const char *cmdname(enum drbd_packet cmd)
+ 		[P_NEG_DREPLY]	        = "NegDReply",
+ 		[P_NEG_RS_DREPLY]	= "NegRSDReply",
+ 		[P_BARRIER_ACK]	        = "BarrierAck",
+-		[P_STATE_CHG_REQ]       = "StateChgRequest",
+ 		[P_STATE_CHG_REPLY]     = "StateChgReply",
+ 		[P_OV_REQUEST]          = "OVRequest",
+ 		[P_OV_REPLY]            = "OVReply",
+ 		[P_OV_RESULT]           = "OVResult",
+ 		[P_CSUM_RS_REQUEST]     = "CsumRSRequest",
+ 		[P_RS_IS_IN_SYNC]	= "CsumRSIsInSync",
++		[P_SYNC_PARAM89]	= "SyncParam89",
+ 		[P_COMPRESSED_BITMAP]   = "CBitmap",
+ 		[P_DELAY_PROBE]         = "DelayProbe",
+ 		[P_OUT_OF_SYNC]		= "OutOfSync",
+-		[P_RETRY_WRITE]		= "RetryWrite",
+ 		[P_RS_CANCEL]		= "RSCancel",
+ 		[P_CONN_ST_CHG_REQ]	= "conn_st_chg_req",
+ 		[P_CONN_ST_CHG_REPLY]	= "conn_st_chg_reply",
+ 		[P_RETRY_WRITE]		= "retry_write",
+ 		[P_PROTOCOL_UPDATE]	= "protocol_update",
++		[P_TRIM]	        = "Trim",
+ 		[P_RS_THIN_REQ]         = "rs_thin_req",
+ 		[P_RS_DEALLOCATED]      = "rs_deallocated",
++		[P_WSAME]	        = "WriteSame",
++		[P_ZEROES]		= "Zeroes",
+ 
+ 		/* enum drbd_packet, but not commands - obsoleted flags:
+ 		 *	P_MAY_IGNORE
 -- 
 2.35.1
 

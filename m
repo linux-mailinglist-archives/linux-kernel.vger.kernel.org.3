@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B4F548049
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D589548045
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238787AbiFMHIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 03:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S238927AbiFMHLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 03:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiFMHIK (ORCPT
+        with ESMTP id S238870AbiFMHLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:08:10 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B6A6324
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:08:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655104089; x=1686640089;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4ZL5x0SSS5qZVmA+JgyUkPjLyNtKpHowUfKdZup163A=;
-  b=L8NYmZR8jMyeK+1owr5MTSCzv2AMh7KmkiHSMnV7kWHzLIrWm2MQkcQz
-   5boTAInpsR+04TDoWqu609sWQJJ7g4u1tOIwGFZ7n7F2m6sTB/9AC2fqM
-   e1Kfymih0cUyZh4jDxdSGFIvRAuno15IRAFORx5C4ec9JIOBxF3GVHvNu
-   OnrDJySms6F03KEIn9sYLVE+K4oZt0nEVBg0JSJDdt/fvkrBJNwUWMvwB
-   ZMnqR23RgRF6myRKzJbzROaBct+yAR5QDeE1yMK73feQZt6A6LnyK0ej7
-   aIIqHeIsrNeSCz+HtAWP4b+OjNBkEWcNKV43Gko4fRsyTeOlzkkhfqOHV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="279240371"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="279240371"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 00:08:04 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="651263450"
-Received: from xinyangc-mobl.ccr.corp.intel.com ([10.254.214.65])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 00:07:59 -0700
-Message-ID: <d4170cd543b250260678341c3ffbe5bb8aaf97f1.camel@intel.com>
-Subject: Re: [PATCH v6 09/13] mm/demotion: Add pg_data_t member to track
- node memory tier details
-From:   Ying Huang <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Mon, 13 Jun 2022 15:07:57 +0800
-In-Reply-To: <20220610135229.182859-10-aneesh.kumar@linux.ibm.com>
-References: <20220610135229.182859-1-aneesh.kumar@linux.ibm.com>
-         <20220610135229.182859-10-aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 13 Jun 2022 03:11:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8AB6324
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:11:10 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o0eE0-0002iA-Tp; Mon, 13 Jun 2022 09:11:00 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D00E4938AD;
+        Mon, 13 Jun 2022 07:10:58 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 09:10:58 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v3 05/13] can: netlink: dump bitrate 0 if
+ can_priv::bittiming.bitrate is -1U
+Message-ID: <20220613071058.h6bmy6emswh76q5s@pengutronix.de>
+References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
+ <20220612213927.3004444-6-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wqlpeg65xesvx6zf"
+Content-Disposition: inline
+In-Reply-To: <20220612213927.3004444-6-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,82 +63,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-10 at 19:22 +0530, Aneesh Kumar K.V wrote:
-> Also update different helpes to use NODE_DATA()->memtier. Since
-> node specific memtier can change based on the reassignment of
-> NUMA node to a different memory tiers, accessing NODE_DATA()->memtier
-> needs to under an rcu read lock of memory_tier_lock.
-> 
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+
+--wqlpeg65xesvx6zf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 12.06.2022 23:39:19, Dario Binacchi wrote:
+> Adding Netlink support to the slcan driver made it necessary to set the
+> bitrate to a fake value (-1U) to prevent open_candev() from failing. In
+> this case the command `ip --details -s -s link show' would print
+> 4294967295 as the bitrate value. The patch change this value in 0.
+>=20
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > ---
->  include/linux/memory-tiers.h |  14 +++++
->  include/linux/mmzone.h       |   3 ++
->  mm/memory-tiers.c            | 102 ++++++++++++++++++++++++++---------
->  3 files changed, 94 insertions(+), 25 deletions(-)
-> 
-> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-> index 52896f5970b7..53f3e4c7cba8 100644
-> --- a/include/linux/memory-tiers.h
-> +++ b/include/linux/memory-tiers.h
-> @@ -6,6 +6,9 @@
->  
-> 
->  #ifdef CONFIG_TIERED_MEMORY
->  
-> 
-> +#include <linux/device.h>
-> +#include <linux/nodemask.h>
-> +
->  #define MEMORY_TIER_HBM_GPU	0
->  #define MEMORY_TIER_DRAM	1
->  #define MEMORY_TIER_PMEM	2
-> @@ -18,13 +21,24 @@
->  #define MAX_STATIC_MEMORY_TIERS  3
->  #define MAX_MEMORY_TIERS  (MAX_STATIC_MEMORY_TIERS + 2)
->  
-> 
-> +struct memory_tier {
-> +	struct list_head list;
-> +	struct device dev;
-> +	nodemask_t nodelist;
-> +	int rank;
-> +};
-> +
+>=20
+> (no changes since v1)
+>=20
+>  drivers/net/can/dev/netlink.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+> index 7633d98e3912..788a6752fcc7 100644
+> --- a/drivers/net/can/dev/netlink.c
+> +++ b/drivers/net/can/dev/netlink.c
+> @@ -505,11 +505,16 @@ static int can_fill_info(struct sk_buff *skb, const=
+ struct net_device *dev)
+>  	struct can_ctrlmode cm =3D {.flags =3D priv->ctrlmode};
+>  	struct can_berr_counter bec =3D { };
+>  	enum can_state state =3D priv->state;
+> +	__u32 bitrate =3D priv->bittiming.bitrate;
+> +	int ret =3D 0;
+> =20
+>  	if (priv->do_get_state)
+>  		priv->do_get_state(dev, &state);
+> =20
+> -	if ((priv->bittiming.bitrate &&
 
-I suggest to use two data structure,
+What about changing this line to:
 
-struct memory_tier {
-	struct list_head list;
-	nodemask_t nodelist;
-	int rank;
-};
+        if ((priv->bittiming.bitrate && priv->bittiming.bitrate !=3D -1 &&
 
-struct memory_tier_dev {
-	struct list_head list;
-	struct device dev;
-	struct memory_tier *tier;
-};
+This would make the code a lot cleaner. Can you think of a nice macro
+name for the -1?
 
-Then we can put struct memory_tier here and still hide struct
-memory_tier_dev in memory_tiers.c.  In this way, we don't need to
-force all struct memory_tier users to compile the entire driver core
-headers.  And we can separate the user space interface implementation
-from the other part of the kernel.
+0 could be CAN_BITRATE_UNCONFIGURED or _UNSET. For -1 I cannot find a
+catchy name, something like CAN_BITRATE_CONFIGURED_UNKOWN or
+SET_UNKNOWN.
 
->  extern bool numa_demotion_enabled;
->  int node_create_and_set_memory_tier(int node, int tier);
->  int next_demotion_node(int node);
->  int node_set_memory_tier(int node, int tier);
->  int node_get_memory_tier_id(int node);
->  int node_reset_memory_tier(int node, int tier);
-> +struct memory_tier *node_get_memory_tier(int node);
-> +void node_put_memory_tier(struct memory_tier *memtier);
+The macros can be added to bittiming.h and be part of this patch. Ofq
+course the above code (and slcan.c) would make use of the macros instead
+of using 0 and -1.
 
-I don't find caller of these 2 functions in series.  Can we remove
-these functions?
+Marc
 
-Best Regards,
-Huang, Ying
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-[snip]
+--wqlpeg65xesvx6zf
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKm4v8ACgkQrX5LkNig
+012N+AgAufc0XxLRDeCmzKBduVV9FwFJOYJbL8GeEu0Z+ieKqhu1JFmtYUlhdz2P
+Nyp+PAa6MktIkhdtqdn4hTSP6WvLIJzh6q6e5t1oD6iQ2qZHx8OjGYcPG+30sX4h
+QU12t6LQeuczbgnwckZ88ISrrYk23SAfiIqC0Wqg9ub33Mftw1IFZokg7Jm9rfZm
+8VZ9upwndUGMMCCnXiPkoCPvzM+kYLOR8E906bbU/xrnF2ZTaY0fGx81Zd7p45Fq
+gFr3muZW/bhbRRzZ/RV5w2yiCuHWIo6n3sUpk3B8afZSYgR28zBtYacN9EUtB/jG
+erc+pALb0wCES8YFwoy2qTMF+CPkqQ==
+=nP2n
+-----END PGP SIGNATURE-----
+
+--wqlpeg65xesvx6zf--

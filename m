@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FED3548F89
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB0A5496A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357887AbiFMMBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S1356141AbiFMM5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357882AbiFMLzh (ORCPT
+        with ESMTP id S1357794AbiFMMyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:55:37 -0400
+        Mon, 13 Jun 2022 08:54:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363572FE4F;
-        Mon, 13 Jun 2022 03:56:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47B13465E;
+        Mon, 13 Jun 2022 04:13:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 094A761257;
-        Mon, 13 Jun 2022 10:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16709C36AFE;
-        Mon, 13 Jun 2022 10:56:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C9760B6E;
+        Mon, 13 Jun 2022 11:13:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A044C3411C;
+        Mon, 13 Jun 2022 11:13:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117763;
-        bh=atF+0ICvtV0XVieIh2P5Wrc2vnnM6O6j8wCY7MwkLUU=;
+        s=korg; t=1655118801;
+        bh=plVLEt9OaQUGl7w2Xcl9A2bkuGQT8eMPuXEdMYK+rY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=efXOR1GmGKEdPFrxuSanxa2++pH6yub2MgKnxabfaZxFOtVsVX3vp5RcssH84DT3a
-         HQs3cBoUttbt7Uqv1HcA2Jhi6dakYinz6F3vgzrDKx1uYrj4K2mLJ+NLlxkRfzPm/L
-         NdYs3sEt45ZnU8iYg8OCDXXGJtQTCPHPY+j7O7vE=
+        b=w9iPw+jeOnkPNERMUoKwnNal1Xstc5h1dYm0+U5Ypzyzxr5Ob0qxvSjQcN4toN3Cl
+         kJYnZBRHN0WcoMLFrOpViQTuwdy+Zk0gc1KL5otgGUftXwUHpJoGk70G1YjNzgP9E4
+         9/sWHiqPd0Pmcpmxq1VY9XHjLIF5w4HJB/7XF1D8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        stable@vger.kernel.org, Mihai Carabas <mihai.carabas@oracle.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 111/287] PCI: cadence: Fix find_first_zero_bit() limit
+Subject: [PATCH 5.15 033/247] pvpanic: Fix typos in the comments
 Date:   Mon, 13 Jun 2022 12:08:55 +0200
-Message-Id: <20220613094927.245021512@linuxfoundation.org>
+Message-Id: <20220613094923.940994903@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 0aa3a0937feeb91a0e4e438c3c063b749b194192 ]
+[ Upstream commit cc5b392d0f94f27743583140d819fa35a46899db ]
 
-The ep->ob_region_map bitmap is a long and it has BITS_PER_LONG bits.
+Fix a few spelling typos in the comments.
 
-Link: https://lore.kernel.org/r/20220315065829.GA13572@kili
-Fixes: 37dddf14f1ae ("PCI: cadence: Add EndPoint Controller driver for Cadence PCIe controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Mihai Carabas <mihai.carabas@oracle.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20210829124354.81653-2-andriy.shevchenko@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pcie-cadence-ep.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/misc/pvpanic/pvpanic-mmio.c | 2 +-
+ drivers/misc/pvpanic/pvpanic.c      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/controller/pcie-cadence-ep.c b/drivers/pci/controller/pcie-cadence-ep.c
-index c3a088910f48..f6da8d562b8a 100644
---- a/drivers/pci/controller/pcie-cadence-ep.c
-+++ b/drivers/pci/controller/pcie-cadence-ep.c
-@@ -178,8 +178,7 @@ static int cdns_pcie_ep_map_addr(struct pci_epc *epc, u8 fn, phys_addr_t addr,
- 	struct cdns_pcie *pcie = &ep->pcie;
- 	u32 r;
+diff --git a/drivers/misc/pvpanic/pvpanic-mmio.c b/drivers/misc/pvpanic/pvpanic-mmio.c
+index be4016084979..61dbff5f0065 100644
+--- a/drivers/misc/pvpanic/pvpanic-mmio.c
++++ b/drivers/misc/pvpanic/pvpanic-mmio.c
+@@ -100,7 +100,7 @@ static int pvpanic_mmio_probe(struct platform_device *pdev)
+ 	pi->base = base;
+ 	pi->capability = PVPANIC_PANICKED | PVPANIC_CRASH_LOADED;
  
--	r = find_first_zero_bit(&ep->ob_region_map,
--				sizeof(ep->ob_region_map) * BITS_PER_LONG);
-+	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
- 	if (r >= ep->max_regions - 1) {
- 		dev_err(&epc->dev, "no free outbound region\n");
- 		return -EINVAL;
+-	/* initlize capability by RDPT */
++	/* initialize capability by RDPT */
+ 	pi->capability &= ioread8(base);
+ 	pi->events = pi->capability;
+ 
+diff --git a/drivers/misc/pvpanic/pvpanic.c b/drivers/misc/pvpanic/pvpanic.c
+index bb7aa6368538..700d7d02c800 100644
+--- a/drivers/misc/pvpanic/pvpanic.c
++++ b/drivers/misc/pvpanic/pvpanic.c
+@@ -58,7 +58,7 @@ pvpanic_panic_notify(struct notifier_block *nb, unsigned long code,
+ 
+ static struct notifier_block pvpanic_panic_nb = {
+ 	.notifier_call = pvpanic_panic_notify,
+-	.priority = 1, /* let this called before broken drm_fb_helper */
++	.priority = 1, /* let this called before broken drm_fb_helper() */
+ };
+ 
+ static void pvpanic_remove(void *param)
 -- 
 2.35.1
 

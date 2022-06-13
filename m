@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A66548A40
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A96548D83
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344052AbiFMNFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S1379368AbiFMNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355507AbiFMMzR (ORCPT
+        with ESMTP id S1379176AbiFMNj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9BBB4AC;
-        Mon, 13 Jun 2022 04:15:34 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86DC22B08;
+        Mon, 13 Jun 2022 04:29:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13785B80EAA;
-        Mon, 13 Jun 2022 11:15:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 612BCC34114;
-        Mon, 13 Jun 2022 11:15:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 656CE61046;
+        Mon, 13 Jun 2022 11:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7609AC34114;
+        Mon, 13 Jun 2022 11:29:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118931;
-        bh=Khduy9z1D5fs1MdqY+9JrX/W2pwEvQY+bI09HiNPlUw=;
+        s=korg; t=1655119760;
+        bh=TePMGL027OeoN3YPEQtjTuC4DQGr2olKyCBqVIpjZK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0H7tLbe2ou4TgS0nJlhkP784VE0SmvlPA0F9YUa7lVZTq34sAtGH03KR0Px3Z9w+k
-         JIEMpe5ZLN9rKpkgXQ9QXZ9NvMetwaFwMp7PpVkRoiaiSKbT/NyWvqpvpF4uZocMJh
-         u5GstjLAiC5krOlNCzjiuy7Gvom2MII2jAgCPplc=
+        b=gWuuMRW9Hhhg8xufHjDJkAcgs/EWY/bSDs2cE4TgzE7+zvyrNBtIL8e2BCXjjgVD1
+         3i8ISdfIq1UpJZeFWL6UOTdF9ILAmFQjpbBA216c8WQgbk8jHVyx9cZPuIJH49oMJD
+         t7jhmVi8qchwkoh4TTiDb2bgYcHzXm9WjAylKoLY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        John Ogness <john.ogness@linutronix.de>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 052/247] serial: meson: acquire port->lock in startup()
+Subject: [PATCH 5.18 129/339] net/mlx5e: Update netdev features after changing XDP state
 Date:   Mon, 13 Jun 2022 12:09:14 +0200
-Message-Id: <20220613094924.532927936@linuxfoundation.org>
+Message-Id: <20220613094930.422406155@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,95 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Ogness <john.ogness@linutronix.de>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 589f892ac8ef244e47c5a00ffd8605daa1eaef8e ]
+[ Upstream commit f6279f113ad593971999c877eb69dc3d36a75894 ]
 
-The uart_ops startup() callback is called without interrupts
-disabled and without port->lock locked, relatively late during the
-boot process (from the call path of console_on_rootfs()). If the
-device is a console, it was already previously registered and could
-be actively printing messages.
+Some features (LRO, HW GRO) conflict with XDP. If there is an attempt to
+enable such features while XDP is active, they will be set to `off
+[requested on]`. In order to activate these features after XDP is turned
+off, the driver needs to call netdev_update_features(). This commit adds
+this missing call after XDP state changes.
 
-Since the startup() callback is reading/writing registers used by
-the console write() callback (AML_UART_CONTROL), its access must
-be synchronized using the port->lock. Currently it is not.
-
-The startup() callback is the only function that explicitly enables
-interrupts. Without the synchronization, it is possible that
-interrupts become accidentally permanently disabled.
-
-CPU0                           CPU1
-meson_serial_console_write     meson_uart_startup
---------------------------     ------------------
-spin_lock(port->lock)
-val = readl(AML_UART_CONTROL)
-uart_console_write()
-                               writel(INT_EN, AML_UART_CONTROL)
-writel(val, AML_UART_CONTROL)
-spin_unlock(port->lock)
-
-Add port->lock synchronization to meson_uart_startup() to avoid
-racing with meson_serial_console_write().
-
-Also add detailed comments to meson_uart_reset() explaining why it
-is *not* using port->lock synchronization.
-
-Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
-Fixes: ff7693d079e5 ("ARM: meson: serial: add MesonX SoC on-chip uart driver")
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Link: https://lore.kernel.org/r/20220508103547.626355-1-john.ogness@linutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: cf6e34c8c22f ("net/mlx5e: Properly block LRO when XDP is enabled")
+Fixes: b0617e7b3500 ("net/mlx5e: Properly block HW GRO when XDP is enabled")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/meson_uart.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index efee3935917f..62e6c1af1344 100644
---- a/drivers/tty/serial/meson_uart.c
-+++ b/drivers/tty/serial/meson_uart.c
-@@ -253,6 +253,14 @@ static const char *meson_uart_type(struct uart_port *port)
- 	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 6a35af2c2c8b..58b6c8b82fd0 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -4581,6 +4581,11 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
+ 
+ unlock:
+ 	mutex_unlock(&priv->state_lock);
++
++	/* Need to fix some features. */
++	if (!err)
++		netdev_update_features(netdev);
++
+ 	return err;
  }
- 
-+/*
-+ * This function is called only from probe() using a temporary io mapping
-+ * in order to perform a reset before setting up the device. Since the
-+ * temporarily mapped region was successfully requested, there can be no
-+ * console on this port at this time. Hence it is not necessary for this
-+ * function to acquire the port->lock. (Since there is no console on this
-+ * port at this time, the port->lock is not initialized yet.)
-+ */
- static void meson_uart_reset(struct uart_port *port)
- {
- 	u32 val;
-@@ -267,9 +275,12 @@ static void meson_uart_reset(struct uart_port *port)
- 
- static int meson_uart_startup(struct uart_port *port)
- {
-+	unsigned long flags;
- 	u32 val;
- 	int ret = 0;
- 
-+	spin_lock_irqsave(&port->lock, flags);
-+
- 	val = readl(port->membase + AML_UART_CONTROL);
- 	val |= AML_UART_CLEAR_ERR;
- 	writel(val, port->membase + AML_UART_CONTROL);
-@@ -285,6 +296,8 @@ static int meson_uart_startup(struct uart_port *port)
- 	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
- 	writel(val, port->membase + AML_UART_MISC);
- 
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
- 	ret = request_irq(port->irq, meson_uart_interrupt, 0,
- 			  port->name, port);
  
 -- 
 2.35.1

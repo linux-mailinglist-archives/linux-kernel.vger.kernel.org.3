@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6E1548836
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76624548791
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357339AbiFMNHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
+        id S1350753AbiFMK66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351231AbiFMMzb (ORCPT
+        with ESMTP id S1350093AbiFMKyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1B1E0EA;
-        Mon, 13 Jun 2022 04:16:14 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D2424970;
+        Mon, 13 Jun 2022 03:29:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6E3160B6C;
-        Mon, 13 Jun 2022 11:16:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C848FC34114;
-        Mon, 13 Jun 2022 11:16:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30475B80E59;
+        Mon, 13 Jun 2022 10:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEDFC34114;
+        Mon, 13 Jun 2022 10:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118973;
-        bh=YoFo55FR6GuCxwjzObkMZXyp+7gaK5kdqZJXzW1mApQ=;
+        s=korg; t=1655116149;
+        bh=pOFYgfee5iVtMFAxZz46DsyhKPKQrBcJoxcFBBfq19w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aGlIXaI9SLwFUlZ7FPIDh9MBaW8MB0eOg7U6V6jcj9IlwlOYK2XcLIhfT1vi5PM5w
-         2YjXWV51lpmKAgtGPotl26IcSvKtRm4m2PrMliMkH5oW8kLj7b2zgcK9HEOF/fObo+
-         x3gFXXy2Jkqt/xmMHoFAq7+Yo3EoeKDesqtv95u8=
+        b=c08SeGDs8US+g6GmBs5+Hg8uFHB7AGqyQzPYpSQl7YYj3h7QkpBr+i0wo1xnFRx0P
+         bCT7yjG63LqSKq7+GV7momnFXIJ3ra73EOJOUpyvgnN6lxLaOVGvAGvo4awI8JlAM6
+         eonfeBkYMzE85vKDINwDwFYI8krZLGWhuUgVGAt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Manuel Lauss <manuel.lauss@gmail.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 095/247] net/mlx5: CT: Fix header-rewrite re-use for tupels
-Date:   Mon, 13 Jun 2022 12:09:57 +0200
-Message-Id: <20220613094925.838138222@linuxfoundation.org>
+Subject: [PATCH 4.14 140/218] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
+Date:   Mon, 13 Jun 2022 12:09:58 +0200
+Message-Id: <20220613094924.834796876@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +61,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 1f2856cde64baa78475e6d3c601fb7b7f693a161 ]
+[ Upstream commit 3928cf08334ed895a31458cbebd8d4ec6d84c080 ]
 
-Tuple entries that don't have nat configured for them
-which are added to the ct nat table will always create
-a new modify header, as we don't check for possible
-re-use on them. The same for tuples that have nat configured
-for them but are added to ct table.
+When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
+MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
+to missing DB1XXX symbols. The PCMCIA driver should be restricted
+to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
 
-Fix the above by only avoiding wasteful re-use lookup
-for actually natted entries in ct nat table.
+ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
 
-Fixes: 7fac5c2eced3 ("net/mlx5: CT: Avoid reusing modify header context for natted entries")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Reviewed-by: Ariel Levkovich <lariel@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 42a4f17dc356 ("MIPS: Alchemy: remove SOC_AU1X00 in favor of MIPS_ALCHEMY")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/mellanox/mlx5/core/en/tc_ct.c    | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/pcmcia/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-index d4b7b4d73b08..94200f2dd92b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-@@ -650,7 +650,7 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 				struct mlx5_flow_attr *attr,
- 				struct flow_rule *flow_rule,
- 				struct mlx5e_mod_hdr_handle **mh,
--				u8 zone_restore_id, bool nat)
-+				u8 zone_restore_id, bool nat_table, bool has_nat)
- {
- 	struct mlx5e_tc_mod_hdr_acts mod_acts = {};
- 	struct flow_action_entry *meta;
-@@ -665,11 +665,12 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 				     &attr->ct_attr.ct_labels_id);
- 	if (err)
- 		return -EOPNOTSUPP;
--	if (nat) {
--		err = mlx5_tc_ct_entry_create_nat(ct_priv, flow_rule,
--						  &mod_acts);
--		if (err)
--			goto err_mapping;
-+	if (nat_table) {
-+		if (has_nat) {
-+			err = mlx5_tc_ct_entry_create_nat(ct_priv, flow_rule, &mod_acts);
-+			if (err)
-+				goto err_mapping;
-+		}
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index d3c378b4db6c..20d85d564b80 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -146,7 +146,7 @@ config TCIC
  
- 		ct_state |= MLX5_CT_STATE_NAT_BIT;
- 	}
-@@ -684,7 +685,7 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 	if (err)
- 		goto err_mapping;
- 
--	if (nat) {
-+	if (nat_table && has_nat) {
- 		attr->modify_hdr = mlx5_modify_header_alloc(ct_priv->dev, ct_priv->ns_type,
- 							    mod_acts.num_actions,
- 							    mod_acts.actions);
-@@ -752,7 +753,9 @@ mlx5_tc_ct_entry_add_rule(struct mlx5_tc_ct_priv *ct_priv,
- 
- 	err = mlx5_tc_ct_entry_create_mod_hdr(ct_priv, attr, flow_rule,
- 					      &zone_rule->mh,
--					      zone_restore_id, nat);
-+					      zone_restore_id,
-+					      nat,
-+					      mlx5_tc_ct_entry_has_nat(entry));
- 	if (err) {
- 		ct_dbg("Failed to create ct entry mod hdr");
- 		goto err_mod_hdr;
+ config PCMCIA_ALCHEMY_DEVBOARD
+ 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
+-	depends on MIPS_ALCHEMY && PCMCIA
++	depends on MIPS_DB1XXX && PCMCIA
+ 	help
+ 	  Enable this driver of you want PCMCIA support on your Alchemy
+ 	  Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
 -- 
 2.35.1
 

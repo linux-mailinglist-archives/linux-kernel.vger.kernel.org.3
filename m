@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D4D54A2E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300C554A2E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbiFMXqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 19:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
+        id S233642AbiFMXrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 19:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiFMXqb (ORCPT
+        with ESMTP id S229848AbiFMXrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 19:46:31 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0892632EFF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:46:31 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id r5so274607pgr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LMZMQK49gc47drd6Jd36STmC+qlFEdOKEq0ulnkEkFs=;
-        b=KpQN3HSapyv/qKjWcCGtXvRNrg5pQGiNxmt8TNqgb1TKcG5DJbt9XHcO+8jhBvRA8r
-         sSdkkSHdkmtN/7q7JB00iwiatLreKrwfpIv/rCQy0oTRWjxDK7urmoWJMjMKJPa4we2V
-         VG34MAF0/wvkUIH61Lad0EWacF1Mz+tqeZXvQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LMZMQK49gc47drd6Jd36STmC+qlFEdOKEq0ulnkEkFs=;
-        b=IrT9brqP+D75k1Gl0rOht2StYNPgdL4rWZbs9OPKACUp8iNfEBYe8qNVpttl3GT28a
-         2DoMIA8Q6zVPizL4YfoXzBgqJJ92yH4MVNHK+0TQSZF74kOFGlIFKI4zZjfxbC0BhnSy
-         gFaKnZuHA7EQI4JTzpoh/x2ppoo6o6WUQCb8v9Q7jFZINZ8FSs68Q290u7es/4SQhsLX
-         a1c6/s8sIrnBlC8wNocGLUmGoqkYlRkpmlmQ7eQKt9eIf84Vza3BHynsoEULWt+KUQan
-         hPuXmAWjg1/KZfJYnl12+co/nwFvUArILBjs/QHp+KvgK31e1M7PPZRaZsOuTGViNoE/
-         UwBQ==
-X-Gm-Message-State: AOAM5328TEwthO7zOs/lgPrgXpTIyAQcLn3PTG+CiLFMoRlMWGHL3L0g
-        pMjjRq45QOp1/VvAaMqGMHc2Vw==
-X-Google-Smtp-Source: ABdhPJypGRCNuj+Vs7kbnSmWhSH8m6+5HFMpQVmxKwRrzBtjzjj+MG9/XNhAPxifXiFhp6arOdMKoA==
-X-Received: by 2002:a63:5248:0:b0:402:de14:ab74 with SMTP id s8-20020a635248000000b00402de14ab74mr1882926pgl.18.1655163990389;
-        Mon, 13 Jun 2022 16:46:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id cp15-20020a170902e78f00b00168c5230332sm5672252plb.148.2022.06.13.16.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 16:46:30 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 16:46:29 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Micah Morton <mortonm@chromium.org>
-Cc:     linux-security-module@vger.kernel.org, jmorris@namei.org,
-        serge@hallyn.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] LSM: SafeSetID: Add setgroups() security policy
- handling
-Message-ID: <202206131643.4FB2340C43@keescook>
-References: <20220613202852.447738-1-mortonm@chromium.org>
- <CAJ-EccOhrYG6n6As72R7YzSk+Zzy=oFFJ62hG9476njprpJuvw@mail.gmail.com>
+        Mon, 13 Jun 2022 19:47:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EDA32EF2;
+        Mon, 13 Jun 2022 16:47:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8015B8168D;
+        Mon, 13 Jun 2022 23:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A224C341C4;
+        Mon, 13 Jun 2022 23:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655164033;
+        bh=ZZQG4WkdlLPvu79h3GXoHi484v8G5Ty5aPwNZxbhBbQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MGwXPpqZc/vkhX22aJDu3oivlC/Il2oQ4muNEDo11DHreWbSRnKtIup3VJIWJpMOt
+         7RnwyciChi/9oVtNjUI2NgtM7ebfbBZYOMpm3XcqtgcEvPicIm9BMzRa9iSLL0pqLo
+         bRJgbRmlAvCIpefnJo4aHvnM7ePiNh+kLupgo3s5oOPiIPmuq/WLxhfDBPfI/efKsK
+         K9Zxll6RzV2KfVVn+ezG/0WIE+YZpoWHo/iTTaRNx5QteT/nMntgyXe2C2363tssSO
+         IjyGHJvCGpj938g7ehCm5jdUE1+J8jZ5gd0kTXj7h3ZNY2t5hynjBZCdi0e7FtZyoM
+         L9UWBambp1Kow==
+Received: by mail-vs1-f46.google.com with SMTP id x9so7391385vsg.13;
+        Mon, 13 Jun 2022 16:47:13 -0700 (PDT)
+X-Gm-Message-State: AJIora+8QokR9jvuJki5moZuEqcQ3XmjOASQMeQj/MdZpCmLTU+5wvOI
+        cMEJeWmOag/9l0b08L+QZYyl0xIL7yDMW8XmpYg=
+X-Google-Smtp-Source: AGRyM1skuJQAfVrZw2mzL2D+3j5zatrbkCDTKbNDOEEEwoGo3Ub8RdzfU440q0wVUVR7cbP33umAs1B4VpH4mhzpU+0=
+X-Received: by 2002:a05:6102:3562:b0:34b:9e99:1bfa with SMTP id
+ bh2-20020a056102356200b0034b9e991bfamr759699vsb.51.1655164032340; Mon, 13 Jun
+ 2022 16:47:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ-EccOhrYG6n6As72R7YzSk+Zzy=oFFJ62hG9476njprpJuvw@mail.gmail.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220613131046.3009889-1-xianting.tian@linux.alibaba.com>
+ <0262A4FB-5A9B-47D3-8F1A-995509F56279@nvidia.com> <CAJF2gTQGXAubtas4wAzrg298dGQJntu38X48V2OzcK8xZ_vPJg@mail.gmail.com>
+ <D667F530-E286-4E75-B7CE-63E120E440C8@nvidia.com>
+In-Reply-To: <D667F530-E286-4E75-B7CE-63E120E440C8@nvidia.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 14 Jun 2022 07:47:00 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
+Message-ID: <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
+Subject: Re: [RESEND PATCH] mm: page_alloc: validate buddy before check the migratetype
+To:     Zi Yan <ziy@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, huanyi.xj@alibaba-inc.com,
+        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Laura Abbott <labbott@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,29 +74,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 02:00:03PM -0700, Micah Morton wrote:
-> On Mon, Jun 13, 2022 at 1:28 PM Micah Morton <mortonm@chromium.org> wrote:
-> [...]
-> > +static int safesetid_task_fix_setgroups(struct cred *new, const struct cred *old)
-> > +{
-> > +       int i;
-> > +
-> > +       /* Do nothing if there are no setgid restrictions for our old RGID. */
-> > +       if (setid_policy_lookup((kid_t){.gid = old->gid}, INVALID_ID, GID) == SIDPOL_DEFAULT)
-> > +               return 0;
-> > +
-> > +       get_group_info(new->group_info);
-> > +       for (i = 0; i < new->group_info->ngroups; i++) {
-> > +               if (!id_permitted_for_cred(old, (kid_t){.gid = group_info->gid[i]}, GID)) {
-> 
-> Oops, should be:
-> 
-> !id_permitted_for_cred(old, (kid_t){.gid = new->group_info->gid[i]}, GID)
-> 
-> Guess I won't send a whole new patch just for that one line
+On Tue, Jun 14, 2022 at 3:49 AM Zi Yan <ziy@nvidia.com> wrote:
+>
+> On 13 Jun 2022, at 12:32, Guo Ren wrote:
+>
+> > On Mon, Jun 13, 2022 at 11:23 PM Zi Yan <ziy@nvidia.com> wrote:
+> >>
+> >> Hi Xianting,
+> >>
+> >> Thanks for your patch.
+> >>
+> >> On 13 Jun 2022, at 9:10, Xianting Tian wrote:
+> >>
+> >>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its=
+ migratetype.")
+> >>> added buddy check code. But unfortunately, this fix isn't backported =
+to
+> >>> linux-5.17.y and the former stable branches. The reason is it added w=
+rong
+> >>> fixes message:
+> >>>      Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallback=
+able
+> >>>                          pageblocks with others")
+> >>
+> >> No, the Fixes tag is right. The commit above does need to validate bud=
+dy.
+> > I think Xianting is right. The =E2=80=9CFixes:" tag is not accurate and=
+ the
+> > page_is_buddy() is necessary here.
+> >
+> > This patch could be applied to the early version of the stable tree
+> > (eg: Linux-5.10.y, not the master tree)
+>
+> This is quite misleading. Commit 787af64d05cd applies does not mean it is
+> intended to fix the preexisting bug. Also it does not apply cleanly
+> to commit d9dddbf55667, there is a clear indentation mismatch. At best,
+> you can say the way of 787af64d05cd fixing 1dd214b8f21c also fixes d9dddb=
+f55667.
+> There is no way you can apply 787af64d05cd to earlier trees and call it a=
+ day.
+>
+> You can mention 787af64d05cd that it fixes a bug in 1dd214b8f21c and ther=
+e is
+> a similar bug in d9dddbf55667 that can be fixed in a similar way too. Say=
+ing
+> the fixes message is wrong just misleads people, making them think there =
+is
+> no bug in 1dd214b8f21c. We need to be clear about this.
+First, d9dddbf55667 is earlier than 1dd214b8f21c in Linus tree. The
+origin fixes could cover the Linux-5.0.y tree if they give the
+accurate commit number and that is the cause we want to point out.
 
-This begs the question: are there self-tests for this LSM somewhere?
-It'd be really nice to add them to tool/testing/selftests ...
+Second, if the patch is for d9dddbf55667 then it could cover any tree
+in the stable repo. Actually, we only know Linux-5.10.y has the
+problem.
 
--- 
-Kees Cook
+Maybe, Gregkh could help to direct us on how to deal with the issue:
+(Fixup a bug which only belongs to the former stable branch.)
+
+>
+> Also, you will need to fix the mm/page_isolation.c code too to make this =
+patch
+> complete, unless you can show that PFN=3D0x1000 is never going to be enco=
+untered
+> in the mm/page_isolation.c code I mentioned below.
+No, we needn't fix mm/page_isolation.c in linux-5.10.y, because it had
+pfn_valid_within(buddy_pfn) check after __find_buddy_pfn() to prevent
+buddy_pfn=3D0.
+The root cause comes from __find_buddy_pfn():
+return page_pfn ^ (1 << order);
+
+When page_pfn is the same as the order size, it will return the
+previous buddy not the next. That is the only exception for this
+algorithm, right?
+
+
+
+
+In fact, the bug is a very long time to reproduce and is not easy to
+debug, so we want to contribute it to the community to prevent other
+guys from wasting time. Although there is no new patch at all.
+
+>
+> >
+> >>
+> >>> Actually, this issue is involved by commit:
+> >>>      commit d9dddbf55667 ("mm/page_alloc: prevent merging between iso=
+lated and other pageblocks")
+> >>>
+> >>> For RISC-V arch, the first 2M is reserved for sbi, so the start PFN i=
+s 512,
+> >>> but it got buddy PFN 0 for PFN 0x2000:
+> >>>      0 =3D 0x2000 ^ (1 << 12)
+> >>> With the illegal buddy PFN 0, it got an illegal buddy page, which cau=
+sed
+> >>> crash in __get_pfnblock_flags_mask().
+> >>
+> >> It seems that the RISC-V arch reveals a similar bug from d9dddbf55667.
+> >> Basically, this bug will only happen when PFN=3D0x2000 is merging up a=
+nd
+> >> there are some isolated pageblocks.
+> > Not PFN=3D0x2000, it's PFN=3D0x1000, I guess.
+> >
+> > RISC-V's first 2MB RAM could reserve for opensbi, so it would have
+> > riscv_pfn_base=3D512 and mem_map began with 512th PFN when
+> > CONFIG_FLATMEM=3Dy.
+> > (Also, csky has the same issue: a non-zero pfn_base in some scenarios.)
+> >
+> > But __find_buddy_pfn algorithm thinks the start address is 0, it could
+> > get 0 pfn or less than the pfn_base value. We need another check to
+> > prevent that.
+> >
+> >>
+> >> BTW, what does first reserved 2MB imply? All 4KB pages from first 2MB =
+are
+> >> set to PageReserved?
+> >>
+> >>>
+> >>> With the patch, it can avoid the calling of get_pageblock_migratetype=
+() if
+> >>> it isn't buddy page.
+> >>
+> >> You might miss the __find_buddy_pfn() caller in unset_migratetype_isol=
+ate()
+> >> from mm/page_isolation.c, if you are talking about linux-5.17.y and fo=
+rmer
+> >> version. There, page_is_buddy() is also not called and is_migrate_isol=
+ate_page()
+> >> is called, which calls get_pageblock_migratetype() too.
+> >>
+> >>>
+> >>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated=
+ and other pageblocks")
+> >>> Cc: stable@vger.kernel.org
+> >>> Reported-by: zjb194813@alibaba-inc.com
+> >>> Reported-by: tianhu.hh@alibaba-inc.com
+> >>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> >>> ---
+> >>>  mm/page_alloc.c | 3 +++
+> >>>  1 file changed, 3 insertions(+)
+> >>>
+> >>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> >>> index b1caa1c6c887..5b423caa68fd 100644
+> >>> --- a/mm/page_alloc.c
+> >>> +++ b/mm/page_alloc.c
+> >>> @@ -1129,6 +1129,9 @@ static inline void __free_one_page(struct page =
+*page,
+> >>>
+> >>>                       buddy_pfn =3D __find_buddy_pfn(pfn, order);
+> >>>                       buddy =3D page + (buddy_pfn - pfn);
+> >>> +
+> >>> +                     if (!page_is_buddy(page, buddy, order))
+> >>> +                             goto done_merging;
+> >>>                       buddy_mt =3D get_pageblock_migratetype(buddy);
+> >>>
+> >>>                       if (migratetype !=3D buddy_mt
+> >>> --
+> >>> 2.17.1
+> >>
+> >> --
+> >> Best Regards,
+> >> Yan, Zi
+> >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+> >
+> > ML: https://lore.kernel.org/linux-csky/
+>
+> --
+> Best Regards,
+> Yan, Zi
+
+
+
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

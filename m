@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B81548EBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3882F549560
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240674AbiFMNpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
+        id S1354994AbiFMLgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378055AbiFMNkC (ORCPT
+        with ESMTP id S1354648AbiFML3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4B0A45C;
-        Mon, 13 Jun 2022 04:29:52 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26EA2A729;
+        Mon, 13 Jun 2022 03:45:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CABDE61236;
-        Mon, 13 Jun 2022 11:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D53B5C34114;
-        Mon, 13 Jun 2022 11:29:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3108A60FDB;
+        Mon, 13 Jun 2022 10:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B34AC34114;
+        Mon, 13 Jun 2022 10:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119791;
-        bh=oVBfeT43YiBBYZIXtsBG1KEvA//lVG/SvY0P/Qp7O3s=;
+        s=korg; t=1655117118;
+        bh=/FzyOH71urNZyAIOe//wJh5fam/TnFMtc33o5CDYOds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AaX5yKIyLZrGmnSntnMwT/1D3RGh1ZO1AGLyCZKZkb+q+OGLTlVRV0zr7ltqRDopg
-         HSnhoseQdZ58d8Ln3SZLTB5vvU1TtK0xvWmgHQQRd+7az1+4fUUcjwjj33Un9RCeI8
-         EYJnsOvc0fWRhBGN6SEw9+CDP4YInVjNQVNpqxNA=
+        b=TOH7zaeUOPC5H4SEFsUz+pCn91pOUlslrxrJ6lpnIyDoAazPbRUropHLRUNX3SiyJ
+         A6a7oN0SUjuzV13KwpUYXRBcjUlaaLEorUPL4/OCYoaW2CTcOuvcO6lLP/ZG6kPq2v
+         dZIqHt30RcjPgs+QoxxlaYvotJ4Bs9N2hd0rt9uY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 141/339] drm/msm/dp: Always clear mask bits to disable interrupts at dp_ctrl_reset_irq_ctrl()
+Subject: [PATCH 5.4 293/411] rpmsg: qcom_smd: Fix irq_of_parse_and_map() return value
 Date:   Mon, 13 Jun 2022 12:09:26 +0200
-Message-Id: <20220613094930.961025942@linuxfoundation.org>
+Message-Id: <20220613094937.544692055@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,78 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 993a2adc6e2e94a0a7b5bfc054eda90ac95f62c3 ]
+[ Upstream commit 1a358d35066487d228a68303d808bc4721c6b1b9 ]
 
-dp_catalog_ctrl_reset() will software reset DP controller. But it will
-not reset programmable registers to default value. DP driver still have
-to clear mask bits to interrupt status registers to disable interrupts
-after software reset of controller.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-At current implementation, dp_ctrl_reset_irq_ctrl() will software reset dp
-controller but did not call dp_catalog_ctrl_enable_irq(false) to clear hpd
-related interrupt mask bits to disable hpd related interrupts due to it
-mistakenly think hpd related interrupt mask bits will be cleared by software
-reset of dp controller automatically. This mistake may cause system to crash
-during suspending procedure due to unexpected irq fired and trigger event
-thread to access dp controller registers with controller clocks are disabled.
-
-This patch fixes system crash during suspending problem by removing "enable"
-flag condition checking at dp_ctrl_reset_irq_ctrl() so that hpd related
-interrupt mask bits are cleared to prevent unexpected from happening.
-
-Changes in v2:
--- add more details commit text
-
-Changes in v3:
--- add synchrons_irq()
--- add atomic_t suspended
-
-Changes in v4:
--- correct Fixes's commit ID
--- remove synchrons_irq()
-
-Changes in v5:
--- revise commit text
-
-Changes in v6:
--- add event_lock to protect "suspended"
-
-Changes in v7:
--- delete "suspended" flag
-
-Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Patchwork: https://patchwork.freedesktop.org/patch/486591/
-Link: https://lore.kernel.org/r/1652804494-19650-1-git-send-email-quic_khsieh@quicinc.com
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Fixes: 53e2822e56c7 ("rpmsg: Introduce Qualcomm SMD backend")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220422105326.78713-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/rpmsg/qcom_smd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index 08cc48af03b7..de1974916ad2 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1380,8 +1380,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
+diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+index 19903de6268d..db5f6009fb49 100644
+--- a/drivers/rpmsg/qcom_smd.c
++++ b/drivers/rpmsg/qcom_smd.c
+@@ -1388,7 +1388,7 @@ static int qcom_smd_parse_edge(struct device *dev,
+ 		edge->name = node->name;
  
- 	dp_catalog_ctrl_reset(ctrl->catalog);
- 
--	if (enable)
--		dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
-+	/*
-+	 * all dp controller programmable registers will not
-+	 * be reset to default value after DP_SW_RESET
-+	 * therefore interrupt mask bits have to be updated
-+	 * to enable/disable interrupts
-+	 */
-+	dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
- }
- 
- void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
+ 	irq = irq_of_parse_and_map(node, 0);
+-	if (irq < 0) {
++	if (!irq) {
+ 		dev_err(dev, "required smd interrupt missing\n");
+ 		ret = irq;
+ 		goto put_node;
 -- 
 2.35.1
 

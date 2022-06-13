@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5078754893A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0AD54950C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357951AbiFML6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S1354242AbiFMLby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356639AbiFMLux (ORCPT
+        with ESMTP id S1353255AbiFMLZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74516DFB6;
-        Mon, 13 Jun 2022 03:54:50 -0700 (PDT)
+        Mon, 13 Jun 2022 07:25:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E465E3CFC4;
+        Mon, 13 Jun 2022 03:42:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BDCA60EFE;
-        Mon, 13 Jun 2022 10:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2010C34114;
-        Mon, 13 Jun 2022 10:54:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3647DB80EB4;
+        Mon, 13 Jun 2022 10:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F3EC34114;
+        Mon, 13 Jun 2022 10:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117689;
-        bh=n4p0wUTaW9qE9OoFYw6rWxXz7KD27Eb4/9X0gjWjJTE=;
+        s=korg; t=1655116947;
+        bh=RZgDdum0msf2g8pnmfSjWw5PkHFRPMvuZw+fPrm/v+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JXx/6TvtfkLCwgEAvsdF07UDfXOxxnwoc6A7vH+9g/lSosPm2d4hDgrSsCA6Wx2en
-         DHPDkymJOzBepx+xammLpbVNjFf8/lsBUiesA0ybWp1fl/ua/l8Cr01JSKhUyU4LWD
-         bMwcgQjriW6FwZt1mbTxEr9aymw2Qk9kDCNSNb4Y=
+        b=eeI6Y7wt7y75zw4QR0uE73oaYBo7szKRrAuPyUkUqgwARwzP39JHIcLV3XJZo3ZWz
+         phezxRGO1GzYog3UbskE4vhmBrZrATZuN6P4F00sw4XPcKvKowL4yUuAQQYYWAGptZ
+         nXl5hyzcN41qLIKv+1L52FWT8HWXHkJgIjh2BnTM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 084/287] drm/rockchip: vop: fix possible null-ptr-deref in vop_bind()
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
+        David Teigland <teigland@redhat.com>
+Subject: [PATCH 5.4 235/411] dlm: fix missing lkb refcount handling
 Date:   Mon, 13 Jun 2022 12:08:28 +0200
-Message-Id: <20220613094926.424740227@linuxfoundation.org>
+Message-Id: <20220613094935.831402076@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-[ Upstream commit f8c242908ad15bbd604d3bcb54961b7d454c43f8 ]
+commit 1689c169134f4b5a39156122d799b7dca76d8ddb upstream.
 
-It will cause null-ptr-deref in resource_size(), if platform_get_resource()
-returns NULL, move calling resource_size() after devm_ioremap_resource() that
-will check 'res' to avoid null-ptr-deref.
+We always call hold_lkb(lkb) if we increment lkb->lkb_wait_count.
+So, we always need to call unhold_lkb(lkb) if we decrement
+lkb->lkb_wait_count. This patch will add missing unhold_lkb(lkb) if we
+decrement lkb->lkb_wait_count. In case of setting lkb->lkb_wait_count to
+zero we need to countdown until reaching zero and call unhold_lkb(lkb).
+The waiters list unhold_lkb(lkb) can be removed because it's done for
+the last lkb_wait_count decrement iteration as it's done in
+_remove_from_waiters().
 
-Fixes: 2048e3286f34 ("drm: rockchip: Add basic drm driver")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220422032854.2995175-1-yangyingliang@huawei.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This issue was discovered by a dlm gfs2 test case which use excessively
+dlm_unlock(LKF_CANCEL) feature. Probably the lkb->lkb_wait_count value
+never reached above 1 if this feature isn't used and so it was not
+discovered before.
+
+The testcase ended in a rsb on the rsb keep data structure with a
+refcount of 1 but no lkb was associated with it, which is itself
+an invalid behaviour. A side effect of that was a condition in which
+the dlm was sending remove messages in a looping behaviour. With this
+patch that has not been reproduced.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: David Teigland <teigland@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/dlm/lock.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-index 873624a11ce8..c0b647435974 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-@@ -1595,10 +1595,10 @@ static int vop_bind(struct device *dev, struct device *master, void *data)
- 	vop_win_init(vop);
+--- a/fs/dlm/lock.c
++++ b/fs/dlm/lock.c
+@@ -1551,6 +1551,7 @@ static int _remove_from_waiters(struct d
+ 		lkb->lkb_wait_type = 0;
+ 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
+ 		lkb->lkb_wait_count--;
++		unhold_lkb(lkb);
+ 		goto out_del;
+ 	}
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	vop->len = resource_size(res);
- 	vop->regs = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(vop->regs))
- 		return PTR_ERR(vop->regs);
-+	vop->len = resource_size(res);
+@@ -1577,6 +1578,7 @@ static int _remove_from_waiters(struct d
+ 		log_error(ls, "remwait error %x reply %d wait_type %d overlap",
+ 			  lkb->lkb_id, mstype, lkb->lkb_wait_type);
+ 		lkb->lkb_wait_count--;
++		unhold_lkb(lkb);
+ 		lkb->lkb_wait_type = 0;
+ 	}
  
- 	vop->regsbak = devm_kzalloc(dev, vop->len, GFP_KERNEL);
- 	if (!vop->regsbak)
--- 
-2.35.1
-
+@@ -5312,11 +5314,16 @@ int dlm_recover_waiters_post(struct dlm_
+ 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_UNLOCK;
+ 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
+ 		lkb->lkb_wait_type = 0;
+-		lkb->lkb_wait_count = 0;
++		/* drop all wait_count references we still
++		 * hold a reference for this iteration.
++		 */
++		while (lkb->lkb_wait_count) {
++			lkb->lkb_wait_count--;
++			unhold_lkb(lkb);
++		}
+ 		mutex_lock(&ls->ls_waiters_mutex);
+ 		list_del_init(&lkb->lkb_wait_reply);
+ 		mutex_unlock(&ls->ls_waiters_mutex);
+-		unhold_lkb(lkb); /* for waiters list */
+ 
+ 		if (oc || ou) {
+ 			/* do an unlock or cancel instead of resending */
 
 

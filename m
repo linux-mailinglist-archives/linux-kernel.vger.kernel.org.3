@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2495B54935C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0121154917C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377000AbiFMNYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S1384946AbiFMOlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377317AbiFMNUP (ORCPT
+        with ESMTP id S1385398AbiFMOkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F1C6A431;
-        Mon, 13 Jun 2022 04:23:29 -0700 (PDT)
+        Mon, 13 Jun 2022 10:40:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97AAAF1E2;
+        Mon, 13 Jun 2022 04:50:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C057760FB9;
-        Mon, 13 Jun 2022 11:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3C1C3411C;
-        Mon, 13 Jun 2022 11:23:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F2B4B80ECC;
+        Mon, 13 Jun 2022 11:50:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92433C34114;
+        Mon, 13 Jun 2022 11:50:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119405;
-        bh=3K7C41fTffbQ/v6QxeTjmJCyuQRwcrtVfBjKF8Xfi4A=;
+        s=korg; t=1655121001;
+        bh=fED2JgPfODF6xFQb88fmPsB6fD8sXOm9jKpl0fa3psg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K+IlOJgS8MVRNLkc1XeYLlpipCYKOs2pzAX4YyIsSLtXKNm5x3cW4om7XPS78BiN9
-         v9sGeQ8H8XjIcp/H3QYThYnCRQQeBbB+gRP5V0U+oA4Os86Lkby+2KuTLqqseVx3SH
-         F3FlJIEz9p3eBeHqaoDZ/kewXnDomZw63uCkvIOY=
+        b=2oj8r7raDxdceIP/Ga1Yr6ayP3ksPtpQSmx2z0F1SY8+smw5/1tbsEgAuK+B/9cFb
+         IqXuklKNpDI/U7jrlesxc2nbFcKVa0Wn9nyV+V8thAoV05NlLFVTKp37Htit0yXGQK
+         rnX3a+lQBtffcqVL/oZLUvK92gnynU5jx5xDg1Po=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 227/247] nfc: st21nfca: fix incorrect validating logic in EVT_TRANSACTION
+        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 235/298] drm/amd/pm: fix a potential gpu_metrics_table memory leak
 Date:   Mon, 13 Jun 2022 12:12:09 +0200
-Message-Id: <20220613094929.830783940@linuxfoundation.org>
+Message-Id: <20220613094932.219773946@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Faltesek <mfaltesek@google.com>
+From: Gong Yuanjun <ruc_gongyuanjun@163.com>
 
-commit 77e5fe8f176a525523ae091d6fd0fbb8834c156d upstream.
+[ Upstream commit d2f4460a3d9502513419f06cc376c7ade49d5753 ]
 
-The first validation check for EVT_TRANSACTION has two different checks
-tied together with logical AND. One is a check for minimum packet length,
-and the other is for a valid aid_tag. If either condition is true (fails),
-then an error should be triggered.  The fix is to change && to ||.
+gpu_metrics_table is allocated in yellow_carp_init_smc_tables() but
+not freed in yellow_carp_fini_smc_tables().
 
-Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Martin Faltesek <mfaltesek@google.com>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/st21nfca/se.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/nfc/st21nfca/se.c
-+++ b/drivers/nfc/st21nfca/se.c
-@@ -319,7 +319,7 @@ int st21nfca_connectivity_event_received
- 		 * AID		81	5 to 16
- 		 * PARAMETERS	82	0 to 255
- 		 */
--		if (skb->len < NFC_MIN_AID_LENGTH + 2 &&
-+		if (skb->len < NFC_MIN_AID_LENGTH + 2 ||
- 		    skb->data[0] != NFC_EVT_TRANSACTION_AID_TAG)
- 			return -EPROTO;
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
+index d0715927b07f..13461e28aeed 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
+@@ -190,6 +190,9 @@ static int yellow_carp_fini_smc_tables(struct smu_context *smu)
+ 	kfree(smu_table->watermarks_table);
+ 	smu_table->watermarks_table = NULL;
  
++	kfree(smu_table->gpu_metrics_table);
++	smu_table->gpu_metrics_table = NULL;
++
+ 	return 0;
+ }
+ 
+-- 
+2.35.1
+
 
 

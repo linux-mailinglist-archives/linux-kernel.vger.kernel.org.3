@@ -2,141 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54365497D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3CB5497E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241864AbiFMQaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 12:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S236533AbiFMQfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 12:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240746AbiFMQ1u (ORCPT
+        with ESMTP id S244371AbiFMQep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 12:27:50 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20321D2ADC;
-        Mon, 13 Jun 2022 07:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655130094; x=1686666094;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kRJcWACmO/lwAN79tjxhatvQLKzpV/YPdBZo5g5JtF4=;
-  b=mPpiJqfy5J4n/YNIIrCPjYmeqaI8Qvoz8aNHxZv+xFMSXj18HGAJIs6+
-   H4BTHzY1T2hlA/9D3KHiVWm0mi/cXiWNWZqOXq/PFsONNr9Ua0fAlnzf2
-   ckzbreDh3doEfnBroLnhrXHxde+kPqB8aUk55BcaOEsceCgrvqcqnI3Px
-   kiuyt2XgwF4JVsKoUtEq+PY6qsXoNbFkp8QNlEwmcM8r/IEkcA7sFp5+3
-   H/oAIFySJjF4GKu6qWUxIMI3CV/zqec9/cNEtQEYAbajGdhuDTIyFSade
-   EwVlmKIDZpIpG+b2yKcRpM7uG+pO1DtuSaVBdTQBko1Eten0QEmUQS1Zm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="277074388"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="277074388"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 07:21:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="761541888"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jun 2022 07:21:22 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25DELK2m022841;
-        Mon, 13 Jun 2022 15:21:20 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] bitops: always define asm-generic non-atomic bitops
-Date:   Mon, 13 Jun 2022 16:19:47 +0200
-Message-Id: <20220613141947.1176100-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com> <20220610113427.908751-3-alexandr.lobakin@intel.com> <YqNMO0ioGzJ1IkoA@smile.fi.intel.com> <22042c14bc6a437d9c6b235fbfa32c8a@intel.com> <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
+        Mon, 13 Jun 2022 12:34:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E223D46141
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:23:40 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25DDtNxM020577;
+        Mon, 13 Jun 2022 14:23:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=KSx5EN7o9Db5WN+FNVkIxbtaI4ppCzlB5T3plRq5fcM=;
+ b=ReN6AAiZEGfERTluqOfPq//mrfxAAVYQPWO9DbdjTv9f7tJGQWkYglM9LNVzc9IgPTo7
+ PP5LWMrIp8PSs6tMVcxB6iynCg4CU2gN4LZbObwIpg57Xnx5CEfLHyyHjGMRjO22qaBE
+ gCTyOj19VcTfkLnIRFIzTpbdfgRO+0YkTrK90+wcRFkIF0MCTquF5jHVzDrM82hnPqLY
+ eAPxk8C59W4xKmBQkMILPkRFL2vY21oN5RjXzChAXdOBmYmiVxslBohM+9+kcGKn0md5
+ cH6WeznrgdrGP9kWBC/XCE5WqUD1UaI59xiNjd5QPJMoiKsBYPgFS9S8WX60gLIaw1YC Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gn4c9s702-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 14:23:18 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25DDtWxX023985;
+        Mon, 13 Jun 2022 14:23:17 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gn4c9s6xw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 14:23:17 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25DEKaYF027989;
+        Mon, 13 Jun 2022 14:23:14 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gmjp9axbt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 14:23:14 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25DENF2221430750
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Jun 2022 14:23:15 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F049DA405F;
+        Mon, 13 Jun 2022 14:23:11 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C0C8A405B;
+        Mon, 13 Jun 2022 14:23:05 +0000 (GMT)
+Received: from [9.43.31.74] (unknown [9.43.31.74])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Jun 2022 14:23:05 +0000 (GMT)
+Message-ID: <4297bd21-e984-9d78-2bca-e70c11749a72@linux.ibm.com>
+Date:   Mon, 13 Jun 2022 19:53:03 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
+ <YqCuE87gCcrnAiXG@cmpxchg.org> <YqDGYjgjcS5OoS3P@cmpxchg.org>
+ <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
+ <YqDncfLeEeBaosrY@cmpxchg.org>
+ <02ee2c97-3bca-8eb6-97d8-1f8743619453@linux.ibm.com>
+ <YqH74WaUzJlb+smt@cmpxchg.org> <20220609152243.00000332@Huawei.com>
+ <YqJa4N/VlS4zN4vf@cmpxchg.org> <20220610105708.0000679b@Huawei.com>
+ <YqdEEhJFr3SlfvSJ@cmpxchg.org>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <YqdEEhJFr3SlfvSJ@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: KaKBm1vH7dsTp6c7uSo-wBq2VCVXRLkG
+X-Proofpoint-ORIG-GUID: g4mFP2TOUU9Fk2O5Ore_l5Gza6me581L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-13_06,2022-06-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 suspectscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206130063
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marco Elver <elver@google.com>
-Date: Fri, 10 Jun 2022 18:32:36 +0200
+On 6/13/22 7:35 PM, Johannes Weiner wrote:
+> On Fri, Jun 10, 2022 at 10:57:08AM +0100, Jonathan Cameron wrote:
+>>
 
-> On Fri, 10 Jun 2022 at 18:02, Luck, Tony <tony.luck@intel.com> wrote:
-> >
-> > > > +/**
-> > > > + * generic_test_bit - Determine whether a bit is set
-> > > > + * @nr: bit number to test
-> > > > + * @addr: Address to start counting from
-> > > > + */
-> > >
-> > > Shouldn't we add in this or in separate patch a big NOTE to explain that this
-> > > is actually atomic and must be kept as a such?
-> >
-> > "atomic" isn't really the right word. The volatile access makes sure that the
-> > compiler does the test at the point that the source code asked, and doesn't
-> > move it before/after other operations.
-> 
-> It's listed in Documentation/atomic_bitops.txt.
+....
 
-Oh, so my memory was actually correct that I saw it in the docs
-somewhere.
-WDYT, should I mention this here in the code (block comment) as well
-that it's atomic and must not lose `volatile` as Andy suggested or
-it's sufficient to have it in the docs (+ it's not underscored)?
+>> I'm not sure completely read only is flexible enough (though mostly RO is fine)
+>> as we keep sketching out cases where any attempt to do things automatically
+>> does the wrong thing and where we need to add an extra tier to get
+>> everything to work.  Short of having a lot of tiers I'm not sure how
+>> we could have the default work well.  Maybe a lot of "tiers" is fine
+>> though perhaps we need to rename them if going this way and then they
+>> don't really work as current concept of tier.
+>>
+>> Imagine a system with subtle difference between different memories such
+>> as 10% latency increase for same bandwidth.  To get an advantage from
+>> demoting to such a tier will require really stable usage and long
+>> run times. Whilst you could design a demotion scheme that takes that
+>> into account, I think we are a long way from that today.
+> 
+> Good point: there can be a clear hardware difference, but it's a
+> policy choice whether the MM should treat them as one or two tiers.
+> 
+> What do you think of a per-driver/per-device (overridable) distance
+> number, combined with a configurable distance cutoff for what
+> constitutes separate tiers. E.g. cutoff=20 means two devices with
+> distances of 10 and 20 respectively would be in the same tier, devices
+> with 10 and 100 would be in separate ones. The kernel then generates
+> and populates the tiers based on distances and grouping cutoff, and
+> populates the memtier directory tree and nodemasks in sysfs.
+> 
 
-> 
-> It is as "atomic" as READ_ONCE() or atomic_read() is. Though you are
-> right that the "atomicity" of reading one bit is almost a given,
-> because we can't really read half a bit.
-> The main thing is that the compiler keeps it "atomic" and e.g. doesn't
-> fuse the load with another or elide it completely, and then transforms
-> the code in concurrency-unfriendly ways.
-> 
-> Like READ_ONCE() and friends, test_bit(), unlike non-atomic bitops,
-> may also be used to dependency-order some subsequent marked (viz.
-> atomic) operations.
-> 
-> > But there is no such thing as an atomic test_bit() operation:
-> >
-> >         if (test_bit(5, addr)) {
-> >                 /* some other CPU nukes bit 5 */
-> >
-> >                 /* I know it was set when I looked, but now, could be anything */
-> 
-> The operation itself is atomic, because reading half a bit is
-> impossible. Whether or not that bit is modified concurrently is a
-> different problem.
-> 
-> Thanks,
-> -- Marco
+Right now core/generic code doesn't get involved in building tiers. It 
+just defines three tiers where drivers could place the respective 
+devices they manage. The above suggestion would imply we are moving 
+quite a lot of policy decision logic into the generic code?.
 
-Thanks,
-Olek
+At some point, we will have to depend on more attributes other than 
+distance(may be HMAT?) and each driver should have the flexibility to 
+place the device it is managing in a specific tier? By then we may 
+decide to support more than 3 static tiers which the core kernel 
+currently does.
+
+If the kernel still can't make the right decision, userspace could 
+rearrange them in any order using rank values. Without something like 
+rank, if userspace needs to fix things up,  it gets hard with device
+hotplugging. ie, the userspace policy could be that any new PMEM tier 
+device that is hotplugged, park it with a very low-rank value and hence 
+lowest in demotion order by default. (echo 10 > 
+/sys/devices/system/memtier/memtier2/rank) . After that userspace could 
+selectively move the new devices to the correct memory tier?
+
+
+> It could be simple tier0, tier1, tier2 numbering again, but the
+> numbers now would mean something to the user. A rank tunable is no
+> longer necessary.
+> 
+> I think even the nodemasks in the memtier tree could be read-only
+> then, since corrections should only be necessary when either the
+> device distance is wrong or the tier grouping cutoff.
+> 
+> Can you think of scenarios where that scheme would fall apart?
+
+-aneesh

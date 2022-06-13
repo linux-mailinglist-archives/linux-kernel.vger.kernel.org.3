@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A400549386
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F227548C64
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357285AbiFML4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
+        id S1356888AbiFMMAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356501AbiFMLuh (ORCPT
+        with ESMTP id S1357706AbiFMLzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:37 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 313FE248CC
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:54:15 -0700 (PDT)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxX+ZVF6diwkU+AA--.11292S2;
-        Mon, 13 Jun 2022 18:54:13 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Xuerui Wang <kernel@xen0n.name>, Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        tangyouling@loongson.cn
-Subject: [PATCH] LoongArch: vmlinux.lds.S: Add missing ELF_DETAILS
-Date:   Mon, 13 Jun 2022 18:54:12 +0800
-Message-Id: <1655117652-11166-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9CxX+ZVF6diwkU+AA--.11292S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKFWDGr45uF4UKF47Kr1UAwb_yoW3AFX_GF
-        9xJw15Gr1rAw42q3WUG395JF95X3WrGF1Yv3WUZw4xXa45Crn8tw4fXa17Za1qyrWrCrW5
-        AFWFgr92yw12qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-        cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4DMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOlkVUUUUU
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Mon, 13 Jun 2022 07:55:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD942F39B;
+        Mon, 13 Jun 2022 03:55:52 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 956946601674;
+        Mon, 13 Jun 2022 11:55:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655117750;
+        bh=AYCMDXpnrnlhea7/vMZzgZlR6eZJdympQCVtx5OxpTM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=a9CdHFRNL1cXCAvRh3XboG6jOiwZc4fzSdgrsQOHaYR4U5YU91vlz5msxD2p5T685
+         lrRe0P/w83HJGc/dmA+zxPrEaVOblxEPEL0usxx2u0eC9sul7icX7gHrUJTO3im7AJ
+         9lOGwrKI80poQ9yvcbLTRhmP4tFA5tfCyrQM7DHFPvr/s4Dftv1ZxlgnUcTZ0EKc4F
+         x2b7lXzuSt9Cke9UIztn45OivAJewKp5eRJqWd0GqVINKHCq6zQOteErj3iFsO9fTw
+         ZoMeIxiT4MBZK49qKgdXbIBC4tpTk6P+2KtV9C+l8PSenJ4oIOBMiR1L7XB4fJ1QAK
+         fRb9Z8IS6IG4w==
+Message-ID: <7d2a1d75-e400-71aa-7127-144e257f408d@collabora.com>
+Date:   Mon, 13 Jun 2022 12:55:46 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v11 10/12] drm/mediatek: dpi: Add dpintf support
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        airlied@linux.ie
+Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
+        wenst@chromium.org, ck.hu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+ <20220613064841.10481-11-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220613064841.10481-11-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,28 +66,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c604abc3f6e ("vmlinux.lds.h: Split ELF_DETAILS from STABS_DEBUG") split
-ELF_DETAILS from STABS_DEBUG, resulting in missing ELF_DETAILS information in
-LoongArch architecture, so add it.
+Il 13/06/22 08:48, Bo-Chen Chen ha scritto:
+> From: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> dpintf is the displayport interface hardware unit. This unit is similar
+> to dpi and can reuse most of the code.
+> 
+> This patch adds support for mt8195-dpintf to this dpi driver. Main
+> differences are:
+>   - Some features/functional components are not available for dpintf
+>     which are now excluded from code execution once is_dpintf is set
+>   - dpintf can and needs to choose between different clockdividers based
+>     on the clockspeed. This is done by choosing a different clock parent.
+>   - There are two additional clocks that need to be managed. These are
+>     only set for dpintf and will be set to NULL if not supplied. The
+>     clk_* calls handle these as normal clocks then.
+>   - Some register contents differ slightly between the two components. To
+>     work around this I added register bits/masks with a DPINTF_ prefix
+>     and use them where different.
+> 
+> Based on a separate driver for dpintf created by
+> Jitao shi <jitao.shi@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Modify reviewers' comments.]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dpi.c          | 115 ++++++++++++++++++--
+>   drivers/gpu/drm/mediatek/mtk_dpi_regs.h     |  13 +++
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   4 +
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   1 +
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |   3 +
+>   5 files changed, 126 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 6b8cf648a5b5..08c8f21b4421 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -71,6 +71,7 @@ struct mtk_dpi {
+>   	void __iomem *regs;
+>   	struct device *dev;
+>   	struct clk *engine_clk;
+> +	struct clk *pll_gate_clk;
 
-Fixes: c604abc3f6e ("vmlinux.lds.h: Split ELF_DETAILS from STABS_DEBUG")
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
- arch/loongarch/kernel/vmlinux.lds.S | 1 +
- 1 file changed, 1 insertion(+)
+You don't need this clock in this driver, at all.
 
-diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-index 9d508158fe1a..78311a6101a3 100644
---- a/arch/loongarch/kernel/vmlinux.lds.S
-+++ b/arch/loongarch/kernel/vmlinux.lds.S
-@@ -101,6 +101,7 @@ SECTIONS
- 
- 	STABS_DEBUG
- 	DWARF_DEBUG
-+	ELF_DETAILS
- 
- 	.gptab.sdata : {
- 		*(.gptab.data)
--- 
-2.36.1
+`pll_gate` would be CLK_VDO0_DP_INTF0_DP_INTF (parent = CLK_TOP_EDP);
+
+Currently, you're assigning CLK_TOP_EDP to "pixel", but you can, at this point,
+simply assign CLK_VDO0_DP_INTF0_DP_INTF to "pixel" instead... as when you call
+clk_prepare_enable() on it, that'll also take care of enabling its CLK_TOP_EDP
+parent for you.
+
+You're not doing anything special if not taking care of enabling/disabling it.
+
+Regards,
+Angelo
 

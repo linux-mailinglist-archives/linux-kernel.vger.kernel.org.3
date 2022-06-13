@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE63A548FCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCC0548EB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352662AbiFMLSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S1380585AbiFMOAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352815AbiFMLOa (ORCPT
+        with ESMTP id S1380416AbiFMNyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:14:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D19E0F8;
-        Mon, 13 Jun 2022 03:37:04 -0700 (PDT)
+        Mon, 13 Jun 2022 09:54:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6A1434B0;
+        Mon, 13 Jun 2022 04:35:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88A2460FDB;
-        Mon, 13 Jun 2022 10:37:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 950ADC34114;
-        Mon, 13 Jun 2022 10:37:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F8E1612E3;
+        Mon, 13 Jun 2022 11:35:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD3DC341F3;
+        Mon, 13 Jun 2022 11:35:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116624;
-        bh=3zHP3TCuZPZfPGWfwnnSEDLT42aavDbHVWky2CtuQRw=;
+        s=korg; t=1655120102;
+        bh=KgLkVpm/eCq7pTrqhy/1TWHRr1bnRifLYUD1rkYJal0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=buIa5DjcqcukBwvXRUxuWgPZw5SgkGhI2c/hI8uCfFod6tWgxypwnS8aNc58rozGv
-         /iuiIx2trXDgmI9WC7gyV2Hj9yioHgRIYkW4+cIIREDMkvpcrk6F+RkGxl8miq/5py
-         JcNRWODfWBQEDlU5drJP1W8irljSn5m8kQW93O5U=
+        b=nnQjAMXQOduCgv4xeDr1PxF6Cw4V80MkYu44P9h5c1GKb1e18KgsAT5P/gJZHlPM0
+         ulWJewt0xQByGomTKe/XLkdrJjRSWxyaEkHrX4L7GlVU17kbUeL3YfSSGSwVbCgQEl
+         AEqmjxSjZyKRaOqfdz0l0RPSfB7w39gW5FwsUr7Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>
-Subject: [PATCH 4.14 218/218] PCI: qcom: Fix unbalanced PHY init on probe errors
+        stable@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 251/339] serial: msm_serial: disable interrupts in __msm_console_write()
 Date:   Mon, 13 Jun 2022 12:11:16 +0200
-Message-Id: <20220613094927.240840505@linuxfoundation.org>
+Message-Id: <20220613094934.266834381@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: John Ogness <john.ogness@linutronix.de>
 
-commit 83013631f0f9961416abd812e228c8efbc2f6069 upstream.
+[ Upstream commit aabdbb1b7a5819e18c403334a31fb0cc2c06ad41 ]
 
-Undo the PHY initialisation (e.g. balance runtime PM) if host
-initialisation fails during probe.
+__msm_console_write() assumes that interrupts are disabled, but
+with threaded console printers it is possible that the write()
+callback of the console is called with interrupts enabled.
 
-Link: https://lore.kernel.org/r/20220401133854.10421-3-johan+linaro@kernel.org
-Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc: stable@vger.kernel.org      # 4.5
+Explicitly disable interrupts using local_irq_save() to preserve
+the assumed context.
+
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Link: https://lore.kernel.org/r/20220506213324.470461-1-john.ogness@linutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/dwc/pcie-qcom.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/tty/serial/msm_serial.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/pci/dwc/pcie-qcom.c
-+++ b/drivers/pci/dwc/pcie-qcom.c
-@@ -1302,10 +1302,15 @@ static int qcom_pcie_probe(struct platfo
- 	ret = dw_pcie_host_init(pp);
- 	if (ret) {
- 		dev_err(dev, "cannot initialize host\n");
--		return ret;
-+		goto err_phy_exit;
- 	}
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 23c94b927776..e676ec761f18 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -1599,6 +1599,7 @@ static inline struct uart_port *msm_get_port_from_line(unsigned int line)
+ static void __msm_console_write(struct uart_port *port, const char *s,
+ 				unsigned int count, bool is_uartdm)
+ {
++	unsigned long flags;
+ 	int i;
+ 	int num_newlines = 0;
+ 	bool replaced = false;
+@@ -1616,6 +1617,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
+ 			num_newlines++;
+ 	count += num_newlines;
  
- 	return 0;
++	local_irq_save(flags);
 +
-+err_phy_exit:
-+	phy_exit(pcie->phy);
+ 	if (port->sysrq)
+ 		locked = 0;
+ 	else if (oops_in_progress)
+@@ -1661,6 +1664,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
+ 
+ 	if (locked)
+ 		spin_unlock(&port->lock);
 +
-+	return ret;
++	local_irq_restore(flags);
  }
  
- static const struct of_device_id qcom_pcie_match[] = {
+ static void msm_console_write(struct console *co, const char *s,
+-- 
+2.35.1
+
 
 

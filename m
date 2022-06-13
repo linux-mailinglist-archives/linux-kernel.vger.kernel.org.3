@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1884E548DF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EA8548ED0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355732AbiFMMSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S1380616AbiFMOA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359054AbiFMMOi (ORCPT
+        with ESMTP id S1380491AbiFMNy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:14:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A67D54F87;
-        Mon, 13 Jun 2022 04:02:14 -0700 (PDT)
+        Mon, 13 Jun 2022 09:54:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BBB7DE3F;
+        Mon, 13 Jun 2022 04:35:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9734AB80E93;
-        Mon, 13 Jun 2022 11:02:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0ACBC34114;
-        Mon, 13 Jun 2022 11:02:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4CD36124E;
+        Mon, 13 Jun 2022 11:35:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C47FBC385A5;
+        Mon, 13 Jun 2022 11:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118131;
-        bh=4xrCwR+dSMUMl6tf6Scxfy8ADhapePz4RrscHl0msvY=;
+        s=korg; t=1655120110;
+        bh=Hcs8FT5zKCSoZoDm28Ri/cAMUxhfgMLbbzBG4k2m+vI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sc3ZJIzV+ES29zraMJSAph1pjC9f7QgqEIPgCGLpCklBtdd4LLrdiqzplQppbmyXi
-         WZAR2HMo4CdGPFk3DfRwPomZCQoyukZisHREwYD0baAty9dgpK6JVvb6g2jlFdanQi
-         sT/Esrt3WzcGH2YRsbhs0vTBJ8s6zSrNVo8xczxA=
+        b=DGWG9QAwHOyhPKa3KoB8nNUS9rR2aSoCRY8QIyUtaA9HZQzs36voGJ9AXy8LYwYok
+         Lc00zPDAc63N6M//Qiz1WQ333kEO9bwJn6tSmw+N765gtDlIjSTLZKMBkBZfs0vB9o
+         hfC/+eFpZ/6gL9A2yirEfykb4sfAaEQGBk0xVXRQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        stable@vger.kernel.org, Yufan Chen <wiz.chen@gmail.com>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 255/287] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+Subject: [PATCH 5.18 254/339] ksmbd: smbd: fix connection dropped issue
 Date:   Mon, 13 Jun 2022 12:11:19 +0200
-Message-Id: <20220613094931.744548529@linuxfoundation.org>
+Message-Id: <20220613094934.355953766@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Hyunchul Lee <hyc.lee@gmail.com>
 
-[ Upstream commit 62b2caef400c1738b6d22f636c628d9f85cd4c4c ]
+[ Upstream commit 5366afc4065075a4456941fbd51c33604d631ee5 ]
 
-There is a deadlock in sa1100_set_termios(), which is shown
-below:
+When there are bursty connection requests,
+RDMA connection event handler is deferred and
+Negotiation requests are received even if
+connection status is NEW.
 
-   (Thread 1)              |      (Thread 2)
-                           | sa1100_enable_ms()
-sa1100_set_termios()       |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | sa1100_timeout()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
+To handle it, set the status to CONNECTED
+if Negotiation requests are received.
 
-We hold sport->port.lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need sport->port.lock in position (2) of thread 2. As a result,
-sa1100_set_termios() will block forever.
-
-This patch moves del_timer_sync() before spin_lock_irqsave()
-in order to prevent the deadlock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417111626.7802-1-duoming@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Yufan Chen <wiz.chen@gmail.com>
+Signed-off-by: Hyunchul Lee <hyc.lee@gmail.com>
+Tested-by: Yufan Chen <wiz.chen@gmail.com>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sa1100.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ksmbd/transport_rdma.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
-index a399772be3fc..8a65fb1ce568 100644
---- a/drivers/tty/serial/sa1100.c
-+++ b/drivers/tty/serial/sa1100.c
-@@ -439,6 +439,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
- 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
- 	quot = uart_get_divisor(port, baud);
- 
-+	del_timer_sync(&sport->timer);
-+
- 	spin_lock_irqsave(&sport->port.lock, flags);
- 
- 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
-@@ -469,8 +471,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
- 				UTSR1_TO_SM(UTSR1_ROR);
- 	}
- 
--	del_timer_sync(&sport->timer);
--
- 	/*
- 	 * Update the per-port timeout.
- 	 */
+diff --git a/fs/ksmbd/transport_rdma.c b/fs/ksmbd/transport_rdma.c
+index e646d79554b8..3f5d13571694 100644
+--- a/fs/ksmbd/transport_rdma.c
++++ b/fs/ksmbd/transport_rdma.c
+@@ -569,6 +569,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
+ 		}
+ 		t->negotiation_requested = true;
+ 		t->full_packet_received = true;
++		t->status = SMB_DIRECT_CS_CONNECTED;
+ 		enqueue_reassembly(t, recvmsg, 0);
+ 		wake_up_interruptible(&t->wait_status);
+ 		break;
 -- 
 2.35.1
 

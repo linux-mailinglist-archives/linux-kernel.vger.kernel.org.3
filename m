@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61ED5481E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42BD548167
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239584AbiFMILf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S239626AbiFMILn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239606AbiFMILH (ORCPT
+        with ESMTP id S239618AbiFMILK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:11:07 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3C21E3FA;
-        Mon, 13 Jun 2022 01:11:06 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LM44w0PKbzDqqK;
-        Mon, 13 Jun 2022 16:10:40 +0800 (CST)
+        Mon, 13 Jun 2022 04:11:10 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AA01E3EA;
+        Mon, 13 Jun 2022 01:11:08 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LM4395M1Nz1K9Q9;
+        Mon, 13 Jun 2022 16:09:09 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 16:11:03 +0800
+ 15.1.2375.24; Mon, 13 Jun 2022 16:11:04 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 16:11:02 +0800
+ 15.1.2375.24; Mon, 13 Jun 2022 16:11:03 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -47,9 +47,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>,
         "John Donnelly" <John.p.donnelly@oracle.com>,
         Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: [PATCH 2/5] arm64: kdump: Support crashkernel=X fall back to reserve region above DMA zones
-Date:   Mon, 13 Jun 2022 16:09:29 +0800
-Message-ID: <20220613080932.663-3-thunder.leizhen@huawei.com>
+Subject: [PATCH 3/5] arm64: kdump: Remove some redundant checks in map_mem()
+Date:   Mon, 13 Jun 2022 16:09:30 +0800
+Message-ID: <20220613080932.663-4-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220613080932.663-1-thunder.leizhen@huawei.com>
 References: <20220613080932.663-1-thunder.leizhen@huawei.com>
@@ -69,71 +69,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For crashkernel=X without '@offset', select a region within DMA zones
-first, and fall back to reserve region above DMA zones. This allows
-users to use the same configuration on multiple platforms.
+arm64_memblock_init()
+	if (!IS_ENABLED(CONFIG_ZONE_DMA/DMA32))
+		reserve_crashkernel()
+			//initialize crashk_res when
+			//"crashkernel=" is correctly specified
+paging_init()
+	map_mem()
+
+As shown in the above pseudo code, the crashk_res.end can only be
+initialized to non-zero when both "!IS_ENABLED(CONFIG_ZONE_DMA/DMA32)"
+and crash_mem_map are true. So some checks in map_mem() can be adjusted
+or optimized.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  2 +-
- arch/arm64/mm/init.c                            | 16 +++++++++++++++-
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ arch/arm64/mm/mmu.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 61b179232b68001..fdac18beba5624e 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -823,7 +823,7 @@
- 			memory region [offset, offset + size] for that kernel
- 			image. If '@offset' is omitted, then a suitable offset
- 			is selected automatically.
--			[KNL, X86-64] Select a region under 4G first, and
-+			[KNL, X86-64, ARM64] Select a region under 4G first, and
- 			fall back to reserve region above 4G when '@offset'
- 			hasn't been specified.
- 			See Documentation/admin-guide/kdump/kdump.rst for further details.
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 5390f361208ccf7..8539598f9e58b4d 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -138,6 +138,7 @@ static void __init reserve_crashkernel(void)
- 	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
- 	char *cmdline = boot_command_line;
- 	int ret;
-+	bool fixed_base;
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 626ec32873c6c36..6028a5757e4eae2 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -529,12 +529,12 @@ static void __init map_mem(pgd_t *pgdp)
  
- 	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
- 		return;
-@@ -166,15 +167,28 @@ static void __init reserve_crashkernel(void)
- 		return;
+ #ifdef CONFIG_KEXEC_CORE
+ 	if (crash_mem_map) {
+-		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+-		    IS_ENABLED(CONFIG_ZONE_DMA32))
+-			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+-		else if (crashk_res.end)
++		if (crashk_res.end)
+ 			memblock_mark_nomap(crashk_res.start,
+ 			    resource_size(&crashk_res));
++		else if (IS_ENABLED(CONFIG_ZONE_DMA) ||
++			 IS_ENABLED(CONFIG_ZONE_DMA32))
++			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
  	}
+ #endif
  
-+	fixed_base = !!crash_base;
- 	crash_size = PAGE_ALIGN(crash_size);
- 
- 	/* User specifies base address explicitly. */
--	if (crash_base)
-+	if (fixed_base)
- 		crash_max = crash_base + crash_size;
- 
-+retry:
- 	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
- 					       crash_base, crash_max);
- 	if (!crash_base) {
-+		/*
-+		 * Attempt to fully allocate low memory failed, fall back
-+		 * to high memory, the minimum required low memory will be
-+		 * reserved later.
-+		 */
-+		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
-+			crash_max = CRASH_ADDR_HIGH_MAX;
-+			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-+			goto retry;
-+		}
-+
- 		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
- 			crash_size);
- 		return;
+@@ -571,16 +571,13 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 * through /sys/kernel/kexec_crash_size interface.
+ 	 */
+ #ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map &&
+-	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+-		if (crashk_res.end) {
+-			__map_memblock(pgdp, crashk_res.start,
+-				       crashk_res.end + 1,
+-				       PAGE_KERNEL,
+-				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+-			memblock_clear_nomap(crashk_res.start,
+-					     resource_size(&crashk_res));
+-		}
++	if (crashk_res.end) {
++		__map_memblock(pgdp, crashk_res.start,
++			       crashk_res.end + 1,
++			       PAGE_KERNEL,
++			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
++		memblock_clear_nomap(crashk_res.start,
++				     resource_size(&crashk_res));
+ 	}
+ #endif
+ }
 -- 
 2.25.1
 

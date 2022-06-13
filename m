@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA729548AA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C341548F47
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380145AbiFMNxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S1353227AbiFMMNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379215AbiFMNuL (ORCPT
+        with ESMTP id S1358838AbiFMMIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:50:11 -0400
+        Mon, 13 Jun 2022 08:08:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA67C2A435;
-        Mon, 13 Jun 2022 04:33:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFED51E6C;
+        Mon, 13 Jun 2022 04:00:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0550DB80E93;
-        Mon, 13 Jun 2022 11:33:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671A9C3411C;
-        Mon, 13 Jun 2022 11:33:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4FCEB80E5E;
+        Mon, 13 Jun 2022 11:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16575C341C6;
+        Mon, 13 Jun 2022 11:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120000;
-        bh=QDH42gKm5gGWv+NIEhenKt9NGcU0y959xwFHE/pD/gM=;
+        s=korg; t=1655118014;
+        bh=cpMk8xVrfIcPTt9lik83luCdwR0TAz+5Gcl5pjiojp4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=asd2nRPfUGfDNN2GNnpet3qBRD5ZopxXPKlkZZjHFMRuteKSQbktiXjT1z+B2Jpn0
-         lcwAzWsYg4AXwIBFSA+XCmNcFXDottFVCi04mmJbpX7K2HKt83dOTZaw6e+r8ZAMjB
-         QcwNPgBQhkqyjMhZiJxPqyngkM6HWLPOOhDScPEI=
+        b=j2mYKcoth4nFKlFySVgAAwVsjfCjuJ9KjXClKHy7vGf6fIkNf3jjKxx21JCBqn86i
+         bodRhb6KrTbWAwEldeIjI9oguUyk/CPU+H+8hP3Lxsdyn6mUkY7/ujUlx9uy8HpqR8
+         phD3MYOqJD03GYYrOO7l4OYOvkuqtghd+i9mS08A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 197/339] af_unix: Fix a data-race in unix_dgram_peer_wake_me().
+Subject: [PATCH 4.19 198/287] usb: dwc3: pci: Fix pm_runtime_get_sync() error checking
 Date:   Mon, 13 Jun 2022 12:10:22 +0200
-Message-Id: <20220613094932.642406521@linuxfoundation.org>
+Message-Id: <20220613094929.867058783@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Zheng Yongjun <zhengyongjun3@huawei.com>
 
-[ Upstream commit 662a80946ce13633ae90a55379f1346c10f0c432 ]
+[ Upstream commit a03e2ddab8e735e2cc315609b297b300e9cc60d2 ]
 
-unix_dgram_poll() calls unix_dgram_peer_wake_me() without `other`'s
-lock held and check if its receive queue is full.  Here we need to
-use unix_recvq_full_lockless() instead of unix_recvq_full(), otherwise
-KCSAN will report a data-race.
+If the device is already in a runtime PM enabled state
+pm_runtime_get_sync() will return 1, so a test for negative
+value should be used to check for errors.
 
-Fixes: 7d267278a9ec ("unix: avoid use-after-free in ep_remove_wait_queue")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Link: https://lore.kernel.org/r/20220605232325.11804-1-kuniyu@amazon.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 8eed00b237a28 ("usb: dwc3: pci: Runtime resume child device from wq")
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+Link: https://lore.kernel.org/r/20220422062652.10575-1-zhengyongjun3@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/unix/af_unix.c | 2 +-
+ drivers/usb/dwc3/dwc3-pci.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index e71a312faa1e..4aed12e94221 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -490,7 +490,7 @@ static int unix_dgram_peer_wake_me(struct sock *sk, struct sock *other)
- 	 * -ECONNREFUSED. Otherwise, if we haven't queued any skbs
- 	 * to other and its full, we will hang waiting for POLLOUT.
- 	 */
--	if (unix_recvq_full(other) && !sock_flag(other, SOCK_DEAD))
-+	if (unix_recvq_full_lockless(other) && !sock_flag(other, SOCK_DEAD))
- 		return 1;
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index ad2cb08b440f..527938eee846 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -205,7 +205,7 @@ static void dwc3_pci_resume_work(struct work_struct *work)
+ 	int ret;
  
- 	if (connected)
+ 	ret = pm_runtime_get_sync(&dwc3->dev);
+-	if (ret) {
++	if (ret < 0) {
+ 		pm_runtime_put_sync_autosuspend(&dwc3->dev);
+ 		return;
+ 	}
 -- 
 2.35.1
 

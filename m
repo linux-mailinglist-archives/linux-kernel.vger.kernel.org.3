@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDC054878A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583585487BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353371AbiFMMui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
+        id S1354667AbiFMMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357740AbiFMMtL (ORCPT
+        with ESMTP id S1357946AbiFMMtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:49:11 -0400
+        Mon, 13 Jun 2022 08:49:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FF462CC6;
-        Mon, 13 Jun 2022 04:11:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF78662CEB;
+        Mon, 13 Jun 2022 04:12:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C75608C3;
-        Mon, 13 Jun 2022 11:11:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A534C34114;
-        Mon, 13 Jun 2022 11:11:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF8BB60B6F;
+        Mon, 13 Jun 2022 11:11:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094EEC3411C;
+        Mon, 13 Jun 2022 11:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118716;
-        bh=E4rQH1VFVcVFFMQSB2xDZNS++oZ3MPwR5If0rkwwWrM=;
+        s=korg; t=1655118719;
+        bh=mx3pn1YskJhKscmJKJAUboZ3tuQwZvcQyJ2kGO9cZds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kPc+vqmm/3w/HMKqltp/B4D8SQE8k/l0nUiaNAULDhBt9cqkkMtcNZDQHTXzSklpy
-         fjbqDa0IwXxAM/IEd/iDwSPMe0xm1AxqOr4I5H9ZElQJIJjcGAOWteaTicN++s0GzK
-         45XG2I8l6lwlHK3CkSCA8iH9/u5yVMLtv37hUZBo=
+        b=hYez+POy2ZWuRJMLSqtD6lf/RQcrlBLRlYcSc6t0JtxAB6A7ASSWcgY/zolx2J7sZ
+         A4iHyw5cW96kCEW4YN648J59V56ZB0G8wBQEj90AwYSaJMDl1ipzcEEjqIQ4IInivc
+         XM5r+i1MOqYcxGWw4dOkIm7E8uIkbdKgGn7hBW4M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        stable@vger.kernel.org, Liu Ying <victor.liu@oss.nxp.com>,
+        Brian Norris <briannorris@chromium.org>,
         Sean Paul <seanpaul@chromium.org>,
         Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH 5.10 164/172] drm/bridge: analogix_dp: Support PSR-exit to disable transition
-Date:   Mon, 13 Jun 2022 12:12:04 +0200
-Message-Id: <20220613094923.242471484@linuxfoundation.org>
+Subject: [PATCH 5.10 165/172] drm/atomic: Force bridge self-refresh-exit on CRTC switch
+Date:   Mon, 13 Jun 2022 12:12:05 +0200
+Message-Id: <20220613094923.273674277@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
 References: <20220613094850.166931805@linuxfoundation.org>
@@ -57,107 +58,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Brian Norris <briannorris@chromium.org>
 
-commit ca871659ec1606d33b1e76de8d4cf924cf627e34 upstream.
+commit e54a4424925a27ed94dff046db3ce5caf4b1e748 upstream.
 
-Most eDP panel functions only work correctly when the panel is not in
-self-refresh. In particular, analogix_dp_bridge_disable() tends to hit
-AUX channel errors if the panel is in self-refresh.
+It's possible to change which CRTC is in use for a given
+connector/encoder/bridge while we're in self-refresh without fully
+disabling the connector/encoder/bridge along the way. This can confuse
+the bridge encoder/bridge, because
+(a) it needs to track the SR state (trying to perform "active"
+    operations while the panel is still in SR can be Bad(TM)); and
+(b) it tracks the SR state via the CRTC state (and after the switch, the
+    previous SR state is lost).
 
-Given the above, it appears that so far, this driver assumes that we are
-never in self-refresh when it comes time to fully disable the bridge.
-Prior to commit 846c7dfc1193 ("drm/atomic: Try to preserve the crtc
-enabled state in drm_atomic_remove_fb, v2."), this tended to be true,
-because we would automatically disable the pipe when framebuffers were
-removed, and so we'd typically disable the bridge shortly after the last
-display activity.
+Thus, we need to either somehow carry the self-refresh state over to the
+new CRTC, or else force an encoder/bridge self-refresh transition during
+such a switch.
 
-However, that is not guaranteed: an idle (self-refresh) display pipe may
-be disabled, e.g., when switching CRTCs. We need to exit PSR first.
+I choose the latter, so we disable the encoder (and exit PSR) before
+attaching it to the new CRTC (where we can continue to assume a clean
+(non-self-refresh) state).
 
-Stable notes: this is definitely a bugfix, and the bug has likely
-existed in some form for quite a while. It may predate the "PSR helpers"
-refactor, but the code looked very different before that, and it's
-probably not worth rewriting the fix.
+This fixes PSR issues seen on Rockchip RK3399 systems with
+drivers/gpu/drm/bridge/analogix/analogix_dp_core.c.
 
+Change in v2:
+
+- Drop "->enable" condition; this could possibly be "->active" to
+  reflect the intended hardware state, but it also is a little
+  over-specific. We want to make a transition through "disabled" any
+  time we're exiting PSR at the same time as a CRTC switch.
+  (Thanks Liu Ying)
+
+Cc: Liu Ying <victor.liu@oss.nxp.com>
 Cc: <stable@vger.kernel.org>
-Fixes: 6c836d965bad ("drm/rockchip: Use the helpers for PSR")
+Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 Reviewed-by: Sean Paul <seanpaul@chromium.org>
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220228122522.v2.1.I161904be17ba14526f78536ccd78b85818449b51@changeid
+Link: https://patchwork.freedesktop.org/patch/msgid/20220228122522.v2.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/analogix/analogix_dp_core.c |   42 +++++++++++++++++++--
- 1 file changed, 38 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/drm_atomic_helper.c |   16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-+++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-@@ -1269,6 +1269,25 @@ static int analogix_dp_bridge_attach(str
- }
+--- a/drivers/gpu/drm/drm_atomic_helper.c
++++ b/drivers/gpu/drm/drm_atomic_helper.c
+@@ -996,9 +996,19 @@ crtc_needs_disable(struct drm_crtc_state
+ 		return drm_atomic_crtc_effectively_active(old_state);
  
- static
-+struct drm_crtc *analogix_dp_get_old_crtc(struct analogix_dp_device *dp,
-+					  struct drm_atomic_state *state)
-+{
-+	struct drm_encoder *encoder = dp->encoder;
-+	struct drm_connector *connector;
-+	struct drm_connector_state *conn_state;
+ 	/*
+-	 * We need to run through the crtc_funcs->disable() function if the CRTC
+-	 * is currently on, if it's transitioning to self refresh mode, or if
+-	 * it's in self refresh mode and needs to be fully disabled.
++	 * We need to disable bridge(s) and CRTC if we're transitioning out of
++	 * self-refresh and changing CRTCs at the same time, because the
++	 * bridge tracks self-refresh status via CRTC state.
++	 */
++	if (old_state->self_refresh_active &&
++	    old_state->crtc != new_state->crtc)
++		return true;
 +
-+	connector = drm_atomic_get_old_connector_for_encoder(state, encoder);
-+	if (!connector)
-+		return NULL;
-+
-+	conn_state = drm_atomic_get_old_connector_state(state, connector);
-+	if (!conn_state)
-+		return NULL;
-+
-+	return conn_state->crtc;
-+}
-+
-+static
- struct drm_crtc *analogix_dp_get_new_crtc(struct analogix_dp_device *dp,
- 					  struct drm_atomic_state *state)
- {
-@@ -1448,14 +1467,16 @@ analogix_dp_bridge_atomic_disable(struct
- {
- 	struct drm_atomic_state *old_state = old_bridge_state->base.state;
- 	struct analogix_dp_device *dp = bridge->driver_private;
--	struct drm_crtc *crtc;
-+	struct drm_crtc *old_crtc, *new_crtc;
-+	struct drm_crtc_state *old_crtc_state = NULL;
- 	struct drm_crtc_state *new_crtc_state = NULL;
-+	int ret;
- 
--	crtc = analogix_dp_get_new_crtc(dp, old_state);
--	if (!crtc)
-+	new_crtc = analogix_dp_get_new_crtc(dp, old_state);
-+	if (!new_crtc)
- 		goto out;
- 
--	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, crtc);
-+	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, new_crtc);
- 	if (!new_crtc_state)
- 		goto out;
- 
-@@ -1464,6 +1485,19 @@ analogix_dp_bridge_atomic_disable(struct
- 		return;
- 
- out:
-+	old_crtc = analogix_dp_get_old_crtc(dp, old_state);
-+	if (old_crtc) {
-+		old_crtc_state = drm_atomic_get_old_crtc_state(old_state,
-+							       old_crtc);
-+
-+		/* When moving from PSR to fully disabled, exit PSR first. */
-+		if (old_crtc_state && old_crtc_state->self_refresh_active) {
-+			ret = analogix_dp_disable_psr(dp);
-+			if (ret)
-+				DRM_ERROR("Failed to disable psr (%d)\n", ret);
-+		}
-+	}
-+
- 	analogix_dp_bridge_disable(bridge);
- }
- 
++	/*
++	 * We also need to run through the crtc_funcs->disable() function if
++	 * the CRTC is currently on, if it's transitioning to self refresh
++	 * mode, or if it's in self refresh mode and needs to be fully
++	 * disabled.
+ 	 */
+ 	return old_state->active ||
+ 	       (old_state->self_refresh_active && !new_state->enable) ||
 
 

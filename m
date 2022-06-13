@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548445493F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809D75491BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385408AbiFMOmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S1359462AbiFMNUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385724AbiFMOkj (ORCPT
+        with ESMTP id S1376283AbiFMNKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:40:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4321EB0416;
-        Mon, 13 Jun 2022 04:50:26 -0700 (PDT)
+        Mon, 13 Jun 2022 09:10:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878CF6220E;
+        Mon, 13 Jun 2022 04:21:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AB54B80ECD;
-        Mon, 13 Jun 2022 11:50:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F36A4C34114;
-        Mon, 13 Jun 2022 11:50:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2CDC60B6E;
+        Mon, 13 Jun 2022 11:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4202C3411E;
+        Mon, 13 Jun 2022 11:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121023;
-        bh=RYGlt8XO8N6wGU/CPy6VpyAOXZydS1xA2/rRn4qKMHg=;
+        s=korg; t=1655119303;
+        bh=k+/pVrIT8QfqIWbATLK3wlWEq5hh0GwRx7H7a3D01Zw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k9Qs5/gMq/5svPzuyk2l+QjmMlW3l7z8rJngOwxXGgnWtfoTF8g6bwDKrQcJ1mi1z
-         G1xTm9r+WBGhSQkev4S3PklMT9KOnyt7pWIRRGGSGNcoQbeo+3w+FthnhUeLSAgHmt
-         7AZirLaKcUj9zTebYEw884+0fLelwxT2fT38xILE=
+        b=jm/UZVmeVfw6gotMCSrN7UeB6aYNoJHQdCdXYcR37+crrSSi+3Xe6eFVQsN8DNl9N
+         d6Wh/HR9HJrz5kjCKnS0wc6byY+qx+sulKjLRATmzTO7E9P+3op+JsT8bgwv7Zfe+k
+         JONjXC3qKIgn/jEq39R8IZHY0zp4tZ8KJaCA0FV0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Wang Cheng <wanngchenng@gmail.com>,
+        stable@vger.kernel.org, Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 220/298] staging: rtl8712: fix uninit-value in usb_read8() and friends
-Date:   Mon, 13 Jun 2022 12:11:54 +0200
-Message-Id: <20220613094931.775435794@linuxfoundation.org>
+Subject: [PATCH 5.15 213/247] scripts/gdb: change kernel config dumping method
+Date:   Mon, 13 Jun 2022 12:11:55 +0200
+Message-Id: <20220613094929.400111120@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,150 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Cheng <wanngchenng@gmail.com>
+From: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 
-[ Upstream commit d1b57669732d09da7e13ef86d058dab0cd57f6e0 ]
+[ Upstream commit 1f7a6cf6b07c74a17343c2559cd5f5018a245961 ]
 
-When r8712_usbctrl_vendorreq() returns negative, 'data' in
-usb_read{8,16,32} will not be initialized.
+MAGIC_START("IKCFG_ST") and MAGIC_END("IKCFG_ED") are moved out
+from the kernel_config_data variable.
 
-BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:643 [inline]
-BUG: KMSAN: uninit-value in string+0x4ec/0x6f0 lib/vsprintf.c:725
- string_nocheck lib/vsprintf.c:643 [inline]
- string+0x4ec/0x6f0 lib/vsprintf.c:725
- vsnprintf+0x2222/0x3650 lib/vsprintf.c:2806
- va_format lib/vsprintf.c:1704 [inline]
- pointer+0x18e6/0x1f70 lib/vsprintf.c:2443
- vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2810
- vprintk_store+0x537/0x2150 kernel/printk/printk.c:2158
- vprintk_emit+0x28b/0xab0 kernel/printk/printk.c:2256
- dev_vprintk_emit+0x5ef/0x6d0 drivers/base/core.c:4604
- dev_printk_emit+0x1dd/0x21f drivers/base/core.c:4615
- __dev_printk+0x3be/0x440 drivers/base/core.c:4627
- _dev_info+0x1ea/0x22f drivers/base/core.c:4673
- r871xu_drv_init+0x1929/0x3070 drivers/staging/rtl8712/usb_intf.c:401
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
- really_probe+0x6c7/0x1350 drivers/base/dd.c:621
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
- really_probe+0x6c7/0x1350 drivers/base/dd.c:621
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_new_device+0x1b91/0x2950 drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5363 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5507 [inline]
- port_event drivers/usb/core/hub.c:5665 [inline]
- hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5747
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2289
- worker_thread+0x10d0/0x2240 kernel/workqueue.c:2436
- kthread+0x3c7/0x500 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
+Thus, we parse kernel_config_data directly instead of considering
+offset of MAGIC_START and MAGIC_END.
 
-Local variable data created at:
- usb_read8+0x5d/0x130 drivers/staging/rtl8712/usb_ops.c:33
- r8712_read8+0xa5/0xd0 drivers/staging/rtl8712/rtl8712_io.c:29
-
-KMSAN: uninit-value in r871xu_drv_init
-https://syzkaller.appspot.com/bug?id=3cd92b1d85428b128503bfa7a250294c9ae00bd8
-
-Reported-by: <syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com>
-Tested-by: <syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com>
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
-Link: https://lore.kernel.org/r/b9b7a6ee02c02aa28054f5cf16129977775f3cd9.1652618244.git.wanngchenng@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 13610aa908dc ("kernel/configs: use .incbin directive to embed config_data.gz")
+Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8712/usb_ops.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+ scripts/gdb/linux/config.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/rtl8712/usb_ops.c b/drivers/staging/rtl8712/usb_ops.c
-index e64845e6adf3..af9966d03979 100644
---- a/drivers/staging/rtl8712/usb_ops.c
-+++ b/drivers/staging/rtl8712/usb_ops.c
-@@ -29,7 +29,8 @@ static u8 usb_read8(struct intf_hdl *intfhdl, u32 addr)
- 	u16 wvalue;
- 	u16 index;
- 	u16 len;
--	__le32 data;
-+	int status;
-+	__le32 data = 0;
- 	struct intf_priv *intfpriv = intfhdl->pintfpriv;
+diff --git a/scripts/gdb/linux/config.py b/scripts/gdb/linux/config.py
+index 90e1565b1967..8843ab3cbadd 100644
+--- a/scripts/gdb/linux/config.py
++++ b/scripts/gdb/linux/config.py
+@@ -24,9 +24,9 @@ class LxConfigDump(gdb.Command):
+             filename = arg
  
- 	request = 0x05;
-@@ -37,8 +38,10 @@ static u8 usb_read8(struct intf_hdl *intfhdl, u32 addr)
- 	index = 0;
- 	wvalue = (u16)(addr & 0x0000ffff);
- 	len = 1;
--	r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index, &data, len,
--				requesttype);
-+	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
-+					 &data, len, requesttype);
-+	if (status < 0)
-+		return 0;
- 	return (u8)(le32_to_cpu(data) & 0x0ff);
- }
- 
-@@ -49,7 +52,8 @@ static u16 usb_read16(struct intf_hdl *intfhdl, u32 addr)
- 	u16 wvalue;
- 	u16 index;
- 	u16 len;
--	__le32 data;
-+	int status;
-+	__le32 data = 0;
- 	struct intf_priv *intfpriv = intfhdl->pintfpriv;
- 
- 	request = 0x05;
-@@ -57,8 +61,10 @@ static u16 usb_read16(struct intf_hdl *intfhdl, u32 addr)
- 	index = 0;
- 	wvalue = (u16)(addr & 0x0000ffff);
- 	len = 2;
--	r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index, &data, len,
--				requesttype);
-+	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
-+					 &data, len, requesttype);
-+	if (status < 0)
-+		return 0;
- 	return (u16)(le32_to_cpu(data) & 0xffff);
- }
- 
-@@ -69,7 +75,8 @@ static u32 usb_read32(struct intf_hdl *intfhdl, u32 addr)
- 	u16 wvalue;
- 	u16 index;
- 	u16 len;
--	__le32 data;
-+	int status;
-+	__le32 data = 0;
- 	struct intf_priv *intfpriv = intfhdl->pintfpriv;
- 
- 	request = 0x05;
-@@ -77,8 +84,10 @@ static u32 usb_read32(struct intf_hdl *intfhdl, u32 addr)
- 	index = 0;
- 	wvalue = (u16)(addr & 0x0000ffff);
- 	len = 4;
--	r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index, &data, len,
--				requesttype);
-+	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
-+					 &data, len, requesttype);
-+	if (status < 0)
-+		return 0;
- 	return le32_to_cpu(data);
- }
+         try:
+-            py_config_ptr = gdb.parse_and_eval("kernel_config_data + 8")
+-            py_config_size = gdb.parse_and_eval(
+-                    "sizeof(kernel_config_data) - 1 - 8 * 2")
++            py_config_ptr = gdb.parse_and_eval("&kernel_config_data")
++            py_config_ptr_end = gdb.parse_and_eval("&kernel_config_data_end")
++            py_config_size = py_config_ptr_end - py_config_ptr
+         except gdb.error as e:
+             raise gdb.GdbError("Can't find config, enable CONFIG_IKCONFIG?")
  
 -- 
 2.35.1

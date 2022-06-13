@@ -2,138 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8CA549A4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0D4549A48
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242589AbiFMRm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        id S231321AbiFMRls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347514AbiFMRkq (ORCPT
+        with ESMTP id S1348062AbiFMRkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:40:46 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E795039B98
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=stMRjnyMVz9r4c
-        1ylukkPkM32KBZXfFXWJnNgmRy7Go=; b=wS+6TT/lgo8P/OK6rhMeB+eOn/m+3+
-        5M4TqDxf+JTy7c2dBNC7XluToCloHyvYn0vChnVyB9wVzBgLqfEZk+BL4zPwV5zb
-        ra2i876oJH1CKCgfi/bOe5ymPeZyNOwyBDdYiNOw18caO/O/XZULuzg82tUEKQDb
-        AL3D0fdhZdHw8=
-Received: (qmail 1304762 invoked from network); 13 Jun 2022 15:10:52 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jun 2022 15:10:52 +0200
-X-UD-Smtp-Session: l3s3148p1@o2Z2BFThogZZD+yY
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: renesas: spider-cpu: Switch from SCIF3 to HSCIF0
-Date:   Mon, 13 Jun 2022 15:10:32 +0200
-Message-Id: <20220613131033.10053-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220613131033.10053-1-wsa+renesas@sang-engineering.com>
-References: <20220613131033.10053-1-wsa+renesas@sang-engineering.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mon, 13 Jun 2022 13:40:53 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E85839800;
+        Mon, 13 Jun 2022 06:10:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VGHIWD._1655125849;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VGHIWD._1655125849)
+          by smtp.aliyun-inc.com;
+          Mon, 13 Jun 2022 21:10:50 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     akpm@linux-foundation.org, vbabka@suse.cz, ziy@nvidia.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, huanyi.xj@alibaba-inc.com,
+        guoren@kernel.org, zjb194813@alibaba-inc.com,
+        tianhu.hh@alibaba-inc.com,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [RESEND PATCH] mm: page_alloc: validate buddy before check the migratetype
+Date:   Mon, 13 Jun 2022 21:10:46 +0800
+Message-Id: <20220613131046.3009889-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Every loader before Linux utilizes HSCIF0 with a speed of 1843200bps.
-Make Linux behave the same.
+Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
+added buddy check code. But unfortunately, this fix isn't backported to
+linux-5.17.y and the former stable branches. The reason is it added wrong
+fixes message:
+     Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
+			   pageblocks with others")
+Actually, this issue is involved by commit:
+     commit d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+For RISC-V arch, the first 2M is reserved for sbi, so the start PFN is 512,
+but it got buddy PFN 0 for PFN 0x2000:
+     0 = 0x2000 ^ (1 << 12)
+With the illegal buddy PFN 0, it got an illegal buddy page, which caused
+crash in __get_pfnblock_flags_mask().
+
+With the patch, it can avoid the calling of get_pageblock_migratetype() if
+it isn't buddy page.
+
+Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
+Cc: stable@vger.kernel.org
+Reported-by: zjb194813@alibaba-inc.com
+Reported-by: tianhu.hh@alibaba-inc.com
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
 ---
- .../boot/dts/renesas/r8a779f0-spider-cpu.dtsi | 26 +++++++++----------
- .../boot/dts/renesas/r8a779f0-spider.dts      |  4 +--
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ mm/page_alloc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-index 41aa8591b3b1..3208d2148768 100644
---- a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-@@ -31,6 +31,14 @@ &extalr_clk {
- 	clock-frequency = <32768>;
- };
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index b1caa1c6c887..5b423caa68fd 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1129,6 +1129,9 @@ static inline void __free_one_page(struct page *page,
  
-+&hscif0 {
-+	pinctrl-0 = <&hscif0_pins>;
-+	pinctrl-names = "default";
+ 			buddy_pfn = __find_buddy_pfn(pfn, order);
+ 			buddy = page + (buddy_pfn - pfn);
 +
-+	uart-has-rtscts;
-+	status = "okay";
-+};
-+
- &i2c4 {
- 	pinctrl-0 = <&i2c4_pins>;
- 	pinctrl-names = "default";
-@@ -50,16 +58,16 @@ &pfc {
- 	pinctrl-0 = <&scif_clk_pins>;
- 	pinctrl-names = "default";
++			if (!page_is_buddy(page, buddy, order))
++				goto done_merging;
+ 			buddy_mt = get_pageblock_migratetype(buddy);
  
-+	hscif0_pins: hscif0 {
-+		groups = "hscif0_data", "hscif0_ctrl";
-+		function = "hscif0";
-+	};
-+
- 	i2c4_pins: i2c4 {
- 		groups = "i2c4";
- 		function = "i2c4";
- 	};
- 
--	scif3_pins: scif3 {
--		groups = "scif3_data", "scif3_ctrl";
--		function = "scif3";
--	};
--
- 	scif_clk_pins: scif_clk {
- 		groups = "scif_clk";
- 		function = "scif_clk";
-@@ -71,14 +79,6 @@ &rwdt {
- 	status = "okay";
- };
- 
--&scif3 {
--	pinctrl-0 = <&scif3_pins>;
--	pinctrl-names = "default";
--
--	uart-has-rtscts;
--	status = "okay";
--};
--
- &scif_clk {
- 	clock-frequency = <24000000>;
- };
-diff --git a/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts b/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts
-index 2e3b719cc749..954ba227bfa7 100644
---- a/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts
-+++ b/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts
-@@ -14,11 +14,11 @@ / {
- 	compatible = "renesas,spider-breakout", "renesas,spider-cpu", "renesas,r8a779f0";
- 
- 	aliases {
--		serial0 = &scif3;
-+		serial0 = &hscif0;
- 	};
- 
- 	chosen {
--		stdout-path = "serial0:115200n8";
-+		stdout-path = "serial0:1843200n8";
- 	};
- };
- 
+ 			if (migratetype != buddy_mt
 -- 
-2.35.1
+2.17.1
 

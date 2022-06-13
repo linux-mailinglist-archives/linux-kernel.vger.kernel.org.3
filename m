@@ -2,158 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424F754A0B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29A054A0B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351749AbiFMVAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S1351574AbiFMVAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351461AbiFMU5X (ORCPT
+        with ESMTP id S1351500AbiFMU5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:57:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45ACC767D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655152305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IemLxworfi1ssWHIr1XY0msbamo9wIJHBY45twSSanM=;
-        b=J+ZW3GAVN1168EMNv62nROgTgsmz2w06wYphfPnvlg03UMnmGNSowZ82JcvFT518UdkKXt
-        MgafnvWmUFZ5ZOqcAEd1pLvWSb2KIqeWv4PD1QodjVDBLBplmE0AYMBKA9gAvhh5i9ONQ2
-        LrQQFcVFVd+ZGr9OmerOSMxzQC7JL60=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-656-6p5MfE-EOjaATSRWTDN_xw-1; Mon, 13 Jun 2022 16:31:42 -0400
-X-MC-Unique: 6p5MfE-EOjaATSRWTDN_xw-1
-Received: by mail-ed1-f72.google.com with SMTP id eh10-20020a0564020f8a00b0042dd9bf7c57so4648494edb.17
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:31:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IemLxworfi1ssWHIr1XY0msbamo9wIJHBY45twSSanM=;
-        b=LSwp2h2Umk8XHxpSgPVohaERh0wW2oQxIhm16ocF/EszBs2UXc3fwv22XXhZCQJC4p
-         SKquZUNKVo1RHjqZCqwg/MfbI3IgTYp/UU6IqD9kU+FoomVhkG1VuvYOi3GRnYN5rVCM
-         HL7dRK5pRJjVlZjyzvD0GixSkFO97Il9ls/y5mz7qm70DFZuJbSGJhzf1xetRe7rrXF4
-         Dn977s63fPYU5cR40VAd1beDxmOVeX742m22kN9jusR83DKk/iOrONTVi/CCKexuIUv2
-         NXkTO6A06EIi/EJX3ggvYcGjzRByIX1uX07RpTM8FIcUi6jnSSK0g73HncawM+kCmxOU
-         oPDw==
-X-Gm-Message-State: AOAM533Bb/eH6jPlJD6+1OmfLnv5i8bASqyrBIK2oJ0jMGXlMoxdMHty
-        xaYeN4yAqa1HkUHOYlKcHJz3ouUtlCF7U7gDc/eX8BLYGqy+QnxuHujRyEnyPCHosmZ4J1mxmJh
-        n4qaVw3GX7QYOmM+T6SRk7TGq
-X-Received: by 2002:a17:906:1109:b0:711:d8fe:fe56 with SMTP id h9-20020a170906110900b00711d8fefe56mr1326754eja.261.1655152301307;
-        Mon, 13 Jun 2022 13:31:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxFYL6OPM1ZkwR1etQsbWL8guElE0GayChWZSl3pxUxYwdxlGsh/5LPiNVqQEj6Yg/QMdLsfg==
-X-Received: by 2002:a17:906:1109:b0:711:d8fe:fe56 with SMTP id h9-20020a170906110900b00711d8fefe56mr1326738eja.261.1655152301108;
-        Mon, 13 Jun 2022 13:31:41 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id u20-20020a509514000000b0042dd1d3d571sm5678676eda.26.2022.06.13.13.31.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 13:31:40 -0700 (PDT)
-Message-ID: <45d458f5-4f4e-9ebd-cb51-1a7b784248ec@redhat.com>
-Date:   Mon, 13 Jun 2022 22:31:39 +0200
+        Mon, 13 Jun 2022 16:57:45 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9496BCAC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655152381; x=1686688381;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Hgo8K21MzN+LWBGiA7mxFtkgEbgnEMtdd3J3tPjhRyI=;
+  b=BztTTTLEr4+NAB5sVPOb04f2TnsmTZkXwZ1wPeerBV3J5VnPFpUlftyA
+   UxNm3MRyfYLQi7Td7viBzFppM0IY9otuyTHDaL7/Nsuqin7fVHxMIHrt0
+   MXXiK2WJxP5BHw+YqsfPnS+5KEUWGwjjSn/wnIUdF4jEVNM/AF/V9tPpx
+   xNSIOTQtRFGgoxjhkvTBXwjyyLkmZDT7mCa7vYZPa2HHLEnSG+NsrZk5C
+   Hz3L1jRnJk9iluCzpagMnoFDuEv/D8r6cPdMnp74jION+HNe1YvQ2onK4
+   F3ptHFM8Qoo6p2I+7Via1JWJnxovOCWP0pNzWQJ6xWVqpF5VtZ+UiJD+r
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="340074743"
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="340074743"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 13:33:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="587988857"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 13:33:00 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0qk7-000L7N-Di;
+        Mon, 13 Jun 2022 20:32:59 +0000
+Date:   Tue, 14 Jun 2022 04:32:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/urgent] BUILD SUCCESS
+ 04193d590b390ec7a0592630f46d559ec6564ba1
+Message-ID: <62a79ecd.p6HXtZFWe1pAS4Xb%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 1/1] x86/PCI: Disable e820 usage for the resource
- allocation
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ferry Toth <ftoth@exalondelft.nl>
-References: <20220613201641.67640-1-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220613201641.67640-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/urgent
+branch HEAD: 04193d590b390ec7a0592630f46d559ec6564ba1  sched: Fix balance_push() vs __sched_setscheduler()
 
-On 6/13/22 22:16, Andy Shevchenko wrote:
-> The resource management improve for PCI on x86 broke booting of Intel MID
-> platforms. It seems that the current code removes all available resources
-> from the list and none of the PCI device may be initialized. Restore the
-> old behaviour by force disabling the e820 usage for the resource allocation.
-> 
-> Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
-> Depends-on: fa6dae5d8208 ("x86/PCI: Add kernel cmdline options to use/ignore E820 reserved regions")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+elapsed time: 725m
 
-Andy, thank you for the patch. Commit 4c5e242d3e93 has also been causing
-issues for other platforms, so I've submitted a revert of it here:
+configs tested: 105
+configs skipped: 3
 
-https://lore.kernel.org/linux-pci/20220612144325.85366-1-hdegoede@redhat.com/T/#u
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-can you please give the revert a try, and confirm that that fixes
-the Intel MID platform issue too ?
+gcc tested configs:
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20220613
+arm                        trizeps4_defconfig
+arm                       aspeed_g5_defconfig
+arm                            mps2_defconfig
+sh                        edosk7705_defconfig
+sh                         apsh4a3a_defconfig
+arm                           h3600_defconfig
+powerpc                     mpc83xx_defconfig
+mips                          rb532_defconfig
+powerpc                         ps3_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                          rsk7203_defconfig
+sh                      rts7751r2d1_defconfig
+powerpc                     tqm8555_defconfig
+powerpc                      cm5200_defconfig
+xtensa                    smp_lx200_defconfig
+ia64                      gensparse_defconfig
+mips                     loongson1b_defconfig
+openrisc                         alldefconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+x86_64               randconfig-k001-20220613
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                                 defconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a012-20220613
+x86_64               randconfig-a011-20220613
+x86_64               randconfig-a013-20220613
+x86_64               randconfig-a016-20220613
+x86_64               randconfig-a015-20220613
+x86_64               randconfig-a014-20220613
+i386                 randconfig-a012-20220613
+i386                 randconfig-a011-20220613
+i386                 randconfig-a013-20220613
+i386                 randconfig-a014-20220613
+i386                 randconfig-a016-20220613
+i386                 randconfig-a015-20220613
+s390                 randconfig-r044-20220613
+riscv                randconfig-r042-20220613
+arc                  randconfig-r043-20220613
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
 
-Regards,
+clang tested configs:
+arm                        mvebu_v5_defconfig
+arm                         lpc32xx_defconfig
+mips                           mtx1_defconfig
+x86_64               randconfig-a003-20220613
+x86_64               randconfig-a006-20220613
+x86_64               randconfig-a001-20220613
+x86_64               randconfig-a005-20220613
+x86_64               randconfig-a002-20220613
+x86_64               randconfig-a004-20220613
+i386                 randconfig-a001-20220613
+i386                 randconfig-a004-20220613
+i386                 randconfig-a002-20220613
+i386                 randconfig-a003-20220613
+i386                 randconfig-a006-20220613
+i386                 randconfig-a005-20220613
 
-Hans
-
-
-
-> ---
->  arch/x86/include/asm/pci_x86.h | 1 +
->  arch/x86/pci/acpi.c            | 2 +-
->  arch/x86/pci/intel_mid_pci.c   | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
-> index f52a886d35cf..503f83fbc686 100644
-> --- a/arch/x86/include/asm/pci_x86.h
-> +++ b/arch/x86/include/asm/pci_x86.h
-> @@ -126,6 +126,7 @@ extern const struct pci_raw_ops *raw_pci_ext_ops;
->  extern const struct pci_raw_ops pci_mmcfg;
->  extern const struct pci_raw_ops pci_direct_conf1;
->  extern bool port_cf9_safe;
-> +extern bool pci_use_e820;
->  
->  /* arch_initcall level */
->  #ifdef CONFIG_PCI_DIRECT
-> diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
-> index a4f43054bc79..ac2f220d50fc 100644
-> --- a/arch/x86/pci/acpi.c
-> +++ b/arch/x86/pci/acpi.c
-> @@ -20,7 +20,7 @@ struct pci_root_info {
->  #endif
->  };
->  
-> -static bool pci_use_e820 = true;
-> +bool pci_use_e820 = true;
->  static bool pci_use_crs = true;
->  static bool pci_ignore_seg;
->  
-> diff --git a/arch/x86/pci/intel_mid_pci.c b/arch/x86/pci/intel_mid_pci.c
-> index 8edd62206604..7869b86bff04 100644
-> --- a/arch/x86/pci/intel_mid_pci.c
-> +++ b/arch/x86/pci/intel_mid_pci.c
-> @@ -313,6 +313,7 @@ int __init intel_mid_pci_init(void)
->  	pcibios_enable_irq = intel_mid_pci_irq_enable;
->  	pcibios_disable_irq = intel_mid_pci_irq_disable;
->  	pci_root_ops = intel_mid_pci_ops;
-> +	pci_use_e820 = false;
->  	pci_soc_mode = 1;
->  	/* Continue with standard init */
->  	acpi_noirq_set();
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

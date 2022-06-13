@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287BF5492F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324B35495E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243334AbiFMKWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        id S1382958AbiFMOWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243172AbiFMKUu (ORCPT
+        with ESMTP id S1383564AbiFMOQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:20:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1921E18;
-        Mon, 13 Jun 2022 03:17:39 -0700 (PDT)
+        Mon, 13 Jun 2022 10:16:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4799EB7D;
+        Mon, 13 Jun 2022 04:43:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8AF9B80E5C;
-        Mon, 13 Jun 2022 10:17:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4B2C34114;
-        Mon, 13 Jun 2022 10:17:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B81D613F9;
+        Mon, 13 Jun 2022 11:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697C4C34114;
+        Mon, 13 Jun 2022 11:43:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115456;
-        bh=3zyHo8E2lTCNCDsARKLRjHsXBpTO5uFQeK4ZbSZk0rs=;
+        s=korg; t=1655120606;
+        bh=TGB8fvzfl3YhMocGqLbDYunFAdllXXLShxgvHAoCEIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oi1ZERJ336p1pwujH6RBnzq8hQdcG+msTT/ylMNO+hsDE+TMgYNwdq8CqX8uOFOol
-         q2QWjP/zSniwz+bBLO7MxRNvuefH0oO4zDcwfDDuMKGHtCkb8gKZnTjChS3CrABGvI
-         SqemY+EuyxRRDBpL5lSVitwLW92Y9jW9Z3bT8dHg=
+        b=NmyKRuO26tFJjZB5ED4Haknjuv1NkE0yCMZ873n8xYLruFOhj73rq0SUJPi3VlWwo
+         aM2r7lNiwu8tjPC1QPlpV51h6Vz+YssSANl0okWxrn/eIRaxr3V2jkxLk5pRpyYIPV
+         ChUQ7V2b49rLvGjH31kxNDRZA7KD+95CAGBxY+Ac=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.9 080/167] ext4: verify dir block before splitting it
+        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 060/298] serial: digicolor-usart: Dont allow CS5-6
 Date:   Mon, 13 Jun 2022 12:09:14 +0200
-Message-Id: <20220613094859.679175410@linuxfoundation.org>
+Message-Id: <20220613094926.769236669@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,88 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 46c116b920ebec58031f0a78c5ea9599b0d2a371 upstream.
+[ Upstream commit fd63031b8c0763addcecdefe0e0c59d49646204e ]
 
-Before splitting a directory block verify its directory entries are sane
-so that the splitting code does not access memory it should not.
+Only CS7 and CS8 seem supported but CSIZE is not sanitized to CS8 in
+the default: block.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220518093332.13986-1-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
+
+Fixes: 5930cb3511df (serial: driver for Conexant Digicolor USART)
+Acked-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-3-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/namei.c |   32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ drivers/tty/serial/digicolor-usart.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -270,9 +270,9 @@ static struct dx_frame *dx_probe(struct
- 				 struct dx_hash_info *hinfo,
- 				 struct dx_frame *frame);
- static void dx_release(struct dx_frame *frames);
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
--		       struct dx_map_entry map[]);
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
-+		       struct dx_map_entry *map_tail);
- static void dx_sort_map(struct dx_map_entry *map, unsigned count);
- static struct ext4_dir_entry_2 *dx_move_dirents(char *from, char *to,
- 		struct dx_map_entry *offsets, int count, unsigned blocksize);
-@@ -1185,15 +1185,23 @@ static inline int search_dirblock(struct
-  * Create map of hash values, offsets, and sizes, stored at end of block.
-  * Returns number of entries mapped.
-  */
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
- 		       struct dx_map_entry *map_tail)
- {
- 	int count = 0;
--	char *base = (char *) de;
-+	struct ext4_dir_entry_2 *de = (struct ext4_dir_entry_2 *)bh->b_data;
-+	unsigned int buflen = bh->b_size;
-+	char *base = bh->b_data;
- 	struct dx_hash_info h = *hinfo;
- 
--	while ((char *) de < base + blocksize) {
-+	if (ext4_has_metadata_csum(dir->i_sb))
-+		buflen -= sizeof(struct ext4_dir_entry_tail);
-+
-+	while ((char *) de < base + buflen) {
-+		if (ext4_check_dir_entry(dir, NULL, de, bh, base, buflen,
-+					 ((char *)de) - base))
-+			return -EFSCORRUPTED;
- 		if (de->name_len && de->inode) {
- 			ext4fs_dirhash(de->name, de->name_len, &h);
- 			map_tail--;
-@@ -1203,8 +1211,7 @@ static int dx_make_map(struct inode *dir
- 			count++;
- 			cond_resched();
- 		}
--		/* XXX: do we need to check rec_len == 0 case? -Chris */
--		de = ext4_next_entry(de, blocksize);
-+		de = ext4_next_entry(de, dir->i_sb->s_blocksize);
+diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
+index c7f81aa1ce91..5fea9bf86e85 100644
+--- a/drivers/tty/serial/digicolor-usart.c
++++ b/drivers/tty/serial/digicolor-usart.c
+@@ -309,6 +309,8 @@ static void digicolor_uart_set_termios(struct uart_port *port,
+ 	case CS8:
+ 	default:
+ 		config |= UA_CONFIG_CHAR_LEN;
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
+ 		break;
  	}
- 	return count;
- }
-@@ -1755,8 +1762,11 @@ static struct ext4_dir_entry_2 *do_split
  
- 	/* create map in the end of data2 block */
- 	map = (struct dx_map_entry *) (data2 + blocksize);
--	count = dx_make_map(dir, (struct ext4_dir_entry_2 *) data1,
--			     blocksize, hinfo, map);
-+	count = dx_make_map(dir, *bh, hinfo, map);
-+	if (count < 0) {
-+		err = count;
-+		goto journal_error;
-+	}
- 	map -= count;
- 	dx_sort_map(map, count);
- 	/* Ensure that neither split block is over half full */
+-- 
+2.35.1
+
 
 

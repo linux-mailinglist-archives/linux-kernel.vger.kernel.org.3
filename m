@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05DA5481E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69505481C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239880AbiFMIQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S239891AbiFMIQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbiFMIQu (ORCPT
+        with ESMTP id S239810AbiFMIQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:16:50 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D46213D20;
-        Mon, 13 Jun 2022 01:16:49 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id d14so6003126eda.12;
-        Mon, 13 Jun 2022 01:16:48 -0700 (PDT)
+        Mon, 13 Jun 2022 04:16:51 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58AD13D20;
+        Mon, 13 Jun 2022 01:16:50 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g25so9607194ejh.9;
+        Mon, 13 Jun 2022 01:16:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=cykRIEYlm/tBwzENkk2TswJzyqXZCOuXhPNHpNdfGrc=;
-        b=PNNSc/2tcFUqXn+STVjJrt3YBVbm04LZM/EczU3wx+RhleoVGwex112Q6q79dxZKBG
-         1zHrKWORgdIecXTx58b97Y5FqcJgG/A8FJAeozNHBZQpuM5uQGJgaTorXGdK5EBVe4iA
-         6qgbddL7W/kHyxtkqgGsFTjOqyKqaLZWHORWLtIrC2nMw6XXge5RD8q7csa03u3qBBej
-         Yf62uELtb4UgL+2fYfehn0W4BapkHeeo3AAYrAALTCnqCNHWpT0W1SsK3BRDm2TnZ7vC
-         qbtBQ5CmeL22g42cWDivjP0OrV2m3P7iBun5l3rrKZii44RO8dRcX6y7hR1i/408A+Lf
-         YXCw==
+        bh=sX3VNzAmkYzYiqkFhxZchgXDARr628j7uPugdvraEco=;
+        b=Hkwr/8vIIXL5Mip8iO4G4zSC+ar+w5ErL+9CwekPh9QYH2qjWB6EiXfLYOWiDwwRrc
+         xkRYPUR51bdxfw1B+LF6b/efmygJuHEPYCdsJRIxwH4bRin4O0794/gYtYNyOvVqvvcK
+         Dq0kS2hy3ByK32doeyvTQmaPVfGC+I4/z+wM/bJ3lUfu98dP+P+QMZ85bzDvyqSXGX/L
+         wr6HKiimrQXasbAeW1BTuAFa/dcadKri1AEk7q5Ztq1T0WQTyZGHWho/QkGY7DSCAAT1
+         JUcZaaO/Wr9DNZirpYsfWdMcGd4SCLcvuo/Lmwi31lrjOtIwS3bG0MYdfkc9IcvsKqqy
+         lcaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=cykRIEYlm/tBwzENkk2TswJzyqXZCOuXhPNHpNdfGrc=;
-        b=dlEHhsj83t3EoZk+tJT3wfUg1hNtueBRcIJswaJu985lopmZVHCvbez9JZpsULknfs
-         dM+XsQVlm4XCJqZvrmyb+jwFRfVZuf+qJvOFXPQJG4Ay7u+hlqUClAV8dn8WKLzb5n0e
-         /plkCdHFM29agqLnKbOR0oeq6POpcixxWPXkJRg6S+IfhsuxQsZ3cDgZ+fPRviAUfnna
-         ahZzfWY5c/msKuZvb+MKvPazKkqRjDK6PiqrVFNZIngSnN9/DpknCZX8mZeymwRHvYoE
-         gKHjgVCwRs1LR/3bHx6o7HWQnYj//ckq1s+Rujn7Owa4VqTPAWlX9CuL0NEAkFpiF06P
-         0/mg==
-X-Gm-Message-State: AOAM532Oxx+g1HCz+6bQLC3LOOrMDDLqce8iOKli0eLYD0M3Q13yXJhg
-        Fes8pYua0AqN9s51E5ltuhc=
-X-Google-Smtp-Source: ABdhPJxU5ol0WWdzFAKE+XHFc3NjaWzaZAwloGvNiBa3wKLi5OHbCKAKFFzQxJuRc2pgxbQ/cFGv8w==
-X-Received: by 2002:a05:6402:500b:b0:431:78d0:bf9d with SMTP id p11-20020a056402500b00b0043178d0bf9dmr36550223eda.184.1655108207464;
-        Mon, 13 Jun 2022 01:16:47 -0700 (PDT)
+        bh=sX3VNzAmkYzYiqkFhxZchgXDARr628j7uPugdvraEco=;
+        b=cn5uka6eCGM2yiXWga3pUgA1/4xv6Luqesr/xOYjbAL3iqweMZLGlLuA5ZQX/qwHzO
+         IRPljrmrB3cMNG1P8Ixixe4SwwZxM6FlHSvNnCRiBxQGfLHYoUSlieXYLVDyVjaw5rcQ
+         PGytAe7AhKI4ZPxwyIb0E99lHE4/gpGnYndRmJia983ORrTmyw1zgMNRdlTA/pJ+gtuD
+         DJWIsjjNmHQEx6r6d5fe5niBzGsd4Du//4izHaSMl0Oc/PvYdUcMVnNjUBbnBTt0GL91
+         nyoYsxXA4yZlvwoMVIh5jHXy+aI8eEdVLtymj9FG7FvPbMnc2RrEHOZ/MTa30CapfzNe
+         Onyw==
+X-Gm-Message-State: AOAM531ytvHndYYS2zVEQEvKI5Lc7auT9xHkwclSockYfjY7RKNnaoIt
+        IE8+Dtyoc5B/OQ5NNoH7wG0=
+X-Google-Smtp-Source: ABdhPJwxwsPJ+0RsHyGuX9PvEr4j71MqXSuHPr4kTLQFvDVZMWdBiEtg0GVEXKn4ubv+3k/XkujCKw==
+X-Received: by 2002:a17:906:5347:b0:712:24cb:b414 with SMTP id j7-20020a170906534700b0071224cbb414mr12953423ejo.341.1655108209302;
+        Mon, 13 Jun 2022 01:16:49 -0700 (PDT)
 Received: from felia.fritz.box (200116b8260df50089ef6db2443adc92.dip.versatel-1u1.de. [2001:16b8:260d:f500:89ef:6db2:443a:dc92])
-        by smtp.gmail.com with ESMTPSA id x15-20020aa7d38f000000b0042dd1584e74sm4397781edq.90.2022.06.13.01.16.46
+        by smtp.gmail.com with ESMTPSA id x15-20020aa7d38f000000b0042dd1584e74sm4397781edq.90.2022.06.13.01.16.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 01:16:47 -0700 (PDT)
+        Mon, 13 Jun 2022 01:16:48 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, Joe Perches <joe@perches.com>,
@@ -59,9 +59,9 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         devicetree@vger.kernel.org, patches@opensource.cirrus.com,
         kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 1/2] dt-bindings: clock: Move lochnagar.h to dt-bindings/clock
-Date:   Mon, 13 Jun 2022 10:16:31 +0200
-Message-Id: <20220613081632.2159-2-lukas.bulwahn@gmail.com>
+Subject: [PATCH 2/2] dt-bindings: clock: Move versaclock.h to dt-bindings/clock
+Date:   Mon, 13 Jun 2022 10:16:32 +0200
+Message-Id: <20220613081632.2159-3-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220613081632.2159-1-lukas.bulwahn@gmail.com>
 References: <20220613081632.2159-1-lukas.bulwahn@gmail.com>
@@ -75,12 +75,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the clock-related dt-binding header files are located in
-include/dt-bindings/clock. It would be good to keep all the similar
+Most of the clock related dt-binding header files are located in
+dt-bindings/clock folder. It would be good to keep all the similar
 header files at a single location.
 
-This was discovered while investigating the state of ownership of the files
-in include/dt-bindings/ according to the MAINTAINERS file.
+This was discovered while investigating the state of ownership of the
+files in include/dt-bindings/ according to the MAINTAINERS file.
 
 This change here is similar to commit 8e28918a85a0 ("dt-bindings: clock:
 Move ti-dra7-atl.h to dt-bindings/clock") and commit 35d35aae8177
@@ -88,56 +88,79 @@ Move ti-dra7-atl.h to dt-bindings/clock") and commit 35d35aae8177
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml | 2 +-
- MAINTAINERS                                                 | 2 +-
- drivers/clk/clk-lochnagar.c                                 | 2 +-
- include/dt-bindings/{clk => clock}/lochnagar.h              | 0
- 4 files changed, 3 insertions(+), 3 deletions(-)
- rename include/dt-bindings/{clk => clock}/lochnagar.h (100%)
+ Documentation/devicetree/bindings/clock/idt,versaclock5.yaml | 4 ++--
+ arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi    | 2 +-
+ arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi          | 2 +-
+ drivers/clk/clk-versaclock5.c                                | 2 +-
+ include/dt-bindings/{clk => clock}/versaclock.h              | 0
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+ rename include/dt-bindings/{clk => clock}/versaclock.h (100%)
 
-diff --git a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-index ad285cb480c9..ef4814ced8db 100644
---- a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-+++ b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-@@ -261,7 +261,7 @@ additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+index 7c331bfbe370..c1b838524064 100644
+--- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
++++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+@@ -108,7 +108,7 @@ patternProperties:
+     properties:
+       idt,mode:
+         description:
+-          The output drive mode. Values defined in dt-bindings/clk/versaclock.h
++          The output drive mode. Values defined in dt-bindings/clock/versaclock.h
+         $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 6
+@@ -151,7 +151,7 @@ additionalProperties: false
  
  examples:
    - |
--    #include <dt-bindings/clk/lochnagar.h>
-+    #include <dt-bindings/clock/lochnagar.h>
-     #include <dt-bindings/pinctrl/lochnagar.h>
-     i2c@e0004000 {
-         #address-cells = <1>;
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 91e9cd30326d..86e6198b206f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4801,7 +4801,7 @@ F:	drivers/hwmon/lochnagar-hwmon.c
- F:	drivers/mfd/lochnagar-i2c.c
- F:	drivers/pinctrl/cirrus/pinctrl-lochnagar.c
- F:	drivers/regulator/lochnagar-regulator.c
--F:	include/dt-bindings/clk/lochnagar.h
-+F:	include/dt-bindings/clock/lochnagar.h
- F:	include/dt-bindings/pinctrl/lochnagar.h
- F:	include/linux/mfd/lochnagar*
- F:	sound/soc/codecs/lochnagar-sc.c
-diff --git a/drivers/clk/clk-lochnagar.c b/drivers/clk/clk-lochnagar.c
-index 565bcd0cdde9..80944bf482e9 100644
---- a/drivers/clk/clk-lochnagar.c
-+++ b/drivers/clk/clk-lochnagar.c
-@@ -19,7 +19,7 @@
- #include <linux/mfd/lochnagar1_regs.h>
- #include <linux/mfd/lochnagar2_regs.h>
+-    #include <dt-bindings/clk/versaclock.h>
++    #include <dt-bindings/clock/versaclock.h>
  
--#include <dt-bindings/clk/lochnagar.h>
-+#include <dt-bindings/clock/lochnagar.h>
+     /* 25MHz reference crystal */
+     ref25: ref25m {
+diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
+index 63e7a39e100e..8166e3c1ff4e 100644
+--- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
++++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
+@@ -5,7 +5,7 @@
  
- #define LOCHNAGAR_NUM_CLOCKS	(LOCHNAGAR_SPDIF_CLKOUT + 1)
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
+-#include <dt-bindings/clk/versaclock.h>
++#include <dt-bindings/clock/versaclock.h>
  
-diff --git a/include/dt-bindings/clk/lochnagar.h b/include/dt-bindings/clock/lochnagar.h
+ / {
+ 	backlight_lvds: backlight-lvds {
+diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
+index f5c1d74b738b..d3fc8ffd5b4c 100644
+--- a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
++++ b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
+@@ -4,7 +4,7 @@
+  */
+ 
+ #include <dt-bindings/gpio/gpio.h>
+-#include <dt-bindings/clk/versaclock.h>
++#include <dt-bindings/clock/versaclock.h>
+ 
+ / {
+ 	memory@48000000 {
+diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+index e7be3e54b9be..b8c556dbeba0 100644
+--- a/drivers/clk/clk-versaclock5.c
++++ b/drivers/clk/clk-versaclock5.c
+@@ -24,7 +24,7 @@
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+ 
+-#include <dt-bindings/clk/versaclock.h>
++#include <dt-bindings/clock/versaclock.h>
+ 
+ /* VersaClock5 registers */
+ #define VC5_OTP_CONTROL				0x00
+diff --git a/include/dt-bindings/clk/versaclock.h b/include/dt-bindings/clock/versaclock.h
 similarity index 100%
-rename from include/dt-bindings/clk/lochnagar.h
-rename to include/dt-bindings/clock/lochnagar.h
+rename from include/dt-bindings/clk/versaclock.h
+rename to include/dt-bindings/clock/versaclock.h
 -- 
 2.17.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E95549239
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4511548BF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355025AbiFMLhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        id S1382240AbiFMOUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354664AbiFML3u (ORCPT
+        with ESMTP id S1382755AbiFMOOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558172AC76;
-        Mon, 13 Jun 2022 03:45:22 -0700 (PDT)
+        Mon, 13 Jun 2022 10:14:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC2243EF7;
+        Mon, 13 Jun 2022 04:42:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD2D961252;
-        Mon, 13 Jun 2022 10:45:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB392C34114;
-        Mon, 13 Jun 2022 10:45:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 974CE61367;
+        Mon, 13 Jun 2022 11:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2DBCC34114;
+        Mon, 13 Jun 2022 11:42:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117121;
-        bh=OMj39jS06hxaG1nDHlRURp1yNmU2OPNlfpnor1SiATM=;
+        s=korg; t=1655120549;
+        bh=b1lknIl+kFp+TIevhQfI3vvWhmS8MpjztMwtA0fOh50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t72lEPFGCYilfLBZZ4NM6mefe/xaztGU1cCN9RNzmsfDCqn0HavrFuFvHo+Wn0KDl
-         o0sLvE7u2+fSZN//JT+jeSAWX/BF63hfvm8AQApjcx52qIYVcgsCqnwWNPG/Hlw1jy
-         p4MUm2nTOxj7CFvGJA1GMR6l9Kf7ZDO/QHcKDElQ=
+        b=bzQdXipovZuH0TDaUnZcefdG377kePoOC67NlQAbaKFf6yv+3PnDuZRb1O6vrksNC
+         gm8Khgwp2BYUHurnoCUOdAhbok6onQ0CkgW1uNU7aVVej9zmxFdH5Zn31PuaGWFKnn
+         4x9dXZuDM3dY3Pjqvn2BkE7Zm8q93ewF2IXIbJAM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 294/411] usb: dwc3: pci: Fix pm_runtime_get_sync() error checking
+        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
+        Jan Kara <jack@suse.cz>, Ming Lei <ming.lei@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 073/298] blk-mq: dont touch ->tagset in blk_mq_get_sq_hctx
 Date:   Mon, 13 Jun 2022 12:09:27 +0200
-Message-Id: <20220613094937.574792706@linuxfoundation.org>
+Message-Id: <20220613094927.162000910@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yongjun <zhengyongjun3@huawei.com>
+From: Ming Lei <ming.lei@redhat.com>
 
-[ Upstream commit a03e2ddab8e735e2cc315609b297b300e9cc60d2 ]
+[ Upstream commit 5d05426e2d5fd7df8afc866b78c36b37b00188b7 ]
 
-If the device is already in a runtime PM enabled state
-pm_runtime_get_sync() will return 1, so a test for negative
-value should be used to check for errors.
+blk_mq_run_hw_queues() could be run when there isn't queued request and
+after queue is cleaned up, at that time tagset is freed, because tagset
+lifetime is covered by driver, and often freed after blk_cleanup_queue()
+returns.
 
-Fixes: 8eed00b237a28 ("usb: dwc3: pci: Runtime resume child device from wq")
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-Link: https://lore.kernel.org/r/20220422062652.10575-1-zhengyongjun3@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+So don't touch ->tagset for figuring out current default hctx by the mapping
+built in request queue, so use-after-free on tagset can be avoided. Meantime
+this way should be fast than retrieving mapping from tagset.
+
+Cc: "yukuai (C)" <yukuai3@huawei.com>
+Cc: Jan Kara <jack@suse.cz>
+Fixes: b6e68ee82585 ("blk-mq: Improve performance of non-mq IO schedulers with multiple HW queues")
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220522122350.743103-1-ming.lei@redhat.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/blk-mq.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 99964f96ff74..955bf820f410 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -211,7 +211,7 @@ static void dwc3_pci_resume_work(struct work_struct *work)
- 	int ret;
- 
- 	ret = pm_runtime_get_sync(&dwc3->dev);
--	if (ret) {
-+	if (ret < 0) {
- 		pm_runtime_put_sync_autosuspend(&dwc3->dev);
- 		return;
- 	}
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 0aa20df31e36..6afe0cd128ac 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2114,8 +2114,7 @@ static bool blk_mq_has_sqsched(struct request_queue *q)
+  */
+ static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
+ {
+-	struct blk_mq_hw_ctx *hctx;
+-
++	struct blk_mq_ctx *ctx = blk_mq_get_ctx(q);
+ 	/*
+ 	 * If the IO scheduler does not respect hardware queues when
+ 	 * dispatching, we just don't bother with multiple HW queues and
+@@ -2123,8 +2122,8 @@ static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
+ 	 * just causes lock contention inside the scheduler and pointless cache
+ 	 * bouncing.
+ 	 */
+-	hctx = blk_mq_map_queue_type(q, HCTX_TYPE_DEFAULT,
+-				     raw_smp_processor_id());
++	struct blk_mq_hw_ctx *hctx = blk_mq_map_queue(q, 0, ctx);
++
+ 	if (!blk_mq_hctx_stopped(hctx))
+ 		return hctx;
+ 	return NULL;
 -- 
 2.35.1
 

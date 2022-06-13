@@ -2,318 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB62548374
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F65548344
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240841AbiFMJmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S240971AbiFMJnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240971AbiFMJmY (ORCPT
+        with ESMTP id S239350AbiFMJnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:42:24 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850FE2661;
-        Mon, 13 Jun 2022 02:42:23 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id d14so6286556eda.12;
-        Mon, 13 Jun 2022 02:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2LqYjtNa4isqkWB+lPEDKcNdn4CAaL+chKNUM4maY+k=;
-        b=XnS8r3wJAaKnAFyVSRHeszHiRS7oujbPmEUlVGTWsIw6zTh0IIjtFkASoexxmpXok+
-         L3Dc8XV8KhPQAjxWp0N/2umOyzfA2WVepb1peevus/ai3wXp98MfSqM6idWVWKOxnISZ
-         posaz3qR50twBk4uJrbuk35bfd9ew/nPkSAdUjJPqafUPXDYZJS+p1KnkAFVFLufvHcc
-         vtf77sQDVPaqBqZDXOt4fN1T0/ylMFl0WxjqbTxi8MmAFZEq2+GBSQr+F1WDNiLYDVds
-         +IhBCUtpD4abZHfx6k8m9tdccmBIC9OnCpUImi2PClKwkFQEKAanTmkNlQ2/G7Pw/4hb
-         2aTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2LqYjtNa4isqkWB+lPEDKcNdn4CAaL+chKNUM4maY+k=;
-        b=MbsUBjtk7Xx070JJY1ddNT79otQ9b3F1zXTXxR2RGq3pKicWh2j7Pr+3evqMXrYJiw
-         gJrZhordclkKaNQUBecIiy0UPucdqSIRCTz3iieUCoZeViqq08Gv7oAcwRfps4559I6q
-         Hg4O+Tls089w5DHKIcCCu4/5oXHBwp271DoHmDySJiX1ZkmI3O8eTWCVeFGIX/2QyjJV
-         oepU2ngfco+IcwpjRu5heQ82eogXkNLE2BFWm/QVc2Y/fOA7KedIMMX9CzkDSoLTJ/N6
-         2b5bcPlrtsyRLCfZlGW0SUbI5hfW08/4sbNW1aAEliDNifF5DphWS+3f9fJp0ZA73gVB
-         Z5tQ==
-X-Gm-Message-State: AOAM532LK97Jn5Vagu6y2/KCfZIOj/1eQer0guwHOYeKJ6eGuCKfV5T1
-        FGu8Uy0Id/aHMIOnuhLw+SM=
-X-Google-Smtp-Source: ABdhPJyyzOML3rpWfzeIv72NuFkLie+UxcIx7S+c1/2MRduaLrbeZfwUzG5NjKj2eFJw7Ww9aiE1qg==
-X-Received: by 2002:a05:6402:1cb5:b0:42d:ddda:7459 with SMTP id cz21-20020a0564021cb500b0042dddda7459mr65754064edb.16.1655113341961;
-        Mon, 13 Jun 2022 02:42:21 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id ko9-20020a170907986900b006fef5088792sm3632946ejc.108.2022.06.13.02.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 02:42:21 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 12:42:19 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [RFC Patch net-next v2 09/15] net: dsa: microchip: update fdb
- add/del/dump in ksz_common
-Message-ID: <20220613094219.zmgbtebf32x42md6@skbuf>
-References: <20220530104257.21485-1-arun.ramadoss@microchip.com>
- <20220530104257.21485-10-arun.ramadoss@microchip.com>
+        Mon, 13 Jun 2022 05:43:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D61FD3E;
+        Mon, 13 Jun 2022 02:43:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9765B61381;
+        Mon, 13 Jun 2022 09:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049FEC34114;
+        Mon, 13 Jun 2022 09:43:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655113388;
+        bh=ulBYdazc2wFX860EwjmZxCF5MO+a9+ET23gEIOuI9uU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tsoF5PUgEdm+pCcqk1wEO/j63pF1rIMskWsdXvKiw9oelaPCL63JkGSUZBVCW+Up8
+         OdU4GgnikAs86gCW772iq2GdT/k7Lw+tK0SF9qk5BpHuIEaEFUzwMfJZkEeMuabWWC
+         23ktv6pcWgBceNYn0HIZowp9HjxC3oKlMAX9/XsQ1JxxQXpaOZ4Yxdc/d8yBv+Flew
+         vBwy+eYVEmw4iXocJ6jhRQd+xEfLUKwyl2ToUDONmUKCOX4odS9gvX9y1u0vN7Lr9F
+         F28Txo+thuVrxRbkDkQXaIUYDC+KI6tPhQhBsX1pIERKoIU28SNqeSzj+8kzUA1+32
+         kWU82zQ+k1m+w==
+Received: by mail-yb1-f173.google.com with SMTP id r82so8886411ybc.13;
+        Mon, 13 Jun 2022 02:43:07 -0700 (PDT)
+X-Gm-Message-State: AOAM533GFsvjR/HbyF8YhyZkTVf7bUMyMmW4NfAD5z74g2rmb8oS4IMZ
+        FMedLNfA44MMaUE2fod0jAUZtC1Ax2Pnn9FXUlo=
+X-Google-Smtp-Source: ABdhPJzmP9blBBv2mg91KpFnNjYRBYxTtwemJ3QI215u5foHBkyL5k8czGe5M8VE60LXBByru/7LVHtt6lQCMWUK07g=
+X-Received: by 2002:a05:6820:1501:b0:41b:d535:325c with SMTP id
+ ay1-20020a056820150100b0041bd535325cmr5522819oob.60.1655113376804; Mon, 13
+ Jun 2022 02:42:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530104257.21485-10-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220613082147.183145-1-mawupeng1@huawei.com> <20220613082147.183145-6-mawupeng1@huawei.com>
+In-Reply-To: <20220613082147.183145-6-mawupeng1@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 13 Jun 2022 11:42:44 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFn_FKt2jLJOntvT0FBtL9b=VWZdrBFpn48LBMDLy1WBQ@mail.gmail.com>
+Message-ID: <CAMj1kXFn_FKt2jLJOntvT0FBtL9b=VWZdrBFpn48LBMDLy1WBQ@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] mm: Only remove nomap flag for initrd
+To:     Wupeng Ma <mawupeng1@huawei.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, paulmck@kernel.org, keescook@chromium.org,
+        songmuchun@bytedance.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, swboyd@chromium.org,
+        wei.liu@kernel.org, robin.murphy@arm.com, david@redhat.com,
+        anshuman.khandual@arm.com, thunder.leizhen@huawei.com,
+        wangkefeng.wang@huawei.com, gpiccoli@igalia.com,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 04:12:51PM +0530, Arun Ramadoss wrote:
-> This patch makes the dsa_switch_hook for fdbs to use ksz_common.c file.
-> And from ksz_common, individual switches fdb functions are called using
-> the dev->dev_ops.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+On Mon, 13 Jun 2022 at 10:00, Wupeng Ma <mawupeng1@huawei.com> wrote:
+>
+> From: Ma Wupeng <mawupeng1@huawei.com>
+>
+> Commit 177e15f0c144 ("arm64: add the initrd region to the linear mapping explicitly")
+> remove all the flags of the memory used by initrd. This is fine since
+> MEMBLOCK_MIRROR is not used in arm64.
+>
+> However with mirrored feature introduced to arm64, this will clear the mirrored
+> flag used by initrd, which will lead to error log printed by
+> find_zone_movable_pfns_for_nodes() if the lower 4G range has some non-mirrored
+> memory.
+>
+> To solve this problem, only MEMBLOCK_NOMAP flag will be removed via
+> memblock_clear_nomap().
+>
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+
+This needs and ack from the arm64 maintainers, please?
+And also please fix the subject to include 'arm64'
+
+
 > ---
-
-I had to jump ahead and look at the other patches to see if you plan on
-doing anything about the r_dyn_mac_table, r_sta_mac_table, w_sta_mac_table
-dev_ops which are only implemented for ksz8. They become redundant when
-you introduce new dev_ops for the entire FDB dump, add, del procedure.
-
-I see those aren't touched - what's the plan there?
-
->  drivers/net/dsa/microchip/ksz8795.c    | 30 +++++++++++++++
->  drivers/net/dsa/microchip/ksz9477.c    | 28 +++++++-------
->  drivers/net/dsa/microchip/ksz_common.c | 52 +++++++++++++++-----------
->  drivers/net/dsa/microchip/ksz_common.h | 10 +++++
->  4 files changed, 84 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index abd28dc44eb5..528de481b319 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -958,6 +958,35 @@ static void ksz8_flush_dyn_mac_table(struct ksz_device *dev, int port)
->  	}
->  }
->  
-> +static int ksz8_fdb_dump(struct ksz_device *dev, int port,
-> +			 dsa_fdb_dump_cb_t *cb, void *data)
-> +{
-> +	int ret = 0;
-> +	u16 i = 0;
-> +	u16 entries = 0;
-> +	u8 timestamp = 0;
-> +	u8 fid;
-> +	u8 member;
-> +	struct alu_struct alu;
-> +
-> +	do {
-> +		alu.is_static = false;
-> +		ret = dev->dev_ops->r_dyn_mac_table(dev, i, alu.mac, &fid,
-> +						    &member, &timestamp,
-> +						    &entries);
-> +		if (!ret && (member & BIT(port))) {
-> +			ret = cb(alu.mac, alu.fid, alu.is_static, data);
-> +			if (ret)
-> +				break;
-> +		}
-> +		i++;
-> +	} while (i < entries);
-> +	if (i >= entries)
-> +		ret = 0;
-> +
-> +	return ret;
-> +}
-> +
->  static int ksz8_mdb_add(struct ksz_device *dev, int port,
->  			const struct switchdev_obj_port_mdb *mdb,
->  			struct dsa_db db)
-> @@ -1528,6 +1557,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
->  	.r_mib_pkt = ksz8_r_mib_pkt,
->  	.freeze_mib = ksz8_freeze_mib,
->  	.port_init_cnt = ksz8_port_init_cnt,
-> +	.fdb_dump = ksz8_fdb_dump,
->  	.mdb_add = ksz8_mdb_add,
->  	.mdb_del = ksz8_mdb_del,
->  	.vlan_filtering = ksz8_port_vlan_filtering,
-> diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> index 045856656466..d70e0c32b309 100644
-> --- a/drivers/net/dsa/microchip/ksz9477.c
-> +++ b/drivers/net/dsa/microchip/ksz9477.c
-> @@ -457,11 +457,10 @@ static int ksz9477_port_vlan_del(struct ksz_device *dev, int port,
->  	return 0;
->  }
->  
-> -static int ksz9477_port_fdb_add(struct dsa_switch *ds, int port,
-> -				const unsigned char *addr, u16 vid,
-> -				struct dsa_db db)
-> +static int ksz9477_fdb_add(struct ksz_device *dev, int port,
-> +			   const unsigned char *addr, u16 vid,
-> +			   struct dsa_db db)
->  {
-> -	struct ksz_device *dev = ds->priv;
->  	u32 alu_table[4];
->  	u32 data;
->  	int ret = 0;
-> @@ -515,11 +514,10 @@ static int ksz9477_port_fdb_add(struct dsa_switch *ds, int port,
->  	return ret;
->  }
->  
-> -static int ksz9477_port_fdb_del(struct dsa_switch *ds, int port,
-> -				const unsigned char *addr, u16 vid,
-> -				struct dsa_db db)
-> +static int ksz9477_fdb_del(struct ksz_device *dev, int port,
-> +			   const unsigned char *addr, u16 vid,
-> +			   struct dsa_db db)
->  {
-> -	struct ksz_device *dev = ds->priv;
->  	u32 alu_table[4];
->  	u32 data;
->  	int ret = 0;
-> @@ -606,10 +604,9 @@ static void ksz9477_convert_alu(struct alu_struct *alu, u32 *alu_table)
->  	alu->mac[5] = alu_table[3] & 0xFF;
->  }
->  
-> -static int ksz9477_port_fdb_dump(struct dsa_switch *ds, int port,
-> -				 dsa_fdb_dump_cb_t *cb, void *data)
-> +static int ksz9477_fdb_dump(struct ksz_device *dev, int port,
-> +			    dsa_fdb_dump_cb_t *cb, void *data)
->  {
-> -	struct ksz_device *dev = ds->priv;
->  	int ret = 0;
->  	u32 ksz_data;
->  	u32 alu_table[4];
-> @@ -1315,9 +1312,9 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
->  	.port_vlan_filtering	= ksz_port_vlan_filtering,
->  	.port_vlan_add		= ksz_port_vlan_add,
->  	.port_vlan_del		= ksz_port_vlan_del,
-> -	.port_fdb_dump		= ksz9477_port_fdb_dump,
-> -	.port_fdb_add		= ksz9477_port_fdb_add,
-> -	.port_fdb_del		= ksz9477_port_fdb_del,
-> +	.port_fdb_dump		= ksz_port_fdb_dump,
-> +	.port_fdb_add		= ksz_port_fdb_add,
-> +	.port_fdb_del		= ksz_port_fdb_del,
->  	.port_mdb_add           = ksz_port_mdb_add,
->  	.port_mdb_del           = ksz_port_mdb_del,
->  	.port_mirror_add	= ksz_port_mirror_add,
-> @@ -1403,6 +1400,9 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
->  	.mirror_del = ksz9477_port_mirror_del,
->  	.get_stp_reg = ksz9477_get_stp_reg,
->  	.get_caps = ksz9477_get_caps,
-> +	.fdb_dump = ksz9477_fdb_dump,
-> +	.fdb_add = ksz9477_fdb_add,
-> +	.fdb_del = ksz9477_fdb_del,
->  	.mdb_add = ksz9477_mdb_add,
->  	.mdb_del = ksz9477_mdb_del,
->  	.shutdown = ksz9477_reset_switch,
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index b9082952db0f..8f79ff1ac648 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -765,32 +765,40 @@ void ksz_port_fast_age(struct dsa_switch *ds, int port)
->  }
->  EXPORT_SYMBOL_GPL(ksz_port_fast_age);
->  
-> +int ksz_port_fdb_add(struct dsa_switch *ds, int port,
-> +		     const unsigned char *addr, u16 vid, struct dsa_db db)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +	int ret = -EOPNOTSUPP;
-> +
-> +	if (dev->dev_ops->fdb_add)
-> +		ret = dev->dev_ops->fdb_add(dev, port, addr, vid, db);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(ksz_port_fdb_add);
-> +
-> +int ksz_port_fdb_del(struct dsa_switch *ds, int port,
-> +		     const unsigned char *addr, u16 vid, struct dsa_db db)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +	int ret = -EOPNOTSUPP;
-> +
-> +	if (dev->dev_ops->fdb_del)
-> +		ret = dev->dev_ops->fdb_del(dev, port, addr, vid, db);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(ksz_port_fdb_del);
-> +
->  int ksz_port_fdb_dump(struct dsa_switch *ds, int port, dsa_fdb_dump_cb_t *cb,
->  		      void *data)
->  {
->  	struct ksz_device *dev = ds->priv;
-> -	int ret = 0;
-> -	u16 i = 0;
-> -	u16 entries = 0;
-> -	u8 timestamp = 0;
-> -	u8 fid;
-> -	u8 member;
-> -	struct alu_struct alu;
-> -
-> -	do {
-> -		alu.is_static = false;
-> -		ret = dev->dev_ops->r_dyn_mac_table(dev, i, alu.mac, &fid,
-> -						    &member, &timestamp,
-> -						    &entries);
-> -		if (!ret && (member & BIT(port))) {
-> -			ret = cb(alu.mac, alu.fid, alu.is_static, data);
-> -			if (ret)
-> -				break;
-> -		}
-> -		i++;
-> -	} while (i < entries);
-> -	if (i >= entries)
-> -		ret = 0;
-> +	int ret = -EOPNOTSUPP;
-> +
-> +	if (dev->dev_ops->fdb_dump)
-> +		ret = dev->dev_ops->fdb_dump(dev, port, cb, data);
->  
->  	return ret;
->  }
-> diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-> index 816581dd7f8e..133b1a257868 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.h
-> +++ b/drivers/net/dsa/microchip/ksz_common.h
-> @@ -192,6 +192,12 @@ struct ksz_dev_ops {
->  			  bool ingress, struct netlink_ext_ack *extack);
->  	void (*mirror_del)(struct ksz_device *dev, int port,
->  			   struct dsa_mall_mirror_tc_entry *mirror);
-> +	int (*fdb_add)(struct ksz_device *dev, int port,
-> +		       const unsigned char *addr, u16 vid, struct dsa_db db);
-> +	int (*fdb_del)(struct ksz_device *dev, int port,
-> +		       const unsigned char *addr, u16 vid, struct dsa_db db);
-> +	int (*fdb_dump)(struct ksz_device *dev, int port,
-> +			dsa_fdb_dump_cb_t *cb, void *data);
->  	int (*mdb_add)(struct ksz_device *dev, int port,
->  		       const struct switchdev_obj_port_mdb *mdb,
->  		       struct dsa_db db);
-> @@ -239,6 +245,10 @@ void ksz_port_bridge_leave(struct dsa_switch *ds, int port,
->  			   struct dsa_bridge bridge);
->  void ksz_port_stp_state_set(struct dsa_switch *ds, int port, u8 state);
->  void ksz_port_fast_age(struct dsa_switch *ds, int port);
-> +int ksz_port_fdb_add(struct dsa_switch *ds, int port,
-> +		     const unsigned char *addr, u16 vid, struct dsa_db db);
-> +int ksz_port_fdb_del(struct dsa_switch *ds, int port,
-> +		     const unsigned char *addr, u16 vid, struct dsa_db db);
->  int ksz_port_fdb_dump(struct dsa_switch *ds, int port, dsa_fdb_dump_cb_t *cb,
->  		      void *data);
->  int ksz_port_mdb_add(struct dsa_switch *ds, int port,
-> -- 
-> 2.36.1
-> 
+>  arch/arm64/mm/init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 339ee84e5a61..8456dbae9441 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -350,8 +350,8 @@ void __init arm64_memblock_init(void)
+>                         "initrd not fully accessible via the linear mapping -- please check your bootloader ...\n")) {
+>                         phys_initrd_size = 0;
+>                 } else {
+> -                       memblock_remove(base, size); /* clear MEMBLOCK_ flags */
+>                         memblock_add(base, size);
+> +                       memblock_clear_nomap(base, size);
+>                         memblock_reserve(base, size);
+>                 }
+>         }
+> --
+> 2.25.1
+>

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246B5549477
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24387549373
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347886AbiFMKwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S1378847AbiFMNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348647AbiFMKtb (ORCPT
+        with ESMTP id S1379228AbiFMNkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:49:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C077D2E684;
-        Mon, 13 Jun 2022 03:27:08 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B76D122;
+        Mon, 13 Jun 2022 04:30:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68B7DB80E93;
-        Mon, 13 Jun 2022 10:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDBFDC34114;
-        Mon, 13 Jun 2022 10:27:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3527360F18;
+        Mon, 13 Jun 2022 11:30:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49030C34114;
+        Mon, 13 Jun 2022 11:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116026;
-        bh=Me9cB5A3xIns031FfP6U4PEKU1XTNrg1iFiuBemJcW8=;
+        s=korg; t=1655119848;
+        bh=71pftw3OoNE6+mQQHohO9Rn9Lsf9BTrdcnxHCcIWmas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u3PXrV9AZO2qAJUjbmJUdEkrhK7SqRMZdt8RFISFezni5uIgnR4vijE27Vw50OkOS
-         0nDmCQ+gx3vZ6MX5dIcxylj1pvx1oz94hfcwx2O2Zp/4ZOfxHYHgU7PRXiEi4GRmGo
-         ZlmfnwJ+0OdspjSt2DfVMeXj1pyRO5H+aJ/eV7TE=
+        b=uZIno9HC2UieKZ8wJJuMhNloV8EEf24RbfJCfHR5ne6f8lZHK5L8N9hPTNJN8Fgz7
+         jCG3RuaE9Kf0S33xSe/V/m6AQSfQ6gYIrqPgZZbrN2pX90papoc3bgJFPX5jY9EgGa
+         ZTlyrH1sYSUMGBYKYkARt/XtRqJdMZLtqrSFa7zU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 4.14 119/218] RDMA/hfi1: Fix potential integer multiplication overflow errors
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 152/339] Bluetooth: hci_sync: Fix attempting to suspend with unfiltered passive scan
 Date:   Mon, 13 Jun 2022 12:09:37 +0200
-Message-Id: <20220613094924.179176677@linuxfoundation.org>
+Message-Id: <20220613094931.293769457@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +56,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit f93e91a0372c922c20d5bee260b0f43b4b8a1bee upstream.
+[ Upstream commit 3b42055388c30f2761a2d9cd9af2c99611dfe457 ]
 
-When multiplying of different types, an overflow is possible even when
-storing the result in a larger type. This is because the conversion is
-done after the multiplication. So arithmetic overflow and thus in
-incorrect value is possible.
+When suspending the passive scanning _must_ have its filter_policy set
+to 0x01 to use the accept list otherwise _any_ advertise report would
+end up waking up the system.
 
-Correct an instance of this in the inter packet delay calculation.  Fix by
-ensuring one of the operands is u64 which will promote the other to u64 as
-well ensuring no overflow.
+In order to fix the filter_policy the code now checks for
+hdev->suspended && HCI_CONN_FLAG_REMOTE_WAKEUP
+first, since the MGMT_OP_SET_DEVICE_FLAGS will reject any attempt to
+set HCI_CONN_FLAG_REMOTE_WAKEUP when it cannot be programmed in the
+acceptlist, so it can return success causing the proper filter_policy
+to be used.
 
-Cc: stable@vger.kernel.org
-Fixes: 7724105686e7 ("IB/hfi1: add driver files")
-Link: https://lore.kernel.org/r/20220520183712.48973.29855.stgit@awfm-01.cornelisnetworks.com
-Reviewed-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215768
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hfi1/init.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/bluetooth/hci_sync.c | 58 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 43 insertions(+), 15 deletions(-)
 
---- a/drivers/infiniband/hw/hfi1/init.c
-+++ b/drivers/infiniband/hw/hfi1/init.c
-@@ -515,7 +515,7 @@ void set_link_ipg(struct hfi1_pportdata
- 	u16 shift, mult;
- 	u64 src;
- 	u32 current_egress_rate; /* Mbits /sec */
--	u32 max_pkt_time;
-+	u64 max_pkt_time;
- 	/*
- 	 * max_pkt_time is the maximum packet egress time in units
- 	 * of the fabric clock period 1/(805 MHz).
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 13600bf120b0..6b8d1cd65de4 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -1664,20 +1664,19 @@ static int hci_le_add_accept_list_sync(struct hci_dev *hdev,
+ 	struct hci_cp_le_add_to_accept_list cp;
+ 	int err;
+ 
++	/* During suspend, only wakeable devices can be in acceptlist */
++	if (hdev->suspended &&
++	    !test_bit(HCI_CONN_FLAG_REMOTE_WAKEUP, params->flags))
++		return 0;
++
+ 	/* Select filter policy to accept all advertising */
+ 	if (*num_entries >= hdev->le_accept_list_size)
+ 		return -ENOSPC;
+ 
+ 	/* Accept list can not be used with RPAs */
+ 	if (!use_ll_privacy(hdev) &&
+-	    hci_find_irk_by_addr(hdev, &params->addr, params->addr_type)) {
++	    hci_find_irk_by_addr(hdev, &params->addr, params->addr_type))
+ 		return -EINVAL;
+-	}
+-
+-	/* During suspend, only wakeable devices can be in acceptlist */
+-	if (hdev->suspended &&
+-	    !test_bit(HCI_CONN_FLAG_REMOTE_WAKEUP, params->flags))
+-		return 0;
+ 
+ 	/* Attempt to program the device in the resolving list first to avoid
+ 	 * having to rollback in case it fails since the resolving list is
+@@ -4881,10 +4880,28 @@ static int hci_update_event_filter_sync(struct hci_dev *hdev)
+ 	return 0;
+ }
+ 
++/* This function disables scan (BR and LE) and mark it as paused */
++static int hci_pause_scan_sync(struct hci_dev *hdev)
++{
++	if (hdev->scanning_paused)
++		return 0;
++
++	/* Disable page scan if enabled */
++	if (test_bit(HCI_PSCAN, &hdev->flags))
++		hci_write_scan_enable_sync(hdev, SCAN_DISABLED);
++
++	hci_scan_disable_sync(hdev);
++
++	hdev->scanning_paused = true;
++
++	return 0;
++}
++
+ /* This function performs the HCI suspend procedures in the follow order:
+  *
+  * Pause discovery (active scanning/inquiry)
+  * Pause Directed Advertising/Advertising
++ * Pause Scanning (passive scanning in case discovery was not active)
+  * Disconnect all connections
+  * Set suspend_status to BT_SUSPEND_DISCONNECT if hdev cannot wakeup
+  * otherwise:
+@@ -4910,15 +4927,11 @@ int hci_suspend_sync(struct hci_dev *hdev)
+ 	/* Pause other advertisements */
+ 	hci_pause_advertising_sync(hdev);
+ 
+-	/* Disable page scan if enabled */
+-	if (test_bit(HCI_PSCAN, &hdev->flags))
+-		hci_write_scan_enable_sync(hdev, SCAN_DISABLED);
+-
+ 	/* Suspend monitor filters */
+ 	hci_suspend_monitor_sync(hdev);
+ 
+ 	/* Prevent disconnects from causing scanning to be re-enabled */
+-	hdev->scanning_paused = true;
++	hci_pause_scan_sync(hdev);
+ 
+ 	/* Soft disconnect everything (power off) */
+ 	err = hci_disconnect_all_sync(hdev, HCI_ERROR_REMOTE_POWER_OFF);
+@@ -4989,6 +5002,22 @@ static void hci_resume_monitor_sync(struct hci_dev *hdev)
+ 	}
+ }
+ 
++/* This function resume scan and reset paused flag */
++static int hci_resume_scan_sync(struct hci_dev *hdev)
++{
++	if (!hdev->scanning_paused)
++		return 0;
++
++	hci_update_scan_sync(hdev);
++
++	/* Reset passive scanning to normal */
++	hci_update_passive_scan_sync(hdev);
++
++	hdev->scanning_paused = false;
++
++	return 0;
++}
++
+ /* This function performs the HCI suspend procedures in the follow order:
+  *
+  * Restore event mask
+@@ -5011,10 +5040,9 @@ int hci_resume_sync(struct hci_dev *hdev)
+ 
+ 	/* Clear any event filters and restore scan state */
+ 	hci_clear_event_filter_sync(hdev);
+-	hci_update_scan_sync(hdev);
+ 
+-	/* Reset passive scanning to normal */
+-	hci_update_passive_scan_sync(hdev);
++	/* Resume scanning */
++	hci_resume_scan_sync(hdev);
+ 
+ 	/* Resume monitor filters */
+ 	hci_resume_monitor_sync(hdev);
+-- 
+2.35.1
+
 
 

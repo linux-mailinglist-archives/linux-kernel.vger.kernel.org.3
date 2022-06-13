@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7159B549694
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3875498EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349262AbiFMK5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S1358850AbiFMNID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349565AbiFMKyY (ORCPT
+        with ESMTP id S1352990AbiFMMzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158CD2F661;
-        Mon, 13 Jun 2022 03:28:16 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84B2CE17;
+        Mon, 13 Jun 2022 04:15:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35BFEB80EA7;
-        Mon, 13 Jun 2022 10:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A52F0C34114;
-        Mon, 13 Jun 2022 10:28:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61F6F60B6E;
+        Mon, 13 Jun 2022 11:15:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE42C34114;
+        Mon, 13 Jun 2022 11:15:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116094;
-        bh=XEYdQj+nG/p83wdweF1uBpntbavIDU+Y+1Fsi+0wt+Y=;
+        s=korg; t=1655118950;
+        bh=zr4wg0RQtrA+BGxp5xSFZRS+UmTe1Lq8t16C3rLsK7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=feE+B11hLeynWEzvLHV5ROLvXO1s0y12Oh3ta6cwtLFJIIe84RMZqqOCjsY6RvVlf
-         qIteigUGsFa5Sw0JDwXrj0SmmuIfIu+KzZCG83C1bwMKI9RmsvwzSpFRQaJzG8jV7/
-         U02aYgA0L7RiJCJ5PAgNJW3zPZ3dUWgOPBQPSHQw=
+        b=LrxJZ4kcF/jEMLbUxGhBct8qAIdu5DTrm0xjUOFE43h5IViZezGYL/oLpoE5fW0IP
+         uCJdexDF0MpNI3san+IIim+kgvDd2xVay32EjLTy0i0UZgbb+KJKbhkw1earO/gyxl
+         Xu1NqOnfhtghHPYmymxvh0ceDtf6Ic7z+Uc8GTB4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Subject: [PATCH 4.14 131/218] gma500: fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Yu Xiao <yu.xiao@corigine.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 087/247] nfp: only report pause frame configuration for physical device
 Date:   Mon, 13 Jun 2022 12:09:49 +0200
-Message-Id: <20220613094924.553713522@linuxfoundation.org>
+Message-Id: <20220613094925.594682759@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Yu Xiao <yu.xiao@corigine.com>
 
-commit bdef417d84536715145f6dc9cc3275c46f26295a upstream.
+[ Upstream commit 0649e4d63420ebc8cbebef3e9d39e12ffc5eb9fa ]
 
-The bug is here:
-	return crtc;
+Only report pause frame configuration for physical device. Logical
+port of both PCI PF and PCI VF do not support it.
 
-The list iterator value 'crtc' will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found.
-
-To fix the bug, return 'crtc' when found, otherwise return NULL.
-
-Cc: stable@vger.kernel.org
-fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327052028.2013-1-xiam0nd.tong@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9fdc5d85a8fe ("nfp: update ethtool reporting of pauseframe control")
+Signed-off-by: Yu Xiao <yu.xiao@corigine.com>
+Signed-off-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/gma500/psb_intel_display.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/gma500/psb_intel_display.c
-+++ b/drivers/gpu/drm/gma500/psb_intel_display.c
-@@ -543,14 +543,15 @@ void psb_intel_crtc_init(struct drm_devi
+diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c b/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
+index be1a358baadb..8b614b0201e7 100644
+--- a/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
++++ b/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
+@@ -286,8 +286,6 @@ nfp_net_get_link_ksettings(struct net_device *netdev,
  
- struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
- {
--	struct drm_crtc *crtc = NULL;
-+	struct drm_crtc *crtc;
- 
- 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
- 		struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
-+
- 		if (gma_crtc->pipe == pipe)
--			break;
-+			return crtc;
- 	}
--	return crtc;
-+	return NULL;
- }
- 
- int gma_connector_clones(struct drm_device *dev, int type_mask)
+ 	/* Init to unknowns */
+ 	ethtool_link_ksettings_add_link_mode(cmd, supported, FIBRE);
+-	ethtool_link_ksettings_add_link_mode(cmd, supported, Pause);
+-	ethtool_link_ksettings_add_link_mode(cmd, advertising, Pause);
+ 	cmd->base.port = PORT_OTHER;
+ 	cmd->base.speed = SPEED_UNKNOWN;
+ 	cmd->base.duplex = DUPLEX_UNKNOWN;
+@@ -295,6 +293,8 @@ nfp_net_get_link_ksettings(struct net_device *netdev,
+ 	port = nfp_port_from_netdev(netdev);
+ 	eth_port = nfp_port_get_eth_port(port);
+ 	if (eth_port) {
++		ethtool_link_ksettings_add_link_mode(cmd, supported, Pause);
++		ethtool_link_ksettings_add_link_mode(cmd, advertising, Pause);
+ 		cmd->base.autoneg = eth_port->aneg != NFP_ANEG_DISABLED ?
+ 			AUTONEG_ENABLE : AUTONEG_DISABLE;
+ 		nfp_net_set_fec_link_mode(eth_port, cmd);
+-- 
+2.35.1
+
 
 

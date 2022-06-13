@@ -2,71 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77467548C68
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA21549536
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386314AbiFMOw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S1386216AbiFMOwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385964AbiFMOuX (ORCPT
+        with ESMTP id S1386132AbiFMOvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:50:23 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8F124979;
-        Mon, 13 Jun 2022 04:54:58 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LM91S5pwBz1K9RY;
-        Mon, 13 Jun 2022 19:53:00 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 19:54:56 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 19:54:54 +0800
-Message-ID: <fa1416be-f940-4c28-5c67-911e61ac024f@huawei.com>
-Date:   Mon, 13 Jun 2022 19:54:53 +0800
+        Mon, 13 Jun 2022 10:51:14 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9622712AF9;
+        Mon, 13 Jun 2022 04:55:37 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 164E91C0BB6; Mon, 13 Jun 2022 13:55:35 +0200 (CEST)
+Date:   Mon, 13 Jun 2022 13:55:34 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.9 000/167] 4.9.318-rc1 review
+Message-ID: <20220613115534.GA4176@duo.ucw.cz>
+References: <20220613094840.720778945@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 6/6] memblock: Disable mirror feature if kernelcore is
- not specified
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>, Mike Rapoport <rppt@kernel.org>
-CC:     Wupeng Ma <mawupeng1@huawei.com>, <corbet@lwn.net>,
-        <will@kernel.org>, <catalin.marinas@arm.com>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <dvhart@infradead.org>,
-        <andy@infradead.org>, <akpm@linux-foundation.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <paulmck@kernel.org>,
-        <keescook@chromium.org>, <songmuchun@bytedance.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <swboyd@chromium.org>, <wei.liu@kernel.org>,
-        <robin.murphy@arm.com>, <david@redhat.com>,
-        <anshuman.khandual@arm.com>, <thunder.leizhen@huawei.com>,
-        <gpiccoli@igalia.com>, <chenhuacai@kernel.org>,
-        <geert@linux-m68k.org>, <vijayb@linux.microsoft.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>
-References: <20220613082147.183145-1-mawupeng1@huawei.com>
- <20220613082147.183145-7-mawupeng1@huawei.com> <YqcZ4O3pwceVtKYm@kernel.org>
- <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="UlVJffcvxoiEqYs2"
+Content-Disposition: inline
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,33 +45,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/6/13 19:25, Ard Biesheuvel wrote:
-> On Mon, 13 Jun 2022 at 13:05, Mike Rapoport <rppt@kernel.org> wrote:
->> On Mon, Jun 13, 2022 at 04:21:47PM +0800, Wupeng Ma wrote:
->>> From: Ma Wupeng <mawupeng1@huawei.com>
->>>
->>> If system have some mirrored memory and mirrored feature is not specified
->>> in boot parameter, the basic mirrored feature will be enabled and this will
->>> lead to the following situations:
->>>
->>> - memblock memory allocation prefers mirrored region. This may have some
->>>    unexpected influence on numa affinity.
->>>
->>> - contiguous memory will be split into several parts if parts of them
->>>    is mirrored memory via memblock_mark_mirror().
-...
-> Also, on second thought, I don't think marking as mirror is what
-> should be affected by the policy. Instead, choose_memblock_flags()
-> should take this into account, in a way that we could refine later if
-> needed.
-> .
+--UlVJffcvxoiEqYs2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The choose_memblock_flags() only solve the issue of memblock allocation, but
+Hi!
 
-the memblock could be splitted and fragmentized, the kernel won't treat the
+> This is the start of the stable review cycle for the 4.9.318 release.
+> There are 167 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-mirror memory as special if no mirrored_kernelcore for now, so I think 
-we'd better
+CIP testing did not find any problems here:
 
-to add the check into memblock_mark_mirror().
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.9.y
 
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--UlVJffcvxoiEqYs2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYqcltgAKCRAw5/Bqldv6
+8tPLAKCyUGnUtOvWC+OiVybqhdVC/qc+gACeOyNUpjnfm7+8jq8JC6sskQJdpuc=
+=PKfr
+-----END PGP SIGNATURE-----
+
+--UlVJffcvxoiEqYs2--

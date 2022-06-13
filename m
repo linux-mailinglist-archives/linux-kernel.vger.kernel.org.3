@@ -2,189 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896CE5483ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC70B548435
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbiFMJ7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S233951AbiFMKAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241505AbiFMJ7G (ORCPT
+        with ESMTP id S231285AbiFMJ77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:59:06 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D201CB0C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:59:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZjWG3ngB7O9Ly01YAU/F89K1BXb/mX/gFXvWcgtsdbovJet2nzipp6Ot5AuGwJgRff91DLjwPSMa54i7U6yVHj1n0PSt/RyIYUyzvOU0HwRPU8dXQcxuEjq5n5+lpxzesDfBAtUWwv1hvpTnGXtInA1b7Qp4Jt5zM5Arb/DEa78TkTFhVZmrZJ37aVSF9x5IyTmVDgPQ8bmo2Ce3wPzL/IoM+zkGXN0OizQTTN938PRMMdZMM9cB2LpLFeTrs2rcynli7+ao38ZaRan9YqXn+FDXG6DvyUgqLNpFc4n99r9MHDcJPska6pyF8+d+ShTxTaMmTNbYcRkPGbMhHpoleA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YwSyxRahEAiQkVmNqRCztaC/dmZgHbQdv6voK+fKB6Y=;
- b=gzrrxG4NygNlbVn7xm7X5N4qFm0MuMm7zJn5/OU8DH1mYtqTMjnJM2SvaZQhTkSN47bsT62vaelmWWchxTz9RUa47FQJx7hnNF3zpXYIqI3g/xGI63+Uivv1qS9k7TBpTOlXzRJYQlGmH133nyRVom1sLxsutqcXcaAnyj2HE6R9HOLdfcz7eGKt66DfhgqdSr59qiy50fav+hrckIxc8xWgpK2YU4F77AkF+xQPMX9K4ZN/A5Tw+rCvOTU5jnWw+ESJ+cFeDQUulnmHGlialOm6uUl+yMoc/UlQnhlOsqPXkHMd6oErq+xQfNd1eWk4YVIrvGHrN2P+OOsJtfSP4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YwSyxRahEAiQkVmNqRCztaC/dmZgHbQdv6voK+fKB6Y=;
- b=XEvHcdn97DsCdozxfnY7E/uucb0H2w0mlLZWuG9O/Ec5lVBbCLNJCAFR2lbf8pKf+HsjvfwUjdZocjWTNf7Pmrl3pPkzKd0B1LazGvWnHmnyPyN+NbOWmfGXHwykUzPEBeHjrM9042dbG6TcY+snOoNt8tB2/rtzbOKPNPchakY=
-Received: from CO6PR12MB5489.namprd12.prod.outlook.com (2603:10b6:303:139::18)
- by CY5PR12MB6273.namprd12.prod.outlook.com (2603:10b6:930:22::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.20; Mon, 13 Jun
- 2022 09:59:01 +0000
-Received: from CO6PR12MB5489.namprd12.prod.outlook.com
- ([fe80::68dc:88ad:eb33:1813]) by CO6PR12MB5489.namprd12.prod.outlook.com
- ([fe80::68dc:88ad:eb33:1813%7]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
- 09:59:01 +0000
-From:   "Lin, Wayne" <Wayne.Lin@amd.com>
-To:     Lyude Paul <lyude@redhat.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        "Lakha, Bhawanpreet" <Bhawanpreet.Lakha@amd.com>,
-        Rajkumar Subbiah <rsubbia@codeaurora.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 3/3] drm/dp_mst: Get rid of old comment in
- drm_atomic_get_mst_topology_state docs
-Thread-Topic: [PATCH 3/3] drm/dp_mst: Get rid of old comment in
- drm_atomic_get_mst_topology_state docs
-Thread-Index: AQHYdr3rfxl56jhHOUq56EiL4VxHW61NKmrQ
-Date:   Mon, 13 Jun 2022 09:59:01 +0000
-Message-ID: <CO6PR12MB5489D6138C8CC26344618172FCAB9@CO6PR12MB5489.namprd12.prod.outlook.com>
-References: <20220602201757.30431-1-lyude@redhat.com>
- <20220602201757.30431-4-lyude@redhat.com>
-In-Reply-To: <20220602201757.30431-4-lyude@redhat.com>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-06-13T09:58:59Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=b25ac003-7823-4ee6-b948-720384bd8549;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2f486694-da7e-4beb-29b5-08da4d2357a7
-x-ms-traffictypediagnostic: CY5PR12MB6273:EE_
-x-microsoft-antispam-prvs: <CY5PR12MB6273F04F9FD1F5D7AAFF41E4FCAB9@CY5PR12MB6273.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nkiNljicWjHU0J6FHIbX59uO1QxeVp1TAX5HZnxJE9odtDqiWdzb35jcKnmTb3gMOaJxGk6Gn61IJa8QuFlNFDQMBjWxiMViwhj5yNoZm+/9/XArQfSOxK2wh8a9TZApVBmvEZwP+DVZcEwT20T0dRsPQR0OkJ/p40dX8EfdWL0N10lgbu2fK+tiabgDkPWnlJPLwOA96N9DaFuzksepcL/GdRdMJg3xiNllXXR8kSbo23gcgNzIBTKUkkIW7cCjmhcL9u9STWOXqrMnDzocZ6+q07yBEMxTufv2m+BoWOrf/Osb8yHhRG9OqTgyEu5UsnLX6guwzY+CD/f6HscY67JKq79PIzsax1FTjscbVkh/2Dka4ZY0zUIW4epLt2NlR9oMbwfn8Z02CUdHPJbKWtuJtXbKfo00r8RXb6fHW9iMkzyzoDEZgxspEuUAA0HNIo6A3izdeXxdjSqWMtZ+XRy8UT31vQy/izK/E64ei9HRI52b5MylfAyQYt8ipTNRBmcnTlmevog/M0xIX0YuBm40OFZuy0bsXhxbYskgc8An0YGvlazmm1roci3tKPBiZvUrTy+Gr5Pm9obdlFLK5gxfbXRhxEaxfK9qbfwi5ud2FjeJ6h9TKG8UkcRYDEWgW24nUwxNQFeUqRjT9mHkVS9YBnwUc0Qeby+f8uwK1fbbWOgEQ8uIz7J/ons7GuOkkbSgEyHBSD1J+G50E37EL/CG6TtZiDg07723qI64uxs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5489.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(508600001)(66556008)(66446008)(66476007)(2906002)(64756008)(66946007)(5660300002)(76116006)(33656002)(8936002)(6506007)(52536014)(8676002)(86362001)(7696005)(9686003)(53546011)(4326008)(38100700002)(26005)(71200400001)(38070700005)(54906003)(83380400001)(316002)(55016003)(122000001)(186003)(110136005)(26583001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EdTZ48YWJGtugHCmatRGxvKW+16cvUo8hUj9Ahf5UKO8oasJFuKrlhfQ6n6D?=
- =?us-ascii?Q?TjBLsgkNLwVmzlL6a/foH10gRCgUmaK76NgXR21VnX6H2+Sh2+/8HMYuihfi?=
- =?us-ascii?Q?eDrqsbfvUbBAPQruxEAAqnOE7a1TXCiU8el5vZ0ro1GAqyiYkxeet5Jg8cZz?=
- =?us-ascii?Q?QplJAaNcrERgzduI1BqHQEdHBmkE8LJnVtABk/4P5QyC2iRvCtHU9l2czlao?=
- =?us-ascii?Q?0YxSBRWnYVP+qsEJwXFccbMQc3ogqTQ3U7nnbvbj3ip5FSZVhrb1o+HLxg+B?=
- =?us-ascii?Q?6AyC43vN0UYjCYTxkhc1qq74O++NYyo0SnBXHPaKdGzPmkqXSqdrrzRcCya3?=
- =?us-ascii?Q?z8sxfpm6Cj8yV5BbNF8Z5wI7YMoUu88m/k2a/HoVLjEd3TWkGUznu8Oeukju?=
- =?us-ascii?Q?uBdEGe8O68KUB1nbDsxN4/pg98ExygPcXd8DwqEaVGgPmpQIluofbNaGpPXA?=
- =?us-ascii?Q?L2PCFy7CK2+ieBmjHwWzf9fkILgRCyF79eTEJWiRtVCud560SxVur7lYGu+S?=
- =?us-ascii?Q?pJwC3CynywPbDa1tI8Y+tob6eTcwd2gNxI3X0FQyvodTcct1AIr2bxKefb9m?=
- =?us-ascii?Q?51lNKewJEjlNITDNTOaalpVgAU5NsGEkSHQG7QBcItQodD2BmZwoq2hAax91?=
- =?us-ascii?Q?wAWBk35smI4085u3Rt6Xwp9OkRfj18pNsdsay1pLBTUzmBMMvje7n9t6IpWF?=
- =?us-ascii?Q?mLWaLVf7JFF3A4wG04M5OxJdZUqlWM1C98yrZV+N/xQ8NpnGLUwHWqqLh9mZ?=
- =?us-ascii?Q?IC5PzSVEVHxp9WHgzHT/ONY3bu3c7lnwpGGSH3SiLs1y/73e7lV4TiS3T8ZL?=
- =?us-ascii?Q?u5349Z8V3japu/u7HKXc01vVoQUgFhGjxbx9vZ3mL2oF8rRaPwiVcQNcXEnu?=
- =?us-ascii?Q?cbT2Lf0uxOLvh0YunfE1l1xWy105fWOpxwitR56jR7sprF6JO71ZXlPq4wQC?=
- =?us-ascii?Q?bH/p/nJdMyZjyk7cybjezdHVc7H+FPfahmNUvijHCo8NYaq12zGtzC/LpnRv?=
- =?us-ascii?Q?8B6vCjHk8fjX48hyZ14dCMxPoikPKpuroc+jVJG90iZuL9vbZ9klJK/cY+y1?=
- =?us-ascii?Q?gbJT9s0qxXe8DziQJPvhOS2HsYVoxnAwo6nytfv6WqWGOxkNQQv0dK/rIrVG?=
- =?us-ascii?Q?zGkP2TNIezziXjY5Hwecustuye2yWoLsgltixLsyy6CXJROdSIdLdqmNqGuW?=
- =?us-ascii?Q?ob8IIc+F9/NlvHCR/GXxE6kE6Lcj7yn4XD6TkkR0GOMUxgJY5mGA5O6/21cx?=
- =?us-ascii?Q?5I/mmcYSzn6xZTffdzN0gRKH0VilgkKce8gnKeUpUVww1eJ+3esWSc4lsmVb?=
- =?us-ascii?Q?6aRH2LaAI4wXn+7/QSP6HhzVLY6q0e/CMTAUPm8MOEP7Gf/aJynMzs06coVV?=
- =?us-ascii?Q?UVEvXDYX5zstEVgWREEZbuqx/rpJOH74b+YX6N9ogjyg9MmocljoHmcy4cv3?=
- =?us-ascii?Q?ExPlBrsoK/SAC5+gKaZxnBrpI/OU5ShEaCC/8HLV1MegkUGIH59KSXNripCI?=
- =?us-ascii?Q?l5fEZqiVy3mjJ6z0rR5qDiF1yG0+s0v8N2kw4YZAUCvoVWVLtMMA26T2Fb5Q?=
- =?us-ascii?Q?g+OVSmJm9pQ1TLWjLXoCDnhigYUj7WIlGmA2+WHizC6OlsHywCWVdD8KxKD9?=
- =?us-ascii?Q?yWlyP0OGIDMc6mgnMv1VVqdfa1nb4wPTgZ3c1yWkbcqM5HPS2zV33KL1CcI0?=
- =?us-ascii?Q?N3dGSPeer1giUJU9sK+XvRPlQyGUsaGteOizL22qBYJshY6Tidse0HourjSQ?=
- =?us-ascii?Q?FkqMkZjymA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 13 Jun 2022 05:59:59 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7661CB20
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:59:58 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id c21so6455174wrb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UmfLVMrsn0WGwubEU9B512VvZRZn5oxu7wSDZVtbht0=;
+        b=LhZfBXrvzYqI3m+WOUh4DDqPjfPfwZPsqmNNJVMNh7XYs9heKwO/IPxsk57tFUWucd
+         Zv6BaDUdcvpVMuRseJV823A6bUqwBLM/ErvVhMli9qCYvcMv3EDVok6Hw5zR/Lk1A7f7
+         YDYDeqVLMVaT975XLHb3o0dDdbgbhPnfyk5U5SilxzCkVewvWxgU9ZYIV0tjRrFHEPqp
+         UaPGF5flFUtToEIyyo3cB7DP2DXyluPY7ZBscQ/IgI0Y1AdUjbs69JrN6nUxHnRrX0Ys
+         uJRq/GzfjN64AWitEhKqIRYtl3Wg2+qaFXED+ezHW03GsDZILI4lTcp8foIuTWyYnlg/
+         ZmtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UmfLVMrsn0WGwubEU9B512VvZRZn5oxu7wSDZVtbht0=;
+        b=URDChsxhjG8MbhHkWBdRscRYaXHHz+L2nHHiDx5pGdM08fzuYz4hm4gZ+kGHGXrG5n
+         5I1oGNbrCYzXQbtd+69U6qCd4oKgp+eMuLiK+MHQSU0YDTEvgKiPz0LoBRFCZHbl9F1U
+         fmkeGfO2msl8R7t7sd2zxYDlCkHvH56mCzqrZGNnSl+1fhv14u54KLx11Lv3hI3ZfV2R
+         M6yxGPRwEK2c8bw42/cqM+sfoAW1by8zin/Fub1sKoXsDmrL9HmVshzTNaJyroe4o2nt
+         rxiMCJWVQidvAacXYcaQCk5mY9Zi9lYRttN61TkNhCzg7QacDYzoutZqNCBrCZNYP3x+
+         JCVw==
+X-Gm-Message-State: AOAM531qfa1MrPXam3YUQ6qc2APKV83EuGcM8OJMFKJ+7uVP3NOhKWpi
+        hTosMfZFwVg1s69TwUU2BCQWt3jLj/WZcV1lm5IGUQ==
+X-Google-Smtp-Source: ABdhPJzxNuCEvmYzaj5KbxDO78aB8w+JhFuCEdlruGFDryxRsTs1bXjV4eGZNPl3H7NY9NxC4va02GY5gR3R6YabY7U=
+X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
+ r11-20020a5d6c6b000000b001ea77eadde8mr57053464wrz.690.1655114396705; Mon, 13
+ Jun 2022 02:59:56 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5489.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f486694-da7e-4beb-29b5-08da4d2357a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2022 09:59:01.5644
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 75lAIRyXiM0kV0ZlrxlCfUB2CPAojtaQZYCCfeph9JfKo8EHdf7TcYzTSbntI/U6lwU86cGmzZcJc+XVV4eQ6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6273
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610050555.288251-1-apatel@ventanamicro.com>
+ <20220610050555.288251-3-apatel@ventanamicro.com> <20220612153113.GA52224@liuzhao-OptiPlex-7080>
+In-Reply-To: <20220612153113.GA52224@liuzhao-OptiPlex-7080>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 13 Jun 2022 15:29:13 +0530
+Message-ID: <CAAhSdy2GXCujSkJgrWC==nTbeT7soY57K_DKP-vs57E=iN-YkQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] RISC-V: KVM: Add extensible system instruction
+ emulation framework
+To:     Liu Zhao <zhao1.liu@linux.intel.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
+On Sun, Jun 12, 2022 at 8:57 PM Liu Zhao <zhao1.liu@linux.intel.com> wrote:
+>
+> On Fri, Jun 10, 2022 at 10:35:54AM +0530, Anup Patel wrote:
+> > Date: Fri, 10 Jun 2022 10:35:54 +0530
+> > From: Anup Patel <apatel@ventanamicro.com>
+> > Subject: [PATCH 2/3] RISC-V: KVM: Add extensible system instruction
+> >  emulation framework
+> > X-Mailer: git-send-email 2.34.1
+> >
+> > We will be emulating more system instructions in near future with
+> > upcoming AIA, PMU, Nested and other virtualization features.
+> >
+> > To accommodate above, we add an extensible system instruction emulation
+> > framework in vcpu_insn.c.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/kvm_vcpu_insn.h |  9 +++
+> >  arch/riscv/kvm/vcpu_insn.c             | 82 +++++++++++++++++++++++---
+> >  2 files changed, 82 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/kvm_vcpu_insn.h b/arch/riscv/include/asm/kvm_vcpu_insn.h
+> > index 4e3ba4e84d0f..3351eb61a251 100644
+> > --- a/arch/riscv/include/asm/kvm_vcpu_insn.h
+> > +++ b/arch/riscv/include/asm/kvm_vcpu_insn.h
+> > @@ -18,6 +18,15 @@ struct kvm_mmio_decode {
+> >       int return_handled;
+> >  };
+> >
+> > +/* Return values used by function emulating a particular instruction */
+> > +enum kvm_insn_return {
+> > +     KVM_INSN_EXIT_TO_USER_SPACE = 0,
+> > +     KVM_INSN_CONTINUE_NEXT_SEPC,
+> > +     KVM_INSN_CONTINUE_SAME_SEPC,
+> > +     KVM_INSN_ILLEGAL_TRAP,
+> > +     KVM_INSN_VIRTUAL_TRAP
+> > +};
+> > +
+> >  void kvm_riscv_vcpu_wfi(struct kvm_vcpu *vcpu);
+> >  int kvm_riscv_vcpu_virtual_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >                               struct kvm_cpu_trap *trap);
+> > diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
+> > index be756879c2ee..75ca62a7fba5 100644
+> > --- a/arch/riscv/kvm/vcpu_insn.c
+> > +++ b/arch/riscv/kvm/vcpu_insn.c
+> > @@ -118,8 +118,24 @@
+> >                                (s32)(((insn) >> 7) & 0x1f))
+> >  #define MASK_FUNCT3          0x7000
+> >
+> > -static int truly_illegal_insn(struct kvm_vcpu *vcpu,
+> > -                           struct kvm_run *run,
+> > +struct insn_func {
+> > +     unsigned long mask;
+> > +     unsigned long match;
+> > +     /*
+> > +      * Possible return values are as follows:
+> > +      * 1) Returns < 0 for error case
+> > +      * 2) Returns 0 for exit to user-space
+> > +      * 3) Returns 1 to continue with next sepc
+> > +      * 4) Returns 2 to continue with same sepc
+> > +      * 5) Returns 3 to inject illegal instruction trap and continue
+> > +      * 6) Returns 4 to inject virtual instruction trap and continue
+> > +      *
+> > +      * Use enum kvm_insn_return for return values
+> > +      */
+> > +     int (*func)(struct kvm_vcpu *vcpu, struct kvm_run *run, ulong insn);
+> > +};
+> > +
+> > +static int truly_illegal_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >                             ulong insn)
+> >  {
+> >       struct kvm_cpu_trap utrap = { 0 };
+> > @@ -128,6 +144,24 @@ static int truly_illegal_insn(struct kvm_vcpu *vcpu,
+> >       utrap.sepc = vcpu->arch.guest_context.sepc;
+> >       utrap.scause = EXC_INST_ILLEGAL;
+> >       utrap.stval = insn;
+> > +     utrap.htval = 0;
+> > +     utrap.htinst = 0;
+> > +     kvm_riscv_vcpu_trap_redirect(vcpu, &utrap);
+> > +
+> > +     return 1;
+> > +}
+> > +
+> > +static int truly_virtual_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> > +                           ulong insn)
+> > +{
+> > +     struct kvm_cpu_trap utrap = { 0 };
+> > +
+> > +     /* Redirect trap to Guest VCPU */
+> > +     utrap.sepc = vcpu->arch.guest_context.sepc;
+> > +     utrap.scause = EXC_VIRTUAL_INST_FAULT;
+> > +     utrap.stval = insn;
+> > +     utrap.htval = 0;
+> > +     utrap.htinst = 0;
+> >       kvm_riscv_vcpu_trap_redirect(vcpu, &utrap);
+> >
+> >       return 1;
+> > @@ -148,18 +182,48 @@ void kvm_riscv_vcpu_wfi(struct kvm_vcpu *vcpu)
+> >       }
+> >  }
+> >
+> > -static int system_opcode_insn(struct kvm_vcpu *vcpu,
+> > -                           struct kvm_run *run,
+> > +static int wfi_insn(struct kvm_vcpu *vcpu, struct kvm_run *run, ulong insn)
+> > +{
+> > +     vcpu->stat.wfi_exit_stat++;
+> > +     kvm_riscv_vcpu_wfi(vcpu);
+> > +     return KVM_INSN_CONTINUE_NEXT_SEPC;
+> > +}
+> > +
+> > +static const struct insn_func system_opcode_funcs[] = {
+> > +     {
+> > +             .mask  = INSN_MASK_WFI,
+> > +             .match = INSN_MATCH_WFI,
+> > +             .func  = wfi_insn,
+> > +     },
+> > +};
+> > +
+> > +static int system_opcode_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >                             ulong insn)
+> >  {
+> > -     if ((insn & INSN_MASK_WFI) == INSN_MATCH_WFI) {
+> > -             vcpu->stat.wfi_exit_stat++;
+> > -             kvm_riscv_vcpu_wfi(vcpu);
+> > +     int i, rc = KVM_INSN_ILLEGAL_TRAP;
+> > +     const struct insn_func *ifn;
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(system_opcode_funcs); i++) {
+> > +             ifn = &system_opcode_funcs[i];
+> > +             if ((insn & ifn->mask) == ifn->match) {
+> > +                     rc = ifn->func(vcpu, run, insn);
+> > +                     break;
+> > +             }
+> > +     }
+> > +
+> > +     switch (rc) {
+> > +     case KVM_INSN_ILLEGAL_TRAP:
+> > +             return truly_illegal_insn(vcpu, run, insn);
+> > +     case KVM_INSN_VIRTUAL_TRAP:
+> > +             return truly_virtual_insn(vcpu, run, insn);
+> > +     case KVM_INSN_CONTINUE_NEXT_SEPC:
+> >               vcpu->arch.guest_context.sepc += INSN_LEN(insn);
+> > -             return 1;
+> > +             break;
+>
+> Hi Anup,
+> What about adding KVM_INSN_CONTINUE_SAME_SEPC and KVM_INSN_EXIT_TO_USER_SPACE
+> cases here and set rc to 1?
 
-Hi Lyude,
+For KVM_INSN_CONTINUE_SAME_SEPC (and any rc >= 1) we should return 1
+whereas for KVM_INSN_EXIT_TO_USER_SPACE we should return 0.
 
-Feel free to add
-Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
+> This is the explicit indication that both cases are handled.
 
-> -----Original Message-----
-> From: Lyude Paul <lyude@redhat.com>
-> Sent: Friday, June 3, 2022 4:18 AM
-> To: dri-devel@lists.freedesktop.org
-> Cc: David Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Tho=
-mas
-> Zimmermann <tzimmermann@suse.de>; Lin, Wayne
-> <Wayne.Lin@amd.com>; Jani Nikula <jani.nikula@intel.com>; Lakha,
-> Bhawanpreet <Bhawanpreet.Lakha@amd.com>; Rajkumar Subbiah
-> <rsubbia@codeaurora.org>; open list <linux-kernel@vger.kernel.org>
-> Subject: [PATCH 3/3] drm/dp_mst: Get rid of old comment in
-> drm_atomic_get_mst_topology_state docs
->=20
-> We don't actually care about connection_mutex here anymore, so let's get
-> rid of the comment mentioning it in this function's kdocs.
->=20
-> Signed-off-by: Lyude Paul <lyude@redhat.com>
-> ---
->  drivers/gpu/drm/display/drm_dp_mst_topology.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> index d6e595b95f07..9f96132a5d74 100644
-> --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> @@ -5458,8 +5458,7 @@
-> EXPORT_SYMBOL(drm_dp_mst_topology_state_funcs);
->   *
->   * This function wraps drm_atomic_get_priv_obj_state() passing in the MS=
-T
-> atomic
->   * state vtable so that the private object state returned is that of a M=
-ST
-> - * topology object. Also, drm_atomic_get_private_obj_state() expects the
-> caller
-> - * to care of the locking, so warn if don't hold the connection_mutex.
-> + * topology object.
->   *
->   * RETURNS:
->   *
-> --
-> 2.35.3
+The KVM_INSN_EXIT_TO_USER_SPACE is always 0 whereas
+KVM_INSN_CONTINUE_SAME_SEPC is always 1 so the statement
+"return (rc <= 0) ? rc : 1;" handles both these cases.
 
---
 Regards,
-Wayne Lin
+Anup
+
+>
+> > +     default:
+> > +             break;
+> >       }
+> >
+> > -     return truly_illegal_insn(vcpu, run, insn);
+> > +     return (rc <= 0) ? rc : 1;
+> >  }
+> >
+> >  /**
+> > --
+> > 2.34.1
+> >
+> >
+> > --
+> > kvm-riscv mailing list
+> > kvm-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kvm-riscv

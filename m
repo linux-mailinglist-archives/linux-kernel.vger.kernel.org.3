@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E4F5493DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB1A548B39
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355334AbiFMLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S1382573AbiFMOSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354307AbiFML3T (ORCPT
+        with ESMTP id S1381103AbiFMOKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:19 -0400
+        Mon, 13 Jun 2022 10:10:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D4A3EF13;
-        Mon, 13 Jun 2022 03:43:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A882D1E3;
+        Mon, 13 Jun 2022 04:42:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3403B80D3B;
-        Mon, 13 Jun 2022 10:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 285EFC3411C;
-        Mon, 13 Jun 2022 10:43:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B555B80EB2;
+        Mon, 13 Jun 2022 11:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E791DC34114;
+        Mon, 13 Jun 2022 11:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116992;
-        bh=NSpYyGGJXBbVhvCEmdzTJ3lzz03ll/lczQXkZqe5C3Y=;
+        s=korg; t=1655120518;
+        bh=wKYQNm6xG3nOwG/8tiktpJg4CqIDjgkr82oZoP7izT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W9JGmzPV2YOn05OdJTpOfKmcFKigZ3heiljsPGe/9YRsUmHQV9WR0wvO5S2kpiVU8
-         004JdaYOmP73AjBhNFVR9B4a4IXyM47Fo8+9vHaINlrVZcp55fKRtrJaHMujrJfxSD
-         SU1LnZR7yzaYdo+Wiax7FiMLyvzIgWCHkmAFQjNw=
+        b=ibSR8U0fTQivdfTFvOonOyByoT7jxau/B54GXM/JEsvYLSdPdZUyDdqiUXZzMSHqr
+         up58GENHjlCsNL+sgT6yDuQJGoJShDJsz1+SFZxGlhpyqB8pVNqfVUMK3O6LR+uTxU
+         guB6xlr0U7LnhqqJYizQijfLDAVMm9L9ceHMwlJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.4 259/411] ASoC: rt5514: Fix event generation for "DSP Voice Wake Up" control
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 038/298] power: supply: ab8500_fg: Allocate wq in probe
 Date:   Mon, 13 Jun 2022 12:08:52 +0200
-Message-Id: <20220613094936.531337696@linuxfoundation.org>
+Message-Id: <20220613094926.091998782@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-commit 4213ff556740bb45e2d9ff0f50d056c4e7dd0921 upstream.
+[ Upstream commit 010ddb813f3554cbbf8bd13b731452236a2c8017 ]
 
-The driver has a custom put function for "DSP Voice Wake Up" which does
-not generate event notifications on change, instead returning 0. Since we
-already exit early in the case that there is no change this can be fixed
-by unconditionally returning 1 at the end of the function.
+The workqueue is allocated in bind() but all interrupts are
+registered in probe().
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220428162444.3883147-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Some interrupts put work on the workqueue, which can have
+bad side effects.
+
+Allocate the workqueue in probe() instead, destroy it in
+.remove() and make unbind() simply flush the workqueue.
+
+Fixes: 1c1f13a006ed ("power: supply: ab8500: Move to componentized binding")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rt5514.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/power/supply/ab8500_fg.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
---- a/sound/soc/codecs/rt5514.c
-+++ b/sound/soc/codecs/rt5514.c
-@@ -419,7 +419,7 @@ static int rt5514_dsp_voice_wake_up_put(
- 		}
- 	}
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 09a4cbd69676..23adcb597ff9 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2995,13 +2995,6 @@ static int ab8500_fg_bind(struct device *dev, struct device *master,
+ {
+ 	struct ab8500_fg *di = dev_get_drvdata(dev);
  
--	return 0;
-+	return 1;
+-	/* Create a work queue for running the FG algorithm */
+-	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
+-	if (di->fg_wq == NULL) {
+-		dev_err(dev, "failed to create work queue\n");
+-		return -ENOMEM;
+-	}
+-
+ 	di->bat_cap.max_mah_design = di->bm->bi->charge_full_design_uah;
+ 	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
+ 	di->vbat_nom_uv = di->bm->bi->voltage_max_design_uv;
+@@ -3025,8 +3018,7 @@ static void ab8500_fg_unbind(struct device *dev, struct device *master,
+ 	if (ret)
+ 		dev_err(dev, "failed to disable coulomb counter\n");
+ 
+-	destroy_workqueue(di->fg_wq);
+-	flush_scheduled_work();
++	flush_workqueue(di->fg_wq);
  }
  
- static const struct snd_kcontrol_new rt5514_snd_controls[] = {
+ static const struct component_ops ab8500_fg_component_ops = {
+@@ -3070,6 +3062,13 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	ab8500_fg_charge_state_to(di, AB8500_FG_CHARGE_INIT);
+ 	ab8500_fg_discharge_state_to(di, AB8500_FG_DISCHARGE_INIT);
+ 
++	/* Create a work queue for running the FG algorithm */
++	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
++	if (di->fg_wq == NULL) {
++		dev_err(dev, "failed to create work queue\n");
++		return -ENOMEM;
++	}
++
+ 	/* Init work for running the fg algorithm instantly */
+ 	INIT_WORK(&di->fg_work, ab8500_fg_instant_work);
+ 
+@@ -3181,6 +3180,8 @@ static int ab8500_fg_remove(struct platform_device *pdev)
+ 	int ret = 0;
+ 	struct ab8500_fg *di = platform_get_drvdata(pdev);
+ 
++	destroy_workqueue(di->fg_wq);
++	flush_scheduled_work();
+ 	component_del(&pdev->dev, &ab8500_fg_component_ops);
+ 	list_del(&di->node);
+ 	ab8500_fg_sysfs_exit(di);
+-- 
+2.35.1
+
 
 

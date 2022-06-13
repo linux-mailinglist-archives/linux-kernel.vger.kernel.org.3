@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33878549D82
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E06549D83
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349606AbiFMTWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S1349640AbiFMTWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348960AbiFMTVf (ORCPT
+        with ESMTP id S1347036AbiFMTVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 15:21:35 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5F932052
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:18:06 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id e66so6102817pgc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:18:06 -0700 (PDT)
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A062018E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:18:07 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso6578389pjh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:18:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KwXY14Kz4g2aCYAhdgeSpgsRv05HFkaBSKgnXrsuDCI=;
-        b=xeagx102iZADD8vk/6snUp2Y6cRGsNv1mAD7IDjympqVvYfiMzNOk4WBMCsM6E9Rz8
-         gF8d0YMOQgauc99u+zhhag3P3yCbc/6E4Ei3febosxzlesH6c3f788NXi/7RMSIvnqmG
-         px7Rwwj0v8R83vIycU1S4BZ5RaQXjCHu/t/eKH5N0SFbQSQ99TEsxcTvg0LumocszxhO
-         hrqLphG+9rCcGVZ/aMdesKL8hx4+q+TFbvjSp7PChzG8DXmDNNILcqbcLR6O5pstSjeI
-         iHidJpc1F7ZEu/i5qxDboqUs9QOUiviEH/A6JrfgcIbpGUMFPTNy4ysSTMDWXV43gmWH
-         WnHg==
+        bh=WtNMojkay1TGl3veVsLBCL1IdXBJpZKRASa03E0Bjrk=;
+        b=bD24dxGKfFGeICbVrf9DLa7VMCKl7hRiega5n95H/eRXArWOFPAijUtmC8XnhIs344
+         MVS8fyo8pPj1M5rKcmAnIfOYtcwbNMqSL9vZYMTaVwB7idEGvuS5UPOwdvUVHTkf7WJI
+         Qp+dfmBTkTqZbhSL4lQM14CfJl2WjLkE+csJXn8gFOLD75H8Swz0u6USqEWWaVkjm6Ir
+         2/OhGrtbDgC1d6vVjwqGaPGgaD0FDt3cs/mmmwQIbZgb6rkSPupDSE0bCOBWjBmYkjIU
+         tIYwarv0ZUhF0HKlinhT4RsfcZbijiu0esNDtQvbMFuiey8l6572d2ljoHbCPNklFv7j
+         cTrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KwXY14Kz4g2aCYAhdgeSpgsRv05HFkaBSKgnXrsuDCI=;
-        b=fPd9xDukr4tGV/0dPHNCCq9xr4Ua/Bhtx3GPW/cJImKhhpcpm+ep+kmBvMRIKcA6F5
-         REmNBh1guAyUwixXObK8RBIJ9SPj0WZ0p4ViueEEPjUZnsROfUDOx5hMluVZh8OCS9Q1
-         nIKmVV+iAHdHwwO3hljQONNaCSzfEJRnmiLrI9cqgAoxONKM9TgwAV3CnR/cLeo+K7PE
-         89NJ8YnVdVYb3cl3zT0CoLlLB49Zq7X7cnco6F5eqgj30ISU8n0BlWiYXuBIsoI4oSwo
-         5WUnl8CqLUxWKn3IFciZG8FckZSGHG7oczXd32DcvXczSrrL+9/PNTWjhC8Bmqp6PoKq
-         w9/g==
-X-Gm-Message-State: AOAM530XzbDbvZ3ftFA6VXeY5ZaQ0KvVewjJXw3ivarPBnsQz70M5ej9
-        TuYPw7hvYclcVDLMSc7sNSLEMA==
-X-Google-Smtp-Source: ABdhPJzUzxhI0lhys4D/Olq54dljejhmpv3sYwLxkp0naQcvqNQRnmbZmw8PvLIUp9jxtrK1HaCR+A==
-X-Received: by 2002:a63:894a:0:b0:3fc:a724:578c with SMTP id v71-20020a63894a000000b003fca724578cmr530868pgd.499.1655140685485;
-        Mon, 13 Jun 2022 10:18:05 -0700 (PDT)
+        bh=WtNMojkay1TGl3veVsLBCL1IdXBJpZKRASa03E0Bjrk=;
+        b=rtqGWvI+2mZSb7K4FD9X+nkzxnq+C5D4PNyqc56wrgrGsfcz3ECaacen7J2ilDW6k6
+         w9gwVzhJD4b2q9OM7HnABgTB03aeNJ3/G95qm6fUq8PLfSIxxEhRNcsQXhJ8mKh/0BT9
+         a2PRhcIFG1slVEgf7lRoeCdd4LLWgjcsf6cKdxnkWqp5mtpHSnjd95VWOrfgzMs33B/p
+         vMYfGi1Tc5gHEeGbbZfL9ksV1gPx/dm8hHEbt72sHEFrXHgPZxffuNQtROW2E/UjZ9jg
+         xGQr5i8j1Xcte2pyWHR1o9LYtY64GE4TUUiBprRycv5aORo9+MZOiLsEZ8cgxvl9JMcx
+         FsSg==
+X-Gm-Message-State: AJIora+eZitxb2a7u4QLIj8KmgOSO0d3hXIDADTW3Id7cjEoFdD8z/b9
+        odgO6RLDTsZFuLSlmB8UdVlsQQ==
+X-Google-Smtp-Source: AGRyM1v/xmb1YOfRGIydVrWS4Zge68b0oTo5AEN1qZItO+KXP82nbbG7O45y1BuRTZIM0E+/iHssfA==
+X-Received: by 2002:a17:902:bf45:b0:15c:df47:3d6 with SMTP id u5-20020a170902bf4500b0015cdf4703d6mr347304pls.58.1655140687192;
+        Mon, 13 Jun 2022 10:18:07 -0700 (PDT)
 Received: from localhost.localdomain ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id u17-20020a62d451000000b0050dc762812csm5646641pfl.6.2022.06.13.10.18.03
+        by smtp.gmail.com with ESMTPSA id u17-20020a62d451000000b0050dc762812csm5646641pfl.6.2022.06.13.10.18.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:18:05 -0700 (PDT)
+        Mon, 13 Jun 2022 10:18:06 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -56,9 +56,9 @@ Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
         quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
         elder@kernel.org, netdev@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 1/6] net: ipa: use "tre_ring" for all TRE ring local variables
-Date:   Mon, 13 Jun 2022 12:17:54 -0500
-Message-Id: <20220613171759.578856-2-elder@linaro.org>
+Subject: [PATCH net-next 2/6] net: ipa: rename two transaction fields
+Date:   Mon, 13 Jun 2022 12:17:55 -0500
+Message-Id: <20220613171759.578856-3-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220613171759.578856-1-elder@linaro.org>
 References: <20220613171759.578856-1-elder@linaro.org>
@@ -75,89 +75,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All local variables that represent event rings are named "ring".
+There are two fields in a GSI transaction that keep track of TRE
+counts.  The first represents the number of TREs reserved for the
+transaction in the TRE ring; that's currently named "tre_count".
+The second is the number of TREs that are actually *used* by the
+transaction at the time it is committed.
 
-All but two functions that represent a channel's TRE ring with a
-local variable use the name "tre_ring".  For consistency, use that
-name in the two functions that don't fit the pattern.
+Rename the "tre_count" field to be "rsvd_count", to make its meaning
+a little more specific.  The "_count" is present in the name mainly
+to avoid interpreting it as a reserved (not-to-be-used) field.  This
+name also distinguishes it from the "tre_count" field associated
+with a channel.
+
+Rename the "used" field to be "used_count", to match the convention
+used for reserved TREs.
 
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
- drivers/net/ipa/gsi_trans.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/net/ipa/gsi_trans.c | 41 +++++++++++++++++++------------------
+ drivers/net/ipa/gsi_trans.h |  8 ++++----
+ 2 files changed, 25 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-index 278e467c5430b..e3f3c736c7409 100644
+index e3f3c736c7409..986857eb39296 100644
 --- a/drivers/net/ipa/gsi_trans.c
 +++ b/drivers/net/ipa/gsi_trans.c
-@@ -549,7 +549,7 @@ static void gsi_trans_tre_fill(struct gsi_tre *dest_tre, dma_addr_t addr,
- static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
- {
- 	struct gsi_channel *channel = &trans->gsi->channel[trans->channel_id];
--	struct gsi_ring *ring = &channel->tre_ring;
-+	struct gsi_ring *tre_ring = &channel->tre_ring;
- 	enum ipa_cmd_opcode opcode = IPA_CMD_NONE;
- 	bool bei = channel->toward_ipa;
- 	struct gsi_tre *dest_tre;
-@@ -567,8 +567,8 @@ static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
- 	 * transfer request, whose opcode is IPA_CMD_NONE.
+@@ -355,7 +355,7 @@ struct gsi_trans *gsi_channel_trans_alloc(struct gsi *gsi, u32 channel_id,
+ 	trans = gsi_trans_pool_alloc(&trans_info->pool, 1);
+ 	trans->gsi = gsi;
+ 	trans->channel_id = channel_id;
+-	trans->tre_count = tre_count;
++	trans->rsvd_count = tre_count;
+ 	init_completion(&trans->completion);
+ 
+ 	/* Allocate the scatterlist and (if requested) info entries. */
+@@ -405,17 +405,17 @@ void gsi_trans_free(struct gsi_trans *trans)
+ 	/* Releasing the reserved TREs implicitly frees the sgl[] and
+ 	 * (if present) info[] arrays, plus the transaction itself.
  	 */
+-	gsi_trans_tre_release(trans_info, trans->tre_count);
++	gsi_trans_tre_release(trans_info, trans->rsvd_count);
+ }
+ 
+ /* Add an immediate command to a transaction */
+ void gsi_trans_cmd_add(struct gsi_trans *trans, void *buf, u32 size,
+ 		       dma_addr_t addr, enum ipa_cmd_opcode opcode)
+ {
+-	u32 which = trans->used++;
++	u32 which = trans->used_count++;
+ 	struct scatterlist *sg;
+ 
+-	WARN_ON(which >= trans->tre_count);
++	WARN_ON(which >= trans->rsvd_count);
+ 
+ 	/* Commands are quite different from data transfer requests.
+ 	 * Their payloads come from a pool whose memory is allocated
+@@ -446,9 +446,9 @@ int gsi_trans_page_add(struct gsi_trans *trans, struct page *page, u32 size,
+ 	struct scatterlist *sg = &trans->sgl[0];
+ 	int ret;
+ 
+-	if (WARN_ON(trans->tre_count != 1))
++	if (WARN_ON(trans->rsvd_count != 1))
+ 		return -EINVAL;
+-	if (WARN_ON(trans->used))
++	if (WARN_ON(trans->used_count))
+ 		return -EINVAL;
+ 
+ 	sg_set_page(sg, page, size, offset);
+@@ -456,7 +456,7 @@ int gsi_trans_page_add(struct gsi_trans *trans, struct page *page, u32 size,
+ 	if (!ret)
+ 		return -ENOMEM;
+ 
+-	trans->used++;	/* Transaction now owns the (DMA mapped) page */
++	trans->used_count++;	/* Transaction now owns the (DMA mapped) page */
+ 
+ 	return 0;
+ }
+@@ -465,25 +465,26 @@ int gsi_trans_page_add(struct gsi_trans *trans, struct page *page, u32 size,
+ int gsi_trans_skb_add(struct gsi_trans *trans, struct sk_buff *skb)
+ {
+ 	struct scatterlist *sg = &trans->sgl[0];
+-	u32 used;
++	u32 used_count;
+ 	int ret;
+ 
+-	if (WARN_ON(trans->tre_count != 1))
++	if (WARN_ON(trans->rsvd_count != 1))
+ 		return -EINVAL;
+-	if (WARN_ON(trans->used))
++	if (WARN_ON(trans->used_count))
+ 		return -EINVAL;
+ 
+ 	/* skb->len will not be 0 (checked early) */
+ 	ret = skb_to_sgvec(skb, sg, 0, skb->len);
+ 	if (ret < 0)
+ 		return ret;
+-	used = ret;
++	used_count = ret;
+ 
+-	ret = dma_map_sg(trans->gsi->dev, sg, used, trans->direction);
++	ret = dma_map_sg(trans->gsi->dev, sg, used_count, trans->direction);
+ 	if (!ret)
+ 		return -ENOMEM;
+ 
+-	trans->used += used;	/* Transaction now owns the (DMA mapped) skb */
++	/* Transaction now owns the (DMA mapped) skb */
++	trans->used_count += used_count;
+ 
+ 	return 0;
+ }
+@@ -559,7 +560,7 @@ static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
+ 	u32 avail;
+ 	u32 i;
+ 
+-	WARN_ON(!trans->used);
++	WARN_ON(!trans->used_count);
+ 
+ 	/* Consume the entries.  If we cross the end of the ring while
+ 	 * filling them we'll switch to the beginning to finish.
+@@ -569,8 +570,8 @@ static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
  	cmd_opcode = channel->command ? &trans->cmd_opcode[0] : NULL;
--	avail = ring->count - ring->index % ring->count;
--	dest_tre = gsi_ring_virt(ring, ring->index);
-+	avail = tre_ring->count - tre_ring->index % tre_ring->count;
-+	dest_tre = gsi_ring_virt(tre_ring, tre_ring->index);
- 	for_each_sg(trans->sgl, sg, trans->used, i) {
- 		bool last_tre = i == trans->used - 1;
+ 	avail = tre_ring->count - tre_ring->index % tre_ring->count;
+ 	dest_tre = gsi_ring_virt(tre_ring, tre_ring->index);
+-	for_each_sg(trans->sgl, sg, trans->used, i) {
+-		bool last_tre = i == trans->used - 1;
++	for_each_sg(trans->sgl, sg, trans->used_count, i) {
++		bool last_tre = i == trans->used_count - 1;
  		dma_addr_t addr = sg_dma_address(sg);
-@@ -576,14 +576,14 @@ static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
+ 		u32 len = sg_dma_len(sg);
  
- 		byte_count += len;
- 		if (!avail--)
--			dest_tre = gsi_ring_virt(ring, 0);
-+			dest_tre = gsi_ring_virt(tre_ring, 0);
- 		if (cmd_opcode)
- 			opcode = *cmd_opcode++;
- 
+@@ -583,7 +584,7 @@ static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
  		gsi_trans_tre_fill(dest_tre, addr, len, last_tre, bei, opcode);
  		dest_tre++;
  	}
--	ring->index += trans->used;
-+	tre_ring->index += trans->used;
+-	tre_ring->index += trans->used;
++	tre_ring->index += trans->used_count;
  
  	if (channel->toward_ipa) {
  		/* We record TX bytes when they are sent */
-@@ -595,7 +595,7 @@ static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
- 	}
- 
- 	/* Associate the last TRE with the transaction */
--	gsi_channel_trans_map(channel, ring->index - 1, trans);
-+	gsi_channel_trans_map(channel, tre_ring->index - 1, trans);
- 
- 	gsi_trans_move_pending(trans);
- 
-@@ -675,7 +675,7 @@ void gsi_channel_trans_cancel_pending(struct gsi_channel *channel)
- int gsi_trans_read_byte(struct gsi *gsi, u32 channel_id, dma_addr_t addr)
+@@ -611,7 +612,7 @@ static void __gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
+ /* Commit a GSI transaction */
+ void gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
  {
- 	struct gsi_channel *channel = &gsi->channel[channel_id];
--	struct gsi_ring *ring = &channel->tre_ring;
-+	struct gsi_ring *tre_ring = &channel->tre_ring;
- 	struct gsi_trans_info *trans_info;
- 	struct gsi_tre *dest_tre;
+-	if (trans->used)
++	if (trans->used_count)
+ 		__gsi_trans_commit(trans, ring_db);
+ 	else
+ 		gsi_trans_free(trans);
+@@ -620,7 +621,7 @@ void gsi_trans_commit(struct gsi_trans *trans, bool ring_db)
+ /* Commit a GSI transaction and wait for it to complete */
+ void gsi_trans_commit_wait(struct gsi_trans *trans)
+ {
+-	if (!trans->used)
++	if (!trans->used_count)
+ 		goto out_trans_free;
  
-@@ -687,10 +687,10 @@ int gsi_trans_read_byte(struct gsi *gsi, u32 channel_id, dma_addr_t addr)
+ 	refcount_inc(&trans->refcount);
+@@ -638,7 +639,7 @@ void gsi_trans_complete(struct gsi_trans *trans)
+ {
+ 	/* If the entire SGL was mapped when added, unmap it now */
+ 	if (trans->direction != DMA_NONE)
+-		dma_unmap_sg(trans->gsi->dev, trans->sgl, trans->used,
++		dma_unmap_sg(trans->gsi->dev, trans->sgl, trans->used_count,
+ 			     trans->direction);
  
- 	/* Now fill the the reserved TRE and tell the hardware */
+ 	ipa_gsi_trans_complete(trans);
+diff --git a/drivers/net/ipa/gsi_trans.h b/drivers/net/ipa/gsi_trans.h
+index 020c3b32de1d7..b5f80250ca006 100644
+--- a/drivers/net/ipa/gsi_trans.h
++++ b/drivers/net/ipa/gsi_trans.h
+@@ -33,8 +33,8 @@ struct gsi_trans_pool;
+  * @gsi:	GSI pointer
+  * @channel_id: Channel number transaction is associated with
+  * @cancelled:	If set by the core code, transaction was cancelled
+- * @tre_count:	Number of TREs reserved for this transaction
+- * @used:	Number of TREs *used* (could be less than tre_count)
++ * @rsvd_count:	Number of TREs reserved for this transaction
++ * @used_count:	Number of TREs *used* (could be less than rsvd_count)
+  * @len:	Total # of transfer bytes represented in sgl[] (set by core)
+  * @data:	Preserved but not touched by the core transaction code
+  * @cmd_opcode:	Array of command opcodes (command channel only)
+@@ -56,8 +56,8 @@ struct gsi_trans {
  
--	dest_tre = gsi_ring_virt(ring, ring->index);
-+	dest_tre = gsi_ring_virt(tre_ring, tre_ring->index);
- 	gsi_trans_tre_fill(dest_tre, addr, 1, true, false, IPA_CMD_NONE);
+ 	bool cancelled;			/* true if transaction was cancelled */
  
--	ring->index++;
-+	tre_ring->index++;
- 	gsi_channel_doorbell(channel);
+-	u8 tre_count;			/* # TREs requested */
+-	u8 used;			/* # entries used in sgl[] */
++	u8 rsvd_count;			/* # TREs requested */
++	u8 used_count;			/* # entries used in sgl[] */
+ 	u32 len;			/* total # bytes across sgl[] */
  
- 	return 0;
+ 	union {
 -- 
 2.34.1
 

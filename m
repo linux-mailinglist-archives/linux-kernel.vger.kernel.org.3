@@ -2,162 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745D6549EA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7693549EAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243151AbiFMUM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S1350902AbiFMUO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241940AbiFMUMo (ORCPT
+        with ESMTP id S1350813AbiFMUOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:12:44 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54F94D9C9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:47:31 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s10so7147168ljh.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gnUSbe8CiTQ19HP1QRaMovzHPwVV5AH7oRueQxzbr2w=;
-        b=psqvyg4bPOOObXvl93Zxro9XA/ODLoG6iBN8VzURq2kWrUR7F3BHDeeHNMu0CFKyIh
-         Niks5hKvSuVELNC275GXW5lNVLONvG604XONrgXtzQCBbODYI+FiNC4UHOy01ziKEw6P
-         PnJJ8X8mCYdNE116ke64zsX9sSqEcXHCfXLltO9UXIpqgB60u1m1gOJgKSvqZ2Vu7Rt3
-         Fab5Mj4u35jsb3FBf1q2tLM98qhaB60LVo3lH+ODCh+pfDogtGE59OZmPCThjZAo5F3C
-         uARnmPJ0E0/9jMWP5IEUMjK7PRjAVPO04tktB/Od36POLALwftkbezadySNHJrj1LtR7
-         bRTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gnUSbe8CiTQ19HP1QRaMovzHPwVV5AH7oRueQxzbr2w=;
-        b=eDv0wUxJq5/7NXH0SMGp/cjqzExnbx0AHLaCmgQBnZGCxSwpzjtTqHT7wUag2grhvA
-         5R9zqUnMTDZ5GfLzBWsosj/EMo4uD8F5PKv4/5OpLw7gJQpgS3HDqFeJcujx/iHq4IQl
-         ffOjQrrRazCk/FtO/RbFCsNm/ijDVakBxnD3RV07KAMZ0ywqlfNhZpWEeqacjiNEP6bl
-         7QRpRtkTRYAXZOT624NiRI+4e6q+NZaDZ3G7WRt8Tg5yXp8iEnImE8aYoD3v73MoownJ
-         cXOuFCaDQ/DLa2oxKBgfL6Dkb1HHLGzVxoOyr+uORKtzI4Muudtd3hZF/hzcT2D1doZK
-         wkAA==
-X-Gm-Message-State: AJIora93gunuSytSzOP3t8SfpBU0IAB0mOAmSbsTC2+F9rqm/SFoGPkF
-        0uMZJBn/+fB0daUoQOGbADZKOyjpYIjwbapwgeMJ
-X-Google-Smtp-Source: AGRyM1uMA1RswQj/kRbYWxpa2gpbkIqW/H3Lhp9QgKWhkKjVKtC7uz71CWdrVgWOGoL64GzPA+QRw4qUugKbzHueGjo=
-X-Received: by 2002:a05:651c:1581:b0:255:48d1:fdae with SMTP id
- h1-20020a05651c158100b0025548d1fdaemr472476ljq.286.1655146049852; Mon, 13 Jun
- 2022 11:47:29 -0700 (PDT)
+        Mon, 13 Jun 2022 16:14:44 -0400
+Received: from outgoing-stata.csail.mit.edu (outgoing-stata.csail.mit.edu [128.30.2.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D68F403FA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:50:06 -0700 (PDT)
+Received: from [77.23.249.31] (helo=srivatsab-a02.vmware.com)
+        by outgoing-stata.csail.mit.edu with esmtpsa (TLS1.2:RSA_AES_128_CBC_SHA1:128)
+        (Exim 4.82)
+        (envelope-from <srivatsa@csail.mit.edu>)
+        id 1o0p7j-0002lx-0j; Mon, 13 Jun 2022 14:49:15 -0400
+Subject: Re: [PATCH 29/36] cpuidle,xenpv: Make more PARAVIRT_XXL noinstr clean
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+References: <20220608142723.103523089@infradead.org>
+ <20220608144517.759631860@infradead.org>
+From:   "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+Message-ID: <510b9b68-7d53-7d4d-5a05-37fbd199eb4b@csail.mit.edu>
+Date:   Mon, 13 Jun 2022 20:48:49 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609221702.347522-9-morbo@google.com>
- <YqYTExy0IpVbunBL@equinox>
-In-Reply-To: <YqYTExy0IpVbunBL@equinox>
-From:   Bill Wendling <morbo@google.com>
-Date:   Mon, 13 Jun 2022 11:47:18 -0700
-Message-ID: <CAGG=3QVc4STHym0hszpr1SP=RYWag5=J-MB-zhz4JzNZnRnbvg@mail.gmail.com>
-Subject: Re: [PATCH 08/12] cdrom: use correct format characters
-To:     Phillip Potter <phil@philpotter.co.uk>
-Cc:     Bill Wendling <isanbard@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220608144517.759631860@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 9:23 AM Phillip Potter <phil@philpotter.co.uk> wrote:
->
-> On Thu, Jun 09, 2022 at 10:16:27PM +0000, Bill Wendling wrote:
-> > From: Bill Wendling <isanbard@gmail.com>
-> >
-> > When compiling with -Wformat, clang emits the following warnings:
-> >
-> > drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-> >         ret = scnprintf(info + *pos, max_size - *pos, header);
-> >                                                       ^~~~~~
-> >
-> > Use a string literal for the format string.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> > Signed-off-by: Bill Wendling <isanbard@gmail.com>
-> > ---
-> >  drivers/cdrom/cdrom.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-> > index 416f723a2dbb..52b40120c76e 100644
-> > --- a/drivers/cdrom/cdrom.c
-> > +++ b/drivers/cdrom/cdrom.c
-> > @@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
-> >       struct cdrom_device_info *cdi;
-> >       int ret;
-> >
-> > -     ret = scnprintf(info + *pos, max_size - *pos, header);
-> > +     ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
-> >       if (!ret)
-> >               return 1;
-> >
-> > --
-> > 2.36.1.255.ge46751e96f-goog
-> >
->
-> Hi Bill,
->
-> Thank you for the patch, much appreciated.
->
-> Looking at this though, all callers of cdrom_print_info() provide 'header'
-> as a string literal defined within the driver, when making the call.
-> Therefore, I'm not convinced this change is necessary for cdrom.c -
-> that said, in this particular use case I don't think it would hurt
-> either.
->
-> I've followed the other responses on parts of this series, so I
-> understand that a different solution is potentially in the works.
-> Thought I'd respond anyway though out of courtesy.
->
-Thanks, Phillip.
+On 6/8/22 4:27 PM, Peter Zijlstra wrote:
+> vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0xde: call to wbinvd() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: default_idle+0x4: call to arch_safe_halt() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: xen_safe_halt+0xa: call to HYPERVISOR_sched_op.constprop.0() leaves .noinstr.text section
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-I pointed out in a separate response that this specific warning is
-disabled by default, but when I ran into while hacking stuff there
-weren't a lot of places where the warning popped up (at least for x86
-builds) and thought it would be a nice cleanup. I understand if you
-don't think this patch is necessary for your code. There are some
-places where visual inspection of the code is "good enough" to ensure
-that nothing untoward will happen (Greg pointed out a similar thing in
-an mm/ file).
+Reviewed-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
 
-Cheers!
--bw
+
+Regards,
+Srivatsa
+VMware Photon OS
+
+> ---
+>  arch/x86/include/asm/paravirt.h      |    6 ++++--
+>  arch/x86/include/asm/special_insns.h |    4 ++--
+>  arch/x86/include/asm/xen/hypercall.h |    2 +-
+>  arch/x86/kernel/paravirt.c           |   14 ++++++++++++--
+>  arch/x86/xen/enlighten_pv.c          |    2 +-
+>  arch/x86/xen/irq.c                   |    2 +-
+>  6 files changed, 21 insertions(+), 9 deletions(-)
+> 
+> --- a/arch/x86/include/asm/paravirt.h
+> +++ b/arch/x86/include/asm/paravirt.h
+> @@ -168,7 +168,7 @@ static inline void __write_cr4(unsigned
+>  	PVOP_VCALL1(cpu.write_cr4, x);
+>  }
+>  
+> -static inline void arch_safe_halt(void)
+> +static __always_inline void arch_safe_halt(void)
+>  {
+>  	PVOP_VCALL0(irq.safe_halt);
+>  }
+> @@ -178,7 +178,9 @@ static inline void halt(void)
+>  	PVOP_VCALL0(irq.halt);
+>  }
+>  
+> -static inline void wbinvd(void)
+> +extern noinstr void pv_native_wbinvd(void);
+> +
+> +static __always_inline void wbinvd(void)
+>  {
+>  	PVOP_ALT_VCALL0(cpu.wbinvd, "wbinvd", ALT_NOT(X86_FEATURE_XENPV));
+>  }
+> --- a/arch/x86/include/asm/special_insns.h
+> +++ b/arch/x86/include/asm/special_insns.h
+> @@ -115,7 +115,7 @@ static inline void wrpkru(u32 pkru)
+>  }
+>  #endif
+>  
+> -static inline void native_wbinvd(void)
+> +static __always_inline void native_wbinvd(void)
+>  {
+>  	asm volatile("wbinvd": : :"memory");
+>  }
+> @@ -179,7 +179,7 @@ static inline void __write_cr4(unsigned
+>  	native_write_cr4(x);
+>  }
+>  
+> -static inline void wbinvd(void)
+> +static __always_inline void wbinvd(void)
+>  {
+>  	native_wbinvd();
+>  }
+> --- a/arch/x86/include/asm/xen/hypercall.h
+> +++ b/arch/x86/include/asm/xen/hypercall.h
+> @@ -382,7 +382,7 @@ MULTI_stack_switch(struct multicall_entr
+>  }
+>  #endif
+>  
+> -static inline int
+> +static __always_inline int
+>  HYPERVISOR_sched_op(int cmd, void *arg)
+>  {
+>  	return _hypercall2(int, sched_op, cmd, arg);
+> --- a/arch/x86/kernel/paravirt.c
+> +++ b/arch/x86/kernel/paravirt.c
+> @@ -233,6 +233,11 @@ static noinstr void pv_native_set_debugr
+>  	native_set_debugreg(regno, val);
+>  }
+>  
+> +noinstr void pv_native_wbinvd(void)
+> +{
+> +	native_wbinvd();
+> +}
+> +
+>  static noinstr void pv_native_irq_enable(void)
+>  {
+>  	native_irq_enable();
+> @@ -242,6 +247,11 @@ static noinstr void pv_native_irq_disabl
+>  {
+>  	native_irq_disable();
+>  }
+> +
+> +static noinstr void pv_native_safe_halt(void)
+> +{
+> +	native_safe_halt();
+> +}
+>  #endif
+>  
+>  enum paravirt_lazy_mode paravirt_get_lazy_mode(void)
+> @@ -273,7 +283,7 @@ struct paravirt_patch_template pv_ops =
+>  	.cpu.read_cr0		= native_read_cr0,
+>  	.cpu.write_cr0		= native_write_cr0,
+>  	.cpu.write_cr4		= native_write_cr4,
+> -	.cpu.wbinvd		= native_wbinvd,
+> +	.cpu.wbinvd		= pv_native_wbinvd,
+>  	.cpu.read_msr		= native_read_msr,
+>  	.cpu.write_msr		= native_write_msr,
+>  	.cpu.read_msr_safe	= native_read_msr_safe,
+> @@ -307,7 +317,7 @@ struct paravirt_patch_template pv_ops =
+>  	.irq.save_fl		= __PV_IS_CALLEE_SAVE(native_save_fl),
+>  	.irq.irq_disable	= __PV_IS_CALLEE_SAVE(pv_native_irq_disable),
+>  	.irq.irq_enable		= __PV_IS_CALLEE_SAVE(pv_native_irq_enable),
+> -	.irq.safe_halt		= native_safe_halt,
+> +	.irq.safe_halt		= pv_native_safe_halt,
+>  	.irq.halt		= native_halt,
+>  #endif /* CONFIG_PARAVIRT_XXL */
+>  
+> --- a/arch/x86/xen/enlighten_pv.c
+> +++ b/arch/x86/xen/enlighten_pv.c
+> @@ -1019,7 +1019,7 @@ static const typeof(pv_ops) xen_cpu_ops
+>  
+>  		.write_cr4 = xen_write_cr4,
+>  
+> -		.wbinvd = native_wbinvd,
+> +		.wbinvd = pv_native_wbinvd,
+>  
+>  		.read_msr = xen_read_msr,
+>  		.write_msr = xen_write_msr,
+> --- a/arch/x86/xen/irq.c
+> +++ b/arch/x86/xen/irq.c
+> @@ -24,7 +24,7 @@ noinstr void xen_force_evtchn_callback(v
+>  	(void)HYPERVISOR_xen_version(0, NULL);
+>  }
+>  
+> -static void xen_safe_halt(void)
+> +static noinstr void xen_safe_halt(void)
+>  {
+>  	/* Blocking includes an implicit local_irq_enable(). */
+>  	if (HYPERVISOR_sched_op(SCHEDOP_block, NULL) != 0)
+> 
+> 

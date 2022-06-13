@@ -2,123 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF57954993E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8A354993C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbiFMQpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 12:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S235462AbiFMQoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 12:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240005AbiFMQo7 (ORCPT
+        with ESMTP id S242085AbiFMQnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 12:44:59 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEC21E4BE1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:33:56 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id t32so10118656ybt.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KQCwIkwNzwt5T2z3wlATn5QZJXZyj8/g94B/Y2n7Ov8=;
-        b=RsztUVvqZtKDuLU8Lf83jCg2FonaZq3j7tha/V+O/QezKPXwlEvSEPOQX3hz9T78C3
-         3I6j6z1A/Cq6rSJmdFgt0oN6wG+e9xT+Ae9I57CN7NuNV7UAGESXGdpL/0qjMFr6J1AO
-         j5S+6qJRX5emBJ2bfvZ0aKKWa1x9S44BcdWCp78aC5PfePta2erze8nysaY1ttyVO7kx
-         fWJ7ZvaryKTY+6zAJ5UhVNSOJgi3zgc40qe+mrW1Ay0ECDOBytM0OUitt40J2PFHczlR
-         Z86EN3athSadQP2xV0dv7LzAY+7OnBLrfmhcH8PuFvJX/KIQYWgquzO8svWkc7MbNA5h
-         H1mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KQCwIkwNzwt5T2z3wlATn5QZJXZyj8/g94B/Y2n7Ov8=;
-        b=i0S+Gwiz64TSkG6DSgj9bujoBfFcHGSVTcC7JPlzES49/Xl3t3jdLWBCatdmkJ/Mvz
-         85hyQTiHENxqdTNdQ44HXNQ0l88qIjVypH9xWK1ar9lnUGpuww2CC0JzaZ6uMNL9+0q0
-         v3K2dfeLTZPeFSKRrNNnldHi6O6G/kxlk39KO7VXgjT6oldcul4KZblBnphRHCN6YAT4
-         U5vXLhf07cUraxdwJxSFSaB2mEPCjI88okk8FvA6Ao7OcAul841P4+4WetI5FcPpWp8G
-         Z8D0ZxHNnnOy37r+TgVOtgmBIri9iUTGnDLChZsW6+wK6dKlz5YKqxSUC1D7jn8A0VBZ
-         GOow==
-X-Gm-Message-State: AOAM533oHha7AbsDsmExpXDVG+71Rytd85bQfT44mAQ+nX4dLSERAsm+
-        +j/Nlj4pu91ylzprNqtlQrRsKgiNXrxEgzQNAgjYTw==
-X-Google-Smtp-Source: ABdhPJy/F93/bynfvfsm40lPj+sfF6IUeml0u74B5+XSTwKjdBKHGF9ssO+g80HeXa4n5Q7iWRh0IVOUfUGuwu/D1DY=
-X-Received: by 2002:a05:6902:102c:b0:663:32b8:4b24 with SMTP id
- x12-20020a056902102c00b0066332b84b24mr51076390ybt.1.1655130835059; Mon, 13
- Jun 2022 07:33:55 -0700 (PDT)
+        Mon, 13 Jun 2022 12:43:53 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0171E44C7;
+        Mon, 13 Jun 2022 07:33:30 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 70B73240012;
+        Mon, 13 Jun 2022 14:33:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1655130805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bgOZd2Vfi/HOg/3HSQWoHmC0I40OMrwKOFV6lIb9Er8=;
+        b=hmpaT1nlbdsUsiDbvJJ5b8jKhvR0VWiONZKXcYKwV/z4P2/qqrPITPWpwH0Q6BYB7ZrvyQ
+        dtKjBYlUL0itD3g5yMn5SgZe6KlVJEhDvQpHyiU1dGsqbSoIpgDwUsdIiw7xiO+2e8s+sh
+        8ubboH3yegNVQRlhprAWMI+KeS5osYC9sNH+gG/qfRI9eIJg8zgz5dU8bPW71avfKFkRNv
+        vVmrm5Q/u8FZMx/dPC2GqSa7I1PVw8yI2Kcdr4SiFFr/wkhv7HZKxPEnqo5lBSbq/2o4kI
+        +kvAK5PRFOet6Y8LLfyf7DtGdfaUKozXAsm9sLiYxXS16mbgYU/wSUXi6H1xWA==
+Date:   Mon, 13 Jun 2022 16:33:21 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tom Rini <trini@konsulko.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V3 1/2] mtd: allow getting MTD device associated with a
+ specific DT node
+Message-ID: <20220613163321.6c3ccb5e@xps-13>
+In-Reply-To: <ad084c13-55fc-8506-f768-49a0c6ae4f7f@gmail.com>
+References: <20220611204651.19947-1-zajec5@gmail.com>
+        <20220613160411.48b07515@xps-13>
+        <ad084c13-55fc-8506-f768-49a0c6ae4f7f@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
- <20220610113427.908751-3-alexandr.lobakin@intel.com> <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
- <22042c14bc6a437d9c6b235fbfa32c8a@intel.com> <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
- <20220613141947.1176100-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220613141947.1176100-1-alexandr.lobakin@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 13 Jun 2022 16:33:17 +0200
-Message-ID: <CANpmjNM0noP8ieQztyEvijz+MG-cDxxmfwaX_QTpnyT5G33EGA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] bitops: always define asm-generic non-atomic bitops
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 16:21, Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> From: Marco Elver <elver@google.com>
-> Date: Fri, 10 Jun 2022 18:32:36 +0200
->
-> > On Fri, 10 Jun 2022 at 18:02, Luck, Tony <tony.luck@intel.com> wrote:
-> > >
-> > > > > +/**
-> > > > > + * generic_test_bit - Determine whether a bit is set
-> > > > > + * @nr: bit number to test
-> > > > > + * @addr: Address to start counting from
-> > > > > + */
-> > > >
-> > > > Shouldn't we add in this or in separate patch a big NOTE to explain that this
-> > > > is actually atomic and must be kept as a such?
-> > >
-> > > "atomic" isn't really the right word. The volatile access makes sure that the
-> > > compiler does the test at the point that the source code asked, and doesn't
-> > > move it before/after other operations.
-> >
-> > It's listed in Documentation/atomic_bitops.txt.
->
-> Oh, so my memory was actually correct that I saw it in the docs
-> somewhere.
-> WDYT, should I mention this here in the code (block comment) as well
-> that it's atomic and must not lose `volatile` as Andy suggested or
-> it's sufficient to have it in the docs (+ it's not underscored)?
+Hi Rafa=C5=82,
 
-Perhaps a quick comment in the code (not kerneldoc above) will be
-sufficient, with reference to Documentation/atomic_bitops.txt.
+zajec5@gmail.com wrote on Mon, 13 Jun 2022 16:15:34 +0200:
+
+> On 13.06.2022 16:04, Miquel Raynal wrote:
+> >> @@ -1154,6 +1154,34 @@ int __get_mtd_device(struct mtd_info *mtd)
+> >>   }
+> >>   EXPORT_SYMBOL_GPL(__get_mtd_device); =20
+> >>   >> +/** =20
+> >> + * of_get_mtd_device_by_node - obtain an MTD device associated with a=
+ given node
+> >> + *
+> >> + * @np: device tree node
+> >> + */
+> >> +struct mtd_info *of_get_mtd_device_by_node(struct device_node *np) =20
+> >=20
+> > Shall we try to use a more of-agnostic syntax or is it too complex here=
+? =20
+>=20
+> I need some extra hint, please. This is how many similar functions look
+> like:
+
+I know most implementation today use of_ functions directly but it
+seems like there is a global move towards fwnodes now, and I was
+wondering if using those instead (which might also apply to other types
+of "nodes" than DT ones) could be possible.
+
+But looking into existing implementations, I came across the pwm implem
+which features:
+- of_pwm_get()
+- acpi_pwm_get()
+
+And finally a fwnode_pwm_get() which does:
+
+	if (is_of_node())
+		of_pwm_get():
+	else if (is_acpi_node())
+		acpi_pwm_get();
+
+So actually my suggestion is meaningless. I'm fine with the current
+approach.
+
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+
+>=20
+> $ grep -E -r "(get|find).*_by_node" ./include/*
+> ./include/drm/drm_mipi_dsi.h:struct mipi_dsi_host *of_find_mipi_dsi_host_=
+by_node(struct device_node *node);
+> ./include/drm/drm_mipi_dsi.h:struct mipi_dsi_device *of_find_mipi_dsi_dev=
+ice_by_node(struct device_node *np);
+> ./include/linux/usb/phy.h:extern struct usb_phy *devm_usb_get_phy_by_node=
+(struct device *dev,
+> ./include/linux/usb/phy.h:static inline struct usb_phy *devm_usb_get_phy_=
+by_node(struct device *dev,
+> ./include/linux/extcon.h:struct extcon_dev *extcon_find_edev_by_node(stru=
+ct device_node *node);
+> ./include/linux/extcon.h:static inline struct extcon_dev *extcon_find_ede=
+v_by_node(struct device_node *node)
+> ./include/linux/of_net.h:extern struct net_device *of_find_net_device_by_=
+node(struct device_node *np);
+> ./include/linux/of_net.h:static inline struct net_device *of_find_net_dev=
+ice_by_node(struct device_node *np)
+> ./include/linux/devfreq.h:struct devfreq *devfreq_get_devfreq_by_node(str=
+uct device_node *node);
+> ./include/linux/devfreq.h:static inline struct devfreq *devfreq_get_devfr=
+eq_by_node(struct device_node *node)
+> ./include/linux/of_platform.h:extern struct platform_device *of_find_devi=
+ce_by_node(struct device_node *np);
+> ./include/linux/of_platform.h:static inline struct platform_device *of_fi=
+nd_device_by_node(struct device_node *np)
+> ./include/linux/backlight.h:struct backlight_device *of_find_backlight_by=
+_node(struct device_node *node);
+> ./include/linux/backlight.h:of_find_backlight_by_node(struct device_node =
+*node)
+> ./include/linux/i2c.h:struct i2c_client *of_find_i2c_device_by_node(struc=
+t device_node *node);
+> ./include/linux/i2c.h:struct i2c_adapter *of_find_i2c_adapter_by_node(str=
+uct device_node *node);
+> ./include/linux/i2c.h:struct i2c_adapter *of_get_i2c_adapter_by_node(stru=
+ct device_node *node);
+> ./include/linux/i2c.h:static inline struct i2c_client *of_find_i2c_device=
+_by_node(struct device_node *node)
+> ./include/linux/i2c.h:static inline struct i2c_adapter *of_find_i2c_adapt=
+er_by_node(struct device_node *node)
+> ./include/linux/i2c.h:static inline struct i2c_adapter *of_get_i2c_adapte=
+r_by_node(struct device_node *node)
+>=20
+>=20
+> >> +{
+> >> +	struct mtd_info *mtd =3D NULL;
+> >> +	struct mtd_info *tmp;
+> >> +	int err;
+> >> +
+> >> +	mutex_lock(&mtd_table_mutex);
+> >> +
+> >> +	err =3D -ENODEV;
+> >> +	mtd_for_each_device(tmp) {
+> >> +		if (mtd_get_of_node(tmp) =3D=3D np) {
+> >> +			mtd =3D tmp;
+> >> +			err =3D __get_mtd_device(mtd);
+> >> +			break;
+> >> +		}
+> >> +	}
+> >> +
+> >> +	mutex_unlock(&mtd_table_mutex);
+> >> +
+> >> +	return err ? ERR_PTR(err) : mtd;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(of_get_mtd_device_by_node);
+> >> +
+> >>   /**
+> >>    *	get_mtd_device_nm - obtain a validated handle for an MTD device by
+> >>    *	device name =20
+>=20
+
+
+Thanks,
+Miqu=C3=A8l

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A005488EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C542854923F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357918AbiFMNEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S1383662AbiFMOXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358373AbiFMMzT (ORCPT
+        with ESMTP id S1383124AbiFMOT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA297CE26;
-        Mon, 13 Jun 2022 04:15:54 -0700 (PDT)
+        Mon, 13 Jun 2022 10:19:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F73145AD5;
+        Mon, 13 Jun 2022 04:43:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4960460B6C;
-        Mon, 13 Jun 2022 11:15:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E3DCC34114;
-        Mon, 13 Jun 2022 11:15:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8490EB80D3A;
+        Mon, 13 Jun 2022 11:43:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFC1C34114;
+        Mon, 13 Jun 2022 11:43:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118953;
-        bh=ObCTs0xkg7XNnYFq31uEHAWVf5xq+3r0Y5NMqivMLp0=;
+        s=korg; t=1655120612;
+        bh=jFnYDH/ga59f/Td+EUa/dt0CS7+r9A8tKGC76gbt254=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jo5mfMYr7ZiCvxcS+HF4W9A+yaQgjuIe57nX24+TY+ejvGFkWhu28N3uBgHL2pUno
-         rZYTC2Omb63r4DETP37IwLFKPsTTYhiUK/+q/88JMF7HS4Dc9+hqmbqfzkDx7Ru4nQ
-         V3SX8Vlibtjn9XtcgAij0uZPfGHcu3fZfGhYrrK8=
+        b=Ul2DsvLk2SnN2Ef9RORnyUxHr7ZM+r7SHue8FlxsZBrG7pTi5fzOUrxf+ZhrFaRiN
+         GvwWd5i6F+gENXj6UuvGDHumDyzyYrQbMU1SDWUw1NIO1p5PvDcZ8N2D4pT4lIY8ju
+         TecG8h6CAPewcesJq1YJ13IZpfNFgwuDmdK2/Z5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 088/247] sfc: fix considering that all channels have TX queues
+        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 096/298] nbd: dont clear NBD_CMD_INFLIGHT flag if request is not completed
 Date:   Mon, 13 Jun 2022 12:09:50 +0200
-Message-Id: <20220613094925.625485735@linuxfoundation.org>
+Message-Id: <20220613094927.861650360@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Habets <habetsm.xilinx@gmail.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-[ Upstream commit 2e102b53f8a778f872dc137f4c7ac548705817aa ]
+[ Upstream commit 2895f1831e911ca87d4efdf43e35eb72a0c7e66e ]
 
-Normally, all channels have RX and TX queues, but this is not true if
-modparam efx_separate_tx_channels=1 is used. In that cases, some
-channels only have RX queues and others only TX queues (or more
-preciselly, they have them allocated, but not initialized).
+Otherwise io will hung because request will only be completed if the
+cmd has the flag 'NBD_CMD_INFLIGHT'.
 
-Fix efx_channel_has_tx_queues to return the correct value for this case
-too.
-
-Messages shown at probe time before the fix:
- sfc 0000:03:00.0 ens6f0np0: MC command 0x82 inlen 544 failed rc=-22 (raw=0) arg=0
- ------------[ cut here ]------------
- netdevice: ens6f0np0: failed to initialise TXQ -1
- WARNING: CPU: 1 PID: 626 at drivers/net/ethernet/sfc/ef10.c:2393 efx_ef10_tx_init+0x201/0x300 [sfc]
- [...] stripped
- RIP: 0010:efx_ef10_tx_init+0x201/0x300 [sfc]
- [...] stripped
- Call Trace:
-  efx_init_tx_queue+0xaa/0xf0 [sfc]
-  efx_start_channels+0x49/0x120 [sfc]
-  efx_start_all+0x1f8/0x430 [sfc]
-  efx_net_open+0x5a/0xe0 [sfc]
-  __dev_open+0xd0/0x190
-  __dev_change_flags+0x1b3/0x220
-  dev_change_flags+0x21/0x60
- [...] stripped
-
-Messages shown at remove time before the fix:
- sfc 0000:03:00.0 ens6f0np0: failed to flush 10 queues
- sfc 0000:03:00.0 ens6f0np0: failed to flush queues
-
-Fixes: 8700aff08984 ("sfc: fix channel allocation with brute force")
-Reported-by: Tianhao Zhao <tizhao@redhat.com>
-Signed-off-by: Martin Habets <habetsm.xilinx@gmail.com>
-Tested-by: Íñigo Huguet <ihuguet@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 07175cb1baf4 ("nbd: make sure request completion won't concurrent")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Link: https://lore.kernel.org/r/20220521073749.3146892-4-yukuai3@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/net_driver.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/block/nbd.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
-index f6981810039d..bf097264d8fb 100644
---- a/drivers/net/ethernet/sfc/net_driver.h
-+++ b/drivers/net/ethernet/sfc/net_driver.h
-@@ -1533,7 +1533,7 @@ static inline bool efx_channel_is_xdp_tx(struct efx_channel *channel)
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 284557041336..ed678037ba6d 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -404,13 +404,14 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
+ 	if (!mutex_trylock(&cmd->lock))
+ 		return BLK_EH_RESET_TIMER;
  
- static inline bool efx_channel_has_tx_queues(struct efx_channel *channel)
- {
--	return true;
-+	return channel && channel->channel >= channel->efx->tx_channel_offset;
- }
+-	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
++	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+ 		mutex_unlock(&cmd->lock);
+ 		return BLK_EH_DONE;
+ 	}
  
- static inline unsigned int efx_channel_num_tx_queues(struct efx_channel *channel)
+ 	if (!refcount_inc_not_zero(&nbd->config_refs)) {
+ 		cmd->status = BLK_STS_TIMEOUT;
++		__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+ 		mutex_unlock(&cmd->lock);
+ 		goto done;
+ 	}
+@@ -479,6 +480,7 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
+ 	dev_err_ratelimited(nbd_to_dev(nbd), "Connection timed out\n");
+ 	set_bit(NBD_RT_TIMEDOUT, &config->runtime_flags);
+ 	cmd->status = BLK_STS_IOERR;
++	__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+ 	mutex_unlock(&cmd->lock);
+ 	sock_shutdown(nbd);
+ 	nbd_config_put(nbd);
+@@ -746,7 +748,7 @@ static struct nbd_cmd *nbd_handle_reply(struct nbd_device *nbd, int index,
+ 	cmd = blk_mq_rq_to_pdu(req);
+ 
+ 	mutex_lock(&cmd->lock);
+-	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
++	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+ 		dev_err(disk_to_dev(nbd->disk), "Suspicious reply %d (status %u flags %lu)",
+ 			tag, cmd->status, cmd->flags);
+ 		ret = -ENOENT;
+@@ -855,8 +857,16 @@ static void recv_work(struct work_struct *work)
+ 		}
+ 
+ 		rq = blk_mq_rq_from_pdu(cmd);
+-		if (likely(!blk_should_fake_timeout(rq->q)))
+-			blk_mq_complete_request(rq);
++		if (likely(!blk_should_fake_timeout(rq->q))) {
++			bool complete;
++
++			mutex_lock(&cmd->lock);
++			complete = __test_and_clear_bit(NBD_CMD_INFLIGHT,
++							&cmd->flags);
++			mutex_unlock(&cmd->lock);
++			if (complete)
++				blk_mq_complete_request(rq);
++		}
+ 		percpu_ref_put(&q->q_usage_counter);
+ 	}
+ 
 -- 
 2.35.1
 

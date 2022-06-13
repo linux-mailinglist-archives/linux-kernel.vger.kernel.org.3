@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210C5548C46
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EEF54894C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357192AbiFMMCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
+        id S1382338AbiFMOOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357267AbiFML4t (ORCPT
+        with ESMTP id S1382676AbiFMOGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:56:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C1A4D9CB;
-        Mon, 13 Jun 2022 03:56:12 -0700 (PDT)
+        Mon, 13 Jun 2022 10:06:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E655972AE;
+        Mon, 13 Jun 2022 04:41:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D18F61368;
-        Mon, 13 Jun 2022 10:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61953C34114;
-        Mon, 13 Jun 2022 10:56:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5793AB80ECE;
+        Mon, 13 Jun 2022 11:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3CB5C34114;
+        Mon, 13 Jun 2022 11:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117771;
-        bh=Y0R34XCIbfGw9P2jW4VI1KTGDab0h87DaHLn0mRVp/Y=;
+        s=korg; t=1655120469;
+        bh=DWggWnX2xNbDWS0Nu1a/WLOOSmvEs+6Jfo+l1xZDVc0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pYSqsVmhFvm6WGk2s4rZ5pcio6utC3TvrF9V+gBdUkZBwdaDJzmy+M9xX91MEWrCg
-         YQ8/1JK2jALZVScNisEOlYBTuvrcWK9B3gOUzb5+lNcg5WFpu1qdGxj6I7f80RMOdy
-         EFsKyfwepl8eLWWlm1/Iu0ZIv3HcVG+A/BuhxBy4=
+        b=0FK4LbjPEMMPr8iR8Oxnwj0HLrt1j9XjiqZ5DIjHXQJE1c/vbVAeFFUFXNc2/7Vl/
+         IluMeUrWgcG9ZMgrFZeukoYkMSDxuY3JGT14zitCiLcZeuARe8EQ/eeUT7/31gBLbU
+         CPHEs7Sy4gYTDvcHCWHJbzigQVxRFIgqi251Qi3A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Elwell <phil@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 114/287] ARM: dts: bcm2835-rpi-b: Fix GPIO line names
+Subject: [PATCH 5.17 044/298] watchdog: rzg2l_wdt: Fix reset control imbalance
 Date:   Mon, 13 Jun 2022 12:08:58 +0200
-Message-Id: <20220613094927.335046659@linuxfoundation.org>
+Message-Id: <20220613094926.280675937@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-[ Upstream commit 97bd8659c1c46c23e4daea7e040befca30939950 ]
+[ Upstream commit 33d04d0fdba9fae18c7d58364643d2c606a43dba ]
 
-Recently this has been fixed in the vendor tree, so upstream this.
+Both rzg2l_wdt_probe() and rzg2l_wdt_start() calls reset_control_
+deassert() which results in a reset control imbalance.
 
-Fixes: 731b26a6ac17 ("ARM: bcm2835: Add names for the Raspberry Pi GPIO lines")
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+This patch fixes reset control imbalance by removing reset_control_
+deassert() from rzg2l_wdt_start() and replaces reset_control_assert with
+reset_control_reset in rzg2l_wdt_stop() as watchdog module can be stopped
+only by a module reset. This change will allow us to restart WDT after
+stop() by configuring WDT timeout and enable registers.
+
+Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220225175320.11041-5-biju.das.jz@bp.renesas.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2835-rpi-b.dts | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/watchdog/rzg2l_wdt.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-b.dts b/arch/arm/boot/dts/bcm2835-rpi-b.dts
-index 31ff602e2cd3..6bac18d7c070 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-b.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-b.dts
-@@ -48,18 +48,17 @@
- 			  "GPIO18",
- 			  "NC", /* GPIO19 */
- 			  "NC", /* GPIO20 */
--			  "GPIO21",
-+			  "CAM_GPIO0",
- 			  "GPIO22",
- 			  "GPIO23",
- 			  "GPIO24",
- 			  "GPIO25",
- 			  "NC", /* GPIO26 */
--			  "CAM_GPIO0",
--			  /* Binary number representing build/revision */
--			  "CONFIG0",
--			  "CONFIG1",
--			  "CONFIG2",
--			  "CONFIG3",
-+			  "GPIO27",
-+			  "GPIO28",
-+			  "GPIO29",
-+			  "GPIO30",
-+			  "GPIO31",
- 			  "NC", /* GPIO32 */
- 			  "NC", /* GPIO33 */
- 			  "NC", /* GPIO34 */
+diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+index 48dfe6e5e64f..88274704b260 100644
+--- a/drivers/watchdog/rzg2l_wdt.c
++++ b/drivers/watchdog/rzg2l_wdt.c
+@@ -88,7 +88,6 @@ static int rzg2l_wdt_start(struct watchdog_device *wdev)
+ {
+ 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+ 
+-	reset_control_deassert(priv->rstc);
+ 	pm_runtime_get_sync(wdev->parent);
+ 
+ 	/* Initialize time out */
+@@ -108,7 +107,7 @@ static int rzg2l_wdt_stop(struct watchdog_device *wdev)
+ 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+ 
+ 	pm_runtime_put(wdev->parent);
+-	reset_control_assert(priv->rstc);
++	reset_control_reset(priv->rstc);
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

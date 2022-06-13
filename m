@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BB1547F20
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E698547F18
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiFMFge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 01:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S233027AbiFMFgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 01:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiFMFf5 (ORCPT
+        with ESMTP id S232781AbiFMFgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 01:35:57 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA3E11479
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:35:28 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id c4so7088517lfj.12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:35:28 -0700 (PDT)
+        Mon, 13 Jun 2022 01:36:03 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE22712A9E
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:35:36 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id h23so7138107lfe.4
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:35:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=openvz-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=fYBLg0GorDblKEye4tioxlFuzZ/2NCtjLKl9KE3W8YI=;
-        b=zIUP7XJmmGybhomix4qhj4dsvVJz3qpTtmJxAHZo+FS3qMKA29sQ0rVxITb06XZqrD
-         nZC+ARODXgb3uW8IID/NoPvHZF9I+vmsgg6S2S3doreOAfToddHYk1Xvd8rWktSA8nfW
-         ahOnjls08LK/iVwueICAsn0ZIC7TfutQY9y1bJsENsR5gcnyHgUNUiHtMrbOcicbvOE2
-         QVKi01RzoRWCS8SpdjYkxAJRvKM/V18mk3VtVZeCBa7GBMjYuZ9WMAr51wHQPnrptMvn
-         8xgK0UlON2cwUtsy7uUQEVj443cXKJL8OSjA3MdZI+qOZ/kfjJeo689lqFDEg/SHaxHZ
-         d7mA==
+        bh=LySdGa6WSWuP57DyggEJLR/XgrjUl+fsCS3/BfNoxBo=;
+        b=MMQLuUr/04JdD6h+bOSVzq6FkKGW1jK4dRUQ5RRZgULnPkx8ZPAbdMfROKB0f01oM2
+         xtYIkf9112uEUuIkZV/zBrk6d7Ru8iB3LRi1ee260+FrR1jNCqxsW8hBdTa4M6TVqb42
+         PNJS7FJvKSSTEmrzL+Jgf91ADt0Ca0zpmxEJhBKqzC84MYEsuwd+4SSmote16X1Mvqps
+         kvUAWAoCgOTXygT1y7N5+eb0PZ5bGR63mHbra6sZ3h+5LaEY7aZRoJ9G2vwSfkzRDk/M
+         otgCOEA+Ecp2xbajvZSrKQmj9agTuFAAuD9tN2aAfrcL5UdcrflBlsakdQrPqksA4xT9
+         i+GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=fYBLg0GorDblKEye4tioxlFuzZ/2NCtjLKl9KE3W8YI=;
-        b=PnwwsaPHTVe4TvOuKQKYrfyPT5bpp475FCglbfSULdPg0fRRImA/fc3ERSWpi9uRNj
-         RNnZ1HUFHL900ObGaj/AQzeUHE07i02xRpBycuIR3xuHuaFTNA6/DlN1jGaYlSXXmmep
-         6lJ8gqnpUHCdbt3KI5FejyzWbJzWaYmdW9KcfSHzNxb0/Pif3BSPN71Hg49IExIwT44D
-         Y0iFO0954WjN4OSEfrfD25Yw68DcUGvKcJgy1YsPAYGsNDp+VPwEPSsg/QFQFwUdkifd
-         96Zo0+XZwyt3E4NemJJFzGGvty1Rf20EGxBlVbjIgPekhOKdohj/UxdHMO7o2VKafnB5
-         t/nA==
-X-Gm-Message-State: AOAM530erNCd+x7M0cJBWcWEDKw9hWGcBzWg3jclTc5AOtqIlJuxbpba
-        H5VuWI36vWXeKN5GeNpSKE67smFrN5R7zw==
-X-Google-Smtp-Source: ABdhPJzvN/XuMilatlDTG99FEYXRhOvXWQuq2fWz3UrzAYP/w/zAkDHEQehBYIW4xnHBlzBchtcVjQ==
-X-Received: by 2002:a05:6512:2614:b0:47d:c632:896b with SMTP id bt20-20020a056512261400b0047dc632896bmr5177459lfb.532.1655098527149;
-        Sun, 12 Jun 2022 22:35:27 -0700 (PDT)
+        bh=LySdGa6WSWuP57DyggEJLR/XgrjUl+fsCS3/BfNoxBo=;
+        b=tNRlCgeYD4B/75f1WWIXQn2YcOpk4YR1xTdGQVjefzj3cSXdXCavsiXS2hLAUEjIPx
+         IaHHMicPb+5YvIwTkiVerLKPIKvO2xXQHiUx13KRNsJlPt6qrLii5FECYwRKf3Cz7Fh2
+         xKChit9vmECT38dDnqkZerZE9PqJuZfioPMPyltcKQCbT9ugPvim7wd836I6TIZCwEcs
+         APUef1nz+S7red1sQdiKhJTk/KFm6nUGyyLIHY/t1In0ew1Sd5u891JR48tqwRvfGbrU
+         0KoBXBEYxwDArE3SFTYwKuKRWMkecErcSQAJKWha8VkrPEMnBpIUu0NEsmrFvDmfgZen
+         9f7g==
+X-Gm-Message-State: AOAM533nBCQXH9l7lZMt6HBThmQdllcZZk6Vc1hn3sPyQjbG58Q9AjrX
+        UEc0FLowtoMZUXy6SSMjm28OJQ==
+X-Google-Smtp-Source: ABdhPJxMkyKV5vTx93A1xGgc69W892dcXfu6ndsf9V1Krre+8NazIcBvdEnZNLY1jvfV+XYxmOL/zg==
+X-Received: by 2002:a05:6512:ac6:b0:479:2bdf:749 with SMTP id n6-20020a0565120ac600b004792bdf0749mr27273040lfu.686.1655098535032;
+        Sun, 12 Jun 2022 22:35:35 -0700 (PDT)
 Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id j21-20020a05651231d500b00478f3bb79d6sm845297lfe.194.2022.06.12.22.35.26
+        by smtp.gmail.com with ESMTPSA id y2-20020a05651c020200b002557df3669bsm880245ljn.21.2022.06.12.22.35.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Jun 2022 22:35:26 -0700 (PDT)
-Message-ID: <05bcd9df-970c-f8f8-0577-9dbb164b1180@openvz.org>
-Date:   Mon, 13 Jun 2022 08:35:26 +0300
+        Sun, 12 Jun 2022 22:35:34 -0700 (PDT)
+Message-ID: <b49f38c5-7544-c297-6198-6ec20852d043@openvz.org>
+Date:   Mon, 13 Jun 2022 08:35:33 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
 From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH mm v4 6/9] memcg: enable accounting for percpu allocation of
- struct cgroup_rstat_cpu
+Subject: [PATCH mm v4 7/9] memcg: enable accounting for large allocations in
+ mem_cgroup_css_alloc
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
@@ -69,63 +69,78 @@ References: <3e1d6eab-57c7-ba3d-67e1-c45aa0dfa2ab@openvz.org>
 Content-Language: en-US
 In-Reply-To: <3e1d6eab-57c7-ba3d-67e1-c45aa0dfa2ab@openvz.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct cgroup_rstat_cpu is percpu allocated for each new cgroup and
-can consume a significant portion of all allocated memory on nodes
-with a large number of CPUs.
+Creation of each memory cgroup allocates few huge objects in
+mem_cgroup_css_alloc(). Its size exceeds the size of memory
+accounted in common part of cgroup creation:
 
-Common part of the cgroup creation:
-Allocs  Alloc   $1*$2   Sum	Allocation
+common part: 	~11Kb	+  318 bytes percpu
+memcg: 		~17Kb	+ 4692 bytes percpu
+
+memory:
+------
+Allocs  Alloc   $1*$2   Sum     Allocation
 number  size
 --------------------------------------------
-16  ~   352     5632    5632    KERNFS
-1   +   4096    4096    9728    (cgroup_mkdir+0xe4)
-1       584     584     10312   (radix_tree_node_alloc.constprop.0+0x89)
-1       192     192     10504   (__d_alloc+0x29)
-2       72      144     10648   (avc_alloc_node+0x27)
-2       64      128     10776   (percpu_ref_init+0x6a)
-1       64      64      10840   (memcg_list_lru_alloc+0x21a)
-percpu:
-1   +   192     192     192     call_site=psi_cgroup_alloc+0x1e
-1   +   96      96      288     call_site=cgroup_rstat_init+0x5f
-2       12      24      312     call_site=percpu_ref_init+0x23
-1       6       6       318     call_site=__percpu_counter_init+0x22
+1   +   8192    8192    8192    (mem_cgroup_css_alloc+0x4a) <NB
+14  ~   352     4928    13120   KERNFS
+1   +   2048    2048    15168   (mem_cgroup_css_alloc+0xdd) <NB
+1       1024    1024    16192   (alloc_shrinker_info+0x79)
+1       584     584     16776   (radix_tree_node_alloc.constprop.0+0x89)
+2       64      128     16904   (percpu_ref_init+0x6a)
+1       64      64      16968   (mem_cgroup_css_online+0x32)
 
- '+' -- to be accounted,
- '~' -- partially accounted
+1   =   3684    3684    3684    call_site=mem_cgroup_css_alloc+0x9e
+1   =   984     984     4668    call_site=mem_cgroup_css_alloc+0xfd
+2       12      24      4692    call_site=percpu_ref_init+0x23
+
+     '=' -- already accounted,
+     '+' -- to be accounted,
+     '~' -- partially accounted
+
+Accounting for this memory helps to avoid misuse inside memcg-limited
+contianers.
 
 Signed-off-by: Vasily Averin <vvs@openvz.org>
+Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
 Acked-by: Shakeel Butt <shakeelb@google.com>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 ---
- kernel/cgroup/rstat.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ mm/memcontrol.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index 24b5c2ab5598..2904b185b01b 100644
---- a/kernel/cgroup/rstat.c
-+++ b/kernel/cgroup/rstat.c
-@@ -257,7 +257,8 @@ int cgroup_rstat_init(struct cgroup *cgrp)
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 27cebaa53472..a8647a8417e4 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5086,7 +5086,7 @@ static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+ {
+ 	struct mem_cgroup_per_node *pn;
  
- 	/* the root cgrp has rstat_cpu preallocated */
- 	if (!cgrp->rstat_cpu) {
--		cgrp->rstat_cpu = alloc_percpu(struct cgroup_rstat_cpu);
-+		cgrp->rstat_cpu = alloc_percpu_gfp(struct cgroup_rstat_cpu,
-+						   GFP_KERNEL_ACCOUNT);
- 		if (!cgrp->rstat_cpu)
- 			return -ENOMEM;
- 	}
+-	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, node);
++	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL_ACCOUNT, node);
+ 	if (!pn)
+ 		return 1;
+ 
+@@ -5138,7 +5138,7 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
+ 	int __maybe_unused i;
+ 	long error = -ENOMEM;
+ 
+-	memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL);
++	memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL_ACCOUNT);
+ 	if (!memcg)
+ 		return ERR_PTR(error);
+ 
 -- 
 2.36.1
 

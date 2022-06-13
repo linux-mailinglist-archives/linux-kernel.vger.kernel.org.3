@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B489E54984F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4CD548A95
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377473AbiFMNgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S1352679AbiFMLY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378129AbiFMNay (ORCPT
+        with ESMTP id S1353731AbiFMLQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:30:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C1CEBA;
-        Mon, 13 Jun 2022 04:25:41 -0700 (PDT)
+        Mon, 13 Jun 2022 07:16:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2739313E24;
+        Mon, 13 Jun 2022 03:39:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A091560F18;
-        Mon, 13 Jun 2022 11:25:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE387C36B08;
-        Mon, 13 Jun 2022 11:25:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D601EB80EA3;
+        Mon, 13 Jun 2022 10:39:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4422EC34114;
+        Mon, 13 Jun 2022 10:39:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119540;
-        bh=IVjXOW8RIGiL5phsUl4Pc2qplnLo+TV0JfVmuDGxz8s=;
+        s=korg; t=1655116782;
+        bh=uZmfmpKOPmINNAdJdzFzI9d0JP3lttiQJvjBMKWNFP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0Z7AZWIdHFJICfDKuNl+ikDdZdLQ/3WKPS10T/X+xrD3xdLZ74cu9Ii19lduY4lB
-         55OZbLqCpC+SH/COGTqTCTSqdZ9po99qSCP5qYWl4fYx5gZ6zueHSCkHx64iHiO5xQ
-         v4l6pvhZUoAfh7MkJ0+7z2S1L3/wypjHRGC7S7Qo=
+        b=C8RVw98BkVYpJBMoXklPs1hSPf5E+sZO98YV16YerifpHPWU1tJMRqQ0VUjiu+WEs
+         psE33GWwL3bObUfPfSS5Unop9dnF6IRusRmcHnO6VxRotGvjqUyokgAnPDa+I/OHQ3
+         HKE3C2rjgICzp3+TkQYTO4gP/ulrlYdVgu/Gl7Dk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 020/339] usb: musb: Fix missing of_node_put() in omap2430_probe
+Subject: [PATCH 5.4 172/411] mfd: ipaq-micro: Fix error check return value of platform_get_irq()
 Date:   Mon, 13 Jun 2022 12:07:25 +0200
-Message-Id: <20220613094927.121085023@linuxfoundation.org>
+Message-Id: <20220613094933.815460535@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit 424bef51fa530389b0b9008c9e144e40c10e8458 ]
+[ Upstream commit 3b49ae380ce1a3054e0c505dd9a356b82a5b48e8 ]
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+platform_get_irq() return negative value on failure, so null check of
+irq is incorrect. Fix it by comparing whether it is less than zero.
 
-Fixes: 8934d3e4d0e7 ("usb: musb: omap2430: Don't use omap_get_control_dev()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220309111033.24487-1-linmq006@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: dcc21cc09e3c ("mfd: Add driver for Atmel Microcontroller on iPaq h3xxx")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20220412085305.2533030-1-lv.ruyi@zte.com.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/musb/omap2430.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mfd/ipaq-micro.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
-index d2b7e613eb34..f571a65ae6ee 100644
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -362,6 +362,7 @@ static int omap2430_probe(struct platform_device *pdev)
- 	control_node = of_parse_phandle(np, "ctrl-module", 0);
- 	if (control_node) {
- 		control_pdev = of_find_device_by_node(control_node);
-+		of_node_put(control_node);
- 		if (!control_pdev) {
- 			dev_err(&pdev->dev, "Failed to get control device\n");
- 			ret = -EINVAL;
+diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
+index a1d9be82734d..88387c7e7443 100644
+--- a/drivers/mfd/ipaq-micro.c
++++ b/drivers/mfd/ipaq-micro.c
+@@ -407,7 +407,7 @@ static int __init micro_probe(struct platform_device *pdev)
+ 	micro_reset_comm(micro);
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (!irq)
++	if (irq < 0)
+ 		return -EINVAL;
+ 	ret = devm_request_irq(&pdev->dev, irq, micro_serial_isr,
+ 			       IRQF_SHARED, "ipaq-micro",
 -- 
 2.35.1
 

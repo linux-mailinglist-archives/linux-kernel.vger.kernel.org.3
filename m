@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0BB549593
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B91548E43
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379319AbiFMNsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S245073AbiFMK1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379282AbiFMNkR (ORCPT
+        with ESMTP id S1343668AbiFMKYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD27205F0;
-        Mon, 13 Jun 2022 04:31:09 -0700 (PDT)
+        Mon, 13 Jun 2022 06:24:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AAA23BF7;
+        Mon, 13 Jun 2022 03:19:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83FAE61245;
-        Mon, 13 Jun 2022 11:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8957CC385A2;
-        Mon, 13 Jun 2022 11:31:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7A52B80E5C;
+        Mon, 13 Jun 2022 10:19:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E9FC385A2;
+        Mon, 13 Jun 2022 10:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119867;
-        bh=tbsBjKqvCokBZRsF7bu0vr3QAcJFbcOcF4t0Z/UWIyw=;
+        s=korg; t=1655115561;
+        bh=Q6we5W8Kv/u+NRHNhRSbKfDoneXxz/vnoRI9lsCPipU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h7bE71tNZnxCicVSL3wQHB5rKSR07d/gVrkqv0ugccrgvDVrS1Al6WAnpgo1Ok7kc
-         IBn8NsUAQ5lbptFlABHy6gcbE1j5c2UbVmnY4Ucfj+4tBHAV21Vpl2MTSaMYHpajr0
-         ITnnj/2G5RRbcNepnRrsX7gvhoh3d+GDdFbDpVvE=
+        b=OMxqhwi0tdqNWFASx1lBM5E1ku+6HjPyCgUCptkhGNdwX0K41u20VlVHU5I+GiI9X
+         ezQ3uoJggjo4rElRGon0e6XXfHftW27SL7IDn5Eii7hpQYR0zmlvTDNOtsNIstLyEF
+         Ty37ivMa+hRgStsuRuYWMmr6gEt4SjkX6H+N0P+0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 167/339] m68knommu: fix undefined reference to `_init_sp
+Subject: [PATCH 4.9 118/167] serial: txx9: Dont allow CS5-6
 Date:   Mon, 13 Jun 2022 12:09:52 +0200
-Message-Id: <20220613094931.746312155@linuxfoundation.org>
+Message-Id: <20220613094908.404110971@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Ungerer <gerg@linux-m68k.org>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit a71b9e66fee47c59b3ec34e652b5c23bc6550794 ]
+[ Upstream commit 79ac88655dc0551e3571ad16bdabdbe65d61553e ]
 
-When configuring a nommu classic m68k system enabling the uboot parameter
-passing support (CONFIG_UBOOT) will produce the following compile error:
+Only CS7 and CS8 are supported but CSIZE is not sanitized with
+CS5 or CS6 to CS8.
 
-   m68k-linux-ld: arch/m68k/kernel/uboot.o: in function `process_uboot_commandline':
-   uboot.c:(.init.text+0x32): undefined reference to `_init_sp'
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
 
-The logic to support this option is only used on ColdFire based platforms
-(in its head.S startup code). So make the selection of this option
-depend on building for a ColdFire based platform.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-5-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/m68k/Kconfig.machine | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/serial_txx9.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index eeab4f3e6c19..946853a08502 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -335,6 +335,7 @@ comment "Machine Options"
+diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
+index ffb3fb1bda9e..61e0b65c3aaf 100644
+--- a/drivers/tty/serial/serial_txx9.c
++++ b/drivers/tty/serial/serial_txx9.c
+@@ -652,6 +652,8 @@ serial_txx9_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	case CS6:	/* not supported */
+ 	case CS8:
+ 		cval |= TXX9_SILCR_UMODE_8BIT;
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
+ 		break;
+ 	}
  
- config UBOOT
- 	bool "Support for U-Boot command line parameters"
-+	depends on COLDFIRE
- 	help
- 	  If you say Y here kernel will try to collect command
- 	  line parameters from the initial u-boot stack.
 -- 
 2.35.1
 

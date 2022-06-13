@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDFF549506
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9C35495EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378990AbiFMNnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        id S1356765AbiFMM5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379122AbiFMNjw (ORCPT
+        with ESMTP id S1357781AbiFMMyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:52 -0400
+        Mon, 13 Jun 2022 08:54:45 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B797A459;
-        Mon, 13 Jun 2022 04:28:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4496A1A4;
+        Mon, 13 Jun 2022 04:13:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4E457CE1166;
-        Mon, 13 Jun 2022 11:28:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 656F0C34114;
-        Mon, 13 Jun 2022 11:28:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CF361CE1177;
+        Mon, 13 Jun 2022 11:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7654C3411E;
+        Mon, 13 Jun 2022 11:13:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119724;
-        bh=PmQMdKKBRYPR+mOWp4FAdxocodqjDfYNXP6WYmpUaM8=;
+        s=korg; t=1655118799;
+        bh=K2DITIBWOUgM3T52kHFf5xwh5Y7EDPOuTclzffvszoo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qbck0VwTsN9QiZkyKiOeixyaRW0CgvMDxkRBN24YYo37zjy9meUXb4Opw+90ICa2m
-         ncph0UNfFBSYrWakDHG4KROxa5eUpc8OmCRPyB8JV7eOalUff3ZS7Khl4Y/GDJ/wfO
-         aoE4AbbPBxwP7wLjCoPqBM33CcAVetnYrDNEGRNw=
+        b=Y6szSAoJAXZ0WoaeYBa0I+XbYLNENZe/grB2jEsHMdg9LVlqY1D945to5p2bfezBY
+         ypdYePS4hK8e+qVUUPD/eMB1EeH8s+CEyNMg3CgAfp/MnyYX0iT35AT0aF9GvHwH2p
+         sFz97wugnbow3vYkBBOEXiJIfquuQMLnX7NYdv4Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Guangguan Wang <guangguan.wang@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 109/339] net/smc: fixes for converting from "struct smc_cdc_tx_pend **" to "struct smc_wr_tx_pend_priv *"
+Subject: [PATCH 5.15 032/247] rpmsg: qcom_smd: Fix returning 0 if irq_of_parse_and_map() fails
 Date:   Mon, 13 Jun 2022 12:08:54 +0200
-Message-Id: <20220613094929.816820580@linuxfoundation.org>
+Message-Id: <20220613094923.910894221@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit e225c9a5a74b12e9ef8516f30a3db2c7eb866ee1 ]
+[ Upstream commit 59d6f72f6f9c92fec8757d9e29527da828e9281f ]
 
-"struct smc_cdc_tx_pend **" can not directly convert
-to "struct smc_wr_tx_pend_priv *".
+irq_of_parse_and_map() returns 0 on failure, so this should not be
+passed further as error return code.
 
-Fixes: 2bced6aefa3d ("net/smc: put slot when connection is killed")
-Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 1a358d350664 ("rpmsg: qcom_smd: Fix irq_of_parse_and_map() return value")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220423093932.32136-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/smc_cdc.c | 2 +-
+ drivers/rpmsg/qcom_smd.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/smc/smc_cdc.c b/net/smc/smc_cdc.c
-index 5c731f27996e..53f63bfbaf5f 100644
---- a/net/smc/smc_cdc.c
-+++ b/net/smc/smc_cdc.c
-@@ -82,7 +82,7 @@ int smc_cdc_get_free_slot(struct smc_connection *conn,
- 		/* abnormal termination */
- 		if (!rc)
- 			smc_wr_tx_put_slot(link,
--					   (struct smc_wr_tx_pend_priv *)pend);
-+					   (struct smc_wr_tx_pend_priv *)(*pend));
- 		rc = -EPIPE;
+diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+index 775a7e44ac68..370688e8646b 100644
+--- a/drivers/rpmsg/qcom_smd.c
++++ b/drivers/rpmsg/qcom_smd.c
+@@ -1406,7 +1406,7 @@ static int qcom_smd_parse_edge(struct device *dev,
+ 	irq = irq_of_parse_and_map(node, 0);
+ 	if (!irq) {
+ 		dev_err(dev, "required smd interrupt missing\n");
+-		ret = irq;
++		ret = -EINVAL;
+ 		goto put_node;
  	}
- 	return rc;
+ 
 -- 
 2.35.1
 

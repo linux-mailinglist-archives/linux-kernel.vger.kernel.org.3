@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA470548F55
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC88C548989
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348093AbiFMKxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
+        id S1383329AbiFMOXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346017AbiFMKvA (ORCPT
+        with ESMTP id S1382071AbiFMOQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:51:00 -0400
+        Mon, 13 Jun 2022 10:16:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5312AC5;
-        Mon, 13 Jun 2022 03:27:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E662DD6E;
+        Mon, 13 Jun 2022 04:43:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62A20B80E92;
-        Mon, 13 Jun 2022 10:27:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAFBDC34114;
-        Mon, 13 Jun 2022 10:27:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9714B80E2C;
+        Mon, 13 Jun 2022 11:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3DCC34114;
+        Mon, 13 Jun 2022 11:43:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116037;
-        bh=d/SWcZsKRuUThfJskQZqSWuF1lVzytQ9GkjT0tAl9hU=;
+        s=korg; t=1655120585;
+        bh=kspaQPGbJV1NlakBjIX0v3JHztnswdilDVjBlWSPEtA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zId1ibw6OWcL8pvguZqkZ0tE20GIUmlED9TeQGsAfa2OpnWWcJcUW1Q4UtJGFnP42
-         F35Z/sS9eS2BAN222AlPkf80le+aS7tXJh06XphPz5Hye5QFOYWcLUPRQkimszqIVB
-         eKc7lAIpuYTE3335rTpKU4ucq6oM/GlQ+lM5YL2I=
+        b=kK+XbWUV0bjzE+mpBvkPEGNnuUyWFzJqk2icJOJAMF1WwJvP0uDrkbxsJe54+XYDo
+         tz0kRBOKoSAn+MlU/bJ1WUPD8lTthzWj34aQ5Vr2FoDMEKf5HC5FtsP52PBIU42EZ7
+         6xTUMCCFo9m2gFg58m9W5TwnoOhMZ9MWYtnqiGu8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 4.14 121/218] irqchip: irq-xtensa-mx: fix initial IRQ affinity
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 085/298] net: ethernet: ti: am65-cpsw-nuss: Fix some refcount leaks
 Date:   Mon, 13 Jun 2022 12:09:39 +0200
-Message-Id: <20220613094924.241281586@linuxfoundation.org>
+Message-Id: <20220613094927.526020927@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,62 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit a255ee29252066d621df5d6b420bf534c6ba5bc0 upstream.
+[ Upstream commit 5dd89d2fc438457811cbbec07999ce0d80051ff5 ]
 
-When irq-xtensa-mx chip is used in non-SMP configuration its
-irq_set_affinity callback is not called leaving IRQ affinity set empty.
-As a result IRQ delivery does not work in that configuration.
-Initialize IRQ affinity of the xtensa MX interrupt distributor to CPU 0
-for all external IRQ lines.
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+am65_cpsw_init_cpts() and am65_cpsw_nuss_probe() don't release
+the refcount in error case.
+Add missing of_node_put() to avoid refcount leak.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b1f66a5bee07 ("net: ethernet: ti: am65-cpsw-nuss: enable packet timestamping support")
+Fixes: 93a76530316a ("net: ethernet: ti: introduce am65x/j721e gigabit eth subsystem driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-xtensa-mx.c |   18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/irqchip/irq-xtensa-mx.c
-+++ b/drivers/irqchip/irq-xtensa-mx.c
-@@ -143,14 +143,25 @@ static struct irq_chip xtensa_mx_irq_chi
- 	.irq_set_affinity = xtensa_mx_irq_set_affinity,
- };
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 8251d7eb001b..eda91336c9f6 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -1802,6 +1802,7 @@ static int am65_cpsw_init_cpts(struct am65_cpsw_common *common)
+ 	if (IS_ERR(cpts)) {
+ 		int ret = PTR_ERR(cpts);
  
-+static void __init xtensa_mx_init_common(struct irq_domain *root_domain)
-+{
-+	unsigned int i;
-+
-+	irq_set_default_host(root_domain);
-+	secondary_init_irq();
-+
-+	/* Initialize default IRQ routing to CPU 0 */
-+	for (i = 0; i < XCHAL_NUM_EXTINTERRUPTS; ++i)
-+		set_er(1, MIROUT(i));
-+}
-+
- int __init xtensa_mx_init_legacy(struct device_node *interrupt_parent)
- {
- 	struct irq_domain *root_domain =
- 		irq_domain_add_legacy(NULL, NR_IRQS - 1, 1, 0,
- 				&xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
- }
++		of_node_put(node);
+ 		if (ret == -EOPNOTSUPP) {
+ 			dev_info(dev, "cpts disabled\n");
+ 			return 0;
+@@ -2669,9 +2670,9 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
+ 	if (!node)
+ 		return -ENOENT;
+ 	common->port_num = of_get_child_count(node);
++	of_node_put(node);
+ 	if (common->port_num < 1 || common->port_num > AM65_CPSW_MAX_PORTS)
+ 		return -ENOENT;
+-	of_node_put(node);
  
-@@ -160,8 +171,7 @@ static int __init xtensa_mx_init(struct
- 	struct irq_domain *root_domain =
- 		irq_domain_add_linear(np, NR_IRQS, &xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
- }
- IRQCHIP_DECLARE(xtensa_mx_irq_chip, "cdns,xtensa-mx", xtensa_mx_init);
+ 	common->rx_flow_id_base = -1;
+ 	init_completion(&common->tdown_complete);
+-- 
+2.35.1
+
 
 

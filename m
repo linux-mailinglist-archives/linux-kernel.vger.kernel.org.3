@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC5A548983
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83645548FE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351917AbiFMMak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S1383760AbiFMOX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351967AbiFMMYX (ORCPT
+        with ESMTP id S1382963AbiFMOV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:24:23 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E94431DFB;
-        Mon, 13 Jun 2022 04:05:34 -0700 (PDT)
+        Mon, 13 Jun 2022 10:21:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2873A2E092;
+        Mon, 13 Jun 2022 04:44:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AED48CE1184;
-        Mon, 13 Jun 2022 11:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFBBBC34114;
-        Mon, 13 Jun 2022 11:05:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09C9B6124E;
+        Mon, 13 Jun 2022 11:44:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1519FC34114;
+        Mon, 13 Jun 2022 11:43:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118331;
-        bh=PuqvqFcsFUVH1pQWN3jq/hsg4+X3qawIG6diTb0z6fY=;
+        s=korg; t=1655120639;
+        bh=ifA7lA7FbfM0V7ZenCFcpEE+5IR5N5Fy03biaMdVr9A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fR3zxdsVtj1NtaH3985emEVAFQM1r2MTt6t0TupCBqbF1qLeoLvrnicZEXT4QtIyg
-         vJTSjiDOXWFG/pnAsNUJ1b7i4sD+fou9sTeVRRQSEBflqvwQBp289u0pbleCQVZYwx
-         ZHN4kK1lYzOr2TCJYup8rLb/6uWAvia4DYIC+OWw=
+        b=i2AGIeky2qGcPCN2mlpfN5hMfrZf3ZiYOEGqhYnGapdAANd0QF+opk+rrcA3/juse
+         aXHZYqidjo3Sa9+dssQ9UeiBqIObOblFCe5bTne4Wfn1jBmSM8mXUR6TUw2L6tpGkn
+         UZg6uFq7aTUHshP2VsPETxDMZQZFARlqDP6MlHVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 037/172] serial: sh-sci: Dont allow CS5-6
-Date:   Mon, 13 Jun 2022 12:09:57 +0200
-Message-Id: <20220613094859.286956628@linuxfoundation.org>
+        stable@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 104/298] block: make bioset_exit() fully resilient against being called twice
+Date:   Mon, 13 Jun 2022 12:09:58 +0200
+Message-Id: <20220613094928.104799885@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-[ Upstream commit 9b87162de8be26bf3156460b37deee6399fd0fcb ]
+[ Upstream commit 605f7415ecfb426610195dd6c7577b30592b3369 ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized from
-CS5 or CS6 to CS8.
+Most of bioset_exit() is fine being called twice, as it clears the
+various allocations etc when they are freed. The exception is
+bio_alloc_cache_destroy(), which does not clear ->cache when it has
+freed it.
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+This isn't necessarily a bug, but can be if buggy users does call the
+exit path more then once, or with just a memset() bioset which has
+never been initialized. dm appears to be one such user.
 
-Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-6-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: be4d234d7aeb ("bio: add allocation cache abstraction")
+Link: https://lore.kernel.org/linux-block/YpK7m+14A+pZKs5k@casper.infradead.org/
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sh-sci.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ block/bio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index f700bfaef129..8d924727d6f0 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -2392,8 +2392,12 @@ static void sci_set_termios(struct uart_port *port, struct ktermios *termios,
- 	int best_clk = -1;
- 	unsigned long flags;
+diff --git a/block/bio.c b/block/bio.c
+index 738fea03edbf..dc6940621d7d 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -668,6 +668,7 @@ static void bio_alloc_cache_destroy(struct bio_set *bs)
+ 		bio_alloc_cache_prune(cache, -1U);
+ 	}
+ 	free_percpu(bs->cache);
++	bs->cache = NULL;
+ }
  
--	if ((termios->c_cflag & CSIZE) == CS7)
-+	if ((termios->c_cflag & CSIZE) == CS7) {
- 		smr_val |= SCSMR_CHR;
-+	} else {
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
-+	}
- 	if (termios->c_cflag & PARENB)
- 		smr_val |= SCSMR_PE;
- 	if (termios->c_cflag & PARODD)
+ /**
 -- 
 2.35.1
 

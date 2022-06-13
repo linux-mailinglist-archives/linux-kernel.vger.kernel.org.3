@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E07548AC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64397548895
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353959AbiFMLbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S1382920AbiFMOO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353056AbiFMLWW (ORCPT
+        with ESMTP id S1381463AbiFMOEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:22:22 -0400
+        Mon, 13 Jun 2022 10:04:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEE03C722;
-        Mon, 13 Jun 2022 03:42:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B0524093;
+        Mon, 13 Jun 2022 04:39:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0784CB80E94;
-        Mon, 13 Jun 2022 10:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1B7C34114;
-        Mon, 13 Jun 2022 10:42:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3D6AB80E2C;
+        Mon, 13 Jun 2022 11:39:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EFBC34114;
+        Mon, 13 Jun 2022 11:39:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116928;
-        bh=LqREU7fmX6uYg++L92zp2S5S/uQhUp3IKR/+9ct0vR0=;
+        s=korg; t=1655120382;
+        bh=BdLngRgHCbIHp4DhE0hw41qU3rCB9q/n6eugofvh6Gc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wW7sUE0blfNNh0YkmbZ6rYfMs08G2/iGHcuBoRh5rzTLbJ8bBHFf/XV08fGxkc44F
-         v6x8glIOXyaNGajZu/RF/pLVEwNmZac9uuFx28bwNMLdbq2PsDKD53O3/XRuUCZFLc
-         7y1HUdQy2I4W4xAOCVZEMCXjLFr3Cd1M16u38JWY=
+        b=iEi9MtZm7m83qzJj+uxULmH1nfw7ySjYyg1O+iI0yzw14jMSpmSVvcVmbzAwII3iF
+         pVEuRIm273djZX5UaAmCitFjlK+mYZVjOMG39L3dQeLW1GLV0bHpd6ZteMND9ITMHX
+         jrRDkZ9WlOogY9ufdH2RAxIDoW+BRFjUfajWhppQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 226/411] ext4: verify dir block before splitting it
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 005/298] lkdtm/bugs: Dont expect thread termination without CONFIG_UBSAN_TRAP
 Date:   Mon, 13 Jun 2022 12:08:19 +0200
-Message-Id: <20220613094935.421037035@linuxfoundation.org>
+Message-Id: <20220613094925.084119132@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,88 +56,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-commit 46c116b920ebec58031f0a78c5ea9599b0d2a371 upstream.
+[ Upstream commit 8bfdbddd68249e0d8598777cca8249619ee51df0 ]
 
-Before splitting a directory block verify its directory entries are sane
-so that the splitting code does not access memory it should not.
+When you don't select CONFIG_UBSAN_TRAP, you get:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220518093332.13986-1-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  # echo ARRAY_BOUNDS > /sys/kernel/debug/provoke-crash/DIRECT
+[  102.265827] ================================================================================
+[  102.278433] UBSAN: array-index-out-of-bounds in drivers/misc/lkdtm/bugs.c:342:16
+[  102.287207] index 8 is out of range for type 'char [8]'
+[  102.298722] ================================================================================
+[  102.313712] lkdtm: FAIL: survived array bounds overflow!
+[  102.318770] lkdtm: Unexpected! This kernel (5.16.0-rc1-s3k-dev-01884-g720dcf79314a ppc) was built with CONFIG_UBSAN_BOUNDS=y
+
+It is not correct because when CONFIG_UBSAN_TRAP is not selected
+you can't expect array bounds overflow to kill the thread.
+
+Modify the logic so that when the kernel is built with
+CONFIG_UBSAN_BOUNDS but without CONFIG_UBSAN_TRAP, you get a warning
+about CONFIG_UBSAN_TRAP not been selected instead.
+
+This also require a fix of pr_expected_config(), otherwise the
+following error is encountered.
+
+  CC      drivers/misc/lkdtm/bugs.o
+drivers/misc/lkdtm/bugs.c: In function 'lkdtm_ARRAY_BOUNDS':
+drivers/misc/lkdtm/bugs.c:351:2: error: 'else' without a previous 'if'
+  351 |  else
+      |  ^~~~
+
+Fixes: c75be56e35b2 ("lkdtm/bugs: Add ARRAY_BOUNDS to selftests")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/namei.c |   32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ drivers/misc/lkdtm/bugs.c  | 5 ++++-
+ drivers/misc/lkdtm/lkdtm.h | 8 ++++----
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -273,9 +273,9 @@ static struct dx_frame *dx_probe(struct
- 				 struct dx_hash_info *hinfo,
- 				 struct dx_frame *frame);
- static void dx_release(struct dx_frame *frames);
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
--		       struct dx_map_entry map[]);
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
-+		       struct dx_map_entry *map_tail);
- static void dx_sort_map(struct dx_map_entry *map, unsigned count);
- static struct ext4_dir_entry_2 *dx_move_dirents(char *from, char *to,
- 		struct dx_map_entry *offsets, int count, unsigned blocksize);
-@@ -1205,15 +1205,23 @@ static inline int search_dirblock(struct
-  * Create map of hash values, offsets, and sizes, stored at end of block.
-  * Returns number of entries mapped.
-  */
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
- 		       struct dx_map_entry *map_tail)
- {
- 	int count = 0;
--	char *base = (char *) de;
-+	struct ext4_dir_entry_2 *de = (struct ext4_dir_entry_2 *)bh->b_data;
-+	unsigned int buflen = bh->b_size;
-+	char *base = bh->b_data;
- 	struct dx_hash_info h = *hinfo;
- 
--	while ((char *) de < base + blocksize) {
-+	if (ext4_has_metadata_csum(dir->i_sb))
-+		buflen -= sizeof(struct ext4_dir_entry_tail);
-+
-+	while ((char *) de < base + buflen) {
-+		if (ext4_check_dir_entry(dir, NULL, de, bh, base, buflen,
-+					 ((char *)de) - base))
-+			return -EFSCORRUPTED;
- 		if (de->name_len && de->inode) {
- 			ext4fs_dirhash(dir, de->name, de->name_len, &h);
- 			map_tail--;
-@@ -1223,8 +1231,7 @@ static int dx_make_map(struct inode *dir
- 			count++;
- 			cond_resched();
- 		}
--		/* XXX: do we need to check rec_len == 0 case? -Chris */
--		de = ext4_next_entry(de, blocksize);
-+		de = ext4_next_entry(de, dir->i_sb->s_blocksize);
- 	}
- 	return count;
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index 4f2808b2ca3c..8cb342c562af 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -351,7 +351,10 @@ void lkdtm_ARRAY_BOUNDS(void)
+ 	kfree(not_checked);
+ 	kfree(checked);
+ 	pr_err("FAIL: survived array bounds overflow!\n");
+-	pr_expected_config(CONFIG_UBSAN_BOUNDS);
++	if (IS_ENABLED(CONFIG_UBSAN_BOUNDS))
++		pr_expected_config(CONFIG_UBSAN_TRAP);
++	else
++		pr_expected_config(CONFIG_UBSAN_BOUNDS);
  }
-@@ -1848,8 +1855,11 @@ static struct ext4_dir_entry_2 *do_split
  
- 	/* create map in the end of data2 block */
- 	map = (struct dx_map_entry *) (data2 + blocksize);
--	count = dx_make_map(dir, (struct ext4_dir_entry_2 *) data1,
--			     blocksize, hinfo, map);
-+	count = dx_make_map(dir, *bh, hinfo, map);
-+	if (count < 0) {
-+		err = count;
-+		goto journal_error;
-+	}
- 	map -= count;
- 	dx_sort_map(map, count);
- 	/* Ensure that neither split block is over half full */
+ void lkdtm_CORRUPT_LIST_ADD(void)
+diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+index d6137c70ebbe..cc76ebcca4c7 100644
+--- a/drivers/misc/lkdtm/lkdtm.h
++++ b/drivers/misc/lkdtm/lkdtm.h
+@@ -9,19 +9,19 @@
+ extern char *lkdtm_kernel_info;
+ 
+ #define pr_expected_config(kconfig)				\
+-{								\
++do {								\
+ 	if (IS_ENABLED(kconfig)) 				\
+ 		pr_err("Unexpected! This %s was built with " #kconfig "=y\n", \
+ 			lkdtm_kernel_info);			\
+ 	else							\
+ 		pr_warn("This is probably expected, since this %s was built *without* " #kconfig "=y\n", \
+ 			lkdtm_kernel_info);			\
+-}
++} while (0)
+ 
+ #ifndef MODULE
+ int lkdtm_check_bool_cmdline(const char *param);
+ #define pr_expected_config_param(kconfig, param)		\
+-{								\
++do {								\
+ 	if (IS_ENABLED(kconfig)) {				\
+ 		switch (lkdtm_check_bool_cmdline(param)) {	\
+ 		case 0:						\
+@@ -52,7 +52,7 @@ int lkdtm_check_bool_cmdline(const char *param);
+ 			break;					\
+ 		}						\
+ 	}							\
+-}
++} while (0)
+ #else
+ #define pr_expected_config_param(kconfig, param) pr_expected_config(kconfig)
+ #endif
+-- 
+2.35.1
+
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB37D549330
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20785498E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351164AbiFMM0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S1376792AbiFMNX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355110AbiFMMXx (ORCPT
+        with ESMTP id S1377120AbiFMNUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0033151A;
-        Mon, 13 Jun 2022 04:04:15 -0700 (PDT)
+        Mon, 13 Jun 2022 09:20:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40486971D;
+        Mon, 13 Jun 2022 04:23:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 62F67CE1161;
-        Mon, 13 Jun 2022 11:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51266C3411C;
-        Mon, 13 Jun 2022 11:04:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA27B80EB1;
+        Mon, 13 Jun 2022 11:22:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ACAEC34114;
+        Mon, 13 Jun 2022 11:22:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118252;
-        bh=n3rgOTOCZ/rJGqGmkXaqvBroutI+QFsBaD4ple4Ma+o=;
+        s=korg; t=1655119344;
+        bh=8RakZCABAzqzZr1UJ6zeh7uxqeAOyykIEYDs/vbs2fM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mBpc2Ua9GqDeVW3ljfZHl1WX4pW+yZx48cq5ra0L9DDEeEV7ClxNa7nqmZE/TonSL
-         Wbczg5sxlK47C0kq+IR1p7CcUuU4jjRntpYr0JOG45gSFzEDSPzej/fXdooL4dRr5i
-         o3Zio8IK9ntQBgCRSV9rUtHymbLPFnhQ0eYPLwdM=
+        b=CDrHjmc3wu9Al2IVHkiaguWtnDp8KPqYDHAUUiowQLhq+LaumjXvxmWHgSQD1+PqX
+         rXpZWAMzEgb0jBdqkQNMVD8Yty0mt2Imc9V/pxaia4k5NsTEnDXbR/7RRb4XQyPJOx
+         KJTPDTudqGIZvVcQAI/PxMm1fDJY6Ikbn38EMuug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 280/287] nfc: st21nfca: fix memory leaks in EVT_TRANSACTION handling
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 202/247] modpost: fix undefined behavior of is_arm_mapping_symbol()
 Date:   Mon, 13 Jun 2022 12:11:44 +0200
-Message-Id: <20220613094932.485978890@linuxfoundation.org>
+Message-Id: <20220613094929.072031177@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Faltesek <mfaltesek@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit 996419e0594abb311fb958553809f24f38e7abbe upstream.
+[ Upstream commit d6b732666a1bae0df3c3ae06925043bba34502b1 ]
 
-Error paths do not free previously allocated memory. Add devm_kfree() to
-those failure paths.
+The return value of is_arm_mapping_symbol() is unpredictable when "$"
+is passed in.
 
-Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
-Fixes: 4fbcc1a4cb20 ("nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION")
-Cc: stable@vger.kernel.org
-Signed-off-by: Martin Faltesek <mfaltesek@google.com>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+strchr(3) says:
+  The strchr() and strrchr() functions return a pointer to the matched
+  character or NULL if the character is not found. The terminating null
+  byte is considered part of the string, so that if c is specified as
+  '\0', these functions return a pointer to the terminator.
+
+When str[1] is '\0', strchr("axtd", str[1]) is not NULL, and str[2] is
+referenced (i.e. buffer overrun).
+
+Test code
+---------
+
+  char str1[] = "abc";
+  char str2[] = "ab";
+
+  strcpy(str1, "$");
+  strcpy(str2, "$");
+
+  printf("test1: %d\n", is_arm_mapping_symbol(str1));
+  printf("test2: %d\n", is_arm_mapping_symbol(str2));
+
+Result
+------
+
+  test1: 0
+  test2: 1
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/st21nfca/se.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ scripts/mod/modpost.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/nfc/st21nfca/se.c
-+++ b/drivers/nfc/st21nfca/se.c
-@@ -342,22 +342,29 @@ int st21nfca_connectivity_event_received
- 		transaction->aid_len = skb->data[1];
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 7a5bddb8913e..94041ee32798 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1260,7 +1260,8 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
  
- 		/* Checking if the length of the AID is valid */
--		if (transaction->aid_len > sizeof(transaction->aid))
-+		if (transaction->aid_len > sizeof(transaction->aid)) {
-+			devm_kfree(dev, transaction);
- 			return -EINVAL;
-+		}
+ static inline int is_arm_mapping_symbol(const char *str)
+ {
+-	return str[0] == '$' && strchr("axtd", str[1])
++	return str[0] == '$' &&
++	       (str[1] == 'a' || str[1] == 'd' || str[1] == 't' || str[1] == 'x')
+ 	       && (str[2] == '\0' || str[2] == '.');
+ }
  
- 		memcpy(transaction->aid, &skb->data[2],
- 		       transaction->aid_len);
- 
- 		/* Check next byte is PARAMETERS tag (82) */
- 		if (skb->data[transaction->aid_len + 2] !=
--		    NFC_EVT_TRANSACTION_PARAMS_TAG)
-+		    NFC_EVT_TRANSACTION_PARAMS_TAG) {
-+			devm_kfree(dev, transaction);
- 			return -EPROTO;
-+		}
- 
- 		transaction->params_len = skb->data[transaction->aid_len + 3];
- 
- 		/* Total size is allocated (skb->len - 2) minus fixed array members */
--		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
-+		if (transaction->params_len > ((skb->len - 2) -
-+		    sizeof(struct nfc_evt_transaction))) {
-+			devm_kfree(dev, transaction);
- 			return -EINVAL;
-+		}
- 
- 		memcpy(transaction->params, skb->data +
- 		       transaction->aid_len + 4, transaction->params_len);
+-- 
+2.35.1
+
 
 

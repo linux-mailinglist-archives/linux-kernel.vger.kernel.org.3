@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AD2549119
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173E75496C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379289AbiFMNr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S1346221AbiFMK5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379271AbiFMNkQ (ORCPT
+        with ESMTP id S1349822AbiFMKyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00502205DB;
-        Mon, 13 Jun 2022 04:31:07 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D382FE6F;
+        Mon, 13 Jun 2022 03:28:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 824C7B80E59;
-        Mon, 13 Jun 2022 11:31:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0393C36B09;
-        Mon, 13 Jun 2022 11:31:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43A6760AE6;
+        Mon, 13 Jun 2022 10:28:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5270BC34114;
+        Mon, 13 Jun 2022 10:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119865;
-        bh=EmEjY/2oupTS6JKEbxG775P6fh8XyKSAcBZ6LBmEp34=;
+        s=korg; t=1655116104;
+        bh=LUspz+JRPahVa/JqODn+Iu0gMILbTdena22bNZLzULY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZJfiz9xPcJhBUNqtz3TEiqwhtrD47b8m46ErJbOACoAVMreUeJNXxt4qMlK8/AbrB
-         GiCHzqDZn2R7Qtn7xjs9NI2TF0vnadmXVVr5DwQNEDSezdYAIGOOThHxLbHcK4c3k1
-         IOI2JXXXolpHEM4BzFbg4wfoOVP/OPO8o7KSWEkY=
+        b=gMXngnB9R0ZCqQDJPfbGulToa6+riBRbyYM2/W+/Pk6tADRj+q/1MUJsaJDaeoZc/
+         w8TXwcBlBjbN7Dwho2XBt0cUmZdGzl9F04ry8daZkZuRNvNKFqNCW+RfmYk2zi4Ao8
+         pc1Bz3RrhLNgif06dIFOuTCVJ4R4HsFJgV5Fd1hc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hugh Dickens <hughd@google.com>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 166/339] m68knommu: set ZERO_PAGE() to the allocated zeroed page
+        stable@vger.kernel.org, Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 4.14 133/218] phy: qcom-qmp: fix struct clk leak on probe errors
 Date:   Mon, 13 Jun 2022 12:09:51 +0200
-Message-Id: <20220613094931.716276473@linuxfoundation.org>
+Message-Id: <20220613094924.615650481@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Ungerer <gerg@linux-m68k.org>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-[ Upstream commit dc068f46217970d9516f16cd37972a01d50dc055 ]
+commit f0a4bc38a12f5a0cc5ad68670d9480e91e6a94df upstream.
 
-The non-MMU m68k pagetable ZERO_PAGE() macro is being set to the
-somewhat non-sensical value of "virt_to_page(0)". The zeroth page
-is not in any way guaranteed to be a page full of "0". So the result
-is that ZERO_PAGE() will almost certainly contain random values.
+Make sure to release the pipe clock reference in case of a late probe
+error (e.g. probe deferral).
 
-We already allocate a real "empty_zero_page" in the mm setup code shared
-between MMU m68k and non-MMU m68k. It is just not hooked up to the
-ZERO_PAGE() macro for the non-MMU m68k case.
-
-Fix ZERO_PAGE() to use the allocated "empty_zero_page" pointer.
-
-I am not aware of any specific issues caused by the old code.
-
-Link: https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#t
-Reported-by: Hugh Dickens <hughd@google.com>
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
+Cc: stable@vger.kernel.org      # 4.12
+Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220427063243.32576-2-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/m68k/include/asm/pgtable_no.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/phy/qualcomm/phy-qcom-qmp.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/m68k/include/asm/pgtable_no.h b/arch/m68k/include/asm/pgtable_no.h
-index 87151d67d91e..bce5ca56c388 100644
---- a/arch/m68k/include/asm/pgtable_no.h
-+++ b/arch/m68k/include/asm/pgtable_no.h
-@@ -42,7 +42,8 @@ extern void paging_init(void);
-  * ZERO_PAGE is a global shared page that is always zero: used
-  * for zero-mapped memory areas etc..
-  */
--#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-+extern void *empty_zero_page;
-+#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
- 
- /*
-  * All 32bit addresses are effectively valid for vmalloc...
--- 
-2.35.1
-
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+@@ -1123,7 +1123,7 @@ int qcom_qmp_phy_create(struct device *d
+ 	 * all phys that don't need this.
+ 	 */
+ 	snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
+-	qphy->pipe_clk = of_clk_get_by_name(np, prop_name);
++	qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
+ 	if (IS_ERR(qphy->pipe_clk)) {
+ 		if (qmp->cfg->type == PHY_TYPE_PCIE ||
+ 		    qmp->cfg->type == PHY_TYPE_USB3) {
 
 

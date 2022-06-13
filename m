@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5E454A08D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20FE54A085
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350468AbiFMU5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S1351391AbiFMU44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352078AbiFMUyJ (ORCPT
+        with ESMTP id S1352081AbiFMUyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 16:54:09 -0400
 Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCEB1A07A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:19:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD23275EA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:19:45 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1655151583;
@@ -22,10 +22,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i8Ujjn8ODA+o6f5+82XskCVtNKiV5I0P+bzfQLYNt08=;
-        b=tNdYTuepZITenpSdu58grTXSjaXt9OL81buen5Wm+++wlMotQfJq9n+UcKkTTT5gZ+gc4f
-        uF7AU1aiTFH85x0uVzzaLfcIcYPfeoCLX+3KfygTgZO4Vq+i5p7QD74yy+0ekX5HwMhW75
-        QJqnizRPQmY2NxNZs3S4Cds/DJ8v8dA=
+        bh=NlTYbbmb8K8Hz7QxoFNu4DEEzvlhQuGMJFGkSKrxTzk=;
+        b=U/iYTMjjDHVUZCoLW/1BknQkILDEl85phr4wKanZLDwM4Jn+hUSCLwE24HlVfV0VaWnFGZ
+        5AwsB6PXGbJcILtgvt/a2jxzEYgsMtJLT/bXeJD/yxxPbvpTCCioX7PAW1dxA4jrSRwzdu
+        UhNm0cH9ryd0tC9r9ti+IK4+K3cI+g0=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -38,9 +38,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 24/32] kasan: move kasan_addr_to_slab to common.c
-Date:   Mon, 13 Jun 2022 22:14:15 +0200
-Message-Id: <5ea6f55fb645405bb52cb15b8d30544ba3f189b0.1655150842.git.andreyknvl@google.com>
+Subject: [PATCH 25/32] kasan: make kasan_addr_to_page static
+Date:   Mon, 13 Jun 2022 22:14:16 +0200
+Message-Id: <810b29bfb50dad8cdc5a5a7075e0da1104de1665.1655150842.git.andreyknvl@google.com>
 In-Reply-To: <cover.1655150842.git.andreyknvl@google.com>
 References: <cover.1655150842.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -59,51 +59,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Move the definition of kasan_addr_to_slab() to the common KASAN code,
-as this function is not only used by the reporting code.
+As kasan_addr_to_page() is only used in report.c, rename it to
+addr_to_page() and make it static.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/common.c | 7 +++++++
- mm/kasan/report.c | 7 -------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ mm/kasan/kasan.h  | 1 -
+ mm/kasan/report.c | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 519fd0b3040b..5d5b4cfae503 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -30,6 +30,13 @@
- #include "kasan.h"
- #include "../slab.h"
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index f696d50b09fb..e3f100833154 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -285,7 +285,6 @@ bool kasan_report(unsigned long addr, size_t size,
+ 		bool is_write, unsigned long ip);
+ void kasan_report_invalid_free(void *object, unsigned long ip);
  
-+struct slab *kasan_addr_to_slab(const void *addr)
-+{
-+	if ((addr >= (void *)PAGE_OFFSET) && (addr < high_memory))
-+		return virt_to_slab(addr);
-+	return NULL;
-+}
-+
- depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
- {
- 	unsigned long entries[KASAN_STACK_DEPTH];
+-struct page *kasan_addr_to_page(const void *addr);
+ struct slab *kasan_addr_to_slab(const void *addr);
+ 
+ #ifdef CONFIG_KASAN_GENERIC
 diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 1dd6fc8a678f..ed8234516bab 100644
+index ed8234516bab..f3ec6f86b199 100644
 --- a/mm/kasan/report.c
 +++ b/mm/kasan/report.c
-@@ -207,13 +207,6 @@ struct page *kasan_addr_to_page(const void *addr)
- 	return NULL;
+@@ -200,7 +200,7 @@ static void print_track(struct kasan_track *track, const char *prefix)
+ 		pr_err("(stack is not available)\n");
  }
  
--struct slab *kasan_addr_to_slab(const void *addr)
--{
--	if ((addr >= (void *)PAGE_OFFSET) && (addr < high_memory))
--		return virt_to_slab(addr);
--	return NULL;
--}
--
- static void describe_object_addr(struct kmem_cache *cache, void *object,
- 				const void *addr)
+-struct page *kasan_addr_to_page(const void *addr)
++static inline struct page *addr_to_page(const void *addr)
  {
+ 	if ((addr >= (void *)PAGE_OFFSET) && (addr < high_memory))
+ 		return virt_to_head_page(addr);
+@@ -283,7 +283,7 @@ static inline bool init_task_stack_addr(const void *addr)
+ 
+ static void print_address_description(void *addr, u8 tag)
+ {
+-	struct page *page = kasan_addr_to_page(addr);
++	struct page *page = addr_to_page(addr);
+ 	struct slab *slab = kasan_addr_to_slab(addr);
+ 
+ 	dump_stack_lvl(KERN_ERR);
 -- 
 2.25.1
 

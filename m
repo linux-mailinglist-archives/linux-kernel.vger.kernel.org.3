@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE50954958F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3788548ACA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352629AbiFMLQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S1357480AbiFMLyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237886AbiFMLNU (ORCPT
+        with ESMTP id S1356763AbiFMLtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:13:20 -0400
+        Mon, 13 Jun 2022 07:49:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2C435274;
-        Mon, 13 Jun 2022 03:36:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28FA4D6AC;
+        Mon, 13 Jun 2022 03:53:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6572F60FFD;
-        Mon, 13 Jun 2022 10:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 708FEC34114;
-        Mon, 13 Jun 2022 10:36:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 188D061347;
+        Mon, 13 Jun 2022 10:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2678CC3411C;
+        Mon, 13 Jun 2022 10:53:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116571;
-        bh=L49VcE1mdqHm6k2wDn2/QF3e8WJpoFCIOCQ1+PsOY2M=;
+        s=korg; t=1655117618;
+        bh=5tuEr5NyfeY7NcgrAX3mYUTvGOLl0/lS8T+UMvcnTqo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w2lRxYdXbvnBAZ9O+W0OFWr3NjZuZ+LLqzwdTqN/BXzJobawBPnFjPUGsIQGAz5WM
-         7uvXdWiBnj2aqbZpw9y/RaHHRqOdsymG6vcMIkKunLK7m5U1PXQptVJDWlAUCKua5F
-         0v5DalBMTugitwBiL0e9bOz/KSNeGQ7iIwR2V7fU=
+        b=zbjD3MVLvaHZN++zddKdAODuE538tjCquiNAY+IsZhjvFH/0WQIXYjn0YGOTlg/DA
+         fV+vCkItYhG8gZ1vrZQ8bOgTVxRhJRJM5kKlV+wnsWkCipDM/vyv2Ue1Ek5J5okt7M
+         wMuaAYNrsFvffG7CCvLwnY5TERWIsYSnkjf3/6Qs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Pascal Hambourg <pascal@plouf.fr.eu.org>,
-        Song Liu <song@kernel.org>
-Subject: [PATCH 4.14 215/218] md/raid0: Ignore RAID0 layout if the second zone has only one device
+        stable@vger.kernel.org, huangwenhui <huangwenhuia@uniontech.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 400/411] ALSA: hda/conexant - Fix loopback issue with CX20632
 Date:   Mon, 13 Jun 2022 12:11:13 +0200
-Message-Id: <20220613094927.148467137@linuxfoundation.org>
+Message-Id: <20220613094940.820869143@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pascal Hambourg <pascal@plouf.fr.eu.org>
+From: huangwenhui <huangwenhuia@uniontech.com>
 
-commit ea23994edc4169bd90d7a9b5908c6ccefd82fa40 upstream.
+commit d5ea7544c32ba27c2c5826248e4ff58bd50a2518 upstream.
 
-The RAID0 layout is irrelevant if all members have the same size so the
-array has only one zone. It is *also* irrelevant if the array has two
-zones and the second zone has only one device, for example if the array
-has two members of different sizes.
+On a machine with CX20632, Alsamixer doesn't have 'Loopback
+Mixing' and 'Line'.
 
-So in that case it makes sense to allow assembly even when the layout is
-undefined, like what is done when the array has only one zone.
-
-Reviewed-by: NeilBrown <neilb@suse.de>
-Signed-off-by: Pascal Hambourg <pascal@plouf.fr.eu.org>
-Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220607065631.10708-1-huangwenhuia@uniontech.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/raid0.c |   31 ++++++++++++++++---------------
- 1 file changed, 16 insertions(+), 15 deletions(-)
+ sound/pci/hda/patch_conexant.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/md/raid0.c
-+++ b/drivers/md/raid0.c
-@@ -150,21 +150,6 @@ static int create_strip_zones(struct mdd
- 	pr_debug("md/raid0:%s: FINAL %d zones\n",
- 		 mdname(mddev), conf->nr_strip_zones);
- 
--	if (conf->nr_strip_zones == 1) {
--		conf->layout = RAID0_ORIG_LAYOUT;
--	} else if (mddev->layout == RAID0_ORIG_LAYOUT ||
--		   mddev->layout == RAID0_ALT_MULTIZONE_LAYOUT) {
--		conf->layout = mddev->layout;
--	} else if (default_layout == RAID0_ORIG_LAYOUT ||
--		   default_layout == RAID0_ALT_MULTIZONE_LAYOUT) {
--		conf->layout = default_layout;
--	} else {
--		pr_err("md/raid0:%s: cannot assemble multi-zone RAID0 with default_layout setting\n",
--		       mdname(mddev));
--		pr_err("md/raid0: please set raid0.default_layout to 1 or 2\n");
--		err = -ENOTSUPP;
--		goto abort;
--	}
- 	/*
- 	 * now since we have the hard sector sizes, we can make sure
- 	 * chunk size is a multiple of that sector size
-@@ -293,6 +278,22 @@ static int create_strip_zones(struct mdd
- 			 (unsigned long long)smallest->sectors);
- 	}
- 
-+	if (conf->nr_strip_zones == 1 || conf->strip_zone[1].nb_dev == 1) {
-+		conf->layout = RAID0_ORIG_LAYOUT;
-+	} else if (mddev->layout == RAID0_ORIG_LAYOUT ||
-+		   mddev->layout == RAID0_ALT_MULTIZONE_LAYOUT) {
-+		conf->layout = mddev->layout;
-+	} else if (default_layout == RAID0_ORIG_LAYOUT ||
-+		   default_layout == RAID0_ALT_MULTIZONE_LAYOUT) {
-+		conf->layout = default_layout;
-+	} else {
-+		pr_err("md/raid0:%s: cannot assemble multi-zone RAID0 with default_layout setting\n",
-+		       mdname(mddev));
-+		pr_err("md/raid0: please set raid0.default_layout to 1 or 2\n");
-+		err = -EOPNOTSUPP;
-+		goto abort;
-+	}
-+
- 	pr_debug("md/raid0:%s: done.\n", mdname(mddev));
- 	*private_conf = conf;
- 
+--- a/sound/pci/hda/patch_conexant.c
++++ b/sound/pci/hda/patch_conexant.c
+@@ -1012,6 +1012,13 @@ static int patch_conexant_auto(struct hd
+ 		snd_hda_pick_fixup(codec, cxt5051_fixup_models,
+ 				   cxt5051_fixups, cxt_fixups);
+ 		break;
++	case 0x14f15098:
++		codec->pin_amp_workaround = 1;
++		spec->gen.mixer_nid = 0x22;
++		spec->gen.add_stereo_mix_input = HDA_HINT_STEREO_MIX_AUTO;
++		snd_hda_pick_fixup(codec, cxt5066_fixup_models,
++				   cxt5066_fixups, cxt_fixups);
++		break;
+ 	case 0x14f150f2:
+ 		codec->power_save_node = 1;
+ 		/* Fall through */
 
 

@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F65548344
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340A4548366
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240971AbiFMJnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S239488AbiFMJnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239350AbiFMJnJ (ORCPT
+        with ESMTP id S240222AbiFMJm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:43:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D61FD3E;
-        Mon, 13 Jun 2022 02:43:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9765B61381;
-        Mon, 13 Jun 2022 09:43:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049FEC34114;
-        Mon, 13 Jun 2022 09:43:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655113388;
-        bh=ulBYdazc2wFX860EwjmZxCF5MO+a9+ET23gEIOuI9uU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tsoF5PUgEdm+pCcqk1wEO/j63pF1rIMskWsdXvKiw9oelaPCL63JkGSUZBVCW+Up8
-         OdU4GgnikAs86gCW772iq2GdT/k7Lw+tK0SF9qk5BpHuIEaEFUzwMfJZkEeMuabWWC
-         23ktv6pcWgBceNYn0HIZowp9HjxC3oKlMAX9/XsQ1JxxQXpaOZ4Yxdc/d8yBv+Flew
-         vBwy+eYVEmw4iXocJ6jhRQd+xEfLUKwyl2ToUDONmUKCOX4odS9gvX9y1u0vN7Lr9F
-         F28Txo+thuVrxRbkDkQXaIUYDC+KI6tPhQhBsX1pIERKoIU28SNqeSzj+8kzUA1+32
-         kWU82zQ+k1m+w==
-Received: by mail-yb1-f173.google.com with SMTP id r82so8886411ybc.13;
-        Mon, 13 Jun 2022 02:43:07 -0700 (PDT)
-X-Gm-Message-State: AOAM533GFsvjR/HbyF8YhyZkTVf7bUMyMmW4NfAD5z74g2rmb8oS4IMZ
-        FMedLNfA44MMaUE2fod0jAUZtC1Ax2Pnn9FXUlo=
-X-Google-Smtp-Source: ABdhPJzmP9blBBv2mg91KpFnNjYRBYxTtwemJ3QI215u5foHBkyL5k8czGe5M8VE60LXBByru/7LVHtt6lQCMWUK07g=
-X-Received: by 2002:a05:6820:1501:b0:41b:d535:325c with SMTP id
- ay1-20020a056820150100b0041bd535325cmr5522819oob.60.1655113376804; Mon, 13
- Jun 2022 02:42:56 -0700 (PDT)
+        Mon, 13 Jun 2022 05:42:57 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5A61901E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:42:56 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 31so3422100pgv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5NDzvjfMCFAmFHxCoKwikhbXpxpjUpoHP86mEjsNFxE=;
+        b=tV+cQALK9x1tNg/BbmFnfN0bRTWtZ1BjT8fDQUmuAnRlR+cwjJzeKjRRz/rk+5TcqA
+         +csmsHauEhIUz/f5UL/0zjmFPxiZ0POufJwmu/fO7Yp3Z0WtdH07ujK/0LScYrKgE3ID
+         a3Y+mEfy4tiRzTepXEDzXuTd/CuBlCwxbx8ih4cx3cLaaXNRoBlS0VQoYN+QhK7G4Axt
+         R+lahczlw/lWfAPPTRW35Guy1XtK0LKdnWHBEujT3comrEL69bbSNXMS3cFvzE8v0q66
+         QO8sXeDblmxKpOThR5w32Mnwa4LV0st+zdIxI9A/11WiVUQYkyYbZwzn6cFAeGn9V9Mi
+         PE/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5NDzvjfMCFAmFHxCoKwikhbXpxpjUpoHP86mEjsNFxE=;
+        b=7tu8W+yImWTXRW06ANc2PXgSa5XAHdkP2Cj4M1jcO5q/N09t9y2Bnw9ZE+cFTPr+LQ
+         8cafmcUcW81mWpO60sS8ebTjsMgyskPAskDBmsiL/A+1205O5nvF5tfMpRjKrBFMRexE
+         ApsA07CmHDbs1FyWlsoNiLg3uTFoT64mDBoO0xYhbm67ptOEQ6YCZfyTZhcTxAxFL8zy
+         RsSMCaV75q8YdSV2Ul5+13LPJ0JBGW8+zFAI3IdtYPLIMMN1oT5c+kxOu9RcB9v/Aysx
+         ET8Hmb1zJiyuOLre8HKVbwXu+VfQSJvFiN8qhYKP8cbtzK8JSnbFiYjAy3yZe1Uc6HsA
+         nSAQ==
+X-Gm-Message-State: AOAM533mHo7K5me5JrmMbltL4M+yCyaZOK0bZ8R/jdbSvGbEP4fzi1KY
+        jhwu5yDgltv4YypPe1VvxakpLQ==
+X-Google-Smtp-Source: ABdhPJxjz+VO42wkE/kKNwDgTRF7V0OVwIiStEG8cJtl1IBzCbp8uJNbykZw81bRmctnpW6uw7iH8w==
+X-Received: by 2002:a63:da56:0:b0:3fe:2bc7:a605 with SMTP id l22-20020a63da56000000b003fe2bc7a605mr24918350pgj.560.1655113376408;
+        Mon, 13 Jun 2022 02:42:56 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id jd13-20020a170903260d00b00168adae4ea2sm4631032plb.39.2022.06.13.02.42.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 02:42:56 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 15:12:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        rafael@kernel.org, dietmar.eggemann@arm.com
+Subject: Re: [PATCH 3/3] thermal: cpufreq_cooling: Update outdated comments
+Message-ID: <20220613094253.36qukzq2vuat3ey6@vireshk-i7>
+References: <20220610100343.32378-1-lukasz.luba@arm.com>
+ <20220610100343.32378-3-lukasz.luba@arm.com>
 MIME-Version: 1.0
-References: <20220613082147.183145-1-mawupeng1@huawei.com> <20220613082147.183145-6-mawupeng1@huawei.com>
-In-Reply-To: <20220613082147.183145-6-mawupeng1@huawei.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 13 Jun 2022 11:42:44 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFn_FKt2jLJOntvT0FBtL9b=VWZdrBFpn48LBMDLy1WBQ@mail.gmail.com>
-Message-ID: <CAMj1kXFn_FKt2jLJOntvT0FBtL9b=VWZdrBFpn48LBMDLy1WBQ@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] mm: Only remove nomap flag for initrd
-To:     Wupeng Ma <mawupeng1@huawei.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, paulmck@kernel.org, keescook@chromium.org,
-        songmuchun@bytedance.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, swboyd@chromium.org,
-        wei.liu@kernel.org, robin.murphy@arm.com, david@redhat.com,
-        anshuman.khandual@arm.com, thunder.leizhen@huawei.com,
-        wangkefeng.wang@huawei.com, gpiccoli@igalia.com,
-        chenhuacai@kernel.org, geert@linux-m68k.org,
-        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610100343.32378-3-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,48 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 10:00, Wupeng Ma <mawupeng1@huawei.com> wrote:
->
-> From: Ma Wupeng <mawupeng1@huawei.com>
->
-> Commit 177e15f0c144 ("arm64: add the initrd region to the linear mapping explicitly")
-> remove all the flags of the memory used by initrd. This is fine since
-> MEMBLOCK_MIRROR is not used in arm64.
->
-> However with mirrored feature introduced to arm64, this will clear the mirrored
-> flag used by initrd, which will lead to error log printed by
-> find_zone_movable_pfns_for_nodes() if the lower 4G range has some non-mirrored
-> memory.
->
-> To solve this problem, only MEMBLOCK_NOMAP flag will be removed via
-> memblock_clear_nomap().
->
-> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
-This needs and ack from the arm64 maintainers, please?
-And also please fix the subject to include 'arm64'
-
-
+On 10-06-22, 11:03, Lukasz Luba wrote:
+> The code has moved and left some comments stale. Update them where
+> there is a need.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  arch/arm64/mm/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index 339ee84e5a61..8456dbae9441 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -350,8 +350,8 @@ void __init arm64_memblock_init(void)
->                         "initrd not fully accessible via the linear mapping -- please check your bootloader ...\n")) {
->                         phys_initrd_size = 0;
->                 } else {
-> -                       memblock_remove(base, size); /* clear MEMBLOCK_ flags */
->                         memblock_add(base, size);
-> +                       memblock_clear_nomap(base, size);
->                         memblock_reserve(base, size);
->                 }
->         }
-> --
-> 2.25.1
->
+>  drivers/thermal/cpufreq_cooling.c | 44 +++++++++++++------------------
+>  1 file changed, 18 insertions(+), 26 deletions(-)
+
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh

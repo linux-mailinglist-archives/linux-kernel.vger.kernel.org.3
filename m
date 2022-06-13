@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA71548E3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0D15488B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357311AbiFMNBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S1378922AbiFMNqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358203AbiFMMzG (ORCPT
+        with ESMTP id S1379226AbiFMNkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84083586D;
-        Mon, 13 Jun 2022 04:14:38 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E00D101;
+        Mon, 13 Jun 2022 04:30:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71EECB80EA7;
-        Mon, 13 Jun 2022 11:14:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7AFDC34114;
-        Mon, 13 Jun 2022 11:14:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 58C98CE118D;
+        Mon, 13 Jun 2022 11:30:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8E4C34114;
+        Mon, 13 Jun 2022 11:30:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118876;
-        bh=ycNyE3kopVPnenzNRMD4UBheYYl2GGGnBKF9x0dU4cU=;
+        s=korg; t=1655119837;
+        bh=ynOFQ8Z5PHk22tFvFXyTLb5N/IoZjn9NfGABCiTAL7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HkTyBnePzxBlJly3lUfoEjEDOYWXU1MGbaouvlp4jnkSgpI513Hak/ug7I9ODeUnF
-         /HJTcdNgolhkrhZcsEi3nxpiXiti1NheNaqQlWIevvM7AjPVd77nSDk26Bi7SbFnnX
-         ojZzHI6q+Wl/VBDK021vILsYn2IR9I5MkKmGgtXk=
+        b=pknfhRid3PqIPjG8BA2CivZEMZS0YAX507d/WBOYz6b1ZO20eJdKLCJQY+n3ul5OQ
+         5BVV/9GnWz0/AvF8+IRVdJ/zz3deoqlC6ajVWrO9ATAFqoABy3L6k9dI1JEZ9ERH1g
+         ORxkUGUtTqyZde3U6lICBxkfe/8V4EdHXXxvty3E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 060/247] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
+Subject: [PATCH 5.18 137/339] net: ping6: Fix ping -6 with interface name
 Date:   Mon, 13 Jun 2022 12:09:22 +0200
-Message-Id: <20220613094924.776974134@linuxfoundation.org>
+Message-Id: <20220613094930.837070203@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +59,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Aya Levin <ayal@nvidia.com>
 
-[ Upstream commit 52bb1cb7118564166b04d52387bd8403632f5190 ]
+[ Upstream commit e6652a8ef3e64d953168a95878fe29b934ad78ac ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
-CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
-to have parity, thus add PARENB.
+When passing interface parameter to ping -6:
+$ ping -6 ::11:141:84:9 -I eth2
+Results in:
+PING ::11:141:84:10(::11:141:84:10) from ::11:141:84:9 eth2: 56 data bytes
+ping: sendmsg: Invalid argument
+ping: sendmsg: Invalid argument
 
-Incorrect CSIZE results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+Initialize the fl6's outgoing interface (OIF) before triggering
+ip6_datagram_send_ctl. Don't wipe fl6 after ip6_datagram_send_ctl() as
+changes in fl6 that may happen in the function are overwritten explicitly.
+Update comment accordingly.
 
-Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
-Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-8-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 13651224c00b ("net: ping6: support setting basic SOL_IPV6 options via cmsg")
+Signed-off-by: Aya Levin <ayal@nvidia.com>
+Reviewed-by: Gal Pressman <gal@nvidia.com>
+Reviewed-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20220531084544.15126-1-tariqt@nvidia.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/st-asc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/ipv6/ping.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index 87e480cc8206..5a45633aaea8 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -535,10 +535,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
- 	/* set character length */
- 	if ((cflag & CSIZE) == CS7) {
- 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
-+		cflag |= PARENB;
- 	} else {
- 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
- 						ASC_CTL_MODE_8BIT;
-+		cflag &= ~CSIZE;
-+		cflag |= CS8;
- 	}
-+	termios->c_cflag = cflag;
+diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
+index ff033d16549e..ecf3a553a0dc 100644
+--- a/net/ipv6/ping.c
++++ b/net/ipv6/ping.c
+@@ -101,6 +101,9 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 	ipc6.sockc.tsflags = sk->sk_tsflags;
+ 	ipc6.sockc.mark = sk->sk_mark;
  
- 	/* set stop bit */
- 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
++	memset(&fl6, 0, sizeof(fl6));
++	fl6.flowi6_oif = oif;
++
+ 	if (msg->msg_controllen) {
+ 		struct ipv6_txoptions opt = {};
+ 
+@@ -112,17 +115,14 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 			return err;
+ 
+ 		/* Changes to txoptions and flow info are not implemented, yet.
+-		 * Drop the options, fl6 is wiped below.
++		 * Drop the options.
+ 		 */
+ 		ipc6.opt = NULL;
+ 	}
+ 
+-	memset(&fl6, 0, sizeof(fl6));
+-
+ 	fl6.flowi6_proto = IPPROTO_ICMPV6;
+ 	fl6.saddr = np->saddr;
+ 	fl6.daddr = *daddr;
+-	fl6.flowi6_oif = oif;
+ 	fl6.flowi6_mark = ipc6.sockc.mark;
+ 	fl6.flowi6_uid = sk->sk_uid;
+ 	fl6.fl6_icmp_type = user_icmph.icmp6_type;
 -- 
 2.35.1
 

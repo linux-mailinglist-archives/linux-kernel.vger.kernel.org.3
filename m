@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA7C5496CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B93054976D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351424AbiFMLGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S1353063AbiFMLTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349031AbiFMK4r (ORCPT
+        with ESMTP id S1352946AbiFMLOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:56:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E7825590
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:32:09 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2D5031F74A;
-        Mon, 13 Jun 2022 10:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655116328; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WYTWO2pXaYgtlF8kR1d/FAF/9Bij0oQPrsARxS+CWZo=;
-        b=Y7Nn5vmbARa0cdH/zy9KNjuKlHN5vus+rPUVAYZLaZhKsszoqcK3B704Sqh++cA5mkkFLw
-        lJehbqmWyaw8q/s0XkSTmwwkbNz+G8UT4uffZvW263+wxxW/+M+/xSUwFafZrjDILpZU+Z
-        jLeyTibWH4euV1l/78ynaoZKmydH5Qk=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BBFD92C141;
-        Mon, 13 Jun 2022 10:32:07 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 12:32:07 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        frederic@kernel.org, Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [BUG] 8e274732115f ("printk: extend console_lock for per-console
- locking")
-Message-ID: <YqcSJyTnuRVAPmLI@alley>
-References: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
- <87v8t5l39z.fsf@jogness.linutronix.de>
- <20220613042937.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
- <87tu8pgcj0.fsf@jogness.linutronix.de>
+        Mon, 13 Jun 2022 07:14:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FDE8F0E;
+        Mon, 13 Jun 2022 03:37:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EAFB0D6E;
+        Mon, 13 Jun 2022 03:37:21 -0700 (PDT)
+Received: from [10.57.35.216] (unknown [10.57.35.216])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67F4A3F73B;
+        Mon, 13 Jun 2022 03:37:20 -0700 (PDT)
+Message-ID: <5bac6f98-e1ba-3584-6eac-21eeaaa0ed26@arm.com>
+Date:   Mon, 13 Jun 2022 11:37:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tu8pgcj0.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/3] thermal: cpufreq_cooling: Use a copy of local ops for
+ each cooling device
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        rafael@kernel.org, dietmar.eggemann@arm.com
+References: <20220610100343.32378-1-lukasz.luba@arm.com>
+ <20220613091611.ncd2hziu4nbyip4x@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220613091611.ncd2hziu4nbyip4x@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-06-13 11:10:19, John Ogness wrote:
-> On 2022-06-12, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> >> As I suspected, the final printk's cannot direct print because the
-> >> kthread was printing. Using the below patch did seem to address your
-> >> problem. But this is probably not the way forward.
-> >
-> > When I apply it, I still lose output, perhaps due to different timing?
-> > Doing the pr_flush(1000, true) just before the call to kernel_power_off()
-> > has been working quite well thus far, though.
+Hi Viresh,
+
+Thank you for the ACKs in the other patches and suggestion in this one.
+
+On 6/13/22 10:16, Viresh Kumar wrote:
+> On 10-06-22, 11:03, Lukasz Luba wrote:
+>> It is very unlikely that one CPU cluster would have the EM and some other
+>> won't have it (because EM registration failed or DT lacks needed entry).
+>> Although, we should avoid modifying global variable with callbacks anyway.
+>> Redesign this and add safety for such situation.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/cpufreq_cooling.c | 16 +++++++++++++---
+>>   1 file changed, 13 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+>> index b8151d95a806..e33183785fac 100644
+>> --- a/drivers/thermal/cpufreq_cooling.c
+>> +++ b/drivers/thermal/cpufreq_cooling.c
+>> @@ -554,7 +554,12 @@ __cpufreq_cooling_register(struct device_node *np,
+>>   	/* max_level is an index, not a counter */
+>>   	cpufreq_cdev->max_level = i - 1;
+>>   
+>> -	cooling_ops = &cpufreq_cooling_ops;
+>> +	cooling_ops = kmemdup(&cpufreq_cooling_ops, sizeof(*cooling_ops),
+>> +			      GFP_KERNEL);
 > 
-> Your pr_flush() is appropriate for your RCU tests, but this is a problem
-> in general that needs to be addressed. I suppose we should start a new
-> thread for that. ;-)
+> I don't like the way we are duplicating the ops here. Instead of this it would
+> be better to add the OPs field in the cooling device structure and fill its
+> fields from here. The ops structure will be allocated with the cooling device
+> itself.
 > 
-> During development we experimented with the idea of kthreads pausing
-> themselves whenever direct printing is activated. It was racey because
-> there are situations when direct printing is only temporarily active and
-> it was hard to coordinate who prints when direct printing becomes
-> inactive again. So we dropped that idea. However, in this situation the
-> system will not be disabling direct printing.
-> 
-> @Paul, can you try the below change instead? Until this has been
-> officially solved, you probably want to keep your pr_flush()
-> solution. (After all, that is exactly what pr_flush() is for.) But it
-> would be helpful if you could run this last test for us.
-> 
-> @Petr, I like the idea of the kthreads getting out of the way rather
-> than trying to direct print themselves (for this situation). It still
-> isn't optimal because that final pr_emerg("Power down\n") might come
-> before the kthread has finished its current line. But in that case the
-> kthread may not have much a chance to finish the printing anyway.
 
-I wonder if we could somehow combine it with pr_flush(timeout).
+I think I know what you mean. Make sense. There are quite a few
+different cooling types of devices which are using the API
+thermal_of_cooling_device_register() with the custom 'ops'. We
+probably don't want to disturb that well working drivers and ecosystem.
 
-The kthread might bail-out when pr_flush() is running. It will
-know that someone would continue printing. The timeout might
-help to avoid a deadlock. We could somehow reuse
-console_trylock_spinning() code here.
+Here, I've tried to align this code with the devfreq_cooling, but I
+might actually apply your suggestion into the devfreq cooling (so they
+will be still aligned). In that case both struct devfreq_cooling_device
+and struct cpufreq_cooling_device would get a new field:
+struct thermal_cooling_device_ops cooling_ops;
+We could then remove the 'global' variables:
+devfreq_cooling_ops and cpufreq_cooling_ops from where we copy.
+Then we would do the needed assignment to the priv 'cooling_ops' in the
+setup code and just use the old API
+thermal_of_cooling_device_register() to set the needed 'ops' pointer in
+the struct thermal_cooling_device.
 
+Does this sound OK?
 
-> John Ogness
-> 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index ea3dd55709e7..45c6c2b0b104 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3729,7 +3729,9 @@ static bool printer_should_wake(struct console *con, u64 seq)
->  		return true;
->  
->  	if (con->blocked ||
-> -	    console_kthreads_atomically_blocked()) {
-> +	    console_kthreads_atomically_blocked() ||
-> +	    system_state > SYSTEM_RUNNING ||
-> +	    oops_in_progress) {
->  		return false;
->  	}
-
-Also this is an interesting idea. We know that panic() will try
-to flush the messages. Well, panic() is not always called
-after Oops.
-
-Best Regards,
-Petr
+Regards,
+Lukasz

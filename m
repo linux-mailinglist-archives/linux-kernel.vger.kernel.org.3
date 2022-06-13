@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A07549595
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA48549909
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358815AbiFMNHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S1351255AbiFMMb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239217AbiFMMzV (ORCPT
+        with ESMTP id S1357554AbiFMM3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:21 -0400
+        Mon, 13 Jun 2022 08:29:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907A6DFC8;
-        Mon, 13 Jun 2022 04:16:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2005A09A;
+        Mon, 13 Jun 2022 04:06:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D03960B6B;
-        Mon, 13 Jun 2022 11:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC9CC34114;
-        Mon, 13 Jun 2022 11:16:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52DA8614C5;
+        Mon, 13 Jun 2022 11:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59BDCC34114;
+        Mon, 13 Jun 2022 11:06:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118964;
-        bh=JvD0aaCdi1KOqBVa71WtDHZ7Uwi3CKeJnRuEToyDQoY=;
+        s=korg; t=1655118369;
+        bh=TGB8fvzfl3YhMocGqLbDYunFAdllXXLShxgvHAoCEIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NSY+4BoBgiy4QEgqIVM31+s8wvW39iIxqkg2EkaQMGaAqkgwO4vr6a0tEC4myczHX
-         jvs5YWV9stRx2BLpuJ95FhYAH6+Fz4GPECt3cwuGqmzefOlvBxmqcn0I6FsEaR+cdB
-         18tLvjph9UnjvxnMTVnPS3SvEUv2wT8lRNQpHkEM=
+        b=fT1Bhslf5UZ3odGjkARA5NOmSNaDPkdKe9rfLuGT83V+PqeDoOLoIBywGxbgB8mav
+         /0uOm33WrX8+xl1PF18DU7Enr/y3q4A+O2HJUs1P2fBMc8QHO7kCPkZESP8YEDpBBg
+         y6NQyzg2T+OkiQoZMfpnlzrbEn77WDWwoRkmdBkk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 092/247] virtio: pci: Fix an error handling path in vp_modern_probe()
+Subject: [PATCH 5.10 034/172] serial: digicolor-usart: Dont allow CS5-6
 Date:   Mon, 13 Jun 2022 12:09:54 +0200
-Message-Id: <20220613094925.747641168@linuxfoundation.org>
+Message-Id: <20220613094858.562826185@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 7a836a2aba09479c8e71fa43249eecc4af945f61 ]
+[ Upstream commit fd63031b8c0763addcecdefe0e0c59d49646204e ]
 
-If an error occurs after a successful pci_request_selected_regions() call,
-it should be undone by a corresponding pci_release_selected_regions() call,
-as already done in vp_modern_remove().
+Only CS7 and CS8 seem supported but CSIZE is not sanitized to CS8 in
+the default: block.
 
-Fixes: fd502729fbbf ("virtio-pci: introduce modern device module")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Message-Id: <237109725aad2c3c03d14549f777b1927c84b045.1648977064.git.christophe.jaillet@wanadoo.fr>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
+
+Fixes: 5930cb3511df (serial: driver for Conexant Digicolor USART)
+Acked-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-3-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/virtio/virtio_pci_modern_dev.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/digicolor-usart.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
-index e11ed748e661..9ab66e44738e 100644
---- a/drivers/virtio/virtio_pci_modern_dev.c
-+++ b/drivers/virtio/virtio_pci_modern_dev.c
-@@ -340,6 +340,7 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
- err_map_isr:
- 	pci_iounmap(pci_dev, mdev->common);
- err_map_common:
-+	pci_release_selected_regions(pci_dev, mdev->modern_bars);
- 	return err;
- }
- EXPORT_SYMBOL_GPL(vp_modern_probe);
+diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
+index c7f81aa1ce91..5fea9bf86e85 100644
+--- a/drivers/tty/serial/digicolor-usart.c
++++ b/drivers/tty/serial/digicolor-usart.c
+@@ -309,6 +309,8 @@ static void digicolor_uart_set_termios(struct uart_port *port,
+ 	case CS8:
+ 	default:
+ 		config |= UA_CONFIG_CHAR_LEN;
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
+ 		break;
+ 	}
+ 
 -- 
 2.35.1
 

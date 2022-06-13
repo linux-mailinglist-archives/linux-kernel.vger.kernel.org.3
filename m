@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E3354956E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8405492F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378109AbiFMNmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S1343620AbiFMKq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378942AbiFMNj0 (ORCPT
+        with ESMTP id S1345567AbiFMKn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E39D79390;
-        Mon, 13 Jun 2022 04:28:16 -0700 (PDT)
+        Mon, 13 Jun 2022 06:43:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF4EDEAE;
+        Mon, 13 Jun 2022 03:24:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3171961037;
-        Mon, 13 Jun 2022 11:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F33C34114;
-        Mon, 13 Jun 2022 11:28:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9E1060EF5;
+        Mon, 13 Jun 2022 10:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D429FC34114;
+        Mon, 13 Jun 2022 10:24:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119694;
-        bh=jFnYDH/ga59f/Td+EUa/dt0CS7+r9A8tKGC76gbt254=;
+        s=korg; t=1655115875;
+        bh=b322/1BkvgbHz4jnXSytj74Ne1OwGJ8tk3k1Vru9dvs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sXHDPtjQD7BhqHvnhLAETRXIIjwz7Xlf/Lrik8gCc8p7xJtwy9XLc3AiMSOtg6VtP
-         iVT5CuhLMrtmvai31+ouHFbrlponrOQ/qifYf5luNJgLG/P2PRxYP6SA17msGlm6bL
-         MCLoowtFJStT9XUEhmbOF6Ds/D7fTNk0j4xrnLqk=
+        b=uvGLvwzwrsFyRPu1CUt4WXI80nUQizjE5Io3HuUqGkOPX0/AQHFCElcUM70Zd9w2r
+         4J64TkHOTwjNqMJb9ROQ3wJiwDJXxRGnmRoxMMt6yTNYTiPR02EUSW3vZN3i/x2O1v
+         dmAuAyYQIgYjlsWe18YjOl1ReQnR8P0hYY/4Raic=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 106/339] nbd: dont clear NBD_CMD_INFLIGHT flag if request is not completed
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 073/218] media: exynos4-is: Change clk_disable to clk_disable_unprepare
 Date:   Mon, 13 Jun 2022 12:08:51 +0200
-Message-Id: <20220613094929.727046931@linuxfoundation.org>
+Message-Id: <20220613094922.532254028@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,78 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 2895f1831e911ca87d4efdf43e35eb72a0c7e66e ]
+[ Upstream commit 9fadab72a6916c7507d7fedcd644859eef995078 ]
 
-Otherwise io will hung because request will only be completed if the
-cmd has the flag 'NBD_CMD_INFLIGHT'.
+The corresponding API for clk_prepare_enable is clk_disable_unprepare,
+other than clk_disable.
 
-Fixes: 07175cb1baf4 ("nbd: make sure request completion won't concurrent")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Link: https://lore.kernel.org/r/20220521073749.3146892-4-yukuai3@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fix this by changing clk_disable to clk_disable_unprepare.
+
+Fixes: b4155d7d5b2c ("[media] exynos4-is: Ensure fimc-is clocks are not enabled until properly configured")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-is.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 284557041336..ed678037ba6d 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -404,13 +404,14 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
- 	if (!mutex_trylock(&cmd->lock))
- 		return BLK_EH_RESET_TIMER;
- 
--	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
-+	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
- 		mutex_unlock(&cmd->lock);
- 		return BLK_EH_DONE;
- 	}
- 
- 	if (!refcount_inc_not_zero(&nbd->config_refs)) {
- 		cmd->status = BLK_STS_TIMEOUT;
-+		__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
- 		mutex_unlock(&cmd->lock);
- 		goto done;
- 	}
-@@ -479,6 +480,7 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
- 	dev_err_ratelimited(nbd_to_dev(nbd), "Connection timed out\n");
- 	set_bit(NBD_RT_TIMEDOUT, &config->runtime_flags);
- 	cmd->status = BLK_STS_IOERR;
-+	__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
- 	mutex_unlock(&cmd->lock);
- 	sock_shutdown(nbd);
- 	nbd_config_put(nbd);
-@@ -746,7 +748,7 @@ static struct nbd_cmd *nbd_handle_reply(struct nbd_device *nbd, int index,
- 	cmd = blk_mq_rq_to_pdu(req);
- 
- 	mutex_lock(&cmd->lock);
--	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
-+	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
- 		dev_err(disk_to_dev(nbd->disk), "Suspicious reply %d (status %u flags %lu)",
- 			tag, cmd->status, cmd->flags);
- 		ret = -ENOENT;
-@@ -855,8 +857,16 @@ static void recv_work(struct work_struct *work)
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index 0fe9be93fabe..0f3f82bd4d20 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -144,7 +144,7 @@ static int fimc_is_enable_clocks(struct fimc_is *is)
+ 			dev_err(&is->pdev->dev, "clock %s enable failed\n",
+ 				fimc_is_clocks[i]);
+ 			for (--i; i >= 0; i--)
+-				clk_disable(is->clocks[i]);
++				clk_disable_unprepare(is->clocks[i]);
+ 			return ret;
  		}
- 
- 		rq = blk_mq_rq_from_pdu(cmd);
--		if (likely(!blk_should_fake_timeout(rq->q)))
--			blk_mq_complete_request(rq);
-+		if (likely(!blk_should_fake_timeout(rq->q))) {
-+			bool complete;
-+
-+			mutex_lock(&cmd->lock);
-+			complete = __test_and_clear_bit(NBD_CMD_INFLIGHT,
-+							&cmd->flags);
-+			mutex_unlock(&cmd->lock);
-+			if (complete)
-+				blk_mq_complete_request(rq);
-+		}
- 		percpu_ref_put(&q->q_usage_counter);
- 	}
- 
+ 		pr_debug("enabled clock: %s\n", fimc_is_clocks[i]);
 -- 
 2.35.1
 

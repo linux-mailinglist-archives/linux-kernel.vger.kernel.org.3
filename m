@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610EF549158
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5FA548E30
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353045AbiFMLYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S1356346AbiFMLoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353726AbiFMLQQ (ORCPT
+        with ESMTP id S1355662AbiFMLjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:16:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A26D10B;
-        Mon, 13 Jun 2022 03:39:42 -0700 (PDT)
+        Mon, 13 Jun 2022 07:39:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB942C659;
+        Mon, 13 Jun 2022 03:49:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E531B80EA7;
-        Mon, 13 Jun 2022 10:39:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECE6C34114;
-        Mon, 13 Jun 2022 10:39:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EC7161260;
+        Mon, 13 Jun 2022 10:49:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5036DC34114;
+        Mon, 13 Jun 2022 10:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116779;
-        bh=9a7P8zmmaHg5dmEDV12QeJBpHWg/5rLuOJoEknwH4hI=;
+        s=korg; t=1655117377;
+        bh=w9LKfzLwAKYB46T3ecIm/GsN+H5j9J7Oa1HOgAq0IV0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TKZwgYFOyrpDSw7i06RbUClTHK7jmxcSaFXItO44XEkaSof/WrQrqVI9N7L3YYzyl
-         susgYsK0vgKzXbiByQ7BrDzTvodOQoru6DtOaQ0MQNbBaefOq/Q4ExDY8qnhtsqDQS
-         Pr5UwpeBJD3U1qWGaZoP+OxESP88XrWuVFcQx/uE=
+        b=AVGVFJgNag1MeBt2qQLp8RESYe+g84uSznuk3STrq3GFRMX1Z3fz+zhb5+GZf9pxm
+         BN+5QkbRyq2f/LBUnKaVOXWitT23Y7HO3YsteZ8K+3MBvSY5p+AdW1hVokgv5Npp/y
+         XefiqvOCqEDOPLBaBh6OgfbsuosWZ2K7yLNDcwHk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hari Bathini <hbathini@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 171/411] powerpc/fadump: fix PT_LOAD segment for boot memory area
-Date:   Mon, 13 Jun 2022 12:07:24 +0200
-Message-Id: <20220613094933.786062397@linuxfoundation.org>
+Subject: [PATCH 4.19 021/287] media: pci: cx23885: Fix the error handling in cx23885_initdev()
+Date:   Mon, 13 Jun 2022 12:07:25 +0200
+Message-Id: <20220613094924.503589168@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hari Bathini <hbathini@linux.ibm.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 15eb77f873255cf9f4d703b63cfbd23c46579654 ]
+[ Upstream commit e8123311cf06d7dae71e8c5fe78e0510d20cd30b ]
 
-Boot memory area is setup as separate PT_LOAD segment in the vmcore
-as it is moved by f/w, on crash, to a destination address provided by
-the kernel. Having separate PT_LOAD segment helps in handling the
-different physical address and offset for boot memory area in the
-vmcore.
+When the driver fails to call the dma_set_mask(), the driver will get
+the following splat:
 
-Commit ced1bf52f477 ("powerpc/fadump: merge adjacent memory ranges to
-reduce PT_LOAD segements") inadvertly broke this pre-condition for
-cases where some of the first kernel memory is available adjacent to
-boot memory area. This scenario is rare but possible when memory for
-fadump could not be reserved adjacent to boot memory area owing to
-memory hole or such. Reading memory from a vmcore exported in such
-scenario provides incorrect data.  Fix it by ensuring no other region
-is folded into boot memory area.
+[   55.853884] BUG: KASAN: use-after-free in __process_removed_driver+0x3c/0x240
+[   55.854486] Read of size 8 at addr ffff88810de60408 by task modprobe/590
+[   55.856822] Call Trace:
+[   55.860327]  __process_removed_driver+0x3c/0x240
+[   55.861347]  bus_for_each_dev+0x102/0x160
+[   55.861681]  i2c_del_driver+0x2f/0x50
 
-Fixes: ced1bf52f477 ("powerpc/fadump: merge adjacent memory ranges to reduce PT_LOAD segements")
-Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220406093839.206608-2-hbathini@linux.ibm.com
+This is because the driver has initialized the i2c related resources
+in cx23885_dev_setup() but not released them in error handling, fix this
+bug by modifying the error path that jumps after failing to call the
+dma_set_mask().
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/fadump.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/pci/cx23885/cx23885-core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/kernel/fadump.c b/arch/powerpc/kernel/fadump.c
-index 0455dc1b2797..69d64f406204 100644
---- a/arch/powerpc/kernel/fadump.c
-+++ b/arch/powerpc/kernel/fadump.c
-@@ -835,7 +835,6 @@ static int fadump_alloc_mem_ranges(struct fadump_mrange_info *mrange_info)
- 				       sizeof(struct fadump_memory_range));
- 	return 0;
- }
--
- static inline int fadump_add_mem_range(struct fadump_mrange_info *mrange_info,
- 				       u64 base, u64 end)
- {
-@@ -854,7 +853,12 @@ static inline int fadump_add_mem_range(struct fadump_mrange_info *mrange_info,
- 		start = mem_ranges[mrange_info->mem_range_cnt - 1].base;
- 		size  = mem_ranges[mrange_info->mem_range_cnt - 1].size;
- 
--		if ((start + size) == base)
-+		/*
-+		 * Boot memory area needs separate PT_LOAD segment(s) as it
-+		 * is moved to a different location at the time of crash.
-+		 * So, fold only if the region is not boot memory area.
-+		 */
-+		if ((start + size) == base && start >= fw_dump.boot_mem_top)
- 			is_adjacent = true;
+diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
+index a1d738969d7b..06e4e1df125c 100644
+--- a/drivers/media/pci/cx23885/cx23885-core.c
++++ b/drivers/media/pci/cx23885/cx23885-core.c
+@@ -2164,7 +2164,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	err = pci_set_dma_mask(pci_dev, 0xffffffff);
+ 	if (err) {
+ 		pr_err("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
+-		goto fail_ctrl;
++		goto fail_dma_set_mask;
  	}
- 	if (!is_adjacent) {
+ 
+ 	err = request_irq(pci_dev->irq, cx23885_irq,
+@@ -2172,7 +2172,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	if (err < 0) {
+ 		pr_err("%s: can't get IRQ %d\n",
+ 		       dev->name, pci_dev->irq);
+-		goto fail_irq;
++		goto fail_dma_set_mask;
+ 	}
+ 
+ 	switch (dev->board) {
+@@ -2194,7 +2194,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 
+ 	return 0;
+ 
+-fail_irq:
++fail_dma_set_mask:
+ 	cx23885_dev_unregister(dev);
+ fail_ctrl:
+ 	v4l2_ctrl_handler_free(hdl);
 -- 
 2.35.1
 

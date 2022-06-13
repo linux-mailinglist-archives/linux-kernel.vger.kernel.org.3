@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1E6548E19
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50138548A1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343644AbiFMKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S1383190AbiFMOP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346763AbiFMKnr (ORCPT
+        with ESMTP id S1382353AbiFMOFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:43:47 -0400
+        Mon, 13 Jun 2022 10:05:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF7ECE1E;
-        Mon, 13 Jun 2022 03:24:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F2995484;
+        Mon, 13 Jun 2022 04:40:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B15660AEB;
-        Mon, 13 Jun 2022 10:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EE5C34114;
-        Mon, 13 Jun 2022 10:24:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4480E612AC;
+        Mon, 13 Jun 2022 11:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A158C34114;
+        Mon, 13 Jun 2022 11:40:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115894;
-        bh=4aKb9UEG4FDgEHvpYFNsNGvy7uct1jE3NM9reyVSyPg=;
+        s=korg; t=1655120440;
+        bh=u3g6ye2lF1PUMaUH3OK098oauGnVr/Y/SqRnFmjCthM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D2YX7tteakGAaTlb/jGSqQRmsGdA4snE080jT8J1JIh0Rx81UpTE2xuMJyNiVU+vL
-         qj6sygvLvzmRopxWDrY2arwSsYHvqRCu9bHHXWPdxmy+0UKpbGQoCwMdxUIgiXxo6r
-         dsz4p7BMBzj+8sfcMFvECVPF9DOhiiq0jbhbjImc=
+        b=kXdjmLS3aThY26yUmzNVuir6UZghbNbzA6iSki2WUwGsl9tPHiz5nZ7x0xwTTQ1hg
+         1N+jZCoJXJNfNoSxRx0XnQ3o5FggzpZsUyZbrk8+ZMhHbLg+HAWAzKwBEGEIHOUuiy
+         32d67qcO/h4LrBs5FGOVo3/s3oZYLsBSEJpE+7Wc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 069/218] media: uvcvideo: Fix missing check to determine if element is found in list
+Subject: [PATCH 5.17 033/298] iio: adc: sc27xx: Fine tune the scale calibration values
 Date:   Mon, 13 Jun 2022 12:08:47 +0200
-Message-Id: <20220613094922.188023754@linuxfoundation.org>
+Message-Id: <20220613094925.935919427@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-[ Upstream commit 261f33388c29f6f3c12a724e6d89172b7f6d5996 ]
+[ Upstream commit 5a7a184b11c6910f47600ff5cbbee34168f701a8 ]
 
-The list iterator will point to a bogus position containing HEAD if
-the list is empty or the element is not found in list. This case
-should be checked before any use of the iterator, otherwise it will
-lead to a invalid memory access. The missing check here is before
-"pin = iterm->id;", just add check here to fix the security bug.
+Small adjustment the scale calibration value for the sc2731,
+use new name sc2731_[big|small]_scale_graph_calib, and remove
+the origin [big|small]_scale_graph_calib struct for unused.
 
-In addition, the list iterator value will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the element is not found in list, considering
-the (mis)use here: "if (iterm == NULL".
-
-Use a new value 'it' as the list iterator, while use the old value
-'iterm' as a dedicated pointer to point to the found element, which
-1. can fix this bug, due to 'iterm' is NULL only if it's not found.
-2. do not need to change all the uses of 'iterm' after the loop.
-3. can also limit the scope of the list iterator 'it' *only inside*
-   the traversal loop by simply declaring 'it' inside the loop in the
-   future, as usage of the iterator outside of the list_for_each_entry
-   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
-
-Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 8ba0dbfd07a35 (iio: adc: sc27xx: Add ADC scale calibration)
+Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Link: https://lore.kernel.org/r/20220419142458.884933-4-gengcixi@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+ drivers/iio/adc/sc27xx_adc.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 2b0ca32d7196..800b37a5bbe8 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -841,29 +841,31 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
- 	struct uvc_video_chain *chain = handle->chain;
- 	const struct uvc_entity *selector = chain->selector;
- 	struct uvc_entity *iterm = NULL;
-+	struct uvc_entity *it;
- 	u32 index = input->index;
--	int pin = 0;
+diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+index aee076c8e2b1..cfe003cc4f0b 100644
+--- a/drivers/iio/adc/sc27xx_adc.c
++++ b/drivers/iio/adc/sc27xx_adc.c
+@@ -103,14 +103,14 @@ static struct sc27xx_adc_linear_graph small_scale_graph = {
+ 	100, 341,
+ };
  
- 	if (selector == NULL ||
- 	    (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
- 		if (index != 0)
- 			return -EINVAL;
--		list_for_each_entry(iterm, &chain->entities, chain) {
--			if (UVC_ENTITY_IS_ITERM(iterm))
-+		list_for_each_entry(it, &chain->entities, chain) {
-+			if (UVC_ENTITY_IS_ITERM(it)) {
-+				iterm = it;
- 				break;
-+			}
- 		}
--		pin = iterm->id;
- 	} else if (index < selector->bNrInPins) {
--		pin = selector->baSourceID[index];
--		list_for_each_entry(iterm, &chain->entities, chain) {
--			if (!UVC_ENTITY_IS_ITERM(iterm))
-+		list_for_each_entry(it, &chain->entities, chain) {
-+			if (!UVC_ENTITY_IS_ITERM(it))
- 				continue;
--			if (iterm->id == pin)
-+			if (it->id == selector->baSourceID[index]) {
-+				iterm = it;
- 				break;
-+			}
- 		}
+-static const struct sc27xx_adc_linear_graph big_scale_graph_calib = {
+-	4200, 856,
+-	3600, 733,
++static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph_calib = {
++	4200, 850,
++	3600, 728,
+ };
+ 
+-static const struct sc27xx_adc_linear_graph small_scale_graph_calib = {
+-	1000, 833,
+-	100, 80,
++static const struct sc27xx_adc_linear_graph sc2731_small_scale_graph_calib = {
++	1000, 838,
++	100, 84,
+ };
+ 
+ static int sc27xx_adc_get_calib_data(u32 calib_data, int calib_adc)
+@@ -130,11 +130,11 @@ static int sc27xx_adc_scale_calibration(struct sc27xx_adc_data *data,
+ 	size_t len;
+ 
+ 	if (big_scale) {
+-		calib_graph = &big_scale_graph_calib;
++		calib_graph = &sc2731_big_scale_graph_calib;
+ 		graph = &big_scale_graph;
+ 		cell_name = "big_scale_calib";
+ 	} else {
+-		calib_graph = &small_scale_graph_calib;
++		calib_graph = &sc2731_small_scale_graph_calib;
+ 		graph = &small_scale_graph;
+ 		cell_name = "small_scale_calib";
  	}
- 
--	if (iterm == NULL || iterm->id != pin)
-+	if (iterm == NULL)
- 		return -EINVAL;
- 
- 	memset(input, 0, sizeof(*input));
 -- 
 2.35.1
 

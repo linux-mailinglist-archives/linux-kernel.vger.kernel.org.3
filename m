@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA54C548C61
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331BB5494A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242090AbiFMKV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
+        id S1379405AbiFMNoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243102AbiFMKUs (ORCPT
+        with ESMTP id S1379170AbiFMNj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:20:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145182181C;
-        Mon, 13 Jun 2022 03:17:34 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6833DDD0;
+        Mon, 13 Jun 2022 04:29:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7B25ECE1166;
-        Mon, 13 Jun 2022 10:17:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F2FC3411C;
-        Mon, 13 Jun 2022 10:17:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C084B80D3A;
+        Mon, 13 Jun 2022 11:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBA7FC34114;
+        Mon, 13 Jun 2022 11:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115450;
-        bh=1NU80AnL8y3iAzFP+OyKKgI3pBIP8WckFqBUVyErnU4=;
+        s=korg; t=1655119752;
+        bh=C/WmO2LlukpJ69iEqbpbD30LwP2REadEzSEAWtmskFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K8fIXoQWRUUe6RgroIKMufzXMSQSQFXNYUAahBhmd7G1l7vITh/zvOGm4FSItyBDU
-         k2sEv3XjTPsjhvo4BkFPIuy7ysB5CIOcz+H2V9v0Y+qi/vq8h9WDVYF5uHnvuVO4kL
-         QQykieci0F//Erd6o2DKkdTHnAGoeVNtMkrt8QZw=
+        b=HYOhTuYv8xdlajl3IsoOCo6474DS3CozwhZh3m6mD12niKbCZpgKlCwa+pbg4H7Cy
+         iAJ0+FnoZNaSGMw+OXyTs/NXASwwKsPRcxBpJhHn5+ZY2d67XfOhjjZ7hoyMFGBp3y
+         tVxk0nQ8C8xIFArlGWm1ptIjvZK1fZZFqaS2i2Bw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 4.9 078/167] ext4: fix use-after-free in ext4_rename_dir_prepare
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Karsten Nielsen <karsten@foo-bar.dk>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 127/339] net/mlx5e: Disable softirq in mlx5e_activate_rq to avoid race condition
 Date:   Mon, 13 Jun 2022 12:09:12 +0200
-Message-Id: <20220613094859.183470668@linuxfoundation.org>
+Message-Id: <20220613094930.360893613@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,125 +58,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-commit 0be698ecbe4471fcad80e81ec6a05001421041b3 upstream.
+[ Upstream commit 2e642afb61b24401a7ec819d27ddcd69c7c29784 ]
 
-We got issue as follows:
-EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
-ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
-ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
-ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
-==================================================================
-BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
-Read of size 4 at addr ffff88810beee6ae by task rep/1895
+When the driver activates the channels, it assumes NAPI isn't running
+yet. mlx5e_activate_rq posts a NOP WQE to ICOSQ to trigger a hardware
+interrupt and start NAPI, which will run mlx5e_alloc_rx_mpwqe and post
+UMR WQEs to ICOSQ to be able to receive packets with striding RQ.
 
-CPU: 13 PID: 1895 Comm: rep Not tainted 5.10.0+ #241
-Call Trace:
- dump_stack+0xbe/0xf9
- print_address_description.constprop.0+0x1e/0x220
- kasan_report.cold+0x37/0x7f
- ext4_rename_dir_prepare+0x152/0x220
- ext4_rename+0xf44/0x1ad0
- ext4_rename2+0x11c/0x170
- vfs_rename+0xa84/0x1440
- do_renameat2+0x683/0x8f0
- __x64_sys_renameat+0x53/0x60
- do_syscall_64+0x33/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7f45a6fc41c9
-RSP: 002b:00007ffc5a470218 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f45a6fc41c9
-RDX: 0000000000000005 RSI: 0000000020000180 RDI: 0000000000000005
-RBP: 00007ffc5a470240 R08: 00007ffc5a470160 R09: 0000000020000080
-R10: 00000000200001c0 R11: 0000000000000246 R12: 0000000000400bb0
-R13: 00007ffc5a470320 R14: 0000000000000000 R15: 0000000000000000
+Unfortunately, a race condition is possible if NAPI is triggered by
+something else (for example, TX) at a bad timing, before
+mlx5e_activate_rq finishes. In this case, mlx5e_alloc_rx_mpwqe may post
+UMR WQEs to ICOSQ, and with the bad timing, the wqe_info of the first
+UMR may be overwritten by the wqe_info of the NOP posted by
+mlx5e_activate_rq.
 
-The buggy address belongs to the page:
-page:00000000440015ce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x10beee
-flags: 0x200000000000000()
-raw: 0200000000000000 ffffea00043ff4c8 ffffea0004325608 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+The consequence is that icosq->db.wqe_info[0].num_wqebbs will be changed
+from MLX5E_UMR_WQEBBS to 1, disrupting the integrity of the array-based
+linked list in wqe_info[]. mlx5e_poll_ico_cq will hang in an infinite
+loop after processing wqe_info[0], because after the corruption, the
+next item to be processed will be wqe_info[1], which is filled with
+zeros, and `sqcc += wi->num_wqebbs` will never move further.
 
-Memory state around the buggy address:
- ffff88810beee580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88810beee600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff88810beee680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                  ^
- ffff88810beee700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88810beee780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-Disabling lock debugging due to kernel taint
-ext4_rename_dir_prepare: [2] parent_de->inode=3537895424
-ext4_rename_dir_prepare: [3] dir=0xffff888124170140
-ext4_rename_dir_prepare: [4] ino=2
-ext4_rename_dir_prepare: ent->dir->i_ino=2 parent=-757071872
+This commit fixes this race condition by using async_icosq to post the
+NOP and trigger the interrupt. async_icosq is always protected with a
+spinlock, eliminating the race condition.
 
-Reason is first directory entry which 'rec_len' is 34478, then will get illegal
-parent entry. Now, we do not check directory entry after read directory block
-in 'ext4_get_first_dir_block'.
-To solve this issue, check directory entry in 'ext4_get_first_dir_block'.
-
-[ Trigger an ext4_error() instead of just warning if the directory is
-  missing a '.' or '..' entry.   Also make sure we return an error code
-  if the file system is corrupted.  -TYT ]
-
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220414025223.4113128-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: bc77b240b3c5 ("net/mlx5e: Add fragmented memory support for RX multi packet WQE")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reported-by: Karsten Nielsen <karsten@foo-bar.dk>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Reviewed-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/namei.c |   30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en.h  |  4 ++++
+ .../net/ethernet/mellanox/mlx5/core/en/ptp.c  |  1 +
+ .../mellanox/mlx5/core/en/reporter_rx.c       |  6 +++++
+ .../net/ethernet/mellanox/mlx5/core/en/trap.c |  1 +
+ .../ethernet/mellanox/mlx5/core/en/xsk/pool.c |  1 +
+ .../mellanox/mlx5/core/en/xsk/setup.c         |  5 +---
+ .../net/ethernet/mellanox/mlx5/core/en_main.c | 24 +++++++++++++------
+ 7 files changed, 31 insertions(+), 11 deletions(-)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -3318,6 +3318,9 @@ static struct buffer_head *ext4_get_firs
- 	struct buffer_head *bh;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index ee34e861d3af..d0d14325a0d9 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -765,6 +765,7 @@ struct mlx5e_rq {
+ 	u8                     wq_type;
+ 	u32                    rqn;
+ 	struct mlx5_core_dev  *mdev;
++	struct mlx5e_channel  *channel;
+ 	u32  umr_mkey;
+ 	struct mlx5e_dma_info  wqe_overflow;
  
- 	if (!ext4_has_inline_data(inode)) {
-+		struct ext4_dir_entry_2 *de;
-+		unsigned int offset;
+@@ -1077,6 +1078,9 @@ void mlx5e_close_cq(struct mlx5e_cq *cq);
+ int mlx5e_open_locked(struct net_device *netdev);
+ int mlx5e_close_locked(struct net_device *netdev);
+ 
++void mlx5e_trigger_napi_icosq(struct mlx5e_channel *c);
++void mlx5e_trigger_napi_sched(struct napi_struct *napi);
 +
- 		/* The first directory block must not be a hole, so
- 		 * treat it as DIRENT_HTREE
- 		 */
-@@ -3326,9 +3329,30 @@ static struct buffer_head *ext4_get_firs
- 			*retval = PTR_ERR(bh);
- 			return NULL;
- 		}
--		*parent_de = ext4_next_entry(
--					(struct ext4_dir_entry_2 *)bh->b_data,
--					inode->i_sb->s_blocksize);
-+
-+		de = (struct ext4_dir_entry_2 *) bh->b_data;
-+		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
-+					 bh->b_size, 0) ||
-+		    le32_to_cpu(de->inode) != inode->i_ino ||
-+		    strcmp(".", de->name)) {
-+			EXT4_ERROR_INODE(inode, "directory missing '.'");
-+			brelse(bh);
-+			*retval = -EFSCORRUPTED;
-+			return NULL;
-+		}
-+		offset = ext4_rec_len_from_disk(de->rec_len,
-+						inode->i_sb->s_blocksize);
-+		de = ext4_next_entry(de, inode->i_sb->s_blocksize);
-+		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
-+					 bh->b_size, offset) ||
-+		    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
-+			EXT4_ERROR_INODE(inode, "directory missing '..'");
-+			brelse(bh);
-+			*retval = -EFSCORRUPTED;
-+			return NULL;
-+		}
-+		*parent_de = de;
-+
- 		return bh;
+ int mlx5e_open_channels(struct mlx5e_priv *priv,
+ 			struct mlx5e_channels *chs);
+ void mlx5e_close_channels(struct mlx5e_channels *chs);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+index 335b20b6383b..047f88f09203 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+@@ -736,6 +736,7 @@ void mlx5e_ptp_activate_channel(struct mlx5e_ptp *c)
+ 	if (test_bit(MLX5E_PTP_STATE_RX, c->state)) {
+ 		mlx5e_ptp_rx_set_fs(c->priv);
+ 		mlx5e_activate_rq(&c->rq);
++		mlx5e_trigger_napi_sched(&c->napi);
+ 	}
+ }
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
+index 2684e9da9f41..fc366e66d0b0 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
+@@ -123,6 +123,8 @@ static int mlx5e_rx_reporter_err_icosq_cqe_recover(void *ctx)
+ 		xskrq->stats->recover++;
  	}
  
++	mlx5e_trigger_napi_icosq(icosq->channel);
++
+ 	mutex_unlock(&icosq->channel->icosq_recovery_lock);
+ 
+ 	return 0;
+@@ -166,6 +168,10 @@ static int mlx5e_rx_reporter_err_rq_cqe_recover(void *ctx)
+ 	clear_bit(MLX5E_RQ_STATE_RECOVERING, &rq->state);
+ 	mlx5e_activate_rq(rq);
+ 	rq->stats->recover++;
++	if (rq->channel)
++		mlx5e_trigger_napi_icosq(rq->channel);
++	else
++		mlx5e_trigger_napi_sched(rq->cq.napi);
+ 	return 0;
+ out:
+ 	clear_bit(MLX5E_RQ_STATE_RECOVERING, &rq->state);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c b/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c
+index 857840ab1e91..11f2a7fb72a9 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c
+@@ -179,6 +179,7 @@ static void mlx5e_activate_trap(struct mlx5e_trap *trap)
+ {
+ 	napi_enable(&trap->napi);
+ 	mlx5e_activate_rq(&trap->rq);
++	mlx5e_trigger_napi_sched(&trap->napi);
+ }
+ 
+ void mlx5e_deactivate_trap(struct mlx5e_priv *priv)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
+index 279cd8f4e79f..2c520394aa1d 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
+@@ -117,6 +117,7 @@ static int mlx5e_xsk_enable_locked(struct mlx5e_priv *priv,
+ 		goto err_remove_pool;
+ 
+ 	mlx5e_activate_xsk(c);
++	mlx5e_trigger_napi_icosq(c);
+ 
+ 	/* Don't wait for WQEs, because the newer xdpsock sample doesn't provide
+ 	 * any Fill Ring entries at the setup stage.
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+index 3ad7f1301fa8..98ed9ef3a6bd 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+@@ -64,6 +64,7 @@ static int mlx5e_init_xsk_rq(struct mlx5e_channel *c,
+ 	rq->clock        = &mdev->clock;
+ 	rq->icosq        = &c->icosq;
+ 	rq->ix           = c->ix;
++	rq->channel      = c;
+ 	rq->mdev         = mdev;
+ 	rq->hw_mtu       = MLX5E_SW2HW_MTU(params, params->sw_mtu);
+ 	rq->xdpsq        = &c->rq_xdpsq;
+@@ -179,10 +180,6 @@ void mlx5e_activate_xsk(struct mlx5e_channel *c)
+ 	mlx5e_reporter_icosq_resume_recovery(c);
+ 
+ 	/* TX queue is created active. */
+-
+-	spin_lock_bh(&c->async_icosq_lock);
+-	mlx5e_trigger_irq(&c->async_icosq);
+-	spin_unlock_bh(&c->async_icosq_lock);
+ }
+ 
+ void mlx5e_deactivate_xsk(struct mlx5e_channel *c)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 72867a8ff48b..6a35af2c2c8b 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -478,6 +478,7 @@ static int mlx5e_init_rxq_rq(struct mlx5e_channel *c, struct mlx5e_params *param
+ 	rq->clock        = &mdev->clock;
+ 	rq->icosq        = &c->icosq;
+ 	rq->ix           = c->ix;
++	rq->channel      = c;
+ 	rq->mdev         = mdev;
+ 	rq->hw_mtu       = MLX5E_SW2HW_MTU(params, params->sw_mtu);
+ 	rq->xdpsq        = &c->rq_xdpsq;
+@@ -1072,13 +1073,6 @@ int mlx5e_open_rq(struct mlx5e_params *params, struct mlx5e_rq_param *param,
+ void mlx5e_activate_rq(struct mlx5e_rq *rq)
+ {
+ 	set_bit(MLX5E_RQ_STATE_ENABLED, &rq->state);
+-	if (rq->icosq) {
+-		mlx5e_trigger_irq(rq->icosq);
+-	} else {
+-		local_bh_disable();
+-		napi_schedule(rq->cq.napi);
+-		local_bh_enable();
+-	}
+ }
+ 
+ void mlx5e_deactivate_rq(struct mlx5e_rq *rq)
+@@ -2233,6 +2227,20 @@ static int mlx5e_channel_stats_alloc(struct mlx5e_priv *priv, int ix, int cpu)
+ 	return 0;
+ }
+ 
++void mlx5e_trigger_napi_icosq(struct mlx5e_channel *c)
++{
++	spin_lock_bh(&c->async_icosq_lock);
++	mlx5e_trigger_irq(&c->async_icosq);
++	spin_unlock_bh(&c->async_icosq_lock);
++}
++
++void mlx5e_trigger_napi_sched(struct napi_struct *napi)
++{
++	local_bh_disable();
++	napi_schedule(napi);
++	local_bh_enable();
++}
++
+ static int mlx5e_open_channel(struct mlx5e_priv *priv, int ix,
+ 			      struct mlx5e_params *params,
+ 			      struct mlx5e_channel_param *cparam,
+@@ -2314,6 +2322,8 @@ static void mlx5e_activate_channel(struct mlx5e_channel *c)
+ 
+ 	if (test_bit(MLX5E_CHANNEL_STATE_XSK, c->state))
+ 		mlx5e_activate_xsk(c);
++
++	mlx5e_trigger_napi_icosq(c);
+ }
+ 
+ static void mlx5e_deactivate_channel(struct mlx5e_channel *c)
+-- 
+2.35.1
+
 
 

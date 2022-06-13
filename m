@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8A1547D6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 03:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AA0547D6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 03:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiFMBbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 21:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S233423AbiFMBbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 21:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiFMBbR (ORCPT
+        with ESMTP id S232238AbiFMBbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 21:31:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48E61C13C;
+        Sun, 12 Jun 2022 21:31:20 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46CC10FFD;
         Sun, 12 Jun 2022 18:31:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61A16B80D22;
-        Mon, 13 Jun 2022 01:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3C4C34115;
-        Mon, 13 Jun 2022 01:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655083873;
-        bh=RVAyZuqlwM/hDCOHKUQEWUEw9mlKJE2gEK5yaIsZ4to=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oHdlufOHxW6XFaMV+oOWi8IucAsP/2KBIE4/fnDJ4fRoVSM6PUMW/Xkdu8sUZUhMo
-         I7gYwme3y+XPuoSGxp65UkpNt1yuR7v/mdBPVWBy5TZiqyFcutWKvSS/l/T5vyRVdB
-         48FYnZvyfimqbWKMgQwckbae+NwbP3rxIkcDBX0ArXbtyCBUeymYa+YgXKkxD5e0dw
-         2MDJiDLn9TkZgh5zvFRbGs61JqmQ5zcyF49vYljd0xrvgihhn8DRYgDyN9V4uFfV21
-         /OLc3yGJvY2vmE/DNFUFW9k1Gza7wrPkg6dIoI9qfHThWZ/X0rTWeaObP+Xi17zAy2
-         79FEsvSEiYQeg==
-From:   guoren@kernel.org
-To:     palmer@rivosinc.com, arnd@arndb.de, linux@roeck-us.net,
-        palmer@dabbelt.com, heiko@sntech.de
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH] uapi: Fixup strace compile error
-Date:   Sun, 12 Jun 2022 21:30:51 -0400
-Message-Id: <20220613013051.1741434-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LLvBp6Zk0zjXZc;
+        Mon, 13 Jun 2022 09:30:10 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 09:31:13 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 09:31:12 +0800
+Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
+ accessed in filemap_read()
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     Kent Overstreet <kent.overstreet@gmail.com>,
+        <akpm@linux-foundation.org>, <axboe@kernel.dk>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220602082129.2805890-1-yukuai3@huawei.com>
+ <YpkB1+PwIZ3AKUqg@casper.infradead.org>
+ <c49af4f7-5005-7cf1-8b58-a398294472ab@huawei.com>
+ <YqNWY46ZRoK6Cwbu@casper.infradead.org>
+ <YqNW8cYn9gM7Txg6@casper.infradead.org>
+ <c5f97e2f-8a48-2906-91a2-1d84629b3641@gmail.com>
+ <YqOOsHecZUWlHEn/@casper.infradead.org>
+ <dfa6d60d-0efd-f12d-9e71-a6cd24188bba@huawei.com>
+ <YqTUEZ+Pa24p09Uc@casper.infradead.org>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <7e9889b7-8eeb-5e97-3f4b-cdc914a032f4@huawei.com>
+Date:   Mon, 13 Jun 2022 09:31:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <YqTUEZ+Pa24p09Uc@casper.infradead.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+�� 2022/06/12 1:42, Matthew Wilcox д��:
+> On Sat, Jun 11, 2022 at 04:23:42PM +0800, Yu Kuai wrote:
+>>> This is going to mark the folio as accessed multiple times if it's
+>>> a multi-page folio.  How about this one?
+>>>
+>> Hi, Matthew
+>>
+>> Thanks for the patch, it looks good to me.
+> 
+> Did you test it?  This is clearly a little subtle ;-)
 
-There is no CONFIG_64BIT in userspace, we shouldn't limit it with
-__BITS_PER_LONG == 32 to break the compatibility. Just export F_*64
-definitions to userspace permanently.
+Yes, I confirmed that with this patch, small sequential read will mark
+page accessed. However, multi-page folio is not tested yet.
 
-gcc-11 -DHAVE_CONFIG_H   -I./linux/x86_64 -I../../../src/linux/x86_64
--I./linux/generic -I../../../src/linux/generic -I. -I../../../src
--DIN_STRACE=1      -isystem /opt/kernel/include -Wall -Wextra
--Wno-missing-field-initializers -Wno-unused-parameter -Wdate-time
--Wformat-security -Wimplicit-fallthrough=5 -Winit-self -Wlogical-op
--Wmissing-prototypes -Wnested-externs -Wold-style-definition
--Wtrampolines -Wundef -Wwrite-strings -Werror   -g -O2 -c -o
-libstrace_a-fetch_bpf_fprog.o `test -f 'fetch_bpf_fprog.c' || echo
-'../../../src/'`fetch_bpf_fprog.c
-In file included from ../../../src/defs.h:404,
-                 from ../../../src/fcntl.c:12:
-../../../src/xlat/fcntlcmds.h:54:7: error: ‘F_GETLK64’ undeclared here
-(not in a function); did you mean ‘F_GETLK’?
-   54 |  XLAT(F_GETLK64),
-      |       ^~~~~~~~~
-../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
-   64 | # define XLAT(val)                      { (unsigned)(val), #val
-      }
-      |                                                      ^~~
-../../../src/xlat/fcntlcmds.h:57:7: error: ‘F_SETLK64’ undeclared here
-(not in a function); did you mean ‘F_SETLK’?
-   57 |  XLAT(F_SETLK64),
-      |       ^~~~~~~~~
-../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
-   64 | # define XLAT(val)                      { (unsigned)(val), #val
-      }
-      |                                                      ^~~
-../../../src/xlat/fcntlcmds.h:60:7: error: ‘F_SETLKW64’ undeclared here
-(not in a function); did you mean ‘F_SETLKW’?
-   60 |  XLAT(F_SETLKW64),
-      |       ^~~~~~~~~~
-../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
-   64 | # define XLAT(val)                      { (unsigned)(val), #val
-      }
-      |                                                      ^~~
-make[4]: *** [Makefile:5017: libstrace_a-fcntl.o] Error 1
+> 
+>> BTW, I still think the fix should be commit 06c0444290ce ("mm/filemap.c:
+>> generic_file_buffered_read() now uses find_get_pages_contig").
+> 
+> Hmm, yes.  That code also has problems, but they're more subtle and
+> probably don't amount to much.
+> 
+> -       iocb->ki_pos += copied;
+> -
+> -       /*
+> -        * When a sequential read accesses a page several times,
+> -        * only mark it as accessed the first time.
+> -        */
+> -       if (iocb->ki_pos >> PAGE_SHIFT != ra->prev_pos >> PAGE_SHIFT)
+> -               mark_page_accessed(page);
+> -
+> -       ra->prev_pos = iocb->ki_pos;
+> 
+> This will mark the page accessed when we _exit_ a page.  So reading
+> 512-bytes at a time from offset 0, we'll mark page 0 as accessed on the
+> first read (because the prev_pos is initialised to -1).  Then on the
+> eighth read, we'll mark page 0 as accessed again (because ki_pos will
+> now be 4096 and prev_pos is 3584).  We'll then read chunks of page 1
+> without marking it as accessed, until we're about to step into page 2.
 
-comment by Eugene:
-Actually, it's quite the opposite: "ifndef" usage made it vailable at all
-times to the userspace, and this change has actually broken building strace
-with the latest kernel headers[1][2].  There could be some debate whether
-having these F_*64 definitions exposed to the user space 64-bit
-applications, but it seems that were no harm (as they were exposed already
-for quite some time), and they are useful at least for strace for compat
-application tracing purposes.
+You are right, I didn't think of that situation.
+> 
+> Marking page 0 accessed twice is bad; it'll set the referenced bit the
+> first time, and then the second time, it'll activate it.  So it'll be
+> thought to be part of the workingset when it's really just been part of
+> a streaming read.
+> 
+> And the last page we read will never be marked accessed unless it
+> happens to finish at the end of a page.
+> 
+> Before Kent started his refactoring, I think it worked:
+> 
+> -       pgoff_t prev_index;
+> -       unsigned int prev_offset;
+> ...
+> -       prev_index = ra->prev_pos >> PAGE_SHIFT;
+> -       prev_offset = ra->prev_pos & (PAGE_SIZE-1);
+> ...
+> -               if (prev_index != index || offset != prev_offset)
+> -                       mark_page_accessed(page);
+> -               prev_index = index;
+> -               prev_offset = offset;
+> ...
+> -       ra->prev_pos = prev_index;
+> -       ra->prev_pos <<= PAGE_SHIFT;
+> -       ra->prev_pos |= prev_offset;
+> 
+> At least, I don't detect any bugs in this.
 
-Fixes: 306f7cc1e9061 "uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h"
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Reported-by: Eugene Syromiatnikov <esyr@redhat.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Heiko Stuebner <heiko@sntech.de>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>
----
- include/uapi/asm-generic/fcntl.h | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-index f13d37b60775..cd6bd65ec25d 100644
---- a/include/uapi/asm-generic/fcntl.h
-+++ b/include/uapi/asm-generic/fcntl.h
-@@ -116,13 +116,11 @@
- #define F_GETSIG	11	/* for sockets. */
- #endif
- 
--#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
- #ifndef F_GETLK64
- #define F_GETLK64	12	/*  using 'struct flock64' */
- #define F_SETLK64	13
- #define F_SETLKW64	14
- #endif
--#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
- 
- #ifndef F_SETOWN_EX
- #define F_SETOWN_EX	15
--- 
-2.36.1
-
+Sure, thanks for your explanation.

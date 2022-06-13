@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4CE548792
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65CC5486BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380294AbiFMOUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S241540AbiFMM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381488AbiFMONI (ORCPT
+        with ESMTP id S1357621AbiFMMyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:13:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64129A9BE;
-        Mon, 13 Jun 2022 04:42:15 -0700 (PDT)
+        Mon, 13 Jun 2022 08:54:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BF9663F1;
+        Mon, 13 Jun 2022 04:13:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1353B80D31;
-        Mon, 13 Jun 2022 11:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 200C9C34114;
-        Mon, 13 Jun 2022 11:41:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F414B80D31;
+        Mon, 13 Jun 2022 11:13:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE87C3411C;
+        Mon, 13 Jun 2022 11:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120515;
-        bh=YIJK08ugzVS2SgYjCZVRaEaAU4lF8zqy0AK0Q4FTywg=;
+        s=korg; t=1655118791;
+        bh=+lNjLZLQbeY+zNTSRXU8Q/ga2ssIT8vG9WFJSp3ZJkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z2J+chQXXpL+4OKLgtxIK5NeVo8tix0/dtqS6ddA3EzhnRlneCCVB41zvU/zUcVey
-         JoOcx1Ng3aIaBecJft4DZaATr1kTv8PkiiCzFKKdjjhIy6CpETyHhxwCyYeElu6F00
-         zXuL1I/+NohmHqd0X+aS8eSw3bWBmLYh9v9JdHMI=
+        b=P67GY8EHw5D9znOo8AqwBXhDx1DElfw4d1/l7hQ0v23hYamDFhp4/dk/wPZCkiu66
+         HVUo6BK70y2QEFO49fjTxlwq+ec/+WcbryAUf6HEUmGAtvLEwn1Oj6bIDx1yBx1sda
+         fHDoCkN4M5HNfSUMAnCKiAlIlzet0kQfdNXnn/w4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 037/298] power: supply: axp288_fuel_gauge: Drop BIOS version check from "T3 MRD" DMI quirk
+Subject: [PATCH 5.15 029/247] iio: proximity: vl53l0x: Fix return value check of wait_for_completion_timeout
 Date:   Mon, 13 Jun 2022 12:08:51 +0200
-Message-Id: <20220613094926.059113182@linuxfoundation.org>
+Message-Id: <20220613094923.819951511@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit f61509a6f0b70f5bedea34efaf8065621689bd7a ]
+[ Upstream commit 50f2959113cb6756ffd73c4fedc712cf2661f711 ]
 
-Some "T3 MRD" mini-PCs / HDMI-sticks without a battery use a different
-value then "5.11" for their DMI BIOS version field.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-Drop the BIOS version check so that the no-battery "T3 MRD" DMI quirk
-applies to these too.
-
-Fixes: 3a06b912a5ce ("power: supply: axp288_fuel_gauge: Make "T3 MRD" no_battery_list DMI entry more generic")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: 3cef2e31b54b ("iio: proximity: vl53l0x: Add IRQ support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220412064210.10734-1-linmq006@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/axp288_fuel_gauge.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/iio/proximity/vl53l0x-i2c.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index ce8ffd0a41b5..68595897e72d 100644
---- a/drivers/power/supply/axp288_fuel_gauge.c
-+++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -600,7 +600,6 @@ static const struct dmi_system_id axp288_no_battery_list[] = {
- 			DMI_MATCH(DMI_BOARD_NAME, "T3 MRD"),
- 			DMI_MATCH(DMI_CHASSIS_TYPE, "3"),
- 			DMI_MATCH(DMI_BIOS_VENDOR, "American Megatrends Inc."),
--			DMI_MATCH(DMI_BIOS_VERSION, "5.11"),
- 		},
- 	},
- 	{}
+diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
+index cf38144b6f95..13a87d3e3544 100644
+--- a/drivers/iio/proximity/vl53l0x-i2c.c
++++ b/drivers/iio/proximity/vl53l0x-i2c.c
+@@ -104,6 +104,7 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
+ 	u16 tries = 20;
+ 	u8 buffer[12];
+ 	int ret;
++	unsigned long time_left;
+ 
+ 	ret = i2c_smbus_write_byte_data(client, VL_REG_SYSRANGE_START, 1);
+ 	if (ret < 0)
+@@ -112,10 +113,8 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
+ 	if (data->client->irq) {
+ 		reinit_completion(&data->completion);
+ 
+-		ret = wait_for_completion_timeout(&data->completion, HZ/10);
+-		if (ret < 0)
+-			return ret;
+-		else if (ret == 0)
++		time_left = wait_for_completion_timeout(&data->completion, HZ/10);
++		if (time_left == 0)
+ 			return -ETIMEDOUT;
+ 
+ 		vl53l0x_clear_irq(data);
 -- 
 2.35.1
 

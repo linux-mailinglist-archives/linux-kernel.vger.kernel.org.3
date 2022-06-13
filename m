@@ -2,102 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76D0549D36
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36FC549D3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245016AbiFMTQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S1346153AbiFMTQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244090AbiFMTPR (ORCPT
+        with ESMTP id S1346255AbiFMTQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:15:17 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C973856769
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:30:35 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso6664066pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:30:35 -0700 (PDT)
+        Mon, 13 Jun 2022 15:16:18 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131EF5FBD
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:31:04 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h19so4784530wrc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wKqpDyJggm7b0f9UQvkgztMJ+TPUivgjBn1axRErEvQ=;
-        b=Qo1PAJdWEUTItUEqm09BhFPEhRGkluSKUjuSCMR8Oh/YdeKgdkNSJFPdNgcZcSYdct
-         YgsNaprlJ0qtSX/OnLKZfU923a8Daly/cmvERPvrQ78MjasSbw3FKBYl7hiFlmp8sdqf
-         qpLeaDQ9V7ZLqWgZPVbSJhxfaVtpebdqLTGNSfXpEcBwcGQAl57IuVX2/57HYlBKzJcW
-         F5jaUrwxHBpehJXWjJWqzqewd9ht+nBf5mJteCtAxWo0vAJzGkggV2K8klQEwt7JvUeT
-         jP+gXghpKDbbePakRiXK1e8V5BUdOjyuDasvHi841XNIFjiNjZY+cTTyrFNQnu/WAIAs
-         hkPg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=b6LI4jSTppnwbn/7MHPjsmN7q6vhTZpE2X7+c7LKVK0=;
+        b=TjSewGIwP0DCjp2l8QRZYjpF076U4CIy6nnYCGcm+6wAHhgocXZcndKQ01Sjwf9Z9x
+         aXsRs94nQKH5njHHI5X7xUl9u0+ErvEIIcs8zmW47MyZ+dMJZxJ85VMQeFMaNCAD7vy3
+         2ELYlJ9/lA4/XTMg+JlYX2JAu6BTqdSCb+uilS5l4cRVuQ8ixXvoQHC9Xp9/sVcMQxhZ
+         35ROofq60l6F0c8S4Ebs/EkepuPtAh3ZzaZcxkoYYHjC7CFnab4ZQp0ZI7ywJZT3HeAZ
+         YsajnPx8xEl6dED0MwsybEwHga8p1kd/sdmv+pyhisG6Wj9drHS0aIFJgwWat+9CyjoY
+         NCWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=wKqpDyJggm7b0f9UQvkgztMJ+TPUivgjBn1axRErEvQ=;
-        b=AtShw++JXP+aQvIatHtFnRqmZPQ6j/Ar+DiYG6zQs4WMRGO0rh5dEVp03MTmNbqX9H
-         CfdqybjIQxh2U9z+xPal2jGaH9XCtEIX7qZX0zJAbPuoAx1P/CVgHZ9cZBsNq6j6qeA1
-         zB+xj0XlGZlaM9gTFV+CInA80StTWrgILPymgFgUuHkfga/lf184lC3HLbfvLMzVcq3F
-         85eiwSZzmMw1O7emcVYHtr8IxONbMhTva3r35cGLlU4L3ucqFX5+BXy1wt/wyGXqslEH
-         OJUYqC0D+wAscD37bvQ5EL+0u5iVI3INo35Zl8e4QY3EqXFgMokWrtpqQj+FRqeF/9Yx
-         1hvw==
-X-Gm-Message-State: AJIora+OGCENNS+AMmaz3CSMOu+S86RF/mF650gQwXRP5R8EhqKC5fsO
-        rBKQoCerZGrjmZBls8LfImI=
-X-Google-Smtp-Source: AGRyM1s8yGZUU+XxoyDpuDsvvN3kmuzm3vvwQE4B03t8rzFiPLfQ52FnP2QC3qWu6V/HIhy9UmSjlA==
-X-Received: by 2002:a17:902:7792:b0:168:d1fd:3013 with SMTP id o18-20020a170902779200b00168d1fd3013mr111116pll.29.1655141434698;
-        Mon, 13 Jun 2022 10:30:34 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id e3-20020a17090301c300b0016196bd15f4sm5397253plh.15.2022.06.13.10.30.33
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=b6LI4jSTppnwbn/7MHPjsmN7q6vhTZpE2X7+c7LKVK0=;
+        b=BNmi1AvuaLeRxqslSDWoBQhhINrP2LS69HDtzXjq3iUxmkIAXnbiaKq/AfC3DJyKpC
+         5z0by4JMSwIyyRxFKQU5NevWHeJIvmthEkTj4QdGJgwjMlHH6lQBri/y6MBAqymV2ptr
+         MBOD7MY+/vqJq3j5cZFUA2J/l5CfUM5vuxKpjTThH/S/e3ANJZ6AsoiLsE8d9/dokZJB
+         2AkgEGai4PTMQld1i/QZfzfhvFS43GSsH39OVKhdy24B00nx0rW1WWNiOw2JccJgMZlX
+         RgsFPs4oWbnOnP7KdoHJjKU8wi/DUvNEGyqXFmv1/nRY4XsLEljIdk2Fs4Aorw12OQoT
+         sqWg==
+X-Gm-Message-State: AJIora+piKsnOZ2QcPbzTBIX8y3q+r7an5wjJIXBnT99iSkPCXya5JGg
+        sYnQEs6ZJNCYTp3yTt65Dkg=
+X-Google-Smtp-Source: AGRyM1vtq4iKf+PhOy3uDZ8M6ggtx+BY/XhVl3NLTzqQGYY0BcpgVGbFm3Ker6Ngqo0WovrLJDRabw==
+X-Received: by 2002:a5d:46cc:0:b0:214:2d66:2d51 with SMTP id g12-20020a5d46cc000000b002142d662d51mr886667wrs.349.1655141462582;
+        Mon, 13 Jun 2022 10:31:02 -0700 (PDT)
+Received: from elementary ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id n4-20020a05600c3b8400b0039c5224bfcbsm14479675wms.46.2022.06.13.10.31.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:30:34 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Jun 2022 07:30:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
+        Mon, 13 Jun 2022 10:31:02 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 19:30:58 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Robert Foss <robert.foss@linaro.org>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 1/4] kernfs: make ->attr.open RCU protected.
-Message-ID: <Yqd0OJupifpplENB@slm.duckdns.org>
-References: <20220602063907.136569-1-imran.f.khan@oracle.com>
- <20220602063907.136569-2-imran.f.khan@oracle.com>
- <YqYpTShTDLvAp4vx@slm.duckdns.org>
- <6d1c5a49-fc16-5fc7-e527-8cb91ec0d25c@oracle.com>
- <YqalHuEB6OjjUosV@slm.duckdns.org>
- <c8a8a616-da4c-f2ce-0bb2-e0cba69db24d@oracle.com>
- <Yqaqbas1JaWz25jB@slm.duckdns.org>
- <61868aa1-6c88-ecd2-beb2-67b87673b805@oracle.com>
+Subject: Re: [PATCH] drm/bridge: anx7625: Zero error variable when panel
+ bridge not present
+Message-ID: <20220613173058.GA132991@elementary>
+References: <20220613163705.1531721-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <61868aa1-6c88-ecd2-beb2-67b87673b805@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220613163705.1531721-1-nfraprado@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 01:56:43PM +1000, Imran Khan wrote:
-> Agree. I did over think this and went for the safest interface that I could
-> think of in each of the use cases. I will remove
-> kernfs_check_open_node_protected and use kernfs_deref_open_node_protected in its
-> place as well. This will cover all accesses under kernfs_open_file_mutex.
+On Mon, Jun 13, 2022 at 12:37:05PM -0400, Nícolas F. R. A. Prado wrote:
+> While parsing the DT, the anx7625 driver checks for the presence of a
+> panel bridge on endpoint 1. If it is missing, pdata->panel_bridge stores
+> the error pointer and the function returns successfully without first
+> cleaning that variable. This is an issue since other functions later
+> check for the presence of a panel bridge by testing the trueness of that
+> variable.
 > 
-> But we will still need kernfs_deref_open_node for cases where
-> !list_empty(&of->list) ensures safe access of ->attr.open and where we can't
-> ensure holding of kernfs_open_file_mutex. So we will need 2 deref accessors.
-> Right? Just asking this because you mentioned above to come up with one deref
-> accessor that can be used in all three use cases
+> In order to ensure proper behavior, zero out pdata->panel_bridge before
+> returning when no panel bridge is found.
 > 
-> Please let me if this sounds okay. I can send updated patch-set with these
-> changes in place.
+> Fixes: 9e82ea0fb1df ("drm/bridge: anx7625: switch to devm_drm_of_get_bridge")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> 
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 53a5da6c49dd..3aed4de16690 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -1657,8 +1657,10 @@ static int anx7625_parse_dt(struct device *dev,
+>  
+>  	pdata->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
+>  	if (IS_ERR(pdata->panel_bridge)) {
+> -		if (PTR_ERR(pdata->panel_bridge) == -ENODEV)
+> +		if (PTR_ERR(pdata->panel_bridge) == -ENODEV) {
+> +			pdata->panel_bridge = NULL;
+>  			return 0;
+> +		}
+>  
+>  		return PTR_ERR(pdata->panel_bridge);
+>  	}
+> -- 
+> 2.36.1
+> 
 
-Just merge all three into one accessor. You can list both the !list_empty
-condition and lock held conditions on the same rcu_dereference_check() call.
+Thanks for spotting this error Nícolas. As you mentioned, prior to
+9e82ea0fb1df the "pdata->panel_bridge" pointer was not modified
+(i.e. left to NULL) on the ENODEV error branch.
 
-Thanks.
-
--- 
-tejun
+I missed it during the refactor, sorry about that.

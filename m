@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14F05496E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8AC54919C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381876AbiFMOLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S1385247AbiFMOq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381433AbiFMOEV (ORCPT
+        with ESMTP id S1386212AbiFMOop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:04:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0A02BB18;
-        Mon, 13 Jun 2022 04:39:32 -0700 (PDT)
+        Mon, 13 Jun 2022 10:44:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0C1B717D;
+        Mon, 13 Jun 2022 04:51:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9035ECE110D;
-        Mon, 13 Jun 2022 11:39:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7854CC34114;
-        Mon, 13 Jun 2022 11:39:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E11861486;
+        Mon, 13 Jun 2022 11:50:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A294C3411B;
+        Mon, 13 Jun 2022 11:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120368;
-        bh=FqAGfbtM97HknUrN5TKRJQyyxOT07KExcU5x8rpdQTw=;
+        s=korg; t=1655121058;
+        bh=sh2G4X4wFqnK2Zl2sU5zgIcGPX5ExeSw9GC5WbGyQy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1LS6Gv6rOUsalJ/BvblDPc41vFDf+971APE+x5JKL0xDuO+2IA6QJj8bSB0c+l3sw
-         JjzP6PCU0gJQ7SB7yMNhYKnoEhMEk+EFkzXa9t6Z0ZL83eXIkFuOC+YMUnPCR1zTm8
-         0Nlmebs7CzeYlc4xJ6zJU2/2aKgPha+QYlR0tz+4=
+        b=MrusuCMNeLBSXYeT0wU0h1hyZyIbtx55sLR/niLd7QsRNcleFMEjQAoKw/HuW65qA
+         FgxUIbBljK34LR+xzzYoV2cPRYJCSXjqxsOoBI3dh8ZaGGM08qCbeo0OySlrmm9Sx9
+         4+3gFVd8Wqpw7XDj+GuDvu5/7+jUJ8Gu9ed16Rcs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 5.18 325/339] mm/huge_memory: Fix xarray node memory leak
-Date:   Mon, 13 Jun 2022 12:12:30 +0200
-Message-Id: <20220613094936.603838232@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        =?UTF-8?q?Andr=C3=A9=20Kapelrud?= <a.kapelrud@gmail.com>
+Subject: [PATCH 5.17 257/298] ALSA: usb-audio: Skip generic sync EP parse for secondary EP
+Date:   Mon, 13 Jun 2022 12:12:31 +0200
+Message-Id: <20220613094932.871986274@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox (Oracle) <willy@infradead.org>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 69a37a8ba1b408a1c7616494aa7018e4b3844cbe upstream.
+commit efb75df105e82f076a85b9f2d81410428bcb55fc upstream.
 
-If xas_split_alloc() fails to allocate the necessary nodes to complete the
-xarray entry split, it sets the xa_state to -ENOMEM, which xas_nomem()
-then interprets as "Please allocate more memory", not as "Please free
-any unnecessary memory" (which was the intended outcome).  It's confusing
-to use xas_nomem() to free memory in this context, so call xas_destroy()
-instead.
+When ep_idx is already non-zero, it means usually a capture stream
+that is set up explicity by a fixed-format quirk, and applying the
+check for generic (non-implicit-fb) sync EPs might hit incorrectly,
+resulting in a bogus sync endpoint for the capture stream.
 
-Reported-by: syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com
-Fixes: 6b24ca4a1a8d ("mm: Use multi-index entries in the page cache")
-Cc: stable@vger.kernel.org
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+This patch adds a check for the ep_idx and skip if it's a secondary
+endpoint.  It's a part of the fixes for regressions on Saffire 6.
+
+Fixes: 7b0efea4baf0 ("ALSA: usb-audio: Add missing ep_idx in fixed EP quirks")
+Reported-and-tested-by: André Kapelrud <a.kapelrud@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220606160910.6926-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/xarray.h |    1 +
- lib/xarray.c           |    5 +++--
- mm/huge_memory.c       |    3 +--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ sound/usb/pcm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/linux/xarray.h
-+++ b/include/linux/xarray.h
-@@ -1508,6 +1508,7 @@ void *xas_find_marked(struct xa_state *,
- void xas_init_marks(const struct xa_state *);
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -304,7 +304,7 @@ int snd_usb_audioformat_set_sync_ep(stru
+ 	 * Generic sync EP handling
+ 	 */
  
- bool xas_nomem(struct xa_state *, gfp_t);
-+void xas_destroy(struct xa_state *);
- void xas_pause(struct xa_state *);
+-	if (altsd->bNumEndpoints < 2)
++	if (fmt->ep_idx > 0 || altsd->bNumEndpoints < 2)
+ 		return 0;
  
- void xas_create_range(struct xa_state *);
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -264,9 +264,10 @@ static void xa_node_free(struct xa_node
-  * xas_destroy() - Free any resources allocated during the XArray operation.
-  * @xas: XArray operation state.
-  *
-- * This function is now internal-only.
-+ * Most users will not need to call this function; it is called for you
-+ * by xas_nomem().
-  */
--static void xas_destroy(struct xa_state *xas)
-+void xas_destroy(struct xa_state *xas)
- {
- 	struct xa_node *next, *node = xas->xa_alloc;
- 
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2622,8 +2622,7 @@ out_unlock:
- 	if (mapping)
- 		i_mmap_unlock_read(mapping);
- out:
--	/* Free any memory we didn't use */
--	xas_nomem(&xas, 0);
-+	xas_destroy(&xas);
- 	count_vm_event(!ret ? THP_SPLIT_PAGE : THP_SPLIT_PAGE_FAILED);
- 	return ret;
- }
+ 	is_playback = !(get_endpoint(alts, 0)->bEndpointAddress & USB_DIR_IN);
 
 

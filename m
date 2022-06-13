@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2065497AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25606549106
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382638AbiFMOSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S1355149AbiFMLem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381997AbiFMOMQ (ORCPT
+        with ESMTP id S1354391AbiFML31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:12:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4F79A99E;
-        Mon, 13 Jun 2022 04:42:12 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23493A45C;
+        Mon, 13 Jun 2022 03:43:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A2DB61425;
-        Mon, 13 Jun 2022 11:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F93DC34114;
-        Mon, 13 Jun 2022 11:42:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5DDBB80D3C;
+        Mon, 13 Jun 2022 10:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D1BC34114;
+        Mon, 13 Jun 2022 10:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120529;
-        bh=rc1qJxIc+5g16Bihj4I702HMC+qtROUwShXb0CBt2RA=;
+        s=korg; t=1655117036;
+        bh=glbF9PmGv1Sr/Vx8N/WqhAtpH/1Hm99EupNe3o6SYgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rBxiv/32X4M7Vsj0U1geMzU1YjJi6U2pRjousgGi1vO6QnOqDwo0etWs5PPmht+Kl
-         S0GKd3gm6LPETe6wrcZ303NBkHAOVzyVsllPcWZXxeAWTRMVM6xKEc4ZD3/bsdH07R
-         WN4wvCgowFlCINJN7L8fcHr5qO7oi5D7COYc5JUI=
+        b=WokWdPDpfC7aCLoCmYh8OTQIjQGSrZIbpOpif5Agufbn44tZtCeViZg93lEvMkqHZ
+         IqL6bhXMtCaNx+E5ABGM8aogx2tTGfAEQGJvMBTSzLoY8bSR6t3nxku5evBYaNWSGu
+         P954zKjt8bOTADStIRiuVszSRoyJXRjir9CwL1ZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 042/298] watchdog: rzg2l_wdt: Fix Runtime PM usage
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Subject: [PATCH 5.4 263/411] gma500: fix an incorrect NULL check on list iterator
 Date:   Mon, 13 Jun 2022 12:08:56 +0200
-Message-Id: <20220613094926.216289708@linuxfoundation.org>
+Message-Id: <20220613094936.648985364@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,80 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 95abafe76297fa057de6c3486ef844bd446bdf18 ]
+commit bdef417d84536715145f6dc9cc3275c46f26295a upstream.
 
-Both rzg2l_wdt_probe() and rzg2l_wdt_start() calls pm_runtime_get() which
-results in a usage counter imbalance. This patch fixes this issue by
-removing pm_runtime_get() call from probe.
+The bug is here:
+	return crtc;
 
-Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220225175320.11041-3-biju.das.jz@bp.renesas.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The list iterator value 'crtc' will *always* be set and non-NULL by
+list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element is found.
+
+To fix the bug, return 'crtc' when found, otherwise return NULL.
+
+Cc: stable@vger.kernel.org
+fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327052028.2013-1-xiam0nd.tong@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/watchdog/rzg2l_wdt.c | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+ drivers/gpu/drm/gma500/psb_intel_display.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 96f2a018ab62..0fc73b8a9567 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -151,12 +151,11 @@ static const struct watchdog_ops rzg2l_wdt_ops = {
- 	.restart = rzg2l_wdt_restart,
- };
+--- a/drivers/gpu/drm/gma500/psb_intel_display.c
++++ b/drivers/gpu/drm/gma500/psb_intel_display.c
+@@ -532,14 +532,15 @@ void psb_intel_crtc_init(struct drm_devi
  
--static void rzg2l_wdt_reset_assert_pm_disable_put(void *data)
-+static void rzg2l_wdt_reset_assert_pm_disable(void *data)
+ struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
  {
- 	struct watchdog_device *wdev = data;
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+-	struct drm_crtc *crtc = NULL;
++	struct drm_crtc *crtc;
  
--	pm_runtime_put(wdev->parent);
- 	pm_runtime_disable(wdev->parent);
- 	reset_control_assert(priv->rstc);
- }
-@@ -206,11 +205,6 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 
- 	reset_control_deassert(priv->rstc);
- 	pm_runtime_enable(&pdev->dev);
--	ret = pm_runtime_resume_and_get(&pdev->dev);
--	if (ret < 0) {
--		dev_err(dev, "pm_runtime_resume_and_get failed ret=%pe", ERR_PTR(ret));
--		goto out_pm_get;
--	}
- 
- 	priv->wdev.info = &rzg2l_wdt_ident;
- 	priv->wdev.ops = &rzg2l_wdt_ops;
-@@ -222,7 +216,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 
- 	watchdog_set_drvdata(&priv->wdev, priv);
- 	ret = devm_add_action_or_reset(&pdev->dev,
--				       rzg2l_wdt_reset_assert_pm_disable_put,
-+				       rzg2l_wdt_reset_assert_pm_disable,
- 				       &priv->wdev);
- 	if (ret < 0)
- 		return ret;
-@@ -235,12 +229,6 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 		dev_warn(dev, "Specified timeout invalid, using default");
- 
- 	return devm_watchdog_register_device(&pdev->dev, &priv->wdev);
--
--out_pm_get:
--	pm_runtime_disable(dev);
--	reset_control_assert(priv->rstc);
--
--	return ret;
+ 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
+ 		struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
++
+ 		if (gma_crtc->pipe == pipe)
+-			break;
++			return crtc;
+ 	}
+-	return crtc;
++	return NULL;
  }
  
- static const struct of_device_id rzg2l_wdt_ids[] = {
--- 
-2.35.1
-
+ int gma_connector_clones(struct drm_device *dev, int type_mask)
 
 

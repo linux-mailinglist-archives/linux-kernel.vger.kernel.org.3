@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A760548A65
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D57A549626
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353136AbiFML0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S1346070AbiFMKgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353311AbiFMLTj (ORCPT
+        with ESMTP id S1346949AbiFMKej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:19:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9F93AA41;
-        Mon, 13 Jun 2022 03:41:11 -0700 (PDT)
+        Mon, 13 Jun 2022 06:34:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47F82721;
+        Mon, 13 Jun 2022 03:22:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D3D7B80EA3;
-        Mon, 13 Jun 2022 10:41:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BEEC341C5;
-        Mon, 13 Jun 2022 10:41:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E86A60B8B;
+        Mon, 13 Jun 2022 10:22:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3F7C34114;
+        Mon, 13 Jun 2022 10:22:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116868;
-        bh=wn3zsxvkrWjSsp5j38FYdXumpvm2wgMG6oLUd2rNGVA=;
+        s=korg; t=1655115751;
+        bh=eMPpJKwA8BTKycbUU9Cu8i3R9Q5hXb8qPpxRbTtLBFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QWUQ+icRFYxZOu2UQiV8COvf8KVXbXpxWnw5f72bOXe9HDV8uxipznI4KzkFpaKtf
-         1pvs24XjacApOIGv+XUj1aQvw0phhbDysNuQPw4olNuAFHCdKuhuEyrtMr6oNfWeAy
-         FuPP5qMf/p5WNdh9uH/OiXmwiLhw3wsnS+7uw6bM=
+        b=lvIFRGhEBhapPUAfYVdIWivWHpDIJ3PVM7nOqTxZS6Cteuvjz5HgNv4eKTWHtrTZ9
+         g6q/iJBgFaxhiiOiAEV5X3FphVb0ebhbuw0sCTul9an7vWZp9u/eX6HT1IzMBqFdpd
+         b3yc431IJyptGmo9/PhedPaMSOnXzOHGBoVbVZPk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 202/411] NFS: Dont report errors from nfs_pageio_complete() more than once
-Date:   Mon, 13 Jun 2022 12:07:55 +0200
-Message-Id: <20220613094934.716948139@linuxfoundation.org>
+Subject: [PATCH 4.14 018/218] media: pci: cx23885: Fix the error handling in cx23885_initdev()
+Date:   Mon, 13 Jun 2022 12:07:56 +0200
+Message-Id: <20220613094912.633693709@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit c5e483b77cc2edb318da152abe07e33006b975fd ]
+[ Upstream commit e8123311cf06d7dae71e8c5fe78e0510d20cd30b ]
 
-Since errors from nfs_pageio_complete() are already being reported
-through nfs_async_write_error(), we should not be returning them to the
-callers of do_writepages() as well. They will end up being reported
-through the generic mechanism instead.
+When the driver fails to call the dma_set_mask(), the driver will get
+the following splat:
 
-Fixes: 6fbda89b257f ("NFS: Replace custom error reporting mechanism with generic one")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+[   55.853884] BUG: KASAN: use-after-free in __process_removed_driver+0x3c/0x240
+[   55.854486] Read of size 8 at addr ffff88810de60408 by task modprobe/590
+[   55.856822] Call Trace:
+[   55.860327]  __process_removed_driver+0x3c/0x240
+[   55.861347]  bus_for_each_dev+0x102/0x160
+[   55.861681]  i2c_del_driver+0x2f/0x50
+
+This is because the driver has initialized the i2c related resources
+in cx23885_dev_setup() but not released them in error handling, fix this
+bug by modifying the error path that jumps after failing to call the
+dma_set_mask().
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/write.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/media/pci/cx23885/cx23885-core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index ecdd79a55840..10ce264a6456 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -692,11 +692,7 @@ static int nfs_writepage_locked(struct page *page,
- 	err = nfs_do_writepage(page, wbc, &pgio);
- 	pgio.pg_error = 0;
- 	nfs_pageio_complete(&pgio);
--	if (err < 0)
--		return err;
--	if (nfs_error_is_fatal(pgio.pg_error))
--		return pgio.pg_error;
--	return 0;
-+	return err;
- }
+diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
+index 4612f26fcd6d..6f297caf5540 100644
+--- a/drivers/media/pci/cx23885/cx23885-core.c
++++ b/drivers/media/pci/cx23885/cx23885-core.c
+@@ -2005,7 +2005,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	err = pci_set_dma_mask(pci_dev, 0xffffffff);
+ 	if (err) {
+ 		pr_err("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
+-		goto fail_ctrl;
++		goto fail_dma_set_mask;
+ 	}
  
- int nfs_writepage(struct page *page, struct writeback_control *wbc)
-@@ -747,9 +743,6 @@ int nfs_writepages(struct address_space *mapping, struct writeback_control *wbc)
+ 	err = request_irq(pci_dev->irq, cx23885_irq,
+@@ -2013,7 +2013,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	if (err < 0) {
+ 		pr_err("%s: can't get IRQ %d\n",
+ 		       dev->name, pci_dev->irq);
+-		goto fail_irq;
++		goto fail_dma_set_mask;
+ 	}
  
- 	if (err < 0)
- 		goto out_err;
--	err = pgio.pg_error;
--	if (nfs_error_is_fatal(err))
--		goto out_err;
+ 	switch (dev->board) {
+@@ -2035,7 +2035,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 
  	return 0;
- out_err:
- 	return err;
+ 
+-fail_irq:
++fail_dma_set_mask:
+ 	cx23885_dev_unregister(dev);
+ fail_ctrl:
+ 	v4l2_ctrl_handler_free(hdl);
 -- 
 2.35.1
 

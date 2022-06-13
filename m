@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AE554A08E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB0854A082
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241179AbiFMU5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
+        id S1351369AbiFMU4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352088AbiFMUyK (ORCPT
+        with ESMTP id S1352086AbiFMUyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 16:54:10 -0400
 Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DBA2A243
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89F421E14
         for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:19:47 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1655151585;
+        t=1655151586;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4luxyHsp81FOFiUT/6yoqfYUWRQbE1ZGpW4pjt9Mu8s=;
-        b=wrqv7ohOF96qGiSQuPggQGcjaCvog98ApGuHxDFierBEUu/M31pb0J67CQIkajDOQYJQER
-        YuDnSp2V6YbPoBkcPXwEnEdjyMR+pJGczOFfBWwr4cvGnkAYWCX7vQpjjcSJ9wtyoKpbVh
-        ZPeMiUpOhK1ShOgWWyVcqDCuLD/pVRs=
+        bh=itBNzX7+Qi1Y3bHVuJEJdtRTIklJZqEOcvL8dc0SsNc=;
+        b=CTO/MXcpYKOePq407VNan80LeLXILV+ErfumGcOaDZOfgkAedUJm/G11UYFbOkw+52G2RK
+        /Gbp33dkm8G6vYCvHqJFwPeXkH2oP2KafObfzMr0HupFt7ugZmEtX34KdpblFzmxqJCqHT
+        4doyDmIylaAHsOMDsMVFB4wdgdwnSoI=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -38,9 +38,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 28/32] kasan: fill in cache and object in complete_report_info
-Date:   Mon, 13 Jun 2022 22:14:19 +0200
-Message-Id: <1e3e75cbcf4f258701b325dbad8b2a43c2633b7b.1655150842.git.andreyknvl@google.com>
+Subject: [PATCH 29/32] kasan: rework function arguments in report.c
+Date:   Mon, 13 Jun 2022 22:14:20 +0200
+Message-Id: <a3e6a3268681a28737a8dbf79eb4786ca2b28276.1655150842.git.andreyknvl@google.com>
 In-Reply-To: <cover.1655150842.git.andreyknvl@google.com>
 References: <cover.1655150842.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,91 +58,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Add cache and object fields to kasan_report_info and fill them in in
-complete_report_info() instead of fetching them in the middle of the
-report printing code.
+Pass a pointer to kasan_report_info to describe_object() and
+describe_object_stacks(), instead of passing the structure's fields.
 
-This allows the reporting code to get access to the object information
-before starting printing the report. One of the following patches uses
-this information to determine the bug type with the tag-based modes.
+The untagged pointer and the tag are still passed as separate arguments
+to some of the functions to avoid duplicating the untagging logic.
+
+This is preparatory change for the next patch.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/kasan.h  |  2 ++
- mm/kasan/report.c | 21 +++++++++++++--------
- 2 files changed, 15 insertions(+), 8 deletions(-)
+ mm/kasan/report.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index 0261d1530055..b9bd9f1656bf 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -156,6 +156,8 @@ struct kasan_report_info {
- 
- 	/* Filled in by the common reporting code. */
- 	void *first_bad_addr;
-+	struct kmem_cache *cache;
-+	void *object;
- };
- 
- /* Do not change the struct layout: compiler ABI. */
 diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 214ba7cb654c..a6b36eb4c33b 100644
+index a6b36eb4c33b..a2789d4a05dd 100644
 --- a/mm/kasan/report.c
 +++ b/mm/kasan/report.c
-@@ -281,19 +281,16 @@ static inline bool init_task_stack_addr(const void *addr)
- 			sizeof(init_thread_union.stack));
+@@ -207,8 +207,8 @@ static inline struct page *addr_to_page(const void *addr)
+ 	return NULL;
  }
  
--static void print_address_description(void *addr, u8 tag)
-+static void print_address_description(void *addr, u8 tag,
-+				      struct kasan_report_info *info)
+-static void describe_object_addr(struct kmem_cache *cache, void *object,
+-				const void *addr)
++static void describe_object_addr(const void *addr, struct kmem_cache *cache,
++				 void *object)
  {
- 	struct page *page = addr_to_page(addr);
--	struct slab *slab = kasan_addr_to_slab(addr);
+ 	unsigned long access_addr = (unsigned long)addr;
+ 	unsigned long object_addr = (unsigned long)object;
+@@ -236,33 +236,32 @@ static void describe_object_addr(struct kmem_cache *cache, void *object,
+ 		(void *)(object_addr + cache->object_size));
+ }
  
- 	dump_stack_lvl(KERN_ERR);
- 	pr_err("\n");
+-static void describe_object_stacks(struct kmem_cache *cache, void *object,
+-					const void *addr, u8 tag)
++static void describe_object_stacks(u8 tag, struct kasan_report_info *info)
+ {
+ 	struct kasan_track *alloc_track;
+ 	struct kasan_track *free_track;
  
--	if (slab) {
--		struct kmem_cache *cache = slab->slab_cache;
--		void *object = nearest_obj(cache, slab,	addr);
--
--		describe_object(cache, object, addr, tag);
-+	if (info->cache && info->object) {
-+		describe_object(info->cache, info->object, addr, tag);
+-	alloc_track = kasan_get_alloc_track(cache, object);
++	alloc_track = kasan_get_alloc_track(info->cache, info->object);
+ 	if (alloc_track) {
+ 		print_track(alloc_track, "Allocated");
  		pr_err("\n");
  	}
  
-@@ -400,7 +397,7 @@ static void print_report(struct kasan_report_info *info)
- 	pr_err("\n");
+-	free_track = kasan_get_free_track(cache, object, tag);
++	free_track = kasan_get_free_track(info->cache, info->object, tag);
+ 	if (free_track) {
+ 		print_track(free_track, "Freed");
+ 		pr_err("\n");
+ 	}
  
- 	if (addr_has_metadata(addr)) {
--		print_address_description(addr, tag);
-+		print_address_description(addr, tag, info);
- 		print_memory_metadata(info->first_bad_addr);
- 	} else {
- 		dump_stack_lvl(KERN_ERR);
-@@ -410,12 +407,20 @@ static void print_report(struct kasan_report_info *info)
- static void complete_report_info(struct kasan_report_info *info)
- {
- 	void *addr = kasan_reset_tag(info->access_addr);
-+	struct slab *slab;
- 
- 	if (info->is_free)
- 		info->first_bad_addr = addr;
- 	else
- 		info->first_bad_addr = kasan_find_first_bad_addr(
- 					info->access_addr, info->access_size);
-+
-+	slab = kasan_addr_to_slab(addr);
-+	if (slab) {
-+		info->cache = slab->slab_cache;
-+		info->object = nearest_obj(info->cache, slab, addr);
-+	} else
-+		info->cache = info->object = NULL;
+-	kasan_print_aux_stacks(cache, object);
++	kasan_print_aux_stacks(info->cache, info->object);
  }
  
- void kasan_report_invalid_free(void *ptr, unsigned long ip)
+-static void describe_object(struct kmem_cache *cache, void *object,
+-				const void *addr, u8 tag)
++static void describe_object(const void *addr, u8 tag,
++			    struct kasan_report_info *info)
+ {
+ 	if (kasan_stack_collection_enabled())
+-		describe_object_stacks(cache, object, addr, tag);
+-	describe_object_addr(cache, object, addr);
++		describe_object_stacks(tag, info);
++	describe_object_addr(addr, info->cache, info->object);
+ }
+ 
+ static inline bool kernel_or_module_addr(const void *addr)
+@@ -290,7 +289,7 @@ static void print_address_description(void *addr, u8 tag,
+ 	pr_err("\n");
+ 
+ 	if (info->cache && info->object) {
+-		describe_object(info->cache, info->object, addr, tag);
++		describe_object(addr, tag, info);
+ 		pr_err("\n");
+ 	}
+ 
 -- 
 2.25.1
 

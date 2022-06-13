@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31DB549814
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40214548955
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240260AbiFMNCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S1348573AbiFMK4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354672AbiFMMzL (ORCPT
+        with ESMTP id S1348769AbiFMKyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754B6635A;
-        Mon, 13 Jun 2022 04:15:16 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7752ED6C;
+        Mon, 13 Jun 2022 03:27:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12420608C3;
-        Mon, 13 Jun 2022 11:15:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB5CC3411F;
-        Mon, 13 Jun 2022 11:15:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C90F60ED7;
+        Mon, 13 Jun 2022 10:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71057C3411E;
+        Mon, 13 Jun 2022 10:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118915;
-        bh=vHhGX7IffV7uK4yuqXhZapoqPd4WxprMmYKXJZTDpNA=;
+        s=korg; t=1655116069;
+        bh=MH+jVAq6gHql77W/E2asVonBTzuDrvB/pKfbqPiaEQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vuern9tMlxwO+hGjDglIxhlGmxd7zlrEQWluX/Skt5ODzLUqXdeAvhCkitWaFp42g
-         i285ATRLEj7rnU1RfpvzAJAXgwO74FOBSRZV3HwhTbdyzPa1KMuQNz6eFOB1DMdcIt
-         BVNAvlniabB51rc4Pw3kZgQWd9GWFGZktfyLs3jE=
+        b=eWf9LHGrShST8q1nrLZqczSzi+JILhEOIQ26rDRCTjgGPB1OsXDLGTbShoGsJWJuE
+         tFw4HBotT41FzgBeLnTlow7Rv3IvZGaC9//iRhpdN+ukB8coyeu52nMGQx+livQ757
+         5Ig7EsC+jhbEDWdfNLGvhSjB1f4uVU2osUp4Xm5Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 073/247] net: ethernet: mtk_eth_soc: out of bounds read in mtk_hwlro_get_fdir_entry()
+        stable@vger.kernel.org, Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 4.14 117/218] md: fix an incorrect NULL check in does_sb_need_changing
 Date:   Mon, 13 Jun 2022 12:09:35 +0200
-Message-Id: <20220613094925.173791142@linuxfoundation.org>
+Message-Id: <20220613094924.117838903@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit e7e7104e2d5ddf3806a28695670f21bef471f1e1 ]
+commit fc8738343eefc4ea8afb6122826dea48eacde514 upstream.
 
-The "fsp->location" variable comes from user via ethtool_get_rxnfc().
-Check that it is valid to prevent an out of bounds read.
+The bug is here:
+	if (!rdev)
 
-Fixes: 7aab747e5563 ("net: ethernet: mediatek: add ethtool functions to configure RX flows of HW LRO")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The list iterator value 'rdev' will *always* be set and non-NULL
+by rdev_for_each(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element found.
+Otherwise it will bypass the NULL check and lead to invalid memory
+access passing the check.
+
+To fix the bug, use a new variable 'iter' as the list iterator,
+while using the original variable 'rdev' as a dedicated pointer to
+point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: 2aa82191ac36 ("md-cluster: Perform a lazy update")
+Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Acked-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/md/md.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index ee1fd472e925..d2d7160b789c 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -1991,6 +1991,9 @@ static int mtk_hwlro_get_fdir_entry(struct net_device *dev,
- 	struct ethtool_rx_flow_spec *fsp =
- 		(struct ethtool_rx_flow_spec *)&cmd->fs;
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -2427,14 +2427,16 @@ static void sync_sbs(struct mddev *mddev
  
-+	if (fsp->location >= ARRAY_SIZE(mac->hwlro_ip))
-+		return -EINVAL;
-+
- 	/* only tcp dst ipv4 is meaningful, others are meaningless */
- 	fsp->flow_type = TCP_V4_FLOW;
- 	fsp->h_u.tcp_ip4_spec.ip4dst = ntohl(mac->hwlro_ip[fsp->location]);
--- 
-2.35.1
-
+ static bool does_sb_need_changing(struct mddev *mddev)
+ {
+-	struct md_rdev *rdev;
++	struct md_rdev *rdev = NULL, *iter;
+ 	struct mdp_superblock_1 *sb;
+ 	int role;
+ 
+ 	/* Find a good rdev */
+-	rdev_for_each(rdev, mddev)
+-		if ((rdev->raid_disk >= 0) && !test_bit(Faulty, &rdev->flags))
++	rdev_for_each(iter, mddev)
++		if ((iter->raid_disk >= 0) && !test_bit(Faulty, &iter->flags)) {
++			rdev = iter;
+ 			break;
++		}
+ 
+ 	/* No good device found. */
+ 	if (!rdev)
 
 

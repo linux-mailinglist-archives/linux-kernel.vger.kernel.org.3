@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18A1548A32
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F92549793
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356406AbiFMLtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S1353073AbiFMLWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356965AbiFMLpP (ORCPT
+        with ESMTP id S1353783AbiFMLQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:45:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6D14969E;
-        Mon, 13 Jun 2022 03:51:29 -0700 (PDT)
+        Mon, 13 Jun 2022 07:16:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529AF15736;
+        Mon, 13 Jun 2022 03:40:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 476DB612BC;
-        Mon, 13 Jun 2022 10:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502D4C34114;
-        Mon, 13 Jun 2022 10:51:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B445B80EA3;
+        Mon, 13 Jun 2022 10:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E1E0C36B02;
+        Mon, 13 Jun 2022 10:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117488;
-        bh=7NQUcC/FlqpwOfcBIb3NaowHI4IDjxIyTjXjX85mQTw=;
+        s=korg; t=1655116805;
+        bh=1QLzhrmPaBDasbV1MuyL7akoWZqN/JmMdcgAMgH4qjM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hbf0+19qR3hPc7DVp26QwFtI9FBBkpL93yboH5FrXpEIzb8KvnzvVXeGhq7s2t+iX
-         /ooU5G5on+oChToEzrHerYYYIqBqWyqB+ypN2B7sr2P1VkGTiAgFvch7pIZK4ctZuG
-         ARMBiwD1d79mCY32ZNrUuWPQv6pV0MWzK9e736mU=
+        b=UmrYmfgP1UKp/1IbMCkkns453IYJf2sEaEkvOMHwmJXNROHvoxTlWABmRCoGxhNmH
+         qJI8m3+/rvxCPHpsE188iEL5/MHGDU2bN3JlO0wr+tjif+Kegej8ufgWBWRXgMlZCM
+         Q41Rnxap4DbB1LrSvluU16wvmBSbey4ZoFxuMr6g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 039/287] net: phy: micrel: Allow probing without .driver_data
-Date:   Mon, 13 Jun 2022 12:07:43 +0200
-Message-Id: <20220613094925.051039214@linuxfoundation.org>
+Subject: [PATCH 5.4 191/411] powerpc/fsl_rio: Fix refcount leak in fsl_rio_setup
+Date:   Mon, 13 Jun 2022 12:07:44 +0200
+Message-Id: <20220613094934.387695295@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,70 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit f2ef6f7539c68c6bd6c32323d8845ee102b7c450 ]
+[ Upstream commit fcee96924ba1596ca80a6770b2567ca546f9a482 ]
 
-Currently, if the .probe element is present in the phy_driver structure
-and the .driver_data is not, a NULL pointer dereference happens.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Allow passing .probe without .driver_data by inserting NULL checks
-for priv->type.
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220513114613.762810-1-festevam@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: abc3aeae3aaa ("fsl-rio: Add two ports and rapidio message units support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220512123724.62931-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/micrel.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ arch/powerpc/sysdev/fsl_rio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 013590330059..1d00a563892a 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -285,7 +285,7 @@ static int kszphy_config_reset(struct phy_device *phydev)
- 		}
+diff --git a/arch/powerpc/sysdev/fsl_rio.c b/arch/powerpc/sysdev/fsl_rio.c
+index 07c164f7f8cf..3f9f78621cf3 100644
+--- a/arch/powerpc/sysdev/fsl_rio.c
++++ b/arch/powerpc/sysdev/fsl_rio.c
+@@ -505,8 +505,10 @@ int fsl_rio_setup(struct platform_device *dev)
+ 	if (rc) {
+ 		dev_err(&dev->dev, "Can't get %pOF property 'reg'\n",
+ 				rmu_node);
++		of_node_put(rmu_node);
+ 		goto err_rmu;
  	}
- 
--	if (priv->led_mode >= 0)
-+	if (priv->type && priv->led_mode >= 0)
- 		kszphy_setup_led(phydev, priv->type->led_mode_reg, priv->led_mode);
- 
- 	return 0;
-@@ -301,10 +301,10 @@ static int kszphy_config_init(struct phy_device *phydev)
- 
- 	type = priv->type;
- 
--	if (type->has_broadcast_disable)
-+	if (type && type->has_broadcast_disable)
- 		kszphy_broadcast_disable(phydev);
- 
--	if (type->has_nand_tree_disable)
-+	if (type && type->has_nand_tree_disable)
- 		kszphy_nand_tree_disable(phydev);
- 
- 	return kszphy_config_reset(phydev);
-@@ -775,7 +775,7 @@ static int kszphy_probe(struct phy_device *phydev)
- 
- 	priv->type = type;
- 
--	if (type->led_mode_reg) {
-+	if (type && type->led_mode_reg) {
- 		ret = of_property_read_u32(np, "micrel,led-mode",
- 				&priv->led_mode);
- 		if (ret)
-@@ -796,7 +796,8 @@ static int kszphy_probe(struct phy_device *phydev)
- 		unsigned long rate = clk_get_rate(clk);
- 		bool rmii_ref_clk_sel_25_mhz;
- 
--		priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
-+		if (type)
-+			priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
- 		rmii_ref_clk_sel_25_mhz = of_property_read_bool(np,
- 				"micrel,rmii-reference-clock-select-25-mhz");
- 
++	of_node_put(rmu_node);
+ 	rmu_regs_win = ioremap(rmu_regs.start, resource_size(&rmu_regs));
+ 	if (!rmu_regs_win) {
+ 		dev_err(&dev->dev, "Unable to map rmu register window\n");
 -- 
 2.35.1
 

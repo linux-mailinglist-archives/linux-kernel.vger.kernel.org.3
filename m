@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78366549AF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2200F549B09
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbiFMSCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
+        id S244863AbiFMSDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244547AbiFMSBu (ORCPT
+        with ESMTP id S244360AbiFMSC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:01:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD373D48;
-        Mon, 13 Jun 2022 06:44:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59C486136C;
-        Mon, 13 Jun 2022 13:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEE4C3411C;
-        Mon, 13 Jun 2022 13:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655127894;
-        bh=SJRMus/BrkP3vZSiuqVxHOTCxoFSg6FdAcDr36Ttmc8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gjj58l5gwcWlK20bbp9cq5UzCb3FzYuo8gSP9m7FOz61y3+/6jw16j5bSlSgphnc8
-         99piEzRHWd+EsGvu5Z4OUB8hMOoaHzV57i9V2INBtqwhbgq/hrGAUjmgEmTkjBxFaz
-         aPwTJfEH11ewftcdF95vLKLZcmyTre9V0/exP9NBK1g/9sHMrr0vCEYCPCOvRh1xYE
-         0w87H4s56a0B0dRbAqmWml9Bx8OOSD32CNxh/rrfFleZWIovdw8CHHRH3oIlnP8itb
-         bD3fhf22w5DNGo0bwN5bM9Lj2zurq5C2+v91DSn1n0PtzCgG0/sAl8P27JG+88h929
-         UeseoLqyYnRVA==
-Received: by mail-ua1-f45.google.com with SMTP id o8so2152924uap.6;
-        Mon, 13 Jun 2022 06:44:54 -0700 (PDT)
-X-Gm-Message-State: AOAM531auZ6shlyMXTJQeowraO5R+GjKMnAD1YN3m0U3n4Cn39x04VL8
-        8hsjMfvMseRkefb5cmgrqDsZRF2F3IhtpfLU/w==
-X-Google-Smtp-Source: ABdhPJwJdSYFPrU1lg9RQoPXl/q9bfbItYSHKMVnQIK267UpiLdgLX0oIGrik27v8fBGf1yD7rtr9VX6VNPHvUarm0M=
-X-Received: by 2002:ab0:2705:0:b0:379:7378:3c75 with SMTP id
- s5-20020ab02705000000b0037973783c75mr1881607uao.77.1655127893697; Mon, 13 Jun
- 2022 06:44:53 -0700 (PDT)
+        Mon, 13 Jun 2022 14:02:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B7F3EF3D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:45:49 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o0kNZ-00081i-52; Mon, 13 Jun 2022 15:45:17 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A615593DBC;
+        Mon, 13 Jun 2022 13:45:12 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 15:45:12 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Conor.Dooley@microchip.com
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        Daire.McNamara@microchip.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH net-next 0/2] Document PolarFire SoC can controller
+Message-ID: <20220613134512.t74de4dytxbdbg7k@pengutronix.de>
+References: <20220607065459.2035746-1-conor.dooley@microchip.com>
+ <20220607071519.6m6swnl55na3vgwm@pengutronix.de>
+ <51e8e297-0171-0c3f-ba86-e61add04830e@microchip.com>
+ <20220607082827.iuonhektfbuqtuqo@pengutronix.de>
+ <0f75a804-a0ca-e470-4a57-a5a3ad9dad11@microchip.com>
+ <4c5b43bd-a255-cbc1-c7a3-9a79e34d2e91@microchip.com>
 MIME-Version: 1.0
-References: <20220607165840.66931-1-yoan.picchi@arm.com> <20220607165840.66931-3-yoan.picchi@arm.com>
- <20220609213652.GA115440-robh@kernel.org> <20220610114840.10db23ea@donnerap.cambridge.arm.com>
- <YqcUXrFGO+QVMKBd@silpixa00400314>
-In-Reply-To: <YqcUXrFGO+QVMKBd@silpixa00400314>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 13 Jun 2022 07:44:42 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ_mjR8tbUu0n4AxXSVGtDOMTnRZTBRyvOAwe28tGXamA@mail.gmail.com>
-Message-ID: <CAL_JsqJ_mjR8tbUu0n4AxXSVGtDOMTnRZTBRyvOAwe28tGXamA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Removes the x86 dependency on the QAT drivers
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Yoan Picchi <yoan.picchi@arm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ofcrvuhmfdcokgre"
+Content-Disposition: inline
+In-Reply-To: <4c5b43bd-a255-cbc1-c7a3-9a79e34d2e91@microchip.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,64 +63,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 4:41 AM Giovanni Cabiddu
-<giovanni.cabiddu@intel.com> wrote:
->
-> On Fri, Jun 10, 2022 at 11:48:40AM +0100, Andre Przywara wrote:
-> > On Thu, 9 Jun 2022 15:36:52 -0600
-> > Rob Herring <robh@kernel.org> wrote:
-> >
-> > Hi,
-> >
-> > > On Tue, Jun 07, 2022 at 04:58:40PM +0000, Yoan Picchi wrote:
-> > > > This dependency looks outdated. After the previous patch, we have been able
-> > > > to use this driver to encrypt some data and to create working VF on arm64.
-> > > > We have not tested it yet on any big endian machine, hence the new dependency
-> > >
-> > > For the subject, use prefixes matching the subsystem (like you did on
-> > > patch 1).
-> Just to add on this, patches to the qat driver should have the following
-> headline:
->     crypto: qat -
-> not
->     crypto: qat:
->
-> > >
-> > > The only testing obligation you have is compiling for BE.
-> >
-> > So I just compiled for arm64 BE, powerpc BE & LE, and riscv again:
-> > $ file qat_c62xvf.ko
-> > qat_c62xvf.ko: ELF 64-bit MSB relocatable, ARM aarch64, version 1 (SYSV),
-> > BuildID[sha1]=630cc0ee5586c7aeb6e0ab5567ce2f2f7cc46adf, with debug_info,
-> > not stripped
-> > qat_c62xvf.ko: ELF 64-bit MSB relocatable, 64-bit PowerPC or cisco 7500,
-> > version 1 (SYSV), BuildID[sha1]=4090ba181cf95f27108bf3ecde0776f12ef2b636,
-> > not stripped
-> > qat_c62xvf.ko: ELF 64-bit LSB relocatable, 64-bit PowerPC or cisco 7500,
-> > version 1 (SYSV), BuildID[sha1]=2cb0fd09d5bc36c8918fcd061c9f3dac1546cf0d,
-> > not stripped
-> > qat_c62xvf.ko: ELF 64-bit LSB relocatable, UCB RISC-V, version 1 (SYSV),
-> > BuildID[sha1]=bfaa53df7e9aad79d3ab4c05e75ca9169227f6b8, not stripped
-> >
-> > All built without errors or warnings, for every of the enabled drivers.
-> >
-> > > If kconfig was
-> > > supposed to capture what endianness drivers have been tested or not
-> > > tested with, then lots of drivers are missing the dependency. Kconfig
-> > > depends/select entries should generally be either to prevent compile
-> > > failures (you checked PPC, RiscV, etc.?) or to hide drivers *really*
-> > > specific to a platform. IMO, we should only have !CPU_BIG_ENDIAN if it
-> > > is known not to work and not easily fixed.
-> >
-> > Fair enough, I leave that decision to Giovanni. I have plans to test this
-> > with BE, but getting a BE setup on a server is not trivial, both for
-> > userland and actual booting, so this will take some time. We just didn't
-> > want to block this on some BE concerns.
-> Just inspecting the code I can see we are not handling BE in the logic
-> that builds FW descriptors.
-> My preference would be to keep !CPU_BIG_ENDIAN until the driver is fixed
-> and tested.
 
-Okay, then at least add '|| COMPILE_TEST' so that allyesconfig builds build it.
+--ofcrvuhmfdcokgre
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+On 13.06.2022 12:52:00, Conor.Dooley@microchip.com wrote:
+> >> The register map cannot be downloaded directly anymore. For reference:
+> >>
+> >> http://web.archive.org/web/20220403030214/https://www.microsemi.com/do=
+cument-portal/doc_download/1244581-polarfire-soc-register-map
+> >=20
+> > Oh that sucks. I know we have had some website issues over the weekend
+> > which might be the problem there. I'll try to bring it up and find out.
+> >=20
+>=20
+> Hey Marc,
+> Doc is still not available but should be getting fixed.
+
+Thanks.
+
+> What do I need to do for this binding? Are you happy to accept it without
+> a driver if I add links to the documentation and a working link to the
+> register map?
+
+I'm taking both patches and change the CAN into capital letters while
+applying, I'll also add a link to the datasheets.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ofcrvuhmfdcokgre
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKnP2UACgkQrX5LkNig
+013f+QgAo0TG9o5JrCA9bcXqT6d4u7VdUwbKtD4+5GEV02lyfojpxd78EtjRNf5U
+DeLVrv4ULFwgdO30NjPch+4P6Vc7Ghs8gP4AQRKMzqduRXB76erdzrjeKFT3f+mR
+4kH81wkCZESZQ2DJD+p2nYFFZrCuwg3Ez2fZvIbJ06qn4C4g3LbkPkXzD7wUVqx9
+bTjHcb9y/E/DNCTaBWpneqN87CNsr2v6PunUNNzb+bJExxQOqXUVtfwnB4FXdoEs
+6UJV3deh47FuvPaCvF4mVOV4eaJ4vIlOAzL09TSt2RHE0m2yZ/HNfwZDYu98LKWa
+vYqLFhjC3Ebqg2lmFtHMTP1KS0GbYg==
+=YYeu
+-----END PGP SIGNATURE-----
+
+--ofcrvuhmfdcokgre--

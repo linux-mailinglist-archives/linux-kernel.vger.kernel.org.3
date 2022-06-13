@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67811548B60
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199B5548D58
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349748AbiFMK5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
+        id S1379139AbiFMNuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350037AbiFMKyj (ORCPT
+        with ESMTP id S1378989AbiFMNnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18704DFA3;
-        Mon, 13 Jun 2022 03:28:38 -0700 (PDT)
+        Mon, 13 Jun 2022 09:43:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D688B3E0FF;
+        Mon, 13 Jun 2022 04:31:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5086B80E2D;
-        Mon, 13 Jun 2022 10:28:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02227C3411E;
-        Mon, 13 Jun 2022 10:28:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20F94B80D3A;
+        Mon, 13 Jun 2022 11:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79585C34114;
+        Mon, 13 Jun 2022 11:31:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116115;
-        bh=4h2v1TIq1NyGvoDQucJRSIgFfQr5k9QZfvY5QR5hwaI=;
+        s=korg; t=1655119900;
+        bh=o/IltqO35pIphNg0FcbTHRuAL3yyQPt+6kUokgbxmUU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C47gfPAvgQ+9DojMBX6BLaGGclQiS26FK/r9TWZk4yDe0nEfGnEdO3sQ899HOHuVW
-         sYFJaEje9vdcTGEOjrveTdaj4/lDzVRYsng1fnLqeSDK3sznxYgkoAwjblg3jGSkSI
-         w0jSWp1d4WXXfhnB+a1iaBYAOH4ZI0PK5fZThs3c=
+        b=tfOOrl/0kf4l4p09BvHqtgxmNMKJxXs5acWU4JlspXyxPbZbUfDftkA5SoEoYfHUM
+         MGHMmy/V6aDH+vD6TKZAihGTPgQfvcLlPWpGTpb/BLjVn/CyfbnAF6obJqSIB9bC+B
+         CoLcvDh8uWLfai9CPM8UUjGTyqveyE88j+K2zM9U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe de Dinechin <christophe@dinechin.org>,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Segall <bsegall@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 4.14 126/218] nodemask.h: fix compilation error with GCC12
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 159/339] tracing: Avoid adding tracer option before update_tracer_options
 Date:   Mon, 13 Jun 2022 12:09:44 +0200
-Message-Id: <20220613094924.395167677@linuxfoundation.org>
+Message-Id: <20220613094931.506850450@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,92 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe de Dinechin <dinechin@redhat.com>
+From: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 
-commit 37462a920392cb86541650a6f4121155f11f1199 upstream.
+[ Upstream commit ef9188bcc6ca1d8a2ad83e826b548e6820721061 ]
 
-With gcc version 12.0.1 20220401 (Red Hat 12.0.1-0), building with
-defconfig results in the following compilation error:
+To prepare for support asynchronous tracer_init_tracefs initcall,
+avoid calling create_trace_option_files before __update_tracer_options.
+Otherwise, create_trace_option_files will show warning because
+some tracers in trace_types list are already in tr->topts.
 
-|   CC      mm/swapfile.o
-| mm/swapfile.c: In function `setup_swap_info':
-| mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds
-|  of `struct plist_node[]' [-Werror=array-bounds]
-|  2291 |                                 p->avail_lists[i].prio = 1;
-|       |                                 ~~~~~~~~~~~~~~^~~
-| In file included from mm/swapfile.c:16:
-| ./include/linux/swap.h:292:27: note: while referencing `avail_lists'
-|   292 |         struct plist_node avail_lists[]; /*
-|       |                           ^~~~~~~~~~~
+For example, hwlat_tracer call register_tracer in late_initcall,
+and global_trace.dir is already created in tracing_init_dentry,
+hwlat_tracer will be put into tr->topts.
+Then if the __update_tracer_options is executed after hwlat_tracer
+registered, create_trace_option_files find that hwlat_tracer is
+already in tr->topts.
 
-This is due to the compiler detecting that the mask in
-node_states[__state] could theoretically be zero, which would lead to
-first_node() returning -1 through find_first_bit.
+Link: https://lkml.kernel.org/r/20220426122407.17042-2-mark-pk.tsai@mediatek.com
 
-I believe that the warning/error is legitimate.  I first tried adding a
-test to check that the node mask is not emtpy, since a similar test exists
-in the case where MAX_NUMNODES == 1.
-
-However, adding the if statement causes other warnings to appear in
-for_each_cpu_node_but, because it introduces a dangling else ambiguity.
-And unfortunately, GCC is not smart enough to detect that the added test
-makes the case where (node) == -1 impossible, so it still complains with
-the same message.
-
-This is why I settled on replacing that with a harmless, but relatively
-useless (node) >= 0 test.  Based on the warning for the dangling else, I
-also decided to fix the case where MAX_NUMNODES == 1 by moving the
-condition inside the for loop.  It will still only be tested once.  This
-ensures that the meaning of an else following for_each_node_mask or
-derivatives would not silently have a different meaning depending on the
-configuration.
-
-Link: https://lkml.kernel.org/r/20220414150855.2407137-3-dinechin@redhat.com
-Signed-off-by: Christophe de Dinechin <christophe@dinechin.org>
-Signed-off-by: Christophe de Dinechin <dinechin@redhat.com>
-Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/nodemask.h |   13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ kernel/trace/trace.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -366,14 +366,13 @@ static inline void __nodes_fold(nodemask
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 8d2b5c5ce5b3..114c31bdf8f9 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -6334,12 +6334,18 @@ static void tracing_set_nop(struct trace_array *tr)
+ 	tr->current_trace = &nop_trace;
  }
  
- #if MAX_NUMNODES > 1
--#define for_each_node_mask(node, mask)			\
--	for ((node) = first_node(mask);			\
--		(node) < MAX_NUMNODES;			\
--		(node) = next_node((node), (mask)))
-+#define for_each_node_mask(node, mask)				    \
-+	for ((node) = first_node(mask);				    \
-+	     (node >= 0) && (node) < MAX_NUMNODES;		    \
-+	     (node) = next_node((node), (mask)))
- #else /* MAX_NUMNODES == 1 */
--#define for_each_node_mask(node, mask)			\
--	if (!nodes_empty(mask))				\
--		for ((node) = 0; (node) < 1; (node)++)
-+#define for_each_node_mask(node, mask)                                  \
-+	for ((node) = 0; (node) < 1 && !nodes_empty(mask); (node)++)
- #endif /* MAX_NUMNODES */
++static bool tracer_options_updated;
++
+ static void add_tracer_options(struct trace_array *tr, struct tracer *t)
+ {
+ 	/* Only enable if the directory has been created already. */
+ 	if (!tr->dir)
+ 		return;
  
- /*
++	/* Only create trace option files after update_tracer_options finish */
++	if (!tracer_options_updated)
++		return;
++
+ 	create_trace_option_files(tr, t);
+ }
+ 
+@@ -9178,6 +9184,7 @@ static void __update_tracer_options(struct trace_array *tr)
+ static void update_tracer_options(struct trace_array *tr)
+ {
+ 	mutex_lock(&trace_types_lock);
++	tracer_options_updated = true;
+ 	__update_tracer_options(tr);
+ 	mutex_unlock(&trace_types_lock);
+ }
+-- 
+2.35.1
+
 
 

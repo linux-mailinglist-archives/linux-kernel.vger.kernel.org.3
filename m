@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36CC5496CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2EB5497F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356513AbiFMLuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S1344774AbiFMKfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356558AbiFMLoq (ORCPT
+        with ESMTP id S1344755AbiFMKbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:44:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758A947AE3;
-        Mon, 13 Jun 2022 03:50:56 -0700 (PDT)
+        Mon, 13 Jun 2022 06:31:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FF327B32;
+        Mon, 13 Jun 2022 03:21:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE02DB80D3C;
-        Mon, 13 Jun 2022 10:50:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1646EC3411C;
-        Mon, 13 Jun 2022 10:50:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F20EB80E5C;
+        Mon, 13 Jun 2022 10:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E414EC34114;
+        Mon, 13 Jun 2022 10:21:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117452;
-        bh=t7o3dVSPbYAXzDXsGXvIxTwGgdjNZH7ytre5uqNhv44=;
+        s=korg; t=1655115701;
+        bh=gEvp05trtCahzfWE7DwLeU08NiFJsEmHDyAXVpflLBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFnC/5AvVQ3U1p2Mm4vvUJX0W9inWFQ9sTxbQgHpYPKBrb4YfL1VpDh0mkNFJVEwK
-         A139Jc7bXPOk342yPlgO5EUvBHxzodS1m/IWv6ydb+rd1Oimlo941JpQ8KuUK2bdn2
-         9yZaBtFFfLPjXMOjqS1ReKS5IpeYawLy2k6xh3Jg=
+        b=1u6FN9yP63c1YNUgKUujWqJGYEYCyzQ8qSuKzzxfAhdS7T3jWr9PpeszJYaU9ywMH
+         pp4vRN4b8V/LYAswUxKg2/p8Idt1GrIippE3ZDVhruWJvb72FK4QHH72Ba59umN+a/
+         o8IchGcqZM1fTLJYAXH45pUpfvTCWoHqIOxgUGTQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 043/287] eth: tg3: silence the GCC 12 array-bounds warning
-Date:   Mon, 13 Jun 2022 12:07:47 +0200
-Message-Id: <20220613094925.173085228@linuxfoundation.org>
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 010/218] b43legacy: Fix assigning negative value to unsigned variable
+Date:   Mon, 13 Jun 2022 12:07:48 +0200
+Message-Id: <20220613094910.770722085@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Haowen Bai <baihaowen@meizu.com>
 
-[ Upstream commit 9dec850fd7c210a04b4707df8e6c95bfafdd6a4b ]
+[ Upstream commit 3f6b867559b3d43a7ce1b4799b755e812fc0d503 ]
 
-GCC 12 currently generates a rather inconsistent warning:
+fix warning reported by smatch:
+drivers/net/wireless/broadcom/b43legacy/phy.c:1181 b43legacy_phy_lo_b_measure()
+warn: assigning (-772) to unsigned variable 'fval'
 
-drivers/net/ethernet/broadcom/tg3.c:17795:51: warning: array subscript 5 is above array bounds of ‘struct tg3_napi[5]’ [-Warray-bounds]
-17795 |                 struct tg3_napi *tnapi = &tp->napi[i];
-      |                                           ~~~~~~~~^~~
-
-i is guaranteed < tp->irq_max which in turn is either 1 or 5.
-There are more loops like this one in the driver, but strangely
-GCC 12 dislikes only this single one.
-
-Silence this silliness for now.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/1648203433-8736-1-git-send-email-baihaowen@meizu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/wireless/broadcom/b43legacy/phy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/broadcom/Makefile b/drivers/net/ethernet/broadcom/Makefile
-index 7046ad6d3d0e..ac50da49ca77 100644
---- a/drivers/net/ethernet/broadcom/Makefile
-+++ b/drivers/net/ethernet/broadcom/Makefile
-@@ -16,3 +16,8 @@ obj-$(CONFIG_BGMAC_BCMA) += bgmac-bcma.o bgmac-bcma-mdio.o
- obj-$(CONFIG_BGMAC_PLATFORM) += bgmac-platform.o
- obj-$(CONFIG_SYSTEMPORT) += bcmsysport.o
- obj-$(CONFIG_BNXT) += bnxt/
-+
-+# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
-+ifndef KBUILD_EXTRA_WARN
-+CFLAGS_tg3.o += -Wno-array-bounds
-+endif
+diff --git a/drivers/net/wireless/broadcom/b43legacy/phy.c b/drivers/net/wireless/broadcom/b43legacy/phy.c
+index 995c7d0c212a..11ee5ee48976 100644
+--- a/drivers/net/wireless/broadcom/b43legacy/phy.c
++++ b/drivers/net/wireless/broadcom/b43legacy/phy.c
+@@ -1148,7 +1148,7 @@ void b43legacy_phy_lo_b_measure(struct b43legacy_wldev *dev)
+ 	struct b43legacy_phy *phy = &dev->phy;
+ 	u16 regstack[12] = { 0 };
+ 	u16 mls;
+-	u16 fval;
++	s16 fval;
+ 	int i;
+ 	int j;
+ 
 -- 
 2.35.1
 

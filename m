@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8AE548658
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A155487AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354076AbiFMLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S1377981AbiFMNh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353663AbiFMLYS (ORCPT
+        with ESMTP id S1377599AbiFMNdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:24:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECE813D67;
-        Mon, 13 Jun 2022 03:42:22 -0700 (PDT)
+        Mon, 13 Jun 2022 09:33:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A2172E0B;
+        Mon, 13 Jun 2022 04:26:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 023E3B80E94;
-        Mon, 13 Jun 2022 10:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FCC9C34114;
-        Mon, 13 Jun 2022 10:42:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4671560B6E;
+        Mon, 13 Jun 2022 11:26:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4ACC341C4;
+        Mon, 13 Jun 2022 11:26:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116939;
-        bh=n+qJvALMCv5MoMuwEOWidACoeDxGUQxdZNNnpfPP+fc=;
+        s=korg; t=1655119617;
+        bh=BW0XEuoI8m9tE28jNunQyhVQ0FFH+oAiHIpWbkAgEyY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2QoUi/3HubrgQtAZHVwC/MznUxZipF8peLJ+uR3UYkZxZli8yrwm/Bne0dXJKbuuA
-         PlrckQCiwi+S4gRRg+21Aj2GEm9PUATEdKH66rQev2/k0PaeK9PSsF0AMK4Tt0l1JR
-         Z2oQW8pGyFNHrpLYAdXZsOk0nqjeY9+HnOP6ORpI=
+        b=KVqXIIacN3lS/+/QQ8zDfizxTLvof/n6yQEp7zU7MAq/2HFpwW7+/EpyORjN0g1tb
+         aqT/x/WJo1seSyOmZRLkYEsIYytoH2FxCD/MchRV2tOY3YCvvKC70qEAtILHL8vVIy
+         cMvTGkcxyHEEk6quFi/i4cxMJ7eMvsP5LsCc/9eA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 5.4 230/411] PCI/PM: Fix bridge_d3_blacklist[] Elo i2 overwrite of Gigabyte X299
+        stable@vger.kernel.org, Zhang Wensheng <zhangwensheng5@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 078/339] driver core: fix deadlock in __device_attach
 Date:   Mon, 13 Jun 2022 12:08:23 +0200
-Message-Id: <20220613094935.538317127@linuxfoundation.org>
+Message-Id: <20220613094928.885407235@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,41 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+From: Zhang Wensheng <zhangwensheng5@huawei.com>
 
-commit 12068bb346db5776d0ec9bb4cd073f8427a1ac92 upstream.
+[ Upstream commit b232b02bf3c205b13a26dcec08e53baddd8e59ed ]
 
-92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold") omitted
-braces around the new Elo i2 entry, so it overwrote the existing Gigabyte
-X299 entry.  Add the appropriate braces.
+In __device_attach function, The lock holding logic is as follows:
+...
+__device_attach
+device_lock(dev)      // get lock dev
+  async_schedule_dev(__device_attach_async_helper, dev); // func
+    async_schedule_node
+      async_schedule_node_domain(func)
+        entry = kzalloc(sizeof(struct async_entry), GFP_ATOMIC);
+	/* when fail or work limit, sync to execute func, but
+	   __device_attach_async_helper will get lock dev as
+	   well, which will lead to A-A deadlock.  */
+	if (!entry || atomic_read(&entry_count) > MAX_WORK) {
+	  func;
+	else
+	  queue_work_node(node, system_unbound_wq, &entry->work)
+  device_unlock(dev)
 
-Found by:
+As shown above, when it is allowed to do async probes, because of
+out of memory or work limit, async work is not allowed, to do
+sync execute instead. it will lead to A-A deadlock because of
+__device_attach_async_helper getting lock dev.
 
-  $ make W=1 drivers/pci/pci.o
-    CC      drivers/pci/pci.o
-  drivers/pci/pci.c:2974:12: error: initialized field overwritten [-Werror=override-init]
-   2974 |   .ident = "Elo i2",
-        |            ^~~~~~~~
+To fix the deadlock, move the async_schedule_dev outside device_lock,
+as we can see, in async_schedule_node_domain, the parameter of
+queue_work_node is system_unbound_wq, so it can accept concurrent
+operations. which will also not change the code logic, and will
+not lead to deadlock.
 
-Link: https://lore.kernel.org/r/20220526221258.GA409855@bhelgaas
-Fixes: 92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold")
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: stable@vger.kernel.org  # v5.15+
+Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
+Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
+Link: https://lore.kernel.org/r/20220518074516.1225580-1-zhangwensheng5@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/pci.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/base/dd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -2613,6 +2613,8 @@ static const struct dmi_system_id bridge
- 			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
- 			DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
- 		},
-+	},
-+	{
- 		/*
- 		 * Downstream device is not accessible after putting a root port
- 		 * into D3cold and back into D0 on Elo i2.
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 3fc3b5940bb3..ed02a529a896 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -941,6 +941,7 @@ static void __device_attach_async_helper(void *_dev, async_cookie_t cookie)
+ static int __device_attach(struct device *dev, bool allow_async)
+ {
+ 	int ret = 0;
++	bool async = false;
+ 
+ 	device_lock(dev);
+ 	if (dev->p->dead) {
+@@ -979,7 +980,7 @@ static int __device_attach(struct device *dev, bool allow_async)
+ 			 */
+ 			dev_dbg(dev, "scheduling asynchronous probe\n");
+ 			get_device(dev);
+-			async_schedule_dev(__device_attach_async_helper, dev);
++			async = true;
+ 		} else {
+ 			pm_request_idle(dev);
+ 		}
+@@ -989,6 +990,8 @@ static int __device_attach(struct device *dev, bool allow_async)
+ 	}
+ out_unlock:
+ 	device_unlock(dev);
++	if (async)
++		async_schedule_dev(__device_attach_async_helper, dev);
+ 	return ret;
+ }
+ 
+-- 
+2.35.1
+
 
 

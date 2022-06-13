@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CE1549304
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A624C548A4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358344AbiFMMCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        id S1354612AbiFMLfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358191AbiFML7h (ORCPT
+        with ESMTP id S1354426AbiFML33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:59:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2934DF7E;
-        Mon, 13 Jun 2022 03:56:35 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154A8DE99;
+        Mon, 13 Jun 2022 03:44:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1EBC6139D;
-        Mon, 13 Jun 2022 10:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECCCC34114;
-        Mon, 13 Jun 2022 10:56:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A89046112A;
+        Mon, 13 Jun 2022 10:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B305EC34114;
+        Mon, 13 Jun 2022 10:44:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117794;
-        bh=HTFSOGHBWdRDwUFiV3IKhBF8OEM33YNKdbdeRaZD1kI=;
+        s=korg; t=1655117064;
+        bh=IAVbfGTRA6I43BJFnxsN8vzB8Joruj/IdTtsLWXc08Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uZ0wmuBRgNZ4chIBX6Be7U1G76rUmkbpOPLaDmtL5WCIw5Z82+BTSpMZeQ4/ZXlAV
-         VSnMUHRloKAOzEbd/zHolyKBUfeWsvyJzJk0lM2Mr1vl9O0Dd5jv6hL+bG0a9WC5Z6
-         oROUBibufwL/w6tsAEG3PnI3ytvUleroM1KonJ6Q=
+        b=1Q0PJO2Henn1hYRd1rU1twCLXVx6Brh0uPkqdI/k49eoqoYQhlPiO09iUMZyE5NIa
+         VJgIplcHSsRYyypmYONTyxlKdCVSEyN1SEY0xjS3EghRvqDKJ8j6WHdqkMX3DtEN2i
+         wTqPLkRGkbfh9rjv7nVqZD+KcEB4Zc3+YzBMlE48=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 134/287] i2c: at91: use dma safe buffers
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 285/411] tty: serial: owl: Fix missing clk_disable_unprepare() in owl_uart_probe
 Date:   Mon, 13 Jun 2022 12:09:18 +0200
-Message-Id: <20220613094927.943345073@linuxfoundation.org>
+Message-Id: <20220613094937.304784853@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 03fbb903c8bf7e53e101e8d9a7b261264317c411 ]
+[ Upstream commit bcea0f547ec1a2ee44d429aaf0334633e386e67c ]
 
-The supplied buffer might be on the stack and we get the following error
-message:
-[    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
+Fix the missing clk_disable_unprepare() before return
+from owl_uart_probe() in the error handling case.
 
-Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
-necessary.
-
-Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: abf42d2f333b ("tty: serial: owl: add "much needed" clk_prepare_enable()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220307105135.11698-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-at91.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/tty/serial/owl-uart.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-at91.c b/drivers/i2c/busses/i2c-at91.c
-index d51bf536bdf7..d5119a2adf5d 100644
---- a/drivers/i2c/busses/i2c-at91.c
-+++ b/drivers/i2c/busses/i2c-at91.c
-@@ -757,6 +757,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
- 	unsigned int_addr_flag = 0;
- 	struct i2c_msg *m_start = msg;
- 	bool is_read;
-+	u8 *dma_buf;
- 
- 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
- 
-@@ -804,7 +805,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
- 	dev->msg = m_start;
- 	dev->recv_len_abort = false;
- 
-+	if (dev->use_dma) {
-+		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-+		if (!dma_buf) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+		dev->buf = dma_buf;
-+	}
-+
- 	ret = at91_do_twi_transfer(dev);
-+	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
- 
- 	ret = (ret < 0) ? ret : num;
- out:
+diff --git a/drivers/tty/serial/owl-uart.c b/drivers/tty/serial/owl-uart.c
+index c55c8507713c..e87953f8a768 100644
+--- a/drivers/tty/serial/owl-uart.c
++++ b/drivers/tty/serial/owl-uart.c
+@@ -695,6 +695,7 @@ static int owl_uart_probe(struct platform_device *pdev)
+ 	owl_port->port.uartclk = clk_get_rate(owl_port->clk);
+ 	if (owl_port->port.uartclk == 0) {
+ 		dev_err(&pdev->dev, "clock rate is zero\n");
++		clk_disable_unprepare(owl_port->clk);
+ 		return -EINVAL;
+ 	}
+ 	owl_port->port.flags = UPF_BOOT_AUTOCONF | UPF_IOREMAP | UPF_LOW_LATENCY;
 -- 
 2.35.1
 

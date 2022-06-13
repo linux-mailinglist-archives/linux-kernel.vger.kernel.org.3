@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7784154880A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91467548863
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356168AbiFMLuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S1351747AbiFMLID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356199AbiFMLn4 (ORCPT
+        with ESMTP id S1349881AbiFMLAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:43:56 -0400
+        Mon, 13 Jun 2022 07:00:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CD246B3C;
-        Mon, 13 Jun 2022 03:50:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA783120E;
+        Mon, 13 Jun 2022 03:33:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79D6A61343;
-        Mon, 13 Jun 2022 10:50:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862D1C34114;
-        Mon, 13 Jun 2022 10:50:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D6D560FDD;
+        Mon, 13 Jun 2022 10:33:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C03C34114;
+        Mon, 13 Jun 2022 10:33:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117432;
-        bh=9fscbB/2/WC67uRuZ4ZUNRPLnqkEBlREFuhjDFoHd/s=;
+        s=korg; t=1655116389;
+        bh=LtWRdp+pRimpsjuHTcv0lC8/M5fAbpiffwBSYWWitDM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rTortXwutidUatrl05405/BArWE9gmi+fyGvsR4QtrDzzIX8grxJLDFX2BMksCqkA
-         xw2+bxwwwGigUF5XIOooozDc15tLSCcHQX/nP49WNdoZZhgdazyNwmHMCt2ZhbdXUR
-         b5bQf7spWh51dwy8X7YrG1xPUgr+J7Vgzsfjn8Rk=
+        b=prSb9HJ2t2oW3bDtBSHXwHM7zHyGXBoANJRToRqYBEBachDy/92aH9wPFGnNJoH3K
+         /qpTUEn+ejODUQAiwMsHfT8bwt54hohFBg3nKcQ2Q4jSv2mj68/pnmKjiL8Hyml0lS
+         qlxYU7Mk37WSgtPnL3VF80Y++4km1BCIZi6Cqufg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 367/411] lkdtm/usercopy: Expand size of "out of frame" object
+Subject: [PATCH 4.14 182/218] lkdtm/usercopy: Expand size of "out of frame" object
 Date:   Mon, 13 Jun 2022 12:10:40 +0200
-Message-Id: <20220613094939.690561949@linuxfoundation.org>
+Message-Id: <20220613094926.130121619@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,13 +75,13 @@ Link: https://lore.kernel.org/lkml/762faf1b-0443-5ddf-4430-44a20cf2ec4d@collabor
 Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/lkdtm/usercopy.c | 17 ++++++++++++++---
+ drivers/misc/lkdtm_usercopy.c | 17 ++++++++++++++---
  1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
-index e172719dd86d..4617c63b1026 100644
---- a/drivers/misc/lkdtm/usercopy.c
-+++ b/drivers/misc/lkdtm/usercopy.c
+diff --git a/drivers/misc/lkdtm_usercopy.c b/drivers/misc/lkdtm_usercopy.c
+index a64372cc148d..178b55141772 100644
+--- a/drivers/misc/lkdtm_usercopy.c
++++ b/drivers/misc/lkdtm_usercopy.c
 @@ -30,12 +30,12 @@ static const unsigned char test_text[] = "This is a test.\n";
   */
  static noinline unsigned char *trick_compiler(unsigned char *stack)

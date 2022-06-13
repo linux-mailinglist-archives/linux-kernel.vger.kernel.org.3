@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E843548C00
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B5F54892F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356161AbiFMM4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S1383320AbiFMOPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357063AbiFMMyL (ORCPT
+        with ESMTP id S1382502AbiFMOF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:54:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52ED6472F;
-        Mon, 13 Jun 2022 04:13:02 -0700 (PDT)
+        Mon, 13 Jun 2022 10:05:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A1295A31;
+        Mon, 13 Jun 2022 04:40:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F30B2B80EA7;
-        Mon, 13 Jun 2022 11:12:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3016CC34114;
-        Mon, 13 Jun 2022 11:12:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5192C6124E;
+        Mon, 13 Jun 2022 11:40:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62948C34114;
+        Mon, 13 Jun 2022 11:40:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118768;
-        bh=yx04ig1XPY/rz+Ru6T8UV2Giw2eWst4eOpfLRficU/o=;
+        s=korg; t=1655120452;
+        bh=T7zgCZdrnSI9zOst5mi3apWNt045/z6rDMsSMmV8L38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NglanGnZu9BRGWbUQeFjTBCaXqoZRPsAPSyeQB/wKD5RW7tLkP1FBA1rtG51WjTxL
-         tbk1xc8M1H3pXZeVWVMWYhlIHMeF4xQHgrV4e+Pgs+KDd9Q63sQu3bhjPd1tjtlpLN
-         oNZ1s5/6496JbbpkCmnD3zgs0To+j8b8RtyM8Qhg=
+        b=WIFL5RQFCFCnkGdiMCY5jyvJ8uvUqBZZ5RIwirN6bN4i33Ukr3W1+V/3lU/rZxDb7
+         g1xlyTZRis7D4+vfWV1MdCwjLzKgdkQSrwj3yTjUAOmpP8ypZAacDfHYngOvOVeUc2
+         5bnqYzcFpZ46K0JoJOPvL67ZqCkgcDyKG6QC9Y7Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 006/247] tty: goldfish: Use tty_port_destroy() to destroy port
-Date:   Mon, 13 Jun 2022 12:08:28 +0200
-Message-Id: <20220613094923.104441867@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Lin Ma <linma@zju.edu.cn>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 015/298] USB: storage: karma: fix rio_karma_init return
+Date:   Mon, 13 Jun 2022 12:08:29 +0200
+Message-Id: <20220613094925.388939519@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Weiyang <wangweiyang2@huawei.com>
+From: Lin Ma <linma@zju.edu.cn>
 
-[ Upstream commit 507b05063d1b7a1fcb9f7d7c47586fc4f3508f98 ]
+[ Upstream commit b92ffb1eddd9a66a90defc556dcbf65a43c196c7 ]
 
-In goldfish_tty_probe(), the port initialized through tty_port_init()
-should be destroyed in error paths.In goldfish_tty_remove(), qtty->port
-also should be destroyed or else might leak resources.
+The function rio_karam_init() should return -ENOMEM instead of
+value 0 (USB_STOR_TRANSPORT_GOOD) when allocation fails.
 
-Fix the above by calling tty_port_destroy().
+Similarly, it should return -EIO when rio_karma_send_command() fails.
 
-Fixes: 666b7793d4bf ("goldfish: tty driver")
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
-Link: https://lore.kernel.org/r/20220328115844.86032-1-wangweiyang2@huawei.com
+Fixes: dfe0d3ba20e8 ("USB Storage: add rio karma eject support")
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220412144359.28447-1-linma@zju.edu.cn
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/goldfish.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/storage/karma.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
-index 876ff5445c52..0dc9a6a36ce0 100644
---- a/drivers/tty/goldfish.c
-+++ b/drivers/tty/goldfish.c
-@@ -407,6 +407,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
- err_tty_register_device_failed:
- 	free_irq(irq, qtty);
- err_dec_line_count:
-+	tty_port_destroy(&qtty->port);
- 	goldfish_tty_current_line_count--;
- 	if (goldfish_tty_current_line_count == 0)
- 		goldfish_tty_delete_driver();
-@@ -428,6 +429,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
- 	iounmap(qtty->base);
- 	qtty->base = NULL;
- 	free_irq(qtty->irq, pdev);
-+	tty_port_destroy(&qtty->port);
- 	goldfish_tty_current_line_count--;
- 	if (goldfish_tty_current_line_count == 0)
- 		goldfish_tty_delete_driver();
+diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
+index 05cec81dcd3f..38ddfedef629 100644
+--- a/drivers/usb/storage/karma.c
++++ b/drivers/usb/storage/karma.c
+@@ -174,24 +174,25 @@ static void rio_karma_destructor(void *extra)
+ 
+ static int rio_karma_init(struct us_data *us)
+ {
+-	int ret = 0;
+ 	struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
+ 
+ 	if (!data)
+-		goto out;
++		return -ENOMEM;
+ 
+ 	data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
+ 	if (!data->recv) {
+ 		kfree(data);
+-		goto out;
++		return -ENOMEM;
+ 	}
+ 
+ 	us->extra = data;
+ 	us->extra_destructor = rio_karma_destructor;
+-	ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
+-	data->in_storage = (ret == 0);
+-out:
+-	return ret;
++	if (rio_karma_send_command(RIO_ENTER_STORAGE, us))
++		return -EIO;
++
++	data->in_storage = 1;
++
++	return 0;
+ }
+ 
+ static struct scsi_host_template karma_host_template;
 -- 
 2.35.1
 

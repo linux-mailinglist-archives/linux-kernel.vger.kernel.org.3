@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F5F5495AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7E3548AF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381256AbiFMOIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
+        id S1385132AbiFMOlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380948AbiFMODH (ORCPT
+        with ESMTP id S1385479AbiFMOkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:03:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20A58DDE3;
-        Mon, 13 Jun 2022 04:38:23 -0700 (PDT)
+        Mon, 13 Jun 2022 10:40:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD699AF304;
+        Mon, 13 Jun 2022 04:50:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C28A7B80EA7;
-        Mon, 13 Jun 2022 11:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF2DC34114;
-        Mon, 13 Jun 2022 11:38:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0243614AD;
+        Mon, 13 Jun 2022 11:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD43C341C4;
+        Mon, 13 Jun 2022 11:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120300;
-        bh=j+uAT323+KaJj7UMoqr4xyarKUVNsQL7xM52Y8ib5w4=;
+        s=korg; t=1655121004;
+        bh=kvqvrS7aBXFQLen3K2YQokr1nKqkLNmgu1NIMizyz9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zq3RLXS+29TORsDQ2ldRTznfIMPzf1kRvrwj42pABC44qp5AKCBO+lGcwhFvTYAgZ
-         jg4/BwAwGUfo3oZKaLlJ2wMbpDWBmo7OL4Tx3w7RCshH7+3adAbDrdxL2UOxZOtzu7
-         DRomr/c8CxC2w6OqQRYd55PHGVQUg1wSFSv7BvVg=
+        b=KJxv0mwnEiTnfqtWX1noyk2B5YCddbVWC2jG+H0ZnKir4vcj4If3I/nu+RG2EBbG2
+         q4EFedcIc9fGdiyFmTQg8H1WBPCK/lHqQlLkfyShK/St7PUvuSaftl1f03QndthmT8
+         uwMIQTSAH4kQ6eLNuQ7pyf8rsGeukgodXd7MSX+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shaoqin Huang <shaoqin.huang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.18 305/339] KVM: x86/mmu: Check every prev_roots in __kvm_mmu_free_obsolete_roots()
+        stable@vger.kernel.org, Lijo Lazar <lijo.lazar@amd.com>,
+        Yang Wang <kevinyang.wang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 236/298] drm/amd/pm: Fix missing thermal throttler status
 Date:   Mon, 13 Jun 2022 12:12:10 +0200
-Message-Id: <20220613094936.010226301@linuxfoundation.org>
+Message-Id: <20220613094932.248975905@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaoqin Huang <shaoqin.huang@intel.com>
+From: Lijo Lazar <lijo.lazar@amd.com>
 
-commit cf4a8693d97a51dccf5a1557248d12d6d8be4b9e upstream.
+[ Upstream commit b0f4d663fce6a4232d3c20ce820f919111b1c60b ]
 
-When freeing obsolete previous roots, check prev_roots as intended, not
-the current root.
+On aldebaran, when thermal throttling happens due to excessive GPU
+temperature, the reason for throttling event is missed in warning
+message. This patch fixes it.
 
-Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
-Fixes: 527d5cd7eece ("KVM: x86/mmu: Zap only obsolete roots if a root shadow page is zapped")
-Message-Id: <20220607005905.2933378-1-shaoqin.huang@intel.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Lijo Lazar <lijo.lazar@amd.com>
+Reviewed-by: Yang Wang <kevinyang.wang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/mmu/mmu.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5168,7 +5168,7 @@ static void __kvm_mmu_free_obsolete_root
- 		roots_to_free |= KVM_MMU_ROOT_CURRENT;
- 
- 	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
--		if (is_obsolete_root(kvm, mmu->root.hpa))
-+		if (is_obsolete_root(kvm, mmu->prev_roots[i].hpa))
- 			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
- 	}
- 
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
+index 4885c4ae78b7..27a54145d352 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
+@@ -1643,6 +1643,7 @@ static const struct throttling_logging_label {
+ 	uint32_t feature_mask;
+ 	const char *label;
+ } logging_label[] = {
++	{(1U << THROTTLER_TEMP_GPU_BIT), "GPU"},
+ 	{(1U << THROTTLER_TEMP_MEM_BIT), "HBM"},
+ 	{(1U << THROTTLER_TEMP_VR_GFX_BIT), "VR of GFX rail"},
+ 	{(1U << THROTTLER_TEMP_VR_MEM_BIT), "VR of HBM rail"},
+-- 
+2.35.1
+
 
 

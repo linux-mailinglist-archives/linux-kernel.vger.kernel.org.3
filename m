@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A61548650
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C4B548627
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344485AbiFMM5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S1381987AbiFMOSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357754AbiFMMyo (ORCPT
+        with ESMTP id S1381470AbiFMOL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:54:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6665B6621F;
-        Mon, 13 Jun 2022 04:13:17 -0700 (PDT)
+        Mon, 13 Jun 2022 10:11:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE539A983;
+        Mon, 13 Jun 2022 04:42:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 188BE60EAE;
-        Mon, 13 Jun 2022 11:13:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DA6C34114;
-        Mon, 13 Jun 2022 11:13:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18F69B80EDE;
+        Mon, 13 Jun 2022 11:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B03C34114;
+        Mon, 13 Jun 2022 11:42:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118796;
-        bh=u3g6ye2lF1PUMaUH3OK098oauGnVr/Y/SqRnFmjCthM=;
+        s=korg; t=1655120523;
+        bh=RAPHGV+rtvwWQJEXunWfr637QO4/abkhlqk7qVnMv14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OEXaYEqJT8nzVHRc8Xbq1dWlRkExoFM5pfmEyqLePn3hohjlvF1397e7gyHXmyxzN
-         EHMI6o5vq0xfa2gBTwXmJIYA9BnnRNJRgkqE5SwlV5DQFeNO9Zb1JLLi6dRFPWdQzf
-         sARGngoOd5NezZVXtlXsjzkdSTqTDy8KepWm/dPw=
+        b=nhTEIv/z40GCSERNGwcRTsuOmbOfhEDmHleYt9nNrvGYdZgoJIG3wqS+FGyOUlQhR
+         EB8Ku/XuZ8/888qyraWqEhB3h9E8epoPy0u5l5mRa7S2CXAIF72WARBveJfjNgHKtY
+         oQcE9ItCWvkxwMqn4f8izGtAvmP88sfkBmV5Yl0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 031/247] iio: adc: sc27xx: Fine tune the scale calibration values
-Date:   Mon, 13 Jun 2022 12:08:53 +0200
-Message-Id: <20220613094923.880979738@linuxfoundation.org>
+Subject: [PATCH 5.17 040/298] export: fix string handling of namespace in EXPORT_SYMBOL_NS
+Date:   Mon, 13 Jun 2022 12:08:54 +0200
+Message-Id: <20220613094926.154151769@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +59,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit 5a7a184b11c6910f47600ff5cbbee34168f701a8 ]
+[ Upstream commit d143b9db8069f0e2a0fa34484e806a55a0dd4855 ]
 
-Small adjustment the scale calibration value for the sc2731,
-use new name sc2731_[big|small]_scale_graph_calib, and remove
-the origin [big|small]_scale_graph_calib struct for unused.
+Commit c3a6cf19e695 ("export: avoid code duplication in
+include/linux/export.h") broke the ability for a defined string to be
+used as a namespace value.  Fix this up by using stringify to properly
+encode the namespace name.
 
-Fixes: 8ba0dbfd07a35 (iio: adc: sc27xx: Add ADC scale calibration)
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-Link: https://lore.kernel.org/r/20220419142458.884933-4-gengcixi@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: c3a6cf19e695 ("export: avoid code duplication in include/linux/export.h")
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Emil Velikov <emil.l.velikov@gmail.com>
+Cc: Jessica Yu <jeyu@kernel.org>
+Cc: Quentin Perret <qperret@google.com>
+Cc: Matthias Maennich <maennich@google.com>
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+Link: https://lore.kernel.org/r/20220427090442.2105905-1-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/sc27xx_adc.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ include/linux/export.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-index aee076c8e2b1..cfe003cc4f0b 100644
---- a/drivers/iio/adc/sc27xx_adc.c
-+++ b/drivers/iio/adc/sc27xx_adc.c
-@@ -103,14 +103,14 @@ static struct sc27xx_adc_linear_graph small_scale_graph = {
- 	100, 341,
- };
+diff --git a/include/linux/export.h b/include/linux/export.h
+index 27d848712b90..5910ccb66ca2 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -2,6 +2,8 @@
+ #ifndef _LINUX_EXPORT_H
+ #define _LINUX_EXPORT_H
  
--static const struct sc27xx_adc_linear_graph big_scale_graph_calib = {
--	4200, 856,
--	3600, 733,
-+static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph_calib = {
-+	4200, 850,
-+	3600, 728,
- };
++#include <linux/stringify.h>
++
+ /*
+  * Export symbols from the kernel to modules.  Forked from module.h
+  * to reduce the amount of pointless cruft we feed to gcc when only
+@@ -154,7 +156,6 @@ struct kernel_symbol {
+ #endif /* CONFIG_MODULES */
  
--static const struct sc27xx_adc_linear_graph small_scale_graph_calib = {
--	1000, 833,
--	100, 80,
-+static const struct sc27xx_adc_linear_graph sc2731_small_scale_graph_calib = {
-+	1000, 838,
-+	100, 84,
- };
+ #ifdef DEFAULT_SYMBOL_NAMESPACE
+-#include <linux/stringify.h>
+ #define _EXPORT_SYMBOL(sym, sec)	__EXPORT_SYMBOL(sym, sec, __stringify(DEFAULT_SYMBOL_NAMESPACE))
+ #else
+ #define _EXPORT_SYMBOL(sym, sec)	__EXPORT_SYMBOL(sym, sec, "")
+@@ -162,8 +163,8 @@ struct kernel_symbol {
  
- static int sc27xx_adc_get_calib_data(u32 calib_data, int calib_adc)
-@@ -130,11 +130,11 @@ static int sc27xx_adc_scale_calibration(struct sc27xx_adc_data *data,
- 	size_t len;
+ #define EXPORT_SYMBOL(sym)		_EXPORT_SYMBOL(sym, "")
+ #define EXPORT_SYMBOL_GPL(sym)		_EXPORT_SYMBOL(sym, "_gpl")
+-#define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", #ns)
+-#define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "_gpl", #ns)
++#define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", __stringify(ns))
++#define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "_gpl", __stringify(ns))
  
- 	if (big_scale) {
--		calib_graph = &big_scale_graph_calib;
-+		calib_graph = &sc2731_big_scale_graph_calib;
- 		graph = &big_scale_graph;
- 		cell_name = "big_scale_calib";
- 	} else {
--		calib_graph = &small_scale_graph_calib;
-+		calib_graph = &sc2731_small_scale_graph_calib;
- 		graph = &small_scale_graph;
- 		cell_name = "small_scale_calib";
- 	}
+ #endif /* !__ASSEMBLY__ */
+ 
 -- 
 2.35.1
 

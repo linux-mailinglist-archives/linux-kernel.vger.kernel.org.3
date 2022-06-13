@@ -2,65 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDE354948A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0E55491AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352005AbiFMMiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S1351870AbiFMLIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351815AbiFMMhT (ORCPT
+        with ESMTP id S1351248AbiFMLDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:37:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CE328718;
-        Mon, 13 Jun 2022 04:08:02 -0700 (PDT)
+        Mon, 13 Jun 2022 07:03:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9A63191F;
+        Mon, 13 Jun 2022 03:33:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC69D60A56;
-        Mon, 13 Jun 2022 11:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E6AC34114;
-        Mon, 13 Jun 2022 11:07:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92F25B80EAD;
+        Mon, 13 Jun 2022 10:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10869C34114;
+        Mon, 13 Jun 2022 10:33:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118480;
-        bh=gf9Yqi/C9uh2Bzvtgr/DICpMgnGQrrhsQEQ5c54oFwU=;
+        s=korg; t=1655116400;
+        bh=LA8dCaaPKOMnOc8bVrWl/usps5F722STdoviF3RJ/pk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XR5S4ObtY05l1IJdMOdtUbHqGEUE3WrGg0l/BaIkH7uVWdpDNRvElMwFYdxzjRWJa
-         1/KbHKR3vVUYOArkMjLFkuql5ObbGPY6HT/76S8PfCAkWmWyb1WdN/1au/O+7ARxjj
-         FmlN2Y/LRCz2YTFHs+FWlq8q3RqyPzFr9wRCfNiI=
+        b=SIHW4HksrY57dEVz0ET+DUzbJ3M29TpwIlj3btnpgWl01/M8qUI6/WFvz04+A7IKG
+         55jHNqGgYcV1zFvITgO7BGIZC6qSDWqsMazQPpJ5R0SMoeQHKCZvxN7uw0fGAMzwxj
+         iOalRzmUnXLOLO7C/dbjvoZtv5ppuz3czj1LSC3Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Stultz <jstultz@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        NeilBrown <neilb@suse.de>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 073/172] driver core: Fix wait_for_device_probe() & deferred_probe_timeout interaction
+Subject: [PATCH 4.14 175/218] SUNRPC: Fix the calculation of xdr->end in xdr_get_next_encode_buffer()
 Date:   Mon, 13 Jun 2022 12:10:33 +0200
-Message-Id: <20220613094907.960256636@linuxfoundation.org>
+Message-Id: <20220613094925.913148777@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,104 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saravana Kannan <saravanak@google.com>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-[ Upstream commit 5ee76c256e928455212ab759c51d198fedbe7523 ]
+[ Upstream commit 6c254bf3b637dd4ef4f78eb78c7447419c0161d7 ]
 
-Mounting NFS rootfs was timing out when deferred_probe_timeout was
-non-zero [1].  This was because ip_auto_config() initcall times out
-waiting for the network interfaces to show up when
-deferred_probe_timeout was non-zero. While ip_auto_config() calls
-wait_for_device_probe() to make sure any currently running deferred
-probe work or asynchronous probe finishes, that wasn't sufficient to
-account for devices being deferred until deferred_probe_timeout.
+I found that NFSD's new NFSv3 READDIRPLUS XDR encoder was screwing up
+right at the end of the page array. xdr_get_next_encode_buffer() does
+not compute the value of xdr->end correctly:
 
-Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
-until the deferred_probe_timeout fires") tried to fix that by making
-sure wait_for_device_probe() waits for deferred_probe_timeout to expire
-before returning.
+ * The check to see if we're on the final available page in xdr->buf
+   needs to account for the space consumed by @nbytes.
 
-However, if wait_for_device_probe() is called from the kernel_init()
-context:
+ * The new xdr->end value needs to account for the portion of @nbytes
+   that is to be encoded into the previous buffer.
 
-- Before deferred_probe_initcall() [2], it causes the boot process to
-  hang due to a deadlock.
-
-- After deferred_probe_initcall() [3], it blocks kernel_init() from
-  continuing till deferred_probe_timeout expires and beats the point of
-  deferred_probe_timeout that's trying to wait for userspace to load
-  modules.
-
-Neither of this is good. So revert the changes to
-wait_for_device_probe().
-
-[1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
-[2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
-[3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
-
-Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
-Cc: John Stultz <jstultz@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Basil Eljuse <Basil.Eljuse@arm.com>
-Cc: Ferry Toth <fntoth@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Anders Roxell <anders.roxell@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: John Stultz <jstultz@google.com>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 2825a7f90753 ("nfsd4: allow encoding across page boundaries")
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Reviewed-by: NeilBrown <neilb@suse.de>
+Reviewed-by: J. Bruce Fields <bfields@fieldses.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/dd.c | 5 -----
- 1 file changed, 5 deletions(-)
+ net/sunrpc/xdr.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 4f4e8aedbd2c..f9d9f1ad9215 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -250,7 +250,6 @@ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
- 
- int driver_deferred_probe_timeout;
- EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
--static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
- 
- static int __init deferred_probe_timeout_setup(char *str)
- {
-@@ -302,7 +301,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
- 	list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
- 		dev_info(p->device, "deferred probe pending\n");
- 	mutex_unlock(&deferred_probe_mutex);
--	wake_up_all(&probe_timeout_waitqueue);
- }
- static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
- 
-@@ -706,9 +704,6 @@ int driver_probe_done(void)
-  */
- void wait_for_device_probe(void)
- {
--	/* wait for probe timeout */
--	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
--
- 	/* wait for the deferred probe workqueue to finish */
- 	flush_work(&deferred_probe_work);
- 
+diff --git a/net/sunrpc/xdr.c b/net/sunrpc/xdr.c
+index 87cf0b933f99..51ccde7c1311 100644
+--- a/net/sunrpc/xdr.c
++++ b/net/sunrpc/xdr.c
+@@ -544,7 +544,11 @@ static __be32 *xdr_get_next_encode_buffer(struct xdr_stream *xdr,
+ 	 */
+ 	xdr->p = (void *)p + frag2bytes;
+ 	space_left = xdr->buf->buflen - xdr->buf->len;
+-	xdr->end = (void *)p + min_t(int, space_left, PAGE_SIZE);
++	if (space_left - nbytes >= PAGE_SIZE)
++		xdr->end = (void *)p + PAGE_SIZE;
++	else
++		xdr->end = (void *)p + space_left - frag1bytes;
++
+ 	xdr->buf->page_len += frag2bytes;
+ 	xdr->buf->len += nbytes;
+ 	return p;
 -- 
 2.35.1
 

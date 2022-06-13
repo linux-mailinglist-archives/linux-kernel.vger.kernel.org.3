@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8945489F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD173548AF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351810AbiFMMQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S1356784AbiFMLvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358394AbiFMMOK (ORCPT
+        with ESMTP id S1357115AbiFMLpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:14:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F98541A3;
-        Mon, 13 Jun 2022 04:01:37 -0700 (PDT)
+        Mon, 13 Jun 2022 07:45:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4D349C8C;
+        Mon, 13 Jun 2022 03:51:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6257611B3;
-        Mon, 13 Jun 2022 11:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C902FC3411E;
-        Mon, 13 Jun 2022 11:01:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB9F261260;
+        Mon, 13 Jun 2022 10:51:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBE0C3411C;
+        Mon, 13 Jun 2022 10:51:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118096;
-        bh=WbYBjSc71f8cIlWrPUklZin8m5JpGhUfr03nU2I9gGA=;
+        s=korg; t=1655117502;
+        bh=/GG/uI1SHmCiMaut98VaM/SKzy5gUyYM4ay2lWKd5Vs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g+4qNhOVZFW+jD/Rvp3sS0mKPQeJ4TtrhdiRRKmgX2wefK3oBJ08CJgWw896mYEJA
-         QcHvrZJQaiu+QdGpUuc7RqyyLK5OXezXpOnitj6f6A8KpRkIhRt1OhPZ4bokTHNDx7
-         h9G51eRGpp9LN3jykCo8pXoeFQ6X4pbFjoZnkJqw=
+        b=a4Uv330E8rQVWuBzT+W9b2DsqLQgbc2Ukd5P9BNlyUsHN8YQCLLR/bjdpSc9IcozG
+         a0X/V1f/vqTZEbIviISWY64lYt8kEvlOc6yH16kREnfxPQv8on7mnZt0FMz+osP4qR
+         9cXkU2cd/GQRF+ZMdwMDaC6Sbb5BC3QtukA41n8w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jun Miao <jun.miao@intel.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 228/287] tracing: Fix sleeping function called from invalid context on RT kernel
+Subject: [PATCH 5.4 379/411] clocksource/drivers/sp804: Avoid error on multiple instances
 Date:   Mon, 13 Jun 2022 12:10:52 +0200
-Message-Id: <20220613094930.929442442@linuxfoundation.org>
+Message-Id: <20220613094940.035306891@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,90 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jun Miao <jun.miao@intel.com>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit 12025abdc8539ed9d5014e2d647a3fd1bd3de5cd ]
+[ Upstream commit a98399cbc1e05f7b977419f03905501d566cf54e ]
 
-When setting bootparams="trace_event=initcall:initcall_start tp_printk=1" in the
-cmdline, the output_printk() was called, and the spin_lock_irqsave() was called in the
-atomic and irq disable interrupt context suitation. On the PREEMPT_RT kernel,
-these locks are replaced with sleepable rt-spinlock, so the stack calltrace will
-be triggered.
-Fix it by raw_spin_lock_irqsave when PREEMPT_RT and "trace_event=initcall:initcall_start
-tp_printk=1" enabled.
+When a machine sports more than one SP804 timer instance, we only bring
+up the first one, since multiple timers of the same kind are not useful
+to Linux. As this is intentional behaviour, we should not return an
+error message, as we do today:
+===============
+[    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
+===============
 
- BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
- in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
- preempt_count: 2, expected: 0
- RCU nest depth: 0, expected: 0
- Preemption disabled at:
- [<ffffffff8992303e>] try_to_wake_up+0x7e/0xba0
- CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt17+ #19 34c5812404187a875f32bee7977f7367f9679ea7
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x60/0x8c
-  dump_stack+0x10/0x12
-  __might_resched.cold+0x11d/0x155
-  rt_spin_lock+0x40/0x70
-  trace_event_buffer_commit+0x2fa/0x4c0
-  ? map_vsyscall+0x93/0x93
-  trace_event_raw_event_initcall_start+0xbe/0x110
-  ? perf_trace_initcall_finish+0x210/0x210
-  ? probe_sched_wakeup+0x34/0x40
-  ? ttwu_do_wakeup+0xda/0x310
-  ? trace_hardirqs_on+0x35/0x170
-  ? map_vsyscall+0x93/0x93
-  do_one_initcall+0x217/0x3c0
-  ? trace_event_raw_event_initcall_level+0x170/0x170
-  ? push_cpu_stop+0x400/0x400
-  ? cblist_init_generic+0x241/0x290
-  kernel_init_freeable+0x1ac/0x347
-  ? _raw_spin_unlock_irq+0x65/0x80
-  ? rest_init+0xf0/0xf0
-  kernel_init+0x1e/0x150
-  ret_from_fork+0x22/0x30
-  </TASK>
+Replace the -EINVAL return with a debug message and return 0 instead.
 
-Link: https://lkml.kernel.org/r/20220419013910.894370-1-jun.miao@intel.com
+Also we do not reach the init function anymore if the DT node is
+disabled (as this is now handled by OF_DECLARE), so remove the explicit
+check for that case.
 
-Signed-off-by: Jun Miao <jun.miao@intel.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+This fixes a long standing bogus error when booting ARM's fastmodels.
+
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/20220506162522.3675399-1-andre.przywara@arm.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clocksource/timer-sp804.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 063b434c89d2..017c8dd46b0f 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -2331,7 +2331,7 @@ trace_event_buffer_lock_reserve(struct ring_buffer **current_rb,
- }
- EXPORT_SYMBOL_GPL(trace_event_buffer_lock_reserve);
+diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
+index 9c841980eed1..c9aa0498fb84 100644
+--- a/drivers/clocksource/timer-sp804.c
++++ b/drivers/clocksource/timer-sp804.c
+@@ -215,6 +215,11 @@ static int __init sp804_of_init(struct device_node *np)
+ 	struct clk *clk1, *clk2;
+ 	const char *name = of_get_property(np, "compatible", NULL);
  
--static DEFINE_SPINLOCK(tracepoint_iter_lock);
-+static DEFINE_RAW_SPINLOCK(tracepoint_iter_lock);
- static DEFINE_MUTEX(tracepoint_printk_mutex);
++	if (initialized) {
++		pr_debug("%pOF: skipping further SP804 timer device\n", np);
++		return 0;
++	}
++
+ 	base = of_iomap(np, 0);
+ 	if (!base)
+ 		return -ENXIO;
+@@ -223,11 +228,6 @@ static int __init sp804_of_init(struct device_node *np)
+ 	writel(0, base + TIMER_CTRL);
+ 	writel(0, base + TIMER_2_BASE + TIMER_CTRL);
  
- static void output_printk(struct trace_event_buffer *fbuffer)
-@@ -2352,14 +2352,14 @@ static void output_printk(struct trace_event_buffer *fbuffer)
- 
- 	event = &fbuffer->trace_file->event_call->event;
- 
--	spin_lock_irqsave(&tracepoint_iter_lock, flags);
-+	raw_spin_lock_irqsave(&tracepoint_iter_lock, flags);
- 	trace_seq_init(&iter->seq);
- 	iter->ent = fbuffer->entry;
- 	event_call->event.funcs->trace(iter, 0, event);
- 	trace_seq_putc(&iter->seq, 0);
- 	printk("%s", iter->seq.buffer);
- 
--	spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
-+	raw_spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
- }
- 
- int tracepoint_printk_sysctl(struct ctl_table *table, int write,
+-	if (initialized || !of_device_is_available(np)) {
+-		ret = -EINVAL;
+-		goto err;
+-	}
+-
+ 	clk1 = of_clk_get(np, 0);
+ 	if (IS_ERR(clk1))
+ 		clk1 = NULL;
 -- 
 2.35.1
 

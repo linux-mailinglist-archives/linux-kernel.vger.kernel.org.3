@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202EF549387
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C3C54970A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356967AbiFMLwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S1357548AbiFMNPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357558AbiFMLqV (ORCPT
+        with ESMTP id S1359138AbiFMNJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:46:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562EF13D7C;
-        Mon, 13 Jun 2022 03:52:39 -0700 (PDT)
+        Mon, 13 Jun 2022 09:09:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7A438BE8;
+        Mon, 13 Jun 2022 04:19:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F5161259;
-        Mon, 13 Jun 2022 10:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB396C34114;
-        Mon, 13 Jun 2022 10:52:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C1BD8CE1174;
+        Mon, 13 Jun 2022 11:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C243CC34114;
+        Mon, 13 Jun 2022 11:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117558;
-        bh=oFxGFstiGXD34FENzq7tY+9mjgtJY0fkcntZ8gaXq64=;
+        s=korg; t=1655119158;
+        bh=rhAYimTtxz80OEZFM8rXb6yoxjM11WKvOvsRYWx+t6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mXdPpPTe2phoWZM1eN99ihdRfFudM7DcY9tofqnaNGmUqjM75d6KbQpSYtWq/DWhu
-         5b6l1bON/fhYP9UDVzxxS+di9Pcmv97eiD1vcgu8QeHFVmCXmlyiS0nk/YME+BnFei
-         QuBYe+028i14ikppMSaI+dyQSFAX6Aj6V1WF37yw=
+        b=eSZkHn7w9A9YYNeCQmc9GCeS+1StK5YkkpUJvlCgDjRLXmg34AsJf8zaln6fJTNrm
+         14fXlL9dtOLyp1fZVoK7Rs+bL9m6aCjC/ee76qaZX1dg21peikeK6orRIlw54HwxBM
+         /0EoM6Gp+GzwNKNiQKr4hDb291OIi5kUKrWWKnGg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 390/411] modpost: fix undefined behavior of is_arm_mapping_symbol()
+Subject: [PATCH 5.15 161/247] tcp: use alloc_large_system_hash() to allocate table_perturb
 Date:   Mon, 13 Jun 2022 12:11:03 +0200
-Message-Id: <20220613094940.365954803@linuxfoundation.org>
+Message-Id: <20220613094927.838678012@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Muchun Song <songmuchun@bytedance.com>
 
-[ Upstream commit d6b732666a1bae0df3c3ae06925043bba34502b1 ]
+[ Upstream commit e67b72b90b7e19a4be4d9c29f3feea6f58ab43f8 ]
 
-The return value of is_arm_mapping_symbol() is unpredictable when "$"
-is passed in.
+In our server, there may be no high order (>= 6) memory since we reserve
+lots of HugeTLB pages when booting.  Then the system panic.  So use
+alloc_large_system_hash() to allocate table_perturb.
 
-strchr(3) says:
-  The strchr() and strrchr() functions return a pointer to the matched
-  character or NULL if the character is not found. The terminating null
-  byte is considered part of the string, so that if c is specified as
-  '\0', these functions return a pointer to the terminator.
-
-When str[1] is '\0', strchr("axtd", str[1]) is not NULL, and str[2] is
-referenced (i.e. buffer overrun).
-
-Test code
----------
-
-  char str1[] = "abc";
-  char str2[] = "ab";
-
-  strcpy(str1, "$");
-  strcpy(str2, "$");
-
-  printf("test1: %d\n", is_arm_mapping_symbol(str1));
-  printf("test2: %d\n", is_arm_mapping_symbol(str2));
-
-Result
-------
-
-  test1: 0
-  test2: 1
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: e9261476184b ("tcp: dynamically allocate the perturb table used by source ports")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220607070214.94443-1-songmuchun@bytedance.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/mod/modpost.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/ipv4/inet_hashtables.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 74e2052f429d..59011ddf8bb8 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1283,7 +1283,8 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index ee9c587031b4..342f3df77835 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -917,10 +917,12 @@ void __init inet_hashinfo2_init(struct inet_hashinfo *h, const char *name,
+ 	init_hashinfo_lhash2(h);
  
- static inline int is_arm_mapping_symbol(const char *str)
- {
--	return str[0] == '$' && strchr("axtd", str[1])
-+	return str[0] == '$' &&
-+	       (str[1] == 'a' || str[1] == 'd' || str[1] == 't' || str[1] == 'x')
- 	       && (str[2] == '\0' || str[2] == '.');
+ 	/* this one is used for source ports of outgoing connections */
+-	table_perturb = kmalloc_array(INET_TABLE_PERTURB_SIZE,
+-				      sizeof(*table_perturb), GFP_KERNEL);
+-	if (!table_perturb)
+-		panic("TCP: failed to alloc table_perturb");
++	table_perturb = alloc_large_system_hash("Table-perturb",
++						sizeof(*table_perturb),
++						INET_TABLE_PERTURB_SIZE,
++						0, 0, NULL, NULL,
++						INET_TABLE_PERTURB_SIZE,
++						INET_TABLE_PERTURB_SIZE);
  }
  
+ int inet_hashinfo2_init_mod(struct inet_hashinfo *h)
 -- 
 2.35.1
 

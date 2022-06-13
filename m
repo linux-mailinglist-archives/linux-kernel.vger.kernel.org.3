@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EDB549726
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6566548EB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351608AbiFMLLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
+        id S1351756AbiFMLLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351576AbiFMLGk (ORCPT
+        with ESMTP id S1352083AbiFMLJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:06:40 -0400
+        Mon, 13 Jun 2022 07:09:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9153335F;
-        Mon, 13 Jun 2022 03:35:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCFD33E32;
+        Mon, 13 Jun 2022 03:35:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3BE561018;
-        Mon, 13 Jun 2022 10:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A46BC34114;
-        Mon, 13 Jun 2022 10:34:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70AEB60F9A;
+        Mon, 13 Jun 2022 10:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85632C34114;
+        Mon, 13 Jun 2022 10:35:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116500;
-        bh=qOVzcPFsMGm4txDxzbRtTtKwNnOjmHxSlt3BmOqhZp0=;
+        s=korg; t=1655116516;
+        bh=EoOtVIPnZtBAk5PHnk/EdTVPGj9ymbTn6H6YTfuhnkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pVCUwqXMu/wM3laIOvysQcw+Yr2ItW9zRkMaeojgYgE0topSSSHVf12h22tqSFeg3
-         LUCWeGpCbWlZeyox07KO88Gtpx7hGdkoXDq1UxdOV4IOvu+uiIh9hp701ZbArxPcEV
-         hrXZNjNbm5Ns0xWspIHQ/GjwTi9K2e2F503hM3xo=
+        b=1ou7X/oUSWBywbw75uuTXKGa6RZFCfV046Z7MIlAOUddLdO7epX7NMCYAL35LeVdH
+         Le/MOMorYybK1SklpZ46F5yLUO2dQiqMP6zbA+EX4fNUlE8HRgx2P13SEsXkqu/n9k
+         UX/oPgXQkBIcRyJ0Rztb444iEE0dvY1S70cpMcyA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 097/411] drbd: fix duplicate array initializer
-Date:   Mon, 13 Jun 2022 12:06:10 +0200
-Message-Id: <20220613094931.589825563@linuxfoundation.org>
+Subject: [PATCH 5.4 100/411] drm/bridge: Fix error handling in analogix_dp_probe
+Date:   Mon, 13 Jun 2022 12:06:13 +0200
+Message-Id: <20220613094931.678424952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -56,89 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 33cb0917bbe241dd17a2b87ead63514c1b7e5615 ]
+[ Upstream commit 9f15930bb2ef9f031d62ffc49629cbae89137733 ]
 
-There are two initializers for P_RETRY_WRITE:
+In the error handling path, the clk_prepare_enable() function
+call should be balanced by a corresponding 'clk_disable_unprepare()'
+call, as already done in the remove function.
 
-drivers/block/drbd/drbd_main.c:3676:22: warning: initialized field overwritten [-Woverride-init]
-
-Remove the first one since it was already ignored by the compiler
-and reorder the list to match the enum definition. As P_ZEROES had
-no entry, add that one instead.
-
-Fixes: 036b17eaab93 ("drbd: Receiving part for the PROTOCOL_UPDATE packet")
-Fixes: f31e583aa2c2 ("drbd: introduce P_ZEROES (REQ_OP_WRITE_ZEROES on the "wire")")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-Link: https://lore.kernel.org/r/20220406190715.1938174-2-christoph.boehmwalder@linbit.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 3424e3a4f844 ("drm: bridge: analogix/dp: split exynos dp driver to bridge directory")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220420011644.25730-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/drbd/drbd_main.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ .../gpu/drm/bridge/analogix/analogix_dp_core.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index ba10fa24fa1f..5ece2fd70d9c 100644
---- a/drivers/block/drbd/drbd_main.c
-+++ b/drivers/block/drbd/drbd_main.c
-@@ -3709,9 +3709,8 @@ const char *cmdname(enum drbd_packet cmd)
- 	 * when we want to support more than
- 	 * one PRO_VERSION */
- 	static const char *cmdnames[] = {
-+
- 		[P_DATA]	        = "Data",
--		[P_WSAME]	        = "WriteSame",
--		[P_TRIM]	        = "Trim",
- 		[P_DATA_REPLY]	        = "DataReply",
- 		[P_RS_DATA_REPLY]	= "RSDataReply",
- 		[P_BARRIER]	        = "Barrier",
-@@ -3722,7 +3721,6 @@ const char *cmdname(enum drbd_packet cmd)
- 		[P_DATA_REQUEST]	= "DataRequest",
- 		[P_RS_DATA_REQUEST]     = "RSDataRequest",
- 		[P_SYNC_PARAM]	        = "SyncParam",
--		[P_SYNC_PARAM89]	= "SyncParam89",
- 		[P_PROTOCOL]            = "ReportProtocol",
- 		[P_UUIDS]	        = "ReportUUIDs",
- 		[P_SIZES]	        = "ReportSizes",
-@@ -3730,6 +3728,7 @@ const char *cmdname(enum drbd_packet cmd)
- 		[P_SYNC_UUID]           = "ReportSyncUUID",
- 		[P_AUTH_CHALLENGE]      = "AuthChallenge",
- 		[P_AUTH_RESPONSE]	= "AuthResponse",
-+		[P_STATE_CHG_REQ]       = "StateChgRequest",
- 		[P_PING]		= "Ping",
- 		[P_PING_ACK]	        = "PingAck",
- 		[P_RECV_ACK]	        = "RecvAck",
-@@ -3740,24 +3739,26 @@ const char *cmdname(enum drbd_packet cmd)
- 		[P_NEG_DREPLY]	        = "NegDReply",
- 		[P_NEG_RS_DREPLY]	= "NegRSDReply",
- 		[P_BARRIER_ACK]	        = "BarrierAck",
--		[P_STATE_CHG_REQ]       = "StateChgRequest",
- 		[P_STATE_CHG_REPLY]     = "StateChgReply",
- 		[P_OV_REQUEST]          = "OVRequest",
- 		[P_OV_REPLY]            = "OVReply",
- 		[P_OV_RESULT]           = "OVResult",
- 		[P_CSUM_RS_REQUEST]     = "CsumRSRequest",
- 		[P_RS_IS_IN_SYNC]	= "CsumRSIsInSync",
-+		[P_SYNC_PARAM89]	= "SyncParam89",
- 		[P_COMPRESSED_BITMAP]   = "CBitmap",
- 		[P_DELAY_PROBE]         = "DelayProbe",
- 		[P_OUT_OF_SYNC]		= "OutOfSync",
--		[P_RETRY_WRITE]		= "RetryWrite",
- 		[P_RS_CANCEL]		= "RSCancel",
- 		[P_CONN_ST_CHG_REQ]	= "conn_st_chg_req",
- 		[P_CONN_ST_CHG_REPLY]	= "conn_st_chg_reply",
- 		[P_RETRY_WRITE]		= "retry_write",
- 		[P_PROTOCOL_UPDATE]	= "protocol_update",
-+		[P_TRIM]	        = "Trim",
- 		[P_RS_THIN_REQ]         = "rs_thin_req",
- 		[P_RS_DEALLOCATED]      = "rs_deallocated",
-+		[P_WSAME]	        = "WriteSame",
-+		[P_ZEROES]		= "Zeroes",
+diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+index 1f26890a8da6..3db0a631a6be 100644
+--- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
++++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+@@ -1696,8 +1696,10 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
  
- 		/* enum drbd_packet, but not commands - obsoleted flags:
- 		 *	P_MAY_IGNORE
+ 	dp->reg_base = devm_ioremap_resource(&pdev->dev, res);
+-	if (IS_ERR(dp->reg_base))
+-		return ERR_CAST(dp->reg_base);
++	if (IS_ERR(dp->reg_base)) {
++		ret = PTR_ERR(dp->reg_base);
++		goto err_disable_clk;
++	}
+ 
+ 	dp->force_hpd = of_property_read_bool(dev->of_node, "force-hpd");
+ 
+@@ -1709,7 +1711,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 	if (IS_ERR(dp->hpd_gpiod)) {
+ 		dev_err(dev, "error getting HDP GPIO: %ld\n",
+ 			PTR_ERR(dp->hpd_gpiod));
+-		return ERR_CAST(dp->hpd_gpiod);
++		ret = PTR_ERR(dp->hpd_gpiod);
++		goto err_disable_clk;
+ 	}
+ 
+ 	if (dp->hpd_gpiod) {
+@@ -1729,7 +1732,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 
+ 	if (dp->irq == -ENXIO) {
+ 		dev_err(&pdev->dev, "failed to get irq\n");
+-		return ERR_PTR(-ENODEV);
++		ret = -ENODEV;
++		goto err_disable_clk;
+ 	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, dp->irq,
+@@ -1738,11 +1742,15 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 					irq_flags, "analogix-dp", dp);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to request irq\n");
+-		return ERR_PTR(ret);
++		goto err_disable_clk;
+ 	}
+ 	disable_irq(dp->irq);
+ 
+ 	return dp;
++
++err_disable_clk:
++	clk_disable_unprepare(dp->clock);
++	return ERR_PTR(ret);
+ }
+ EXPORT_SYMBOL_GPL(analogix_dp_probe);
+ 
 -- 
 2.35.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269E55494D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F70548C28
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381394AbiFMOGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S1354367AbiFMMsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380397AbiFMN6w (ORCPT
+        with ESMTP id S1354533AbiFMMoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:58:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6377044A37;
-        Mon, 13 Jun 2022 04:37:41 -0700 (PDT)
+        Mon, 13 Jun 2022 08:44:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B0F60A88;
+        Mon, 13 Jun 2022 04:10:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 588A361306;
-        Mon, 13 Jun 2022 11:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62346C3411C;
-        Mon, 13 Jun 2022 11:37:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A3D5B80EAB;
+        Mon, 13 Jun 2022 11:10:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF3CC34114;
+        Mon, 13 Jun 2022 11:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120259;
-        bh=NAIQG1l2FirVUzMbuRQQdkfhzSCBC5Eunt0cXQIbI78=;
+        s=korg; t=1655118654;
+        bh=z0Rpbi17kI3kP8ywAUFn2VeND4oIavLdCBRpI5XBHPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iMKNEfh3FvHHdruCOb8135q614zwgSIEqNsHSOHFWYvUGCtHHRiDnoU8mWB9D6kSw
-         arfc4WVK2FJudjDZDnR0AmR212kvXobhigDsbCLYH3IHeHUllwHw7Zh5NGcwJDaJoz
-         wrMYO/0HvNTc596bBYdnsc+fR/uI9BDkuOoF7iKI=
+        b=m/TFzsP/cJQnUF+h+dUuCMvFAl/jL9Z7vzeLy1FF9/cIcIpPCJvROB02hVJdxhKNk
+         LR0yBfoNada6F4U6raeYcApcs/8RiXdst9un131RjFkOIvZsHeAV+U7q58SuwxnuEe
+         5ILWv5+DF9XLO+UL1u0Om4lOL1W4ewnW6eiwf820=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 289/339] platform/x86: barco-p50-gpio: Add check for platform_driver_register
+        stable@vger.kernel.org, Satadru Pramanik <satadru@gmail.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.10 154/172] cifs: fix reconnect on smb3 mount types
 Date:   Mon, 13 Jun 2022 12:11:54 +0200
-Message-Id: <20220613094935.399154218@linuxfoundation.org>
+Message-Id: <20220613094922.888181879@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Paulo Alcantara <pc@cjr.nz>
 
-[ Upstream commit 011881b80ebe773914b59905bce0f5e0ef93e7ba ]
+commit c36ee7dab7749f7be21f7a72392744490b2a9a2b upstream.
 
-As platform_driver_register() could fail, it should be better
-to deal with the return value in order to maintain the code
-consisitency.
+cifs.ko defines two file system types: cifs & smb3, and
+__cifs_get_super() was not including smb3 file system type when
+looking up superblocks, therefore failing to reconnect tcons in
+cifs_tree_connect().
 
-Fixes: 86af1d02d458 ("platform/x86: Support for EC-connected GPIOs for identify LED/button on Barco P50 board")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Peter Korsgaard <peter.korsgaard@barco.com>
-Link: https://lore.kernel.org/r/20220526090345.1444172-1-jiasheng@iscas.ac.cn
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix this by calling iterate_supers_type() on both file system types.
+
+Link: https://lore.kernel.org/r/CAFrh3J9soC36+BVuwHB=g9z_KB5Og2+p2_W+BBoBOZveErz14w@mail.gmail.com
+Cc: stable@vger.kernel.org
+Tested-by: Satadru Pramanik <satadru@gmail.com>
+Reported-by: Satadru Pramanik <satadru@gmail.com>
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/barco-p50-gpio.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ fs/cifs/cifsfs.c |    2 +-
+ fs/cifs/cifsfs.h |    2 +-
+ fs/cifs/misc.c   |   27 ++++++++++++++++-----------
+ 3 files changed, 18 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/platform/x86/barco-p50-gpio.c b/drivers/platform/x86/barco-p50-gpio.c
-index 05534287bc26..8dd672339485 100644
---- a/drivers/platform/x86/barco-p50-gpio.c
-+++ b/drivers/platform/x86/barco-p50-gpio.c
-@@ -405,11 +405,14 @@ MODULE_DEVICE_TABLE(dmi, dmi_ids);
- static int __init p50_module_init(void)
- {
- 	struct resource res = DEFINE_RES_IO(P50_GPIO_IO_PORT_BASE, P50_PORT_CMD + 1);
-+	int ret;
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -1033,7 +1033,7 @@ struct file_system_type cifs_fs_type = {
+ };
+ MODULE_ALIAS_FS("cifs");
  
- 	if (!dmi_first_match(dmi_ids))
- 		return -ENODEV;
+-static struct file_system_type smb3_fs_type = {
++struct file_system_type smb3_fs_type = {
+ 	.owner = THIS_MODULE,
+ 	.name = "smb3",
+ 	.mount = smb3_do_mount,
+--- a/fs/cifs/cifsfs.h
++++ b/fs/cifs/cifsfs.h
+@@ -51,7 +51,7 @@ static inline unsigned long cifs_get_tim
+ 	return (unsigned long) dentry->d_fsdata;
+ }
  
--	platform_driver_register(&p50_gpio_driver);
-+	ret = platform_driver_register(&p50_gpio_driver);
-+	if (ret)
-+		return ret;
+-extern struct file_system_type cifs_fs_type;
++extern struct file_system_type cifs_fs_type, smb3_fs_type;
+ extern const struct address_space_operations cifs_addr_ops;
+ extern const struct address_space_operations cifs_addr_ops_smallbuf;
  
- 	gpio_pdev = platform_device_register_simple(DRIVER_NAME, PLATFORM_DEVID_NONE, &res, 1);
- 	if (IS_ERR(gpio_pdev)) {
--- 
-2.35.1
-
+--- a/fs/cifs/misc.c
++++ b/fs/cifs/misc.c
+@@ -1053,18 +1053,23 @@ static struct super_block *__cifs_get_su
+ 		.data = data,
+ 		.sb = NULL,
+ 	};
++	struct file_system_type **fs_type = (struct file_system_type *[]) {
++		&cifs_fs_type, &smb3_fs_type, NULL,
++	};
+ 
+-	iterate_supers_type(&cifs_fs_type, f, &sd);
+-
+-	if (!sd.sb)
+-		return ERR_PTR(-EINVAL);
+-	/*
+-	 * Grab an active reference in order to prevent automounts (DFS links)
+-	 * of expiring and then freeing up our cifs superblock pointer while
+-	 * we're doing failover.
+-	 */
+-	cifs_sb_active(sd.sb);
+-	return sd.sb;
++	for (; *fs_type; fs_type++) {
++		iterate_supers_type(*fs_type, f, &sd);
++		if (sd.sb) {
++			/*
++			 * Grab an active reference in order to prevent automounts (DFS links)
++			 * of expiring and then freeing up our cifs superblock pointer while
++			 * we're doing failover.
++			 */
++			cifs_sb_active(sd.sb);
++			return sd.sb;
++		}
++	}
++	return ERR_PTR(-EINVAL);
+ }
+ 
+ static void __cifs_put_super(struct super_block *sb)
 
 

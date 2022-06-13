@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29EC5488E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F32548B0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356549AbiFMLtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S1378047AbiFMNgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357234AbiFMLpt (ORCPT
+        with ESMTP id S1378777AbiFMNcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:45:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD444A3C4;
-        Mon, 13 Jun 2022 03:51:56 -0700 (PDT)
+        Mon, 13 Jun 2022 09:32:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C9E71A37;
+        Mon, 13 Jun 2022 04:26:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1D77B80E8D;
-        Mon, 13 Jun 2022 10:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFDB9C3411C;
-        Mon, 13 Jun 2022 10:51:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9120761038;
+        Mon, 13 Jun 2022 11:26:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB8DC34114;
+        Mon, 13 Jun 2022 11:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117513;
-        bh=r9U7jUpfO1R5w4kmQhKW5ns+fP6NnOjs2mPhPNkAiJk=;
+        s=korg; t=1655119598;
+        bh=KclK8A9MhOsYG/yo+Vlgioldi22Z3Bpk3Q51BGbrmKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A/mKba4QfoOsyejr87Ue+RulV9IPG1RomlD/t9CVBRiIGOaTJhi6n1CN59EYSGAcz
-         4awhet8G9VRkoYT/QjCU2XfTxG1l+yqgqq7tRjUvW6/BGQ6y8laNDFbhLgR8D5a5N9
-         0nwzdUax9Dk8hNpKLhpfvjUrTkCOrR9E+7/r9aBk=
+        b=o08hNd9L6c3y5NKnlsrnp+YmROYTZYdM93ucyUQ8vltkdoHq/maIf3vJtCclEE9Sp
+         z71fMo2bnz6Uqs6U2sXpye86iqprLOpEOs+MLYsVxzbBuhqqEIWOt3KKQkdOMo51iw
+         L0ZXPS1pGilTKMAzLJm4973/K+s9bOIxCh3pmeq4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yicong Yang <yangyicong@hisilicon.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Jay Zhou <jianjay.zhou@huawei.com>
-Subject: [PATCH 4.19 052/287] PCI: Avoid pci_dev_lock() AB/BA deadlock with sriov_numvfs_store()
+        stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 051/339] soundwire: intel: prevent pm_runtime resume prior to system suspend
 Date:   Mon, 13 Jun 2022 12:07:56 +0200
-Message-Id: <20220613094925.445854097@linuxfoundation.org>
+Message-Id: <20220613094928.071132812@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,88 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit a91ee0e9fca9d7501286cfbced9b30a33e52740a ]
+[ Upstream commit 6d9f2dadba698114fed97b224578c5338a36b0d9 ]
 
-The sysfs sriov_numvfs_store() path acquires the device lock before the
-config space access lock:
+commit e38f9ff63e6d ("ACPI: scan: Do not add device IDs from _CID if _HID is not valid")
+exposes a race condition on a TGL RVP device leading to a timeout.
 
-  sriov_numvfs_store
-    device_lock                 # A (1) acquire device lock
-    sriov_configure
-      vfio_pci_sriov_configure  # (for example)
-        vfio_pci_core_sriov_configure
-          pci_disable_sriov
-            sriov_disable
-              pci_cfg_access_lock
-                pci_wait_cfg    # B (4) wait for dev->block_cfg_access == 0
+The detailed analysis shows the RT711 codec driver scheduling a jack
+detection workqueue while attaching during a spurious pm_runtime
+resume, and the work function happens to be scheduled after the
+manager device is suspended.
 
-Previously, pci_dev_lock() acquired the config space access lock before the
-device lock:
+The direct link between this ACPI patch and a spurious pm_runtime
+resume is not obvious; the most likely explanation is that a change in
+the ACPI device linked list management modifies the order in which the
+pm_runtime device status is checked and exposes a race condition that
+was probably present for a very long time, but was not identified.
 
-  pci_dev_lock
-    pci_cfg_access_lock
-      dev->block_cfg_access = 1 # B (2) set dev->block_cfg_access = 1
-    device_lock                 # A (3) wait for device lock
+We already have a check in the .prepare stage, where we will resume to
+full power from specific clock-stop modes. In all other cases, we
+don't need to resume to full power by default. Adding the
+SMART_SUSPEND flag prevents the spurious resume from happening.
 
-Any path that uses pci_dev_lock(), e.g., pci_reset_function(), may
-deadlock with sriov_numvfs_store() if the operations occur in the sequence
-(1) (2) (3) (4).
-
-Avoid the deadlock by reversing the order in pci_dev_lock() so it acquires
-the device lock before the config space access lock, the same as the
-sriov_numvfs_store() path.
-
-[bhelgaas: combined and adapted commit log from Jay Zhou's independent
-subsequent posting:
-https://lore.kernel.org/r/20220404062539.1710-1-jianjay.zhou@huawei.com]
-Link: https://lore.kernel.org/linux-pci/1583489997-17156-1-git-send-email-yangyicong@hisilicon.com/
-Also-posted-by: Jay Zhou <jianjay.zhou@huawei.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+BugLink: https://github.com/thesofproject/linux/issues/3459
+Fixes: 029bfd1cd53cd ("soundwire: intel: conditionally exit clock stop mode on system suspend")
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Link: https://lore.kernel.org/r/20220420023241.14335-2-yung-chuan.liao@linux.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/pci.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/soundwire/intel.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 293b3e3b0083..0c03836245bd 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -4667,18 +4667,18 @@ static int pci_dev_reset_slot_function(struct pci_dev *dev, int probe)
+diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+index 63101f1ba271..32e5fdb823c4 100644
+--- a/drivers/soundwire/intel.c
++++ b/drivers/soundwire/intel.c
+@@ -1293,6 +1293,9 @@ static int intel_link_probe(struct auxiliary_device *auxdev,
+ 	/* use generic bandwidth allocation algorithm */
+ 	sdw->cdns.bus.compute_params = sdw_compute_params;
  
- static void pci_dev_lock(struct pci_dev *dev)
- {
--	pci_cfg_access_lock(dev);
- 	/* block PM suspend, driver probe, etc. */
- 	device_lock(&dev->dev);
-+	pci_cfg_access_lock(dev);
- }
- 
- /* Return 1 on successful lock, 0 on contention */
- static int pci_dev_trylock(struct pci_dev *dev)
- {
--	if (pci_cfg_access_trylock(dev)) {
--		if (device_trylock(&dev->dev))
-+	if (device_trylock(&dev->dev)) {
-+		if (pci_cfg_access_trylock(dev))
- 			return 1;
--		pci_cfg_access_unlock(dev);
-+		device_unlock(&dev->dev);
- 	}
- 
- 	return 0;
-@@ -4686,8 +4686,8 @@ static int pci_dev_trylock(struct pci_dev *dev)
- 
- static void pci_dev_unlock(struct pci_dev *dev)
- {
--	device_unlock(&dev->dev);
- 	pci_cfg_access_unlock(dev);
-+	device_unlock(&dev->dev);
- }
- 
- static void pci_dev_save_and_disable(struct pci_dev *dev)
++	/* avoid resuming from pm_runtime suspend if it's not required */
++	dev_pm_set_driver_flags(dev, DPM_FLAG_SMART_SUSPEND);
++
+ 	ret = sdw_bus_master_add(bus, dev, dev->fwnode);
+ 	if (ret) {
+ 		dev_err(dev, "sdw_bus_master_add fail: %d\n", ret);
 -- 
 2.35.1
 

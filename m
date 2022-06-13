@@ -2,124 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E220E54A223
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CF954A228
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240011AbiFMWf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 18:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S240282AbiFMWil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 18:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiFMWfZ (ORCPT
+        with ESMTP id S230240AbiFMWik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 18:35:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C215205C9;
-        Mon, 13 Jun 2022 15:35:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39E60B80D19;
-        Mon, 13 Jun 2022 22:35:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB934C34114;
-        Mon, 13 Jun 2022 22:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655159722;
-        bh=93/0s24Rk9qIM/vFqUauCUwcbv2MlKEpirZjcE6H/e8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=f96UB1iBnsCXl1Y4RqeS3j2hvgyXNo0rfE09pHQWobnpj5ePka7GichUC4tIfAXvC
-         Ivz0oVhuNfP71u/kkx2jq0uEYK3KEtr9xKc0JNkbLb7BXA4tjR75LNT06iivQJAxT/
-         Qn/W035eqJUICmPFeGSKx+yWld0pr9uE65B4z2qK97qJPPEF8VoH8T0Ez0KmPFWiRu
-         cBAM3SYUx9QPRBgzEFnJud64jLuINl6k7B8z1xfMeKarnTCGr9CTQdQCx8/JBJPoL+
-         nyQT+A9AsJ9DgfvjciiFqVMk6zzrrBpEP0OCAwUzO50JhHz6fQP3znfoWw8o4Et7F5
-         aiZBbChF3Z5Fw==
-Date:   Mon, 13 Jun 2022 17:35:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 1/1] x86/PCI: Disable e820 usage for the resource
- allocation
-Message-ID: <20220613223520.GA721969@bhelgaas>
+        Mon, 13 Jun 2022 18:38:40 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E1617B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:38:38 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id y79so7671901iof.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cSfQVDPdSZV7BsUZMX0DMKU36oE62bl8JUEG399LTGQ=;
+        b=iOe2c0LZoVW+GY27vdPQ164YNh5IJrimb87nSfQol6K9V2Wjvi7hEXWRmNiYR1bwUQ
+         5TpXCahY9UIL2dY5I5t2MiTzSJeqPHWw1Bto/qfAjYn4kJxplc0U01mR//HUbdxvQDGH
+         LC1M4Ru3Us/w/yWJb/J6AsoYk4lQ2ihX8s0Q5Vwi6gl6Ecnqp3Ll7kSNctOBXPo0GBq9
+         0QlakwT6SIWPHk+3iwnGbYC8THbaSirHeaaduFJiwRI7mJgxtID2V6jIeJmNOgmln4Kn
+         nr1bVIcZPbAxgugwhMKLjJyi++xVgjKyQpMomzK+P5O1PiDVc69khAKw2yR2WyI0wcqy
+         tq7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cSfQVDPdSZV7BsUZMX0DMKU36oE62bl8JUEG399LTGQ=;
+        b=L/1raY/lwaS2NECJ8dPRv1YUThUHblTcjcXpH1rxXm0TUOT4j+2zJexdyJHCyFrKms
+         aq6NJ2vfSelxIiwRCs14gS/eiwlgFuBPELxWM3FUngOlkBSthmRi+tuwCOFZs/zjQIwr
+         wm4Wp9NN0IJAkaLnafU/idLTyn2KT53AF6ck9yNPZsAOPtwW3edwidIQ5/keKTAKSQRl
+         f2glA3kPfjt0AwHYSeMfOZGpyMDm9aKhXMcxozREfg2JoeIGJxOPYhAWh+2/ftWahaFe
+         76iQm6bqk12DeDyzFO1v3G8UrUlGOOObGgEUQJDjWD3eQ9RBig7QNTtGVjK2KXlE7mLk
+         mCUw==
+X-Gm-Message-State: AOAM532xJBRD/C9nq3tIHI4HzXaE5n4HCQUumzZGWwryVnQUV29vzVtQ
+        ep4umnxbWo8ePKlaOVQFZFHm0jLkGGiz2r2vrpl5jg==
+X-Google-Smtp-Source: ABdhPJzj+2L+AFjPv9s2kVu3WHMiTFEhxc4SE7Sug7k/UXLKnkibOKebwzScvc2nvqb2XiNvP2b7nEi2BQSFne2x9hs=
+X-Received: by 2002:a02:2305:0:b0:331:a026:b650 with SMTP id
+ u5-20020a022305000000b00331a026b650mr1141093jau.314.1655159918049; Mon, 13
+ Jun 2022 15:38:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613201641.67640-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601210951.3916598-1-axelrasmussen@google.com>
+ <20220601210951.3916598-3-axelrasmussen@google.com> <20220613145540.1c9f7750092911bae1332b92@linux-foundation.org>
+ <Yqe6R+XSH+nFc8se@xz-m1.local>
+In-Reply-To: <Yqe6R+XSH+nFc8se@xz-m1.local>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Mon, 13 Jun 2022 15:38:02 -0700
+Message-ID: <CAJHvVchdmV42qCgO6j=zGBi0DeVcvW1OC88rHUP6V66Fg3CSww@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 11:16:41PM +0300, Andy Shevchenko wrote:
-> The resource management improve for PCI on x86 broke booting of Intel MID
-> platforms. It seems that the current code removes all available resources
-> from the list and none of the PCI device may be initialized. Restore the
-> old behaviour by force disabling the e820 usage for the resource allocation.
-> 
-> Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
-> Depends-on: fa6dae5d8208 ("x86/PCI: Add kernel cmdline options to use/ignore E820 reserved regions")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, Jun 13, 2022 at 3:29 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, Jun 13, 2022 at 02:55:40PM -0700, Andrew Morton wrote:
+> > On Wed,  1 Jun 2022 14:09:47 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
+> >
+> > > To achieve this, add a /dev/userfaultfd misc device. This device
+> > > provides an alternative to the userfaultfd(2) syscall for the creation
+> > > of new userfaultfds. The idea is, any userfaultfds created this way will
+> > > be able to handle kernel faults, without the caller having any special
+> > > capabilities. Access to this mechanism is instead restricted using e.g.
+> > > standard filesystem permissions.
+> >
+> > The use of a /dev node isn't pretty.  Why can't this be done by
+> > tweaking sys_userfaultfd() or by adding a sys_userfaultfd2()?
 
-Yeah, I blew it with 4c5e242d3e93.  Can you provide more details on
-how the MID platforms broke?  Since you set "pci_use_e820 = false" for
-MID below, I assume MID doesn't depend on the e820 clipping and thus
-should not break if we turn off clipping by default in 2023 as in
-0ae084d5a674 ("x86/PCI: Disable E820 reserved region clipping starting
-in 2023").  But it'd be nice to see the dmesg log and make sure.
+I think for any approach involving syscalls, we need to be able to
+control access to who can call a syscall. Maybe there's another way
+I'm not aware of, but I think today the only mechanism to do this is
+capabilities. I proposed adding a CAP_USERFAULTFD for this purpose,
+but that approach was rejected [1]. So, I'm not sure of another way
+besides using a device node.
 
-> ---
->  arch/x86/include/asm/pci_x86.h | 1 +
->  arch/x86/pci/acpi.c            | 2 +-
->  arch/x86/pci/intel_mid_pci.c   | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
-> index f52a886d35cf..503f83fbc686 100644
-> --- a/arch/x86/include/asm/pci_x86.h
-> +++ b/arch/x86/include/asm/pci_x86.h
-> @@ -126,6 +126,7 @@ extern const struct pci_raw_ops *raw_pci_ext_ops;
->  extern const struct pci_raw_ops pci_mmcfg;
->  extern const struct pci_raw_ops pci_direct_conf1;
->  extern bool port_cf9_safe;
-> +extern bool pci_use_e820;
->  
->  /* arch_initcall level */
->  #ifdef CONFIG_PCI_DIRECT
-> diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
-> index a4f43054bc79..ac2f220d50fc 100644
-> --- a/arch/x86/pci/acpi.c
-> +++ b/arch/x86/pci/acpi.c
-> @@ -20,7 +20,7 @@ struct pci_root_info {
->  #endif
->  };
->  
-> -static bool pci_use_e820 = true;
-> +bool pci_use_e820 = true;
->  static bool pci_use_crs = true;
->  static bool pci_ignore_seg;
->  
-> diff --git a/arch/x86/pci/intel_mid_pci.c b/arch/x86/pci/intel_mid_pci.c
-> index 8edd62206604..7869b86bff04 100644
-> --- a/arch/x86/pci/intel_mid_pci.c
-> +++ b/arch/x86/pci/intel_mid_pci.c
-> @@ -313,6 +313,7 @@ int __init intel_mid_pci_init(void)
->  	pcibios_enable_irq = intel_mid_pci_irq_enable;
->  	pcibios_disable_irq = intel_mid_pci_irq_disable;
->  	pci_root_ops = intel_mid_pci_ops;
-> +	pci_use_e820 = false;
->  	pci_soc_mode = 1;
->  	/* Continue with standard init */
->  	acpi_noirq_set();
-> -- 
-> 2.35.1
-> 
+One thing that could potentially make this cleaner is, as one LWN
+commenter pointed out, we could have open() on /dev/userfaultfd just
+return a new userfaultfd directly, instead of this multi-step process
+of open /dev/userfaultfd, NEW ioctl, then you get a userfaultfd. When
+I wrote this originally it wasn't clear to me how to get that to
+happen - open() doesn't directly return the result of our custom open
+function pointer, as far as I can tell - but it could be investigated.
+
+[1]: https://lore.kernel.org/lkml/686276b9-4530-2045-6bd8-170e5943abe4@schaufler-ca.com/T/
+
+> >
+> > Peter, will you be completing review of this patchset?
+>
+> Sorry to not have reviewed it proactively..
+>
+> I think it's because I never had a good picture/understanding of what
+> should be the best security model for uffd, meanwhile I am (it seems) just
+> seeing more and more ways to "provide a safer uffd" by different people
+> using different ways.. and I never had time (and probably capability too..)
+> to figure out the correct approach if not to accept all options provided.
+
+Agreed, what we have right now is a bit of a mess of different
+approaches. I think the reason for this is, there is no "perfect" way
+to control access to features like this, so what we now have is
+several different approaches with different tradeoffs.
+
+From my perspective, the existing controls were simpler to implement,
+but are not ideal because they require us to grant access to UFFD
+*plus more stuff too*.
+
+The approach I've proposed is the most granular, so it doesn't require
+adding any extra permissions. But, I agree the interface is sort of
+overcomplicated. :/ But, from my perspective, security in shared Cloud
+computing environments where UFFD is used for live migration is
+critical, so I prefer this tradeoff - I'll put up with a slightly
+messier interface, if the gain is a very minimal set of privileges.
+
+>
+> I think I'll just assume the whole thing is acked already from you
+> generally, then I'll read at least the implementation before the end of
+> tomorrow.
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>

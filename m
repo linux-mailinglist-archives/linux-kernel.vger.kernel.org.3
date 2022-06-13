@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE8D548ED9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E7C549482
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357143AbiFML6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S1378301AbiFMNm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356621AbiFMLur (ORCPT
+        with ESMTP id S1378994AbiFMNjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC4022B27;
-        Mon, 13 Jun 2022 03:54:39 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E67F7937F;
+        Mon, 13 Jun 2022 04:28:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26CF160F00;
-        Mon, 13 Jun 2022 10:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38F2BC34114;
-        Mon, 13 Jun 2022 10:54:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 068D36114A;
+        Mon, 13 Jun 2022 11:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122A5C3411E;
+        Mon, 13 Jun 2022 11:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117678;
-        bh=aumf9yAoZ5XHJ9DWTFSBRcccitJ4jRF/Eo0ETcWmvzQ=;
+        s=korg; t=1655119705;
+        bh=8PGhjs0A2YdVyurjxtWzr47UU3TE7+riO+Iw8NBZlA8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XOOOXAFs+qyCRocM6qwGi//r7Duzawsmq8SZtNiBOl/whZQcG1+9uHWWVUYD347sW
-         28fMfKXdsfWrFOjx6Ec1cKwELD7wDNG5UOIL8AVPEqXlAoe05v8HeHBicAAdPEtgDj
-         T3CCSGcLwOxAaPGWhJkPZXDYp8xG/uWyXrSRj9KE=
+        b=l7ZE1NUunO3w4Sp4gwbDHLMiz6K0V/1M8WyJcY3uzW+AmNXh1+bkWPPyoIRVNUJ8c
+         OHS1FUK6aTGuvAKudIvKqLPUDg4wpL0fXc531oQ4LaqywA4QiBWs7+XHG/lwhIp/2d
+         sOOyFsllkxgJ7er0OtI9ZdXy0yyf3xEgIX8MtTBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 092/287] perf/amd/ibs: Use interrupt regs ip for stack unwinding
+Subject: [PATCH 5.18 091/339] drm/amdgpu: Off by one in dm_dmub_outbox1_low_irq()
 Date:   Mon, 13 Jun 2022 12:08:36 +0200
-Message-Id: <20220613094926.668894523@linuxfoundation.org>
+Message-Id: <20220613094929.275871423@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ravi Bangoria <ravi.bangoria@amd.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 3d47083b9ff46863e8374ad3bb5edb5e464c75f8 ]
+[ Upstream commit a35faec3db0e13aac8ea720bc1a3503081dd5a3d ]
 
-IbsOpRip is recorded when IBS interrupt is triggered. But there is
-a skid from the time IBS interrupt gets triggered to the time the
-interrupt is presented to the core. Meanwhile processor would have
-moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
-recorded as part of the interrupt regs. This causes issues while
-unwinding stack using the ORC unwinder as it needs consistent rip,
-rsp and rbp. Fix this by using rip from interrupt regs instead of
-IbsOpRip for stack unwinding.
+The > ARRAY_SIZE() should be >= ARRAY_SIZE() to prevent an out of bounds
+access.
 
-Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
-Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
+Fixes: e27c41d5b068 ("drm/amd/display: Support for DMUB HPD interrupt handling")
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index 2d9e1372b070..d157d0adef06 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -324,6 +324,16 @@ static int perf_ibs_init(struct perf_event *event)
- 	hwc->config_base = perf_ibs->msr;
- 	hwc->config = config;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 62139ff35476..8dd03de7c277 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -771,7 +771,7 @@ static void dm_dmub_outbox1_low_irq(void *interrupt_params)
  
-+	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack. Setting _EARLY flag
-+	 * makes sure we unwind call-stack before perf sample rip is set to
-+	 * IbsOpRip.
-+	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
-+
- 	return 0;
- }
- 
-@@ -693,6 +703,14 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
- 		data.raw = &raw;
- 	}
- 
-+	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack.
-+	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		data.callchain = perf_callchain(event, iregs);
-+
- 	throttle = perf_event_overflow(event, &data, &regs);
- out:
- 	if (throttle) {
+ 		do {
+ 			dc_stat_get_dmub_notification(adev->dm.dc, &notify);
+-			if (notify.type > ARRAY_SIZE(dm->dmub_thread_offload)) {
++			if (notify.type >= ARRAY_SIZE(dm->dmub_thread_offload)) {
+ 				DRM_ERROR("DM: notify type %d invalid!", notify.type);
+ 				continue;
+ 			}
 -- 
 2.35.1
 

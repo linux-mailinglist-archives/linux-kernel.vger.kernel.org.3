@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1910A548B79
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04295548880
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354113AbiFMMUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S1384306AbiFMOdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359315AbiFMMOv (ORCPT
+        with ESMTP id S1384972AbiFMOa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:14:51 -0400
+        Mon, 13 Jun 2022 10:30:28 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8122120A2;
-        Mon, 13 Jun 2022 04:02:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914E32B249;
+        Mon, 13 Jun 2022 04:48:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F3B9B80EA8;
-        Mon, 13 Jun 2022 11:02:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67637C34114;
-        Mon, 13 Jun 2022 11:02:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 161A8B80D3A;
+        Mon, 13 Jun 2022 11:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C983C34114;
+        Mon, 13 Jun 2022 11:47:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118139;
-        bh=ahCWFjMh8WyDj8Acc6WZ3lx9b4o/NO9n4MoAfv21HLg=;
+        s=korg; t=1655120872;
+        bh=MPZ2kt6IJpKMf0EU6+R/THNMtkJr2jpdHAH+dhp2Y8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0PqPO3Ci0iy64AKwxY7F3cuVjdfgw5PJnoP54az6DmC69q9q6VcEk7MefvBigkuxo
-         nKgCDjky9QTvicKKuaWVaEK+9iFX2iihlWgoVzvH4rExqKt76jqPQvGQbRlRNqHQMJ
-         +2JKnQ1T0HLdf1XX3UhFB4EZ+1/FwFn+bt3SsOQ8=
+        b=I69pj31qr/PAPEXuNpwA13YKMXB0maS1sk8DMlKDB7/QJXAphB4Pe+tXg9U2RKdLQ
+         duaK3sbsxbY2I5JPlAzC8E+WTaRgD7ZtpFQFr7DZSte+dSD2FDUAi1QClm6Umy48eX
+         aw5sd4C9JlqbysqnDP8BGEcsF/K28nNFhOkEcgdg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 258/287] usb: dwc2: gadget: dont reset gadgets driver->bus
+Subject: [PATCH 5.17 188/298] net/mlx5: fs, fail conflicting actions
 Date:   Mon, 13 Jun 2022 12:11:22 +0200
-Message-Id: <20220613094931.833055169@linuxfoundation.org>
+Message-Id: <20220613094930.807260019@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Mark Bloch <mbloch@nvidia.com>
 
-[ Upstream commit 3120aac6d0ecd9accf56894aeac0e265f74d3d5a ]
+[ Upstream commit 8fa5e7b20e01042b14f8cd684d2da9b638460c74 ]
 
-UDC driver should not touch gadget's driver internals, especially it
-should not reset driver->bus. This wasn't harmful so far, but since
-commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets") gadget
-subsystem got it's own bus and messing with ->bus triggers the
-following NULL pointer dereference:
+When combining two steering rules into one check
+not only do they share the same actions but those
+actions are also the same. This resolves an issue where
+when creating two different rules with the same match
+the actions are overwritten and one of the rules is deleted
+a FW syndrome can be seen in dmesg.
 
-dwc2 12480000.hsotg: bound driver g_ether
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[00000000] *pgd=00000000
-Internal error: Oops: 5 [#1] SMP ARM
-Modules linked in: ...
-CPU: 0 PID: 620 Comm: modprobe Not tainted 5.18.0-rc5-next-20220504 #11862
-Hardware name: Samsung Exynos (Flattened Device Tree)
-PC is at module_add_driver+0x44/0xe8
-LR is at sysfs_do_create_link_sd+0x84/0xe0
-...
-Process modprobe (pid: 620, stack limit = 0x(ptrval))
-...
- module_add_driver from bus_add_driver+0xf4/0x1e4
- bus_add_driver from driver_register+0x78/0x10c
- driver_register from usb_gadget_register_driver_owner+0x40/0xb4
- usb_gadget_register_driver_owner from do_one_initcall+0x44/0x1e0
- do_one_initcall from do_init_module+0x44/0x1c8
- do_init_module from load_module+0x19b8/0x1b9c
- load_module from sys_finit_module+0xdc/0xfc
- sys_finit_module from ret_fast_syscall+0x0/0x54
-Exception stack(0xf1771fa8 to 0xf1771ff0)
-...
-dwc2 12480000.hsotg: new device is high-speed
----[ end trace 0000000000000000 ]---
+mlx5_core 0000:03:00.0: mlx5_cmd_check:819:(pid 2105): DEALLOC_MODIFY_HEADER_CONTEXT(0x941) op_mod(0x0) failed, status bad resource state(0x9), syndrome (0x1ab444)
 
-Fix this by removing driver->bus entry reset.
-
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/20220505104618.22729-1-m.szyprowski@samsung.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0d235c3fabb7 ("net/mlx5: Add hash table to search FTEs in a flow-group")
+Signed-off-by: Mark Bloch <mbloch@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../net/ethernet/mellanox/mlx5/core/fs_core.c | 35 +++++++++++++++++--
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 1e46005929e4..85d25f7e9c27 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4326,7 +4326,6 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+index bd52b0b4eefa..add55195335c 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+@@ -1560,9 +1560,22 @@ static struct mlx5_flow_rule *find_flow_rule(struct fs_fte *fte,
+ 	return NULL;
+ }
  
- 	WARN_ON(hsotg->driver);
+-static bool check_conflicting_actions(u32 action1, u32 action2)
++static bool check_conflicting_actions_vlan(const struct mlx5_fs_vlan *vlan0,
++					   const struct mlx5_fs_vlan *vlan1)
+ {
+-	u32 xored_actions = action1 ^ action2;
++	return vlan0->ethtype != vlan1->ethtype ||
++	       vlan0->vid != vlan1->vid ||
++	       vlan0->prio != vlan1->prio;
++}
++
++static bool check_conflicting_actions(const struct mlx5_flow_act *act1,
++				      const struct mlx5_flow_act *act2)
++{
++	u32 action1 = act1->action;
++	u32 action2 = act2->action;
++	u32 xored_actions;
++
++	xored_actions = action1 ^ action2;
  
--	driver->driver.bus = NULL;
- 	hsotg->driver = driver;
- 	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
- 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+ 	/* if one rule only wants to count, it's ok */
+ 	if (action1 == MLX5_FLOW_CONTEXT_ACTION_COUNT ||
+@@ -1579,6 +1592,22 @@ static bool check_conflicting_actions(u32 action1, u32 action2)
+ 			     MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2))
+ 		return true;
+ 
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_PACKET_REFORMAT &&
++	    act1->pkt_reformat != act2->pkt_reformat)
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
++	    act1->modify_hdr != act2->modify_hdr)
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH &&
++	    check_conflicting_actions_vlan(&act1->vlan[0], &act2->vlan[0]))
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2 &&
++	    check_conflicting_actions_vlan(&act1->vlan[1], &act2->vlan[1]))
++		return true;
++
+ 	return false;
+ }
+ 
+@@ -1586,7 +1615,7 @@ static int check_conflicting_ftes(struct fs_fte *fte,
+ 				  const struct mlx5_flow_context *flow_context,
+ 				  const struct mlx5_flow_act *flow_act)
+ {
+-	if (check_conflicting_actions(flow_act->action, fte->action.action)) {
++	if (check_conflicting_actions(flow_act, &fte->action)) {
+ 		mlx5_core_warn(get_dev(&fte->node),
+ 			       "Found two FTEs with conflicting actions\n");
+ 		return -EEXIST;
 -- 
 2.35.1
 

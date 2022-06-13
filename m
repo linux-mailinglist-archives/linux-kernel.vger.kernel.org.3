@@ -2,64 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969765499CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75065499D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237833AbiFMRW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S241620AbiFMRXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241426AbiFMRWc (ORCPT
+        with ESMTP id S241523AbiFMRWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:22:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75FD33352;
-        Mon, 13 Jun 2022 05:37:24 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8D92866015D8;
-        Mon, 13 Jun 2022 13:37:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655123843;
-        bh=SN+r3+C8txifAec4wsuKPre5ESL3Qr6tJo6VOZZTPok=;
+        Mon, 13 Jun 2022 13:22:52 -0400
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557C222536;
+        Mon, 13 Jun 2022 05:38:03 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LMB1M31q6zMpt89;
+        Mon, 13 Jun 2022 14:37:59 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4LMB1L5mZPzlmw7y;
+        Mon, 13 Jun 2022 14:37:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1655123879;
+        bh=CFrbP6NAnep/uRfS4DXF/JGcmyrnfXN/8k2zjVoJmus=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QcnCpgdKPGIs5XF/cGQZGajDsXPaLCx4/cUDwJ3hkKxnxba7UOwoo+ZESoepdSREa
-         DHNY065sHf4gj09AlGRWZW/yAW3NiAGGX1zoTAypT7WkGxBgDuF3ubaZgD+uRACUMe
-         u9jun8TWs8F+CEZmmdemRxwibE+NPeNn+OuaseKeGHtCPkW4ws5ExS7+WQqSCgUTas
-         XTnxGHCjEqE9DmbzUWjbOotVtFo+A553TYfNifOMqUiJoHs5OlaYNL5LX/s1siMSwQ
-         T0wqYCXfc8jkOKFFuCBHOHRUxRvCuXwW2nb0WCiXs4wQ1uNHiFzVslzFJwcQzu10Np
-         LhoBxki8cfVkQ==
-Message-ID: <d3f718fa-c773-4bc7-506b-d109bf72aa3b@collabora.com>
-Date:   Mon, 13 Jun 2022 14:37:19 +0200
+        b=KNig8/rih8RGxFYrWUxBTVY8iMKdsC3bvch75EnH2jHFG9eTzjtGXtZ4xPoDqFsCH
+         OXVtTkMxReVaqnpl2e3+rEOMb5qLFa+7I4oi8R6xEZlYjqVJ1PycrfIKV5rQP5PTUr
+         CvnMMV+B5QsC5SS2cxpA560hAZXcb136lFwqnYCM=
+Message-ID: <c27c75ab-bb59-10a2-653e-a80d648bbcaa@digikod.net>
+Date:   Mon, 13 Jun 2022 14:37:58 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 2/3] firmware: mediatek: Use meaningful names for mbox
+User-Agent: 
+Subject: Re: [PATCH 4/4] certs: unify blacklist_hashes.c and
+ blacklist_nohashes.c
 Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        YC Hung <yc.hung@mediatek.com>,
-        Curtis Malainey <cujomalainey@chromium.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220609083101.24195-1-tinghan.shen@mediatek.com>
- <20220609083101.24195-3-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220609083101.24195-3-tinghan.shen@mediatek.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+References: <20220611172233.1494073-1-masahiroy@kernel.org>
+ <20220611172233.1494073-4-masahiroy@kernel.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20220611172233.1494073-4-masahiroy@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,51 +60,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/06/22 10:31, Tinghan Shen ha scritto:
-> Rename mbox according to action instead of 'mbox0' and 'mbox1'
+
+
+On 11/06/2022 19:22, Masahiro Yamada wrote:
+> These two files are very similar. Unify them.
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Reviewed-by: Mickaël Salaün <mic@linux.microsoft.com>
+
 > ---
->   drivers/firmware/mtk-adsp-ipc.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/firmware/mtk-adsp-ipc.c b/drivers/firmware/mtk-adsp-ipc.c
-> index cb255a99170c..3de94765d659 100644
-> --- a/drivers/firmware/mtk-adsp-ipc.c
-> +++ b/drivers/firmware/mtk-adsp-ipc.c
-> @@ -83,7 +83,11 @@ static int mtk_adsp_ipc_probe(struct platform_device *pdev)
->   		return -ENOMEM;
+>   certs/Makefile             | 12 +++++-------
+>   certs/blacklist_hashes.c   |  1 -
+>   certs/blacklist_nohashes.c |  6 ------
+>   3 files changed, 5 insertions(+), 14 deletions(-)
+>   delete mode 100644 certs/blacklist_nohashes.c
+> 
+> diff --git a/certs/Makefile b/certs/Makefile
+> index df7aaeafd19c..7068d45db807 100644
+> --- a/certs/Makefile
+> +++ b/certs/Makefile
+> @@ -4,24 +4,22 @@
+>   #
 >   
->   	for (i = 0; i < MTK_ADSP_MBOX_NUM; i++) {
-> -		chan_name = kasprintf(GFP_KERNEL, "mbox%d", i);
-> +		if (i < MTK_ADSP_MBOX_NUM / 2)
-> +			chan_name = kasprintf(GFP_KERNEL, "rep");
-> +		else
-> +			chan_name = kasprintf(GFP_KERNEL, "req");
+>   obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o common.o
+> -obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
+> +obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o blacklist_hashes.o
+>   obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
+> -ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
+>   
+>   $(obj)/blacklist_hashes.o: $(obj)/blacklist_hash_list
+>   CFLAGS_blacklist_hashes.o := -I $(obj)
+>   
+>   quiet_cmd_check_and_copy_blacklist_hash_list = GEN     $@
+>         cmd_check_and_copy_blacklist_hash_list = \
+> +	$(if $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST), \
+>   	$(AWK) -f $(srctree)/$(src)/check-blacklist-hashes.awk $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) >&2; \
+> -	cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
+> +	{ cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST); echo $(comma) NULL; } > $@, \
+> +	echo NULL > $@)
+>   
+>   $(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
+>   	$(call if_changed,check_and_copy_blacklist_hash_list)
+> -obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
+> -else
+> -obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
+> -endif
 > +
->   		if (!chan_name) {
->   			ret = -ENOMEM;
->   			goto out;
-
-At this point, just call them "reply" and "request", as that simply provides a
-perfectly clear explanation.
-
-Besides, I'm sorry but I really don't like this code, it's really too much
-fragile and will have to be changed entirely if a third mbox is introduced.
-
-I can suggest a cooler way:
-
-static const char * const adsp_mbox_ch_names[MTK_ADSP_MBOX_NUM] = { "rep", "req" };
-
-for (i = 0; i < ARRAY_SIZE(adsp_mbox_ch_names); i++) {
-	/* we can delete chan_name and also avoid a kfree if we do... */
-
-	.... code ....
-
-	adsp_chan->ch = mbox_request_channel_byname(cl, adsp_mbox_ch_names[i]);
-
-	... etc etc ...
-}
-
-Cheers,
-Angelo
+>   targets += blacklist_hash_list
+>   
+>   quiet_cmd_extract_certs  = CERT    $@
+> diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
+> index 86d66fe11348..0c5476abebd9 100644
+> --- a/certs/blacklist_hashes.c
+> +++ b/certs/blacklist_hashes.c
+> @@ -3,5 +3,4 @@
+>   
+>   const char __initconst *const blacklist_hashes[] = {
+>   #include "blacklist_hash_list"
+> -	, NULL
+>   };
+> diff --git a/certs/blacklist_nohashes.c b/certs/blacklist_nohashes.c
+> deleted file mode 100644
+> index 753b703ef0ef..000000000000
+> --- a/certs/blacklist_nohashes.c
+> +++ /dev/null
+> @@ -1,6 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include "blacklist.h"
+> -
+> -const char __initconst *const blacklist_hashes[] = {
+> -	NULL
+> -};

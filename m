@@ -2,168 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3862A547EDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF19E547EE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiFMFUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 01:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S231764AbiFMFXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 01:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiFMFUe (ORCPT
+        with ESMTP id S233074AbiFMFX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 01:20:34 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2040.outbound.protection.outlook.com [40.92.19.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E9E29C94
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:20:33 -0700 (PDT)
+        Mon, 13 Jun 2022 01:23:27 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2071.outbound.protection.outlook.com [40.107.220.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AA910F7;
+        Sun, 12 Jun 2022 22:23:23 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D8O1j+xNvZpYlmkkVpdhiL9JXRP0YvRZLgm3qP83M+sumnGB+sCZjrOKQBRSqJZp5QFW0+3lZCt+tSHRdx9XygTJBDklR4tdJmDrlg8UDukknsvxQ2By03iwjaq1eLir4A4YZxkViWt5swJ+joFjICxppPUSfKmAPxF5QMyoBDCM9m/3Ku9SB/D61rVvJdvhPcJF+dK4uJdbQbLD9DcdOBcONW1JCY9OrW9ePyjjztpjY8jOVLewRUYKFxYsrn7jErGq5TeU1QdmoUnAWArG2LaDzTVxYjHs98hyxc4S07q+QE3kODzt+DU4+2Jabn+i+KzWYAXTwq5M8GlOB7b0FQ==
+ b=eC/6D3Sjn3asRTC7WWzLq4jkIbqRa+5U0ro3XIKbaBSB4kjQ+VTR1raclJocbpyaCr03U5p1W0jb8fFIRzfYANjP+Wk8XdZrdExvxg6X3lrSHTfGdn1s7cvspSP105ydcBNFXoMzBvn6ujGCCSjRLKct7BDtvsyNqx9CcZ7Lvro8kKU7QJrB0Mh3qjHtef73VftBxchG2Fi7rNuMmQcKdm0x0CRHBNQ59c6kBN5kSc1PrbLAohyuQxlm1XYLYfyAbRlH3i9Fs0vKtNH8R0Y3NHe0Fi80dtat/8nKcaCgQ0BZC2AV5WUiu392zbdEVc74Ns9XO6qhUrkaxJ3KO184dQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B9Ax+HbYfwrN0caNKi3EQjnbgZLAXg6QeUpIf/ttvWQ=;
- b=V3GSadrSMDM3Xe7T4uZUucYiw4qRpHIrWeN+fYkzoTKS/F9t3+4FBB9ONga3Ne1vhXP4WiKDcKT/9XnBiLdacGNCzWnoSQz+1UVkkkB5jLeF4GgSzDuKibbEaDaT7nCWeIqvwhk8uIzMDSM5KnNWWScaVwDfaV5dwyY1ViEyoyh96wUVqNC9LSYrUDNQlJI8vJJepbQZFYi2cfg6xv0d67dGXYfPM61LVsD5ZHvK9zlcORamF6EeSLdPultrYZ4WbO7EtePh33/O2kXkytgN+JSJ3t8neK765BkLJsCuVEr/bfnb3bCqO+ke5+qTCR7CGklDrOPH7Xxn0PQu/KTfCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=EmD244jJoOEYpFPag/CK4MpSakZDM+q/s+uyG0rcrqM=;
+ b=OknvzT4HRGYTK33vbQyDLAY1vxuKHXpjvZM+p2aCurOeP2m1mF69Spfusf0x8S8FVb8JV+JBwK8H2zHo1XIF2dlmVxqU9PvBwWPwoXr9o6xGjwjUC5XY4Q6QeZ4fy0EeP4yOzDLcvXYNkmjJaexcJVQHwYnDVyrCxy38TVhhxGrvwEtx3B6/0zy4Z1pEn+6QUVb91+AL7A/O7t0z5fHusf90fWegMkwSubMFimm9J07rEARR/tQSamoHBew7GIC2rsl5+y5C0CEesSiWdE+ihhzb7DyygHo94mv6H8OnJ5oZ7KSpwTER286pZ57qjhSp4RDIYT+4XAkPoKjAXPbUCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B9Ax+HbYfwrN0caNKi3EQjnbgZLAXg6QeUpIf/ttvWQ=;
- b=Yz23yBJ8JFlwmmbqLpjxXPXollxWfKd4GLKHUZijEjfiFo9AUlBPTcbmhTgEM24odM3Le+G27s8ArbpBWvfSD9jYWjV58y6ZI0xPtcP+PJBYPPQsy08Q6G52cHbz81lDsvpbgk0WkPxY7pNRHnGraMuldbKmdO5oVl4tBo3J+qK8mrxYHHpZy5NQ6vRMqsaYq2LnDE+qlzzHFaCwPG20M4JYuPNndjl03akzl6rfZYqOavElN7zly1nK4FoISBk/JcQTXRQmYQFdFZLu+0THW8OPr7qb9CAf1qcJjLyBIt5zyJdQ2RFCMuWLV7v9WmTGfZnlZQjDTFtx6dpNU2WUYQ==
-Received: from PH7PR14MB5594.namprd14.prod.outlook.com (2603:10b6:510:1f6::17)
- by MWHPR14MB1694.namprd14.prod.outlook.com (2603:10b6:300:135::12) with
+ bh=EmD244jJoOEYpFPag/CK4MpSakZDM+q/s+uyG0rcrqM=;
+ b=RdmoDMIAJUsKkVnG0SRgttybFNNPsd5kK7NrATCSDec99au9qEBSLo4++XTuzIIOqXNg3qSDk7NPd6djmEcjged3ZUo+c/Ix+pI3WyycrsCeBt3hP5r+fqdSeGSrA9lwyWgB46Cl3AUZEHFLR6e0pnJRO0O3AN/JE1uAUeN5Sj0=
+Received: from DM6PR02MB6635.namprd02.prod.outlook.com (2603:10b6:5:221::18)
+ by CH2PR02MB6600.namprd02.prod.outlook.com (2603:10b6:610:a6::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.19; Mon, 13 Jun
- 2022 05:20:30 +0000
-Received: from PH7PR14MB5594.namprd14.prod.outlook.com
- ([fe80::ad4e:5917:88d1:c56f]) by PH7PR14MB5594.namprd14.prod.outlook.com
- ([fe80::ad4e:5917:88d1:c56f%7]) with mapi id 15.20.5332.014; Mon, 13 Jun 2022
- 05:20:30 +0000
-From:   Celeste Liu <coelacanthus@outlook.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Celeste Liu <coelacanthus@outlook.com>, xctan <xc-tan@outlook.com>,
-        dram <dramforever@live.com>, Ruizhe Pan <c141028@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Yash Shah <yash.shah@sifive.com>
-Subject: [PATCH v2] riscv: don't allow write but not read page mapping request in mmap
-Date:   Mon, 13 Jun 2022 13:20:23 +0800
-Message-ID: <PH7PR14MB5594801243EB482C01963A2FCEAB9@PH7PR14MB5594.namprd14.prod.outlook.com>
-X-Mailer: git-send-email 2.36.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [B1cnbDxTCThT12cLyQ0PryPnM/nOS4g20Pcy8w0lUH9EvLYmGzV8OG0a6K1sAZml]
-X-ClientProxiedBy: TY2PR0101CA0032.apcprd01.prod.exchangelabs.com
- (2603:1096:404:8000::18) To PH7PR14MB5594.namprd14.prod.outlook.com
- (2603:10b6:510:1f6::17)
-X-Microsoft-Original-Message-ID: <20220613052023.63287-1-coelacanthus@outlook.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Mon, 13 Jun
+ 2022 05:23:22 +0000
+Received: from DM6PR02MB6635.namprd02.prod.outlook.com
+ ([fe80::914b:e95d:6a:8044]) by DM6PR02MB6635.namprd02.prod.outlook.com
+ ([fe80::914b:e95d:6a:8044%3]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 05:23:22 +0000
+From:   Shubhrajyoti Datta <shubhraj@xilinx.com>
+To:     Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v14 0/5] clk: clocking-wizard: Driver updates
+Thread-Topic: [PATCH v14 0/5] clk: clocking-wizard: Driver updates
+Thread-Index: AQHYTYuVTKGc5tZzXkGPQANpjpyWDq1NMBvw
+Date:   Mon, 13 Jun 2022 05:23:22 +0000
+Message-ID: <DM6PR02MB66350E44F54101752D4046FCAAAB9@DM6PR02MB6635.namprd02.prod.outlook.com>
+References: <20220411100443.15132-1-shubhrajyoti.datta@xilinx.com>
+In-Reply-To: <20220411100443.15132-1-shubhrajyoti.datta@xilinx.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-06-13T05:23:18Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=62b70cee-b4c3-4ebd-bb51-833b082ac206;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: eb3bafb4-4cec-4726-a833-08da4cfcd58c
+x-ms-traffictypediagnostic: CH2PR02MB6600:EE_
+x-microsoft-antispam-prvs: <CH2PR02MB6600EF3FE5F66B3D7489EC2CAAAB9@CH2PR02MB6600.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J62684uqPyiLhCd9inh+2DA6ryfbVOXSI6EHIPk1WbpU+g2St2W9ofSwGvXixpDOgyPfiAG3DjMvQ1W+woCFlqN8bai8iXVtypnemUboGufkCcShlZ077CLWF6GLFavIILrD+TmrdbUAwuOW8FqoQWKhu68eMA3WkzyJwwGSkQeu3DTmgcf8MdgTra5raN1Ecl6x47MZ8dM4m6nLeHWqZqndKEV04+SSAyGV1rxldvGg+1D2wUE5m1RPDhAlzpgBMaxYg9GQGk7yLJazk3TOYrege3ahoPvT0GAaOIFE3Bb4IE8+Oj3g4mavQMPSq00bICsFpGTB7xhSUgLyyNiBh0NMS6Ah/7F/XzRkr6MSigeiVzHKHEd/of5HgoPTIemGhsd2lXyh1UzPy5D2NTUWXCZa5VA7uno9LV/d+gTbw+5NdbEnRVgURnZ+Y2LvekP4fGi9J3IyRbw47kdhneZpsb5CFVsNj8PejZyqoWImfsa+JQVjn5nozZwiev0DhniCb8Ffl91XKGJZO+vcekK6qtOGSvGzX5SafdbQTUlwyW/nkiJdceGXwDNqKpi38D+Eglh4IVJtE45ZQt/R7FpL0Ad+taS67tw8nmtUHFz8tx0LHQBAKl0FA2ILsXKPfqOoVW+bNwa3pqtbyp6+DlxO8zt0SldjKVDJH1fcHO6z0Q9kskAQYcQ/6P9PD52ukvsOTHSvSFAn13LymNcfUc5djw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR02MB6635.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(122000001)(71200400001)(38070700005)(76116006)(66946007)(9686003)(86362001)(8676002)(508600001)(66556008)(66446008)(316002)(110136005)(54906003)(186003)(26005)(66476007)(4326008)(64756008)(55016003)(53546011)(7696005)(6506007)(38100700002)(83380400001)(5660300002)(52536014)(15650500001)(2906002)(33656002)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?x9Otrwz4UzHExQ7Ew5oJ4ZKpJvB4T4ugvuwy5PxVtNxzpkgOXCb4dPtIrSnR?=
+ =?us-ascii?Q?im2h6BWpFtVKqo3eTh6k2qpRgqEo6jwT4lX5Pg7oMjxiaF0MTIgxLifJX3zQ?=
+ =?us-ascii?Q?87Etl7GbIssxNrL+a8EVszsIommTrxFhY2ZKUuidC5/sCtPegZoIV/7etUMd?=
+ =?us-ascii?Q?mGHxKvbIHw0/csC8JPBxYYfKhky7lp9GgrgvbtTXazlOvJFVxWKf/RdDiwOg?=
+ =?us-ascii?Q?aQq77DIx1yAdOkaF7vKHME5gFeWmrWLF49xWPx2lNHvb7mBAZAlQ8BahIjzS?=
+ =?us-ascii?Q?XX0h0eVN5nK14WGWWXD4Kw8JYtyPfUH1gbqAbhwxsxZJqbBTfxaFwUibMhOI?=
+ =?us-ascii?Q?78VYoW48D7ATPG1Vl5/sYi3/g3A+IQfFPH5u0cayL7c4KMkoc0ij//D+uvBb?=
+ =?us-ascii?Q?+ki0nOARcqJUn3E2Rzp4nW2nW8eX8S4pJPWxUlJvBquTpoGWxo0l4h3A+jAF?=
+ =?us-ascii?Q?DO9dgTJjaKx7R9ddo2z51P2z2giArc4MLFvsM3vuT53Ef9SLFEaIeMvOsTQS?=
+ =?us-ascii?Q?OUAbim0e/3aLFqA9f7xrO7yU0z8zly9gbS8mvcIFBdrkGoczDnfaTezA5WaJ?=
+ =?us-ascii?Q?nT3rbS5gvipbxSc1zUSGzaXWj4MwrxeAE2afl2KwBl5zBfbYt3AqsNuy8emi?=
+ =?us-ascii?Q?sbuptCf4fBbrl7dOkp4E9Wvp7bWw5C5GRHwASrBMoNqMbTjYjYpWDcvetHhC?=
+ =?us-ascii?Q?cImyCWji2bW5nQNfOu0vu/vbdBIL0JdfK2AOGeFCpkEEhZuK3QLPUBPh6uod?=
+ =?us-ascii?Q?oU1DrZqlOzAk2oIodfsOaMnrJKPhyduefElcRDlzd0oydVHgPnuvme+NgTo3?=
+ =?us-ascii?Q?3BwhBxV7/ocUs96kMh3TdXID2jVB4szO8fi8Be3DUFCNZA4C1hIpoWARIJx6?=
+ =?us-ascii?Q?a8lEEw8vzySDBdqBiNHhS83IAER2YtoCBcBNVLEmQ2RWeJRTFjjZX4wshYRg?=
+ =?us-ascii?Q?fnp6QfzuWm43vvkyZndqbmIz4brnI5W58tUUkVAQBWNuhWCHo34nmBnL3W+J?=
+ =?us-ascii?Q?Zq8yOhW8/+HiH91NakoWssGjhecwm2rdRiyivi5GwuXy7BD6t0+lZVLAcvF6?=
+ =?us-ascii?Q?pLTH5mXXoy/mn1pLPcJ8oUon4RR2qXPnSw2TRETZv8gjrjQ/zjUMjsR/jYBi?=
+ =?us-ascii?Q?Wmg98opQL3whLiM3HmIGSlpdnHrR+WlbXWzxM2SoKq2r9GP61eKWK1NW2+K8?=
+ =?us-ascii?Q?S0DddssF3qmc/7c+F3jk+DQPhh62Ma6eZBLc116QpGHLJoEDopeTmBqemA07?=
+ =?us-ascii?Q?hARcjcuv5RDyohHBNqez3xx22xZ+RPTNtBSrk+RzdDu4MDOAAcAt4W6o9SNz?=
+ =?us-ascii?Q?cxEeDvfBlJL8hdm6oj/IJu2xFtEL0d56Oxt5A5NhLCoVokd/ELg4dMtIrONu?=
+ =?us-ascii?Q?7jP/lo5tgXUgvSddm+tyoQZ162Ur/DlU1ZF6Nkl4h7qX87FFXtDkmPlOivqT?=
+ =?us-ascii?Q?X++uvWpb2Y7ZV4vX19ZZb4ey9/rd3MrOH/QAr8A7J7GG3ZxTGj/ncTSa4z2b?=
+ =?us-ascii?Q?d6077QCQmHXd9LKwznjGiNdlfmKLjzNIN0ZFIMHMm9dBQrtIdWOREJvrsNtk?=
+ =?us-ascii?Q?/QITqn1Ofph3wb7ekJSinv+bNQi0H3Jxi25eVA+T99ueGMo/aUaIsdJ3ffZt?=
+ =?us-ascii?Q?NXizqOOVkwgUHluY//NIdlsGBzxSwgc5MAETqM23rF62kPPhxI1uH7T1WzrD?=
+ =?us-ascii?Q?NXlzi47X820b7ka7YZV/hssZAWjFoIN7Jkk7apTcK9mDk3yCFATW4uBvky9r?=
+ =?us-ascii?Q?sTyhVnQQJQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0c63a832-258c-4183-d753-08da4cfc6f0d
-X-MS-Exchange-SLBlob-MailProps: c5DxU4rKaXn3YlxdnLAu8Crp96QAJlZ4N49hJA9vcGl/Hj9fi4Ug0o2jwT3RQ4OL3cPnlmEeUgftYenHwIGE42viLB9yIXnnckY79f8XlE7gtQOJUBhZOoUDnEfJa0tvoM00sXpZqK+cXou6UZu19h8hQQJu7law2wPyOAqyOOxPkrzEaCyDauRm8qMmHliCG8RDRjpQ/4dYUsgJoYj0wqUrksBWFZ5ubectHaNrvp5vYrShNT9Fal68OWDL08qdU2QA1gsmZ+KFaUndJXIucFc/oT2qyh82ZUNPxzENFrDMCJfmmxMYHWMSHR6OIY/VO1WLrmC194IgIu+iOHCc1iOZc6yiB82heCm5IQtsfkbH9aYMtfMEWY+m2Jw088rLSDShTmSoudC6o5iaWnXhU/JBYw/8kxwlXuMrpX7PaypccuaI1r5x5XoZJMd2MRfcBUaRbzze1iE3nDRV3iuRanYuOG4UBnJPfCO/9KY9LPlUtdN95DgTA+FOu1wRqMputlUTkrXRzn0bW+zMNO0/OeDW/Bidclcj53Y2auOSnUTxTOzTnX7awWFR4LVwKN2TDIInKsBfhqIjquYwRoX36uWAHgkS+uudb2FiE4RzHDg/fu/3kLKR0C3M2ndgytOWTFTc4MaIOqAFwzuaHWz/YS44nBPA+mVgSAoEYALCpLIGeP7Ke/AHbnEIkFjDf+H5Olh5076MZ4G0e59739ZeTUJw35yCgCL2DiE0P9eU/sU/xwOJxO7Ny0QneFvgZDudE/URVSgflltQQyNh/zky0vXvcC1QCY3FwWur189SZcw92xWUqESYPG1tq6OyImfeGPdwYZiew3WJumabRKL+YWUgX984o+Ge
-X-MS-TrafficTypeDiagnostic: MWHPR14MB1694:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jihMZc5oxYI33C8iY3qIxBsARwYZp/puScyDkK05qJ5Ob4xT/2fvUe7sPgcMd7j7diwwhW6NAQO9slQZlbyGXfhEOy8q0vwS7wl7ffPXKpFFeQXseuk4h8NvjCRTvuOfNsxqafZS/L1K2Ulx5P4U5ulLNrzkCVVs2tFdkYAeMXP3gU/p2vLfgBNgtXVLTm54xt81nhT+dvB24GSkLHoa1h6vGuZLwYVRf7kbfHc7/DSudW16NrfzuHrv9C6/Sti7mtrBPx9m1xfxORQ71sgoSYHG+5NItTRxfMHc9JemORZ0x5rPcKaNgMrLpmSQEM3hI1w0d/Wkv3KIkoI4aR9Ml2fk8w4tV8ot3WBlVrwzwU+pyONm40WPn7IPaw8eDh4p3CCSV5cG+SmhhoXt8lsYt2n2UhsqOcMFrLeYNOZs9As5i7TskGmvMkELb4fGgnEWzUP71hYgd2oDwRw0VLCyfuXm5EwmyHxRCq0uZMnldLa803Bur1V5tg1eRHhyWRU9NtMR8fvr1TxwbjYkCiKku2LTgMkeAaUDtXdcSNErxZp2E1loCa0oCxUUfZnMoZJWR6moF5ARZobOYgsSEEovtC+fB0W2sFdvluUBi7o/i0VJWTn8x34Xeo0lRsaKcDIMYl6Zw/wdosIfEqlB3IkV+g==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9aYcLeHknq1jDhexSBAKS+J/mZSCF70y2L+kX90wpCOulYejpMmwVxepcNMg?=
- =?us-ascii?Q?WfdNsMX1eKJrlS5+jGRAzo0FyirSDcWlpgUURh8TQSTe3VVRMUlm4N+U8lP0?=
- =?us-ascii?Q?4V2CcmoOa+JBmhPIqxA70ZqaXbuAWqmWK3lKc3prPhJTpDNKhk8gFYjX7459?=
- =?us-ascii?Q?KSj8nXrp7UV3VcdsnZZjJL4cmqkdPa/22WLp9w0gFrOxWh9dUiGKQb5E6cZ3?=
- =?us-ascii?Q?1saFVJIfHkCRrs8N4FtghF85IZBDw1WdM9oxLm78HPyMEIdShVU/YL6wIwQZ?=
- =?us-ascii?Q?38vHqxIAf4ghpYKi16Pp+FEwyqcpAxtlbjsor89w4jPHaGETzjQIka12z0Or?=
- =?us-ascii?Q?Tvj9PIFJ2lvCjl1owGQHn+rMAEHkkVJC0qdt8sS8sOcJZi57rG4mp+F5vAVP?=
- =?us-ascii?Q?jt/GiSA3IW/qtzC+4slqFQhKITfh1jFAdVfmoCc/h4qMU/ic2GX5FNdQ7rF0?=
- =?us-ascii?Q?iZh6uDRto8Zwc1m67O52r2z5dv+c2Aqq1VXmV/NTZHv0t9DvhY+3fQGJV5GO?=
- =?us-ascii?Q?YUHnuTKrg8aZGqAJPc6YYulriuvwaog+Md5sTYWkIbx8vL1MBr1YP4k7h/2Z?=
- =?us-ascii?Q?+gJLIY6IsS38KZZ2D8psZDncIOmPwvZslkhIVsVGNcwkdPXVxZvE3jXz8Isf?=
- =?us-ascii?Q?dgoYMA3aF1SryXsiiEgqYHSP/V3NLYbO648SEM4kw5wA3engdkKbwROOAk8Z?=
- =?us-ascii?Q?iCJ8vyBFwMK6CEkbBFH810DOMlMZtNiMyA8dNs4wywbkADJ2LVEpL4fj0nuN?=
- =?us-ascii?Q?/fqs9rofJFRT6miLgnVdVZT3tIEnE/5DQS2jBjSsWmcUgUZ5G7cQDCrupwJK?=
- =?us-ascii?Q?HrJZKiR1gquOZsuA7umK0rgiyl0TIo0nB+ZzzGx+7bw8xZMyDIt5H2+hfNgk?=
- =?us-ascii?Q?U8faVRoJA7yIcQlm2C6Xc4w+dEqNgRonaE2sqPbRBVLZ5QiM/SouNQwEvx73?=
- =?us-ascii?Q?V3HQOde9roIOwXZoyxMlguoQrI62DnIVmgXaZZHrGqMXN6lpoEyv/BKV1yHY?=
- =?us-ascii?Q?Hc8p8tHfyVG6oPgX4RYyyD10ACN2etXETKwlpABKhXuDVcw8auo6MFDHk7Lf?=
- =?us-ascii?Q?t186j24Pz7FMJQ3E/4t+iKt1U/Q4FTDfJlhWB9B1Xu3DejnqEQPPo87rdmNy?=
- =?us-ascii?Q?9cF1ROyevXOzcnC0xtXWlRX7lm32N3bJ55IZKyV9xIaELmhfoaPtCAB68Irs?=
- =?us-ascii?Q?eU811Bmmc5sgUONky1LFfR3Xl9/K6OZwqQn1KynozAfBwOtTrSDulPJbCoqW?=
- =?us-ascii?Q?Dhffz5vvhJWFOFYA3OtpberGIq9l9JybFKiyO8Kc/HkfqI6F/JQE0iB393bP?=
- =?us-ascii?Q?lklJdTtCUxIDpY7kwKMubB1+oIcZ6zFTOos9Wt2/PRCpICHTk6rVsB5SoDLh?=
- =?us-ascii?Q?AagoE/UO4HCUNdPkpWq1fMbQPxkqOE5lk9F1GSb0HAuL8vz+U123wyhODkgm?=
- =?us-ascii?Q?QMXHVX94LKsikxNrQ3NFmQ6U7l3uhViv/g9Yl2mYp3vP4U3TTh2qm8ZUYZlF?=
- =?us-ascii?Q?3Nf+mcU1l3VA3gj/NRaO5BFgJoXfoEdJHhiU?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c63a832-258c-4183-d753-08da4cfc6f0d
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR14MB5594.namprd14.prod.outlook.com
+X-OriginatorOrg: xilinx.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 05:20:30.8117
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR02MB6635.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb3bafb4-4cec-4726-a833-08da4cfcd58c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2022 05:23:22.4425
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR14MB1694
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oQr0GQrzThmab0CcC2EV54VzpPicCM9PxVppExflRl/bojySm9vf4kt3e/dPCo5wqWjKMPWVP95TlIOGWyRTWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6600
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When xctan tries to run one of libaio's tests
-(https://pagure.io/libaio/blob/1b18bfafc6a2f7b9fa2c6be77a95afed8b7be448/f/harness/cases/5.t),
-it encounters a strange behavior: for the same PROT_WRITE only mapping,
-there was a discrepancy in whether it could be read before and after writing
-(readable before writing, unreadable after writing). After some investigation,
-I found that mmap allows write only mapping, an undefined behavior, on RISC-V.
+[AMD Official Use Only - General]
 
-As mentioned in Table 4.5 in RISC-V spec Volume 2 Section 4.3 version
-"20211203 Privileged Architecture v1.12, Ratified"[1], the PTE permission
-bit combination of "write+!read" is "Reserved for future use.". Hence, don't
-allow such mapping request in mmap call. In the current code[2], write+exec
-only is marked as invalid, but write only is not marked as invalid.
+Gentle ping.
 
-This patch refines that judgment.
+-----Original Message-----
+From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>=20
+Sent: Monday, April 11, 2022 3:35 PM
+To: linux-clk@vger.kernel.org
+Cc: robh+dt@kernel.org; gregkh@linuxfoundation.org; sboyd@kernel.org; devic=
+etree@vger.kernel.org; linux-kernel@vger.kernel.org; Shubhrajyoti Datta <sh=
+ubhraj@xilinx.com>
+Subject: [PATCH v14 0/5] clk: clocking-wizard: Driver updates
 
-[1]: https://github.com/riscv/riscv-isa-manual/releases/download/Priv-v1.12/riscv-privileged-20211203.pdf
-[2]: modified in commit e0d17c842c0f824fd4df9f4688709fc6907201e1
-     (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0d17c842c0f824fd4df9f4688709fc6907201e1)
+The patch does the following
+Update the versions of the clocking wizard ip.
+Move from staging to clk directory.
+Update the bindings.
 
-Reported-by: xctan <xc-tan@outlook.com>
-Co-developed-by: dram <dramforever@live.com>
-Signed-off-by: dram <dramforever@live.com>
-Co-developed-by: Ruizhe Pan <c141028@gmail.com>
-Signed-off-by: Ruizhe Pan <c141028@gmail.com>
-Signed-off-by: Celeste Liu <coelacanthus@outlook.com>
-Cc: linux-riscv@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Yash Shah <yash.shah@sifive.com>
----
-v2: This version adds a link to the referenced spec, and reference of the 
-previous related modification.
+v12:=20
+No change.=20
+Rebased
+v13:
+Update the clocking compatible
+Add the change removing the driver from staging
+v14:
+Moved to the xilinx folder
 
- arch/riscv/kernel/sys_riscv.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Shubhrajyoti Datta (5):
+  dt-bindings: add documentation of xilinx clocking wizard
+  clk: clocking-wizard: Add the clockwizard to clk directory
+  clk: clocking-wizard: Rename nr-outputs to xlnx,nr-outputs
+  clk: clocking-wizard: Fix the reconfig for 5.2
+  clk: clocking-wizard: Update the compatible
 
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 9c0194f176fc..571556bb9261 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -18,9 +18,8 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
- 	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
- 		return -EINVAL;
- 
--	if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
--		if (unlikely(!(prot & PROT_READ)))
--			return -EINVAL;
-+	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
-+		return -EINVAL;
- 
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
- 			       offset >> (PAGE_SHIFT - page_shift_offset));
--- 
-2.36.1
+ .../bindings/clock/xlnx,clocking-wizard.yaml  | 77 +++++++++++++++++++
+ drivers/clk/xilinx/Kconfig                    | 11 +++
+ drivers/clk/xilinx/Makefile                   |  1 +
+ .../xilinx}/clk-xlnx-clock-wizard.c           | 19 +++--
+ drivers/staging/Kconfig                       |  2 -
+ drivers/staging/Makefile                      |  1 -
+ drivers/staging/clocking-wizard/Kconfig       | 10 ---
+ drivers/staging/clocking-wizard/Makefile      |  2 -
+ drivers/staging/clocking-wizard/TODO          | 13 ----
+ .../staging/clocking-wizard/dt-binding.txt    | 30 --------
+ 10 files changed, 103 insertions(+), 63 deletions(-)  create mode 100644 D=
+ocumentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+ rename drivers/{staging/clocking-wizard =3D> clk/xilinx}/clk-xlnx-clock-wi=
+zard.c (96%)  delete mode 100644 drivers/staging/clocking-wizard/Kconfig
+ delete mode 100644 drivers/staging/clocking-wizard/Makefile
+ delete mode 100644 drivers/staging/clocking-wizard/TODO
+ delete mode 100644 drivers/staging/clocking-wizard/dt-binding.txt
 
+--
+2.17.1

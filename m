@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21489549A6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7FC549A66
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbiFMRvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S236916AbiFMRuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242362AbiFMRuf (ORCPT
+        with ESMTP id S233958AbiFMRuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:50:35 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00D46EB3E;
-        Mon, 13 Jun 2022 06:33:20 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id p69so6111002iod.0;
-        Mon, 13 Jun 2022 06:33:20 -0700 (PDT)
+        Mon, 13 Jun 2022 13:50:12 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728CB3CFE7;
+        Mon, 13 Jun 2022 06:33:27 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id q11so6047703iod.8;
+        Mon, 13 Jun 2022 06:33:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=vyoJ85txEp3wcFTSeMW6nKhdwOlY3JedEaCIumOgJX0=;
-        b=otzJfOUwHCkOtcKoB+GqdbhFFpPSSm1AmwqloLzwx32osBGOFYzUbLkEpWK6Oa5V0q
-         retP9HK66JWnNhLtdaquDt3d9M5Q7CjwxfDh7Q0zVjBJJRkV4DAa6rjuWbxQXeaXKIis
-         HG4asCk5ZBT6cb8K2A/XGoc4LCHKKNtrTXme/PiVShYUiu4AiifGzWalPz4N0MS7cKt4
-         jbrRaRKC8BJRRFmGHAJ3cu1mvepMq/iZOUKYVi/WAgdZhvegzW3igb6ZwHhP4g8bfVV/
-         Bz1/2vjbcnU2+5JESO/uCAfaTqtRcF+YGC/MHg8CqU9DSd/jkWfLhNE4deQ+4YVCyCrx
-         ne4Q==
-X-Gm-Message-State: AOAM533gaA8O0s4lMVijjQ5n9gYXBdQ0wkdSxpfHDXVWpPCiQ8z5WvJA
-        Y+PbIlr7kNYfw4mOpRitXw==
-X-Google-Smtp-Source: ABdhPJwOoiPPMXAQ3HpzpzSM0BQ0OOEN1wDLDCLjfQX27FZnwuzSrw5lgyXQOpUCBVuEPG4qAKKUYw==
-X-Received: by 2002:a05:6602:2cd1:b0:66a:6f0:5867 with SMTP id j17-20020a0566022cd100b0066a06f05867mr540059iow.143.1655127199851;
-        Mon, 13 Jun 2022 06:33:19 -0700 (PDT)
+        bh=vdZfN90YQu4hf8Uqw177MbmjixkJ2AAcNrLx6oY9MCU=;
+        b=0vEUpAa5zAKQ89i46hqzZ+3hHeTnn+DY1/X0kJqYTFueZ/FwBOmrWDjFsa9Z9odXwA
+         XIjIzf/6hM5JcDlSSzkHeMObN075lc2pXL6MO4JLhob4Y18jDKdvfTMrMv1IxFRWemqi
+         IekeaKiCXsLUYOKPMWwtBHZjYPlOQvFTiyS51PcrCX7Y2C+stDxntVkUIN7XsOBy43dA
+         u0xReuMw2mjoYysPsGqAcxIds4wIewSkd74UcCePomD/b6c7wQVujeaosljM/+6Uqey0
+         Vz3gXVjv0A4PGzhbEY+B87oYpb5ay9ATjp/elrD4yzI4Z4jFyKQQZLIpI8E7aucJg0pz
+         Ii2w==
+X-Gm-Message-State: AOAM532oZpiFlDl4z/q02iRfmE4Sw1UP9tpECriUzZLcRbTTDmksN14b
+        oYoyJUfpE5+LEyTXxGcKpg==
+X-Google-Smtp-Source: ABdhPJwxl/8h496O951i+ofEnsI3E+yQOwKm/ujxZmtouDcCZ56WJ1Frq7wX9lahXWnDMzS3ZoRpNQ==
+X-Received: by 2002:a6b:bf46:0:b0:669:c998:6b48 with SMTP id p67-20020a6bbf46000000b00669c9986b48mr6141923iof.67.1655127206555;
+        Mon, 13 Jun 2022 06:33:26 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id b14-20020a92c84e000000b002d1df239846sm3901175ilq.79.2022.06.13.06.33.18
+        by smtp.gmail.com with ESMTPSA id l16-20020a056e020e5000b002d1a16ef24dsm3870641ilk.82.2022.06.13.06.33.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 06:33:19 -0700 (PDT)
-Received: (nullmailer pid 3564130 invoked by uid 1000);
+        Mon, 13 Jun 2022 06:33:26 -0700 (PDT)
+Received: (nullmailer pid 3564137 invoked by uid 1000);
         Mon, 13 Jun 2022 13:33:17 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Irui Wang <irui.wang@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, maoguang.meng@mediatek.com,
-        xia.jiang@mediatek.com, srv_heupstream@mediatek.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        kyrie wu <kyrie.wu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        nicolas.dufresne@collabora.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org
-In-Reply-To: <20220613032232.23187-2-irui.wang@mediatek.com>
-References: <20220613032232.23187-1-irui.wang@mediatek.com> <20220613032232.23187-2-irui.wang@mediatek.com>
-Subject: Re: [V3,1/8] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, szunichen@gmail.com,
+        lars@metafoo.de, matthias.bgg@gmail.com,
+        daniel.thompson@linaro.org, lee.jones@linaro.org,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        linux-leds@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        jingoohan1@gmail.com, devicetree@vger.kernel.org, jic23@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
+In-Reply-To: <20220613111146.25221-7-peterwu.pub@gmail.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-7-peterwu.pub@gmail.com>
+Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
 Date:   Mon, 13 Jun 2022 07:33:17 -0600
-Message-Id: <1655127197.543108.3564129.nullmailer@robh.at.kernel.org>
+Message-Id: <1655127197.567546.3564136.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -72,16 +67,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 11:22:25 +0800, Irui Wang wrote:
-> From: kyrie wu <kyrie.wu@mediatek.com>
+On Mon, 13 Jun 2022 19:11:37 +0800, ChiaEn Wu wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> Add mediatek,mt8195-jpgdec compatible to binding document.
+> Add Mediatek MT6370 binding documentation.
 > 
-> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > ---
->  .../media/mediatek,mt8195-jpegdec.yaml        | 177 ++++++++++++++++++
->  1 file changed, 177 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+>  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
+>  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
+>  2 files changed, 297 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+>  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -90,30 +87,24 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id:minItems: 0 is less than the minimum of 1
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems', 'minItems' were unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: ignoring, error in schema: patternProperties: ^jpgdec@[0-9a-f]+$: properties: mediatek,hw-id: minItems
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec']
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master/jpgdec@1a040000: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec-hw']
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master/jpgdec@1a050000: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec-hw']
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master/jpgdec@1b040000: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec-hw']
+./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: backlight: False schema does not allow {'compatible': ['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use': b'\x0f'}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: charger: False schema does not allow {'compatible': ['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]], 'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels': [[1, 5]], 'usb-otg-vbus-regulator': {'regulator-name': ['mt6370-usb-otg-vbus'], 'regulator-min-microvolt': [[4350000]], 'regulator-max-microvolt': [[5800000]], 'regulator-min-microamp': [[500000]], 'regulator-max-microamp': [[3000000]], 'phandle': [[2]]}}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: tcpc: False schema does not allow {'compatible': ['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, 4, 8]], 'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C'], 'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'], 'try-power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos': [[570527944]], 'op-sink-microwatt': [[10000000]], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@1': {'reg': [[1]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@2': {'reg': [[2]], 'endpoint': {'remote-endpoint': [[4294967295]]}}}}}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator: False schema does not allow {'compatible': ['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#size-cells': [[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator'], 'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]}, 'led@1': {'reg': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]], 'color': [[3]]}}, 'led@3': {'reg': [[3]], 'function': ['indicator'], 'color': [[0]], 'led-max-microamp': [[6000]]}}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: flashlight: False schema does not allow {'compatible': ['mediatek,mt6370-flashlight'], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[1]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}, 'led@1': {'reg': [[1]], 'led-sources': [[1]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[2]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: backlight: mediatek,bled-channel-use: b'\x0f' is not of type 'object', 'array', 'boolean', 'null'
+	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
+Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/backlight: failed to match any schema with compatible: ['mediatek,mt6370-backlight']
+Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/charger: failed to match any schema with compatible: ['mediatek,mt6370-charger']
+Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/indicator: failed to match any schema with compatible: ['mediatek,mt6370-indicator']
+Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/flashlight: failed to match any schema with compatible: ['mediatek,mt6370-flashlight']
+Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/tcpc: failed to match any schema with compatible: ['mediatek,mt6370-tcpc']
 
 doc reference errors (make refcheckdocs):
 

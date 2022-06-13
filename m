@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08B4548AA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A470F549827
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353339AbiFMLXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S1352895AbiFMLWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353663AbiFMLQK (ORCPT
+        with ESMTP id S1353682AbiFMLQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:16:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F84838BDA;
-        Mon, 13 Jun 2022 03:38:50 -0700 (PDT)
+        Mon, 13 Jun 2022 07:16:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F86613D53;
+        Mon, 13 Jun 2022 03:38:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C035BB80EAC;
-        Mon, 13 Jun 2022 10:38:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F280C34114;
-        Mon, 13 Jun 2022 10:38:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E16AE60AE6;
+        Mon, 13 Jun 2022 10:38:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0164DC34114;
+        Mon, 13 Jun 2022 10:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116727;
-        bh=nKTfZeuLrKxdwEf0gmHdzEbNZIZRCIXzPoBOQmXgezQ=;
+        s=korg; t=1655116738;
+        bh=L/MEZxvAKSUaoK7ru1wLW2kZXpTBU08Z9+MoWcemPh8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oM/4zx8QCZMSmjpnsChN2JxW+JSb6AKW5jhzwZLAuL4hbJgfMTo/usiQ7i/efkiHi
-         hC5gnbFDiN5VBECGWvf2DXnSRJoShFLKobrg+hNm0AeJdIwo7etfNKyGqsg1DUiXjD
-         wJOX3jTjPdGruODPcYH2m3hTfDz5RlBkLsWrb1xg=
+        b=ZFhXdviwF1+szeu85vmQyfU8ep2jpHV6KIJvPrmqaSRK5R4qGmSIIiShaekxwdrzM
+         m4sI19EvC3+t0YK/dMjkckX63R6hKTxrk/mwEQPK3UaDoyA9z9oFddQpBm0lLZuD7m
+         APXnjPAn0XcFrnDvCkXXvLj6vq6dtqum/M0FgvW8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 155/411] net/smc: postpone sk_refcnt increment in connect()
-Date:   Mon, 13 Jun 2022 12:07:08 +0200
-Message-Id: <20220613094933.311476944@linuxfoundation.org>
+Subject: [PATCH 5.4 156/411] arm64: dts: rockchip: Move drive-impedance-ohm to emmc phy on rk3399
+Date:   Mon, 13 Jun 2022 12:07:09 +0200
+Message-Id: <20220613094933.340582744@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,40 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: liuyacan <liuyacan@corp.netease.com>
+From: Shawn Lin <shawn.lin@rock-chips.com>
 
-[ Upstream commit 75c1edf23b95a9c66923d9269d8e86e4dbde151f ]
+[ Upstream commit 4246d0bab2a8685e3d4aec2cb0ef8c526689ce96 ]
 
-Same trigger condition as commit 86434744. When setsockopt runs
-in parallel to a connect(), and switch the socket into fallback
-mode. Then the sk_refcnt is incremented in smc_connect(), but
-its state stay in SMC_INIT (NOT SMC_ACTIVE). This cause the
-corresponding sk_refcnt decrement in __smc_release() will not be
-performed.
+drive-impedance-ohm is introduced for emmc phy instead of pcie phy.
 
-Fixes: 86434744fedf ("net/smc: add fallback check to connect()")
-Signed-off-by: liuyacan <liuyacan@corp.netease.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: fb8b7460c995 ("arm64: dts: rockchip: Define drive-impedance-ohm for RK3399's emmc-phy.")
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+Link: https://lore.kernel.org/r/1647336426-154797-1-git-send-email-shawn.lin@rock-chips.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/af_smc.c | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index a5a8cca46bd5..394491692a07 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -877,9 +877,9 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
- 	if (rc && rc != -EINPROGRESS)
- 		goto out;
- 
--	sock_hold(&smc->sk); /* sock put in passive closing */
- 	if (smc->use_fallback)
- 		goto out;
-+	sock_hold(&smc->sk); /* sock put in passive closing */
- 	if (flags & O_NONBLOCK) {
- 		if (schedule_work(&smc->connect_work))
- 			smc->connect_nonblock = 1;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index 95942d917de5..4496f7e1c68f 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1447,6 +1447,7 @@
+ 			reg = <0xf780 0x24>;
+ 			clocks = <&sdhci>;
+ 			clock-names = "emmcclk";
++			drive-impedance-ohm = <50>;
+ 			#phy-cells = <0>;
+ 			status = "disabled";
+ 		};
+@@ -1457,7 +1458,6 @@
+ 			clock-names = "refclk";
+ 			#phy-cells = <1>;
+ 			resets = <&cru SRST_PCIEPHY>;
+-			drive-impedance-ohm = <50>;
+ 			reset-names = "phy";
+ 			status = "disabled";
+ 		};
 -- 
 2.35.1
 

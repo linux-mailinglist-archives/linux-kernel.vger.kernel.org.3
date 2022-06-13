@@ -2,141 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90C1548923
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96875498D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236416AbiFMKWY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Jun 2022 06:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S243431AbiFMKVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242941AbiFMKUm (ORCPT
+        with ESMTP id S242999AbiFMKUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:20:42 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70A50108
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:17:19 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2044.outbound.protection.outlook.com [104.47.22.44]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-2-yYJeCvqFNeC3c_16aEaG1A-2; Mon, 13 Jun 2022 12:17:15 +0200
-X-MC-Unique: yYJeCvqFNeC3c_16aEaG1A-2
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- ZRAP278MB0223.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2c::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5332.13; Mon, 13 Jun 2022 10:17:13 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
- 10:17:13 +0000
-Date:   Mon, 13 Jun 2022 12:17:12 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, l.stach@pengutronix.de,
-        bhelgaas@google.com, robh@kernel.org
-Cc:     broonie@kernel.org, lorenzo.pieralisi@arm.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH v10 5/7] PCI: imx6: Turn off regulator when the system is
- in suspend mode
-Message-ID: <20220613101712.GA20538@francesco-nb.int.toradex.com>
-References: <1655110538-10914-1-git-send-email-hongxing.zhu@nxp.com>
- <1655110538-10914-6-git-send-email-hongxing.zhu@nxp.com>
-In-Reply-To: <1655110538-10914-6-git-send-email-hongxing.zhu@nxp.com>
-X-ClientProxiedBy: MR1P264CA0068.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:3f::33) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        Mon, 13 Jun 2022 06:20:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D34CE8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:17:24 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM6sQ4xtyzjXgk;
+        Mon, 13 Jun 2022 18:15:54 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 18:17:22 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 18:17:21 +0800
+Message-ID: <476432e2-125f-13d6-ce7a-19d94465c138@huawei.com>
+Date:   Mon, 13 Jun 2022 18:17:21 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 763b0922-782e-40d8-c3cc-08da4d25e26b
-X-MS-TrafficTypeDiagnostic: ZRAP278MB0223:EE_
-X-Microsoft-Antispam-PRVS: <ZRAP278MB0223C73A8AEF48B6973EF486E2AB9@ZRAP278MB0223.CHEP278.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: Vg2CAPYW3ymHcXhSA0A91/6QE55HZj25mVlZsG3CvluhnilgTuZ/NTRWS4woUQaFg/2nRkMuexosL4QhocxhXZslwhZacJCk6NfeIGCBy6vFi3RF95AsEw31azPWqtj2thDrMR6Ikyl6LWHPYeK2eue4jjYSj1Mj7LVrqhrfBNOHivNQ2W/W+7QTmXYksl205OlCyvweNsEOS92MaY/uoqd6Ui7qYoB7hCxMAoa9jcgnufq9dn2/sMbILHXmT52ej9FuBnQrxTLThG+ZiDKVslwP+xP0r4WQUQiUCJH7PPHfu5BFfAnQXY9ghP3Lr+A2vxT2xm5CGtzMiiC6mV/+jv1G63DSniX4o3SB9qHPr8sleEUDI0y2c6PGJKT3ddhIuNwHIjqDEn5n9ZyaJzMy1g+XAH+mrHhG058+wctqRxS4aK8Lp70YiCNNZAcVVQgXe9lTD6j5op0JoLnWAwLVOLVlObpht3V76n3/7WGEmkyWy/C3lFdAgzY6M+Z7XYYjarXV/cA6ZCixbStdY8O3mFCYM8qNcTt3iQRDx9PO5gjCZt3dIWOn21mxXbpMXwF9oDy3Bww0C1isSV+5914mSIXOyrScrF7KVrSRjkzShNBsNf7NpNHnf2VzuwI30LAqLVXIVs0iEFem4aZNhiPQfiCayngu7hI09upJY6SofIcWTWgxyrngZcQSYLo6gJs4sMjT/cX8uWMStb614rAeYg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(346002)(39840400004)(366004)(8936002)(6512007)(6486002)(66556008)(15650500001)(33656002)(2906002)(38100700002)(8676002)(86362001)(508600001)(186003)(52116002)(4744005)(41300700001)(5660300002)(26005)(7416002)(83380400001)(38350700002)(6506007)(1076003)(44832011)(316002)(66946007)(66476007)(4326008);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4VlI591WYg+1FfvVyaQx6qS3zALb7YqXh9sJu3B53R4r7W+FeG6xHqDrXs11?=
- =?us-ascii?Q?A2TiRTXIkrQD7NWGuSEv669VY9uLHA7PJLpJqI8w8v/nJJrCl0ubhze3A+1g?=
- =?us-ascii?Q?KzWlKwwt7Pomd3rWzuCix8gPkSjKgIXAJYzuPQMQSrK+SNq5DratNcOxS5c0?=
- =?us-ascii?Q?cYoTF9gphfaJO5CIYZ/M56px2xDVRLsXkSYbrVAI433e8/7FYvdgucYhFGNT?=
- =?us-ascii?Q?4ytj/Bs2UwAz8SIl71j6CY+lNajhvR7xrp/hIk5Lc+O+JIarbiUswdx/jDFr?=
- =?us-ascii?Q?cnh6EwIM0sW7LcHBjBK0sszKC1Ym6jaEEL1Otnss0gkTe9ng36iaMa6jeCnN?=
- =?us-ascii?Q?KTIlzW5Z+V2WoJcx0bVt7uwHJs3IjprAtoQoC+YFutG0w2A+PHBF8cs2aOzg?=
- =?us-ascii?Q?QB82G0xRXwzpTEwypI4rBIYhUBCnPu4dGJ4TtOmiZkI6jRMV703M+J10ufIc?=
- =?us-ascii?Q?ebLrT4ahLKpFDj61cG3ATJf19WISH7edPu5575B7xeELdn04PnBF8SJWx7bb?=
- =?us-ascii?Q?mkYy239OVEQXpB0xN781GhicGTwtXT2dwJ6Ua3Qhml+Gnd904GpYilB91vDl?=
- =?us-ascii?Q?/ldqRZcrxvbvqxoqWjWqUV6aeahskfh6nmCn7qDQytmGXHU9H8+Jq3sLxdgb?=
- =?us-ascii?Q?eSq9e29giZuSrYTzpbj7kA6J9B0SnzDI0UXBwQ0SpPkL+fCVdZ1BMgVVCrGY?=
- =?us-ascii?Q?bkXV9qmgBxRPS7bWOffsm4YrnukpLashjafJPnEEwiKy5S5P4gWlnQrMWbS7?=
- =?us-ascii?Q?SLoxBeno1oNncFjweFLWEOed3zis5nHy9AFTwTiY+gscsPOIY/jCSnaxIopI?=
- =?us-ascii?Q?c4zwXNrNTiRGy2Md2zn68K16/RVP/vQcO3TNzakoOa1t+NhH99FbcGoONG/z?=
- =?us-ascii?Q?XosdEuDO3CSnOWkTJPg3sdwIjrg7LMDLC8uMs/MUKQf1hc2Od4K2S5NMicqu?=
- =?us-ascii?Q?Bs+0+xGsuvpJKlBZr4LWLQdaWYILgtQMUC+OBQDu8w0yutMTEyjIRWiDJ6x9?=
- =?us-ascii?Q?9a+POjVaRjwobGFCU1tTmCevmZ9/ZhHynPX0/y4NW2mkT8O/ZUWbd3pvAlpZ?=
- =?us-ascii?Q?W4eaZxQA5PIzIAnZMjFCLDT9g4XI7djpJImXkz24nCThH+rd2fOE6gdBpRjv?=
- =?us-ascii?Q?Hywo+K90pVCA52y8ujG77ZVuNhymWVQocbw97p4rw3A1oFTWhDiKDhZBLjgm?=
- =?us-ascii?Q?a3arx2Bvt4b9FyiNVpNHludyovj2ZxxROsmKq3YLi13tv6VSpCPCWdPAZjeY?=
- =?us-ascii?Q?HIFxeS/35+nMcy9pZ+6ob4K1G42vfhQfm6Ht/J8rWRC4mrW/iYUGmJxBtId4?=
- =?us-ascii?Q?glwBnPBEgVDnxKV/UFhZmHi/+q1/MiB4KFQa35U5TgiIUm7u5Ab9ndyyoDoB?=
- =?us-ascii?Q?ozarzouHXe+fJDqWKWjIS7HBBTfe8EvNZL8KKvc6S4YAaKU//ZZRzWijR2/N?=
- =?us-ascii?Q?9vJX/KSPY/1IaWKiyBkkT5bFgo4X5MD+4v+VohvOE6eGvUQrharHZBrLz7ES?=
- =?us-ascii?Q?znNhvIORb57SdP6NnF3Z2mB6LrjDh/vVdyxJN40lirpl8Qe9ZTXrC3D9cN1q?=
- =?us-ascii?Q?xFbodh+YOUXZRRDy7hMt6xRk1/A0D3fm2T2Cc9CSQINjTw9504zmfLoLGCQD?=
- =?us-ascii?Q?E4JQ5ZCmCCB/b9QoEMr/fB421zMe9vQ8XE5l12NXXKKs1TwAF+7k+49wOr+T?=
- =?us-ascii?Q?gvYwczsU4Q3QcuqL47oTqaogDKGzwIDbKWCSuJd3jXnVHd30mryRKcrmJBgj?=
- =?us-ascii?Q?VEkZVoz7SnZy0qhfayY+p30wY5CANtw=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 763b0922-782e-40d8-c3cc-08da4d25e26b
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 10:17:13.4813
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uMGpOyuf8LtQ06OWla6ptR9BvGW/SN26cYXDKl5jbbkuoAQ8/GimVWdEaBv7lgL4OKjYmM6TjgnLlN0sZpPF8MaybFSnVsl+yBf1SHdxJ9U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0223
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] ARM: Mark the FDT_FIXED sections as shareable
+Content-Language: en-US
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Pitre <nico@fluxnic.net>
+References: <20220613091901.730-1-thunder.leizhen@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20220613091901.730-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 04:55:36PM +0800, Richard Zhu wrote:
-> The driver should undo any enables it did itself. The regulator disable
-> shouldn't be basing decisions on regulator_is_enabled().
-> 
-> Move the regulator_disable to the suspend function, turn off regulator
-> when the system is in suspend mode.
 
-According to the documentation:
-
-  vpcie-supply:
-    description: Should specify the regulator in charge of PCIe port power.
-      The regulator will be enabled when initializing the PCIe host and
-      disabled either as part of the init process or when shutting down
-      the host (optional required).
-
-Is this really what we want to do (remove power in suspend, enable
-it on resume)? On our boards this powers a PCIe device connected to the host
-port, that sound fair according to the binding documentation for it.
-Am I wrong?
-
-We do have issues with PCIe not working anymore after suspend/resume,
-wondering (I did not have time to properly dig into it) if this is the
-root cause.
-
-Francesco
-
+On 2022/6/13 17:19, Zhen Lei wrote:
+> commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
+> region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
+> which contains fdt. But it only reserves the exact physical memory that
+> fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
+> speculative read access can bring the RAM content from non-fdt zone into
+> cache, PIPT makes it to be hit by subsequently read access through
+> shareable mapping(such as linear mapping), and the cache consistency
+> between cores is lost due to non-shareable property.
+>
+> |<---------FDT_FIXED_SIZE------>|
+> |                               |
+>   -------------------------------
+> | <non-fdt> | <fdt> | <non-fdt> |
+>   -------------------------------
+>
+> 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
+>     into the cache.
+> 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
+>     received the notification to invalid the corresponding cachelines, but
+>     the property non-shareable makes it to be ignored.
+> 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
+>     is read.
+>
+> To eliminate this risk, add a new memory type MT_MEMORY_RO. Compared to
+> MT_ROM, it is shareable and non-executable.
+>
+> Here's an example:
+>    list_del corruption. prev->next should be c0ecbf74, but was c08410dc
+>    kernel BUG at lib/list_debug.c:53!
+>    ... ...
+>    PC is at __list_del_entry_valid+0x58/0x98
+>    LR is at __list_del_entry_valid+0x58/0x98
+>    psr: 60000093
+>    sp : c0ecbf30  ip : 00000000  fp : 00000001
+>    r10: c08410d0  r9 : 00000001  r8 : c0825e0c
+>    r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
+>    r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
+>    ... ...
+>    Stack: (0xc0ecbf30 to 0xc0ecc000)
+>    bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
+>    bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
+>    bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
+>    ... ...                                           <  next     prev  >
+>    (__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
+>    (__list_del_entry) from (finish_swait+0x60/0x7c)
+>    (finish_swait) from (rcu_gp_kthread+0x560/0xa20)
+>    (rcu_gp_kthread) from (kthread+0x14c/0x15c)
+>    (kthread) from (ret_from_fork+0x14/0x24)
+>
+> The faulty list node to be deleted is a local variable, its address is
+> c0ecbf74. The dumped stack shows that 'prev' = c0ecbf74, but its value
+> before lib/list_debug.c:53 is c08410dc. A large amount of printing results
+> in swapping out the cacheline containing the old data(MT_ROM mapping is
+> read only, so the cacheline cannot be dirty), and the subsequent dump
+> operation obtains new data from the DDR.
+>
+> Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>   arch/arm/include/asm/mach/map.h |  1 +
+>   arch/arm/mm/mmu.c               | 15 ++++++++++++++-
+>   2 files changed, 15 insertions(+), 1 deletion(-)
+>
+> v1 --> v2:
+> As Ard Biesheuvel's suggestion, add a new memory type MT_MEMORY_RO instead of
+> add a new memory type MT_ROM_XIP.
+>
+> diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
+> index 92282558caf7cdb..2b8970d8e5a2ff8 100644
+> --- a/arch/arm/include/asm/mach/map.h
+> +++ b/arch/arm/include/asm/mach/map.h
+> @@ -27,6 +27,7 @@ enum {
+>   	MT_HIGH_VECTORS,
+>   	MT_MEMORY_RWX,
+>   	MT_MEMORY_RW,
+> +	MT_MEMORY_RO,
+>   	MT_ROM,
+>   	MT_MEMORY_RWX_NONCACHED,
+>   	MT_MEMORY_RW_DTCM,
+> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+> index 5e2be37a198e29e..cd17e324aa51ea6 100644
+> --- a/arch/arm/mm/mmu.c
+> +++ b/arch/arm/mm/mmu.c
+> @@ -296,6 +296,13 @@ static struct mem_type mem_types[] __ro_after_init = {
+>   		.prot_sect = PMD_TYPE_SECT | PMD_SECT_AP_WRITE,
+>   		.domain    = DOMAIN_KERNEL,
+>   	},
+> +	[MT_MEMORY_RO] = {
+> +		.prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
+> +			     L_PTE_XN | L_PTE_RDONLY,
+> +		.prot_l1   = PMD_TYPE_TABLE,
+> +		.prot_sect = PMD_TYPE_SECT,
+> +		.domain    = DOMAIN_KERNEL,
+> +	},
+>   	[MT_ROM] = {
+>   		.prot_sect = PMD_TYPE_SECT,
+>   		.domain    = DOMAIN_KERNEL,
+> @@ -489,6 +496,7 @@ static void __init build_mem_type_table(void)
+>   
+>   			/* Also setup NX memory mapping */
+>   			mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_XN;
+> +			mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_XN;
+>   		}
+>   		if (cpu_arch >= CPU_ARCH_ARMv7 && (cr & CR_TRE)) {
+>   			/*
+> @@ -568,6 +576,7 @@ static void __init build_mem_type_table(void)
+>   		mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+>   		mem_types[MT_MINICLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+>   		mem_types[MT_CACHECLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+> +		mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+>   #endif
+>   
+>   		/*
+> @@ -587,6 +596,8 @@ static void __init build_mem_type_table(void)
+>   			mem_types[MT_MEMORY_RWX].prot_pte |= L_PTE_SHARED;
+>   			mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_S;
+>   			mem_types[MT_MEMORY_RW].prot_pte |= L_PTE_SHARED;
+> +			mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_S;
+> +			mem_types[MT_MEMORY_RO].prot_pte |= L_PTE_SHARED;
+>   			mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
+>   			mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= PMD_SECT_S;
+>   			mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |= L_PTE_SHARED;
+> @@ -647,6 +658,8 @@ static void __init build_mem_type_table(void)
+>   	mem_types[MT_MEMORY_RWX].prot_pte |= kern_pgprot;
+>   	mem_types[MT_MEMORY_RW].prot_sect |= ecc_mask | cp->pmd;
+>   	mem_types[MT_MEMORY_RW].prot_pte |= kern_pgprot;
+> +	mem_types[MT_MEMORY_RO].prot_sect |= ecc_mask | cp->pmd;
+> +	mem_types[MT_MEMORY_RO].prot_pte |= kern_pgprot;
+>   	mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
+>   	mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
+>   	mem_types[MT_ROM].prot_sect |= cp->pmd;
+> @@ -1360,7 +1373,7 @@ static void __init devicemaps_init(const struct machine_desc *mdesc)
+>   		map.pfn = __phys_to_pfn(__atags_pointer & SECTION_MASK);
+>   		map.virtual = FDT_FIXED_BASE;
+>   		map.length = FDT_FIXED_SIZE;
+> -		map.type = MT_ROM;
+> +		map.type = MT_MEMORY_RO;
+>   		create_mapping(&map);
+>   	}
+>   

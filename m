@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF09E54968A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490E5548F05
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346551AbiFMKa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
+        id S1351817AbiFMMMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344563AbiFMK3C (ORCPT
+        with ESMTP id S1359106AbiFMMJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:29:02 -0400
+        Mon, 13 Jun 2022 08:09:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA708255B7;
-        Mon, 13 Jun 2022 03:20:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCA45252F;
+        Mon, 13 Jun 2022 04:00:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D6360B91;
-        Mon, 13 Jun 2022 10:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDA1C34114;
-        Mon, 13 Jun 2022 10:20:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4C16611B3;
+        Mon, 13 Jun 2022 11:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1632C34114;
+        Mon, 13 Jun 2022 11:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115624;
-        bh=g7SB3apUoO7P6BCpj7sZDzJFWpEJqgCZHd9WtGuebqQ=;
+        s=korg; t=1655118025;
+        bh=mKCy2VSksGrDe/nNB/Q3+imgZ7hyqsETHFRAvYagaQ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sLKdtxfa/+kzBF9eggOVSZzkRs+GU3O2XCALuXYm7OgrMWdszruOZ+yDhs3B4IeHK
-         i5mXmnah57kLmF5ZKKrYZmamX6UkLiSz4iYv+ib0RL2QIy0fgRbIbSmsfApComBQeo
-         Eoy6UPIcJRy/eUtieUQxz0YyfbTwhEQmh+SKxaV4=
+        b=ZGofcTRpX3XxW1NHwDokSBkt2OWHn3IGwqAz7e/9w17c8TUSDQi7RqLoidVgjpS2P
+         x/OUKnD1z3pDYYhx0ewBjQdQVIR75cBspztIZ9BIg2GLLB0v/hV0PC4NM4S1hSesYT
+         eeoavsKdnIObuBGVtPOx1oW65HdLVqrM5LmZbdWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Donald Buczek <buczek@molgen.mpg.de>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 152/167] md: protect md_unregister_thread from reentrancy
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 202/287] soc: rockchip: Fix refcount leak in rockchip_grf_init
 Date:   Mon, 13 Jun 2022 12:10:26 +0200
-Message-Id: <20220613094916.572509483@linuxfoundation.org>
+Message-Id: <20220613094929.988994727@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1e267742283a4b5a8ca65755c44166be27e9aa0f ]
+[ Upstream commit 9b59588d8be91c96bfb0371e912ceb4f16315dbf ]
 
-Generally, the md_unregister_thread is called with reconfig_mutex, but
-raid_message in dm-raid doesn't hold reconfig_mutex to unregister thread,
-so md_unregister_thread can be called simulitaneously from two call sites
-in theory.
+of_find_matching_node_and_match returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Then after previous commit which remove the protection of reconfig_mutex
-for md_unregister_thread completely, the potential issue could be worse
-than before.
-
-Let's take pers_lock at the beginning of function to ensure reentrancy.
-
-Reported-by: Donald Buczek <buczek@molgen.mpg.de>
-Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Signed-off-by: Song Liu <song@kernel.org>
+Fixes: 4c58063d4258 ("soc: rockchip: add driver handling grf setup")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220516072013.19731-1-linmq006@gmail.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/md.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/soc/rockchip/grf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 0197d18b5407..9e8373e7e287 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -7254,17 +7254,22 @@ EXPORT_SYMBOL(md_register_thread);
+diff --git a/drivers/soc/rockchip/grf.c b/drivers/soc/rockchip/grf.c
+index 3b81e1d75a97..3e7e999ee324 100644
+--- a/drivers/soc/rockchip/grf.c
++++ b/drivers/soc/rockchip/grf.c
+@@ -151,12 +151,14 @@ static int __init rockchip_grf_init(void)
+ 		return -ENODEV;
+ 	if (!match || !match->data) {
+ 		pr_err("%s: missing grf data\n", __func__);
++		of_node_put(np);
+ 		return -EINVAL;
+ 	}
  
- void md_unregister_thread(struct md_thread **threadp)
- {
--	struct md_thread *thread = *threadp;
--	if (!thread)
--		return;
--	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
--	/* Locking ensures that mddev_unlock does not wake_up a
-+	struct md_thread *thread;
-+
-+	/*
-+	 * Locking ensures that mddev_unlock does not wake_up a
- 	 * non-existent thread
- 	 */
- 	spin_lock(&pers_lock);
-+	thread = *threadp;
-+	if (!thread) {
-+		spin_unlock(&pers_lock);
-+		return;
-+	}
- 	*threadp = NULL;
- 	spin_unlock(&pers_lock);
+ 	grf_info = match->data;
  
-+	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
- 	kthread_stop(thread->tsk);
- 	kfree(thread);
- }
+ 	grf = syscon_node_to_regmap(np);
++	of_node_put(np);
+ 	if (IS_ERR(grf)) {
+ 		pr_err("%s: could not get grf syscon\n", __func__);
+ 		return PTR_ERR(grf);
 -- 
 2.35.1
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14DF54963D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40893548F95
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355728AbiFMLlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
+        id S240278AbiFMNGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354380AbiFMLcZ (ORCPT
+        with ESMTP id S1354394AbiFMMzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:32:25 -0400
+        Mon, 13 Jun 2022 08:55:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE0CB8A;
-        Mon, 13 Jun 2022 03:47:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA67610543;
+        Mon, 13 Jun 2022 04:16:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59CD36112A;
-        Mon, 13 Jun 2022 10:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F01C34114;
-        Mon, 13 Jun 2022 10:47:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59BB060EF1;
+        Mon, 13 Jun 2022 11:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65BBEC34114;
+        Mon, 13 Jun 2022 11:16:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117237;
-        bh=ZvBvAv7kjVo49vs4eozwkRMvE0oHu/7YyhCnQ65kPVE=;
+        s=korg; t=1655118989;
+        bh=T6ZSpYjX9kIN6bdYKRnBTZugulok050C0NWTF+1U8Jk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A4y45ZKV5Nk4m4/Aemz4/TD1TGV1Je7jghublVcLs6sbatnrInp8Bk9csPhVUEoKN
-         7az8vyAl8GjgpErUScWI4a0dhu2qYrTD6jyXrzMpv4BJ2KfXAckstjI00jCKwwL6jD
-         WLFwdA8GrG3yfHdVAocOs8chT6A1Am9oeR0LnhUI=
+        b=CIpNIMmvZt5FzqNKH+veWioQKz1wYo6dHxb1KpODRPz+Bi8KYypigQvZ8+SJjX/LZ
+         UZ6MxQCq7jRZJrK+U5ljYVU0wbX0f0Vwk3j0TVOVaudLg0joXaeG5ssAsJ/Jhw2z7I
+         PUTsuW0Pbx7nBtI87rn1r6EcHc4I9AgHmltGKDbg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Xiao <yu.xiao@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 329/411] nfp: only report pause frame configuration for physical device
+Subject: [PATCH 5.15 100/247] vdpa: ifcvf: set pci driver data in probe
 Date:   Mon, 13 Jun 2022 12:10:02 +0200
-Message-Id: <20220613094938.592298822@linuxfoundation.org>
+Message-Id: <20220613094925.988710920@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Xiao <yu.xiao@corigine.com>
+From: Jason Wang <jasowang@redhat.com>
 
-[ Upstream commit 0649e4d63420ebc8cbebef3e9d39e12ffc5eb9fa ]
+[ Upstream commit bd8bb9aed56b1814784a975e2dfea12a9adcee92 ]
 
-Only report pause frame configuration for physical device. Logical
-port of both PCI PF and PCI VF do not support it.
+We should set the pci driver data in probe instead of the vdpa device
+adding callback. Otherwise if no vDPA device is created we will lose
+the pointer to the management device.
 
-Fixes: 9fdc5d85a8fe ("nfp: update ethtool reporting of pauseframe control")
-Signed-off-by: Yu Xiao <yu.xiao@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 6b5df347c6482 ("vDPA/ifcvf: implement management netlink framework for ifcvf")
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+Message-Id: <20220524055557.1938-1-jasowang@redhat.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/vdpa/ifcvf/ifcvf_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c b/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
-index 89e578e25ff8..10857914c552 100644
---- a/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
-@@ -266,8 +266,6 @@ nfp_net_get_link_ksettings(struct net_device *netdev,
+diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+index 003530b19b4e..4fe8aa13ac68 100644
+--- a/drivers/vdpa/ifcvf/ifcvf_main.c
++++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+@@ -505,7 +505,6 @@ static int ifcvf_vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name)
+ 	}
  
- 	/* Init to unknowns */
- 	ethtool_link_ksettings_add_link_mode(cmd, supported, FIBRE);
--	ethtool_link_ksettings_add_link_mode(cmd, supported, Pause);
--	ethtool_link_ksettings_add_link_mode(cmd, advertising, Pause);
- 	cmd->base.port = PORT_OTHER;
- 	cmd->base.speed = SPEED_UNKNOWN;
- 	cmd->base.duplex = DUPLEX_UNKNOWN;
-@@ -275,6 +273,8 @@ nfp_net_get_link_ksettings(struct net_device *netdev,
- 	port = nfp_port_from_netdev(netdev);
- 	eth_port = nfp_port_get_eth_port(port);
- 	if (eth_port) {
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, Pause);
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, Pause);
- 		cmd->base.autoneg = eth_port->aneg != NFP_ANEG_DISABLED ?
- 			AUTONEG_ENABLE : AUTONEG_DISABLE;
- 		nfp_net_set_fec_link_mode(eth_port, cmd);
+ 	ifcvf_mgmt_dev->adapter = adapter;
+-	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
+ 
+ 	vf = &adapter->vf;
+ 	vf->dev_type = get_dev_type(pdev);
+@@ -620,6 +619,8 @@ static int ifcvf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		goto err;
+ 	}
+ 
++	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
++
+ 	return 0;
+ 
+ err:
 -- 
 2.35.1
 

@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09016549555
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269E55494D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376912AbiFMNTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S1381394AbiFMOGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359839AbiFMNKn (ORCPT
+        with ESMTP id S1380397AbiFMN6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:10:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688464FC5F;
-        Mon, 13 Jun 2022 04:21:38 -0700 (PDT)
+        Mon, 13 Jun 2022 09:58:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6377044A37;
+        Mon, 13 Jun 2022 04:37:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62199B80EB6;
-        Mon, 13 Jun 2022 11:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E674C36B01;
-        Mon, 13 Jun 2022 11:21:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 588A361306;
+        Mon, 13 Jun 2022 11:37:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62346C3411C;
+        Mon, 13 Jun 2022 11:37:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119295;
-        bh=wZu47sFcC5jdshOGv1kURpbz0zahA5vFVM3Yk9qTv2c=;
+        s=korg; t=1655120259;
+        bh=NAIQG1l2FirVUzMbuRQQdkfhzSCBC5Eunt0cXQIbI78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bsRhcXKsoCOciQSQ548d5ORSbWXmVeAAhrhfrgoZTuEerIbVMStljXWP6ptZtCWRI
-         nQUYUxy1D9+bojt2Jsx0uncCP+ki4/tyT8/kvMJRyu2zYo+Idtld2q8F9uLPcLU0GN
-         L0lcWXmBV/6GGWE1j8fjRLJZf3RfXEcA/DM6aSHc=
+        b=iMKNEfh3FvHHdruCOb8135q614zwgSIEqNsHSOHFWYvUGCtHHRiDnoU8mWB9D6kSw
+         arfc4WVK2FJudjDZDnR0AmR212kvXobhigDsbCLYH3IHeHUllwHw7Zh5NGcwJDaJoz
+         wrMYO/0HvNTc596bBYdnsc+fR/uI9BDkuOoF7iKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 211/247] nodemask: Fix return values to be unsigned
-Date:   Mon, 13 Jun 2022 12:11:53 +0200
-Message-Id: <20220613094929.340267224@linuxfoundation.org>
+Subject: [PATCH 5.18 289/339] platform/x86: barco-p50-gpio: Add check for platform_driver_register
+Date:   Mon, 13 Jun 2022 12:11:54 +0200
+Message-Id: <20220613094935.399154218@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,184 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 0dfe54071d7c828a02917b595456bfde1afdddc9 ]
+[ Upstream commit 011881b80ebe773914b59905bce0f5e0ef93e7ba ]
 
-The nodemask routines had mixed return values that provided potentially
-signed return values that could never happen. This was leading to the
-compiler getting confusing about the range of possible return values
-(it was thinking things could be negative where they could not be). Fix
-all the nodemask routines that should be returning unsigned
-(or bool) values. Silences:
+As platform_driver_register() could fail, it should be better
+to deal with the return value in order to maintain the code
+consisitency.
 
- mm/swapfile.c: In function ‘setup_swap_info’:
- mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds of ‘struct plist_node[]’ [-Werror=array-bounds]
-  2291 |                                 p->avail_lists[i].prio = 1;
-       |                                 ~~~~~~~~~~~~~~^~~
- In file included from mm/swapfile.c:16:
- ./include/linux/swap.h:292:27: note: while referencing ‘avail_lists’
-   292 |         struct plist_node avail_lists[]; /*
-       |                           ^~~~~~~~~~~
-
-Reported-by: Christophe de Dinechin <dinechin@redhat.com>
-Link: https://lore.kernel.org/lkml/20220414150855.2407137-3-dinechin@redhat.com/
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Fixes: 86af1d02d458 ("platform/x86: Support for EC-connected GPIOs for identify LED/button on Barco P50 board")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Peter Korsgaard <peter.korsgaard@barco.com>
+Link: https://lore.kernel.org/r/20220526090345.1444172-1-jiasheng@iscas.ac.cn
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/nodemask.h | 38 +++++++++++++++++++-------------------
- lib/nodemask.c           |  4 ++--
- 2 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/platform/x86/barco-p50-gpio.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index c6199dbe2591..0f233b76c9ce 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -42,11 +42,11 @@
-  * void nodes_shift_right(dst, src, n)	Shift right
-  * void nodes_shift_left(dst, src, n)	Shift left
-  *
-- * int first_node(mask)			Number lowest set bit, or MAX_NUMNODES
-- * int next_node(node, mask)		Next node past 'node', or MAX_NUMNODES
-- * int next_node_in(node, mask)		Next node past 'node', or wrap to first,
-+ * unsigned int first_node(mask)	Number lowest set bit, or MAX_NUMNODES
-+ * unsigend int next_node(node, mask)	Next node past 'node', or MAX_NUMNODES
-+ * unsigned int next_node_in(node, mask) Next node past 'node', or wrap to first,
-  *					or MAX_NUMNODES
-- * int first_unset_node(mask)		First node not set in mask, or 
-+ * unsigned int first_unset_node(mask)	First node not set in mask, or
-  *					MAX_NUMNODES
-  *
-  * nodemask_t nodemask_of_node(node)	Return nodemask with bit 'node' set
-@@ -153,7 +153,7 @@ static inline void __nodes_clear(nodemask_t *dstp, unsigned int nbits)
- 
- #define node_test_and_set(node, nodemask) \
- 			__node_test_and_set((node), &(nodemask))
--static inline int __node_test_and_set(int node, nodemask_t *addr)
-+static inline bool __node_test_and_set(int node, nodemask_t *addr)
+diff --git a/drivers/platform/x86/barco-p50-gpio.c b/drivers/platform/x86/barco-p50-gpio.c
+index 05534287bc26..8dd672339485 100644
+--- a/drivers/platform/x86/barco-p50-gpio.c
++++ b/drivers/platform/x86/barco-p50-gpio.c
+@@ -405,11 +405,14 @@ MODULE_DEVICE_TABLE(dmi, dmi_ids);
+ static int __init p50_module_init(void)
  {
- 	return test_and_set_bit(node, addr->bits);
- }
-@@ -200,7 +200,7 @@ static inline void __nodes_complement(nodemask_t *dstp,
+ 	struct resource res = DEFINE_RES_IO(P50_GPIO_IO_PORT_BASE, P50_PORT_CMD + 1);
++	int ret;
  
- #define nodes_equal(src1, src2) \
- 			__nodes_equal(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_equal(const nodemask_t *src1p,
-+static inline bool __nodes_equal(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_equal(src1p->bits, src2p->bits, nbits);
-@@ -208,7 +208,7 @@ static inline int __nodes_equal(const nodemask_t *src1p,
+ 	if (!dmi_first_match(dmi_ids))
+ 		return -ENODEV;
  
- #define nodes_intersects(src1, src2) \
- 			__nodes_intersects(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_intersects(const nodemask_t *src1p,
-+static inline bool __nodes_intersects(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_intersects(src1p->bits, src2p->bits, nbits);
-@@ -216,20 +216,20 @@ static inline int __nodes_intersects(const nodemask_t *src1p,
+-	platform_driver_register(&p50_gpio_driver);
++	ret = platform_driver_register(&p50_gpio_driver);
++	if (ret)
++		return ret;
  
- #define nodes_subset(src1, src2) \
- 			__nodes_subset(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_subset(const nodemask_t *src1p,
-+static inline bool __nodes_subset(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_subset(src1p->bits, src2p->bits, nbits);
- }
- 
- #define nodes_empty(src) __nodes_empty(&(src), MAX_NUMNODES)
--static inline int __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
-+static inline bool __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_empty(srcp->bits, nbits);
- }
- 
- #define nodes_full(nodemask) __nodes_full(&(nodemask), MAX_NUMNODES)
--static inline int __nodes_full(const nodemask_t *srcp, unsigned int nbits)
-+static inline bool __nodes_full(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_full(srcp->bits, nbits);
- }
-@@ -260,15 +260,15 @@ static inline void __nodes_shift_left(nodemask_t *dstp,
-           > MAX_NUMNODES, then the silly min_ts could be dropped. */
- 
- #define first_node(src) __first_node(&(src))
--static inline int __first_node(const nodemask_t *srcp)
-+static inline unsigned int __first_node(const nodemask_t *srcp)
- {
--	return min_t(int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
-+	return min_t(unsigned int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
- }
- 
- #define next_node(n, src) __next_node((n), &(src))
--static inline int __next_node(int n, const nodemask_t *srcp)
-+static inline unsigned int __next_node(int n, const nodemask_t *srcp)
- {
--	return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
-+	return min_t(unsigned int, MAX_NUMNODES, find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
- }
- 
- /*
-@@ -276,7 +276,7 @@ static inline int __next_node(int n, const nodemask_t *srcp)
-  * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
-  */
- #define next_node_in(n, src) __next_node_in((n), &(src))
--int __next_node_in(int node, const nodemask_t *srcp);
-+unsigned int __next_node_in(int node, const nodemask_t *srcp);
- 
- static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- {
-@@ -296,9 +296,9 @@ static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- })
- 
- #define first_unset_node(mask) __first_unset_node(&(mask))
--static inline int __first_unset_node(const nodemask_t *maskp)
-+static inline unsigned int __first_unset_node(const nodemask_t *maskp)
- {
--	return min_t(int,MAX_NUMNODES,
-+	return min_t(unsigned int, MAX_NUMNODES,
- 			find_first_zero_bit(maskp->bits, MAX_NUMNODES));
- }
- 
-@@ -435,11 +435,11 @@ static inline int num_node_state(enum node_states state)
- 
- #define first_online_node	first_node(node_states[N_ONLINE])
- #define first_memory_node	first_node(node_states[N_MEMORY])
--static inline int next_online_node(int nid)
-+static inline unsigned int next_online_node(int nid)
- {
- 	return next_node(nid, node_states[N_ONLINE]);
- }
--static inline int next_memory_node(int nid)
-+static inline unsigned int next_memory_node(int nid)
- {
- 	return next_node(nid, node_states[N_MEMORY]);
- }
-diff --git a/lib/nodemask.c b/lib/nodemask.c
-index 3aa454c54c0d..e22647f5181b 100644
---- a/lib/nodemask.c
-+++ b/lib/nodemask.c
-@@ -3,9 +3,9 @@
- #include <linux/module.h>
- #include <linux/random.h>
- 
--int __next_node_in(int node, const nodemask_t *srcp)
-+unsigned int __next_node_in(int node, const nodemask_t *srcp)
- {
--	int ret = __next_node(node, srcp);
-+	unsigned int ret = __next_node(node, srcp);
- 
- 	if (ret == MAX_NUMNODES)
- 		ret = __first_node(srcp);
+ 	gpio_pdev = platform_device_register_simple(DRIVER_NAME, PLATFORM_DEVID_NONE, &res, 1);
+ 	if (IS_ERR(gpio_pdev)) {
 -- 
 2.35.1
 

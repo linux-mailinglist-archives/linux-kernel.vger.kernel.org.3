@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9635496BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1175496AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379900AbiFMN5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S1359009AbiFMNJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379757AbiFMNxP (ORCPT
+        with ESMTP id S1357318AbiFMM6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:53:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B236AA49;
-        Mon, 13 Jun 2022 04:33:43 -0700 (PDT)
+        Mon, 13 Jun 2022 08:58:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55BA2BEB;
+        Mon, 13 Jun 2022 04:17:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9285B61037;
-        Mon, 13 Jun 2022 11:33:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C34C3411C;
-        Mon, 13 Jun 2022 11:33:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66A3160B60;
+        Mon, 13 Jun 2022 11:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B905C3411C;
+        Mon, 13 Jun 2022 11:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120023;
-        bh=Gz5KKxSoQqdqXxpnd/NNBuLB+Maj7zOsdY6zfhd9yW8=;
+        s=korg; t=1655119064;
+        bh=Lz1feZx4k0vGpdzPrMBkSjZPNGG86nxQQ3odhQoYv9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oT+n4r6X43I0QAIEfu9K3ZLAiGL5m+4E0zA2CaJkm7GNZfIsJSeTXlA0v3Ko07fra
-         aw2wQRXilwbL5abucHXqSUZPWD7JA9sQMlWPVsQwLFB4TVdVkG8WUs0ScMYqWuK+KE
-         l0Vq0j+i2t7cjQm7NwwUBEOVA1+eSyPg1obUjZ0I=
+        b=Hkw2D7cXAUldvTjQ8SyZgkY61LmujZyAXIjmVGCrhuPthnQIKdYs+yLIOwhYgYS9Y
+         yVYvWXkFdk0/59C8+O8un2sUvfeZVu6/EYcZSfx9kIknwcJthgI7QLSHkkUMp5skP6
+         qxSIdZQ9dtXYcxjR51QeAXkXivLJ0Ln7jxAEU5Ps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Ungerer <gerg@linux-m68k.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 203/339] xsk: Fix handling of invalid descriptors in XSK TX batching API
-Date:   Mon, 13 Jun 2022 12:10:28 +0200
-Message-Id: <20220613094932.821168595@linuxfoundation.org>
+Subject: [PATCH 5.15 127/247] m68knommu: fix undefined reference to `mach_get_rtc_pll
+Date:   Mon, 13 Jun 2022 12:10:29 +0200
+Message-Id: <20220613094926.812341729@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,83 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Greg Ungerer <gerg@linux-m68k.org>
 
-[ Upstream commit d678cbd2f867a564a3c5b276c454e873f43f02f8 ]
+[ Upstream commit 1300eec9e51f23c34c4487d2b06f58ca22e1ad3d ]
 
-xdpxceiver run on a AF_XDP ZC enabled driver revealed a problem with XSK
-Tx batching API. There is a test that checks how invalid Tx descriptors
-are handled by AF_XDP. Each valid descriptor is followed by invalid one
-on Tx side whereas the Rx side expects only to receive a set of valid
-descriptors.
+Configuring for a nommu classic m68k target and enabling the generic rtc
+driver (CONFIG_RTC_DRV_GENERIC) will result in the following compile
+error:
 
-In current xsk_tx_peek_release_desc_batch() function, the amount of
-available descriptors is hidden inside xskq_cons_peek_desc_batch(). This
-can be problematic in cases where invalid descriptors are present due to
-the fact that xskq_cons_peek_desc_batch() returns only a count of valid
-descriptors. This means that it is impossible to properly update XSK
-ring state when calling xskq_cons_release_n().
+   m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+   time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
 
-To address this issue, pull out the contents of
-xskq_cons_peek_desc_batch() so that callers (currently only
-xsk_tx_peek_release_desc_batch()) will always be able to update the
-state of ring properly, as total count of entries is now available and
-use this value as an argument in xskq_cons_release_n(). By
-doing so, xskq_cons_peek_desc_batch() can be dropped altogether.
+There are no definitions of "mach_set_rtc_pll" and "mach_get_rtc_pll" in the
+nommu code paths. Move these definitions and the associated "mach_hwclk",
+so that they are around their use case in time.c. This means they will
+always be defined on the builds that require them, and not on those that
+cannot use them - such as ColdFire (both with and without MMU enabled).
 
-Fixes: 9349eb3a9d2a ("xsk: Introduce batched Tx descriptor interfaces")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Link: https://lore.kernel.org/bpf/20220607142200.576735-1-maciej.fijalkowski@intel.com
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xsk.c       | 5 +++--
- net/xdp/xsk_queue.h | 8 --------
- 2 files changed, 3 insertions(+), 10 deletions(-)
+ arch/m68k/kernel/setup_mm.c | 7 -------
+ arch/m68k/kernel/setup_no.c | 1 -
+ arch/m68k/kernel/time.c     | 9 +++++++++
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 3a9348030e20..d6bcdbfd0fc5 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -373,7 +373,8 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
- 		goto out;
- 	}
+diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
+index 4b51bfd38e5f..f24410a54dcb 100644
+--- a/arch/m68k/kernel/setup_mm.c
++++ b/arch/m68k/kernel/setup_mm.c
+@@ -87,15 +87,8 @@ void (*mach_sched_init) (void) __initdata = NULL;
+ void (*mach_init_IRQ) (void) __initdata = NULL;
+ void (*mach_get_model) (char *model);
+ void (*mach_get_hardware_list) (struct seq_file *m);
+-/* machine dependent timer functions */
+-int (*mach_hwclk) (int, struct rtc_time*);
+-EXPORT_SYMBOL(mach_hwclk);
+ unsigned int (*mach_get_ss)(void);
+-int (*mach_get_rtc_pll)(struct rtc_pll_info *);
+-int (*mach_set_rtc_pll)(struct rtc_pll_info *);
+ EXPORT_SYMBOL(mach_get_ss);
+-EXPORT_SYMBOL(mach_get_rtc_pll);
+-EXPORT_SYMBOL(mach_set_rtc_pll);
+ void (*mach_reset)( void );
+ void (*mach_halt)( void );
+ void (*mach_power_off)( void );
+diff --git a/arch/m68k/kernel/setup_no.c b/arch/m68k/kernel/setup_no.c
+index 5e4104f07a44..19eea73d3c17 100644
+--- a/arch/m68k/kernel/setup_no.c
++++ b/arch/m68k/kernel/setup_no.c
+@@ -50,7 +50,6 @@ char __initdata command_line[COMMAND_LINE_SIZE];
  
--	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, pool, max_entries);
-+	max_entries = xskq_cons_nb_entries(xs->tx, max_entries);
-+	nb_pkts = xskq_cons_read_desc_batch(xs->tx, pool, max_entries);
- 	if (!nb_pkts) {
- 		xs->tx->queue_empty_descs++;
- 		goto out;
-@@ -389,7 +390,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
- 	if (!nb_pkts)
- 		goto out;
+ /* machine dependent timer functions */
+ void (*mach_sched_init)(void) __initdata = NULL;
+-int (*mach_hwclk) (int, struct rtc_time*);
  
--	xskq_cons_release_n(xs->tx, nb_pkts);
-+	xskq_cons_release_n(xs->tx, max_entries);
- 	__xskq_cons_release(xs->tx);
- 	xs->sk.sk_write_space(&xs->sk);
+ /* machine dependent reboot functions */
+ void (*mach_reset)(void);
+diff --git a/arch/m68k/kernel/time.c b/arch/m68k/kernel/time.c
+index 340ffeea0a9d..a97600b2af50 100644
+--- a/arch/m68k/kernel/time.c
++++ b/arch/m68k/kernel/time.c
+@@ -63,6 +63,15 @@ void timer_heartbeat(void)
+ #endif /* CONFIG_HEARTBEAT */
  
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 801cda5d1938..64b43f31942f 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -282,14 +282,6 @@ static inline bool xskq_cons_peek_desc(struct xsk_queue *q,
- 	return xskq_cons_read_desc(q, desc, pool);
- }
- 
--static inline u32 xskq_cons_peek_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
--					    u32 max)
--{
--	u32 entries = xskq_cons_nb_entries(q, max);
--
--	return xskq_cons_read_desc_batch(q, pool, entries);
--}
--
- /* To improve performance in the xskq_cons_release functions, only update local state here.
-  * Reflect this to global state when we get new entries from the ring in
-  * xskq_cons_get_entries() and whenever Rx or Tx processing are completed in the NAPI loop.
+ #ifdef CONFIG_M68KCLASSIC
++/* machine dependent timer functions */
++int (*mach_hwclk) (int, struct rtc_time*);
++EXPORT_SYMBOL(mach_hwclk);
++
++int (*mach_get_rtc_pll)(struct rtc_pll_info *);
++int (*mach_set_rtc_pll)(struct rtc_pll_info *);
++EXPORT_SYMBOL(mach_get_rtc_pll);
++EXPORT_SYMBOL(mach_set_rtc_pll);
++
+ #if !IS_BUILTIN(CONFIG_RTC_DRV_GENERIC)
+ void read_persistent_clock64(struct timespec64 *ts)
+ {
 -- 
 2.35.1
 

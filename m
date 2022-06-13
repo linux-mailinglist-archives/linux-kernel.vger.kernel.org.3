@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0395486D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD08548687
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351673AbiFMLLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        id S1379962AbiFMN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351744AbiFMLIC (ORCPT
+        with ESMTP id S1380258AbiFMNx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:08:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3637D33A04;
-        Mon, 13 Jun 2022 03:35:14 -0700 (PDT)
+        Mon, 13 Jun 2022 09:53:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904D27DE1D;
+        Mon, 13 Jun 2022 04:34:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64CF5B80E93;
-        Mon, 13 Jun 2022 10:35:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D37B9C36AFE;
-        Mon, 13 Jun 2022 10:35:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BDE7612D0;
+        Mon, 13 Jun 2022 11:34:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3898AC34114;
+        Mon, 13 Jun 2022 11:34:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116503;
-        bh=jdxYV56eY7XhApEmOlDXD1XspYqjrLg6jh431dpAOcQ=;
+        s=korg; t=1655120059;
+        bh=FW/I7BVkoeE8In3t2dtd44ke8+0eARmdPhzZXUroxaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fx2kVZVypyHujTft7z+y9VjZyCEXAMFm3GCk3s/AOaeAVv6mvc/0hqT2KJxjUoaF4
-         6cA8eYPmimihVTlQJ5/FhupnetP8Hcnj337fC14KEXKAWO5cMDZJAovNzae6mMoXbd
-         G9n6sewi/38GXL8hNRaj6cCxP9nqZuxzTA1JQks8=
+        b=Zhy8OVpiJjt5Uy7+J+hqv/f472BEzXwRoztJsoB2e/Zf07xGD051ncBsukVaoBapx
+         BOGECYHsMSmpqUN+lpvXhXQFwJt6rSVCo29KgIgb0VFwp6rD1jAZypxxhvS1Ajn61o
+         ALk6JjiTFJ25FFYfy7FypJHgBKecA79im9ZkdGdk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 203/218] nbd: fix io hung while disconnecting device
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 236/339] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
 Date:   Mon, 13 Jun 2022 12:11:01 +0200
-Message-Id: <20220613094926.779729747@linuxfoundation.org>
+Message-Id: <20220613094933.815191697@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,76 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 09dadb5985023e27d4740ebd17e6fea4640110e5 ]
+[ Upstream commit 62b2caef400c1738b6d22f636c628d9f85cd4c4c ]
 
-In our tests, "qemu-nbd" triggers a io hung:
+There is a deadlock in sa1100_set_termios(), which is shown
+below:
 
-INFO: task qemu-nbd:11445 blocked for more than 368 seconds.
-      Not tainted 5.18.0-rc3-next-20220422-00003-g2176915513ca #884
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:qemu-nbd        state:D stack:    0 pid:11445 ppid:     1 flags:0x00000000
-Call Trace:
- <TASK>
- __schedule+0x480/0x1050
- ? _raw_spin_lock_irqsave+0x3e/0xb0
- schedule+0x9c/0x1b0
- blk_mq_freeze_queue_wait+0x9d/0xf0
- ? ipi_rseq+0x70/0x70
- blk_mq_freeze_queue+0x2b/0x40
- nbd_add_socket+0x6b/0x270 [nbd]
- nbd_ioctl+0x383/0x510 [nbd]
- blkdev_ioctl+0x18e/0x3e0
- __x64_sys_ioctl+0xac/0x120
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fd8ff706577
-RSP: 002b:00007fd8fcdfebf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000040000000 RCX: 00007fd8ff706577
-RDX: 000000000000000d RSI: 000000000000ab00 RDI: 000000000000000f
-RBP: 000000000000000f R08: 000000000000fbe8 R09: 000055fe497c62b0
-R10: 00000002aff20000 R11: 0000000000000246 R12: 000000000000006d
-R13: 0000000000000000 R14: 00007ffe82dc5e70 R15: 00007fd8fcdff9c0
+   (Thread 1)              |      (Thread 2)
+                           | sa1100_enable_ms()
+sa1100_set_termios()       |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | sa1100_timeout()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-"qemu-ndb -d" will call ioctl 'NBD_DISCONNECT' first, however, following
-message was found:
+We hold sport->port.lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need sport->port.lock in position (2) of thread 2. As a result,
+sa1100_set_termios() will block forever.
 
-block nbd0: Send disconnect failed -32
+This patch moves del_timer_sync() before spin_lock_irqsave()
+in order to prevent the deadlock.
 
-Which indicate that something is wrong with the server. Then,
-"qemu-nbd -d" will call ioctl 'NBD_CLEAR_SOCK', however ioctl can't clear
-requests after commit 2516ab1543fd("nbd: only clear the queue on device
-teardown"). And in the meantime, request can't complete through timeout
-because nbd_xmit_timeout() will always return 'BLK_EH_RESET_TIMER', which
-means such request will never be completed in this situation.
-
-Now that the flag 'NBD_CMD_INFLIGHT' can make sure requests won't
-complete multiple times, switch back to call nbd_clear_sock() in
-nbd_clear_sock_ioctl(), so that inflight requests can be cleared.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20220521073749.3146892-5-yukuai3@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417111626.7802-1-duoming@zju.edu.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/sa1100.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 9596f93d98b2..338d02a67afb 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1275,7 +1275,7 @@ static int nbd_start_device_ioctl(struct nbd_device *nbd, struct block_device *b
- static void nbd_clear_sock_ioctl(struct nbd_device *nbd,
- 				 struct block_device *bdev)
- {
--	sock_shutdown(nbd);
-+	nbd_clear_sock(nbd);
- 	__invalidate_device(bdev, true);
- 	nbd_bdev_reset(bdev);
- 	if (test_and_clear_bit(NBD_HAS_CONFIG_REF,
+diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+index 5fe6cccfc1ae..e64e42a19d1a 100644
+--- a/drivers/tty/serial/sa1100.c
++++ b/drivers/tty/serial/sa1100.c
+@@ -446,6 +446,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
+ 	quot = uart_get_divisor(port, baud);
+ 
++	del_timer_sync(&sport->timer);
++
+ 	spin_lock_irqsave(&sport->port.lock, flags);
+ 
+ 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
+@@ -476,8 +478,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 				UTSR1_TO_SM(UTSR1_ROR);
+ 	}
+ 
+-	del_timer_sync(&sport->timer);
+-
+ 	/*
+ 	 * Update the per-port timeout.
+ 	 */
 -- 
 2.35.1
 

@@ -2,129 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6581454A110
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BC654A10E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352183AbiFMVOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S235012AbiFMVOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352090AbiFMVNI (ORCPT
+        with ESMTP id S1351816AbiFMVNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:13:08 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80F2393DF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:52:41 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id q11so9153918oih.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:52:41 -0700 (PDT)
+        Mon, 13 Jun 2022 17:13:17 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7241942A1D;
+        Mon, 13 Jun 2022 13:53:09 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bg6so13503084ejb.0;
+        Mon, 13 Jun 2022 13:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ie2xrfdugqSnUY/lUmZJBYqEw/Jj5HQgDROYZDI7Ljg=;
-        b=q8Sos2zHH2cqeJpqAWGopwq4BFpy5d162ZHvWsGBGzD8dXmnX4TsH4oGd9xtjxFj3k
-         kkiT7ORHTaWO7TVdzrFrUtvSJwyodFHKf3kDLk5zfyB6+Q4t7bACoSZoThK4QulFXt66
-         4eu47sTHknmVkiiSbjTEY+HxauLbTxzPeZ3t8=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0xKpA2CkarcNm8NsicwZmWQkXSJdlfuX89TYCY5IOVo=;
+        b=oqcBeVuuOMRJM412U3KFCHQa2M87fcxpRnxTqck08gJQDouywpryfANrktU2bzTpFl
+         fsd1PpSOY3yl1qhqTmYGgpebhL0fZQk5JejqxS4kHZJPGxXieBsaGZgWRYC8IkhYJqZh
+         ueGwr+q0B7dEVqMyenU1G8A3iOt7yHSiRqN1gKyA6OySiWaxwsgiKg4xobRn2m2xgN9L
+         PF1cdR1mlZyG0pNLiDxgUQHDpgxWuY1TcsM5HWYgAXIKM34kElxXrTKcOd94PT5IMdd5
+         PXBxlmbyTMjE1mQOwAw3YJIKodTKz5uLmBLvnaVTXDoPzwJh3RnHoqVInxNL4eyJBJZd
+         EgEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ie2xrfdugqSnUY/lUmZJBYqEw/Jj5HQgDROYZDI7Ljg=;
-        b=2BTagNmBRGJKz/ZTRxxdjqJTzA/79KBvd8kRgwKLGEXSwrqp8MDigqb+uLTFATWVn0
-         zhdPb7sy3W4CLmN+ssYS8jRFXcCTAurin51vg+4ZxhBAf923rcLPBfOhiXBVCbbRlZNL
-         UqnK3UC0ZLtQu4gpLSVaywfwUxZuLhDa4SxEnMELatRnDN1jmgJwJ6CM/iEZwu22shFI
-         ++n4u1cGVXP+spHifOqH8ZwxsEECmss5pvPPEs7K7kioh7tlWKb65priM065pa3+RIka
-         W4nSQaZ+euFdODEBEcUJaWSQHAz6aDNEgLPu89LSr6fO/9cwfe3je4hSczNAK7kDvlrX
-         Cz2w==
-X-Gm-Message-State: AOAM531+gspUQfDPTzRz97z4rQH/BlZdnSfK3vL4miik1O7Ok0xDWIr+
-        PRlDKk81HOxg+zjIPEp9CvkFKA==
-X-Google-Smtp-Source: ABdhPJxwqO943xteTGAgFieA/vZp5/Zn/6Qxyj5rF6Le0Sf8rKMQHGa/+OpWxWOapQGjDXa0MQVMLw==
-X-Received: by 2002:a05:6808:2394:b0:326:d5d6:a4ba with SMTP id bp20-20020a056808239400b00326d5d6a4bamr321996oib.67.1655153561069;
-        Mon, 13 Jun 2022 13:52:41 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id dv8-20020a056870d88800b000f5eb6b409bsm4444747oab.45.2022.06.13.13.52.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 13:52:40 -0700 (PDT)
-Message-ID: <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com>
-Date:   Mon, 13 Jun 2022 15:52:38 -0500
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0xKpA2CkarcNm8NsicwZmWQkXSJdlfuX89TYCY5IOVo=;
+        b=zESkymhMT1LM2CixGurHFWZGGoIz5J1wmKIu95gEcytUcdPj6FrmcfZBihcb1MZ4Bw
+         6bsbUDRx9aFjbCiJFg4Ow/mNvfdl3CvmsrYdwhar/xUoMbH7PBgOukX4ghMDWSD7dsQi
+         QBumx4kBDa3YdozoFfX4ecu7CVofcjNjxOuEiQXN06gVXv9yGRCgCcE0t3Ub5HANBMqZ
+         1lIx2HmvzLU2Npe5ChSKDAl+BJXnggiYUKZ1hjHRYq4x/Rn3OjyWcwLn+2Zal6FZP4kQ
+         SJFAthFxJ3T3ujxj2C4ykX6TaiPjJuG8O1KeLXwU7+K4Wqg8HT9FeePpGzADNgZDl8Pg
+         ByqA==
+X-Gm-Message-State: AOAM533AvZCkzo3gMnREBQNeaR5BllSHoiou4LKIoE9iFRNcZVSAz6y0
+        FAnN1D3YdVcgvWWfVHukdZSlOCYa93x23Q==
+X-Google-Smtp-Source: ABdhPJwfkzRmgw0YzkxGU9voWfn/nUs7UdNN6/bLuU+oxejU3G6rzltetr68M0tPwtfEuI1tzCNTQw==
+X-Received: by 2002:a17:906:a383:b0:6f5:132c:1a14 with SMTP id k3-20020a170906a38300b006f5132c1a14mr1410151ejz.21.1655153587911;
+        Mon, 13 Jun 2022 13:53:07 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id gl6-20020a170906e0c600b006fec63e564bsm4224434ejb.30.2022.06.13.13.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 13:53:07 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: Re: [PATCH 1/2] ARM: dts: sunxi: Use constants for RTC clock indexes
+Date:   Mon, 13 Jun 2022 22:53:06 +0200
+Message-ID: <2632539.mvXUDI8C0e@kista>
+In-Reply-To: <5831557.lOV4Wx5bFT@kista>
+References: <20220607012438.18183-1-samuel@sholland.org> <5831557.lOV4Wx5bFT@kista>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        keyrings@vger.kernel.org, selinux@vger.kernel.org,
-        serge@hallyn.com, amir73il@gmail.com, kernel-team@cloudflare.com,
-        Jeff Moyer <jmoyer@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-References: <20220608150942.776446-1-fred@cloudflare.com>
- <87tu8oze94.fsf@email.froward.int.ebiederm.org>
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <87tu8oze94.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Dne nedelja, 12. junij 2022 ob 22:45:47 CEST je Jernej =C5=A0krabec napisal=
+(a):
+> Dne torek, 07. junij 2022 ob 03:24:37 CEST je Samuel Holland napisal(a):
+> > The binding header provides descriptive names for the RTC clock indexes,
+> > since the indexes were arbitrarily chosen by the binding, not by the
+> > hardware. Let's use the names, so the meaning is clearer.
+> >=20
+> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+>=20
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-On 6/13/22 12:04 PM, Eric W. Biederman wrote:
-> Frederick Lawler <fred@cloudflare.com> writes:
-> 
->> While experimenting with the security_prepare_creds() LSM hook, we
->> noticed that our EPERM error code was not propagated up the callstack.
->> Instead ENOMEM is always returned.  As a result, some tools may send a
->> confusing error message to the user:
->>
->> $ unshare -rU
->> unshare: unshare failed: Cannot allocate memory
->>
->> A user would think that the system didn't have enough memory, when
->> instead the action was denied.
->>
->> This problem occurs because prepare_creds() and prepare_kernel_cred()
->> return NULL when security_prepare_creds() returns an error code. Later,
->> functions calling prepare_creds() and prepare_kernel_cred() return
->> ENOMEM because they assume that a NULL meant there was no memory
->> allocated.
->>
->> Fix this by propagating an error code from security_prepare_creds() up
->> the callstack.
-> 
-> Why would it make sense for security_prepare_creds to return an error
-> code other than ENOMEM?
->  > That seems a bit of a violation of what that function is supposed to do
->
+Applied both, thanks!
 
-The API allows LSM authors to decide what error code is returned from 
-the cred_prepare hook. security_task_alloc() is a similar hook, and has 
-its return code propagated.
+Best regards,
+Jernej
 
-I'm proposing we follow security_task_allocs() pattern, and add 
-visibility for failure cases in prepare_creds().
-
-> I have probably missed a very interesting discussion where that was
-> mentioned but I don't see link to the discussion or anything explaining
-> why we want to do that in this change.
-> 
-
-AFAIK, this is the start of the discussion.
-
-> Eric
-> 
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B105487F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542925486CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359196AbiFMMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S1350504AbiFMLBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359236AbiFMMFc (ORCPT
+        with ESMTP id S1350223AbiFMKyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37212611E;
-        Mon, 13 Jun 2022 03:59:47 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E5855B8;
+        Mon, 13 Jun 2022 03:30:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 584F0B80E93;
-        Mon, 13 Jun 2022 10:59:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E32C34114;
-        Mon, 13 Jun 2022 10:59:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9863560F09;
+        Mon, 13 Jun 2022 10:30:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC393C34114;
+        Mon, 13 Jun 2022 10:30:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117984;
-        bh=soJ/Lp0mYEdmHuiQSIXPEH2zl0L9SqY1vManfWUOxD8=;
+        s=korg; t=1655116226;
+        bh=t5HIl67g2jwSScHPwn9iUau0Gi2bGRH/gEUJaM81zWk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pAgXhi/sOxtYcQiaqi6xCNIZeBsyYtjGl8AqT6y+pfzw8scBp9SXrVB1nJ9b2uM80
-         1PR7LWaatlUGAdMCjIbg3mj1kYgc5SGUJ9oBSQB2PYvZRE6Z4A2HXTP+yfOWKkYmu8
-         8w2RusLnr+JVedFw/nl+FEg83vfwdYnR0EjHlgnM=
+        b=ynqDCNVZmwT/zGMAoPbyJ0jG/jKXDoqnMduquzyQ88cwVP0WhklISwbnNmZDY/3sa
+         O92y45eX661UiHpCNrkQAjYDa10hxZ9eNu5UJMa5qeqFvt3fR/Q/5Gq4yGE6VaXCeT
+         /EMFZ7w8eRDP2ld6TN4b8194BgFfVxcpjGuVPSTs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>, Coly Li <colyli@suse.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.19 188/287] md: bcache: check the return value of kzalloc() in detached_dev_do_request()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 154/218] serial: sh-sci: Dont allow CS5-6
 Date:   Mon, 13 Jun 2022 12:10:12 +0200
-Message-Id: <20220613094929.568061189@linuxfoundation.org>
+Message-Id: <20220613094925.264540003@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
+[ Upstream commit 9b87162de8be26bf3156460b37deee6399fd0fcb ]
 
-The function kzalloc() in detached_dev_do_request() can fail, so its
-return value should be checked.
+Only CS7 and CS8 seem supported but CSIZE is not sanitized from
+CS5 or CS6 to CS8.
 
-Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: Coly Li <colyli@suse.de>
-Link: https://lore.kernel.org/r/20220527152818.27545-4-colyli@suse.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
+
+Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-6-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/bcache/request.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/tty/serial/sh-sci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/md/bcache/request.c
-+++ b/drivers/md/bcache/request.c
-@@ -1102,6 +1102,12 @@ static void detached_dev_do_request(stru
- 	 * which would call closure_get(&dc->disk.cl)
- 	 */
- 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
-+	if (!ddip) {
-+		bio->bi_status = BLK_STS_RESOURCE;
-+		bio->bi_end_io(bio);
-+		return;
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 21f81dc08139..f7dd843a3eff 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -2267,8 +2267,12 @@ static void sci_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	unsigned long max_freq = 0;
+ 	int best_clk = -1;
+ 
+-	if ((termios->c_cflag & CSIZE) == CS7)
++	if ((termios->c_cflag & CSIZE) == CS7) {
+ 		smr_val |= SCSMR_CHR;
++	} else {
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
 +	}
-+
- 	ddip->d = d;
- 	ddip->start_time = jiffies;
- 	ddip->bi_end_io = bio->bi_end_io;
+ 	if (termios->c_cflag & PARENB)
+ 		smr_val |= SCSMR_PE;
+ 	if (termios->c_cflag & PARODD)
+-- 
+2.35.1
+
 
 

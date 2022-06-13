@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2FC5498E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AAD549728
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358302AbiFMMCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S1382364AbiFMOR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358287AbiFML7v (ORCPT
+        with ESMTP id S1381904AbiFMOJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:59:51 -0400
+        Mon, 13 Jun 2022 10:09:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E83D4ECF5;
-        Mon, 13 Jun 2022 03:56:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C367994CB;
+        Mon, 13 Jun 2022 04:41:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 813CB61372;
-        Mon, 13 Jun 2022 10:56:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E70C34114;
-        Mon, 13 Jun 2022 10:56:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C2A260EAE;
+        Mon, 13 Jun 2022 11:41:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78265C34114;
+        Mon, 13 Jun 2022 11:41:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117804;
-        bh=BsecvjSZwvGK55sDF6oogUuZm6eTKn5sBosmydNJiYA=;
+        s=korg; t=1655120501;
+        bh=OvlDMLQLOH5d3ypaCZ86PeQ/s4W7BSd2C5aVrUGyOXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fE02NaBm+c9CjjX3/DMAKqnM9hJcIQyFyGbs9rzwkgZ1FEZbhLCrH5SmUmR4KsdfW
-         F1Q1OE0JgffnQ1+pWLfeeiaoLPgOlE9mLL1B3uW1s0uHeT2D5D08jmXkTZB+1MwZvN
-         Z62TyPM2f0PS/gHkUglFSBzVFIn4Qx3vAQb61RZA=
+        b=lrknFE9p07YPtgBv3HcGX/PCl6Qd0BKgqtDa4NqKpyivK58SedT6OlZcINzHh416E
+         GVao5J3h1+1jTBd2mDbFyPl0N8QwqY14X5SD+W+8GMYnlwqyikmxhmgRYx0QIj6wcP
+         x7UQfXOMPAz4ObP+nLV0XmcVcP43zRBdwKGlmTfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
-        hui li <juanfengpy@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 125/287] proc: fix dentry/inode overinstantiating under /proc/${pid}/net
+Subject: [PATCH 5.17 055/298] staging: r8188eu: add check for kzalloc
 Date:   Mon, 13 Jun 2022 12:09:09 +0200
-Message-Id: <20220613094927.670547213@linuxfoundation.org>
+Message-Id: <20220613094926.618832360@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,59 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Dobriyan <adobriyan@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 7055197705709c59b8ab77e6a5c7d46d61edd96e ]
+[ Upstream commit f94b47c6bde624d6c07f43054087607c52054a95 ]
 
-When a process exits, /proc/${pid}, and /proc/${pid}/net dentries are
-flushed.  However some leaf dentries like /proc/${pid}/net/arp_cache
-aren't.  That's because respective PDEs have proc_misc_d_revalidate() hook
-which returns 1 and leaves dentries/inodes in the LRU.
+As kzalloc() may return null pointer, it should be better to
+check the return value and return error if fails in order
+to avoid dereference of null pointer.
+Moreover, the return value of rtw_alloc_hwxmits() should also
+be dealt with.
 
-Force revalidation/lookup on everything under /proc/${pid}/net by
-inheriting proc_net_dentry_ops.
-
-[akpm@linux-foundation.org: coding-style cleanups]
-Link: https://lkml.kernel.org/r/YjdVHgildbWO7diJ@localhost.localdomain
-Fixes: c6c75deda813 ("proc: fix lookup in /proc/net subdirectories after setns(2)")
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-Reported-by: hui li <juanfengpy@gmail.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220518075957.514603-1-jiasheng@iscas.ac.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/proc/generic.c  | 3 +++
- fs/proc/proc_net.c | 3 +++
- 2 files changed, 6 insertions(+)
+ drivers/staging/r8188eu/core/rtw_xmit.c    | 13 +++++++++++--
+ drivers/staging/r8188eu/include/rtw_xmit.h |  2 +-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/fs/proc/generic.c b/fs/proc/generic.c
-index bab10368a04d..d8b3c6a7173f 100644
---- a/fs/proc/generic.c
-+++ b/fs/proc/generic.c
-@@ -445,6 +445,9 @@ static struct proc_dir_entry *__proc_create(struct proc_dir_entry **parent,
- 	proc_set_user(ent, (*parent)->uid, (*parent)->gid);
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index 8503059edc46..f4e9f6102539 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -179,7 +179,12 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
  
- 	ent->proc_dops = &proc_misc_dentry_ops;
-+	/* Revalidate everything under /proc/${pid}/net */
-+	if ((*parent)->proc_dops == &proc_net_dentry_ops)
-+		pde_force_lookup(ent);
+ 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
  
- out:
- 	return ent;
-diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
-index 096bcc1e7a8a..68ce173d5590 100644
---- a/fs/proc/proc_net.c
-+++ b/fs/proc/proc_net.c
-@@ -342,6 +342,9 @@ static __net_init int proc_net_ns_init(struct net *net)
- 
- 	proc_set_user(netd, uid, gid);
- 
-+	/* Seed dentry revalidation for /proc/${pid}/net */
-+	pde_force_lookup(netd);
+-	rtw_alloc_hwxmits(padapter);
++	res = rtw_alloc_hwxmits(padapter);
++	if (res) {
++		res = _FAIL;
++		goto exit;
++	}
 +
- 	err = -EEXIST;
- 	net_statd = proc_net_mkdir(net, "stat", netd);
- 	if (!net_statd)
+ 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+ 
+ 	for (i = 0; i < 4; i++)
+@@ -1496,7 +1501,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
+ 	return res;
+ }
+ 
+-void rtw_alloc_hwxmits(struct adapter *padapter)
++int rtw_alloc_hwxmits(struct adapter *padapter)
+ {
+ 	struct hw_xmit *hwxmits;
+ 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
+@@ -1504,6 +1509,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
+ 	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
+ 
+ 	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
++	if (!pxmitpriv->hwxmits)
++		return -ENOMEM;
+ 
+ 	hwxmits = pxmitpriv->hwxmits;
+ 
+@@ -1520,6 +1527,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
+ 		hwxmits[3] .sta_queue = &pxmitpriv->bk_pending;
+ 	} else {
+ 	}
++
++	return 0;
+ }
+ 
+ void rtw_free_hwxmits(struct adapter *padapter)
+diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
+index b2df1480d66b..e73632972900 100644
+--- a/drivers/staging/r8188eu/include/rtw_xmit.h
++++ b/drivers/staging/r8188eu/include/rtw_xmit.h
+@@ -341,7 +341,7 @@ s32 rtw_txframes_sta_ac_pending(struct adapter *padapter,
+ void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry);
+ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter);
+ void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv);
+-void rtw_alloc_hwxmits(struct adapter *padapter);
++int rtw_alloc_hwxmits(struct adapter *padapter);
+ void rtw_free_hwxmits(struct adapter *padapter);
+ s32 rtw_xmit(struct adapter *padapter, struct sk_buff **pkt);
+ 
 -- 
 2.35.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8E65488C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94F35490CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383326AbiFMOV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
+        id S243524AbiFMK13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383078AbiFMOPS (ORCPT
+        with ESMTP id S244759AbiFMKYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:15:18 -0400
+        Mon, 13 Jun 2022 06:24:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DAA9BAEC;
-        Mon, 13 Jun 2022 04:42:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D2ABF7E;
+        Mon, 13 Jun 2022 03:18:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE427B80EDF;
-        Mon, 13 Jun 2022 11:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDAFC34114;
-        Mon, 13 Jun 2022 11:42:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD799B80E5E;
+        Mon, 13 Jun 2022 10:18:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B2AC3411E;
+        Mon, 13 Jun 2022 10:18:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120562;
-        bh=D27Pr3GuMl20TQ8/GTGuFIMN/gCZCy7tPMWRbhSOrvY=;
+        s=korg; t=1655115500;
+        bh=PLII3z8k6s49qpTxgn+ynR7j/IvGloXYIOhLBRVT4+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g6AizjLFZVdOSaqWIBGb0RdpCYu6JSIV8V8NnGd7ZZTjwOhNcIbWpBt75AZGapOLH
-         KiPPvas23VksJxCk8guNndg2GPMiL//wfdknKreJkfM46YFQJh5akTh4xQG2W10nBM
-         nfYKQOJqofVqfKCh3t8lCLRN/jir9nLm2Ei5fW04=
+        b=smvjIpeye40piKCV82akIfx0BvpBWh1Cxs8Kfgpiv0Fl6Q5wCQHYybrinLjFyHAe8
+         cBeGZqH9XmpgHJ1NU6giassz5Q7EfRGSK1MZifHxSQUj/DTINvF93gYShrjqKixo42
+         Vnk7bCXdnu3WZDR/Bsy0cKK6KBoYtyNxnVlBmb88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 078/298] amt: fix possible memory leak in amt_rcv()
+        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.9 098/167] hugetlb: fix huge_pmd_unshare address update
 Date:   Mon, 13 Jun 2022 12:09:32 +0200
-Message-Id: <20220613094927.311543716@linuxfoundation.org>
+Message-Id: <20220613094903.870291376@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: Mike Kravetz <mike.kravetz@oracle.com>
 
-[ Upstream commit 1a1a0e80e005cbdc2c250fc858e1d8570f4e4acb ]
+commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
 
-If an amt receives packets and it finds socket.
-If it can't find a socket, it should free a received skb.
-But it doesn't.
-So, a memory leak would possibly occur.
+The routine huge_pmd_unshare() is passed a pointer to an address
+associated with an area which may be unshared.  If unshare is successful
+this address is updated to 'optimize' callers iterating over huge page
+addresses.  For the optimization to work correctly, address should be
+updated to the last huge page in the unmapped/unshared area.  However, in
+the common case where the passed address is PUD_SIZE aligned, the address
+is incorrectly updated to the address of the preceding huge page.  That
+wastes CPU cycles as the unmapped/unshared range is scanned twice.
 
-Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
+Fixes: 39dde65c9940 ("shared page table for hugetlb page")
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Acked-by: Muchun Song <songmuchun@bytedance.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/amt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/hugetlb.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index 6205282a09e5..d23eac9ce858 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -2679,7 +2679,7 @@ static int amt_rcv(struct sock *sk, struct sk_buff *skb)
- 	amt = rcu_dereference_sk_user_data(sk);
- 	if (!amt) {
- 		err = true;
--		goto out;
-+		goto drop;
- 	}
- 
- 	skb->dev = amt->dev;
--- 
-2.35.1
-
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4593,7 +4593,14 @@ int huge_pmd_unshare(struct mm_struct *m
+ 	pud_clear(pud);
+ 	put_page(virt_to_page(ptep));
+ 	mm_dec_nr_pmds(mm);
+-	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
++	/*
++	 * This update of passed address optimizes loops sequentially
++	 * processing addresses in increments of huge page size (PMD_SIZE
++	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
++	 * Update address to the 'last page' in the cleared area so that
++	 * calling loop can move to first page past this area.
++	 */
++	*addr |= PUD_SIZE - PMD_SIZE;
+ 	return 1;
+ }
+ #define want_pmd_share()	(1)
 
 

@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6539454840B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9D45487CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241407AbiFMKPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
+        id S1348189AbiFMKxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241344AbiFMKOq (ORCPT
+        with ESMTP id S1346139AbiFMKvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:14:46 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69100CE1C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:14:34 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id m20so10160689ejj.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M46PCkjJ2OifC0xaqwZJ7l8A4H9uAcmd8SjFaU1ZI3o=;
-        b=RY32gASyfk41ROBUhtm7wusGacyUTe5+H8ZMqeHzaR2h7UknN9RbikleB7Vzgo5/aN
-         qHO37sPTq+UUwbHnakGMJafJ/JOPPxwhitAGUBF7n3OFEe8P/NIS8p3OKqL8wv5L2GIm
-         6pmPjIwLKMU/A/b+7TQ7do/4KVOWgOcRYxiDNnXKTC7AbDxvfdT7qkwHZZCd9Da5M9tm
-         Pg5VYi16kYv/RuHVaWdSDEDq6EYXAVHufR0D7nSyMF0Bs8vEl4bfLQR3ROEeR8UyOydk
-         edovqXodfaCVZd4CRsKBjgskDrH+K/lf4hbinJJ9aGdKVUvI8n9islLSU7QV7+kJXNWP
-         4c0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M46PCkjJ2OifC0xaqwZJ7l8A4H9uAcmd8SjFaU1ZI3o=;
-        b=pFOYAEexK8Fqp5dRVxJv+xmNTiGsONStqg3otxoezAbDxaCEeDpJbd2APC97szHJkK
-         oNPK6RUWoUplDBZjBrTbhTgYL8bCh3X1b5RYCAH8kYzzKCgE2wHFbvRa66bp83wNB/Nl
-         G+kZPJ6laPqnqJjXm3SjvGXjKETR+kW5ZX+zIUT/cFUiZEt0OtTv6xRxkCuoL06d++o8
-         q4TBKYCdyaSO7ms4dRdhY/BpNgWL7dB8vHPCwlCJkVSV3g9kWoKRg8O+Knnxqaur8oMc
-         zIC02+J2vI497YIFIEdXkSwyvpjJWdk2bIgni0UvXmyNuE0H1ceiYYwrHHYT4YAIiFYS
-         EvTA==
-X-Gm-Message-State: AOAM532KjwlrOJLgz2xwUKxPrqH4xg9LKwGjoJmWJYIdSgt3mOvHJt6W
-        JMw01r0OGDTwOOWnlx9EbnzjOg==
-X-Google-Smtp-Source: ABdhPJw63RL7dYHdoDbusyEcWLmssYal+r5BY4+7+lRfm3Z0XJfoRLsIaSNcWuOfIbK+EpvPFW1/aQ==
-X-Received: by 2002:a17:907:6e8f:b0:710:865b:9c90 with SMTP id sh15-20020a1709076e8f00b00710865b9c90mr39900307ejc.27.1655115272913;
-        Mon, 13 Jun 2022 03:14:32 -0700 (PDT)
-Received: from krzk-bin.monzoon.net (80-254-69-65.dynamic.monzoon.net. [80.254.69.65])
-        by smtp.gmail.com with ESMTPSA id y9-20020a170906524900b006fec69696a0sm3639863ejm.220.2022.06.13.03.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 03:14:32 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: ufs: exynos: constify driver data
-Date:   Mon, 13 Jun 2022 12:14:29 +0200
-Message-Id: <20220613101429.114449-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 13 Jun 2022 06:51:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96132B1C7;
+        Mon, 13 Jun 2022 03:27:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8395360F0F;
+        Mon, 13 Jun 2022 10:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9292DC34114;
+        Mon, 13 Jun 2022 10:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655116039;
+        bh=ElTrzJflzTayQDk3IvY4AJqUX+sEJm6xvL79q7KQGwg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=0glQsmXuqgrnypOHFhzg0L01WMdhXq9zLWQg1AV/9hFKr4qeaxgxho+STMNq1uW7j
+         j24S/KR+HhIZ7YAoD4GBcrMbvmZCqo8FBmQD84cKM3FUjXJMm2IycJbp6lwflS/apV
+         sh1/PlNLKsnZRbvTFkXGJq2xCDTUaDtArYHOnWDA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Luca=20B=C3=A9la=20Palkovics?= 
+        <luca.bela.palkovics@gmail.com>, Qu Wenruo <wqu@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.4 011/411] btrfs: repair super block num_devices automatically
+Date:   Mon, 13 Jun 2022 12:04:44 +0200
+Message-Id: <20220613094928.836533111@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,62 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Constify the drv data because it should not be modified (used by
-multiple devices).
+From: Qu Wenruo <wqu@suse.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+commit d201238ccd2f30b9bfcfadaeae0972e3a486a176 upstream.
+
+[BUG]
+There is a report that a btrfs has a bad super block num devices.
+
+This makes btrfs to reject the fs completely.
+
+  BTRFS error (device sdd3): super_num_devices 3 mismatch with num_devices 2 found here
+  BTRFS error (device sdd3): failed to read chunk tree: -22
+  BTRFS error (device sdd3): open_ctree failed
+
+[CAUSE]
+During btrfs device removal, chunk tree and super block num devs are
+updated in two different transactions:
+
+  btrfs_rm_device()
+  |- btrfs_rm_dev_item(device)
+  |  |- trans = btrfs_start_transaction()
+  |  |  Now we got transaction X
+  |  |
+  |  |- btrfs_del_item()
+  |  |  Now device item is removed from chunk tree
+  |  |
+  |  |- btrfs_commit_transaction()
+  |     Transaction X got committed, super num devs untouched,
+  |     but device item removed from chunk tree.
+  |     (AKA, super num devs is already incorrect)
+  |
+  |- cur_devices->num_devices--;
+  |- cur_devices->total_devices--;
+  |- btrfs_set_super_num_devices()
+     All those operations are not in transaction X, thus it will
+     only be written back to disk in next transaction.
+
+So after the transaction X in btrfs_rm_dev_item() committed, but before
+transaction X+1 (which can be minutes away), a power loss happen, then
+we got the super num mismatch.
+
+This has been fixed by commit bbac58698a55 ("btrfs: remove device item
+and update super block in the same transaction").
+
+[FIX]
+Make the super_num_devices check less strict, converting it from a hard
+error to a warning, and reset the value to a correct one for the current
+or next transaction commit.
+
+As the number of device items is the critical information where the
+super block num_devices is only a cached value (and also useful for
+cross checking), it's safe to automatically update it. Other device
+related problems like missing device are handled after that and may
+require other means to resolve, like degraded mount. With this fix,
+potentially affected filesystems won't fail mount and require the manual
+repair by btrfs check.
+
+Reported-by: Luca Béla Palkovics <luca.bela.palkovics@gmail.com>
+Link: https://lore.kernel.org/linux-btrfs/CA+8xDSpvdm_U0QLBAnrH=zqDq_cWCOH5TiV46CKmp3igr44okQ@mail.gmail.com/
+CC: stable@vger.kernel.org # 4.14+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ufs/host/ufs-exynos.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ fs/btrfs/volumes.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
-index a81d8cbd542f..9fef706d896e 100644
---- a/drivers/ufs/host/ufs-exynos.c
-+++ b/drivers/ufs/host/ufs-exynos.c
-@@ -157,7 +157,6 @@ enum {
- 
- #define CNTR_DIV_VAL 40
- 
--static struct exynos_ufs_drv_data exynos_ufs_drvs;
- static void exynos_ufs_auto_ctrl_hcc(struct exynos_ufs *ufs, bool en);
- static void exynos_ufs_ctrl_clkstop(struct exynos_ufs *ufs, bool en);
- 
-@@ -1473,7 +1472,7 @@ static int exynosauto_ufs_vh_init(struct ufs_hba *hba)
- 	return 0;
- }
- 
--static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
-+static const struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
- 	.name				= "exynos_ufs",
- 	.init				= exynos_ufs_init,
- 	.hce_enable_notify		= exynos_ufs_hce_enable_notify,
-@@ -1545,7 +1544,7 @@ static struct exynos_ufs_uic_attr exynos7_uic_attr = {
- 	.pa_dbg_option_suite		= 0x30103,
- };
- 
--static struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
-+static const struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
- 	.uic_attr		= &exynos7_uic_attr,
- 	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
- 				  UFSHCI_QUIRK_SKIP_RESET_INTR_AGGR |
-@@ -1561,7 +1560,7 @@ static struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
- 	.post_pwr_change	= exynosauto_ufs_post_pwr_change,
- };
- 
--static struct exynos_ufs_drv_data exynosauto_ufs_vh_drvs = {
-+static const struct exynos_ufs_drv_data exynosauto_ufs_vh_drvs = {
- 	.vops			= &ufs_hba_exynosauto_vh_ops,
- 	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
- 				  UFSHCI_QUIRK_SKIP_RESET_INTR_AGGR |
-@@ -1573,7 +1572,7 @@ static struct exynos_ufs_drv_data exynosauto_ufs_vh_drvs = {
- 	.opts			= EXYNOS_UFS_OPT_BROKEN_RX_SEL_IDX,
- };
- 
--static struct exynos_ufs_drv_data exynos_ufs_drvs = {
-+static const struct exynos_ufs_drv_data exynos_ufs_drvs = {
- 	.uic_attr		= &exynos7_uic_attr,
- 	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
- 				  UFSHCI_QUIRK_BROKEN_REQ_LIST_CLR |
--- 
-2.34.1
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -7383,12 +7383,12 @@ int btrfs_read_chunk_tree(struct btrfs_f
+ 	 * do another round of validation checks.
+ 	 */
+ 	if (total_dev != fs_info->fs_devices->total_devices) {
+-		btrfs_err(fs_info,
+-	   "super_num_devices %llu mismatch with num_devices %llu found here",
++		btrfs_warn(fs_info,
++"super block num_devices %llu mismatch with DEV_ITEM count %llu, will be repaired on next transaction commit",
+ 			  btrfs_super_num_devices(fs_info->super_copy),
+ 			  total_dev);
+-		ret = -EINVAL;
+-		goto error;
++		fs_info->fs_devices->total_devices = total_dev;
++		btrfs_set_super_num_devices(fs_info->super_copy, total_dev);
+ 	}
+ 	if (btrfs_super_total_bytes(fs_info->super_copy) <
+ 	    fs_info->fs_devices->total_rw_bytes) {
+
 

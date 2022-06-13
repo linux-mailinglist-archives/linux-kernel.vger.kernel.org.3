@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0AE549184
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7AA54964C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358348AbiFMNGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S1379897AbiFMNvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354293AbiFMMzj (ORCPT
+        with ESMTP id S1379736AbiFMNo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A8D11146;
-        Mon, 13 Jun 2022 04:16:28 -0700 (PDT)
+        Mon, 13 Jun 2022 09:44:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012AA38B1;
+        Mon, 13 Jun 2022 04:32:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DB6160B60;
-        Mon, 13 Jun 2022 11:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACBDFC3411C;
-        Mon, 13 Jun 2022 11:16:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B51F9CE1166;
+        Mon, 13 Jun 2022 11:32:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0E7C34114;
+        Mon, 13 Jun 2022 11:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118987;
-        bh=uS4yQiy6l5prXpMsSbHprTqB0Erj5eGU8B8u2yfkB7Y=;
+        s=korg; t=1655119947;
+        bh=U5YQJHSj04ogWj8kHnUJp6R+UQwf5EflSvuli1TWa3A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gLVn9Ow8A1ZvnMy6uK2ktYA/xS+oeLbjMfpUBTiaEnFhpKOoZ0oRrf6FKL8QbLz70
-         OTtO7Tcin2uxkgXS+vgA4fBelZ3AFLa8lEGPICtmRUpxjmhrPQA1WqqCG4lLytTixz
-         7eP4j0ZzP8OaR9EACxSYpD8Utnaf6emxr834uIOw=
+        b=ZX2c9b4xYGsepBenO9CDDVhdcn8TxbATitBD9/8lvk59ie4ap8szo8ovYD6Y4gs+2
+         eym3inIbjcypsVexWK31NoIXM4uBMlk/AB6WyECcar36Ixb2qazWXHFQ7wAJ320261
+         v+ArILFwgj2bwaFmfea0NyNLL9r4jeWg8Ifz/4aI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Laurent Fasnacht <laurent.fasnacht@proton.ch>,
-        Neal Cardwell <ncardwell@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Kinglong Mee <kinglongmee@gmail.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 099/247] tcp: tcp_rtx_synack() can be called from process context
+Subject: [PATCH 5.18 176/339] xprtrdma: treat all calls not a bcall when bc_serv is NULL
 Date:   Mon, 13 Jun 2022 12:10:01 +0200
-Message-Id: <20220613094925.958134702@linuxfoundation.org>
+Message-Id: <20220613094932.014077945@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,90 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Kinglong Mee <kinglongmee@gmail.com>
 
-[ Upstream commit 0a375c822497ed6ad6b5da0792a12a6f1af10c0b ]
+[ Upstream commit 11270e7ca268e8d61b5d9e5c3a54bd1550642c9c ]
 
-Laurent reported the enclosed report [1]
+When a rdma server returns a fault format reply, nfs v3 client may
+treats it as a bcall when bc service is not exist.
 
-This bug triggers with following coditions:
+The debug message at rpcrdma_bc_receive_call are,
 
-0) Kernel built with CONFIG_DEBUG_PREEMPT=y
+[56579.837169] RPC:       rpcrdma_bc_receive_call: callback XID
+00000001, length=20
+[56579.837174] RPC:       rpcrdma_bc_receive_call: 00 00 00 01 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 04
 
-1) A new passive FastOpen TCP socket is created.
-   This FO socket waits for an ACK coming from client to be a complete
-   ESTABLISHED one.
-2) A socket operation on this socket goes through lock_sock()
-   release_sock() dance.
-3) While the socket is owned by the user in step 2),
-   a retransmit of the SYN is received and stored in socket backlog.
-4) At release_sock() time, the socket backlog is processed while
-   in process context.
-5) A SYNACK packet is cooked in response of the SYN retransmit.
-6) -> tcp_rtx_synack() is called in process context.
+After that, rpcrdma_bc_receive_call will meets NULL pointer as,
 
-Before blamed commit, tcp_rtx_synack() was always called from BH handler,
-from a timer handler.
+[  226.057890] BUG: unable to handle kernel NULL pointer dereference at
+00000000000000c8
+...
+[  226.058704] RIP: 0010:_raw_spin_lock+0xc/0x20
+...
+[  226.059732] Call Trace:
+[  226.059878]  rpcrdma_bc_receive_call+0x138/0x327 [rpcrdma]
+[  226.060011]  __ib_process_cq+0x89/0x170 [ib_core]
+[  226.060092]  ib_cq_poll_work+0x26/0x80 [ib_core]
+[  226.060257]  process_one_work+0x1a7/0x360
+[  226.060367]  ? create_worker+0x1a0/0x1a0
+[  226.060440]  worker_thread+0x30/0x390
+[  226.060500]  ? create_worker+0x1a0/0x1a0
+[  226.060574]  kthread+0x116/0x130
+[  226.060661]  ? kthread_flush_work_fn+0x10/0x10
+[  226.060724]  ret_from_fork+0x35/0x40
+...
 
-Fix this by using TCP_INC_STATS() & NET_INC_STATS()
-which do not assume caller is in non preemptible context.
-
-[1]
-BUG: using __this_cpu_add() in preemptible [00000000] code: epollpep/2180
-caller is tcp_rtx_synack.part.0+0x36/0xc0
-CPU: 10 PID: 2180 Comm: epollpep Tainted: G           OE     5.16.0-0.bpo.4-amd64 #1  Debian 5.16.12-1~bpo11+1
-Hardware name: Supermicro SYS-5039MC-H8TRF/X11SCD-F, BIOS 1.7 11/23/2021
-Call Trace:
- <TASK>
- dump_stack_lvl+0x48/0x5e
- check_preemption_disabled+0xde/0xe0
- tcp_rtx_synack.part.0+0x36/0xc0
- tcp_rtx_synack+0x8d/0xa0
- ? kmem_cache_alloc+0x2e0/0x3e0
- ? apparmor_file_alloc_security+0x3b/0x1f0
- inet_rtx_syn_ack+0x16/0x30
- tcp_check_req+0x367/0x610
- tcp_rcv_state_process+0x91/0xf60
- ? get_nohz_timer_target+0x18/0x1a0
- ? lock_timer_base+0x61/0x80
- ? preempt_count_add+0x68/0xa0
- tcp_v4_do_rcv+0xbd/0x270
- __release_sock+0x6d/0xb0
- release_sock+0x2b/0x90
- sock_setsockopt+0x138/0x1140
- ? __sys_getsockname+0x7e/0xc0
- ? aa_sk_perm+0x3e/0x1a0
- __sys_setsockopt+0x198/0x1e0
- __x64_sys_setsockopt+0x21/0x30
- do_syscall_64+0x38/0xc0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: 168a8f58059a ("tcp: TCP Fast Open Server - main code path")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Laurent Fasnacht <laurent.fasnacht@proton.ch>
-Acked-by: Neal Cardwell <ncardwell@google.com>
-Link: https://lore.kernel.org/r/20220530213713.601888-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
+Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/sunrpc/xprtrdma/rpc_rdma.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index ed7125a47ce0..dc3b4668fcde 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -4116,8 +4116,8 @@ int tcp_rtx_synack(const struct sock *sk, struct request_sock *req)
- 	res = af_ops->send_synack(sk, NULL, &fl, req, NULL, TCP_SYNACK_NORMAL,
- 				  NULL);
- 	if (!res) {
--		__TCP_INC_STATS(sock_net(sk), TCP_MIB_RETRANSSEGS);
--		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPSYNRETRANS);
-+		TCP_INC_STATS(sock_net(sk), TCP_MIB_RETRANSSEGS);
-+		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPSYNRETRANS);
- 		if (unlikely(tcp_passive_fastopen(sk)))
- 			tcp_sk(sk)->total_retrans++;
- 		trace_tcp_retransmit_synack(sk, req);
+diff --git a/net/sunrpc/xprtrdma/rpc_rdma.c b/net/sunrpc/xprtrdma/rpc_rdma.c
+index 281ddb87ac8d..190a4de239c8 100644
+--- a/net/sunrpc/xprtrdma/rpc_rdma.c
++++ b/net/sunrpc/xprtrdma/rpc_rdma.c
+@@ -1121,6 +1121,7 @@ static bool
+ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
+ #if defined(CONFIG_SUNRPC_BACKCHANNEL)
+ {
++	struct rpc_xprt *xprt = &r_xprt->rx_xprt;
+ 	struct xdr_stream *xdr = &rep->rr_stream;
+ 	__be32 *p;
+ 
+@@ -1144,6 +1145,10 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
+ 	if (*p != cpu_to_be32(RPC_CALL))
+ 		return false;
+ 
++	/* No bc service. */
++	if (xprt->bc_serv == NULL)
++		return false;
++
+ 	/* Now that we are sure this is a backchannel call,
+ 	 * advance to the RPC header.
+ 	 */
 -- 
 2.35.1
 

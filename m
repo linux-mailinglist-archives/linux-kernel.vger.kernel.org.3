@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E23549605
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1EC1548B41
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359802AbiFMNO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S1358880AbiFMMTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358884AbiFMNIX (ORCPT
+        with ESMTP id S1358531AbiFMMOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:08:23 -0400
+        Mon, 13 Jun 2022 08:14:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8000E2228E;
-        Mon, 13 Jun 2022 04:18:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D74544C8;
+        Mon, 13 Jun 2022 04:01:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A393F60EAD;
-        Mon, 13 Jun 2022 11:18:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D08C34114;
-        Mon, 13 Jun 2022 11:18:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FB3961435;
+        Mon, 13 Jun 2022 11:01:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B851C34114;
+        Mon, 13 Jun 2022 11:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119133;
-        bh=B6BWwsDd+moXQyLuhfJ0Ej3IU+RDaIH9ARr/oKTP++A=;
+        s=korg; t=1655118104;
+        bh=biiVoSpGX61XIR/40UCOyNG2ZScSEoYD1nvvGjKna2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yva3azL42+sO0U0Nh2rmV+arUMiNC6ySu8MCev1EmvPLJ4BFKeWoMZ6gA8DIvftqV
-         5OGJMOnmsRuYmAtbMhGhESN2bzDD4eto6ZLn5WVhmySitiwd6or0QRJXpK2HqpPiD7
-         pSl5y22B1kSni3l7dB6FRGEtcP4x8iAReob/7wqA=
+        b=rs1HP7qao15IvW1rvy66fhTLyC7Q6yIoXRcn4sZwplO1OC36TLvxyvBDx72EZu20g
+         vayrpDeUXclFxNXE8SNBtSsIG669QqkvDRR/NSS15gbZ2mDfvbxJGAVwXg+pH/IuyC
+         kHcO5b65CsApq3K6OGnGOLHHyhXj51ZriyoNfco4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Hugh Dickens <hughd@google.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 153/247] net: ipv6: unexport __init-annotated seg6_hmac_init()
+Subject: [PATCH 4.19 231/287] m68knommu: set ZERO_PAGE() to the allocated zeroed page
 Date:   Mon, 13 Jun 2022 12:10:55 +0200
-Message-Id: <20220613094927.595755276@linuxfoundation.org>
+Message-Id: <20220613094931.020997377@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Greg Ungerer <gerg@linux-m68k.org>
 
-[ Upstream commit 5801f064e35181c71857a80ff18af4dbec3c5f5c ]
+[ Upstream commit dc068f46217970d9516f16cd37972a01d50dc055 ]
 
-EXPORT_SYMBOL and __init is a bad combination because the .init.text
-section is freed up after the initialization. Hence, modules cannot
-use symbols annotated __init. The access to a freed symbol may end up
-with kernel panic.
+The non-MMU m68k pagetable ZERO_PAGE() macro is being set to the
+somewhat non-sensical value of "virt_to_page(0)". The zeroth page
+is not in any way guaranteed to be a page full of "0". So the result
+is that ZERO_PAGE() will almost certainly contain random values.
 
-modpost used to detect it, but it has been broken for a decade.
+We already allocate a real "empty_zero_page" in the mm setup code shared
+between MMU m68k and non-MMU m68k. It is just not hooked up to the
+ZERO_PAGE() macro for the non-MMU m68k case.
 
-Recently, I fixed modpost so it started to warn it again, then this
-showed up in linux-next builds.
+Fix ZERO_PAGE() to use the allocated "empty_zero_page" pointer.
 
-There are two ways to fix it:
+I am not aware of any specific issues caused by the old code.
 
-  - Remove __init
-  - Remove EXPORT_SYMBOL
-
-I chose the latter for this case because the caller (net/ipv6/seg6.c)
-and the callee (net/ipv6/seg6_hmac.c) belong to the same module.
-It seems an internal function call in ipv6.ko.
-
-Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#t
+Reported-by: Hugh Dickens <hughd@google.com>
+Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/seg6_hmac.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/m68k/include/asm/pgtable_no.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv6/seg6_hmac.c b/net/ipv6/seg6_hmac.c
-index 687d95dce085..5b2c9ce53395 100644
---- a/net/ipv6/seg6_hmac.c
-+++ b/net/ipv6/seg6_hmac.c
-@@ -399,7 +399,6 @@ int __init seg6_hmac_init(void)
- {
- 	return seg6_hmac_init_algo();
- }
--EXPORT_SYMBOL(seg6_hmac_init);
+diff --git a/arch/m68k/include/asm/pgtable_no.h b/arch/m68k/include/asm/pgtable_no.h
+index fc3a96c77bd8..12f673707d4b 100644
+--- a/arch/m68k/include/asm/pgtable_no.h
++++ b/arch/m68k/include/asm/pgtable_no.h
+@@ -42,7 +42,8 @@ extern void paging_init(void);
+  * ZERO_PAGE is a global shared page that is always zero: used
+  * for zero-mapped memory areas etc..
+  */
+-#define ZERO_PAGE(vaddr)	(virt_to_page(0))
++extern void *empty_zero_page;
++#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
  
- int __net_init seg6_hmac_net_init(struct net *net)
- {
+ /*
+  * No page table caches to initialise.
 -- 
 2.35.1
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB56549178
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40726548D06
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383557AbiFMOXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
+        id S1354515AbiFMLjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382944AbiFMOTX (ORCPT
+        with ESMTP id S1355171AbiFMLav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:19:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB3B4615D;
-        Mon, 13 Jun 2022 04:43:49 -0700 (PDT)
+        Mon, 13 Jun 2022 07:30:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F0B2B242;
+        Mon, 13 Jun 2022 03:46:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F63BB80EB2;
-        Mon, 13 Jun 2022 11:43:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D3BC34114;
-        Mon, 13 Jun 2022 11:43:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A797061248;
+        Mon, 13 Jun 2022 10:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A48C34114;
+        Mon, 13 Jun 2022 10:46:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120626;
-        bh=8SmF3u8jtyrgaKPmoZQpFxedcHtPU80zlRVhFLsWpQ8=;
+        s=korg; t=1655117202;
+        bh=3z2h9TsGGV1nv2mizR5ga4PJZxa8jkuUU08Q/9Kx23Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j2xrdYiMcdcoUYMQwO8HcDnxOb9iFDHc4i9htbauwWOVpneAN/enkjXMkab4yf7cw
-         NZ/qALPgfuB7mnYkmr6eZpYScV6PP7Sw8HSFKIsVc70AkGM1Acyd0EhZTWi6Pj3o1E
-         Bi6xG2FJjQyXrs4dIBGa9LoFNHMq34Bsm9sIXg2E=
+        b=r4gCekdv5Z8HFjpCuq4d7Eu67Kzjn5Q/8Iz5tfW0h2yzEBO+lf9NdjR2EEfhuwXca
+         S9VVC9HSxVPAHqlKK3PnABwCpOXLtpCyk6qidlp2eoFEe/Blt02Dy+UlUtwe3D63nv
+         4t8WtNhhDhfX5d8hgpU1Q2Nr3lwt61Z3MM8tMt9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 101/298] block: use bio_queue_enter instead of blk_queue_enter in bio_poll
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 322/411] s390/crypto: fix scatterwalk_unmap() callers in AES-GCM
 Date:   Mon, 13 Jun 2022 12:09:55 +0200
-Message-Id: <20220613094928.015022495@linuxfoundation.org>
+Message-Id: <20220613094938.388822493@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit ebd076bf7d5deef488ec7ebc3fdbf781eafae269 ]
+[ Upstream commit bd52cd5e23f134019b23f0c389db0f9a436e4576 ]
 
-We want to have a valid live gendisk to call ->poll and not just a
-request_queue, so call the right helper.
+The argument of scatterwalk_unmap() is supposed to be the void* that was
+returned by the previous scatterwalk_map() call.
+The s390 AES-GCM implementation was instead passing the pointer to the
+struct scatter_walk.
 
-Fixes: 3e08773c3841 ("block: switch polling to be bio based")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220523124302.526186-1-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+This doesn't actually break anything because scatterwalk_unmap() only uses
+its argument under CONFIG_HIGHMEM and ARCH_HAS_FLUSH_ON_KUNMAP.
+
+Fixes: bf7fa038707c ("s390/crypto: add s390 platform specific aes gcm support.")
+Signed-off-by: Jann Horn <jannh@google.com>
+Acked-by: Harald Freudenberger <freude@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220517143047.3054498-1-jannh@google.com
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/s390/crypto/aes_s390.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 779b4a1f66ac..45d750eb2628 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -992,7 +992,7 @@ int bio_poll(struct bio *bio, struct io_comp_batch *iob, unsigned int flags)
- 	if (current->plug)
- 		blk_flush_plug(current->plug, false);
+diff --git a/arch/s390/crypto/aes_s390.c b/arch/s390/crypto/aes_s390.c
+index 9803e96d2924..558cfe570ccf 100644
+--- a/arch/s390/crypto/aes_s390.c
++++ b/arch/s390/crypto/aes_s390.c
+@@ -861,7 +861,7 @@ static inline void _gcm_sg_unmap_and_advance(struct gcm_sg_walk *gw,
+ 					     unsigned int nbytes)
+ {
+ 	gw->walk_bytes_remain -= nbytes;
+-	scatterwalk_unmap(&gw->walk);
++	scatterwalk_unmap(gw->walk_ptr);
+ 	scatterwalk_advance(&gw->walk, nbytes);
+ 	scatterwalk_done(&gw->walk, 0, gw->walk_bytes_remain);
+ 	gw->walk_ptr = NULL;
+@@ -936,7 +936,7 @@ static int gcm_out_walk_go(struct gcm_sg_walk *gw, unsigned int minbytesneeded)
+ 		goto out;
+ 	}
  
--	if (blk_queue_enter(q, BLK_MQ_REQ_NOWAIT))
-+	if (bio_queue_enter(bio))
- 		return 0;
- 	if (WARN_ON_ONCE(!queue_is_mq(q)))
- 		ret = 0;	/* not yet implemented, should not happen */
+-	scatterwalk_unmap(&gw->walk);
++	scatterwalk_unmap(gw->walk_ptr);
+ 	gw->walk_ptr = NULL;
+ 
+ 	gw->ptr = gw->buf;
 -- 
 2.35.1
 

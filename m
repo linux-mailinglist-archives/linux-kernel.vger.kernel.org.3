@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213DD54953E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2018954950E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358358AbiFMMGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S1384388AbiFMO3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359160AbiFMMFU (ORCPT
+        with ESMTP id S1383934AbiFMOYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC7A183B4;
-        Mon, 13 Jun 2022 03:59:15 -0700 (PDT)
+        Mon, 13 Jun 2022 10:24:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C3C47546;
+        Mon, 13 Jun 2022 04:45:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 712DEB80D3A;
-        Mon, 13 Jun 2022 10:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEADC34114;
-        Mon, 13 Jun 2022 10:59:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E46B6B80D31;
+        Mon, 13 Jun 2022 11:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFB1C34114;
+        Mon, 13 Jun 2022 11:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117953;
-        bh=J/lBRPTrbMuX5tg6HI8ukkMhUeW5ztbRQip7ocy+hsQ=;
+        s=korg; t=1655120755;
+        bh=fOmEGDzjhXjRXNSFXsnkEyFZWht1ZbgaTXFWlRky5G8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JMyaqc11PXA2l3iKVvBE/gUih3IIToJKnzml/CbDQVK7UOeMnFcJ+VT0cwuYzpDij
-         /TLzuY2XclrK8dBqOoqFk4hD1Lppd94seqtxVt3EkRG6eRXX+xX8C65Lu8MN7rZ1kD
-         XscF+xrGNbPF5y7BerR+sHUhkjgaH+8v7xF/YtGg=
+        b=PFqyUc4RwTrEUnhLV+YiaATDb6YtH9ZIlPA3XK0XNndsbnQ8d7I36BXNbirjhhfk8
+         a64C2k6P35gG8tCmQTNUOby3KViABIIVj8v0u+tBQdTJY2Sbz76GBV5r5GKchDKvcb
+         xtHaZ6UN9SnH7nPBsA51JK4xdY3jwhXAkmyGonQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 4.19 182/287] docs/conf.py: Cope with removal of language=None in Sphinx 5.0.0
+        stable@vger.kernel.org, Changcheng Liu <jerrliu@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 112/298] net/mlx5: correct ECE offset in query qp output
 Date:   Mon, 13 Jun 2022 12:10:06 +0200
-Message-Id: <20220613094929.386233689@linuxfoundation.org>
+Message-Id: <20220613094928.344120690@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akira Yokosawa <akiyks@gmail.com>
+From: Changcheng Liu <jerrliu@nvidia.com>
 
-commit 627f01eab93d8671d4e4afee9b148f9998d20e7c upstream.
+[ Upstream commit 3fc2a9e89b3508a5cc0c324f26d7b4740ba8c456 ]
 
-One of the changes in Sphinx 5.0.0 [1] says [sic]:
+ECE field should be after opt_param_mask in query qp output.
 
-    5.0.0 final
-
-     - #10474: language does not accept None as it value.
-       The default value of language becomes to 'en' now.
-
-[1]: https://www.sphinx-doc.org/en/master/changes.html#release-5-0-0-released-may-30-2022
-
-It results in a new warning from Sphinx 5.0.0 [sic]:
-
-    WARNING: Invalid configuration value found: 'language = None'.
-    Update your configuration to a valid langauge code. Falling
-    back to 'en' (English).
-
-Silence the warning by using 'en'.
-It works with all the Sphinx versions required for building
-kernel documentation (1.7.9 or later).
-
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Link: https://lore.kernel.org/r/bd0c2ddc-2401-03cb-4526-79ca664e1cbe@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6b646a7e4af6 ("net/mlx5: Add ability to read and write ECE options")
+Signed-off-by: Changcheng Liu <jerrliu@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/conf.py |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/mlx5/mlx5_ifc.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -95,7 +95,7 @@ finally:
- #
- # This is also used if you do content translation via gettext catalogs.
- # Usually you set "language" from the command line for these cases.
--language = None
-+language = 'en'
+diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
+index 49a48d7709ac..4cd54277d5d9 100644
+--- a/include/linux/mlx5/mlx5_ifc.h
++++ b/include/linux/mlx5/mlx5_ifc.h
+@@ -5175,12 +5175,11 @@ struct mlx5_ifc_query_qp_out_bits {
  
- # There are two options for replacing |today|: either, you set today to some
- # non-false value, then it is used:
+ 	u8         syndrome[0x20];
+ 
+-	u8         reserved_at_40[0x20];
+-	u8         ece[0x20];
++	u8         reserved_at_40[0x40];
+ 
+ 	u8         opt_param_mask[0x20];
+ 
+-	u8         reserved_at_a0[0x20];
++	u8         ece[0x20];
+ 
+ 	struct mlx5_ifc_qpc_bits qpc;
+ 
+-- 
+2.35.1
+
 
 

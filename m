@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6B15492B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518A5548F84
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350034AbiFMK6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S1349176AbiFMK46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350059AbiFMKyk (ORCPT
+        with ESMTP id S1349476AbiFMKyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D0824967;
-        Mon, 13 Jun 2022 03:28:50 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB6C2494F;
+        Mon, 13 Jun 2022 03:28:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A85C60AE6;
-        Mon, 13 Jun 2022 10:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19800C34114;
-        Mon, 13 Jun 2022 10:28:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C589B80E93;
+        Mon, 13 Jun 2022 10:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CCCEC34114;
+        Mon, 13 Jun 2022 10:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116129;
-        bh=RsqfcE3Vlaza98kvhQkeITROjqKHS5OvbTROZhct/dA=;
+        s=korg; t=1655116085;
+        bh=2LFwGuCsKCuYENEjOsRcLSDeb9bv9mIq1XjW2w4MUhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=maJAPzDKJzmBKeADritdlYGWqyzSB+of0v9/Jkl7BufSFItQc52jAqjYsQ2zL2+L5
-         GqLS7kB/lkaBNv4B3IabHOL7jifsYMbY5/nbkp+hVSZehBFr/Hhcivvocw2K9g0W7M
-         kp71mx6w7Sq9iHuwe/en4g5J6jVfNKTX5bZnNCFA=
+        b=wjaiGTj6aFN9D3ELdcsFARK3g0OW4TdApkXVs5bKwxMLfazIVzAiA43Q///6JmVVR
+         7ESL4fgAGVdEfEkl/GtMXCSf/7Z8clPYFoD1JA3lB3pnnUqQ2WrjhuRekEoHDmMmPf
+         I7NrjG+E7gr8w8KRLFC/uxaTkh9YU+DouYTsmjRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        stable@vger.kernel.org, Steven Price <steven.price@arm.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 019/411] ACPICA: Avoid cache flush inside virtual machines
-Date:   Mon, 13 Jun 2022 12:04:52 +0200
-Message-Id: <20220613094929.077452334@linuxfoundation.org>
+Subject: [PATCH 5.4 020/411] drm/komeda: return early if drm_universal_plane_init() fails.
+Date:   Mon, 13 Jun 2022 12:04:53 +0200
+Message-Id: <20220613094929.107319038@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -58,69 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+From: Liviu Dudau <liviu.dudau@arm.com>
 
-[ Upstream commit e2efb6359e620521d1e13f69b2257de8ceaa9475 ]
+[ Upstream commit c8f76c37cc3668ee45e081e76a15f24a352ebbdd ]
 
-While running inside virtual machine, the kernel can bypass cache
-flushing. Changing sleep state in a virtual machine doesn't affect the
-host system sleep state and cannot lead to data loss.
+If drm_universal_plane_init() fails early we jump to the common cleanup code
+that calls komeda_plane_destroy() which in turn could access the uninitalised
+drm_plane and crash. Return early if an error is detected without going through
+the common code.
 
-Before entering sleep states, the ACPI code flushes caches to prevent
-data loss using the WBINVD instruction.  This mechanism is required on
-bare metal.
-
-But, any use WBINVD inside of a guest is worthless.  Changing sleep
-state in a virtual machine doesn't affect the host system sleep state
-and cannot lead to data loss, so most hypervisors simply ignore it.
-Despite this, the ACPI code calls WBINVD unconditionally anyway.
-It's useless, but also normally harmless.
-
-In TDX guests, though, WBINVD stops being harmless; it triggers a
-virtualization exception (#VE).  If the ACPI cache-flushing WBINVD
-were left in place, TDX guests would need handling to recover from
-the exception.
-
-Avoid using WBINVD whenever running under a hypervisor.  This both
-removes the useless WBINVDs and saves TDX from implementing WBINVD
-handling.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20220405232939.73860-30-kirill.shutemov@linux.intel.com
+Reported-by: Steven Price <steven.price@arm.com>
+Reviewed-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Liviu Dudau <liviu.dudau@arm.com>
+Link: https://lore.kernel.org/dri-devel/20211203100946.2706922-1-liviu.dudau@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/acenv.h | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/arm/display/komeda/komeda_plane.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/acenv.h b/arch/x86/include/asm/acenv.h
-index 9aff97f0de7f..d937c55e717e 100644
---- a/arch/x86/include/asm/acenv.h
-+++ b/arch/x86/include/asm/acenv.h
-@@ -13,7 +13,19 @@
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
+index 98e915e325dd..a5f57b38d193 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
+@@ -274,8 +274,10 @@ static int komeda_plane_add(struct komeda_kms_dev *kms,
  
- /* Asm macros */
+ 	komeda_put_fourcc_list(formats);
  
--#define ACPI_FLUSH_CPU_CACHE()	wbinvd()
-+/*
-+ * ACPI_FLUSH_CPU_CACHE() flushes caches on entering sleep states.
-+ * It is required to prevent data loss.
-+ *
-+ * While running inside virtual machine, the kernel can bypass cache flushing.
-+ * Changing sleep state in a virtual machine doesn't affect the host system
-+ * sleep state and cannot lead to data loss.
-+ */
-+#define ACPI_FLUSH_CPU_CACHE()					\
-+do {								\
-+	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))	\
-+		wbinvd();					\
-+} while (0)
+-	if (err)
+-		goto cleanup;
++	if (err) {
++		kfree(kplane);
++		return err;
++	}
  
- int __acpi_acquire_global_lock(unsigned int *lock);
- int __acpi_release_global_lock(unsigned int *lock);
+ 	drm_plane_helper_add(plane, &komeda_plane_helper_funcs);
+ 
 -- 
 2.35.1
 

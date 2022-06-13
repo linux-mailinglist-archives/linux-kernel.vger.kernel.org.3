@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990C55493DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A323549035
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384679AbiFMO34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S1352904AbiFMMPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383983AbiFMOYZ (ORCPT
+        with ESMTP id S1353356AbiFMMLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B9C102;
-        Mon, 13 Jun 2022 04:46:21 -0700 (PDT)
+        Mon, 13 Jun 2022 08:11:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F267C30F7B;
+        Mon, 13 Jun 2022 04:01:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8DCF612A8;
-        Mon, 13 Jun 2022 11:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B671FC34114;
-        Mon, 13 Jun 2022 11:46:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2F43B80D3A;
+        Mon, 13 Jun 2022 11:00:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B83EC34114;
+        Mon, 13 Jun 2022 11:00:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120780;
-        bh=U5YQJHSj04ogWj8kHnUJp6R+UQwf5EflSvuli1TWa3A=;
+        s=korg; t=1655118049;
+        bh=08MSGcfMf86xbN8A/gKSwhJFsnUHsnIbA4cPwajrovA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2uFKqyVMe1gIZgp07OH3TbJvE+1MZZUaXpnqwlH5lg62D+3noNOAOfZYJ6jxUxDTd
-         fTqvN8bXHkeAPFG0KA0m0PEg4daXhpfp7qkjnz1dWN9ngMo/65SI4eufAKTP75DenV
-         3MDLlNRQlj4KXw01fRWJe+NQoV9bLMhFS7xzuCjk=
+        b=pg58aQLaWoMK6SnVjQxD5BMeUmzxqOgIeq4e5d2DUuXE8zoLEHmoETTnqlp4O325Y
+         W7uPAvBU4e9dCfBUOBJt0HPaP57tXF3+VaLQ2Edl7HH3/CriHqag/CjZlgXD4Nz1tu
+         4EWEFNNmODUCxn6bPlSdhMeuRosRFKMOFS3gvTHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kinglong Mee <kinglongmee@gmail.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        stable@vger.kernel.org,
+        syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com,
+        Jon Maloy <jmaloy@redhat.com>,
+        Hoang Le <hoang.h.le@dektech.com.au>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 155/298] xprtrdma: treat all calls not a bcall when bc_serv is NULL
+Subject: [PATCH 4.19 225/287] tipc: check attribute length for bearer name
 Date:   Mon, 13 Jun 2022 12:10:49 +0200
-Message-Id: <20220613094929.639401135@linuxfoundation.org>
+Message-Id: <20220613094930.837317331@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kinglong Mee <kinglongmee@gmail.com>
+From: Hoang Le <hoang.h.le@dektech.com.au>
 
-[ Upstream commit 11270e7ca268e8d61b5d9e5c3a54bd1550642c9c ]
+[ Upstream commit 7f36f798f89bf32c0164049cb0e3fd1af613d0bb ]
 
-When a rdma server returns a fault format reply, nfs v3 client may
-treats it as a bcall when bc service is not exist.
+syzbot reported uninit-value:
+=====================================================
+BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:644 [inline]
+BUG: KMSAN: uninit-value in string+0x4f9/0x6f0 lib/vsprintf.c:725
+ string_nocheck lib/vsprintf.c:644 [inline]
+ string+0x4f9/0x6f0 lib/vsprintf.c:725
+ vsnprintf+0x2222/0x3650 lib/vsprintf.c:2806
+ vprintk_store+0x537/0x2150 kernel/printk/printk.c:2158
+ vprintk_emit+0x28b/0xab0 kernel/printk/printk.c:2256
+ vprintk_default+0x86/0xa0 kernel/printk/printk.c:2283
+ vprintk+0x15f/0x180 kernel/printk/printk_safe.c:50
+ _printk+0x18d/0x1cf kernel/printk/printk.c:2293
+ tipc_enable_bearer net/tipc/bearer.c:371 [inline]
+ __tipc_nl_bearer_enable+0x2022/0x22a0 net/tipc/bearer.c:1033
+ tipc_nl_bearer_enable+0x6c/0xb0 net/tipc/bearer.c:1042
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
 
-The debug message at rpcrdma_bc_receive_call are,
+- Do sanity check the attribute length for TIPC_NLA_BEARER_NAME.
+- Do not use 'illegal name' in printing message.
 
-[56579.837169] RPC:       rpcrdma_bc_receive_call: callback XID
-00000001, length=20
-[56579.837174] RPC:       rpcrdma_bc_receive_call: 00 00 00 01 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 04
-
-After that, rpcrdma_bc_receive_call will meets NULL pointer as,
-
-[  226.057890] BUG: unable to handle kernel NULL pointer dereference at
-00000000000000c8
-...
-[  226.058704] RIP: 0010:_raw_spin_lock+0xc/0x20
-...
-[  226.059732] Call Trace:
-[  226.059878]  rpcrdma_bc_receive_call+0x138/0x327 [rpcrdma]
-[  226.060011]  __ib_process_cq+0x89/0x170 [ib_core]
-[  226.060092]  ib_cq_poll_work+0x26/0x80 [ib_core]
-[  226.060257]  process_one_work+0x1a7/0x360
-[  226.060367]  ? create_worker+0x1a0/0x1a0
-[  226.060440]  worker_thread+0x30/0x390
-[  226.060500]  ? create_worker+0x1a0/0x1a0
-[  226.060574]  kthread+0x116/0x130
-[  226.060661]  ? kthread_flush_work_fn+0x10/0x10
-[  226.060724]  ret_from_fork+0x35/0x40
-...
-
-Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
-Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Reported-by: syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com
+Fixes: cb30a63384bc ("tipc: refactor function tipc_enable_bearer()")
+Acked-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
+Link: https://lore.kernel.org/r/20220602063053.5892-1-hoang.h.le@dektech.com.au
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprtrdma/rpc_rdma.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/tipc/bearer.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/net/sunrpc/xprtrdma/rpc_rdma.c b/net/sunrpc/xprtrdma/rpc_rdma.c
-index 281ddb87ac8d..190a4de239c8 100644
---- a/net/sunrpc/xprtrdma/rpc_rdma.c
-+++ b/net/sunrpc/xprtrdma/rpc_rdma.c
-@@ -1121,6 +1121,7 @@ static bool
- rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
- #if defined(CONFIG_SUNRPC_BACKCHANNEL)
- {
-+	struct rpc_xprt *xprt = &r_xprt->rx_xprt;
- 	struct xdr_stream *xdr = &rep->rr_stream;
- 	__be32 *p;
+diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
+index e1006ed4d90a..0f970259d0d5 100644
+--- a/net/tipc/bearer.c
++++ b/net/tipc/bearer.c
+@@ -246,9 +246,8 @@ static int tipc_enable_bearer(struct net *net, const char *name,
+ 	u32 i;
  
-@@ -1144,6 +1145,10 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
- 	if (*p != cpu_to_be32(RPC_CALL))
- 		return false;
+ 	if (!bearer_name_validate(name, &b_names)) {
+-		errstr = "illegal name";
+ 		NL_SET_ERR_MSG(extack, "Illegal name");
+-		goto rejected;
++		return res;
+ 	}
  
-+	/* No bc service. */
-+	if (xprt->bc_serv == NULL)
-+		return false;
-+
- 	/* Now that we are sure this is a backchannel call,
- 	 * advance to the RPC header.
- 	 */
+ 	if (prio > TIPC_MAX_LINK_PRI && prio != TIPC_MEDIA_LINK_PRI) {
 -- 
 2.35.1
 

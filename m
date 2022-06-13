@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3DD549843
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14605491D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238169AbiFMNCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S1382289AbiFMOUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358323AbiFMMzK (ORCPT
+        with ESMTP id S1382928AbiFMOO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7E51E7;
-        Mon, 13 Jun 2022 04:14:59 -0700 (PDT)
+        Mon, 13 Jun 2022 10:14:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7696D9AE72;
+        Mon, 13 Jun 2022 04:42:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8893260B6B;
-        Mon, 13 Jun 2022 11:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E53C3411C;
-        Mon, 13 Jun 2022 11:14:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B160BB80EB3;
+        Mon, 13 Jun 2022 11:42:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272A9C34114;
+        Mon, 13 Jun 2022 11:42:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118899;
-        bh=0+3cOnk2z3C+1fmNZLPemFHmvE1ZEFxh/Sv4oC37mqs=;
+        s=korg; t=1655120554;
+        bh=HV73AQN1kNcjmqMkArhjy0PLs8x/DcI7HaSRZwf/Jeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cV7VVtBUuKYqnIFXKAOHvcor8zzCqHMdSBc/AgvQeNZzKtwWbtKbtDCuJokuuS7/c
-         K7UMCjFb+sOwmul10YC/2Jk9IL1W+QO0i9QoQhNxeg0BsZi8Llzrh32Zrir5heOitJ
-         KjtCtNrbTkhutDHzrZ555zyZE1YVd7ncq4Rmydjc=
+        b=s9oUruVGCGrM5BjJ/haZV4+JZ249KnOQGQ5efWWZ7awmLY6eWP29UniW9ogVET6ue
+         Fk6s0AV7JsnvomInBIpS9ebqvzRtYjBg37yrdXvbuWJf4C0CKAoqMb2o5S8t/5aspK
+         aD2J5aM5cDas2jLk4JtZ0CqbuacwEJBDz8fbKDtk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 067/247] watchdog: ts4800_wdt: Fix refcount leak in ts4800_wdt_probe
+Subject: [PATCH 5.17 075/298] clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return value
 Date:   Mon, 13 Jun 2022 12:09:29 +0200
-Message-Id: <20220613094924.990995949@linuxfoundation.org>
+Message-Id: <20220613094927.221328000@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 5d24df3d690809952528e7a19a43d84bc5b99d44 ]
+[ Upstream commit 9c04a8ff03def4df3f81219ffbe1ec9b44ff5348 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add  missing of_node_put() in some error paths.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fixes: bf9006399939 ("watchdog: ts4800: add driver for TS-4800 watchdog")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220511114203.47420-1-linmq006@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Fixes: 89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220422104101.55754-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/ts4800_wdt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/clocksource/timer-oxnas-rps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
-index c137ad2bd5c3..0ea554c7cda5 100644
---- a/drivers/watchdog/ts4800_wdt.c
-+++ b/drivers/watchdog/ts4800_wdt.c
-@@ -125,13 +125,16 @@ static int ts4800_wdt_probe(struct platform_device *pdev)
- 	ret = of_property_read_u32_index(np, "syscon", 1, &reg);
- 	if (ret < 0) {
- 		dev_err(dev, "no offset in syscon\n");
-+		of_node_put(syscon_np);
- 		return ret;
+diff --git a/drivers/clocksource/timer-oxnas-rps.c b/drivers/clocksource/timer-oxnas-rps.c
+index 56c0cc32d0ac..d514b44e67dd 100644
+--- a/drivers/clocksource/timer-oxnas-rps.c
++++ b/drivers/clocksource/timer-oxnas-rps.c
+@@ -236,7 +236,7 @@ static int __init oxnas_rps_timer_init(struct device_node *np)
  	}
  
- 	/* allocate memory for watchdog struct */
- 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
--	if (!wdt)
-+	if (!wdt) {
-+		of_node_put(syscon_np);
- 		return -ENOMEM;
-+	}
- 
- 	/* set regmap and offset to know where to write */
- 	wdt->feed_offset = reg;
+ 	rps->irq = irq_of_parse_and_map(np, 0);
+-	if (rps->irq < 0) {
++	if (!rps->irq) {
+ 		ret = -EINVAL;
+ 		goto err_iomap;
+ 	}
 -- 
 2.35.1
 

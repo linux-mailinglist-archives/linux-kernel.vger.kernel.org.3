@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E55548B13
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B4C549653
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377854AbiFMNex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S1356671AbiFMLwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378393AbiFMNb0 (ORCPT
+        with ESMTP id S1357560AbiFMLqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:31:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD94028E20;
-        Mon, 13 Jun 2022 04:26:02 -0700 (PDT)
+        Mon, 13 Jun 2022 07:46:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5721C13E27;
+        Mon, 13 Jun 2022 03:52:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7686B80E93;
-        Mon, 13 Jun 2022 11:26:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521CAC34114;
-        Mon, 13 Jun 2022 11:25:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF68BB80D3A;
+        Mon, 13 Jun 2022 10:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17307C34114;
+        Mon, 13 Jun 2022 10:52:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119559;
-        bh=/lWHFpte0nQhGTo7XI8GUdlZRuC2Mn0hannG7wMM4LU=;
+        s=korg; t=1655117566;
+        bh=f5PpVOOP3sRfv4brxVzINldqUAaGx0LXGTxUjPP4kic=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P8vyx3u0EHg5tgQTjEtQMIBUR7ayb17UAxt+eUakR3DjlWu8191Kxb6zuK9tJBQiZ
-         Z+mDeu6uPCfCaBckhbCAvzGaGSZfaNzujimGlgcmAVwQ2YziTd10SHlM5o0jt4XY8g
-         3uHN/ZiwEOIkWIz/nNfMHd9Trp1ENDxUie2AdYSE=
+        b=bSTVZBB91Yz9zSHydNDsN6M8hYNk74vAUaiYf2yo5N76CjT0J8S/FFIZRXQNN+R1J
+         CEcsu+83ozYeWd8DlHSQztJcb8VveOHv32g6nG1wIBgQNqR02H4vKXUPpITCvHH6Fv
+         Rnss52rhL9se6ePb5rVhSTyeqlmcyM2d8IATGRiY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, Wenli Looi <wlooi@ucalgary.ca>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 057/339] soc: rockchip: Fix refcount leak in rockchip_grf_init
+Subject: [PATCH 4.19 058/287] ath9k: fix ar9003_get_eepmisc
 Date:   Mon, 13 Jun 2022 12:08:02 +0200
-Message-Id: <20220613094928.252533585@linuxfoundation.org>
+Message-Id: <20220613094925.628008225@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Wenli Looi <wlooi@ucalgary.ca>
 
-[ Upstream commit 9b59588d8be91c96bfb0371e912ceb4f16315dbf ]
+[ Upstream commit 9aaff3864b603408c02c629957ae8d8ff5d5a4f2 ]
 
-of_find_matching_node_and_match returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+The current implementation is reading the wrong eeprom type.
 
-Fixes: 4c58063d4258 ("soc: rockchip: add driver handling grf setup")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220516072013.19731-1-linmq006@gmail.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Fixes: d8ec2e2a63e8 ("ath9k: Add an eeprom_ops callback for retrieving the eepmisc value")
+Signed-off-by: Wenli Looi <wlooi@ucalgary.ca>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220320233010.123106-5-wlooi@ucalgary.ca
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/rockchip/grf.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/wireless/ath/ath9k/ar9003_eeprom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/rockchip/grf.c b/drivers/soc/rockchip/grf.c
-index 494cf2b5bf7b..343ff61ccccb 100644
---- a/drivers/soc/rockchip/grf.c
-+++ b/drivers/soc/rockchip/grf.c
-@@ -148,12 +148,14 @@ static int __init rockchip_grf_init(void)
- 		return -ENODEV;
- 	if (!match || !match->data) {
- 		pr_err("%s: missing grf data\n", __func__);
-+		of_node_put(np);
- 		return -EINVAL;
- 	}
+diff --git a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
+index 4d45d5a8ad2e..db583a6aeb0c 100644
+--- a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
++++ b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
+@@ -5615,7 +5615,7 @@ unsigned int ar9003_get_paprd_scale_factor(struct ath_hw *ah,
  
- 	grf_info = match->data;
+ static u8 ar9003_get_eepmisc(struct ath_hw *ah)
+ {
+-	return ah->eeprom.map4k.baseEepHeader.eepMisc;
++	return ah->eeprom.ar9300_eep.baseEepHeader.opCapFlags.eepMisc;
+ }
  
- 	grf = syscon_node_to_regmap(np);
-+	of_node_put(np);
- 	if (IS_ERR(grf)) {
- 		pr_err("%s: could not get grf syscon\n", __func__);
- 		return PTR_ERR(grf);
+ const struct eeprom_ops eep_ar9300_ops = {
 -- 
 2.35.1
 

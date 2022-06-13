@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7511E549763
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28973548BB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359337AbiFMNR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S1380864AbiFMODX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359431AbiFMNJx (ORCPT
+        with ESMTP id S1381127AbiFMN4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:09:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED73396BC;
-        Mon, 13 Jun 2022 04:20:37 -0700 (PDT)
+        Mon, 13 Jun 2022 09:56:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0EE87A22;
+        Mon, 13 Jun 2022 04:36:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 016B6CE110D;
-        Mon, 13 Jun 2022 11:20:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3038C3411C;
-        Mon, 13 Jun 2022 11:20:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1B06B80ECA;
+        Mon, 13 Jun 2022 11:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29E9C34114;
+        Mon, 13 Jun 2022 11:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119234;
-        bh=RYGlt8XO8N6wGU/CPy6VpyAOXZydS1xA2/rRn4qKMHg=;
+        s=korg; t=1655120196;
+        bh=WOZZ81gRLciIhVRawU+i1v+Da6F8SDjqNSRRDxrrypA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HJFWx6U3HgxYHhrgHaLxIxuYekvESTXzwLkUdwTFmuEKF+rrtw4XytlIe/jAGAZan
-         UOEmeSgv2vNnATR4h/94Ntv2Xxm1oC3MJlfsA8X5206BbXCQyNWWAmIhGleYi1CWzc
-         2yl6J3BPdDU7mJ3ass4OQ532DsPwjpKK6hkhLCWY=
+        b=gx/h2CvMe8w5T19lU7gp6M6ajEkj2vzA6gmHLbN7zjVC9glERyVz7ZfLtarx4wlAO
+         PCHYgZxkiPXZE72Gbd4AJRZs9FxAVPYP4E9nEzUPVFUVr9kwaH71tTG9u4bPnIfVLe
+         62mFld0WWfwCQ7Xb4+TxbDTZnQjwJ3SgkKurNYcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Wang Cheng <wanngchenng@gmail.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 188/247] staging: rtl8712: fix uninit-value in usb_read8() and friends
+Subject: [PATCH 5.18 265/339] drm/amd/display: Check zero planes for OTG disable W/A on clock change
 Date:   Mon, 13 Jun 2022 12:11:30 +0200
-Message-Id: <20220613094928.654728921@linuxfoundation.org>
+Message-Id: <20220613094934.686145142@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,151 +59,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Cheng <wanngchenng@gmail.com>
+From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
 
-[ Upstream commit d1b57669732d09da7e13ef86d058dab0cd57f6e0 ]
+[ Upstream commit 66a197203794339b028eedfa880bff9367fce783 ]
 
-When r8712_usbctrl_vendorreq() returns negative, 'data' in
-usb_read{8,16,32} will not be initialized.
+[Why]
+A display clock change hang can occur when switching between DIO and HPO
+enabled modes during the optimize_bandwidth in dc_commit_state_no_check
+call.
 
-BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:643 [inline]
-BUG: KMSAN: uninit-value in string+0x4ec/0x6f0 lib/vsprintf.c:725
- string_nocheck lib/vsprintf.c:643 [inline]
- string+0x4ec/0x6f0 lib/vsprintf.c:725
- vsnprintf+0x2222/0x3650 lib/vsprintf.c:2806
- va_format lib/vsprintf.c:1704 [inline]
- pointer+0x18e6/0x1f70 lib/vsprintf.c:2443
- vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2810
- vprintk_store+0x537/0x2150 kernel/printk/printk.c:2158
- vprintk_emit+0x28b/0xab0 kernel/printk/printk.c:2256
- dev_vprintk_emit+0x5ef/0x6d0 drivers/base/core.c:4604
- dev_printk_emit+0x1dd/0x21f drivers/base/core.c:4615
- __dev_printk+0x3be/0x440 drivers/base/core.c:4627
- _dev_info+0x1ea/0x22f drivers/base/core.c:4673
- r871xu_drv_init+0x1929/0x3070 drivers/staging/rtl8712/usb_intf.c:401
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
- really_probe+0x6c7/0x1350 drivers/base/dd.c:621
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
- really_probe+0x6c7/0x1350 drivers/base/dd.c:621
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_new_device+0x1b91/0x2950 drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5363 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5507 [inline]
- port_event drivers/usb/core/hub.c:5665 [inline]
- hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5747
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2289
- worker_thread+0x10d0/0x2240 kernel/workqueue.c:2436
- kthread+0x3c7/0x500 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
+This happens when going from 4k120 8bpc 420 to 4k144 10bpc 444.
 
-Local variable data created at:
- usb_read8+0x5d/0x130 drivers/staging/rtl8712/usb_ops.c:33
- r8712_read8+0xa5/0xd0 drivers/staging/rtl8712/rtl8712_io.c:29
+Display clock in the DIO case is 1200MHz, but pixel rate is 600MHz
+because the pixel format is 420.
 
-KMSAN: uninit-value in r871xu_drv_init
-https://syzkaller.appspot.com/bug?id=3cd92b1d85428b128503bfa7a250294c9ae00bd8
+Display clock in the HPO case is less (800MHz?) because of ODM combine
+which results in a smaller divider.
 
-Reported-by: <syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com>
-Tested-by: <syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com>
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
-Link: https://lore.kernel.org/r/b9b7a6ee02c02aa28054f5cf16129977775f3cd9.1652618244.git.wanngchenng@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The DIO is still active in prepare but not active in the optimize which
+results in the hang occuring.
+
+During this change there are no planes on the stream so it's safe to
+apply the workaround, but dpms_off = false and signal type is not
+virtual.
+
+[How]
+Check for plane_count == 0, no planes on the stream.
+
+It's easiest to check pipe->plane_state == NULL as an equivalent check
+rather than trying to search for the stream status in the context
+associated with the stream, so let's do that.
+
+The primary, non MPO pipe should not have a NULL plane state.
+
+Reviewed-by: Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>
+Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
+Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8712/usb_ops.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c | 3 ++-
+ drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/rtl8712/usb_ops.c b/drivers/staging/rtl8712/usb_ops.c
-index e64845e6adf3..af9966d03979 100644
---- a/drivers/staging/rtl8712/usb_ops.c
-+++ b/drivers/staging/rtl8712/usb_ops.c
-@@ -29,7 +29,8 @@ static u8 usb_read8(struct intf_hdl *intfhdl, u32 addr)
- 	u16 wvalue;
- 	u16 index;
- 	u16 len;
--	__le32 data;
-+	int status;
-+	__le32 data = 0;
- 	struct intf_priv *intfpriv = intfhdl->pintfpriv;
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
+index 8be4c1970628..3bf2ab2ff7f8 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
+@@ -91,7 +91,8 @@ static void dcn315_disable_otg_wa(struct clk_mgr *clk_mgr_base, bool disable)
  
- 	request = 0x05;
-@@ -37,8 +38,10 @@ static u8 usb_read8(struct intf_hdl *intfhdl, u32 addr)
- 	index = 0;
- 	wvalue = (u16)(addr & 0x0000ffff);
- 	len = 1;
--	r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index, &data, len,
--				requesttype);
-+	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
-+					 &data, len, requesttype);
-+	if (status < 0)
-+		return 0;
- 	return (u8)(le32_to_cpu(data) & 0x0ff);
- }
+ 		if (pipe->top_pipe || pipe->prev_odm_pipe)
+ 			continue;
+-		if (pipe->stream && (pipe->stream->dpms_off || dc_is_virtual_signal(pipe->stream->signal))) {
++		if (pipe->stream && (pipe->stream->dpms_off || pipe->plane_state == NULL ||
++				     dc_is_virtual_signal(pipe->stream->signal))) {
+ 			if (disable)
+ 				pipe->stream_res.tg->funcs->immediate_disable_crtc(pipe->stream_res.tg);
+ 			else
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
+index 3121dd2d2a91..fc3af81ed6c6 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
+@@ -122,7 +122,8 @@ static void dcn316_disable_otg_wa(struct clk_mgr *clk_mgr_base, bool disable)
  
-@@ -49,7 +52,8 @@ static u16 usb_read16(struct intf_hdl *intfhdl, u32 addr)
- 	u16 wvalue;
- 	u16 index;
- 	u16 len;
--	__le32 data;
-+	int status;
-+	__le32 data = 0;
- 	struct intf_priv *intfpriv = intfhdl->pintfpriv;
- 
- 	request = 0x05;
-@@ -57,8 +61,10 @@ static u16 usb_read16(struct intf_hdl *intfhdl, u32 addr)
- 	index = 0;
- 	wvalue = (u16)(addr & 0x0000ffff);
- 	len = 2;
--	r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index, &data, len,
--				requesttype);
-+	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
-+					 &data, len, requesttype);
-+	if (status < 0)
-+		return 0;
- 	return (u16)(le32_to_cpu(data) & 0xffff);
- }
- 
-@@ -69,7 +75,8 @@ static u32 usb_read32(struct intf_hdl *intfhdl, u32 addr)
- 	u16 wvalue;
- 	u16 index;
- 	u16 len;
--	__le32 data;
-+	int status;
-+	__le32 data = 0;
- 	struct intf_priv *intfpriv = intfhdl->pintfpriv;
- 
- 	request = 0x05;
-@@ -77,8 +84,10 @@ static u32 usb_read32(struct intf_hdl *intfhdl, u32 addr)
- 	index = 0;
- 	wvalue = (u16)(addr & 0x0000ffff);
- 	len = 4;
--	r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index, &data, len,
--				requesttype);
-+	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
-+					 &data, len, requesttype);
-+	if (status < 0)
-+		return 0;
- 	return le32_to_cpu(data);
- }
- 
+ 		if (pipe->top_pipe || pipe->prev_odm_pipe)
+ 			continue;
+-		if (pipe->stream && (pipe->stream->dpms_off || dc_is_virtual_signal(pipe->stream->signal))) {
++		if (pipe->stream && (pipe->stream->dpms_off || pipe->plane_state == NULL ||
++				     dc_is_virtual_signal(pipe->stream->signal))) {
+ 			if (disable)
+ 				pipe->stream_res.tg->funcs->immediate_disable_crtc(pipe->stream_res.tg);
+ 			else
 -- 
 2.35.1
 

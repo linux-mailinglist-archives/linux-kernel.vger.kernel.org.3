@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED294548654
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF7254877A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348600AbiFMK5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S1350944AbiFMMdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349965AbiFMKyi (ORCPT
+        with ESMTP id S1357229AbiFMM3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8E62FFF3;
-        Mon, 13 Jun 2022 03:28:31 -0700 (PDT)
+        Mon, 13 Jun 2022 08:29:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB7F59979;
+        Mon, 13 Jun 2022 04:06:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB51460F09;
-        Mon, 13 Jun 2022 10:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDB99C34114;
-        Mon, 13 Jun 2022 10:28:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEA65613E9;
+        Mon, 13 Jun 2022 11:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F10C34114;
+        Mon, 13 Jun 2022 11:06:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116110;
-        bh=7xf9iBHpNNLxSetGM17NzppiizC8ZCsYKWufW33KuuU=;
+        s=korg; t=1655118364;
+        bh=Qkp/d6fTI1AaGtwPky2hCYDAbrq6zhP9mCpWsyyUi6c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QfTq9oaHAA6qI4b3o2mjNQRBuuIzawJTIf/6OKrGJoFQ+6LolIJkbQL3O/ZeREbpL
-         eHsXb4pQIyqaWKElNd4wXN1aLgzdQr0ySoujB58miir1HwnkIDx7dtS+eUIGoGKnUh
-         Bw0Gb/Wsre0DTaTx9gDVdoCZdnl8uxs/w0Xa4iOc=
+        b=cYa2Sd8auXfPl091FuOO/5FDUy9iqbHgB14UlXyt1o2VxOMaW/133kCxmGwmv0Ga/
+         LkkhyZhH4P587vCfNZGvrcPZiVr3jHtbsgP7seuRMZf1R/qipQjpKlKc8VTRPeRfRE
+         Wx1gUQO5FGvjJEGk2VEJjL0O4xGse4TsCcmQLv14=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 4.14 134/218] docs/conf.py: Cope with removal of language=None in Sphinx 5.0.0
+        stable@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 032/172] serial: meson: acquire port->lock in startup()
 Date:   Mon, 13 Jun 2022 12:09:52 +0200
-Message-Id: <20220613094924.647845896@linuxfoundation.org>
+Message-Id: <20220613094858.096965496@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +59,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akira Yokosawa <akiyks@gmail.com>
+From: John Ogness <john.ogness@linutronix.de>
 
-commit 627f01eab93d8671d4e4afee9b148f9998d20e7c upstream.
+[ Upstream commit 589f892ac8ef244e47c5a00ffd8605daa1eaef8e ]
 
-One of the changes in Sphinx 5.0.0 [1] says [sic]:
+The uart_ops startup() callback is called without interrupts
+disabled and without port->lock locked, relatively late during the
+boot process (from the call path of console_on_rootfs()). If the
+device is a console, it was already previously registered and could
+be actively printing messages.
 
-    5.0.0 final
+Since the startup() callback is reading/writing registers used by
+the console write() callback (AML_UART_CONTROL), its access must
+be synchronized using the port->lock. Currently it is not.
 
-     - #10474: language does not accept None as it value.
-       The default value of language becomes to 'en' now.
+The startup() callback is the only function that explicitly enables
+interrupts. Without the synchronization, it is possible that
+interrupts become accidentally permanently disabled.
 
-[1]: https://www.sphinx-doc.org/en/master/changes.html#release-5-0-0-released-may-30-2022
+CPU0                           CPU1
+meson_serial_console_write     meson_uart_startup
+--------------------------     ------------------
+spin_lock(port->lock)
+val = readl(AML_UART_CONTROL)
+uart_console_write()
+                               writel(INT_EN, AML_UART_CONTROL)
+writel(val, AML_UART_CONTROL)
+spin_unlock(port->lock)
 
-It results in a new warning from Sphinx 5.0.0 [sic]:
+Add port->lock synchronization to meson_uart_startup() to avoid
+racing with meson_serial_console_write().
 
-    WARNING: Invalid configuration value found: 'language = None'.
-    Update your configuration to a valid langauge code. Falling
-    back to 'en' (English).
+Also add detailed comments to meson_uart_reset() explaining why it
+is *not* using port->lock synchronization.
 
-Silence the warning by using 'en'.
-It works with all the Sphinx versions required for building
-kernel documentation (1.7.9 or later).
-
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Link: https://lore.kernel.org/r/bd0c2ddc-2401-03cb-4526-79ca664e1cbe@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
+Fixes: ff7693d079e5 ("ARM: meson: serial: add MesonX SoC on-chip uart driver")
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Link: https://lore.kernel.org/r/20220508103547.626355-1-john.ogness@linutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/conf.py |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/meson_uart.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -96,7 +96,7 @@ finally:
- #
- # This is also used if you do content translation via gettext catalogs.
- # Usually you set "language" from the command line for these cases.
--language = None
-+language = 'en'
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index d2c08b760f83..91b7359b79a2 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -255,6 +255,14 @@ static const char *meson_uart_type(struct uart_port *port)
+ 	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
+ }
  
- # There are two options for replacing |today|: either, you set today to some
- # non-false value, then it is used:
++/*
++ * This function is called only from probe() using a temporary io mapping
++ * in order to perform a reset before setting up the device. Since the
++ * temporarily mapped region was successfully requested, there can be no
++ * console on this port at this time. Hence it is not necessary for this
++ * function to acquire the port->lock. (Since there is no console on this
++ * port at this time, the port->lock is not initialized yet.)
++ */
+ static void meson_uart_reset(struct uart_port *port)
+ {
+ 	u32 val;
+@@ -269,9 +277,12 @@ static void meson_uart_reset(struct uart_port *port)
+ 
+ static int meson_uart_startup(struct uart_port *port)
+ {
++	unsigned long flags;
+ 	u32 val;
+ 	int ret = 0;
+ 
++	spin_lock_irqsave(&port->lock, flags);
++
+ 	val = readl(port->membase + AML_UART_CONTROL);
+ 	val |= AML_UART_CLEAR_ERR;
+ 	writel(val, port->membase + AML_UART_CONTROL);
+@@ -287,6 +298,8 @@ static int meson_uart_startup(struct uart_port *port)
+ 	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
+ 	writel(val, port->membase + AML_UART_MISC);
+ 
++	spin_unlock_irqrestore(&port->lock, flags);
++
+ 	ret = request_irq(port->irq, meson_uart_interrupt, 0,
+ 			  port->name, port);
+ 
+-- 
+2.35.1
+
 
 

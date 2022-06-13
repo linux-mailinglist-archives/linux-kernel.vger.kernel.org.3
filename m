@@ -2,127 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11097549D97
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97D8549D98
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349918AbiFMTY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S1350011AbiFMTYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350071AbiFMTXW (ORCPT
+        with ESMTP id S1350295AbiFMTXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:23:22 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C63522CD
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:19:55 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id h5so8031055wrb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=v9wOSbkkFgoouudCT5M9ut11ttnj6LGZRsAbuaQUW4w=;
-        b=AhRXQM/ukGy67WqPvSWEdkzh2PE+yy+GSFhlwgy+rjdEcBQcH5eTH7wmfvOFQZ2+2g
-         S2NoTKCqKPCjaIsxjCSDZKihElHpfrXopMf0Gvr1nWl6qFzmc4Rc9R/OCX8XXiAnZ3z2
-         3mMZ1tYsDbkbr+HujclIPj1SogBHfm7NDSF8qEzfkoEuxVDqnMvotCfqtMgGcOLnrt0C
-         FNZiHc/RrEuV5NC0Wjh+Ib++wXt99f9T+4ntJIv7vi99j0/qXrAejs2G2swfZ3NBBBeS
-         i7Xxq0fQR9Et8WY8Hl5XgxQuIs4n+t1h9QP85QyB0kf3CHBK1OLwHHO8Ifsq88iyH651
-         YxAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=v9wOSbkkFgoouudCT5M9ut11ttnj6LGZRsAbuaQUW4w=;
-        b=nCkV3cqEN6RQbDuqk3TMnO1MMUOTTXasPNvlDDl3/h7/2j/wRWTtsWPheSmzIsGEHx
-         7i5moMOuVjx0xUjVwOpp3pg4KM21NYpxz9ZcDUMqEaxrB2Z8Nc4O88Dgzs+1SRCEZ0Ty
-         yZ42cBaD4B8PizPI414WVbcQO2if7DTNrPuOZSa7IFcePINhTJNiRS8BiANgazzb+uwu
-         JJ3vQqVUZ0Ymeh1XJsRSoZ3cSHssWky1aB421ZrYta46v3QamZ086EbWMhbS1iWLUYr/
-         L22K5GmhbuTRAin4iudZoFYEU/7ZevPQ4W+Izgp4+v6qVlLp4HlxgD4N1+q6KYmCb+ka
-         +Jlw==
-X-Gm-Message-State: AJIora/U0c3rmIFTEvwGcR5JZfpqs+doFZ0Wl2ayPOsK8OLVBQE5XTa9
-        gOahYKBZlcAxkR8qRBcv5UU=
-X-Google-Smtp-Source: AGRyM1vK1IbbnFk2rcDMjgTifM9dW4eAfDBLjuP8C26mHS6Fg6KbDO8FnPheE0vldCzWcRT9Eblp7g==
-X-Received: by 2002:a05:6000:1688:b0:218:47d6:5e46 with SMTP id y8-20020a056000168800b0021847d65e46mr785988wrd.699.1655140794288;
-        Mon, 13 Jun 2022 10:19:54 -0700 (PDT)
-Received: from elementary ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05600c424800b0039740903c39sm9879039wmm.7.2022.06.13.10.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:19:53 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 19:19:51 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     javierm@redhat.com, davidgow@google.com, airlied@linux.ie,
-        dlatypov@google.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, tzimmermann@suse.de,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 1/3] drm/rect: Add DRM_RECT_INIT() macro
-Message-ID: <20220613171951.GA132742@elementary>
-References: <20220612161248.271590-1-jose.exposito89@gmail.com>
- <20220612161248.271590-2-jose.exposito89@gmail.com>
- <87pmjdyp62.fsf@intel.com>
+        Mon, 13 Jun 2022 15:23:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5C34BF71;
+        Mon, 13 Jun 2022 10:20:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9632D23A;
+        Mon, 13 Jun 2022 10:20:27 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F6B23F792;
+        Mon, 13 Jun 2022 10:20:25 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 18:20:15 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, sudeep.holla@arm.com,
+        quic_sramana@quicinc.com, vincent.guittot@linaro.org,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>
+Subject: Re: [RFC 0/3] SCMI Vhost and Virtio backend implementation
+Message-ID: <Yqdxz9lZo5qedTG4@e120937-lin>
+References: <20220609071956.5183-1-quic_neeraju@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87pmjdyp62.fsf@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220609071956.5183-1-quic_neeraju@quicinc.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:53:57AM +0300, Jani Nikula wrote:
-> On Sun, 12 Jun 2022, José Expósito <jose.exposito89@gmail.com> wrote:
-> > Add a helper macro to initialize a rectangle from x, y, width and
-> > height information.
-> >
-> > Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-> > ---
-> >  include/drm/drm_rect.h | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/include/drm/drm_rect.h b/include/drm/drm_rect.h
-> > index 6f6e19bd4dac..945696323c69 100644
-> > --- a/include/drm/drm_rect.h
-> > +++ b/include/drm/drm_rect.h
-> > @@ -47,6 +47,18 @@ struct drm_rect {
-> >  	int x1, y1, x2, y2;
-> >  };
-> >  
-> > +/**
-> > + * DRM_RECT_INIT - initialize a rectangle from x/y/w/h
-> > + * @x: x coordinate
-> > + * @y: y coordinate
-> > + * @w: width
-> > + * @h: height
-> > + *
-> > + * RETURNS:
-> > + * A new rectangle of the specified size.
-> > + */
-> > +#define DRM_RECT_INIT(x, y, w, h) { (x), (y), (x) + (w), (y) + (h) }
-> 
-> Please use designated initializers.
-> 
-> It might help type safety if it also contained a (struct drm_rect) cast.
++CC: Souvik
 
-Thanks a lot for your review Jani, just emailed v3 with your suggested
-changes.
+On Thu, Jun 09, 2022 at 12:49:53PM +0530, Neeraj Upadhyay wrote:
+> This RFC series, provides ARM System Control and Management Interface (SCMI)
+> protocol backend implementation for Virtio transport. The purpose of this
 
-Jose
- 
-> BR,
-> Jani.
+Hi Neeraj,
+
+Thanks for this work, I only glanced through the series at first to
+grasp a general understanding of it (without goind into much details for
+now) and I'd have a few questions/concerns that I'll noted down below.
+
+I focused mainly on the backend server aims/functionalities/issues ignoring
+at first the vhost-scmi entry-point since the vost-scmi accelerator is just
+a (more-or-less) standard means of configuring and grabbing SCMI traffic
+from the VMs into the Host Kernel and so I found more interesting at first
+to understand what we can do with such traffic at first.
+(IOW the vhost-scmi layer is welcome but remain to see what to do with it...)
+
+> feature is to provide para-virtualized interfaces to guest VMs, to various
+> hardware blocks like clocks, regulators. This allows the guest VMs to
+> communicate their resource needs to the host, in the absence of direct
+> access to those resources.
+
+In an SCMI stack the agents (like VMs) issue requests to an SCMI platform
+backend that is in charge of policying and armonizing such requests
+eventually denying some of these (possibly malicious) while allowing others
+(possibly armonizing/merging such reqs); with your solution basically the
+SCMI backend in Kernel marshals/conveys all of such SCMI requests to the
+proper Linux Kernel subsystem that is usually in charge of it, using
+dedicated protocol handlers that basically translates SCMI requests to
+Linux APIs calls to the Host. (I may have oversimplified or missed
+something...)
+
+At the price of a bit of overhead and code-duplication introduced by
+this SCMI Backend you can indeed leverage the existing mechanisms for
+resource accounting and sharing included in such Linux subsystems (like
+Clock framework), and that's nice and useful, BUT how do you policy/filter
+(possibly dinamically as VMs come and go) what these VMs can see and do
+with these resources ?
+
+... MORE importantly how do you protect the Host (or another VM) from
+unacceptable (or possibly malicious) requests conveyed from one VM request
+vqueue into the Linux subsystems (like clocks) ?
+
+I saw you have added a good deal of DT bindings for the backend
+describing protocols, so you could just expose only some protocols via
+the backend (if I get it right) but you cannot anyway selectively expose
+only a subset of resources to the different agents, so, if you expose the
+clock protocol, that will be visible by any VMs and an agent could potentially
+kill the Host or mount some clock related attack acting on the right clock.
+(I mean you cannot describe in the Host DT a number X of clocks to be
+supported by the Host Linux Clock framework BUT then expose selectively to
+the SCMI agents only a subset Y < X to shield the Host from misbehaviour...
+...at least not in a dynamic way avoiding to bake a fixed policy into
+the backend...or maybe I'm missing how you can do that, in such a case
+please explain...)
+
+Moreover, in a normal SCMI stack the server resides out of reach from the
+OSPM agents since the server, wherever it sits, has the last word and can
+deny and block unreasonable/malicious requests while armonizing others: this
+means the typical SCMI platform fw is configured in such a way that clearly
+defines a set of policies to be enforced between the access of the various
+agents. (and it can reside in the trusted codebase given its 'reduced'
+size...even though this policies are probably at the moment not so
+dynamically modificable there either...)
+
+With your approach of a Linux Kernel based SCMI platform backend you are
+certainly using all the good and well proven mechanisms offered by the
+Kernel to share and co-ordinate access to such resources, which is good
+(.. even though Linux is not so small in term of codebase to be used as
+a TCB to tell the truth :D), BUT I don't see the same level of policying
+or filtering applied anywhere in the proposed RFCs, especially to protect
+the Host which at the end is supposed to use the same Linux subsystems and
+possibly share some of those resources for its own needs.
+
+I saw the Base protocol basic implementation you provided to expose the
+supported backend protocols to the VMs, it would be useful to see how
+you plan to handle something like the Clock protocol you mention in the
+example below. (if you have Clock protocol backend that as WIP already
+would be interesting to see it...)
+
+Another issue/criticality that comes to my mind is how do you gather in
+general basic resources states/descriptors from the existing Linux subsystems
+(even leaving out any policying concerns): as an example, how do you gather
+from the Host Clock framework the list of available clocks and their rates
+descriptors that you're going expose to a specific VMs once this latter will
+issue the related SCMI commands to get to know which SCMI Clock domain are
+available ?
+(...and I mean in a dynamic way not using a builtin per-platform baked set of
+ resources known to be made available... I doubt that any sort of DT
+ description would be accepted in this regards ...)
+
 > 
+> 1. Architecture overview
+> ---------------------
 > 
-> > +
-> >  /**
-> >   * DRM_RECT_FMT - printf string for &struct drm_rect
-> >   */
+> Below diagram shows the overall software architecture of SCMI communication
+> between guest VM and the host software. In this diagram, guest is a linux
+> VM; also, host uses KVM linux.
 > 
-> -- 
-> Jani Nikula, Intel Open Source Graphics Center
+>          GUEST VM                   HOST
+>  +--------------------+    +---------------------+    +--------------+
+>  |   a. Device A      |    |   k. Device B       |    |      PLL     |
+>  |  (Clock consumer)  |    |  (Clock consumer)   |    |              |
+>  +--------------------+    +---------------------+    +--------------+
+>           |                         |                         ^
+>           v                         v                         |
+>  +--------------------+    +---------------------+    +-----------------+
+>  | b. Clock Framework |    | j. Clock Framework  | -->| l. Clock Driver |
+>  +-- -----------------+    +---------------------+    +-----------------+
+>           |                         ^
+>           v                         |
+>  +--------------------+    +------------------------+
+>  |  c. SCMI Clock     |    | i. SCMI Virtio Backend |
+>  +--------------------+    +------------------------+ 
+>           |                         ^
+>           v                         |
+>  +--------------------+    +----------------------+
+>  |  d. SCMI Virtio    |    |   h. SCMI Vhost      |<-----------+
+>  +--------------------+    +----------------------+            |
+>           |                         ^                          |
+>           v                         |                          |
+> +-------------------------------------------------+    +-----------------+
+> |              e. Virtio Infra                    |    |    g. VMM       |
+> +-------------------------------------------------+    +-----------------+
+>           |                         ^                           ^
+>           v                         |                           |
+> +-------------------------------------------------+             |
+> |                f. Hypervisor                    |-------------
+> +-------------------------------------------------+
+> 
+
+Looking at the above schema and thinking out loud where any dynamic
+policying against the resources can fit (..and trying desperately NOT to push
+that into the Kernel too :P...) ... I think that XEN was trying something similar
+(with a real backend SCMI platform FW at the end of the pipe though I think...) and
+in their case the per-VMs resource allocation was performed using SCMI
+BASE_SET_DEVICE_PERMISSIONS commands issued by the Hypervisor/VMM itself
+I think or by a Dom0 elected as a trusted agent and so allowed to configure
+such resource partitioning ...
+
+https://www.mail-archive.com/xen-devel@lists.xenproject.org/msg113868.html
+
+...maybe a similar approach, with some sort of SCMI Trusted Agent living within
+the VMM and in charge of directing such resources' partitioning between
+VMs by issuing BASE_SET_DEVICE_PERMISSIONS towards the Kernel SCMI Virtio
+Backend, could help keeping at least the policy bits related to the VMs out of
+the kernel/DTs and possibly dynamically configurable following VMs lifecycle.
+
+Even though, in our case ALL the resource management by device ID would have to
+happen in the Kernel SCMI backend at the end, given that is where the SCMI
+platform resides indeed, BUT at least you could keep the effective policy out of
+kernel space, doing something like:
+
+1. VMM/TrustedAgent query Kernel_SCMI_Virtio_backend for available resources
+
+2. VMM/TrustedAg decides resources allocation between VMs (and/or possibly the Host
+   based on some configured policy)
+
+3. VMM/TrustedAgent issues BASE_SET_DEVICE_PERMISSIONS/PROTOCOLS to the
+   Kernel_SCMI_Virtio_backend
+
+4. Kernel_SCMI_Virtio_backend enforces resource partioning and sharing
+   when processing subsequent VMs SCMI requests coming via Vhost-SCMI
+
+...where the TrustedAgent here could be (I guess) the VMM or the Host or
+both with different level of privilege if you don't want the VMM to be able
+to configure resources access for the whole Host.
+
+> a. Device A             This is the client kernel driver in guest VM,
+>                         for ex. diplay driver, which uses standard
+>                         clock framework APIs to vote for a clock.
+> 
+> b. Clock Framework      Underlying kernel clock framework on
+>                         guest.
+> 
+> c. SCMI Clock           SCMI interface based clock driver.
+> 
+> d. SCMI Virtio          Underlying SCMI framework, using Virtio as
+>                         transport driver.
+> 
+> e. Virtio Infra         Virtio drivers on guest VM. These drivers
+>                         initiate virtqueue requests over Virtio
+>                         transport (MMIO/PCI), and forwards response
+>                         to SCMI Virtio registered callbacks.
+> 
+> f. Hypervisor           Hosted Hypervisor (KVM for ex.), which traps
+>                         and forwards requests on virtqueue ring
+>                         buffers to the VMM.
+> 
+> g. VMM                  Virtual Machine Monitor, running on host userspace,
+>                         which manages the lifecycle of guest VMs, and forwards
+>                         guest initiated virtqueue requests as IOCTLs to the
+>                         Vhost driver on host.
+> 
+> h. SCMI Vhost           In kernel driver, which handles SCMI virtqueue
+>                         requests from guest VMs. This driver forwards the
+>                         requests to SCMI Virtio backend driver, and returns
+>                         the response from backend, over the virtqueue ring
+>                         buffers.
+> 
+> i. SCMI Virtio Backend  SCMI backend, which handles the incoming SCMI messages
+>                         from SCMI Vhost driver, and forwards them to the
+>                         backend protocols like clock and voltage protocols.
+>                         The backend protocols uses the host apis for those
+>                         resources like clock APIs provided by clock framework,
+>                         to vote/request for the resource. The response from
+>                         the host api is parceled into a SCMI response message,
+>                         and is returned to the SCMI Vhost driver. The SCMI
+>                         Vhost driver in turn, returns the reponse over the
+>                         Virtqueue reponse buffers.
+> 
+
+Last but not least, this SCMI Virtio Backend layer in charge of
+processing incoming SCMI packets, interfacing with the Linux subsystems
+final backend and building SCMI replies from Linux will introduce a
+certain level of code/funcs duplication given that this same SCMI basic
+processing capabilities have been already baked in the SCMI stacks found in
+SCP and in TF-A (.. and maybe a few other other proprietary backends)...
+
+... but this is something maybe to be addressed in general in a
+different context not something that can be addressed by this series.
+
+Sorry for the usual flood of words :P ... I'll have a more in deep
+review of the series in the next days, for now I wanted just to share my
+concerns and (maybe wrong) understanding and see what you or Sudeep and
+Souvik think about.
+
+Thanks,
+Cristian
+

@@ -2,195 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7CC549DD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39723549DDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244948AbiFMTkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S1343568AbiFMTlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245317AbiFMTkH (ORCPT
+        with ESMTP id S235421AbiFMTlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:40:07 -0400
-Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [IPv6:2001:1600:3:17::8faf])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3AC13E81;
-        Mon, 13 Jun 2022 11:06:12 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LMKJ12cnCzMqMX3;
-        Mon, 13 Jun 2022 20:06:09 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4LMKHx4fv8zlqQHK;
-        Mon, 13 Jun 2022 20:06:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1655143569;
-        bh=6V0xLAgnaKegpa6qvcm9opCXJieMVgO6NIinoOfSkmQ=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=B4dVtViDU3L7AvfOcgxrH+CTy/oyH6pNvblHsoGEy4jJ+KsICrtKzt/AwU1ndUlf7
-         O2UmFxfBQfnkJ3m69/GGGjclPGZf3OBSAKGAuc3MWf21IbPwsBmnGVruUTpjdTp/4k
-         z1LkPxgOJqO+z55Fav51erAELvxVmLaprQF/cwMo=
-Message-ID: <f6fbf06a-6507-a908-33ed-1218713de09b@digikod.net>
-Date:   Mon, 13 Jun 2022 20:06:04 +0200
+        Mon, 13 Jun 2022 15:41:12 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439C776286
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:08:35 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id x138so6402132pfc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6RfOO19u1aifVisZByr6WMgdeJkVkBAonCLIE3lhww4=;
+        b=ZayI3pusa6NPPyQZLxoG9kjQSrLh5RNRtXEreB7tn3HaMiEKs1Z81QJIKGnlBiOvT8
+         3ZLMkTlpiBnqjIIlh93/+g4p5UHN4QIWDyTopX3GH7Euacyu8/dnuI4KUls12eDKB465
+         pxLc45h7AyHIaDcwYjMRBCzav/15XOBFQDWOU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6RfOO19u1aifVisZByr6WMgdeJkVkBAonCLIE3lhww4=;
+        b=2A/UNpupy8EqUv2nHH3Hytes0CfvnZr3YUiGYCYXmFdRv47lsUG+kKN8kKQRbvfQEk
+         mLFzCDlVeRGZusctiLjqXW98fr0HLT3L1CoFTDxGNkC+R3JD4ETlelC28gzy/ny+P9uT
+         YnMYnujA9XK0+rfm3bBmgi+J2AIlMNW83zz3S7rA+vjVlCvl2WIiMPmNmK6L3LDKFYFo
+         EAWXwhcOGpjD3AtL2fnAE5KUxDaO38wI86iRPtV0i4O4v/jKw92IMXKbb8SOHKXCSBqi
+         avK1uJxJj48XoZer8smJ/EWMurySyKMuHEWWKFoRB9sW+SIqC9QUV6rJeCZrzjXeaw9F
+         skQg==
+X-Gm-Message-State: AOAM531EiQa2nKEqIa27JwGxyvbANPwokxRNrsGhlRSES1OWN3CTIZgV
+        XguN8O733kIefDL/dzivHgmG8A==
+X-Google-Smtp-Source: ABdhPJzyTBSrgeUuj8ZPrTjLj2otwZf42YS9YWJUq0VMLGjI4RlCZxEMTxCgygHUnY0IX59pPnAQ+w==
+X-Received: by 2002:a05:6a00:1acd:b0:51c:795b:860c with SMTP id f13-20020a056a001acd00b0051c795b860cmr591557pfv.16.1655143714650;
+        Mon, 13 Jun 2022 11:08:34 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:c4fb:a1d8:47ef:f10c])
+        by smtp.gmail.com with UTF8SMTPSA id f12-20020aa782cc000000b0051bd9981cacsm5734717pfn.123.2022.06.13.11.08.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 11:08:34 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 11:08:32 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <Yqd9IHQEj3Ex+FcF@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-References: <20220611172233.1494073-1-masahiroy@kernel.org>
- <20220611172233.1494073-2-masahiroy@kernel.org>
- <58a20890-557e-f31c-ed59-7e256445a26c@digikod.net>
- <CAK7LNAQ3p2XiLO7tJSJ9JWnqRomCwjYeQy-Z3j0m904Yn6Av_g@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH 2/4] certs: fix and refactor
- CONFIG_SYSTEM_BLACKLIST_HASH_LIST build
-In-Reply-To: <CAK7LNAQ3p2XiLO7tJSJ9JWnqRomCwjYeQy-Z3j0m904Yn6Av_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yp5nf2w8uVZ38/XZ@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
+> On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+> > Hi Krishna,
+> > 
+> > with this version I see xHCI errors on my SC7180 based system, like
+> > these:
+> > 
+> > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+> > 
+> > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+> > 
+> > After resume a downstream hub isn't enumerated again.
+> > 
+> > So far I didn't see those with v13, but I aso saw the first error with
+> > v16.
+> 
+> It also happens with v13, but only when a wakeup capable vUSB <= 2
+> device is plugged in. Initially I used a wakeup capable USB3 to
+> Ethernet adapter to trigger the wakeup case, however older versions
+> of this series that use usb_wakeup_enabled_descendants() to check
+> for wakeup capable devices didn't actually check for vUSB > 2
+> devices.
+> 
+> So the case were the controller/PHYs is powered down works, but
+> the controller is unhappy when the runtime PM path is used during
+> system suspend.
 
-On 13/06/2022 16:55, Masahiro Yamada wrote:
-> On Mon, Jun 13, 2022 at 9:34 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->>
->>
->> On 11/06/2022 19:22, Masahiro Yamada wrote:
->>> Commit addf466389d9 ("certs: Check that builtin blacklist hashes are
->>> valid") was applied 8 months after the submission.
->>>
->>> In the meantime, the base code had been removed by commit b8c96a6b466c
->>> ("certs: simplify $(srctree)/ handling and remove config_filename
->>> macro").
->>>
->>> Fix the Makefile.
->>>
->>> Create a local copy of $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST). It is
->>> included from certs/blacklist_hashes.c and also works as a timestamp.
->>>
->>> Send error messages from check-blacklist-hashes.awk to stderr instead
->>> of stdout.
->>>
->>> Fixes: addf466389d9 ("certs: Check that builtin blacklist hashes are valid")
->>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->>
->> Reviewed-by: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> As a side note, it may let an orphan certs/blacklist_hashes_checked file
->> but we can't really do something about that and it's OK.
-> 
-> 
-> GNU Make uses timestamps of files for dependency tracking,
-> so Kbuild keeps all intermediate files.
-> 
-> Keeping certs/blacklist_hashes_checked
-> is the right thing to do.
+The issue isn't seen on all systems using dwc3-qcom and the problem starts
+during probe(). The expected probe sequence is something like this:
 
-blacklist_hashes_checked is the file you replaced with 
-blacklist_hash_list, and is then not used in any Makefile anymore. There 
-is then no timestamp issue. I just wanted to mention that it is normal 
-that a git status will show it on build directories also used as source 
-directories that were already using such feature.
+dwc3_qcom_probe
+  dwc3_qcom_of_register_core
+    dwc3_probe
 
+  if (device_can_wakeup(&qcom->dwc3->dev))
+    ...
 
+The important part is that device_can_wakeup() is called after dwc3_probe()
+has completed. That's what I see on a QC SC7280 system, where wakeup is
+generally working with these patches.
 
-> 
-> 
-> 
->> Thanks!
->>
->>> ---
->>>
->>>    certs/.gitignore         |  2 +-
->>>    certs/Makefile           | 20 ++++++++++----------
->>>    certs/blacklist_hashes.c |  2 +-
->>>    3 files changed, 12 insertions(+), 12 deletions(-)
->>>
->>> diff --git a/certs/.gitignore b/certs/.gitignore
->>> index 56637aceaf81..cec5465f31c1 100644
->>> --- a/certs/.gitignore
->>> +++ b/certs/.gitignore
->>> @@ -1,5 +1,5 @@
->>>    # SPDX-License-Identifier: GPL-2.0-only
->>> -/blacklist_hashes_checked
->>> +/blacklist_hash_list
->>>    /extract-cert
->>>    /x509_certificate_list
->>>    /x509_revocation_list
->>> diff --git a/certs/Makefile b/certs/Makefile
->>> index cb1a9da3fc58..a8d628fd5f7b 100644
->>> --- a/certs/Makefile
->>> +++ b/certs/Makefile
->>> @@ -7,22 +7,22 @@ obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o c
->>>    obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
->>>    obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
->>>    ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
->>> -quiet_cmd_check_blacklist_hashes = CHECK   $(patsubst "%",%,$(2))
->>> -      cmd_check_blacklist_hashes = $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(2); touch $@
->>>
->>> -$(eval $(call config_filename,SYSTEM_BLACKLIST_HASH_LIST))
->>> +$(obj)/blacklist_hashes.o: $(obj)/blacklist_hash_list
->>> +CFLAGS_blacklist_hashes.o := -I $(obj)
->>>
->>> -$(obj)/blacklist_hashes.o: $(obj)/blacklist_hashes_checked
->>> +quiet_cmd_check_and_copy_blacklist_hash_list = GEN     $@
->>> +      cmd_check_and_copy_blacklist_hash_list = \
->>> +     $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) >&2; \
->>> +     cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
->>>
->>> -CFLAGS_blacklist_hashes.o += -I$(srctree)
->>> -
->>> -targets += blacklist_hashes_checked
->>> -$(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FORCE
->>> -     $(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
->>> +$(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
->>> +     $(call if_changed,check_and_copy_blacklist_hash_list)
->>>    obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
->>>    else
->>>    obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
->>>    endif
->>> +targets += blacklist_hash_list
->>>
->>>    quiet_cmd_extract_certs  = CERT    $@
->>>          cmd_extract_certs  = $(obj)/extract-cert $(extract-cert-in) $@
->>> @@ -33,7 +33,7 @@ $(obj)/system_certificates.o: $(obj)/x509_certificate_list
->>>    $(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) $(obj)/extract-cert FORCE
->>>        $(call if_changed,extract_certs)
->>>
->>> -targets += x509_certificate_list blacklist_hashes_checked
->>> +targets += x509_certificate_list
->>>
->>>    # If module signing is requested, say by allyesconfig, but a key has not been
->>>    # supplied, then one will need to be generated to make sure the build does not
->>> diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
->>> index d5961aa3d338..86d66fe11348 100644
->>> --- a/certs/blacklist_hashes.c
->>> +++ b/certs/blacklist_hashes.c
->>> @@ -2,6 +2,6 @@
->>>    #include "blacklist.h"
->>>
->>>    const char __initconst *const blacklist_hashes[] = {
->>> -#include CONFIG_SYSTEM_BLACKLIST_HASH_LIST
->>> +#include "blacklist_hash_list"
->>>        , NULL
->>>    };
-> 
-> 
-> 
-> --
-> Best Regards
-> Masahiro Yamada
+However on a QC SC7180 system dwc3_probe() is deferred and only executed after
+dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
+With that the controller/driver ends up in an unhappy state after system
+suspend.
+
+Probing is deferred on SC7180 because device_links_check_suppliers() finds
+that '88e3000.phy' isn't ready yet.

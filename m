@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9027548A07
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E16554948C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244747AbiFMK1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S1354292AbiFMMa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245710AbiFMKYr (ORCPT
+        with ESMTP id S1351893AbiFMMZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:24:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF43120BEF;
-        Mon, 13 Jun 2022 03:19:16 -0700 (PDT)
+        Mon, 13 Jun 2022 08:25:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E4727FE4;
+        Mon, 13 Jun 2022 04:05:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4A04ECE1102;
-        Mon, 13 Jun 2022 10:19:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2095DC34114;
-        Mon, 13 Jun 2022 10:19:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0490ACE1179;
+        Mon, 13 Jun 2022 11:05:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B88DC34114;
+        Mon, 13 Jun 2022 11:05:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115553;
-        bh=hxNeKlEn0nZ4rWcWNULpY5MIvcnsf/maQImXH9MuIXw=;
+        s=korg; t=1655118339;
+        bh=gIozRHWTMU8uI04KtBwRuTUKrP1BLAMx6fJOoYClCS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W6v1ml6qTYML3l2GP2WmYmt9qiBQIwIORmIK8cK14jFkDW0tIrszNHZWQyEoZRJYJ
-         J0PNefQKz6dax3YvUgKLgvB/kVYCwVUTG2TtQOU98PmPV9wcqX76OaGphbGe/hWx7X
-         1fnlFnMB9ov1UCEEz8Drdq937aoqdPdRduhk2n+c=
+        b=WVexYpjVFnks8nMbPJn+5kTBD6j/kUDNIZdzmSxjMlmpLtmcMUollgS7nojmcqRzy
+         52mhRY3t4XLaeAmteQijsqBZgxqy+gVyvcYrYFO/61ZHrlmHkjbBuc0wzLUBl3Ltoy
+         aHkNC4c0XKsWxbxNbKTXABjY7xJ4rkgITfYt2OPE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Laurent Fasnacht <laurent.fasnacht@proton.ch>,
-        Neal Cardwell <ncardwell@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@st.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 126/167] tcp: tcp_rtx_synack() can be called from process context
+Subject: [PATCH 5.10 040/172] serial: stm32-usart: Correct CSIZE, bits, and parity
 Date:   Mon, 13 Jun 2022 12:10:00 +0200
-Message-Id: <20220613094910.396930476@linuxfoundation.org>
+Message-Id: <20220613094900.006815184@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,90 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 0a375c822497ed6ad6b5da0792a12a6f1af10c0b ]
+[ Upstream commit 1deeda8d2877c18bc2b9eeee10dd6d2628852848 ]
 
-Laurent reported the enclosed report [1]
+Add CSIZE sanitization for unsupported CSIZE configurations. In
+addition, if parity is asked for but CSx was unsupported, the sensible
+result is CS8+parity which requires setting USART_CR1_M0 like with 9
+bits.
 
-This bug triggers with following coditions:
+Incorrect CSIZE results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
 
-0) Kernel built with CONFIG_DEBUG_PREEMPT=y
-
-1) A new passive FastOpen TCP socket is created.
-   This FO socket waits for an ACK coming from client to be a complete
-   ESTABLISHED one.
-2) A socket operation on this socket goes through lock_sock()
-   release_sock() dance.
-3) While the socket is owned by the user in step 2),
-   a retransmit of the SYN is received and stored in socket backlog.
-4) At release_sock() time, the socket backlog is processed while
-   in process context.
-5) A SYNACK packet is cooked in response of the SYN retransmit.
-6) -> tcp_rtx_synack() is called in process context.
-
-Before blamed commit, tcp_rtx_synack() was always called from BH handler,
-from a timer handler.
-
-Fix this by using TCP_INC_STATS() & NET_INC_STATS()
-which do not assume caller is in non preemptible context.
-
-[1]
-BUG: using __this_cpu_add() in preemptible [00000000] code: epollpep/2180
-caller is tcp_rtx_synack.part.0+0x36/0xc0
-CPU: 10 PID: 2180 Comm: epollpep Tainted: G           OE     5.16.0-0.bpo.4-amd64 #1  Debian 5.16.12-1~bpo11+1
-Hardware name: Supermicro SYS-5039MC-H8TRF/X11SCD-F, BIOS 1.7 11/23/2021
-Call Trace:
- <TASK>
- dump_stack_lvl+0x48/0x5e
- check_preemption_disabled+0xde/0xe0
- tcp_rtx_synack.part.0+0x36/0xc0
- tcp_rtx_synack+0x8d/0xa0
- ? kmem_cache_alloc+0x2e0/0x3e0
- ? apparmor_file_alloc_security+0x3b/0x1f0
- inet_rtx_syn_ack+0x16/0x30
- tcp_check_req+0x367/0x610
- tcp_rcv_state_process+0x91/0xf60
- ? get_nohz_timer_target+0x18/0x1a0
- ? lock_timer_base+0x61/0x80
- ? preempt_count_add+0x68/0xa0
- tcp_v4_do_rcv+0xbd/0x270
- __release_sock+0x6d/0xb0
- release_sock+0x2b/0x90
- sock_setsockopt+0x138/0x1140
- ? __sys_getsockname+0x7e/0xc0
- ? aa_sk_perm+0x3e/0x1a0
- __sys_setsockopt+0x198/0x1e0
- __x64_sys_setsockopt+0x21/0x30
- do_syscall_64+0x38/0xc0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: 168a8f58059a ("tcp: TCP Fast Open Server - main code path")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Laurent Fasnacht <laurent.fasnacht@proton.ch>
-Acked-by: Neal Cardwell <ncardwell@google.com>
-Link: https://lore.kernel.org/r/20220530213713.601888-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: c8a9d043947b (serial: stm32: fix word length configuration)
+Cc: Erwan Le Ray <erwan.leray@st.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-9-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/stm32-usart.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 95b0f486cb10..e0009cd69da7 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3709,8 +3709,8 @@ int tcp_rtx_synack(const struct sock *sk, struct request_sock *req)
- 	tcp_rsk(req)->txhash = net_tx_rndhash();
- 	res = af_ops->send_synack(sk, NULL, &fl, req, NULL, TCP_SYNACK_NORMAL);
- 	if (!res) {
--		__TCP_INC_STATS(sock_net(sk), TCP_MIB_RETRANSSEGS);
--		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPSYNRETRANS);
-+		TCP_INC_STATS(sock_net(sk), TCP_MIB_RETRANSSEGS);
-+		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPSYNRETRANS);
- 		if (unlikely(tcp_passive_fastopen(sk)))
- 			tcp_sk(sk)->total_retrans++;
- 	}
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 6afae051ba8d..8cd9e5b077b6 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -810,13 +810,22 @@ static void stm32_usart_set_termios(struct uart_port *port,
+ 	 * CS8 or (CS7 + parity), 8 bits word aka [M1:M0] = 0b00
+ 	 * M0 and M1 already cleared by cr1 initialization.
+ 	 */
+-	if (bits == 9)
++	if (bits == 9) {
+ 		cr1 |= USART_CR1_M0;
+-	else if ((bits == 7) && cfg->has_7bits_data)
++	} else if ((bits == 7) && cfg->has_7bits_data) {
+ 		cr1 |= USART_CR1_M1;
+-	else if (bits != 8)
++	} else if (bits != 8) {
+ 		dev_dbg(port->dev, "Unsupported data bits config: %u bits\n"
+ 			, bits);
++		cflag &= ~CSIZE;
++		cflag |= CS8;
++		termios->c_cflag = cflag;
++		bits = 8;
++		if (cflag & PARENB) {
++			bits++;
++			cr1 |= USART_CR1_M0;
++		}
++	}
+ 
+ 	if (ofs->rtor != UNDEF_REG && (stm32_port->rx_ch ||
+ 				       stm32_port->fifoen)) {
 -- 
 2.35.1
 

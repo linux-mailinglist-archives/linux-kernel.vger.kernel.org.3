@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0581548628
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758C85486C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351984AbiFMLKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
+        id S1350882AbiFMLJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351888AbiFMLFL (ORCPT
+        with ESMTP id S1351841AbiFMLFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:05:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DAB283;
-        Mon, 13 Jun 2022 03:34:40 -0700 (PDT)
+        Mon, 13 Jun 2022 07:05:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1A127FC1;
+        Mon, 13 Jun 2022 03:34:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61CEDB80EAA;
-        Mon, 13 Jun 2022 10:34:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7699C341C6;
-        Mon, 13 Jun 2022 10:34:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB7A2B80E5C;
+        Mon, 13 Jun 2022 10:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5901CC34114;
+        Mon, 13 Jun 2022 10:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116478;
-        bh=mcCq2tAQcRwM1eMmrEbz4JuAXlEEuypW9hkFo3uvlzE=;
+        s=korg; t=1655116453;
+        bh=4MhuP+PzGuPC0rV50BO8x+3UT4LdGj2SK5oU1LoYP6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wreQOycSoUdoqxpfHYzYLjtU8zxMMGgBBLR6RXiv+1mFBhG5edncqMyjDyHFzCu68
-         7KntsUNLezm/T4x5MnKDE/lNdZ6uLBkZ64N2m5bbFf+7Ec61UNktYFACSYplQWqi9+
-         cR7kX9YAmKlV8sHhrcssMUZabEhiB9wGJ8j+IogM=
+        b=fWSz6cHBVRnC2a7V9uU/140LvThNMpy92ADM+/VHmUt8eZNSMIX6sET2+yTItbTWf
+         vWC6WDyaLDkQArlvLGh38aVeU6024qLORvHzRA/GzV/1cjslreXwgRAS3VKfD4SoFy
+         eRKNCvV8x+XorcFSovjClWQI6omM0B/p5cJZCsEI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 084/411] ASoC: mediatek: Fix error handling in mt8173_max98090_dev_probe
-Date:   Mon, 13 Jun 2022 12:05:57 +0200
-Message-Id: <20220613094931.200268598@linuxfoundation.org>
+Subject: [PATCH 5.4 089/411] drm/vc4: txp: Force alpha to be 0xff if its disabled
+Date:   Mon, 13 Jun 2022 12:06:02 +0200
+Message-Id: <20220613094931.350002662@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -57,47 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 4f4e0454e226de3bf4efd7e7924d1edc571c52d5 ]
+[ Upstream commit 5453343a88ede8b12812fced81ecd24cb888ccc3 ]
 
-Call of_node_put(platform_node) to avoid refcount leak in
-the error path.
+If we use a format that has padding instead of the alpha component (such
+as XRGB8888), it appears that the Transposer will fill the padding to 0,
+disregarding what was stored in the input buffer padding.
 
-Fixes: 94319ba10eca ("ASoC: mediatek: Use platform_of_node for machine drivers")
-Fixes: 493433785df0 ("ASoC: mediatek: mt8173: fix device_node leak")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220404092903.26725-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This leads to issues with IGT, since it will set the padding to 0xff,
+but will then compare the CRC of the two frames which will thus fail.
+Another nice side effect is that it is now possible to just use the
+buffer as ARGB.
+
+Fixes: 008095e065a8 ("drm/vc4: Add support for the transposer block")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://lore.kernel.org/r/20220328153659.2382206-4-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-max98090.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/vc4/vc4_txp.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-index de1410c2c446..32df18180114 100644
---- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-@@ -167,7 +167,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 	if (!codec_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_platform_node;
- 	}
- 	for_each_card_prelinks(card, i, dai_link) {
- 		if (dai_link->codecs->name)
-@@ -182,6 +183,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 			__func__, ret);
+diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
+index 2342b49c16dd..0d9263f65d95 100644
+--- a/drivers/gpu/drm/vc4/vc4_txp.c
++++ b/drivers/gpu/drm/vc4/vc4_txp.c
+@@ -291,6 +291,12 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
  
- 	of_node_put(codec_node);
-+
-+put_platform_node:
- 	of_node_put(platform_node);
- 	return ret;
- }
+ 	if (fb->format->has_alpha)
+ 		ctrl |= TXP_ALPHA_ENABLE;
++	else
++		/*
++		 * If TXP_ALPHA_ENABLE isn't set and TXP_ALPHA_INVERT is, the
++		 * hardware will force the output padding to be 0xff.
++		 */
++		ctrl |= TXP_ALPHA_INVERT;
+ 
+ 	gem = drm_fb_cma_get_gem_obj(fb, 0);
+ 	TXP_WRITE(TXP_DST_PTR, gem->paddr + fb->offsets[0]);
 -- 
 2.35.1
 

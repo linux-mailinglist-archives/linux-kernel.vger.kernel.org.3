@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C29B5491FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89BD5498DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351059AbiFMLC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S1353654AbiFMMJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350425AbiFMKyw (ORCPT
+        with ESMTP id S1359256AbiFMMFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812901FA52;
-        Mon, 13 Jun 2022 03:31:27 -0700 (PDT)
+        Mon, 13 Jun 2022 08:05:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DED626134;
+        Mon, 13 Jun 2022 03:59:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EE17ACE1171;
-        Mon, 13 Jun 2022 10:31:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9729C34114;
-        Mon, 13 Jun 2022 10:31:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C983B80EA8;
+        Mon, 13 Jun 2022 10:59:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3406AC34114;
+        Mon, 13 Jun 2022 10:59:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116284;
-        bh=h4DIRPIkd+t7iQudHWhOEiQWDM93GOEVD1Vy7LOVC1E=;
+        s=korg; t=1655117986;
+        bh=2xRg+D79i5GNl8UccOe7sFp/4aJop6QuUDfI2goaweQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HrT+aOdKj3jVa8v5Dq//OyQpj/szBcr0LdJqGHyUWzcKOg+ilwdn0Ov7JOjAEiPHR
-         ShjB77/oO0Lhlt7XVfnwM8s7dSbJ61Wnt19rFAKnIjBZnXZrb1BeaZsYxjnJ5HChPp
-         Yg/t4k17/jUXdmYsnGt74BA7XdtHLPcUZF0dhOik=
+        b=agNjp7jMXrA9TqgI6g1CdLPQgX+K2v1Z1PPTTC56CtdmAShdrqsiCl1PDLMaa029f
+         oGg+rEOQX9l3x5nnykd/B7aeCZxN/Zces+Cf9TLRuY9UthB2UfXjGyDftSQwaRbbVt
+         jbZ8ZJPoIPJuWNjFLdjd6d1bx9PwqnH+RijvMHGQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Manuel Lauss <manuel.lauss@gmail.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 155/218] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
+Subject: [PATCH 4.19 189/287] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
 Date:   Mon, 13 Jun 2022 12:10:13 +0200
-Message-Id: <20220613094925.295221300@linuxfoundation.org>
+Message-Id: <20220613094929.598096632@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +61,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 52bb1cb7118564166b04d52387bd8403632f5190 ]
+[ Upstream commit 3928cf08334ed895a31458cbebd8d4ec6d84c080 ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
-CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
-to have parity, thus add PARENB.
+When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
+MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
+to missing DB1XXX symbols. The PCMCIA driver should be restricted
+to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
 
-Incorrect CSIZE results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
 
-Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
-Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-8-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 42a4f17dc356 ("MIPS: Alchemy: remove SOC_AU1X00 in favor of MIPS_ALCHEMY")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/st-asc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/pcmcia/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index b313a792b149..44d52c087c56 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -545,10 +545,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
- 	/* set character length */
- 	if ((cflag & CSIZE) == CS7) {
- 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
-+		cflag |= PARENB;
- 	} else {
- 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
- 						ASC_CTL_MODE_8BIT;
-+		cflag &= ~CSIZE;
-+		cflag |= CS8;
- 	}
-+	termios->c_cflag = cflag;
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index cbbe4a285b48..a8fdd6df6a12 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -146,7 +146,7 @@ config TCIC
  
- 	/* set stop bit */
- 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
+ config PCMCIA_ALCHEMY_DEVBOARD
+ 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
+-	depends on MIPS_ALCHEMY && PCMCIA
++	depends on MIPS_DB1XXX && PCMCIA
+ 	help
+ 	  Enable this driver of you want PCMCIA support on your Alchemy
+ 	  Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
 -- 
 2.35.1
 

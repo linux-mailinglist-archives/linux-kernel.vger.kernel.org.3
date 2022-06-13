@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06F85493C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03269548D12
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355203AbiFMLl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        id S1353267AbiFMLXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355134AbiFMLel (ORCPT
+        with ESMTP id S1353703AbiFMLQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:34:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BC5434A3;
-        Mon, 13 Jun 2022 03:47:47 -0700 (PDT)
+        Mon, 13 Jun 2022 07:16:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286AD13E00;
+        Mon, 13 Jun 2022 03:39:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3875DB80E8D;
-        Mon, 13 Jun 2022 10:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F200C34114;
-        Mon, 13 Jun 2022 10:47:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8B2260FFD;
+        Mon, 13 Jun 2022 10:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3ACC34114;
+        Mon, 13 Jun 2022 10:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117265;
-        bh=gEvp05trtCahzfWE7DwLeU08NiFJsEmHDyAXVpflLBk=;
+        s=korg; t=1655116758;
+        bh=H+6XSFESsu3j17+OL3yTMd1DwPEEmFwLDglx60VInyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N+c5qrlU/3QJZlzwhQezD+CIuL+MBXdF3DQM1HHfMNFT3p0x3TG8dIIhpy8c+BEkY
-         DlpEvf+EbKJQM1w0KSAQ+88rczYSupLEQlF0UtbTGuv8nAbECiwmrv7YUjnOpma5QE
-         nY1AdcBKyFnEFSy3jnP5tvJKMb5G10vySp6q8b0w=
+        b=IrcWbhRJQ26biglJANTi7JmPC97f2Hh0Gwjx4fLYE6+Wpp5NSU8PhGVsnZvBqFS+m
+         qytlqTEoSKLFZFR1YdQnZ5h7/RoGZDoe40brBi+pzX371+6bLy7XDApKWB5wVuMJlx
+         zWKwNAGlKMx1d669sJN222K+y1qQBvv0dFXN1kAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 011/287] b43legacy: Fix assigning negative value to unsigned variable
-Date:   Mon, 13 Jun 2022 12:07:15 +0200
-Message-Id: <20220613094924.194039359@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 163/411] can: xilinx_can: mark bit timing constants as const
+Date:   Mon, 13 Jun 2022 12:07:16 +0200
+Message-Id: <20220613094933.549758697@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haowen Bai <baihaowen@meizu.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 3f6b867559b3d43a7ce1b4799b755e812fc0d503 ]
+[ Upstream commit ae38fda02996d43d9fb09f16e81e0008704dd524 ]
 
-fix warning reported by smatch:
-drivers/net/wireless/broadcom/b43legacy/phy.c:1181 b43legacy_phy_lo_b_measure()
-warn: assigning (-772) to unsigned variable 'fval'
+This patch marks the bit timing constants as const.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/1648203433-8736-1-git-send-email-baihaowen@meizu.com
+Fixes: c223da689324 ("can: xilinx_can: Add support for CANFD FD frames")
+Link: https://lore.kernel.org/all/20220317203119.792552-1-mkl@pengutronix.de
+Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+Cc: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/broadcom/b43legacy/phy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/xilinx_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/broadcom/b43legacy/phy.c b/drivers/net/wireless/broadcom/b43legacy/phy.c
-index 995c7d0c212a..11ee5ee48976 100644
---- a/drivers/net/wireless/broadcom/b43legacy/phy.c
-+++ b/drivers/net/wireless/broadcom/b43legacy/phy.c
-@@ -1148,7 +1148,7 @@ void b43legacy_phy_lo_b_measure(struct b43legacy_wldev *dev)
- 	struct b43legacy_phy *phy = &dev->phy;
- 	u16 regstack[12] = { 0 };
- 	u16 mls;
--	u16 fval;
-+	s16 fval;
- 	int i;
- 	int j;
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index 008d3d492bd1..be3811311db2 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -239,7 +239,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd = {
+ };
  
+ /* AXI CANFD Data Bittiming constants as per AXI CANFD 1.0 specs */
+-static struct can_bittiming_const xcan_data_bittiming_const_canfd = {
++static const struct can_bittiming_const xcan_data_bittiming_const_canfd = {
+ 	.name = DRIVER_NAME,
+ 	.tseg1_min = 1,
+ 	.tseg1_max = 16,
+@@ -265,7 +265,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
+ };
+ 
+ /* AXI CANFD 2.0 Data Bittiming constants as per AXI CANFD 2.0 spec */
+-static struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
++static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
+ 	.name = DRIVER_NAME,
+ 	.tseg1_min = 1,
+ 	.tseg1_max = 32,
 -- 
 2.35.1
 

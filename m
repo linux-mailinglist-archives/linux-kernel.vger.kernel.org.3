@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D66548621
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5047D5486DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379069AbiFMNnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
+        id S243136AbiFMKVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379160AbiFMNj4 (ORCPT
+        with ESMTP id S242994AbiFMKUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B4622502;
-        Mon, 13 Jun 2022 04:29:05 -0700 (PDT)
+        Mon, 13 Jun 2022 06:20:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6631EF47;
+        Mon, 13 Jun 2022 03:17:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9358461036;
-        Mon, 13 Jun 2022 11:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A219DC34114;
-        Mon, 13 Jun 2022 11:29:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4BE4B80E94;
+        Mon, 13 Jun 2022 10:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295A2C3411E;
+        Mon, 13 Jun 2022 10:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119744;
-        bh=eDqhiksNIf+jsUY2XBvAV3uAA2+r9m8+eNfbCUe+LBo=;
+        s=korg; t=1655115445;
+        bh=+l/Nx/a5XALx/gZy/D7ecejLI4B/gZmd54H3ChmGk+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mXYTmD6bvOL09S5MBcrdFw8zMerE/3Ecz8oU0J+xxZnFvQBd/sZH8ZmC7w/DHOsAf
-         P1z/0kL9dm/vaxPPIZ6neXEwSlQMxSAAnm6pVrbZ+g2Ak77JMDsiAi4ZyS5PUo+yuW
-         hEIEIQCKvb5d3tqIJE5gBXZCmAt2qNMMkqyJWzNs=
+        b=avmgUTfCt6LNvXugK6QUuVOG3Ok7GrZyi4WwELh7jegrLbjQeedC3IOyA1WAJ72fX
+         XFhDOCowiZA81iHn7bgktBZJLw4FraLHKB/Bg/QdliHl3760FxhTtJYPp7J/ixrj4T
+         8TRbCWHD4Jwh3Rp12u9owe0CKbNV5p7zPsaAD/0c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 124/339] net/mlx5: Dont use already freed action pointer
-Date:   Mon, 13 Jun 2022 12:09:09 +0200
-Message-Id: <20220613094930.271415321@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.9 076/167] iwlwifi: mvm: fix assert 1F04 upon reconfig
+Date:   Mon, 13 Jun 2022 12:09:10 +0200
+Message-Id: <20220613094858.677567856@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
 
-[ Upstream commit 80b2bd737d0e833e6a2b77e482e5a714a79c86a4 ]
+commit 9d096e3d3061dbf4ee10e2b59fc2c06e05bdb997 upstream.
 
-The call to mlx5dr_action_destroy() releases "action" memory. That
-pointer is set to miss_action later and generates the following smatch
-error:
+When we reconfig we must not send the MAC_POWER command that relates to
+a MAC that was not yet added to the firmware.
 
- drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c:53 set_miss_action()
- warn: 'action' was already freed.
+Ignore those in the iterator.
 
-Make sure that the pointer is always valid by setting NULL after destroy.
-
-Fixes: 6a48faeeca10 ("net/mlx5: Add direct rule fs_cmd implementation")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20220517120044.ed2ffc8ce732.If786e19512d0da4334a6382ea6148703422c7d7b@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/power.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-index 728f81882589..6a9abba92df6 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-@@ -44,11 +44,10 @@ static int set_miss_action(struct mlx5_flow_root_namespace *ns,
- 	err = mlx5dr_table_set_miss_action(ft->fs_dr_table.dr_table, action);
- 	if (err && action) {
- 		err = mlx5dr_action_destroy(action);
--		if (err) {
--			action = NULL;
--			mlx5_core_err(ns->dev, "Failed to destroy action (%d)\n",
--				      err);
--		}
-+		if (err)
-+			mlx5_core_err(ns->dev,
-+				      "Failed to destroy action (%d)\n", err);
-+		action = NULL;
- 	}
- 	ft->fs_dr_table.miss_action = action;
- 	if (old_miss_action) {
--- 
-2.35.1
-
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/power.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
+@@ -612,6 +612,9 @@ static void iwl_mvm_power_get_vifs_itera
+ 	struct iwl_mvm_vif *mvmvif = iwl_mvm_vif_from_mac80211(vif);
+ 	struct iwl_power_vifs *power_iterator = _data;
+ 
++	if (!mvmvif->uploaded)
++		return;
++
+ 	switch (ieee80211_vif_type_p2p(vif)) {
+ 	case NL80211_IFTYPE_P2P_DEVICE:
+ 		break;
 
 

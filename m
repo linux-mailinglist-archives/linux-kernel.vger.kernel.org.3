@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2385C54934D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67964548B81
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359063AbiFMNJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S1356300AbiFMMeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357354AbiFMM6l (ORCPT
+        with ESMTP id S1351131AbiFMMaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:58:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EEE2BDB;
-        Mon, 13 Jun 2022 04:17:36 -0700 (PDT)
+        Mon, 13 Jun 2022 08:30:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3435B3D9;
+        Mon, 13 Jun 2022 04:07:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27968B80E59;
-        Mon, 13 Jun 2022 11:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7633CC36AFF;
-        Mon, 13 Jun 2022 11:17:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE293614A1;
+        Mon, 13 Jun 2022 11:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070FDC34114;
+        Mon, 13 Jun 2022 11:06:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119053;
-        bh=yDpd7oAWsynJGccSydOf6o7OH6T+QbeLge5NLgiCdfA=;
+        s=korg; t=1655118413;
+        bh=pQ9JYYcHm9GS02sX537UncrdtSqbROorluuFN+6UxEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MU9eD0Mw2vO1CpsxjRiCdi8Vzna+MBpTYNWV8Ql6d8w/Qjc7v7ugayggbGRyLfyKF
-         zr8VhQM+qYAlJqpel1y81glb/U3e2B4vB7aYHous53ALBtztEcE6trBB5ctbNkrlPo
-         mj3hBv4fGSOg+IvH1TgbN1j4nzqthT0WDGpgVP9c=
+        b=qjIeeHp73/sHK5JEUnsEApL6YKLRAMlT/v8BjNJnb/609iV2C0OwcxDael3tuq7SZ
+         gB+Y3Sg7RvaONbttl3ZHvp+XFq40JSjK2q2Gxo4W7wlwdXwtRe1PWxTM/L3AOZE8HM
+         L2tb/mUCGfNJR6umbLGcHdpXWhc5/e+fnw6JQgTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>, Helge Deller <deller@gmx.de>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 124/247] video: fbdev: hyperv_fb: Allow resolutions with size > 64 MB for Gen1
+Subject: [PATCH 5.10 066/172] net/mlx5e: Update netdev features after changing XDP state
 Date:   Mon, 13 Jun 2022 12:10:26 +0200
-Message-Id: <20220613094926.723098325@linuxfoundation.org>
+Message-Id: <20220613094906.246763280@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit c4b4d7047f16a8d138ce76da65faefb7165736f2 ]
+[ Upstream commit f6279f113ad593971999c877eb69dc3d36a75894 ]
 
-This patch fixes a bug where GEN1 VMs doesn't allow resolutions greater
-than 64 MB size (eg 7680x4320). Unnecessary PCI check limits Gen1 VRAM
-to legacy PCI BAR size only (ie 64MB). Thus any, resolution requesting
-greater then 64MB (eg 7680x4320) would fail. MMIO region assigning this
-memory shouldn't be limited by PCI bar size.
+Some features (LRO, HW GRO) conflict with XDP. If there is an attempt to
+enable such features while XDP is active, they will be set to `off
+[requested on]`. In order to activate these features after XDP is turned
+off, the driver needs to call netdev_update_features(). This commit adds
+this missing call after XDP state changes.
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: cf6e34c8c22f ("net/mlx5e: Properly block LRO when XDP is enabled")
+Fixes: b0617e7b3500 ("net/mlx5e: Properly block HW GRO when XDP is enabled")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/hyperv_fb.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
-index c8e0ea27caf1..58c304a3b7c4 100644
---- a/drivers/video/fbdev/hyperv_fb.c
-+++ b/drivers/video/fbdev/hyperv_fb.c
-@@ -1009,7 +1009,6 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
- 	struct pci_dev *pdev  = NULL;
- 	void __iomem *fb_virt;
- 	int gen2vm = efi_enabled(EFI_BOOT);
--	resource_size_t pot_start, pot_end;
- 	phys_addr_t paddr;
- 	int ret;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index d9cc0ed6c5f7..cfc3bfcb04a2 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -4576,6 +4576,11 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
  
-@@ -1060,23 +1059,7 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
- 	dio_fb_size =
- 		screen_width * screen_height * screen_depth / 8;
+ unlock:
+ 	mutex_unlock(&priv->state_lock);
++
++	/* Need to fix some features. */
++	if (!err)
++		netdev_update_features(netdev);
++
+ 	return err;
+ }
  
--	if (gen2vm) {
--		pot_start = 0;
--		pot_end = -1;
--	} else {
--		if (!(pci_resource_flags(pdev, 0) & IORESOURCE_MEM) ||
--		    pci_resource_len(pdev, 0) < screen_fb_size) {
--			pr_err("Resource not available or (0x%lx < 0x%lx)\n",
--			       (unsigned long) pci_resource_len(pdev, 0),
--			       (unsigned long) screen_fb_size);
--			goto err1;
--		}
--
--		pot_end = pci_resource_end(pdev, 0);
--		pot_start = pot_end - screen_fb_size + 1;
--	}
--
--	ret = vmbus_allocate_mmio(&par->mem, hdev, pot_start, pot_end,
-+	ret = vmbus_allocate_mmio(&par->mem, hdev, 0, -1,
- 				  screen_fb_size, 0x100000, true);
- 	if (ret != 0) {
- 		pr_err("Unable to allocate framebuffer memory\n");
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F3E5496B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBCA548ABB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357567AbiFMLyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S1384049AbiFMOcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355813AbiFMLtr (ORCPT
+        with ESMTP id S1384416AbiFMO3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:49:47 -0400
+        Mon, 13 Jun 2022 10:29:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27CD4D6AA;
-        Mon, 13 Jun 2022 03:53:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A039EA5006;
+        Mon, 13 Jun 2022 04:47:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 626EFB80D3F;
-        Mon, 13 Jun 2022 10:53:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90F1C34114;
-        Mon, 13 Jun 2022 10:53:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3342BB80EB2;
+        Mon, 13 Jun 2022 11:47:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FDCEC34114;
+        Mon, 13 Jun 2022 11:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117613;
-        bh=k+/pVrIT8QfqIWbATLK3wlWEq5hh0GwRx7H7a3D01Zw=;
+        s=korg; t=1655120843;
+        bh=FKej8SBFned+bzHH/nlY+d5eNOv/cPZuTaoTzbfd1JE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z4Xsj2Elr2VEsZT6T+5XJ2q7n8+I1b6VPKA9WTHuotSre4xL0y4jIa5dr8bZ3DxK7
-         pCM3Ub6NOXgC70emscTWQPeGrqK8/W/z3MsQGlFAi6oZmzhr+S1EykUYmJAkkdhypX
-         OsMdMJpd3+wfiFZh9UUNi6uzzZa44hV2i5Ujplk8=
+        b=FkKF7AMKTG2M+2XZF279OMjpaSyQQDKQgieLh4aL+fIQJUHk1HVwdn37BPYpRO5n+
+         Xwa+Nhjg53SRtq4rruSSKIYEe6iLHsyQd1FvReCzLK1Wj1AUkHyj2dJ96S+2Rm+U2L
+         JwWvmmon66Jkoe5TQhfZ2BoQft5wqvbiLziTNuNU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 399/411] scripts/gdb: change kernel config dumping method
+Subject: [PATCH 5.17 178/298] net/mlx4_en: Fix wrong return value on ioctl EEPROM query failure
 Date:   Mon, 13 Jun 2022 12:11:12 +0200
-Message-Id: <20220613094940.790327325@linuxfoundation.org>
+Message-Id: <20220613094930.332792306@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+From: Gal Pressman <gal@nvidia.com>
 
-[ Upstream commit 1f7a6cf6b07c74a17343c2559cd5f5018a245961 ]
+[ Upstream commit f5826c8c9d57210a17031af5527056eefdc2b7eb ]
 
-MAGIC_START("IKCFG_ST") and MAGIC_END("IKCFG_ED") are moved out
-from the kernel_config_data variable.
+The ioctl EEPROM query wrongly returns success on read failures, fix
+that by returning the appropriate error code.
 
-Thus, we parse kernel_config_data directly instead of considering
-offset of MAGIC_START and MAGIC_END.
-
-Fixes: 13610aa908dc ("kernel/configs: use .incbin directive to embed config_data.gz")
-Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Fixes: 7202da8b7f71 ("ethtool, net/mlx4_en: Cable info, get_module_info/eeprom ethtool support")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220606115718.14233-1-tariqt@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/gdb/linux/config.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/mellanox/mlx4/en_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/gdb/linux/config.py b/scripts/gdb/linux/config.py
-index 90e1565b1967..8843ab3cbadd 100644
---- a/scripts/gdb/linux/config.py
-+++ b/scripts/gdb/linux/config.py
-@@ -24,9 +24,9 @@ class LxConfigDump(gdb.Command):
-             filename = arg
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
+index ed5038d98ef6..6400a827173c 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
+@@ -2110,7 +2110,7 @@ static int mlx4_en_get_module_eeprom(struct net_device *dev,
+ 			en_err(priv,
+ 			       "mlx4_get_module_info i(%d) offset(%d) bytes_to_read(%d) - FAILED (0x%x)\n",
+ 			       i, offset, ee->len - i, ret);
+-			return 0;
++			return ret;
+ 		}
  
-         try:
--            py_config_ptr = gdb.parse_and_eval("kernel_config_data + 8")
--            py_config_size = gdb.parse_and_eval(
--                    "sizeof(kernel_config_data) - 1 - 8 * 2")
-+            py_config_ptr = gdb.parse_and_eval("&kernel_config_data")
-+            py_config_ptr_end = gdb.parse_and_eval("&kernel_config_data_end")
-+            py_config_size = py_config_ptr_end - py_config_ptr
-         except gdb.error as e:
-             raise gdb.GdbError("Can't find config, enable CONFIG_IKCONFIG?")
- 
+ 		i += ret;
 -- 
 2.35.1
 

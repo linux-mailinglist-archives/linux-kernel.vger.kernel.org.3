@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F59548AD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A78B5496CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380626AbiFMOBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
+        id S1352883AbiFMMl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380505AbiFMNyi (ORCPT
+        with ESMTP id S1355667AbiFMMjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:54:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE9D443E2;
-        Mon, 13 Jun 2022 04:35:11 -0700 (PDT)
+        Mon, 13 Jun 2022 08:39:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E7F33887;
+        Mon, 13 Jun 2022 04:09:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 23B81CE1232;
-        Mon, 13 Jun 2022 11:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B3EC36AFF;
-        Mon, 13 Jun 2022 11:35:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5B64B80E93;
+        Mon, 13 Jun 2022 11:09:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E04BC34114;
+        Mon, 13 Jun 2022 11:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120107;
-        bh=4aYV3+qesPToYmG7/6BMlAecFB2vSBxvku6tOzoYkcc=;
+        s=korg; t=1655118557;
+        bh=Af1Twr37yZkIfi9hel/4jCo9eqfsFUDhK9Nk8JM5iS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qnquiUfNFIyox0w45cE4n4y/FtbCT+xoi7Yo84gblPvEf3ojGVTHvp6JyHON5pBlz
-         B8/Et8FvGNXkJUSl6snk4b+1yFiiQnYmGX3tHuDikjBNlj73A6OsnjbxpgPYnJwPat
-         GLti8tFa65U4guobirfFIxSTWrHmEIhDuqxSGcgE=
+        b=tHUepwuZVXo4Rf/LtAF6+rP4fQR2dLOqqLPWgS8BMnaqJKMG7u8m+7MqYbbL4o7NM
+         yxJca88pesf9ZK+Gd6NZ5B7aW1ZhVvd7TOahQ2nAGzsykSeF52jUkDZk7SZd1KZJr2
+         LXCP4EX+q96CvF+cMLmdieXJtzfx0xZ2iAcAz894=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Xinpeng <liuxp11@chinatelecom.cn>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 253/339] watchdog: wdat_wdt: Stop watchdog when rebooting the system
-Date:   Mon, 13 Jun 2022 12:11:18 +0200
-Message-Id: <20220613094934.325985974@linuxfoundation.org>
+Subject: [PATCH 5.10 119/172] drivers: staging: rtl8192u: Fix deadlock in ieee80211_beacons_stop()
+Date:   Mon, 13 Jun 2022 12:11:19 +0200
+Message-Id: <20220613094918.993261392@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Xinpeng <liuxp11@chinatelecom.cn>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 27fdf84510a1374748904db43f6755f912736d92 ]
+[ Upstream commit 806c7b53414934ba2a39449b31fd1a038e500273 ]
 
-Executing reboot command several times on the machine "Dell
-PowerEdge R740", UEFI security detection stopped machine
-with the following prompt:
+There is a deadlock in ieee80211_beacons_stop(), which is shown below:
 
-UEFI0082: The system was reset due to a timeout from the watchdog
-timer. Check the System Event Log (SEL) or crash dumps from
-Operating Sysstem to identify the source that triggered the
-watchdog timer reset. Update the firmware or driver for the
-identified device.
+   (Thread 1)              |      (Thread 2)
+                           | ieee80211_send_beacon()
+ieee80211_beacons_stop()   |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | ieee80211_send_beacon_cb()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-iDRAC has warning event: "The watchdog timer reset the system".
+We hold ieee->beacon_lock in position (1) of thread 1 and use
+del_timer_sync() to wait timer to stop, but timer handler
+also need ieee->beacon_lock in position (2) of thread 2.
+As a result, ieee80211_beacons_stop() will block forever.
 
-This patch fixes this issue by adding the reboot notifier.
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain
+the needed lock.
 
-Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/1650984810-6247-3-git-send-email-liuxp11@chinatelecom.cn
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417135407.109536-1-duoming@zju.edu.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/wdat_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index 195c8c004b69..4fac8148a8e6 100644
---- a/drivers/watchdog/wdat_wdt.c
-+++ b/drivers/watchdog/wdat_wdt.c
-@@ -462,6 +462,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 		return ret;
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c
+index 690b664df8fa..56a447651644 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c
+@@ -528,9 +528,9 @@ static void ieee80211_beacons_stop(struct ieee80211_device *ieee)
+ 	spin_lock_irqsave(&ieee->beacon_lock, flags);
  
- 	watchdog_set_nowayout(&wdat->wdd, nowayout);
-+	watchdog_stop_on_reboot(&wdat->wdd);
- 	return devm_watchdog_register_device(dev, &wdat->wdd);
+ 	ieee->beacon_txing = 0;
+-	del_timer_sync(&ieee->beacon_timer);
+ 
+ 	spin_unlock_irqrestore(&ieee->beacon_lock, flags);
++	del_timer_sync(&ieee->beacon_timer);
  }
  
+ void ieee80211_stop_send_beacons(struct ieee80211_device *ieee)
 -- 
 2.35.1
 

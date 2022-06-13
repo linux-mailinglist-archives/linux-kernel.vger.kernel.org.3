@@ -2,238 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F7B54800A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D95C548019
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237938AbiFMG7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 02:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S235779AbiFMHB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 03:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237424AbiFMG7V (ORCPT
+        with ESMTP id S238308AbiFMHBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 02:59:21 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58E816582
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655103560; x=1686639560;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=j3eWTQk7h2QMpwvrlWqr83AalhCYxmBrbOjJyKycaFI=;
-  b=jiOvPTSb+4GKPygiyshSGwBuYHDwWNg0O3aCDQbzAAqmZxbuf0yHk5bD
-   i2ZD9zENICFksu5fFF2iom74EQwVlPbitOE/TPKHzAErDBYYu/JerTUDQ
-   /NS5kudxPtyXh4K44r0473H4xKZjxy2yZ+2Vd02/fxZLdHHXzxwhphIUl
-   OYToqS7hc/fYrhBSL+ux+11BLuz1d0eRHPIp7/lt+frIDBrxViRg0a296
-   fL6KVe2FhoT9EgguaYIWs02QaIXMse66Or/0OEfPx29aRN0imzQru3auU
-   l20VxBdBBU9lxn0p7enSGmR7MoPGgdO9hoHjRFb4E+Vpg9zsRmceFbCLz
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="258629725"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="258629725"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 23:59:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="639563620"
-Received: from xinyangc-mobl.ccr.corp.intel.com ([10.254.214.65])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 23:59:15 -0700
-Message-ID: <193ad45f2ec47ac157a812975f3e4235fcbc061a.camel@intel.com>
-Subject: Re: [PATCH v6 04/13] mm/demotion/dax/kmem: Set node's memory tier
- to MEMORY_TIER_PMEM
-From:   Ying Huang <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Mon, 13 Jun 2022 14:59:12 +0800
-In-Reply-To: <20220610135229.182859-5-aneesh.kumar@linux.ibm.com>
-References: <20220610135229.182859-1-aneesh.kumar@linux.ibm.com>
-         <20220610135229.182859-5-aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 13 Jun 2022 03:01:20 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773DA167F0;
+        Mon, 13 Jun 2022 00:01:18 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id DDD1FC021; Mon, 13 Jun 2022 09:01:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655103676; bh=YpDF1SHYxI61u2L6DgPHZqPG6ImYo1B3buDP6pUy5ao=;
+        h=Date:From:Cc:Subject:References:In-Reply-To:From;
+        b=YYD/QoI//cCiQkMsSXbj4VL18p+EAUve37OyMr+1wr9ez9EIE1rMf0GtR8W6Cfu9T
+         OcEuQV9+sBIyiZbrOF8cQ5BfhDN6uhP0uXO3T6MMcu3f0J28ksA/NbZ7fOGnyg6g1d
+         NxLAJAh7uOlhu7g2KkQDKNHU4TR2lbNqWMS6S6gD6/CqVX65TiF2q7UoDGsnxowMgA
+         GkVoT8jSIqF5ZM9/TPsmjdxcyceu5FRN3gjiIR+Ld41Kt9En07Re/Vszf5i5M+eT39
+         xn3mexSuXYBbnoSXUTcWKV4Td31/hslYVWnXmNvh9yUqlcUQarXwrh5f0PVjPn6bYj
+         Kul3dNWX0DZcg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 7E76EC009;
+        Mon, 13 Jun 2022 09:01:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655103675; bh=YpDF1SHYxI61u2L6DgPHZqPG6ImYo1B3buDP6pUy5ao=;
+        h=Date:From:Cc:Subject:References:In-Reply-To:From;
+        b=g5vkwGIRlWJb8UwwjzWK20P35pU7SAYnffIyS8mRhn+XU6DqXxVMzOEFnYut0kQwh
+         kDNfZxZ37VUYBbSADidP0dbzU8dgIr8TNaRby33s83SpXFtM3is4yZyk/n6RoBSwSv
+         BlOrUb97JD7ooQxhGCnQb/GJGqjncvNjIstOZNaW0EV6TV9rQ0OwxGIez3CdnfeX5f
+         n1IX9nZ/tHLzDO6h/P1boJ6MB8ZJGWJI/p1/wVxKSA0Wp/uIvZgRzpxNPrl2WQaaCB
+         yA4tBRXZFKDEm13CS9Jx7PzZecWiEkbeKkuinhoCbYnvNtjA0fY0zRavKZIE1G7OWS
+         iJOpTrDTFH5IQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 124ad89d;
+        Mon, 13 Jun 2022 07:01:07 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 16:00:52 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v2 05/06] 9p fid refcount: add a 9p_fid_ref tracepoint
+Message-ID: <YqbgpMJCVk44Q0zP@codewreck.org>
+References: <20220612184659.6dff5107@rorschach.local.home>
+ <20220612234634.1559778-1-asmadeus@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220612234634.1559778-1-asmadeus@codewreck.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-10 at 19:22 +0530, Aneesh Kumar K.V wrote:
-> By default, all nodes are assigned to DEFAULT_MEMORY_TIER which
-> is the memory tier designated for nodes with DRAM
-> 
-> Set dax kmem device node's tier to MEMORY_TIER_PMEM. MEMORY_TIER_PMEM
-> is assigned a default rank value of 100 and appears below DEFAULT_MEMORY_TIER
-> in demotion order.
-> 
-> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->  drivers/dax/kmem.c           |  4 ++
->  include/linux/memory-tiers.h |  1 +
->  mm/memory-tiers.c            | 78 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 83 insertions(+)
-> 
-> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-> index a37622060fff..0cb3de3d138f 100644
-> --- a/drivers/dax/kmem.c
-> +++ b/drivers/dax/kmem.c
-> @@ -11,6 +11,7 @@
->  #include <linux/fs.h>
->  #include <linux/mm.h>
->  #include <linux/mman.h>
-> +#include <linux/memory-tiers.h>
->  #include "dax-private.h"
->  #include "bus.h"
->  
-> 
-> @@ -147,6 +148,9 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
->  
-> 
->  	dev_set_drvdata(dev, data);
->  
-> 
-> +#ifdef CONFIG_TIERED_MEMORY
-> +	node_create_and_set_memory_tier(numa_node, MEMORY_TIER_PMEM);
-> +#endif
->  	return 0;
->  
-> 
->  err_request_mem:
-> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-> index 44c3c3b16a36..e102ec73ab80 100644
-> --- a/include/linux/memory-tiers.h
-> +++ b/include/linux/memory-tiers.h
-> @@ -18,6 +18,7 @@
->  #define MAX_MEMORY_TIERS  3
->  
-> 
->  extern bool numa_demotion_enabled;
-> +int node_create_and_set_memory_tier(int node, int tier);
->  #else
->  #define numa_demotion_enabled	false
->  
-> 
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> index c3123a457d90..00d393a5a628 100644
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -67,6 +67,84 @@ static struct memory_tier *register_memory_tier(unsigned int tier,
->  	return memtier;
->  }
->  
-> 
-> +static struct memory_tier *__node_get_memory_tier(int node)
+Dominique Martinet wrote on Mon, Jun 13, 2022 at 08:46:34AM +0900:
+> I've applied your suggestion to use DECLARE_TRACEPOINT + enable checks,
+> it doesn't seem to have many users but it looks good to me.
+>
+> diff --git a/include/net/9p/client.h b/include/net/9p/client.h
+> index 9fd38d674057..6f347983705d 100644
+> --- a/include/net/9p/client.h
+> +++ b/include/net/9p/client.h
+> @@ -237,8 +238,17 @@ static inline int p9_req_try_get(struct p9_req_t *r)
+>  
+>  int p9_req_put(struct p9_req_t *r);
+>  
+> +/* We cannot have the real tracepoints in header files,
+> + * use a wrapper function */
+> +DECLARE_TRACEPOINT(9p_fid_ref);
+> +void do_trace_9p_fid_get(struct p9_fid *fid);
+> +void do_trace_9p_fid_put(struct p9_fid *fid);
+> +
+>  static inline struct p9_fid *p9_fid_get(struct p9_fid *fid)
+>  {
+> +	if (tracepoint_enabled(9p_fid_ref))
+
+This here requires __tracepoint_9p_fid_ref exported...
+
+> diff --git a/net/9p/client.c b/net/9p/client.c
+> index f3eb280c7d9d..06d67a02d431 100644
+> --- a/net/9p/client.c
+> +++ b/net/9p/client.c
+> @@ -928,6 +931,18 @@ static void p9_fid_destroy(struct p9_fid *fid)
+>  	kfree(fid);
+>  }
+>  
+
+So I've also added this here:
+
++/* We also need to export tracepoint symbols for tracepoint_enabled() */
++EXPORT_TRACEPOINT_SYMBOL(9p_fid_ref);
++
+
+Which looks frequent enough to probably be the right thing to do?
+
+(It's small enough that I won't bother repost a v3 unless something else
+comes up)
+
+> +void do_trace_9p_fid_get(struct p9_fid *fid)
 > +{
-> +	struct memory_tier *memtier;
-> +
-> +	list_for_each_entry(memtier, &memory_tiers, list) {
-> +		if (node_isset(node, memtier->nodelist))
-> +			return memtier;
-> +	}
-> +	return NULL;
+> +	trace_9p_fid_ref(fid, P9_FID_REF_GET);
 > +}
+> +EXPORT_SYMBOL(do_trace_9p_fid_get);
 > +
-
-I suggest to add NODE_DATA(nid)->mem_tier before this patch.  That is,
-part of [9/13].  That will make code much simpler and easier to
-review.
-
-And, in addition to dax_kmem, whenever a normal node is onlined, we
-need to add it to the default memory tier.  I found this is done in
-[5/13].  IMHO, we should move that part before this patch.
-
-Best Regards,
-Huang, Ying
-
-> +static struct memory_tier *__get_memory_tier_from_id(int id)
+> +void do_trace_9p_fid_put(struct p9_fid *fid)
 > +{
-> +	struct memory_tier *memtier;
-> +
-> +	list_for_each_entry(memtier, &memory_tiers, list) {
-> +		if (memtier->id == id)
-> +			return memtier;
-> +	}
-> +	return NULL;
+> +	trace_9p_fid_ref(fid, P9_FID_REF_PUT);
 > +}
+> +EXPORT_SYMBOL(do_trace_9p_fid_put);
 > +
-> +static int __node_create_and_set_memory_tier(int node, int tier)
-> +{
-> +	int ret = 0;
-> +	struct memory_tier *memtier;
-> +
-> +	memtier = __get_memory_tier_from_id(tier);
-> +	if (!memtier) {
-> +		int rank;
-> +
-> +		rank = get_rank_from_tier(tier);
-> +		if (rank == -1) {
-> +			ret = -EINVAL;
-> +			goto out;
-> +		}
-> +		memtier = register_memory_tier(tier, rank);
-> +		if (!memtier) {
-> +			ret = -EINVAL;
-> +			goto out;
-> +		}
-> +	}
-> +	node_set(node, memtier->nodelist);
-> +out:
-> +	return ret;
-> +}
-> +
-> +int node_create_and_set_memory_tier(int node, int tier)
-> +{
-> +	struct memory_tier *current_tier;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&memory_tier_lock);
-> +
-> +	current_tier = __node_get_memory_tier(node);
-> +	if (!current_tier) {
-> +		ret = __node_create_and_set_memory_tier(node, tier);
-> +		goto out;
-> +	}
-> +
-> +	if (current_tier->id == tier)
-> +		goto out;
-> +
-> +	node_clear(node, current_tier->nodelist);
-> +
-> +	ret = __node_create_and_set_memory_tier(node, tier);
-> +	if (ret) {
-> +		/* reset it back to older tier */
-> +		node_set(node, current_tier->nodelist);
-> +		goto out;
-> +	}
-> +out:
-> +	mutex_unlock(&memory_tier_lock);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(node_create_and_set_memory_tier);
-> +
->  static int __init memory_tier_init(void)
->  {
->  	struct memory_tier *memtier;
+>  static int p9_client_version(struct p9_client *c)
+>  {
+>  	int err = 0;
 
-
+-- 
+Dominique

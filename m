@@ -2,210 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309FA54A0FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DFA54A101
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244015AbiFMVMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S1352088AbiFMVNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351961AbiFMVMe (ORCPT
+        with ESMTP id S1352050AbiFMVMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:12:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68FF53E5EB
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655153449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uHh1Mc7ZpYll3jkRg/4I2vZLEod4WMai9S1oJy78FZg=;
-        b=HaFtrNhqDdyXicP9yPhPOcblhPU24z6gvNzZX+e2ITvmr6JvvVlJWGx1EXngtCyzMzcQRy
-        EfSGqOa9sJcm2aCmFOJ8mXRrW75jAHsV7wornbSadQEGQksLodg+6vstswjSaSHi8cYu2f
-        aoeq0ymFDJ9SYhXd071uhpEEBr/dF4U=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-p69iTIA2MIaMne9qU-wmzQ-1; Mon, 13 Jun 2022 16:50:48 -0400
-X-MC-Unique: p69iTIA2MIaMne9qU-wmzQ-1
-Received: by mail-ed1-f72.google.com with SMTP id g7-20020a056402424700b0042dee9d11d0so4655903edb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:50:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uHh1Mc7ZpYll3jkRg/4I2vZLEod4WMai9S1oJy78FZg=;
-        b=jTzpndcoIwk7lou0w4ZPWGQmdBHoY9NaKIC8vjVWFXOVKIAhi7gcoeu9D3LU5g/w6Z
-         gNfXuvmJ7qvbtEmWH6xBGW0emXz5rjYrT8yVk1foTnvjnRBZ2uFbg+6IeHjhY606yA1v
-         /stoPzT8KF2QX10TzXYCvamv85sRsByB0FZwRNBudSPJ4MzaAX0/eGAhoktAIRDEqrvm
-         iJi1v3h7stZuE0TRWcbjKp1f91qvePaBPmp5udrLWBKogM2a/uHVKNywxZFbXax3xCRp
-         3yMQoM1CIZeIiBwWcp/rRK2MEzKSZaLSpVd4zam3o37gn5pAYF02U9zMLKSM/1oVO7BP
-         3pqg==
-X-Gm-Message-State: AJIora+HfY18swWsc92WygnOGiy4Sf2jDvFoJeJtH8JFzh79GNntsWtx
-        68VcKYzw/ESzOKDjuH0bUt2k0M0tHTAJz7KS+Y5pPtdg87YfFWljHgoDTVAT4UQkhAF8j3fxUYX
-        nN8fH8hJBJs+scl5dpOqlrt1u
-X-Received: by 2002:a17:907:160c:b0:711:3b56:dc7 with SMTP id hb12-20020a170907160c00b007113b560dc7mr1377166ejc.587.1655153446903;
-        Mon, 13 Jun 2022 13:50:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwLiEiFvejpV3bRXy2k4g93sSKykLlmNzgB4sMsx4IWkixW2j3DGJCzho0mbCSzEtPT4MlbBg==
-X-Received: by 2002:a17:907:160c:b0:711:3b56:dc7 with SMTP id hb12-20020a170907160c00b007113b560dc7mr1377157ejc.587.1655153446669;
-        Mon, 13 Jun 2022 13:50:46 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id za14-20020a170906878e00b00706c1327f4bsm4243279ejb.23.2022.06.13.13.50.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 13:50:46 -0700 (PDT)
-Message-ID: <81a7cbe7-068a-d9ab-74b1-b6891f5a6f10@redhat.com>
-Date:   Mon, 13 Jun 2022 22:50:45 +0200
+        Mon, 13 Jun 2022 17:12:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC9A6571;
+        Mon, 13 Jun 2022 13:51:24 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B2E006601668;
+        Mon, 13 Jun 2022 21:51:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655153483;
+        bh=8qUc74bLu4+4c99EHIFyhvDd9mzPx8O2XOjdFV43U5c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JYNVheWXO6w9qtes6hbwKf505NJi25Db4LnlIm04il/DtSS11i7s7OJivXqeJAMBa
+         XfhS1OI2O4SE07CFs/Qd7MCrBrTdCW7yujHHv63RkvUoSKSup2r+C4iAcEHLxmUBJj
+         kIKNRhishKcRtOY9mcKyWfVZXn8tjtg/Vs/BKIwHcSTfkEgQHAx3Kz7RR+Jf3Z04Mk
+         Xiyu2BS6DWEuPt5ahU9OQRW0QJZKLv+oK61xsDijFX24wstblsr6nLE4qFIbQ869r+
+         kKCLvTBylvo7v8LYk0+9IkL05/IOFEVoRyCrwni+xut8M71Lr+z/oBNSkOvpUDobXP
+         m2azljGgHY6Sg==
+Date:   Mon, 13 Jun 2022 16:51:17 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: Re: [PATCH v2 7/7] drm/bridge: anx7625: Add typec_mux_set callback
+ function
+Message-ID: <20220613205117.aewpbdjolxmys4vy@notapiano>
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-8-pmalani@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 12/16] platform/x86/thinkpad_acpi: Use
- acpi_dev_for_each_child()
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Mark Gross <markgross@kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
- <2091400.OBFZWjSADL@kreacher>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <2091400.OBFZWjSADL@kreacher>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220609181106.3695103-8-pmalani@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Prashant,
 
-On 6/13/22 20:30, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Jun 09, 2022 at 06:09:46PM +0000, Prashant Malani wrote:
+> From: Pin-Yen Lin <treapking@chromium.org>
 > 
-> Instead of walking the list of children of an ACPI device directly,
-> use acpi_dev_for_each_child() to carry out an action for all of
-> the given ACPI device's children.
+> Add the callback function when the driver receives state
+> changes of the Type-C port. The callback function configures the
+> crosspoint switch of the anx7625 bridge chip, which can change the
+> output pins of the signals according to the port state.
 > 
-> This will help to eliminate the children list head from struct
-> acpi_device as it is redundant and it is used in questionable ways
-> in some places (in particular, locking is needed for walking the
-> list pointed to it safely, but it is often missing).
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Rafael, feel free to take this upstream through the apci tree.
-
-Regards,
-
-Hans
-
-
-
-
+> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 > ---
 > 
-> v1 -> v2:
->    * Eliminate unnecessary branch (Andy).
+> Changes since v2:
+> - No changes.
 > 
-> ---
->  drivers/platform/x86/thinkpad_acpi.c |   53 +++++++++++++++++------------------
->  1 file changed, 27 insertions(+), 26 deletions(-)
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 58 +++++++++++++++++++++++
+>  drivers/gpu/drm/bridge/analogix/anx7625.h | 13 +++++
+>  2 files changed, 71 insertions(+)
 > 
-> Index: linux-pm/drivers/platform/x86/thinkpad_acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/x86/thinkpad_acpi.c
-> +++ linux-pm/drivers/platform/x86/thinkpad_acpi.c
-> @@ -6841,6 +6841,31 @@ static const struct backlight_ops ibm_ba
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index d41a21103bd3..2c308d12fab2 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> +#include <linux/usb/typec_dp.h>
+>  #include <linux/usb/typec_mux.h>
+>  #include <linux/workqueue.h>
 >  
->  /* --------------------------------------------------------------------- */
->  
-> +static int __init tpacpi_evaluate_bcl(struct acpi_device *adev, void *not_used)
-> +{
-> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	union acpi_object *obj;
-> +	acpi_status status;
-> +	int rc;
-> +
-> +	status = acpi_evaluate_object(adev->handle, "_BCL", NULL, &buffer);
-> +	if (ACPI_FAILURE(status))
-> +		return 0;
-> +
-> +	obj = buffer.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_PACKAGE) {
-> +		acpi_handle_info(adev->handle,
-> +				 "Unknown _BCL data, please report this to %s\n",
-> +				 TPACPI_MAIL);
-> +		rc = 0;
-> +	} else {
-> +		rc = obj->package.count;
-> +	}
-> +	kfree(obj);
-> +
-> +	return rc;
-> +}
-> +
->  /*
->   * Call _BCL method of video device.  On some ThinkPads this will
->   * switch the firmware to the ACPI brightness control mode.
-> @@ -6848,37 +6873,13 @@ static const struct backlight_ops ibm_ba
->  
->  static int __init tpacpi_query_bcl_levels(acpi_handle handle)
->  {
-> -	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> -	union acpi_object *obj;
-> -	struct acpi_device *device, *child;
-> -	int rc;
-> +	struct acpi_device *device;
->  
->  	device = acpi_fetch_acpi_dev(handle);
->  	if (!device)
->  		return 0;
->  
-> -	rc = 0;
-> -	list_for_each_entry(child, &device->children, node) {
-> -		acpi_status status = acpi_evaluate_object(child->handle, "_BCL",
-> -							  NULL, &buffer);
-> -		if (ACPI_FAILURE(status)) {
-> -			buffer.length = ACPI_ALLOCATE_BUFFER;
-> -			continue;
-> -		}
-> -
-> -		obj = (union acpi_object *)buffer.pointer;
-> -		if (!obj || (obj->type != ACPI_TYPE_PACKAGE)) {
-> -			pr_err("Unknown _BCL data, please report this to %s\n",
-> -				TPACPI_MAIL);
-> -			rc = 0;
-> -		} else {
-> -			rc = obj->package.count;
-> -		}
-> -		break;
-> -	}
-> -
-> -	kfree(buffer.pointer);
-> -	return rc;
-> +	return acpi_dev_for_each_child(device, tpacpi_evaluate_bcl, NULL);
+> @@ -2582,9 +2583,66 @@ static void anx7625_runtime_disable(void *data)
+>  	pm_runtime_disable(data);
 >  }
 >  
->  
-> 
-> 
-> 
+> +static void anx7625_set_crosspoint_switch(struct anx7625_data *ctx,
+> +					  enum typec_orientation orientation)
+> +{
+> +	if (orientation == TYPEC_ORIENTATION_NORMAL) {
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> +				  SW_SEL1_SSRX_RX1 | SW_SEL1_DPTX0_RX2);
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> +				  SW_SEL2_SSTX_TX1 | SW_SEL2_DPTX1_TX2);
+> +	} else if (orientation == TYPEC_ORIENTATION_REVERSE) {
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> +				  SW_SEL1_SSRX_RX2 | SW_SEL1_DPTX0_RX1);
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> +				  SW_SEL2_SSTX_TX2 | SW_SEL2_DPTX1_TX1);
+> +	}
+> +}
+> +
+> +static void anx7625_typec_two_ports_update(struct anx7625_data *ctx)
+> +{
+> +	if (ctx->typec_ports[0].dp_connected && ctx->typec_ports[1].dp_connected)
+> +		/* Both ports available, do nothing to retain the current one. */
+> +		return;
+> +	else if (ctx->typec_ports[0].dp_connected)
+> +		anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_NORMAL);
+> +	else if (ctx->typec_ports[1].dp_connected)
+> +		anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_REVERSE);
+> +}
+> +
+>  static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+>  				 struct typec_mux_state *state)
+>  {
+> +	struct anx7625_port_data *data = typec_mux_get_drvdata(mux);
+> +	struct anx7625_data *ctx = data->ctx;
+> +	struct device *dev = &ctx->client->dev;
+> +
+> +	bool old_dp_connected = (ctx->typec_ports[0].dp_connected ||
+> +				 ctx->typec_ports[1].dp_connected);
 
+Here you're assuming you have 2 switches. Given that this on its own doesn't do
+anything, just move it after the 
+
+	if (ctx->num_typec_switches == 1)
+		return 0;
+
+check.
+
+Thanks,
+Nícolas
+
+> +	bool new_dp_connected;
+> +
+> +	if (ctx->num_typec_switches == 1)
+> +		return 0;
+> +
+> +	dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
+> +		ctx->typec_ports[0].dp_connected, ctx->typec_ports[1].dp_connected);
+> +
+> +	data->dp_connected = (state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
+> +			      state->alt->mode == USB_TYPEC_DP_MODE);
+> +
+> +	new_dp_connected = (ctx->typec_ports[0].dp_connected ||
+> +			    ctx->typec_ports[1].dp_connected);
+> +
+> +	/* dp on, power on first */
+> +	if (!old_dp_connected && new_dp_connected)
+> +		pm_runtime_get_sync(dev);
+> +
+> +	anx7625_typec_two_ports_update(ctx);
+> +
+> +	/* dp off, power off last */
+> +	if (old_dp_connected && !new_dp_connected)
+> +		pm_runtime_put_sync(dev);
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> index 76cfc64f7574..7d6c6fdf9a3a 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> @@ -55,6 +55,18 @@
+>  #define HPD_STATUS_CHANGE 0x80
+>  #define HPD_STATUS 0x80
+>  
+> +#define TCPC_SWITCH_0 0xB4
+> +#define SW_SEL1_DPTX0_RX2 BIT(0)
+> +#define SW_SEL1_DPTX0_RX1 BIT(1)
+> +#define SW_SEL1_SSRX_RX2 BIT(4)
+> +#define SW_SEL1_SSRX_RX1 BIT(5)
+> +
+> +#define TCPC_SWITCH_1 0xB5
+> +#define SW_SEL2_DPTX1_TX2 BIT(0)
+> +#define SW_SEL2_DPTX1_TX1 BIT(1)
+> +#define SW_SEL2_SSTX_TX2 BIT(4)
+> +#define SW_SEL2_SSTX_TX1 BIT(5)
+> +
+>  /******** END of I2C Address 0x58 ********/
+>  
+>  /***************************************************************/
+> @@ -444,6 +456,7 @@ struct anx7625_i2c_client {
+>  };
+>  
+>  struct anx7625_port_data {
+> +	bool dp_connected;
+>  	struct typec_mux_dev *typec_mux;
+>  	struct anx7625_data *ctx;
+>  };
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
+> 

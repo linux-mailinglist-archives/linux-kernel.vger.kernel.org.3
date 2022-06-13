@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D21548C02
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79C154900D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356040AbiFMMsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S1380634AbiFMODB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355296AbiFMMo1 (ORCPT
+        with ESMTP id S1380999AbiFMNzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:44:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5556D34643;
-        Mon, 13 Jun 2022 04:11:06 -0700 (PDT)
+        Mon, 13 Jun 2022 09:55:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9678A84A10;
+        Mon, 13 Jun 2022 04:36:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F2F5B80E93;
-        Mon, 13 Jun 2022 11:11:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B7AC34114;
-        Mon, 13 Jun 2022 11:11:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A2CE612D0;
+        Mon, 13 Jun 2022 11:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9129C34114;
+        Mon, 13 Jun 2022 11:36:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118665;
-        bh=bSgguiXMY2uBFm3dklHW6Pw0NkaX477qApLT3LAWogw=;
+        s=korg; t=1655120180;
+        bh=2H2CyXv2Ye91YOMEfo5u5VeHXj+oImPJDnj3yXu5duQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OcnTkRQVVBhbeQeqF8Q14KMMJf/brDLkMqNPAa35F9AN2rMP3ndp1XZ1Cq4VPtiq6
-         Du1qLlETXsyDe9GrbhuCM/PxqSLZ5WhukOm4xhplE0yZGIBKpR1J1+1hv64yz4lS08
-         hS0EFpdmMb7FjuJI2n2Q7etEDDeHeQn8NVP4KKsY=
+        b=ooPe+eLfBiS+NSZ8ET4lp+Kgpz8wULzpsExUxnYtgqWFidT/5p0Frix9SQnBBWldo
+         tyUcXbKHeMETzDbyLR+c1C29v7agH0gq1W+4UL9CVZbJRC9YDWtD4Ttp0ucFPbIjqk
+         4cNvBdSsos2gzJYCaIr3DSSqBEOrMhd06T11jmO8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 144/172] nbd: fix race between nbd_alloc_config() and module removal
+        stable@vger.kernel.org, Cyril Brulebois <kibi@debian.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 279/339] Revert "PCI: brcmstb: Add control of subdevice voltage regulators"
 Date:   Mon, 13 Jun 2022 12:11:44 +0200
-Message-Id: <20220613094922.250439879@linuxfoundation.org>
+Message-Id: <20220613094935.098766956@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,122 +55,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-[ Upstream commit c55b2b983b0fa012942c3eb16384b2b722caa810 ]
+[ Upstream commit 212942609d83b591f5a2f2691df122d13aa3a87d ]
 
-When nbd module is being removing, nbd_alloc_config() may be
-called concurrently by nbd_genl_connect(), although try_module_get()
-will return false, but nbd_alloc_config() doesn't handle it.
+This reverts commit 93e41f3fca3d4a0f927b784012338c37f80a8a80.
 
-The race may lead to the leak of nbd_config and its related
-resources (e.g, recv_workq) and oops in nbd_read_stat() due
-to the unload of nbd module as shown below:
+This is part of a revert of the following commits:
 
-  BUG: kernel NULL pointer dereference, address: 0000000000000040
-  Oops: 0000 [#1] SMP PTI
-  CPU: 5 PID: 13840 Comm: kworker/u17:33 Not tainted 5.14.0+ #1
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-  Workqueue: knbd16-recv recv_work [nbd]
-  RIP: 0010:nbd_read_stat.cold+0x130/0x1a4 [nbd]
-  Call Trace:
-   recv_work+0x3b/0xb0 [nbd]
-   process_one_work+0x1ed/0x390
-   worker_thread+0x4a/0x3d0
-   kthread+0x12a/0x150
-   ret_from_fork+0x22/0x30
+  11ed8b8624b8 ("PCI: brcmstb: Do not turn off WOL regulators on suspend")
+  93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+  67211aadcb4b ("PCI: brcmstb: Add mechanism to turn on subdev regulators")
+  830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
 
-Fixing it by checking the return value of try_module_get()
-in nbd_alloc_config(). As nbd_alloc_config() may return ERR_PTR(-ENODEV),
-assign nbd->config only when nbd_alloc_config() succeeds to ensure
-the value of nbd->config is binary (valid or NULL).
+Cyril reported that 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup()
+into two funcs"), which appeared in v5.17-rc1, broke booting on the
+Raspberry Pi Compute Module 4.  Apparently 830aa6f29f07 panics with an
+Asynchronous SError Interrupt, and after further commits here is a black
+screen on HDMI and no output on the serial console.
 
-Also adding a debug message to check the reference counter
-of nbd_config during module removal.
+This does not seem to affect the Raspberry Pi 4 B.
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20220521073749.3146892-3-yukuai3@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+Link: https://lore.kernel.org/r/20220511201856.808690-3-helgaas@kernel.org
+Reported-by: Cyril Brulebois <kibi@debian.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ drivers/pci/controller/pcie-brcmstb.c | 83 ++-------------------------
+ 1 file changed, 5 insertions(+), 78 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 1ca326c66521..74afa50c7864 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1472,15 +1472,20 @@ static struct nbd_config *nbd_alloc_config(void)
- {
- 	struct nbd_config *config;
+diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+index 3edd63735948..fd464d38fecb 100644
+--- a/drivers/pci/controller/pcie-brcmstb.c
++++ b/drivers/pci/controller/pcie-brcmstb.c
+@@ -196,8 +196,6 @@ static inline void brcm_pcie_bridge_sw_init_set_generic(struct brcm_pcie *pcie,
+ static inline void brcm_pcie_perst_set_4908(struct brcm_pcie *pcie, u32 val);
+ static inline void brcm_pcie_perst_set_7278(struct brcm_pcie *pcie, u32 val);
+ static inline void brcm_pcie_perst_set_generic(struct brcm_pcie *pcie, u32 val);
+-static int brcm_pcie_linkup(struct brcm_pcie *pcie);
+-static int brcm_pcie_add_bus(struct pci_bus *bus);
  
-+	if (!try_module_get(THIS_MODULE))
-+		return ERR_PTR(-ENODEV);
-+
- 	config = kzalloc(sizeof(struct nbd_config), GFP_NOFS);
--	if (!config)
--		return NULL;
-+	if (!config) {
-+		module_put(THIS_MODULE);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
- 	atomic_set(&config->recv_threads, 0);
- 	init_waitqueue_head(&config->recv_wq);
- 	init_waitqueue_head(&config->conn_wait);
- 	config->blksize = NBD_DEF_BLKSIZE;
- 	atomic_set(&config->live_connections, 0);
--	try_module_get(THIS_MODULE);
- 	return config;
+ enum {
+ 	RGR1_SW_INIT_1,
+@@ -331,8 +329,6 @@ struct brcm_pcie {
+ 	u32			hw_rev;
+ 	void			(*perst_set)(struct brcm_pcie *pcie, u32 val);
+ 	void			(*bridge_sw_init_set)(struct brcm_pcie *pcie, u32 val);
+-	bool			refusal_mode;
+-	struct subdev_regulators *sr;
+ };
+ 
+ static inline bool is_bmips(const struct brcm_pcie *pcie)
+@@ -501,34 +497,6 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+ 	return 0;
  }
  
-@@ -1507,12 +1512,13 @@ static int nbd_open(struct block_device *bdev, fmode_t mode)
- 			mutex_unlock(&nbd->config_lock);
- 			goto out;
- 		}
--		config = nbd->config = nbd_alloc_config();
--		if (!config) {
--			ret = -ENOMEM;
-+		config = nbd_alloc_config();
-+		if (IS_ERR(config)) {
-+			ret = PTR_ERR(config);
- 			mutex_unlock(&nbd->config_lock);
- 			goto out;
- 		}
-+		nbd->config = config;
- 		refcount_set(&nbd->config_refs, 1);
- 		refcount_inc(&nbd->refs);
- 		mutex_unlock(&nbd->config_lock);
-@@ -1934,13 +1940,14 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
- 		nbd_put(nbd);
- 		return -EINVAL;
- 	}
--	config = nbd->config = nbd_alloc_config();
--	if (!nbd->config) {
-+	config = nbd_alloc_config();
-+	if (IS_ERR(config)) {
- 		mutex_unlock(&nbd->config_lock);
- 		nbd_put(nbd);
- 		printk(KERN_ERR "nbd: couldn't allocate config\n");
--		return -ENOMEM;
-+		return PTR_ERR(config);
- 	}
-+	nbd->config = config;
- 	refcount_set(&nbd->config_refs, 1);
- 	set_bit(NBD_RT_BOUND, &config->runtime_flags);
+-static int brcm_pcie_add_bus(struct pci_bus *bus)
+-{
+-	struct device *dev = &bus->dev;
+-	struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+-	int ret;
+-
+-	if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+-		return 0;
+-
+-	ret = pci_subdev_regulators_add_bus(bus);
+-	if (ret)
+-		return ret;
+-
+-	/* Grab the regulators for suspend/resume */
+-	pcie->sr = bus->dev.driver_data;
+-
+-	/*
+-	 * If we have failed linkup there is no point to return an error as
+-	 * currently it will cause a WARNING() from pci_alloc_child_bus().
+-	 * We return 0 and turn on the "refusal_mode" so that any further
+-	 * accesses to the pci_dev just get 0xffffffff
+-	 */
+-	if (brcm_pcie_linkup(pcie) != 0)
+-		pcie->refusal_mode = true;
+-
+-	return 0;
+-}
+-
+ static void pci_subdev_regulators_remove_bus(struct pci_bus *bus)
+ {
+ 	struct device *dev = &bus->dev;
+@@ -857,18 +825,6 @@ static void __iomem *brcm_pcie_map_conf(struct pci_bus *bus, unsigned int devfn,
+ 	/* Accesses to the RC go right to the RC registers if slot==0 */
+ 	if (pci_is_root_bus(bus))
+ 		return PCI_SLOT(devfn) ? NULL : base + where;
+-	if (pcie->refusal_mode) {
+-		/*
+-		 * At this point we do not have link.  There will be a CPU
+-		 * abort -- a quirk with this controller --if Linux tries
+-		 * to read any config-space registers besides those
+-		 * targeting the host bridge.  To prevent this we hijack
+-		 * the address to point to a safe access that will return
+-		 * 0xffffffff.
+-		 */
+-		writel(0xffffffff, base + PCIE_MISC_RC_BAR2_CONFIG_HI);
+-		return base + PCIE_MISC_RC_BAR2_CONFIG_HI + (where & 0x3);
+-	}
  
-@@ -2476,6 +2483,9 @@ static void __exit nbd_cleanup(void)
- 	while (!list_empty(&del_list)) {
- 		nbd = list_first_entry(&del_list, struct nbd_device, list);
- 		list_del_init(&nbd->list);
-+		if (refcount_read(&nbd->config_refs))
-+			printk(KERN_ERR "nbd: possibly leaking nbd_config (ref %d)\n",
-+					refcount_read(&nbd->config_refs));
- 		if (refcount_read(&nbd->refs) != 1)
- 			printk(KERN_ERR "nbd: possibly leaking a device\n");
- 		nbd_put(nbd);
+ 	/* For devices, write to the config space index register */
+ 	idx = PCIE_ECAM_OFFSET(bus->number, devfn, 0);
+@@ -897,7 +853,7 @@ static struct pci_ops brcm_pcie_ops = {
+ 	.map_bus = brcm_pcie_map_conf,
+ 	.read = pci_generic_config_read,
+ 	.write = pci_generic_config_write,
+-	.add_bus = brcm_pcie_add_bus,
++	.add_bus = pci_subdev_regulators_add_bus,
+ 	.remove_bus = pci_subdev_regulators_remove_bus,
+ };
+ 
+@@ -1370,14 +1326,6 @@ static int brcm_pcie_suspend(struct device *dev)
+ 		return ret;
+ 	}
+ 
+-	if (pcie->sr) {
+-		ret = regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
+-		if (ret) {
+-			dev_err(dev, "Could not turn off regulators\n");
+-			reset_control_reset(pcie->rescal);
+-			return ret;
+-		}
+-	}
+ 	clk_disable_unprepare(pcie->clk);
+ 
+ 	return 0;
+@@ -1395,17 +1343,9 @@ static int brcm_pcie_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (pcie->sr) {
+-		ret = regulator_bulk_enable(pcie->sr->num_supplies, pcie->sr->supplies);
+-		if (ret) {
+-			dev_err(dev, "Could not turn on regulators\n");
+-			goto err_disable_clk;
+-		}
+-	}
+-
+ 	ret = reset_control_reset(pcie->rescal);
+ 	if (ret)
+-		goto err_regulator;
++		goto err_disable_clk;
+ 
+ 	ret = brcm_phy_start(pcie);
+ 	if (ret)
+@@ -1437,9 +1377,6 @@ static int brcm_pcie_resume(struct device *dev)
+ 
+ err_reset:
+ 	reset_control_rearm(pcie->rescal);
+-err_regulator:
+-	if (pcie->sr)
+-		regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
+ err_disable_clk:
+ 	clk_disable_unprepare(pcie->clk);
+ 	return ret;
+@@ -1571,17 +1508,7 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, pcie);
+ 
+-	ret = pci_host_probe(bridge);
+-	if (!ret && !brcm_pcie_link_up(pcie))
+-		ret = -ENODEV;
+-
+-	if (ret) {
+-		brcm_pcie_remove(pdev);
+-		return ret;
+-	}
+-
+-	return 0;
+-
++	return pci_host_probe(bridge);
+ fail:
+ 	__brcm_pcie_remove(pcie);
+ 	return ret;
+@@ -1590,8 +1517,8 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+ MODULE_DEVICE_TABLE(of, brcm_pcie_match);
+ 
+ static const struct dev_pm_ops brcm_pcie_pm_ops = {
+-	.suspend_noirq = brcm_pcie_suspend,
+-	.resume_noirq = brcm_pcie_resume,
++	.suspend = brcm_pcie_suspend,
++	.resume = brcm_pcie_resume,
+ };
+ 
+ static struct platform_driver brcm_pcie_driver = {
 -- 
 2.35.1
 

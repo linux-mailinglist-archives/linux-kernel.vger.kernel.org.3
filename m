@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2C654864C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2046554866D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358937AbiFMMIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S1384146AbiFMO24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359176AbiFMMFZ (ORCPT
+        with ESMTP id S1383872AbiFMOYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8239C192A3;
-        Mon, 13 Jun 2022 03:59:38 -0700 (PDT)
+        Mon, 13 Jun 2022 10:24:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5827B4707B;
+        Mon, 13 Jun 2022 04:45:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13F3DB80D31;
-        Mon, 13 Jun 2022 10:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B255C34114;
-        Mon, 13 Jun 2022 10:59:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAEBC612AC;
+        Mon, 13 Jun 2022 11:45:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02305C3411C;
+        Mon, 13 Jun 2022 11:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117975;
-        bh=rStf1JFbzVr+6DRMXFsadNh6Oky+hlIwUz0q441iUPE=;
+        s=korg; t=1655120739;
+        bh=9phftI5w2jdpco4ORl3mxxTJoT7mNPSI6iI6YVxDZsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ty+JR75IOWFkAaysvNOAe2/IC9SXPtlPGNQ4rr2ESQzTi2YYH3EFjr8vYy8asI0Gd
-         PKEPwAoY6Yfdao1qp/p4DXhKWBQooGtK872IGiYoHTl3ZwcV4XgCKcoD2oG3mdzwW2
-         cWm+bIKLYG3yUYCGuR9TwIoRaDitG1xV0SX+8KcY=
+        b=TRwJ5DfRYN+s+rxrUUK8kmY2YJBAn2/AbdwTuS/M7F1irSgzAAuLmysRjwU+Hv/de
+         4Jt+ZbrD/fAsI4bu6EEwF5vLGUxSKSYo+1CYKLT4oQjxpuOxrIc0RJprgWLREYO0PQ
+         BMWed24Vv/DGk3NNS5tnQA5j+iTe2Qfi7waXm4M8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.19 185/287] phy: qcom-qmp: fix reset-controller leak on probe errors
-Date:   Mon, 13 Jun 2022 12:10:09 +0200
-Message-Id: <20220613094929.476799292@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 116/298] vdpa: ifcvf: set pci driver data in probe
+Date:   Mon, 13 Jun 2022 12:10:10 +0200
+Message-Id: <20220613094928.463447055@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Jason Wang <jasowang@redhat.com>
 
-commit 4d2900f20edfe541f75756a00deeb2ffe7c66bc1 upstream.
+[ Upstream commit bd8bb9aed56b1814784a975e2dfea12a9adcee92 ]
 
-Make sure to release the lane reset controller in case of a late probe
-error (e.g. probe deferral).
+We should set the pci driver data in probe instead of the vdpa device
+adding callback. Otherwise if no vDPA device is created we will lose
+the pointer to the management device.
 
-Note that due to the reset controller being defined in devicetree in
-"lane" child nodes, devm_reset_control_get_exclusive() cannot be used
-directly.
-
-Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
-Cc: stable@vger.kernel.org      # 4.12
-Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220427063243.32576-3-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6b5df347c6482 ("vDPA/ifcvf: implement management netlink framework for ifcvf")
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+Message-Id: <20220524055557.1938-1-jasowang@redhat.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/vdpa/ifcvf/ifcvf_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -1426,6 +1426,11 @@ static const struct phy_ops qcom_qmp_phy
- 	.owner		= THIS_MODULE,
- };
- 
-+static void qcom_qmp_reset_control_put(void *data)
-+{
-+	reset_control_put(data);
-+}
-+
- static
- int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id)
- {
-@@ -1490,6 +1495,10 @@ int qcom_qmp_phy_create(struct device *d
- 			dev_err(dev, "failed to get lane%d reset\n", id);
- 			return PTR_ERR(qphy->lane_rst);
- 		}
-+		ret = devm_add_action_or_reset(dev, qcom_qmp_reset_control_put,
-+					       qphy->lane_rst);
-+		if (ret)
-+			return ret;
+diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+index d1a6b5ab543c..474c6120c955 100644
+--- a/drivers/vdpa/ifcvf/ifcvf_main.c
++++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+@@ -514,7 +514,6 @@ static int ifcvf_vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
  	}
  
- 	generic_phy = devm_phy_create(dev, np, &qcom_qmp_phy_gen_ops);
+ 	ifcvf_mgmt_dev->adapter = adapter;
+-	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
+ 
+ 	vf = &adapter->vf;
+ 	vf->dev_type = get_dev_type(pdev);
+@@ -629,6 +628,8 @@ static int ifcvf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		goto err;
+ 	}
+ 
++	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
++
+ 	return 0;
+ 
+ err:
+-- 
+2.35.1
+
 
 

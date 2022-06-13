@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347755498D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC85E548D93
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244468AbiFMKcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S1377180AbiFMNUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345873AbiFMKaL (ORCPT
+        with ESMTP id S1358927AbiFMNIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:30:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557AC13F6C;
-        Mon, 13 Jun 2022 03:21:04 -0700 (PDT)
+        Mon, 13 Jun 2022 09:08:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88751387BD;
+        Mon, 13 Jun 2022 04:18:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9146E60AE8;
-        Mon, 13 Jun 2022 10:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A42C34114;
-        Mon, 13 Jun 2022 10:21:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5C3B80E59;
+        Mon, 13 Jun 2022 11:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D6FC34114;
+        Mon, 13 Jun 2022 11:18:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115663;
-        bh=yl3jrND5U1Or25BPXn+pHgU7me4egZGSZ+x487ubYJo=;
+        s=korg; t=1655119135;
+        bh=7QwqXo9WjHkvHUzsG/HwftUa0vGNKXOY1EDRXi2pBc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jFNOqeCrnbnFKegdepNtug03QkcFLMj1Vnfh8dYTkmUSFh2txD9rK04vz3Ki+96Xs
-         Cm+JN/D7gI/u9xwcj8HDKG8blDTkPgkjCL9cvG0zP6szAUW8TWTnojIXeKTm4oecfl
-         Ywh775w4jquDlYmWsG2YWGT7Lu9zofKqPhQqOndc=
+        b=HV5POb8lNcx4bvZXn85+4Hr3A46G1L0zCRH/Wa5O4H38FJZjt5LxnilUXn2a4AyZj
+         +kHb3TMu2C21oU4SDDHc1AYPkMVuLhAgDbOAa7aDBsKTV76TleJN1Ti6Tf+8CpWi29
+         kldxPw6SlPG4UjkDCbHyXGe3zMHkCIxOCN1oRW80=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ariel Miculas <ariel.miculas@belden.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.9 164/167] powerpc/32: Fix overread/overwrite of thread_struct via ptrace
+        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 136/247] SUNRPC: Trap RDMA segment overflows
 Date:   Mon, 13 Jun 2022 12:10:38 +0200
-Message-Id: <20220613094919.437056428@linuxfoundation.org>
+Message-Id: <20220613094927.083029335@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,106 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-commit 8e1278444446fc97778a5e5c99bca1ce0bbc5ec9 upstream.
+[ Upstream commit f012e95b377c73c0283f009823c633104dedb337 ]
 
-The ptrace PEEKUSR/POKEUSR (aka PEEKUSER/POKEUSER) API allows a process
-to read/write registers of another process.
+Prevent svc_rdma_build_writes() from walking off the end of a Write
+chunk's segment array. Caught with KASAN.
 
-To get/set a register, the API takes an index into an imaginary address
-space called the "USER area", where the registers of the process are
-laid out in some fashion.
+The test that this fix replaces is invalid, and might have been left
+over from an earlier prototype of the PCL work.
 
-The kernel then maps that index to a particular register in its own data
-structures and gets/sets the value.
-
-The API only allows a single machine-word to be read/written at a time.
-So 4 bytes on 32-bit kernels and 8 bytes on 64-bit kernels.
-
-The way floating point registers (FPRs) are addressed is somewhat
-complicated, because double precision float values are 64-bit even on
-32-bit CPUs. That means on 32-bit kernels each FPR occupies two
-word-sized locations in the USER area. On 64-bit kernels each FPR
-occupies one word-sized location in the USER area.
-
-Internally the kernel stores the FPRs in an array of u64s, or if VSX is
-enabled, an array of pairs of u64s where one half of each pair stores
-the FPR. Which half of the pair stores the FPR depends on the kernel's
-endianness.
-
-To handle the different layouts of the FPRs depending on VSX/no-VSX and
-big/little endian, the TS_FPR() macro was introduced.
-
-Unfortunately the TS_FPR() macro does not take into account the fact
-that the addressing of each FPR differs between 32-bit and 64-bit
-kernels. It just takes the index into the "USER area" passed from
-userspace and indexes into the fp_state.fpr array.
-
-On 32-bit there are 64 indexes that address FPRs, but only 32 entries in
-the fp_state.fpr array, meaning the user can read/write 256 bytes past
-the end of the array. Because the fp_state sits in the middle of the
-thread_struct there are various fields than can be overwritten,
-including some pointers. As such it may be exploitable.
-
-It has also been observed to cause systems to hang or otherwise
-misbehave when using gdbserver, and is probably the root cause of this
-report which could not be easily reproduced:
-  https://lore.kernel.org/linuxppc-dev/dc38afe9-6b78-f3f5-666b-986939e40fc6@keymile.com/
-
-Rather than trying to make the TS_FPR() macro even more complicated to
-fix the bug, or add more macros, instead add a special-case for 32-bit
-kernels. This is more obvious and hopefully avoids a similar bug
-happening again in future.
-
-Note that because 32-bit kernels never have VSX enabled the code doesn't
-need to consider TS_FPRWIDTH/OFFSET at all. Add a BUILD_BUG_ON() to
-ensure that 32-bit && VSX is never enabled.
-
-Fixes: 87fec0514f61 ("powerpc: PTRACE_PEEKUSR/PTRACE_POKEUSER of FPR registers in little endian builds")
-Cc: stable@vger.kernel.org # v3.13+
-Reported-by: Ariel Miculas <ariel.miculas@belden.com>
-Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220609133245.573565-1-mpe@ellerman.id.au
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7a1cbfa18059 ("svcrdma: Use parsed chunk lists to construct RDMA Writes")
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/ptrace.c |   18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ net/sunrpc/xprtrdma/svc_rdma_rw.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/powerpc/kernel/ptrace.c
-+++ b/arch/powerpc/kernel/ptrace.c
-@@ -2938,8 +2938,13 @@ long arch_ptrace(struct task_struct *chi
+diff --git a/net/sunrpc/xprtrdma/svc_rdma_rw.c b/net/sunrpc/xprtrdma/svc_rdma_rw.c
+index e27433f08ca7..50bf62f85166 100644
+--- a/net/sunrpc/xprtrdma/svc_rdma_rw.c
++++ b/net/sunrpc/xprtrdma/svc_rdma_rw.c
+@@ -456,10 +456,10 @@ svc_rdma_build_writes(struct svc_rdma_write_info *info,
+ 		unsigned int write_len;
+ 		u64 offset;
  
- 			flush_fp_to_thread(child);
- 			if (fpidx < (PT_FPSCR - PT_FPR0))
--				memcpy(&tmp, &child->thread.TS_FPR(fpidx),
--				       sizeof(long));
-+				if (IS_ENABLED(CONFIG_PPC32)) {
-+					// On 32-bit the index we are passed refers to 32-bit words
-+					tmp = ((u32 *)child->thread.fp_state.fpr)[fpidx];
-+				} else {
-+					memcpy(&tmp, &child->thread.TS_FPR(fpidx),
-+					       sizeof(long));
-+				}
- 			else
- 				tmp = child->thread.fp_state.fpscr;
- 		}
-@@ -2971,8 +2976,13 @@ long arch_ptrace(struct task_struct *chi
+-		seg = &info->wi_chunk->ch_segments[info->wi_seg_no];
+-		if (!seg)
++		if (info->wi_seg_no >= info->wi_chunk->ch_segcount)
+ 			goto out_overflow;
  
- 			flush_fp_to_thread(child);
- 			if (fpidx < (PT_FPSCR - PT_FPR0))
--				memcpy(&child->thread.TS_FPR(fpidx), &data,
--				       sizeof(long));
-+				if (IS_ENABLED(CONFIG_PPC32)) {
-+					// On 32-bit the index we are passed refers to 32-bit words
-+					((u32 *)child->thread.fp_state.fpr)[fpidx] = data;
-+				} else {
-+					memcpy(&child->thread.TS_FPR(fpidx), &data,
-+					       sizeof(long));
-+				}
- 			else
- 				child->thread.fp_state.fpscr = data;
- 			ret = 0;
++		seg = &info->wi_chunk->ch_segments[info->wi_seg_no];
+ 		write_len = min(remaining, seg->rs_length - info->wi_seg_off);
+ 		if (!write_len)
+ 			goto out_overflow;
+-- 
+2.35.1
+
 
 

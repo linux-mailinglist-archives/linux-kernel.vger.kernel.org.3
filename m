@@ -2,46 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1173548D08
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB4B549258
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354168AbiFMMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        id S1383702AbiFMO1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358461AbiFMM3m (ORCPT
+        with ESMTP id S1383751AbiFMOX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:29:42 -0400
+        Mon, 13 Jun 2022 10:23:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097215A2E5;
-        Mon, 13 Jun 2022 04:06:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E4321273;
+        Mon, 13 Jun 2022 04:45:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2513614A5;
-        Mon, 13 Jun 2022 11:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE4B2C385A9;
-        Mon, 13 Jun 2022 11:06:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4952612A8;
+        Mon, 13 Jun 2022 11:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B848C34114;
+        Mon, 13 Jun 2022 11:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118402;
-        bh=ujqa69PlYLhlbA5HRuL7vg58c8MZKjA7sq0ItS05Eg8=;
+        s=korg; t=1655120709;
+        bh=gJVcHejTKcyuP/psQJV5MtzjcY2RzC0c8YvPepU7RPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fg2O84OFt7hAinIz0/1oyAVvHnDw7i3FRoh6dsDgT9QZWjRW6UPE6fkBsyzfzWrlh
-         ST6W0L+e8W32B47yb9Qci+TfGflyjWHe/uQHI4FrMNAbi681Ce1aiHCvqiKC/6PMab
-         djGVT7Y0gkCw/6f53j3reBpUXdQrjGCuX84IAW2g=
+        b=Oxqw/PGTNtqLyyp40Jf0BwlVTPHdClLyc21JcQLHgnlyAiZez4YvmSUFjlAwEKMdg
+         An9Dvgzf2qesmBnkpOu24kLrHwITqYJSussa9YzQxtK3wje82mqJvUZZ7yV2WCqtBc
+         +UQoxoG6/i5fA6nSd2McVATZqajWoFb8iMUO9tzE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 063/172] sfc: fix wrong tx channel offset with efx_separate_tx_channels
+Subject: [PATCH 5.17 129/298] perf parse-events: Move slots event for the hybrid platform too
 Date:   Mon, 13 Jun 2022 12:10:23 +0200
-Message-Id: <20220613094905.560176189@linuxfoundation.org>
+Message-Id: <20220613094928.855785268@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +63,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Íñigo Huguet <ihuguet@redhat.com>
+From: Kan Liang <kan.liang@linux.intel.com>
 
-[ Upstream commit c308dfd1b43ef0d4c3e57b741bb3462eb7a7f4a2 ]
+[ Upstream commit e0e14cdff31d326f81e0edbd5140f788c870756c ]
 
-tx_channel_offset is calculated in efx_allocate_msix_channels, but it is
-also calculated again in efx_set_channels because it was originally done
-there, and when efx_allocate_msix_channels was introduced it was
-forgotten to be removed from efx_set_channels.
+The commit 94dbfd6781a0e87b ("perf parse-events: Architecture specific
+leader override") introduced a feature to reorder the slots event to
+fulfill the restriction of the perf metrics topdown group. But the
+feature doesn't work on the hybrid machine.
 
-Moreover, the old calculation is wrong when using
-efx_separate_tx_channels because now we can have XDP channels after the
-TX channels, so n_channels - n_tx_channels doesn't point to the first TX
-channel.
+  $ perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
 
-Remove the old calculation from efx_set_channels, and add the
-initialization of this variable if MSI or legacy interrupts are used,
-next to the initialization of the rest of the related variables, where
-it was missing.
+   Performance counter stats for 'system wide':
 
-Fixes: 3990a8fffbda ("sfc: allocate channels for XDP tx queues")
-Reported-by: Tianhao Zhao <tizhao@redhat.com>
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+       <not counted>      cpu_core/instructions/
+       <not counted>      cpu_core/slots/
+     <not supported>      cpu_core/topdown-retiring/
+
+         1.002871801 seconds time elapsed
+
+A hybrid platform has a different PMU name for the core PMUs, while
+current perf hard code the PMU name "cpu".
+
+Introduce a new function to check whether the system supports the perf
+metrics feature. The result is cached for the future usage.
+
+For X86, the core PMU name always has "cpu" prefix.
+
+With the patch:
+
+  $ perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
+
+   Performance counter stats for 'system wide':
+
+          76,337,010      cpu_core/slots/
+          10,416,809      cpu_core/instructions/
+          11,692,372      cpu_core/topdown-retiring/
+
+         1.002805453 seconds time elapsed
+
+Reviewed-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Link: https://lore.kernel.org/r/20220518143900.1493980-5-kan.liang@linux.intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/efx_channels.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/perf/arch/x86/util/evlist.c  |  5 +++--
+ tools/perf/arch/x86/util/topdown.c | 25 +++++++++++++++++++++++++
+ tools/perf/arch/x86/util/topdown.h |  7 +++++++
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+ create mode 100644 tools/perf/arch/x86/util/topdown.h
 
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-index 2ab8571ef1cc..d0f1b2dc7dff 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -287,6 +287,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
- 		efx->n_channels = 1;
- 		efx->n_rx_channels = 1;
- 		efx->n_tx_channels = 1;
-+		efx->tx_channel_offset = 0;
- 		efx->n_xdp_channels = 0;
- 		efx->xdp_channel_offset = efx->n_channels;
- 		rc = pci_enable_msi(efx->pci_dev);
-@@ -307,6 +308,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
- 		efx->n_channels = 1 + (efx_separate_tx_channels ? 1 : 0);
- 		efx->n_rx_channels = 1;
- 		efx->n_tx_channels = 1;
-+		efx->tx_channel_offset = 1;
- 		efx->n_xdp_channels = 0;
- 		efx->xdp_channel_offset = efx->n_channels;
- 		efx->legacy_irq = efx->pci_dev->irq;
-@@ -858,10 +860,6 @@ int efx_set_channels(struct efx_nic *efx)
- 	int xdp_queue_number;
- 	int rc;
+diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
+index 75564a7df15b..68f681ad54c1 100644
+--- a/tools/perf/arch/x86/util/evlist.c
++++ b/tools/perf/arch/x86/util/evlist.c
+@@ -3,6 +3,7 @@
+ #include "util/pmu.h"
+ #include "util/evlist.h"
+ #include "util/parse-events.h"
++#include "topdown.h"
  
--	efx->tx_channel_offset =
--		efx_separate_tx_channels ?
--		efx->n_channels - efx->n_tx_channels : 0;
--
- 	if (efx->xdp_tx_queue_count) {
- 		EFX_WARN_ON_PARANOID(efx->xdp_tx_queues);
+ #define TOPDOWN_L1_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
+ #define TOPDOWN_L2_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
+@@ -25,12 +26,12 @@ struct evsel *arch_evlist__leader(struct list_head *list)
  
+ 	first = list_first_entry(list, struct evsel, core.node);
+ 
+-	if (!pmu_have_event("cpu", "slots"))
++	if (!topdown_sys_has_perf_metrics())
+ 		return first;
+ 
+ 	/* If there is a slots event and a topdown event then the slots event comes first. */
+ 	__evlist__for_each_entry(list, evsel) {
+-		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
++		if (evsel->pmu_name && !strncmp(evsel->pmu_name, "cpu", 3) && evsel->name) {
+ 			if (strcasestr(evsel->name, "slots")) {
+ 				slots = evsel;
+ 				if (slots == first)
+diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
+index 2f3d96aa92a5..f4d5422e9960 100644
+--- a/tools/perf/arch/x86/util/topdown.c
++++ b/tools/perf/arch/x86/util/topdown.c
+@@ -3,6 +3,31 @@
+ #include "api/fs/fs.h"
+ #include "util/pmu.h"
+ #include "util/topdown.h"
++#include "topdown.h"
++
++/* Check whether there is a PMU which supports the perf metrics. */
++bool topdown_sys_has_perf_metrics(void)
++{
++	static bool has_perf_metrics;
++	static bool cached;
++	struct perf_pmu *pmu;
++
++	if (cached)
++		return has_perf_metrics;
++
++	/*
++	 * The perf metrics feature is a core PMU feature.
++	 * The PERF_TYPE_RAW type is the type of a core PMU.
++	 * The slots event is only available when the core PMU
++	 * supports the perf metrics feature.
++	 */
++	pmu = perf_pmu__find_by_type(PERF_TYPE_RAW);
++	if (pmu && pmu_have_event(pmu->name, "slots"))
++		has_perf_metrics = true;
++
++	cached = true;
++	return has_perf_metrics;
++}
+ 
+ /*
+  * Check whether we can use a group for top down.
+diff --git a/tools/perf/arch/x86/util/topdown.h b/tools/perf/arch/x86/util/topdown.h
+new file mode 100644
+index 000000000000..46bf9273e572
+--- /dev/null
++++ b/tools/perf/arch/x86/util/topdown.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _TOPDOWN_H
++#define _TOPDOWN_H 1
++
++bool topdown_sys_has_perf_metrics(void);
++
++#endif
 -- 
 2.35.1
 

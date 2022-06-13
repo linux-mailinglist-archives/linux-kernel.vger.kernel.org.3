@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD1E549152
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6BE548ABE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347881AbiFMKtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S1378891AbiFMNnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343978AbiFMKoo (ORCPT
+        with ESMTP id S1379126AbiFMNjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:44:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794102B24A;
-        Mon, 13 Jun 2022 03:25:39 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40027A45A;
+        Mon, 13 Jun 2022 04:28:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7837760EF5;
-        Mon, 13 Jun 2022 10:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8740FC3411E;
-        Mon, 13 Jun 2022 10:25:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADE8FB80E93;
+        Mon, 13 Jun 2022 11:28:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D35FC34114;
+        Mon, 13 Jun 2022 11:28:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115937;
-        bh=YVVPUSoDaXsYIq+Ui4oa02D/zRSv0Ui66rsUZ8ecm0o=;
+        s=korg; t=1655119727;
+        bh=P50pTOx/TQ2prKLJ2l40bdgNimtq4ha46DOvNvsWprM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yOTFjIFvO57CV5aZsmfHXeJGGjbAMYSCFhpMLyvlWKgLpYGxYPsEjZ864SeK8MT6E
-         473cNFTzVuLBc3E8PXEro1izzCRh5RIke25sQ7w+YwPpVCTbtk+VG32wdOgUnUMHkd
-         thGJrtDseOkCKEhj20Xl2UwLKhYTTWX/jh1bnWWY=
+        b=hsaYXvOBdTDBY7KhHHtLCVJAGnqtQBN8zQ4QY/sX4/GVtnTIBPxmjaB6h9ik8co5v
+         +/C1FbVNlu7ryeLbOaAv7hpqteqnG0J3K9HERau4x2OgW6E1J0GTTjx/Z0JN1Wn3wQ
+         o9xvy6Krt7pN+sJ2j4Ihvu0602m0VbaC750KNIGo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
+        stable@vger.kernel.org, Haisu Wang <haisuwang@tencent.com>,
+        samuelliao <samuelliao@tencent.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 085/218] mfd: ipaq-micro: Fix error check return value of platform_get_irq()
+Subject: [PATCH 5.18 118/339] blk-mq: do not update io_ticks with passthrough requests
 Date:   Mon, 13 Jun 2022 12:09:03 +0200
-Message-Id: <20220613094923.106580220@linuxfoundation.org>
+Message-Id: <20220613094930.087117371@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Haisu Wang <haisuwang@tencent.com>
 
-[ Upstream commit 3b49ae380ce1a3054e0c505dd9a356b82a5b48e8 ]
+[ Upstream commit b81c14ca14b631aa1abae32fb5ae75b5e9251012 ]
 
-platform_get_irq() return negative value on failure, so null check of
-irq is incorrect. Fix it by comparing whether it is less than zero.
+Flush or passthrough requests are not accounted as normal IO in completion.
+To reflect iostat for slow IO, io_ticks is updated when stat show called
+based on inflight numbers.
+It may cause inconsistent io_ticks calculation result.
 
-Fixes: dcc21cc09e3c ("mfd: Add driver for Atmel Microcontroller on iPaq h3xxx")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220412085305.2533030-1-lv.ruyi@zte.com.cn
+So do not account non-passthrough request when check inflight.
+
+Fixes: 86d7331299fd ("block: update io_ticks when io hang")
+Signed-off-by: Haisu Wang <haisuwang@tencent.com>
+Reviewed-by: samuelliao <samuelliao@tencent.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220530064059.1120058-1-haisuwang@tencent.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/ipaq-micro.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/blk-mq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
-index cd762d08f116..2ba0e2d575c0 100644
---- a/drivers/mfd/ipaq-micro.c
-+++ b/drivers/mfd/ipaq-micro.c
-@@ -410,7 +410,7 @@ static int __init micro_probe(struct platform_device *pdev)
- 	micro_reset_comm(micro);
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 9d33e0032fee..de7fc6957271 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -133,7 +133,8 @@ static bool blk_mq_check_inflight(struct request *rq, void *priv,
+ {
+ 	struct mq_inflight *mi = priv;
  
- 	irq = platform_get_irq(pdev, 0);
--	if (!irq)
-+	if (irq < 0)
- 		return -EINVAL;
- 	ret = devm_request_irq(&pdev->dev, irq, micro_serial_isr,
- 			       IRQF_SHARED, "ipaq-micro",
+-	if ((!mi->part->bd_partno || rq->part == mi->part) &&
++	if (rq->part && blk_do_io_stat(rq) &&
++	    (!mi->part->bd_partno || rq->part == mi->part) &&
+ 	    blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT)
+ 		mi->inflight[rq_data_dir(rq)]++;
+ 
 -- 
 2.35.1
 

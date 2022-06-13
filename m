@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3DD548E3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35138549780
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356564AbiFMM4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S1358060AbiFML7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357412AbiFMMyW (ORCPT
+        with ESMTP id S1356757AbiFMLvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:54:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A788B65413;
-        Mon, 13 Jun 2022 04:13:08 -0700 (PDT)
+        Mon, 13 Jun 2022 07:51:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494FE1D0DC;
+        Mon, 13 Jun 2022 03:55:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D0ADB80EB2;
-        Mon, 13 Jun 2022 11:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EDFC3411E;
-        Mon, 13 Jun 2022 11:13:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5E7161257;
+        Mon, 13 Jun 2022 10:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C9FC34114;
+        Mon, 13 Jun 2022 10:55:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118785;
-        bh=qIctmzWwVqoXtzQCDZGCcDEE0UjqLDBVq5twQgliLeE=;
+        s=korg; t=1655117714;
+        bh=ySNlVh5nnEoeJjtjWyS0BCQmTJIZarnRBpGoaW3WTy8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VZshVmcPKMK/Y4YP+ZbhRweH6M5PtrY1F2FueG0PiLfdbkxVaxjSF5bv1AIhkh/8F
-         oLT2l4hR1D17Gs7Md1StmVBkcKQwptFmZ9PLkiZ0DKfmUICl2g3mTiL9Bv9/EeSM+X
-         ekAMlUEnRlMoJaaY6SfZ2Bw71Me2RIJaevGXQIKQ=
+        b=C6HqNHSV64G7FPLWFQq8oD0+fiqzsPWROfpbDxqFHZwMmblKb428qEzQKC0CdbO3F
+         lhkl7459D4m1HyqPPsmDsfHknZ18DzkNuwiubkZtw7eryPLfIbdKmYpdtUpz8jr/j5
+         eFcNaoTsYW4s0vlONUX1m7MwtlxF119JJDkRjOQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 027/247] rpmsg: virtio: Fix the unregistration of the device rpmsg_ctrl
+Subject: [PATCH 4.19 105/287] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
 Date:   Mon, 13 Jun 2022 12:08:49 +0200
-Message-Id: <20220613094923.758774686@linuxfoundation.org>
+Message-Id: <20220613094927.062242650@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,38 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit df191796985922488e4e6b64f7bd79c3934412f2 ]
+[ Upstream commit be2af740e2a9c7134f2d8ab4f104006e110b13de ]
 
-Unregister the rpmsg_ctrl device instead of just freeing the
-the virtio_rpmsg_channel structure.
-This will properly unregister the device and call
-virtio_rpmsg_release_device() that frees the structure.
+Fix the missing clk_disable_unprepare() before return
+from wm2000_anc_transition() in the error handling case.
 
-Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Reviewed-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20220426060536.15594-4-hbh25y@gmail.com
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Fixes: 514cfd6dd725 ("ASoC: wm2000: Integrate with clock API")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220514091053.686416-1-yangyingliang@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rpmsg/virtio_rpmsg_bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/wm2000.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 3a62e6197151..b03e7404212f 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -853,7 +853,7 @@ static void rpmsg_virtio_del_ctrl_dev(struct rpmsg_device *rpdev_ctrl)
+diff --git a/sound/soc/codecs/wm2000.c b/sound/soc/codecs/wm2000.c
+index c5ae07234a00..cad39f63b763 100644
+--- a/sound/soc/codecs/wm2000.c
++++ b/sound/soc/codecs/wm2000.c
+@@ -545,7 +545,7 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
  {
- 	if (!rpdev_ctrl)
- 		return;
--	kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
-+	device_unregister(&rpdev_ctrl->dev);
+ 	struct i2c_client *i2c = wm2000->i2c;
+ 	int i, j;
+-	int ret;
++	int ret = 0;
+ 
+ 	if (wm2000->anc_mode == mode)
+ 		return 0;
+@@ -575,13 +575,13 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
+ 		ret = anc_transitions[i].step[j](i2c,
+ 						 anc_transitions[i].analogue);
+ 		if (ret != 0)
+-			return ret;
++			break;
+ 	}
+ 
+ 	if (anc_transitions[i].dest == ANC_OFF)
+ 		clk_disable_unprepare(wm2000->mclk);
+ 
+-	return 0;
++	return ret;
  }
  
- static int rpmsg_probe(struct virtio_device *vdev)
+ static int wm2000_anc_set_mode(struct wm2000_priv *wm2000)
 -- 
 2.35.1
 

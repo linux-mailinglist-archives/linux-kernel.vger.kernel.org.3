@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C4E5497A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D03548BB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351442AbiFMM1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S1348244AbiFMK4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355359AbiFMMXz (ORCPT
+        with ESMTP id S1347786AbiFMKwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:55 -0400
+        Mon, 13 Jun 2022 06:52:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8D331535;
-        Mon, 13 Jun 2022 04:04:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098D12458D;
+        Mon, 13 Jun 2022 03:27:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB0F060F9A;
-        Mon, 13 Jun 2022 11:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0264FC34114;
-        Mon, 13 Jun 2022 11:04:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ED2760EF8;
+        Mon, 13 Jun 2022 10:27:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F45C34114;
+        Mon, 13 Jun 2022 10:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118287;
-        bh=ILuenawKbjOrDwWqNqVUBtwfgO7eeVeZ+H1tzJT7j/Y=;
+        s=korg; t=1655116050;
+        bh=yBMfBMsenoejD3SJApeyaIR+DRPPPmmkDIHXMUaPI6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0/O5jiJ3P/wFwzRJjQl6jf052HHn/NqVoYpCPeTYH6UEeDeNPtljUeRLvpRhU5WHN
-         CZXngK77zeU5FkyMMgG68Jui6RuZWjWGil62ChMZyT6Awwb1ukF69YZ0k92qU7W8Bu
-         3lxMMz/UDKLAJKd9YH4D2cIcSC9PV4/RsxIGm5iY=
+        b=mAcmotJJowfnTxOygy7VS9oQ5XKBrXDTjudjW1zSlBCTklyv8IF9Rm6dX12rj99/a
+         lvpCcKUXKro+6r8ilGSrSsTWf81MXRPb7UP6aJGXu99fGoSo4k7bVy/ffXSEBlVNTK
+         JvpDccHY/hZL5pVfBryy5rUo6aQAa752FAdwn9uk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 021/172] iio: proximity: vl53l0x: Fix return value check of wait_for_completion_timeout
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 4.14 123/218] um: chan_user: Fix winch_tramp() return value
 Date:   Mon, 13 Jun 2022 12:09:41 +0200
-Message-Id: <20220613094855.460626895@linuxfoundation.org>
+Message-Id: <20220613094924.303302204@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 50f2959113cb6756ffd73c4fedc712cf2661f711 ]
+commit 57ae0b67b747031bc41fb44643aa5344ab58607e upstream.
 
-wait_for_completion_timeout() returns unsigned long not int.
-It returns 0 if timed out, and positive if completed.
-The check for <= 0 is ambiguous and should be == 0 here
-indicating timeout which is the only error case.
+The previous fix here was only partially correct, it did
+result in returning a proper error value in case of error,
+but it also clobbered the pid that we need to return from
+this function (not just zero for success).
 
-Fixes: 3cef2e31b54b ("iio: proximity: vl53l0x: Add IRQ support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220412064210.10734-1-linmq006@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+As a result, it returned 0 here, but later this is treated
+as a pid and used to kill the process, but since it's now
+0 we kill(0, SIGKILL), which makes UML kill itself rather
+than just the helper thread.
+
+Fix that and make it more obvious by using a separate
+variable for the pid.
+
+Fixes: ccf1236ecac4 ("um: fix error return code in winch_tramp()")
+Reported-and-tested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/proximity/vl53l0x-i2c.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ arch/um/drivers/chan_user.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
-index 235e125aeb3a..3d3ab86423ee 100644
---- a/drivers/iio/proximity/vl53l0x-i2c.c
-+++ b/drivers/iio/proximity/vl53l0x-i2c.c
-@@ -104,6 +104,7 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
- 	u16 tries = 20;
- 	u8 buffer[12];
- 	int ret;
-+	unsigned long time_left;
+--- a/arch/um/drivers/chan_user.c
++++ b/arch/um/drivers/chan_user.c
+@@ -220,7 +220,7 @@ static int winch_tramp(int fd, struct tt
+ 		       unsigned long *stack_out)
+ {
+ 	struct winch_data data;
+-	int fds[2], n, err;
++	int fds[2], n, err, pid;
+ 	char c;
  
- 	ret = i2c_smbus_write_byte_data(client, VL_REG_SYSRANGE_START, 1);
- 	if (ret < 0)
-@@ -112,10 +113,8 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
- 	if (data->client->irq) {
- 		reinit_completion(&data->completion);
+ 	err = os_pipe(fds, 1, 1);
+@@ -238,8 +238,9 @@ static int winch_tramp(int fd, struct tt
+ 	 * problem with /dev/net/tun, which if held open by this
+ 	 * thread, prevents the TUN/TAP device from being reused.
+ 	 */
+-	err = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
+-	if (err < 0) {
++	pid = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
++	if (pid < 0) {
++		err = pid;
+ 		printk(UM_KERN_ERR "fork of winch_thread failed - errno = %d\n",
+ 		       -err);
+ 		goto out_close;
+@@ -263,7 +264,7 @@ static int winch_tramp(int fd, struct tt
+ 		goto out_close;
+ 	}
  
--		ret = wait_for_completion_timeout(&data->completion, HZ/10);
--		if (ret < 0)
--			return ret;
--		else if (ret == 0)
-+		time_left = wait_for_completion_timeout(&data->completion, HZ/10);
-+		if (time_left == 0)
- 			return -ETIMEDOUT;
+-	return err;
++	return pid;
  
- 		vl53l0x_clear_irq(data);
--- 
-2.35.1
-
+  out_close:
+ 	close(fds[1]);
 
 

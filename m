@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992D154929B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17319548D6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384084AbiFMOev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
+        id S1384091AbiFMOcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385041AbiFMOac (ORCPT
+        with ESMTP id S1384628AbiFMO3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:30:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A27DA8688;
-        Mon, 13 Jun 2022 04:48:30 -0700 (PDT)
+        Mon, 13 Jun 2022 10:29:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D109A5FC9;
+        Mon, 13 Jun 2022 04:48:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 104E9B80EA7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1224861425;
+        Mon, 13 Jun 2022 11:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270F6C36AFE;
         Mon, 13 Jun 2022 11:47:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72903C3411B;
-        Mon, 13 Jun 2022 11:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120856;
-        bh=VAb/NpOY428oAmU6JQGJpbkhTN2C2LxLd0vPS9M/mTg=;
+        s=korg; t=1655120859;
+        bh=UuwuoCKP0zhAIEMCwoBc6I19MSn59HdkRGxknIb62ZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EUeBpldeww9dkGhdPpTXb06xaxzu7wk7U1xjwgpQ+FgKhiAMWp5BygptQyIIefrtA
-         NTYR9OAXe9Vn2jOiQFLljqwdUCfBdc1c9AeiiCPPrvoLzm3mOR/tu0wILe/GFGBzIZ
-         ZDBViOaEwggENB6mHpAw6mQG+9p725pqf3kI079w=
+        b=UAdBDN0iJ5Ry0cj9/q3AQ9xNjjJ+yEprXKMy63ALhYF4NjTIYltAr2MfUGMTtIoBg
+         VPY7IEu/QvDDHOetHfZcpq6a6m3m4E2LKWZhK+SLu2A57LbOlow19ynyD+fotxQaAP
+         y4M7u+upvtbJzDo3iGAwJzwQL7Hyx2Jw8pKQ7ido=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 183/298] net: xfrm: unexport __init-annotated xfrm4_protocol_init()
-Date:   Mon, 13 Jun 2022 12:11:17 +0200
-Message-Id: <20220613094930.481971535@linuxfoundation.org>
+Subject: [PATCH 5.17 184/298] net: ipv6: unexport __init-annotated seg6_hmac_init()
+Date:   Mon, 13 Jun 2022 12:11:18 +0200
+Message-Id: <20220613094930.511005664@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -59,7 +58,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 4a388f08d8784af48f352193d2b72aaf167a57a1 ]
+[ Upstream commit 5801f064e35181c71857a80ff18af4dbec3c5f5c ]
 
 EXPORT_SYMBOL and __init is a bad combination because the .init.text
 section is freed up after the initialization. Hence, modules cannot
@@ -76,29 +75,31 @@ There are two ways to fix it:
   - Remove __init
   - Remove EXPORT_SYMBOL
 
-I chose the latter for this case because the only in-tree call-site,
-net/ipv4/xfrm4_policy.c is never compiled as modular.
-(CONFIG_XFRM is boolean)
+I chose the latter for this case because the caller (net/ipv6/seg6.c)
+and the callee (net/ipv6/seg6_hmac.c) belong to the same module.
+It seems an internal function call in ipv6.ko.
 
-Fixes: 2f32b51b609f ("xfrm: Introduce xfrm_input_afinfo to access the the callbacks properly")
+Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
 Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/xfrm4_protocol.c | 1 -
+ net/ipv6/seg6_hmac.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/net/ipv4/xfrm4_protocol.c b/net/ipv4/xfrm4_protocol.c
-index 2fe5860c21d6..b146ce88c5d0 100644
---- a/net/ipv4/xfrm4_protocol.c
-+++ b/net/ipv4/xfrm4_protocol.c
-@@ -304,4 +304,3 @@ void __init xfrm4_protocol_init(void)
+diff --git a/net/ipv6/seg6_hmac.c b/net/ipv6/seg6_hmac.c
+index 29bc4e7c3046..6de01185cc68 100644
+--- a/net/ipv6/seg6_hmac.c
++++ b/net/ipv6/seg6_hmac.c
+@@ -399,7 +399,6 @@ int __init seg6_hmac_init(void)
  {
- 	xfrm_input_register_afinfo(&xfrm4_input_afinfo);
+ 	return seg6_hmac_init_algo();
  }
--EXPORT_SYMBOL(xfrm4_protocol_init);
+-EXPORT_SYMBOL(seg6_hmac_init);
+ 
+ int __net_init seg6_hmac_net_init(struct net *net)
+ {
 -- 
 2.35.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63FC5487EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8065486F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351865AbiFMM0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        id S1380957AbiFMODM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355105AbiFMMXx (ORCPT
+        with ESMTP id S1381074AbiFMNzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5565C313A0;
-        Mon, 13 Jun 2022 04:04:12 -0700 (PDT)
+        Mon, 13 Jun 2022 09:55:53 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EE685EFB;
+        Mon, 13 Jun 2022 04:36:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1242DB80D3A;
-        Mon, 13 Jun 2022 11:04:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3CEC3411E;
-        Mon, 13 Jun 2022 11:04:09 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BF0D4CE1247;
+        Mon, 13 Jun 2022 11:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC07C34114;
+        Mon, 13 Jun 2022 11:36:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118249;
-        bh=3Q45GHZVWaHQiB84TGE2px6796EaNM0h4IvajO1FfVg=;
+        s=korg; t=1655120188;
+        bh=VAG+3uL6h5kOCfu6AuzyUB7t+yIhbm19oEA/UYTLcX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q7Mk5TAzgZF++QBMHYTHRGnxcws+snil8XSNVBTb8w1PCmqzRkrqvb7lc7Ci4SYXE
-         G907vaEznGBII+4zvetlZHKa+2fOokP+hbRs5R5ukp6n6mGIC2WRIOwitso376g/aE
-         Zrshs4LyVe7aACoJSDo3AM3tAbwvIjU1jV6ucWOM=
+        b=Dp8CUMOhhhXPLeo5xl/2bLdIi7HOmPCgtQVXuFSJESm6aYUmdem3/b7HReCwYFBEm
+         iVS4cfbEAuOvEfoUSz2eUTd8tsH94aUZQvEIoXEuAjAFsqE+kI4dyCV/G2cKf+drSG
+         QNo0DO70+3hccTyKLd3PKq3bQQVNyJ1t3PVcSj0Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 279/287] nfc: st21nfca: fix incorrect validating logic in EVT_TRANSACTION
-Date:   Mon, 13 Jun 2022 12:11:43 +0200
-Message-Id: <20220613094932.455811228@linuxfoundation.org>
+        stable@vger.kernel.org, Cyril Brulebois <kibi@debian.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 281/339] Revert "PCI: brcmstb: Split brcm_pcie_setup() into two funcs"
+Date:   Mon, 13 Jun 2022 12:11:46 +0200
+Message-Id: <20220613094935.158169666@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Faltesek <mfaltesek@google.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-commit 77e5fe8f176a525523ae091d6fd0fbb8834c156d upstream.
+[ Upstream commit f4fd559de3434c44bed1d2912bd0c75cfa42898b ]
 
-The first validation check for EVT_TRANSACTION has two different checks
-tied together with logical AND. One is a check for minimum packet length,
-and the other is for a valid aid_tag. If either condition is true (fails),
-then an error should be triggered.  The fix is to change && to ||.
+This reverts commit 830aa6f29f07a4e2f1a947dfa72b3ccddb46dd21.
 
-Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Martin Faltesek <mfaltesek@google.com>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This is part of a revert of the following commits:
+
+  11ed8b8624b8 ("PCI: brcmstb: Do not turn off WOL regulators on suspend")
+  93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+  67211aadcb4b ("PCI: brcmstb: Add mechanism to turn on subdev regulators")
+  830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+
+Cyril reported that 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup()
+into two funcs"), which appeared in v5.17-rc1, broke booting on the
+Raspberry Pi Compute Module 4.  Apparently 830aa6f29f07 panics with an
+Asynchronous SError Interrupt, and after further commits here is a black
+screen on HDMI and no output on the serial console.
+
+This does not seem to affect the Raspberry Pi 4 B.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+Link: https://lore.kernel.org/r/20220511201856.808690-5-helgaas@kernel.org
+Reported-by: Cyril Brulebois <kibi@debian.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/st21nfca/se.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/pcie-brcmstb.c | 65 +++++++++++----------------
+ 1 file changed, 26 insertions(+), 39 deletions(-)
 
---- a/drivers/nfc/st21nfca/se.c
-+++ b/drivers/nfc/st21nfca/se.c
-@@ -330,7 +330,7 @@ int st21nfca_connectivity_event_received
- 		 * AID		81	5 to 16
- 		 * PARAMETERS	82	0 to 255
- 		 */
--		if (skb->len < NFC_MIN_AID_LENGTH + 2 &&
-+		if (skb->len < NFC_MIN_AID_LENGTH + 2 ||
- 		    skb->data[0] != NFC_EVT_TRANSACTION_AID_TAG)
- 			return -EPROTO;
+diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+index 0e8346114a8d..e61058e13818 100644
+--- a/drivers/pci/controller/pcie-brcmstb.c
++++ b/drivers/pci/controller/pcie-brcmstb.c
+@@ -926,9 +926,16 @@ static inline int brcm_pcie_get_rc_bar2_size_and_offset(struct brcm_pcie *pcie,
  
+ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+ {
++	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+ 	u64 rc_bar2_offset, rc_bar2_size;
+ 	void __iomem *base = pcie->base;
+-	int ret, memc;
++	struct device *dev = pcie->dev;
++	struct resource_entry *entry;
++	bool ssc_good = false;
++	struct resource *res;
++	int num_out_wins = 0;
++	u16 nlw, cls, lnksta;
++	int i, ret, memc;
+ 	u32 tmp, burst, aspm_support;
+ 
+ 	/* Reset the bridge */
+@@ -1018,40 +1025,6 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+ 	if (pcie->gen)
+ 		brcm_pcie_set_gen(pcie, pcie->gen);
+ 
+-	/* Don't advertise L0s capability if 'aspm-no-l0s' */
+-	aspm_support = PCIE_LINK_STATE_L1;
+-	if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
+-		aspm_support |= PCIE_LINK_STATE_L0S;
+-	tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+-	u32p_replace_bits(&tmp, aspm_support,
+-		PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
+-	writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+-
+-	/*
+-	 * For config space accesses on the RC, show the right class for
+-	 * a PCIe-PCIe bridge (the default setting is to be EP mode).
+-	 */
+-	tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+-	u32p_replace_bits(&tmp, 0x060400,
+-			  PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
+-	writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+-
+-	return 0;
+-}
+-
+-static int brcm_pcie_linkup(struct brcm_pcie *pcie)
+-{
+-	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+-	struct device *dev = pcie->dev;
+-	void __iomem *base = pcie->base;
+-	struct resource_entry *entry;
+-	struct resource *res;
+-	int num_out_wins = 0;
+-	u16 nlw, cls, lnksta;
+-	bool ssc_good = false;
+-	u32 tmp;
+-	int ret, i;
+-
+ 	/* Unassert the fundamental reset */
+ 	pcie->perst_set(pcie, 0);
+ 
+@@ -1102,6 +1075,24 @@ static int brcm_pcie_linkup(struct brcm_pcie *pcie)
+ 		num_out_wins++;
+ 	}
+ 
++	/* Don't advertise L0s capability if 'aspm-no-l0s' */
++	aspm_support = PCIE_LINK_STATE_L1;
++	if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
++		aspm_support |= PCIE_LINK_STATE_L0S;
++	tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
++	u32p_replace_bits(&tmp, aspm_support,
++		PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
++	writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
++
++	/*
++	 * For config space accesses on the RC, show the right class for
++	 * a PCIe-PCIe bridge (the default setting is to be EP mode).
++	 */
++	tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
++	u32p_replace_bits(&tmp, 0x060400,
++			  PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
++	writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
++
+ 	if (pcie->ssc) {
+ 		ret = brcm_pcie_set_ssc(pcie);
+ 		if (ret == 0)
+@@ -1290,10 +1281,6 @@ static int brcm_pcie_resume(struct device *dev)
+ 	if (ret)
+ 		goto err_reset;
+ 
+-	ret = brcm_pcie_linkup(pcie);
+-	if (ret)
+-		goto err_reset;
+-
+ 	if (pcie->msi)
+ 		brcm_msi_set_regs(pcie->msi);
+ 
+-- 
+2.35.1
+
 
 

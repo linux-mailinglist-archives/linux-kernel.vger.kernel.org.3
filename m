@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D3548DD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2808549992
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244083AbiFMPIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
+        id S237228AbiFMRLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242851AbiFMPHr (ORCPT
+        with ESMTP id S241837AbiFMRKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:07:47 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DDE53A68;
-        Mon, 13 Jun 2022 05:14:13 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id o7so10810383eja.1;
-        Mon, 13 Jun 2022 05:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ZOSb9pg1CC7QiA6hpPCF1GAL0i7t8dmmtte682l7O5g=;
-        b=aEDGa3kWtRRvzYp+rcI42ukVWyZtgRs6xli28Pg17OiS+14bbfLbvcpNZyBXlOBy4a
-         Shl6VbaReFerfActKevQ8vxfh/kGbp+raKiJo9THOkPTf4nrC/9upPrni0UtVxJ6AbeF
-         6+2T6beOnxnONkX82dPAMeIgHEx8cYGW0pweHB0wH0y30jmkhVrHwsxXPfmAXsuQgOKG
-         aAj/nfiIgeWjwPcrXKWOq07xUUtJEzfcdhO1r5L5BS+njZ6fVXZONWOZe8wGjeeSsCwQ
-         ENxV2aNa7IVLVMQdMkn1PFOfhxMwSFPrJ/QkhrAnXYSvjsbyA6TcGmwQRdMzDNfxZ6uj
-         Z4jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ZOSb9pg1CC7QiA6hpPCF1GAL0i7t8dmmtte682l7O5g=;
-        b=IUwCak5EdiSp8a/OOdmxNGe91Ib93NL8qNBkmuHpsPI4OOrogAgRfCQHktUYw/PgmB
-         Gx1dmBELtffw/XlE4/LVb7wnq0KfCXKeXZfYVzsgcvjUrYli4ns//5CqUaewIROZEQv/
-         dcnZU9CnYt/ClgggqI22oYEP4BdE1uavH9MJatNa3i6Jhq03pBLZjiq/LoaIficJpI5j
-         ZpmQhi2/v9C3Or+IDHONg88kQDXRPhH0ugV9by4nJtG+7VbtZgWMlYkJ4hoVm0T6c/vb
-         NfXhoFZLACSeuS+xRfMbIiZNvk/w77pY3ZHDJGr4nI9X6gCm3je6JMcywvZNE7gDDMXA
-         eNQQ==
-X-Gm-Message-State: AOAM532KDfhpowykxgKnmOKpfGgRBWo/2ixyApEbIzOrpFtoPTn2jcxd
-        3yXDjWjaFCsgSqz6kN1Motg=
-X-Google-Smtp-Source: ABdhPJynhA0seghy2iemorEdB5BqNwm/BCYUfhCKm4Nq0gOgRaYKyRMEEsqwAQD7c02TgDJr4f08vA==
-X-Received: by 2002:a17:906:5189:b0:712:1017:8ce7 with SMTP id y9-20020a170906518900b0071210178ce7mr18384106ejk.196.1655122452179;
-        Mon, 13 Jun 2022 05:14:12 -0700 (PDT)
-Received: from felia.fritz.box (200116b8260df50011e978c0f780de03.dip.versatel-1u1.de. [2001:16b8:260d:f500:11e9:78c0:f780:de03])
-        by smtp.gmail.com with ESMTPSA id u26-20020a170906951a00b00709e786c7b2sm3751900ejx.213.2022.06.13.05.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 05:14:11 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: add include/dt-bindings/mips to MIPS
-Date:   Mon, 13 Jun 2022 14:14:08 +0200
-Message-Id: <20220613121408.8786-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 13 Jun 2022 13:10:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A332C54BD1;
+        Mon, 13 Jun 2022 05:16:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BDA0D6E;
+        Mon, 13 Jun 2022 05:16:28 -0700 (PDT)
+Received: from [10.1.29.148] (e127744.cambridge.arm.com [10.1.29.148])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 512913F73B;
+        Mon, 13 Jun 2022 05:16:25 -0700 (PDT)
+Subject: Re: [PATCH 7/8] arm64/perf: Add BRBE driver
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        peterz@infradead.org, acme@kernel.org, mark.rutland@arm.com,
+        will@kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org
+References: <20220613100119.684673-1-anshuman.khandual@arm.com>
+ <20220613100119.684673-8-anshuman.khandual@arm.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <f84187d1-b7eb-e25e-090a-d09532f15594@arm.com>
+Date:   Mon, 13 Jun 2022 13:16:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220613100119.684673-8-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,32 +52,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maintainers of the directory Documentation/devicetree/bindings/mips
-are also the maintainers of the corresponding directory
-include/dt-bindings/mips.
+Hi Anshuman, thanks for the update,
 
-Add the file entry for include/dt-bindings/mips to the appropriate
-section in MAINTAINERS.
+As I mentioned offline, I have a perf test that I've been using for the
+branch records and filters. I'll let you know the result using this set.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Thomas, please pick this MAINTAINERS addition to your section.
+On 13/06/2022 11:01, Anshuman Khandual wrote:
+> [...]
+>
+> +
+> +static int brbe_fetch_perf_priv(u64 brbinf)
+> +{
+> +       int brbe_el = brbe_fetch_el(brbinf);
+> +
+> +       switch (brbe_el) {
+> +       case BRBINF_EL_EL0:
+> +               return PERF_BR_PRIV_USER;
+> +       case BRBINF_EL_EL1:
+> +               return PERF_BR_PRIV_KERNEL;
+> +       case BRBINF_EL_EL2:
+> +               if (is_kernel_in_hyp_mode())
+> +                       return PERF_BR_PRIV_KERNEL;
+> +               return PERF_BR_PRIV_HV;
+> +       default:
+> +               pr_warn("unknown branch privilege captured\n");
+> +               return -1;
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+This looks like it should return PERF_BR_PRIV_UNKNOWN.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1b30f6b69477..6bf0c0ff935f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13362,6 +13362,7 @@ F:	Documentation/devicetree/bindings/mips/
- F:	Documentation/mips/
- F:	arch/mips/
- F:	drivers/platform/mips/
-+F:	include/dt-bindings/mips/
- 
- MIPS BOSTON DEVELOPMENT BOARD
- M:	Paul Burton <paulburton@kernel.org>
--- 
-2.17.1
+Thanks,
+German
 
+> +       }
+> +}
+> +
+> +static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
+> +			       u64 brbinf, int idx)
+> +{
+>
+> [...]
+>
+> +
+> +	if (branch_sample_priv(event)) {
+> +		/*
+> +		 * All these information (i.e branch privilege level) are not
+> +		 * available for source only branch records.
+> +		 */
+> +		if (type != BRBINF_VALID_SOURCE)
+> +			cpuc->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
+> +	}
+> +}
+> +
+>
+> [...]

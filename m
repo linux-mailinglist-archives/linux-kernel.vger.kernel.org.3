@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4902549347
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D2B548B32
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384054AbiFMO2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S1350185AbiFMLGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383852AbiFMOYK (ORCPT
+        with ESMTP id S1349581AbiFMK5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:10 -0400
+        Mon, 13 Jun 2022 06:57:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58F847064;
-        Mon, 13 Jun 2022 04:45:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F82725C68;
+        Mon, 13 Jun 2022 03:32:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5ED76B80EB2;
-        Mon, 13 Jun 2022 11:45:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D203C34114;
-        Mon, 13 Jun 2022 11:45:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73165B80EA8;
+        Mon, 13 Jun 2022 10:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A80C34114;
+        Mon, 13 Jun 2022 10:32:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120731;
-        bh=mNMKCj7YmZGHq44rzzYxEBmfMtk9Q5va+TOc/sbYdvw=;
+        s=korg; t=1655116334;
+        bh=3sEpLrvvO/uTRcRbh2J/sUJLoAvJDDtp0BA43wGp+94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Dm++/Vz97JOJyPBXtduW0DsC+PNE4RnD6IgVPMpYIB85L2iIecyDJ1O5kJfHED6U
-         wNnmUTWFgmR+jS4fIaLjMSfMKc/NICkCHFRQjW04PkGnx1gtJuiHLX+rK0+npGNiVw
-         P7iroWYTdYIX66IaOa7gllZQdw2pDTtTRKiis6s0=
+        b=R4A6SSTuVujUh2WBLNA9bg83E2/v3TY4K3XOD7N9v2srhFGhDr4q/pf1Xn1kqXS+i
+         9Ab/gUJIkF6HbiB/I2Bn4sevPaZx8Bez+W6MvEC2/JwdEoJx49PVSnUPBUtAvqTHUT
+         egoN2AJRSnQ9Iivl6ouaOhdsT8GyQvEOZZ3WWOrQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Kinglong Mee <kinglongmee@gmail.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 136/298] mips: cpc: Fix refcount leak in mips_cpc_default_phys_base
+Subject: [PATCH 4.14 172/218] xprtrdma: treat all calls not a bcall when bc_serv is NULL
 Date:   Mon, 13 Jun 2022 12:10:30 +0200
-Message-Id: <20220613094929.068988781@linuxfoundation.org>
+Message-Id: <20220613094925.821320025@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gong Yuanjun <ruc_gongyuanjun@163.com>
+From: Kinglong Mee <kinglongmee@gmail.com>
 
-[ Upstream commit 4107fa700f314592850e2c64608f6ede4c077476 ]
+[ Upstream commit 11270e7ca268e8d61b5d9e5c3a54bd1550642c9c ]
 
-Add the missing of_node_put() to release the refcount incremented
-by of_find_compatible_node().
+When a rdma server returns a fault format reply, nfs v3 client may
+treats it as a bcall when bc service is not exist.
 
-Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+The debug message at rpcrdma_bc_receive_call are,
+
+[56579.837169] RPC:       rpcrdma_bc_receive_call: callback XID
+00000001, length=20
+[56579.837174] RPC:       rpcrdma_bc_receive_call: 00 00 00 01 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 04
+
+After that, rpcrdma_bc_receive_call will meets NULL pointer as,
+
+[  226.057890] BUG: unable to handle kernel NULL pointer dereference at
+00000000000000c8
+...
+[  226.058704] RIP: 0010:_raw_spin_lock+0xc/0x20
+...
+[  226.059732] Call Trace:
+[  226.059878]  rpcrdma_bc_receive_call+0x138/0x327 [rpcrdma]
+[  226.060011]  __ib_process_cq+0x89/0x170 [ib_core]
+[  226.060092]  ib_cq_poll_work+0x26/0x80 [ib_core]
+[  226.060257]  process_one_work+0x1a7/0x360
+[  226.060367]  ? create_worker+0x1a0/0x1a0
+[  226.060440]  worker_thread+0x30/0x390
+[  226.060500]  ? create_worker+0x1a0/0x1a0
+[  226.060574]  kthread+0x116/0x130
+[  226.060661]  ? kthread_flush_work_fn+0x10/0x10
+[  226.060724]  ret_from_fork+0x35/0x40
+...
+
+Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
+Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/mips-cpc.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/sunrpc/xprtrdma/rpc_rdma.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/mips/kernel/mips-cpc.c b/arch/mips/kernel/mips-cpc.c
-index 17aff13cd7ce..3e386f7e1545 100644
---- a/arch/mips/kernel/mips-cpc.c
-+++ b/arch/mips/kernel/mips-cpc.c
-@@ -28,6 +28,7 @@ phys_addr_t __weak mips_cpc_default_phys_base(void)
- 	cpc_node = of_find_compatible_node(of_root, NULL, "mti,mips-cpc");
- 	if (cpc_node) {
- 		err = of_address_to_resource(cpc_node, 0, &res);
-+		of_node_put(cpc_node);
- 		if (!err)
- 			return res.start;
- 	}
+diff --git a/net/sunrpc/xprtrdma/rpc_rdma.c b/net/sunrpc/xprtrdma/rpc_rdma.c
+index 991d5a96f35b..030bf17a20b6 100644
+--- a/net/sunrpc/xprtrdma/rpc_rdma.c
++++ b/net/sunrpc/xprtrdma/rpc_rdma.c
+@@ -974,6 +974,7 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep,
+ 		 __be32 xid, __be32 proc)
+ #if defined(CONFIG_SUNRPC_BACKCHANNEL)
+ {
++	struct rpc_xprt *xprt = &r_xprt->rx_xprt;
+ 	struct xdr_stream *xdr = &rep->rr_stream;
+ 	__be32 *p;
+ 
+@@ -997,6 +998,10 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep,
+ 	if (*p != cpu_to_be32(RPC_CALL))
+ 		return false;
+ 
++	/* No bc service. */
++	if (xprt->bc_serv == NULL)
++		return false;
++
+ 	/* Now that we are sure this is a backchannel call,
+ 	 * advance to the RPC header.
+ 	 */
 -- 
 2.35.1
 

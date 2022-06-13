@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57B75497A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A25548B11
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353415AbiFMLXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
+        id S1352854AbiFMLWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353672AbiFMLQL (ORCPT
+        with ESMTP id S1353675AbiFMLQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 07:16:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB5413DD3;
-        Mon, 13 Jun 2022 03:38:55 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9C613DE3;
+        Mon, 13 Jun 2022 03:38:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D8C3B80EA8;
-        Mon, 13 Jun 2022 10:38:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B77FC3411C;
-        Mon, 13 Jun 2022 10:38:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4083F6119F;
+        Mon, 13 Jun 2022 10:38:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 520E6C34114;
+        Mon, 13 Jun 2022 10:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116733;
-        bh=EFmUdl9NrFEx7bbsKO6ZCv5QzcIZLGeHdaaADbLR9TU=;
+        s=korg; t=1655116735;
+        bh=jz97ufQZegxXM/ay5UtsmJDdCJIvZdocyqwTKrydkNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ftbRUP7lBoROfzmY7mcJVD9tdznWyk/cyKjZkpLPszKD2+h6fs8TfPrldFSlwGt1U
-         9BjykUbSfCvoeD0/j1N0DfeODvLTLY8VpJsVc2WtGVgxThL2j9ZB1fhycFjKbpl+NG
-         KS5xl3VXio6JLwdmwFkisr2wikiHNpXBtpnrMs2Y=
+        b=soG7pIzwItXTHOJCerxRMNlzwvC2bMqq74D9xD2RDO3lrNFNb+MGCcWVetB7kT1Pp
+         EJJiAiXj3IQzjGo2c+8Z2kn7FEYQchhZqqbyxXr6txp0REPY8IziuOYmzAUvkIR33y
+         6hsV/qNAxRE2C8ZxyTQLwVvcUZgXb1b6oxvtVQbo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Stefan Wahren <stefan.wahren@i2se.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 165/411] ARM: dts: bcm2837-rpi-cm3-io3: Fix GPIO line names for SMPS I2C
-Date:   Mon, 13 Jun 2022 12:07:18 +0200
-Message-Id: <20220613094933.609820473@linuxfoundation.org>
+Subject: [PATCH 5.4 166/411] ARM: dts: bcm2837-rpi-3-b-plus: Fix GPIO line name of power LED
+Date:   Mon, 13 Jun 2022 12:07:19 +0200
+Message-Id: <20220613094933.639865844@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -58,35 +58,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Phil Elwell <phil@raspberrypi.com>
 
-[ Upstream commit 9fd26fd02749ec964eb0d588a3bab9e09bf77927 ]
+[ Upstream commit 57f718aa4b93392fb1a8c0a874ab882b9e18136a ]
 
-The GPIOs 46 & 47 are already used for a I2C interface to a SMPS.
-So fix the GPIO line names accordingly.
+The red LED on the Raspberry Pi 3 B Plus is the power LED.
+So fix the GPIO line name accordingly.
 
-Fixes: a54fe8a6cf66 ("ARM: dts: add Raspberry Pi Compute Module 3 and IO board")
+Fixes: 71c0cd2283f2 ("ARM: dts: bcm2837: Add Raspberry Pi 3 B+")
 Signed-off-by: Phil Elwell <phil@raspberrypi.com>
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts b/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts
-index 588d9411ceb6..3dfce4312dfc 100644
---- a/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts
-+++ b/arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts
-@@ -63,8 +63,8 @@
- 			  "GPIO43",
- 			  "GPIO44",
- 			  "GPIO45",
--			  "GPIO46",
--			  "GPIO47",
-+			  "SMPS_SCL",
-+			  "SMPS_SDA",
- 			  /* Used by eMMC */
- 			  "SD_CLK_R",
- 			  "SD_CMD_R",
+diff --git a/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts b/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
+index 74ed6d047807..d9f63fc59f16 100644
+--- a/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
++++ b/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
+@@ -43,7 +43,7 @@
+ 		#gpio-cells = <2>;
+ 		gpio-line-names = "BT_ON",
+ 				  "WL_ON",
+-				  "STATUS_LED_R",
++				  "PWR_LED_R",
+ 				  "LAN_RUN",
+ 				  "",
+ 				  "CAM_GPIO0",
 -- 
 2.35.1
 

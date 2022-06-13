@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A648547FD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E024547FD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238479AbiFMGuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 02:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
+        id S238272AbiFMGvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 02:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237803AbiFMGs4 (ORCPT
+        with ESMTP id S238392AbiFMGvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 02:48:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AF215827;
-        Sun, 12 Jun 2022 23:48:54 -0700 (PDT)
-X-UUID: 852b16fdbd084e3fa7b56955cdeaf3a3-20220613
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:e1b1ec7c-91a3-4f45-aac3-02461839e6e2,OB:20,L
-        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:90
-X-CID-INFO: VERSION:1.1.5,REQID:e1b1ec7c-91a3-4f45-aac3-02461839e6e2,OB:20,LOB
-        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:90
-X-CID-META: VersionHash:2a19b09,CLOUDID:11725ac6-12ba-4305-bfdf-9aefbdc32516,C
-        OID:ef7ad5cd4226,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 852b16fdbd084e3fa7b56955cdeaf3a3-20220613
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1925287180; Mon, 13 Jun 2022 14:48:46 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 13 Jun 2022 14:48:44 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 13 Jun 2022 14:48:44 +0800
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v11 12/12] drm/mediatek: dpi: Add matrix_sel helper
-Date:   Mon, 13 Jun 2022 14:48:41 +0800
-Message-ID: <20220613064841.10481-13-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
-References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+        Mon, 13 Jun 2022 02:51:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9799F1EAE7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655103006; x=1686639006;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RGtR00YXznzblbZw6feUnIn4iE2iFhjqHOStGqIumPY=;
+  b=d9tZu/eWNuxPSenGteO1BzHMy8LhFAsCllGFcW5oNWJ8D2RtgPFa6WTi
+   ItFhINYi0R9rn0SYr/Fpp7gfVlkAVCGuAjtuLKfVDCRCLK3y/E2gehlUv
+   BospXCSK2vsWiPwScmY7dKgRDiB3VvTbJc5gkOZxkmmg5baePoc7GMXX7
+   CNvtXCmTCf11HSVWeZJe2AXhdbEnTVekIcNYXsGcKMNRjMT3sg3kzxNXb
+   nYnkwpYpW3cpaNpiLID6bRlcdSUuZFCTqGFByZhBALLRWbpSjGp1XNGQV
+   yBhqCQQnWAttoFVWRRPAOkyd2wgRdKAaAzHQOA9wo3PNvTC2hDlme2xbj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="339861047"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="339861047"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 23:49:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="567782758"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 12 Jun 2022 23:49:47 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0dtS-000Kaj-UI;
+        Mon, 13 Jun 2022 06:49:46 +0000
+Date:   Mon, 13 Jun 2022 14:49:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalesh Singh <kaleshsingh@google.com>, mark.rutland@arm.com,
+        broonie@kernel.org, maz@kernel.org
+Cc:     kbuild-all@lists.01.org, will@kernel.org, qperret@google.com,
+        tabba@google.com, surenb@google.com, tjmercier@google.com,
+        kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] KVM: arm64: Unwind and dump nVHE hypervisor
+ stacktrace
+Message-ID: <202206131423.8tjrMBgk-lkp@intel.com>
+References: <20220607165105.639716-6-kaleshsingh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607165105.639716-6-kaleshsingh@google.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,76 +83,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Ranquet <granquet@baylibre.com>
+Hi Kalesh,
 
-Add a mtk_dpi_matrix_sel() helper to update the DPI_MATRIX_SET
-register depending on the color format.
+Thank you for the patch! Yet something to improve:
 
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dpi.c      | 21 +++++++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
- 2 files changed, 24 insertions(+)
+[auto build test ERROR on f2906aa863381afb0015a9eb7fefad885d4e5a56]
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 9668bd5dd14a..dc355a512963 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -387,6 +387,25 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
- 		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0, EDGE_SEL_EN);
- }
- 
-+static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi, enum mtk_dpi_out_color_format format)
-+{
-+	u32 matrix_sel = 0;
-+
-+	switch (format) {
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
-+	case MTK_DPI_COLOR_FORMAT_XV_YCC:
-+		if (dpi->mode.hdisplay <= 720)
-+			matrix_sel = 0x2;
-+		break;
-+	default:
-+		break;
-+	}
-+	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel, INT_MATRIX_SEL_MASK);
-+}
-+
- static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 					enum mtk_dpi_out_color_format format)
- {
-@@ -394,6 +413,7 @@ static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
- 		mtk_dpi_config_yuv422_enable(dpi, false);
- 		mtk_dpi_config_csc_enable(dpi, true);
-+		mtk_dpi_matrix_sel(dpi, format);
- 		if (dpi->conf->swap_input_support)
- 			mtk_dpi_config_swap_input(dpi, false);
- 		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_BGR);
-@@ -401,6 +421,7 @@ static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
- 		mtk_dpi_config_yuv422_enable(dpi, true);
- 		mtk_dpi_config_csc_enable(dpi, true);
-+		mtk_dpi_matrix_sel(dpi, format);
- 		if (dpi->conf->swap_input_support)
- 			mtk_dpi_config_swap_input(dpi, true);
- 		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-index f7f0272dbd6a..96c117202d0d 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-@@ -230,4 +230,7 @@
- #define EDGE_SEL_EN			BIT(5)
- #define H_FRE_2N			BIT(25)
- 
-+#define DPI_MATRIX_SET		0xB4
-+#define INT_MATRIX_SEL_MASK	(0x1F << 0)
-+
- #endif /* __MTK_DPI_REGS_H */
+url:    https://github.com/intel-lab-lkp/linux/commits/Kalesh-Singh/KVM-nVHE-Hypervisor-stack-unwinder/20220608-011351
+base:   f2906aa863381afb0015a9eb7fefad885d4e5a56
+config: arm64-randconfig-c024-20220612 (https://download.01.org/0day-ci/archive/20220613/202206131423.8tjrMBgk-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ac1ce397ffe5b05df06cdb56a30db4099c7428ec
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kalesh-Singh/KVM-nVHE-Hypervisor-stack-unwinder/20220608-011351
+        git checkout ac1ce397ffe5b05df06cdb56a30db4099c7428ec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   aarch64-linux-ld: arch/arm64/kernel/stacktrace.o: in function `hyp_dump_backtrace':
+>> arch/arm64/kernel/stacktrace.c:254: undefined reference to `kvm_arm_hyp_stacktrace_page'
+   aarch64-linux-ld: arch/arm64/kernel/stacktrace.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `kvm_arm_hyp_stacktrace_page' which may bind externally can not be used when making a shared object; recompile with -fPIC
+   arch/arm64/kernel/stacktrace.c:254:(.text+0x634): dangerous relocation: unsupported relocation
+>> aarch64-linux-ld: arch/arm64/kernel/stacktrace.c:254: undefined reference to `kvm_arm_hyp_stacktrace_page'
+   pahole: .tmp_vmlinux.btf: No such file or directory
+   .btf.vmlinux.bin.o: file not recognized: file format not recognized
+
+
+vim +254 arch/arm64/kernel/stacktrace.c
+
+   246	
+   247	/**
+   248	 * Symbolizes and dumps the hypervisor backtrace from the shared
+   249	 * stacktrace page.
+   250	 */
+   251	noinline notrace void hyp_dump_backtrace(unsigned long hyp_offset)
+   252	{
+   253		unsigned long *stacktrace_pos =
+ > 254			(unsigned long *)*this_cpu_ptr(&kvm_arm_hyp_stacktrace_page);
+   255		unsigned long va_mask = GENMASK_ULL(vabits_actual - 1, 0);
+   256		unsigned long pc = *stacktrace_pos++;
+   257	
+   258		kvm_err("nVHE HYP call trace:\n");
+   259	
+   260		while (pc) {
+   261			pc &= va_mask;		/* Mask tags */
+   262			pc += hyp_offset;	/* Convert to kern addr */
+   263			kvm_err("[<%016lx>] %pB\n", pc, (void *)pc);
+   264			pc = *stacktrace_pos++;
+   265		}
+   266	
+   267		kvm_err("---- end of nVHE HYP call trace ----\n");
+   268	}
+   269	#else /* __KVM_NVHE_HYPERVISOR__ */
+   270	DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack)
+   271		__aligned(16);
+   272	
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

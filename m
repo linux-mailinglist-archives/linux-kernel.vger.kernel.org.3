@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5F4548CBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030D4549282
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356804AbiFMLtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S1346357AbiFMKh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357411AbiFMLqG (ORCPT
+        with ESMTP id S1344821AbiFMKhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:46:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FEA4B42C;
-        Mon, 13 Jun 2022 03:52:17 -0700 (PDT)
+        Mon, 13 Jun 2022 06:37:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9310411C1C;
+        Mon, 13 Jun 2022 03:22:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 673B761346;
-        Mon, 13 Jun 2022 10:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749D4C34114;
-        Mon, 13 Jun 2022 10:52:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EC002CE0EEB;
+        Mon, 13 Jun 2022 10:22:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF3BC34114;
+        Mon, 13 Jun 2022 10:22:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117535;
-        bh=c/sh0ADfc8YO6RjUcVirxMAJQkJ6AkcflF2WlJjEjmA=;
+        s=korg; t=1655115762;
+        bh=MxBRfXlXQLUT75soDSKGi1x1t5WHTACug5T0lRzTfbk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rUr8HLB+Yu96A2B2WkI49S8g0OhnhBEXqmOHuVH/QDBejtjmroCdnYfFd452lxRGT
-         cXbwHEeqb0it/R6/12nUHH9IrMOBjEtwJ2f4CYYOtrbxx7UlWwEheW/f/MIbvo284B
-         NKzHIsLGY49ZtfAUn25j6tVbFcs2FmZOW/aFuxtI=
+        b=m02GtW5MSKNYLNFYHhaUkmyrV/MerVlTPxvmXtUwE3+YaQ5hVYw2iNruDblEB2UCD
+         +yjM9Fx9fp0IyZKQTKaubSlrUbQVCW5AScme2+cKC2fVFXQrTQGhW5M92hSSxPyzg5
+         TGjnGOo2KWm+35+5COThyHiXKhVclHo0DnsTbCgM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Douglas Miller <doug.miller@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, jianghaoran <jianghaoran@kylinos.cn>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 056/287] RDMA/hfi1: Prevent panic when SDMA is disabled
+Subject: [PATCH 4.14 022/218] ipv6: Dont send rs packets to the interface of ARPHRD_TUNNEL
 Date:   Mon, 13 Jun 2022 12:08:00 +0200
-Message-Id: <20220613094925.566240775@linuxfoundation.org>
+Message-Id: <20220613094913.563479624@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Miller <doug.miller@cornelisnetworks.com>
+From: jianghaoran <jianghaoran@kylinos.cn>
 
-[ Upstream commit 629e052d0c98e46dde9f0824f0aa437f678d9b8f ]
+[ Upstream commit b52e1cce31ca721e937d517411179f9196ee6135 ]
 
-If the hfi1 module is loaded with HFI1_CAP_SDMA off, a call to
-hfi1_write_iter() will dereference a NULL pointer and panic. A typical
-stack frame is:
+ARPHRD_TUNNEL interface can't process rs packets
+and will generate TX errors
 
-  sdma_select_user_engine [hfi1]
-  hfi1_user_sdma_process_request [hfi1]
-  hfi1_write_iter [hfi1]
-  do_iter_readv_writev
-  do_iter_write
-  vfs_writev
-  do_writev
-  do_syscall_64
+ex:
+ip tunnel add ethn mode ipip local 192.168.1.1 remote 192.168.1.2
+ifconfig ethn x.x.x.x
 
-The fix is to test for SDMA in hfi1_write_iter() and fail the I/O with
-EINVAL.
+ethn: flags=209<UP,POINTOPOINT,RUNNING,NOARP>  mtu 1480
+	inet x.x.x.x  netmask 255.255.255.255  destination x.x.x.x
+	inet6 fe80::5efe:ac1e:3cdb  prefixlen 64  scopeid 0x20<link>
+	tunnel   txqueuelen 1000  (IPIP Tunnel)
+	RX packets 0  bytes 0 (0.0 B)
+	RX errors 0  dropped 0  overruns 0  frame 0
+	TX packets 0  bytes 0 (0.0 B)
+	TX errors 3  dropped 0 overruns 0  carrier 0  collisions 0
 
-Link: https://lore.kernel.org/r/20220520183706.48973.79803.stgit@awfm-01.cornelisnetworks.com
-Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: jianghaoran <jianghaoran@kylinos.cn>
+Link: https://lore.kernel.org/r/20220429053802.246681-1-jianghaoran@kylinos.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hfi1/file_ops.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/ipv6/addrconf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/hfi1/file_ops.c b/drivers/infiniband/hw/hfi1/file_ops.c
-index adeb259458de..64ee11542a56 100644
---- a/drivers/infiniband/hw/hfi1/file_ops.c
-+++ b/drivers/infiniband/hw/hfi1/file_ops.c
-@@ -308,6 +308,8 @@ static ssize_t hfi1_write_iter(struct kiocb *kiocb, struct iov_iter *from)
- 	unsigned long dim = from->nr_segs;
- 	int idx;
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 09807202bd1c..0d3e76b160a5 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -4058,7 +4058,8 @@ static void addrconf_dad_completed(struct inet6_ifaddr *ifp, bool bump_id,
+ 	send_rs = send_mld &&
+ 		  ipv6_accept_ra(ifp->idev) &&
+ 		  ifp->idev->cnf.rtr_solicits != 0 &&
+-		  (dev->flags&IFF_LOOPBACK) == 0;
++		  (dev->flags & IFF_LOOPBACK) == 0 &&
++		  (dev->type != ARPHRD_TUNNEL);
+ 	read_unlock_bh(&ifp->idev->lock);
  
-+	if (!HFI1_CAP_IS_KSET(SDMA))
-+		return -EINVAL;
- 	idx = srcu_read_lock(&fd->pq_srcu);
- 	pq = srcu_dereference(fd->pq, &fd->pq_srcu);
- 	if (!cq || !pq) {
+ 	/* While dad is in progress mld report's source address is in6_addrany.
 -- 
 2.35.1
 

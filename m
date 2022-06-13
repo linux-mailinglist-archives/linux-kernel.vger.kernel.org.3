@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC75754878F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EBD5486B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379031AbiFMNnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S1378729AbiFMNmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379116AbiFMNjw (ORCPT
+        with ESMTP id S1378990AbiFMNje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8467A453;
-        Mon, 13 Jun 2022 04:28:43 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6256F793BF;
+        Mon, 13 Jun 2022 04:28:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA95761036;
-        Mon, 13 Jun 2022 11:28:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DF7C34114;
-        Mon, 13 Jun 2022 11:28:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A539B80EAA;
+        Mon, 13 Jun 2022 11:28:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDD3C34114;
+        Mon, 13 Jun 2022 11:28:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119722;
-        bh=yRjoz7WQZ8rS3SzcadpZzio7LtuJZcOWf3VV+O2JBU4=;
+        s=korg; t=1655119702;
+        bh=6lOmx3AsyEf3czrTCiWgKfvKLJC6S5vFM4BRHd+z1Is=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cw0qVlw9ZP4rBTIW8YRGfXixIAPGuVEquWrRBkzkjaBtn+bd7pYe9mzw6zuyHcBeT
-         52FDnIT/9Rup/KbrtbI66axI8ciMtmIUsmYsy5BvHBoS/7ueB04KAJhLxzeyFvPBux
-         /sSTGQyr+wz39GagPfLhc5P3ciHkVASDCnKptxGA=
+        b=D4PwORsAB8PhjlxGFIPC/sd5nYI5tlDBHGcWVJr26fq2jQOdYCc0OTBalkehlijeB
+         16F0g1jc+rfIsozQEi3f17cVctKH8KkT7rDWySnjEjcfOg4ZvEfpDHarUTtU8kJKmb
+         SFQ8XKXM4tUlYzuk3stj4Df1ZVuQc8pOwDwcZers=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Eddie James <eajames@linux.ibm.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 087/339] amt: fix possible memory leak in amt_rcv()
-Date:   Mon, 13 Jun 2022 12:08:32 +0200
-Message-Id: <20220613094929.155305498@linuxfoundation.org>
+Subject: [PATCH 5.18 090/339] spi: fsi: Fix spurious timeout
+Date:   Mon, 13 Jun 2022 12:08:35 +0200
+Message-Id: <20220613094929.245397534@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -55,36 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: Eddie James <eajames@linux.ibm.com>
 
-[ Upstream commit 1a1a0e80e005cbdc2c250fc858e1d8570f4e4acb ]
+[ Upstream commit 61bf40ef51aa73f6216b33563271b6acf7ea8d70 ]
 
-If an amt receives packets and it finds socket.
-If it can't find a socket, it should free a received skb.
-But it doesn't.
-So, a memory leak would possibly occur.
+The driver may return a timeout error even if the status register
+indicates that the transfer may proceed. Fix this by restructuring
+the polling loop.
 
-Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 89b35e3f2851 ("spi: fsi: Implement a timeout for polling status")
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220525165852.33167-2-eajames@linux.ibm.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/amt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-fsi.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index d376ed89f836..22d7da749a24 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -2679,7 +2679,7 @@ static int amt_rcv(struct sock *sk, struct sk_buff *skb)
- 	amt = rcu_dereference_sk_user_data(sk);
- 	if (!amt) {
- 		err = true;
--		goto out;
-+		goto drop;
- 	}
+diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+index d403a7a3021d..72ab066ce552 100644
+--- a/drivers/spi/spi-fsi.c
++++ b/drivers/spi/spi-fsi.c
+@@ -319,12 +319,12 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
  
- 	skb->dev = amt->dev;
+ 			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+ 			do {
++				if (time_after(jiffies, end))
++					return -ETIMEDOUT;
++
+ 				rc = fsi_spi_status(ctx, &status, "TX");
+ 				if (rc)
+ 					return rc;
+-
+-				if (time_after(jiffies, end))
+-					return -ETIMEDOUT;
+ 			} while (status & SPI_FSI_STATUS_TDR_FULL);
+ 
+ 			sent += nb;
+@@ -337,12 +337,12 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 		while (transfer->len > recv) {
+ 			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+ 			do {
++				if (time_after(jiffies, end))
++					return -ETIMEDOUT;
++
+ 				rc = fsi_spi_status(ctx, &status, "RX");
+ 				if (rc)
+ 					return rc;
+-
+-				if (time_after(jiffies, end))
+-					return -ETIMEDOUT;
+ 			} while (!(status & SPI_FSI_STATUS_RDR_FULL));
+ 
+ 			rc = fsi_spi_read_reg(ctx, SPI_FSI_DATA_RX, &in);
 -- 
 2.35.1
 

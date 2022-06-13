@@ -2,41 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76D5549B60
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC92D549B63
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236871AbiFMSVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S239194AbiFMSWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245163AbiFMSVa (ORCPT
+        with ESMTP id S242509AbiFMSWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:21:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF63746CAA;
-        Mon, 13 Jun 2022 07:25:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53D941042;
-        Mon, 13 Jun 2022 07:25:41 -0700 (PDT)
-Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19AB73F85F;
-        Mon, 13 Jun 2022 07:25:41 -0700 (PDT)
-From:   Yoan Picchi <yoan.picchi@arm.com>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 2/2] Removes the x86 dependency on the QAT drivers
-Date:   Mon, 13 Jun 2022 14:25:35 +0000
-Message-Id: <20220613142535.222041-3-yoan.picchi@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220613142535.222041-1-yoan.picchi@arm.com>
-References: <20220613142535.222041-1-yoan.picchi@arm.com>
+        Mon, 13 Jun 2022 14:22:32 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175942D1C0;
+        Mon, 13 Jun 2022 07:29:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655130541; x=1686666541;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yo6oWuP1uRTaNxH2baN81HXr0Uua9EFGTDjlZt3dMu8=;
+  b=DBcUToDMdvWPLx8xPLuKw9HhtDWKXsrQfhh8JgZlXsKrRFtxpj+Ra7S8
+   WalsncKQw/fZCXztXuuqah72OpSUzIVYaW/JW4+epSnGqtX4QGAcMHAEM
+   kUCdXna7rrt2nzlPoOQSp3tKwv2TGm2prbjF+3wzixwC1HTXT5pO8trw1
+   y/FbgiztqQ5kYIpXEwoRfZnpF9wnVNseOiftQpMNZ85WJhrz6I2jj28xa
+   iQvGWsj5DYEVSBda+K2UFHDdta03cNugTxx9qTPhRYqxikBfljT+ush4e
+   i0djt6o6rrHCz6ZGXyGW/f9/6McyUYYfCsSOBAPHS9AcqFZOnDYpRzNXP
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279345735"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="279345735"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 07:28:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="611801842"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 13 Jun 2022 07:28:49 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0l3g-000Ks1-MG;
+        Mon, 13 Jun 2022 14:28:48 +0000
+Date:   Mon, 13 Jun 2022 22:28:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ansuel Smith <ansuelsmth@gmail.com>
+Subject: Re: [PATCH v5 1/3] mtd: nand: raw: qcom_nandc: add support for
+ unprotected spare data pages
+Message-ID: <202206132205.G3tGFPx7-lkp@intel.com>
+References: <20220608001030.18813-2-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608001030.18813-2-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,82 +75,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This dependency looks outdated. After the previous patch, we have been able
-to use this driver to encrypt some data and to create working VF on arm64.
-We have not tested it yet on any big endian machine, hence the new dependency
+Hi Ansuel,
 
-Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
----
- drivers/crypto/qat/Kconfig | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/crypto/qat/Kconfig b/drivers/crypto/qat/Kconfig
-index 4b90c0f22b03..1220cc86f910 100644
---- a/drivers/crypto/qat/Kconfig
-+++ b/drivers/crypto/qat/Kconfig
-@@ -17,7 +17,7 @@ config CRYPTO_DEV_QAT
- 
- config CRYPTO_DEV_QAT_DH895xCC
- 	tristate "Support for Intel(R) DH895xCC"
--	depends on X86 && PCI
-+	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) DH895xcc with Intel(R) QuickAssist Technology
-@@ -28,7 +28,7 @@ config CRYPTO_DEV_QAT_DH895xCC
- 
- config CRYPTO_DEV_QAT_C3XXX
- 	tristate "Support for Intel(R) C3XXX"
--	depends on X86 && PCI
-+	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) C3xxx with Intel(R) QuickAssist Technology
-@@ -39,7 +39,7 @@ config CRYPTO_DEV_QAT_C3XXX
- 
- config CRYPTO_DEV_QAT_C62X
- 	tristate "Support for Intel(R) C62X"
--	depends on X86 && PCI
-+	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) C62x with Intel(R) QuickAssist Technology
-@@ -50,7 +50,7 @@ config CRYPTO_DEV_QAT_C62X
- 
- config CRYPTO_DEV_QAT_4XXX
- 	tristate "Support for Intel(R) QAT_4XXX"
--	depends on X86 && PCI
-+	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) QuickAssist Technology QAT_4xxx
-@@ -61,7 +61,7 @@ config CRYPTO_DEV_QAT_4XXX
- 
- config CRYPTO_DEV_QAT_DH895xCCVF
- 	tristate "Support for Intel(R) DH895xCC Virtual Function"
--	depends on X86 && PCI
-+	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
- 	select PCI_IOV
- 	select CRYPTO_DEV_QAT
- 
-@@ -74,7 +74,7 @@ config CRYPTO_DEV_QAT_DH895xCCVF
- 
- config CRYPTO_DEV_QAT_C3XXXVF
- 	tristate "Support for Intel(R) C3XXX Virtual Function"
--	depends on X86 && PCI
-+	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
- 	select PCI_IOV
- 	select CRYPTO_DEV_QAT
- 	help
-@@ -86,7 +86,7 @@ config CRYPTO_DEV_QAT_C3XXXVF
- 
- config CRYPTO_DEV_QAT_C62XVF
- 	tristate "Support for Intel(R) C62X Virtual Function"
--	depends on X86 && PCI
-+	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
- 	select PCI_IOV
- 	select CRYPTO_DEV_QAT
- 	help
+[auto build test WARNING on mtd/nand/next]
+[also build test WARNING on mtd/mtd/next mtd/mtd/fixes robh/for-next v5.19-rc2 next-20220610]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ansuel-Smith/Add-support-for-unprotected-spare-data-page/20220608-104834
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+config: hexagon-randconfig-r041-20220613 (https://download.01.org/0day-ci/archive/20220613/202206132205.G3tGFPx7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5f9263b88e99a6cae44be5e737cb0928ee420e87
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ansuel-Smith/Add-support-for-unprotected-spare-data-page/20220608-104834
+        git checkout 5f9263b88e99a6cae44be5e737cb0928ee420e87
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mtd/nand/raw/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mtd/nand/raw/qcom_nandc.c:3020:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   return ret;
+                          ^~~
+   drivers/mtd/nand/raw/qcom_nandc.c:3009:33: note: initialize the variable 'ret' to silence this warning
+           int partitions_count, i, j, ret;
+                                          ^
+                                           = 0
+   1 warning generated.
+
+
+vim +/ret +3020 drivers/mtd/nand/raw/qcom_nandc.c
+
+  3000	
+  3001	static int qcom_nand_host_parse_boot_partitions(struct qcom_nand_controller *nandc,
+  3002							struct qcom_nand_host *host,
+  3003							struct device_node *dn)
+  3004	{
+  3005		struct nand_chip *chip = &host->chip;
+  3006		struct mtd_info *mtd = nand_to_mtd(chip);
+  3007		struct qcom_nand_boot_partition *boot_partition;
+  3008		struct device *dev = nandc->dev;
+  3009		int partitions_count, i, j, ret;
+  3010	
+  3011		if (!nandc->props->use_codeword_fixup)
+  3012			return 0;
+  3013	
+  3014		if (!of_find_property(dn, "qcom,boot-partitions", NULL))
+  3015			return 0;
+  3016	
+  3017		partitions_count = of_property_count_u32_elems(dn, "qcom,boot-partitions");
+  3018		if (partitions_count < 0) {
+  3019			dev_err(dev, "Error parsing boot partition.");
+> 3020			return ret;
+  3021		}
+  3022	
+  3023		host->nr_boot_partitions = partitions_count / 2;
+  3024		host->boot_partitions = devm_kcalloc(dev, host->nr_boot_partitions,
+  3025						     sizeof(*host->boot_partitions), GFP_KERNEL);
+  3026		if (!host->boot_partitions)
+  3027			return -ENOMEM;
+  3028	
+  3029		for (i = 0, j = 0; i < host->nr_boot_partitions; i++, j += 2) {
+  3030			boot_partition = &host->boot_partitions[i];
+  3031	
+  3032			ret = of_property_read_u32_index(dn, "qcom,boot-partitions", j,
+  3033							 &boot_partition->page_offset);
+  3034			if (ret) {
+  3035				dev_err(dev, "Error parsing boot partition offset at index %d", i);
+  3036				return ret;
+  3037			}
+  3038	
+  3039			if (boot_partition->page_offset % mtd->writesize) {
+  3040				dev_err(dev, "Boot partition offset not multiple of writesize at index %i",
+  3041					i);
+  3042				return -EINVAL;
+  3043			}
+  3044			/* Convert offset to nand pages */
+  3045			boot_partition->page_offset /= mtd->writesize;
+  3046	
+  3047			ret = of_property_read_u32_index(dn, "qcom,boot-partitions", j + 1,
+  3048							 &boot_partition->page_size);
+  3049			if (ret) {
+  3050				dev_err(dev, "Error parsing boot partition size at index %d", i);
+  3051				return ret;
+  3052			}
+  3053	
+  3054			if (boot_partition->page_size % mtd->writesize) {
+  3055				dev_err(dev, "Boot partition size not multiple of writesize at index %i",
+  3056					i);
+  3057				return -EINVAL;
+  3058			}
+  3059			/* Convert size to nand pages */
+  3060			boot_partition->page_size /= mtd->writesize;
+  3061		}
+  3062	
+  3063		return 0;
+  3064	}
+  3065	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

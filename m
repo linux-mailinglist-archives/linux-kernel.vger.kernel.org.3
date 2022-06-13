@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D529549108
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD79549081
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353441AbiFMLTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
+        id S1353484AbiFMLTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353366AbiFMLPe (ORCPT
+        with ESMTP id S1353386AbiFMLPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:15:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E277337A83;
-        Mon, 13 Jun 2022 03:37:57 -0700 (PDT)
+        Mon, 13 Jun 2022 07:15:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE7A37A9B;
+        Mon, 13 Jun 2022 03:37:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB442B80EAC;
-        Mon, 13 Jun 2022 10:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C48FC34114;
-        Mon, 13 Jun 2022 10:37:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F010A610A0;
+        Mon, 13 Jun 2022 10:37:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A03DC34114;
+        Mon, 13 Jun 2022 10:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116674;
-        bh=/gkQN5CunXWV/qiT5reQapox6Wq07Z6DjeOd+/yeOgQ=;
+        s=korg; t=1655116677;
+        bh=bD3WJRYvtGNG7uTosFr26V1dTdZAK0QT563DMFOOOXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qBX4ZLiffK02fEoWFJoT1twoIDXcXkfTCoW4UHbRHUbpEga9nfu5a78zUbH1Y0Mtm
-         SLhmCma61M8d+kXJxgcw4BCf1z2rb88ZFtfn4juoS279sa2SmmYL24zvTYEY7RVXAH
-         Vjot/IE3WrZBd6G5H/IKHvG0lcLPP1KUyZFB3PBw=
+        b=OAjBXu/56R//QbtNcqNbccrk6RULL8XMLwnaCziCT5QRRnaKv7o00JhV/4BUFo6rB
+         G/YKE0dtagmDSG6nvb43sFVT8ahf1jXLQo89vMmJVhNPzbz9aXbrEW8yjQeYgC7DLr
+         7L2tDqk+7YG8AwyUjMFNI7/vIGItIfPVAFSoI1Ng=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 132/411] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
-Date:   Mon, 13 Jun 2022 12:06:45 +0200
-Message-Id: <20220613094932.630596834@linuxfoundation.org>
+Subject: [PATCH 5.4 133/411] regulator: pfuze100: Fix refcount leak in pfuze_parse_regulators_dt
+Date:   Mon, 13 Jun 2022 12:06:46 +0200
+Message-Id: <20220613094932.660492818@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -57,32 +57,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 2be84f73785fa9ed6443e3c5b158730266f1c2ee ]
+[ Upstream commit afaa7b933ef00a2d3262f4d1252087613fb5c06d ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+of_node_get() returns a node with refcount incremented.
+Calling of_node_put() to drop the reference when not needed anymore.
 
-Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
+Fixes: 3784b6d64dc5 ("regulator: pfuze100: add pfuze100 regulator driver")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511133725.39039-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220511113506.45185-1-linmq006@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mxs/mxs-saif.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/regulator/pfuze100-regulator.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
-index cb1b525cbe9d..c899a05e896f 100644
---- a/sound/soc/mxs/mxs-saif.c
-+++ b/sound/soc/mxs/mxs-saif.c
-@@ -767,6 +767,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
- 		saif->master_id = saif->id;
- 	} else {
- 		ret = of_alias_get_id(master, "saif");
-+		of_node_put(master);
- 		if (ret < 0)
- 			return ret;
- 		else
+diff --git a/drivers/regulator/pfuze100-regulator.c b/drivers/regulator/pfuze100-regulator.c
+index 44b1da7cc374..f873d97100e2 100644
+--- a/drivers/regulator/pfuze100-regulator.c
++++ b/drivers/regulator/pfuze100-regulator.c
+@@ -528,6 +528,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
+ 	parent = of_get_child_by_name(np, "regulators");
+ 	if (!parent) {
+ 		dev_err(dev, "regulators node not found\n");
++		of_node_put(np);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -557,6 +558,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
+ 	}
+ 
+ 	of_node_put(parent);
++	of_node_put(np);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Error parsing regulator init data: %d\n",
+ 			ret);
 -- 
 2.35.1
 

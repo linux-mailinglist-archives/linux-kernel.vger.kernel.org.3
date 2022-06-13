@@ -2,200 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC72547DD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174B2547DDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237121AbiFMDMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 23:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S238268AbiFMDNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 23:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiFMDMs (ORCPT
+        with ESMTP id S238293AbiFMDMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 23:12:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9344DDD7;
-        Sun, 12 Jun 2022 20:12:42 -0700 (PDT)
-X-UUID: f7c315592ef14a779a345bf3483fb912-20220613
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:d00b79aa-2c5e-4094-b4fe-cc82990eee57,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:8ad051c6-12ba-4305-bfdf-9aefbdc32516,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: f7c315592ef14a779a345bf3483fb912-20220613
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1170772932; Mon, 13 Jun 2022 11:12:34 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 13 Jun 2022 11:12:33 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 13 Jun 2022 11:12:33 +0800
-Message-ID: <fc301b26d4e0fea003a9b6c2237eaca16a4929f6.camel@mediatek.com>
-Subject: Re: [PATCH v10 08/21] drm/mediatek: dpi: implement a swap_input
- toggle in SoC config
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Mon, 13 Jun 2022 11:12:33 +0800
-In-Reply-To: <2c88fd4c308e86536d5996b3f32f68d05d452e23.camel@mediatek.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-9-granquet@baylibre.com>
-         <2c88fd4c308e86536d5996b3f32f68d05d452e23.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 12 Jun 2022 23:12:55 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982E2DFCE;
+        Sun, 12 Jun 2022 20:12:54 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f8so3988538plo.9;
+        Sun, 12 Jun 2022 20:12:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q0gGWcWV/COJT901q1rc8QzcrP5DaNECZkTvshE+F+Q=;
+        b=KyQJjJ5e7Nsc4ypOYCGc1PPbWbAidU7McvnzqEwhmXBSKGt+XA+UKo4C0rStxYLtJ6
+         rzzT7/GhMYx3yzArDjKvdHv48bl1IH5UTHIo6z8v3HO0+YiK0Ouxtqo8iVvuBkoJpNUj
+         Xw49TN+kG5PMWL7Zmdq/LcnxdEME5yBFZzB5+q2WmWf9oibGDOHANnGUF0XVZr1TDpAT
+         OGPBKSva3rbfUUvwOG56eu3S0Eal0dSMaPyP8UCn0t556oli2wM6QdU6PfNuhaRUeetW
+         PDazGjTXbMEwdTPjrNC1IfAHzRwTtJU7evS9DKVtupE8v9qPoM++WUb2O4s5v7QxmPal
+         tDcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=q0gGWcWV/COJT901q1rc8QzcrP5DaNECZkTvshE+F+Q=;
+        b=KQDoAaYeTFuAa5+S0U1mKvyLYF2VKqKVuKru9kvKPrEGHaoOS/f6nd43haDlPXGP+s
+         Q6rufbISwuKciiWXTGY3tgqOFBqGBwHzpzWyiqj+5CE6PtPTmQCP1ZE0O3gPXervnNfM
+         bUuTQA8c58eK/RPFEIjQq0PtPnMZIi3tTZH51z/WjzbfkiYuTX9bK0GcF9VseO+J7eNe
+         KEi9QYoy2yE4bsxgGm2ypiXD2MV8MOr/nHEzlaC7lb9gKRFi4UKD2DM5n5Ij0klndiws
+         gEYGPqWF4xWiMh1pAVJoWpA6aIogi9wR6S/9w08BirOtIBfXX75IXv/vpZme9kyZACs1
+         Cqrw==
+X-Gm-Message-State: AOAM531f71unLdESh36gmpp8wZhJRdeFBDHljrShjE7iqctv+KQxH+U5
+        nsH8o4+CzVurzhiWsltCM9k=
+X-Google-Smtp-Source: ABdhPJxhWu5uQt6Se6MpSnQ4Yq2wcgiALwT33Ycu65UT8s52QfSmAr2EACBf0v+/7oDFaCHYncX6eA==
+X-Received: by 2002:a17:902:f646:b0:168:e2da:8931 with SMTP id m6-20020a170902f64600b00168e2da8931mr1018319plg.84.1655089973994;
+        Sun, 12 Jun 2022 20:12:53 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id b11-20020a1709027e0b00b0015ed003552fsm3737642plm.293.2022.06.12.20.12.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 20:12:53 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sun, 12 Jun 2022 17:12:51 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YqarMyNo9oHxhZFh@slm.duckdns.org>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-8-longman@redhat.com>
+ <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
+ <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-30 at 15:50 +0800, CK Hu wrote:
-> Hi, Guillaume:
-> 
-> 
-> On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> > Adds a bit of flexibility to support SoCs without swap_input
-> > support
-> > 
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 14 +++++++++++---
-> >  1 file changed, 11 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > index 545a1337cc89..454f8563efae 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > @@ -126,6 +126,7 @@ struct mtk_dpi_conf {
-> >  	const u32 *output_fmts;
-> >  	u32 num_output_fmts;
-> >  	bool is_ck_de_pol;
-> > +	bool swap_input_support;
-> >  	const struct mtk_dpi_yc_limit *limit;
-> >  };
-> >  
-> > @@ -378,18 +379,21 @@ static void
-> > mtk_dpi_config_color_format(struct
-> > mtk_dpi *dpi,
-> >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
-> >  		mtk_dpi_config_yuv422_enable(dpi, false);
-> >  		mtk_dpi_config_csc_enable(dpi, true);
-> > -		mtk_dpi_config_swap_input(dpi, false);
-> > +		if (dpi->conf->swap_input_support)
-> > +			mtk_dpi_config_swap_input(dpi, false);
-> >  		mtk_dpi_config_channel_swap(dpi,
-> > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
-> >  	} else if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_422) ||
-> >  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
-> >  		mtk_dpi_config_yuv422_enable(dpi, true);
-> >  		mtk_dpi_config_csc_enable(dpi, true);
-> > -		mtk_dpi_config_swap_input(dpi, true);
-> > +		if (dpi->conf->swap_input_support)
-> > +			mtk_dpi_config_swap_input(dpi, true);
-> 
-> As [1], please keep in touch with Mediatek engineer.
-> 
-> Regards,
-> CK
-> 
-> [1] 
-> 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220218145437.18563-8-granquet@baylibre.com/
-> 
+Hello,
 
-Hello CK,
+On Sun, Jun 12, 2022 at 11:02:38PM -0400, Waiman Long wrote:
+> That is the behavior enforced by setting the CPU_EXCLUSIVE bit in cgroup v1.
+> I haven't explicitly change it to make it different in cgroup v2. The major
+> reason is that I don't want change to one cpuset to affect a sibling
+> partition as it may make the code more complicate to validate if a partition
+> is valid.
 
-the reason is the hardware design of dp_intf does not support input
-swap.
-I will add this in commit message.
+If at all possible, I'd really like to avoid situations where a parent can't
+withdraw resources due to something that a descendant does.
 
-BRs,
-Bo-Chen
+Thanks.
 
-> >  		mtk_dpi_config_channel_swap(dpi,
-> > MTK_DPI_OUT_CHANNEL_SWAP_RGB);
-> >  	} else {
-> >  		mtk_dpi_config_yuv422_enable(dpi, false);
-> >  		mtk_dpi_config_csc_enable(dpi, false);
-> > -		mtk_dpi_config_swap_input(dpi, false);
-> > +		if (dpi->conf->swap_input_support)
-> > +			mtk_dpi_config_swap_input(dpi, false);
-> >  		mtk_dpi_config_channel_swap(dpi,
-> > MTK_DPI_OUT_CHANNEL_SWAP_RGB);
-> >  	}
-> >  }
-> > @@ -808,6 +812,7 @@ static const struct mtk_dpi_conf mt8173_conf =
-> > {
-> >  	.output_fmts = mt8173_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> >  	.is_ck_de_pol = true,
-> > +	.swap_input_support = true,
-> >  	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> > @@ -819,6 +824,7 @@ static const struct mtk_dpi_conf mt2701_conf =
-> > {
-> >  	.output_fmts = mt8173_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> >  	.is_ck_de_pol = true,
-> > +	.swap_input_support = true,
-> >  	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> > @@ -829,6 +835,7 @@ static const struct mtk_dpi_conf mt8183_conf =
-> > {
-> >  	.output_fmts = mt8183_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-> >  	.is_ck_de_pol = true,
-> > +	.swap_input_support = true,
-> >  	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> > @@ -839,6 +846,7 @@ static const struct mtk_dpi_conf mt8192_conf =
-> > {
-> >  	.output_fmts = mt8173_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> >  	.is_ck_de_pol = true,
-> > +	.swap_input_support = true,
-> >  	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> 
-> 
-
+-- 
+tejun

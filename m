@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F20A548E7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56D4548A7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348799AbiFMMJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S1358539AbiFMNEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358997AbiFMMFF (ORCPT
+        with ESMTP id S1355306AbiFMM4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CC450E3E;
-        Mon, 13 Jun 2022 03:58:31 -0700 (PDT)
+        Mon, 13 Jun 2022 08:56:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFB012756;
+        Mon, 13 Jun 2022 04:16:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9C2DB80E5E;
-        Mon, 13 Jun 2022 10:58:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E34C34114;
-        Mon, 13 Jun 2022 10:58:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE6EF608C3;
+        Mon, 13 Jun 2022 11:16:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69D2C34114;
+        Mon, 13 Jun 2022 11:16:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117908;
-        bh=kzU2F1dmlQuSiFYLk4sZru/9NQcZuxeTeX7IbSNKY4Q=;
+        s=korg; t=1655119012;
+        bh=N3txV4yHwqjSWgO5zKiV3UT5OkRIaAkmgOgP1nAZgNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CuwmVjaLvc8aAcH6h4/hdS51tEmTKXM5jjkAWZRrHX2hWBmy7fFH9Hhz85in64FOc
-         T0t9gtBVIVsRCDF+8lVhwlCvhwgsnDfsA/lhv6zD7GzmHAJILZLcR9iQDrdMrxMWLv
-         FVjJbofpH1u05mzjYVHeCoKAXBbv8vjDjzCvvrpA=
+        b=Yh7gMQag6poBKtCuWrQaRThKdHxX9jZipzyqRVGbm97IWMGg5vhYjc5GCraNe1FGE
+         slsBsFGIwaX0hUxFLbGttr4PglHwpu2zeNaSkX7XFzgBtgpVTjlyMD6q5QPjd5HOVB
+         IH1IBwtoX7iBI+497L+EZeJLUDLfYq0HmXheLExM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 4.19 160/287] drm/amdgpu/cs: make commands with 0 chunks illegal behaviour.
+        stable@vger.kernel.org, Menglong Dong <imagedong@tencent.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Hao Peng <flyingpeng@tencent.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 082/247] bpf: Fix probe read error in ___bpf_prog_run()
 Date:   Mon, 13 Jun 2022 12:09:44 +0200
-Message-Id: <20220613094928.731224455@linuxfoundation.org>
+Message-Id: <20220613094925.443589455@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,64 +58,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Airlie <airlied@redhat.com>
+From: Menglong Dong <imagedong@tencent.com>
 
-commit 31ab27b14daaa75541a415c6794d6f3567fea44a upstream.
+[ Upstream commit caff1fa4118cec4dfd4336521ebd22a6408a1e3e ]
 
-Submitting a cs with 0 chunks, causes an oops later, found trying
-to execute the wrong userspace driver.
+I think there is something wrong with BPF_PROBE_MEM in ___bpf_prog_run()
+in big-endian machine. Let's make a test and see what will happen if we
+want to load a 'u16' with BPF_PROBE_MEM.
 
-MESA_LOADER_DRIVER_OVERRIDE=v3d glxinfo
+Let's make the src value '0x0001', the value of dest register will become
+0x0001000000000000, as the value will be loaded to the first 2 byte of
+DST with following code:
 
-[172536.665184] BUG: kernel NULL pointer dereference, address: 00000000000001d8
-[172536.665188] #PF: supervisor read access in kernel mode
-[172536.665189] #PF: error_code(0x0000) - not-present page
-[172536.665191] PGD 6712a0067 P4D 6712a0067 PUD 5af9ff067 PMD 0
-[172536.665195] Oops: 0000 [#1] SMP NOPTI
-[172536.665197] CPU: 7 PID: 2769838 Comm: glxinfo Tainted: P           O      5.10.81 #1-NixOS
-[172536.665199] Hardware name: To be filled by O.E.M. To be filled by O.E.M./CROSSHAIR V FORMULA-Z, BIOS 2201 03/23/2015
-[172536.665272] RIP: 0010:amdgpu_cs_ioctl+0x96/0x1ce0 [amdgpu]
-[172536.665274] Code: 75 18 00 00 4c 8b b2 88 00 00 00 8b 46 08 48 89 54 24 68 49 89 f7 4c 89 5c 24 60 31 d2 4c 89 74 24 30 85 c0 0f 85 c0 01 00 00 <48> 83 ba d8 01 00 00 00 48 8b b4 24 90 00 00 00 74 16 48 8b 46 10
-[172536.665276] RSP: 0018:ffffb47c0e81bbe0 EFLAGS: 00010246
-[172536.665277] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[172536.665278] RDX: 0000000000000000 RSI: ffffb47c0e81be28 RDI: ffffb47c0e81bd68
-[172536.665279] RBP: ffff936524080010 R08: 0000000000000000 R09: ffffb47c0e81be38
-[172536.665281] R10: ffff936524080010 R11: ffff936524080000 R12: ffffb47c0e81bc40
-[172536.665282] R13: ffffb47c0e81be28 R14: ffff9367bc410000 R15: ffffb47c0e81be28
-[172536.665283] FS:  00007fe35e05d740(0000) GS:ffff936c1edc0000(0000) knlGS:0000000000000000
-[172536.665284] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[172536.665286] CR2: 00000000000001d8 CR3: 0000000532e46000 CR4: 00000000000406e0
-[172536.665287] Call Trace:
-[172536.665322]  ? amdgpu_cs_find_mapping+0x110/0x110 [amdgpu]
-[172536.665332]  drm_ioctl_kernel+0xaa/0xf0 [drm]
-[172536.665338]  drm_ioctl+0x201/0x3b0 [drm]
-[172536.665369]  ? amdgpu_cs_find_mapping+0x110/0x110 [amdgpu]
-[172536.665372]  ? selinux_file_ioctl+0x135/0x230
-[172536.665399]  amdgpu_drm_ioctl+0x49/0x80 [amdgpu]
-[172536.665403]  __x64_sys_ioctl+0x83/0xb0
-[172536.665406]  do_syscall_64+0x33/0x40
-[172536.665409]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+  bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));
 
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2018
-Signed-off-by: Dave Airlie <airlied@redhat.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Obviously, the value in DST is not correct. In fact, we can compare
+BPF_PROBE_MEM with LDX_MEM_H:
+
+  DST = *(SIZE *)(unsigned long) (SRC + insn->off);
+
+If the memory load is done by LDX_MEM_H, the value in DST will be 0x1 now.
+
+And I think this error results in the test case 'test_bpf_sk_storage_map'
+failing:
+
+  test_bpf_sk_storage_map:PASS:bpf_iter_bpf_sk_storage_map__open_and_load 0 nsec
+  test_bpf_sk_storage_map:PASS:socket 0 nsec
+  test_bpf_sk_storage_map:PASS:map_update 0 nsec
+  test_bpf_sk_storage_map:PASS:socket 0 nsec
+  test_bpf_sk_storage_map:PASS:map_update 0 nsec
+  test_bpf_sk_storage_map:PASS:socket 0 nsec
+  test_bpf_sk_storage_map:PASS:map_update 0 nsec
+  test_bpf_sk_storage_map:PASS:attach_iter 0 nsec
+  test_bpf_sk_storage_map:PASS:create_iter 0 nsec
+  test_bpf_sk_storage_map:PASS:read 0 nsec
+  test_bpf_sk_storage_map:FAIL:ipv6_sk_count got 0 expected 3
+  $10/26 bpf_iter/bpf_sk_storage_map:FAIL
+
+The code of the test case is simply, it will load sk->sk_family to the
+register with BPF_PROBE_MEM and check if it is AF_INET6. With this patch,
+now the test case 'bpf_iter' can pass:
+
+  $10  bpf_iter:OK
+
+Fixes: 2a02759ef5f8 ("bpf: Add support for BTF pointers to interpreter")
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>
+Link: https://lore.kernel.org/bpf/20220524021228.533216-1-imagedong@tencent.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/core.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@ -110,7 +110,7 @@ static int amdgpu_cs_parser_init(struct
- 	int ret;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6e3ae90ad107..48eb9c329da6 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1652,6 +1652,11 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 		CONT;							\
+ 	LDX_MEM_##SIZEOP:						\
+ 		DST = *(SIZE *)(unsigned long) (SRC + insn->off);	\
++		CONT;							\
++	LDX_PROBE_MEM_##SIZEOP:						\
++		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
++				      (const void *)(long) (SRC + insn->off));	\
++		DST = *((SIZE *)&DST);					\
+ 		CONT;
  
- 	if (cs->in.num_chunks == 0)
--		return 0;
-+		return -EINVAL;
+ 	LDST(B,   u8)
+@@ -1659,15 +1664,6 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 	LDST(W,  u32)
+ 	LDST(DW, u64)
+ #undef LDST
+-#define LDX_PROBE(SIZEOP, SIZE)							\
+-	LDX_PROBE_MEM_##SIZEOP:							\
+-		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));	\
+-		CONT;
+-	LDX_PROBE(B,  1)
+-	LDX_PROBE(H,  2)
+-	LDX_PROBE(W,  4)
+-	LDX_PROBE(DW, 8)
+-#undef LDX_PROBE
  
- 	chunk_array = kmalloc_array(cs->in.num_chunks, sizeof(uint64_t), GFP_KERNEL);
- 	if (!chunk_array)
+ #define ATOMIC_ALU_OP(BOP, KOP)						\
+ 		case BOP:						\
+-- 
+2.35.1
+
 
 

@@ -2,103 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880BF549DB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD7B549DBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350261AbiFMTaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S1350301AbiFMTaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351281AbiFMT3H (ORCPT
+        with ESMTP id S1351694AbiFMT3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:29:07 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921F45D5E6;
-        Mon, 13 Jun 2022 10:52:49 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id c83so4610076qke.3;
-        Mon, 13 Jun 2022 10:52:49 -0700 (PDT)
+        Mon, 13 Jun 2022 15:29:38 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCE65AEF5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:54:07 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id y6so751807pfr.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:54:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Xla91C2UcQ97H+k46Q2ZwzUHnW80EyE/ynT41i2I05w=;
-        b=px+3WPCQZb6nMzINI2nyLOq02p5ky06WhhMrt/FxrDEnCNWJSjl2udhTzvQHkLu8ff
-         MGz1lLT4g6ILJEKT29XpU4Pitbb1MkwxeHIYiSFqVSo6ci0FFvSzHaQbjKKbAlr/pnwA
-         TZ49MHmyCk66O0BxWNR1Su5nSbICxoiQ+OGELKncZJOU1jaQr1zkob2zL/2FYnMiaQ/J
-         auqi5jn058zgKuZ3Qy7LbTrG11cwhCKyo6sEhiZwIQs2v3Ko6QAu3kXkFLIaY2kmASzN
-         SciTe3UWWwtr62119MiwKjRAMyi5XDj0gXFjcYtzBqlSF4sNePMIN8l1PDDetK4aD64E
-         QQZg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EpkxShZgsyvOC558FK0jGzBMP0ZDetJPHuYDFcyKyHc=;
+        b=eG1Pt6SNmAWAbkQk0PJbYFEvmFih5RDAoAG3SGj9P+NC9N4y2TBh/8isp3VZBGLNND
+         yDB1cZ+gI8hf7X/1TgWUueDSwHZUKcPPgJ8cvQxWYoqNtqMYspH5vxuMOlOSjlodhHgo
+         NCF/c7tLgHjo6IkzT/GNDMo7q8CeO9mlRyslgemmXeCc883bzaJZfz0iTITTCdAieJX1
+         edRMTkN+sI6nqjdHKTnzFJFXwTllkMb7mraT8WCdDi9rXA1U7aFLKpDBTa0k3OproqJ8
+         9eps/zayaB+UUjZYpaXGOrKephUjO/9VYF+pKzdVEs0hQ1YTJ/FL/r85EY3lAxNctwzO
+         /0vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Xla91C2UcQ97H+k46Q2ZwzUHnW80EyE/ynT41i2I05w=;
-        b=FJIdY7TkDalKKSRZbJRLh3naUCTEpGN94+fGl0WCgmwx1TmZ5SpwRJPZQC0uVQAwIq
-         Ppe+nK1o/kp6evo6B1C7y6ZNKMZZcB5pW9vmRAk22HAh2JASJ71PFeIROlSkbOy/7S/j
-         wkVCrVlJM6sHn+PH9/OKH8a5I5FQ7H2P7TaF3s7mhv/SL8L2jTFmwifo+LwLitAEab/t
-         xfra7himIc91wpxzXXpPWOaPggc35cbD1InMLeXEiTU6EcbLaxuANI9bcCfy+amxgXOj
-         IQ8kg8dJd7izYNssMqGZ4Lm2gd9mu0O2jN1LRoqKz23CbRapX5tkrbVD0X3jB/2S5Vwf
-         Sf9A==
-X-Gm-Message-State: AOAM531WpQgNHFKCzkLIDvWQ9RfwT5z46ObvXQl3WrRiLgEpFqmmljf9
-        s1NTN0ACx0a3FJUp2VEoNic=
-X-Google-Smtp-Source: ABdhPJxEbdd+iGY7vGbsWWhKPmtHdc0fRd+fVtzKu4+yL93Z4wC9PZkSqqBu+sB2kuq1L06CBvI5PA==
-X-Received: by 2002:a05:620a:370e:b0:6a7:2471:b3eb with SMTP id de14-20020a05620a370e00b006a72471b3ebmr888325qkb.631.1655142768605;
-        Mon, 13 Jun 2022 10:52:48 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k15-20020a05620a138f00b006a73654c19bsm6912665qki.23.2022.06.13.10.52.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 10:52:48 -0700 (PDT)
-Message-ID: <5824bdf6-accc-8938-16b0-743d6fe27282@gmail.com>
-Date:   Mon, 13 Jun 2022 10:52:45 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EpkxShZgsyvOC558FK0jGzBMP0ZDetJPHuYDFcyKyHc=;
+        b=nlc4cOLhc5mEnxNer13S78cuYpSMF6gzHoJaqjWNJYar+4XhriOvCKh9rNUWR3V9rS
+         8G49PaPfkpcWJyMr1/wEEwN31n1JYi9o6kgx46wqjIMY/5UsFiyc+Bnpu+STL60jVDFQ
+         A9FTmKtX0deLdCehQrEZxTILKKfaWdBkiAy/I5GbSzcLNbsU0FIk7PzFbEROAjXyc8sx
+         IIgMgwBXpO8hvVUZYFNwntEr080P9/pZasIjZbAIvUia2wWYh6Cr/EtD6gKd4XiisdvC
+         8CkwlkopNlVORPeA0dsvJsDqkKFLuPCI7/Wtp7Fgnqzkmm+EtDlvNCKw12oLkbeE+X44
+         IB7Q==
+X-Gm-Message-State: AOAM53371sdhaIulMpigEhXX5DHejQD8N9rUQPeZDN2uneDu6+K9H0JT
+        vI+O+drbjzttvmTnf/HEhjUKSA==
+X-Google-Smtp-Source: ABdhPJwmaLN1NSMSGFo0uwnuNY059nYyRtqZVSuz1JztPm/dzXwvfwgkAcmuxoNDA0S+IlGMwxsw4A==
+X-Received: by 2002:a63:f25:0:b0:401:d066:2727 with SMTP id e37-20020a630f25000000b00401d0662727mr700401pgl.386.1655142846731;
+        Mon, 13 Jun 2022 10:54:06 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f20-20020a17090a639400b001ea75a02805sm7735594pjj.52.2022.06.13.10.54.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 10:54:06 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 17:54:02 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+4688c50a9c8e68e7aaa1@syzkaller.appspotmail.com>
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Subject: Re: [syzbot] WARNING in handle_exception_nmi (2)
+Message-ID: <Yqd5upAHNOxD0wrQ@google.com>
+References: <0000000000000a5eae05d8947adb@google.com>
+ <0000000000003719fc05e13b37e3@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4.9 000/167] 4.9.318-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220613094840.720778945@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000003719fc05e13b37e3@google.com>
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 03:07, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.318 release.
-> There are 167 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, Jun 12, 2022, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 > 
-> Responses should be made by Wed, 15 Jun 2022 09:47:08 +0000.
-> Anything received after that time might be too late.
+> HEAD commit:    7a68065eb9cd Merge tag 'gpio-fixes-for-v5.19-rc2' of git:/..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=177df408080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4688c50a9c8e68e7aaa1
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12087173f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16529343f00000
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.318-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+4688c50a9c8e68e7aaa1@syzkaller.appspotmail.com
 > 
-> thanks,
-> 
-> greg k-h
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 3609 at arch/x86/kvm/vmx/vmx.c:4896 handle_exception_nmi+0xfdc/0x1190 arch/x86/kvm/vmx/vmx.c:4896
+> Modules linked in:
+> CPU: 0 PID: 3609 Comm: syz-executor169 Not tainted 5.19.0-rc1-syzkaller-00303-g7a68065eb9cd #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+I'm pretty sure this is a bug in GCE's L0 KVM.  Per syzbot's bisection, the WARN
+repros all the way back to v5.11 on GCE.  The test is doing VMWRITE from its L1
+(effective L2) with a memory operand that takes a #PF.  The #PF ends up in L1,
+which triggers the splat as KVM (real L1) isn't intercepting #PFs.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+I've repro'd this on a GCE host running a GCE kernel, and verified the same host
+running a v5.18 kernel does _not_ trigger the splat.
+
+I'll route this to someone internally.
+
+> RIP: 0010:handle_exception_nmi+0xfdc/0x1190 arch/x86/kvm/vmx/vmx.c:4896
+> Code: 0f 84 c8 f3 ff ff e8 33 5c 58 00 48 89 ef c7 85 84 0d 00 00 00 00 00 00 e8 21 35 ec ff 41 89 c4 e9 af f3 ff ff e8 14 5c 58 00 <0f> 0b e9 69 f6 ff ff e8 08 5c 58 00 be f5 ff ff ff bf 01 00 00 00
+> RSP: 0018:ffffc9000309faf8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff88801ba1d880 RSI: ffffffff8122171c RDI: 0000000000000001
+> RBP: ffff88807cd88000 R08: 0000000000000001 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000001 R12: 00000000a0000975
+> R13: ffff88807cd88248 R14: 0000000000000000 R15: 0000000080000300
+> FS:  0000555556c8d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000000 CR3: 00000000229ca000 CR4: 00000000003526e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 00000000b8fecd19 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __vmx_handle_exit arch/x86/kvm/vmx/vmx.c:6174 [inline]
+>  vmx_handle_exit+0x498/0x1950 arch/x86/kvm/vmx/vmx.c:6191
+>  vcpu_enter_guest arch/x86/kvm/x86.c:10361 [inline]
+>  vcpu_run arch/x86/kvm/x86.c:10450 [inline]
+>  kvm_arch_vcpu_ioctl_run+0x4208/0x66f0 arch/x86/kvm/x86.c:10654
+>  kvm_vcpu_ioctl+0x570/0xf30 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3944
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7f56efaee199
+> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffc37353158 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f56efaee199
+> RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
+> RBP: 00007f56efab1bf0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f56efab1c80
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> 

@@ -2,155 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F86A547D91
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD472547D98
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbiFMCND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
+        id S230440AbiFMCU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235855AbiFMCNB (ORCPT
+        with ESMTP id S230422AbiFMCU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:13:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9A912AD1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 19:12:59 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1655086377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Or2rbY8MjbpIj8wbtfD9FjomH8TXd2sOJsV3nzxdHE=;
-        b=EBvH6LzinBUvol2iP9BgQPuybJCqyYmeGqcIVfjEGC9DrfWosOQWwaiTkeGGUhlDmRLzG4
-        3ItJ7jSbWTyPzqlceGy+Vx+9kPrykEsMDoJkTQD3ZVxDDi6dyyegkJzLjRvSVfXzTYUhPo
-        4pGHTmD4a+X/beB5H75zhMe0fEzZYMll71sJvAsnk1zE1syfc1lc84edGRUXdhoXCYYK7D
-        m17nF2fADJq6sZtiSep69M7b59t0ovhXvCOVJEf/eGor/Izb3Tn6E3Kx7n1tAzV3jF8Kj1
-        PUZF8OE54FKqmR6mPXcwtmfRQ8aWYBPiqmNy43CljDcAiIhIbccf2xi32w636Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1655086377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Or2rbY8MjbpIj8wbtfD9FjomH8TXd2sOJsV3nzxdHE=;
-        b=WaG2qSsKx0Tslybo4icUP2xx8YIHPGtfXmoEfKqf6ki0G1uT+Uu7XJV/XzIl1fEWmzJ1oj
-        lCRScQwaJXnLkQCA==
-To:     paulmck@kernel.org
-Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org,
-        pmladek@suse.com, Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [BUG] 8e274732115f ("printk: extend console_lock for
- per-console locking")
-In-Reply-To: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
-References: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
-Date:   Mon, 13 Jun 2022 04:18:56 +0206
-Message-ID: <87v8t5l39z.fsf@jogness.linutronix.de>
+        Sun, 12 Jun 2022 22:20:57 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BE913F10;
+        Sun, 12 Jun 2022 19:20:55 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LLwFY3xzQzRj51;
+        Mon, 13 Jun 2022 10:17:37 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 10:20:53 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <james.smart@broadcom.com>, <dick.kennedy@broadcom.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND --next] scsi: lpfc: Use memset_startat() helper in lpfc_nvmet_xmt_fcp_op_cmp
+Date:   Mon, 13 Jun 2022 10:18:51 +0800
+Message-ID: <20220613021851.59699-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLACK autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-10, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> I have started getting rcutorture shutdown-time hangs when running
-> against recent mainline, and bisected back to the 8e274732115f ("printk:
-> extend console_lock for per-console locking") commit.  These hangs go
-> away (or at least their probability drops dramatically) if I build with
-> CONFIG_PREEMPTION=n -and- CONFIG_NO_HZ=y (not n!), at least assuming
-> that I also boot with "nohz_full=0-N".
->
-> Attempts to debug using rcutorture's "--gdb" argument result in
-> "[Inferior 1 (process 1) exited normally]", but with the same truncated
-> console-log output as when running without "--gdb".  This suggests
-> that the kernel really did run to completion and halt as expected,
-> but that the shutdown-time printk() output was lost.  Furthermore, if I
-> use the gdb "hbreak" command to set a breakpoint at kernel_power_off(),
-> it really does hit that breakpoint.  This would not happen in the case
-> of a kernel hang.
->
-> So, given that I can hit that breakpoint, what should I ask gdb to
-> show me?
+Use memset_startat() helper to simplify the code, no functional change
+in this patch.
 
-If you also compile with CONFIG_GDB_SCRIPTS=y then you can use the
-defined "lx-dmesg" gdb command to see if the messages are in the
-ringbuffer.
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ drivers/scsi/lpfc/lpfc_nvmet.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-(You may need to add:
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index c0ee0b39075d..c3cb7e8a2a7c 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -722,7 +722,7 @@ lpfc_nvmet_xmt_fcp_op_cmp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdwqe,
+ 	struct lpfc_nvmet_tgtport *tgtp;
+ 	struct nvmefc_tgt_fcp_req *rsp;
+ 	struct lpfc_async_xchg_ctx *ctxp;
+-	uint32_t status, result, op, start_clean, logerr;
++	uint32_t status, result, op, logerr;
+ 	struct lpfc_wcqe_complete *wcqe = &rspwqe->wcqe_cmpl;
+ #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
+ 	int id;
+@@ -820,9 +820,7 @@ lpfc_nvmet_xmt_fcp_op_cmp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdwqe,
+ 		/* lpfc_nvmet_xmt_fcp_release() will recycle the context */
+ 	} else {
+ 		ctxp->entry_cnt++;
+-		start_clean = offsetof(struct lpfc_iocbq, cmd_flag);
+-		memset(((char *)cmdwqe) + start_clean, 0,
+-		       (sizeof(struct lpfc_iocbq) - start_clean));
++		memset_startat(cmdwqe, 0, cmd_flag);
+ #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
+ 		if (ctxp->ts_cmd_nvme) {
+ 			ctxp->ts_isr_data = cmdwqe->isr_timestamp;
+-- 
+2.17.1
 
-add-auto-load-safe-path /path/to/linux/scripts/gdb/vmlinux-gdb.py
-
-to your $HOME/.gdbinit)
-
-But since you are hitting the breakpoint, the messages will be there.
-
-> Alternatively, this reproduces on a variety of x86 platforms, so you
-> should be able reproduce it as follows [1]:
->
-> 	git checkout v5.19-rc1
-> 	tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 2 --configs "TREE01" --gdb --kconfig "CONFIG_DEBUG_INFO_NONE=n CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y" --trust-make
->
-> This builds a kernel, boots it, and then tells you how to launch gdb
-> (presumably in some other window).  Once you give launch gdb and give
-> it the suggested commands, the kernel runs for two minutes under qemu,
-> then shuts down.  I used the following gdb commands to set the breakpoint
-> and run the kernel:
->
-> 	target remote :1234  # suggested by the rcutorture script
-> 	hbreak kernel_power_off  # added by me
-> 	continue  # suggested by the rcutorture script
-
-Thanks. Nice helper scripts. With this I could easily reproduce the
-issue.
-
-As I suspected, the final printk's cannot direct print because the
-kthread was printing. Using the below patch did seem to address your
-problem. But this is probably not the way forward.
-
-What I have not figured out is why this problem does not exist when only
-the kthread patch (but not the "extend console_lock" patch) is
-applied. Somehow the console_lock is magically providing some sort of
-synchronization in the end. Or maybe it is just the increased lock
-contention that helps out.
-
-It seems we need some sort of console_flush_on_panic() for non-panic
-situations that is not as violent as console_flush_on_panic().
-
-@Petr, does it make sense to add the below patch to mainline? It is only
-marginally helpful because it performs the direct printing in the wrong
-context. Really we need that final pr_emerg("Power down\n") to be a
-successful direct print so that the buffer is fully flushed before
-hitting machine_power_off(). In fact, the below patch could make things
-worse because the printing kthread could take over printing from that
-final pr_emerg().
-
-John Ogness
-
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index ea3dd55709e7..5950586008fa 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -3841,6 +3841,18 @@ static int printk_kthread_func(void *data)
- 		console_kthread_printing_exit();
- 
- 		mutex_unlock(&con->lock);
-+
-+		/*
-+		 * The kernel may have transitioned to a direct printing
-+		 * state, but any printk calls may not have direct printed
-+		 * because this thread was printing its message. Grab and
-+		 * release the console lock to flush out any pending
-+		 * messages on all consoles.
-+		 */
-+		if (allow_direct_printing()) {
-+			console_lock();
-+			console_unlock();
-+		}
- 	}
- 
- 	con_printk(KERN_INFO, con, "printing thread stopped\n");

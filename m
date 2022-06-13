@@ -2,154 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427E8549BA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261B4549B9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbiFMSfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S245288AbiFMSfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245511AbiFMSf2 (ORCPT
+        with ESMTP id S245736AbiFMSet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:35:28 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1AE6439;
-        Mon, 13 Jun 2022 08:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655134972; x=1686670972;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m8YDmG7CVT6t+y4DSNge1YApMVBVkN5F0wgxXF4G1vY=;
-  b=GkvQlMNowfxqLWzbnndmKWBVBmDaRoTR4/HwZaMXNJ6R81d2Ko6RHw3L
-   67u+/aaWpJ3F6B8fX7BNWhoAplRMGkklANHvxUZR7p+bItDyiJcqMDEu0
-   TOF3YPOfQVYTBHkDh+80A9penvjZetUtJyr4kQvpzRV2/whWobq2qbXhS
-   g=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 13 Jun 2022 08:42:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 08:42:51 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 13 Jun 2022 08:42:51 -0700
-Received: from [10.110.74.141] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 13 Jun
- 2022 08:42:49 -0700
-Message-ID: <b12a3e95-44b2-7075-2b77-f382f0d38cf7@quicinc.com>
-Date:   Mon, 13 Jun 2022 08:42:48 -0700
-MIME-Version: 1.0
+        Mon, 13 Jun 2022 14:34:49 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80138.outbound.protection.outlook.com [40.107.8.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBEBEA0;
+        Mon, 13 Jun 2022 08:44:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dFECvAeyNmG+7iJ1NuL/E0u1a8ECQCHseqyee1O+Z9RZPYnUw1C+umE08c/D32sB4wj2K9WS36qQsD+AdOYflmuKpbO+k1KQx5Yg+U2PMym8lLfv+e0QhH+5VcIeXv97TJjB6fFYaW+hwZifzfVgm5QMALSATymKyixxhZjqeBAf7izpXKdXzB4Nnb1xiagOJcczcIaltphe48yqno4F7CSe97Fp0l8MV/jIE373djFCUFBnRUXOLBRYxbK6eushNkW4f3rOTSWAoTg4ll1WZAWYL5pON4JV0/y+FFuWySjcq6W2TfAHeFu2VYaNfdfjCBcHbSq4SN89JrjMqS0uiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GT6kCWQlMPODIzu7SyaYRQJqFP6y0QUtnMMflCPsrjY=;
+ b=iJ3kd7uMxSJv9HCuDH3VqGdtbCwZmuCNaFBP3z1fCxeHWAP8GLlHnPNAstzCuHTRXs7VoIEgLi58bgbfSlYKbefbNmUzFYdPDm16+bfh4KK/o2XAZxxVMqAVJtVcITq/I2byulNsKk2dHsW466fB2xY0dkrphBaSx0W3IjuMV5o566hICplNGfnFavGuypUUg8g0EHezOI4JuAX/HfM9pc0tVEtaKp6uyMm09CFPNoFr15PTeVjgtdymJo+RtFwmM57G4jZP2V0SM9ZXAfGOgHgk7/kmo1kkaZ3rqlX3cOnrA97l3AADu9sGvelLVrlV9RBa/tuUtaqUt6IcwQvO+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GT6kCWQlMPODIzu7SyaYRQJqFP6y0QUtnMMflCPsrjY=;
+ b=Ggom9GUz0K+5txM0+cJkFKAiUNVREQfI+rgFngRDolCONjXP4CFrJyynGzl6pSIk7nk4HlTH44AdRZ4M6Bnlj1K+nUFzPfwuAsTGAMqe1zSGzG1vN1jcMQJpg0C49SKZqZW7YdKCqxsZAzYDcuIK3UCOzWadTgr7VVdP2CvMP00=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
+ by AM6PR02MB4582.eurprd02.prod.outlook.com (2603:10a6:20b:3d::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Mon, 13 Jun
+ 2022 15:44:00 +0000
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::6c12:cd95:b34:7dde]) by AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::6c12:cd95:b34:7dde%4]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 15:43:59 +0000
+Message-ID: <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
+Date:   Mon, 13 Jun 2022 17:43:57 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v4] drm/msm/dp: force link training for display resolution
- change
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dianders@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1653687133-32331-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n519jUEQK565OFVevvyoF49rgTazf4McjKmDS8mfDrWwyQ@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n519jUEQK565OFVevvyoF49rgTazf4McjKmDS8mfDrWwyQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3
+Content-Language: sv
+To:     Wolfram Sang <wsa@kernel.org>, Codrin.Ciubotariu@microchip.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        kamel.bouhara@bootlin.com
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <YqdQoJbsgwjQ9PYh@shikoro>
+From:   Peter Rosin <peda@axentia.se>
+In-Reply-To: <YqdQoJbsgwjQ9PYh@shikoro>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: GV3P280CA0010.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:b::11) To AM0PR02MB4436.eurprd02.prod.outlook.com
+ (2603:10a6:208:ed::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 245e55b1-cc6a-4f3b-b70c-08da4d5388a5
+X-MS-TrafficTypeDiagnostic: AM6PR02MB4582:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR02MB4582343C711BB1A323F86AF2BCAB9@AM6PR02MB4582.eurprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Knv/3JrIrGNnCb9DTUJK/gxFmglNInIeU9ut/gi4DPc98A4IQIll1NfU/NyJXICk+FGRg+N9Se18ahxE6h8u2tluhaCYljxYGaoMCRvnZS7kXSrX1N70Tng4yTf7sRGf+9Dow+xZWTpnpJ7ogsa87YDkYHBSRgraQWg63TXnIlBPQZV78TUuDAdI+eOwZydlotzaFWG5EvktTg9OHpSmLSViY+iMMaFHKPy9RUEKRBwP3eyLNDo4v4YIqAymaPvmg1uvH0r6mGJTp/cU1QDUZGxkHCtZtxLkqSLg2uJO9FXEh8/qAptZI7ZiBIootkI7Hd5HvHrYbJ145U5p8bas0SpxoXeJCqPeKW03/wglopBsktOTLUpCUhbe4jjCKuz++YYtHY1ub19cnDSHWe9wxCjkdKrruFJCAfivBhpKBRG8zK8/c0VDfjliRm1FgkQOFjmlzbaYEvWMADH53SASTUZk3XYO4ldwsvPc6Kz9aFDxlZXWU5YlPbVhlr1pjq4IEC8iUocBpytECR2f+5vRszaZA7/fZ2+rNpl9TK0PVGH4IN8DzKM0SSFVkxerzcyyOp7hYyGUK5P9vOVcayz9li3UvQU+66XREfeEg7LFZhgy/mmKvX0+DK3VaY5LKZuW5F83zpdymr+QR8LaNJO7aHVeD2sTB0epSqXBOIoGnEcDhMMRHx9mwmUZV23FvpGQI6dR5SwXS90012ekuS48NIrdArsZPMoQu4CqtR6GjmA4aPFoW2GiWwSYNTmpPJyt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(346002)(39840400004)(366004)(186003)(2616005)(41300700001)(4744005)(508600001)(921005)(2906002)(66946007)(36756003)(38100700002)(316002)(31686004)(86362001)(8936002)(6506007)(5660300002)(7416002)(26005)(66476007)(8676002)(66556008)(6512007)(31696002)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzlFRXIvR0NMOHhTZHNzVWtWQ3JZTHZmU08rOXNUNlBRYVBMN2dMSE1sMi9x?=
+ =?utf-8?B?V01pQkNtQUxCSXIxOENTOW9iUm9JdEtqd1poc3FSY2wxM01RUFNwR25xUXli?=
+ =?utf-8?B?SEM2ZDE4MkhWckp6UWR4K1EwOC9CS2dROXpPYUdZMEwzcEpNdis3TjNkRHph?=
+ =?utf-8?B?QUhWOGpGNUJVSEU5VTFkNE9EeWlSeUVEVHRZYVN4a21JWnZOSUtLU2VEdzVo?=
+ =?utf-8?B?aHBaQjZiWmw4YWtoSGhteFgrb0tzRjRFeDlvQXNIQWZjV3FrazlScW9SZ0xL?=
+ =?utf-8?B?UUNaSUxubU9vT1RMa2hxc1UvbFFFR1paaS9lVzNveTc0eEZGZm82ejZVRXpp?=
+ =?utf-8?B?UWlPT0NtN3Brd0xFbkZONE1rbVp6a1piMjlxNzA3YW1WcjlFYzJOdHFjVVRC?=
+ =?utf-8?B?bzdQUXpOMGg3VllTSjRzZEtBY1NobWpIa1ZrUVdXL0ZUUTQ0M1lrNkk2RC9I?=
+ =?utf-8?B?OElmV0pBMGVWYS8vK21sM1R1UW85MllaeTZ6cnJvRTRhNHhlT2tOYXhLLy9V?=
+ =?utf-8?B?TXY2Z0FIcHJBTFlxNWZUV3lVVUFPdzNocCtsaHBITkROTlpzdUt6NWJSdGRB?=
+ =?utf-8?B?RmN1SU1WM2FCd0o4UzdMR2JtQ3pvSlIvV2NuaWl6Z2Uzbk5WQ3kwOXJuLzV1?=
+ =?utf-8?B?dFN2NHBaa1NLenpZYTZMaWhiNmRCZ28wSGZNNmFpN3cxcW84OFZkcWxuVVpk?=
+ =?utf-8?B?WEZvbk9CM1lQaGQ1WmhueUdvVlAweVExUEdMV0RibzU3czREUkVNeXAyS1V6?=
+ =?utf-8?B?R0ZWem54NEFIdEN3Z3Qwbk9hQitYNWlETUhFejg4MzQ1MEgyRk1BaEtDVVRz?=
+ =?utf-8?B?U0tiU1ZiSm4xWW9GUU01eXMxSGJ2MUpvNEJmVXdFcWpjZnpmOHlMVTF3eTNT?=
+ =?utf-8?B?U2hxV1F5ZXZKNDI2NGphTmRKWWE2SlZJVWRWNG9OMkFncDR3Tis5TDFMWkh0?=
+ =?utf-8?B?ZUpqUEJRa3Vjb0NlMFlWclBpWkRwOVNxekJkME5yRTF5NW5VZmJzS1h1MFFF?=
+ =?utf-8?B?ME5iczdRVHcvWExOME9wVkFRVW85RnoxU2lJSGRHMnorSERhaktWVDdZWU16?=
+ =?utf-8?B?RHVtb1htWnpRK0dPTmVFMkhvemVIb1BFeVZkQVQrSXQwNVlWNmNQdHBKMVVo?=
+ =?utf-8?B?K3FYRlVuVHJzUEZsWTFOaU9NbDRRVDloQ0txSlZqL2p3b3lrZXFkeU9zYmtJ?=
+ =?utf-8?B?bHVhVnZBZWJobXRFVURsbFg2ZGlxVWRkOFJhVmxyaGlXbitnc3hySVRQSEFq?=
+ =?utf-8?B?RG40RTBaMnFRQUp3SmQ2Y2JZN2xKQlFNbEY2aUxNQzcwU20ySUNxdHFJN0xo?=
+ =?utf-8?B?dlEyNkZ6WUYrdDUvTVJDQk1YVWFQRjFaeTRhYTZ2VHY0QzZwK1gyRXRYUmg5?=
+ =?utf-8?B?c2ZIQmQyWTRBSFBuSWZ1NkJHM3Q3VE5Jd05OeWxveFIrV01UMU1sMXBaNXZQ?=
+ =?utf-8?B?Q3QxbjM4aHRBRUZLUGFEQTJWMXQxelBEdkFVREx4SlBzTmZWMUl0LzYvaG15?=
+ =?utf-8?B?Vkd5SmZ2TzNLQS94YVEyeTVJZFF6YllsTGtDaGEwbWJSaWhISHhUM0tOTWsw?=
+ =?utf-8?B?UHpmeUFLdlVHMXRka0I4OTVQU2NZNnVqNXBwUXhnVVU2cnltVnFSZkl6cDYx?=
+ =?utf-8?B?bllkbUsyQVJrY01NdmR2ckVJekNyVDFwSnQ1RlMzb3p0a3ZPSXJuQ1dKaVRZ?=
+ =?utf-8?B?VlA0RDZISjAzcXNsTGYyTW91YlN4NldSTGRBSzlWZU93LysrU05OOEhzU2RP?=
+ =?utf-8?B?aHovb1Noc1NSZEdHSGNpVGlaeVV2c3p6T25IVGNmaEZLQy9FTkxhNFNmOTkx?=
+ =?utf-8?B?T1lra08wUlQyYk91b3EzTmVwZHMvR0xrYVJRVzk2ZHJ1Q1Bmc3krbWpKT2U3?=
+ =?utf-8?B?YlVZRVFVamhWUkE3SEJWQmp5UnlYQXU1TDk4QWlqN2tXZTdCT0orbk1Ba1FN?=
+ =?utf-8?B?L1Uzd1lTN0dXRzc1WWNnbHhPYnNxa3BTZ25JcWVURSt2WTBoTmtDbU1iazF2?=
+ =?utf-8?B?bEhNQlR0SHJhQU02bTNiN09TNnpVRFJBb3BrRCthOEZ0V2tBdHIrOUw0RjV4?=
+ =?utf-8?B?S2xGdUxPZkJISkhXTnJrNmoxU1lEZmlYbmdFNnUrNGxobXFYQ1VCZVdBTyth?=
+ =?utf-8?B?bWlqQ2hkOGJoWEF2VGo1NUZlUE1RaGdtYkM1c2RXRDZiOC9TeXdTMnExU3Y0?=
+ =?utf-8?B?bDVoVHhUN1AzQ3ZoVmdlM0hkNjR1NzhlaFkwdnJZemtrZXdmUHg0SjlGcllL?=
+ =?utf-8?B?YnozWWQwMzZtOXp6RDcraWNYTjQveThpL01oMWxqblBvaUQ1cTk5YytqSHhV?=
+ =?utf-8?B?WkJNQ0VMVGJ2c29mWmFLNXNTZ0ZnbUM0WjVyYnpialRBYkE1UWkvQT09?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 245e55b1-cc6a-4f3b-b70c-08da4d5388a5
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 15:43:59.8876
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kSL/LbAoVqp4uGb8bYW3VxlmYn6x6DysaltZAmZjCVebQM7FH7IDIU/CA4xrtQp9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR02MB4582
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
-On 6/10/2022 2:04 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-05-27 14:32:13)
->> During display resolution changes display have to be disabled first
->> followed by display enabling with new resolution. Display disable
->> will turn off both pixel clock and main link clock so that main link
->> have to be re trained during display enable to have new video stream
-> s/re/re-/
->
->> flow again. At current implementation, display enable function manually
->> kicks up irq_hpd_handle which will read panel link status and start link
->> training if link status is not in sync state. However, there is rare
->> case that a particular panel links status keep staying in sync for
->> some period of time after main link had been shut down previously at
->> display disabled. Main link retraining will not be executed by
->> irq_hdp_handle() if the link status read from pane shows it is in
-> s/pane/panel/
->
->> sync state. If this was happen, then video stream of newer display
->> resolution will fail to be transmitted to panel due to main link is
->> not in sync between host and panel. This patch force main link always
->> be retrained during display enable procedure to prevent this rare
->> failed case from happening. Also this implementation are more
->> efficient than manual kicking off irq_hpd_handle function.
-> The description makes it sound like the link status is not updated,
-> sometimes. Isn't that the real issue here? Not that link training needs
-> to be done again (which it always does apparently), but that disabling
-> the display doesn't wait for the link to go down. Or disabling the link
-> is causing some sort of glitch on the sink causing it to report the
-> status as OK when it really isn't.
+2022-06-13 at 16:58, Wolfram Sang wrote:
+> Hi Codrin,
+> 
+>> could you please apply this patch-set [1] and let us know if it 
+>> addresses your issue?
+> 
+> Any comments to the comments I gave to [1]? :)
 
-As soon as mainlink teared down, sink has to reflect the mainlink at out 
-of synch state in real time.
+I replied to patch 1/3 and 2/3 but have not seen them on the lists and
+patchwork also appears to be in the dark.
+Did the replies make it anywhere? Should I resend?
 
-link re-training always required for display resolution changes since 
-resolution changes will involve link configuration changes, such as 2 
-lanes change to 1 changes or 5.7G link rate changes to 2.7G or vise 
-versa. Therefore there is no need to check sinker's main link status to 
-decide re training is required or not.
+Cheers,
+Peter
 
-
-
->> Changes in v2:
->> -- set force_link_train flag on DP only (is_edp == false)
->>
->> Changes in v3:
->> -- revise commit  text
->> -- add Fixes tag
->>
->> Changes in v4:
->> -- revise commit  text
->>
->> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
->> index c388323..370348d 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -1688,10 +1689,14 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->>
->>          state =  dp_display->hpd_state;
->>
->> -       if (state == ST_DISPLAY_OFF)
->> +       if (state == ST_DISPLAY_OFF) {
->>                  dp_display_host_phy_init(dp_display);
->>
->> -       dp_display_enable(dp_display, 0);
->> +               if (!dp->is_edp)
-> Does this assume eDP has one resolution? I don't understand why eDP is
-> special here, especially if eDP has more than one resolution available
-> it seems like we would want to retrain the link regardless.
->
->> +                       force_link_train = true;
->> +       }
->> +
->> +       dp_display_enable(dp_display, force_link_train);
->>
->>          rc = dp_display_post_enable(dp);
->>          if (rc) {

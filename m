@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9CF54977F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA729548AA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358944AbiFMNIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S1380145AbiFMNxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356950AbiFMM6P (ORCPT
+        with ESMTP id S1379215AbiFMNuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:58:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0A61A9;
-        Mon, 13 Jun 2022 04:17:25 -0700 (PDT)
+        Mon, 13 Jun 2022 09:50:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA67C2A435;
+        Mon, 13 Jun 2022 04:33:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0C01DCE116E;
-        Mon, 13 Jun 2022 11:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239E5C34114;
-        Mon, 13 Jun 2022 11:17:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0550DB80E93;
+        Mon, 13 Jun 2022 11:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671A9C3411C;
+        Mon, 13 Jun 2022 11:33:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119042;
-        bh=EmEjY/2oupTS6JKEbxG775P6fh8XyKSAcBZ6LBmEp34=;
+        s=korg; t=1655120000;
+        bh=QDH42gKm5gGWv+NIEhenKt9NGcU0y959xwFHE/pD/gM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wooAU7Ka4GGhZm/inGrdTpT2vmqfUO2oUFCn/G/8ZLzvYtieqkgJEfWZdY9xUHGst
-         No9cstXk0d5PEFmgzZVgVaAtNTLoUOdPRCpf5twdu+lSW+FohSwjApTRWACVHoPdI5
-         5wbR/FquOEXy7O3Z6SosUhB2CLCttC+QTWmkkXQg=
+        b=asd2nRPfUGfDNN2GNnpet3qBRD5ZopxXPKlkZZjHFMRuteKSQbktiXjT1z+B2Jpn0
+         lcwAzWsYg4AXwIBFSA+XCmNcFXDottFVCi04mmJbpX7K2HKt83dOTZaw6e+r8ZAMjB
+         QcwNPgBQhkqyjMhZiJxPqyngkM6HWLPOOhDScPEI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hugh Dickens <hughd@google.com>,
-        Greg Ungerer <gerg@linux-m68k.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 120/247] m68knommu: set ZERO_PAGE() to the allocated zeroed page
+Subject: [PATCH 5.18 197/339] af_unix: Fix a data-race in unix_dgram_peer_wake_me().
 Date:   Mon, 13 Jun 2022 12:10:22 +0200
-Message-Id: <20220613094926.603648110@linuxfoundation.org>
+Message-Id: <20220613094932.642406521@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Ungerer <gerg@linux-m68k.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit dc068f46217970d9516f16cd37972a01d50dc055 ]
+[ Upstream commit 662a80946ce13633ae90a55379f1346c10f0c432 ]
 
-The non-MMU m68k pagetable ZERO_PAGE() macro is being set to the
-somewhat non-sensical value of "virt_to_page(0)". The zeroth page
-is not in any way guaranteed to be a page full of "0". So the result
-is that ZERO_PAGE() will almost certainly contain random values.
+unix_dgram_poll() calls unix_dgram_peer_wake_me() without `other`'s
+lock held and check if its receive queue is full.  Here we need to
+use unix_recvq_full_lockless() instead of unix_recvq_full(), otherwise
+KCSAN will report a data-race.
 
-We already allocate a real "empty_zero_page" in the mm setup code shared
-between MMU m68k and non-MMU m68k. It is just not hooked up to the
-ZERO_PAGE() macro for the non-MMU m68k case.
-
-Fix ZERO_PAGE() to use the allocated "empty_zero_page" pointer.
-
-I am not aware of any specific issues caused by the old code.
-
-Link: https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#t
-Reported-by: Hugh Dickens <hughd@google.com>
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+Fixes: 7d267278a9ec ("unix: avoid use-after-free in ep_remove_wait_queue")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Link: https://lore.kernel.org/r/20220605232325.11804-1-kuniyu@amazon.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/m68k/include/asm/pgtable_no.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/unix/af_unix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/m68k/include/asm/pgtable_no.h b/arch/m68k/include/asm/pgtable_no.h
-index 87151d67d91e..bce5ca56c388 100644
---- a/arch/m68k/include/asm/pgtable_no.h
-+++ b/arch/m68k/include/asm/pgtable_no.h
-@@ -42,7 +42,8 @@ extern void paging_init(void);
-  * ZERO_PAGE is a global shared page that is always zero: used
-  * for zero-mapped memory areas etc..
-  */
--#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-+extern void *empty_zero_page;
-+#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index e71a312faa1e..4aed12e94221 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -490,7 +490,7 @@ static int unix_dgram_peer_wake_me(struct sock *sk, struct sock *other)
+ 	 * -ECONNREFUSED. Otherwise, if we haven't queued any skbs
+ 	 * to other and its full, we will hang waiting for POLLOUT.
+ 	 */
+-	if (unix_recvq_full(other) && !sock_flag(other, SOCK_DEAD))
++	if (unix_recvq_full_lockless(other) && !sock_flag(other, SOCK_DEAD))
+ 		return 1;
  
- /*
-  * All 32bit addresses are effectively valid for vmalloc...
+ 	if (connected)
 -- 
 2.35.1
 

@@ -2,112 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FB054803D
+	by mail.lfdr.de (Postfix) with ESMTP id C294554803E
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbiFMHOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 03:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39156 "EHLO
+        id S239016AbiFMHPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 03:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239305AbiFMHOS (ORCPT
+        with ESMTP id S235615AbiFMHPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:14:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD451A3A6;
-        Mon, 13 Jun 2022 00:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655104457; x=1686640457;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wvl/B4oq3q+IXNEFYXE9Z2uZbSwi0g50OFlczbgIglM=;
-  b=GaXj+bO3X8cjT8yYIyMQcjSzBxupw+qwQ+zBiWfLjfVA5vP8J1FfOeaT
-   WL85qviOcLHGw15H5pzoEz6zrM/ep9dmcRNa8M85l6xzYClNKSt57PI5U
-   O8xGs+1vCNaiafarHsv6GtWFVCpS372zhOxF/b7i+l9rRFqhcvdmsiJ2M
-   h3PWI7ZxIxSIyCk7+VY38pi69Wyfrstqp/yEnicP1Jv0t1Njg0r9t+Q3j
-   Y5hfFiEvm9FzqvFVOwV1/SRids14hdmDJfNxzF5EmTLtGQdCzVwFlVTfA
-   Sdo8yeAb5ikDcv7s43B3swXxl/0Dn8Ak9qqZNCmY+0s98GzV+IHjEdlnh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="303586783"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="303586783"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 00:14:16 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="639571875"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.193])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 00:14:14 -0700
-Message-ID: <f4fd942e-2bc8-b70b-d8ec-56690750efbb@intel.com>
-Date:   Mon, 13 Jun 2022 10:14:12 +0300
+        Mon, 13 Jun 2022 03:15:07 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375491A3A6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:15:06 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id bo5so5001345pfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ryeH9bTEtbNft6a8+l0Ww/QD0tPIB9O2GIzjchd0JQ8=;
+        b=7Z2m+UanT7leluCE0awhNxUgN/zvt+QgLX41xEJAkZ+hZl9VI2EHpDcYFUppZ9BKoY
+         50fge9XUhht5/9Jy98ZmwWcEyX6y0D12e8O+OcFKcGMtINA54VotW1Re/vgDyk53Ukdm
+         IHxc1+r+vMC9HH0wgZhf2TJdBx5q2rbxsUSIztrzJbjkJ804j6UTeS5RqqRNrRkuRW6M
+         zyXgQD365z1Sc+96lW/fEZVdEBCWAefn+rXwdENfblHqcGEtDQrRctODB4Opn2iWL40a
+         99tK75i+ilgO4NFf/w7KwY3VOplAn0WgtizKYpUhR3effzvDCve7a3XIeOS6hX6DqZzx
+         pZMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ryeH9bTEtbNft6a8+l0Ww/QD0tPIB9O2GIzjchd0JQ8=;
+        b=JFwQnpVegLwpleVxFtHu/RZZ4a073GHAr8NTyuGOZN0PEK44RaOgfMPSgNyA4MKpgo
+         CfCxp4Dqkae9SogZe8uB4m85EmUsHUgHgxbzSEbp5dEH0vWx6Z2+PWYKa1y3JmyOOHTo
+         YzLln7ATzMevlroJObQ+ine8dDEfoQ+cmdPzGzpqhqw/J7UdFAntqKsCXn+29ZcMotXf
+         7Cl3fexOgQk0VChP+u5hN2r+lt3feDAAXtfXzkVFIE5ggui+8JhsLNDR5yInOYgu743X
+         HPFbTX6lZsn1pY0qY63grU6ZFCSiJydHCGj3Lkg2COgJd9dE6BK3qJnjdSTHK3yqeBI8
+         8Q2Q==
+X-Gm-Message-State: AOAM531T/UO1KFbpeZC76nuV5mhVHsyUb46karGfqHrCr0zWLfzBeia+
+        5b26qL5gmQ55VihI8DfkV6I/LQ==
+X-Google-Smtp-Source: ABdhPJzHmwvUgcBKOSqyUg5vAuPr66x5IQQXFrWOSIsM17SUv8GbRUJd/cQ3bPRDaT8Mt+cFaz4YcQ==
+X-Received: by 2002:a63:4853:0:b0:3fa:dc6:7ac2 with SMTP id x19-20020a634853000000b003fa0dc67ac2mr50831303pgk.298.1655104505694;
+        Mon, 13 Jun 2022 00:15:05 -0700 (PDT)
+Received: from localhost ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id s2-20020a17090302c200b00168d9630b49sm2205628plk.307.2022.06.13.00.15.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 00:15:05 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 15:15:02 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm/kmemleak: Use _irq lock/unlock variants in
+ kmemleak_scan/_clear()
+Message-ID: <Yqbj9vxGrpuBlMuc@FVFYT0MHHV2J.usts.net>
+References: <20220612183301.981616-1-longman@redhat.com>
+ <20220612183301.981616-2-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH 5/5] mmc: sdhci-st: Obviously always return success in
- remove callback
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     kernel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220610211257.102071-1-u.kleine-koenig@pengutronix.de>
- <20220610211257.102071-5-u.kleine-koenig@pengutronix.de>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220610211257.102071-5-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220612183301.981616-2-longman@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/06/22 00:12, Uwe Kleine-König wrote:
-> sdhci_pltfm_unregister() returns 0 unconditionally and returning an
-> error in a platform remove callback isn't very sensible. (The only
-> effect of the latter is that the device core emits a generic warning and
-> then removes the device anyhow.)
+On Sun, Jun 12, 2022 at 02:32:59PM -0400, Waiman Long wrote:
+> The kmemleak_scan() function is called only from the kmemleak scan
+> thread or from write to the kmemleak debugfs file. Both are in task
+> context and so we can directly use the simpler _irq() lock/unlock calls
+> instead of the more complex _irqsave/_irqrestore variants.
 > 
-> So return 0 unconditionally to make it obvious there is no error
-> forwarded to the upper layers.
+> Similarly, kmemleak_clear() is called only from write to the kmemleak
+> debugfs file. The same change can be applied.
 > 
-> This is a preparation for making platform remove callbacks return void.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-> ---
->  drivers/mmc/host/sdhci-st.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-st.c b/drivers/mmc/host/sdhci-st.c
-> index d41582c21aa3..6415916fbd91 100644
-> --- a/drivers/mmc/host/sdhci-st.c
-> +++ b/drivers/mmc/host/sdhci-st.c
-> @@ -440,15 +440,14 @@ static int sdhci_st_remove(struct platform_device *pdev)
->  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
->  	struct reset_control *rstc = pdata->rstc;
-> -	int ret;
->  
-> -	ret = sdhci_pltfm_unregister(pdev);
-> +	sdhci_pltfm_unregister(pdev);
->  
->  	clk_disable_unprepare(pdata->icnclk);
->  
->  	reset_control_assert(rstc);
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  #ifdef CONFIG_PM_SLEEP
-
+Thanks.

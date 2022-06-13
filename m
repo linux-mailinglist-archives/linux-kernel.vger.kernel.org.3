@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583585487BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1807E548723
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354667AbiFMMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S1377040AbiFMNZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357946AbiFMMtQ (ORCPT
+        with ESMTP id S1377500AbiFMNUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:49:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF78662CEB;
-        Mon, 13 Jun 2022 04:12:03 -0700 (PDT)
+        Mon, 13 Jun 2022 09:20:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E83E6B039;
+        Mon, 13 Jun 2022 04:23:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF8BB60B6F;
-        Mon, 13 Jun 2022 11:11:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094EEC3411C;
-        Mon, 13 Jun 2022 11:11:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D83E3B80EB9;
+        Mon, 13 Jun 2022 11:23:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3947EC34114;
+        Mon, 13 Jun 2022 11:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118719;
-        bh=mx3pn1YskJhKscmJKJAUboZ3tuQwZvcQyJ2kGO9cZds=;
+        s=korg; t=1655119399;
+        bh=k8N7I45uscrRs3fgcM4PAu2rtmy65eaSx9DYg7wNjog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hYez+POy2ZWuRJMLSqtD6lf/RQcrlBLRlYcSc6t0JtxAB6A7ASSWcgY/zolx2J7sZ
-         A4iHyw5cW96kCEW4YN648J59V56ZB0G8wBQEj90AwYSaJMDl1ipzcEEjqIQ4IInivc
-         XM5r+i1MOqYcxGWw4dOkIm7E8uIkbdKgGn7hBW4M=
+        b=Si9n16ac1c7Xfrz1WHYf9tR6BvI2RZ26nGCiCRm/xbrVLLkOiEt24Hh1AE4Ivg0tN
+         b2XyGuSIFjREQiyWz8ugPye1pdvUmuyNEKfLMcH2nPxCVaDc19Sm2GsbKg4vMb4d9d
+         +1Mx5XnH0gQ1cgTLQ+9FZ6PPQNw9PYK8O4CyUN/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Ying <victor.liu@oss.nxp.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH 5.10 165/172] drm/atomic: Force bridge self-refresh-exit on CRTC switch
-Date:   Mon, 13 Jun 2022 12:12:05 +0200
-Message-Id: <20220613094923.273674277@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Frode Nordahl <frode.nordahl@canonical.com>,
+        Ilya Maximets <i.maximets@ovn.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 225/247] net: openvswitch: fix misuse of the cached connection on tuple changes
+Date:   Mon, 13 Jun 2022 12:12:07 +0200
+Message-Id: <20220613094929.770311789@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +56,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Ilya Maximets <i.maximets@ovn.org>
 
-commit e54a4424925a27ed94dff046db3ce5caf4b1e748 upstream.
+commit 2061ecfdf2350994e5b61c43e50e98a7a70e95ee upstream.
 
-It's possible to change which CRTC is in use for a given
-connector/encoder/bridge while we're in self-refresh without fully
-disabling the connector/encoder/bridge along the way. This can confuse
-the bridge encoder/bridge, because
-(a) it needs to track the SR state (trying to perform "active"
-    operations while the panel is still in SR can be Bad(TM)); and
-(b) it tracks the SR state via the CRTC state (and after the switch, the
-    previous SR state is lost).
+If packet headers changed, the cached nfct is no longer relevant
+for the packet and attempt to re-use it leads to the incorrect packet
+classification.
 
-Thus, we need to either somehow carry the self-refresh state over to the
-new CRTC, or else force an encoder/bridge self-refresh transition during
-such a switch.
+This issue is causing broken connectivity in OpenStack deployments
+with OVS/OVN due to hairpin traffic being unexpectedly dropped.
 
-I choose the latter, so we disable the encoder (and exit PSR) before
-attaching it to the new CRTC (where we can continue to assume a clean
-(non-self-refresh) state).
+The setup has datapath flows with several conntrack actions and tuple
+changes between them:
 
-This fixes PSR issues seen on Rockchip RK3399 systems with
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c.
+  actions:ct(commit,zone=8,mark=0/0x1,nat(src)),
+          set(eth(src=00:00:00:00:00:01,dst=00:00:00:00:00:06)),
+          set(ipv4(src=172.18.2.10,dst=192.168.100.6,ttl=62)),
+          ct(zone=8),recirc(0x4)
 
-Change in v2:
+After the first ct() action the packet headers are almost fully
+re-written.  The next ct() tries to re-use the existing nfct entry
+and marks the packet as invalid, so it gets dropped later in the
+pipeline.
 
-- Drop "->enable" condition; this could possibly be "->active" to
-  reflect the intended hardware state, but it also is a little
-  over-specific. We want to make a transition through "disabled" any
-  time we're exiting PSR at the same time as a CRTC switch.
-  (Thanks Liu Ying)
+Clearing the cached conntrack entry whenever packet tuple is changed
+to avoid the issue.
 
-Cc: Liu Ying <victor.liu@oss.nxp.com>
-Cc: <stable@vger.kernel.org>
-Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Sean Paul <seanpaul@chromium.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220228122522.v2.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid
+The flow key should not be cleared though, because we should still
+be able to match on the ct_state if the recirculation happens after
+the tuple change but before the next ct() action.
+
+Cc: stable@vger.kernel.org
+Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
+Reported-by: Frode Nordahl <frode.nordahl@canonical.com>
+Link: https://mail.openvswitch.org/pipermail/ovs-discuss/2022-May/051829.html
+Link: https://bugs.launchpad.net/ubuntu/+source/ovn/+bug/1967856
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Link: https://lore.kernel.org/r/20220606221140.488984-1-i.maximets@ovn.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_atomic_helper.c |   16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ net/openvswitch/actions.c   |    6 ++++++
+ net/openvswitch/conntrack.c |    4 +++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -996,9 +996,19 @@ crtc_needs_disable(struct drm_crtc_state
- 		return drm_atomic_crtc_effectively_active(old_state);
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -373,6 +373,7 @@ static void set_ip_addr(struct sk_buff *
+ 	update_ip_l4_checksum(skb, nh, *addr, new_addr);
+ 	csum_replace4(&nh->check, *addr, new_addr);
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
+ 	*addr = new_addr;
+ }
  
- 	/*
--	 * We need to run through the crtc_funcs->disable() function if the CRTC
--	 * is currently on, if it's transitioning to self refresh mode, or if
--	 * it's in self refresh mode and needs to be fully disabled.
-+	 * We need to disable bridge(s) and CRTC if we're transitioning out of
-+	 * self-refresh and changing CRTCs at the same time, because the
-+	 * bridge tracks self-refresh status via CRTC state.
-+	 */
-+	if (old_state->self_refresh_active &&
-+	    old_state->crtc != new_state->crtc)
-+		return true;
+@@ -420,6 +421,7 @@ static void set_ipv6_addr(struct sk_buff
+ 		update_ipv6_checksum(skb, l4_proto, addr, new_addr);
+ 
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
+ 	memcpy(addr, new_addr, sizeof(__be32[4]));
+ }
+ 
+@@ -660,6 +662,7 @@ static int set_nsh(struct sk_buff *skb,
+ static void set_tp_port(struct sk_buff *skb, __be16 *port,
+ 			__be16 new_port, __sum16 *check)
+ {
++	ovs_ct_clear(skb, NULL);
+ 	inet_proto_csum_replace2(check, skb, *port, new_port, false);
+ 	*port = new_port;
+ }
+@@ -699,6 +702,7 @@ static int set_udp(struct sk_buff *skb,
+ 		uh->dest = dst;
+ 		flow_key->tp.src = src;
+ 		flow_key->tp.dst = dst;
++		ovs_ct_clear(skb, NULL);
+ 	}
+ 
+ 	skb_clear_hash(skb);
+@@ -761,6 +765,8 @@ static int set_sctp(struct sk_buff *skb,
+ 	sh->checksum = old_csum ^ old_correct_csum ^ new_csum;
+ 
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
 +
-+	/*
-+	 * We also need to run through the crtc_funcs->disable() function if
-+	 * the CRTC is currently on, if it's transitioning to self refresh
-+	 * mode, or if it's in self refresh mode and needs to be fully
-+	 * disabled.
- 	 */
- 	return old_state->active ||
- 	       (old_state->self_refresh_active && !new_state->enable) ||
+ 	flow_key->tp.src = sh->source;
+ 	flow_key->tp.dst = sh->dest;
+ 
+--- a/net/openvswitch/conntrack.c
++++ b/net/openvswitch/conntrack.c
+@@ -1336,7 +1336,9 @@ int ovs_ct_clear(struct sk_buff *skb, st
+ 
+ 	nf_ct_put(ct);
+ 	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
+-	ovs_ct_fill_key(skb, key, false);
++
++	if (key)
++		ovs_ct_fill_key(skb, key, false);
+ 
+ 	return 0;
+ }
 
 

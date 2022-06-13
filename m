@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272005488FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBC3548B6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245060AbiFMKam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S1355837AbiFMMeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343681AbiFMK2l (ORCPT
+        with ESMTP id S1355440AbiFMMaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:28:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFE924F32;
-        Mon, 13 Jun 2022 03:20:13 -0700 (PDT)
+        Mon, 13 Jun 2022 08:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDCA5B889;
+        Mon, 13 Jun 2022 04:07:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DAE3B80E94;
-        Mon, 13 Jun 2022 10:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7726DC34114;
-        Mon, 13 Jun 2022 10:20:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8AE060F9A;
+        Mon, 13 Jun 2022 11:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 931A1C34114;
+        Mon, 13 Jun 2022 11:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115610;
-        bh=omYW723Pcyyws1DWQ6cjmtBfLQRTncsgZjV1sJNcIeI=;
+        s=korg; t=1655118419;
+        bh=i4UrdNh/w1HqKxEbhvH7EbnVz3Tuhaih/X1iFaZXl0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T4hXSPaIufdeoJHq0XLHFjjW/F5xz5Zr2z6hylI2ig0rdBhMh0gZ7joxFyQLoU9+w
-         ZKnRNUtFOHGfpQmr1L/fWKq70VTHvr2ZL9Sib4F/vjepEqqlfgQIcEm7QixXBG9re1
-         3NYrcSVAyiEHwkCBHyfPaE8SV9xPfGSE5OfN/25U=
+        b=u3+ohHfRn8Pj3VDYeBfSYGNKeDkAld5rAQtyrGptphioBC9mstKmZCkV1OnGvDD15
+         3VYPAEIEKpS71riP7HMzZULDTVSCw52DigS/V3KZ7HkQodKjl4Qkoxv/VnQlKgLtuX
+         Oey74g0dNEW5rh/yfspo86S7e185Ms8chhyWwsKU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Vincent Ray <vray@kalrayinc.com>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 136/167] net: xfrm: unexport __init-annotated xfrm4_protocol_init()
+Subject: [PATCH 5.10 050/172] net: sched: fixed barrier to prevent skbuff sticking in qdisc backlog
 Date:   Mon, 13 Jun 2022 12:10:10 +0200
-Message-Id: <20220613094912.803578623@linuxfoundation.org>
+Message-Id: <20220613094902.444603190@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +56,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Vincent Ray <vray@kalrayinc.com>
 
-[ Upstream commit 4a388f08d8784af48f352193d2b72aaf167a57a1 ]
+[ Upstream commit a54ce3703613e41fe1d98060b62ec09a3984dc28 ]
 
-EXPORT_SYMBOL and __init is a bad combination because the .init.text
-section is freed up after the initialization. Hence, modules cannot
-use symbols annotated __init. The access to a freed symbol may end up
-with kernel panic.
+In qdisc_run_begin(), smp_mb__before_atomic() used before test_bit()
+does not provide any ordering guarantee as test_bit() is not an atomic
+operation. This, added to the fact that the spin_trylock() call at
+the beginning of qdisc_run_begin() does not guarantee acquire
+semantics if it does not grab the lock, makes it possible for the
+following statement :
 
-modpost used to detect it, but it has been broken for a decade.
+if (test_bit(__QDISC_STATE_MISSED, &qdisc->state))
 
-Recently, I fixed modpost so it started to warn it again, then this
-showed up in linux-next builds.
+to be executed before an enqueue operation called before
+qdisc_run_begin().
 
-There are two ways to fix it:
+As a result the following race can happen :
 
-  - Remove __init
-  - Remove EXPORT_SYMBOL
+           CPU 1                             CPU 2
 
-I chose the latter for this case because the only in-tree call-site,
-net/ipv4/xfrm4_policy.c is never compiled as modular.
-(CONFIG_XFRM is boolean)
+      qdisc_run_begin()               qdisc_run_begin() /* true */
+        set(MISSED)                            .
+      /* returns false */                      .
+          .                            /* sees MISSED = 1 */
+          .                            /* so qdisc not empty */
+          .                            __qdisc_run()
+          .                                    .
+          .                              pfifo_fast_dequeue()
+ ----> /* may be done here */                  .
+|         .                                clear(MISSED)
+|         .                                    .
+|         .                                smp_mb __after_atomic();
+|         .                                    .
+|         .                                /* recheck the queue */
+|         .                                /* nothing => exit   */
+|   enqueue(skb1)
+|         .
+|   qdisc_run_begin()
+|         .
+|     spin_trylock() /* fail */
+|         .
+|     smp_mb__before_atomic() /* not enough */
+|         .
+ ---- if (test_bit(MISSED))
+        return false;   /* exit */
 
-Fixes: 2f32b51b609f ("xfrm: Introduce xfrm_input_afinfo to access the the callbacks properly")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Steffen Klassert <steffen.klassert@secunet.com>
+In the above scenario, CPU 1 and CPU 2 both try to grab the
+qdisc->seqlock at the same time. Only CPU 2 succeeds and enters the
+bypass code path, where it emits its skb then calls __qdisc_run().
+
+CPU1 fails, sets MISSED and goes down the traditionnal enqueue() +
+dequeue() code path. But when executing qdisc_run_begin() for the
+second time, after enqueuing its skbuff, it sees the MISSED bit still
+set (by itself) and consequently chooses to exit early without setting
+it again nor trying to grab the spinlock again.
+
+Meanwhile CPU2 has seen MISSED = 1, cleared it, checked the queue
+and found it empty, so it returned.
+
+At the end of the sequence, we end up with skb1 enqueued in the
+backlog, both CPUs out of __dev_xmit_skb(), the MISSED bit not set,
+and no __netif_schedule() called made. skb1 will now linger in the
+qdisc until somebody later performs a full __qdisc_run(). Associated
+to the bypass capacity of the qdisc, and the ability of the TCP layer
+to avoid resending packets which it knows are still in the qdisc, this
+can lead to serious traffic "holes" in a TCP connection.
+
+We fix this by replacing the smp_mb__before_atomic() / test_bit() /
+set_bit() / smp_mb__after_atomic() sequence inside qdisc_run_begin()
+by a single test_and_set_bit() call, which is more concise and
+enforces the needed memory barriers.
+
+Fixes: 89837eb4b246 ("net: sched: add barrier to ensure correct ordering for lockless qdisc")
+Signed-off-by: Vincent Ray <vray@kalrayinc.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220526001746.2437669-1-eric.dumazet@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/xfrm4_protocol.c | 1 -
- 1 file changed, 1 deletion(-)
+ include/net/sch_generic.h | 36 ++++++++----------------------------
+ 1 file changed, 8 insertions(+), 28 deletions(-)
 
-diff --git a/net/ipv4/xfrm4_protocol.c b/net/ipv4/xfrm4_protocol.c
-index dccefa9d84cf..5a4b19834fe2 100644
---- a/net/ipv4/xfrm4_protocol.c
-+++ b/net/ipv4/xfrm4_protocol.c
-@@ -298,4 +298,3 @@ void __init xfrm4_protocol_init(void)
- {
- 	xfrm_input_register_afinfo(&xfrm4_input_afinfo);
- }
--EXPORT_SYMBOL(xfrm4_protocol_init);
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index 1042c449e7db..769764bda7a8 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -163,37 +163,17 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+ 		if (spin_trylock(&qdisc->seqlock))
+ 			goto nolock_empty;
+ 
+-		/* Paired with smp_mb__after_atomic() to make sure
+-		 * STATE_MISSED checking is synchronized with clearing
+-		 * in pfifo_fast_dequeue().
++		/* No need to insist if the MISSED flag was already set.
++		 * Note that test_and_set_bit() also gives us memory ordering
++		 * guarantees wrt potential earlier enqueue() and below
++		 * spin_trylock(), both of which are necessary to prevent races
+ 		 */
+-		smp_mb__before_atomic();
+-
+-		/* If the MISSED flag is set, it means other thread has
+-		 * set the MISSED flag before second spin_trylock(), so
+-		 * we can return false here to avoid multi cpus doing
+-		 * the set_bit() and second spin_trylock() concurrently.
+-		 */
+-		if (test_bit(__QDISC_STATE_MISSED, &qdisc->state))
++		if (test_and_set_bit(__QDISC_STATE_MISSED, &qdisc->state))
+ 			return false;
+ 
+-		/* Set the MISSED flag before the second spin_trylock(),
+-		 * if the second spin_trylock() return false, it means
+-		 * other cpu holding the lock will do dequeuing for us
+-		 * or it will see the MISSED flag set after releasing
+-		 * lock and reschedule the net_tx_action() to do the
+-		 * dequeuing.
+-		 */
+-		set_bit(__QDISC_STATE_MISSED, &qdisc->state);
+-
+-		/* spin_trylock() only has load-acquire semantic, so use
+-		 * smp_mb__after_atomic() to ensure STATE_MISSED is set
+-		 * before doing the second spin_trylock().
+-		 */
+-		smp_mb__after_atomic();
+-
+-		/* Retry again in case other CPU may not see the new flag
+-		 * after it releases the lock at the end of qdisc_run_end().
++		/* Try to take the lock again to make sure that we will either
++		 * grab it or the CPU that still has it will see MISSED set
++		 * when testing it in qdisc_run_end()
+ 		 */
+ 		if (!spin_trylock(&qdisc->seqlock))
+ 			return false;
 -- 
 2.35.1
 

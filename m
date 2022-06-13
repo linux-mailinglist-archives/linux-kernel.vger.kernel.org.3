@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2639A548785
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502EA548708
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359035AbiFMMI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S1383791AbiFMOYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359150AbiFMMFT (ORCPT
+        with ESMTP id S1382933AbiFMOVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EEC2AC0;
-        Mon, 13 Jun 2022 03:59:01 -0700 (PDT)
+        Mon, 13 Jun 2022 10:21:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DE9A2060;
+        Mon, 13 Jun 2022 04:43:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FA6DB80D31;
-        Mon, 13 Jun 2022 10:59:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14332C34114;
-        Mon, 13 Jun 2022 10:58:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E24DDB80E2C;
+        Mon, 13 Jun 2022 11:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F04C34114;
+        Mon, 13 Jun 2022 11:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117939;
-        bh=TzLegqWaKtcXylWJBZtdaGnyCgqrSdPcY8fQTn74aqA=;
+        s=korg; t=1655120636;
+        bh=vgKo32g688iQ+3jnemU02qj9Di+VAnXSWSB12XS0bkQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kkydkAgL6AisLG/BAUMNlkQkp+gzqPeuU0smIOfRXko4SBPmtDNywl7BgIP8Ptp2a
-         0Zz5ohLC9UCqfc4ht03kxLtCMMTpsyzLaW1L1hsylPBjyNRkXUiymtHqJvZtDYWxkq
-         b8IkJVswptS99LaZ297vx/QlOG5uz3Hq6goi6nf8=
+        b=s60zLo+sBW00tl9LGqgOLTeFk3199TvbnoDVxToq8HQ9zdHzDXhmB70LtD9D31ckx
+         nNSFD8uaz/8nHeamtcdk6CfzU7SqmTyDCN0tXpo6zhTXo8glgREIpkRjCBU+sfGaIz
+         pbcWOSNEkb1G7R5Yz5RtFUiwYXCWglOwMT39Ohe0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 4.19 173/287] iommu/msm: Fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 103/298] sfc: fix wrong tx channel offset with efx_separate_tx_channels
 Date:   Mon, 13 Jun 2022 12:09:57 +0200
-Message-Id: <20220613094929.118092532@linuxfoundation.org>
+Message-Id: <20220613094928.075637456@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Íñigo Huguet <ihuguet@redhat.com>
 
-commit 8b9ad480bd1dd25f4ff4854af5685fa334a2f57a upstream.
+[ Upstream commit c308dfd1b43ef0d4c3e57b741bb3462eb7a7f4a2 ]
 
-The bug is here:
-	if (!iommu || iommu->dev->of_node != spec->np) {
+tx_channel_offset is calculated in efx_allocate_msix_channels, but it is
+also calculated again in efx_set_channels because it was originally done
+there, and when efx_allocate_msix_channels was introduced it was
+forgotten to be removed from efx_set_channels.
 
-The list iterator value 'iommu' will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found (in fact,
-it will point to a invalid structure object containing HEAD).
+Moreover, the old calculation is wrong when using
+efx_separate_tx_channels because now we can have XDP channels after the
+TX channels, so n_channels - n_tx_channels doesn't point to the first TX
+channel.
 
-To fix the bug, use a new value 'iter' as the list iterator, while use
-the old value 'iommu' as a dedicated variable to point to the found one,
-and remove the unneeded check for 'iommu->dev->of_node != spec->np'
-outside the loop.
+Remove the old calculation from efx_set_channels, and add the
+initialization of this variable if MSI or legacy interrupts are used,
+next to the initialization of the rest of the related variables, where
+it was missing.
 
-Cc: stable@vger.kernel.org
-Fixes: f78ebca8ff3d6 ("iommu/msm: Add support for generic master bindings")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220501132823.12714-1-xiam0nd.tong@gmail.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 3990a8fffbda ("sfc: allocate channels for XDP tx queues")
+Reported-by: Tianhao Zhao <tizhao@redhat.com>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/msm_iommu.c |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/sfc/efx_channels.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -638,16 +638,19 @@ static void insert_iommu_master(struct d
- static int qcom_iommu_of_xlate(struct device *dev,
- 			       struct of_phandle_args *spec)
- {
--	struct msm_iommu_dev *iommu;
-+	struct msm_iommu_dev *iommu = NULL, *iter;
- 	unsigned long flags;
- 	int ret = 0;
+diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
+index eec0db76d888..8ab9358a1c3d 100644
+--- a/drivers/net/ethernet/sfc/efx_channels.c
++++ b/drivers/net/ethernet/sfc/efx_channels.c
+@@ -309,6 +309,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
+ 		efx->n_channels = 1;
+ 		efx->n_rx_channels = 1;
+ 		efx->n_tx_channels = 1;
++		efx->tx_channel_offset = 0;
+ 		efx->n_xdp_channels = 0;
+ 		efx->xdp_channel_offset = efx->n_channels;
+ 		rc = pci_enable_msi(efx->pci_dev);
+@@ -329,6 +330,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
+ 		efx->n_channels = 1 + (efx_separate_tx_channels ? 1 : 0);
+ 		efx->n_rx_channels = 1;
+ 		efx->n_tx_channels = 1;
++		efx->tx_channel_offset = 1;
+ 		efx->n_xdp_channels = 0;
+ 		efx->xdp_channel_offset = efx->n_channels;
+ 		efx->legacy_irq = efx->pci_dev->irq;
+@@ -957,10 +959,6 @@ int efx_set_channels(struct efx_nic *efx)
+ 	struct efx_channel *channel;
+ 	int rc;
  
- 	spin_lock_irqsave(&msm_iommu_lock, flags);
--	list_for_each_entry(iommu, &qcom_iommu_devices, dev_node)
--		if (iommu->dev->of_node == spec->np)
-+	list_for_each_entry(iter, &qcom_iommu_devices, dev_node) {
-+		if (iter->dev->of_node == spec->np) {
-+			iommu = iter;
- 			break;
-+		}
-+	}
+-	efx->tx_channel_offset =
+-		efx_separate_tx_channels ?
+-		efx->n_channels - efx->n_tx_channels : 0;
+-
+ 	if (efx->xdp_tx_queue_count) {
+ 		EFX_WARN_ON_PARANOID(efx->xdp_tx_queues);
  
--	if (!iommu || iommu->dev->of_node != spec->np) {
-+	if (!iommu) {
- 		ret = -ENODEV;
- 		goto fail;
- 	}
+-- 
+2.35.1
+
 
 

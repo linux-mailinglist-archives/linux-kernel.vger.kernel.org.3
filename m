@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1AB5494D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33658548B98
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244707AbiFMK1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S1353268AbiFMMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245613AbiFMKYo (ORCPT
+        with ESMTP id S1350794AbiFMMYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:24:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23834205FD;
-        Mon, 13 Jun 2022 03:19:14 -0700 (PDT)
+        Mon, 13 Jun 2022 08:24:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44D3326C8;
+        Mon, 13 Jun 2022 04:05:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 76173CE110D;
-        Mon, 13 Jun 2022 10:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F953C34114;
-        Mon, 13 Jun 2022 10:19:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30845613E9;
+        Mon, 13 Jun 2022 11:05:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDA1C3411E;
+        Mon, 13 Jun 2022 11:05:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115550;
-        bh=C/1wgkfCoPY65kNeAyGytBp4GA2vjRzYayx29RryE+s=;
+        s=korg; t=1655118336;
+        bh=KA4ckKEwTMQjAMAYZw3XIsMlaWXwigYBmOCaRpLBCGY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vEJooU6sAU23InhpIhgpU2Yj+QVxDzG3gshBt4rNfvuDvXWkx/NBROeilN2Xc9zIl
-         h2p2gzrbtraqxwWnDqdn3pTu//3cjdgGHSC6mJeqstZemYC0fKxEumUhj+ParL16w4
-         4yapYdSzU2gDZue/ZoixL6UWc5OZEfv3ussM11vM=
+        b=hl23M0MDH8TMA6eALVbTr1qnAgoYO3kmqj488DxZXP1rtoetjfAqIDj3fjc0AOBXP
+         d3JJvvB3J11NdLNwBW14keLuSLIWVeygRDtTnuoQBbx/3uN14WzhrPVoQFOy+kFFr2
+         DzhLjklx18HzkVZf4CvMDVoJXj83NdD3lyCbRolU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 125/167] jffs2: fix memory leak in jffs2_do_fill_super
+Subject: [PATCH 5.10 039/172] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
 Date:   Mon, 13 Jun 2022 12:09:59 +0200
-Message-Id: <20220613094910.147360722@linuxfoundation.org>
+Message-Id: <20220613094859.757132852@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,66 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit c14adb1cf70a984ed081c67e9d27bc3caad9537c ]
+[ Upstream commit 52bb1cb7118564166b04d52387bd8403632f5190 ]
 
-If jffs2_iget() or d_make_root() in jffs2_do_fill_super() returns
-an error, we can observe the following kmemleak report:
+Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
+CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
+to have parity, thus add PARENB.
 
---------------------------------------------
-unreferenced object 0xffff888105a65340 (size 64):
-  comm "mount", pid 710, jiffies 4302851558 (age 58.239s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff859c45e5>] kmem_cache_alloc_trace+0x475/0x8a0
-    [<ffffffff86160146>] jffs2_sum_init+0x96/0x1a0
-    [<ffffffff86140e25>] jffs2_do_mount_fs+0x745/0x2120
-    [<ffffffff86149fec>] jffs2_do_fill_super+0x35c/0x810
-    [<ffffffff8614aae9>] jffs2_fill_super+0x2b9/0x3b0
-    [...]
-unreferenced object 0xffff8881bd7f0000 (size 65536):
-  comm "mount", pid 710, jiffies 4302851558 (age 58.239s)
-  hex dump (first 32 bytes):
-    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
-    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
-  backtrace:
-    [<ffffffff858579ba>] kmalloc_order+0xda/0x110
-    [<ffffffff85857a11>] kmalloc_order_trace+0x21/0x130
-    [<ffffffff859c2ed1>] __kmalloc+0x711/0x8a0
-    [<ffffffff86160189>] jffs2_sum_init+0xd9/0x1a0
-    [<ffffffff86140e25>] jffs2_do_mount_fs+0x745/0x2120
-    [<ffffffff86149fec>] jffs2_do_fill_super+0x35c/0x810
-    [<ffffffff8614aae9>] jffs2_fill_super+0x2b9/0x3b0
-    [...]
---------------------------------------------
+Incorrect CSIZE results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
 
-This is because the resources allocated in jffs2_sum_init() are not
-released. Call jffs2_sum_exit() to release these resources to solve
-the problem.
-
-Fixes: e631ddba5887 ("[JFFS2] Add erase block summary support (mount time improvement)")
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
+Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-8-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jffs2/fs.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/st-asc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/jffs2/fs.c b/fs/jffs2/fs.c
-index d3c9e4c82e57..610e11e76f2d 100644
---- a/fs/jffs2/fs.c
-+++ b/fs/jffs2/fs.c
-@@ -597,6 +597,7 @@ int jffs2_do_fill_super(struct super_block *sb, void *data, int silent)
- 	jffs2_free_raw_node_refs(c);
- 	kvfree(c->blocks);
- 	jffs2_clear_xattr_subsystem(c);
-+	jffs2_sum_exit(c);
-  out_inohash:
- 	kfree(c->inocache_list);
-  out_wbuf:
+diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+index e7048515a79c..97d36f870f64 100644
+--- a/drivers/tty/serial/st-asc.c
++++ b/drivers/tty/serial/st-asc.c
+@@ -535,10 +535,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	/* set character length */
+ 	if ((cflag & CSIZE) == CS7) {
+ 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
++		cflag |= PARENB;
+ 	} else {
+ 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
+ 						ASC_CTL_MODE_8BIT;
++		cflag &= ~CSIZE;
++		cflag |= CS8;
+ 	}
++	termios->c_cflag = cflag;
+ 
+ 	/* set stop bit */
+ 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
 -- 
 2.35.1
 

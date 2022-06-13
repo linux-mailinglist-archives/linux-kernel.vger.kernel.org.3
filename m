@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF20548015
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F08547FBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238302AbiFMG77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 02:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
+        id S237253AbiFMGqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 02:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbiFMG75 (ORCPT
+        with ESMTP id S230380AbiFMGqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 02:59:57 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B74CB165AB
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:59:55 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 0B9761E80D53;
-        Mon, 13 Jun 2022 14:58:45 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jrgQAJbPANH4; Mon, 13 Jun 2022 14:58:42 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: renyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 98E401E80D05;
-        Mon, 13 Jun 2022 14:58:41 +0800 (CST)
-From:   Ren Yu <renyu@nfschina.com>
-To:     lgirdwood@gmail.com
-Cc:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        ckeepax@opensource.cirrus.com, srinivas.kandagatla@linaro.org,
-        rf@opensource.cirrus.com, steve@sk2.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        qixu@nfschina.com, liqiong@nfschina.com, yuzhe@nfschina.com,
-        hukun@nfschina.com, renyu@nfschina.com
-Subject: [PATCH] soc: There are several spelling mistakes. Fix them
-Date:   Mon, 13 Jun 2022 14:58:58 +0800
-Message-Id: <20220613065858.23369-1-renyu@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        Mon, 13 Jun 2022 02:46:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B3110545
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:46:11 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM27d1vMhzRj0j;
+        Mon, 13 Jun 2022 14:42:53 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 14:46:00 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 13 Jun
+ 2022 14:45:59 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <richard@nod.at>, <miquel.raynal@bootlin.com>,
+        <s.hauer@pengutronix.de>, <vigneshr@ti.com>,
+        <Artem.Bityutskiy@nokia.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
+Subject: [PATCH v2] ubi: ubi_wl_put_peb: Fix infinite loop when wear-leveling work failed
+Date:   Mon, 13 Jun 2022 14:59:04 +0800
+Message-ID: <20220613065904.326567-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,38 +52,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Ren Yu <renyu@nfschina.com>
----
- sound/soc/codecs/lm49453.c | 2 +-
- sound/soc/codecs/rt5631.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Following process will trigger an infinite loop in ubi_wl_put_peb():
 
-diff --git a/sound/soc/codecs/lm49453.c b/sound/soc/codecs/lm49453.c
-index bd0078e4499b..2eb43e93778e 100644
---- a/sound/soc/codecs/lm49453.c
-+++ b/sound/soc/codecs/lm49453.c
-@@ -1201,7 +1201,7 @@ static int lm49453_set_dai_sysclk(struct snd_soc_dai *dai, int clk_id,
- 	case 12288000:
- 	case 26000000:
- 	case 19200000:
--		/* pll clk slection */
-+		/* pll clk selection */
- 		pll_clk = 0;
- 		break;
- 	case 48000:
-diff --git a/sound/soc/codecs/rt5631.h b/sound/soc/codecs/rt5631.h
-index 8a6b99a48c7c..0caca2e1d31b 100644
---- a/sound/soc/codecs/rt5631.h
-+++ b/sound/soc/codecs/rt5631.h
-@@ -373,7 +373,7 @@
-  */
- #define RT5631_SDP_DAC_DATA_L_R_SWAP			(0x1 << 4)
+	ubifs_bgt		ubi_bgt
+ubifs_leb_unmap
+  ubi_leb_unmap
+    ubi_eba_unmap_leb
+      ubi_wl_put_peb	wear_leveling_worker
+                          e1 = rb_entry(rb_first(&ubi->used)
+			  e2 = get_peb_for_wl(ubi)
+			  ubi_io_read_vid_hdr  // return err (flash fault)
+			  out_error:
+			    ubi->move_from = ubi->move_to = NULL
+			    wl_entry_destroy(ubi, e1)
+			      ubi->lookuptbl[e->pnum] = NULL
+      retry:
+        e = ubi->lookuptbl[pnum];	// return NULL
+	if (e == ubi->move_from) {	// NULL == NULL gets true
+	  goto retry;			// infinite loop !!!
+
+$ top
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     COMMAND
+  7676 root     20   0       0      0      0 R 100.0  0.0  ubifs_bgt0_0
+
+Fix it by:
+ 1) Letting ubi_wl_put_peb() returns directly if wearl leveling entry has
+    been removed from 'ubi->lookuptbl'.
+ 2) Using 'ubi->wl_lock' protecting wl entry deletion to preventing an
+    use-after-free problem for wl entry in ubi_wl_put_peb().
+
+Fetch a reproducer in [Link].
+
+Fixes: 43f9b25a9cdd7b1 ("UBI: bugfix: protect from volume removal")
+Fixes: ee59ba8b064f692 ("UBI: Fix stale pointers in ubi->lookuptbl")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216111
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+ v1->v2: Don't split wl_entry_destroy(), since kmem_cache_free() can be
+         executed wrapped a spinlock, eg dtl_disable().
+ drivers/mtd/ubi/wl.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mtd/ubi/wl.c b/drivers/mtd/ubi/wl.c
+index 55bae06cf408..ee0100740869 100644
+--- a/drivers/mtd/ubi/wl.c
++++ b/drivers/mtd/ubi/wl.c
+@@ -973,11 +973,11 @@ static int wear_leveling_worker(struct ubi_device *ubi, struct ubi_work *wrk,
+ 	spin_lock(&ubi->wl_lock);
+ 	ubi->move_from = ubi->move_to = NULL;
+ 	ubi->move_to_put = ubi->wl_scheduled = 0;
++	wl_entry_destroy(ubi, e1);
++	wl_entry_destroy(ubi, e2);
+ 	spin_unlock(&ubi->wl_lock);
  
--/* Data Length Slection */
-+/* Data Length Selection */
- #define RT5631_SDP_I2S_DL_MASK				(0x3 << 2)
- #define RT5631_SDP_I2S_DL_16				(0x0 << 2)
- #define RT5631_SDP_I2S_DL_20				(0x1 << 2)
+ 	ubi_free_vid_buf(vidb);
+-	wl_entry_destroy(ubi, e1);
+-	wl_entry_destroy(ubi, e2);
+ 
+ out_ro:
+ 	ubi_ro_mode(ubi);
+@@ -1253,6 +1253,18 @@ int ubi_wl_put_peb(struct ubi_device *ubi, int vol_id, int lnum,
+ retry:
+ 	spin_lock(&ubi->wl_lock);
+ 	e = ubi->lookuptbl[pnum];
++	if (!e) {
++		/*
++		 * This wl entry has been removed for some errors by other
++		 * process (eg. wear leveling worker), corresponding process
++		 * (except __erase_worker, which cannot concurrent with
++		 * ubi_wl_put_peb) will set ubi ro_mode at the same time,
++		 * just ignore this wl entry.
++		 */
++		spin_unlock(&ubi->wl_lock);
++		up_read(&ubi->fm_protect);
++		return 0;
++	}
+ 	if (e == ubi->move_from) {
+ 		/*
+ 		 * User is putting the physical eraseblock which was selected to
 -- 
-2.11.0
+2.31.1
 

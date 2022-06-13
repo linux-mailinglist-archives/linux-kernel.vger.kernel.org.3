@@ -2,155 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CCB549D34
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28AA549D25
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238406AbiFMTPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
+        id S235126AbiFMTOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349196AbiFMTNo (ORCPT
+        with ESMTP id S239018AbiFMTOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:13:44 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8154650E25
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:12:02 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id s1so7935346wra.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:12:02 -0700 (PDT)
+        Mon, 13 Jun 2022 15:14:08 -0400
+Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DED8CE3D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BwfpdGVZuLzhMRO0qDkUrzUSE4uGJ0s4izOa+gswkLc=;
-        b=iyoFryyCEMOgC7rXLKu4nOmoJ4Ev3bSJmT6ed09FE5xCAAc5dBkkwtXxpcvvGQ+P+z
-         ETT+TDFbc4w3QEtd0CSTtGopVeE/ROGO0WHkEbyE/LYwiv3H3TW3pyxouKMCLv+KqkYZ
-         yNXDxA5s4wHBPNNleteRDWB0OVGKRy46fxusIatVg7fbsU3f8NuQHDDwXuooOAhihX5c
-         apRzdEm4Qcxw1Vp4x8eHSJ0zk6RBYV1Jvu3JCqD8yM8Yczm4FlFHmh8FmzU3HH+SvYZl
-         N0nY66gFj0te0BB1xSoY4rr990nbGbzyauUa8tb8y8DjQzQQuFKjHb8vPu4IK/5VClaZ
-         mw/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BwfpdGVZuLzhMRO0qDkUrzUSE4uGJ0s4izOa+gswkLc=;
-        b=w4spjPNy8d/o5JeJHgYvcEGSUeMvWcDEXwVbcRuVBClPrLPTzlSxaGwEzzl8+Ehzu0
-         gwJRoz8llqhNj/1ScRRr4/7LNN71CBN7ZO0cf1AkNFGFE3qdESVdyH3SdgFPdf1fY/+K
-         HQhvZd4uP6GURhprnBj7u6TTJc+IFMdyMiTbsIN88bS10e01//Tt8VfFBEm5y7YmpzlX
-         Y9TBsr13i0eq2bAY7dcL00xDibEKc3n0gm7PLg3eeiZ/RDgK8wupDOjraL5jnIETOlpl
-         c9L/sPQVerfG75JiU2ufx8wxTwjCJVVgWNO1ZShkHS4rFuxQ4Vu5OkhhiBJdVjRM6AWs
-         YXgg==
-X-Gm-Message-State: AJIora9TZ4WJE2Esc6zW3egJoQfcRigE4ucmKGbyFei3GDkakbKsPlaN
-        B18AiueEJvxAjqIaXP4NKuzYmK2Lztnvm0LRjlWVIg==
-X-Google-Smtp-Source: AGRyM1s6B0qb0T2WacCoWhhkywiiU+ZvFODg5mDtSwgELuEdOO1P7hQRTSX7NI4gasI6mKDBJY57NrqOabVTnciF7VA=
-X-Received: by 2002:adf:f688:0:b0:215:6e4d:4103 with SMTP id
- v8-20020adff688000000b002156e4d4103mr802713wrp.372.1655140320646; Mon, 13 Jun
- 2022 10:12:00 -0700 (PDT)
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=lHjgrdlCsJlZNExw2i+5p/H7UmbCDOq2p/NEOrPWfhI=;
+        b=LpfJ3oPYuuqg6i3ho0XikhkAPNOBaQbZr82eZv0bUP4ve0Z4PFc69HjP4A1M56gmZKZ2eeqWeEmaK
+         /bUI2rk7ZHbhQLN3iywV3rXmHhTZmEd1p2FLPwDnC7hvKoXzu9/hs2Zxr+nrvWNjhCw34+f4LZh6pZ
+         RCZs2OIgx//zHcR4YywpNgW/VFVFDy3TU6TxoiGBxMJb2k/wI0CT68I90+bLDAH02G0QrW943PVKpd
+         AsUU63h3+s0KtUXIcN+1Au7F8a79oACmCtcr/1pCrG9iPqlQmT2DjilP0pjq9DvnxVpd8eUlSAiHTT
+         hgQfucYdZ9sfLrjuWUEjgqP/jBu8daA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=lHjgrdlCsJlZNExw2i+5p/H7UmbCDOq2p/NEOrPWfhI=;
+        b=ldsO6NEhLw+vp3UB1ZOzR2Yob+FMPpcyEw0+v01Wvw2DdWcTcV26CW6XMjhQ+5z+CJAUaadOaYIWC
+         Icw4EPWAg==
+X-HalOne-Cookie: 392d8748579318f935a12eb6f32b987bbdd36c36
+X-HalOne-ID: 0764a83b-eb3c-11ec-a913-d0431ea8a290
+Received: from mailproxy3.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 0764a83b-eb3c-11ec-a913-d0431ea8a290;
+        Mon, 13 Jun 2022 17:12:40 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 19:12:38 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Liviu Dudau <Liviu.Dudau@arm.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: display: Add Arm virtual platforms
+ display
+Message-ID: <YqdwBoMldyuh+vjg@ravnborg.org>
+References: <20220613145709.3729053-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20220606222058.86688-1-yosryahmed@google.com> <20220606222058.86688-2-yosryahmed@google.com>
- <bdfea446-623c-d423-673f-496b3725ec2c@intel.com>
-In-Reply-To: <bdfea446-623c-d423-673f-496b3725ec2c@intel.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 13 Jun 2022 10:11:23 -0700
-Message-ID: <CAJD7tkbUXb7qBm1GAMDr29DcsC90_bPzwffkdtAu_Na+inVzVg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-To:     "Huang, Shaoqin" <shaoqin.huang@intel.com>
-Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613145709.3729053-1-robh@kernel.org>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 8:18 PM Huang, Shaoqin <shaoqin.huang@intel.com> wrote:
->
->
->
-> On 6/7/2022 6:20 AM, Yosry Ahmed wrote:
-> > Add NR_SECONDARY_PAGETABLE stat to count secondary page table uses, e.g.
-> > KVM mmu. This provides more insights on the kernel memory used
-> > by a workload.
-> >
-> > This stat will be used by subsequent patches to count KVM mmu
-> > memory usage.
-> >
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >   Documentation/admin-guide/cgroup-v2.rst | 5 +++++
-> >   Documentation/filesystems/proc.rst      | 4 ++++
-> >   drivers/base/node.c                     | 2 ++
-> >   fs/proc/meminfo.c                       | 2 ++
-> >   include/linux/mmzone.h                  | 1 +
-> >   mm/memcontrol.c                         | 1 +
-> >   mm/page_alloc.c                         | 6 +++++-
-> >   mm/vmstat.c                             | 1 +
-> >   8 files changed, 21 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> > index 69d7a6983f781..307a284b99189 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -1312,6 +1312,11 @@ PAGE_SIZE multiple when read back.
-> >         pagetables
-> >                   Amount of memory allocated for page tables.
-> >
-> > +       sec_pagetables
-> > +             Amount of memory allocated for secondary page tables,
-> > +             this currently includes KVM mmu allocations on x86
-> > +             and arm64.
-> > +
-> >         percpu (npn)
-> >               Amount of memory used for storing per-cpu kernel
-> >               data structures.
-> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> > index 061744c436d99..894d6317f3bdc 100644
-> > --- a/Documentation/filesystems/proc.rst
-> > +++ b/Documentation/filesystems/proc.rst
-> > @@ -973,6 +973,7 @@ You may not have all of these fields.
-> >       SReclaimable:   159856 kB
-> >       SUnreclaim:     124508 kB
-> >       PageTables:      24448 kB
-> > +    SecPageTables:    0 kB
-> >       NFS_Unstable:        0 kB
-> >       Bounce:              0 kB
-> >       WritebackTmp:        0 kB
-> > @@ -1067,6 +1068,9 @@ SUnreclaim
-> >   PageTables
-> >                 amount of memory dedicated to the lowest level of page
-> >                 tables.
-> > +SecPageTables
-> > +           amount of memory dedicated to secondary page tables, this
-> > +           currently includes KVM mmu allocations on x86 and arm64.
->
-> Just a notice. This patch in the latest 5.19.0-rc2+ have a conflict in
-> Documentation/filesystems/proc.rst file. But that's not a problem.
-
-Thanks for pointing this out. Let me know if a rebase and resend is necessary.
-
-<snip>
+Hi Rob, thanks!
+On Mon, Jun 13, 2022 at 08:57:09AM -0600, Rob Herring wrote:
+> 'arm,rtsm-display' is a panel for Arm, Ltd. virtual platforms (e.g. FVP).
+> The binding has been in use for a long time, but was never documented.
+> 
+> Some users and an example have a 'panel-dpi' compatible, but that's not
+> needed without a 'panel-timing' node which none of the users have since
+> commit 928faf5e3e8d ("arm64: dts: fvp: Remove panel timings"). The
+> example does have a 'panel-timing' node, but it should not for the
+> same reasons the node was removed in the dts files. So update the
+> example in arm,pl11x.yaml to match the schema.
+> 
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Andre Przywara <andre.przywara@arm.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>

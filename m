@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EEF54894C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F40549169
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382338AbiFMOOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        id S1358133AbiFMMBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382676AbiFMOGL (ORCPT
+        with ESMTP id S1357288AbiFML4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:06:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E655972AE;
-        Mon, 13 Jun 2022 04:41:11 -0700 (PDT)
+        Mon, 13 Jun 2022 07:56:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDA84D9DF;
+        Mon, 13 Jun 2022 03:56:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5793AB80ECE;
-        Mon, 13 Jun 2022 11:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3CB5C34114;
-        Mon, 13 Jun 2022 11:41:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BA0261347;
+        Mon, 13 Jun 2022 10:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CAAC3411C;
+        Mon, 13 Jun 2022 10:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120469;
-        bh=DWggWnX2xNbDWS0Nu1a/WLOOSmvEs+6Jfo+l1xZDVc0=;
+        s=korg; t=1655117774;
+        bh=e9Upjv2UjuVKFm0ao7tdajLsppKQwhgrBqFX6MFyU+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0FK4LbjPEMMPr8iR8Oxnwj0HLrt1j9XjiqZ5DIjHXQJE1c/vbVAeFFUFXNc2/7Vl/
-         IluMeUrWgcG9ZMgrFZeukoYkMSDxuY3JGT14zitCiLcZeuARe8EQ/eeUT7/31gBLbU
-         CPHEs7Sy4gYTDvcHCWHJbzigQVxRFIgqi251Qi3A=
+        b=J4ynSbfUWgPXO5PwdTFLljAaW924bTGM5kPqrS5dIaTYODDkDlBrjlzAC/V9QK8mC
+         Bht5H6wBOYYDozYAC9hUmUztO9BIng9V87kk69DySmb16II/qXO7rhn6SW7K01lSxL
+         cZ1C+BfdpnnGzeLK7o9OZLI34UfrK6WurFbZUl/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 044/298] watchdog: rzg2l_wdt: Fix reset control imbalance
-Date:   Mon, 13 Jun 2022 12:08:58 +0200
-Message-Id: <20220613094926.280675937@linuxfoundation.org>
+Subject: [PATCH 4.19 115/287] crypto: marvell/cesa - ECB does not IV
+Date:   Mon, 13 Jun 2022 12:08:59 +0200
+Message-Id: <20220613094927.365926335@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 33d04d0fdba9fae18c7d58364643d2c606a43dba ]
+[ Upstream commit 4ffa1763622ae5752961499588f3f8874315f974 ]
 
-Both rzg2l_wdt_probe() and rzg2l_wdt_start() calls reset_control_
-deassert() which results in a reset control imbalance.
+The DES3 ECB has an IV size set but ECB does not need one.
 
-This patch fixes reset control imbalance by removing reset_control_
-deassert() from rzg2l_wdt_start() and replaces reset_control_assert with
-reset_control_reset in rzg2l_wdt_stop() as watchdog module can be stopped
-only by a module reset. This change will allow us to restart WDT after
-stop() by configuring WDT timeout and enable registers.
-
-Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220225175320.11041-5-biju.das.jz@bp.renesas.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Fixes: 4ada483978237 ("crypto: marvell/cesa - add Triple-DES support")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/rzg2l_wdt.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/crypto/marvell/cipher.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 48dfe6e5e64f..88274704b260 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -88,7 +88,6 @@ static int rzg2l_wdt_start(struct watchdog_device *wdev)
- {
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
- 
--	reset_control_deassert(priv->rstc);
- 	pm_runtime_get_sync(wdev->parent);
- 
- 	/* Initialize time out */
-@@ -108,7 +107,7 @@ static int rzg2l_wdt_stop(struct watchdog_device *wdev)
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
- 
- 	pm_runtime_put(wdev->parent);
--	reset_control_assert(priv->rstc);
-+	reset_control_reset(priv->rstc);
- 
- 	return 0;
- }
+diff --git a/drivers/crypto/marvell/cipher.c b/drivers/crypto/marvell/cipher.c
+index 0ae84ec9e21c..c9b905efc448 100644
+--- a/drivers/crypto/marvell/cipher.c
++++ b/drivers/crypto/marvell/cipher.c
+@@ -625,7 +625,6 @@ struct skcipher_alg mv_cesa_ecb_des3_ede_alg = {
+ 	.decrypt = mv_cesa_ecb_des3_ede_decrypt,
+ 	.min_keysize = DES3_EDE_KEY_SIZE,
+ 	.max_keysize = DES3_EDE_KEY_SIZE,
+-	.ivsize = DES3_EDE_BLOCK_SIZE,
+ 	.base = {
+ 		.cra_name = "ecb(des3_ede)",
+ 		.cra_driver_name = "mv-ecb-des3-ede",
 -- 
 2.35.1
 

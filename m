@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0050354886B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A0D548812
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351001AbiFMK7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S1349823AbiFMLAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350155AbiFMKyn (ORCPT
+        with ESMTP id S1350219AbiFMKyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A12DFED;
-        Mon, 13 Jun 2022 03:29:31 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBDB1134;
+        Mon, 13 Jun 2022 03:30:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B8D660EF5;
-        Mon, 13 Jun 2022 10:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 894DBC34114;
-        Mon, 13 Jun 2022 10:29:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2227B80E94;
+        Mon, 13 Jun 2022 10:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE0BC34114;
+        Mon, 13 Jun 2022 10:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116170;
-        bh=srE8cZV7uZ5jo1lc4JV2ZCVGuEAjbdgMCcMiaUhLJPE=;
+        s=korg; t=1655116223;
+        bh=+y+tqItgn462wYbLLs6LsQooLjpGTjCvYb7UO89/G2c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k2lsznlH2w6x6QuxWFdFU1qK4sP5Dr9YRxG2bXaTpCIQInD30R/VkTU9tBGClkNeE
-         riOmwa2wKNmPHVoba+/G2pwtP34SNuIbAGCphbnBUumXv0YjBrlBjx/847CIzcQu26
-         RlANyD4N3iqszI0n+/RBjyZYuBmWwG8yyXMKYsTA=
+        b=dE2wVlg5KdYnhlW/NBL6EexHWu0x5pFvvF4VlfxdWt5B0K/8XsKG11L0zkdefOK5a
+         uHyEFNJx+o1VSiYGWDvVX+c1bVXi8QjZ39yqWkUgzn7V+y/aIly44IbwjpXLdOup9g
+         GIMElELUcnMvyS/iDfDi9Bbi3bHNjlK0JSKLqtws=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, jianghaoran <jianghaoran@kylinos.cn>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jian-Hong Pan <jhp@endlessos.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 036/411] ipv6: Dont send rs packets to the interface of ARPHRD_TUNNEL
-Date:   Mon, 13 Jun 2022 12:05:09 +0200
-Message-Id: <20220613094929.587599195@linuxfoundation.org>
+Subject: [PATCH 5.4 046/411] ACPI: PM: Block ASUS B1400CEAE from suspend to idle by default
+Date:   Mon, 13 Jun 2022 12:05:19 +0200
+Message-Id: <20220613094929.891181941@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,48 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jianghaoran <jianghaoran@kylinos.cn>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit b52e1cce31ca721e937d517411179f9196ee6135 ]
+[ Upstream commit d52848620de00cde4a3a5df908e231b8c8868250 ]
 
-ARPHRD_TUNNEL interface can't process rs packets
-and will generate TX errors
+ASUS B1400CEAE fails to resume from suspend to idle by default.  This was
+bisected back to commit df4f9bc4fb9c ("nvme-pci: add support for ACPI
+StorageD3Enable property") but this is a red herring to the problem.
 
-ex:
-ip tunnel add ethn mode ipip local 192.168.1.1 remote 192.168.1.2
-ifconfig ethn x.x.x.x
+Before this commit the system wasn't getting into deepest sleep state.
+Presumably this commit is allowing entry into deepest sleep state as
+advertised by firmware, but there are some other problems related to
+the wakeup.
 
-ethn: flags=209<UP,POINTOPOINT,RUNNING,NOARP>  mtu 1480
-	inet x.x.x.x  netmask 255.255.255.255  destination x.x.x.x
-	inet6 fe80::5efe:ac1e:3cdb  prefixlen 64  scopeid 0x20<link>
-	tunnel   txqueuelen 1000  (IPIP Tunnel)
-	RX packets 0  bytes 0 (0.0 B)
-	RX errors 0  dropped 0  overruns 0  frame 0
-	TX packets 0  bytes 0 (0.0 B)
-	TX errors 3  dropped 0 overruns 0  carrier 0  collisions 0
+As it is confirmed the system works properly with S3, set the default for
+this system to S3.
 
-Signed-off-by: jianghaoran <jianghaoran@kylinos.cn>
-Link: https://lore.kernel.org/r/20220429053802.246681-1-jianghaoran@kylinos.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Jian-Hong Pan <jhp@endlessos.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215742
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Tested-by: Jian-Hong Pan <jhp@endlessos.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/addrconf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/acpi/sleep.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index efea88fb3cd5..e29553e4f4ee 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -4202,7 +4202,8 @@ static void addrconf_dad_completed(struct inet6_ifaddr *ifp, bool bump_id,
- 	send_rs = send_mld &&
- 		  ipv6_accept_ra(ifp->idev) &&
- 		  ifp->idev->cnf.rtr_solicits != 0 &&
--		  (dev->flags&IFF_LOOPBACK) == 0;
-+		  (dev->flags & IFF_LOOPBACK) == 0 &&
-+		  (dev->type != ARPHRD_TUNNEL);
- 	read_unlock_bh(&ifp->idev->lock);
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index b0e23e3fe0d5..34966128293b 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -374,6 +374,18 @@ static const struct dmi_system_id acpisleep_dmi_table[] __initconst = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "20GGA00L00"),
+ 		},
+ 	},
++	/*
++	 * ASUS B1400CEAE hangs on resume from suspend (see
++	 * https://bugzilla.kernel.org/show_bug.cgi?id=215742).
++	 */
++	{
++	.callback = init_default_s3,
++	.ident = "ASUS B1400CEAE",
++	.matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++		DMI_MATCH(DMI_PRODUCT_NAME, "ASUS EXPERTBOOK B1400CEAE"),
++		},
++	},
+ 	{},
+ };
  
- 	/* While dad is in progress mld report's source address is in6_addrany.
 -- 
 2.35.1
 

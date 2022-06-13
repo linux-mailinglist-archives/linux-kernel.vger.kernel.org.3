@@ -2,148 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6269C549B7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CA0549B80
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245477AbiFMS3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S245495AbiFMS3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343993AbiFMS2o (ORCPT
+        with ESMTP id S245636AbiFMS3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:28:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293BDB225B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:44:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IEfVO3p8TtmbkhfyAZCfpHMcYnsk1901oHfnPETiUxk=; b=lA+oiSffR4bHoAK/vJesjSm3LC
-        iOXSHmhjhGvnJAPG5VrcmU/ECoQobY1YDOf98/cIA4KhDXRObEFXNGAW7DP+8fL9RoPxjxvtAomHS
-        mfZkq4xsCGyya7Jqtd8gAMt3nLYBBPwVHs3OxkLhk/ht34YAqqXjqQKcL67rS4qgfA68kpi1r+40Z
-        0sJvOyEP/EqWHHdKbmk6kdispjZe7A1Mp2eF7DQXxg07UNTjT3+LjdemvLPa34rKTNqc6lqZqxDx+
-        Q+jebNIZgh0VZ9oW9g9T6rA6A6aMasi7QOJG84qV822lzyCaNl/DgqZexFYzMLCtv2wEY27JKLtc7
-        cxfTlEKA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o0lII-007aoc-TQ; Mon, 13 Jun 2022 14:43:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EAE333002BE;
-        Mon, 13 Jun 2022 16:43:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D1E8D284A2B0D; Mon, 13 Jun 2022 16:43:52 +0200 (CEST)
-Date:   Mon, 13 Jun 2022 16:43:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-Message-ID: <YqdNKJllCVMci3ov@hirez.programming.kicks-ass.net>
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
+        Mon, 13 Jun 2022 14:29:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9031FB227E;
+        Mon, 13 Jun 2022 07:44:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA76B61363;
+        Mon, 13 Jun 2022 14:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85710C34114;
+        Mon, 13 Jun 2022 14:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655131474;
+        bh=mVPcnBqff4Qg8JmFyDlY5tck7ujgQlmYljTopZhsfwA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=npBL6noPLhOvqurAUFEXI06PVTFaowFh/a1v2bfo0Vhw+B1slp+Dnnj4lvQs79T6X
+         AjC24IR/OAJcjmJe822xBWn2hBBLxKE094kCn5JPa+Enqw8rWaQ+5z3XBuNHeG+qyk
+         IxnjO0S23IAU1LiHKcMRLaGfGCWJF2aZZPk4VVW+qHskXyqPAh9TbS3QaQJdt0tMHi
+         d9d1WfAhe0uGInHm2u/QYz3Gp5/eV8zmiZvvR6kkprYfdQZZoGuETNcYoMAM3bPtAk
+         aZXtqWRzHByo9LPNNrU6Epwl+4SZSLR70CvLFWdGk3CWR94CnXC/UwNYPm604Jw64j
+         ajGguXDVI04fg==
+Date:   Mon, 13 Jun 2022 16:44:30 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: add include/dt-bindings/i2c to I2C
+ SUBSYSTEM HOST DRIVERS
+Message-ID: <YqdNTgCNGT0Y5y2T@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-i2c@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220613114614.21510-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3qqK9zQnklREXAWN"
 Content-Disposition: inline
-In-Reply-To: <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220613114614.21510-1-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 04:35:11PM +0200, Peter Zijlstra wrote:
 
-> @@ -3652,17 +3697,28 @@ static noinline int visit_groups_merge(s
->  			.size = ARRAY_SIZE(itrs),
->  		};
->  		/* Events not within a CPU context may be on any CPU. */
-> -		__heap_add(&event_heap, perf_event_groups_first(groups, -1, NULL));
-> +		__heap_add(&event_heap, perf_event_groups_first(groups, -1, pmu, NULL));
->  	}
->  	evt = event_heap.data;
->  
-> -	__heap_add(&event_heap, perf_event_groups_first(groups, cpu, NULL));
-> +	__heap_add(&event_heap, perf_event_groups_first(groups, cpu, pmu, NULL));
->  
->  #ifdef CONFIG_CGROUP_PERF
->  	for (; css; css = css->parent)
-> -		__heap_add(&event_heap, perf_event_groups_first(groups, cpu, css->cgroup));
-> +		__heap_add(&event_heap, perf_event_groups_first(groups, cpu, pmu, css->cgroup));
->  #endif
->  
-> +	if (event_heap.nr) {
-> +		/*
-> +		 * XXX: For now, visit_groups_merge() gets called with pmu
-> +		 * pointer never NULL. But these functions needs to be called
-> +		 * once for each pmu if I implement pmu=NULL optimization.
-> +		 */
-> +		__link_epc((*evt)->pmu_ctx);
-> +		perf_assert_pmu_disabled((*evt)->pmu_ctx->pmu);
-> +	}
-> +
-> +
->  	min_heapify_all(&event_heap, &perf_min_heap);
->  
->  	while (event_heap.nr) {
+--3qqK9zQnklREXAWN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> @@ -3741,39 +3799,67 @@ static int merge_sched_in(struct perf_ev
->  	return 0;
->  }
->  
-> -static void
-> -ctx_pinned_sched_in(struct perf_event_context *ctx,
-> -		    struct perf_cpu_context *cpuctx)
-> +static void ctx_pinned_sched_in(struct perf_event_context *ctx, struct pmu *pmu)
->  {
-> +	struct perf_event_pmu_context *pmu_ctx;
->  	int can_add_hw = 1;
->  
-> -	if (ctx != &cpuctx->ctx)
-> -		cpuctx = NULL;
-> -
-> -	visit_groups_merge(cpuctx, &ctx->pinned_groups,
-> -			   smp_processor_id(),
-> -			   merge_sched_in, &can_add_hw);
-> +	if (pmu) {
-> +		visit_groups_merge(ctx, &ctx->pinned_groups,
-> +				   smp_processor_id(), pmu,
-> +				   merge_sched_in, &can_add_hw);
-> +	} else {
-> +		/*
-> +		 * XXX: This can be optimized for per-task context by calling
-> +		 * visit_groups_merge() only once with:
-> +		 *   1) pmu=NULL
-> +		 *   2) Ignoring pmu in perf_event_groups_cmp() when it's NULL
-> +		 *   3) Making can_add_hw a per-pmu variable
-> +		 *
-> +		 * Though, it can not be opimized for per-cpu context because
-> +		 * per-cpu rb-tree consist of pmu-subtrees and pmu-subtrees
-> +		 * consist of cgroup-subtrees. i.e. a cgroup events of same
-> +		 * cgroup but different pmus are seperated out into respective
-> +		 * pmu-subtrees.
-> +		 */
-> +		list_for_each_entry(pmu_ctx, &ctx->pmu_ctx_list, pmu_ctx_entry) {
-> +			can_add_hw = 1;
-> +			visit_groups_merge(ctx, &ctx->pinned_groups,
-> +					   smp_processor_id(), pmu_ctx->pmu,
-> +					   merge_sched_in, &can_add_hw);
-> +		}
-> +	}
->  }
+On Mon, Jun 13, 2022 at 01:46:14PM +0200, Lukas Bulwahn wrote:
+> Maintainers of the directory Documentation/devicetree/bindings/i2c
+> are also the maintainers of the corresponding directory
+> include/dt-bindings/i2c.
+>=20
+> Add the file entry for include/dt-bindings/i2c to the appropriate
+> section in MAINTAINERS.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-I'm not sure I follow.. task context can have multiple PMUs just the
-same as CPU context can, that's more or less the entire point of the
-patch.
+Applied to for-current, thanks!
+
+
+--3qqK9zQnklREXAWN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnTU4ACgkQFA3kzBSg
+KbbBHA/+Mb15/3R9zbn9P90XoGh7h9cFJqnCEDQELBlPGUXBfErYrpLpNeH2wnee
+2nXy9uZX/DZSNTCmPOzpzvb+DbZeF82xqf1XJohVFs+6NyWQxjETu9+/ink5UAet
+plEeZVBSLvhjXl/kC55cJTxMKa94pNx5isIYfG7gaXBMpFqt+Pm6ecqkUe2WxFu5
+h8T/PIw8QzjsKI+Z7Oap53QzrdomAu5GHfU+O/PjRVmL+DDTIbzJKyw9Oq4QB4S5
+h0zyIrgl2WZBjioX0GKO92H8tRiWLzyLSB5OLcff9H3WkNt7iOhEtlU1nMO9jzyg
+6Bk1872XyT0WR653s/yH27nC3aFvA0ggz4mU9YNLxdzuUwbrRhNXpHM0+340RNNL
+F8budrCM2EbepLjG8qBt6kQUKowamTOVyOSSr3E0PVmDvQryzliJ/HbSoBIE0+2J
+sCnNdzSBreQ17hOShTHkiKkENrSILErFvd+DHKbw5wRLyTnlGu60+QK0BSX8dR7m
+Q3dGbZgVZMdHmX/MQuphIARJU7X3lcunObFvbpV4HZUigKB0gNRPivmb2yvwVenB
+aQ4NnVMK2HEm4BSLmOG/Ddvc6Jowpof7kzq+AUz+z46C6EojK0sWDPA8v6Eh428j
+nOToyzaj+B+lndhZqATTfGFUMEDSpnUlgQCXTODZiZWV7+MHLbA=
+=YW+Z
+-----END PGP SIGNATURE-----
+
+--3qqK9zQnklREXAWN--

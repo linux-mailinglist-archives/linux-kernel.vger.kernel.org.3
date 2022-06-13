@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693CD548AE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540FB548D97
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345795AbiFMKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S1353747AbiFML0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345861AbiFMKeS (ORCPT
+        with ESMTP id S1353434AbiFMLTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:34:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEFC28726;
-        Mon, 13 Jun 2022 03:22:15 -0700 (PDT)
+        Mon, 13 Jun 2022 07:19:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E79B3B002;
+        Mon, 13 Jun 2022 03:41:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 977EECE0EEB;
-        Mon, 13 Jun 2022 10:22:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70999C34114;
-        Mon, 13 Jun 2022 10:22:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF409B80EA3;
+        Mon, 13 Jun 2022 10:41:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 304EDC3411C;
+        Mon, 13 Jun 2022 10:41:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115731;
-        bh=+hGjQKfDNGnTsMzTo9PMesAjDFTq1kh+tT1+3aPgf3c=;
+        s=korg; t=1655116873;
+        bh=710qDeAQ+M2wd+oQnN+CKC6Zb5QNapd+zSvcMbkNVZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HP8hr3jeFAkEK6XmGWYMs9Gq7RWlv3ziOrcg6UV8ppcmD8VVaztvKta1Iw+8aBmPZ
-         g+9+mIm8Nl9AVu8fozc3l+Imz2CtOZvZ+KnD1JqgR7nLXrVJK1rWKZmnKXk3SiRyC+
-         2QBtlKvIr92aNHigEo+MHYKIae8PSQ52iwKYmeqQ=
+        b=hQZyt5xby/6XAippub76DF5pOvT6awuJEoI8+bfrgwHTLdDE/e5unTE9bkMCeu6u2
+         OvL18VSjGGTHXyMcSjqmGfpnHiGdlp6LFX/1G0p0tsWfETaP0AqXuaQ0x1W9TDCE9B
+         DOBNr3E0fBhNHsJk+g7YBYpUH0SMmvtgzRCuNTQ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Niels Dossche <dossche.niels@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 009/218] mwifiex: add mutex lock for call in mwifiex_dfs_chan_sw_work_queue
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Douglas Miller <doug.miller@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 194/411] RDMA/hfi1: Prevent use of lock before it is initialized
 Date:   Mon, 13 Jun 2022 12:07:47 +0200
-Message-Id: <20220613094910.533370585@linuxfoundation.org>
+Message-Id: <20220613094934.478195288@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Douglas Miller <doug.miller@cornelisnetworks.com>
 
-[ Upstream commit 3e12968f6d12a34b540c39cbd696a760cc4616f0 ]
+[ Upstream commit 05c03dfd09c069c4ffd783b47b2da5dcc9421f2c ]
 
-cfg80211_ch_switch_notify uses ASSERT_WDEV_LOCK to assert that
-net_device->ieee80211_ptr->mtx (which is the same as priv->wdev.mtx)
-is held during the function's execution.
-mwifiex_dfs_chan_sw_work_queue is one of its callers, which does not
-hold that lock, therefore violating the assertion.
-Add a lock around the call.
+If there is a failure during probe of hfi1 before the sdma_map_lock is
+initialized, the call to hfi1_free_devdata() will attempt to use a lock
+that has not been initialized. If the locking correctness validator is on
+then an INFO message and stack trace resembling the following may be seen:
 
-Disclaimer:
-I am currently working on a static analyser to detect missing locks.
-This was a reported case. I manually verified the report by looking
-at the code, so that I do not send wrong information or patches.
-After concluding that this seems to be a true positive, I created
-this patch.
-However, as I do not in fact have this particular hardware,
-I was unable to test it.
+  INFO: trying to register non-static key.
+  The code is fine but needs lockdep annotation, or maybe
+  you didn't initialize this object before use?
+  turning off the locking correctness validator.
+  Call Trace:
+  register_lock_class+0x11b/0x880
+  __lock_acquire+0xf3/0x7930
+  lock_acquire+0xff/0x2d0
+  _raw_spin_lock_irq+0x46/0x60
+  sdma_clean+0x42a/0x660 [hfi1]
+  hfi1_free_devdata+0x3a7/0x420 [hfi1]
+  init_one+0x867/0x11a0 [hfi1]
+  pci_device_probe+0x40e/0x8d0
 
-Reviewed-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220321225515.32113-1-dossche.niels@gmail.com
+The use of sdma_map_lock in sdma_clean() is for freeing the sdma_map
+memory, and sdma_map is not allocated/initialized until after
+sdma_map_lock has been initialized. This code only needs to be run if
+sdma_map is not NULL, and so checking for that condition will avoid trying
+to use the lock before it is initialized.
+
+Fixes: 473291b3ea0e ("IB/hfi1: Fix for early release of sdma context")
+Fixes: 7724105686e7 ("IB/hfi1: add driver files")
+Link: https://lore.kernel.org/r/20220520183701.48973.72434.stgit@awfm-01.cornelisnetworks.com
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
+Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/marvell/mwifiex/11h.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/infiniband/hw/hfi1/sdma.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/11h.c b/drivers/net/wireless/marvell/mwifiex/11h.c
-index 238accfe4f41..c4176e357b22 100644
---- a/drivers/net/wireless/marvell/mwifiex/11h.c
-+++ b/drivers/net/wireless/marvell/mwifiex/11h.c
-@@ -303,5 +303,7 @@ void mwifiex_dfs_chan_sw_work_queue(struct work_struct *work)
+diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
+index 248be21acdbe..2a684fc6056e 100644
+--- a/drivers/infiniband/hw/hfi1/sdma.c
++++ b/drivers/infiniband/hw/hfi1/sdma.c
+@@ -1329,11 +1329,13 @@ void sdma_clean(struct hfi1_devdata *dd, size_t num_engines)
+ 		kvfree(sde->tx_ring);
+ 		sde->tx_ring = NULL;
+ 	}
+-	spin_lock_irq(&dd->sde_map_lock);
+-	sdma_map_free(rcu_access_pointer(dd->sdma_map));
+-	RCU_INIT_POINTER(dd->sdma_map, NULL);
+-	spin_unlock_irq(&dd->sde_map_lock);
+-	synchronize_rcu();
++	if (rcu_access_pointer(dd->sdma_map)) {
++		spin_lock_irq(&dd->sde_map_lock);
++		sdma_map_free(rcu_access_pointer(dd->sdma_map));
++		RCU_INIT_POINTER(dd->sdma_map, NULL);
++		spin_unlock_irq(&dd->sde_map_lock);
++		synchronize_rcu();
++	}
+ 	kfree(dd->per_sdma);
+ 	dd->per_sdma = NULL;
  
- 	mwifiex_dbg(priv->adapter, MSG,
- 		    "indicating channel switch completion to kernel\n");
-+	mutex_lock(&priv->wdev.mtx);
- 	cfg80211_ch_switch_notify(priv->netdev, &priv->dfs_chandef);
-+	mutex_unlock(&priv->wdev.mtx);
- }
 -- 
 2.35.1
 

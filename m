@@ -2,122 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7835482CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148015482DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239720AbiFMJIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S240079AbiFMJJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240558AbiFMJIh (ORCPT
+        with ESMTP id S240062AbiFMJJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:08:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F7F1085
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655111316; x=1686647316;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/xfr7er5pb9mxRpWgXM+pcGqC+mkTeha9+7hr/drtQI=;
-  b=EAVflvIUqux6I1Kkj9r4qxx4Ky4F6JHtx9S1P2t+s3DR9x/RoMUQSPDS
-   TQXKX8X3wQRkdvtVvwCtvgzUG15acqpoOaijnXTETSUIDVsjzbNgCmMd0
-   qhqH5IvwrNPspsJVDqxe38gWoRnanCQSBpf2GLH8C2/B16lfG0/t6/EqL
-   svkAXGtSgCan1etW2oJgli8Wsk8zel0j8U98zo6bkM2apF4viMNnnrrXX
-   IoNKDbQQBTHUfB/4wgUacTsCrxpsxa01pSnrniwZgZjDYWsNfqa5mZsXM
-   ljcsjpSUzLcExQeXZbGfcxuV+svRq3Vu4FDcHdM4+26SnerRoSE68qSEn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="258662354"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="258662354"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 02:08:36 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="639627927"
-Received: from xiruzha-mobl1.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.249.169.88])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 02:08:29 -0700
-Date:   Mon, 13 Jun 2022 17:08:26 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     Yicong Yang <yangyicong@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        yangyicong@hisilicon.com, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Len Brown <len.brown@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Aubrey Li <aubrey.li@intel.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>, linux-kernel@vger.kernel.org,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Mohini Narkhede <mohini.narkhede@intel.com>
-Subject: Re: [PATCH v4] sched/fair: Introduce SIS_UTIL to search idle CPU
- based on sum of util_avg
-Message-ID: <20220613090826.GA36036@chenyu5-mobl1>
-References: <20220612163428.849378-1-yu.c.chen@intel.com>
- <ca59e113-d5df-7dec-6bab-a8d239b50c0b@huawei.com>
- <20220613080636.GA32587@chenyu5-mobl1>
- <20220613085437.GC3195@suse.de>
+        Mon, 13 Jun 2022 05:09:01 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A793235
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:08:59 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4LM5N73Srsz9sZR;
+        Mon, 13 Jun 2022 11:08:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1655111335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/diBHTT7FJGtxv9Ix4yOBCZ8RnU/aeUMZMRq1jZWVd0=;
+        b=Znxifht26gApX39S8dBdMlCkItNVWLXnXVPMEVWY3AG9zAT6gRrWMY9rhTZyANLJTCXA+T
+        /Py+ybJGqRWT/5GkeLRhJZiWzDalGM3ZvZadEpQEYyYCU21C9ACURqw1LrNyUVHsOxWjvx
+        1p9izA8OmzrQ5cxuRmCiyhEfNhVce3b+LqtSrMJHG1exvU+qFVCJb9AZGKmxkawe7s4w+F
+        /Xrajo+QQRwLwU5ACiJOqV5anBx0ps2Y2wIrqp32YeXJCOeBwJm20EiuG6GVGM12Bl5Dy4
+        ebLpFyJ47wP6J1/GG07XltI+NvUdJKpT2sZ8ndEXg24vYNlBTBRianCdqohCbA==
+Message-ID: <51536e97-ca5f-abe4-b46c-ee3eb57f891e@mailbox.org>
+Date:   Mon, 13 Jun 2022 11:08:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613085437.GC3195@suse.de>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Content-Language: en-CA
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     andrey.grodzovsky@amd.com, linux-mm@kvack.org,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        hughd@google.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, daniel@ffwll.ch,
+        linux-tegra@vger.kernel.org, alexander.deucher@amd.com,
+        akpm@linux-foundation.org, linux-media@vger.kernel.org
+References: <YqG67sox6L64E6wV@dhcp22.suse.cz>
+ <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
+ <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
+ <26d3e1c7-d73c-cc95-54ef-58b2c9055f0c@gmail.com>
+ <YqIB0bavUeU8Abwl@dhcp22.suse.cz>
+ <d4a19481-7a9f-19bf-c270-d89baa0970fc@amd.com>
+ <YqIMmK18mb/+s5de@dhcp22.suse.cz>
+ <3f7d3d96-0858-fb6d-07a3-4c18964f888e@gmail.com>
+ <YqMuq/ZrV8loC3jE@dhcp22.suse.cz>
+ <2e7e050e-04eb-0c0a-0675-d7f1c3ae7aed@amd.com>
+ <YqNSSFQELx/LeEHR@dhcp22.suse.cz>
+ <288528c3-411e-fb25-2f08-92d4bb9f1f13@gmail.com>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
+In-Reply-To: <288528c3-411e-fb25-2f08-92d4bb9f1f13@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: 577iphbxb4bs3945taqe58kkqzbs8imi
+X-MBO-RS-ID: 72e59480f2d70ddaf00
+X-Rspamd-Queue-Id: 4LM5N73Srsz9sZR
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 09:54:37AM +0100, Mel Gorman wrote:
-> On Mon, Jun 13, 2022 at 04:06:36PM +0800, Chen Yu wrote:
-> > On Mon, Jun 13, 2022 at 03:40:52PM +0800, Yicong Yang wrote:
-> > > On 2022/6/13 0:34, Chen Yu wrote:
-> > > >  
-> > [cut...]
-> > > >  #define NUMA_IMBALANCE_MIN 2
-> > > > diff --git a/kernel/sched/features.h b/kernel/sched/features.h
-> > > > index 1cf435bbcd9c..3334a1b93fc6 100644
-> > > > --- a/kernel/sched/features.h
-> > > > +++ b/kernel/sched/features.h
-> > > > @@ -61,6 +61,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
-> > > >   * When doing wakeups, attempt to limit superfluous scans of the LLC domain.
-> > > >   */
-> > > >  SCHED_FEAT(SIS_PROP, true)
-> > > > +SCHED_FEAT(SIS_UTIL, true)
-> > > >  
-> > > 
-> > > confused here that shouldn't we have SCHED_FEAT(SIS_PROP, false)? With SIS_UTIL enabled, SIS_PROP will have no
-> > > effect since nr is overridden by SIS_UTIL.
-> > Yes, no matter what SIS_PROP is set, the result of SIS_UTIL would be used to decide
-> > the scan depth. We don't change the default value of SIS_PROP here, as this patch
-> > tends to only touch one feature at one time. And the options could be tuned by user via
-> > sysfs manually. Besides, the target is to replace SIS_PROP with another search policy,
-> > Peter mentioned that "And ideally we're remove SIS_PROP after a few releases if this
-> > works out", so I assume that changing the default value of SIS_PROP does not matter
-> > in current patch.
-> > 
+On 2022-06-11 10:06, Christian König wrote:
+> Am 10.06.22 um 16:16 schrieb Michal Hocko:
+>> [...]
+>>>> Just consider the above mentioned memcg driven model. It doesn't really
+>>>> require to chase specific files and do some arbitrary math to share the
+>>>> responsibility. It has a clear accounting and responsibility model.
+>>> Ok, how does that work then?
+>> The memory is accounted to whoever faults that memory in or to the
+>> allocating context if that is a kernel memory (in most situations).
 > 
-> I had expected it to be disabled given that SIS_PROP does work to
-> calculcate nr,
-I see, disable SIS_PROP would reduce duplicated nr calculation.
-> then discards it, and uses SIS_UTIL. If SIS_UTIL shows a
-> regression and reports a bug, the first step would be to disable
-> SIS_UTIL and enable SIS_PROP via sched_feat.
-OK, I'll change it in next version.
+> That's what I had in mind as well. Problem with this approach is that file descriptors are currently not informed that they are shared between processes.
+> 
+> So to make this work we would need something like attach/detach to process in struct file_operations.
+> 
+> And as I noted, this happens rather often. For example a game which renders 120 frames per second needs to transfer 120 buffers per second between client and X.
 
-thanks,
-Chenyu
-> 
-> -- 
-> Mel Gorman
-> SUSE Labs
+FWIW, in the steady state, the game will cycle between a small (generally 2-5) set of buffers. The game will not cause new buffers to be exported & imported for every frame.
+
+In general, I'd expect dma-buf export & import to happen relatively rarely, e.g. when a window is opened or resized.
+
+
+-- 
+Earthling Michel Dänzer            |                  https://redhat.com
+Libre software enthusiast          |         Mesa and Xwayland developer

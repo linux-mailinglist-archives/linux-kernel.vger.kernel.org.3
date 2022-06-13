@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D19F548AC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913F1548A3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384961AbiFMOiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S1359715AbiFMNU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384744AbiFMOgt (ORCPT
+        with ESMTP id S1376499AbiFMNLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:36:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218E44C7BB;
-        Mon, 13 Jun 2022 04:49:33 -0700 (PDT)
+        Mon, 13 Jun 2022 09:11:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2B166FA0;
+        Mon, 13 Jun 2022 04:22:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2D88B80EB2;
-        Mon, 13 Jun 2022 11:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291D8C34114;
-        Mon, 13 Jun 2022 11:49:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCC560F91;
+        Mon, 13 Jun 2022 11:21:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B7CDC34114;
+        Mon, 13 Jun 2022 11:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120970;
-        bh=GQF/q+GBPN0LQWcKw7/iuxVdHzsQarKQIrtWpvX9WAo=;
+        s=korg; t=1655119314;
+        bh=yzEr4owxzOhbiK85r++xW5wWQCnarR6rihYSQru+o2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H50mLX4RC7n45cBtmr7RaEY516foYJ0UhXFkj3T5kqc6XoiDGN8H7dw4d2wqODVs+
-         Q0NwTP3sDOOXbOnBJkD2CsMLMBVcnXyC6xy6/2hLSjKaEvVDHokNCozy4EnEKC3LPE
-         eZvAhrmR1xrDMNMKBgvwJvyz7nhcv6V1plgojq48=
+        b=UtMGccPki/Y9Ruh+h3G6lLAHm9MSYml/AyVjWd8q7txk1LJ5oLxn28STWb5F6u6X8
+         GywIWOsG4ete4qFMj5TEy90qTpbBJoOfRIYlJp18EffO/0hHlTHEpgLGR4HcaC8IMK
+         llN7Diua33RVrDaDAEbU4ynMPrSI11nfyD260uoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yufan Chen <wiz.chen@gmail.com>,
-        Hyunchul Lee <hyc.lee@gmail.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 225/298] ksmbd: smbd: fix connection dropped issue
+        stable@vger.kernel.org, Cameron Berkenpas <cam@neo-zeon.de>,
+        Takashi Iwai <tiwai@suse.de>,
+        Songine <donglingluoying@gmail.com>
+Subject: [PATCH 5.15 217/247] ALSA: hda/realtek: Fix for quirk to enable speaker output on the Lenovo Yoga DuetITL 2021
 Date:   Mon, 13 Jun 2022 12:11:59 +0200
-Message-Id: <20220613094931.923649601@linuxfoundation.org>
+Message-Id: <20220613094929.524544774@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hyunchul Lee <hyc.lee@gmail.com>
+From: Cameron Berkenpas <cam@neo-zeon.de>
 
-[ Upstream commit 5366afc4065075a4456941fbd51c33604d631ee5 ]
+commit 85743a847caeab696dafc4ce1a7e1e2b7e29a0f6 upstream.
 
-When there are bursty connection requests,
-RDMA connection event handler is deferred and
-Negotiation requests are received even if
-connection status is NEW.
+Enables the ALC287_FIXUP_YOGA7_14ITL_SPEAKERS quirk for the Lenovo
+Yoga DuetITL 2021 laptop to fix speaker output.
 
-To handle it, set the status to CONNECTED
-if Negotiation requests are received.
+[ re-sorted in the SSID order by tiwai ]
 
-Reported-by: Yufan Chen <wiz.chen@gmail.com>
-Signed-off-by: Hyunchul Lee <hyc.lee@gmail.com>
-Tested-by: Yufan Chen <wiz.chen@gmail.com>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=208555
+Signed-off-by: Cameron Berkenpas <cam@neo-zeon.de>
+Co-authored-by: Songine <donglingluoying@gmail.com>
+Cc: stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220606002329.215330-1-cam@neo-zeon.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/transport_rdma.c | 1 +
+ sound/pci/hda/patch_realtek.c |    1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/fs/ksmbd/transport_rdma.c b/fs/ksmbd/transport_rdma.c
-index ba5a22bc2e6d..d3b60b833a81 100644
---- a/fs/ksmbd/transport_rdma.c
-+++ b/fs/ksmbd/transport_rdma.c
-@@ -569,6 +569,7 @@ static void recv_done(struct ib_cq *cq, struct ib_wc *wc)
- 		}
- 		t->negotiation_requested = true;
- 		t->full_packet_received = true;
-+		t->status = SMB_DIRECT_CS_CONNECTED;
- 		enqueue_reassembly(t, recvmsg, 0);
- 		wake_up_interruptible(&t->wait_status);
- 		break;
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9043,6 +9043,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x17aa, 0x3176, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x17aa, 0x3178, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
++	SND_PCI_QUIRK(0x17aa, 0x3802, "Lenovo Yoga DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
+ 	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
 
 

@@ -2,156 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC07549E5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55E2549EA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346164AbiFMUF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S1349539AbiFMUKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345169AbiFMUFp (ORCPT
+        with ESMTP id S244314AbiFMUJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:05:45 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8BFBA556
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:40:21 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id b7so7154880ljr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:40:21 -0700 (PDT)
+        Mon, 13 Jun 2022 16:09:54 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D78327B09;
+        Mon, 13 Jun 2022 11:44:06 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id i29so10295937lfp.3;
+        Mon, 13 Jun 2022 11:44:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SW1J4TxrbvE0J+NvABWMWUwXUDHi8O6WM5U0kmdXuvs=;
-        b=YcOMN9J8NO13M1lsQJ09hM7cCxE8MS8M7Gv1MrIUfDqyrowxYIz0M4kq/4DzZS1VvJ
-         X+WwlBoGf6CzRGJ8G1EjU7INISE4kKU0Z/BuQnIyh3+0qLr9mDdeVrnpP8AHGXywflLI
-         gn4vt4eUHsaKF6mpPhECp6pZ2U/kiDWVsOWPKlO9R4E2oApQGpBRq/kLZZK9nbrMH8Vs
-         rXrYvlBgBc2y9ISFPMRSym0HBSe8rRlM0D6NK0Ddpva36u6S2KIqGMmwmrN+Mz2tgqDy
-         Zm5vDhOTpucmZ8RQFhCIrZBcGzE3vnnOhB0faQ7Lbps3yLPlEQLVSwLrlcC8TPCjgrM+
-         10Rw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0ZkWwoMHmOjNQD8c/MvUfXL++UZYPGh4KCJsTnGxYJw=;
+        b=Z+Yudr03xA3T6wpYkyh8SrfLyupr9tKRPXD2+loi9r1VgLEXt7mHVHwW3LxTRx3VWN
+         0Bvs/G/b44NykMzol8sPhaGMPeS8oJn6GsRn+i2F/l4O+alIlH6P3DPJ8S7rZvjyNvKz
+         dYQnIrxwajkFFEjZDvcR8XbHf8NjM1vCUwNbFhWOFRiWCJZAWQWUZDBtasCP2EoN9JTX
+         8h6DkoP78r1+u6nYjPtm+tFZQwlpq43t0JqtR2xs5CgrCf4Z8QnJuzsHlN7c3fS2NF5t
+         JKcqwrHRaWdw72u+q03PA6TDElEccD8O96TnmUiM+VQSveZbykIbyfzovzJP88LmtFk4
+         u1Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SW1J4TxrbvE0J+NvABWMWUwXUDHi8O6WM5U0kmdXuvs=;
-        b=AM7NvhQc++aXNIUMN/mvMysebFHz72BoCI+sSMJLq8FA+5G1t94vK9K12tAZ1FkJPI
-         ovDVp3vGxgyybnfAe9/SnOoa4N+VfSNUGO1w8iP60EBd5fvmTGgHW0KRONjuUSBKmh4T
-         ZtRg+lG3eR7SA0BtMktd+qLLpKT5W2GD3wX6vPHFtxuHQPFbTgsXPNQ61w4mFas+HbVy
-         kYWVIQ5NcpzTPQm6+omND76d555KG+Q5EGbL5NUI/JPrEey4SSVawtQE1L0rhx85airw
-         smwIRI++sLDBxlQy33A4smaIfV9Pu6mQXnATWhjUGGwD9mqSrPk5zXtx6mU+VNtzRWrI
-         uyqg==
-X-Gm-Message-State: AJIora/qNFQ64fUeHBKMnCEkOAtJL/lpH0svfpy0mjSFAadgYFIHf33U
-        9wUbdaNkBbwZPPibkmPJku+pO/FbSDhR9TfiDlAJ
-X-Google-Smtp-Source: AGRyM1sc5PXhrpO/NALvqllDtgfvAmsGr0nMSO+nh757PXQ+6BPBVtmdCaZdkhadYmRsZLgDd/bC0jYF0EiuvoWxC2E=
-X-Received: by 2002:a05:651c:1581:b0:255:48d1:fdae with SMTP id
- h1-20020a05651c158100b0025548d1fdaemr459115ljq.286.1655145619959; Mon, 13 Jun
- 2022 11:40:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0ZkWwoMHmOjNQD8c/MvUfXL++UZYPGh4KCJsTnGxYJw=;
+        b=UWorLSM19cgDotaZEjH0SFgId4+9ljX4Srq0dRxAF7AG9hZX+pSVwNGRIGosIzP0vC
+         ABXCw79ZKYYY0osJHB50hhxjpjql6s92qaa/Kf2NMPUENAzNsMKiJQsEbi5kKuirMtDd
+         8DzAYB68kC+hdJpqvc5iM5+64uqnN7lbkMKQYaZpTMVCzooOoBtsBNdfPCTGwhWjiax9
+         mK8OLBYTzIf1cP4Lerwzrdbj2xMpyTmIyfTHkgCg3rOZeVw4DEQhzmfiWRquDfdD7AXa
+         4OhZAuG84DPGnVMygUF/UOhZY/L7VQWtJ+OuhyRigQfUwOqGqXHlck5Id74yCNd9ZzGP
+         KZig==
+X-Gm-Message-State: AJIora/tdi/k58V5Z7swx+oPiTYuaQqZGlKnCCMrEDgUuGKVRrItSLfA
+        EFZcNccOCfe5L5+1GbrHyno=
+X-Google-Smtp-Source: AGRyM1vgWfFYu5VOKFpQZS6GlNe0ObJ6V5Ly2KIsrTrNXkPdaPRbPZAnYJyJY7yrTN5mYDLInEEhdw==
+X-Received: by 2002:a05:6512:31c3:b0:479:3c8a:b39f with SMTP id j3-20020a05651231c300b004793c8ab39fmr680193lfe.111.1655145844744;
+        Mon, 13 Jun 2022 11:44:04 -0700 (PDT)
+Received: from localhost.localdomain ([94.103.229.27])
+        by smtp.gmail.com with ESMTPSA id b15-20020ac247ef000000b004787d3cbc67sm1073598lfp.219.2022.06.13.11.44.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 11:44:02 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     toke@toke.dk, kvalo@kernel.org, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Subject: [PATCH v6 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Date:   Mon, 13 Jun 2022 21:43:59 +0300
+Message-Id: <d57bbedc857950659bfacac0ab48790c1eda00c8.1655145743.git.paskripkin@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609221702.347522-8-morbo@google.com>
- <YqLUORmZQgG1D6lc@kroah.com>
-In-Reply-To: <YqLUORmZQgG1D6lc@kroah.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Mon, 13 Jun 2022 11:40:08 -0700
-Message-ID: <CAGG=3QV1DqiufpBRmUcYMEuH55OizMGLCcCiLhxaZ8FEwbn7gA@mail.gmail.com>
-Subject: Re: [PATCH 07/12] driver/char: use correct format characters
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bill Wendling <isanbard@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 10:18 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jun 09, 2022 at 10:16:26PM +0000, Bill Wendling wrote:
-> > From: Bill Wendling <isanbard@gmail.com>
->
-> Why isn't that matching your From: line in the email?
->
-There must be something wrong with my .gitconfig file. I"ll check into it.
+Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb() [0]. The
+problem was in incorrect htc_handle->drv_priv initialization.
 
-> >
-> > When compiling with -Wformat, clang emits the following warnings:
->
-> Is that ever a default build option for the kernel?
->
-We want to enable -Wformat for clang. I believe that these specific
-warnings have been disabled, but I'm confused as to why, because
-they're valid warnings. When I compiled with the warning enabled,
-there were only a few (12) places that needed changes, so thought that
-patches would be a nice cleanup, even though the warning itself is
-disabled.
+Probable call trace which can trigger use-after-free:
 
-> > drivers/char/mem.c:775:16: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-> >                               NULL, devlist[minor].name);
-> >                                     ^~~~~~~~~~~~~~~~~~~
-> >
-> > Use a string literal for the format string.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> > Signed-off-by: Bill Wendling <isanbard@gmail.com>
-> > ---
-> >  drivers/char/mem.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-> > index 84ca98ed1dad..32d821ba9e4d 100644
-> > --- a/drivers/char/mem.c
-> > +++ b/drivers/char/mem.c
-> > @@ -772,7 +772,7 @@ static int __init chr_dev_init(void)
-> >                       continue;
-> >
-> >               device_create(mem_class, NULL, MKDEV(MEM_MAJOR, minor),
-> > -                           NULL, devlist[minor].name);
-> > +                           NULL, "%s", devlist[minor].name);
->
-> Please explain how this static string can ever be user controlled.
->
-All someone would need to do is accidentally insert an errant '%' in
-one of the strings for this function call to perform unexpected
-actions---at the very least reading memory that's not allocated and
-may contain garbage, thereby decreasing performance and possibly
-overrunning some buffer. Perhaps in this specific scenario it's
-unlikely, but "device_create()" is used in a lot more places than
-here. This patch is a general code cleanup.
+ath9k_htc_probe_device()
+  /* htc_handle->drv_priv = priv; */
+  ath9k_htc_wait_for_target()      <--- Failed
+  ieee80211_free_hw()		   <--- priv pointer is freed
 
--bw
+<IRQ>
+...
+ath9k_hif_usb_rx_cb()
+  ath9k_hif_usb_rx_stream()
+   RX_STAT_INC()		<--- htc_handle->drv_priv access
+
+In order to not add fancy protection for drv_priv we can move
+htc_handle->drv_priv initialization at the end of the
+ath9k_htc_probe_device() and add helper macro to make
+all *_STAT_* macros NULL safe, since syzbot has reported related NULL
+deref in that macros [1]
+
+Link: https://syzkaller.appspot.com/bug?id=6ead44e37afb6866ac0c7dd121b4ce07cb665f60 [0]
+Link: https://syzkaller.appspot.com/bug?id=b8101ffcec107c0567a0cd8acbbacec91e9ee8de [1]
+Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+
+Changes since v5:
+	- No changes
+
+Changes since v4:
+	s/save/safe/ in commit message
+
+Changes since v3:
+	- s/SAVE/SAFE/
+	- Added links to syzkaller reports
+
+Changes since v2:
+	- My send-email script forgot, that mailing lists exist.
+	  Added back all related lists
+
+Changes since v1:
+	- Removed clean-ups and moved them to 2/2
+
+---
+ drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
+ drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
+index 6b45e63fa..e3d546ef7 100644
+--- a/drivers/net/wireless/ath/ath9k/htc.h
++++ b/drivers/net/wireless/ath/ath9k/htc.h
+@@ -327,11 +327,11 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
+ }
+ 
+ #ifdef CONFIG_ATH9K_HTC_DEBUGFS
+-
+-#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
+-#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
+-#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
+-#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
++#define __STAT_SAFE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
++#define TX_STAT_INC(c) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
++#define TX_STAT_ADD(c, a) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
++#define RX_STAT_INC(c) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
++#define RX_STAT_ADD(c, a) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
+ #define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
+ 
+ #define TX_QSTAT_INC(q) (priv->debug.tx_stats.queue_stats[q]++)
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_init.c b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+index ff61ae34e..07ac88fb1 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_init.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+@@ -944,7 +944,6 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
+ 	priv->hw = hw;
+ 	priv->htc = htc_handle;
+ 	priv->dev = dev;
+-	htc_handle->drv_priv = priv;
+ 	SET_IEEE80211_DEV(hw, priv->dev);
+ 
+ 	ret = ath9k_htc_wait_for_target(priv);
+@@ -965,6 +964,8 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
+ 	if (ret)
+ 		goto err_init;
+ 
++	htc_handle->drv_priv = priv;
++
+ 	return 0;
+ 
+ err_init:
+-- 
+2.36.1
+

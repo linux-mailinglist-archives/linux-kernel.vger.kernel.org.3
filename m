@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE244548D4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDFF549506
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242986AbiFMKUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S1378990AbiFMNnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243130AbiFMKTC (ORCPT
+        with ESMTP id S1379122AbiFMNjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:19:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B173DDFB2;
-        Mon, 13 Jun 2022 03:16:45 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B797A459;
+        Mon, 13 Jun 2022 04:28:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43FAE60765;
-        Mon, 13 Jun 2022 10:16:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D2B1C34114;
-        Mon, 13 Jun 2022 10:16:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4E457CE1166;
+        Mon, 13 Jun 2022 11:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 656F0C34114;
+        Mon, 13 Jun 2022 11:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115404;
-        bh=hj2J+v5j3ZFbQEu6MDUIKw3/kjjkro8X6Gww229V7K4=;
+        s=korg; t=1655119724;
+        bh=PmQMdKKBRYPR+mOWp4FAdxocodqjDfYNXP6WYmpUaM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qI/Uaoih/V/JOHAEu4DZb3fQIkI3A3zzPSVu79DMcGa4ADj0WutkMzhdzyjZZYX8w
-         2zqnRsHnN0wnNXPUXSJYWTKMAOjARn+pAcFqa/NGTXTze3MF1YnNYn8xeVF70rsEpq
-         mAN+SNgPncl6jvUMO25xynzYM392M4tOyDG067kc=
+        b=qbck0VwTsN9QiZkyKiOeixyaRW0CgvMDxkRBN24YYo37zjy9meUXb4Opw+90ICa2m
+         ncph0UNfFBSYrWakDHG4KROxa5eUpc8OmCRPyB8JV7eOalUff3ZS7Khl4Y/GDJ/wfO
+         aoE4AbbPBxwP7wLjCoPqBM33CcAVetnYrDNEGRNw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Guangguan Wang <guangguan.wang@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 060/167] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
+Subject: [PATCH 5.18 109/339] net/smc: fixes for converting from "struct smc_cdc_tx_pend **" to "struct smc_wr_tx_pend_priv *"
 Date:   Mon, 13 Jun 2022 12:08:54 +0200
-Message-Id: <20220613094854.980135112@linuxfoundation.org>
+Message-Id: <20220613094929.816820580@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Guangguan Wang <guangguan.wang@linux.alibaba.com>
 
-[ Upstream commit be2af740e2a9c7134f2d8ab4f104006e110b13de ]
+[ Upstream commit e225c9a5a74b12e9ef8516f30a3db2c7eb866ee1 ]
 
-Fix the missing clk_disable_unprepare() before return
-from wm2000_anc_transition() in the error handling case.
+"struct smc_cdc_tx_pend **" can not directly convert
+to "struct smc_wr_tx_pend_priv *".
 
-Fixes: 514cfd6dd725 ("ASoC: wm2000: Integrate with clock API")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220514091053.686416-1-yangyingliang@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 2bced6aefa3d ("net/smc: put slot when connection is killed")
+Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wm2000.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/smc/smc_cdc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wm2000.c b/sound/soc/codecs/wm2000.c
-index 23cde3a0dc11..73cda3c2a861 100644
---- a/sound/soc/codecs/wm2000.c
-+++ b/sound/soc/codecs/wm2000.c
-@@ -545,7 +545,7 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
- {
- 	struct i2c_client *i2c = wm2000->i2c;
- 	int i, j;
--	int ret;
-+	int ret = 0;
- 
- 	if (wm2000->anc_mode == mode)
- 		return 0;
-@@ -575,13 +575,13 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
- 		ret = anc_transitions[i].step[j](i2c,
- 						 anc_transitions[i].analogue);
- 		if (ret != 0)
--			return ret;
-+			break;
+diff --git a/net/smc/smc_cdc.c b/net/smc/smc_cdc.c
+index 5c731f27996e..53f63bfbaf5f 100644
+--- a/net/smc/smc_cdc.c
++++ b/net/smc/smc_cdc.c
+@@ -82,7 +82,7 @@ int smc_cdc_get_free_slot(struct smc_connection *conn,
+ 		/* abnormal termination */
+ 		if (!rc)
+ 			smc_wr_tx_put_slot(link,
+-					   (struct smc_wr_tx_pend_priv *)pend);
++					   (struct smc_wr_tx_pend_priv *)(*pend));
+ 		rc = -EPIPE;
  	}
- 
- 	if (anc_transitions[i].dest == ANC_OFF)
- 		clk_disable_unprepare(wm2000->mclk);
- 
--	return 0;
-+	return ret;
- }
- 
- static int wm2000_anc_set_mode(struct wm2000_priv *wm2000)
+ 	return rc;
 -- 
 2.35.1
 

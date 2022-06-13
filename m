@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84ED7547D9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE0E547DA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbiFMCX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S236939AbiFMCg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235542AbiFMCXz (ORCPT
+        with ESMTP id S234610AbiFMCgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:23:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBE55F89
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 19:23:52 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1655087030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L4pUhakLpeWdRTQcLyq5yzn64tbD6Lu4RAFJSVoJmmo=;
-        b=TPSgRqSxJKpUzMpRDYleQ+mW3mGgo2s7Z6qJlxG0rDJaxuUCiy4IJ7yCEQfSCtsVj7tvu9
-        WVWVNOjTbBWN1cLTJa0xaA4sERf/1/MLNxpRxXETrtwP8Uue73f3uOvhC2r1YLl9dHSzeu
-        d9vC9L1doE5A611uE+RClgTZzdveCUbt1Stdyd66VN8J4ia+dGBd+Xp4QZfXCUR3Jer5mN
-        AhHohhx4EYiDNIR+GYjwKIkKMB/blVxQCCP+rslP6cHoa1mw67ZQpYtx0Ytv0oYIUBGUvA
-        AsBAsS30junXnmCxU3BqCN6KiagBWANSZ/4jyqj0hcLKYrCeOYJeLMl5ETXgiA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1655087030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L4pUhakLpeWdRTQcLyq5yzn64tbD6Lu4RAFJSVoJmmo=;
-        b=oq26gIIX/4R1s70Vh5UkPEYUPdDHS1kl8SGMOhIP6rqLLgnvjq3GF/kVztoroIA5H3JgUy
-        DaJGTklOUb5xc8Ag==
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Subject: Re: [BUG] Threaded printk breaks early debugging
-In-Reply-To: <CAMdYzYosXiQc9=t7daPaWWS=rnTVT6nnZvVBXDycBQvfR-1FAA@mail.gmail.com>
-References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
- <87y1y48spg.fsf@jogness.linutronix.de>
- <CAMdYzYr-Wo713Y4qjboTpoK6GcrYfKCfRJAEizwXw6-=dymVzg@mail.gmail.com>
- <87zgihlbst.fsf@jogness.linutronix.de>
- <CAMdYzYosXiQc9=t7daPaWWS=rnTVT6nnZvVBXDycBQvfR-1FAA@mail.gmail.com>
-Date:   Mon, 13 Jun 2022 04:29:50 +0206
-Message-ID: <87sfo9l2rt.fsf@jogness.linutronix.de>
+        Sun, 12 Jun 2022 22:36:53 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D83C13193A;
+        Sun, 12 Jun 2022 19:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tPJq6
+        gucZx+Wp1lUC5ETt48nGtlt3Xy3NEt/XUEDBHI=; b=QmFJDv4PPFAL1b4vdRuRg
+        ubprrklRX44kwkPMTJHmgvFJ5GX5OgHEyfScb//kEUWkY+emcK9gLGKxMYQRY6qS
+        yfQXtWtKV+xuBf7WIiGwtqpneQMdfHlxN1alCF56jDnSMDOvUbjYR52dAapNJG+j
+        9mEXJuNhQKxqJLksThTe98=
+Received: from carlis-virtual-machine (unknown [218.17.89.92])
+        by smtp9 (Coremail) with SMTP id DcCowABn0SOWoqZifKK3Ig--.39550S2;
+        Mon, 13 Jun 2022 10:36:06 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     gregkh@linuxfoundation.org, zhangxuezhi1@coolpad.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: core: sysfs: convert sysfs snprintf to sysfs_emit
+Date:   Mon, 13 Jun 2022 10:35:53 +0800
+Message-Id: <20220613023553.103441-1-zhangxuezhi1@coolpad.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowABn0SOWoqZifKK3Ig--.39550S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrZrWxCrWrWw43JF48XFW8Zwb_yoW8Jr1xpF
+        4rGayUArWUGw1xu3W5CFsFva4Fgas2ya47W3yxJw15u3srA3yDKFyDAFW5Gr18XrWxCFyS
+        yF17KFW5WayxKFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jv89NUUUUU=
+X-Originating-IP: [218.17.89.92]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/1tbiFRkfhV5mLNpnpgAAsZ
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-12, Peter Geis <pgwipeout@gmail.com> wrote:
-> The buffer isn't an issue here, everything is available in dmesg when
-> userspace becomes available. Instead some messages bound for the
-> serial console are never output.
+Fix the following coccicheck warnings:
+drivers/usb/core/sysfs.c:921:8-16:
+WARNING: use scnprintf or sprintf
+drivers/usb/core/sysfs.c:730:8-16:
+WARNING: use scnprintf or sprintf
 
-OK. Good to know.
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+---
+v2: add correct public mailing list
+---
+ drivers/usb/core/sysfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> We run a serial console at 1.5m baud which is significantly higher
-> than most SoCs which default to 115200. I have noticed some timing
-> differences since the introduction of the threaded console. A
-> significant amount of information is dumped very early in the boot
-> process (between 0 and 4 seconds into boot), as most drivers are
-> probing during this time. It also happens to be when the earlycon
-> console hands over to the normal console. There is no abnormal
-> debugging enabled, the output is a standard (non-quiet) boot log. The
-> question is why is direct mode not triggering during a panic?
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index fa2e49d432ff..6387c0dfe30e 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -727,7 +727,7 @@ static ssize_t authorized_show(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
+ {
+ 	struct usb_device *usb_dev = to_usb_device(dev);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", usb_dev->authorized);
++	return sysfs_emit(buf, "%u\n", usb_dev->authorized);
+ }
+ 
+ /*
+@@ -918,7 +918,7 @@ static ssize_t authorized_default_show(struct device *dev,
+ 	struct usb_hcd *hcd;
+ 
+ 	hcd = bus_to_hcd(usb_bus);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", hcd->dev_policy);
++	return sysfs_emit(buf, "%u\n", hcd->dev_policy);
+ }
+ 
+ static ssize_t authorized_default_store(struct device *dev,
+-- 
+2.34.1
 
-Just to be clear, you are not losing any intermediate messages. Only the
-tail end of the kernel log was never printed. Is this correct?
-
-This may be the same issue being discussed here [0].
-
-John Ogness
-
-[0] https://lore.kernel.org/all/87v8t5l39z.fsf@jogness.linutronix.de

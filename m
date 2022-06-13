@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F19549A59
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FD3549A6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236265AbiFMRt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S241628AbiFMRvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242906AbiFMRsX (ORCPT
+        with ESMTP id S242083AbiFMRus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:48:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E9C3CA6A;
-        Mon, 13 Jun 2022 06:30:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Jun 2022 13:50:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A12B6D4EA;
+        Mon, 13 Jun 2022 06:32:53 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC783612D5;
-        Mon, 13 Jun 2022 13:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A11EC3411B;
-        Mon, 13 Jun 2022 13:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655127021;
-        bh=3owKJmN+C3KrJEir3DsRctBw54DfOoSMlpRJuhdRiu4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kxGF1j+eI+5kQ9AwgEWJQbIMyKWMkuWMh2YymfsxLeoUcyHSfh+u9NaCjsZW5Ci27
-         vTsJYsAU/bj5451JRBoiCIZY66di1Q7BS3fcpqI1qf+L14TbWqYWroAS+JnbNP6p4e
-         uVnxGIRT3PO02aIGBewc+ipWcchbuoF4KC6L3GCg4kZ97nqXH0hjrsyj7n3atE4uAM
-         QwoDlKRynboAxbw6gmIFCLp85vsf59Y0Vsx0u8kkqPOHvKxoUOuZ1PhF+DxRJGR15I
-         w8W2Sc08wUbogEwgW9COSZFjWJkJKBxfWao4czQMmNyiu3wRuj/2ilOGB301DjKyza
-         AwSOUq9BPr1qw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01FD217A1CBC;
-        Mon, 13 Jun 2022 13:30:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 258626601657;
+        Mon, 13 Jun 2022 14:32:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655127172;
+        bh=x7PKJ7/wI+4pEk0fBB1cBzEfhIUXQMpcgCQViN4gRig=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TT7dUN/GAZG0MsNiPCNHAJBTZK80l6u+lqQvHrH0PSnXq1kH09ROpjZo19y9UL8co
+         WLSs2a9O2iCNkgO5C3TXrMcyMR8OIlheB9wgQ+e3mdn1uL1Q1Q+nCJoqQbjw6mlmYn
+         GFuvH9M+RmpGYitbriSpYsxVKqgAP+CB6mYzoZkLU+KwN/FQjqDpvpwoxvQXc8gJyh
+         Rm7u9bso7wVH0aXJ7X4iALEo1wMU9kWdKiFDtY9fGo6YJAuFC6ZZCUTvewdxo9Nedb
+         hzVT5yEOUq4++nc0dYBfa9RqINm00dAe3pD3QahcwhJ4CbfxNVYOciPyDqda7L/WZT
+         +G6HWIgn8HoOA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     daniel.lezcano@linaro.org
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 0/2] MediaTek SoC ARM/ARM64 System Timer
+Date:   Mon, 13 Jun 2022 15:32:46 +0200
+Message-Id: <20220613133248.34652-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: make __sys_accept4_file() static
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165512702100.2444.14881268183989098998.git-patchwork-notify@kernel.org>
-Date:   Mon, 13 Jun 2022 13:30:21 +0000
-References: <20220610091017.1991892-1-yajun.deng@linux.dev>
-In-Reply-To: <20220610091017.1991892-1-yajun.deng@linux.dev>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+In an effort to give some love to the apparently forgotten MT6795 SoC,
+I am upstreaming more components that are necessary to support platforms
+powered by this one apart from a simple boot to serial console.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+This series introduces support to start the System Timer for the CPU
+cores found in various MediaTek SoCs including, but not limited to the
+MT6795 Helio X10 - and will most probably unblock many developers for
+the upstreaming of various platforms.
 
-On Fri, 10 Jun 2022 17:10:17 +0800 you wrote:
-> __sys_accept4_file() isn't used outside of the file, make it static.
-> 
-> As the same time, move file_flags and nofile parameters into
-> __sys_accept4_file().
-> 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> 
-> [...]
+For a broad overview of why/what/when, please look at the description
+of patch [2/2] in this series.
 
-Here is the summary with links:
-  - [net-next] net: make __sys_accept4_file() static
-    https://git.kernel.org/netdev/net-next/c/c04245328dd7
+Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
 
-You are awesome, thank you!
+Changes in v3:
+ - Changed statement in documentation, now saying:
+   "MediaTek SoCs have different timers on different platforms"
+
+Changes in v2:
+ - Added back a lost line in commit 2/2 (sorry, commit didn't get amended...!)
+ - Tested again for safety
+
+AngeloGioacchino Del Regno (2):
+  dt-bindings: timer: mediatek: Add CPUX System Timer and MT6795
+    compatible
+  clocksource/drivers/timer-mediatek: Implement CPUXGPT timers
+
+ .../bindings/timer/mediatek,mtk-timer.txt     |   6 +-
+ drivers/clocksource/timer-mediatek.c          | 119 ++++++++++++++++++
+ 2 files changed, 124 insertions(+), 1 deletion(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 

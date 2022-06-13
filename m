@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D9E548C82
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52675549236
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244844AbiFMK1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S1345648AbiFMKur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244391AbiFMKXy (ORCPT
+        with ESMTP id S1347614AbiFMKtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:23:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736BED129;
-        Mon, 13 Jun 2022 03:18:16 -0700 (PDT)
+        Mon, 13 Jun 2022 06:49:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576192D1D9;
+        Mon, 13 Jun 2022 03:26:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AC9460AE8;
-        Mon, 13 Jun 2022 10:18:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA456C34114;
-        Mon, 13 Jun 2022 10:18:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9304FB80E93;
+        Mon, 13 Jun 2022 10:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01982C3411C;
+        Mon, 13 Jun 2022 10:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115495;
-        bh=warabXHqo3R/AW86wKqeUS76ekKpwHQWxZeyzIf6P7M=;
+        s=korg; t=1655115987;
+        bh=RH0MNiGREynDBBlITDYxTVlqFv6UzXOCXc80+4sWsmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qfghu0PByznlAGqYZNhnXK3hQ7CE+8DbeDIt9I+RLvEQPOf5jWR8ZG1WGoHVypAWv
-         1q89GyTwJEJzp7xSJYS6IemLllCVmiOSmyuQ+pRUo5ldenv6q+xdcJhX4reIjgPqHx
-         67jYkB6vwr98Y4GVDATNCTUdneOYxbWRvU81JCNU=
+        b=pxb5r4zsRw5oaDdK+zPpRW3hgs7gweBiBBk6fjJ8QRNDUgJdjlUVjiISh6J3jffyq
+         mbAAjC9bMIwkhiLMX9sIUoXi0R42yCCT3maSTsnfVJOUn/hHg1rP/89EROzU4WE3Pw
+         N98q8vKDQnSnHHg+IcpBU/JsOZLpDC9ABOP6Ok0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 4.9 096/167] iommu/msm: Fix an incorrect NULL check on list iterator
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 4.14 112/218] scsi: dc395x: Fix a missing check on list iterator
 Date:   Mon, 13 Jun 2022 12:09:30 +0200
-Message-Id: <20220613094903.413953382@linuxfoundation.org>
+Message-Id: <20220613094923.960265560@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +56,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 8b9ad480bd1dd25f4ff4854af5685fa334a2f57a upstream.
+commit 036a45aa587a10fa2abbd50fbd0f6c4cfc44f69f upstream.
 
 The bug is here:
-	if (!iommu || iommu->dev->of_node != spec->np) {
 
-The list iterator value 'iommu' will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found (in fact,
-it will point to a invalid structure object containing HEAD).
+	p->target_id, p->target_lun);
 
-To fix the bug, use a new value 'iter' as the list iterator, while use
-the old value 'iommu' as a dedicated variable to point to the found one,
-and remove the unneeded check for 'iommu->dev->of_node != spec->np'
-outside the loop.
+The list iterator 'p' will point to a bogus position containing HEAD if the
+list is empty or no element is found. This case must be checked before any
+use of the iterator, otherwise it will lead to an invalid memory access.
 
+To fix this bug, add a check. Use a new variable 'iter' as the list
+iterator, and use the original variable 'p' as a dedicated pointer to point
+to the found element.
+
+Link: https://lore.kernel.org/r/20220414040231.2662-1-xiam0nd.tong@gmail.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Cc: stable@vger.kernel.org
-Fixes: f78ebca8ff3d6 ("iommu/msm: Add support for generic master bindings")
 Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220501132823.12714-1-xiam0nd.tong@gmail.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/msm_iommu.c |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/scsi/dc395x.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -580,16 +580,19 @@ static void insert_iommu_master(struct d
- static int qcom_iommu_of_xlate(struct device *dev,
- 			       struct of_phandle_args *spec)
- {
--	struct msm_iommu_dev *iommu;
-+	struct msm_iommu_dev *iommu = NULL, *iter;
- 	unsigned long flags;
- 	int ret = 0;
- 
- 	spin_lock_irqsave(&msm_iommu_lock, flags);
--	list_for_each_entry(iommu, &qcom_iommu_devices, dev_node)
--		if (iommu->dev->of_node == spec->np)
-+	list_for_each_entry(iter, &qcom_iommu_devices, dev_node) {
-+		if (iter->dev->of_node == spec->np) {
-+			iommu = iter;
- 			break;
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -3775,10 +3775,19 @@ static struct DeviceCtlBlk *device_alloc
+ #endif
+ 	if (dcb->target_lun != 0) {
+ 		/* Copy settings */
+-		struct DeviceCtlBlk *p;
+-		list_for_each_entry(p, &acb->dcb_list, list)
+-			if (p->target_id == dcb->target_id)
++		struct DeviceCtlBlk *p = NULL, *iter;
++
++		list_for_each_entry(iter, &acb->dcb_list, list)
++			if (iter->target_id == dcb->target_id) {
++				p = iter;
+ 				break;
++			}
++
++		if (!p) {
++			kfree(dcb);
++			return NULL;
 +		}
-+	}
- 
--	if (!iommu || iommu->dev->of_node != spec->np) {
-+	if (!iommu) {
- 		ret = -ENODEV;
- 		goto fail;
- 	}
++
+ 		dprintkdbg(DBG_1, 
+ 		       "device_alloc: <%02i-%i> copy from <%02i-%i>\n",
+ 		       dcb->target_id, dcb->target_lun,
 
 

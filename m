@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AD45491A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E06954905B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380320AbiFMN6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S1354800AbiFMLqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380162AbiFMNxn (ORCPT
+        with ESMTP id S1355636AbiFMLmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:53:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6BB7FB;
-        Mon, 13 Jun 2022 04:34:00 -0700 (PDT)
+        Mon, 13 Jun 2022 07:42:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9D12E097;
+        Mon, 13 Jun 2022 03:50:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C6396124B;
-        Mon, 13 Jun 2022 11:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A06C34114;
-        Mon, 13 Jun 2022 11:33:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E51B1B80E56;
+        Mon, 13 Jun 2022 10:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF53C34114;
+        Mon, 13 Jun 2022 10:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120039;
-        bh=swWzbn2TpIpi73RFLngVo0lUDHXK3tIvjiipGZ76mpI=;
+        s=korg; t=1655117410;
+        bh=pqhJmF9qXFmlGCy4O3OHm8/2Lk2t6X69Xz6V9YTOae8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bulihAumDrGz1nt1YOF3aZ17Dw8UtvuWytsIalqp9vy6MOGvBJM0tBX7py9q7dRYD
-         orJPLveiFZgtyGnUmFedWcD836/wzCiM98JZHY/Mlo/ZQOlr5Wn+X5NXd3TSD0ewgG
-         NXgaT7zPrunHh85YMIRiTqkoscTfnrT9yDj+aH3g=
+        b=TMg4++9B1PgirrwttPeYKHQJAkzkYXS2uzjSJ935XGhGCR1FZkLxBASuz4/VEIOdL
+         Iw4EBktQiDWS5YTK0YYrn8Ka4ly/5E1M1za0onw+tVJmKgl/v62yTDTJBd/fTSFhuk
+         Isy4u3zp3qQiOZ0INe5S+6aa3HWy+3Tk4Xu0+RAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anton Makarov <am@3a-alliance.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 221/339] net: seg6: fix seg6_lookup_any_nexthop() to handle VRFs using flowi_l3mdev
+Subject: [PATCH 5.4 373/411] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
 Date:   Mon, 13 Jun 2022 12:10:46 +0200
-Message-Id: <20220613094933.359666192@linuxfoundation.org>
+Message-Id: <20220613094939.862821266@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit a3bd2102e464202b58d57390a538d96f57ffc361 ]
+[ Upstream commit 62b2caef400c1738b6d22f636c628d9f85cd4c4c ]
 
-Commit 40867d74c374 ("net: Add l3mdev index to flow struct and avoid oif
-reset for port devices") adds a new entry (flowi_l3mdev) in the common
-flow struct used for indicating the l3mdev index for later rule and
-table matching.
-The l3mdev_update_flow() has been adapted to properly set the
-flowi_l3mdev based on the flowi_oif/flowi_iif. In fact, when a valid
-flowi_iif is supplied to the l3mdev_update_flow(), this function can
-update the flowi_l3mdev entry only if it has not yet been set (i.e., the
-flowi_l3mdev entry is equal to 0).
+There is a deadlock in sa1100_set_termios(), which is shown
+below:
 
-The SRv6 End.DT6 behavior in VRF mode leverages a VRF device in order to
-force the routing lookup into the associated routing table. This routing
-operation is performed by seg6_lookup_any_nextop() preparing a flowi6
-data structure used by ip6_route_input_lookup() which, in turn,
-(indirectly) invokes l3mdev_update_flow().
+   (Thread 1)              |      (Thread 2)
+                           | sa1100_enable_ms()
+sa1100_set_termios()       |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | sa1100_timeout()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-However, seg6_lookup_any_nexthop() does not initialize the new
-flowi_l3mdev entry which is filled with random garbage data. This
-prevents l3mdev_update_flow() from properly updating the flowi_l3mdev
-with the VRF index, and thus SRv6 End.DT6 (VRF mode)/DT46 behaviors are
-broken.
+We hold sport->port.lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need sport->port.lock in position (2) of thread 2. As a result,
+sa1100_set_termios() will block forever.
 
-This patch correctly initializes the flowi6 instance allocated and used
-by seg6_lookup_any_nexhtop(). Specifically, the entire flowi6 instance
-is wiped out: in case new entries are added to flowi/flowi6 (as happened
-with the flowi_l3mdev entry), we should no longer have incorrectly
-initialized values. As a result of this operation, the value of
-flowi_l3mdev is also set to 0.
+This patch moves del_timer_sync() before spin_lock_irqsave()
+in order to prevent the deadlock.
 
-The proposed fix can be tested easily. Starting from the commit
-referenced in the Fixes, selftests [1],[2] indicate that the SRv6
-End.DT6 (VRF mode)/DT46 behaviors no longer work correctly. By applying
-this patch, those behaviors are back to work properly again.
-
-[1] - tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-[2] - tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-
-Fixes: 40867d74c374 ("net: Add l3mdev index to flow struct and avoid oif reset for port devices")
-Reported-by: Anton Makarov <am@3a-alliance.com>
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20220608091917.20345-1-andrea.mayer@uniroma2.it
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417111626.7802-1-duoming@zju.edu.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/seg6_local.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/sa1100.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 9fbe243a0e81..98a34287439c 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -218,6 +218,7 @@ seg6_lookup_any_nexthop(struct sk_buff *skb, struct in6_addr *nhaddr,
- 	struct flowi6 fl6;
- 	int dev_flags = 0;
+diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+index 8e618129e65c..ff4b44bdf6b6 100644
+--- a/drivers/tty/serial/sa1100.c
++++ b/drivers/tty/serial/sa1100.c
+@@ -454,6 +454,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
+ 	quot = uart_get_divisor(port, baud);
  
-+	memset(&fl6, 0, sizeof(fl6));
- 	fl6.flowi6_iif = skb->dev->ifindex;
- 	fl6.daddr = nhaddr ? *nhaddr : hdr->daddr;
- 	fl6.saddr = hdr->saddr;
++	del_timer_sync(&sport->timer);
++
+ 	spin_lock_irqsave(&sport->port.lock, flags);
+ 
+ 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
+@@ -484,8 +486,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 				UTSR1_TO_SM(UTSR1_ROR);
+ 	}
+ 
+-	del_timer_sync(&sport->timer);
+-
+ 	/*
+ 	 * Update the per-port timeout.
+ 	 */
 -- 
 2.35.1
 

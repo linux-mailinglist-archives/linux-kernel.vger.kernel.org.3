@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8F55491BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF997549545
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381700AbiFMOLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S1385684AbiFMOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381338AbiFMOES (ORCPT
+        with ESMTP id S1386315AbiFMOpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:04:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68296915A5;
-        Mon, 13 Jun 2022 04:39:13 -0700 (PDT)
+        Mon, 13 Jun 2022 10:45:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BB9B82C2;
+        Mon, 13 Jun 2022 04:51:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F173560B6E;
-        Mon, 13 Jun 2022 11:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B41FC34114;
-        Mon, 13 Jun 2022 11:39:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F148B80EB2;
+        Mon, 13 Jun 2022 11:51:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD6AC341C5;
+        Mon, 13 Jun 2022 11:51:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120352;
-        bh=MmMkYtXo0kaC/SGumxIQWqcUBTgb+3KADcP4UnpW0gM=;
+        s=korg; t=1655121066;
+        bh=PaL1zTH1wXah+/4mOlA883UyymoOJto0oTy9ru8QEV0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KlyEUIjEnXEesjsWiByAcJaNRpuRGTjkpi0aL0oPhzByh4Eh4Xe5e3FfmR0JOuwrl
-         B73qzvFk1ukK5hOFYX49KZn6/9X15KEtickUNtd6nWgrXls9E2QUab5oucw158FW/2
-         /RGJp9R2Iyi1mRX1SCLivOZXpTysGweXBtipFJB4=
+        b=Crtnu6Ju+xLCwO5+rs7nAOJKWyq/KAJ3yDQ/sVr6dCL5Bkyo0IUPj2rDJ2gw62JMe
+         eNc4cpMTW7rG+201dpBzgDBgK7L6Kde8wvKJ5XkrDKSySWic5fWihfjqy1aWOpTmMV
+         GS9d1J1lNaX6aQpY7SGo/Wv1bJmQxsJLK7+Hhjxo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Ying <victor.liu@oss.nxp.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH 5.18 329/339] drm/atomic: Force bridge self-refresh-exit on CRTC switch
+        stable@vger.kernel.org, Cameron Berkenpas <cam@neo-zeon.de>,
+        Takashi Iwai <tiwai@suse.de>,
+        Songine <donglingluoying@gmail.com>
+Subject: [PATCH 5.17 260/298] ALSA: hda/realtek: Fix for quirk to enable speaker output on the Lenovo Yoga DuetITL 2021
 Date:   Mon, 13 Jun 2022 12:12:34 +0200
-Message-Id: <20220613094936.722348733@linuxfoundation.org>
+Message-Id: <20220613094932.961016048@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Cameron Berkenpas <cam@neo-zeon.de>
 
-commit e54a4424925a27ed94dff046db3ce5caf4b1e748 upstream.
+commit 85743a847caeab696dafc4ce1a7e1e2b7e29a0f6 upstream.
 
-It's possible to change which CRTC is in use for a given
-connector/encoder/bridge while we're in self-refresh without fully
-disabling the connector/encoder/bridge along the way. This can confuse
-the bridge encoder/bridge, because
-(a) it needs to track the SR state (trying to perform "active"
-    operations while the panel is still in SR can be Bad(TM)); and
-(b) it tracks the SR state via the CRTC state (and after the switch, the
-    previous SR state is lost).
+Enables the ALC287_FIXUP_YOGA7_14ITL_SPEAKERS quirk for the Lenovo
+Yoga DuetITL 2021 laptop to fix speaker output.
 
-Thus, we need to either somehow carry the self-refresh state over to the
-new CRTC, or else force an encoder/bridge self-refresh transition during
-such a switch.
+[ re-sorted in the SSID order by tiwai ]
 
-I choose the latter, so we disable the encoder (and exit PSR) before
-attaching it to the new CRTC (where we can continue to assume a clean
-(non-self-refresh) state).
-
-This fixes PSR issues seen on Rockchip RK3399 systems with
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c.
-
-Change in v2:
-
-- Drop "->enable" condition; this could possibly be "->active" to
-  reflect the intended hardware state, but it also is a little
-  over-specific. We want to make a transition through "disabled" any
-  time we're exiting PSR at the same time as a CRTC switch.
-  (Thanks Liu Ying)
-
-Cc: Liu Ying <victor.liu@oss.nxp.com>
-Cc: <stable@vger.kernel.org>
-Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Sean Paul <seanpaul@chromium.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220228122522.v2.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=208555
+Signed-off-by: Cameron Berkenpas <cam@neo-zeon.de>
+Co-authored-by: Songine <donglingluoying@gmail.com>
+Cc: stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220606002329.215330-1-cam@neo-zeon.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_atomic_helper.c |   16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -1011,9 +1011,19 @@ crtc_needs_disable(struct drm_crtc_state
- 		return drm_atomic_crtc_effectively_active(old_state);
- 
- 	/*
--	 * We need to run through the crtc_funcs->disable() function if the CRTC
--	 * is currently on, if it's transitioning to self refresh mode, or if
--	 * it's in self refresh mode and needs to be fully disabled.
-+	 * We need to disable bridge(s) and CRTC if we're transitioning out of
-+	 * self-refresh and changing CRTCs at the same time, because the
-+	 * bridge tracks self-refresh status via CRTC state.
-+	 */
-+	if (old_state->self_refresh_active &&
-+	    old_state->crtc != new_state->crtc)
-+		return true;
-+
-+	/*
-+	 * We also need to run through the crtc_funcs->disable() function if
-+	 * the CRTC is currently on, if it's transitioning to self refresh
-+	 * mode, or if it's in self refresh mode and needs to be fully
-+	 * disabled.
- 	 */
- 	return old_state->active ||
- 	       (old_state->self_refresh_active && !new_state->active) ||
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9255,6 +9255,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x17aa, 0x3176, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x17aa, 0x3178, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
++	SND_PCI_QUIRK(0x17aa, 0x3802, "Lenovo Yoga DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
+ 	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
 
 

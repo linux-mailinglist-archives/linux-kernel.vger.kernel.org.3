@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A624C548A4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F371548FC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354612AbiFMLfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S1383312AbiFMOWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354426AbiFML33 (ORCPT
+        with ESMTP id S1381962AbiFMOQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154A8DE99;
-        Mon, 13 Jun 2022 03:44:25 -0700 (PDT)
+        Mon, 13 Jun 2022 10:16:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8297EA005E;
+        Mon, 13 Jun 2022 04:43:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A89046112A;
-        Mon, 13 Jun 2022 10:44:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B305EC34114;
-        Mon, 13 Jun 2022 10:44:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ECCC6146C;
+        Mon, 13 Jun 2022 11:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 712FEC34114;
+        Mon, 13 Jun 2022 11:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117064;
-        bh=IAVbfGTRA6I43BJFnxsN8vzB8Joruj/IdTtsLWXc08Q=;
+        s=korg; t=1655120590;
+        bh=Y1PrFQd2z7ks6vExBBUqZskoendISOySkhLR5eHinlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Q0PJO2Henn1hYRd1rU1twCLXVx6Brh0uPkqdI/k49eoqoYQhlPiO09iUMZyE5NIa
-         VJgIplcHSsRYyypmYONTyxlKdCVSEyN1SEY0xjS3EghRvqDKJ8j6WHdqkMX3DtEN2i
-         wTqPLkRGkbfh9rjv7nVqZD+KcEB4Zc3+YzBMlE48=
+        b=i4FqH5/zZUUojN14cKhl8P42fuczxS2wxM4BOc7IqYj6eYsh98DrpTO0E8sJQ/+z2
+         LBL7wvde87FQOA0R8nlFh2qHp3ftVC6buxS/vbIfoQOz4NEJeRH7vx+5lE0wFRKL8J
+         JMo+h2J9aTDRVxFyT8J3ZI4XsGiuLErx6ej3OlcI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 285/411] tty: serial: owl: Fix missing clk_disable_unprepare() in owl_uart_probe
+Subject: [PATCH 5.17 064/298] serial: sifive: Sanitize CSIZE and c_iflag
 Date:   Mon, 13 Jun 2022 12:09:18 +0200
-Message-Id: <20220613094937.304784853@linuxfoundation.org>
+Message-Id: <20220613094926.889268399@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit bcea0f547ec1a2ee44d429aaf0334633e386e67c ]
+[ Upstream commit c069d2756c01ed36121fae6a42c14fdf1325c71d ]
 
-Fix the missing clk_disable_unprepare() before return
-from owl_uart_probe() in the error handling case.
+Only CS8 is supported but CSIZE was not sanitized to CS8.
 
-Fixes: abf42d2f333b ("tty: serial: owl: add "much needed" clk_prepare_enable()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220307105135.11698-1-linmq006@gmail.com
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
+
+Similarly, INPCK, PARMRK, and BRKINT are reported textually unsupported
+but were not cleared in termios c_iflag which is the machine-readable
+format.
+
+Fixes: 45c054d0815b (tty: serial: add driver for the SiFive UART)
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-7-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/owl-uart.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/sifive.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/owl-uart.c b/drivers/tty/serial/owl-uart.c
-index c55c8507713c..e87953f8a768 100644
---- a/drivers/tty/serial/owl-uart.c
-+++ b/drivers/tty/serial/owl-uart.c
-@@ -695,6 +695,7 @@ static int owl_uart_probe(struct platform_device *pdev)
- 	owl_port->port.uartclk = clk_get_rate(owl_port->clk);
- 	if (owl_port->port.uartclk == 0) {
- 		dev_err(&pdev->dev, "clock rate is zero\n");
-+		clk_disable_unprepare(owl_port->clk);
- 		return -EINVAL;
- 	}
- 	owl_port->port.flags = UPF_BOOT_AUTOCONF | UPF_IOREMAP | UPF_LOW_LATENCY;
+diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
+index fff0b7916f3d..cba44483cb03 100644
+--- a/drivers/tty/serial/sifive.c
++++ b/drivers/tty/serial/sifive.c
+@@ -666,12 +666,16 @@ static void sifive_serial_set_termios(struct uart_port *port,
+ 	int rate;
+ 	char nstop;
+ 
+-	if ((termios->c_cflag & CSIZE) != CS8)
++	if ((termios->c_cflag & CSIZE) != CS8) {
+ 		dev_err_once(ssp->port.dev, "only 8-bit words supported\n");
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
++	}
+ 	if (termios->c_iflag & (INPCK | PARMRK))
+ 		dev_err_once(ssp->port.dev, "parity checking not supported\n");
+ 	if (termios->c_iflag & BRKINT)
+ 		dev_err_once(ssp->port.dev, "BREAK detection not supported\n");
++	termios->c_iflag &= ~(INPCK|PARMRK|BRKINT);
+ 
+ 	/* Set number of stop bits */
+ 	nstop = (termios->c_cflag & CSTOPB) ? 2 : 1;
 -- 
 2.35.1
 

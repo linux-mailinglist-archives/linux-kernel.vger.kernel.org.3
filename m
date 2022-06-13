@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948C3549838
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D43548D35
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357328AbiFMMoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S1352306AbiFMMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356625AbiFMMjc (ORCPT
+        with ESMTP id S1357785AbiFMMT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:39:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40ECB33E37;
-        Mon, 13 Jun 2022 04:09:55 -0700 (PDT)
+        Mon, 13 Jun 2022 08:19:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BBC56775;
+        Mon, 13 Jun 2022 04:02:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 751BE60B7B;
-        Mon, 13 Jun 2022 11:09:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809F4C34114;
-        Mon, 13 Jun 2022 11:09:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C47BAB80D31;
+        Mon, 13 Jun 2022 11:02:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237F4C3411C;
+        Mon, 13 Jun 2022 11:02:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118593;
-        bh=T39f0eVQOSJ9MBYJVxLyGztljyf680swlm25slWr4q4=;
+        s=korg; t=1655118175;
+        bh=xyFbE5pv8bl67oZmKZ4mGg9acI4G9yfb0MUCQQZAONg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UGTA5d3AiC1VfkfVE4uyUPtxwH7PObbNdtlHuXAFkbYNW7R+Im6BKn/kV7t1AZVlI
-         mQfJXdrwMPxFpwZ+866nDjVFIcQz5lnzDQ0zozwR/F9P0lyifXOBuGqY7LDy6bGau1
-         TA76UV0xr6lOzW6K6gjq8dLUgNSp6G5OZAGvJDMU=
+        b=aV3sw3LWg3KO784Z/2CZQ7nZTHw/ZeUAHGzUo5+5qHfW7qZ3DMoxcw6tgRaAW134L
+         O0xgQ6zdlih0/zDgyXRRE99GSufQxHizmsmpKnOX7X5PQte2o+RtwLOARHhFKJsz9v
+         MP9P91RyBmbiJJTQ9SkT9K4poLp09WISInAB7qkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Evan Green <evgreen@chromium.org>,
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 124/172] USB: hcd-pci: Fully suspend across freeze/thaw cycle
-Date:   Mon, 13 Jun 2022 12:11:24 +0200
-Message-Id: <20220613094920.320151695@linuxfoundation.org>
+Subject: [PATCH 4.19 261/287] clocksource/drivers/sp804: Avoid error on multiple instances
+Date:   Mon, 13 Jun 2022 12:11:25 +0200
+Message-Id: <20220613094931.922183213@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Green <evgreen@chromium.org>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit 63acaa8e9c65dc34dc249440216f8e977f5d2748 ]
+[ Upstream commit a98399cbc1e05f7b977419f03905501d566cf54e ]
 
-The documentation for the freeze() method says that it "should quiesce
-the device so that it doesn't generate IRQs or DMA". The unspoken
-consequence of not doing this is that MSIs aimed at non-boot CPUs may
-get fully lost if they're sent during the period where the target CPU is
-offline.
+When a machine sports more than one SP804 timer instance, we only bring
+up the first one, since multiple timers of the same kind are not useful
+to Linux. As this is intentional behaviour, we should not return an
+error message, as we do today:
+===============
+[    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
+===============
 
-The current callbacks for USB HCD do not fully quiesce interrupts,
-specifically on XHCI. Change to use the full suspend/resume flow for
-freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
-where USB devices fail to thaw during hibernation because XHCI misses
-its interrupt and cannot recover.
+Replace the -EINVAL return with a debug message and return 0 instead.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Evan Green <evgreen@chromium.org>
-Link: https://lore.kernel.org/r/20220421103751.v3.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Also we do not reach the init function anymore if the DT node is
+disabled (as this is now handled by OF_DECLARE), so remove the explicit
+check for that case.
+
+This fixes a long standing bogus error when booting ARM's fastmodels.
+
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/20220506162522.3675399-1-andre.przywara@arm.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hcd-pci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clocksource/timer-sp804.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index ec0d6c50610c..eee78cbfaa72 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -614,10 +614,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
- 	.suspend_noirq	= hcd_pci_suspend_noirq,
- 	.resume_noirq	= hcd_pci_resume_noirq,
- 	.resume		= hcd_pci_resume,
--	.freeze		= check_root_hub_suspended,
-+	.freeze		= hcd_pci_suspend,
- 	.freeze_noirq	= check_root_hub_suspended,
- 	.thaw_noirq	= NULL,
--	.thaw		= NULL,
-+	.thaw		= hcd_pci_resume,
- 	.poweroff	= hcd_pci_suspend,
- 	.poweroff_noirq	= hcd_pci_suspend_noirq,
- 	.restore_noirq	= hcd_pci_resume_noirq,
+diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
+index e01222ea888f..738c50e916f7 100644
+--- a/drivers/clocksource/timer-sp804.c
++++ b/drivers/clocksource/timer-sp804.c
+@@ -228,6 +228,11 @@ static int __init sp804_of_init(struct device_node *np)
+ 	struct clk *clk1, *clk2;
+ 	const char *name = of_get_property(np, "compatible", NULL);
+ 
++	if (initialized) {
++		pr_debug("%pOF: skipping further SP804 timer device\n", np);
++		return 0;
++	}
++
+ 	base = of_iomap(np, 0);
+ 	if (!base)
+ 		return -ENXIO;
+@@ -236,11 +241,6 @@ static int __init sp804_of_init(struct device_node *np)
+ 	writel(0, base + TIMER_CTRL);
+ 	writel(0, base + TIMER_2_BASE + TIMER_CTRL);
+ 
+-	if (initialized || !of_device_is_available(np)) {
+-		ret = -EINVAL;
+-		goto err;
+-	}
+-
+ 	clk1 = of_clk_get(np, 0);
+ 	if (IS_ERR(clk1))
+ 		clk1 = NULL;
 -- 
 2.35.1
 

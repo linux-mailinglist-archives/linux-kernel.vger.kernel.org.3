@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DEB5548A9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05EE54975A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344667AbiFMKfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S1349668AbiFMMPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344535AbiFMKbn (ORCPT
+        with ESMTP id S1353241AbiFMMLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:31:43 -0400
+        Mon, 13 Jun 2022 08:11:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D756427B08;
-        Mon, 13 Jun 2022 03:21:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD6D30F68;
+        Mon, 13 Jun 2022 04:01:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15E14B80E93;
-        Mon, 13 Jun 2022 10:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868F6C34114;
-        Mon, 13 Jun 2022 10:21:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49B5DB80EA3;
+        Mon, 13 Jun 2022 11:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A54B3C34114;
+        Mon, 13 Jun 2022 11:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115695;
-        bh=tR5vPJ3JhLbnENevnpA2/f7+Oj3bnG6otpdtGqfAU/8=;
+        s=korg; t=1655118058;
+        bh=Q6O0rLhRh7t1GEXYwFrotaql9tBEwTFcFTigl83sGXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GuKJs79NBOU860j3xBybveBEvLkc5oUzUBygq0Rbce1dARQAV1cQpJnf9SeqNJi28
-         YSwyt1KBmQ3LQhMjDnexT7SJTLRgRGtE1Fu8yi14sI2SlVjz77icdH+12Y/OJzVESB
-         ct4E0CTAepIdF6UXSc8ESbPqrmAAjfIaK6GbDHi8=
+        b=kH/b4VrkDQXoPo/bLYxqef5fd7wkF7qvW6Q0Im/+4ZE8MFAssVIwksSxl1ymvLz0W
+         F+AlJpBNj6BeWCOvWmndI9U9BqwEeI8/yrvbZ6PrmjkmdokA7bmm0ZZDtZeTobSrDj
+         PqPfbc/u/vvDCb1LlHYvhNI6z213pGvEl9KzRcSA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tokunori Ikegami <ikegami.t@gmail.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 4.9 166/167] mtd: cfi_cmdset_0002: Use chip_ready() for write on S29GL064N
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 216/287] net: ethernet: mtk_eth_soc: out of bounds read in mtk_hwlro_get_fdir_entry()
 Date:   Mon, 13 Jun 2022 12:10:40 +0200
-Message-Id: <20220613094919.913846252@linuxfoundation.org>
+Message-Id: <20220613094930.410942777@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,138 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tokunori Ikegami <ikegami.t@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 0a8e98305f63deaf0a799d5cf5532cc83af035d1 upstream.
+[ Upstream commit e7e7104e2d5ddf3806a28695670f21bef471f1e1 ]
 
-Since commit dfeae1073583("mtd: cfi_cmdset_0002: Change write buffer to
-check correct value") buffered writes fail on S29GL064N. This is
-because, on S29GL064N, reads return 0xFF at the end of DQ polling for
-write completion, where as, chip_good() check expects actual data
-written to the last location to be returned post DQ polling completion.
-Fix is to revert to using chip_good() for S29GL064N which only checks
-for DQ lines to settle down to determine write completion.
+The "fsp->location" variable comes from user via ethtool_get_rxnfc().
+Check that it is valid to prevent an out of bounds read.
 
-Link: https://lore.kernel.org/r/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
-Fixes: dfeae1073583("mtd: cfi_cmdset_0002: Change write buffer to check correct value")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tokunori Ikegami <ikegami.t@gmail.com>
-Acked-by: Vignesh Raghavendra <vigneshr@ti.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220323170458.5608-3-ikegami.t@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7aab747e5563 ("net: ethernet: mediatek: add ethtool functions to configure RX flows of HW LRO")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/chips/cfi_cmdset_0002.c |   42 +++++++++++++++++++++++++++++-------
- include/linux/mtd/cfi.h             |    1 
- 2 files changed, 35 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/mtd/chips/cfi_cmdset_0002.c
-+++ b/drivers/mtd/chips/cfi_cmdset_0002.c
-@@ -49,6 +49,10 @@
- #define SST49LF008A		0x005a
- #define AT49BV6416		0x00d6
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index 59f3dce3ab1d..f2eaf8c13cc2 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1575,6 +1575,9 @@ static int mtk_hwlro_get_fdir_entry(struct net_device *dev,
+ 	struct ethtool_rx_flow_spec *fsp =
+ 		(struct ethtool_rx_flow_spec *)&cmd->fs;
  
-+enum cfi_quirks {
-+	CFI_QUIRK_DQ_TRUE_DATA = BIT(0),
-+};
++	if (fsp->location >= ARRAY_SIZE(mac->hwlro_ip))
++		return -EINVAL;
 +
- static int cfi_amdstd_read (struct mtd_info *, loff_t, size_t, size_t *, u_char *);
- static int cfi_amdstd_write_words(struct mtd_info *, loff_t, size_t, size_t *, const u_char *);
- static int cfi_amdstd_write_buffers(struct mtd_info *, loff_t, size_t, size_t *, const u_char *);
-@@ -361,6 +365,15 @@ static void fixup_s29ns512p_sectors(stru
- 	pr_warning("%s: Bad S29NS512P CFI data; adjust to 512 sectors\n", mtd->name);
- }
- 
-+static void fixup_quirks(struct mtd_info *mtd)
-+{
-+	struct map_info *map = mtd->priv;
-+	struct cfi_private *cfi = map->fldrv_priv;
-+
-+	if (cfi->mfr == CFI_MFR_AMD && cfi->id == 0x0c01)
-+		cfi->quirks |= CFI_QUIRK_DQ_TRUE_DATA;
-+}
-+
- /* Used to fix CFI-Tables of chips without Extended Query Tables */
- static struct cfi_fixup cfi_nopri_fixup_table[] = {
- 	{ CFI_MFR_SST, 0x234a, fixup_sst39vf }, /* SST39VF1602 */
-@@ -399,6 +412,7 @@ static struct cfi_fixup cfi_fixup_table[
- #if !FORCE_WORD_WRITE
- 	{ CFI_MFR_ANY, CFI_ID_ANY, fixup_use_write_buffers },
- #endif
-+	{ CFI_MFR_ANY, CFI_ID_ANY, fixup_quirks },
- 	{ 0, 0, NULL }
- };
- static struct cfi_fixup jedec_fixup_table[] = {
-@@ -756,6 +770,18 @@ static int __xipram chip_ready(struct ma
- 	return map_word_equal(map, t, *expected);
- }
- 
-+static int __xipram chip_good(struct map_info *map, unsigned long addr,
-+			      map_word *expected)
-+{
-+	struct cfi_private *cfi = map->fldrv_priv;
-+	map_word *datum = expected;
-+
-+	if (cfi->quirks & CFI_QUIRK_DQ_TRUE_DATA)
-+		datum = NULL;
-+
-+	return chip_ready(map, addr, datum);
-+}
-+
- static int get_chip(struct map_info *map, struct flchip *chip, unsigned long adr, int mode)
- {
- 	DECLARE_WAITQUEUE(wait, current);
-@@ -1608,11 +1634,11 @@ static int __xipram do_write_oneword(str
- 		}
- 
- 		/*
--		 * We check "time_after" and "!chip_ready" before checking
--		 * "chip_ready" to avoid the failure due to scheduling.
-+		 * We check "time_after" and "!chip_good" before checking
-+		 * "chip_good" to avoid the failure due to scheduling.
- 		 */
- 		if (time_after(jiffies, timeo) &&
--		    !chip_ready(map, adr, &datum)) {
-+		    !chip_good(map, adr, &datum)) {
- 			xip_enable(map, chip, adr);
- 			printk(KERN_WARNING "MTD %s(): software timeout\n", __func__);
- 			xip_disable(map, chip, adr);
-@@ -1620,7 +1646,7 @@ static int __xipram do_write_oneword(str
- 			break;
- 		}
- 
--		if (chip_ready(map, adr, &datum))
-+		if (chip_good(map, adr, &datum))
- 			break;
- 
- 		/* Latency issues. Drop the lock, wait a while and retry */
-@@ -1864,13 +1890,13 @@ static int __xipram do_write_buffer(stru
- 		}
- 
- 		/*
--		 * We check "time_after" and "!chip_ready" before checking
--		 * "chip_ready" to avoid the failure due to scheduling.
-+		 * We check "time_after" and "!chip_good" before checking
-+		 * "chip_good" to avoid the failure due to scheduling.
- 		 */
--		if (time_after(jiffies, timeo) && !chip_ready(map, adr, &datum))
-+		if (time_after(jiffies, timeo) && !chip_good(map, adr, &datum))
- 			break;
- 
--		if (chip_ready(map, adr, &datum)) {
-+		if (chip_good(map, adr, &datum)) {
- 			xip_enable(map, chip, adr);
- 			goto op_done;
- 		}
---- a/include/linux/mtd/cfi.h
-+++ b/include/linux/mtd/cfi.h
-@@ -293,6 +293,7 @@ struct cfi_private {
- 	map_word sector_erase_cmd;
- 	unsigned long chipshift; /* Because they're of the same type */
- 	const char *im_name;	 /* inter_module name for cmdset_setup */
-+	unsigned long quirks;
- 	struct flchip chips[0];  /* per-chip data structure for each chip */
- };
- 
+ 	/* only tcp dst ipv4 is meaningful, others are meaningless */
+ 	fsp->flow_type = TCP_V4_FLOW;
+ 	fsp->h_u.tcp_ip4_spec.ip4dst = ntohl(mac->hwlro_ip[fsp->location]);
+-- 
+2.35.1
+
 
 

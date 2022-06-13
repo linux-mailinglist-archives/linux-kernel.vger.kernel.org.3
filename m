@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9180548BBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4D55488F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348314AbiFMKtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S1379843AbiFMNpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245081AbiFMKqU (ORCPT
+        with ESMTP id S1379218AbiFMNkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:46:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2639F2BB12;
-        Mon, 13 Jun 2022 03:25:49 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A6BCE0E;
+        Mon, 13 Jun 2022 04:30:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40050B80E2D;
-        Mon, 13 Jun 2022 10:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA338C34114;
-        Mon, 13 Jun 2022 10:25:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C695661236;
+        Mon, 13 Jun 2022 11:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DACC34114;
+        Mon, 13 Jun 2022 11:30:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115946;
-        bh=ockDeXhQuJGhj3zJd/glicCCiwAoqKGOoVyrjVbqya4=;
+        s=korg; t=1655119816;
+        bh=dPSEXvNIfdoSYenegAt9waDDwo12zSYYNWw8b2UUi+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BDPm9Vua4uM/OuSjWW5brcSnzam8Yd6l9d12rnJNkXH+oZwzt8z6jR9ijuCadLX8I
-         FFHkHJf0ZFnvg6UMb1aMsTLtcLcOrrK1UzMsNLnYTgROzvse/VGmRYJbulRYna/INl
-         i9aPEqlufQLQTVvOkPcuKc3Hs/EhfxHisusFNmjg=
+        b=qmCBpFTs4XldbQTqIecywMl7r3rpnxr5QDqyDOgIJBs/PYO5+R0BKWhlLu6c8MN6W
+         JNNqqumjtnnn1bxq3kyoR9naiESs2gp9wqlLH5HP/hXyDYM2FGIxyCTVtR9VLewbhl
+         ZhSfXIX3AP9GsPS/gKgw1im5EoAVPk3G7BipE6Og=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "D. Ziegfeld" <dzigg@posteo.de>,
-        =?UTF-8?q?J=C3=B6rg-Volker=20Peetz?= <jvpeetz@web.de>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 099/218] iommu/amd: Increase timeout waiting for GA log enablement
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 132/339] vdpa: ifcvf: set pci driver data in probe
 Date:   Mon, 13 Jun 2022 12:09:17 +0200
-Message-Id: <20220613094923.552621398@linuxfoundation.org>
+Message-Id: <20220613094930.514023351@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+From: Jason Wang <jasowang@redhat.com>
 
-[ Upstream commit 42bb5aa043382f09bef2cc33b8431be867c70f8e ]
+[ Upstream commit bd8bb9aed56b1814784a975e2dfea12a9adcee92 ]
 
-On some systems it can take a long time for the hardware to enable the
-GA log of the AMD IOMMU. The current wait time is only 0.1ms, but
-testing showed that it can take up to 14ms for the GA log to enter
-running state after it has been enabled.
+We should set the pci driver data in probe instead of the vdpa device
+adding callback. Otherwise if no vDPA device is created we will lose
+the pointer to the management device.
 
-Sometimes the long delay happens when booting the system, sometimes
-only on resume. Adjust the timeout accordingly to not print a warning
-when hardware takes a longer than usual.
-
-There has already been an attempt to fix this with commit
-
-	9b45a7738eec ("iommu/amd: Fix loop timeout issue in iommu_ga_log_enable()")
-
-But that commit was based on some wrong math and did not fix the issue
-in all cases.
-
-Cc: "D. Ziegfeld" <dzigg@posteo.de>
-Cc: Jörg-Volker Peetz <jvpeetz@web.de>
-Fixes: 8bda0cfbdc1a ("iommu/amd: Detect and initialize guest vAPIC log")
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Link: https://lore.kernel.org/r/20220520102214.12563-1-joro@8bytes.org
+Fixes: 6b5df347c6482 ("vDPA/ifcvf: implement management netlink framework for ifcvf")
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+Message-Id: <20220524055557.1938-1-jasowang@redhat.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/amd_iommu_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vdpa/ifcvf/ifcvf_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/amd_iommu_init.c b/drivers/iommu/amd_iommu_init.c
-index 5dddbb9b06f1..2a6a108f0e8c 100644
---- a/drivers/iommu/amd_iommu_init.c
-+++ b/drivers/iommu/amd_iommu_init.c
-@@ -89,7 +89,7 @@
- #define ACPI_DEVFLAG_LINT1              0x80
- #define ACPI_DEVFLAG_ATSDIS             0x10000000
+diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+index 4366320fb68d..197d52e7b801 100644
+--- a/drivers/vdpa/ifcvf/ifcvf_main.c
++++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+@@ -765,7 +765,6 @@ static int ifcvf_vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+ 	}
  
--#define LOOP_TIMEOUT	100000
-+#define LOOP_TIMEOUT	2000000
- /*
-  * ACPI table definitions
-  *
+ 	ifcvf_mgmt_dev->adapter = adapter;
+-	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
+ 
+ 	vf = &adapter->vf;
+ 	vf->dev_type = get_dev_type(pdev);
+@@ -880,6 +879,8 @@ static int ifcvf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		goto err;
+ 	}
+ 
++	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
++
+ 	return 0;
+ 
+ err:
 -- 
 2.35.1
 

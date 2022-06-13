@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC24548C80
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2FC548B63
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352104AbiFMLKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S1381420AbiFMOEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351890AbiFMLFM (ORCPT
+        with ESMTP id S1380287AbiFMNyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:05:12 -0400
+        Mon, 13 Jun 2022 09:54:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D447128C;
-        Mon, 13 Jun 2022 03:34:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A4D42A21;
+        Mon, 13 Jun 2022 04:34:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 739D860FFD;
-        Mon, 13 Jun 2022 10:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 836D8C3411C;
-        Mon, 13 Jun 2022 10:34:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91BBF612D0;
+        Mon, 13 Jun 2022 11:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE7FC34114;
+        Mon, 13 Jun 2022 11:34:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116480;
-        bh=iPDGLaiCpDKpB218XQ4ilOz8blVhaF7quo/ECIy5Zx4=;
+        s=korg; t=1655120065;
+        bh=ZjDVsKHFBSnws36ePAnZg275uQcp5H4PcRvFzlD2OCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZYUj+rYKNdGG3ikclxStljMkdMGeM9+OBliN2Wk442zZ4xbSMqAVyzWzEM/RnL73+
-         bQLILN+f3zTYuI7Vt0kWFt+mQWHTl12LC0ZI2J6H/T3MVNBi6hkqm/U+rpWOvweMI9
-         7x+xhzXUSAW9vI6ujHFkeCL1eYVyMeLVCKa9qmho=
+        b=GdOw7yAMTFxOtA1uIG2rgNiapakQfWnLMWiyHKauhP60cOEWFLhhU6YCfuehZ7/3F
+         SEMXPUP2zht6b6B9NZ5JUOBkLujbvj8izhd3/QNwn8xvHfP6o+PN9XsSrQZDUAe3tu
+         G+4cVlx+UfapznwBQ8Vo+Zp5V5G4MeRrM+yCMJTE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Evan Green <evgreen@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 189/218] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+        stable@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
+        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 222/339] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
 Date:   Mon, 13 Jun 2022 12:10:47 +0200
-Message-Id: <20220613094926.349731531@linuxfoundation.org>
+Message-Id: <20220613094933.390057932@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Green <evgreen@chromium.org>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 63acaa8e9c65dc34dc249440216f8e977f5d2748 ]
+[ Upstream commit 6c77676645ad42993e0a8bdb8dafa517851a352a ]
 
-The documentation for the freeze() method says that it "should quiesce
-the device so that it doesn't generate IRQs or DMA". The unspoken
-consequence of not doing this is that MSIs aimed at non-boot CPUs may
-get fully lost if they're sent during the period where the target CPU is
-offline.
+The maths at the end of iter_xarray_get_pages() to calculate the actual
+size doesn't work under some circumstances, such as when it's been asked to
+extract a partial single page.  Various terms of the equation cancel out
+and you end up with actual == offset.  The same issue exists in
+iter_xarray_get_pages_alloc().
 
-The current callbacks for USB HCD do not fully quiesce interrupts,
-specifically on XHCI. Change to use the full suspend/resume flow for
-freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
-where USB devices fail to thaw during hibernation because XHCI misses
-its interrupt and cannot recover.
+Fix these to just use min() to select the lesser amount from between the
+amount of page content transcribed into the buffer, minus the offset, and
+the size limit specified.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Evan Green <evgreen@chromium.org>
-Link: https://lore.kernel.org/r/20220421103751.v3.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This doesn't appear to have caused a problem yet upstream because network
+filesystems aren't getting the pages from an xarray iterator, but rather
+passing it directly to the socket, which just iterates over it.  Cachefiles
+*does* do DIO from one to/from ext4/xfs/btrfs/etc. but it always asks for
+whole pages to be written or read.
+
+Fixes: 7ff5062079ef ("iov_iter: Add ITER_XARRAY")
+Reported-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Alexander Viro <viro@zeniv.linux.org.uk>
+cc: Dominique Martinet <asmadeus@codewreck.org>
+cc: Mike Marshall <hubcap@omnibond.com>
+cc: Gao Xiang <xiang@kernel.org>
+cc: linux-afs@lists.infradead.org
+cc: v9fs-developer@lists.sourceforge.net
+cc: devel@lists.orangefs.org
+cc: linux-erofs@lists.ozlabs.org
+cc: linux-cachefs@redhat.com
+cc: linux-fsdevel@vger.kernel.org
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hcd-pci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ lib/iov_iter.c | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 5340d433cdf0..18b3a5e518cd 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -632,10 +632,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
- 	.suspend_noirq	= hcd_pci_suspend_noirq,
- 	.resume_noirq	= hcd_pci_resume_noirq,
- 	.resume		= hcd_pci_resume,
--	.freeze		= check_root_hub_suspended,
-+	.freeze		= hcd_pci_suspend,
- 	.freeze_noirq	= check_root_hub_suspended,
- 	.thaw_noirq	= NULL,
--	.thaw		= NULL,
-+	.thaw		= hcd_pci_resume,
- 	.poweroff	= hcd_pci_suspend,
- 	.poweroff_noirq	= hcd_pci_suspend_noirq,
- 	.restore_noirq	= hcd_pci_resume_noirq,
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index 6dd5330f7a99..dda6d5f481c1 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -1434,7 +1434,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+ {
+ 	unsigned nr, offset;
+ 	pgoff_t index, count;
+-	size_t size = maxsize, actual;
++	size_t size = maxsize;
+ 	loff_t pos;
+ 
+ 	if (!size || !maxpages)
+@@ -1461,13 +1461,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+ 	if (nr == 0)
+ 		return 0;
+ 
+-	actual = PAGE_SIZE * nr;
+-	actual -= offset;
+-	if (nr == count && size > 0) {
+-		unsigned last_offset = (nr > 1) ? 0 : offset;
+-		actual -= PAGE_SIZE - (last_offset + size);
+-	}
+-	return actual;
++	return min(nr * PAGE_SIZE - offset, maxsize);
+ }
+ 
+ /* must be done on non-empty ITER_IOVEC one */
+@@ -1602,7 +1596,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
+ 	struct page **p;
+ 	unsigned nr, offset;
+ 	pgoff_t index, count;
+-	size_t size = maxsize, actual;
++	size_t size = maxsize;
+ 	loff_t pos;
+ 
+ 	if (!size)
+@@ -1631,13 +1625,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
+ 	if (nr == 0)
+ 		return 0;
+ 
+-	actual = PAGE_SIZE * nr;
+-	actual -= offset;
+-	if (nr == count && size > 0) {
+-		unsigned last_offset = (nr > 1) ? 0 : offset;
+-		actual -= PAGE_SIZE - (last_offset + size);
+-	}
+-	return actual;
++	return min(nr * PAGE_SIZE - offset, maxsize);
+ }
+ 
+ ssize_t iov_iter_get_pages_alloc(struct iov_iter *i,
 -- 
 2.35.1
 

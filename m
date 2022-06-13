@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16715496E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B0354901F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385840AbiFMOlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S1381825AbiFMOEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384427AbiFMOhM (ORCPT
+        with ESMTP id S1381585AbiFMN47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:37:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4744D261;
-        Mon, 13 Jun 2022 04:49:45 -0700 (PDT)
+        Mon, 13 Jun 2022 09:56:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5028B08D;
+        Mon, 13 Jun 2022 04:37:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81A1FB80EE0;
-        Mon, 13 Jun 2022 11:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D040EC5831C;
-        Mon, 13 Jun 2022 11:49:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C035E6130F;
+        Mon, 13 Jun 2022 11:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C98E2C3411E;
+        Mon, 13 Jun 2022 11:37:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120984;
-        bh=7x+kvaAGBYnjwKY1A04rLcfFo43yJeOkojHUWswIhIA=;
+        s=korg; t=1655120235;
+        bh=KkEwSdV0Df7GKOOH0Kp16NI1mitGNhdo6IBAn9lPEgY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FnXWxqZSp2ULI0j2V2wpcK2AJ0Be8tDXzoCF5kK3ViSuPfD9clxZgmSatafcU0YSH
-         ZEzZQsRWR6qjXxeGD9SOFw5iCZ6AkhTanDt1UK6rpQouq0/2iDnze8ZGRjJ3NqmPMY
-         Msk2rfUkwRIil8W6VzzlBvWrMdTF71GTqu0rmS+s=
+        b=VIzGXk5SOfr3m7X+kyBFb0Np7PO12fEEBlEvnqmWwUl79pV0I5HngrPFByzIXvGTR
+         KOFmvrEE5ewd8ZzmrVc0apTlvNsM/JYUTwrr05547LxJCRVxoI29mYPS7HW8Wc6pIk
+         ZxIDPsR6tNokvu8nfVTomteL5bw0T0BCjm7WvBSA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Venky Shankar <vshankar@redhat.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 230/298] ceph: allow ceph.dir.rctime xattr to be updatable
+        stable@vger.kernel.org, Satadru Pramanik <satadru@gmail.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.18 299/339] cifs: fix reconnect on smb3 mount types
 Date:   Mon, 13 Jun 2022 12:12:04 +0200
-Message-Id: <20220613094932.070737086@linuxfoundation.org>
+Message-Id: <20220613094935.832962614@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Venky Shankar <vshankar@redhat.com>
+From: Paulo Alcantara <pc@cjr.nz>
 
-[ Upstream commit d7a2dc523085f8b8c60548ceedc696934aefeb0e ]
+commit c36ee7dab7749f7be21f7a72392744490b2a9a2b upstream.
 
-`rctime' has been a pain point in cephfs due to its buggy
-nature - inconsistent values reported and those sorts.
-Fixing rctime is non-trivial needing an overall redesign
-of the entire nested statistics infrastructure.
+cifs.ko defines two file system types: cifs & smb3, and
+__cifs_get_super() was not including smb3 file system type when
+looking up superblocks, therefore failing to reconnect tcons in
+cifs_tree_connect().
 
-As a workaround, PR
+Fix this by calling iterate_supers_type() on both file system types.
 
-     http://github.com/ceph/ceph/pull/37938
-
-allows this extended attribute to be manually set. This allows
-users to "fixup" inconsistent rctime values. While this sounds
-messy, its probably the wisest approach allowing users/scripts
-to workaround buggy rctime values.
-
-The above PR enables Ceph MDS to allow manually setting
-rctime extended attribute with the corresponding user-land
-changes. We may as well allow the same to be done via kclient
-for parity.
-
-Signed-off-by: Venky Shankar <vshankar@redhat.com>
-Reviewed-by: Xiubo Li <xiubli@redhat.com>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/CAFrh3J9soC36+BVuwHB=g9z_KB5Og2+p2_W+BBoBOZveErz14w@mail.gmail.com
+Cc: stable@vger.kernel.org
+Tested-by: Satadru Pramanik <satadru@gmail.com>
+Reported-by: Satadru Pramanik <satadru@gmail.com>
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ceph/xattr.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ fs/cifs/cifsfs.c |    2 +-
+ fs/cifs/cifsfs.h |    2 +-
+ fs/cifs/misc.c   |   27 ++++++++++++++++-----------
+ 3 files changed, 18 insertions(+), 13 deletions(-)
 
-diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
-index fcf7dfdecf96..e41b22bd66ce 100644
---- a/fs/ceph/xattr.c
-+++ b/fs/ceph/xattr.c
-@@ -366,6 +366,14 @@ static ssize_t ceph_vxattrcb_auth_mds(struct ceph_inode_info *ci,
- 	}
- #define XATTR_RSTAT_FIELD(_type, _name)			\
- 	XATTR_NAME_CEPH(_type, _name, VXATTR_FLAG_RSTAT)
-+#define XATTR_RSTAT_FIELD_UPDATABLE(_type, _name)			\
-+	{								\
-+		.name = CEPH_XATTR_NAME(_type, _name),			\
-+		.name_size = sizeof (CEPH_XATTR_NAME(_type, _name)),	\
-+		.getxattr_cb = ceph_vxattrcb_ ## _type ## _ ## _name,	\
-+		.exists_cb = NULL,					\
-+		.flags = VXATTR_FLAG_RSTAT,				\
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -1084,7 +1084,7 @@ struct file_system_type cifs_fs_type = {
+ };
+ MODULE_ALIAS_FS("cifs");
+ 
+-static struct file_system_type smb3_fs_type = {
++struct file_system_type smb3_fs_type = {
+ 	.owner = THIS_MODULE,
+ 	.name = "smb3",
+ 	.init_fs_context = smb3_init_fs_context,
+--- a/fs/cifs/cifsfs.h
++++ b/fs/cifs/cifsfs.h
+@@ -38,7 +38,7 @@ static inline unsigned long cifs_get_tim
+ 	return (unsigned long) dentry->d_fsdata;
+ }
+ 
+-extern struct file_system_type cifs_fs_type;
++extern struct file_system_type cifs_fs_type, smb3_fs_type;
+ extern const struct address_space_operations cifs_addr_ops;
+ extern const struct address_space_operations cifs_addr_ops_smallbuf;
+ 
+--- a/fs/cifs/misc.c
++++ b/fs/cifs/misc.c
+@@ -1209,18 +1209,23 @@ static struct super_block *__cifs_get_su
+ 		.data = data,
+ 		.sb = NULL,
+ 	};
++	struct file_system_type **fs_type = (struct file_system_type *[]) {
++		&cifs_fs_type, &smb3_fs_type, NULL,
++	};
+ 
+-	iterate_supers_type(&cifs_fs_type, f, &sd);
+-
+-	if (!sd.sb)
+-		return ERR_PTR(-EINVAL);
+-	/*
+-	 * Grab an active reference in order to prevent automounts (DFS links)
+-	 * of expiring and then freeing up our cifs superblock pointer while
+-	 * we're doing failover.
+-	 */
+-	cifs_sb_active(sd.sb);
+-	return sd.sb;
++	for (; *fs_type; fs_type++) {
++		iterate_supers_type(*fs_type, f, &sd);
++		if (sd.sb) {
++			/*
++			 * Grab an active reference in order to prevent automounts (DFS links)
++			 * of expiring and then freeing up our cifs superblock pointer while
++			 * we're doing failover.
++			 */
++			cifs_sb_active(sd.sb);
++			return sd.sb;
++		}
 +	}
- #define XATTR_LAYOUT_FIELD(_type, _name, _field)			\
- 	{								\
- 		.name = CEPH_XATTR_NAME2(_type, _name, _field),	\
-@@ -404,7 +412,7 @@ static struct ceph_vxattr ceph_dir_vxattrs[] = {
- 	XATTR_RSTAT_FIELD(dir, rsubdirs),
- 	XATTR_RSTAT_FIELD(dir, rsnaps),
- 	XATTR_RSTAT_FIELD(dir, rbytes),
--	XATTR_RSTAT_FIELD(dir, rctime),
-+	XATTR_RSTAT_FIELD_UPDATABLE(dir, rctime),
- 	{
- 		.name = "ceph.dir.pin",
- 		.name_size = sizeof("ceph.dir.pin"),
--- 
-2.35.1
-
++	return ERR_PTR(-EINVAL);
+ }
+ 
+ static void __cifs_put_super(struct super_block *sb)
 
 

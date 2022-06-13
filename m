@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AE2549778
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2ED5495ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356073AbiFMLnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S1353664AbiFMLYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355525AbiFMLjI (ORCPT
+        with ESMTP id S1353733AbiFMLQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:39:08 -0400
+        Mon, 13 Jun 2022 07:16:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DE72C119;
-        Mon, 13 Jun 2022 03:48:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4BC13E23;
+        Mon, 13 Jun 2022 03:39:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9BE36112A;
-        Mon, 13 Jun 2022 10:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00AB7C34114;
-        Mon, 13 Jun 2022 10:48:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B96B611B3;
+        Mon, 13 Jun 2022 10:39:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A748C34114;
+        Mon, 13 Jun 2022 10:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117328;
-        bh=1ZG1JySuWceOc9T7kfMLbN7XXqvVOPvIff+FirOxY38=;
+        s=korg; t=1655116785;
+        bh=0mrpPtTiXtjUagEn5JIToAkwp1lSzmOb/SAbatJjMl4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BELpSgBOs86PpO82p8risPUE6OgikLpbUd4KYBwA8/rClaN4V7+DlARoJHIHQ0O98
-         91ztTTnCEqikEGeAQNS0+iqCs0hZPAXAi+SImkuo9KSZkotvolQoivd7n0OQENVC6u
-         TABfSgkbdTR4GHksjbYE1AViq0TPlAm8vSxE5gzI=
+        b=mRAYJUmHSfsXANsQk+yXbLgXbFnS3aTD635C1cqradrXR2oPiP1tqxwYLmR+/DAU/
+         DRKMQY89QDIlhKf4vQMr9lttWE5kIsocvBvqM94qqLefYd/2KtGSKEkW9prDnbAJEA
+         ors0fYYRxX/bsAZuj84lN/kbsryw+RsoUFiNUVMs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 022/287] media: cx25821: Fix the warning when removing the module
+Subject: [PATCH 5.4 173/411] scsi: fcoe: Fix Wstringop-overflow warnings in fcoe_wwn_from_mac()
 Date:   Mon, 13 Jun 2022 12:07:26 +0200
-Message-Id: <20220613094924.534679502@linuxfoundation.org>
+Message-Id: <20220613094933.845286788@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +55,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-[ Upstream commit 2203436a4d24302871617373a7eb21bc17e38762 ]
+[ Upstream commit 54db804d5d7d36709d1ce70bde3b9a6c61b290b6 ]
 
-When removing the module, we will get the following warning:
+Fix the following Wstringop-overflow warnings when building with GCC-11:
 
-[   14.746697] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'cx25821[1]'
-[   14.747449] WARNING: CPU: 4 PID: 368 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
-[   14.751611] RIP: 0010:remove_proc_entry+0x389/0x3f0
-[   14.759589] Call Trace:
-[   14.759792]  <TASK>
-[   14.759975]  unregister_irq_proc+0x14c/0x170
-[   14.760340]  irq_free_descs+0x94/0xe0
-[   14.760640]  mp_unmap_irq+0xb6/0x100
-[   14.760937]  acpi_unregister_gsi_ioapic+0x27/0x40
-[   14.761334]  acpi_pci_irq_disable+0x1d3/0x320
-[   14.761688]  pci_disable_device+0x1ad/0x380
-[   14.762027]  ? _raw_spin_unlock_irqrestore+0x2d/0x60
-[   14.762442]  ? cx25821_shutdown+0x20/0x9f0 [cx25821]
-[   14.762848]  cx25821_finidev+0x48/0xc0 [cx25821]
-[   14.763242]  pci_device_remove+0x92/0x240
+drivers/scsi/fcoe/fcoe.c: In function ‘fcoe_netdev_config’:
+drivers/scsi/fcoe/fcoe.c:744:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  744 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr, 1, 0);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/fcoe/fcoe.c:744:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/fcoe/fcoe.c:36:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+drivers/scsi/fcoe/fcoe.c:747:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  747 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  748 |                                                  2, 0);
+      |                                                  ~~~~~
+drivers/scsi/fcoe/fcoe.c:747:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/fcoe/fcoe.c:36:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+  CC      drivers/scsi/bnx2fc/bnx2fc_io.o
+In function ‘bnx2fc_net_config’,
+    inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  833 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  834 |                                                  1, 0);
+      |                                                  ~~~~~
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+                 from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+In function ‘bnx2fc_net_config’,
+    inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  839 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  840 |                                                  2, 0);
+      |                                                  ~~~~~
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+                 from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c: In function ‘__qedf_probe’:
+drivers/scsi/qedf/qedf_main.c:3520:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+ 3520 |                 qedf->wwnn = fcoe_wwn_from_mac(qedf->mac, 1, 0);
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c:3520:30: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/qedf/qedf.h:9,
+                 from drivers/scsi/qedf/qedf_main.c:23:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c:3521:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+ 3521 |                 qedf->wwpn = fcoe_wwn_from_mac(qedf->mac, 2, 0);
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c:3521:30: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/qedf/qedf.h:9,
+                 from drivers/scsi/qedf/qedf_main.c:23:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
 
-Fix this by freeing the irq before call pci_disable_device().
+by changing the array size to the correct value of ETH_ALEN in the
+argument declaration.
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Also, fix a couple of checkpatch warnings:
+WARNING: function definition argument 'unsigned int' should also have an identifier name
+
+This helps with the ongoing efforts to globally enable
+-Wstringop-overflow.
+
+Link: https://github.com/KSPP/linux/issues/181
+Fixes: 85b4aa4926a5 ("[SCSI] fcoe: Fibre Channel over Ethernet")
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx25821/cx25821-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
+ include/scsi/libfcoe.h        | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index e04fe9f17b7a..99359eaf8cdc 100644
---- a/drivers/media/pci/cx25821/cx25821-core.c
-+++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -1350,11 +1350,11 @@ static void cx25821_finidev(struct pci_dev *pci_dev)
- 	struct cx25821_dev *dev = get_cx25821(v4l2_dev);
+diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+index 07a0dadc75bf..7ce2a0434e1e 100644
+--- a/drivers/scsi/fcoe/fcoe_ctlr.c
++++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+@@ -1966,7 +1966,7 @@ EXPORT_SYMBOL(fcoe_ctlr_recv_flogi);
+  *
+  * Returns: u64 fc world wide name
+  */
+-u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN],
++u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN],
+ 		      unsigned int scheme, unsigned int port)
+ {
+ 	u64 wwn;
+diff --git a/include/scsi/libfcoe.h b/include/scsi/libfcoe.h
+index fac8e89aed81..310e0dbffda9 100644
+--- a/include/scsi/libfcoe.h
++++ b/include/scsi/libfcoe.h
+@@ -249,7 +249,8 @@ int fcoe_ctlr_recv_flogi(struct fcoe_ctlr *, struct fc_lport *,
+ 			 struct fc_frame *);
  
- 	cx25821_shutdown(dev);
--	pci_disable_device(pci_dev);
- 
- 	/* unregister stuff */
- 	if (pci_dev->irq)
- 		free_irq(pci_dev->irq, dev);
-+	pci_disable_device(pci_dev);
- 
- 	cx25821_dev_unregister(dev);
- 	v4l2_device_unregister(v4l2_dev);
+ /* libfcoe funcs */
+-u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
++u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN], unsigned int scheme,
++		      unsigned int port);
+ int fcoe_libfc_config(struct fc_lport *, struct fcoe_ctlr *,
+ 		      const struct libfc_function_template *, int init_fcp);
+ u32 fcoe_fc_crc(struct fc_frame *fp);
 -- 
 2.35.1
 

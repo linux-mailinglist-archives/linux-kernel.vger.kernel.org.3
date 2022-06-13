@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244AB549088
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175E75491D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357162AbiFMLxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        id S1353826AbiFML07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356172AbiFMLsZ (ORCPT
+        with ESMTP id S1353811AbiFMLT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:48:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E5C20BC6;
-        Mon, 13 Jun 2022 03:52:55 -0700 (PDT)
+        Mon, 13 Jun 2022 07:19:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAD23B560;
+        Mon, 13 Jun 2022 03:41:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4471B61257;
-        Mon, 13 Jun 2022 10:52:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 589B0C34114;
-        Mon, 13 Jun 2022 10:52:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9E2AB80EAA;
+        Mon, 13 Jun 2022 10:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A08AC34114;
+        Mon, 13 Jun 2022 10:41:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117574;
-        bh=zfVYQZExyk2+PW74rnQ2CE7NuMP51ZzEX49QRBSfEM8=;
+        s=korg; t=1655116903;
+        bh=ywtWzVs7H9aRp2wlE0OHMeZsDuk5hC5P/5o+5/xR1co=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ruTQOPRu867ES8fErIdRdDBo8qbLPjqzHiCEWX+kxQovx++z7hPeJ89BwZYn++rRP
-         +1DwpHFfkCA6pFzo5mCJa7Xsr4ISKr81yTMBxX1IqUUuOvFQlrxH0WBV+gyLPu1Ksr
-         dYlweQCfH9yW3LNT2oAcgMRA50xGjUuHTjWix9pk=
+        b=frb5zTWbZX+zgqSFERLRPaQ3AkfY6On2UYRrIEUZvHGTlYfhPoH9WxfkvEU38oG2W
+         +Fep54dqDParHiYP4BsYL37+ISwgDiupQBnHxghUCFQqD2sB45iUvVUce2tO3XdXlX
+         VqpWdNYjnc0khjHtbc2M/hREo4MguHyR/zM/5m+M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miles Chen <miles.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 064/287] drm/mediatek: Fix mtk_cec_mask()
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 5.4 215/411] wifi: mac80211: fix use-after-free in chanctx code
 Date:   Mon, 13 Jun 2022 12:08:08 +0200
-Message-Id: <20220613094925.811122915@linuxfoundation.org>
+Message-Id: <20220613094935.099721778@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,45 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miles Chen <miles.chen@mediatek.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 2c5d69b0a141e1e98febe3111e6f4fd8420493a5 ]
+commit 2965c4cdf7ad9ce0796fac5e57debb9519ea721e upstream.
 
-In current implementation, mtk_cec_mask() writes val into target register
-and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
-should read a register, clean only mask bits, and update (val | mask) bits
-to the register.
+In ieee80211_vif_use_reserved_context(), when we have an
+old context and the new context's replace_state is set to
+IEEE80211_CHANCTX_REPLACE_NONE, we free the old context
+in ieee80211_vif_use_reserved_reassign(). Therefore, we
+cannot check the old_ctx anymore, so we should set it to
+NULL after this point.
 
-Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220315232301.2434-1-miles.chen@mediatek.com/
-Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
-Cc: CK Hu <ck.hu@mediatek.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, since the new_ctx replace state is clearly not
+IEEE80211_CHANCTX_REPLACES_OTHER, we're not going to do
+anything else in this function and can just return to
+avoid accessing the freed old_ctx.
+
+Cc: stable@vger.kernel.org
+Fixes: 5bcae31d9cb1 ("mac80211: implement multi-vif in-place reservations")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220601091926.df419d91b165.I17a9b3894ff0b8323ce2afdb153b101124c821e5@changeid
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/mac80211/chan.c |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
-index 5ce84d0dbf81..acbf878083d7 100644
---- a/drivers/gpu/drm/mediatek/mtk_cec.c
-+++ b/drivers/gpu/drm/mediatek/mtk_cec.c
-@@ -92,7 +92,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
- 	u32 tmp = readl(cec->regs + offset) & ~mask;
+--- a/net/mac80211/chan.c
++++ b/net/mac80211/chan.c
+@@ -1639,12 +1639,9 @@ int ieee80211_vif_use_reserved_context(s
  
- 	tmp |= val & mask;
--	writel(val, cec->regs + offset);
-+	writel(tmp, cec->regs + offset);
- }
+ 	if (new_ctx->replace_state == IEEE80211_CHANCTX_REPLACE_NONE) {
+ 		if (old_ctx)
+-			err = ieee80211_vif_use_reserved_reassign(sdata);
+-		else
+-			err = ieee80211_vif_use_reserved_assign(sdata);
++			return ieee80211_vif_use_reserved_reassign(sdata);
  
- void mtk_cec_set_hpd_event(struct device *dev,
--- 
-2.35.1
-
+-		if (err)
+-			return err;
++		return ieee80211_vif_use_reserved_assign(sdata);
+ 	}
+ 
+ 	/*
 
 

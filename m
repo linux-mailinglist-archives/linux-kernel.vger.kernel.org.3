@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67926548E7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC93548DB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356860AbiFMLvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S1384564AbiFMOgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357332AbiFMLp7 (ORCPT
+        with ESMTP id S1385459AbiFMObN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:45:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0014AE3B;
-        Mon, 13 Jun 2022 03:52:08 -0700 (PDT)
+        Mon, 13 Jun 2022 10:31:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8D6ABE42;
+        Mon, 13 Jun 2022 04:48:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03459611B3;
-        Mon, 13 Jun 2022 10:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E95C34114;
-        Mon, 13 Jun 2022 10:52:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14B19B80EE2;
+        Mon, 13 Jun 2022 11:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667D2C34114;
+        Mon, 13 Jun 2022 11:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117527;
-        bh=waQKgNy+BWkAicT7he7wv5bSKCqAUiqLzRoxehJRFQ0=;
+        s=korg; t=1655120891;
+        bh=di+rlPStseU+iqxIuStF2OeBZTDVaIS8ROUsB/WG8bY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kxc4nILfNAO4QV30RFGRPjTbpUeZnI6BTOEZsFcA9YOLX0IHFJZzxgiTkuri4aMyD
-         EGdppwohVSq5EMtrIsUHs7XeQN5c55MDjZu6oCJ2CmnXK3fYXmxXWrKLMxu7fc5U5D
-         FLRXV0nDM6pVkIvollfwNg4P5cipBmMI9pJ9vPw8=
+        b=vsX8UthsGuT0jL/6gTTld2pnRc0jYzB+/xS8EiInsznZ6jFnO1qv+mDeM9H7OhK3+
+         UMrz8hngzXAG5r0gqBphAF1rDiGqavK48KS3kFaX0gvXdSjZNqKvMBHDLrs4IRcEF7
+         zxkReOs11RZ20GhXJGvDFBt4C6+9rFi/vGSOyQ8c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 394/411] nbd: fix io hung while disconnecting device
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 173/298] stmmac: intel: Fix an error handling path in intel_eth_pci_probe()
 Date:   Mon, 13 Jun 2022 12:11:07 +0200
-Message-Id: <20220613094940.481053342@linuxfoundation.org>
+Message-Id: <20220613094930.180659430@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,76 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 09dadb5985023e27d4740ebd17e6fea4640110e5 ]
+[ Upstream commit 5e74a4b3ec1816e3bbfd715d46ae29d2508079cb ]
 
-In our tests, "qemu-nbd" triggers a io hung:
+When the managed API is used, there is no need to explicitly call
+pci_free_irq_vectors().
 
-INFO: task qemu-nbd:11445 blocked for more than 368 seconds.
-      Not tainted 5.18.0-rc3-next-20220422-00003-g2176915513ca #884
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:qemu-nbd        state:D stack:    0 pid:11445 ppid:     1 flags:0x00000000
-Call Trace:
- <TASK>
- __schedule+0x480/0x1050
- ? _raw_spin_lock_irqsave+0x3e/0xb0
- schedule+0x9c/0x1b0
- blk_mq_freeze_queue_wait+0x9d/0xf0
- ? ipi_rseq+0x70/0x70
- blk_mq_freeze_queue+0x2b/0x40
- nbd_add_socket+0x6b/0x270 [nbd]
- nbd_ioctl+0x383/0x510 [nbd]
- blkdev_ioctl+0x18e/0x3e0
- __x64_sys_ioctl+0xac/0x120
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fd8ff706577
-RSP: 002b:00007fd8fcdfebf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000040000000 RCX: 00007fd8ff706577
-RDX: 000000000000000d RSI: 000000000000ab00 RDI: 000000000000000f
-RBP: 000000000000000f R08: 000000000000fbe8 R09: 000055fe497c62b0
-R10: 00000002aff20000 R11: 0000000000000246 R12: 000000000000006d
-R13: 0000000000000000 R14: 00007ffe82dc5e70 R15: 00007fd8fcdff9c0
+This looks to be a left-over from the commit in the Fixes tag. Only the
+.remove() function had been updated.
 
-"qemu-ndb -d" will call ioctl 'NBD_DISCONNECT' first, however, following
-message was found:
+So remove this unused function call and update goto label accordingly.
 
-block nbd0: Send disconnect failed -32
-
-Which indicate that something is wrong with the server. Then,
-"qemu-nbd -d" will call ioctl 'NBD_CLEAR_SOCK', however ioctl can't clear
-requests after commit 2516ab1543fd("nbd: only clear the queue on device
-teardown"). And in the meantime, request can't complete through timeout
-because nbd_xmit_timeout() will always return 'BLK_EH_RESET_TIMER', which
-means such request will never be completed in this situation.
-
-Now that the flag 'NBD_CMD_INFLIGHT' can make sure requests won't
-complete multiple times, switch back to call nbd_clear_sock() in
-nbd_clear_sock_ioctl(), so that inflight requests can be cleared.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20220521073749.3146892-5-yukuai3@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 8accc467758e ("stmmac: intel: use managed PCI function on probe and resume")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
+Link: https://lore.kernel.org/r/1ac9b6787b0db83b0095711882c55c77c8ea8da0.1654462241.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index ef355f14ed2c..09323b0510f0 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1344,7 +1344,7 @@ static int nbd_start_device_ioctl(struct nbd_device *nbd, struct block_device *b
- static void nbd_clear_sock_ioctl(struct nbd_device *nbd,
- 				 struct block_device *bdev)
- {
--	sock_shutdown(nbd);
-+	nbd_clear_sock(nbd);
- 	__invalidate_device(bdev, true);
- 	nbd_bdev_reset(bdev);
- 	if (test_and_clear_bit(NBD_RT_HAS_CONFIG_REF,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+index 6f87e296a410..502fbbc082fb 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+@@ -1073,13 +1073,11 @@ static int intel_eth_pci_probe(struct pci_dev *pdev,
+ 
+ 	ret = stmmac_dvr_probe(&pdev->dev, plat, &res);
+ 	if (ret) {
+-		goto err_dvr_probe;
++		goto err_alloc_irq;
+ 	}
+ 
+ 	return 0;
+ 
+-err_dvr_probe:
+-	pci_free_irq_vectors(pdev);
+ err_alloc_irq:
+ 	clk_disable_unprepare(plat->stmmac_clk);
+ 	clk_unregister_fixed_rate(plat->stmmac_clk);
 -- 
 2.35.1
 

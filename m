@@ -2,167 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7F8547E93
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 06:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81224547E9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 06:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbiFME3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 00:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
+        id S232334AbiFMEbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 00:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbiFME3n (ORCPT
+        with ESMTP id S229499AbiFMEbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 00:29:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822161CB1A
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 21:29:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6152612C9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:29:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071EDC34114;
-        Mon, 13 Jun 2022 04:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655094578;
-        bh=i49pQc/pJodj7UnEjzLfwNx3xKTBjjxSB1t7FjyvBiE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=C6/UVSAS7YCK2CqrwT1O41jmLu6hh5uQpGL0hPN6CArYclWfJxJOPUP+WS1x7aujF
-         cf+L5uN2odp9mNo33bcLU68q5ofwYHqsmHs7OsDrQY1ks6xqOQTOw+XmsUfMauSXcN
-         4yukCEw3isdWzACQ5EWAsGYFI9jpzNSIjbAiwpRpydP4PC6+CgI7zrvNt802+EjphI
-         EHaZ2xUdxmkT87FYS0AYZSULAm3Jk/vHA7W5rCefcINWFJY558DDcEAUMGJJ7EtiYB
-         wrIdrGv1s6MOq0Sqt54765n2eWOYeOM7amSnfURqHVVp2E4HdCmgOzyZM4zA3nvJdB
-         GIjD4eUkGxh0A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9370F5C059E; Sun, 12 Jun 2022 21:29:37 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 21:29:37 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org,
-        pmladek@suse.com, Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [BUG] 8e274732115f ("printk: extend console_lock for per-console
- locking")
-Message-ID: <20220613042937.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1>
- <87v8t5l39z.fsf@jogness.linutronix.de>
+        Mon, 13 Jun 2022 00:31:08 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C18C23D;
+        Sun, 12 Jun 2022 21:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655094667; x=1686630667;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=cbQSg0DTpRGtPM3hIBBJ/Z+d2lDkACTCIYG/qn7BGx0=;
+  b=AHYIVcPyaBipuxRuJ676TfRPL0b0cMp7TIArEkWY6JyY7Ydgybp+wamI
+   MxhQdBO+coSjT8GzWzTIQa/j46X5RfyD2xcQPv8foyNFJm39LQoyqNd/f
+   jAkgoqU9AV27JoFzToQTk5S7x7WSixiTi4Ss+vnzAaDBrbVNSX/ymT55l
+   s=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 12 Jun 2022 21:31:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 21:31:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 12 Jun 2022 21:31:05 -0700
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 12 Jun 2022 21:30:59 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [v21 0/5] USB DWC3 host wake up support from system suspend
+Date:   Mon, 13 Jun 2022 10:00:49 +0530
+Message-ID: <1655094654-24052-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v8t5l39z.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 04:18:56AM +0206, John Ogness wrote:
-> On 2022-06-10, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > I have started getting rcutorture shutdown-time hangs when running
-> > against recent mainline, and bisected back to the 8e274732115f ("printk:
-> > extend console_lock for per-console locking") commit.  These hangs go
-> > away (or at least their probability drops dramatically) if I build with
-> > CONFIG_PREEMPTION=n -and- CONFIG_NO_HZ=y (not n!), at least assuming
-> > that I also boot with "nohz_full=0-N".
-> >
-> > Attempts to debug using rcutorture's "--gdb" argument result in
-> > "[Inferior 1 (process 1) exited normally]", but with the same truncated
-> > console-log output as when running without "--gdb".  This suggests
-> > that the kernel really did run to completion and halt as expected,
-> > but that the shutdown-time printk() output was lost.  Furthermore, if I
-> > use the gdb "hbreak" command to set a breakpoint at kernel_power_off(),
-> > it really does hit that breakpoint.  This would not happen in the case
-> > of a kernel hang.
-> >
-> > So, given that I can hit that breakpoint, what should I ask gdb to
-> > show me?
-> 
-> If you also compile with CONFIG_GDB_SCRIPTS=y then you can use the
-> defined "lx-dmesg" gdb command to see if the messages are in the
-> ringbuffer.
-> 
-> (You may need to add:
-> 
-> add-auto-load-safe-path /path/to/linux/scripts/gdb/vmlinux-gdb.py
-> 
-> to your $HOME/.gdbinit)
-> 
-> But since you are hitting the breakpoint, the messages will be there.
-> 
-> > Alternatively, this reproduces on a variety of x86 platforms, so you
-> > should be able reproduce it as follows [1]:
-> >
-> > 	git checkout v5.19-rc1
-> > 	tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 2 --configs "TREE01" --gdb --kconfig "CONFIG_DEBUG_INFO_NONE=n CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y" --trust-make
-> >
-> > This builds a kernel, boots it, and then tells you how to launch gdb
-> > (presumably in some other window).  Once you give launch gdb and give
-> > it the suggested commands, the kernel runs for two minutes under qemu,
-> > then shuts down.  I used the following gdb commands to set the breakpoint
-> > and run the kernel:
-> >
-> > 	target remote :1234  # suggested by the rcutorture script
-> > 	hbreak kernel_power_off  # added by me
-> > 	continue  # suggested by the rcutorture script
-> 
-> Thanks. Nice helper scripts. With this I could easily reproduce the
-> issue.
+Avoiding phy powerdown in host mode when dwc3 is wakeup capable, so that
+it can be wake up by devices. Keep usb30_prim gdsc active to retain
+controller status during suspend/resume.
 
-Glad that they worked nicely for you!
+Changes in v21:
+Fixed compilation issues in dwc3 qcom driver code.
 
-> As I suspected, the final printk's cannot direct print because the
-> kthread was printing. Using the below patch did seem to address your
-> problem. But this is probably not the way forward.
+Changes in v20:
+Fixed nitpicks in dwc3 qcom driver.
+Fixed code changes in dwc3 core driver.
 
-When I apply it, I still lose output, perhaps due to different timing?
-Doing the pr_flush(1000, true) just before the call to kernel_power_off()
-has been working quite well thus far, though.
+Changes in v19:
+Fixed dwc3 driver code changes.
 
-							Thanx, Paul
+Changes in v18:
+Fixed minor nit picks in v17 reported by Matthias.
 
-> What I have not figured out is why this problem does not exist when only
-> the kthread patch (but not the "extend console_lock" patch) is
-> applied. Somehow the console_lock is magically providing some sort of
-> synchronization in the end. Or maybe it is just the increased lock
-> contention that helps out.
-> 
-> It seems we need some sort of console_flush_on_panic() for non-panic
-> situations that is not as violent as console_flush_on_panic().
-> 
-> @Petr, does it make sense to add the below patch to mainline? It is only
-> marginally helpful because it performs the direct printing in the wrong
-> context. Really we need that final pr_emerg("Power down\n") to be a
-> successful direct print so that the buffer is fully flushed before
-> hitting machine_power_off(). In fact, the below patch could make things
-> worse because the printing kthread could take over printing from that
-> final pr_emerg().
-> 
-> John Ogness
-> 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index ea3dd55709e7..5950586008fa 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3841,6 +3841,18 @@ static int printk_kthread_func(void *data)
->  		console_kthread_printing_exit();
->  
->  		mutex_unlock(&con->lock);
-> +
-> +		/*
-> +		 * The kernel may have transitioned to a direct printing
-> +		 * state, but any printk calls may not have direct printed
-> +		 * because this thread was printing its message. Grab and
-> +		 * release the console lock to flush out any pending
-> +		 * messages on all consoles.
-> +		 */
-> +		if (allow_direct_printing()) {
-> +			console_lock();
-> +			console_unlock();
-> +		}
->  	}
->  
->  	con_printk(KERN_INFO, con, "printing thread stopped\n");
+Changes in v17:
+Moved the speed check to glue driver.
+Powering down phy's solely based on dwc3 wakeup capability.
+Configuring the interrupt functions appropriately.
+
+Changes in v16:
+Added changes to power down the phy's during suspend only if dwc3
+is not wakeup capable.
+
+Changes in v15:
+Added patch to enable wakeup for xhci-plat based on children wakeup status.
+Used device_wakeup_path instead of device_children_wakeup_capable
+
+Changes in v14:
+Added patch for device_children_wakeup_capable.
+Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
+Fixed minor nit picks in v13 reported by Matthias.
+
+Changes in v13:
+Moved the dt bindings patch to start.
+Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
+Check wakep-source property for dwc3 core node to set the
+wakeup capability. Drop the device_init_wakeup call from
+runtime suspend and resume.
+Added GENPD_FLAG_RPM_ALWAYS_ON and set GENPD_FLAG_ALWAYS_ON if
+wakeup is supported.
+
+Changes in v12:
+Squashed PATCH 1/5 and 2/5 of v11.
+Added dt bindings and device tree entry for wakeup-source property
+for dwc3 core node.
+Dropped redundant phy_set_mode call.
+
+
+Changes in v11:
+Moving back to v8 version
+https://patchwork.kernel.org/project/linux-arm-msm/cover/1624882097-23265-1-git-send-email-sanm@codeaurora.org
+as we are getting interrupts during suspend
+when enabling both DP hs phy irq and DM hs phy irq.
+Moved the set phy mode function to dwc3/core.c from xhci-plat.c
+We didn't find any other option other than accessing xhci from dwc.
+
+Changes in v10:
+PATCH 1/6: Change device_set_wakeup_capable to device_set_wakeup_enable
+PATCH 2/6: Remove redundant else part in dwc3_resume_common
+PATCH 4/6: Change the irg flags
+PATCH 5/6: Set flag GENPD_FLAG_ALWAYS_ON
+PATCH 6/6: Remove disable interrupts function and enable
+interrupts in probe.
+
+
+Changes in v9:
+Checking with device_may_makeup property instead of phy_power_off flag.
+Changed the IRQ flags and removed hs_phy_mode variable.
+
+Changes in v8:
+Moved the dwc3 suspend quirk code in dwc3/host.c to xhci-plat.c
+Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
+to keep gdsc active.
+
+Changes in v7:
+Change in commit text and message in PATCH 1/5 and PATCH 5/5
+as per Matthias suggestion.
+Added curly braces for if and else if sections in PATCH 4/5.
+
+Changes in v6:
+Addressed comments in host.c and core.c
+Separated the patches in dwc3-qcom.c to make it simple.
+Dropped wakeup-source change as it is not related to this series.
+
+Changes in v5:
+Added phy_power_off flag to check presence of wakeup capable devices.
+Dropped patch[v4,4/5] as it is present linux-next.
+Addressed comments in host.c and dwc3-qcom.c.
+
+Changes in v4:
+Addressed Matthias comments raised in v3.
+
+Changes in v3:
+Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
+Addressed Matthias comments and added entry for DEV_SUPERSPEED.
+Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
+Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
+
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
+
+Sandeep Maheswaram (5):
+  dt-bindings: usb: dwc3: Add wakeup-source property support
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: qcom: Add helper functions to enable,disable wake irqs
+  usb: dwc3: qcom: Configure wakeup interrupts during suspend
+  usb: dwc3: qcom: Keep power domain on to retain controller status
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |   5 +
+ drivers/usb/dwc3/core.c                            |   9 +-
+ drivers/usb/dwc3/dwc3-qcom.c                       | 140 +++++++++++++++------
+ 3 files changed, 108 insertions(+), 46 deletions(-)
+
+-- 
+2.7.4
+

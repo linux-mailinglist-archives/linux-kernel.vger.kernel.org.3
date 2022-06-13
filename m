@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A15548CD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6A6548B10
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379237AbiFMNuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S1355579AbiFMLjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379077AbiFMNnn (ORCPT
+        with ESMTP id S1354830AbiFMLaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:43:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921683EB8D;
-        Mon, 13 Jun 2022 04:31:47 -0700 (PDT)
+        Mon, 13 Jun 2022 07:30:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1983FBDE;
+        Mon, 13 Jun 2022 03:45:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2FE36125A;
-        Mon, 13 Jun 2022 11:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9CA4C34114;
-        Mon, 13 Jun 2022 11:31:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48A2361248;
+        Mon, 13 Jun 2022 10:45:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55AF1C34114;
+        Mon, 13 Jun 2022 10:45:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119906;
-        bh=r+9jZckJhU5GOlndnobg0898jPtm8X7hVE+DfhMLKLs=;
+        s=korg; t=1655117148;
+        bh=/lWHFpte0nQhGTo7XI8GUdlZRuC2Mn0hannG7wMM4LU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tgto6gzApPgMlGWeD64sc5eJSIp0luy1bd+GVSRfjKbda2oDrYLU5m2fk31ukgs5f
-         a4YG8sd4no5gT7TEE+TjudPlSMe7G2ViFBk4lBltxe2ACy3Qo5M0unPM1K8t7/ahgO
-         CHe3RIMkeAHjUcsH/fK+17KgTFKlaEGHGhQWrn50=
+        b=JSK5jsaarZ7GpSYuiETkUSEGJMSCVAcwJGNtubVqVcZXhWapn9ZuWYUh+du8r7U/6
+         2hhPejOBz8aLn3/w7qGdl14KaEZklsvCdseOCMQGcjTHqD0SnBmKt2GZCopPlnJd3R
+         4jhPVPRqCcDxYheGVeJpyB4PSYjRFikAsxseJTDM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 151/339] Bluetooth: MGMT: Add conditions for setting HCI_CONN_FLAG_REMOTE_WAKEUP
+Subject: [PATCH 5.4 303/411] soc: rockchip: Fix refcount leak in rockchip_grf_init
 Date:   Mon, 13 Jun 2022 12:09:36 +0200
-Message-Id: <20220613094931.264269801@linuxfoundation.org>
+Message-Id: <20220613094937.839141064@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit a9a347655d224fa2841877957b34fc9d491fc2d7 ]
+[ Upstream commit 9b59588d8be91c96bfb0371e912ceb4f16315dbf ]
 
-HCI_CONN_FLAG_REMOTE_WAKEUP can only be set if device can be programmed
-in the allowlist which in case of device using RPA requires LL Privacy
-support to be enabled.
+of_find_matching_node_and_match returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215768
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 4c58063d4258 ("soc: rockchip: add driver handling grf setup")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220516072013.19731-1-linmq006@gmail.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/mgmt.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/soc/rockchip/grf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index d2d390534e54..74937a834648 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -4529,6 +4529,23 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
- 		params = hci_conn_params_lookup(hdev, &cp->addr.bdaddr,
- 						le_addr_type(cp->addr.type));
- 		if (params) {
-+			DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
-+
-+			bitmap_from_u64(flags, current_flags);
-+
-+			/* Devices using RPAs can only be programmed in the
-+			 * acceptlist LL Privacy has been enable otherwise they
-+			 * cannot mark HCI_CONN_FLAG_REMOTE_WAKEUP.
-+			 */
-+			if (test_bit(HCI_CONN_FLAG_REMOTE_WAKEUP, flags) &&
-+			    !use_ll_privacy(hdev) &&
-+			    hci_find_irk_by_addr(hdev, &params->addr,
-+						 params->addr_type)) {
-+				bt_dev_warn(hdev,
-+					    "Cannot set wakeable for RPA");
-+				goto unlock;
-+			}
-+
- 			bitmap_from_u64(params->flags, current_flags);
- 			status = MGMT_STATUS_SUCCESS;
- 
-@@ -4545,6 +4562,7 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
- 		}
+diff --git a/drivers/soc/rockchip/grf.c b/drivers/soc/rockchip/grf.c
+index 494cf2b5bf7b..343ff61ccccb 100644
+--- a/drivers/soc/rockchip/grf.c
++++ b/drivers/soc/rockchip/grf.c
+@@ -148,12 +148,14 @@ static int __init rockchip_grf_init(void)
+ 		return -ENODEV;
+ 	if (!match || !match->data) {
+ 		pr_err("%s: missing grf data\n", __func__);
++		of_node_put(np);
+ 		return -EINVAL;
  	}
  
-+unlock:
- 	hci_dev_unlock(hdev);
+ 	grf_info = match->data;
  
- done:
+ 	grf = syscon_node_to_regmap(np);
++	of_node_put(np);
+ 	if (IS_ERR(grf)) {
+ 		pr_err("%s: could not get grf syscon\n", __func__);
+ 		return PTR_ERR(grf);
 -- 
 2.35.1
 

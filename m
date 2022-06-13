@@ -2,115 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833CC5483D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6539454840B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241495AbiFMKOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S241407AbiFMKPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236358AbiFMKOR (ORCPT
+        with ESMTP id S241344AbiFMKOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:14:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32C2F72
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:14:15 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B481B21D51;
-        Mon, 13 Jun 2022 10:14:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655115254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8A1SBt7Y4ENgqL4eImjxK6vltqR5eYeh6JFaCiLr7vA=;
-        b=XEIaa7toxjzMzmVz63x8m/Bpz29asC1XFMDzDOXMWlSSE/4ReiaKbx5luU5EL1s71vEGjb
-        MV3HE9NpUiJSOf2bpEKQjUPEkTT8jliDvnD0E1jO++E86f768apChswS7pPvdQGUEFrQGC
-        G6pZM5KHDslkiRb0FnVSVU1b3+9IJ/Y=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 82DAF2C142;
-        Mon, 13 Jun 2022 10:14:14 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 12:14:14 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Subject: Re: [BUG] Threaded printk breaks early debugging
-Message-ID: <YqcN9mH/aVwBoIMQ@alley>
-References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
- <87y1y48spg.fsf@jogness.linutronix.de>
- <YqVZ4CyWTiDgngkA@google.com>
- <8735g9mqo0.fsf@jogness.linutronix.de>
- <Yqazr060OLp2Rpbk@google.com>
- <87wndlge43.fsf@jogness.linutronix.de>
- <Yqb9xOBiY/262lhk@google.com>
+        Mon, 13 Jun 2022 06:14:46 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69100CE1C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:14:34 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id m20so10160689ejj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M46PCkjJ2OifC0xaqwZJ7l8A4H9uAcmd8SjFaU1ZI3o=;
+        b=RY32gASyfk41ROBUhtm7wusGacyUTe5+H8ZMqeHzaR2h7UknN9RbikleB7Vzgo5/aN
+         qHO37sPTq+UUwbHnakGMJafJ/JOPPxwhitAGUBF7n3OFEe8P/NIS8p3OKqL8wv5L2GIm
+         6pmPjIwLKMU/A/b+7TQ7do/4KVOWgOcRYxiDNnXKTC7AbDxvfdT7qkwHZZCd9Da5M9tm
+         Pg5VYi16kYv/RuHVaWdSDEDq6EYXAVHufR0D7nSyMF0Bs8vEl4bfLQR3ROEeR8UyOydk
+         edovqXodfaCVZd4CRsKBjgskDrH+K/lf4hbinJJ9aGdKVUvI8n9islLSU7QV7+kJXNWP
+         4c0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M46PCkjJ2OifC0xaqwZJ7l8A4H9uAcmd8SjFaU1ZI3o=;
+        b=pFOYAEexK8Fqp5dRVxJv+xmNTiGsONStqg3otxoezAbDxaCEeDpJbd2APC97szHJkK
+         oNPK6RUWoUplDBZjBrTbhTgYL8bCh3X1b5RYCAH8kYzzKCgE2wHFbvRa66bp83wNB/Nl
+         G+kZPJ6laPqnqJjXm3SjvGXjKETR+kW5ZX+zIUT/cFUiZEt0OtTv6xRxkCuoL06d++o8
+         q4TBKYCdyaSO7ms4dRdhY/BpNgWL7dB8vHPCwlCJkVSV3g9kWoKRg8O+Knnxqaur8oMc
+         zIC02+J2vI497YIFIEdXkSwyvpjJWdk2bIgni0UvXmyNuE0H1ceiYYwrHHYT4YAIiFYS
+         EvTA==
+X-Gm-Message-State: AOAM532KjwlrOJLgz2xwUKxPrqH4xg9LKwGjoJmWJYIdSgt3mOvHJt6W
+        JMw01r0OGDTwOOWnlx9EbnzjOg==
+X-Google-Smtp-Source: ABdhPJw63RL7dYHdoDbusyEcWLmssYal+r5BY4+7+lRfm3Z0XJfoRLsIaSNcWuOfIbK+EpvPFW1/aQ==
+X-Received: by 2002:a17:907:6e8f:b0:710:865b:9c90 with SMTP id sh15-20020a1709076e8f00b00710865b9c90mr39900307ejc.27.1655115272913;
+        Mon, 13 Jun 2022 03:14:32 -0700 (PDT)
+Received: from krzk-bin.monzoon.net (80-254-69-65.dynamic.monzoon.net. [80.254.69.65])
+        by smtp.gmail.com with ESMTPSA id y9-20020a170906524900b006fec69696a0sm3639863ejm.220.2022.06.13.03.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 03:14:32 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: ufs: exynos: constify driver data
+Date:   Mon, 13 Jun 2022 12:14:29 +0200
+Message-Id: <20220613101429.114449-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqb9xOBiY/262lhk@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-06-13 18:05:08, Sergey Senozhatsky wrote:
-> On (22/06/13 10:36), John Ogness wrote:
-> > >> IMHO, no. Especially in that situation, we do not want printk causing
-> > >> that atomic section to become even longer. If the machine has entered
-> > >> normal operation, we want printk out of the way.
-> > >
-> > > At the same time printk throttles itself in such cases: new messages are
-> > > not added at much higher pace that they are printed at. So we lower the
-> > > chances of missing messages.
-> > 
-> > That is true if there is only 1 printk caller.
-> 
-> Well, which is the case when num_online_cpus() == 1?
+Constify the drv data because it should not be modified (used by
+multiple devices).
 
-Good question.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/ufs/host/ufs-exynos.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Well, it would be nice to have the same behavior on single CPU
-and SMP systems. Blocking atomic context with slow console is
-bad even on single processor system. If there are problems with
-lost messages then we will need a solution for SMP anyway.
+diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
+index a81d8cbd542f..9fef706d896e 100644
+--- a/drivers/ufs/host/ufs-exynos.c
++++ b/drivers/ufs/host/ufs-exynos.c
+@@ -157,7 +157,6 @@ enum {
+ 
+ #define CNTR_DIV_VAL 40
+ 
+-static struct exynos_ufs_drv_data exynos_ufs_drvs;
+ static void exynos_ufs_auto_ctrl_hcc(struct exynos_ufs *ufs, bool en);
+ static void exynos_ufs_ctrl_clkstop(struct exynos_ufs *ufs, bool en);
+ 
+@@ -1473,7 +1472,7 @@ static int exynosauto_ufs_vh_init(struct ufs_hba *hba)
+ 	return 0;
+ }
+ 
+-static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
++static const struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
+ 	.name				= "exynos_ufs",
+ 	.init				= exynos_ufs_init,
+ 	.hce_enable_notify		= exynos_ufs_hce_enable_notify,
+@@ -1545,7 +1544,7 @@ static struct exynos_ufs_uic_attr exynos7_uic_attr = {
+ 	.pa_dbg_option_suite		= 0x30103,
+ };
+ 
+-static struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
++static const struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
+ 	.uic_attr		= &exynos7_uic_attr,
+ 	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
+ 				  UFSHCI_QUIRK_SKIP_RESET_INTR_AGGR |
+@@ -1561,7 +1560,7 @@ static struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
+ 	.post_pwr_change	= exynosauto_ufs_post_pwr_change,
+ };
+ 
+-static struct exynos_ufs_drv_data exynosauto_ufs_vh_drvs = {
++static const struct exynos_ufs_drv_data exynosauto_ufs_vh_drvs = {
+ 	.vops			= &ufs_hba_exynosauto_vh_ops,
+ 	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
+ 				  UFSHCI_QUIRK_SKIP_RESET_INTR_AGGR |
+@@ -1573,7 +1572,7 @@ static struct exynos_ufs_drv_data exynosauto_ufs_vh_drvs = {
+ 	.opts			= EXYNOS_UFS_OPT_BROKEN_RX_SEL_IDX,
+ };
+ 
+-static struct exynos_ufs_drv_data exynos_ufs_drvs = {
++static const struct exynos_ufs_drv_data exynos_ufs_drvs = {
+ 	.uic_attr		= &exynos7_uic_attr,
+ 	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
+ 				  UFSHCI_QUIRK_BROKEN_REQ_LIST_CLR |
+-- 
+2.34.1
 
-> > For SMP systems with printing handovers, it might not help at all.
-> > I firmly believe that sprinkling randomness into printk (i.e. system)
-> > latencies is not the answer. We need to keep printk lockless and out
-> > of the system's way unless there is a real emergency happening.
-> 
-> Yeah sure.
->
-> > This particular thread is not about missed messages due to printk not
-> > "throttling the system", but rather the kernel buffers not getting
-> > flushed in an emergency. This, of course, needs to be properly handled.
-> 
-> True, but Peter mentioned
-> 
->   "I noticed with threading enabled during large bursts the console
->    drops an excessive amount of messages. It's especially apparent
->    during the handover from earlycon to the normal console."
-
-But this is also the situation when softlockups happen. It should
-ideally be solved with a big enough buffer.
-
-Another interesting alternative is the Peter Zijlstra's mode
-where all messages are printed to the console "immediately".
-They are serialized only by the CPU-reentrant lock.
-
-This mode is not good for production system. But it might
-be good for debugging. The good thing is that the behavior
-is well defined.
-
-I hope that we will get this mode with the atomic consoles.
-
-Best Regards,
-Petr

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371E5548C4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB6E54941A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353932AbiFML1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
+        id S1378553AbiFMNnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353572AbiFMLTu (ORCPT
+        with ESMTP id S1377982AbiFMNhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:19:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7F33B2A9;
-        Mon, 13 Jun 2022 03:41:24 -0700 (PDT)
+        Mon, 13 Jun 2022 09:37:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C0766ACF;
+        Mon, 13 Jun 2022 04:27:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AC80B80EA7;
-        Mon, 13 Jun 2022 10:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A97EC34114;
-        Mon, 13 Jun 2022 10:41:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5020161127;
+        Mon, 13 Jun 2022 11:27:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67339C34114;
+        Mon, 13 Jun 2022 11:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116881;
-        bh=75pxU6AJ6qp+2Jj6blxovuFp3F54aXvZVsi90ESDs+k=;
+        s=korg; t=1655119644;
+        bh=CA/sPs05YcX72Y5xiIYQdDb0jrU/vZ9roClReairjqw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KqS5bK9fUTrJIJfxHwOqN81BQhsVklhtOLILsjm6z3UVPCNw0JFFkH6P+8Bm6gHS9
-         Juxboul6IBt53hrU9e96rKYCsh7QiRSaN08i2oXD+77dF7DE08WAE3zt5hElhO17He
-         v3NgOTuU5jsaP2ong+vPcz2GDBAZHvGNTIj4bXmI=
+        b=u756ydz+QwzNUkC5SXX0XJjHS3I53w9fGiDqQHdLWeoiaijoqNqUhSi0jkb1ptibL
+         2L4sF1iT9nhnr1f+L9t3MudnXLMJsPigp4cPoJZcZiqNmjFXhDwLP+Mys/gAosUNLI
+         +PtLqjLai1PuuUaP9OV5qYkeKIsJTQtg/XtfOxjo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.4 219/411] bfq: Split shared queues on move between cgroups
+        stable@vger.kernel.org, Sean Anderson <sean.anderson@seco.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 067/339] serial: uartlite: Fix BRKINT clearing
 Date:   Mon, 13 Jun 2022 12:08:12 +0200
-Message-Id: <20220613094935.217764614@linuxfoundation.org>
+Message-Id: <20220613094928.555773654@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,99 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 3bc5e683c67d94bd839a1da2e796c15847b51b69 upstream.
+[ Upstream commit 3f7fed405c118607d4d42255f2572072db728399 ]
 
-When bfqq is shared by multiple processes it can happen that one of the
-processes gets moved to a different cgroup (or just starts submitting IO
-for different cgroup). In case that happens we need to split the merged
-bfqq as otherwise we will have IO for multiple cgroups in one bfqq and
-we will just account IO time to wrong entities etc.
+BRKINT is within c_iflag rather than c_cflag.
 
-Similarly if the bfqq is scheduled to merge with another bfqq but the
-merge didn't happen yet, cancel the merge as it need not be valid
-anymore.
-
-CC: stable@vger.kernel.org
-Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-3-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: ea017f5853e9 (tty: serial: uartlite: Prevent changing fixed parameters)
+Reviewed-by: Sean Anderson <sean.anderson@seco.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-2-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-cgroup.c  |   36 +++++++++++++++++++++++++++++++++---
- block/bfq-iosched.c |    2 +-
- block/bfq-iosched.h |    1 +
- 3 files changed, 35 insertions(+), 4 deletions(-)
+ drivers/tty/serial/uartlite.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -708,9 +708,39 @@ static struct bfq_group *__bfq_bic_chang
- 	}
+diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+index 007db67292a2..880e2afbb97b 100644
+--- a/drivers/tty/serial/uartlite.c
++++ b/drivers/tty/serial/uartlite.c
+@@ -321,7 +321,8 @@ static void ulite_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	struct uartlite_data *pdata = port->private_data;
  
- 	if (sync_bfqq) {
--		entity = &sync_bfqq->entity;
--		if (entity->sched_data != &bfqg->sched_data)
--			bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
-+		if (!sync_bfqq->new_bfqq && !bfq_bfqq_coop(sync_bfqq)) {
-+			/* We are the only user of this bfqq, just move it */
-+			if (sync_bfqq->entity.sched_data != &bfqg->sched_data)
-+				bfq_bfqq_move(bfqd, sync_bfqq, bfqg);
-+		} else {
-+			struct bfq_queue *bfqq;
-+
-+			/*
-+			 * The queue was merged to a different queue. Check
-+			 * that the merge chain still belongs to the same
-+			 * cgroup.
-+			 */
-+			for (bfqq = sync_bfqq; bfqq; bfqq = bfqq->new_bfqq)
-+				if (bfqq->entity.sched_data !=
-+				    &bfqg->sched_data)
-+					break;
-+			if (bfqq) {
-+				/*
-+				 * Some queue changed cgroup so the merge is
-+				 * not valid anymore. We cannot easily just
-+				 * cancel the merge (by clearing new_bfqq) as
-+				 * there may be other processes using this
-+				 * queue and holding refs to all queues below
-+				 * sync_bfqq->new_bfqq. Similarly if the merge
-+				 * already happened, we need to detach from
-+				 * bfqq now so that we cannot merge bio to a
-+				 * request from the old cgroup.
-+				 */
-+				bfq_put_cooperator(sync_bfqq);
-+				bfq_release_process_ref(bfqd, sync_bfqq);
-+				bic_set_bfqq(bic, NULL, 1);
-+			}
-+		}
- 	}
+ 	/* Set termios to what the hardware supports */
+-	termios->c_cflag &= ~(BRKINT | CSTOPB | PARENB | PARODD | CSIZE);
++	termios->c_iflag &= ~BRKINT;
++	termios->c_cflag &= ~(CSTOPB | PARENB | PARODD | CSIZE);
+ 	termios->c_cflag |= pdata->cflags & (PARENB | PARODD | CSIZE);
+ 	tty_termios_encode_baud_rate(termios, pdata->baud, pdata->baud);
  
- 	return bfqg;
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -4914,7 +4914,7 @@ void bfq_put_queue(struct bfq_queue *bfq
- 	bfqg_and_blkg_put(bfqg);
- }
- 
--static void bfq_put_cooperator(struct bfq_queue *bfqq)
-+void bfq_put_cooperator(struct bfq_queue *bfqq)
- {
- 	struct bfq_queue *__bfqq, *next;
- 
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -949,6 +949,7 @@ void bfq_weights_tree_remove(struct bfq_
- void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 		     bool compensate, enum bfqq_expiration reason);
- void bfq_put_queue(struct bfq_queue *bfqq);
-+void bfq_put_cooperator(struct bfq_queue *bfqq);
- void bfq_end_wr_async_queues(struct bfq_data *bfqd, struct bfq_group *bfqg);
- void bfq_release_process_ref(struct bfq_data *bfqd, struct bfq_queue *bfqq);
- void bfq_schedule_dispatch(struct bfq_data *bfqd);
+-- 
+2.35.1
+
 
 

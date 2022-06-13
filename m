@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045FA5494BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08F85491D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352101AbiFMMPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
+        id S1359563AbiFMNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353329AbiFMMLz (ORCPT
+        with ESMTP id S1358854AbiFMNID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:11:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4D53725;
-        Mon, 13 Jun 2022 04:01:01 -0700 (PDT)
+        Mon, 13 Jun 2022 09:08:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057D6381B3;
+        Mon, 13 Jun 2022 04:18:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 07139CE1177;
-        Mon, 13 Jun 2022 11:00:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DA8C3411E;
-        Mon, 13 Jun 2022 11:00:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F13AB80E93;
+        Mon, 13 Jun 2022 11:18:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6A26C34114;
+        Mon, 13 Jun 2022 11:18:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118044;
-        bh=Nutzhf21cfKA6oCIN7OHbNcV/jTtb54ejurYibKvydU=;
+        s=korg; t=1655119111;
+        bh=Wz6ytuiPn3zwCWRswCXT2My9kXeHiATd09Epw/fkci4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X4oap5TobVNdQL8+dTnUfXWIpn/KFO+ikvcZ7LQ9uQA6F1tScqvM/8GoLKVtL3O95
-         cJBFBC8OZFCq0AvSSOPOY8lIwbCafSU5rzCGA6GiFO95Ovn7GF0owJ5+iTKbsJKvzY
-         h+r2rK+EOOJuoal3qUBwhRc89yBWL1W2ldcPYhB0=
+        b=qaOx92fTtegRZaeEW2VhMPtgofSy9AQ6SPJYlJIFpkqrSUlC6utz7YGDh7EZ6WBvO
+         Yr/oUelLVA3yKxOG3W60UYJBO9eyFy0T6fTQ5k/13jbxVNMlbStsWpVuh1zvBFYd8Y
+         3FmmHK9HlPU5ylTtF/wH7tkEyImxkOwR4ZtdWezU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Laurent Fasnacht <laurent.fasnacht@proton.ch>,
-        Neal Cardwell <ncardwell@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 223/287] tcp: tcp_rtx_synack() can be called from process context
+Subject: [PATCH 5.15 145/247] bpf, arm64: Clear prog->jited_len along prog->jited
 Date:   Mon, 13 Jun 2022 12:10:47 +0200
-Message-Id: <20220613094930.775948037@linuxfoundation.org>
+Message-Id: <20220613094927.353112126@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,88 +60,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 0a375c822497ed6ad6b5da0792a12a6f1af10c0b ]
+[ Upstream commit 10f3b29c65bb2fe0d47c2945cd0b4087be1c5218 ]
 
-Laurent reported the enclosed report [1]
+syzbot reported an illegal copy_to_user() attempt
+from bpf_prog_get_info_by_fd() [1]
 
-This bug triggers with following coditions:
+There was no repro yet on this bug, but I think
+that commit 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
+is exposing a prior bug in bpf arm64.
 
-0) Kernel built with CONFIG_DEBUG_PREEMPT=y
+bpf_prog_get_info_by_fd() looks at prog->jited_len
+to determine if the JIT image can be copied out to user space.
 
-1) A new passive FastOpen TCP socket is created.
-   This FO socket waits for an ACK coming from client to be a complete
-   ESTABLISHED one.
-2) A socket operation on this socket goes through lock_sock()
-   release_sock() dance.
-3) While the socket is owned by the user in step 2),
-   a retransmit of the SYN is received and stored in socket backlog.
-4) At release_sock() time, the socket backlog is processed while
-   in process context.
-5) A SYNACK packet is cooked in response of the SYN retransmit.
-6) -> tcp_rtx_synack() is called in process context.
+My theory is that syzbot managed to get a prog where prog->jited_len
+has been set to 43, while prog->bpf_func has ben cleared.
 
-Before blamed commit, tcp_rtx_synack() was always called from BH handler,
-from a timer handler.
+It is not clear why copy_to_user(uinsns, NULL, ulen) is triggering
+this particular warning.
 
-Fix this by using TCP_INC_STATS() & NET_INC_STATS()
-which do not assume caller is in non preemptible context.
+I thought find_vma_area(NULL) would not find a vm_struct.
+As we do not hold vmap_area_lock spinlock, it might be possible
+that the found vm_struct was garbage.
 
 [1]
-BUG: using __this_cpu_add() in preemptible [00000000] code: epollpep/2180
-caller is tcp_rtx_synack.part.0+0x36/0xc0
-CPU: 10 PID: 2180 Comm: epollpep Tainted: G           OE     5.16.0-0.bpo.4-amd64 #1  Debian 5.16.12-1~bpo11+1
-Hardware name: Supermicro SYS-5039MC-H8TRF/X11SCD-F, BIOS 1.7 11/23/2021
-Call Trace:
- <TASK>
- dump_stack_lvl+0x48/0x5e
- check_preemption_disabled+0xde/0xe0
- tcp_rtx_synack.part.0+0x36/0xc0
- tcp_rtx_synack+0x8d/0xa0
- ? kmem_cache_alloc+0x2e0/0x3e0
- ? apparmor_file_alloc_security+0x3b/0x1f0
- inet_rtx_syn_ack+0x16/0x30
- tcp_check_req+0x367/0x610
- tcp_rcv_state_process+0x91/0xf60
- ? get_nohz_timer_target+0x18/0x1a0
- ? lock_timer_base+0x61/0x80
- ? preempt_count_add+0x68/0xa0
- tcp_v4_do_rcv+0xbd/0x270
- __release_sock+0x6d/0xb0
- release_sock+0x2b/0x90
- sock_setsockopt+0x138/0x1140
- ? __sys_getsockname+0x7e/0xc0
- ? aa_sk_perm+0x3e/0x1a0
- __sys_setsockopt+0x198/0x1e0
- __x64_sys_setsockopt+0x21/0x30
- do_syscall_64+0x38/0xc0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+usercopy: Kernel memory exposure attempt detected from vmalloc (offset 792633534417210172, size 43)!
+kernel BUG at mm/usercopy.c:101!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 25002 Comm: syz-executor.1 Not tainted 5.18.0-syzkaller-10139-g8291eaafed36 #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : usercopy_abort+0x90/0x94 mm/usercopy.c:101
+lr : usercopy_abort+0x90/0x94 mm/usercopy.c:89
+sp : ffff80000b773a20
+x29: ffff80000b773a30 x28: faff80000b745000 x27: ffff80000b773b48
+x26: 0000000000000000 x25: 000000000000002b x24: 0000000000000000
+x23: 00000000000000e0 x22: ffff80000b75db67 x21: 0000000000000001
+x20: 000000000000002b x19: ffff80000b75db3c x18: 00000000fffffffd
+x17: 2820636f6c6c616d x16: 76206d6f72662064 x15: 6574636574656420
+x14: 74706d6574746120 x13: 2129333420657a69 x12: 73202c3237313031
+x11: 3237313434333533 x10: 3336323937207465 x9 : 657275736f707865
+x8 : ffff80000a30c550 x7 : ffff80000b773830 x6 : ffff80000b773830
+x5 : 0000000000000000 x4 : ffff00007fbbaa10 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : f7ff000028fc0000 x0 : 0000000000000064
+Call trace:
+ usercopy_abort+0x90/0x94 mm/usercopy.c:89
+ check_heap_object mm/usercopy.c:186 [inline]
+ __check_object_size mm/usercopy.c:252 [inline]
+ __check_object_size+0x198/0x36c mm/usercopy.c:214
+ check_object_size include/linux/thread_info.h:199 [inline]
+ check_copy_size include/linux/thread_info.h:235 [inline]
+ copy_to_user include/linux/uaccess.h:159 [inline]
+ bpf_prog_get_info_by_fd.isra.0+0xf14/0xfdc kernel/bpf/syscall.c:3993
+ bpf_obj_get_info_by_fd+0x12c/0x510 kernel/bpf/syscall.c:4253
+ __sys_bpf+0x900/0x2150 kernel/bpf/syscall.c:4956
+ __do_sys_bpf kernel/bpf/syscall.c:5021 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5019 [inline]
+ __arm64_sys_bpf+0x28/0x40 kernel/bpf/syscall.c:5019
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
+ el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0xa0/0xc0 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x1ac/0x1b0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
+Code: aa0003e3 d00038c0 91248000 97fff65f (d4210000)
 
-Fixes: 168a8f58059a ("tcp: TCP Fast Open Server - main code path")
+Fixes: db496944fdaa ("bpf: arm64: add JIT support for multi-function programs")
+Reported-by: syzbot <syzkaller@googlegroups.com>
 Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Laurent Fasnacht <laurent.fasnacht@proton.ch>
-Acked-by: Neal Cardwell <ncardwell@google.com>
-Link: https://lore.kernel.org/r/20220530213713.601888-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20220531215113.1100754-1-eric.dumazet@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 8543cd724d54..25dbdb27a571 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3805,8 +3805,8 @@ int tcp_rtx_synack(const struct sock *sk, struct request_sock *req)
- 	tcp_rsk(req)->txhash = net_tx_rndhash();
- 	res = af_ops->send_synack(sk, NULL, &fl, req, NULL, TCP_SYNACK_NORMAL);
- 	if (!res) {
--		__TCP_INC_STATS(sock_net(sk), TCP_MIB_RETRANSSEGS);
--		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPSYNRETRANS);
-+		TCP_INC_STATS(sock_net(sk), TCP_MIB_RETRANSSEGS);
-+		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPSYNRETRANS);
- 		if (unlikely(tcp_passive_fastopen(sk)))
- 			tcp_sk(sk)->total_retrans++;
- 		trace_tcp_retransmit_synack(sk, req);
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index b56e7bd96594..95439bbe5df8 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1113,6 +1113,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 			bpf_jit_binary_free(header);
+ 			prog->bpf_func = NULL;
+ 			prog->jited = 0;
++			prog->jited_len = 0;
+ 			goto out_off;
+ 		}
+ 		bpf_jit_binary_lock_ro(header);
 -- 
 2.35.1
 

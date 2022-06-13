@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF06548BBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43E654955C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359279AbiFMNJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S1382963AbiFMO1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356193AbiFMM4J (ORCPT
+        with ESMTP id S1383687AbiFMOXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:56:09 -0400
+        Mon, 13 Jun 2022 10:23:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F4113D08;
-        Mon, 13 Jun 2022 04:17:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE8D47048;
+        Mon, 13 Jun 2022 04:44:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0825FB80D31;
-        Mon, 13 Jun 2022 11:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3375AC36AFE;
-        Mon, 13 Jun 2022 11:17:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8788B80D31;
+        Mon, 13 Jun 2022 11:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD23C34114;
+        Mon, 13 Jun 2022 11:44:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119028;
-        bh=krgTrEnmGtku2UsuLCKD1KWXr3Zj+p5LhNcEzz+llsI=;
+        s=korg; t=1655120692;
+        bh=k+nBBCHqK9h4ic60pdj6CWi8bzDqIkaYwyyIRwk/hj4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gEB0KW8Jgbj5PAoowTnJxr4IHBEQBSEQzLHkwZDaBpnkrN4ohdea+WSSMZw/YRXuB
-         H8pk5GTYMJH7UtL+Ah7L22cMj85B0U8qjpfTn8MlDcTgb+mxRrFPWtx9ftKTYaaBwu
-         rAbZcgUINz2/G0QY1MrfuYTmvgN0s00iAdlVP0Ss=
+        b=JeuQhQQRixYMzxu83wfdQXXHhjZ300cUgFK22W1+azCOjUY6Zd/yDPj07oE9hB8ea
+         GyX4yrfhy7IwKoC/BEF5Hp7sapW42CZY0weeBqoytln/N7tPW2d+a+HH0rOX4Ux/ug
+         jGEbCqG18ao4rgEr0SnooNr80d1ISnRTn9MZhRUc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 115/247] tracing: Avoid adding tracer option before update_tracer_options
+Subject: [PATCH 5.17 123/298] drm/msm/dp: Always clear mask bits to disable interrupts at dp_ctrl_reset_irq_ctrl()
 Date:   Mon, 13 Jun 2022 12:10:17 +0200
-Message-Id: <20220613094926.451660654@linuxfoundation.org>
+Message-Id: <20220613094928.672935176@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit ef9188bcc6ca1d8a2ad83e826b548e6820721061 ]
+[ Upstream commit 993a2adc6e2e94a0a7b5bfc054eda90ac95f62c3 ]
 
-To prepare for support asynchronous tracer_init_tracefs initcall,
-avoid calling create_trace_option_files before __update_tracer_options.
-Otherwise, create_trace_option_files will show warning because
-some tracers in trace_types list are already in tr->topts.
+dp_catalog_ctrl_reset() will software reset DP controller. But it will
+not reset programmable registers to default value. DP driver still have
+to clear mask bits to interrupt status registers to disable interrupts
+after software reset of controller.
 
-For example, hwlat_tracer call register_tracer in late_initcall,
-and global_trace.dir is already created in tracing_init_dentry,
-hwlat_tracer will be put into tr->topts.
-Then if the __update_tracer_options is executed after hwlat_tracer
-registered, create_trace_option_files find that hwlat_tracer is
-already in tr->topts.
+At current implementation, dp_ctrl_reset_irq_ctrl() will software reset dp
+controller but did not call dp_catalog_ctrl_enable_irq(false) to clear hpd
+related interrupt mask bits to disable hpd related interrupts due to it
+mistakenly think hpd related interrupt mask bits will be cleared by software
+reset of dp controller automatically. This mistake may cause system to crash
+during suspending procedure due to unexpected irq fired and trigger event
+thread to access dp controller registers with controller clocks are disabled.
 
-Link: https://lkml.kernel.org/r/20220426122407.17042-2-mark-pk.tsai@mediatek.com
+This patch fixes system crash during suspending problem by removing "enable"
+flag condition checking at dp_ctrl_reset_irq_ctrl() so that hpd related
+interrupt mask bits are cleared to prevent unexpected from happening.
 
-Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Changes in v2:
+-- add more details commit text
+
+Changes in v3:
+-- add synchrons_irq()
+-- add atomic_t suspended
+
+Changes in v4:
+-- correct Fixes's commit ID
+-- remove synchrons_irq()
+
+Changes in v5:
+-- revise commit text
+
+Changes in v6:
+-- add event_lock to protect "suspended"
+
+Changes in v7:
+-- delete "suspended" flag
+
+Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/486591/
+Link: https://lore.kernel.org/r/1652804494-19650-1-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 98b06d3ce164..518ce39a878d 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -6320,12 +6320,18 @@ static void tracing_set_nop(struct trace_array *tr)
- 	tr->current_trace = &nop_trace;
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 6eb176872a17..7ae74bd05924 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1373,8 +1373,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
+ 
+ 	dp_catalog_ctrl_reset(ctrl->catalog);
+ 
+-	if (enable)
+-		dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
++	/*
++	 * all dp controller programmable registers will not
++	 * be reset to default value after DP_SW_RESET
++	 * therefore interrupt mask bits have to be updated
++	 * to enable/disable interrupts
++	 */
++	dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
  }
  
-+static bool tracer_options_updated;
-+
- static void add_tracer_options(struct trace_array *tr, struct tracer *t)
- {
- 	/* Only enable if the directory has been created already. */
- 	if (!tr->dir)
- 		return;
- 
-+	/* Only create trace option files after update_tracer_options finish */
-+	if (!tracer_options_updated)
-+		return;
-+
- 	create_trace_option_files(tr, t);
- }
- 
-@@ -9146,6 +9152,7 @@ static void __update_tracer_options(struct trace_array *tr)
- static void update_tracer_options(struct trace_array *tr)
- {
- 	mutex_lock(&trace_types_lock);
-+	tracer_options_updated = true;
- 	__update_tracer_options(tr);
- 	mutex_unlock(&trace_types_lock);
- }
+ void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
 -- 
 2.35.1
 

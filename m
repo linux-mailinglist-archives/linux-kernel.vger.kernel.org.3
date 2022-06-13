@@ -2,127 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E6D5482C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796195482F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbiFMJCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S232399AbiFMJCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiFMJC2 (ORCPT
+        with ESMTP id S232193AbiFMJCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:02:28 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6511C3;
-        Mon, 13 Jun 2022 02:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1655110940; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 13 Jun 2022 05:02:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49DDE68
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:02:42 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 70AC51F74A;
+        Mon, 13 Jun 2022 09:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655110961; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wzTq3X/06BFOnsk1/1jD9KPlkg3opvD7FWyWkz4J1rI=;
-        b=eLbD7wDeL0e0UWjrlIAm+qxeUDjLUr4Yyk0i2d54W+5bAOCWSQRMYIi1m81Qr72nZqeEgF
-        HnHc235l7jwMFS6tEjgir9ZSM+GK0ETMW/sTRnSfdAKWWG+73XAR2rdXGhp/vLId5m1VXb
-        aklKa5aNN8ZZcUu/Obf/x/a9IfsHEi4=
-Date:   Mon, 13 Jun 2022 10:02:11 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] clk: ingenic-tcu: Properly enable registers before
- accessing timers
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <NRREDR.U6G6SM5BIXEC3@crapouillou.net>
-In-Reply-To: <20220603134705.11156-1-aidanmacdonald.0x0@gmail.com>
-References: <20220603134705.11156-1-aidanmacdonald.0x0@gmail.com>
+        bh=oSoy01892wgEbmAT5CsOX8s6pKzZrIQbbDB9Ls6YIdE=;
+        b=EbEM9sff2ICxfbQAMPVMbW6FAm7xh6g25kC1K4vdXUQvgAWdPQyqbxz2tg0W4Ic0FvSfRK
+        XI4EO5Z8HMZ35NCu2R5Mq+UFsu4D6O9bUj4qJ88ZXTKcjq8TCHt6NHP2LRQOfN2q8ENYUR
+        oe20Jw/P6r2uS9VP8C/Q2KPM6azJPd8=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 132E22C141;
+        Mon, 13 Jun 2022 09:02:40 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 11:02:38 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Vasily Averin <vvs@openvz.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Shakeel Butt <shakeelb@google.com>
+Subject: Re: [PATCH] mm: kmem: make mem_cgroup_from_obj() vmalloc()-safe
+Message-ID: <Yqb9Ln+XWyyexW12@dhcp22.suse.cz>
+References: <20220610180310.1725111-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610180310.1725111-1-roman.gushchin@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
+[Add Vlastimil]
 
-Le ven., juin 3 2022 at 14:47:05 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Access to registers is guarded by ingenic_tcu_{enable,disable}_regs()
-> so the stop bit can be cleared before accessing a timer channel, but
-> those functions did not clear the stop bit on SoCs with a global TCU
-> clock gate.
->=20
-> Testing on the X1000 has revealed that the stop bits must be cleared
-> _and_ the global TCU clock must be ungated to access timer registers.
-> Programming manuals for the X1000, JZ4740, and JZ4725B specify this
-> behavior. If the stop bit isn't cleared, then writes to registers do
-> not take effect, which can leave clocks with no defined parent when
-> registered and leave clock tree state out of sync with the hardware,
-> triggering bugs in downstream drivers relying on TCU clocks.
->=20
-> Fixing this is easy: have ingenic_tcu_{enable,disable}_regs() always
-> clear the stop bit, regardless of the presence of a global TCU gate.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+On Fri 10-06-22 11:03:10, Roman Gushchin wrote:
+> Currently mem_cgroup_from_obj() is not working properly with objects
+> allocated using vmalloc(). It creates problems in some cases, when
+> it's called for static objects belonging to  modules or generally
+> allocated using vmalloc().
+> 
+> This patch makes mem_cgroup_from_obj() safe to be called on objects
+> allocated using vmalloc().
+> 
+> It also introduces mem_cgroup_from_slab_obj(), which is a faster
+> version to use in places when we know the object is either a slab
+> object or a generic slab page (e.g. when adding an object to a lru
+> list).
+> 
+> Suggested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
 
-Tested on JZ4770, it still works fine.
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+The patch looks good to me but I have a question about virt_to_folio.
+Should we document this function to be internal only and never to be
+used outside of the MM proper. Otherwsise we are risking more users
+falling the same problem (esp. those using kvmalloc).
 
-Still needs a Fixes: tag (+ Cc: linux-stable) so I'm expecting a V2.
-
-Cheers,
--Paul
-
+Keeping the rest of the patch for reference.
 > ---
->  drivers/clk/ingenic/tcu.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-> index 201bf6e6b6e0..d5544cbc5c48 100644
-> --- a/drivers/clk/ingenic/tcu.c
-> +++ b/drivers/clk/ingenic/tcu.c
-> @@ -101,15 +101,11 @@ static bool ingenic_tcu_enable_regs(struct=20
-> clk_hw *hw)
->  	bool enabled =3D false;
->=20
+>  include/linux/memcontrol.h |  6 ++++
+>  mm/list_lru.c              |  2 +-
+>  mm/memcontrol.c            | 71 +++++++++++++++++++++++++++-----------
+>  3 files changed, 57 insertions(+), 22 deletions(-)
+> 
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 0d7584e2f335..4d31ce55b1c0 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1761,6 +1761,7 @@ static inline int memcg_kmem_id(struct mem_cgroup *memcg)
+>  }
+>  
+>  struct mem_cgroup *mem_cgroup_from_obj(void *p);
+> +struct mem_cgroup *mem_cgroup_from_slab_obj(void *p);
+>  
+>  static inline void count_objcg_event(struct obj_cgroup *objcg,
+>  				     enum vm_event_item idx)
+> @@ -1858,6 +1859,11 @@ static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
+>  	return NULL;
+>  }
+>  
+> +static inline struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline void count_objcg_event(struct obj_cgroup *objcg,
+>  				     enum vm_event_item idx)
+>  {
+> diff --git a/mm/list_lru.c b/mm/list_lru.c
+> index ba76428ceece..a05e5bef3b40 100644
+> --- a/mm/list_lru.c
+> +++ b/mm/list_lru.c
+> @@ -71,7 +71,7 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
+>  	if (!list_lru_memcg_aware(lru))
+>  		goto out;
+>  
+> -	memcg = mem_cgroup_from_obj(ptr);
+> +	memcg = mem_cgroup_from_slab_obj(ptr);
+>  	if (!memcg)
+>  		goto out;
+>  
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 4093062c5c9b..8c408d681377 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -783,7 +783,7 @@ void __mod_lruvec_kmem_state(void *p, enum node_stat_item idx, int val)
+>  	struct lruvec *lruvec;
+>  
+>  	rcu_read_lock();
+> -	memcg = mem_cgroup_from_obj(p);
+> +	memcg = mem_cgroup_from_slab_obj(p);
+>  
 >  	/*
-> -	 * If the SoC has no global TCU clock, we must ungate the channel's
-> -	 * clock to be able to access its registers.
-> -	 * If we have a TCU clock, it will be enabled automatically as it=20
-> has
-> -	 * been attached to the regmap.
-> +	 * According to the programming manual, a timer channel's registers=20
-> can
-> +	 * only be accessed when the channel's stop bit is clear.
->  	 */
-> -	if (!tcu->clk) {
-> -		enabled =3D !!ingenic_tcu_is_enabled(hw);
-> -		regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
-> -	}
-> +	enabled =3D !!ingenic_tcu_is_enabled(hw);
-> +	regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
->=20
->  	return enabled;
+>  	 * Untracked pages have no memcg, no lruvec. Update only the
+> @@ -2833,27 +2833,9 @@ int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
+>  	return 0;
 >  }
-> @@ -120,8 +116,7 @@ static void ingenic_tcu_disable_regs(struct=20
-> clk_hw *hw)
->  	const struct ingenic_tcu_clk_info *info =3D tcu_clk->info;
->  	struct ingenic_tcu *tcu =3D tcu_clk->tcu;
->=20
-> -	if (!tcu->clk)
-> -		regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
-> +	regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
+>  
+> -/*
+> - * Returns a pointer to the memory cgroup to which the kernel object is charged.
+> - *
+> - * A passed kernel object can be a slab object or a generic kernel page, so
+> - * different mechanisms for getting the memory cgroup pointer should be used.
+> - * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
+> - * can not know for sure how the kernel object is implemented.
+> - * mem_cgroup_from_obj() can be safely used in such cases.
+> - *
+> - * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
+> - * cgroup_mutex, etc.
+> - */
+> -struct mem_cgroup *mem_cgroup_from_obj(void *p)
+> +static __always_inline
+> +struct mem_cgroup *mem_cgroup_from_obj_folio(struct folio *folio, void *p)
+>  {
+> -	struct folio *folio;
+> -
+> -	if (mem_cgroup_disabled())
+> -		return NULL;
+> -
+> -	folio = virt_to_folio(p);
+> -
+>  	/*
+>  	 * Slab objects are accounted individually, not per-page.
+>  	 * Memcg membership data for each individual object is saved in
+> @@ -2886,6 +2868,53 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
+>  	return page_memcg_check(folio_page(folio, 0));
 >  }
->=20
->  static u8 ingenic_tcu_get_parent(struct clk_hw *hw)
-> --
-> 2.35.1
->=20
+>  
+> +/*
+> + * Returns a pointer to the memory cgroup to which the kernel object is charged.
+> + *
+> + * A passed kernel object can be a slab object, vmalloc object or a generic
+> + * kernel page, so different mechanisms for getting the memory cgroup pointer
+> + * should be used.
+> + *
+> + * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
+> + * can not know for sure how the kernel object is implemented.
+> + * mem_cgroup_from_obj() can be safely used in such cases.
+> + *
+> + * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
+> + * cgroup_mutex, etc.
+> + */
+> +struct mem_cgroup *mem_cgroup_from_obj(void *p)
+> +{
+> +	struct folio *folio;
+> +
+> +	if (mem_cgroup_disabled())
+> +		return NULL;
+> +
+> +	if (unlikely(is_vmalloc_addr(p)))
+> +		folio = page_folio(vmalloc_to_page(p));
+> +	else
+> +		folio = virt_to_folio(p);
+> +
+> +	return mem_cgroup_from_obj_folio(folio, p);
+> +}
+> +
+> +/*
+> + * Returns a pointer to the memory cgroup to which the kernel object is charged.
+> + * Similar to mem_cgroup_from_obj(), but faster and not suitable for objects,
+> + * allocated using vmalloc().
+> + *
+> + * A passed kernel object must be a slab object or a generic kernel page.
+> + *
+> + * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
+> + * cgroup_mutex, etc.
+> + */
+> +struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
+> +{
+> +	if (mem_cgroup_disabled())
+> +		return NULL;
+> +
+> +	return mem_cgroup_from_obj_folio(virt_to_folio(p), p);
+> +}
+> +
+>  static struct obj_cgroup *__get_obj_cgroup_from_memcg(struct mem_cgroup *memcg)
+>  {
+>  	struct obj_cgroup *objcg = NULL;
+> -- 
+> 2.35.3
 
-
+-- 
+Michal Hocko
+SUSE Labs

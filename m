@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A04549121
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8F7549107
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356410AbiFMM6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S1357102AbiFMM6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357823AbiFMMyq (ORCPT
+        with ESMTP id S1357836AbiFMMyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 08:54:46 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3259E35276;
-        Mon, 13 Jun 2022 04:13:27 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCD966692;
+        Mon, 13 Jun 2022 04:13:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 42E72CE1184;
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE463B80D31;
+        Mon, 13 Jun 2022 11:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13363C34114;
         Mon, 13 Jun 2022 11:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE57C34114;
-        Mon, 13 Jun 2022 11:13:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118804;
-        bh=fzLWIQmYrPsIEXhtSGEyvG+3MT0KclU5eCm7/1w/720=;
+        s=korg; t=1655118807;
+        bh=FPCtJIGId+3o2cgwL1VcU2bSODXmShM9hQCM1twwlq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s+A7JpG7VS6ZFWcdjg0NW+3vrdpvDHgiS0zxz2eKjz6cjbu4q56RK8a2OE+VrGKX1
-         jQ+DYEbYSEJMItzChyO4kBXaBqH9WWqjPhSYw+6GemGJbfcWWrBAHZC8sDziGvP9Qp
-         LA4BkNp3udOLxvnaQjK9SvGp9SJUl5eouIpc4iSY=
+        b=Lp6kRZPdJOkKSvpUK5+uvGmoGE+Oidyk6tz6Q9p5jfIT1EdTizSfymAObMqFnj9Br
+         j8yaBWoIzEXHL3TGIxkPpX0z5MpFoD5exie7CaXwzQIqxiQcZcdXjNNcT8smziWJcb
+         VrZdkFs4OPHzW+h/i4fUOZ4Y0MV+Dq0M3xv7xyc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        zhenwei pi <pizhenwei@bytedance.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 034/247] misc/pvpanic: Convert regular spinlock into trylock on panic path
-Date:   Mon, 13 Jun 2022 12:08:56 +0200
-Message-Id: <20220613094923.971711730@linuxfoundation.org>
+        stable@vger.kernel.org, Evan Green <evgreen@chromium.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 035/247] phy: qcom-qmp: fix pipe-clock imbalance on power-on failure
+Date:   Mon, 13 Jun 2022 12:08:57 +0200
+Message-Id: <20220613094924.002277108@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
 References: <20220613094922.843438024@linuxfoundation.org>
@@ -60,69 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guilherme G. Piccoli <gpiccoli@igalia.com>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-[ Upstream commit e918c10265ef2bc82ce8a6fed6d8123d09ec1db3 ]
+[ Upstream commit 5e73b2d9867998278479ccc065a8a8227a5513ef ]
 
-The pvpanic driver relies on panic notifiers to execute a callback
-on panic event. Such function is executed in atomic context - the
-panic function disables local IRQs, preemption and all other CPUs
-that aren't running the panic code.
+Make sure to disable the pipe clock also if ufs-reset deassertion fails
+during power on.
 
-With that said, it's dangerous to use regular spinlocks in such path,
-as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
-This patch fixes that by replacing regular spinlocks with the trylock
-safer approach.
+Note that the ufs-reset is asserted in qcom_qmp_phy_com_exit().
 
-It also fixes an old comment (about a long gone framebuffer code) and
-the notifier priority - we should execute hypervisor notifiers early,
-deferring this way the panic action to the hypervisor, as expected by
-the users that are setting up pvpanic.
-
-Fixes: b3c0f8774668 ("misc/pvpanic: probe multiple instances")
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Mihai Carabas <mihai.carabas@oracle.com>
-Cc: Shile Zhang <shile.zhang@linux.alibaba.com>
-Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
-Cc: zhenwei pi <pizhenwei@bytedance.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Link: https://lore.kernel.org/r/20220427224924.592546-6-gpiccoli@igalia.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c9b589791fc1 ("phy: qcom: Utilize UFS reset controller")
+Cc: Evan Green <evgreen@chromium.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220502133130.4125-2-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/pvpanic/pvpanic.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/misc/pvpanic/pvpanic.c b/drivers/misc/pvpanic/pvpanic.c
-index 700d7d02c800..b9e6400a574b 100644
---- a/drivers/misc/pvpanic/pvpanic.c
-+++ b/drivers/misc/pvpanic/pvpanic.c
-@@ -34,7 +34,9 @@ pvpanic_send_event(unsigned int event)
- {
- 	struct pvpanic_instance *pi_cur;
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+index 9bb19c4bfe79..ed69d455ac0e 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+@@ -4802,7 +4802,7 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
  
--	spin_lock(&pvpanic_lock);
-+	if (!spin_trylock(&pvpanic_lock))
-+		return;
-+
- 	list_for_each_entry(pi_cur, &pvpanic_list, list) {
- 		if (event & pi_cur->capability & pi_cur->events)
- 			iowrite8(event, pi_cur->base);
-@@ -56,9 +58,13 @@ pvpanic_panic_notify(struct notifier_block *nb, unsigned long code,
- 	return NOTIFY_DONE;
- }
+ 	ret = reset_control_deassert(qmp->ufs_reset);
+ 	if (ret)
+-		goto err_lane_rst;
++		goto err_pcs_ready;
  
-+/*
-+ * Call our notifier very early on panic, deferring the
-+ * action taken to the hypervisor.
-+ */
- static struct notifier_block pvpanic_panic_nb = {
- 	.notifier_call = pvpanic_panic_notify,
--	.priority = 1, /* let this called before broken drm_fb_helper() */
-+	.priority = INT_MAX,
- };
- 
- static void pvpanic_remove(void *param)
+ 	qcom_qmp_phy_configure(pcs_misc, cfg->regs, cfg->pcs_misc_tbl,
+ 			       cfg->pcs_misc_tbl_num);
 -- 
 2.35.1
 

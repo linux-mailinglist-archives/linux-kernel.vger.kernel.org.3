@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520E35488BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09755495BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343829AbiFMKqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S242626AbiFMKUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346270AbiFMKnf (ORCPT
+        with ESMTP id S242682AbiFMKSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:43:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367DEDEF8;
-        Mon, 13 Jun 2022 03:24:47 -0700 (PDT)
+        Mon, 13 Jun 2022 06:18:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67D4DF37;
+        Mon, 13 Jun 2022 03:16:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C78BF60EF5;
-        Mon, 13 Jun 2022 10:24:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D940FC34114;
-        Mon, 13 Jun 2022 10:24:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0DAB2CE1106;
+        Mon, 13 Jun 2022 10:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0534CC34114;
+        Mon, 13 Jun 2022 10:16:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115886;
-        bh=abunFcpH2MzXC7tgks7vVcK0ssYo5h1JmuJgNWDU2O0=;
+        s=korg; t=1655115374;
+        bh=9AWYvwpbknsiS/4G3LdwateIgFBMMn2KK4bA6s5Ljp4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mFzRp6wHf2TUrQnNnFZRut4lT3+Yp4+c6lG2waWvUoQNHs5ajV23bjCtVxcQTlSut
-         bu8GHBUUPfht0NP8xDUkfjDQWH8bY1WSYv/ikDKtLCTS0LoSn0NP8M68jd2a8WEJR1
-         Ro5jsoQB6T4czED9vnyFpSM7l3lpZY8AwNY094ew=
+        b=0e/1RHeoLnw2NwUi+U31MgZtBhCkn5m4mqskBta8LEbctKEbLLNWDpKCMv0rETY4C
+         0E0yPnWUcqH4zRvr+RPDtgNgOCyrNrArJX36shcsXM6kL/fEBA/Jjcff4B0vjbveLX
+         I2+zQhBNvDAItHAKN/bwoZKo4/BMV2xLrUGd4Kfo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 066/218] irqchip/aspeed-i2c-ic: Fix irq_of_parse_and_map() return value
-Date:   Mon, 13 Jun 2022 12:08:44 +0200
-Message-Id: <20220613094921.944231825@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 051/167] drm/msm: return an error pointer in msm_gem_prime_get_sg_table()
+Date:   Mon, 13 Jun 2022 12:08:45 +0200
+Message-Id: <20220613094852.941038391@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 50f0f26e7c8665763d0d7d3372dbcf191f94d077 ]
+[ Upstream commit cf575e31611eb6dccf08fad02e57e35b2187704d ]
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+The msm_gem_prime_get_sg_table() needs to return error pointers on
+error.  This is called from drm_gem_map_dma_buf() and returning a
+NULL will lead to a crash in that function.
 
-Fixes: f48e699ddf70 ("irqchip/aspeed-i2c-ic: Add I2C IRQ controller for Aspeed")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220423094227.33148-1-krzysztof.kozlowski@linaro.org
+Fixes: ac45146733b0 ("drm/msm: fix msm_gem_prime_get_sg_table()")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/485023/
+Link: https://lore.kernel.org/r/YnOmtS5tfENywR9m@kili
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-aspeed-i2c-ic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/msm_gem_prime.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-aspeed-i2c-ic.c b/drivers/irqchip/irq-aspeed-i2c-ic.c
-index 815b88dd18f2..45de46066d06 100644
---- a/drivers/irqchip/irq-aspeed-i2c-ic.c
-+++ b/drivers/irqchip/irq-aspeed-i2c-ic.c
-@@ -82,8 +82,8 @@ static int __init aspeed_i2c_ic_of_init(struct device_node *node,
- 	}
+diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
+index 13403c6da6c7..7e4664968106 100644
+--- a/drivers/gpu/drm/msm/msm_gem_prime.c
++++ b/drivers/gpu/drm/msm/msm_gem_prime.c
+@@ -26,7 +26,7 @@ struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
+ 	int npages = obj->size >> PAGE_SHIFT;
  
- 	i2c_ic->parent_irq = irq_of_parse_and_map(node, 0);
--	if (i2c_ic->parent_irq < 0) {
--		ret = i2c_ic->parent_irq;
-+	if (!i2c_ic->parent_irq) {
-+		ret = -EINVAL;
- 		goto err_iounmap;
- 	}
+ 	if (WARN_ON(!msm_obj->pages))  /* should have already pinned! */
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
  
+ 	return drm_prime_pages_to_sg(msm_obj->pages, npages);
+ }
 -- 
 2.35.1
 

@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19586548134
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A77A54812C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiFMIBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S233263AbiFMICP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbiFMIAh (ORCPT
+        with ESMTP id S238854AbiFMICC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:00:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC21E55B2;
-        Mon, 13 Jun 2022 01:00:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B87DB80D88;
-        Mon, 13 Jun 2022 08:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89EEC3411C;
-        Mon, 13 Jun 2022 08:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655107233;
-        bh=elvnnOZZ+5pJ88iCZ8TUUMHnnNbH59nzjeBrpwy9VpA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=chyH8RQHqqSfLNpzUnKbg0vjCkNFRzV2w6hJD0AeyilyaPhk3YsTcI0a/lnoSzER0
-         Iw9lkOOaBd9jP/4INyFRODPVoF3WSwFGFiB144mLo+h8puFnkfLES3E8ZIpQ0Q9FI/
-         QCaAMAtSUxVUAvcYBEr5Ta4Zi1Kdncgrv/re/Xjw=
-Date:   Mon, 13 Jun 2022 10:00:30 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     daniel@iogearbox.net, linux-kernel@vger.kernel.org, pavel@denx.de,
-        sashal@kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] bpf: Fix excessive memory allocation in stack_map_alloc()
-Message-ID: <YqbunqapIFiIVqOb@kroah.com>
-References: <YqC+WquFukW84W12@kroah.com>
- <20220608160728.272118-1-ytcoode@gmail.com>
+        Mon, 13 Jun 2022 04:02:02 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE1610571;
+        Mon, 13 Jun 2022 01:01:57 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id bo5so5083421pfb.4;
+        Mon, 13 Jun 2022 01:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jZWzCgoz5Pw3mHE8/DxjotUDMmE2UXTU9cjooBfPmLk=;
+        b=eYnjniZGIG1VbbkLc4H+4pxr7II/uiE5QUzdgkk8FjDZim7NHyrkQaJACWgS+VT8J/
+         N5Hazh+NsG4Oq6jkk2ceOx9DRm9kGRi0VAETwfc1VwRKLZGgtxzXnryl+FH3Csi1/Vhi
+         MU2rNA0bHK+/2q0S+XuWJfQYCebTP3WfWuKhmbYftBGxTqbOjUG3AoOw9mdzb1r7S1cj
+         kZ344qTwXUNRPCMkVVlAJ8z8Sfv20pIkaQbHpimRpisj1ytbPTubIjjjHhzi66C+u/N/
+         /U7pGptATCd5hcBargfGFbrwwijj5CyEYQPwC9w76XPpKybYxUTlrxUiMPOpWKtzrBT1
+         6SOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jZWzCgoz5Pw3mHE8/DxjotUDMmE2UXTU9cjooBfPmLk=;
+        b=MDcfN/2qO7Jqe5mVhJhnzwQvEbgBl/DK4PnwFBqFqIHab/HfdDL8DDAyxmKnTv64fB
+         cbgcr2T0BzWsfCYd6VBzON7V8Z9myB9yJR8yPMTbBHeR5IHGBH4lu+BSSsltu8MtLI7F
+         KGQq3yiX/+QJ4FER/nuzIngRzWfI5Coswsy9V3IqdyhEWzFL/8gIH6K3HkVfReu/1A7h
+         4E06j1wQ/9Pzm2ctQG8+a5f769GE2Gxqyup78spPSAl0C3JfcYUl1VPBT6Pa0N35dRQK
+         w8r7ARWC7PN9vCkvWOmcgxl66dkg41H2j0XF0LYu72zNfkdhjypdXG0vu45SwQtLK7q/
+         KTew==
+X-Gm-Message-State: AOAM531bQTzotaWYwfhrncm3JGAvn4rCZBGWh47nznO5q8OCBvvxaFZX
+        8To9SF80pKBARdl5rC5y/zA=
+X-Google-Smtp-Source: ABdhPJwip/iwh/bSl3Xq0RGH3xDHwUGJhANIMKdhvlGRKZdAtKJT95PIzG2rrw6Rb18tgoNsZDtDBg==
+X-Received: by 2002:a05:6a00:a06:b0:51e:47f5:79ad with SMTP id p6-20020a056a000a0600b0051e47f579admr22192430pfh.53.1655107317114;
+        Mon, 13 Jun 2022 01:01:57 -0700 (PDT)
+Received: from localhost (subs02-180-214-232-18.three.co.id. [180.214.232.18])
+        by smtp.gmail.com with ESMTPSA id q8-20020a170902a3c800b0015e8d4eb22csm4386153plb.118.2022.06.13.01.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 01:01:56 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 15:01:53 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Dongliang Mu <mudongliangabcd@gmail.com>, cocci@inria.fr,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dev-tools: fix one invalid url
+Message-ID: <Yqbu8TwmaXdBiIBs@debian.me>
+References: <20220613071243.12961-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220608160728.272118-1-ytcoode@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220613071243.12961-1-dzm91@hust.edu.cn>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 12:07:28AM +0800, Yuntao Wang wrote:
-> On Wed, 8 Jun 2022 17:20:58 +0200, Greg KH wrote:
-> > On Wed, Jun 08, 2022 at 10:25:38PM +0800, Yuntao Wang wrote:
-> > > The 'n_buckets * (value_size + sizeof(struct stack_map_bucket))' part of
-> > > the allocated memory for 'smap' is never used, get rid of it.
-> > > 
-> > > Fixes: b936ca643ade ("bpf: rework memlock-based memory accounting for maps")
-> > > Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> > > Link: https://lore.kernel.org/bpf/20220407130423.798386-1-ytcoode@gmail.com
-> > > ---
-> > > This is the modified version for 5.10, the original patch is:
-> > > 
-> > > [ Upstream commit b45043192b3e481304062938a6561da2ceea46a6 ]
-> > > 
-> > > It would be better if the new patch can be reviewed by someone else.
-> > 
-> > What is wrong with the version that we have queued up in the 5.10-stable
-> > review queue right now?
+On Mon, Jun 13, 2022 at 03:12:42PM +0800, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
 > 
-> Since the 5.10 branch doesn't have commit 370868107bf6, the upstream version
-> is not correct for it, I modified the original patch and wanted to backport
-> it to the 5.10 branch.
+> Fix the invalid url about Semantic Patch Language
+> 
 
-This does not apply to the 5.10 branch now, can you provide a working
-version?
+I think what this patch doing is to point SPL reference URL from old
+Coccinelle documentation (doc root) to actual SPL doc entry on new
+Coccinelle page, right? If so, "fix invalid URL" may not be right patch
+description and title.
 
-thanks,
-
-greg k-h
+-- 
+An old man doll... just what I always wanted! - Clara

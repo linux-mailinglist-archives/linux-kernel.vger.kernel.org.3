@@ -2,165 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8999549D93
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B19549D70
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349251AbiFMTYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S1348667AbiFMTVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349397AbiFMTWJ (ORCPT
+        with ESMTP id S1349089AbiFMTVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:22:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8091A5250D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:21:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1851060C16
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D63C3411B;
-        Mon, 13 Jun 2022 17:21:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655140885;
-        bh=awvuHJ3WanfHU+vluSYhtwaUL0847oXiEl8aOFz++RI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jjq7hoiSQsNd3XQw+AacpDwmcusDCkcHUbdP/HtIvNo+T+pJBJ6bN41S5QZDq8Jq+
-         Gi4o10dNT15pR3iMmYUJVaVwoync0UcWwJ8Uy6U+4h7JpawIsuS4Bz55uKY23nOQvX
-         vmYBMZBQMY5r6XBabY/p+qybbgdH2g35q3bQLvJw=
-Date:   Mon, 13 Jun 2022 19:21:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        alsa-devel@alsa-project.org, vkoul@kernel.org,
-        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
-        broonie@kernel.org, srinivas.kandagatla@linaro.org,
-        sanyog.r.kale@intel.com, bard.liao@intel.com
-Subject: Re: [PATCH 1/2] soundwire: intel: uniquify debug message
-Message-ID: <YqdyErIYYk85NV41@kroah.com>
-References: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
- <20220610023537.27223-2-yung-chuan.liao@linux.intel.com>
- <YqLVwqx9/Pos8T06@kroah.com>
- <b86e6cbd-3488-a239-d765-cf01bf0d4f70@linux.intel.com>
- <YqRCKtLGYlRQQ+DU@kroah.com>
- <7328fbb2-06af-99c8-5e7f-9d22f8c4e4f6@linux.intel.com>
+        Mon, 13 Jun 2022 15:21:18 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CABA1CB22;
+        Mon, 13 Jun 2022 10:23:06 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id s37so3637895pfg.11;
+        Mon, 13 Jun 2022 10:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=7M+A4Tkcl4j2ZEYJxnHofmbHWBP8K2O9jymdDhG9tv0=;
+        b=SfbzRvanLsSXpQIXsHN2DLvLUMY5t8/g0db/VVEH7eeh+ei07KzvHZObXvbjTtVeim
+         QqAtDY4GBjmFmerP5kZz+/mf7m/AS/3Q5XZMZOj/OJ8HDObBVWj2SDvQTRMUldRoZMZ+
+         SeJLzy0p5MzASUh/0RwJPnMgBysfdsAoMl1zLmYslcAO+FOxbb8NVeSW1lz0Tf3iyUJ1
+         7LDCIUE5aIDnihc8OtiMhEzJchy+X65LWl8FCJEPOHTTeMSAznyrJtD842u6apyMxgiI
+         ZuePfGPvvzwdUYaLN3R4KH78h6kCwyviro32caqZmQSWGivj6/D750j/QfJwc+em2o6W
+         8ANw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=7M+A4Tkcl4j2ZEYJxnHofmbHWBP8K2O9jymdDhG9tv0=;
+        b=t3DkZMS/cctafLZdQLmxZP854yMY27zMd3yQMrXvqyh8klLUZAh1a8p1Yg3DldYyXG
+         1Y6I47mjQxw0VkSicPFwXJkPaw9VgcJ5o1Uz3aBm3RKqAw7KeMkzFvIZQH2bslvRsM+K
+         ohuOWNPBBN3yjD/xEa+soqp+6a7nj77qDycRfjGMDXqbAoxR7oAR34RmTRwM0SlufChL
+         6Uzp2r7InXKbTsVAGao0SaCE3aj5FRtkte/esTEJDQmTGQxuI0mGvKbCO/SlA+m4pC0C
+         eYnTWuZ7kV89ZHDgMKIUpU0MOgsuEOMGRCkTfu8fJswXUic1ksdCUebQukqM8Y+18oMu
+         GNCw==
+X-Gm-Message-State: AOAM531gkt+L5SdHB/8PZ9u3H9D0zXCWxttkv8Szo7ecXSbAs0NqtrLY
+        VJU1CZv1DIyGLCTPgAKNgeo=
+X-Google-Smtp-Source: ABdhPJw4VXb316KPeH1PJV6+trUh6zgGxF5VJQRHS1G9M7KvTAY4ypmt5bbKi2jd6R5tOl/qrqr8KQ==
+X-Received: by 2002:a63:1f55:0:b0:3fd:41c5:b53a with SMTP id q21-20020a631f55000000b003fd41c5b53amr529334pgm.441.1655140985316;
+        Mon, 13 Jun 2022 10:23:05 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id s194-20020a6377cb000000b003fd1111d73csm5956795pgc.4.2022.06.13.10.23.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 10:23:04 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 13 Jun 2022 07:23:03 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v11 3/8] cgroup/cpuset: Allow no-task partition to have
+ empty cpuset.cpus.effective
+Message-ID: <Yqdydz3vNgfVMgDf@slm.duckdns.org>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-4-longman@redhat.com>
+ <YqYlCRywdgSYtwKk@slm.duckdns.org>
+ <YqYlOQjKtQCBsQuT@slm.duckdns.org>
+ <ce3106c1-a3c4-b449-bafc-6940d672bd94@redhat.com>
+ <YqanEZZooeZwtutA@slm.duckdns.org>
+ <20220613140206.GA6910@blackbody.suse.cz>
+ <f1c33447-1f82-9698-6b0c-fc9ffb12b4bb@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <7328fbb2-06af-99c8-5e7f-9d22f8c4e4f6@linux.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f1c33447-1f82-9698-6b0c-fc9ffb12b4bb@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 07:48:32AM -0500, Pierre-Louis Bossart wrote:
-> 
-> 
-> >>>> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-> >>>> index 505c5ef061e3..808e2f320052 100644
-> >>>> --- a/drivers/soundwire/intel.c
-> >>>> +++ b/drivers/soundwire/intel.c
-> >>>> @@ -1328,8 +1328,8 @@ int intel_link_startup(struct auxiliary_device *auxdev)
-> >>>>  
-> >>>>  	if (bus->prop.hw_disabled) {
-> >>>>  		dev_info(dev,
-> >>>> -			 "SoundWire master %d is disabled, ignoring\n",
-> >>>> -			 sdw->instance);
-> >>>> +			 "%s: SoundWire master %d is disabled, ignoring\n",
-> >>>> +			 __func__, sdw->instance);
-> >>>
-> >>> This is not a debug message, please make it such if you want to have
-> >>> __func__  And even then, it's not needed as you can get that from the
-> >>> kernel automatically.
-> >>
-> >> Sorry, I don't understand the feedback at all.
-> > 
-> > dev_info() is not a way to send debug messages.
-> > 
-> > If you want this to be only for debugging, use dev_dbg().  And when you
-> > use that, you get the __func__ location for free in the output already
-> > if you want that.
-> > 
-> >> This message was added precisely to figure out why the expected
-> >> programming sequence was not followed, only to discover that we have
-> >> devices with spurious PCI wakes handled below. Without this added
-> >> difference with __func__, we wouldn't know if the issue happened during
-> >> the expected/regular programming sequence or not.
-> > 
-> > Perhaps make the text unique then?  Why would an informational message
-> > need a function name.  Drivers should be quiet when all is going well.
-> > If something is not going well, dev_info() is not the kernel log level
-> > to be sending something out at.
-> 
-> This is not a debug message - unlike all the others. The BIOS and/or the
-> user may disable a specific link and it's useful to know.
+Hello,
 
-Ok, but that's not what your subject and changelog said you were
-modifying here.  Hence my confusion :)
+On Mon, Jun 13, 2022 at 12:47:37PM -0400, Waiman Long wrote:
+> On 6/13/22 10:02, Michal Koutný wrote:
+> > On Sun, Jun 12, 2022 at 04:55:13PM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > > But how would that happen? A lot of other things would break too if that
+> > > were to happen.
+> > cpuset is a threaded controller where the internal-node-constraint does
+> > not hold. So the additional condition for cpuset migrations is IMO
+> > warranted (and needed if there's no "fall up").
+> 
+> Yes, you are right. cpuset is threaded and so it may have tasks even if it
+> is not the leaf node.
 
-> The intent of __func__ was precisely to make the text unique across all
-> cases where we test for hw_disabled, but you have a point that this
-> specific info message should be clearer. The text was actually already
-> different from the 'disable or not-started' cases, I might have done one
-> too many edits in this file. Will fix.
-> 
-> >>>>  		return 0;
-> >>>>  	}
-> >>>>  
-> >>>> @@ -1489,8 +1489,8 @@ int intel_link_process_wakeen_event(struct auxiliary_device *auxdev)
-> >>>>  	bus = &sdw->cdns.bus;
-> >>>>  
-> >>>>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
-> >>>> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
-> >>>> -			bus->link_id);
-> >>>> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
-> >>>> +			__func__, bus->link_id);
-> >>>>  		return 0;
-> >>>>  	}
-> >>>>  
-> >>>> @@ -1549,8 +1549,8 @@ static int __maybe_unused intel_pm_prepare(struct device *dev)
-> >>>>  	int ret;
-> >>>>  
-> >>>>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
-> >>>> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
-> >>>> -			bus->link_id);
-> >>>> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
-> >>>> +			__func__, bus->link_id);
-> >>>
-> >>> Not needed, it is provided automatically if you ask the kernel for this.
-> >>> Same for all other instances in this patch.
-> >>
-> >> provided how? Your comment is a bit cryptic here.
-> > 
-> > the dynamic debug code in the kernel already adds the function name
-> > where the message was sent from, if you want to know this in userspace.
-> > Please read the documentation for details (I think the key is the 'f'
-> > flag to be enabled in userspace).
-> > 
-> > So adding __func__ to dev_dbg() calls are redundant and never needed.
-> 
-> Oh wow, I had no idea - and I am not the only one :-)
-> 
-> Here's what I get with a grep on the kernel code
-> 
-> git grep __func__ | grep dev_dbg | wc -l
-> 
-> 3122
-> 
-> 
-> Doing this for sound/ gives me 356, and that's for single-line logs only.
-> 
-> There's clearly something that was missed by tons of people.
+And we had this same exchange the last time. Can you please add a comment?
+We might also already have had this exchange before too but is it necessary
+to allow threaded cgroups to be isolated roots? The interaction between
+being threaded and isolated is cleaner at that layer as it's interactions
+between two explicit mode changes.
 
-Yes, it's not commonly known so cleanups are always welcome.  Perhaps
-some of those usages predate the feature being added as well.
+Thanks.
 
-thanks,
-
-greg k-h
+-- 
+tejun

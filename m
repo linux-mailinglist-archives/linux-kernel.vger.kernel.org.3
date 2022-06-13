@@ -2,149 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E1254834C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBADB54833F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238848AbiFMJcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
+        id S240773AbiFMJc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbiFMJcC (ORCPT
+        with ESMTP id S229926AbiFMJcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:32:02 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECCB18B0A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655112720; x=1686648720;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hr64nq78b3DhYXBFaO31QJuhfJABxC8jmGW5U+Ds5e4=;
-  b=NmNph2kGoj0BA5V19OQ3asbpC61oohiX1z1zfY2efmgQgKfQKHiQuv/a
-   N4QmGAzd6A66WPjMMZcAf9OduCaEoq8Tx6dV+RAnEDFred031fAhGFOvG
-   13FK4vPYB4Z/5Mn2iUl2FYoBdvRBbZjOPXrLvLoY0OiuAu50iWsV1mGDv
-   aHa+REDB+Tfv81jV0QILhSzbIGFFo1ndKsConal3d0rll7iHIPif6cQct
-   vPXaISY6DqTvd8Zw1883jF1Wg4fCM6YjGH7yzDhZzRAH1ZUSlEJLzrL6N
-   Uc7RvcMRbf2+OoDUpZCKBafuVrujNurCohoQ2IU9rdXNaG61UOtFkb+Eo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="277004017"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="277004017"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 02:32:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="535030145"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Jun 2022 02:31:58 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0gQP-000KgF-OC;
-        Mon, 13 Jun 2022 09:31:57 +0000
-Date:   Mon, 13 Jun 2022 17:31:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     kbuild-all@lists.01.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] mm/mmap: Drop generic protection_map[] array
-Message-ID: <202206131716.tDWk9rLs-lkp@intel.com>
-References: <20220613053354.553579-3-anshuman.khandual@arm.com>
+        Mon, 13 Jun 2022 05:32:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B760B18B20;
+        Mon, 13 Jun 2022 02:32:45 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id fu3so9986540ejc.7;
+        Mon, 13 Jun 2022 02:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ouugFA4wvIvBuAMFZVHlrzyWmRsNThmM8N7DKEf0gGY=;
+        b=oblnuSouSDHMuqqARXqLd++pJVy0ujuQRDiQLY4ejPoBD5wsxfGqhSrTcVzAt5Gt26
+         QiFuWxurpt5YZkOQSm0Tp3o+xudHbm87PKyI1FPii/mfmTQp3wb57k39LNfQgEWzcUuw
+         1XsQCib9W/SQti9C/PVNRuWN7jfnY4msyCtg4/4eRZqlPqy+XogtJ7RCKQJr82OPwibF
+         cyIX2cItdXwXnywtg5EwwRXFHO1cje+97NICmD3MxynF8a9kt00y+/PvexlP0UuJExTA
+         tpA6vBc642YpKduVNWMGqRHC66OD1i1VwG/rWg+nhOpRhi0vKSBXjAayFRyguvLNUNwy
+         Pv7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ouugFA4wvIvBuAMFZVHlrzyWmRsNThmM8N7DKEf0gGY=;
+        b=XH7pkNp1MJJEUkN8ugSWGiZHhIFTp7l+ifY0qwUqmwlQtuUKEqmFrQu2fUr7V6cgyH
+         vu+dWFfRxonQdgjYeSNbyWFBzGPR2otEKsNObJ2qePCkUPNamp3YZ00qS744kYli4us5
+         RJSyzic3ABtQrzz7sRCmclkOdm/AK23jYg27bMArCYgt1M0kw28/afUIE2JEdP1SG4t2
+         LzTYdSotJLRMHWkK78nLbCM26zlGu5s0XKJOd2l5UOwb4WUJRiOAij3EHr4YyXuUoxvC
+         EGoiLDjEZn1RaWdB9fz/QudLVNR/uXnh2Thfnfg2V64b9YJ92WfN+h70rOcEyw4jQhd0
+         CfrQ==
+X-Gm-Message-State: AOAM5308zj8033xJ1N6I6Rq47azbZ5CM+uOniOQlcOrkpQUDtL0YG1Lv
+        aWv18kcUd/HimU5IE6z9QJM=
+X-Google-Smtp-Source: ABdhPJwAs1tRfFppx8kO1Vel1dF59AAvl8ss/jjooMB0Wgg9BxIlvxBNGJxskC/qCCUplkShMlSgzA==
+X-Received: by 2002:a17:906:fb0f:b0:715:7e23:bbbc with SMTP id lz15-20020a170906fb0f00b007157e23bbbcmr6489946ejb.373.1655112764229;
+        Mon, 13 Jun 2022 02:32:44 -0700 (PDT)
+Received: from skbuf ([188.25.255.186])
+        by smtp.gmail.com with ESMTPSA id h1-20020a17090791c100b006f3ef214dc7sm3614269ejz.45.2022.06.13.02.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 02:32:43 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 12:32:42 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [RFC Patch net-next v2 07/15] net: dsa: microchip: update the
+ ksz_phylink_get_caps
+Message-ID: <20220613093242.ja2jbmhi5uucsavn@skbuf>
+References: <20220530104257.21485-1-arun.ramadoss@microchip.com>
+ <20220530104257.21485-8-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613053354.553579-3-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220530104257.21485-8-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+On Mon, May 30, 2022 at 04:12:49PM +0530, Arun Ramadoss wrote:
+> This patch assigns the phylink_get_caps in ksz8795 and ksz9477 to
+> ksz_phylink_get_caps. And update their mac_capabilities in the
+> respective ksz_dev_ops.
+> 
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> ---
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: riscv-randconfig-r042-20220613 (https://download.01.org/0day-ci/archive/20220613/202206131716.tDWk9rLs-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/696f81b49f7b6316f652d795da4c0008efef4487
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
-        git checkout 696f81b49f7b6316f652d795da4c0008efef4487
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/riscv/mm/init.c:1224:59: error: 'PAGE_NONE' undeclared here (not in a function); did you mean 'SIGEV_NONE'?
-    1224 |         [VM_NONE]                                       = PAGE_NONE,
-         |                                                           ^~~~~~~~~
-         |                                                           SIGEV_NONE
->> arch/riscv/mm/init.c:1225:59: error: 'PAGE_READ' undeclared here (not in a function); did you mean 'MAY_READ'?
-    1225 |         [VM_READ]                                       = PAGE_READ,
-         |                                                           ^~~~~~~~~
-         |                                                           MAY_READ
->> arch/riscv/mm/init.c:1226:59: error: 'PAGE_COPY' undeclared here (not in a function)
-    1226 |         [VM_WRITE]                                      = PAGE_COPY,
-         |                                                           ^~~~~~~~~
->> arch/riscv/mm/init.c:1228:59: error: 'PAGE_EXEC' undeclared here (not in a function); did you mean 'TASK_EXEC'?
-    1228 |         [VM_EXEC]                                       = PAGE_EXEC,
-         |                                                           ^~~~~~~~~
-         |                                                           TASK_EXEC
->> arch/riscv/mm/init.c:1229:59: error: 'PAGE_READ_EXEC' undeclared here (not in a function); did you mean 'PAGE_KERNEL_EXEC'?
-    1229 |         [VM_EXEC | VM_READ]                             = PAGE_READ_EXEC,
-         |                                                           ^~~~~~~~~~~~~~
-         |                                                           PAGE_KERNEL_EXEC
->> arch/riscv/mm/init.c:1230:59: error: 'PAGE_COPY_EXEC' undeclared here (not in a function); did you mean 'PAGE_KERNEL_EXEC'?
-    1230 |         [VM_EXEC | VM_WRITE]                            = PAGE_COPY_EXEC,
-         |                                                           ^~~~~~~~~~~~~~
-         |                                                           PAGE_KERNEL_EXEC
->> arch/riscv/mm/init.c:1231:59: error: 'PAGE_COPY_READ_EXEC' undeclared here (not in a function)
-    1231 |         [VM_EXEC | VM_WRITE | VM_READ]                  = PAGE_COPY_READ_EXEC,
-         |                                                           ^~~~~~~~~~~~~~~~~~~
->> arch/riscv/mm/init.c:1238:59: error: 'PAGE_SHARED_EXEC' undeclared here (not in a function); did you mean 'PAGE_SHARED'?
-    1238 |         [VM_SHARED | VM_EXEC | VM_WRITE]                = PAGE_SHARED_EXEC,
-         |                                                           ^~~~~~~~~~~~~~~~
-         |                                                           PAGE_SHARED
-
-
-vim +1224 arch/riscv/mm/init.c
-
-  1222	
-  1223	pgprot_t protection_map[16] __ro_after_init = {
-> 1224		[VM_NONE]					= PAGE_NONE,
-> 1225		[VM_READ]					= PAGE_READ,
-> 1226		[VM_WRITE]					= PAGE_COPY,
-  1227		[VM_WRITE | VM_READ]				= PAGE_COPY,
-> 1228		[VM_EXEC]					= PAGE_EXEC,
-> 1229		[VM_EXEC | VM_READ]				= PAGE_READ_EXEC,
-> 1230		[VM_EXEC | VM_WRITE]				= PAGE_COPY_EXEC,
-> 1231		[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY_READ_EXEC,
-  1232		[VM_SHARED]					= PAGE_NONE,
-  1233		[VM_SHARED | VM_READ]				= PAGE_READ,
-  1234		[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
-  1235		[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
-  1236		[VM_SHARED | VM_EXEC]				= PAGE_EXEC,
-  1237		[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READ_EXEC,
-> 1238		[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED_EXEC,
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

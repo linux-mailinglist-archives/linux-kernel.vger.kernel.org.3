@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DB55495D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D2D5495A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346309AbiFMKa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S1378971AbiFMNwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245132AbiFMK1i (ORCPT
+        with ESMTP id S1379875AbiFMNp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:27:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E46245BB;
-        Mon, 13 Jun 2022 03:19:59 -0700 (PDT)
+        Mon, 13 Jun 2022 09:45:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190D4F5A9;
+        Mon, 13 Jun 2022 04:32:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3927AB80E94;
-        Mon, 13 Jun 2022 10:19:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD6FC34114;
-        Mon, 13 Jun 2022 10:19:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 508DCB80E93;
+        Mon, 13 Jun 2022 11:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49CDC34114;
+        Mon, 13 Jun 2022 11:32:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115597;
-        bh=r3w9mf82Q9TSr2F+49vnzyLqXi4WacsulumrBjsiqsI=;
+        s=korg; t=1655119959;
+        bh=AiFiMrZGrxYTMTzFPfsA2Nca+TfnO4Ub0Mjh7g1xlcQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sDOKp4KM94xSEj/bm9S+HHJ8FxnHo9ed2mrHexUYNHDM7npSmPMOzhcg2Vurwm1MH
-         9xbWMzwcYcXM2jvjSDP42h3AtE3OsdfZ+3Iop5qFeoD1dTx2mjlZ8k+jFGMA3YFlLT
-         mm3EXATkFrCAR6UD7s01aZi8TiBoXOEA0ZeGvhig=
+        b=O8ArOZF1eVmJwjEZvTN3LGnYp5E+WpQpQf9HHNxLZ8w26FYl9Ohu5TjZOqVEP/Dcr
+         oN7do83frMOeItbXAYmHQMQhXAqhMKvniyJuEInXqZPqK5+gUGhh+e38JRVYQLdFMX
+         nXT90Sw7Snus1LCB8czarq9NlXhF4VZfag89tx14=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 131/167] video: fbdev: pxa3xx-gcu: release the resources correctly in pxa3xx_gcu_probe/remove()
+        stable@vger.kernel.org, Yi Chen <yiche@redhat.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 180/339] netfilter: nat: really support inet nat without l3 address
 Date:   Mon, 13 Jun 2022 12:10:05 +0200
-Message-Id: <20220613094911.620869381@linuxfoundation.org>
+Message-Id: <20220613094932.140124367@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,64 +56,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit d87ad457f7e1b8d2492ca5b1531eb35030a1cc8f ]
+[ Upstream commit 282e5f8fe907dc3f2fbf9f2103b0e62ffc3a68a5 ]
 
-In pxa3xx_gcu_probe(), the sequence of error lable is wrong, it will
-leads some resource leaked, so adjust the sequence to handle the error
-correctly, and if pxa3xx_gcu_add_buffer() fails, pxa3xx_gcu_free_buffers()
-need be called.
-In pxa3xx_gcu_remove(), add missing clk_disable_unpreprare().
+When no l3 address is given, priv->family is set to NFPROTO_INET and
+the evaluation function isn't called.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Call it too so l4-only rewrite can work.
+Also add a test case for this.
+
+Fixes: a33f387ecd5aa ("netfilter: nft_nat: allow to specify layer 4 protocol NAT only")
+Reported-by: Yi Chen <yiche@redhat.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/pxa3xx-gcu.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ net/netfilter/nft_nat.c                      |  3 +-
+ tools/testing/selftests/netfilter/nft_nat.sh | 43 ++++++++++++++++++++
+ 2 files changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/pxa3xx-gcu.c b/drivers/video/fbdev/pxa3xx-gcu.c
-index 50bce45e7f3d..184773b6b9e4 100644
---- a/drivers/video/fbdev/pxa3xx-gcu.c
-+++ b/drivers/video/fbdev/pxa3xx-gcu.c
-@@ -662,6 +662,7 @@ static int pxa3xx_gcu_probe(struct platform_device *pdev)
- 	for (i = 0; i < 8; i++) {
- 		ret = pxa3xx_gcu_add_buffer(dev, priv);
- 		if (ret) {
-+			pxa3xx_gcu_free_buffers(dev, priv);
- 			dev_err(dev, "failed to allocate DMA memory\n");
- 			goto err_disable_clk;
- 		}
-@@ -677,15 +678,15 @@ static int pxa3xx_gcu_probe(struct platform_device *pdev)
- 			SHARED_SIZE, irq);
- 	return 0;
+diff --git a/net/netfilter/nft_nat.c b/net/netfilter/nft_nat.c
+index 4394df4bc99b..e5fd6995e4bf 100644
+--- a/net/netfilter/nft_nat.c
++++ b/net/netfilter/nft_nat.c
+@@ -335,7 +335,8 @@ static void nft_nat_inet_eval(const struct nft_expr *expr,
+ {
+ 	const struct nft_nat *priv = nft_expr_priv(expr);
  
--err_free_dma:
--	dma_free_coherent(dev, SHARED_SIZE,
--			priv->shared, priv->shared_phys);
-+err_disable_clk:
-+	clk_disable_unprepare(priv->clk);
- 
- err_misc_deregister:
- 	misc_deregister(&priv->misc_dev);
- 
--err_disable_clk:
--	clk_disable_unprepare(priv->clk);
-+err_free_dma:
-+	dma_free_coherent(dev, SHARED_SIZE,
-+			  priv->shared, priv->shared_phys);
- 
- 	return ret;
+-	if (priv->family == nft_pf(pkt))
++	if (priv->family == nft_pf(pkt) ||
++	    priv->family == NFPROTO_INET)
+ 		nft_nat_eval(expr, regs, pkt);
  }
-@@ -698,6 +699,7 @@ static int pxa3xx_gcu_remove(struct platform_device *pdev)
- 	pxa3xx_gcu_wait_idle(priv);
- 	misc_deregister(&priv->misc_dev);
- 	dma_free_coherent(dev, SHARED_SIZE, priv->shared, priv->shared_phys);
-+	clk_disable_unprepare(priv->clk);
- 	pxa3xx_gcu_free_buffers(dev, priv);
  
- 	return 0;
+diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
+index eb8543b9a5c4..924ecb3f1f73 100755
+--- a/tools/testing/selftests/netfilter/nft_nat.sh
++++ b/tools/testing/selftests/netfilter/nft_nat.sh
+@@ -374,6 +374,45 @@ EOF
+ 	return $lret
+ }
+ 
++test_local_dnat_portonly()
++{
++	local family=$1
++	local daddr=$2
++	local lret=0
++	local sr_s
++	local sr_r
++
++ip netns exec "$ns0" nft -f /dev/stdin <<EOF
++table $family nat {
++	chain output {
++		type nat hook output priority 0; policy accept;
++		meta l4proto tcp dnat to :2000
++
++	}
++}
++EOF
++	if [ $? -ne 0 ]; then
++		if [ $family = "inet" ];then
++			echo "SKIP: inet port test"
++			test_inet_nat=false
++			return
++		fi
++		echo "SKIP: Could not add $family dnat hook"
++		return
++	fi
++
++	echo SERVER-$family | ip netns exec "$ns1" timeout 5 socat -u STDIN TCP-LISTEN:2000 &
++	sc_s=$!
++
++	result=$(ip netns exec "$ns0" timeout 1 socat TCP:$daddr:2000 STDOUT)
++
++	if [ "$result" = "SERVER-inet" ];then
++		echo "PASS: inet port rewrite without l3 address"
++	else
++		echo "ERROR: inet port rewrite"
++		ret=1
++	fi
++}
+ 
+ test_masquerade6()
+ {
+@@ -1148,6 +1187,10 @@ fi
+ reset_counters
+ test_local_dnat ip
+ test_local_dnat6 ip6
++
++reset_counters
++test_local_dnat_portonly inet 10.0.1.99
++
+ reset_counters
+ $test_inet_nat && test_local_dnat inet
+ $test_inet_nat && test_local_dnat6 inet
 -- 
 2.35.1
 

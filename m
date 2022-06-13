@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D412549C3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19929549C3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244667AbiFMSyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S1344356AbiFMSyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243812AbiFMSxM (ORCPT
+        with ESMTP id S1344600AbiFMSxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:53:12 -0400
+        Mon, 13 Jun 2022 14:53:14 -0400
 Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA6AF45CA;
-        Mon, 13 Jun 2022 08:55:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FCEF45CD;
+        Mon, 13 Jun 2022 08:55:12 -0700 (PDT)
 Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx2.veeam.com (Postfix) with ESMTPS id 10A14431CB;
-        Mon, 13 Jun 2022 11:55:04 -0400 (EDT)
+        by mx2.veeam.com (Postfix) with ESMTPS id 6A53840118;
+        Mon, 13 Jun 2022 11:55:08 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx2-2022; t=1655135704;
-        bh=J6II4Dmn3qQVJe/t6k11phsdt0yI20fexOrwnohZmkg=;
+        s=mx2-2022; t=1655135708;
+        bh=Sfz04j+oMJImGYRj57Xp2198QOHGgf81l+CsLOdh9V4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=OUHXDFRwYFOGkmRTTP9Xs0V3hgoTOmwRlczKXjhEn4ZOuE1XgK/eSBjA3i+AfQlVo
-         AoLrE+HnUS/Dzd1k57whKmUA/l19WFLJ/gg41Jt2a5w79QPLg1NpL55HyOFIrsgCIl
-         q3SzGjXdQeLmcSKEmM+/7wDkdoWgOoAAcSo3Hv9+qFr4xYkTbBlkN9HBvpSKIkRXSR
-         bNVR/JZe0Av1fLnzuz6jjnEvlbn3VUtcPzySOB0NS0ILSrNYPoi9AbXEz5ldRUvdOR
-         ET3wMWKXW81IQy3Rzs669i//r77tvcT8N9FfMGo8gR4XkaKh+mVlIeb7SimXjQExNK
-         F+u7i1KclyVkA==
+        b=LgAVIxctDI9NM+VKZCmWFf7qcL604fZBLZbuSBZ/YyAa3nVkStOiZbgsxPT0t/BTB
+         BsAU2O0iYhiJ8yc6XO2DaPBSWGbVg+fA/SqAeedIfUxER94kCzJ0AXdjBfHdxfLKyC
+         3FCkaYtlhcuu/kZPSzBQytpx/D5xHRRKoRrX3s2hbzp/V81FpFouMRiihK2d7z3mcy
+         VYWoBQnG/pYMa0XnTt9pHdrnXqy8CklzzVvcEc2HHzTnqIlV5a8khUfzMDUO6644Qu
+         Qgc3ykXI2tJHhY/TbWB/gOZzNc1kYGQ1fTSOrNWKoHBnxOPZu2HK0CNQiMp1fdvE38
+         rQ/w2NFz+EomA==
 Received: from prgdevlinuxpatch01.amust.local (172.24.14.5) by
  prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.9; Mon, 13 Jun 2022 17:54:47 +0200
+ 15.2.1118.9; Mon, 13 Jun 2022 17:54:50 +0200
 From:   Sergei Shtepa <sergei.shtepa@veeam.com>
 To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Subject: [PATCH 15/20] block, blksnap: snapshot image block device
-Date:   Mon, 13 Jun 2022 18:53:08 +0300
-Message-ID: <1655135593-1900-16-git-send-email-sergei.shtepa@veeam.com>
+Subject: [PATCH 16/20] block, blksnap: snapshot
+Date:   Mon, 13 Jun 2022 18:53:09 +0300
+Message-ID: <1655135593-1900-17-git-send-email-sergei.shtepa@veeam.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
 References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
@@ -62,440 +62,782 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provides the operation of block devices of snapshot images. Read and
-write operations are redirected to the regions of difference blocks for
-block device (struct diff_area).
+The struck snapshot combines block devices, for which a snapshot is
+created, block devices of their snapshot images, as well as a difference
+storage.
+There may be several snapshots at the same time, but they should not
+contain common block devices. This can be used for cases when backup is
+scheduled once an hour for some block devices, and once a day for
+others, and once a week for others. In this case, it is possible that
+three snapshots are used at the same time.
 
 Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
 ---
- drivers/block/blksnap/snapimage.c | 345 ++++++++++++++++++++++++++++++
- drivers/block/blksnap/snapimage.h |  65 ++++++
- 2 files changed, 410 insertions(+)
- create mode 100644 drivers/block/blksnap/snapimage.c
- create mode 100644 drivers/block/blksnap/snapimage.h
+ drivers/block/blksnap/snapshot.c | 671 +++++++++++++++++++++++++++++++
+ drivers/block/blksnap/snapshot.h |  76 ++++
+ 2 files changed, 747 insertions(+)
+ create mode 100644 drivers/block/blksnap/snapshot.c
+ create mode 100644 drivers/block/blksnap/snapshot.h
 
-diff --git a/drivers/block/blksnap/snapimage.c b/drivers/block/blksnap/snapimage.c
+diff --git a/drivers/block/blksnap/snapshot.c b/drivers/block/blksnap/snapshot.c
 new file mode 100644
-index 000000000000..df69e989056f
+index 000000000000..d7285b8108d0
 --- /dev/null
-+++ b/drivers/block/blksnap/snapimage.c
-@@ -0,0 +1,345 @@
++++ b/drivers/block/blksnap/snapshot.c
+@@ -0,0 +1,671 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#define pr_fmt(fmt) KBUILD_MODNAME "-snapimage: " fmt
++#define pr_fmt(fmt) KBUILD_MODNAME "-snapshot: " fmt
 +#include <linux/slab.h>
-+#include <linux/cdrom.h>
-+#include <linux/blk-mq.h>
++#include <linux/sched/mm.h>
 +#include <linux/blk_snap.h>
 +#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
 +#include "memory_checker.h"
 +#endif
-+#include "snapimage.h"
++#include "snapshot.h"
++#include "tracker.h"
++#include "diff_storage.h"
 +#include "diff_area.h"
-+#include "chunk.h"
++#include "snapimage.h"
 +#include "cbt_map.h"
 +
-+#define SNAPIMAGE_MAX_DEVICES 2048
++LIST_HEAD(snapshots);
++DECLARE_RWSEM(snapshots_lock);
 +
-+static unsigned int _major;
-+static DEFINE_IDR(_minor_idr);
-+static DEFINE_SPINLOCK(_minor_lock);
-+
-+static void free_minor(int minor)
++static void snapshot_release(struct snapshot *snapshot)
 +{
-+	spin_lock(&_minor_lock);
-+	idr_remove(&_minor_idr, minor);
-+	spin_unlock(&_minor_lock);
-+}
++	int inx;
++	unsigned int current_flag;
 +
-+static int new_minor(int *minor, void *ptr)
-+{
-+	int ret;
++	pr_info("Release snapshot %pUb\n", &snapshot->id);
 +
-+	idr_preload(GFP_KERNEL);
-+	spin_lock(&_minor_lock);
++	/* Destroy all snapshot images. */
++	for (inx = 0; inx < snapshot->count; ++inx) {
++		struct snapimage *snapimage = snapshot->snapimage_array[inx];
 +
-+	ret = idr_alloc(&_minor_idr, ptr, 0, 1 << MINORBITS, GFP_NOWAIT);
-+
-+	spin_unlock(&_minor_lock);
-+	idr_preload_end();
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	*minor = ret;
-+	return 0;
-+}
-+
-+static inline void snapimage_unprepare_worker(struct snapimage *snapimage)
-+{
-+	kthread_flush_worker(&snapimage->worker);
-+	kthread_stop(snapimage->worker_task);
-+}
-+
-+static int snapimage_kthread_worker_fn(void *worker_ptr)
-+{
-+	current->flags |= PF_LOCAL_THROTTLE | PF_MEMALLOC_NOIO;
-+	return kthread_worker_fn(worker_ptr);
-+}
-+
-+static inline int snapimage_prepare_worker(struct snapimage *snapimage)
-+{
-+	struct task_struct *task;
-+
-+	kthread_init_worker(&snapimage->worker);
-+
-+	task = kthread_run(snapimage_kthread_worker_fn, &snapimage->worker,
-+			   BLK_SNAP_IMAGE_NAME "%d",
-+			   MINOR(snapimage->image_dev_id));
-+	if (IS_ERR(task))
-+		return -ENOMEM;
-+
-+	set_user_nice(task, MIN_NICE);
-+
-+	snapimage->worker_task = task;
-+	return 0;
-+}
-+
-+struct snapimage_cmd {
-+	struct kthread_work work;
-+};
-+
-+static void snapimage_queue_work(struct kthread_work *work)
-+{
-+	struct snapimage_cmd *cmd =
-+		container_of(work, struct snapimage_cmd, work);
-+	struct request *rq = blk_mq_rq_from_pdu(cmd);
-+	struct snapimage *snapimage = rq->q->queuedata;
-+	blk_status_t status = BLK_STS_OK;
-+	struct bio_vec bvec;
-+	struct req_iterator iter;
-+	struct diff_area_image_ctx io_ctx;
-+	sector_t pos = blk_rq_pos(rq);
-+
-+	diff_area_throttling_io(snapimage->diff_area);
-+	diff_area_image_ctx_init(&io_ctx, snapimage->diff_area,
-+				 op_is_write(req_op(rq)));
-+	rq_for_each_segment(bvec, rq, iter) {
-+		status = diff_area_image_io(&io_ctx, &bvec, &pos);
-+		if (unlikely(status != BLK_STS_OK))
-+			break;
-+	}
-+	diff_area_image_ctx_done(&io_ctx);
-+
-+	blk_mq_end_request(rq, status);
-+}
-+
-+static int snapimage_init_request(struct blk_mq_tag_set *set,
-+				  struct request *rq, unsigned int hctx_idx,
-+				  unsigned int numa_node)
-+{
-+	struct snapimage_cmd *cmd = blk_mq_rq_to_pdu(rq);
-+
-+	kthread_init_work(&cmd->work, snapimage_queue_work);
-+	return 0;
-+}
-+
-+static blk_status_t snapimage_queue_rq(struct blk_mq_hw_ctx *hctx,
-+				       const struct blk_mq_queue_data *bd)
-+{
-+	int ret;
-+	struct request *rq = bd->rq;
-+	struct snapimage *snapimage = rq->q->queuedata;
-+	struct snapimage_cmd *cmd = blk_mq_rq_to_pdu(rq);
-+
-+	/*
-+	 * Cannot fall asleep in the context of this function,
-+	 * as we are under rwsem lockdown.
-+	 */
-+
-+	blk_mq_start_request(rq);
-+
-+	if (unlikely(!snapimage->is_ready)) {
-+		blk_mq_end_request(rq, BLK_STS_IOERR);
-+		return BLK_STS_IOERR;
++		if (snapimage)
++			snapimage_free(snapimage);
 +	}
 +
-+	if (op_is_write(req_op(rq))) {
-+		ret = cbt_map_set_both(snapimage->cbt_map, blk_rq_pos(rq),
-+				       blk_rq_sectors(rq));
-+		if (unlikely(ret)) {
-+			blk_mq_end_request(rq, BLK_STS_IOERR);
-+			return BLK_STS_IOERR;
++	/* Flush and freeze fs on each original block device. */
++	for (inx = 0; inx < snapshot->count; ++inx) {
++		struct tracker *tracker = snapshot->tracker_array[inx];
++
++		if (!tracker || !tracker->diff_area)
++			continue;
++
++		if (freeze_bdev(tracker->diff_area->orig_bdev))
++			pr_err("Failed to freeze device [%u:%u]\n",
++			       MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
++	}
++
++	current_flag = memalloc_noio_save();
++	tracker_lock();
++
++	/* Set tracker as available for new snapshots. */
++	for (inx = 0; inx < snapshot->count; ++inx)
++		tracker_release_snapshot(snapshot->tracker_array[inx]);
++
++	tracker_unlock();
++	memalloc_noio_restore(current_flag);
++
++	/* Thaw fs on each original block device. */
++	for (inx = 0; inx < snapshot->count; ++inx) {
++		struct tracker *tracker = snapshot->tracker_array[inx];
++
++		if (!tracker || !tracker->diff_area)
++			continue;
++
++		if (thaw_bdev(tracker->diff_area->orig_bdev))
++			pr_err("Failed to thaw device [%u:%u]\n",
++			       MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
++	}
++
++	/* Destroy diff area for each tracker. */
++	for (inx = 0; inx < snapshot->count; ++inx) {
++		struct tracker *tracker = snapshot->tracker_array[inx];
++
++		if (tracker) {
++			diff_area_put(tracker->diff_area);
++			tracker->diff_area = NULL;
++
++			tracker_put(tracker);
++			snapshot->tracker_array[inx] = NULL;
 +		}
 +	}
-+
-+	kthread_queue_work(&snapimage->worker, &cmd->work);
-+	return BLK_STS_OK;
 +}
 +
-+static const struct blk_mq_ops mq_ops = {
-+	.queue_rq = snapimage_queue_rq,
-+	.init_request = snapimage_init_request,
++static void snapshot_free(struct kref *kref)
++{
++	struct snapshot *snapshot = container_of(kref, struct snapshot, kref);
++
++	if (snapshot->is_taken)
++		snapshot_release(snapshot);
++	kfree(snapshot->snapimage_array);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	if (snapshot->snapimage_array)
++		memory_object_dec(memory_object_snapimage_array);
++#endif
++	kfree(snapshot->tracker_array);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	if (snapshot->tracker_array)
++		memory_object_dec(memory_object_tracker_array);
++#endif
++	diff_storage_put(snapshot->diff_storage);
++
++	kfree(snapshot);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	memory_object_dec(memory_object_snapshot);
++#endif
++}
++
++static inline void snapshot_get(struct snapshot *snapshot)
++{
++	kref_get(&snapshot->kref);
++};
++static inline void snapshot_put(struct snapshot *snapshot)
++{
++	if (likely(snapshot))
++		kref_put(&snapshot->kref, snapshot_free);
 +};
 +
-+const struct block_device_operations bd_ops = {
-+	.owner = THIS_MODULE,
-+	//.open = snapimage_open,
-+	//.ioctl = snapimage_ioctl,
-+	//.release = snapimage_close,
-+};
-+
-+static inline int snapimage_alloc_tag_set(struct snapimage *snapimage)
++static struct snapshot *snapshot_new(unsigned int count)
 +{
-+	struct blk_mq_tag_set *set = &snapimage->tag_set;
++	int ret;
++	struct snapshot *snapshot = NULL;
 +
-+	set->ops = &mq_ops;
-+	set->nr_hw_queues = 1;
-+	set->nr_maps = 1;
-+	set->queue_depth = 128;
-+	set->numa_node = NUMA_NO_NODE;
-+	set->flags = BLK_MQ_F_SHOULD_MERGE | BLK_MQ_F_STACKING;
-+
-+	set->cmd_size = sizeof(struct snapimage_cmd);
-+	set->driver_data = snapimage;
-+
-+	return blk_mq_alloc_tag_set(set);
-+}
-+
-+void snapimage_free(struct snapimage *snapimage)
-+{
-+	pr_info("Snapshot image disk [%u:%u] delete\n",
-+		MAJOR(snapimage->image_dev_id), MINOR(snapimage->image_dev_id));
-+
-+	blk_mq_freeze_queue(snapimage->disk->queue);
-+	snapimage->is_ready = false;
-+	blk_mq_unfreeze_queue(snapimage->disk->queue);
-+
-+	snapimage_unprepare_worker(snapimage);
-+
-+	del_gendisk(snapimage->disk);
-+	blk_cleanup_disk(snapimage->disk);
-+	blk_mq_free_tag_set(&snapimage->tag_set);
-+
-+	diff_area_put(snapimage->diff_area);
-+	cbt_map_put(snapimage->cbt_map);
-+
-+	free_minor(MINOR(snapimage->image_dev_id));
-+	kfree(snapimage);
++	snapshot = kzalloc(sizeof(struct snapshot), GFP_KERNEL);
++	if (!snapshot) {
++		ret = -ENOMEM;
++		goto fail;
++	}
 +#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
-+	memory_object_dec(memory_object_snapimage);
++	memory_object_inc(memory_object_snapshot);
 +#endif
-+}
-+
-+struct snapimage *snapimage_create(struct diff_area *diff_area,
-+				   struct cbt_map *cbt_map)
-+{
-+	int ret = 0;
-+	int minor;
-+	struct snapimage *snapimage = NULL;
-+	struct gendisk *disk;
-+
-+	pr_info("Create snapshot image for device [%u:%u]\n",
-+		MAJOR(diff_area->orig_bdev->bd_dev),
-+		MINOR(diff_area->orig_bdev->bd_dev));
-+
-+	snapimage = kzalloc(sizeof(struct snapimage), GFP_KERNEL);
-+	if (snapimage == NULL)
-+		return ERR_PTR(-ENOMEM);
++	snapshot->tracker_array = kcalloc(count, sizeof(void *), GFP_KERNEL);
++	if (!snapshot->tracker_array) {
++		ret = -ENOMEM;
++		goto fail_free_snapshot;
++	}
 +#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
-+	memory_object_inc(memory_object_snapimage);
++	memory_object_inc(memory_object_tracker_array);
 +#endif
-+	ret = new_minor(&minor, snapimage);
-+	if (ret) {
-+		pr_err("Failed to allocate minor for snapshot image device. errno=%d\n",
-+		       abs(ret));
-+		goto fail_free_image;
++	snapshot->snapimage_array = kcalloc(count, sizeof(void *), GFP_KERNEL);
++	if (!snapshot->snapimage_array) {
++		ret = -ENOMEM;
++		goto fail_free_trackers;
 +	}
-+
-+	snapimage->is_ready = true;
-+	snapimage->capacity = cbt_map->device_capacity;
-+	snapimage->image_dev_id = MKDEV(_major, minor);
-+	pr_info("Snapshot image device id [%u:%u]\n",
-+		MAJOR(snapimage->image_dev_id), MINOR(snapimage->image_dev_id));
-+
-+	ret = snapimage_prepare_worker(snapimage);
-+	if (ret) {
-+		pr_err("Failed to prepare worker thread. errno=%d\n", abs(ret));
-+		goto fail_free_minor;
-+	}
-+
-+	ret = snapimage_alloc_tag_set(snapimage);
-+	if (ret) {
-+		pr_err("Failed to allocate tag set. errno=%d\n", abs(ret));
-+		goto fail_free_worker;
-+	}
-+
-+	disk = blk_mq_alloc_disk(&snapimage->tag_set, snapimage);
-+	if (IS_ERR(disk)) {
-+		ret = PTR_ERR(disk);
-+		pr_err("Failed to allocate disk. errno=%d\n", abs(ret));
-+		goto fail_free_tagset;
-+	}
-+
-+	blk_queue_max_hw_sectors(disk->queue, BLK_DEF_MAX_SECTORS);
-+	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, disk->queue);
-+
-+	if (snprintf(disk->disk_name, DISK_NAME_LEN, "%s%d",
-+		     BLK_SNAP_IMAGE_NAME, minor) < 0) {
-+		pr_err("Unable to set disk name for snapshot image device: invalid minor %u\n",
-+		       minor);
-+		ret = -EINVAL;
-+		goto fail_cleanup_disk;
-+	}
-+	pr_info("Snapshot image disk name [%s]\n", disk->disk_name);
-+
-+	disk->flags = 0;
-+	//disk->flags |= GENHD_FL_HIDDEN;
-+	//disk->flags |= GENHD_FL_REMOVABLE;
-+#ifdef GENHD_FL_NO_PART_SCAN
-+	disk->flags |= GENHD_FL_NO_PART_SCAN;
-+#else
-+	disk->flags |= GENHD_FL_NO_PART;
-+#endif
-+
-+
-+	disk->major = _major;
-+	disk->first_minor = minor;
-+	disk->minors = 1; // One disk has only one partition.
-+
-+	disk->fops = &bd_ops;
-+	disk->private_data = snapimage;
-+	snapimage->disk = disk;
-+
-+	set_capacity(disk, snapimage->capacity);
-+	pr_debug("Snapshot image device capacity %lld bytes\n",
-+		 (u64)(snapimage->capacity << SECTOR_SHIFT));
-+
-+	diff_area_get(diff_area);
-+	snapimage->diff_area = diff_area;
-+	cbt_map_get(cbt_map);
-+	snapimage->cbt_map = cbt_map;
-+
-+	ret = add_disk(disk);
-+	if (ret) {
-+		pr_err("Failed to add disk [%s] for snapshot image device\n",
-+		       disk->disk_name);
-+		goto fail_cleanup_disk;
-+	}
-+
-+	return snapimage;
-+
-+fail_cleanup_disk:
-+	blk_cleanup_disk(disk);
-+fail_free_tagset:
-+	blk_mq_free_tag_set(&snapimage->tag_set);
-+fail_free_worker:
-+	snapimage_unprepare_worker(snapimage);
-+fail_free_minor:
-+	free_minor(minor);
-+fail_free_image:
-+	kfree(snapimage);
 +#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
-+	memory_object_dec(memory_object_snapimage);
++	memory_object_inc(memory_object_snapimage_array);
 +#endif
++	snapshot->diff_storage = diff_storage_new();
++	if (!snapshot->diff_storage) {
++		ret = -ENOMEM;
++		goto fail_free_snapimage;
++	}
++
++	INIT_LIST_HEAD(&snapshot->link);
++	kref_init(&snapshot->kref);
++	uuid_gen(&snapshot->id);
++	snapshot->is_taken = false;
++
++	return snapshot;
++
++fail_free_snapimage:
++	kfree(snapshot->snapimage_array);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	if (snapshot->snapimage_array)
++		memory_object_dec(memory_object_superblock_array);
++#endif
++	kfree(snapshot->snapimage_array);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	if (snapshot->snapimage_array)
++		memory_object_dec(memory_object_snapimage_array);
++#endif
++fail_free_trackers:
++	kfree(snapshot->tracker_array);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	if (snapshot->tracker_array)
++		memory_object_dec(memory_object_tracker_array);
++#endif
++
++fail_free_snapshot:
++	kfree(snapshot);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	if (snapshot)
++		memory_object_dec(memory_object_snapshot);
++#endif
++
++fail:
 +	return ERR_PTR(ret);
 +}
 +
-+int snapimage_init(void)
++void snapshot_done(void)
 +{
-+	int mj = 0;
++	struct snapshot *snapshot;
 +
-+	mj = register_blkdev(mj, BLK_SNAP_IMAGE_NAME);
-+	if (mj < 0) {
-+		pr_err("Failed to register snapshot image block device. errno=%d\n",
-+		       abs(mj));
-+		return mj;
++	pr_debug("Cleanup snapshots\n");
++	do {
++		down_write(&snapshots_lock);
++		snapshot = list_first_entry_or_null(&snapshots, struct snapshot,
++						    link);
++		if (snapshot)
++			list_del(&snapshot->link);
++		up_write(&snapshots_lock);
++
++		snapshot_put(snapshot);
++	} while (snapshot);
++}
++
++int snapshot_create(struct blk_snap_dev_t *dev_id_array, unsigned int count,
++		    uuid_t *id)
++{
++	struct snapshot *snapshot = NULL;
++	int ret;
++	unsigned int inx;
++
++	pr_info("Create snapshot for devices:\n");
++	for (inx = 0; inx < count; ++inx)
++		pr_info("\t%u:%u\n", dev_id_array[inx].mj,
++			dev_id_array[inx].mn);
++
++	snapshot = snapshot_new(count);
++	if (IS_ERR(snapshot)) {
++		pr_err("Unable to create snapshot: failed to allocate snapshot structure\n");
++		return PTR_ERR(snapshot);
 +	}
-+	_major = mj;
-+	pr_info("Snapshot image block device major %d was registered\n",
-+		_major);
 +
++	ret = -ENODEV;
++	for (inx = 0; inx < count; ++inx) {
++		dev_t dev_id =
++			MKDEV(dev_id_array[inx].mj, dev_id_array[inx].mn);
++		struct tracker *tracker;
++
++		tracker = tracker_create_or_get(dev_id);
++		if (IS_ERR(tracker)) {
++			pr_err("Unable to create snapshot\n");
++			pr_err("Failed to add device [%u:%u] to snapshot tracking\n",
++			       MAJOR(dev_id), MINOR(dev_id));
++			ret = PTR_ERR(tracker);
++			goto fail;
++		}
++
++		snapshot->tracker_array[inx] = tracker;
++		snapshot->count++;
++	}
++
++	down_write(&snapshots_lock);
++	list_add_tail(&snapshots, &snapshot->link);
++	up_write(&snapshots_lock);
++
++	uuid_copy(id, &snapshot->id);
++	pr_info("Snapshot %pUb was created\n", &snapshot->id);
++	return 0;
++fail:
++	pr_err("Snapshot cannot be created\n");
++
++	snapshot_put(snapshot);
++	return ret;
++}
++
++static struct snapshot *snapshot_get_by_id(uuid_t *id)
++{
++	struct snapshot *snapshot = NULL;
++	struct snapshot *s;
++
++	down_read(&snapshots_lock);
++	if (list_empty(&snapshots))
++		goto out;
++
++	list_for_each_entry(s, &snapshots, link) {
++		if (uuid_equal(&s->id, id)) {
++			snapshot = s;
++			snapshot_get(snapshot);
++			break;
++		}
++	}
++out:
++	up_read(&snapshots_lock);
++	return snapshot;
++}
++
++int snapshot_destroy(uuid_t *id)
++{
++	struct snapshot *snapshot = NULL;
++
++	pr_info("Destroy snapshot %pUb\n", id);
++	down_write(&snapshots_lock);
++	if (!list_empty(&snapshots)) {
++		struct snapshot *s = NULL;
++
++		list_for_each_entry(s, &snapshots, link) {
++			if (uuid_equal(&s->id, id)) {
++				snapshot = s;
++				list_del(&snapshot->link);
++				break;
++			}
++		}
++	}
++	up_write(&snapshots_lock);
++
++	if (!snapshot) {
++		pr_err("Unable to destroy snapshot: cannot find snapshot by id %pUb\n",
++		       id);
++		return -ENODEV;
++	}
++	snapshot_put(snapshot);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	pr_debug("blksnap memory consumption:\n");
++	memory_object_print();
++	memory_object_max_print();
++#endif
 +	return 0;
 +}
 +
-+void snapimage_done(void)
++int snapshot_append_storage(uuid_t *id, struct blk_snap_dev_t dev_id,
++			    struct big_buffer *ranges, unsigned int range_count)
 +{
-+	unregister_blkdev(_major, BLK_SNAP_IMAGE_NAME);
-+	pr_info("Snapshot image block device [%d] was unregistered\n", _major);
++	int ret = 0;
++	struct snapshot *snapshot;
 +
-+	idr_destroy(&_minor_idr);
++	snapshot = snapshot_get_by_id(id);
++	if (!snapshot)
++		return -ESRCH;
++
++	ret = diff_storage_append_block(snapshot->diff_storage,
++					MKDEV(dev_id.mj, dev_id.mn), ranges,
++					range_count);
++	snapshot_put(snapshot);
++	return ret;
 +}
 +
-+int snapimage_major(void)
++int snapshot_take(uuid_t *id)
 +{
-+	return _major;
++	int ret = 0;
++	struct snapshot *snapshot;
++	int inx;
++	unsigned int current_flag;
++
++	snapshot = snapshot_get_by_id(id);
++	if (!snapshot)
++		return -ESRCH;
++
++	if (snapshot->is_taken) {
++		ret = -EALREADY;
++		goto out;
++	}
++
++	if (!snapshot->count) {
++		ret = -ENODEV;
++		goto out;
++	}
++
++	/* Allocate diff area for each device in the snapshot. */
++	for (inx = 0; inx < snapshot->count; inx++) {
++		struct tracker *tracker = snapshot->tracker_array[inx];
++		struct diff_area *diff_area;
++
++		if (!tracker)
++			continue;
++
++		diff_area =
++			diff_area_new(tracker->dev_id, snapshot->diff_storage);
++		if (IS_ERR(diff_area)) {
++			ret = PTR_ERR(diff_area);
++			goto fail;
++		}
++		tracker->diff_area = diff_area;
++	}
++
++	/* Try to flush and freeze file system on each original block device. */
++	for (inx = 0; inx < snapshot->count; inx++) {
++		struct tracker *tracker = snapshot->tracker_array[inx];
++
++		if (!tracker)
++			continue;
++
++		if (freeze_bdev(tracker->diff_area->orig_bdev))
++			pr_err("Failed to freeze device [%u:%u]\n",
++			       MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
++	}
++
++	current_flag = memalloc_noio_save();
++	tracker_lock();
++
++	/*
++	 * Take snapshot - switch CBT tables and enable COW logic
++	 * for each tracker.
++	 */
++	for (inx = 0; inx < snapshot->count; inx++) {
++		if (!snapshot->tracker_array[inx])
++			continue;
++		ret = tracker_take_snapshot(snapshot->tracker_array[inx]);
++		if (ret) {
++			pr_err("Unable to take snapshot: failed to capture snapshot %pUb\n",
++			       &snapshot->id);
++
++			break;
++		}
++	}
++
++	if (ret) {
++		while (inx--) {
++			struct tracker *tracker = snapshot->tracker_array[inx];
++
++			if (tracker)
++				tracker_release_snapshot(tracker);
++		}
++	} else
++		snapshot->is_taken = true;
++
++	tracker_unlock();
++	memalloc_noio_restore(current_flag);
++
++	/* Thaw file systems on original block devices. */
++	for (inx = 0; inx < snapshot->count; inx++) {
++		struct tracker *tracker = snapshot->tracker_array[inx];
++
++		if (!tracker)
++			continue;
++
++		if (thaw_bdev(tracker->diff_area->orig_bdev))
++			pr_err("Failed to thaw device [%u:%u]\n",
++			       MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
++	}
++
++	if (ret)
++		goto fail;
++
++	pr_info("Snapshot was taken successfully\n");
++
++	/**
++	 * Sometimes a snapshot is in the state of corrupt immediately
++	 * after it is taken.
++	 */
++	for (inx = 0; inx < snapshot->count; inx++) {
++		struct tracker *tracker = snapshot->tracker_array[inx];
++
++		if (!tracker)
++			continue;
++
++		if (diff_area_is_corrupted(tracker->diff_area)) {
++			pr_err("Unable to freeze devices [%u:%u]: diff area is corrupted\n",
++			       MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
++			ret = -EFAULT;
++			goto fail;
++		}
++	}
++
++	/* Create all image block devices. */
++	for (inx = 0; inx < snapshot->count; inx++) {
++		struct snapimage *snapimage;
++		struct tracker *tracker = snapshot->tracker_array[inx];
++
++		snapimage =
++			snapimage_create(tracker->diff_area, tracker->cbt_map);
++		if (IS_ERR(snapimage)) {
++			ret = PTR_ERR(snapimage);
++			pr_err("Failed to create snapshot image for device [%u:%u] with error=%d\n",
++			       MAJOR(tracker->dev_id), MINOR(tracker->dev_id),
++			       ret);
++			break;
++		}
++		snapshot->snapimage_array[inx] = snapimage;
++	}
++
++	goto out;
++fail:
++	pr_err("Unable to take snapshot: failed to capture snapshot %pUb\n",
++	       &snapshot->id);
++
++	down_write(&snapshots_lock);
++	list_del(&snapshot->link);
++	up_write(&snapshots_lock);
++	snapshot_put(snapshot);
++out:
++	snapshot_put(snapshot);
++	return ret;
 +}
-diff --git a/drivers/block/blksnap/snapimage.h b/drivers/block/blksnap/snapimage.h
++
++struct event *snapshot_wait_event(uuid_t *id, unsigned long timeout_ms)
++{
++	struct snapshot *snapshot;
++	struct event *event;
++
++	//pr_debug("Wait event\n");
++	snapshot = snapshot_get_by_id(id);
++	if (!snapshot)
++		return ERR_PTR(-ESRCH);
++
++	event = event_wait(&snapshot->diff_storage->event_queue, timeout_ms);
++
++	snapshot_put(snapshot);
++	return event;
++}
++
++static inline int uuid_copy_to_user(uuid_t __user *dst, const uuid_t *src)
++{
++	int len;
++
++	len = copy_to_user(dst, src, sizeof(uuid_t));
++	if (len)
++		return -ENODATA;
++	return 0;
++}
++
++int snapshot_collect(unsigned int *pcount, uuid_t __user *id_array)
++{
++	int ret = 0;
++	int inx = 0;
++	struct snapshot *s;
++
++	pr_debug("Collect snapshots\n");
++
++	down_read(&snapshots_lock);
++	if (list_empty(&snapshots))
++		goto out;
++
++	if (!id_array) {
++		list_for_each_entry(s, &snapshots, link)
++			inx++;
++		goto out;
++	}
++
++	list_for_each_entry(s, &snapshots, link) {
++		if (inx >= *pcount) {
++			ret = -ENODATA;
++			goto out;
++		}
++
++		ret = uuid_copy_to_user(&id_array[inx], &s->id);
++		if (ret) {
++			pr_err("Unable to collect snapshots: failed to copy data to user buffer\n");
++			goto out;
++		}
++
++		inx++;
++	}
++out:
++	up_read(&snapshots_lock);
++	*pcount = inx;
++	return ret;
++}
++
++int snapshot_collect_images(
++	uuid_t *id, struct blk_snap_image_info __user *user_image_info_array,
++	unsigned int *pcount)
++{
++	int ret = 0;
++	int inx;
++	unsigned long len;
++	struct blk_snap_image_info *image_info_array = NULL;
++	struct snapshot *snapshot;
++
++	pr_debug("Collect images for snapshots\n");
++
++	snapshot = snapshot_get_by_id(id);
++	if (!snapshot)
++		return -ESRCH;
++
++	if (!snapshot->is_taken) {
++		ret = -ENODEV;
++		goto out;
++	}
++
++	pr_debug("Found snapshot with %d devices\n", snapshot->count);
++	if (!user_image_info_array) {
++		pr_debug(
++			"Unable to collect snapshot images: users buffer is not set\n");
++		goto out;
++	}
++
++	if (*pcount < snapshot->count) {
++		ret = -ENODATA;
++		goto out;
++	}
++
++	image_info_array =
++		kcalloc(snapshot->count, sizeof(struct blk_snap_image_info),
++			GFP_KERNEL);
++	if (!image_info_array) {
++		pr_err("Unable to collect snapshot images: not enough memory.\n");
++		ret = -ENOMEM;
++		goto out;
++	}
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	memory_object_inc(memory_object_blk_snap_image_info);
++#endif
++	for (inx = 0; inx < snapshot->count; inx++) {
++		if (snapshot->tracker_array[inx]) {
++			dev_t orig_dev_id =
++				snapshot->tracker_array[inx]->dev_id;
++
++			pr_debug("Original [%u:%u]\n",
++				 MAJOR(orig_dev_id),
++				 MINOR(orig_dev_id));
++			image_info_array[inx].orig_dev_id.mj =
++				MAJOR(orig_dev_id);
++			image_info_array[inx].orig_dev_id.mn =
++				MINOR(orig_dev_id);
++		}
++
++		if (snapshot->snapimage_array[inx]) {
++			dev_t image_dev_id =
++				snapshot->snapimage_array[inx]->image_dev_id;
++
++			pr_debug("Image [%u:%u]\n",
++				 MAJOR(image_dev_id),
++				 MINOR(image_dev_id));
++			image_info_array[inx].image_dev_id.mj =
++				MAJOR(image_dev_id);
++			image_info_array[inx].image_dev_id.mn =
++				MINOR(image_dev_id);
++		}
++	}
++
++	len = copy_to_user(user_image_info_array, image_info_array,
++			   snapshot->count *
++				   sizeof(struct blk_snap_image_info));
++	if (len != 0) {
++		pr_err("Unable to collect snapshot images: failed to copy data to user buffer\n");
++		ret = -ENODATA;
++	}
++out:
++	*pcount = snapshot->count;
++
++	kfree(image_info_array);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	if (image_info_array)
++		memory_object_dec(memory_object_blk_snap_image_info);
++#endif
++	snapshot_put(snapshot);
++
++	return ret;
++}
++
++int snapshot_mark_dirty_blocks(dev_t image_dev_id,
++			       struct blk_snap_block_range *block_ranges,
++			       unsigned int count)
++{
++	int ret = 0;
++	int inx = 0;
++	struct snapshot *s;
++	struct cbt_map *cbt_map = NULL;
++
++	pr_debug("Marking [%d] dirty blocks for device [%u:%u]\n", count,
++		 MAJOR(image_dev_id), MINOR(image_dev_id));
++
++	down_read(&snapshots_lock);
++	if (list_empty(&snapshots))
++		goto out;
++
++	list_for_each_entry(s, &snapshots, link) {
++		for (inx = 0; inx < s->count; inx++) {
++			if (s->snapimage_array[inx]->image_dev_id ==
++			    image_dev_id) {
++				cbt_map = s->snapimage_array[inx]->cbt_map;
++				break;
++			}
++		}
++
++		inx++;
++	}
++	if (!cbt_map) {
++		pr_err("Cannot find snapshot image device [%u:%u]\n",
++		       MAJOR(image_dev_id), MINOR(image_dev_id));
++		ret = -ENODEV;
++		goto out;
++	}
++
++	ret = cbt_map_mark_dirty_blocks(cbt_map, block_ranges, count);
++	if (ret)
++		pr_err("Failed to set CBT table. errno=%d\n", abs(ret));
++out:
++	up_read(&snapshots_lock);
++
++	return ret;
++}
+diff --git a/drivers/block/blksnap/snapshot.h b/drivers/block/blksnap/snapshot.h
 new file mode 100644
-index 000000000000..e978711004f0
+index 000000000000..6929d7ab62e8
 --- /dev/null
-+++ b/drivers/block/blksnap/snapimage.h
-@@ -0,0 +1,65 @@
++++ b/drivers/block/blksnap/snapshot.h
+@@ -0,0 +1,76 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#pragma once
-+#include <linux/blk_types.h>
-+#include <linux/blkdev.h>
-+#include <linux/blk-mq.h>
-+#include <linux/kthread.h>
++#include <linux/types.h>
++#include <linux/list.h>
++#include <linux/mm.h>
++#include <linux/kref.h>
++#include <linux/uuid.h>
++#include <linux/spinlock.h>
++#include <linux/rwsem.h>
++#include <linux/fs.h>
++#include "big_buffer.h"
++#include "event_queue.h"
 +
-+struct diff_area;
-+struct cbt_map;
-+
++struct tracker;
++struct diff_storage;
++struct snapimage;
 +/**
-+ * struct snapimage - Snapshot image block device.
++ * struct snapshot - Snapshot structure.
++ * @link:
++ *	The list header allows to store snapshots in a linked list.
++ * @kref:
++ *	Protects the structure from being released during the processing of
++ *	an ioctl.
++ * @id:
++ *	UUID of snapshot.
++ * @is_taken:
++ *	Flag that the snapshot was taken.
++ * @diff_storage:
++ *	A pointer to the difference storage of this snapshot.
++ * @count:
++ *	The number of block devices in the snapshot. This number
++ *	corresponds to the size of arrays of pointers to trackers
++ *	and snapshot images.
++ * @tracker_array:
++ *	Array of pointers to block device trackers.
++ * @snapimage_array:
++ *	Array of pointers to images of snapshots of block devices.
 + *
-+ * @image_dev_id:
-+ *	ID of the snapshot image block device.
-+ * @capacity:
-+ *	The size of the snapshot image in sectors must be equal to the size
-+ *	of the original device at the time of taking the snapshot.
-+ * @is_ready:
-+ *	The flag means that the snapshot image is ready for processing
-+ *	I/O requests.
-+ * @worker:
-+ *	The worker thread for processing I/O requests.
-+ * @worker_task:
-+ *	A pointer to the &struct task of the worker thread.
-+ * @tag_set:
-+ *	Area to keep a shared tag map.
-+ * @disk:
-+ *	A pointer to the &struct gendisk for the image block device.
-+ * @diff_area:
-+ *	A pointer to the owned &struct diff_area.
-+ * @cbt_map:
-+ *	A pointer to the owned &struct cbt_map.
++ * A snapshot corresponds to a single backup session and provides snapshot
++ * images for multiple block devices. Several backup sessions can be
++ * performed at the same time, which means that several snapshots can
++ * exist at the same time. However, the original block device can only
++ * belong to one snapshot. Creating multiple snapshots from the same block
++ * device is not allowed.
 + *
-+ * The snapshot image is presented in the system as a block device. But
-+ * when reading or writing a snapshot image, the data is redirected to
-+ * the original block device or to the block device of the difference storage.
++ * A UUID is used to identify the snapshot.
 + *
-+ * The module does not prohibit reading and writing data to the snapshot
-+ * from different threads in parallel. To avoid the problem with simultaneous
-+ * access, it is enough to open the snapshot image block device with the
-+ * FMODE_EXCL parameter.
 + */
-+struct snapimage {
-+	dev_t image_dev_id;
-+	sector_t capacity;
-+	bool is_ready;
-+
-+	struct kthread_worker worker;
-+	struct task_struct *worker_task;
-+
-+	struct blk_mq_tag_set tag_set;
-+	struct gendisk *disk;
-+
-+	struct diff_area *diff_area;
-+	struct cbt_map *cbt_map;
++struct snapshot {
++	struct list_head link;
++	struct kref kref;
++	uuid_t id;
++	bool is_taken;
++	struct diff_storage *diff_storage;
++	int count;
++	struct tracker **tracker_array;
++	struct snapimage **snapimage_array;
 +};
 +
-+int snapimage_init(void);
-+void snapimage_done(void);
-+int snapimage_major(void);
++void snapshot_done(void);
 +
-+void snapimage_free(struct snapimage *snapimage);
-+struct snapimage *snapimage_create(struct diff_area *diff_area,
-+				   struct cbt_map *cbt_map);
++int snapshot_create(struct blk_snap_dev_t *dev_id_array, unsigned int count,
++		    uuid_t *id);
++int snapshot_destroy(uuid_t *id);
++int snapshot_append_storage(uuid_t *id, struct blk_snap_dev_t dev_id,
++			    struct big_buffer *ranges,
++			    unsigned int range_count);
++int snapshot_take(uuid_t *id);
++struct event *snapshot_wait_event(uuid_t *id, unsigned long timeout_ms);
++int snapshot_collect(unsigned int *pcount, uuid_t __user *id_array);
++int snapshot_collect_images(uuid_t *id,
++			    struct blk_snap_image_info __user *image_info_array,
++			    unsigned int *pcount);
++int snapshot_mark_dirty_blocks(dev_t image_dev_id,
++			       struct blk_snap_block_range *block_ranges,
++			       unsigned int count);
 -- 
 2.20.1
 

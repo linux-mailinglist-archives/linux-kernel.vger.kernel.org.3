@@ -2,231 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F10547E46
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B719547E47
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiFMDym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 23:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
+        id S231640AbiFMD5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 23:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbiFMDye (ORCPT
+        with ESMTP id S229682AbiFMD5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 23:54:34 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88A1290;
-        Sun, 12 Jun 2022 20:54:32 -0700 (PDT)
-X-UUID: 682fd261204149ba8f7b0acd1f318bb3-20220613
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:8965c552-923c-43ae-be0a-22ba49894736,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:65bd53c6-12ba-4305-bfdf-9aefbdc32516,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 682fd261204149ba8f7b0acd1f318bb3-20220613
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1698871727; Mon, 13 Jun 2022 11:54:29 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 13 Jun 2022 11:54:27 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 13 Jun 2022 11:54:27 +0800
-Message-ID: <fd6a9978c0987976f515959f092ec5c28f572aac.camel@mediatek.com>
-Subject: Re: [PATCH v20 1/6] soc: mediatek: mutex: add common interface for
- modules setting
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <cellopoint.kai@gmail.com>
-Date:   Mon, 13 Jun 2022 11:54:26 +0800
-In-Reply-To: <20220610063424.7800-2-moudy.ho@mediatek.com>
-References: <20220610063424.7800-1-moudy.ho@mediatek.com>
-         <20220610063424.7800-2-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+        Sun, 12 Jun 2022 23:57:02 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC212F00D
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 20:57:00 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25CLCQp1029706;
+        Mon, 13 Jun 2022 03:56:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=KG14P2TM148vVQXg7+Ea7fiMQd0OFS2RupI3bS6V/IM=;
+ b=bzUa9NeHLOPmuqJijE1Q3zblmL5y1E8cQ4VARxnh9+izhoyqLW7dJfo0aADfCuidxL4j
+ WrmpOgeT71fuaVQJsKJ4Oir5Wiku2hleZQ2xMZO6fIyJkcJZ8B66MtRaPQOcNXPVvLg5
+ SKzX6fALWQUbWDDvW9kI5/eeEgpNqqpqfPZZIuyZvYukcgTeVYUPc4dRhrKndSNPu2DI
+ Wp7+LATotq+oiO2w1iHpUOD4Qmqtmmqt1P7TASoLVmLPQ73ZAZTKd8Y55xy46TiMKkED
+ yJbvqh+eps97k2JxbSvGG3rSffTMeeJziSQ1vqP4quJuYYl2g7xYW5eMtJU4DGugOGmK Gw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmkkt9y49-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Jun 2022 03:56:56 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25D3uoLi019918;
+        Mon, 13 Jun 2022 03:56:55 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gmhg2x3ds-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Jun 2022 03:56:55 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BnR7n6MCuixzjoqc8lqH6PHgFuXZxxEWsk9yjr4WNj7RUiXoNNk5PdOkslIufYVXzVwznOMg6j3NFfAlCXSiiB0YS785MYdfd7XnDfI4hpdD/F7AQ0GTIzKj0HYO34tnM4YEkAEIbBe8teNht4XkAQ25ctoBd0PoiynrkMlxmWdbmdsORBLKDFESgdLvzFMvX554jxgv30IbkgiTQ9Zlezo9tC2s6PwO39nmzDYraBBmx+4T+EjsclTdDOwL3OngUjweNSOou7jfuYXulZqC9F/9wlvhr5IdtKG0OW6j93PhQZb9gXm/XaAGgOELMMybzbaj687qhiNSPrRw0v201A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KG14P2TM148vVQXg7+Ea7fiMQd0OFS2RupI3bS6V/IM=;
+ b=i3KXGX4jKJif9CDeaKz1eN3NoM5Wl6afqWXrA524Go4fDaoKyOJT+nDkBYgi164oR2k4cQqO5Kr0QgaQj8mIkIJBJtppuKifcJc72bcUCtNGv28EMcrZrIvsgjKSGyQhn9hLRAjcUu5oG4YZ6jeJ1gHffrhNGjHzVXX8qFmdnAAz+sTb+UpB7pVrCHSUtwq6IQ6li39AEStq8Hjg52HoX73qrGroToKwVbm5yw+UXR9dfqCf4s6QiOWcxAF0Fx4Hff561GyzzjNBbagbeZmpeHpSEB8IRFCm9xubBGADmCpwGJ1TEsF9Fq5J8QwXLfTizdmq8uRiMm30KT+sxIbiUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KG14P2TM148vVQXg7+Ea7fiMQd0OFS2RupI3bS6V/IM=;
+ b=gVtMqqCseCNsbbKBpS84U6nI0M05OHrLJz3dNLPfrR5H9W7Ewg17BRlCZQFPQoiKvURqmB20DTR8by3RQS/XLHIwEn1kaCjOpViEmvy6eLn1KiFvNXrpB12QxP0yXVnDr/aNEi9PvFPRLqOut74cg8J9vDea+1biug0ohP86B0E=
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
+ by PH0PR10MB5514.namprd10.prod.outlook.com (2603:10b6:510:106::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Mon, 13 Jun
+ 2022 03:56:52 +0000
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::e9bd:ba52:c1c2:11e0]) by CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::e9bd:ba52:c1c2:11e0%9]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 03:56:51 +0000
+Message-ID: <61868aa1-6c88-ecd2-beb2-67b87673b805@oracle.com>
+Date:   Mon, 13 Jun 2022 13:56:43 +1000
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH RESEND v4 1/4] kernfs: make ->attr.open RCU protected.
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+References: <20220602063907.136569-1-imran.f.khan@oracle.com>
+ <20220602063907.136569-2-imran.f.khan@oracle.com>
+ <YqYpTShTDLvAp4vx@slm.duckdns.org>
+ <6d1c5a49-fc16-5fc7-e527-8cb91ec0d25c@oracle.com>
+ <YqalHuEB6OjjUosV@slm.duckdns.org>
+ <c8a8a616-da4c-f2ce-0bb2-e0cba69db24d@oracle.com>
+ <Yqaqbas1JaWz25jB@slm.duckdns.org>
+From:   Imran Khan <imran.f.khan@oracle.com>
+In-Reply-To: <Yqaqbas1JaWz25jB@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SYBPR01CA0012.ausprd01.prod.outlook.com (2603:10c6:10::24)
+ To CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d8d54d11-111e-4cd8-11e6-08da4cf0bf99
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5514:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR10MB5514A43111156D8226A48DCBB0AB9@PH0PR10MB5514.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IVHr8XFGdRVXKn8VvJ4HUYGiMTtAfjYYfCxbsoaQQLcr3vsoDCM43dq/wWvyANHkuU0AxFLwCTAZY0yEmg/ppvl+reoVl4puMsTFsccKi8PVKOiCiWFO7qyHsCRvShfFJKDR4We7aWbW9ogkQUC3JePmQkLw5yfZOvP79K9w0RUYox78j40zSoEVZDuZeQCCx3SLr/kbzOBFl8OlxhuOvRgO5rTOu/OUpiOaLENw0z5TSz2LPhPuGZ7WaWFBz6volJafG99ndnq/5/WRxo/5YXmwWlNe4bCHyMIlMhcjqbI22OYsurwk7SB9Syr9jLDp7M7YxrfnM1lQLHYEi+S3C7+kXpGaIfwC1zB58YfMj9d3pMWxr29cvfVKkZe+xLkJ/1BcqPf2vQlWpL6quCA5zLw78YLuudp8cem2iWo4yMbmR+c1nL0q19+bB/Q2iy61DXT/MO1J39HhtRKAhXkJLDUW7+3aSdYTCI0Q3z94Gx1FZA6nli9JomcG5oWTwiNojnJ4Y7yuFkJ/WdM5V26PwKmV5xIFE+9K/+B8wuqNH7vUC+foZDla30AMYVrrbpAqKaNcuO2u/jV+DQrfYnUHGXcl1hX8GwuVhvNv6oYDH+kM6jauC3SRP6w8qAQY3MaBk9x6RErdtmabg0PmH+33dx0Nk5g5nnaGPszw010Iow0xNtdoQpK9UrgYLdZyxmdOB0Pz+CCnqZYWGVwdUR2ZY1uAHMBqHQRmyPcx5dULi8w=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(6486002)(8676002)(66556008)(4326008)(86362001)(508600001)(31696002)(6916009)(316002)(66946007)(66476007)(38100700002)(2616005)(53546011)(6506007)(26005)(186003)(6512007)(6666004)(83380400001)(5660300002)(31686004)(2906002)(36756003)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1Q3R2k2WURKN3lzS2toNjRjSXg3NE1yajNWN0wyeGZHZERsT1hyaExyMUsx?=
+ =?utf-8?B?aDRrVGNjckRLcTBncWhWQWF6cHNzc05TRTIyVytuS0t5TWxkOFg4NGt3TE9M?=
+ =?utf-8?B?LytKZnhPL3ExMEZ2KzBPZ0NFNGFBMlVCbzB5dHFEM092dXFqMzJQbHE3VWFU?=
+ =?utf-8?B?WXlFYlpmQ2p0TjZuUE90VVcwckVRVUcwaVZ5em1aazNnL2Vhb09NaDVlQmg1?=
+ =?utf-8?B?N3ZhZFdBYzVTS0U2Q3VHSTJrZXkyNHJ3Y3VVNmRWMlpsQWJ5UmowdmgzK2hw?=
+ =?utf-8?B?LzZoWWI2cm44Q1BJK3owOEVHOURmc0I4TzkxM3dQZjYzYnhOTUJvZWtxaVlR?=
+ =?utf-8?B?R1ByZEhyODBZc2RjOTZic2xWS3UrQzBGb2lzbWxnUW4rZ2RtOEJ5dDVJVFpF?=
+ =?utf-8?B?T2JybW0zWEZwV1IwNEw0Sis1czJYMVhGWkFXT09pcDZ6aXROSTNsSm1DazIv?=
+ =?utf-8?B?UmJEMHppSnlqczVlUFdRU1d0WU8vWmNqMk4rSk54VEZTbnFNSi9IZ1RBQWp1?=
+ =?utf-8?B?d1IzelgxOVdFWGJRRnZNWVB4enUwZ1FjN1hFWTR4ZnB0cXZVd3hjUHk2UXVp?=
+ =?utf-8?B?M2FTU2F6TTEzRVhici9YdldoU3d6ZDhMMFJRVDA0c0h0NkpRWUVMeGt3Ym5T?=
+ =?utf-8?B?dlZkQVorQXFoYXVNM0xxN1RSZmlFNkpuc2N4Y0RvMWJ5dHFhdWNtLzhIVUgy?=
+ =?utf-8?B?cmRRcEZQYWNBdmpWN1QwTlczQ0Y0cjdHQkQrY3V0SEZJTWtGLzQ4Yy9MQUZi?=
+ =?utf-8?B?MUpuQ1hDY0pDTXFxbUZsODNUdWU2dzVZQW1lT1pyd3l5MXg4NVR0ZXhQdzF5?=
+ =?utf-8?B?SzJJbkxxNUpCTFVjeDh5YUsrUmdDNHJ1ZTJlY3dGLzllQlhPOGJ6OWdFWmhT?=
+ =?utf-8?B?SzNaTjN3VE9mNEdNK0NDY3VtZ2JORVpwNmI0ejFTTnh4U0d3UlYxZWViVk1r?=
+ =?utf-8?B?V3ZVUlNVNWN2S3NoRUNDYzF0Mk5PY2U0bGNCQ2tiQXdZVk9hS2ozWGx2NHZL?=
+ =?utf-8?B?em8ySm9SaUxvVnFRa2lMUkZpZThTalFmQ1FidmJtQllEL3BlZ2QzOHJyellS?=
+ =?utf-8?B?TTlFZThNd1c3bEJYSTNlRlFvWm90UTZiT09HYnhlM3NudUtLNXRRZXVCVWJn?=
+ =?utf-8?B?cjJXU05qUGdQenVnaFhUU3l2R2RLRHZ0VVZSWndqTjBTSnhxUkFBSXZSM1M4?=
+ =?utf-8?B?ZUN2QUIzR01CYXpJQUVWaEZ0QW56NkxCVFVhdVU2MmlHR1JROHptcDg1S0Vu?=
+ =?utf-8?B?Y2hXYnRGdElMRVdKNGN6QXc5anJBVXNRcjJ6dHg5TUh2eVI0aVpkU3dNN0s4?=
+ =?utf-8?B?SUNmY0dJb0UvbVo3c0JzdmtZU1BNbzlhZWxJeHZwcHBKVFVTc24rMnVZbm1J?=
+ =?utf-8?B?emZKWUZZejhVbUUxMUo0bVIxaFlTUnJzUlJLUkRzMy84Nlp3bExrU29BUUV5?=
+ =?utf-8?B?WFBHZEJ1QzZDV1M5T2M3MzhlYWVwcFNXenZ0RHQrR05lWGg1MnpSOUVsSito?=
+ =?utf-8?B?UGswNEl2bi9JaytXdkdTNG15QjhTUkovOWVQalhCVTlUUnNwclhNWGplUWlo?=
+ =?utf-8?B?cDBhbFpoVGk4eEFmQmI5ZDZnWTBYZVliV09kWEh1Tk1RczhaZDhJTGRzQTQv?=
+ =?utf-8?B?Q0NvaTNSMGIvZHhaRkkrTWhPb3dvS1FhMGI1dVRjYW9jMTZ2cFZSdk9jbk5G?=
+ =?utf-8?B?U1VhcjNUSEJhcVFyTVpZQmdycGs1OEduZERBMUVsOUxsUTkvcmdPb1VqdXFX?=
+ =?utf-8?B?MWIzNFRWMk5RWW1ETXFKeEtGaUtJenRDTHJ2bUgrZEJDR2p3UDBld0pTcEtn?=
+ =?utf-8?B?OGdvTjJDRmxOMzlZOFhqSUVlWVFwbXNGSXhXUmkxNGQrclZ3NXprN2xERUt0?=
+ =?utf-8?B?ME5yZGFvdWY0aE9ZWm9YM0wyaEFDQiswOHRtWnBNUHVlamUrMmRxUHJ1anV5?=
+ =?utf-8?B?b3lhbW8xUWRQNHNiNElhZnhnbXBZdlJFNmZvS0ErT2ZsN2o4UXMzQ2ZENDZh?=
+ =?utf-8?B?a09pRGswZVRSOXFqTWgzb1RMa3pxN0x6ZnJzRE5uVWgzL2p6bnpYUThHaDd0?=
+ =?utf-8?B?T1ozK0dDTlg2dEpMUWhoMkxxWWhuSnQ4OWtrQ21vZ1QrZ2x4bGZ6V05xOG5v?=
+ =?utf-8?B?dGVrSExEaUNYV1ovMUxJZzIzQ3BsZGJzMDkzeGYzWktmUW5WRGVkcXJsWGxE?=
+ =?utf-8?B?T2Jwb3hyY2JQRTNDdHhhMUcyWE04aVk0SXY5aUEzMDlUU2FxWWZWM201ZmNW?=
+ =?utf-8?B?UTdIVFlZRFo0T0NDY2JxU1VKNjR5Y1l3Y2dCMklybTN3aUhLbjFQZisyanBO?=
+ =?utf-8?B?Nm9kZVFiR1Z5OTBCN1NrVHMrUy9DOUpiVWNyRXhKTXlDcDVjRUZWa2R2d2VY?=
+ =?utf-8?Q?m2ANOJKM0Xbw24y0=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8d54d11-111e-4cd8-11e6-08da4cf0bf99
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4468.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 03:56:51.7638
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xbU9LRRiIuXJLKKLTcC49XoD+v6XfSGvGPz9KcdIIQVNOtufDdnYX27rhs/KSYWmKVA68O2ta5RDQ+B3fEvrtg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5514
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-06-13_01:2022-06-09,2022-06-13 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=625 mlxscore=0 spamscore=0
+ bulkscore=0 malwarescore=0 phishscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206130016
+X-Proofpoint-GUID: g3geutz3wgzg7U_h6gN0FBOgeCMx1t7N
+X-Proofpoint-ORIG-GUID: g3geutz3wgzg7U_h6gN0FBOgeCMx1t7N
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Moudy:
+Hello Tejun,
 
-On Fri, 2022-06-10 at 14:34 +0800, Moudy Ho wrote:
-> In order to allow multiple modules to operate MUTEX hardware through
-> a common interfrace, two flexible indexes "mtk_mutex_mod_index" and
-> "mtk_mutex_sof_index" need to be added to replace original component
-> ID so that like DDP and MDP can add their own MOD table or SOF
-> settings independently.
+On 13/6/22 1:09 pm, Tejun Heo wrote:
+> On Mon, Jun 13, 2022 at 12:55:14PM +1000, Imran Khan wrote:
+>> I took below phrases as reference:
+>>
+>> If the access might be within an RCU read-side critical section on the one hand,
+>> or protected by (say) my_lock on the other, use rcu_dereference_check(), for
+>> example:
+>>
+>> p1 = rcu_dereference_check(p->rcu_protected_pointer,
+>>                            lockdep_is_held(&my_lock));
+>>
+>>
+>> and
+>>
+>>
+>> If the access might be within an RCU read-side critical section on the one hand,
+>> or protected by either my_lock or your_lock on the other, again use
+>> rcu_dereference_check(), for example:
+>>
+>> p1 = rcu_dereference_check(p->rcu_protected_pointer,
+>>                            lockdep_is_held(&my_lock) ||
+>>                            lockdep_is_held(&your_lock));
 > 
-> In addition, 2 generic interface "mtk_mutex_write_mod" and
-> "mtk_mutex_write_sof" have been added, which is expected to replace
-> the "mtk_mutex_add_comp" and "mtk_mutex_remove_comp" pair originally
-> dedicated to DDP in the future.
+> So, both are saying that if a given reference can be under both read
+> critical section or a lock which blocks updates, you can use deref_check to
+> cover both cases - we're just using the stronger form of derefing even
+> though that's not necessary while update side is locked out, which is fine.
+> 
+> The protected one is different in that it doesn't enforce the load ordering
+> which is required for accesses with only RCU read lock. Given that all
+> that's required is dependency ordering, I doubt it makes any actual
+> difference and it likely is more useful in marking a specific dereference as
+> always being with the update side locked.> tl;dr is that you're way over-thinking the rcu deref code. Just make one
+> deref accessor which encompasses all three use cases.
+> 
+> 
 
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Agree. I did over think this and went for the safest interface that I could
+think of in each of the use cases. I will remove
+kernfs_check_open_node_protected and use kernfs_deref_open_node_protected in its
+place as well. This will cover all accesses under kernfs_open_file_mutex.
 
-> 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  drivers/soc/mediatek/mtk-mutex.c       | 53
-> ++++++++++++++++++++++++++
->  include/linux/soc/mediatek/mtk-mutex.h | 25 ++++++++++++
->  2 files changed, 78 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c
-> b/drivers/soc/mediatek/mtk-mutex.c
-> index 981d56967e7a..1d2c4df18b5c 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -185,6 +185,7 @@ struct mtk_mutex_data {
->  	const unsigned int *mutex_sof;
->  	const unsigned int mutex_mod_reg;
->  	const unsigned int mutex_sof_reg;
-> +	const unsigned int *mutex_table_mod;
->  	const bool no_clk;
->  };
->  
-> @@ -606,6 +607,58 @@ void mtk_mutex_release(struct mtk_mutex *mutex)
->  }
->  EXPORT_SYMBOL_GPL(mtk_mutex_release);
->  
-> +int mtk_mutex_write_mod(struct mtk_mutex *mutex,
-> +			enum mtk_mutex_mod_index idx, bool clear)
-> +{
-> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> +						 mutex[mutex->id]);
-> +	unsigned int reg;
-> +	unsigned int offset;
-> +
-> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-> +
-> +	if (idx < MUTEX_MOD_IDX_MDP_RDMA0 ||
-> +	    idx >= MUTEX_MOD_IDX_MAX) {
-> +		dev_err(mtx->dev, "Not supported MOD table index : %d",
-> idx);
-> +		return -EINVAL;
-> +	}
-> +
-> +	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
-> +				    mutex->id);
-> +	reg = readl_relaxed(mtx->regs + offset);
-> +
-> +	if (clear)
-> +		reg &= ~BIT(mtx->data->mutex_table_mod[idx]);
-> +	else
-> +		reg |= BIT(mtx->data->mutex_table_mod[idx]);
-> +
-> +	writel_relaxed(reg, mtx->regs + offset);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mutex_write_mod);
-> +
-> +int mtk_mutex_write_sof(struct mtk_mutex *mutex,
-> +			enum mtk_mutex_sof_index idx)
-> +{
-> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> +						 mutex[mutex->id]);
-> +
-> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-> +
-> +	if (idx < MUTEX_SOF_IDX_SINGLE_MODE ||
-> +	    idx >= MUTEX_SOF_IDX_MAX) {
-> +		dev_err(mtx->dev, "Not supported SOF index : %d", idx);
-> +		return -EINVAL;
-> +	}
-> +
-> +	writel_relaxed(idx, mtx->regs +
-> +		       DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg,
-> mutex->id));
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mutex_write_sof);
-> +
->  static int mtk_mutex_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> diff --git a/include/linux/soc/mediatek/mtk-mutex.h
-> b/include/linux/soc/mediatek/mtk-mutex.h
-> index 6fe4ffbde290..2ddab9d2b85d 100644
-> --- a/include/linux/soc/mediatek/mtk-mutex.h
-> +++ b/include/linux/soc/mediatek/mtk-mutex.h
-> @@ -10,6 +10,26 @@ struct regmap;
->  struct device;
->  struct mtk_mutex;
->  
-> +enum mtk_mutex_mod_index {
-> +	/* MDP table index */
-> +	MUTEX_MOD_IDX_MDP_RDMA0,
-> +	MUTEX_MOD_IDX_MDP_RSZ0,
-> +	MUTEX_MOD_IDX_MDP_RSZ1,
-> +	MUTEX_MOD_IDX_MDP_TDSHP0,
-> +	MUTEX_MOD_IDX_MDP_WROT0,
-> +	MUTEX_MOD_IDX_MDP_WDMA,
-> +	MUTEX_MOD_IDX_MDP_AAL0,
-> +	MUTEX_MOD_IDX_MDP_CCORR0,
-> +
-> +	MUTEX_MOD_IDX_MAX		/* ALWAYS keep at the end */
-> +};
-> +
-> +enum mtk_mutex_sof_index {
-> +	MUTEX_SOF_IDX_SINGLE_MODE,
-> +
-> +	MUTEX_SOF_IDX_MAX		/* ALWAYS keep at the end */
-> +};
-> +
->  struct mtk_mutex *mtk_mutex_get(struct device *dev);
->  int mtk_mutex_prepare(struct mtk_mutex *mutex);
->  void mtk_mutex_add_comp(struct mtk_mutex *mutex,
-> @@ -22,5 +42,10 @@ void mtk_mutex_unprepare(struct mtk_mutex *mutex);
->  void mtk_mutex_put(struct mtk_mutex *mutex);
->  void mtk_mutex_acquire(struct mtk_mutex *mutex);
->  void mtk_mutex_release(struct mtk_mutex *mutex);
-> +int mtk_mutex_write_mod(struct mtk_mutex *mutex,
-> +			enum mtk_mutex_mod_index idx,
-> +			bool clear);
-> +int mtk_mutex_write_sof(struct mtk_mutex *mutex,
-> +			enum mtk_mutex_sof_index idx);
->  
->  #endif /* MTK_MUTEX_H */
+But we will still need kernfs_deref_open_node for cases where
+!list_empty(&of->list) ensures safe access of ->attr.open and where we can't
+ensure holding of kernfs_open_file_mutex. So we will need 2 deref accessors.
+Right? Just asking this because you mentioned above to come up with one deref
+accessor that can be used in all three use cases
+
+Please let me if this sounds okay. I can send updated patch-set with these
+changes in place.
+
+Thanks,
+-- Imran
 

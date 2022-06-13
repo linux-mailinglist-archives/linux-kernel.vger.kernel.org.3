@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3FD549434
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6478D5496D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376693AbiFMNTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S238511AbiFMM02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359647AbiFMNKU (ORCPT
+        with ESMTP id S1355148AbiFMMXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:10:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B663B03A;
-        Mon, 13 Jun 2022 04:21:16 -0700 (PDT)
+        Mon, 13 Jun 2022 08:23:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB76731525;
+        Mon, 13 Jun 2022 04:04:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58608B80E59;
-        Mon, 13 Jun 2022 11:21:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE8BC34114;
-        Mon, 13 Jun 2022 11:21:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C41BB80E42;
+        Mon, 13 Jun 2022 11:04:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC7FBC34114;
+        Mon, 13 Jun 2022 11:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119273;
-        bh=I2/Q9j+xDREdk8V1BM4fCkekGaFWomnYTF/1/GKomvc=;
+        s=korg; t=1655118258;
+        bh=Z6IPkPoOUagw/OZ8hPLnmLRYln8J0pLkvV77+rmkJ+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OsDl4yc6fbGEYdZQaTBof5nT78lRSgulbRKq0QL6Xk6o9RaZ5XIKfEs/tLbeqDtI5
-         XM2mhCe5tc3PUTfqB9DEE4gSqS7FpPr/uH4H2DxuLBeh6pmSLf7fu2aTmIK+i1tkAT
-         OW6KLjoXGSZWCsQGyWqjyq6cENguLPixOR9Eoflk=
+        b=DAatBxC1E20Nkaz8egArrlQLmC6leEl1v+rfuGPHzKCbwxlh9o1mD2UG8e90Smo70
+         VmfdVW1Pu1skDBLNPbdescNxIvK2HUeu9s/9LZP4soJP1TxksZY6q+jBA2EVCZrbqJ
+         7NX6eFHciWJzsVYsS+DNynj8xE9fzlxKZ+eiR1kA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 203/247] x86/cpu: Elide KCSAN for cpu_has() and friends
-Date:   Mon, 13 Jun 2022 12:11:45 +0200
-Message-Id: <20220613094929.102341977@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Olivier Matz <olivier.matz@6wind.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 4.19 282/287] ixgbe: fix unexpected VLAN Rx in promisc mode on VF
+Date:   Mon, 13 Jun 2022 12:11:46 +0200
+Message-Id: <20220613094932.546352691@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Olivier Matz <olivier.matz@6wind.com>
 
-[ Upstream commit a6a5eb269f6f3a2fe392f725a8d9052190c731e2 ]
+commit 7bb0fb7c63df95d6027dc50d6af3bc3bbbc25483 upstream.
 
-As x86 uses the <asm-generic/bitops/instrumented-*.h> headers, the
-regular forms of all bitops are instrumented with explicit calls to
-KASAN and KCSAN checks. As these are explicit calls, these are not
-suppressed by the noinstr function attribute.
+When the promiscuous mode is enabled on a VF, the IXGBE_VMOLR_VPE
+bit (VLAN Promiscuous Enable) is set. This means that the VF will
+receive packets whose VLAN is not the same than the VLAN of the VF.
 
-This can result in calls to those check functions in noinstr code, which
-objtool warns about:
+For instance, in this situation:
 
-vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+┌────────┐    ┌────────┐    ┌────────┐
+│        │    │        │    │        │
+│        │    │        │    │        │
+│     VF0├────┤VF1  VF2├────┤VF3     │
+│        │    │        │    │        │
+└────────┘    └────────┘    └────────┘
+   VM1           VM2           VM3
 
-Prevent this by using the arch_*() bitops, which are the underlying
-bitops without explciit instrumentation.
+vf 0:  vlan 1000
+vf 1:  vlan 1000
+vf 2:  vlan 1001
+vf 3:  vlan 1001
 
-[null: Changelog]
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220502111216.290518605@infradead.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+If we tcpdump on VF3, we see all the packets, even those transmitted
+on vlan 1000.
+
+This behavior prevents to bridge VF1 and VF2 in VM2, because it will
+create a loop: packets transmitted on VF1 will be received by VF2 and
+vice-versa, and bridged again through the software bridge.
+
+This patch remove the activation of VLAN Promiscuous when a VF enables
+the promiscuous mode. However, the IXGBE_VMOLR_UPE bit (Unicast
+Promiscuous) is kept, so that a VF receives all packets that has the
+same VLAN, whatever the destination MAC address.
+
+Fixes: 8443c1a4b192 ("ixgbe, ixgbevf: Add new mbox API xcast mode")
+Cc: stable@vger.kernel.org
+Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Signed-off-by: Olivier Matz <olivier.matz@6wind.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/cpufeature.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index 16a51e7288d5..b0f206681fde 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -51,7 +51,7 @@ extern const char * const x86_power_flags[32];
- extern const char * const x86_bug_flags[NBUGINTS*32];
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
+@@ -1172,9 +1172,9 @@ static int ixgbe_update_vf_xcast_mode(st
+ 			return -EPERM;
+ 		}
  
- #define test_cpu_cap(c, bit)						\
--	 test_bit(bit, (unsigned long *)((c)->x86_capability))
-+	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
- 
- /*
-  * There are 32 bits/features in each mask word.  The high bits
--- 
-2.35.1
-
+-		disable = 0;
++		disable = IXGBE_VMOLR_VPE;
+ 		enable = IXGBE_VMOLR_BAM | IXGBE_VMOLR_ROMPE |
+-			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE | IXGBE_VMOLR_VPE;
++			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
 
 

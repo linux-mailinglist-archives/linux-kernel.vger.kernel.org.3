@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A8854844D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820455483D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbiFMJsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S241265AbiFMJtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240506AbiFMJsM (ORCPT
+        with ESMTP id S241089AbiFMJs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:48:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDB113F05;
-        Mon, 13 Jun 2022 02:48:10 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LM6C90FjHzgYrW;
-        Mon, 13 Jun 2022 17:46:13 +0800 (CST)
+        Mon, 13 Jun 2022 05:48:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8799618B2C;
+        Mon, 13 Jun 2022 02:48:24 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM6Cz1M2dzjXfR;
+        Mon, 13 Jun 2022 17:46:55 +0800 (CST)
 Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Mon, 13 Jun 2022 17:48:08 +0800
 Received: from ubuntu1804.huawei.com (10.67.174.61) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 17:48:07 +0800
+ 15.1.2375.24; Mon, 13 Jun 2022 17:48:08 +0800
 From:   Yang Jihong <yangjihong1@huawei.com>
 To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
         <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
         <jolsa@kernel.org>, <namhyung@kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
 CC:     <yangjihong1@huawei.com>
-Subject: [RFC 11/13] perf kwork: Add softirq latency support
-Date:   Mon, 13 Jun 2022 17:46:03 +0800
-Message-ID: <20220613094605.208401-12-yangjihong1@huawei.com>
+Subject: [RFC 12/13] perf kwork: Add workqueue latency support
+Date:   Mon, 13 Jun 2022 17:46:04 +0800
+Message-ID: <20220613094605.208401-13-yangjihong1@huawei.com>
 X-Mailer: git-send-email 2.30.GIT
 In-Reply-To: <20220613094605.208401-1-yangjihong1@huawei.com>
 References: <20220613094605.208401-1-yangjihong1@huawei.com>
@@ -54,133 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implements softirq latency function.
+Implements workqueue latency function.
 
 test case:
 
-  # perf kwork lat
+  # perf kwork -k workqueue lat
 
     Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
    ---------------------------------------------------------------------------------------------------------------------------
-    (s)RCU:9                  | 0006 |      1.338 ms |         1 |      1.338 ms |    2072616.369122 s |    2072616.370461 s |
-    (s)RCU:9                  | 0005 |      0.945 ms |         2 |      1.757 ms |    2072616.368262 s |    2072616.370020 s |
-    (s)RCU:9                  | 0002 |      0.575 ms |        73 |      1.884 ms |    2072616.423139 s |    2072616.425023 s |
-    (s)RCU:9                  | 0000 |      0.327 ms |       105 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
-    (s)RCU:9                  | 0001 |      0.233 ms |       711 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
-    (s)NET_RX:3               | 0002 |      0.219 ms |         5 |      0.762 ms |    2072624.174209 s |    2072624.174971 s |
-    (s)RCU:9                  | 0004 |      0.176 ms |         4 |      0.265 ms |    2072620.333206 s |    2072620.333472 s |
-    (s)RCU:9                  | 0007 |      0.172 ms |      3165 |      2.890 ms |    2072616.385706 s |    2072616.388595 s |
-    (s)TIMER:1                | 0000 |      0.168 ms |        11 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
-    (s)RCU:9                  | 0003 |      0.149 ms |       194 |      1.127 ms |    2072620.617286 s |    2072620.618413 s |
-    (s)SCHED:7                | 0002 |      0.136 ms |        12 |      0.384 ms |    2072617.261300 s |    2072617.261684 s |
-    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
-    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
-    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
-    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
-    (s)SCHED:7                | 0003 |      0.113 ms |        82 |      0.226 ms |    2072618.917223 s |    2072618.917449 s |
-    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
-    (s)TIMER:1                | 0007 |      0.095 ms |      1550 |      1.274 ms |    2072625.965379 s |    2072625.966653 s |
-    (s)TIMER:1                | 0004 |      0.081 ms |         2 |      0.082 ms |    2072620.333187 s |    2072620.333269 s |
-    (s)TIMER:1                | 0002 |      0.076 ms |        10 |      0.104 ms |    2072617.261239 s |    2072617.261344 s |
-    (s)TIMER:1                | 0003 |      0.065 ms |       245 |      1.023 ms |    2072620.617286 s |    2072620.618309 s |
-    (s)SCHED:7                | 0006 |      0.064 ms |         2 |      0.081 ms |    2072616.370310 s |    2072616.370391 s |
-    (s)SCHED:7                | 0007 |      0.062 ms |      2753 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
-    (s)TIMER:1                | 0001 |      0.055 ms |       774 |      0.396 ms |    2072617.523145 s |    2072617.523540 s |
-    (s)SCHED:7                | 0005 |      0.040 ms |         2 |      0.042 ms |    2072616.369895 s |    2072616.369937 s |
+    (w)0xffff888101c5cc00     | 0001 |   5120.387 ms |         1 |   5120.387 ms |    2072619.309237 s |    2072624.429624 s |
+    (w)0xffff8883333e9040     | 0002 |      2.331 ms |         1 |      2.331 ms |    2072618.029512 s |    2072618.031844 s |
+    (w)0xffff888332fe9040     | 0000 |      0.724 ms |         5 |      1.628 ms |    2072620.638985 s |    2072620.640613 s |
+    (w)0xffff8883333ea180     | 0002 |      0.675 ms |         6 |      2.007 ms |    2072624.174209 s |    2072624.176216 s |
+    (w)0xffff888102e44400     | 0001 |      0.400 ms |         1 |      0.400 ms |    2072625.965284 s |    2072625.965684 s |
+    (w)0xffffffff82f7da00     | 0000 |      0.392 ms |         7 |      0.822 ms |    2072621.627843 s |    2072621.628665 s |
+    (w)0xffff8881035a83d8     | 0000 |      0.352 ms |         3 |      0.827 ms |    2072620.650451 s |    2072620.651278 s |
+    (w)0xffff888100e65c80     | 0001 |      0.318 ms |        78 |      1.228 ms |    2072620.504051 s |    2072620.505279 s |
+    (w)0xffff8881035a81e8     | 0004 |      0.285 ms |         1 |      0.285 ms |    2072621.357437 s |    2072621.357722 s |
+    (w)0xffff888102fc14a0     | 0002 |      0.279 ms |         5 |      0.319 ms |    2072618.029425 s |    2072618.029744 s |
+    (w)0xffff8883335e9040     | 0003 |      0.271 ms |         2 |      0.293 ms |    2072618.917354 s |    2072618.917647 s |
+    (w)0xffffffff8305ca48     | 0003 |      0.268 ms |         2 |      0.292 ms |    2072618.917407 s |    2072618.917699 s |
+    (w)0xffffffff8305c990     | 0003 |      0.256 ms |         1 |      0.256 ms |    2072625.973445 s |    2072625.973701 s |
+    (w)0xffff888102e444b8     | 0001 |      0.254 ms |         1 |      0.254 ms |    2072626.173289 s |    2072626.173542 s |
+    (w)0xffff888332fea180     | 0000 |      0.252 ms |       346 |      2.237 ms |    2072620.339623 s |    2072620.341860 s |
+    (w)0xffff8883331e9040     | 0001 |      0.226 ms |         2 |      0.234 ms |    2072625.965354 s |    2072625.965588 s |
+    (w)0xffff888100e65c80     | 0000 |      0.217 ms |        10 |      0.705 ms |    2072620.339040 s |    2072620.339745 s |
+    (w)0xffff888333de9040     | 0007 |      0.179 ms |         8 |      0.374 ms |    2072619.565271 s |    2072619.565645 s |
    ---------------------------------------------------------------------------------------------------------------------------
-    INFO: 28.605% skipped events (25424 including 2617 raise, 22807 entry, 0 exit)
+    INFO: 0.024% skipped events (21 including 11 raise, 10 entry, 0 exit)
 
-  # perf kwork lat -C 0,1
+  # perf kwork -k workqueue lat -s freq,avg
 
     Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
    ---------------------------------------------------------------------------------------------------------------------------
-    (s)RCU:9                  | 0000 |      0.327 ms |       105 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
-    (s)RCU:9                  | 0001 |      0.233 ms |       711 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
-    (s)TIMER:1                | 0000 |      0.168 ms |        11 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
-    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
-    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
-    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
-    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
-    (s)TIMER:1                | 0001 |      0.055 ms |       774 |      0.396 ms |    2072617.523145 s |    2072617.523540 s |
+    (w)0xffff888332fea180     | 0000 |      0.252 ms |       346 |      2.237 ms |    2072620.339623 s |    2072620.341860 s |
+    (w)0xffff888100e65c80     | 0001 |      0.318 ms |        78 |      1.228 ms |    2072620.504051 s |    2072620.505279 s |
+    (w)0xffff888100e65c80     | 0000 |      0.217 ms |        10 |      0.705 ms |    2072620.339040 s |    2072620.339745 s |
+    (w)0xffff888333de9040     | 0007 |      0.179 ms |         8 |      0.374 ms |    2072619.565271 s |    2072619.565645 s |
+    (w)0xffffffff82f7da00     | 0000 |      0.392 ms |         7 |      0.822 ms |    2072621.627843 s |    2072621.628665 s |
+    (w)0xffff8883333ea180     | 0002 |      0.675 ms |         6 |      2.007 ms |    2072624.174209 s |    2072624.176216 s |
+    (w)0xffff888332fe9040     | 0000 |      0.724 ms |         5 |      1.628 ms |    2072620.638985 s |    2072620.640613 s |
+    (w)0xffff888102fc14a0     | 0002 |      0.279 ms |         5 |      0.319 ms |    2072618.029425 s |    2072618.029744 s |
+    (w)0xffff8881035a83d8     | 0000 |      0.352 ms |         3 |      0.827 ms |    2072620.650451 s |    2072620.651278 s |
+    (w)0xffff8883335e9040     | 0003 |      0.271 ms |         2 |      0.293 ms |    2072618.917354 s |    2072618.917647 s |
+    (w)0xffffffff8305ca48     | 0003 |      0.268 ms |         2 |      0.292 ms |    2072618.917407 s |    2072618.917699 s |
+    (w)0xffff8883331e9040     | 0001 |      0.226 ms |         2 |      0.234 ms |    2072625.965354 s |    2072625.965588 s |
+    (w)0xffff888101c5cc00     | 0001 |   5120.387 ms |         1 |   5120.387 ms |    2072619.309237 s |    2072624.429624 s |
+    (w)0xffff8883333e9040     | 0002 |      2.331 ms |         1 |      2.331 ms |    2072618.029512 s |    2072618.031844 s |
+    (w)0xffff888102e44400     | 0001 |      0.400 ms |         1 |      0.400 ms |    2072625.965284 s |    2072625.965684 s |
+    (w)0xffff8881035a81e8     | 0004 |      0.285 ms |         1 |      0.285 ms |    2072621.357437 s |    2072621.357722 s |
+    (w)0xffffffff8305c990     | 0003 |      0.256 ms |         1 |      0.256 ms |    2072625.973445 s |    2072625.973701 s |
+    (w)0xffff888102e444b8     | 0001 |      0.254 ms |         1 |      0.254 ms |    2072626.173289 s |    2072626.173542 s |
    ---------------------------------------------------------------------------------------------------------------------------
-    INFO: 26.410% skipped events (23473 including 795 raise, 22678 entry, 0 exit)
+    INFO: 0.024% skipped events (21 including 11 raise, 10 entry, 0 exit)
 
-  # perf kwork lat -n SCHED
-
-    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
-   ---------------------------------------------------------------------------------------------------------------------------
-    (s)SCHED:7                | 0002 |      0.136 ms |        12 |      0.384 ms |    2072617.261300 s |    2072617.261684 s |
-    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
-    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
-    (s)SCHED:7                | 0003 |      0.113 ms |        82 |      0.226 ms |    2072618.917223 s |    2072618.917449 s |
-    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
-    (s)SCHED:7                | 0006 |      0.064 ms |         2 |      0.081 ms |    2072616.370310 s |    2072616.370391 s |
-    (s)SCHED:7                | 0007 |      0.062 ms |      2753 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
-    (s)SCHED:7                | 0005 |      0.040 ms |         2 |      0.042 ms |    2072616.369895 s |    2072616.369937 s |
-   ---------------------------------------------------------------------------------------------------------------------------
-    INFO: 0.006% skipped events (5 including 5 raise, 0 entry, 0 exit)
-
-  # perf kwork lat -s freq,max
+  # perf kwork -k workqueue lat -C 1
 
     Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
    ---------------------------------------------------------------------------------------------------------------------------
-    (s)RCU:9                  | 0007 |      0.172 ms |      3165 |      2.890 ms |    2072616.385706 s |    2072616.388595 s |
-    (s)SCHED:7                | 0007 |      0.062 ms |      2753 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
-    (s)TIMER:1                | 0007 |      0.095 ms |      1550 |      1.274 ms |    2072625.965379 s |    2072625.966653 s |
-    (s)TIMER:1                | 0001 |      0.055 ms |       774 |      0.396 ms |    2072617.523145 s |    2072617.523540 s |
-    (s)RCU:9                  | 0001 |      0.233 ms |       711 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
-    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
-    (s)TIMER:1                | 0003 |      0.065 ms |       245 |      1.023 ms |    2072620.617286 s |    2072620.618309 s |
-    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
-    (s)RCU:9                  | 0003 |      0.149 ms |       194 |      1.127 ms |    2072620.617286 s |    2072620.618413 s |
-    (s)RCU:9                  | 0000 |      0.327 ms |       105 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
-    (s)SCHED:7                | 0003 |      0.113 ms |        82 |      0.226 ms |    2072618.917223 s |    2072618.917449 s |
-    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
-    (s)RCU:9                  | 0002 |      0.575 ms |        73 |      1.884 ms |    2072616.423139 s |    2072616.425023 s |
-    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
-    (s)SCHED:7                | 0002 |      0.136 ms |        12 |      0.384 ms |    2072617.261300 s |    2072617.261684 s |
-    (s)TIMER:1                | 0000 |      0.168 ms |        11 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
-    (s)TIMER:1                | 0002 |      0.076 ms |        10 |      0.104 ms |    2072617.261239 s |    2072617.261344 s |
-    (s)NET_RX:3               | 0002 |      0.219 ms |         5 |      0.762 ms |    2072624.174209 s |    2072624.174971 s |
-    (s)RCU:9                  | 0004 |      0.176 ms |         4 |      0.265 ms |    2072620.333206 s |    2072620.333472 s |
-    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
-    (s)RCU:9                  | 0005 |      0.945 ms |         2 |      1.757 ms |    2072616.368262 s |    2072616.370020 s |
-    (s)TIMER:1                | 0004 |      0.081 ms |         2 |      0.082 ms |    2072620.333187 s |    2072620.333269 s |
-    (s)SCHED:7                | 0006 |      0.064 ms |         2 |      0.081 ms |    2072616.370310 s |    2072616.370391 s |
-    (s)SCHED:7                | 0005 |      0.040 ms |         2 |      0.042 ms |    2072616.369895 s |    2072616.369937 s |
-    (s)RCU:9                  | 0006 |      1.338 ms |         1 |      1.338 ms |    2072616.369122 s |    2072616.370461 s |
+    (w)0xffff888101c5cc00     | 0001 |   5120.387 ms |         1 |   5120.387 ms |    2072619.309237 s |    2072624.429624 s |
+    (w)0xffff888102e44400     | 0001 |      0.400 ms |         1 |      0.400 ms |    2072625.965284 s |    2072625.965684 s |
+    (w)0xffff888100e65c80     | 0001 |      0.318 ms |        78 |      1.228 ms |    2072620.504051 s |    2072620.505279 s |
+    (w)0xffff888102e444b8     | 0001 |      0.254 ms |         1 |      0.254 ms |    2072626.173289 s |    2072626.173542 s |
+    (w)0xffff8883331e9040     | 0001 |      0.226 ms |         2 |      0.234 ms |    2072625.965354 s |    2072625.965588 s |
    ---------------------------------------------------------------------------------------------------------------------------
-    INFO: 28.605% skipped events (25424 including 2617 raise, 22807 entry, 0 exit)
-
-  # perf kwork lat --time 2072620.333236,
-
-    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
-   ---------------------------------------------------------------------------------------------------------------------------
-    (s)RCU:9                  | 0001 |      0.699 ms |       130 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
-    (s)RCU:9                  | 0000 |      0.320 ms |        70 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
-    (s)NET_RX:3               | 0002 |      0.298 ms |         3 |      0.762 ms |    2072624.174209 s |    2072624.174971 s |
-    (s)RCU:9                  | 0002 |      0.297 ms |        13 |      0.687 ms |    2072622.126201 s |    2072622.126888 s |
-    (s)RCU:9                  | 0003 |      0.271 ms |        17 |      1.127 ms |    2072620.617286 s |    2072620.618413 s |
-    (s)TIMER:1                | 0000 |      0.166 ms |         8 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
-    (s)RCU:9                  | 0004 |      0.146 ms |         3 |      0.253 ms |    2072621.357331 s |    2072621.357584 s |
-    (s)SCHED:7                | 0003 |      0.143 ms |        15 |      0.197 ms |    2072625.973321 s |    2072625.973519 s |
-    (s)TIMER:1                | 0003 |      0.137 ms |        16 |      1.023 ms |    2072620.617286 s |    2072620.618309 s |
-    (s)RCU:9                  | 0005 |      0.133 ms |         1 |      0.133 ms |    2072626.530482 s |    2072626.530615 s |
-    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
-    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
-    (s)SCHED:7                | 0001 |      0.121 ms |        15 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
-    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
-    (s)SCHED:7                | 0000 |      0.115 ms |       269 |      0.987 ms |    2072624.176905 s |    2072624.177892 s |
-    (s)SCHED:7                | 0002 |      0.109 ms |         7 |      0.140 ms |    2072625.966227 s |    2072625.966368 s |
-    (s)RCU:9                  | 0007 |      0.095 ms |      1526 |      1.333 ms |    2072620.616224 s |    2072620.617557 s |
-    (s)TIMER:1                | 0007 |      0.094 ms |      1546 |      1.274 ms |    2072625.965379 s |    2072625.966653 s |
-    (s)TIMER:1                | 0004 |      0.079 ms |         1 |      0.079 ms |    2072621.357313 s |    2072621.357393 s |
-    (s)TIMER:1                | 0002 |      0.072 ms |         7 |      0.082 ms |    2072620.845190 s |    2072620.845272 s |
-    (s)TIMER:1                | 0001 |      0.070 ms |         9 |      0.149 ms |    2072620.360584 s |    2072620.360734 s |
-    (s)SCHED:7                | 0007 |      0.068 ms |      1959 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
-    (s)SCHED:7                | 0005 |      0.038 ms |         1 |      0.038 ms |    2072626.530536 s |    2072626.530573 s |
-   ---------------------------------------------------------------------------------------------------------------------------
-    INFO: 17.800% skipped events (15821 including 1602 raise, 14219 entry, 0 exit)
+    INFO: 0.006% skipped events (5 including 3 raise, 2 entry, 0 exit)
 
 Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
 ---
@@ -188,38 +126,38 @@ Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
  1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/builtin-kwork.c b/tools/perf/builtin-kwork.c
-index 84e318eea832..e0ffd3291b3a 100644
+index e0ffd3291b3a..7e3da243ccd8 100644
 --- a/tools/perf/builtin-kwork.c
 +++ b/tools/perf/builtin-kwork.c
-@@ -816,6 +816,20 @@ static struct kwork_class kwork_irq = {
+@@ -935,6 +935,20 @@ static struct kwork_class kwork_softirq = {
  };
  
- static struct kwork_class kwork_softirq;
-+static int process_softirq_raise_event(struct perf_tool *tool,
-+				       struct evsel *evsel,
-+				       struct perf_sample *sample,
-+				       struct machine *machine)
+ static struct kwork_class kwork_workqueue;
++static int process_workqueue_activate_work_event(struct perf_tool *tool,
++						 struct evsel *evsel,
++						 struct perf_sample *sample,
++						 struct machine *machine)
 +{
 +	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
 +
 +	if (kwork->tp_handler->raise_event)
-+		return kwork->tp_handler->raise_event(kwork, &kwork_softirq,
-+						      evsel, sample, machine);
++		return kwork->tp_handler->raise_event(kwork, &kwork_workqueue,
++						    evsel, sample, machine);
 +
 +	return 0;
 +}
 +
- static int process_softirq_entry_event(struct perf_tool *tool,
- 				       struct evsel *evsel,
- 				       struct perf_sample *sample,
-@@ -845,7 +859,7 @@ static int process_softirq_exit_event(struct perf_tool *tool,
+ static int process_workqueue_execute_start_event(struct perf_tool *tool,
+ 						 struct evsel *evsel,
+ 						 struct perf_sample *sample,
+@@ -964,7 +978,7 @@ static int process_workqueue_execute_end_event(struct perf_tool *tool,
  }
  
- const struct evsel_str_handler softirq_tp_handlers[] = {
--	{ "irq:softirq_raise", NULL, },
-+	{ "irq:softirq_raise", process_softirq_raise_event, },
- 	{ "irq:softirq_entry", process_softirq_entry_event, },
- 	{ "irq:softirq_exit",  process_softirq_exit_event, },
+ const struct evsel_str_handler workqueue_tp_handlers[] = {
+-	{ "workqueue:workqueue_activate_work", NULL, },
++	{ "workqueue:workqueue_activate_work", process_workqueue_activate_work_event, },
+ 	{ "workqueue:workqueue_execute_start", process_workqueue_execute_start_event, },
+ 	{ "workqueue:workqueue_execute_end",   process_workqueue_execute_end_event, },
  };
 -- 
 2.30.GIT

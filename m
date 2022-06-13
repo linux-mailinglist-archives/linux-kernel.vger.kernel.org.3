@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542925486CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9D554879F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350504AbiFMLBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S1351997AbiFMMfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350223AbiFMKyq (ORCPT
+        with ESMTP id S1349406AbiFMMbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E5855B8;
-        Mon, 13 Jun 2022 03:30:27 -0700 (PDT)
+        Mon, 13 Jun 2022 08:31:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94812B865;
+        Mon, 13 Jun 2022 04:07:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9863560F09;
-        Mon, 13 Jun 2022 10:30:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC393C34114;
-        Mon, 13 Jun 2022 10:30:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 667FF614C3;
+        Mon, 13 Jun 2022 11:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702C4C34114;
+        Mon, 13 Jun 2022 11:07:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116226;
-        bh=t5HIl67g2jwSScHPwn9iUau0Gi2bGRH/gEUJaM81zWk=;
+        s=korg; t=1655118427;
+        bh=BaivaKI+6LKe4QyubgCLaVmnqy1TW00F7HM8aV6lwss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ynqDCNVZmwT/zGMAoPbyJ0jG/jKXDoqnMduquzyQ88cwVP0WhklISwbnNmZDY/3sa
-         O92y45eX661UiHpCNrkQAjYDa10hxZ9eNu5UJMa5qeqFvt3fR/Q/5Gq4yGE6VaXCeT
-         /EMFZ7w8eRDP2ld6TN4b8194BgFfVxcpjGuVPSTs=
+        b=j/T9GmvNDzL47B1iikmGipG6rCkH00VAZzGK8EliDK6b3GEMRc6wJpMLtKIk9HSuD
+         sMnvk0xlAfB9u1FVJlQ5m68N43k2q8Fgk+YFKKIouIwyrbTl+rKKILXop3y47Romx/
+         NsOiLZI9u3QJcWvCYyEipt1DN75D+UUg93f4gPms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 154/218] serial: sh-sci: Dont allow CS5-6
-Date:   Mon, 13 Jun 2022 12:10:12 +0200
-Message-Id: <20220613094925.264540003@linuxfoundation.org>
+Subject: [PATCH 5.10 053/172] net: dsa: mv88e6xxx: Fix refcount leak in mv88e6xxx_mdios_register
+Date:   Mon, 13 Jun 2022 12:10:13 +0200
+Message-Id: <20220613094903.133590832@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 9b87162de8be26bf3156460b37deee6399fd0fcb ]
+[ Upstream commit 02ded5a173619b11728b8bf75a3fd995a2c1ff28 ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized from
-CS5 or CS6 to CS8.
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+mv88e6xxx_mdio_register() pass the device node to of_mdiobus_register().
+We don't need the device node after it.
 
-Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-6-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Add missing of_node_put() to avoid refcount leak.
+
+Fixes: a3c53be55c95 ("net: dsa: mv88e6xxx: Support multiple MDIO busses")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sh-sci.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/dsa/mv88e6xxx/chip.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 21f81dc08139..f7dd843a3eff 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -2267,8 +2267,12 @@ static void sci_set_termios(struct uart_port *port, struct ktermios *termios,
- 	unsigned long max_freq = 0;
- 	int best_clk = -1;
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index e79a808375fc..7b7a8a74405d 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -3148,6 +3148,7 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
+ 	 */
+ 	child = of_get_child_by_name(np, "mdio");
+ 	err = mv88e6xxx_mdio_register(chip, child, false);
++	of_node_put(child);
+ 	if (err)
+ 		return err;
  
--	if ((termios->c_cflag & CSIZE) == CS7)
-+	if ((termios->c_cflag & CSIZE) == CS7) {
- 		smr_val |= SCSMR_CHR;
-+	} else {
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
-+	}
- 	if (termios->c_cflag & PARENB)
- 		smr_val |= SCSMR_PE;
- 	if (termios->c_cflag & PARODD)
 -- 
 2.35.1
 

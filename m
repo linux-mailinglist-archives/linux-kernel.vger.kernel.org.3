@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AD6548D44
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A65549416
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353464AbiFMMcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S1356927AbiFMLpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358733AbiFMM3q (ORCPT
+        with ESMTP id S1355669AbiFMLjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:29:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A035A594;
-        Mon, 13 Jun 2022 04:06:48 -0700 (PDT)
+        Mon, 13 Jun 2022 07:39:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40314240AB;
+        Mon, 13 Jun 2022 03:49:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04F69B80EAB;
-        Mon, 13 Jun 2022 11:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E82C34114;
-        Mon, 13 Jun 2022 11:06:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0B68612C3;
+        Mon, 13 Jun 2022 10:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E456CC34114;
+        Mon, 13 Jun 2022 10:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118404;
-        bh=AMLhu3VFIpENflsH0OO2dA3qH0B6xz6Ffq9TvfKxdck=;
+        s=korg; t=1655117380;
+        bh=7irXMfXyvExHJ0c3dYWbmjrRhnNm0R1jpcHKY/Wb8ZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pl+9KqmLPe+FwRK8GuhPLuJpsno1c+L4UlJ40JOaxdMWmqB0MrKkcv347tJ6n4lLb
-         jGOX2UXmDuepc68bknN3fY7yYrTWcQpkfPtdtEf0FY6F8/SjfjbfIhGM1GZSOrIYTX
-         hmoOWZ7xVxw+spEHpL1WmUu+6zWhB6KcLLt2anQg=
+        b=oNvWwo7EpCSQwG1dAsqIAqbx6B5IdpNrbn4+MzpD4r4k9AO/37lkO9SxkdW6viuy1
+         8V4vYZhi7xe2o79eU0blR05wXDHotz3i7B79HQfSdOrAVmTbwDFLjWk8y4+zwWhvIT
+         yCclqPJwoKIH4Z5Sl87ZHDx+dwmH22CfPDxSNeRE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 064/172] net/mlx5: Dont use already freed action pointer
+Subject: [PATCH 5.4 351/411] xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
 Date:   Mon, 13 Jun 2022 12:10:24 +0200
-Message-Id: <20220613094905.800393306@linuxfoundation.org>
+Message-Id: <20220613094939.229039192@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 80b2bd737d0e833e6a2b77e482e5a714a79c86a4 ]
+[ Upstream commit dbac14a5a05ff8e1ce7c0da0e1f520ce39ec62ea ]
 
-The call to mlx5dr_action_destroy() releases "action" memory. That
-pointer is set to miss_action later and generates the following smatch
-error:
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
- drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c:53 set_miss_action()
- warn: 'action' was already freed.
+modpost used to detect it, but it has been broken for a decade.
 
-Make sure that the pointer is always valid by setting NULL after destroy.
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
 
-Fixes: 6a48faeeca10 ("net/mlx5: Add direct rule fs_cmd implementation")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+There are two ways to fix it:
+
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because none of the in-tree call-sites
+(arch/arm/xen/enlighten.c, arch/x86/xen/grant-table.c) is compiled as
+modular.
+
+Fixes: 243848fc018c ("xen/grant-table: Move xlated_setup_gnttab_pages to common place")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Acked-by: Stefano Stabellini <sstabellini@kernel.org>
+Link: https://lore.kernel.org/r/20220606045920.4161881-1-masahiroy@kernel.org
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/xen/xlate_mmu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-index 96c39a17d026..b227fa9ada46 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-@@ -43,11 +43,10 @@ static int set_miss_action(struct mlx5_flow_root_namespace *ns,
- 	err = mlx5dr_table_set_miss_action(ft->fs_dr_table.dr_table, action);
- 	if (err && action) {
- 		err = mlx5dr_action_destroy(action);
--		if (err) {
--			action = NULL;
--			mlx5_core_err(ns->dev, "Failed to destroy action (%d)\n",
--				      err);
--		}
-+		if (err)
-+			mlx5_core_err(ns->dev,
-+				      "Failed to destroy action (%d)\n", err);
-+		action = NULL;
- 	}
- 	ft->fs_dr_table.miss_action = action;
- 	if (old_miss_action) {
+diff --git a/drivers/xen/xlate_mmu.c b/drivers/xen/xlate_mmu.c
+index 7b1077f0abcb..c8aa4f5f85db 100644
+--- a/drivers/xen/xlate_mmu.c
++++ b/drivers/xen/xlate_mmu.c
+@@ -261,7 +261,6 @@ int __init xen_xlate_map_ballooned_pages(xen_pfn_t **gfns, void **virt,
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(xen_xlate_map_ballooned_pages);
+ 
+ struct remap_pfn {
+ 	struct mm_struct *mm;
 -- 
 2.35.1
 

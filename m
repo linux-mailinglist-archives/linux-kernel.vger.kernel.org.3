@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497855486C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A265487DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386271AbiFMOwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37588 "EHLO
+        id S1385962AbiFMOur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385899AbiFMOss (ORCPT
+        with ESMTP id S1386555AbiFMOqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:48:48 -0400
+        Mon, 13 Jun 2022 10:46:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB5BC047E;
-        Mon, 13 Jun 2022 04:53:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CF8BDA21;
+        Mon, 13 Jun 2022 04:52:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A57C61425;
-        Mon, 13 Jun 2022 11:53:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350A9C34114;
-        Mon, 13 Jun 2022 11:52:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D6FB614E3;
+        Mon, 13 Jun 2022 11:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A52BC34114;
+        Mon, 13 Jun 2022 11:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121179;
-        bh=B7tnLXZ9zOFwqW4lhSdUyligTwXyJWYFGo6O+Ex6O7U=;
+        s=korg; t=1655121140;
+        bh=7ZJdOB8NWztNFmJga+HULPqObVqV573O24/WNfw5IOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ekT9F0orK09gyrOiv+HF26iJ+yKR21hsv1JdK5FGrnAGZifekzdjj8c5oEdvo/vGX
-         LGfCcTADGHMH6Crghq0UYTXwHxzVVIT2L2kNr6op99sqbmECWeF02wsqs7Z79pxAsq
-         unEj2+qVY25lhGWUS0xHFvxDMmE0QMHk+3doLU+o=
+        b=P/a0A5CsQNON+Naz/3njpyOv8GRbKnUATeclacEednuoaB946krbR8CGR9zyOiowZ
+         lYe+dWONT1V/kTZcK1c1Df8v6V/25YBUeL3fCUKgDWzj7xhhEekuvf7Ayzcc9tZdIe
+         c+hios2eHVUxzv22byk2EUsPgZ1ihjBbFCjILi0w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tyler Erickson <tyler.erickson@seagate.com>,
-        Muhammad Ahmad <muhammad.ahmad@seagate.com>,
-        Michael English <michael.english@seagate.com>,
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.17 267/298] libata: fix reading concurrent positioning ranges log
-Date:   Mon, 13 Jun 2022 12:12:41 +0200
-Message-Id: <20220613094933.170957037@linuxfoundation.org>
+Subject: [PATCH 5.17 269/298] ata: libata-transport: fix {dma|pio|xfer}_mode sysfs files
+Date:   Mon, 13 Jun 2022 12:12:43 +0200
+Message-Id: <20220613094933.230142519@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -57,76 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyler Erickson <tyler.erickson@seagate.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit c745dfc541e78428ba3986f1d17fe1dfdaca8184 upstream.
+commit 72aad489f992871e908ff6d9055b26c6366fb864 upstream.
 
-The concurrent positioning ranges log is not a fixed size and may depend
-on how many ranges are supported by the device. This patch uses the size
-reported in the GPL directory to determine the number of pages supported
-by the device before attempting to read this log page.
+The {dma|pio}_mode sysfs files are incorrectly documented as having a
+list of the supported DMA/PIO transfer modes, while the corresponding
+fields of the *struct* ata_device hold the transfer mode IDs, not masks.
 
-This resolves this error from the dmesg output:
-    ata6.00: Read log 0x47 page 0x00 failed, Emask 0x1
+To match these docs, the {dma|pio}_mode (and even xfer_mode!) sysfs
+files are handled by the ata_bitfield_name_match() macro which leads to
+reading such kind of nonsense from them:
 
+$ cat /sys/class/ata_device/dev3.0/pio_mode
+XFER_UDMA_7, XFER_UDMA_6, XFER_UDMA_5, XFER_UDMA_4, XFER_MW_DMA_4,
+XFER_PIO_6, XFER_PIO_5, XFER_PIO_4, XFER_PIO_3, XFER_PIO_2, XFER_PIO_1,
+XFER_PIO_0
+
+Using the correct ata_bitfield_name_search() macro fixes that:
+
+$ cat /sys/class/ata_device/dev3.0/pio_mode
+XFER_PIO_4
+
+While fixing the file documentation, somewhat reword the {dma|pio}_mode
+file doc and add a note about being mostly useful for PATA devices to
+the xfer_mode file doc...
+
+Fixes: d9027470b886 ("[libata] Add ATA transport class")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 Cc: stable@vger.kernel.org
-Fixes: fe22e1c2f705 ("libata: support concurrent positioning ranges log")
-Signed-off-by: Tyler Erickson <tyler.erickson@seagate.com>
-Reviewed-by: Muhammad Ahmad <muhammad.ahmad@seagate.com>
-Tested-by: Michael English <michael.english@seagate.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-core.c |   21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ Documentation/ABI/testing/sysfs-ata |   11 ++++++-----
+ drivers/ata/libata-transport.c      |    2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -2003,16 +2003,16 @@ retry:
- 	return err_mask;
- }
+--- a/Documentation/ABI/testing/sysfs-ata
++++ b/Documentation/ABI/testing/sysfs-ata
+@@ -107,13 +107,14 @@ Description:
+ 				described in ATA8 7.16 and 7.17. Only valid if
+ 				the device is not a PM.
  
--static bool ata_log_supported(struct ata_device *dev, u8 log)
-+static int ata_log_supported(struct ata_device *dev, u8 log)
- {
- 	struct ata_port *ap = dev->link->ap;
+-		pio_mode:	(RO) Transfer modes supported by the device when
+-				in PIO mode. Mostly used by PATA device.
++		pio_mode:	(RO) PIO transfer mode used by the device.
++				Mostly used by PATA devices.
  
- 	if (dev->horkage & ATA_HORKAGE_NO_LOG_DIR)
--		return false;
-+		return 0;
+-		xfer_mode:	(RO) Current transfer mode
++		xfer_mode:	(RO) Current transfer mode. Mostly used by
++				PATA devices.
  
- 	if (ata_read_log_page(dev, ATA_LOG_DIRECTORY, 0, ap->sector_buf, 1))
--		return false;
--	return get_unaligned_le16(&ap->sector_buf[log * 2]) ? true : false;
-+		return 0;
-+	return get_unaligned_le16(&ap->sector_buf[log * 2]);
- }
+-		dma_mode:	(RO) Transfer modes supported by the device when
+-				in DMA mode. Mostly used by PATA device.
++		dma_mode:	(RO) DMA transfer mode used by the device.
++				Mostly used by PATA devices.
  
- static bool ata_identify_page_supported(struct ata_device *dev, u8 page)
-@@ -2448,15 +2448,20 @@ static void ata_dev_config_cpr(struct at
- 	struct ata_cpr_log *cpr_log = NULL;
- 	u8 *desc, *buf = NULL;
+ 		class:		(RO) Device class. Can be "ata" for disk,
+ 				"atapi" for packet device, "pmp" for PM, or
+--- a/drivers/ata/libata-transport.c
++++ b/drivers/ata/libata-transport.c
+@@ -196,7 +196,7 @@ static struct {
+ 	{ XFER_PIO_0,			"XFER_PIO_0" },
+ 	{ XFER_PIO_SLOW,		"XFER_PIO_SLOW" }
+ };
+-ata_bitfield_name_match(xfer,ata_xfer_names)
++ata_bitfield_name_search(xfer, ata_xfer_names)
  
--	if (ata_id_major_version(dev->id) < 11 ||
--	    !ata_log_supported(dev, ATA_LOG_CONCURRENT_POSITIONING_RANGES))
-+	if (ata_id_major_version(dev->id) < 11)
-+		goto out;
-+
-+	buf_len = ata_log_supported(dev, ATA_LOG_CONCURRENT_POSITIONING_RANGES);
-+	if (buf_len == 0)
- 		goto out;
- 
- 	/*
- 	 * Read the concurrent positioning ranges log (0x47). We can have at
--	 * most 255 32B range descriptors plus a 64B header.
-+	 * most 255 32B range descriptors plus a 64B header. This log varies in
-+	 * size, so use the size reported in the GPL directory. Reading beyond
-+	 * the supported length will result in an error.
- 	 */
--	buf_len = (64 + 255 * 32 + 511) & ~511;
-+	buf_len <<= 9;
- 	buf = kzalloc(buf_len, GFP_KERNEL);
- 	if (!buf)
- 		goto out;
+ /*
+  * ATA Port attributes
 
 

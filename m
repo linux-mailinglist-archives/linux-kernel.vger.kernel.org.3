@@ -2,82 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348A1549DD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7CC549DD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbiFMTgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S244948AbiFMTkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241245AbiFMTgM (ORCPT
+        with ESMTP id S245317AbiFMTkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:36:12 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023793FDB3;
-        Mon, 13 Jun 2022 11:03:21 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id p1so4826308ilj.9;
-        Mon, 13 Jun 2022 11:03:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oHzia+bhaBA7DMXVkKIrTmOmhwAsD0Y7KThGYZ8Hdc4=;
-        b=v7TbA+Nz78VTC/4yKG1e+Zp2e1pWPUTnBI/vhWqgJyZokJVUsFuTd2vKuuQ0UlPltx
-         Aw8uGHYpeqza/aRWnX2SD3ZrNuY3zQvbg88HYUdnUQh+Gq5PiT8e2fi8tQMPCz5Dq6ZH
-         JmwFTTF9/S6yxyo1k8uyP8mgZ/Lzeuiby3wwZzf+gG9MFenAyV4cQGZ9HS1i8/rd0qJW
-         o0KJr/Kmit5eUUx2qec34iiyDx4GtL2xlYFduk7IBM9K4Y5DxiZpVWoO+PyfVmq+O9lo
-         2EtP9bddITJUTkg4zIzyRPEQiUPH9DEYyOLWxxAkJHeEeSlp3mXXin556VweUBpSth4e
-         ZAIQ==
-X-Gm-Message-State: AJIora9U4g0AdCuK9grGUhNgeLyV54+n8p7a6ASJjkauUu3JuAxbMBtJ
-        +/kX+UX9P+74eRWanHOMMA==
-X-Google-Smtp-Source: AGRyM1sAK2tNW0/E5Y94TDRjcKisI2L7QGgHIU7/awk1+gkGynbDfPu/INUy24XIlHKadZ/NU5nSIg==
-X-Received: by 2002:a05:6e02:1b0c:b0:2d3:bfdf:e3c5 with SMTP id i12-20020a056e021b0c00b002d3bfdfe3c5mr631830ilv.138.1655143400248;
-        Mon, 13 Jun 2022 11:03:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id c2-20020a92c8c2000000b002d11397f4f9sm4191996ilq.74.2022.06.13.11.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 11:03:19 -0700 (PDT)
-Received: (nullmailer pid 3990444 invoked by uid 1000);
-        Mon, 13 Jun 2022 18:03:18 -0000
-Date:   Mon, 13 Jun 2022 12:03:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     anand.gore@broadcom.com, samyon.furman@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        f.fainelli@gmail.com, devicetree@vger.kernel.org,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        linux-kernel@vger.kernel.org, philippe.reynes@softathome.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com
-Subject: Re: [PATCH 1/3] dt-bindings: arm: Add BCM63148 SoC
-Message-ID: <20220613180318.GA3990308-robh@kernel.org>
-References: <20220610002113.14483-1-william.zhang@broadcom.com>
- <20220610002113.14483-2-william.zhang@broadcom.com>
+        Mon, 13 Jun 2022 15:40:07 -0400
+Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [IPv6:2001:1600:3:17::8faf])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3AC13E81;
+        Mon, 13 Jun 2022 11:06:12 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LMKJ12cnCzMqMX3;
+        Mon, 13 Jun 2022 20:06:09 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4LMKHx4fv8zlqQHK;
+        Mon, 13 Jun 2022 20:06:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1655143569;
+        bh=6V0xLAgnaKegpa6qvcm9opCXJieMVgO6NIinoOfSkmQ=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=B4dVtViDU3L7AvfOcgxrH+CTy/oyH6pNvblHsoGEy4jJ+KsICrtKzt/AwU1ndUlf7
+         O2UmFxfBQfnkJ3m69/GGGjclPGZf3OBSAKGAuc3MWf21IbPwsBmnGVruUTpjdTp/4k
+         z1LkPxgOJqO+z55Fav51erAELvxVmLaprQF/cwMo=
+Message-ID: <f6fbf06a-6507-a908-33ed-1218713de09b@digikod.net>
+Date:   Mon, 13 Jun 2022 20:06:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610002113.14483-2-william.zhang@broadcom.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+References: <20220611172233.1494073-1-masahiroy@kernel.org>
+ <20220611172233.1494073-2-masahiroy@kernel.org>
+ <58a20890-557e-f31c-ed59-7e256445a26c@digikod.net>
+ <CAK7LNAQ3p2XiLO7tJSJ9JWnqRomCwjYeQy-Z3j0m904Yn6Av_g@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH 2/4] certs: fix and refactor
+ CONFIG_SYSTEM_BLACKLIST_HASH_LIST build
+In-Reply-To: <CAK7LNAQ3p2XiLO7tJSJ9JWnqRomCwjYeQy-Z3j0m904Yn6Av_g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Jun 2022 17:21:11 -0700, William Zhang wrote:
-> Add BCM63148 SoC device tree description to bcmbca binding document.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
-> 
->  Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+On 13/06/2022 16:55, Masahiro Yamada wrote:
+> On Mon, Jun 13, 2022 at 9:34 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>
+>>
+>>
+>> On 11/06/2022 19:22, Masahiro Yamada wrote:
+>>> Commit addf466389d9 ("certs: Check that builtin blacklist hashes are
+>>> valid") was applied 8 months after the submission.
+>>>
+>>> In the meantime, the base code had been removed by commit b8c96a6b466c
+>>> ("certs: simplify $(srctree)/ handling and remove config_filename
+>>> macro").
+>>>
+>>> Fix the Makefile.
+>>>
+>>> Create a local copy of $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST). It is
+>>> included from certs/blacklist_hashes.c and also works as a timestamp.
+>>>
+>>> Send error messages from check-blacklist-hashes.awk to stderr instead
+>>> of stdout.
+>>>
+>>> Fixes: addf466389d9 ("certs: Check that builtin blacklist hashes are valid")
+>>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>>
+>> Reviewed-by: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> As a side note, it may let an orphan certs/blacklist_hashes_checked file
+>> but we can't really do something about that and it's OK.
+> 
+> 
+> GNU Make uses timestamps of files for dependency tracking,
+> so Kbuild keeps all intermediate files.
+> 
+> Keeping certs/blacklist_hashes_checked
+> is the right thing to do.
+
+blacklist_hashes_checked is the file you replaced with 
+blacklist_hash_list, and is then not used in any Makefile anymore. There 
+is then no timestamp issue. I just wanted to mention that it is normal 
+that a git status will show it on build directories also used as source 
+directories that were already using such feature.
+
+
+
+> 
+> 
+> 
+>> Thanks!
+>>
+>>> ---
+>>>
+>>>    certs/.gitignore         |  2 +-
+>>>    certs/Makefile           | 20 ++++++++++----------
+>>>    certs/blacklist_hashes.c |  2 +-
+>>>    3 files changed, 12 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/certs/.gitignore b/certs/.gitignore
+>>> index 56637aceaf81..cec5465f31c1 100644
+>>> --- a/certs/.gitignore
+>>> +++ b/certs/.gitignore
+>>> @@ -1,5 +1,5 @@
+>>>    # SPDX-License-Identifier: GPL-2.0-only
+>>> -/blacklist_hashes_checked
+>>> +/blacklist_hash_list
+>>>    /extract-cert
+>>>    /x509_certificate_list
+>>>    /x509_revocation_list
+>>> diff --git a/certs/Makefile b/certs/Makefile
+>>> index cb1a9da3fc58..a8d628fd5f7b 100644
+>>> --- a/certs/Makefile
+>>> +++ b/certs/Makefile
+>>> @@ -7,22 +7,22 @@ obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o c
+>>>    obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
+>>>    obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
+>>>    ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
+>>> -quiet_cmd_check_blacklist_hashes = CHECK   $(patsubst "%",%,$(2))
+>>> -      cmd_check_blacklist_hashes = $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(2); touch $@
+>>>
+>>> -$(eval $(call config_filename,SYSTEM_BLACKLIST_HASH_LIST))
+>>> +$(obj)/blacklist_hashes.o: $(obj)/blacklist_hash_list
+>>> +CFLAGS_blacklist_hashes.o := -I $(obj)
+>>>
+>>> -$(obj)/blacklist_hashes.o: $(obj)/blacklist_hashes_checked
+>>> +quiet_cmd_check_and_copy_blacklist_hash_list = GEN     $@
+>>> +      cmd_check_and_copy_blacklist_hash_list = \
+>>> +     $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) >&2; \
+>>> +     cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
+>>>
+>>> -CFLAGS_blacklist_hashes.o += -I$(srctree)
+>>> -
+>>> -targets += blacklist_hashes_checked
+>>> -$(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FORCE
+>>> -     $(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
+>>> +$(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
+>>> +     $(call if_changed,check_and_copy_blacklist_hash_list)
+>>>    obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
+>>>    else
+>>>    obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
+>>>    endif
+>>> +targets += blacklist_hash_list
+>>>
+>>>    quiet_cmd_extract_certs  = CERT    $@
+>>>          cmd_extract_certs  = $(obj)/extract-cert $(extract-cert-in) $@
+>>> @@ -33,7 +33,7 @@ $(obj)/system_certificates.o: $(obj)/x509_certificate_list
+>>>    $(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) $(obj)/extract-cert FORCE
+>>>        $(call if_changed,extract_certs)
+>>>
+>>> -targets += x509_certificate_list blacklist_hashes_checked
+>>> +targets += x509_certificate_list
+>>>
+>>>    # If module signing is requested, say by allyesconfig, but a key has not been
+>>>    # supplied, then one will need to be generated to make sure the build does not
+>>> diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
+>>> index d5961aa3d338..86d66fe11348 100644
+>>> --- a/certs/blacklist_hashes.c
+>>> +++ b/certs/blacklist_hashes.c
+>>> @@ -2,6 +2,6 @@
+>>>    #include "blacklist.h"
+>>>
+>>>    const char __initconst *const blacklist_hashes[] = {
+>>> -#include CONFIG_SYSTEM_BLACKLIST_HASH_LIST
+>>> +#include "blacklist_hash_list"
+>>>        , NULL
+>>>    };
+> 
+> 
+> 
+> --
+> Best Regards
+> Masahiro Yamada

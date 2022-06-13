@@ -2,44 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83645548FE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC27548DD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383760AbiFMOX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S1352085AbiFMMJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382963AbiFMOV2 (ORCPT
+        with ESMTP id S1359151AbiFMMFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:21:28 -0400
+        Mon, 13 Jun 2022 08:05:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2873A2E092;
-        Mon, 13 Jun 2022 04:44:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1F512AAC;
+        Mon, 13 Jun 2022 03:59:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09C9B6124E;
-        Mon, 13 Jun 2022 11:44:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1519FC34114;
-        Mon, 13 Jun 2022 11:43:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEBE760F9A;
+        Mon, 13 Jun 2022 10:59:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4412C34114;
+        Mon, 13 Jun 2022 10:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120639;
-        bh=ifA7lA7FbfM0V7ZenCFcpEE+5IR5N5Fy03biaMdVr9A=;
+        s=korg; t=1655117942;
+        bh=1deBv8pWO4EhlblSV+d3qc0OS1zA34siQuYQ1ppkR98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i2AGIeky2qGcPCN2mlpfN5hMfrZf3ZiYOEGqhYnGapdAANd0QF+opk+rrcA3/juse
-         aXHZYqidjo3Sa9+dssQ9UeiBqIObOblFCe5bTne4Wfn1jBmSM8mXUR6TUw2L6tpGkn
-         UZg6uFq7aTUHshP2VsPETxDMZQZFARlqDP6MlHVQ=
+        b=M2SjwOqiUcxy/EUEZd8gACipjIGZ1h7DeYBvPpaPyh5kewhp6xsPW10kqscjygUP7
+         nWUAlIup+YhRlWnbJXIw51J6LDPsoBO0ghcg/7N0Y6HNB08lr253pLqFYMgUDjqQft
+         xdOb9QYh1hwqEwxWbTAUf9tLDXEkfaygmlIUIvq0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 104/298] block: make bioset_exit() fully resilient against being called twice
+        stable@vger.kernel.org,
+        Christophe de Dinechin <christophe@dinechin.org>,
+        Christophe de Dinechin <dinechin@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Segall <bsegall@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH 4.19 174/287] nodemask.h: fix compilation error with GCC12
 Date:   Mon, 13 Jun 2022 12:09:58 +0200
-Message-Id: <20220613094928.104799885@linuxfoundation.org>
+Message-Id: <20220613094929.147608458@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Christophe de Dinechin <dinechin@redhat.com>
 
-[ Upstream commit 605f7415ecfb426610195dd6c7577b30592b3369 ]
+commit 37462a920392cb86541650a6f4121155f11f1199 upstream.
 
-Most of bioset_exit() is fine being called twice, as it clears the
-various allocations etc when they are freed. The exception is
-bio_alloc_cache_destroy(), which does not clear ->cache when it has
-freed it.
+With gcc version 12.0.1 20220401 (Red Hat 12.0.1-0), building with
+defconfig results in the following compilation error:
 
-This isn't necessarily a bug, but can be if buggy users does call the
-exit path more then once, or with just a memset() bioset which has
-never been initialized. dm appears to be one such user.
+|   CC      mm/swapfile.o
+| mm/swapfile.c: In function `setup_swap_info':
+| mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds
+|  of `struct plist_node[]' [-Werror=array-bounds]
+|  2291 |                                 p->avail_lists[i].prio = 1;
+|       |                                 ~~~~~~~~~~~~~~^~~
+| In file included from mm/swapfile.c:16:
+| ./include/linux/swap.h:292:27: note: while referencing `avail_lists'
+|   292 |         struct plist_node avail_lists[]; /*
+|       |                           ^~~~~~~~~~~
 
-Fixes: be4d234d7aeb ("bio: add allocation cache abstraction")
-Link: https://lore.kernel.org/linux-block/YpK7m+14A+pZKs5k@casper.infradead.org/
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This is due to the compiler detecting that the mask in
+node_states[__state] could theoretically be zero, which would lead to
+first_node() returning -1 through find_first_bit.
+
+I believe that the warning/error is legitimate.  I first tried adding a
+test to check that the node mask is not emtpy, since a similar test exists
+in the case where MAX_NUMNODES == 1.
+
+However, adding the if statement causes other warnings to appear in
+for_each_cpu_node_but, because it introduces a dangling else ambiguity.
+And unfortunately, GCC is not smart enough to detect that the added test
+makes the case where (node) == -1 impossible, so it still complains with
+the same message.
+
+This is why I settled on replacing that with a harmless, but relatively
+useless (node) >= 0 test.  Based on the warning for the dangling else, I
+also decided to fix the case where MAX_NUMNODES == 1 by moving the
+condition inside the for loop.  It will still only be tested once.  This
+ensures that the meaning of an else following for_each_node_mask or
+derivatives would not silently have a different meaning depending on the
+configuration.
+
+Link: https://lkml.kernel.org/r/20220414150855.2407137-3-dinechin@redhat.com
+Signed-off-by: Christophe de Dinechin <christophe@dinechin.org>
+Signed-off-by: Christophe de Dinechin <dinechin@redhat.com>
+Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Cc: Zhen Lei <thunder.leizhen@huawei.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bio.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/nodemask.h |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/block/bio.c b/block/bio.c
-index 738fea03edbf..dc6940621d7d 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -668,6 +668,7 @@ static void bio_alloc_cache_destroy(struct bio_set *bs)
- 		bio_alloc_cache_prune(cache, -1U);
- 	}
- 	free_percpu(bs->cache);
-+	bs->cache = NULL;
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -375,14 +375,13 @@ static inline void __nodes_fold(nodemask
  }
  
- /**
--- 
-2.35.1
-
+ #if MAX_NUMNODES > 1
+-#define for_each_node_mask(node, mask)			\
+-	for ((node) = first_node(mask);			\
+-		(node) < MAX_NUMNODES;			\
+-		(node) = next_node((node), (mask)))
++#define for_each_node_mask(node, mask)				    \
++	for ((node) = first_node(mask);				    \
++	     (node >= 0) && (node) < MAX_NUMNODES;		    \
++	     (node) = next_node((node), (mask)))
+ #else /* MAX_NUMNODES == 1 */
+-#define for_each_node_mask(node, mask)			\
+-	if (!nodes_empty(mask))				\
+-		for ((node) = 0; (node) < 1; (node)++)
++#define for_each_node_mask(node, mask)                                  \
++	for ((node) = 0; (node) < 1 && !nodes_empty(mask); (node)++)
+ #endif /* MAX_NUMNODES */
+ 
+ /*
 
 

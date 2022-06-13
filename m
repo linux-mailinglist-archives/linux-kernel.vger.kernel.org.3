@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9ED5491F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D8954908A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355809AbiFMLrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S1381384AbiFMOET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356107AbiFMLnq (ORCPT
+        with ESMTP id S1380294AbiFMNyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:43:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4E446171;
-        Mon, 13 Jun 2022 03:50:25 -0700 (PDT)
+        Mon, 13 Jun 2022 09:54:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590BB42EC4;
+        Mon, 13 Jun 2022 04:34:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A753261283;
-        Mon, 13 Jun 2022 10:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD2EC34114;
-        Mon, 13 Jun 2022 10:50:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBFB8B80EC9;
+        Mon, 13 Jun 2022 11:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B8CEC34114;
+        Mon, 13 Jun 2022 11:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117419;
-        bh=0ykvDx+6cw8djPmm3o7wHrIpWnx7jCjSgX+4ZLy89Rw=;
+        s=korg; t=1655120067;
+        bh=aT6YvPhoPElGUTTysLZKWXB1UMLXmkhkzGyEYMZj38o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cWy0dGg7aS25dhlxaAwIKyLPXmXly1gXg3SgJQNF+He+lf8VFoxM+RxIvbE5YisUS
-         sNgjGTkEChWY/I1e9YqwybhUHRfW8GxlRLa8Sm03FZk/62WxNzPmtPV39bd5UaYA9A
-         G+O1zgqzVz6mtc4YyCBz537T8zcS+tgedhzoYfLs=
+        b=a3koddpZDF5yUOxX6Oi+Oqe3aM4Nn+EjMa2DtW6yR+32cBQhr1p7QT3obRemw1tyw
+         PPclzX69Fyc8BlP/eVmg/kBiZQ7x2QfwfXws2p/ISmpkTHDqTHDq4fvWLAnuqU1RRx
+         L6uhdGD/33yh9eEapvzu+2Kg+JIPZdv9BteUnnko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 374/411] drivers: usb: host: Fix deadlock in oxu_bus_suspend()
-Date:   Mon, 13 Jun 2022 12:10:47 +0200
-Message-Id: <20220613094939.891794696@linuxfoundation.org>
+Subject: [PATCH 5.18 223/339] iio: dummy: iio_simple_dummy: check the return value of kstrdup()
+Date:   Mon, 13 Jun 2022 12:10:48 +0200
+Message-Id: <20220613094933.419702138@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-[ Upstream commit 4d378f2ae58138d4c55684e1d274e7dd94aa6524 ]
+[ Upstream commit ba93642188a6fed754bf7447f638bc410e05a929 ]
 
-There is a deadlock in oxu_bus_suspend(), which is shown below:
+kstrdup() is also a memory allocation-related function, it returns NULL
+when some memory errors happen. So it is better to check the return
+value of it so to catch the memory error in time. Besides, there should
+have a kfree() to clear up the allocation if we get a failure later in
+this function to prevent memory leak.
 
-   (Thread 1)              |      (Thread 2)
-                           | timer_action()
-oxu_bus_suspend()          |  mod_timer()
- spin_lock_irq() //(1)     |  (wait a time)
- ...                       | oxu_watchdog()
- del_timer_sync()          |  spin_lock_irq() //(2)
- (wait timer to stop)      |  ...
-
-We hold oxu->lock in position (1) of thread 1, and use
-del_timer_sync() to wait timer to stop, but timer handler
-also need oxu->lock in position (2) of thread 2. As a result,
-oxu_bus_suspend() will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irq(), which could let timer handler to obtain
-the needed lock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417120305.64577-1-duoming@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Link: https://lore.kernel.org/r/tencent_C920CFCC33B9CC1C63141FE1334A39FF8508@qq.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/oxu210hp-hcd.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iio/dummy/iio_simple_dummy.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
-index 65985247fc00..f05b6f2b0865 100644
---- a/drivers/usb/host/oxu210hp-hcd.c
-+++ b/drivers/usb/host/oxu210hp-hcd.c
-@@ -3906,8 +3906,10 @@ static int oxu_bus_suspend(struct usb_hcd *hcd)
- 		}
+diff --git a/drivers/iio/dummy/iio_simple_dummy.c b/drivers/iio/dummy/iio_simple_dummy.c
+index c0b7ef900735..c24f609c2ade 100644
+--- a/drivers/iio/dummy/iio_simple_dummy.c
++++ b/drivers/iio/dummy/iio_simple_dummy.c
+@@ -575,10 +575,9 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	 */
+ 
+ 	swd = kzalloc(sizeof(*swd), GFP_KERNEL);
+-	if (!swd) {
+-		ret = -ENOMEM;
+-		goto error_kzalloc;
+-	}
++	if (!swd)
++		return ERR_PTR(-ENOMEM);
++
+ 	/*
+ 	 * Allocate an IIO device.
+ 	 *
+@@ -590,7 +589,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	indio_dev = iio_device_alloc(parent, sizeof(*st));
+ 	if (!indio_dev) {
+ 		ret = -ENOMEM;
+-		goto error_ret;
++		goto error_free_swd;
  	}
  
-+	spin_unlock_irq(&oxu->lock);
- 	/* turn off now-idle HC */
- 	del_timer_sync(&oxu->watchdog);
-+	spin_lock_irq(&oxu->lock);
- 	ehci_halt(oxu);
- 	hcd->state = HC_STATE_SUSPENDED;
+ 	st = iio_priv(indio_dev);
+@@ -616,6 +615,10 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	 *    indio_dev->name = spi_get_device_id(spi)->name;
+ 	 */
+ 	indio_dev->name = kstrdup(name, GFP_KERNEL);
++	if (!indio_dev->name) {
++		ret = -ENOMEM;
++		goto error_free_device;
++	}
+ 
+ 	/* Provide description of available channels */
+ 	indio_dev->channels = iio_dummy_channels;
+@@ -632,7 +635,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 
+ 	ret = iio_simple_dummy_events_register(indio_dev);
+ 	if (ret < 0)
+-		goto error_free_device;
++		goto error_free_name;
+ 
+ 	ret = iio_simple_dummy_configure_buffer(indio_dev);
+ 	if (ret < 0)
+@@ -649,11 +652,12 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	iio_simple_dummy_unconfigure_buffer(indio_dev);
+ error_unregister_events:
+ 	iio_simple_dummy_events_unregister(indio_dev);
++error_free_name:
++	kfree(indio_dev->name);
+ error_free_device:
+ 	iio_device_free(indio_dev);
+-error_ret:
++error_free_swd:
+ 	kfree(swd);
+-error_kzalloc:
+ 	return ERR_PTR(ret);
+ }
  
 -- 
 2.35.1

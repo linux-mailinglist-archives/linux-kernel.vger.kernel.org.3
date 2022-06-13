@@ -2,53 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BCB5490AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCB15492B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379741AbiFMNpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S1349167AbiFMMK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379215AbiFMNkD (ORCPT
+        with ESMTP id S1358328AbiFMMCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3915CE03;
-        Mon, 13 Jun 2022 04:30:12 -0700 (PDT)
+        Mon, 13 Jun 2022 08:02:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48C1252A0;
+        Mon, 13 Jun 2022 03:57:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A233FB80EA7;
-        Mon, 13 Jun 2022 11:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE069C34114;
-        Mon, 13 Jun 2022 11:30:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA40461346;
+        Mon, 13 Jun 2022 10:57:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE29BC34114;
+        Mon, 13 Jun 2022 10:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119810;
-        bh=gJVcHejTKcyuP/psQJV5MtzjcY2RzC0c8YvPepU7RPE=;
+        s=korg; t=1655117835;
+        bh=NMJ0Q3mzGfxxTNw7cOKiHx7s6OMZBmRl14vQe8MNUQA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UUAlXZ6dRlwtnlzQVa+ExeLq5bQZ29PFHJ0v/J6KSzy4zLsU1/2gzuvUR3Ch+08W1
-         eK0hTu+Oz30BZMrhZISRDXmtgzAtsWMMR5UI5MMI2X/sTSeTqIBy05dqSX5y4Rrq12
-         GUP4V+uIWuXPlTm7IG7gfZhXLlq26O1cvUDCq6Hg=
+        b=b1+Ypgh4qcnFCugIaCK/1084D8f88LcBZgDZsdy7ZmVlUtP02ZLbJ88Nm/Grc9wiD
+         28B3O2JmjiIS71h5fVmu7CjXDnGv6thATgCZGhgSwzSlEc1m/ou0SogveIxtcLAyeO
+         APEC3y42iOymZYxda6rYy3w5lKNQfy3pxpemA3SQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 148/339] perf parse-events: Move slots event for the hybrid platform too
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 4.19 149/287] ext4: verify dir block before splitting it
 Date:   Mon, 13 Jun 2022 12:09:33 +0200
-Message-Id: <20220613094931.172977154@linuxfoundation.org>
+Message-Id: <20220613094928.394744339@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,143 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit e0e14cdff31d326f81e0edbd5140f788c870756c ]
+commit 46c116b920ebec58031f0a78c5ea9599b0d2a371 upstream.
 
-The commit 94dbfd6781a0e87b ("perf parse-events: Architecture specific
-leader override") introduced a feature to reorder the slots event to
-fulfill the restriction of the perf metrics topdown group. But the
-feature doesn't work on the hybrid machine.
+Before splitting a directory block verify its directory entries are sane
+so that the splitting code does not access memory it should not.
 
-  $ perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
-
-   Performance counter stats for 'system wide':
-
-       <not counted>      cpu_core/instructions/
-       <not counted>      cpu_core/slots/
-     <not supported>      cpu_core/topdown-retiring/
-
-         1.002871801 seconds time elapsed
-
-A hybrid platform has a different PMU name for the core PMUs, while
-current perf hard code the PMU name "cpu".
-
-Introduce a new function to check whether the system supports the perf
-metrics feature. The result is cached for the future usage.
-
-For X86, the core PMU name always has "cpu" prefix.
-
-With the patch:
-
-  $ perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
-
-   Performance counter stats for 'system wide':
-
-          76,337,010      cpu_core/slots/
-          10,416,809      cpu_core/instructions/
-          11,692,372      cpu_core/topdown-retiring/
-
-         1.002805453 seconds time elapsed
-
-Reviewed-by: Ian Rogers <irogers@google.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Link: https://lore.kernel.org/r/20220518143900.1493980-5-kan.liang@linux.intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220518093332.13986-1-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/arch/x86/util/evlist.c  |  5 +++--
- tools/perf/arch/x86/util/topdown.c | 25 +++++++++++++++++++++++++
- tools/perf/arch/x86/util/topdown.h |  7 +++++++
- 3 files changed, 35 insertions(+), 2 deletions(-)
- create mode 100644 tools/perf/arch/x86/util/topdown.h
+ fs/ext4/namei.c |   32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-index 75564a7df15b..68f681ad54c1 100644
---- a/tools/perf/arch/x86/util/evlist.c
-+++ b/tools/perf/arch/x86/util/evlist.c
-@@ -3,6 +3,7 @@
- #include "util/pmu.h"
- #include "util/evlist.h"
- #include "util/parse-events.h"
-+#include "topdown.h"
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -272,9 +272,9 @@ static struct dx_frame *dx_probe(struct
+ 				 struct dx_hash_info *hinfo,
+ 				 struct dx_frame *frame);
+ static void dx_release(struct dx_frame *frames);
+-static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
+-		       unsigned blocksize, struct dx_hash_info *hinfo,
+-		       struct dx_map_entry map[]);
++static int dx_make_map(struct inode *dir, struct buffer_head *bh,
++		       struct dx_hash_info *hinfo,
++		       struct dx_map_entry *map_tail);
+ static void dx_sort_map(struct dx_map_entry *map, unsigned count);
+ static struct ext4_dir_entry_2 *dx_move_dirents(char *from, char *to,
+ 		struct dx_map_entry *offsets, int count, unsigned blocksize);
+@@ -1203,15 +1203,23 @@ static inline int search_dirblock(struct
+  * Create map of hash values, offsets, and sizes, stored at end of block.
+  * Returns number of entries mapped.
+  */
+-static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
+-		       unsigned blocksize, struct dx_hash_info *hinfo,
++static int dx_make_map(struct inode *dir, struct buffer_head *bh,
++		       struct dx_hash_info *hinfo,
+ 		       struct dx_map_entry *map_tail)
+ {
+ 	int count = 0;
+-	char *base = (char *) de;
++	struct ext4_dir_entry_2 *de = (struct ext4_dir_entry_2 *)bh->b_data;
++	unsigned int buflen = bh->b_size;
++	char *base = bh->b_data;
+ 	struct dx_hash_info h = *hinfo;
  
- #define TOPDOWN_L1_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
- #define TOPDOWN_L2_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
-@@ -25,12 +26,12 @@ struct evsel *arch_evlist__leader(struct list_head *list)
+-	while ((char *) de < base + blocksize) {
++	if (ext4_has_metadata_csum(dir->i_sb))
++		buflen -= sizeof(struct ext4_dir_entry_tail);
++
++	while ((char *) de < base + buflen) {
++		if (ext4_check_dir_entry(dir, NULL, de, bh, base, buflen,
++					 ((char *)de) - base))
++			return -EFSCORRUPTED;
+ 		if (de->name_len && de->inode) {
+ 			ext4fs_dirhash(de->name, de->name_len, &h);
+ 			map_tail--;
+@@ -1221,8 +1229,7 @@ static int dx_make_map(struct inode *dir
+ 			count++;
+ 			cond_resched();
+ 		}
+-		/* XXX: do we need to check rec_len == 0 case? -Chris */
+-		de = ext4_next_entry(de, blocksize);
++		de = ext4_next_entry(de, dir->i_sb->s_blocksize);
+ 	}
+ 	return count;
+ }
+@@ -1756,8 +1763,11 @@ static struct ext4_dir_entry_2 *do_split
  
- 	first = list_first_entry(list, struct evsel, core.node);
- 
--	if (!pmu_have_event("cpu", "slots"))
-+	if (!topdown_sys_has_perf_metrics())
- 		return first;
- 
- 	/* If there is a slots event and a topdown event then the slots event comes first. */
- 	__evlist__for_each_entry(list, evsel) {
--		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
-+		if (evsel->pmu_name && !strncmp(evsel->pmu_name, "cpu", 3) && evsel->name) {
- 			if (strcasestr(evsel->name, "slots")) {
- 				slots = evsel;
- 				if (slots == first)
-diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
-index 2f3d96aa92a5..f4d5422e9960 100644
---- a/tools/perf/arch/x86/util/topdown.c
-+++ b/tools/perf/arch/x86/util/topdown.c
-@@ -3,6 +3,31 @@
- #include "api/fs/fs.h"
- #include "util/pmu.h"
- #include "util/topdown.h"
-+#include "topdown.h"
-+
-+/* Check whether there is a PMU which supports the perf metrics. */
-+bool topdown_sys_has_perf_metrics(void)
-+{
-+	static bool has_perf_metrics;
-+	static bool cached;
-+	struct perf_pmu *pmu;
-+
-+	if (cached)
-+		return has_perf_metrics;
-+
-+	/*
-+	 * The perf metrics feature is a core PMU feature.
-+	 * The PERF_TYPE_RAW type is the type of a core PMU.
-+	 * The slots event is only available when the core PMU
-+	 * supports the perf metrics feature.
-+	 */
-+	pmu = perf_pmu__find_by_type(PERF_TYPE_RAW);
-+	if (pmu && pmu_have_event(pmu->name, "slots"))
-+		has_perf_metrics = true;
-+
-+	cached = true;
-+	return has_perf_metrics;
-+}
- 
- /*
-  * Check whether we can use a group for top down.
-diff --git a/tools/perf/arch/x86/util/topdown.h b/tools/perf/arch/x86/util/topdown.h
-new file mode 100644
-index 000000000000..46bf9273e572
---- /dev/null
-+++ b/tools/perf/arch/x86/util/topdown.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _TOPDOWN_H
-+#define _TOPDOWN_H 1
-+
-+bool topdown_sys_has_perf_metrics(void);
-+
-+#endif
--- 
-2.35.1
-
+ 	/* create map in the end of data2 block */
+ 	map = (struct dx_map_entry *) (data2 + blocksize);
+-	count = dx_make_map(dir, (struct ext4_dir_entry_2 *) data1,
+-			     blocksize, hinfo, map);
++	count = dx_make_map(dir, *bh, hinfo, map);
++	if (count < 0) {
++		err = count;
++		goto journal_error;
++	}
+ 	map -= count;
+ 	dx_sort_map(map, count);
+ 	/* Ensure that neither split block is over half full */
 
 

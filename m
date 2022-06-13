@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECFB54A0EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBD954A0EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351143AbiFMVKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S1352033AbiFMVLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbiFMVKR (ORCPT
+        with ESMTP id S1351783AbiFMVKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:10:17 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7BC2F3A4;
-        Mon, 13 Jun 2022 13:48:09 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id y16so5137583ili.13;
-        Mon, 13 Jun 2022 13:48:09 -0700 (PDT)
+        Mon, 13 Jun 2022 17:10:42 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B73536E19
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:48:25 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-30ce6492a60so10347837b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3mzLXc3omMOdnceGi72bYvaWi09FowsdxsPXVOOLWCo=;
+        b=UkGQCIGmy2VA2qNV54XgHFut1lruS44Ok6ioCXsNzw6LyRpNqBzZClI6cA1S7OvMcY
+         Kp8PTojzzJD65eMqBbZ/0ziJq0NYOS6jETD9dqdsU4UjPK+Z84UhGwH6M7KldwNl2q3N
+         5tACt6+cbeMJpcLCaQEI4AOkuRxogFnBtnqG8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/dzRBMIn98y05EN99Sgq5WDsEwo7wpH66xTE6XCo/M4=;
-        b=DK0uhSJYtjiyjLQvTvTq2iUHAujLGBGBiyoTPN+vCrum3bibAC+WLkJ9pTP1QCph3N
-         0MbMWb3j0SpOpgQKxnMDEs/p9N4WJ7tH4moYqsCTez94Qk67ATaGGLekMJnzDBgYVWsE
-         q9i4sJtScHtQJc6fsEP8fzedyvntjY/xTCMYm9Os8uE/1lGfJDAHoC2GkMHt2UPmf1GL
-         Px4osl3EhxDeLmoY+qTnRtrSD/6zLqH8OoVDAaLfJ8zoYSR5kIwV/hwFrwv7LpNqMTkq
-         3a0B6WnFYkP2TXGiU3lijF3kogM8nabC/En/c6MqfDLHQTEH64SwE0qMFMG39OIBuS/D
-         AkpA==
-X-Gm-Message-State: AJIora+1KepHiNcoL+CpPjUXWWIPuT+VEg/BCqu+zMT+QjxiDzXctdpq
-        6IU1aFCUuWzbfUbZMF6DIA==
-X-Google-Smtp-Source: AGRyM1uVO/KYjaDwGOXreGf4KGdEqy/t353ouqbFZgp5s/y6kuWD2fxXl3ut4zPLn500QHJwX/rd6w==
-X-Received: by 2002:a92:ca45:0:b0:2d1:b7cf:26a9 with SMTP id q5-20020a92ca45000000b002d1b7cf26a9mr962751ilo.52.1655153288816;
-        Mon, 13 Jun 2022 13:48:08 -0700 (PDT)
-Received: from robh.at.kernel.org ([69.39.28.171])
-        by smtp.gmail.com with ESMTPSA id c2-20020a92c8c2000000b002d11397f4f9sm4380280ilq.74.2022.06.13.13.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 13:48:08 -0700 (PDT)
-Received: (nullmailer pid 56167 invoked by uid 1000);
-        Mon, 13 Jun 2022 20:48:06 -0000
-Date:   Mon, 13 Jun 2022 14:48:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Minghuan Lian <minghuan.Lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jonathan Chocron <jonnyc@amazon.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Jesper Nilsson <jesper.nilsson@axis.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Srikanth Thokala <srikanth.thokala@intel.com>,
-        Xiaowei Song <songxiaowei@hisilicon.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pratyush Anand <pratyush.anand@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 15/18] PCI: dwc: Add dw_ prefix to the pcie_port
- structure name
-Message-ID: <20220613204806.GA55629-robh@kernel.org>
-References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
- <20220610082535.12802-16-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3mzLXc3omMOdnceGi72bYvaWi09FowsdxsPXVOOLWCo=;
+        b=Fuzq/jmBQHVJ48g2mNMhJACdl9KOVhnaIunUJptnk72mELyu4dKgJL5MVgpvI0zKu/
+         siCgThpsS+qqbENMj5Rm8NdpklhV3SPiRZ51YbDkQ7GYyux98x9MFC7CizSNH75L8l3C
+         h458mgR+PyrlxFOCC8yOZ/lCfVq5EkpezimnzYiylLBEiGUeTxdJa8dSQdJU+Xcx3ke7
+         EtMw7gcdK13Zjq0uESxpgbZnNEODWoeW0jHSy/nlpa0PhrWKXJLOxJMo87ZDZBap36Cb
+         F6dFAygj2pVrMGkTo/ZRJHr329RCZEjz7gLeF4lqTgT/MmyNGGO6witgcsJmSbhyyroT
+         98wg==
+X-Gm-Message-State: AJIora8BCGvJYBjLTDYbaQDI3gSuxAknRYCfE9kugaEho5yPomFaCtbd
+        jsvNnhF9sU8jz7sAJVb5JUvW16aZs96wcLBPI0sBfg==
+X-Google-Smtp-Source: AGRyM1v0IBXwwJvQ6ThVo9NueSieU7nIxKk5N1jB0CBM2omKJsAvjrCZ6AcsceMJ9k7lsbfvB7coyKa/u+Rb5K9KkgU=
+X-Received: by 2002:a0d:f882:0:b0:2f4:d830:6fd with SMTP id
+ i124-20020a0df882000000b002f4d83006fdmr1775978ywf.387.1655153304756; Mon, 13
+ Jun 2022 13:48:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610082535.12802-16-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-6-pmalani@chromium.org> <20220613204544.onfazkv4ciphddm3@notapiano>
+In-Reply-To: <20220613204544.onfazkv4ciphddm3@notapiano>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Mon, 13 Jun 2022 13:48:13 -0700
+Message-ID: <CACeCKacaq_6zc9daL38VycCxWaNvVHFETBfytrDXTBCa3Y3jRw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] drm/bridge: anx7625: Register number of Type C switches
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,49 +91,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:25:31AM +0300, Serge Semin wrote:
-> All of the DW PCIe core driver entities have names with the dw_ prefix in
-> order to easily distinguish local and common PCIe name spaces. All except
-> the pcie_port structure which contains the DW PCIe Root Port descriptor.
-> For historical reason the structure has retained the original name since
-> commit 340cba6092c2 ("pci: Add PCIe driver for Samsung Exynos") when
-> the DW PCIe IP-core support was added to the kernel. Let's finally fix
-> that by adding the dw_ prefix to the structure name and by adding the _rp
-> suffix to be similar to the EP counterpart. Thus the name will be coherent
-> with the common driver naming policy. It shall make the driver code more
-> readable eliminating visual confusion between the local and generic PCI
-> name spaces.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v4:
-> - This is a new patch created on the v4 lap of the series.
-> ---
->  drivers/pci/controller/dwc/pci-dra7xx.c       | 12 +++----
->  drivers/pci/controller/dwc/pci-exynos.c       |  6 ++--
->  drivers/pci/controller/dwc/pci-imx6.c         |  6 ++--
->  drivers/pci/controller/dwc/pci-keystone.c     | 20 +++++------
->  drivers/pci/controller/dwc/pci-layerscape.c   |  2 +-
->  drivers/pci/controller/dwc/pci-meson.c        |  2 +-
->  drivers/pci/controller/dwc/pcie-al.c          |  6 ++--
->  drivers/pci/controller/dwc/pcie-armada8k.c    |  4 +--
->  drivers/pci/controller/dwc/pcie-artpec6.c     |  4 +--
->  .../pci/controller/dwc/pcie-designware-host.c | 36 +++++++++----------
->  .../pci/controller/dwc/pcie-designware-plat.c |  2 +-
->  drivers/pci/controller/dwc/pcie-designware.h  | 30 ++++++++--------
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c |  4 +--
->  drivers/pci/controller/dwc/pcie-fu740.c       |  2 +-
->  drivers/pci/controller/dwc/pcie-histb.c       | 10 +++---
->  drivers/pci/controller/dwc/pcie-intel-gw.c    |  6 ++--
->  drivers/pci/controller/dwc/pcie-keembay.c     |  4 +--
->  drivers/pci/controller/dwc/pcie-kirin.c       |  2 +-
->  drivers/pci/controller/dwc/pcie-qcom.c        |  4 +--
->  drivers/pci/controller/dwc/pcie-spear13xx.c   |  6 ++--
->  drivers/pci/controller/dwc/pcie-tegra194.c    | 22 ++++++------
->  drivers/pci/controller/dwc/pcie-uniphier.c    | 10 +++---
->  drivers/pci/controller/dwc/pcie-visconti.c    |  6 ++--
->  23 files changed, 103 insertions(+), 103 deletions(-)
+Hi N=C3=ADcolas,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Mon, Jun 13, 2022 at 1:45 PM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> Hi Prashant,
+>
+> On Thu, Jun 09, 2022 at 06:09:44PM +0000, Prashant Malani wrote:
+> > Parse the "switches" node, if available, and count and store the number
+> > of Type-C switches within it. Since we currently don't do anything with
+> > this info, no functional changes are expected from this change.
+> >
+> > This patch sets a foundation for the actual registering of Type-C
+> > switches with the Type-C connector class framework.
+> >
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
+> >
+> > Changes since v1:
+> > - No changes.
+> >
+> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 20 ++++++++++++++++++++
+> >  drivers/gpu/drm/bridge/analogix/anx7625.h |  1 +
+> >  2 files changed, 21 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/dr=
+m/bridge/analogix/anx7625.c
+> > index 53a5da6c49dd..07ed44c6b839 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -2581,6 +2581,22 @@ static void anx7625_runtime_disable(void *data)
+> >       pm_runtime_disable(data);
+> >  }
+> >
+> > +static int anx7625_register_typec_switches(struct device *device, stru=
+ct anx7625_data *ctx)
+> > +{
+> > +     struct device_node *of =3D NULL;
+> > +     int ret =3D 0;
+> > +
+> > +     of =3D of_get_child_by_name(device->of_node, "switches");
+> > +     if (!of)
+> > +             return -ENODEV;
+> > +
+> > +     ctx->num_typec_switches =3D of_get_child_count(of);
+> > +     if (ctx->num_typec_switches <=3D 0)
+> > +             return -ENODEV;
+>
+> Since the hardware only allows at most 2 switches (based on the dt-bindin=
+gs),
+> you should have a define for that limit and check that it isn't exceeded =
+here.
+
+This is already enforced by the DT binding (see the
+"patternProperties" in patch 4/7, suggested by Krzysztof in the
+previous version)
+
+>
+> Thanks,
+> N=C3=ADcolas
+>
+> > +
+> > +     return ret;
+> > +}
+> > +
+> >  static int anx7625_i2c_probe(struct i2c_client *client,
+> >                            const struct i2c_device_id *id)
+> >  {
+> > @@ -2686,6 +2702,10 @@ static int anx7625_i2c_probe(struct i2c_client *=
+client,
+> >       if (platform->pdata.intp_irq)
+> >               queue_work(platform->workqueue, &platform->work);
+> >
+> > +     ret =3D anx7625_register_typec_switches(dev, platform);
+> > +     if (ret)
+> > +             dev_info(dev, "Didn't register Type C switches, err: %d\n=
+", ret);
+> > +
+> >       platform->bridge.funcs =3D &anx7625_bridge_funcs;
+> >       platform->bridge.of_node =3D client->dev.of_node;
+> >       if (!anx7625_of_panel_on_aux_bus(&client->dev))
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/dr=
+m/bridge/analogix/anx7625.h
+> > index e257a84db962..d5cbca708842 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > @@ -473,6 +473,7 @@ struct anx7625_data {
+> >       struct drm_connector *connector;
+> >       struct mipi_dsi_device *dsi;
+> >       struct drm_dp_aux aux;
+> > +     int num_typec_switches;
+> >  };
+> >
+> >  #endif  /* __ANX7625_H__ */
+> > --
+> > 2.36.1.476.g0c4daa206d-goog
+> >

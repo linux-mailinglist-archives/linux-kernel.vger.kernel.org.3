@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CD5549325
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C90C5493DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350094AbiFMMhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S245499AbiFMKdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347854AbiFMMgP (ORCPT
+        with ESMTP id S1346339AbiFMKa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:36:15 -0400
+        Mon, 13 Jun 2022 06:30:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDF81CB38;
-        Mon, 13 Jun 2022 04:07:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245591FA51;
+        Mon, 13 Jun 2022 03:21:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D483608C3;
-        Mon, 13 Jun 2022 11:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4050DC34114;
-        Mon, 13 Jun 2022 11:07:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DCEE60AE8;
+        Mon, 13 Jun 2022 10:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D628C34114;
+        Mon, 13 Jun 2022 10:21:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118474;
-        bh=M+nrL1voRykk1xNL3fDXNbK7OXaK2QeZLJddAItmT9s=;
+        s=korg; t=1655115673;
+        bh=l3M5qn6Xz2e9y3Wi8sYO0gsFwQC5uBAZ1xUE9h4tvp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=daOUsIPkmkZ2XPiMNDdXDygEvseqvt2H3dohdJxsPlWrF3HTxrp3d9y6f1YUH9x7X
-         4+jhrXpxn6sJiCOFgEqTFWJeD1L4Q28hiX4WP9Wn8yIqnfWE0T4fB0KJ5vC56grWVJ
-         RPTgZR3+oe6KYu2oM6QRwQsse6zeTNztFLsQamiM=
+        b=mOCmNAzn9/0jKl2Lh39GElGKYdNVFM1owI+mMSAReP+FplQnPYCBXmah7NtfizMiI
+         2AUcUaCQflBjfe6Smoi92xoWgzNJDqNTfcWwg26xl0Pnq/tnJ0bmAm+26FjETIltXq
+         PDMCTTSIJ0ose61prdwVULNSBBTeKr+lCliSabIg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 071/172] scsi: sd: Fix potential NULL pointer dereference
+Subject: [PATCH 4.9 157/167] vringh: Fix loop descriptors check in the indirect cases
 Date:   Mon, 13 Jun 2022 12:10:31 +0200
-Message-Id: <20220613094907.496963526@linuxfoundation.org>
+Message-Id: <20220613094917.736801133@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit 05fbde3a77a4f1d62e4c4428f384288c1f1a0be5 ]
+[ Upstream commit dbd29e0752286af74243cf891accf472b2f3edd8 ]
 
-If sd_probe() sees an early error before sdkp->device is initialized,
-sd_zbc_release_disk() is called. This causes a NULL pointer dereference
-when sd_is_zoned() is called inside that function. Avoid this by removing
-the call to sd_zbc_release_disk() in sd_probe() error path.
+We should use size of descriptor chain to test loop condition
+in the indirect case. And another statistical count is also introduced
+for indirect descriptors to avoid conflict with the statistical count
+of direct descriptors.
 
-This change is safe and does not result in zone information memory leakage
-because the zone information for a zoned disk is allocated only when
-sd_revalidate_disk() is called, at which point sdkp->disk_dev is fully set,
-resulting in sd_disk_release() being called when needed to cleanup a disk
-zone information using sd_zbc_release_disk().
-
-Link: https://lore.kernel.org/r/20220601062544.905141-2-damien.lemoal@opensource.wdc.com
-Fixes: 89d947561077 ("sd: Implement support for ZBC devices")
-Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: f87d0fbb5798 ("vringh: host-side implementation of virtio rings.")
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Signed-off-by: Fam Zheng <fam.zheng@bytedance.com>
+Message-Id: <20220505100910.137-1-xieyongji@bytedance.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/sd.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/vhost/vringh.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 56e291708587..bd068d3bb455 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3511,7 +3511,6 @@ static int sd_probe(struct device *dev)
-  out_put:
- 	put_disk(gd);
-  out_free:
--	sd_zbc_release_disk(sdkp);
- 	kfree(sdkp);
-  out:
- 	scsi_autopm_put_device(sdp);
+diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+index da47542496cc..63f0ab3e6f63 100644
+--- a/drivers/vhost/vringh.c
++++ b/drivers/vhost/vringh.c
+@@ -262,7 +262,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 	     gfp_t gfp,
+ 	     int (*copy)(void *dst, const void *src, size_t len))
+ {
+-	int err, count = 0, up_next, desc_max;
++	int err, count = 0, indirect_count = 0, up_next, desc_max;
+ 	struct vring_desc desc, *descs;
+ 	struct vringh_range range = { -1ULL, 0 }, slowrange;
+ 	bool slow = false;
+@@ -319,7 +319,12 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 			continue;
+ 		}
+ 
+-		if (count++ == vrh->vring.num) {
++		if (up_next == -1)
++			count++;
++		else
++			indirect_count++;
++
++		if (count > vrh->vring.num || indirect_count > desc_max) {
+ 			vringh_bad("Descriptor loop in %p", descs);
+ 			err = -ELOOP;
+ 			goto fail;
+@@ -381,6 +386,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 				i = return_from_indirect(vrh, &up_next,
+ 							 &descs, &desc_max);
+ 				slow = false;
++				indirect_count = 0;
+ 			} else
+ 				break;
+ 		}
 -- 
 2.35.1
 

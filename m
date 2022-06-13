@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DDB548E98
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C55F548A14
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380936AbiFMOHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S1376822AbiFMNXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380388AbiFMOAI (ORCPT
+        with ESMTP id S1377118AbiFMNUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:00:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F678DDC5;
-        Mon, 13 Jun 2022 04:38:02 -0700 (PDT)
+        Mon, 13 Jun 2022 09:20:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74A46A01F;
+        Mon, 13 Jun 2022 04:23:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CD06612A8;
-        Mon, 13 Jun 2022 11:38:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2D8C34114;
-        Mon, 13 Jun 2022 11:38:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE51EB80EA8;
+        Mon, 13 Jun 2022 11:22:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31CA3C34114;
+        Mon, 13 Jun 2022 11:22:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120281;
-        bh=YLhttcZMZGaOIF9jhTmY3/sTXVBFMSJCqpPCbEzUyKY=;
+        s=korg; t=1655119371;
+        bh=Dj/kSjaqhkxhxJKbMWzx5gYqGhBbJl2vIhWkkBUPOC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZFWws8Sk4JtYr6poOnB6poq04MMDVLikGkdMjDSjbsZhhTIvNVOtZJCCtrS/mH5nB
-         rth6QSgaFesRi/ltjht6yx5CiZEw/IdxafwHo/zZ/YvoFajgdpeObaeRv/rm7LaAc/
-         wa5U7Qx6Aj2yyyJ2bBfYshMmO4bkaHMK4qyOJSNg=
+        b=ZbIE/DJ4U7k+MDpTn3hLFDZpmRU8yZj5SG6tA15BGwznEHksIoPsgP0llkfaL5FRq
+         Gt4IuG2n0uLZig/LK5u4hhrUn5lKwBhnHUBqR55coNlSQEapt9MHd6X0y6hXUp13Xg
+         CnAAWAGjkrdoQBlY/wLr8M/uL9A5xnY/fVCwedL8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jchao Sun <sunjunchao2870@gmail.com>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH 5.18 316/339] writeback: Fix inode->i_io_list not be protected by inode->i_lock error
+        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.15 239/247] powerpc/mm: Switch obsolete dssall to .long
 Date:   Mon, 13 Jun 2022 12:12:21 +0200
-Message-Id: <20220613094936.332889957@linuxfoundation.org>
+Message-Id: <20220613094930.195445063@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,161 +54,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jchao Sun <sunjunchao2870@gmail.com>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
 
-commit 10e14073107dd0b6d97d9516a02845a8e501c2c9 upstream.
+commit d51f86cfd8e378d4907958db77da3074f6dce3ba upstream.
 
-Commit b35250c0816c ("writeback: Protect inode->i_io_list with
-inode->i_lock") made inode->i_io_list not only protected by
-wb->list_lock but also inode->i_lock, but inode_io_list_move_locked()
-was missed. Add lock there and also update comment describing
-things protected by inode->i_lock. This also fixes a race where
-__mark_inode_dirty() could move inode under flush worker's hands
-and thus sync(2) could miss writing some inodes.
+The dssall ("Data Stream Stop All") instruction is obsolete altogether
+with other Data Cache Instructions since ISA 2.03 (year 2006).
 
-Fixes: b35250c0816c ("writeback: Protect inode->i_io_list with inode->i_lock")
-Link: https://lore.kernel.org/r/20220524150540.12552-1-sunjunchao2870@gmail.com
-CC: stable@vger.kernel.org
-Signed-off-by: Jchao Sun <sunjunchao2870@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+LLVM IAS does not support it but PPC970 seems to be using it.
+This switches dssall to .long as there is no much point in fixing LLVM.
+
+Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211221055904.555763-6-aik@ozlabs.ru
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fs-writeback.c |   37 ++++++++++++++++++++++++++++---------
- fs/inode.c        |    2 +-
- 2 files changed, 29 insertions(+), 10 deletions(-)
+ arch/powerpc/include/asm/ppc-opcode.h   |    2 ++
+ arch/powerpc/kernel/idle.c              |    2 +-
+ arch/powerpc/kernel/idle_6xx.S          |    2 +-
+ arch/powerpc/kernel/l2cr_6xx.S          |    6 +++---
+ arch/powerpc/kernel/swsusp_32.S         |    2 +-
+ arch/powerpc/kernel/swsusp_asm64.S      |    2 +-
+ arch/powerpc/mm/mmu_context.c           |    2 +-
+ arch/powerpc/platforms/powermac/cache.S |    4 ++--
+ 8 files changed, 12 insertions(+), 10 deletions(-)
 
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -120,6 +120,7 @@ static bool inode_io_list_move_locked(st
- 				      struct list_head *head)
- {
- 	assert_spin_locked(&wb->list_lock);
-+	assert_spin_locked(&inode->i_lock);
+--- a/arch/powerpc/include/asm/ppc-opcode.h
++++ b/arch/powerpc/include/asm/ppc-opcode.h
+@@ -249,6 +249,7 @@
+ #define PPC_INST_COPY			0x7c20060c
+ #define PPC_INST_DCBA			0x7c0005ec
+ #define PPC_INST_DCBA_MASK		0xfc0007fe
++#define PPC_INST_DSSALL			0x7e00066c
+ #define PPC_INST_ISEL			0x7c00001e
+ #define PPC_INST_ISEL_MASK		0xfc00003e
+ #define PPC_INST_LSWI			0x7c0004aa
+@@ -576,6 +577,7 @@
+ #define	PPC_DCBZL(a, b)		stringify_in_c(.long PPC_RAW_DCBZL(a, b))
+ #define	PPC_DIVDE(t, a, b)	stringify_in_c(.long PPC_RAW_DIVDE(t, a, b))
+ #define	PPC_DIVDEU(t, a, b)	stringify_in_c(.long PPC_RAW_DIVDEU(t, a, b))
++#define PPC_DSSALL		stringify_in_c(.long PPC_INST_DSSALL)
+ #define PPC_LQARX(t, a, b, eh)	stringify_in_c(.long PPC_RAW_LQARX(t, a, b, eh))
+ #define PPC_STQCX(t, a, b)	stringify_in_c(.long PPC_RAW_STQCX(t, a, b))
+ #define PPC_MADDHD(t, a, b, c)	stringify_in_c(.long PPC_RAW_MADDHD(t, a, b, c))
+--- a/arch/powerpc/kernel/idle.c
++++ b/arch/powerpc/kernel/idle.c
+@@ -82,7 +82,7 @@ void power4_idle(void)
+ 		return;
  
- 	list_move(&inode->i_io_list, head);
+ 	if (cpu_has_feature(CPU_FTR_ALTIVEC))
+-		asm volatile("DSSALL ; sync" ::: "memory");
++		asm volatile(PPC_DSSALL " ; sync" ::: "memory");
  
-@@ -1365,9 +1366,9 @@ static int move_expired_inodes(struct li
- 		inode = wb_inode(delaying_queue->prev);
- 		if (inode_dirtied_after(inode, dirtied_before))
- 			break;
-+		spin_lock(&inode->i_lock);
- 		list_move(&inode->i_io_list, &tmp);
- 		moved++;
--		spin_lock(&inode->i_lock);
- 		inode->i_state |= I_SYNC_QUEUED;
- 		spin_unlock(&inode->i_lock);
- 		if (sb_is_blkdev_sb(inode->i_sb))
-@@ -1383,7 +1384,12 @@ static int move_expired_inodes(struct li
- 		goto out;
- 	}
+ 	power4_idle_nap();
  
--	/* Move inodes from one superblock together */
-+	/*
-+	 * Although inode's i_io_list is moved from 'tmp' to 'dispatch_queue',
-+	 * we don't take inode->i_lock here because it is just a pointless overhead.
-+	 * Inode is already marked as I_SYNC_QUEUED so writeback list handling is
-+	 * fully under our control.
-+	 */
- 	while (!list_empty(&tmp)) {
- 		sb = wb_inode(tmp.prev)->i_sb;
- 		list_for_each_prev_safe(pos, node, &tmp) {
-@@ -1826,8 +1832,8 @@ static long writeback_sb_inodes(struct s
- 			 * We'll have another go at writing back this inode
- 			 * when we completed a full scan of b_io.
- 			 */
--			spin_unlock(&inode->i_lock);
- 			requeue_io(inode, wb);
-+			spin_unlock(&inode->i_lock);
- 			trace_writeback_sb_inodes_requeue(inode);
- 			continue;
- 		}
-@@ -2358,6 +2364,7 @@ void __mark_inode_dirty(struct inode *in
- {
- 	struct super_block *sb = inode->i_sb;
- 	int dirtytime = 0;
-+	struct bdi_writeback *wb = NULL;
+--- a/arch/powerpc/kernel/idle_6xx.S
++++ b/arch/powerpc/kernel/idle_6xx.S
+@@ -129,7 +129,7 @@ BEGIN_FTR_SECTION
+ END_FTR_SECTION_IFCLR(CPU_FTR_NO_DPM)
+ 	mtspr	SPRN_HID0,r4
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ 	lwz	r8,TI_LOCAL_FLAGS(r2)	/* set napping bit */
+--- a/arch/powerpc/kernel/l2cr_6xx.S
++++ b/arch/powerpc/kernel/l2cr_6xx.S
+@@ -96,7 +96,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_L2CR)
  
- 	trace_writeback_mark_inode_dirty(inode, flags);
+ 	/* Stop DST streams */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
  
-@@ -2410,13 +2417,24 @@ void __mark_inode_dirty(struct inode *in
- 		inode->i_state |= flags;
+@@ -292,7 +292,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_L3CR)
+ 	isync
  
- 		/*
-+		 * Grab inode's wb early because it requires dropping i_lock and we
-+		 * need to make sure following checks happen atomically with dirty
-+		 * list handling so that we don't move inodes under flush worker's
-+		 * hands.
-+		 */
-+		if (!was_dirty) {
-+			wb = locked_inode_to_wb_and_lock_list(inode);
-+			spin_lock(&inode->i_lock);
-+		}
-+
-+		/*
- 		 * If the inode is queued for writeback by flush worker, just
- 		 * update its dirty state. Once the flush worker is done with
- 		 * the inode it will place it on the appropriate superblock
- 		 * list, based upon its state.
- 		 */
- 		if (inode->i_state & I_SYNC_QUEUED)
--			goto out_unlock_inode;
-+			goto out_unlock;
+ 	/* Stop DST streams */
+-	DSSALL
++	PPC_DSSALL
+ 	sync
  
- 		/*
- 		 * Only add valid (hashed) inodes to the superblock's
-@@ -2424,22 +2442,19 @@ void __mark_inode_dirty(struct inode *in
- 		 */
- 		if (!S_ISBLK(inode->i_mode)) {
- 			if (inode_unhashed(inode))
--				goto out_unlock_inode;
-+				goto out_unlock;
- 		}
- 		if (inode->i_state & I_FREEING)
--			goto out_unlock_inode;
-+			goto out_unlock;
+ 	/* Get the current enable bit of the L3CR into r4 */
+@@ -401,7 +401,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_L3CR)
+ _GLOBAL(__flush_disable_L1)
+ 	/* Stop pending alitvec streams and memory accesses */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+  	sync
  
- 		/*
- 		 * If the inode was already on b_dirty/b_io/b_more_io, don't
- 		 * reposition it (that would break b_dirty time-ordering).
- 		 */
- 		if (!was_dirty) {
--			struct bdi_writeback *wb;
- 			struct list_head *dirty_list;
- 			bool wakeup_bdi = false;
+--- a/arch/powerpc/kernel/swsusp_32.S
++++ b/arch/powerpc/kernel/swsusp_32.S
+@@ -181,7 +181,7 @@ _GLOBAL(swsusp_arch_resume)
+ #ifdef CONFIG_ALTIVEC
+ 	/* Stop pending alitvec streams and memory accesses */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ #endif
+  	sync
+--- a/arch/powerpc/kernel/swsusp_asm64.S
++++ b/arch/powerpc/kernel/swsusp_asm64.S
+@@ -142,7 +142,7 @@ END_FW_FTR_SECTION_IFCLR(FW_FEATURE_LPAR
+ _GLOBAL(swsusp_arch_resume)
+ 	/* Stop pending alitvec streams and memory accesses */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ 	sync
  
--			wb = locked_inode_to_wb_and_lock_list(inode);
--
- 			inode->dirtied_when = jiffies;
- 			if (dirtytime)
- 				inode->dirtied_time_when = jiffies;
-@@ -2453,6 +2468,7 @@ void __mark_inode_dirty(struct inode *in
- 							       dirty_list);
+--- a/arch/powerpc/mm/mmu_context.c
++++ b/arch/powerpc/mm/mmu_context.c
+@@ -81,7 +81,7 @@ void switch_mm_irqs_off(struct mm_struct
+ 	 * context
+ 	 */
+ 	if (cpu_has_feature(CPU_FTR_ALTIVEC))
+-		asm volatile ("dssall");
++		asm volatile (PPC_DSSALL);
  
- 			spin_unlock(&wb->list_lock);
-+			spin_unlock(&inode->i_lock);
- 			trace_writeback_dirty_inode_enqueue(inode);
+ 	if (!new_on_cpu)
+ 		membarrier_arch_switch_mm(prev, next, tsk);
+--- a/arch/powerpc/platforms/powermac/cache.S
++++ b/arch/powerpc/platforms/powermac/cache.S
+@@ -48,7 +48,7 @@ flush_disable_75x:
  
- 			/*
-@@ -2467,6 +2483,9 @@ void __mark_inode_dirty(struct inode *in
- 			return;
- 		}
- 	}
-+out_unlock:
-+	if (wb)
-+		spin_unlock(&wb->list_lock);
- out_unlock_inode:
- 	spin_unlock(&inode->i_lock);
- }
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -27,7 +27,7 @@
-  * Inode locking rules:
-  *
-  * inode->i_lock protects:
-- *   inode->i_state, inode->i_hash, __iget()
-+ *   inode->i_state, inode->i_hash, __iget(), inode->i_io_list
-  * Inode LRU list locks protect:
-  *   inode->i_sb->s_inode_lru, inode->i_lru
-  * inode->i_sb->s_inode_list_lock protects:
+ 	/* Stop DST streams */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ 
+@@ -197,7 +197,7 @@ flush_disable_745x:
+ 	isync
+ 
+ 	/* Stop prefetch streams */
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ 
+ 	/* Disable L2 prefetching */
 
 

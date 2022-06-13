@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8815D548E5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BE654913A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350727AbiFMMiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S1351985AbiFMLJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345759AbiFMMh5 (ORCPT
+        with ESMTP id S1351656AbiFMLEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:37:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE5D5C653;
-        Mon, 13 Jun 2022 04:08:10 -0700 (PDT)
+        Mon, 13 Jun 2022 07:04:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772D427B29;
+        Mon, 13 Jun 2022 03:33:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 48176CE118D;
-        Mon, 13 Jun 2022 11:08:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50833C34114;
-        Mon, 13 Jun 2022 11:08:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC01260AE6;
+        Mon, 13 Jun 2022 10:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9EFC34114;
+        Mon, 13 Jun 2022 10:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118485;
-        bh=V4bABrb+ZtJl1IDsg1Yfzab/S1dFMaKP+IxS4m5bOiE=;
+        s=korg; t=1655116423;
+        bh=UjN40bD9Kovb1IG9JeutwK3mTWfJKUmz62dH6ycF1q4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=udp8wTiOf02asOPxUjHXgxFdSEBJOb7KGBNZPxWC6oko3VlR0Y+VRHBzfnhRfsK8H
-         MHLU78U5ezu7ufgh90uVo2cKZkIq+PniQsJxGWPTjp+FFVcs752ZuRtz5bkkJQVdfj
-         YUQzRbzC1aAdQxlvHmMHdEPLU1lxUGUNjzIhJjQg=
+        b=clhuf+lkRvMFByW1z4BVo3NYHg1750ZGrkCH6JwuV3I+G1f9QCrOQ4+d5TF1iEmP/
+         2AAayxgzxtTD/LeS8Grt4XfEZqf4QQI4echeI4jaYgLPavuVP26Tzl7+dOQUEEM+XZ
+         3jKn3sdHiWdxJekAOYwJ9j9NLo+yRdJz0V8Xd+t0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Walker <benjamin.walker@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 075/172] dmaengine: idxd: set DMA_INTERRUPT cap bit
-Date:   Mon, 13 Jun 2022 12:10:35 +0200
-Message-Id: <20220613094908.416938429@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 178/218] net: ipv6: unexport __init-annotated seg6_hmac_init()
+Date:   Mon, 13 Jun 2022 12:10:36 +0200
+Message-Id: <20220613094926.006229211@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 4e5a4eb20393b851590b4465f1197a8041c2076b ]
+[ Upstream commit 5801f064e35181c71857a80ff18af4dbec3c5f5c ]
 
-Even though idxd driver has always supported interrupt, it never actually
-set the DMA_INTERRUPT cap bit. Rectify this mistake so the interrupt
-capability is advertised.
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Reported-by: Ben Walker <benjamin.walker@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Link: https://lore.kernel.org/r/164971497859.2201379.17925303210723708961.stgit@djiang5-desk3.ch.intel.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+modpost used to detect it, but it has been broken for a decade.
+
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
+
+There are two ways to fix it:
+
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because the caller (net/ipv6/seg6.c)
+and the callee (net/ipv6/seg6_hmac.c) belong to the same module.
+It seems an internal function call in ipv6.ko.
+
+Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/idxd/dma.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/ipv6/seg6_hmac.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
-index aa7435555de9..d53ce22b4b8f 100644
---- a/drivers/dma/idxd/dma.c
-+++ b/drivers/dma/idxd/dma.c
-@@ -188,6 +188,7 @@ int idxd_register_dma_device(struct idxd_device *idxd)
- 	INIT_LIST_HEAD(&dma->channels);
- 	dma->dev = dev;
+diff --git a/net/ipv6/seg6_hmac.c b/net/ipv6/seg6_hmac.c
+index 558fe8cc6d43..ad5f8d521402 100644
+--- a/net/ipv6/seg6_hmac.c
++++ b/net/ipv6/seg6_hmac.c
+@@ -405,7 +405,6 @@ int __init seg6_hmac_init(void)
+ {
+ 	return seg6_hmac_init_algo();
+ }
+-EXPORT_SYMBOL(seg6_hmac_init);
  
-+	dma_cap_set(DMA_INTERRUPT, dma->cap_mask);
- 	dma_cap_set(DMA_PRIVATE, dma->cap_mask);
- 	dma_cap_set(DMA_COMPLETION_NO_ORDER, dma->cap_mask);
- 	dma->device_release = idxd_dma_release;
+ int __net_init seg6_hmac_net_init(struct net *net)
+ {
 -- 
 2.35.1
 

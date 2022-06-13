@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21DA5497CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09F1548F6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357406AbiFMM6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
+        id S242806AbiFMKVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357862AbiFMMyr (ORCPT
+        with ESMTP id S243280AbiFMKTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:54:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B1D66697;
-        Mon, 13 Jun 2022 04:13:31 -0700 (PDT)
+        Mon, 13 Jun 2022 06:19:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D2920F73;
+        Mon, 13 Jun 2022 03:16:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C589460B60;
-        Mon, 13 Jun 2022 11:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6BE1C3411E;
-        Mon, 13 Jun 2022 11:13:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5CACB80E5C;
+        Mon, 13 Jun 2022 10:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1C8C34114;
+        Mon, 13 Jun 2022 10:16:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118810;
-        bh=x0Y131J8nnxXns7YvxxNrHgT0d8tKBuoMIC9D2JTZec=;
+        s=korg; t=1655115415;
+        bh=z9ZVZvLTkZIpAPfLBywKcJvGM8+KiNdtryLagDHFcN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iBVn0jWssTpk9Tv1dcl3SmbIM/nzmzNMMZM3BVbtf1czS9HSmxrwXOhyedFI/95RG
-         /Bf7KYg63rIdJfb5FFK8CclwQ0Io17vgZQH6ZlpyX/OqThTwbuHW37IwIEXdNTKW17
-         NlwQUAoI2+8T0/nFc3TMSPFbbqxBuAjzQX2+drKc=
+        b=b04Qx3YKVEYkFJY7v8UfG7DUjREyO6dQHtEZn78lk5n9Eirgk4PrHZwAr3FHVWxfr
+         SpdH/uYG9pEujLshdGGs97swtisCcJmEqj3/yI7dzJTf5TGoF+mJ6OuYf6lxJSit25
+         ZK8w/8LzfrBUq2HIVpPviH0952p6UaOYuSrm4x3E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 036/247] power: supply: axp288_fuel_gauge: Drop BIOS version check from "T3 MRD" DMI quirk
+Subject: [PATCH 4.9 064/167] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
 Date:   Mon, 13 Jun 2022 12:08:58 +0200
-Message-Id: <20220613094924.034734391@linuxfoundation.org>
+Message-Id: <20220613094855.940213495@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit f61509a6f0b70f5bedea34efaf8065621689bd7a ]
+[ Upstream commit aad66a3c78da668f4506356c2fdb70b7a19ecc76 ]
 
-Some "T3 MRD" mini-PCs / HDMI-sticks without a battery use a different
-value then "5.11" for their DMI BIOS version field.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Drop the BIOS version check so that the no-battery "T3 MRD" DMI quirk
-applies to these too.
-
-Fixes: 3a06b912a5ce ("power: supply: axp288_fuel_gauge: Make "T3 MRD" no_battery_list DMI entry more generic")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308073648.24634-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/axp288_fuel_gauge.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/soc/qcom/smsm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index c1da217fdb0e..97e8663c08df 100644
---- a/drivers/power/supply/axp288_fuel_gauge.c
-+++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -605,7 +605,6 @@ static const struct dmi_system_id axp288_no_battery_list[] = {
- 			DMI_MATCH(DMI_BOARD_NAME, "T3 MRD"),
- 			DMI_MATCH(DMI_CHASSIS_TYPE, "3"),
- 			DMI_MATCH(DMI_BIOS_VENDOR, "American Megatrends Inc."),
--			DMI_MATCH(DMI_BIOS_VERSION, "5.11"),
- 		},
- 	},
- 	{}
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index 783cb3364599..01bc8528f24d 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -367,6 +367,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
+ 		return 0;
+ 
+ 	host->ipc_regmap = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(host->ipc_regmap))
+ 		return PTR_ERR(host->ipc_regmap);
+ 
 -- 
 2.35.1
 

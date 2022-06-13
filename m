@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9E6549086
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7D65491B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383597AbiFMO0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S1354479AbiFMLiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383661AbiFMOXo (ORCPT
+        with ESMTP id S1355064AbiFMLa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF1346C87;
-        Mon, 13 Jun 2022 04:44:44 -0700 (PDT)
+        Mon, 13 Jun 2022 07:30:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FAA2B240;
+        Mon, 13 Jun 2022 03:46:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FE73B80E2C;
-        Mon, 13 Jun 2022 11:44:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E687C34114;
-        Mon, 13 Jun 2022 11:44:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F77360FDB;
+        Mon, 13 Jun 2022 10:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4F4C34114;
+        Mon, 13 Jun 2022 10:46:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120681;
-        bh=y/xU9oOplUtcQEcsuZanE4P5PA5XL3lSbfOYopghJCk=;
+        s=korg; t=1655117184;
+        bh=aAA6hQIpGv3F1Y6sJQtvDmCD4JxsSlbLtBI+wfx5otg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2lX3lTO1CtcMNv/PrJ2OruD81LT+C6+BIwA9vG9V1NH+DjqTdeUzTTtgqpr1gfA7v
-         3h9FyHpsmltG26eas2krSWghst1uA9ccmZRopKMvoa6wSVIwdiqxKnsPxIWStVezzm
-         hVeJUBgUSrHcdlI3XjlWojGeDO1nyBIBpBC4Pspk=
+        b=QnOsbDk67zSnPWlBM8PzKgwQiEn/S26OC24TecK/F7IsTGWPqqcXsyl4qRaC+ZMLl
+         yjkYOE7Vpj1AZjpvMMREicFMKtK56sIowSs0m0Gil5LobDHxR6/Xjzd7J4iMBgkxKY
+         Q9QSrlMLuv0LSKm7tNeDFJXuQffpEL6DReZzj4ss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 095/298] block: take destination bvec offsets into account in bio_copy_data_iter
+        stable@vger.kernel.org, Romain Naour <romain.naour@smile.fr>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 316/411] bus: ti-sysc: Fix warnings for unbind for serial
 Date:   Mon, 13 Jun 2022 12:09:49 +0200
-Message-Id: <20220613094927.831704807@linuxfoundation.org>
+Message-Id: <20220613094938.216549236@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Tony Lindgren <tony@atomide.com>
 
-[ Upstream commit 403d50341cce6b5481a92eb481e6df60b1f49b55 ]
+[ Upstream commit c337125b8834f9719dfda0e40b25eaa266f1b8cf ]
 
-Appartly bcache can copy into bios that do not just contain fresh
-pages but can have offsets into the bio_vecs.  Restore support for tht
-in bio_copy_data_iter.
+We can get "failed to disable" clock_unprepare warnings on unbind at least
+for the serial console device if the unbind is done before the device has
+been idled.
 
-Fixes: f8b679a070c5 ("block: rewrite bio_copy_data_iter to use bvec_kmap_local and memcpy_to_bvec")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220524143919.1155501-1-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+As some devices are using deferred idle, we must check the status for
+pending idle work to idle the device.
+
+Fixes: 76f0f772e469 ("bus: ti-sysc: Improve handling for no-reset-on-init and no-idle-on-init")
+Cc: Romain Naour <romain.naour@smile.fr>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Link: https://lore.kernel.org/r/20220512053021.61650-1-tony@atomide.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bio.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/bus/ti-sysc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/block/bio.c b/block/bio.c
-index 342b1cf5d713..738fea03edbf 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -1308,10 +1308,12 @@ void bio_copy_data_iter(struct bio *dst, struct bvec_iter *dst_iter,
- 		struct bio_vec src_bv = bio_iter_iovec(src, *src_iter);
- 		struct bio_vec dst_bv = bio_iter_iovec(dst, *dst_iter);
- 		unsigned int bytes = min(src_bv.bv_len, dst_bv.bv_len);
--		void *src_buf;
-+		void *src_buf = bvec_kmap_local(&src_bv);
-+		void *dst_buf = bvec_kmap_local(&dst_bv);
+diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
+index 469ca73de4ce..44aeceaccfa4 100644
+--- a/drivers/bus/ti-sysc.c
++++ b/drivers/bus/ti-sysc.c
+@@ -2724,7 +2724,9 @@ static int sysc_remove(struct platform_device *pdev)
+ 	struct sysc *ddata = platform_get_drvdata(pdev);
+ 	int error;
  
--		src_buf = bvec_kmap_local(&src_bv);
--		memcpy_to_bvec(&dst_bv, src_buf);
-+		memcpy(dst_buf, src_buf, bytes);
-+
-+		kunmap_local(dst_buf);
- 		kunmap_local(src_buf);
+-	cancel_delayed_work_sync(&ddata->idle_work);
++	/* Device can still be enabled, see deferred idle quirk in probe */
++	if (cancel_delayed_work_sync(&ddata->idle_work))
++		ti_sysc_idle(&ddata->idle_work.work);
  
- 		bio_advance_iter_single(src, src_iter, bytes);
+ 	error = pm_runtime_get_sync(ddata->dev);
+ 	if (error < 0) {
 -- 
 2.35.1
 

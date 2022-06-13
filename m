@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEC5548AAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B43549431
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376661AbiFMNWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S1386116AbiFMOqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377232AbiFMNUJ (ORCPT
+        with ESMTP id S1386208AbiFMOop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:09 -0400
+        Mon, 13 Jun 2022 10:44:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7596A039;
-        Mon, 13 Jun 2022 04:23:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C02B715E;
+        Mon, 13 Jun 2022 04:51:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1FDB61121;
-        Mon, 13 Jun 2022 11:22:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFED2C341C5;
-        Mon, 13 Jun 2022 11:22:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 760866133B;
+        Mon, 13 Jun 2022 11:51:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3ACC34114;
+        Mon, 13 Jun 2022 11:51:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119363;
-        bh=XR4pBaO0NMis/STcgabovWoFuXApSW2ZcL7eX6Yn8E4=;
+        s=korg; t=1655121088;
+        bh=NdoOI/mdof+A4Uy4fR9Q85uef2kWgrggo63N4r2XOrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DVZ78e4oL1/5SNLi4xc4HjCyTKp4W14FtzDQrL+pEsLOvbSHHMr/JmL6TSLFuQWc4
-         VlrWxhkR0O7smgBLBAQPZjiZDxbHpsh+CtOmeNwdnnsulqgNtVTLXThkwT72vVxGdi
-         aRjiUM2LAGx684F/lEsmARRoQATMHqwYIer2N+PQ=
+        b=yH/0UdbY/xUpzUPG8aYtqdk0OdKThzyKghMVuVNxDeueOEeTcDEwyXTid8in3Fqa0
+         7VDDtcMFq5TrgAh2dsNCTJesrcyXRw68/bddA1VEzsHhCazyDmvbORWBbRVCm58oOv
+         Ewn1hPg43b9xsAM8e902IJWoXYt9G9hi+QTbLNME=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Ying <victor.liu@oss.nxp.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH 5.15 236/247] drm/atomic: Force bridge self-refresh-exit on CRTC switch
+        stable@vger.kernel.org, Cyril Brulebois <kibi@debian.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 244/298] Revert "PCI: brcmstb: Do not turn off WOL regulators on suspend"
 Date:   Mon, 13 Jun 2022 12:12:18 +0200
-Message-Id: <20220613094930.102199941@linuxfoundation.org>
+Message-Id: <20220613094932.486775523@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-commit e54a4424925a27ed94dff046db3ce5caf4b1e748 upstream.
+[ Upstream commit 7894025c783ca36394d3afe49c8cfb4c830b82fe ]
 
-It's possible to change which CRTC is in use for a given
-connector/encoder/bridge while we're in self-refresh without fully
-disabling the connector/encoder/bridge along the way. This can confuse
-the bridge encoder/bridge, because
-(a) it needs to track the SR state (trying to perform "active"
-    operations while the panel is still in SR can be Bad(TM)); and
-(b) it tracks the SR state via the CRTC state (and after the switch, the
-    previous SR state is lost).
+This reverts commit 11ed8b8624b8085f706864b4addcd304b1e4fc38.
 
-Thus, we need to either somehow carry the self-refresh state over to the
-new CRTC, or else force an encoder/bridge self-refresh transition during
-such a switch.
+This is part of a revert of the following commits:
 
-I choose the latter, so we disable the encoder (and exit PSR) before
-attaching it to the new CRTC (where we can continue to assume a clean
-(non-self-refresh) state).
+  11ed8b8624b8 ("PCI: brcmstb: Do not turn off WOL regulators on suspend")
+  93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+  67211aadcb4b ("PCI: brcmstb: Add mechanism to turn on subdev regulators")
+  830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
 
-This fixes PSR issues seen on Rockchip RK3399 systems with
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c.
+Cyril reported that 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup()
+into two funcs"), which appeared in v5.17-rc1, broke booting on the
+Raspberry Pi Compute Module 4.  Apparently 830aa6f29f07 panics with an
+Asynchronous SError Interrupt, and after further commits here is a black
+screen on HDMI and no output on the serial console.
 
-Change in v2:
+This does not seem to affect the Raspberry Pi 4 B.
 
-- Drop "->enable" condition; this could possibly be "->active" to
-  reflect the intended hardware state, but it also is a little
-  over-specific. We want to make a transition through "disabled" any
-  time we're exiting PSR at the same time as a CRTC switch.
-  (Thanks Liu Ying)
-
-Cc: Liu Ying <victor.liu@oss.nxp.com>
-Cc: <stable@vger.kernel.org>
-Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Sean Paul <seanpaul@chromium.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220228122522.v2.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+Link: https://lore.kernel.org/r/20220511201856.808690-2-helgaas@kernel.org
+Reported-by: Cyril Brulebois <kibi@debian.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_atomic_helper.c |   16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/pci/controller/pcie-brcmstb.c | 53 +++++----------------------
+ 1 file changed, 9 insertions(+), 44 deletions(-)
 
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -996,9 +996,19 @@ crtc_needs_disable(struct drm_crtc_state
- 		return drm_atomic_crtc_effectively_active(old_state);
+diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+index 375c0c40bbf8..3edd63735948 100644
+--- a/drivers/pci/controller/pcie-brcmstb.c
++++ b/drivers/pci/controller/pcie-brcmstb.c
+@@ -333,7 +333,6 @@ struct brcm_pcie {
+ 	void			(*bridge_sw_init_set)(struct brcm_pcie *pcie, u32 val);
+ 	bool			refusal_mode;
+ 	struct subdev_regulators *sr;
+-	bool			ep_wakeup_capable;
+ };
  
- 	/*
--	 * We need to run through the crtc_funcs->disable() function if the CRTC
--	 * is currently on, if it's transitioning to self refresh mode, or if
--	 * it's in self refresh mode and needs to be fully disabled.
-+	 * We need to disable bridge(s) and CRTC if we're transitioning out of
-+	 * self-refresh and changing CRTCs at the same time, because the
-+	 * bridge tracks self-refresh status via CRTC state.
-+	 */
-+	if (old_state->self_refresh_active &&
-+	    old_state->crtc != new_state->crtc)
-+		return true;
-+
-+	/*
-+	 * We also need to run through the crtc_funcs->disable() function if
-+	 * the CRTC is currently on, if it's transitioning to self refresh
-+	 * mode, or if it's in self refresh mode and needs to be fully
-+	 * disabled.
- 	 */
- 	return old_state->active ||
- 	       (old_state->self_refresh_active && !new_state->active) ||
+ static inline bool is_bmips(const struct brcm_pcie *pcie)
+@@ -1351,21 +1350,9 @@ static void brcm_pcie_turn_off(struct brcm_pcie *pcie)
+ 	pcie->bridge_sw_init_set(pcie, 1);
+ }
+ 
+-static int pci_dev_may_wakeup(struct pci_dev *dev, void *data)
+-{
+-	bool *ret = data;
+-
+-	if (device_may_wakeup(&dev->dev)) {
+-		*ret = true;
+-		dev_info(&dev->dev, "disable cancelled for wake-up device\n");
+-	}
+-	return (int) *ret;
+-}
+-
+ static int brcm_pcie_suspend(struct device *dev)
+ {
+ 	struct brcm_pcie *pcie = dev_get_drvdata(dev);
+-	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+ 	int ret;
+ 
+ 	brcm_pcie_turn_off(pcie);
+@@ -1384,22 +1371,11 @@ static int brcm_pcie_suspend(struct device *dev)
+ 	}
+ 
+ 	if (pcie->sr) {
+-		/*
+-		 * Now turn off the regulators, but if at least one
+-		 * downstream device is enabled as a wake-up source, do not
+-		 * turn off regulators.
+-		 */
+-		pcie->ep_wakeup_capable = false;
+-		pci_walk_bus(bridge->bus, pci_dev_may_wakeup,
+-			     &pcie->ep_wakeup_capable);
+-		if (!pcie->ep_wakeup_capable) {
+-			ret = regulator_bulk_disable(pcie->sr->num_supplies,
+-						     pcie->sr->supplies);
+-			if (ret) {
+-				dev_err(dev, "Could not turn off regulators\n");
+-				reset_control_reset(pcie->rescal);
+-				return ret;
+-			}
++		ret = regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
++		if (ret) {
++			dev_err(dev, "Could not turn off regulators\n");
++			reset_control_reset(pcie->rescal);
++			return ret;
+ 		}
+ 	}
+ 	clk_disable_unprepare(pcie->clk);
+@@ -1420,21 +1396,10 @@ static int brcm_pcie_resume(struct device *dev)
+ 		return ret;
+ 
+ 	if (pcie->sr) {
+-		if (pcie->ep_wakeup_capable) {
+-			/*
+-			 * We are resuming from a suspend.  In the suspend we
+-			 * did not disable the power supplies, so there is
+-			 * no need to enable them (and falsely increase their
+-			 * usage count).
+-			 */
+-			pcie->ep_wakeup_capable = false;
+-		} else {
+-			ret = regulator_bulk_enable(pcie->sr->num_supplies,
+-						    pcie->sr->supplies);
+-			if (ret) {
+-				dev_err(dev, "Could not turn on regulators\n");
+-				goto err_disable_clk;
+-			}
++		ret = regulator_bulk_enable(pcie->sr->num_supplies, pcie->sr->supplies);
++		if (ret) {
++			dev_err(dev, "Could not turn on regulators\n");
++			goto err_disable_clk;
+ 		}
+ 	}
+ 
+-- 
+2.35.1
+
 
 

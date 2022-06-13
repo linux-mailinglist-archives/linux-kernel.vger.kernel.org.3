@@ -2,135 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EAF548375
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4851954838B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240866AbiFMJhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S240951AbiFMJlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240304AbiFMJhm (ORCPT
+        with ESMTP id S240106AbiFMJlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:37:42 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A52C1275F;
-        Mon, 13 Jun 2022 02:37:41 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LM5vX2ft9z67PMv;
-        Mon, 13 Jun 2022 17:32:40 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 13 Jun 2022 11:37:39 +0200
-Received: from [10.195.33.253] (10.195.33.253) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 10:37:38 +0100
-Message-ID: <04540488-ec07-3bc2-a997-b7f64b0ba606@huawei.com>
-Date:   Mon, 13 Jun 2022 10:40:46 +0100
+        Mon, 13 Jun 2022 05:41:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65842183BD;
+        Mon, 13 Jun 2022 02:41:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48A7161389;
+        Mon, 13 Jun 2022 09:41:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C43C3411E;
+        Mon, 13 Jun 2022 09:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655113301;
+        bh=3puFac3kf4giRZYoO/LUKKimJuAXXCEnp+VaAFnVp0o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EI79bY9mlA9e+vYEx3uUUMNO6sq8+/PDdG2zOjbwdzhpBT5leidQSOyGozcRT3Ghb
+         o5ssxRmDK/wronkeLdXsP/EtgKSNYhpVUDSKuo+aULIi8qsZpvwOQvf4MJXUvkqCRP
+         2KwNLhRCBMaFJW2XwbGPwj7v0j7/aRmSzBjskTIl1fT+5riJV9/6hkIB2hDoidLE8h
+         3tYi0lftDAzhGMOosxrgU8tJZer3KygMzLqjr8gJ5irMmV4lVlj9kDhRX2evUc0fXk
+         LbGk1oFBMga+929A47QJVIYO6FMcnq0H8XwAGKBcYv4mpD8mSp69g9yTmqlumu7DG2
+         oy3cQxwTwh6fw==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-fe4ac3b87fso7720993fac.3;
+        Mon, 13 Jun 2022 02:41:41 -0700 (PDT)
+X-Gm-Message-State: AOAM530KsL050976LyuIWh1WxMoZYMWd1Fom5jJ2A6Dy4pcYmR8kNMtu
+        jphEtEYwwU9YfuHkBUPGuprUOxL6InAAxddRZX8=
+X-Google-Smtp-Source: ABdhPJzJUE5eQIFQw1wDEuVAU3BsFccZwzLeam8ZSG5GUbrm7+bJ19w2hvDgq/MdVlhPhpH4bgTqWjWDxk7foXjlYlM=
+X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
+ v8-20020a05687105c800b000f33c1c126fmr7222252oan.126.1655113289866; Mon, 13
+ Jun 2022 02:41:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RFC v2 04/18] scsi: core: Add support to send reserved
- commands
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <brking@us.ibm.com>, <hare@suse.de>,
-        <hch@lst.de>
-CC:     <linux-block@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <chenxiang66@hisilicon.com>
-References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
- <1654770559-101375-5-git-send-email-john.garry@huawei.com>
- <3f519a72-bb43-b1f0-c85d-a2ea4596f2f2@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <3f519a72-bb43-b1f0-c85d-a2ea4596f2f2@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.33.253]
-X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220613082147.183145-1-mawupeng1@huawei.com> <20220613082147.183145-3-mawupeng1@huawei.com>
+In-Reply-To: <20220613082147.183145-3-mawupeng1@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 13 Jun 2022 11:41:17 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEWRXKZdLz3C2MofKXgx6yadSOQru979brm3r_sgBdMgw@mail.gmail.com>
+Message-ID: <CAMj1kXEWRXKZdLz3C2MofKXgx6yadSOQru979brm3r_sgBdMgw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] arm64/mirror: arm64 enabling - find mirrored
+ memory ranges
+To:     Wupeng Ma <mawupeng1@huawei.com>
+Cc:     corbet@lwn.net, will@kernel.org, catalin.marinas@arm.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        dvhart@infradead.org, andy@infradead.org, rppt@kernel.org,
+        akpm@linux-foundation.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, paulmck@kernel.org,
+        keescook@chromium.org, songmuchun@bytedance.com,
+        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
+        swboyd@chromium.org, wei.liu@kernel.org, robin.murphy@arm.com,
+        david@redhat.com, anshuman.khandual@arm.com,
+        thunder.leizhen@huawei.com, wangkefeng.wang@huawei.com,
+        gpiccoli@igalia.com, chenhuacai@kernel.org, geert@linux-m68k.org,
+        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 08:03, Damien Le Moal wrote:
->> +	if (shost->nr_reserved_cmds && !sht->reserved_queuecommand) {
->> +		shost_printk(KERN_ERR, shost,
->> +			"nr_reserved_cmds set but no method to queue\n");
->> +		goto fail;
-> This would be a driver implementation bug.
+On Mon, 13 Jun 2022 at 10:00, Wupeng Ma <mawupeng1@huawei.com> wrote:
+>
+> From: Ma Wupeng <mawupeng1@huawei.com>
+>
+> Commit b05b9f5f9dcf ("x86, mirror: x86 enabling - find mirrored memory ranges")
+> introduced mirrored memory support for x86 and this could be used on arm64.
+>
+> Since we only support this feature on arm64, efi_find_mirror() won't be placed
+> into efi_init(), which is used by riscv/arm/arm64, it is added in setup_arch()
+> to scan the memory map and mark mirrored memory in memblock.
+>
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 2 +-
+>  arch/arm64/kernel/setup.c                       | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 8090130b544b..e3537646b6f7 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -2301,7 +2301,7 @@
+>
+>         keepinitrd      [HW,ARM]
+>
+> -       kernelcore=     [KNL,X86,IA-64,PPC]
+> +       kernelcore=     [KNL,X86,IA-64,PPC,ARM64]
+>                         Format: nn[KMGTPE] | nn% | "mirror"
+>                         This parameter specifies the amount of memory usable by
+>                         the kernel for non-movable allocations.  The requested
+> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+> index cf3a759f10d4..6e9acd7ecf0f 100644
+> --- a/arch/arm64/kernel/setup.c
+> +++ b/arch/arm64/kernel/setup.c
+> @@ -328,6 +328,7 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>
+>         xen_early_init();
+>         efi_init();
+> +       efi_find_mirror();
+>
+>         if (!efi_enabled(EFI_BOOT) && ((u64)_text % MIN_KIMG_ALIGN) != 0)
+>              pr_warn(FW_BUG "Kernel image misaligned at boot, please fix your bootloader!");
 
-It would be a driver bug, but it probably makes the driver utterly 
-useless and there is no point in continuing (to try to add). If the 
-driver supports reserved commands then they are prob essential to make 
-the driver function.
+As suggested by Kefeng Wang, I think this call needs to be moved into
+efi_init() [the generic version]
 
-> So what about a WARN() here ?
-
-Maybe but I really do not see a point in continuing
-
-> 
->> +	}
->> +
->>   	/* Use min_t(int, ...) in case shost->can_queue exceeds SHRT_MAX */
->>   	shost->cmd_per_lun = min_t(int, shost->cmd_per_lun,
->>   				   shost->can_queue);
->> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
->> index f6e53c6d913c..8c8b4c6767d9 100644
->> --- a/drivers/scsi/scsi_lib.c
->> +++ b/drivers/scsi/scsi_lib.c
->> @@ -1422,6 +1422,16 @@ static void scsi_complete(struct request *rq)
->>   	struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(rq);
->>   	enum scsi_disposition disposition;
->>   
->> +	if (scsi_is_reserved_cmd(cmd)) {
->> +		struct scsi_device *sdev = cmd->device;
->> +
->> +		scsi_mq_uninit_cmd(cmd);
->> +		scsi_device_unbusy(sdev, cmd);
->> +		__blk_mq_end_request(rq, 0);
->> +
->> +		return;
->> +	}
->> +
->>   	INIT_LIST_HEAD(&cmd->eh_entry);
->>   
->>   	atomic_inc(&cmd->device->iodone_cnt);
->> @@ -1706,6 +1716,28 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
->>   
->>   	WARN_ON_ONCE(cmd->budget_token < 0);
->>   
->> +	if (scsi_is_reserved_cmd(cmd)) {
->> +		unsigned char *host_scribble = cmd->host_scribble;
->> +
->> +		if (!(req->rq_flags & RQF_DONTPREP)) {
->> +			ret = scsi_prepare_cmd(req);
->> +			if (ret != BLK_STS_OK) {
->> +
-> Stray blank line.
-
-ok
-
-> 
->> +				goto out_dec_host_busy;
->> +			}
-> No need for the curly brackets here.
-
-ok
-
-> 
->> +
->> +			req->rq_flags |= RQF_DONTPREP;
->> +		} else {
->> +			clear_bit(SCMD_STATE_COMPLETE, &cmd->state);
->> +		}
-
-Thanks,
-John
+Please drop this hunk, and add this call to efi_init() in patch #1.

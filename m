@@ -2,138 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476E4548BE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96EF549A57
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237215AbiFMPtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S234355AbiFMRsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiFMPsJ (ORCPT
+        with ESMTP id S238684AbiFMRrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:48:09 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBDE179947
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:25:21 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id j20so6171392ljg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zXYzaYM+MH6bQYEtMJikPf8JokCGUGXGDdjWTBEEWDQ=;
-        b=dgK3ftwBWoh2255c8PIURNKpgXKChTnlKkjWgEuBdG9//gqdDQL8ol3ateTZTeeaxX
-         kSgZiPw2BcFAtYLAqRwewoopZnE9rmjU8OnuaHp8Ois9ym7w1m1PSbwfkZFjknXjRuoE
-         CWLyC/DqQA1CprvXN5XXQBhSvQKaqKdAuWrg5pqjX72OUS8A+hQ2bO+3kChs/ujSLmBh
-         gRLw6uiTm5Kewng/SqqZJmQGEkvRvSsaMzUGL/2JaNXqGepoFeJ0n/xvFSRnfnNCqB68
-         Or2PDsvFDtdRZph9gbC+j44SPr0rGp1RAFOOzti/NtVzIAl4uw4r/RuNBJ8/B9cgpH4v
-         qlzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zXYzaYM+MH6bQYEtMJikPf8JokCGUGXGDdjWTBEEWDQ=;
-        b=27rJwZN/qiyBGBlfupnK2bH1UHtq2XmmT9nDETaZTo7qGNciIY6SCmaNeE5sKWgKrD
-         /ptuoXXgqdUjrW1Lcj4go3Sfdl4sU2GJqJmecdOfg7jh0nM32wAojf9olhJK8DfiJIs7
-         Tlbt+rm1/QPuo6ad2Py90QzM+1I6y1dbLOTffuMYHbkhtsZvCct7JohS0pTt+uCWQaW/
-         2zuOTzkbyiXdzAiQw86FtvtidS2cBqliLcIbX/q3Gyrsv3MTn8Fh5ZBMqUgK64FCxo9b
-         BzpQLBebNkwu/HMnXbLhwoFAHZmYHwsXkvGDycYMLLTY91/82J0dcrn/X66DQtQSUdOU
-         E6Bw==
-X-Gm-Message-State: AOAM531r1eik0w75j78GqPF0QTcIMdxdj5JQX+oKBsI5ZpZm8uZeaKMr
-        9E90KOn4U3T9YVDI0dyUS0CBM4GRfl8Rh9/QGP4=
-X-Google-Smtp-Source: ABdhPJwUs2NIu7N/KkUEMmOlkf3FuWOlW2LvnHcTJ1I+lMILeD5lT8v+WxKL51G3XWcsSTjFah0NywVVBIESoCPwZk0=
-X-Received: by 2002:a2e:bd15:0:b0:255:3768:9999 with SMTP id
- n21-20020a2ebd15000000b0025537689999mr45730036ljq.20.1655126718954; Mon, 13
- Jun 2022 06:25:18 -0700 (PDT)
+        Mon, 13 Jun 2022 13:47:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6E514E2C8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:29:22 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25DCPhSP007022;
+        Mon, 13 Jun 2022 13:28:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qYUMEST+bP9k/kJYvw0TZMvwPo1yTFFJ5+kSY3p9rtA=;
+ b=Fm+tL3fznS6TsNGSBlMve+XsoiSjZ7IZJWW5owD8Qk4+gTfwMZCuQUnXQTTP6pdsjXbB
+ YO1AoMkHz+7EEqg0WsHFhtGeUnfLesWhf81chcuSdLYTIJ8qSkc/FJ5vG60YbITCwje1
+ S0VAXtTqL0PNV/BRzZiD07hvf7rF/dr3hELXUvaj+XZx805tlA2m555icMV1BLzMl+6a
+ RdcUfRnJIkCmy1yBfgxvBEe01trbYG4xt46U58FSorWShw0xd8QpINleX8kDtlZuvf8v
+ 9Mt+JnNCd7/WAzhs/TW6v6TtFH89BPSY57Q88r4M7hhZ/L5UoKBdA+k535tC39moLZib nQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gp5819abh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 13:28:58 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25DDQdqi023792;
+        Mon, 13 Jun 2022 13:28:57 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gp5819aax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 13:28:57 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25DDMQUA012698;
+        Mon, 13 Jun 2022 13:28:55 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gmjp9aurh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 13:28:55 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25DDSriV21627204
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Jun 2022 13:28:53 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10B03A405B;
+        Mon, 13 Jun 2022 13:28:53 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0FB30A4054;
+        Mon, 13 Jun 2022 13:28:46 +0000 (GMT)
+Received: from [9.43.31.74] (unknown [9.43.31.74])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Jun 2022 13:28:45 +0000 (GMT)
+Message-ID: <080d64c3-1289-49c4-f4a0-105e5266a6f0@linux.ibm.com>
+Date:   Mon, 13 Jun 2022 18:58:43 +0530
 MIME-Version: 1.0
-Received: by 2002:a05:6500:21a2:b0:142:5559:4fec with HTTP; Mon, 13 Jun 2022
- 06:25:18 -0700 (PDT)
-Reply-To: marija.sterbenc@aol.com
-From:   Marija Sterbenc <marijasterbenc21@gmail.com>
-Date:   Mon, 13 Jun 2022 14:25:18 +0100
-Message-ID: <CALEkHnNpX9E4-PD2OucwJgOBx0-qxEjcQ_jku-iPMrn26AtLHg@mail.gmail.com>
-Subject: Pani Marija Sterbenc
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 01/13] mm/demotion: Add support for explicit memory
+ tiers
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Ying Huang <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220610135229.182859-1-aneesh.kumar@linux.ibm.com>
+ <20220610135229.182859-2-aneesh.kumar@linux.ibm.com>
+ <7e0b41422dbd0976cb43c2f126e9371d5e311e77.camel@intel.com>
+ <48096ad7-ce6d-79b7-1edd-7e6652ab2a4d@linux.ibm.com>
+ <a88bd25fc77252dee4f895f3a9b2c1f6ebb5169e.camel@intel.com>
+ <Yqc4nSEuso+YmPE7@cmpxchg.org>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <Yqc4nSEuso+YmPE7@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7vqlVs_ASNebhc5-mePDxHBzn4AZNUI0
+X-Proofpoint-ORIG-GUID: JDNWtd59BKZomjhr8ISgYEAtZb9jgHRO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-13_05,2022-06-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ malwarescore=0 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206130059
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drah=C3=A1 milovan=C3=A1,
+On 6/13/22 6:46 PM, Johannes Weiner wrote:
+> On Mon, Jun 13, 2022 at 01:30:08PM +0800, Ying Huang wrote:
+>> On Mon, 2022-06-13 at 09:01 +0530, Aneesh Kumar K V wrote:
+>>> On 6/13/22 8:52 AM, Ying Huang wrote:
+>>>> On Fri, 2022-06-10 at 19:22 +0530, Aneesh Kumar K.V wrote:
+>>>>> +config TIERED_MEMORY
+>>>>> +	def_bool NUMA
+>>>>> +
+>>>>
+>>>> As Yang pointed out, why not just use CONFIG_NUMA?  I suspect the
+>>>> added value of CONIFIG_TIRED_MEMORY.
+>>>
+>>> I decided to use TIERED_MEMORY to bring more clarity. It should be same
+>>> now that we have moved CONFIG_MIGRATION dependencies to runtime. IMHO
+>>> having CONFIG_TIERED_MEMORY is better than using CONFIG_NUMA.
+>>
+>> I don't think CONFIG_TIERED_MEMORY bring no much value.  It's better
+>> to use CONFIG_NUMA directly.  But this is just my opinion.
+> 
+> I agree. As long as it's always built with CONFIG_NUMA, it's simply
+> NUMA code. Easy enough to modularize it later if somebody really wants
+> this to be configurable separately.
 
-Pozdravujem =C5=A5a v mene Bo=C5=BEom; je pravda, =C5=BEe tento list v=C3=
-=A1s mo=C5=BEno
-prekvap=C3=AD, ale napriek tomu v=C3=A1s pokorne =C5=BEiadam, aby ste mi ve=
-novali
-pozornos=C5=A5 a dobre ma po=C4=8Duli. Vol=C3=A1m sa pani Marija Sterbenc .=
- M=C3=A1m 63
-rokov a som vydat=C3=A1 za p=C3=A1na Rodrigueza Sterbenca a pred jeho smr=
-=C5=A5ou v
-roku 2012 sme boli man=C5=BEelmi 32 rokov.
+I was comparing,
 
-Boli sme man=C5=BEelmi 32 rokov bez die=C5=A5a=C5=A5a a on zomrel po kr=C3=
-=A1tkej chorobe
-a po jeho smrti som sa rozhodol, =C5=BEe sa kv=C3=B4li svojmu n=C3=A1bo=C5=
-=BEensk=C3=A9mu
-presved=C4=8Deniu a vysok=C3=A9mu veku znova neo=C5=BEen=C3=ADm. Ke=C4=8F b=
-ol m=C3=B4j zosnul=C3=BD
-man=C5=BEel na=C5=BEive, ulo=C5=BEil tu v banke sumu 4 500 000,00 (=C5=A1ty=
-ri mili=C3=B3ny,
-p=C3=A4=C5=A5stotis=C3=ADc eur). V s=C3=BA=C4=8Dasnosti s=C3=BA tieto penia=
-ze st=C3=A1le v =C3=BAschove banky.
-Ned=C3=A1vno mi m=C3=B4j doktor povedal, =C5=BEe nasleduj=C3=BAce =C5=A1tyr=
-i mesiace nevydr=C5=BE=C3=ADm
-kv=C3=B4li rakovine.
+#ifdef CONFIG_TIERED_MEMORY
+struct memory_tier {
 
-Ke=C4=8F=C5=BEe som poznal svoj stav, rozhodol som sa tieto peniaze darova=
-=C5=A5
-cirkv=C3=A1m, organiz=C3=A1ci=C3=A1m alebo dobr=C3=BDm =C4=BEu=C4=8Fom, kto=
-r=C3=AD bud=C3=BA tento fond
-vyu=C5=BE=C3=ADva=C5=A5 tak, ako v=C3=A1m d=C3=A1m n=C3=A1vod na spr=C3=A1v=
-nu predstavu o vyu=C5=BEit=C3=AD tohto
-fondu.
+vs
 
-Chcem, aby ste tieto peniaze pou=C5=BEili pre charitat=C3=ADvne organiz=C3=
-=A1cie,
-sirotince, vdovy a in=C3=BDch =C4=BEud=C3=AD, ktor=C3=AD s=C3=BA v n=C3=BAd=
-zi. Rozhodol som sa tak,
-preto=C5=BEe nem=C3=A1m =C5=BEiadne die=C5=A5a, ktor=C3=A9 by tieto peniaze=
- zdedilo. Navy=C5=A1e,
-pr=C3=ADbuzn=C3=AD m=C3=B4jho man=C5=BEela mi nie s=C3=BA bl=C3=ADzki, ke=
-=C4=8F=C5=BEe som ochorela na
-rakovinu a chceli ma vidie=C5=A5 m=C5=95tvu, aby mohli zdedi=C5=A5 jeho boh=
-atstvo, a
-preto nem=C3=A1me =C5=BEiadne die=C5=A5a. T=C3=ADto =C4=BEudia nie s=C3=BA =
-hodn=C3=AD tohto dedi=C4=8Dstva. To
-je d=C3=B4vod, pre=C4=8Do som sa rozhodol kontaktova=C5=A5 v=C3=A1s a darov=
-a=C5=A5 v=C3=A1m tento
-fond na charitat=C3=ADvne pr=C3=A1ce.
+#ifdef CONFIG_NUMA
+struct memory_tier {
 
-Hne=C4=8F ako dostanem va=C5=A1u odpove=C4=8F, d=C3=A1m v=C3=A1m kontakt na=
- banku, kde je tento
-fond ulo=C5=BEen=C3=BD moj=C3=ADm zosnul=C3=BDm man=C5=BEelom pred jeho n=
-=C3=A1hlou smr=C5=A5ou, a tie=C5=BE
-pover=C3=ADm n=C3=A1=C5=A1ho rodinn=C3=A9ho pr=C3=A1vnika, aby banke vydal =
-splnomocnenie, ktor=C3=A9
-predlo=C5=BE=C3=AD ste pr=C3=ADjemcom tohto fondu a tie=C5=BE chcem, aby st=
-e ma v=C5=BEdy
-zap=C3=A1jali do svojej ka=C5=BEdodennej modlitby.
+I will switch to CONFIG_NUMA in the next update since you are not 
+finding it beneficial.
 
-Ak=C3=A9ko=C4=BEvek oneskorenie vo va=C5=A1ej odpovedi mi m=C3=B4=C5=BEe po=
-skytn=C3=BA=C5=A5 priestor na
-h=C4=BEadanie in=C3=A9ho dobr=C3=A9ho =C4=8Dloveka na rovnak=C3=BD =C3=BA=
-=C4=8Del.
-
-=C4=8Eakujem a zosta=C5=88 po=C5=BEehnan=C3=BD.
-
-va=C5=A1a sestra
-Pani Marija Sterbenc
+-aneesh

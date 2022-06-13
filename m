@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F4A548C9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BF05496CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349920AbiFMLCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S1351495AbiFMLEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350309AbiFMKyt (ORCPT
+        with ESMTP id S1350183AbiFMKyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC8D19038;
-        Mon, 13 Jun 2022 03:30:46 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5EDDFEA;
+        Mon, 13 Jun 2022 03:30:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1076360FC7;
-        Mon, 13 Jun 2022 10:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 236EAC34114;
-        Mon, 13 Jun 2022 10:30:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B363B80E59;
+        Mon, 13 Jun 2022 10:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C200FC34114;
+        Mon, 13 Jun 2022 10:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116245;
-        bh=7jqS2tTlnNZbrQ98eK9OJ7pRMtBHKuwDuhlgk5Xc4Sk=;
+        s=korg; t=1655116201;
+        bh=iDmtIbiCibEJV3q/3pm/u+kHThmsdq8O7eZM/tAXpic=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tlvdCYtx2rGfWnJYfk1hdC5qE+YSFNhY16SD8JE+Sd325zpgm1eQ5BhOMSIdg+4Lc
-         k5QYeAsfaGvBx3N3y8fqm2ra/W4BamVpbeduQK52c1TI7vwOrLvd8eLlgDObTqqmAe
-         zK6620Y9oonSIvIItzDaXZX3iQ32os4oxzFPsABE=
+        b=Ba1/DL/ZWv9+pioBz60nUn09vAsFA/f97SGEKLehDgcjuvqpblwDj7f2loeTZDDgU
+         zKEPiD5Yvx9/yXu+iVIvTUae4/f+KzlbkoAw64GXx6waAqAPWlhlCCIJGv4JBNuz08
+         aBIdRhbX1Lv2l8BRiK6+o3QeKipdRcWmWHJMB15w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 041/411] HID: bigben: fix slab-out-of-bounds Write in bigben_probe
-Date:   Mon, 13 Jun 2022 12:05:14 +0200
-Message-Id: <20220613094929.741809174@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 042/411] ASoC: tscs454: Add endianness flag in snd_soc_component_driver
+Date:   Mon, 13 Jun 2022 12:05:15 +0200
+Message-Id: <20220613094929.771651698@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,41 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit fc4ef9d5724973193bfa5ebed181dba6de3a56db ]
+[ Upstream commit ff69ec96b87dccb3a29edef8cec5d4fefbbc2055 ]
 
-There is a slab-out-of-bounds Write bug in hid-bigbenff driver.
-The problem is the driver assumes the device must have an input but
-some malicious devices violate this assumption.
+The endianness flag is used on the CODEC side to specify an
+ambivalence to endian, typically because it is lost over the hardware
+link. This device receives audio over an I2S DAI and as such should
+have endianness applied.
 
-Fix this by checking hid_device's input is non-empty before its usage.
+A fixup is also required to use the width directly rather than relying
+on the format in hw_params, now both little and big endian would be
+supported. It is worth noting this changes the behaviour of S24_LE to
+use a word length of 24 rather than 32. This would appear to be a
+correction since the fact S24_LE is stored as 32 bits should not be
+presented over the bus.
 
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220504170905.332415-26-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-bigbenff.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ sound/soc/codecs/tscs454.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hid/hid-bigbenff.c b/drivers/hid/hid-bigbenff.c
-index 74ad8bf98bfd..e8c5e3ac9fff 100644
---- a/drivers/hid/hid-bigbenff.c
-+++ b/drivers/hid/hid-bigbenff.c
-@@ -347,6 +347,12 @@ static int bigben_probe(struct hid_device *hid,
- 	bigben->report = list_entry(report_list->next,
- 		struct hid_report, list);
+diff --git a/sound/soc/codecs/tscs454.c b/sound/soc/codecs/tscs454.c
+index c3587af9985c..3d981441b8d1 100644
+--- a/sound/soc/codecs/tscs454.c
++++ b/sound/soc/codecs/tscs454.c
+@@ -3128,18 +3128,17 @@ static int set_aif_sample_format(struct snd_soc_component *component,
+ 	unsigned int width;
+ 	int ret;
  
-+	if (list_empty(&hid->inputs)) {
-+		hid_err(hid, "no inputs found\n");
-+		error = -ENODEV;
-+		goto error_hw_stop;
-+	}
-+
- 	hidinput = list_first_entry(&hid->inputs, struct hid_input, list);
- 	set_bit(FF_RUMBLE, hidinput->input->ffbit);
+-	switch (format) {
+-	case SNDRV_PCM_FORMAT_S16_LE:
++	switch (snd_pcm_format_width(format)) {
++	case 16:
+ 		width = FV_WL_16;
+ 		break;
+-	case SNDRV_PCM_FORMAT_S20_3LE:
++	case 20:
+ 		width = FV_WL_20;
+ 		break;
+-	case SNDRV_PCM_FORMAT_S24_3LE:
++	case 24:
+ 		width = FV_WL_24;
+ 		break;
+-	case SNDRV_PCM_FORMAT_S24_LE:
+-	case SNDRV_PCM_FORMAT_S32_LE:
++	case 32:
+ 		width = FV_WL_32;
+ 		break;
+ 	default:
+@@ -3337,6 +3336,7 @@ static const struct snd_soc_component_driver soc_component_dev_tscs454 = {
+ 	.num_dapm_routes = ARRAY_SIZE(tscs454_intercon),
+ 	.controls =	tscs454_snd_controls,
+ 	.num_controls = ARRAY_SIZE(tscs454_snd_controls),
++	.endianness = 1,
+ };
  
+ #define TSCS454_RATES SNDRV_PCM_RATE_8000_96000
 -- 
 2.35.1
 

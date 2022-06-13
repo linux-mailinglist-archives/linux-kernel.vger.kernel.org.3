@@ -2,87 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82CB54A13A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C4254A13C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352031AbiFMVTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S1352173AbiFMVTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352015AbiFMVSG (ORCPT
+        with ESMTP id S244742AbiFMVSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:18:06 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8C147060
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 14:00:45 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 39565C01D; Mon, 13 Jun 2022 23:00:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655154043; bh=hbjlIsPkm7Pdw1vKt/fEMjXNUukRrKqZfsATzfBGdhI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aUclKhe0qUUXxJVj3as+72ZyUR2Mdt4qSYLf9TJPdVbqDzlPkitddPgzPxxC7T4M0
-         ILx6q0v/NOVegp1C4dD/nxABDGhU7MqoFue+UZALvKJZdzBC6WGWdx0Ho9EdsuRlqr
-         ptXjp7XPNwomOPNtQyaM/N+Otti4b6vZDbcbpxfx+5rG3zDVXWBkrsmfXixReV3O4b
-         Lp7KEN2/IlVOcNN6fCCfdqpShAD1oNqcrVgK3v7oTfyBsEJrXzO1tEM/v3OrbXa8yg
-         GZN6OtHSlkFBfikloQO/9d5m3ZgQgYlZRg+pgCdl5fk+JJ25YRLeGo+4RXbrtrX3iR
-         cNPTTOPtWZYlQ==
+        Mon, 13 Jun 2022 17:18:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C70309;
+        Mon, 13 Jun 2022 14:00:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5657CB81598;
+        Mon, 13 Jun 2022 21:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58AFC34114;
+        Mon, 13 Jun 2022 21:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655154046;
+        bh=qeRciMZ8+GN9aRNLiPL16tbvkPgNHQGPPX68ZXr0H8w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cH1HY1ZeheBnhLELtecwl/zbtYzor0+cS4PRydzC//tiN73QIqC7IaEcv0V1qlLwa
+         kOsPiLYqj3HI6gDgH0wjH2yYuYPwVXUgFIWoP97ObQ7RwjPMKDc7D5SuJQShAdnL1j
+         MI6YJijlZ0vZhX4/Uuik9iSmaxq/1ihMlbraEdHgxVaazktGGuPrSiJjbwwY6YaiFS
+         wMYDiWJ6Wppeb5549QR00Ib1DfjpoCPlQ6mvI2YbuxkL5rKlYLV4BufVaNf3POQ3WH
+         zFw66jdNs99nwWtNBnogZ5g6zFdVgklR9diVJoJ/0GIi8r5SWt24tR9GCbTXvb7KTJ
+         HxOWrCeG9+KsQ==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jarkko.nikula@linux.intel.com
+Cc:     dinguyen@kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCHv3 1/2] i2c: designware: introduce a custom scl recovery for SoCFPGA platforms
+Date:   Mon, 13 Jun 2022 16:00:31 -0500
+Message-Id: <20220613210032.773826-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 67266C009;
-        Mon, 13 Jun 2022 23:00:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655154042; bh=hbjlIsPkm7Pdw1vKt/fEMjXNUukRrKqZfsATzfBGdhI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xFktnS+NHA+NVGMei1DidQmfBeYBsl1yQecTuPCUxTmkNTgCiGsnrsFDvr9LVfBWJ
-         qZ8gR8rqIdPe9IPllqYo9KS3S8+pLDE8m/KKH/RFrp4DPKaE7+J4syA2zJV7lRDY/Z
-         byYBoa5nMq3LE7oHKCEO8bosF5fSAwoh9yNv2evr3hs8LC0/1euxRhBb2EKi5UZWQx
-         VsE5pxM77qWoZn34VzKH91rX/5J2pBuHeSt5XNMvtVN2TCLv2MzNPPOpfwn5bmrQ90
-         GDUhj2w7DdmFtWphQCJUAuFVU0oTUBnwaxN09sw0w3jqAx5GVL7hzxhu89Bf+vWiUS
-         KCEx2zDqREJow==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id d2cce1e8;
-        Mon, 13 Jun 2022 21:00:36 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 06:00:21 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/06] fid refcounting improvements and fixes
-Message-ID: <YqelZWe4BJfDkYEd@codewreck.org>
-References: <20220612085330.1451496-1-asmadeus@codewreck.org>
- <20220613202053.GI7401@sequoia>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220613202053.GI7401@sequoia>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tyler Hicks wrote on Mon, Jun 13, 2022 at 03:20:53PM -0500:
-> On 2022-06-12 17:53:23, Dominique Martinet wrote:
-> > @@ -222,7 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
-> >                  * We need to hold rename lock when doing a multipath
-> >                  * walk to ensure none of the patch component change
-> >                  */
-> > -               fid = p9_client_walk(old_fid, l, &wnames[i], clone);
-> > +               fid = p9_client_walk(old_fid, l, &wnames[i],
-> > +                                    old_fid == root_fid /* clone */);
-> 
-> This is no problem at all. The rebased patches look good to me. Squash
-> your fix to my fix and it should be ready to go.
+The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+thus cannot be recovered by the default method of by doing a GPIO access.
+Only a reset of the I2C IP block can a recovery be successful.
 
-Thanks for all your reviews :)
-I've rebased my branch if you want to check:
-https://github.com/martinetd/linux/commits/9p-next
+The assignment of the recover_bus needs to get done before the call to
+devm_gpiod_get_optional(), otherwise, the assignment is not taking place
+because of an error after returning from devm_gpiod_get_optional().
 
-We've just started a cycle so I'll submit the first three patches (fixes
-to stable) next week, and the rest for when 5.20 cycle starts.
-Feel free to remind me if it looks like I forgot.
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+v3: simplify the function
+    update commit message
+v2: remove change to MODEL_MASK
+    s/i2c_custom_scl_recovery/i2c_socfpga_scl_recovery
+---
+ drivers/i2c/busses/i2c-designware-core.h    |  1 +
+ drivers/i2c/busses/i2c-designware-master.c  | 12 ++++++++++++
+ drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
+ 3 files changed, 14 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 70b80e710990..7b22ec1d6a96 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -303,6 +303,7 @@ struct dw_i2c_dev {
+ #define MODEL_MSCC_OCELOT	BIT(8)
+ #define MODEL_BAIKAL_BT1	BIT(9)
+ #define MODEL_AMD_NAVI_GPU	BIT(10)
++#define MODEL_SOCFPGA		BIT(11)
+ #define MODEL_MASK		GENMASK(11, 8)
+ 
+ /*
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 44a94b225ed8..502820b812a5 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -813,12 +813,24 @@ static void i2c_dw_unprepare_recovery(struct i2c_adapter *adap)
+ 	i2c_dw_init_master(dev);
+ }
+ 
++static int i2c_socfpga_scl_recovery(struct i2c_adapter *adap)
++{
++	i2c_dw_prepare_recovery(adap);
++	i2c_dw_unprepare_recovery(adap);
++	return 0;
++}
++
+ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ {
+ 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+ 	struct i2c_adapter *adap = &dev->adapter;
+ 	struct gpio_desc *gpio;
+ 
++	if ((dev->flags & MODEL_MASK) == MODEL_SOCFPGA) {
++		rinfo->recover_bus = i2c_socfpga_scl_recovery;
++		adap->bus_recovery_info = rinfo;
++	}
++
+ 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+ 	if (IS_ERR_OR_NULL(gpio))
+ 		return PTR_ERR_OR_ZERO(gpio);
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 70ade5306e45..b33e015e6732 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -153,6 +153,7 @@ static const struct of_device_id dw_i2c_of_match[] = {
+ 	{ .compatible = "snps,designware-i2c", },
+ 	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+ 	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
++	{ .compatible = "intel,socfpga-i2c", .data = (void *)MODEL_SOCFPGA },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
 -- 
-Dominique
+2.25.1
+

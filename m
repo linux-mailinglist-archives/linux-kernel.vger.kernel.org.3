@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A702E548E2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07D55490A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377155AbiFMNUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S240889AbiFMN70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358973AbiFMNIq (ORCPT
+        with ESMTP id S1380209AbiFMNxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:08:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9731FCFF;
-        Mon, 13 Jun 2022 04:19:03 -0700 (PDT)
+        Mon, 13 Jun 2022 09:53:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809C4E01B;
+        Mon, 13 Jun 2022 04:34:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA79EB80EA7;
-        Mon, 13 Jun 2022 11:19:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2BA4C34114;
-        Mon, 13 Jun 2022 11:19:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B320B80EC9;
+        Mon, 13 Jun 2022 11:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739E8C34114;
+        Mon, 13 Jun 2022 11:34:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119141;
-        bh=mMjDWJlacooFiZ2ImmHkyR7vekvzqW++iLlyOOmOz5s=;
+        s=korg; t=1655120047;
+        bh=naEnH1J6S3lsn0rLEmw7F4V1NJPcViFMClyMQD3Scpg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YD1q5cgsw4BWW8hBd/C7CPccO23/f/SUFvi0Ocw4d6GhmSTqz9SlNAa1Wgdn9Q63h
-         1faH1JDACpH9lE5S91wIESwYjMRrMyDeCFfv1rlYJTaSwpZhY7BTAILt/k6+SqeqVC
-         PgpnZ7vCdt3gx5ZHIhe2TCeA0391MjgL2cwwdaqI=
+        b=Yd3hg1DiMWc6ev/uys6g4S7P79D6eRavAgjxA9U3u5ybPWHB4H8k0McY+Wbc3lxZd
+         BdyONyi09CArtnjh95tdk7G71BoyPjkjUJKJwp8alhUIackugZxs+0XbaokUSXbUH8
+         /eXhDnlEkKzBi8Uq19LH+9ihX31biyYZIwmqXxMg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Maher Sanalla <msanalla@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mark Bloch <mbloch@nvidia.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 155/247] net/mlx5: Fix mlx5_get_next_dev() peer device matching
+        stable@vger.kernel.org, Brad Campbell <lists2009@fnarfbargle.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 232/339] thunderbolt: Use different lane for second DisplayPort tunnel
 Date:   Mon, 13 Jun 2022 12:10:57 +0200
-Message-Id: <20220613094927.656795102@linuxfoundation.org>
+Message-Id: <20220613094933.695751782@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,120 +55,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saeed Mahameed <saeedm@nvidia.com>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-[ Upstream commit 1c5de097bea31760c3f0467ac0c84ba0dc3525d5 ]
+[ Upstream commit 9d2d0a5cf0ca063f417681cc33e767ce52615286 ]
 
-In some use-cases, mlx5 instances will need to search for their peer
-device (the other port on the same HCA). For that, mlx5 device matching
-mechanism relied on auxiliary_find_device() to search, and used a bad matching
-callback function.
+Brad reported that on Apple hardware with Light Ridge or Falcon Ridge
+controller, plugging in a chain of Thunderbolt displays (Light Ridge
+based controllers) causes all kinds of tearing and flickering. The
+reason for this is that on Thunderbolt 1 hardware there is no lane
+bonding so we have two independent 10 Gb/s lanes, and currently Linux
+tunnels both displays through the lane 1. This makes the displays to
+share the 10 Gb/s bandwidth which may not be enough for higher
+resolutions.
 
-This approach has two issues:
+For this reason make the second tunnel go through the lane 0 instead.
+This seems to match what the macOS connection manager is also doing.
 
-1) next_phys_dev() the matching function, assumed all devices are
-   of the type mlx5_adev (mlx5 auxiliary device) which is wrong and
-   could lead to crashes, this worked for a while, since only lately
-   other drivers started registering auxiliary devices.
-
-2) using the auxiliary class bus (auxiliary_find_device) to search for
-   mlx5_core_dev devices, who are actually PCIe device instances, is wrong.
-   This works since mlx5_core always has at least one mlx5_adev instance
-   hanging around in the aux bus.
-
-As suggested by others we can fix 1. by comparing device names prefixes
-if they have the string "mlx5_core" in them, which is not a best practice !
-but even with that fixed, still 2. needs fixing, we are trying to
-match pcie device peers so we should look in the right bus (pci bus),
-hence this fix.
-
-The fix:
-1) search the pci bus for mlx5 peer devices, instead of the aux bus
-2) to validated devices are the same type "mlx5_core_dev" compare if
-   they have the same driver, which is bulletproof.
-
-   This wouldn't have worked with the aux bus since the various mlx5 aux
-   device types don't share the same driver, even if they share the same device
-   wrapper struct (mlx5_adev) "which helped to find the parent device"
-
-Fixes: a925b5e309c9 ("net/mlx5: Register mlx5 devices to auxiliary virtual bus")
-Reported-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reported-by: Maher Sanalla <msanalla@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Reviewed-by: Mark Bloch <mbloch@nvidia.com>
-Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
+Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Tested-by: Brad Campbell <lists2009@fnarfbargle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/dev.c | 34 +++++++++++++------
- 1 file changed, 23 insertions(+), 11 deletions(-)
+ drivers/thunderbolt/tb.c     | 19 +++++++++++++++++--
+ drivers/thunderbolt/test.c   | 16 ++++++++--------
+ drivers/thunderbolt/tunnel.c | 11 ++++++-----
+ drivers/thunderbolt/tunnel.h |  4 ++--
+ 4 files changed, 33 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/dev.c b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
-index 94411b34799e..949f12ede3d2 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/dev.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
-@@ -559,18 +559,32 @@ static int _next_phys_dev(struct mlx5_core_dev *mdev,
- 	return 1;
- }
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 9beb47b31c75..44d04b651a8b 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -867,7 +867,7 @@ static struct tb_port *tb_find_dp_out(struct tb *tb, struct tb_port *in)
  
-+static void *pci_get_other_drvdata(struct device *this, struct device *other)
-+{
-+	if (this->driver != other->driver)
-+		return NULL;
-+
-+	return pci_get_drvdata(to_pci_dev(other));
-+}
-+
- static int next_phys_dev(struct device *dev, const void *data)
+ static void tb_tunnel_dp(struct tb *tb)
  {
--	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
--	struct mlx5_core_dev *mdev = madev->mdev;
-+	struct mlx5_core_dev *mdev, *this = (struct mlx5_core_dev *)data;
+-	int available_up, available_down, ret;
++	int available_up, available_down, ret, link_nr;
+ 	struct tb_cm *tcm = tb_priv(tb);
+ 	struct tb_port *port, *in, *out;
+ 	struct tb_tunnel *tunnel;
+@@ -912,6 +912,20 @@ static void tb_tunnel_dp(struct tb *tb)
+ 		return;
+ 	}
+ 
++	/*
++	 * This is only applicable to links that are not bonded (so
++	 * when Thunderbolt 1 hardware is involved somewhere in the
++	 * topology). For these try to share the DP bandwidth between
++	 * the two lanes.
++	 */
++	link_nr = 1;
++	list_for_each_entry(tunnel, &tcm->tunnel_list, list) {
++		if (tb_tunnel_is_dp(tunnel)) {
++			link_nr = 0;
++			break;
++		}
++	}
 +
-+	mdev = pci_get_other_drvdata(this->device, dev);
-+	if (!mdev)
-+		return 0;
+ 	/*
+ 	 * DP stream needs the domain to be active so runtime resume
+ 	 * both ends of the tunnel.
+@@ -943,7 +957,8 @@ static void tb_tunnel_dp(struct tb *tb)
+ 	tb_dbg(tb, "available bandwidth for new DP tunnel %u/%u Mb/s\n",
+ 	       available_up, available_down);
  
- 	return _next_phys_dev(mdev, data);
- }
+-	tunnel = tb_tunnel_alloc_dp(tb, in, out, available_up, available_down);
++	tunnel = tb_tunnel_alloc_dp(tb, in, out, link_nr, available_up,
++				    available_down);
+ 	if (!tunnel) {
+ 		tb_port_dbg(out, "could not allocate DP tunnel\n");
+ 		goto err_reclaim;
+diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
+index 1f69bab236ee..66b6e665e96f 100644
+--- a/drivers/thunderbolt/test.c
++++ b/drivers/thunderbolt/test.c
+@@ -1348,7 +1348,7 @@ static void tb_test_tunnel_dp(struct kunit *test)
+ 	in = &host->ports[5];
+ 	out = &dev->ports[13];
  
- static int next_phys_dev_lag(struct device *dev, const void *data)
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1394,7 +1394,7 @@ static void tb_test_tunnel_dp_chain(struct kunit *test)
+ 	in = &host->ports[5];
+ 	out = &dev4->ports[14];
+ 
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1444,7 +1444,7 @@ static void tb_test_tunnel_dp_tree(struct kunit *test)
+ 	in = &dev2->ports[13];
+ 	out = &dev5->ports[13];
+ 
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1509,7 +1509,7 @@ static void tb_test_tunnel_dp_max_length(struct kunit *test)
+ 	in = &dev6->ports[13];
+ 	out = &dev12->ports[13];
+ 
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1627,7 +1627,7 @@ static void tb_test_tunnel_port_on_path(struct kunit *test)
+ 	in = &dev2->ports[13];
+ 	out = &dev5->ports[13];
+ 
+-	dp_tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	dp_tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, dp_tunnel != NULL);
+ 
+ 	KUNIT_EXPECT_TRUE(test, tb_tunnel_port_on_path(dp_tunnel, in));
+@@ -2009,7 +2009,7 @@ static void tb_test_credit_alloc_dp(struct kunit *test)
+ 	in = &host->ports[5];
+ 	out = &dev->ports[14];
+ 
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_ASSERT_EQ(test, tunnel->npaths, (size_t)3);
+ 
+@@ -2245,7 +2245,7 @@ static struct tb_tunnel *TB_TEST_DP_TUNNEL1(struct kunit *test,
+ 
+ 	in = &host->ports[5];
+ 	out = &dev->ports[13];
+-	dp_tunnel1 = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	dp_tunnel1 = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, dp_tunnel1 != NULL);
+ 	KUNIT_ASSERT_EQ(test, dp_tunnel1->npaths, (size_t)3);
+ 
+@@ -2282,7 +2282,7 @@ static struct tb_tunnel *TB_TEST_DP_TUNNEL2(struct kunit *test,
+ 
+ 	in = &host->ports[6];
+ 	out = &dev->ports[14];
+-	dp_tunnel2 = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	dp_tunnel2 = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, dp_tunnel2 != NULL);
+ 	KUNIT_ASSERT_EQ(test, dp_tunnel2->npaths, (size_t)3);
+ 
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index 118742ec93ed..8ccd70920b6a 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -858,6 +858,7 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+  * @tb: Pointer to the domain structure
+  * @in: DP in adapter port
+  * @out: DP out adapter port
++ * @link_nr: Preferred lane adapter when the link is not bonded
+  * @max_up: Maximum available upstream bandwidth for the DP tunnel (%0
+  *	    if not limited)
+  * @max_down: Maximum available downstream bandwidth for the DP tunnel
+@@ -869,8 +870,8 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+  * Return: Returns a tb_tunnel on success or NULL on failure.
+  */
+ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+-				     struct tb_port *out, int max_up,
+-				     int max_down)
++				     struct tb_port *out, int link_nr,
++				     int max_up, int max_down)
  {
--	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
--	struct mlx5_core_dev *mdev = madev->mdev;
-+	struct mlx5_core_dev *mdev, *this = (struct mlx5_core_dev *)data;
-+
-+	mdev = pci_get_other_drvdata(this->device, dev);
-+	if (!mdev)
-+		return 0;
+ 	struct tb_tunnel *tunnel;
+ 	struct tb_path **paths;
+@@ -894,21 +895,21 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+ 	paths = tunnel->paths;
  
- 	if (!MLX5_CAP_GEN(mdev, vport_group_manager) ||
- 	    !MLX5_CAP_GEN(mdev, lag_master) ||
-@@ -583,19 +597,17 @@ static int next_phys_dev_lag(struct device *dev, const void *data)
- static struct mlx5_core_dev *mlx5_get_next_dev(struct mlx5_core_dev *dev,
- 					       int (*match)(struct device *dev, const void *data))
- {
--	struct auxiliary_device *adev;
--	struct mlx5_adev *madev;
-+	struct device *next;
+ 	path = tb_path_alloc(tb, in, TB_DP_VIDEO_HOPID, out, TB_DP_VIDEO_HOPID,
+-			     1, "Video");
++			     link_nr, "Video");
+ 	if (!path)
+ 		goto err_free;
+ 	tb_dp_init_video_path(path);
+ 	paths[TB_DP_VIDEO_PATH_OUT] = path;
  
- 	if (!mlx5_core_is_pf(dev))
- 		return NULL;
+ 	path = tb_path_alloc(tb, in, TB_DP_AUX_TX_HOPID, out,
+-			     TB_DP_AUX_TX_HOPID, 1, "AUX TX");
++			     TB_DP_AUX_TX_HOPID, link_nr, "AUX TX");
+ 	if (!path)
+ 		goto err_free;
+ 	tb_dp_init_aux_path(path);
+ 	paths[TB_DP_AUX_PATH_OUT] = path;
  
--	adev = auxiliary_find_device(NULL, dev, match);
--	if (!adev)
-+	next = bus_find_device(&pci_bus_type, NULL, dev, match);
-+	if (!next)
- 		return NULL;
- 
--	madev = container_of(adev, struct mlx5_adev, adev);
--	put_device(&adev->dev);
--	return madev->mdev;
-+	put_device(next);
-+	return pci_get_drvdata(to_pci_dev(next));
- }
- 
- /* Must be called with intf_mutex held */
+ 	path = tb_path_alloc(tb, out, TB_DP_AUX_RX_HOPID, in,
+-			     TB_DP_AUX_RX_HOPID, 1, "AUX RX");
++			     TB_DP_AUX_RX_HOPID, link_nr, "AUX RX");
+ 	if (!path)
+ 		goto err_free;
+ 	tb_dp_init_aux_path(path);
+diff --git a/drivers/thunderbolt/tunnel.h b/drivers/thunderbolt/tunnel.h
+index 03e56076b5bc..bb4d1f1d6d0b 100644
+--- a/drivers/thunderbolt/tunnel.h
++++ b/drivers/thunderbolt/tunnel.h
+@@ -71,8 +71,8 @@ struct tb_tunnel *tb_tunnel_alloc_pci(struct tb *tb, struct tb_port *up,
+ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+ 					bool alloc_hopid);
+ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+-				     struct tb_port *out, int max_up,
+-				     int max_down);
++				     struct tb_port *out, int link_nr,
++				     int max_up, int max_down);
+ struct tb_tunnel *tb_tunnel_alloc_dma(struct tb *tb, struct tb_port *nhi,
+ 				      struct tb_port *dst, int transmit_path,
+ 				      int transmit_ring, int receive_path,
 -- 
 2.35.1
 

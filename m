@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C648F548CDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AC65493F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242553AbiFMKUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S1356964AbiFMNBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242006AbiFMKR4 (ORCPT
+        with ESMTP id S1358091AbiFMMzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:17:56 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C23A201AF;
-        Mon, 13 Jun 2022 03:15:55 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E0D9590;
+        Mon, 13 Jun 2022 04:14:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 24A29CE1163;
-        Mon, 13 Jun 2022 10:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B20EC34114;
-        Mon, 13 Jun 2022 10:15:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34A3460B60;
+        Mon, 13 Jun 2022 11:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413C3C3411C;
+        Mon, 13 Jun 2022 11:14:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115349;
-        bh=zeX27Fz5CbFREmTH7EisWvyju2EjMVy2UlDeKjYszYg=;
+        s=korg; t=1655118859;
+        bh=EO27XRrZvZM3OEMGUga+8QfaUgSMH/01Y5OujwF83w4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wnpp7ZcfbntFSHcaiqoZBTu2gW1/M5Ei1yox2RbOJZDSbtwEsQxt+Ic14bIIhz9jD
-         2ubnE8xdMkflUhTsP8Q9x2fB2iH3Shw/yMs+mXJClicBt8Xh+Eh/oqPdvvOS21owVt
-         WCv0BXnyMpal973RwG3lLvwUcLZtn4qAVrDO1Tdw=
+        b=FFSyrkxDcalFghBqTuMMXYK9aDSd1h3srN10vNHezmnsDJaD457lVEKArGE9aPDSS
+         dykTFwlXBRrlR/CWqzG1dEmJIiHo0B8wuMGWpcJKsM44eHJQyLuWn/HPr/HOp+NY5g
+         fz85MbzFVOhT1hLmUbS/KCPDmAjUo/MWI+F6pa4Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 044/167] ath9k_htc: fix potential out of bounds access with invalid rxstatus->rs_keyix
-Date:   Mon, 13 Jun 2022 12:08:38 +0200
-Message-Id: <20220613094851.276924228@linuxfoundation.org>
+Subject: [PATCH 5.15 017/247] pwm: lp3943: Fix duty calculation in case period was clamped
+Date:   Mon, 13 Jun 2022 12:08:39 +0200
+Message-Id: <20220613094923.451054502@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 2dc509305cf956381532792cb8dceef2b1504765 ]
+[ Upstream commit 5e3b07ca5cc78cd4a987e78446849e41288d87cb ]
 
-The "rxstatus->rs_keyix" eventually gets passed to test_bit() so we need to
-ensure that it is within the bitmap.
+The hardware only supports periods <= 1.6 ms and if a bigger period is
+requested it is clamped to 1.6 ms. In this case duty_cycle might be bigger
+than 1.6 ms and then the duty cycle register is written with a value
+bigger than LP3943_MAX_DUTY. So clamp duty_cycle accordingly.
 
-drivers/net/wireless/ath/ath9k/common.c:46 ath9k_cmn_rx_accept()
-error: passing untrusted data 'rx_stats->rs_keyix' to 'test_bit()'
-
-Fixes: 4ed1a8d4a257 ("ath9k_htc: use ath9k_cmn_rx_accept")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220409061225.GA5447@kili
+Fixes: af66b3c0934e ("pwm: Add LP3943 PWM driver")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/pwm/pwm-lp3943.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-index 6a9c9b4ef2c9..fe4491eff8ca 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-@@ -1004,6 +1004,14 @@ static bool ath9k_rx_prepare(struct ath9k_htc_priv *priv,
- 		goto rx_next;
- 	}
+diff --git a/drivers/pwm/pwm-lp3943.c b/drivers/pwm/pwm-lp3943.c
+index ea17d446a627..2bd04ecb508c 100644
+--- a/drivers/pwm/pwm-lp3943.c
++++ b/drivers/pwm/pwm-lp3943.c
+@@ -125,6 +125,7 @@ static int lp3943_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+ 	if (err)
+ 		return err;
  
-+	if (rxstatus->rs_keyix >= ATH_KEYMAX &&
-+	    rxstatus->rs_keyix != ATH9K_RXKEYIX_INVALID) {
-+		ath_dbg(common, ANY,
-+			"Invalid keyix, dropping (keyix: %d)\n",
-+			rxstatus->rs_keyix);
-+		goto rx_next;
-+	}
-+
- 	/* Get the RX status information */
++	duty_ns = min(duty_ns, period_ns);
+ 	val = (u8)(duty_ns * LP3943_MAX_DUTY / period_ns);
  
- 	memset(rx_status, 0, sizeof(struct ieee80211_rx_status));
+ 	return lp3943_write_byte(lp3943, reg_duty, val);
 -- 
 2.35.1
 

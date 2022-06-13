@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0C1549FA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE89549FA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234521AbiFMUlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
+        id S1344413AbiFMUnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244080AbiFMUlB (ORCPT
+        with ESMTP id S1346301AbiFMUmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:41:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E253EAA2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:38:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Jun 2022 16:42:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265E113F25;
+        Mon, 13 Jun 2022 12:43:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 820FAB81260
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DBFC34114;
-        Mon, 13 Jun 2022 19:38:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655149105;
-        bh=IlyREGSSiPBcDabHaDrw79yO/FNKivARjh643g+g8bg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HKxskh0FzKAYavUnvpmvVGz58e6f02/DD31IMhs0e3QIy8kF25+Q4kZED2OAA/JyF
-         kFWE3kXI/WQ672dssR7JZHVNhWnRLQ4eHQJhTZ6siEiLoiAcet93ZVbgAddfCH8Mak
-         Yw4qwxLr/B/BBkNU8uqSjigM70N4wk5/BUbMdfL8=
-Date:   Mon, 13 Jun 2022 21:38:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paul Gortmaker <paul.gortmaker@windriver.com>
-Cc:     Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
-Subject: Re: RFC: repeated insmod/rmmod and DEBUG_KOBJECT_RELEASE - do we
- care?
-Message-ID: <YqeSLvnLo2CX+oTp@kroah.com>
-References: <20220613110239.GA69975@windriver.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CA43221AFC;
+        Mon, 13 Jun 2022 19:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655149424;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDlIv8k4YI9AeL8zTuC9Y9jHBJ5RQWlcpO0WYfw29GM=;
+        b=QYlBWgzCJ6lCxWp3gQ2Z3SxBRp998NEKsWzmGenXDPEfVxBop57Ws1nlUFD0NTb9nj2J1U
+        XFqvWHen/BxLTqci0hMrUCQAEuxeP+1O5zGCtE8sHpo8OzFa4m5PB0GRMkfkadYEfZOtJ4
+        mcIcxneT88NF/XRo8y5WU9xxDHnnFz0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655149424;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDlIv8k4YI9AeL8zTuC9Y9jHBJ5RQWlcpO0WYfw29GM=;
+        b=WxJzS6RsJwIE+51FIvF7osXGjc2WqiShjDo+rq6ZX5YPlk22LSRsagEVL8ljguIQVAH0D+
+        IrM0Uph/jbzMNSCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8279413443;
+        Mon, 13 Jun 2022 19:43:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FbzTHnCTp2I1NAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Mon, 13 Jun 2022 19:43:44 +0000
+Date:   Mon, 13 Jun 2022 21:39:12 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     syzbot <syzbot+d2dd123304b4ae59f1bd@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
+        hch@lst.de, josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+Subject: Re: [syzbot] KASAN: use-after-free Read in
+ copy_page_from_iter_atomic (2)
+Message-ID: <20220613193912.GI20633@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        syzbot <syzbot+d2dd123304b4ae59f1bd@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com, hch@lst.de,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+References: <0000000000003ce9d105e0db53c8@google.com>
+ <00000000000085068105e112a117@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613110239.GA69975@windriver.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <00000000000085068105e112a117@google.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 07:02:39AM -0400, Paul Gortmaker wrote:
-> If a person has CONFIG_DEBUG_KOBJECT_RELEASE enabled, and runs a rather
-> questionable test suite doing a repeated modprobe followed by modprobe -r
-> it will eventually trigger a duplicate sysfs name warning:
+On Fri, Jun 10, 2022 at 12:10:19AM -0700, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
-> [ 1427.032646] kobject: 'usbserial_generic' (00000000c91a1c2c): kobject_release, parent 00000000890627c7 (delayed 4000)
-> [...]
-> [ 1430.110659] kobject: 'usbserial_generic' (00000000a633d9a5): kobject_add_internal: parent: 'drivers', set: 'drivers'
-> [ 1430.110667] sysfs: cannot create duplicate filename '/bus/usb/drivers/usbserial_generic'
-> [ 1430.110671] CPU: 2 PID: 1102 Comm: modprobe Not tainted 5.15.38 #7
-> [ 1430.110678] Call Trace:
-> [ 1430.110685]  dump_stack_lvl+0x33/0x42
-> [ 1430.110693]  sysfs_warn_dup+0x51/0x60         <----------
-> [ 1430.110699]  sysfs_create_dir_ns+0xb8/0xd0
+> commit 4cd4aed63125ccd4efc35162627827491c2a7be7
+> Author: Christoph Hellwig <hch@lst.de>
+> Date:   Fri May 27 08:43:20 2022 +0000
 > 
-> For context to lkml readers, CONFIG_DEBUG_KOBJECT_RELEASE inserts a
-> random delay of between 2 and 5 seconds before freeing a kobject.
-> 
-> In the above case, the free was delayed 4s by the DEBUG option, but we tried
-> to reconstruct the same sysfs entry in just 3s elapsed and hence it triggered
-> the namespace collision warning. 
-> 
-> I'm not convinced this warrants fixing, given the contrived nature of the
-> root only test, but I did at least want to get it on record, so maybe it
-> saves someone else some research time, given a similar report.
+>     btrfs: fold repair_io_failure into btrfs_repair_eb_io_failure
 
-It's come up many many times in the past years, sorry you hit it again
-without realizing it.
+Josef also reported a crash and found a bug in the patch, now added as
+fixup that'll be in for-next:
 
-> We could I guess, within the CONFIG_DEBUG_KOBJECT_RELEASE ifdef'd code use
-> kobject_rename() to add a "-zombie" suffix or something like that, but then
-> it might mask name space collisions people *do* want to see?
-
-That wouldn't work as you would have rename collisions as well.
-
-And that warning is just that, a warning that you did something foolish
-so the kernel is trying to say "don't do that".  And doing a
-modprobe/rmmod constantly is a huge "don't do that" hint.
-
-> As per above it was seen with usb-serial, but I suspect any driver with a
-> sysfs kobject could reproduce the issue.  I also didn't reproduce on the
-> latest kernel but I can't imagine anything has changed in this area.
-
-Yes, the module handling code has changed a bit, so it might have solved
-some of these things.  But the root cause is still there, you are doing
-something odd/broken and the kernel warned you about it :)
-
-thanks,
-
-greg k-h
+diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+index 89a319e65197..5eac9ffb7499 100644
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -2260,7 +2260,7 @@ int btrfs_repair_eb_io_failure(const struct extent_buffer *eb, int mirror_num)
+		__bio_add_page(&bio, p, PAGE_SIZE, start - page_offset(p));
+		ret = btrfs_map_repair_bio(fs_info, &bio, mirror_num);
+		bio_uninit(&bio);
+-
++               start += PAGE_SIZE;
+		if (ret)
+			return ret;
+	}
+---

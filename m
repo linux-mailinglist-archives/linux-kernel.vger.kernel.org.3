@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5841549DB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67279549DC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349455AbiFMT3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S1350719AbiFMTbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351737AbiFMT3k (ORCPT
+        with ESMTP id S245219AbiFMTab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:29:40 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D245DD1D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:54:54 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id c2so8243548edf.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:54:54 -0700 (PDT)
+        Mon, 13 Jun 2022 15:30:31 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED4C3A5C5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:55:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id o7so12647751eja.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0yE1F+T2LeAVJ2bFwOtJHGbp283h9GhemqSHAeGwktA=;
-        b=cV5JPzOcrWUkY/YCBj01CplxNVk0Ypz2tEFigoKe7aUyACwfxpLidnfRJxQUvCHXB8
-         hXeDqzdFDhPl5UTeyCWepHZO/sI6ZgbBgwwQXwmZisuOyhVixvoN3C2E6lXFMJOFc09R
-         /Hv3Nw2iClVxh/V9udd7r9WBzL/nRXXjTHk6I=
+        bh=Qnmd/iXwgOAAlMSgI58Wt3WqINV1dXxUsm+6NoZ5u8g=;
+        b=CM6sbcBzjbo8jcx6FrpKxdA0+hnApCbPoz5aS6hM55/UCzzbW5lBIMBSv3ZCUmyzhu
+         ck/HBBgRPJKAaMaxtqLQsdS5ZwY40yDhXWMYeDqF7eYfJnYirtKw/B2MTrFojJHovlbi
+         LeWUTk2dRPSAL6ujLahMqKWNxgzTFpSo4v6Ng71GH0VdwsV3F0XC0Ynwy6e3Iaw+VGRp
+         VRxICAjcU1Vbguh/WcbSKwhsAIn2RA64FR/m15+YHFuVO4Y1c+QwLFUc1F9nZyYm1R2X
+         5P1UR2oPyzE6UPlptbt5jMmuPD4QFOIis1lawV89Cu0cPPjcqofF2Ptc5lvRuLxHErTw
+         TJRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0yE1F+T2LeAVJ2bFwOtJHGbp283h9GhemqSHAeGwktA=;
-        b=vQqDQU534fPb4TqkwoJZpY5ZMvwr01idJnm9JHi3rdUdJcmHq9KHOzQJeJTCbqXM7w
-         Orx7kQ4PvZMAnIq/jYCoetgjobFqRImOvfy0xyisXxb8X21BTEhVXNHb0JZmoGYuXuli
-         NPRwV9mYJo5Eh0KXAfx4/kn/BV/qF78DetjqQmcnpniKqkB2QGtD1viuDgWycFrbhM5J
-         c2RD3wiIvFRtlV2djcQvzbNzDFUfQPw9oIE/nOyKkNKqMcnKeNvE0Jx8GwH2P+oSXMOJ
-         dbmtk8ybiyrU5RjW8wFLdLFA+rY7w5NWa7TshkLCIhfFFGFlKxkt70dFV6YRV3Egoihq
-         9gJg==
-X-Gm-Message-State: AJIora+09gV78OzAJP4fqkOBjwe7GvsuydC/RkzE8a8mSWh6AAQSyjSX
-        Voqt43aCwzuOb3Vtptr2Ldb3AhtDrIVYL1lX
-X-Google-Smtp-Source: AGRyM1tjg56jNjPlCziy2KcuLRteGWDzW9zCH31ClOkzgtLqPRlTof6HpD47lOUZsBQMNkERe4VMfA==
-X-Received: by 2002:a05:6402:e81:b0:432:7f12:1878 with SMTP id h1-20020a0564020e8100b004327f121878mr1004817eda.179.1655142893265;
-        Mon, 13 Jun 2022 10:54:53 -0700 (PDT)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id d9-20020a1709063ec900b006feb6dee4absm4102475ejj.137.2022.06.13.10.54.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 10:54:52 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id e5so3404749wma.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:54:52 -0700 (PDT)
-X-Received: by 2002:a1c:5418:0:b0:39c:3552:c85e with SMTP id
- i24-20020a1c5418000000b0039c3552c85emr16162741wmb.68.1655142892217; Mon, 13
- Jun 2022 10:54:52 -0700 (PDT)
+        bh=Qnmd/iXwgOAAlMSgI58Wt3WqINV1dXxUsm+6NoZ5u8g=;
+        b=o6+UV8sFl3LhbDv5Z7PDiLV+JkmuLJSwrvipNEFiOIfsNnv1aJYmqj0T9gX0DlFhAI
+         6n5b2Wx95rMnib1wCN/3sSxECyilaXuwVKq1cnShgp3eWg9BqTePNYfx2DNLTyeDchlX
+         GzDBvVARq2HVZ4K3q85ny16mJkjoVuLplCoVobWxEk795YhMupw0n18rhF92jbeYNC8L
+         Z0iSwgy43XQeGi9+9QZYHgA5WX5FbTfACm7LYl+q/bDQ5bhLMsksqetaJnCdiXliuUGN
+         iFVH3SRq3S1XdL35sYBoHjPNyFtjuLeziUZRfpS/XHNQbhRnnXil2RyU+RFnw2mJI0PT
+         Abtw==
+X-Gm-Message-State: AOAM532NyxXxp8+XokIKNXOinkMxKZrSPRJ0KIOpGtZJFoqfP5Top/6K
+        26QX5We2pgUB7kpjqWXXPEWJl91Ra9v4NZNvLQnN5w==
+X-Google-Smtp-Source: AGRyM1vDh4u0EqUkAEC2QaY3FmKLC/4K7J/GzeNxqF+oFeSa4v0oV8VhwdwV55GJtAMZdjjndGLRdCT5PCkCx6hcazg=
+X-Received: by 2002:a17:906:c193:b0:718:d076:df7 with SMTP id
+ g19-20020a170906c19300b00718d0760df7mr896612ejz.358.1655142913232; Mon, 13
+ Jun 2022 10:55:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk>
-In-Reply-To: <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Jun 2022 10:54:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjmCzdNDCt6L8-N33WSRaYjnj0=yTc_JG8A_Pd7ZEtEJw@mail.gmail.com>
-Message-ID: <CAHk-=wjmCzdNDCt6L8-N33WSRaYjnj0=yTc_JG8A_Pd7ZEtEJw@mail.gmail.com>
-Subject: Re: [RFC][PATCH] fix short copy handling in copy_mc_pipe_to_iter()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        nvdimm@lists.linux.dev
+References: <202206120046.YKeKzlVN-lkp@intel.com>
+In-Reply-To: <202206120046.YKeKzlVN-lkp@intel.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 13 Jun 2022 10:55:02 -0700
+Message-ID: <CAGS_qxquSGoHD2NeRiS-basVg-nOP8s4kSGi90e2QuMc-Pt0Pg@mail.gmail.com>
+Subject: Re: lib/overflow_kunit.c:644:1: warning: the frame size of 2832 bytes
+ is larger than 1024 bytes
+To:     kernel test robot <lkp@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 5:10 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Sat, Jun 11, 2022 at 9:44 AM kernel test robot <lkp@intel.com> wrote:
 >
-> Unlike other copying operations on ITER_PIPE, copy_mc_to_iter() can
-> result in a short copy.  In that case we need to trim the unused
-> buffers, as well as the length of partially filled one - it's not
-> enough to set ->head, ->iov_offset and ->count to reflect how
-> much had we copied.  Not hard to fix, fortunately...
+> Hi Kees,
 >
-> I'd put a helper (pipe_discard_from(pipe, head)) into pipe_fs_i.h,
-> rather than iov_iter.c -
+> First bad commit (maybe != root cause):
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   0885eacdc81f920c3e0554d5615e69a66504a28d
+> commit: 617f55e20743fc50c989b498f9dee289eb644cfd lib: overflow: Convert to Kunit
+> date:   3 months ago
+> config: powerpc-buildonly-randconfig-r006-20220611 (https://download.01.org/0day-ci/archive/20220612/202206120046.YKeKzlVN-lkp@intel.com/config)
+> compiler: powerpc-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=617f55e20743fc50c989b498f9dee289eb644cfd
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 617f55e20743fc50c989b498f9dee289eb644cfd
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>    lib/overflow_kunit.c:191:19: warning: 's64_tests' defined but not used [-Wunused-const-variable=]
+>      191 | DEFINE_TEST_ARRAY(s64) = {
+>          |                   ^~~
+>    lib/overflow_kunit.c:24:11: note: in definition of macro 'DEFINE_TEST_ARRAY'
+>       24 |         } t ## _tests[]
+>          |           ^
+>    lib/overflow_kunit.c:94:19: warning: 'u64_tests' defined but not used [-Wunused-const-variable=]
+>       94 | DEFINE_TEST_ARRAY(u64) = {
+>          |                   ^~~
+>    lib/overflow_kunit.c:24:11: note: in definition of macro 'DEFINE_TEST_ARRAY'
+>       24 |         } t ## _tests[]
+>          |           ^
+>    lib/overflow_kunit.c: In function 'overflow_size_helpers_test':
+> >> lib/overflow_kunit.c:644:1: warning: the frame size of 2832 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>      644 | }
+>          | ^
+>    lib/overflow_kunit.c: In function 'overflow_shift_test':
+>    lib/overflow_kunit.c:451:1: warning: the frame size of 7232 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>      451 | }
+>          | ^
 
-Actually, since this "copy_mc_xyz()" stuff is going to be entirely
-impossible to debug and replicate for any normal situation, I would
-suggest we take the approach that we (long ago) used to take with
-copy_from_user(): zero out the destination buffer, so that developers
-that can't test the faulting behavior don't have to worry about it.
+I have an RFC series out to reduce the stack usage of KUNIT_EXPECT_*
+even further, but they won't help enough here.
+https://lore.kernel.org/linux-kselftest/20220525154442.1438081-1-dlatypov@google.com/
 
-And then the existing code is fine: it will break out of the loop, but
-it won't do the odd revert games and the "randomnoise.len -= rem"
-thing that I can't wrap my head around.
+So If we want to try and "fix" this, I think the only answer would be
+to split up the test funcs as appropriate.
+But I don't really know if that's warranted to fix this warning here,
+which largely indicates a compiler quality problem over a code quality
+one.
 
-Hmm?
-
-                Linus
+Daniel

@@ -2,226 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EFF54827E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8BD548225
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiFMI2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S231299AbiFMI26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240161AbiFMI23 (ORCPT
+        with ESMTP id S240184AbiFMI2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:28:29 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F26612757
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:28:26 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d5so1895915plo.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ykDR2Uk4CbOQ3wM0PXuQC4oxDGLqvfs6LYo+jnOevDY=;
-        b=iBEsynkrqKiDNFcZ/2PPp1KD827bEZaQ/fOYwNHs93fW8/auD7Uf41sOsHATyyeNgu
-         v4qiBS0sWa2faVOaBotB267Qu1DkblzSW3vCivrWnXT0Lg4RmDx1p1XW/fyBzBH98cz/
-         k0ud7NQUACMOVgBADm0y8FMttNspzpifAnudU=
+        Mon, 13 Jun 2022 04:28:31 -0400
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754D412757;
+        Mon, 13 Jun 2022 01:28:30 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id a15so6133311wrh.2;
+        Mon, 13 Jun 2022 01:28:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ykDR2Uk4CbOQ3wM0PXuQC4oxDGLqvfs6LYo+jnOevDY=;
-        b=3P1m9YfX4RIxuLt/BbnpRmB/a8JMSauUg1oZNd6QTdF7p9kTkuVuzaM2SP0Mm7SU6s
-         E/x47VNcQJh0uHlLfOazPCvDZx+da/QgkJ08QFpSf90ghifRdbTsFxz0V1Mqdj3Q04DK
-         1WfDGyCHUckwkon9UuKUck22iHHc3He3rrwrGPuPuq9qT/R4cSFkhQAZLCCOgxFo9CKb
-         IV5D62nfc82ddeXXAGDtwl7o9cWU+o+7AkMCkNGMFwjlli6p3/FYHAQy2GrcTLoil5lt
-         KVq4SzBv4JIwI71p3IFUzIGvwpuAKa83/SsnnsxBw5mmPeTo6oRWTaq63fE6XYzlvvzu
-         EiGw==
-X-Gm-Message-State: AOAM530/VFyya9vyNizRoMnnNXkiRWoLfksOGYJ6JTEExFcgZ81YUAOu
-        yfacD/B8NH+1lkeBqE0z+Sf/VSMuDjxpWg==
-X-Google-Smtp-Source: ABdhPJygjTGKX6O7iWUY8qOD+wjhd0VACZB/J2Z7QNA2jWpF+iXgT4YvK1K2bcNxt+9/tu+2hettsA==
-X-Received: by 2002:a05:6a00:2341:b0:51b:dd96:c7c1 with SMTP id j1-20020a056a00234100b0051bdd96c7c1mr53913886pfj.14.1655108895352;
-        Mon, 13 Jun 2022 01:28:15 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:79ca:e1d9:ad5:dc9e])
-        by smtp.gmail.com with ESMTPSA id br8-20020a056a00440800b00518a473265csm4624906pfb.217.2022.06.13.01.28.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 01:28:14 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Phillip Lougher <phillip@squashfs.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Xiongwei Song <Xiongwei.Song@windriver.com>,
-        Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/3] squashfs: implement readahead
-Date:   Mon, 13 Jun 2022 16:28:02 +0800
-Message-Id: <20220613082802.1301238-4-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-In-Reply-To: <20220613082802.1301238-1-hsinyi@chromium.org>
-References: <20220613082802.1301238-1-hsinyi@chromium.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hBtcUvM74HCV9u8vUlhcOue6ctsIhFbgdVClXbpGCNQ=;
+        b=iLdtkcnFnvBj+s/QCzNtL1bW+qOXi7CbchvrHIwR/HTU/qi6l9Ic5B+glg0j6vDkE5
+         ZsVv0qDX8ufh0XDzW8EAIiIy4EIriPELMOICQ2YetB8+llvnW8oNLhqwc6KAUnzcU0lm
+         wZx245m/IKQYX2Vls5KUs2heCvWQqQIZjWjPyl8wgHDUIA14/94OE1TMeN0I+5/ZXISe
+         K/31BCDafWrheQrs5453LBbOxVj17qCsQYArP8KV0JMbOV0Bs258JpglFDcYJZ9F4uEF
+         A9MQbSeGjmKkBpoOpal6938tNViKTKbL9J33Nnq8QkOHwrG5XNVpwF5kMSJws9ILPryu
+         tUyg==
+X-Gm-Message-State: AOAM532wxfGwdNQOYSJJ++l4gX1hpMP27IPH6J8Xhua6ArbbmD1Lue5V
+        cMKhQYnTDeScaXyIbkBU3kY4EjRWBOLPog==
+X-Google-Smtp-Source: ABdhPJxFmgXHOMghqLKZ2Ukn1poGFL1jpCdV5xds0HjrqG3tqDnmo7a2inSaGbYsaLu00fyjFfNnyg==
+X-Received: by 2002:adf:f706:0:b0:20e:6788:c2b6 with SMTP id r6-20020adff706000000b0020e6788c2b6mr56239494wrp.633.1655108908965;
+        Mon, 13 Jun 2022 01:28:28 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id c16-20020a7bc850000000b0039c96b97359sm1789466wml.37.2022.06.13.01.28.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 01:28:28 -0700 (PDT)
+Message-ID: <1a631963-8b76-b14a-892c-9e22a23a55f7@kernel.org>
+Date:   Mon, 13 Jun 2022 10:28:27 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] serial: 8250: Use UART_LCR_WLEN8 instead of literal
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220613075736.12283-1-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220613075736.12283-1-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement readahead callback for squashfs. It will read datablocks
-which cover pages in readahead request. For a few cases it will
-not mark page as uptodate, including:
-- file end is 0.
-- zero filled blocks.
-- current batch of pages isn't in the same datablock.
-- decompressor error.
-Otherwise pages will be marked as uptodate. The unhandled pages will be
-updated by readpage later.
+On 13. 06. 22, 9:57, Ilpo Järvinen wrote:
+> Use UART_LCR_WLEN8 instead of literal 0x03 in size_fifo().
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Suggested-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
-Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
-Reported-by: Andrew Morton <akpm@linux-foundation.org>
----
-v5->v6:
-- use the new squashfs_page_actor_init_special() to handle short file
-  cases as well.
-- use memzero_page().
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-v5:
-https://lore.kernel.org/lkml/20220606150305.1883410-4-hsinyi@chromium.org/
-v4:
-https://lore.kernel.org/lkml/20220601103922.1338320-4-hsinyi@chromium.org/
-v3:
-https://lore.kernel.org/lkml/20220523065909.883444-4-hsinyi@chromium.org/
-v2:
-https://lore.kernel.org/lkml/20220517082650.2005840-4-hsinyi@chromium.org/
-v1:
-https://lore.kernel.org/lkml/20220516105100.1412740-3-hsinyi@chromium.org/
----
- fs/squashfs/file.c | 92 +++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 1 deletion(-)
+> ---
+>   drivers/tty/serial/8250/8250_port.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 953b0fadfd4c..8365c7ad3576 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -843,7 +843,7 @@ static int size_fifo(struct uart_8250_port *up)
+>   	serial_out(up, UART_LCR, UART_LCR_CONF_MODE_A);
+>   	old_dl = serial_dl_read(up);
+>   	serial_dl_write(up, 0x0001);
+> -	serial_out(up, UART_LCR, 0x03);
+> +	serial_out(up, UART_LCR, UART_LCR_WLEN8);
+>   	for (count = 0; count < 256; count++)
+>   		serial_out(up, UART_TX, count);
+>   	mdelay(20);/* FIXME - schedule_timeout */
 
-diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
-index 7f0904b203294..f0c64ee272d5d 100644
---- a/fs/squashfs/file.c
-+++ b/fs/squashfs/file.c
-@@ -39,6 +39,7 @@
- #include "squashfs_fs_sb.h"
- #include "squashfs_fs_i.h"
- #include "squashfs.h"
-+#include "page_actor.h"
- 
- /*
-  * Locate cache slot in range [offset, index] for specified inode.  If
-@@ -496,7 +497,96 @@ static int squashfs_read_folio(struct file *file, struct folio *folio)
- 	return res;
- }
- 
-+static void squashfs_readahead(struct readahead_control *ractl)
-+{
-+	struct inode *inode = ractl->mapping->host;
-+	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
-+	size_t mask = (1UL << msblk->block_log) - 1;
-+	unsigned short shift = msblk->block_log - PAGE_SHIFT;
-+	loff_t start = readahead_pos(ractl) & ~mask;
-+	size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
-+	struct squashfs_page_actor *actor;
-+	unsigned int nr_pages = 0;
-+	struct page **pages;
-+	int i, file_end = i_size_read(inode) >> msblk->block_log;
-+	unsigned int max_pages = 1UL << shift;
-+
-+	readahead_expand(ractl, start, (len | mask) + 1);
-+
-+	if (file_end == 0)
-+		return;
-+
-+	pages = kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
-+	if (!pages)
-+		return;
-+
-+	for (;;) {
-+		pgoff_t index;
-+		int res, bsize;
-+		u64 block = 0;
-+		unsigned int expected;
-+
-+		nr_pages = __readahead_batch(ractl, pages, max_pages);
-+		if (!nr_pages)
-+			break;
-+
-+		if (readahead_pos(ractl) >= i_size_read(inode))
-+			goto skip_pages;
-+
-+		index = pages[0]->index >> shift;
-+		if ((pages[nr_pages - 1]->index >> shift) != index)
-+			goto skip_pages;
-+
-+		expected = index == file_end ?
-+			   (i_size_read(inode) & (msblk->block_size - 1)) :
-+			    msblk->block_size;
-+
-+		bsize = read_blocklist(inode, index, &block);
-+		if (bsize == 0)
-+			goto skip_pages;
-+
-+		actor = squashfs_page_actor_init_special(msblk, pages, nr_pages,
-+							 expected);
-+		if (!actor)
-+			goto skip_pages;
-+
-+		res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
-+
-+		kfree(actor);
-+
-+		if (res == expected) {
-+			int bytes;
-+
-+			/* Last page (if present) may have trailing bytes not filled */
-+			bytes = res % PAGE_SIZE;
-+			if (pages[nr_pages - 1]->index == file_end && bytes)
-+				memzero_page(pages[nr_pages - 1], bytes,
-+					     PAGE_SIZE - bytes);
-+
-+			for (i = 0; i < nr_pages; i++) {
-+				flush_dcache_page(pages[i]);
-+				SetPageUptodate(pages[i]);
-+			}
-+		}
-+
-+		for (i = 0; i < nr_pages; i++) {
-+			unlock_page(pages[i]);
-+			put_page(pages[i]);
-+		}
-+	}
-+
-+	kfree(pages);
-+	return;
-+
-+skip_pages:
-+	for (i = 0; i < nr_pages; i++) {
-+		unlock_page(pages[i]);
-+		put_page(pages[i]);
-+	}
-+	kfree(pages);
-+}
- 
- const struct address_space_operations squashfs_aops = {
--	.read_folio = squashfs_read_folio
-+	.read_folio = squashfs_read_folio,
-+	.readahead = squashfs_readahead
- };
+
 -- 
-2.36.1.476.g0c4daa206d-goog
-
+js
+suse labs

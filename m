@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91AB2548D8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F021254947D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357836AbiFMND5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S1344319AbiFMKuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355477AbiFMMzR (ORCPT
+        with ESMTP id S1345326AbiFMKs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA703B4A3;
-        Mon, 13 Jun 2022 04:15:31 -0700 (PDT)
+        Mon, 13 Jun 2022 06:48:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BFA2C676;
+        Mon, 13 Jun 2022 03:26:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65D8CB80EAA;
-        Mon, 13 Jun 2022 11:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E73C34114;
-        Mon, 13 Jun 2022 11:15:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B895460F0B;
+        Mon, 13 Jun 2022 10:26:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA411C34114;
+        Mon, 13 Jun 2022 10:26:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118929;
-        bh=PxqYABG3RA/+b0k6rSPsFZJoLIgRj6mAXyUTxIdnKdU=;
+        s=korg; t=1655115965;
+        bh=ViJROby02GyZyQYTg0MYFcHMxaI8kXhKPs9s2mAtsnA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J85vseCEGLNbTDMTnHr7oK3oGKuIrVQmWsTHKOBhPE0UQUNGQVMOJrYLyZf5fqAoR
-         yZmNlFFALo3u1bqUNfs6r7isCV2Jj3gXMCSTt5s6jdnVCDjtJPAzepMpuXBtc2rE3j
-         dTJVomDIXE2EI3D6JE4rGdrm2fZvEm9U/CEzeuaE=
+        b=XWskt4O/vtcWOgiMXupj3rSc8PlOL1d5zncrScHW4zLMPrHZU+WgK1wuRB69aeQAq
+         KaoX/tHvOBN8ryVywXH99mej2315zYSPx03XG1ZuaaaAzpsssYVCQuOmIH4PI0J/3Z
+         ymL4qV5tJaCWsjAn3o++NuMqVRWIUiHocZlE+aa4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Tony Lindgren <tony@atomide.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 051/247] tty: n_gsm: Fix packet data hex dump output
-Date:   Mon, 13 Jun 2022 12:09:13 +0200
-Message-Id: <20220613094924.502001331@linuxfoundation.org>
+Subject: [PATCH 4.14 096/218] mailbox: forward the hrtimer if not queued and under a lock
+Date:   Mon, 13 Jun 2022 12:09:14 +0200
+Message-Id: <20220613094923.460487927@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,100 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Björn Ardö <bjorn.ardo@axis.com>
 
-[ Upstream commit 925ea0fa5277c1e6bb9e51955ef34eea9736c3d7 ]
+[ Upstream commit bca1a1004615efe141fd78f360ecc48c60bc4ad5 ]
 
-The module param debug for n_gsm uses KERN_INFO level, but the hexdump
-now uses KERN_DEBUG level. This started after commit 091cb0994edd
-("lib/hexdump: make print_hex_dump_bytes() a nop on !DEBUG builds").
-We now use dynamic_hex_dump() unless DEBUG is set.
+This reverts commit c7dacf5b0f32957b24ef29df1207dc2cd8307743,
+"mailbox: avoid timer start from callback"
 
-This causes no packets to be seen with modprobe n_gsm debug=0x1f unlike
-earlier. Let's fix this by adding gsm_hex_dump_bytes() that calls
-print_hex_dump() with KERN_INFO to match what n_gsm is doing with the
-other debug related output.
+The previous commit was reverted since it lead to a race that
+caused the hrtimer to not be started at all. The check for
+hrtimer_active() in msg_submit() will return true if the
+callback function txdone_hrtimer() is currently running. This
+function could return HRTIMER_NORESTART and then the timer
+will not be restarted, and also msg_submit() will not start
+the timer. This will lead to a message actually being submitted
+but no timer will start to check for its compleation.
 
-Fixes: 091cb0994edd ("lib/hexdump: make print_hex_dump_bytes() a nop on !DEBUG builds")
-Cc: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Link: https://lore.kernel.org/r/20220512131506.1216-1-tony@atomide.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The original fix that added checking hrtimer_active() was added to
+avoid a warning with hrtimer_forward. Looking in the kernel
+another solution to avoid this warning is to check hrtimer_is_queued()
+before calling hrtimer_forward_now() instead. This however requires a
+lock so the timer is not started by msg_submit() inbetween this check
+and the hrtimer_forward() call.
+
+Fixes: c7dacf5b0f32 ("mailbox: avoid timer start from callback")
+Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c | 31 +++++++++++++++++++++++--------
- 1 file changed, 23 insertions(+), 8 deletions(-)
+ drivers/mailbox/mailbox.c          | 19 +++++++++++++------
+ include/linux/mailbox_controller.h |  1 +
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 0722860b6f54..a246f429ffb7 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -443,6 +443,25 @@ static u8 gsm_encode_modem(const struct gsm_dlci *dlci)
- 	return modembits;
- }
+diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+index 10a559cfb7ea..aa28fdcb81b9 100644
+--- a/drivers/mailbox/mailbox.c
++++ b/drivers/mailbox/mailbox.c
+@@ -85,11 +85,11 @@ static void msg_submit(struct mbox_chan *chan)
+ exit:
+ 	spin_unlock_irqrestore(&chan->lock, flags);
  
-+static void gsm_hex_dump_bytes(const char *fname, const u8 *data,
-+			       unsigned long len)
-+{
-+	char *prefix;
-+
-+	if (!fname) {
-+		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1, data, len,
-+			       true);
-+		return;
-+	}
-+
-+	prefix = kasprintf(GFP_KERNEL, "%s: ", fname);
-+	if (!prefix)
-+		return;
-+	print_hex_dump(KERN_INFO, prefix, DUMP_PREFIX_OFFSET, 16, 1, data, len,
-+		       true);
-+	kfree(prefix);
-+}
-+
- /**
-  *	gsm_print_packet	-	display a frame for debug
-  *	@hdr: header to print before decode
-@@ -507,7 +526,7 @@ static void gsm_print_packet(const char *hdr, int addr, int cr,
- 	else
- 		pr_cont("(F)");
- 
--	print_hex_dump_bytes("", DUMP_PREFIX_NONE, data, dlen);
-+	gsm_hex_dump_bytes(NULL, data, dlen);
- }
- 
- 
-@@ -689,9 +708,7 @@ static void gsm_data_kick(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 		}
- 
- 		if (debug & 4)
--			print_hex_dump_bytes("gsm_data_kick: ",
--					     DUMP_PREFIX_OFFSET,
--					     gsm->txframe, len);
-+			gsm_hex_dump_bytes(__func__, gsm->txframe, len);
- 		if (gsmld_output(gsm, gsm->txframe, len) <= 0)
- 			break;
- 		/* FIXME: Can eliminate one SOF in many more cases */
-@@ -2371,8 +2388,7 @@ static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len)
- 		return -ENOSPC;
+-	/* kick start the timer immediately to avoid delays */
+ 	if (!err && (chan->txdone_method & TXDONE_BY_POLL)) {
+-		/* but only if not already active */
+-		if (!hrtimer_active(&chan->mbox->poll_hrt))
+-			hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
++		/* kick start the timer immediately to avoid delays */
++		spin_lock_irqsave(&chan->mbox->poll_hrt_lock, flags);
++		hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
++		spin_unlock_irqrestore(&chan->mbox->poll_hrt_lock, flags);
  	}
- 	if (debug & 4)
--		print_hex_dump_bytes("gsmld_output: ", DUMP_PREFIX_OFFSET,
--				     data, len);
-+		gsm_hex_dump_bytes(__func__, data, len);
- 	return gsm->tty->ops->write(gsm->tty, data, len);
  }
  
-@@ -2448,8 +2464,7 @@ static void gsmld_receive_buf(struct tty_struct *tty, const unsigned char *cp,
- 	char flags = TTY_NORMAL;
+@@ -123,20 +123,26 @@ static enum hrtimer_restart txdone_hrtimer(struct hrtimer *hrtimer)
+ 		container_of(hrtimer, struct mbox_controller, poll_hrt);
+ 	bool txdone, resched = false;
+ 	int i;
++	unsigned long flags;
  
- 	if (debug & 4)
--		print_hex_dump_bytes("gsmld_receive: ", DUMP_PREFIX_OFFSET,
--				     cp, count);
-+		gsm_hex_dump_bytes(__func__, cp, count);
+ 	for (i = 0; i < mbox->num_chans; i++) {
+ 		struct mbox_chan *chan = &mbox->chans[i];
  
- 	for (; count; count--, cp++) {
- 		if (fp)
+ 		if (chan->active_req && chan->cl) {
+-			resched = true;
+ 			txdone = chan->mbox->ops->last_tx_done(chan);
+ 			if (txdone)
+ 				tx_tick(chan, 0);
++			else
++				resched = true;
+ 		}
+ 	}
+ 
+ 	if (resched) {
+-		hrtimer_forward_now(hrtimer, ms_to_ktime(mbox->txpoll_period));
++		spin_lock_irqsave(&mbox->poll_hrt_lock, flags);
++		if (!hrtimer_is_queued(hrtimer))
++			hrtimer_forward_now(hrtimer, ms_to_ktime(mbox->txpoll_period));
++		spin_unlock_irqrestore(&mbox->poll_hrt_lock, flags);
++
+ 		return HRTIMER_RESTART;
+ 	}
+ 	return HRTIMER_NORESTART;
+@@ -473,6 +479,7 @@ int mbox_controller_register(struct mbox_controller *mbox)
+ 		hrtimer_init(&mbox->poll_hrt, CLOCK_MONOTONIC,
+ 			     HRTIMER_MODE_REL);
+ 		mbox->poll_hrt.function = txdone_hrtimer;
++		spin_lock_init(&mbox->poll_hrt_lock);
+ 	}
+ 
+ 	for (i = 0; i < mbox->num_chans; i++) {
+diff --git a/include/linux/mailbox_controller.h b/include/linux/mailbox_controller.h
+index 74deadb42d76..5a4524f66ea1 100644
+--- a/include/linux/mailbox_controller.h
++++ b/include/linux/mailbox_controller.h
+@@ -83,6 +83,7 @@ struct mbox_controller {
+ 				      const struct of_phandle_args *sp);
+ 	/* Internal to API */
+ 	struct hrtimer poll_hrt;
++	spinlock_t poll_hrt_lock;
+ 	struct list_head node;
+ };
+ 
 -- 
 2.35.1
 

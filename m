@@ -2,93 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4195A548436
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C18548420
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiFMKDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
+        id S240099AbiFMKHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241439AbiFMKCb (ORCPT
+        with ESMTP id S234679AbiFMKHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:02:31 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4F710A7;
-        Mon, 13 Jun 2022 03:02:28 -0700 (PDT)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LM6Tf4bCNz682DK;
-        Mon, 13 Jun 2022 17:58:46 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 12:02:26 +0200
-Received: from [10.195.33.253] (10.195.33.253) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 11:02:25 +0100
-Message-ID: <5a2047e3-5e71-141a-ec3a-2e22749d3c49@huawei.com>
-Date:   Mon, 13 Jun 2022 11:05:33 +0100
+        Mon, 13 Jun 2022 06:07:03 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AFF25FC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:07:00 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z7so6363767edm.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:07:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=388rVfLziXGbjQS21Tul2j/I7M6Zt1K95tN24K1AmoM=;
+        b=hNPIvBFiRMJ6rB/VHNwmWvua/nH8QKLJWyeJkrEUtfgSTBNVuaQxhkbVVpGMdFbjRr
+         8LEM6GKxwsaJ+IGRBEPZ5cL3V68XTQWq3Aw//53cWUmdeBb7cFfKiCxoD0TWWiptbIL/
+         jWGZvp3CsaRaRaogyBL+TKOexYVfbxexw4ssqWWiTXn9DSWXN45SchBd44isMpwxWuSa
+         OnzxtDc82Fea/jlWVAQzdMCGB/l4fNmhfWMyphWpbwg0FJvwAlZ600AO9HPDhaOHb9By
+         Wy8Olozr1Xjub65R8YtZPR4+ZrGIj271V6fcw7137YbsyDzvqpYLPlcHJhqZVzrdXEuS
+         bsgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=388rVfLziXGbjQS21Tul2j/I7M6Zt1K95tN24K1AmoM=;
+        b=MKgm5TQatjp3/i4RHcCtp+t2ZmE/ZRjnNVXcSBv9oPPUlJtHSsc3gD4o1TLgtsjkrK
+         uPpEndfL7M6r3iQhuRShtMmcj0Q1FXZNxCTw1QZxmye2ww1OYtilPUNxEWQVPB1GHiv5
+         Nbq6xJmVvOs7ccMJ0Pg+KYErXaXRsgnCSKgz+3MpusrtAFGW1L8ft3ZBuH6p70N0wSBf
+         sv9QdZKGLcXwNH5CXQpX9l8n2tubMe/Y3BwPK3n4f7pB2fy8YDQikt2OqJw4fSSFmKpO
+         xBXBD+7W01zOunrWj+lWVAIaWsoMxbBR8lqghy3bQqXCoD6nJljAHi7/KA0cRNr6Um2R
+         hXzQ==
+X-Gm-Message-State: AOAM531FdGvGIY+vbrAi6DLvksXKsT87rlIVL41cbc6b1gxhU/UwwCAl
+        xZGRCLsDSS/qYgaKHy6lLRIYB9lvlqmyug==
+X-Google-Smtp-Source: ABdhPJyLVR6mKaSnfeAjdGkfvs4pku53sb5gAxMEnTrk6uCc+t28wi5xWYywt1WZ8NQMLmTOvRKS7Q==
+X-Received: by 2002:a05:6402:5252:b0:42f:b566:c189 with SMTP id t18-20020a056402525200b0042fb566c189mr52169148edd.398.1655114819283;
+        Mon, 13 Jun 2022 03:06:59 -0700 (PDT)
+Received: from krzk-bin.monzoon.net (80-254-69-65.dynamic.monzoon.net. [80.254.69.65])
+        by smtp.gmail.com with ESMTPSA id v2-20020a170906858200b006fe921fcb2dsm3639911ejx.49.2022.06.13.03.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 03:06:58 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/3] scsi: ufs: minor cleanups
+Date:   Mon, 13 Jun 2022 12:06:52 +0200
+Message-Id: <20220613100655.105301-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
- handling
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <brking@us.ibm.com>, <hare@suse.de>,
-        <hch@lst.de>
-CC:     <linux-block@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <chenxiang66@hisilicon.com>
-References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
- <1654770559-101375-4-git-send-email-john.garry@huawei.com>
- <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
- <7f80f3b6-84f6-de48-4e69-4562c96e62c5@huawei.com>
- <e4b108ba-cbc9-5237-f873-2fcea94f2b85@opensource.wdc.com>
- <53fa2856-54f2-c075-2eed-4f05c3459597@huawei.com>
- <d2e452cd-6a91-f25d-748e-94f560deb1bb@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <d2e452cd-6a91-f25d-748e-94f560deb1bb@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.33.253]
-X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 10:43, Damien Le Moal wrote:
->>> Currently, that is not possible to do cleanly as there are no guarantees
->>> we can get a free tag (there is a race between block layer tag allocation
->>> and libata internal tag counting). So a reserved tag for that would be
->>> nice. We would end up with 31 IO tags at most + 1 reserved tag for NCQ
->>> commands + ATA_TAG_INTERNAL for non-NCQ. That last one would be rendered
->>> rather useless. But that also means that we kind-of go back to the days
->>> when Linux showed ATA drives max QD of 31...
->> So must the ATA_TAG_INTERNAL qc always be available for non-NCQ action
->> like EH, and that is why you cannot reuse for this internal NCQ
->> (queuable) command?
-> Currently, ATA_TAG_INTERNAL is always used for non-NCQ commands. Seeing a
-> qc with that tag means it is*not*  NCQ.
-> 
-> I am trying to see if I can reuse the tag from one of the commands that
-> completed with that weird good status/sense data available. The problem
-> though is that this all needs to be done*before*  calling
-> qc->complete_fn() which will free the tag. So we endup with 2 qcs that
-> have the same tag, the second one (for the read log command) temporarily
-> using the tag but still going through the same completion path without the
-> original command fully completed yet. It is a real mess.
-> 
+Hi,
 
-Reusing tags seems really messy, but then reserving an NCQ command seems 
-wasteful.
+Changes since v2
+================
+1. More whitespace cleanups.
 
-Thanks,
-John
+Changes since v1
+================
+1. Drop patch 1 (needs further work).
+2. Rebase on current linux-next (including Bart Van Assche's work).
+
+v1: https://lore.kernel.org/all/20220408103027.311624-1-krzysztof.kozlowski@linaro.org/
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (3):
+  scsi: core: fix white-spaces
+  scsi: ufs: ufshcd-pltfrm: constify pointed data
+  scsi: ufs: ufshcd: constify pointed data
+
+ drivers/scsi/scsi_debug.c         |  2 +-
+ drivers/scsi/scsi_priv.h          |  4 +--
+ drivers/scsi/scsi_proc.c          | 14 ++++-----
+ drivers/scsi/scsi_scan.c          | 10 +++----
+ drivers/scsi/scsi_sysfs.c         |  4 +--
+ drivers/scsi/scsi_transport_spi.c | 49 +++++++++++++++----------------
+ drivers/scsi/scsicam.c            |  6 ++--
+ drivers/scsi/sr.c                 |  8 ++---
+ drivers/ufs/core/ufshcd-priv.h    |  6 ++--
+ drivers/ufs/core/ufshcd.c         | 42 +++++++++++++-------------
+ drivers/ufs/host/ufshcd-pltfrm.c  | 10 +++----
+ drivers/ufs/host/ufshcd-pltfrm.h  |  4 +--
+ include/linux/libata.h            |  6 ++--
+ include/scsi/scsi_cmnd.h          |  2 +-
+ include/scsi/scsi_device.h        | 10 +++----
+ include/scsi/scsi_host.h          | 13 ++++----
+ include/scsi/scsi_ioctl.h         |  2 +-
+ include/scsi/scsi_transport.h     |  2 +-
+ include/scsi/scsi_transport_spi.h |  2 +-
+ include/scsi/scsicam.h            |  2 +-
+ include/scsi/sg.h                 |  2 +-
+ include/ufs/ufshcd.h              |  6 ++--
+ 22 files changed, 103 insertions(+), 103 deletions(-)
+
+-- 
+2.34.1
+

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B535488C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494395492C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346061AbiFMKvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S1359130AbiFMMJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347936AbiFMKtH (ORCPT
+        with ESMTP id S1358702AbiFMMEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:49:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A61C2D1FD;
-        Mon, 13 Jun 2022 03:26:39 -0700 (PDT)
+        Mon, 13 Jun 2022 08:04:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B310D50006;
+        Mon, 13 Jun 2022 03:57:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE3B660F0F;
-        Mon, 13 Jun 2022 10:26:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70F0C34114;
-        Mon, 13 Jun 2022 10:26:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29653B80D3A;
+        Mon, 13 Jun 2022 10:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83615C34114;
+        Mon, 13 Jun 2022 10:57:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115998;
-        bh=REuaWyW5uskEwir9+iUVh14ktdiKIXAINWSm23//9Ks=;
+        s=korg; t=1655117862;
+        bh=inTd+OvQqc7ZGHRQcLzAuhCDyTfspiFvyQADRH4U39g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uydgBWH5bHQGcG12IWVa5jSmIrJdwtFVJ1vmSVpNb88gnRyWTE01cTO2alQZWUX0V
-         B1y13iqS54B02XorXmzu8dKQj2RguXTBR+9NaJTzyaFscafQYRC32lE2oULnLAJ0RI
-         OHeN7WA+eZCJJFb6uzSD6dMuclokH3nNn90qn3VQ=
+        b=1t9kM5WQZfjtpuXh5zsSpao9NzAGyqQXbkLkRyAExcuD6IVVnq3At9yIdiiqoQDWe
+         ZwK+ZT03HFjtgrOfJzEucFXoGud4MjTrSBLaXwwpUs83yG5UlYkhDify2NJNE5YQkm
+         N+9iLsQZHLtFjtAOH2nkCMw358Yduiyrd8mC07Hg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 4.14 103/218] iwlwifi: mvm: fix assert 1F04 upon reconfig
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 137/287] video: fbdev: clcdfb: Fix refcount leak in clcdfb_of_vram_setup
 Date:   Mon, 13 Jun 2022 12:09:21 +0200
-Message-Id: <20220613094923.678228913@linuxfoundation.org>
+Message-Id: <20220613094928.032262659@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 9d096e3d3061dbf4ee10e2b59fc2c06e05bdb997 upstream.
+[ Upstream commit b23789a59fa6f00e98a319291819f91fbba0deb8 ]
 
-When we reconfig we must not send the MAC_POWER command that relates to
-a MAC that was not yet added to the firmware.
+of_parse_phandle() returns a node pointer with refcount incremented, we should
+use of_node_put() on it when not need anymore.  Add missing of_node_put() to
+avoid refcount leak.
 
-Ignore those in the iterator.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20220517120044.ed2ffc8ce732.If786e19512d0da4334a6382ea6148703422c7d7b@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/power.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/video/fbdev/amba-clcd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/net/wireless/intel/iwlwifi/mvm/power.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
-@@ -611,6 +611,9 @@ static void iwl_mvm_power_get_vifs_itera
- 	struct iwl_power_vifs *power_iterator = _data;
- 	bool active = mvmvif->phy_ctxt && mvmvif->phy_ctxt->id < NUM_PHY_CTX;
+diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
+index 38c1f324ce15..549f78e77255 100644
+--- a/drivers/video/fbdev/amba-clcd.c
++++ b/drivers/video/fbdev/amba-clcd.c
+@@ -838,12 +838,15 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
+ 		return -ENODEV;
  
-+	if (!mvmvif->uploaded)
-+		return;
-+
- 	switch (ieee80211_vif_type_p2p(vif)) {
- 	case NL80211_IFTYPE_P2P_DEVICE:
- 		break;
+ 	fb->fb.screen_base = of_iomap(memory, 0);
+-	if (!fb->fb.screen_base)
++	if (!fb->fb.screen_base) {
++		of_node_put(memory);
+ 		return -ENOMEM;
++	}
+ 
+ 	fb->fb.fix.smem_start = of_translate_address(memory,
+ 			of_get_address(memory, 0, &size, NULL));
+ 	fb->fb.fix.smem_len = size;
++	of_node_put(memory);
+ 
+ 	return 0;
+ }
+-- 
+2.35.1
+
 
 

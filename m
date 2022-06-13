@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C74549522
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E34B54986B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382218AbiFMON3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S1377887AbiFMNkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382598AbiFMOGG (ORCPT
+        with ESMTP id S1378087AbiFMNhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:06:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666F695DED;
-        Mon, 13 Jun 2022 04:41:01 -0700 (PDT)
+        Mon, 13 Jun 2022 09:37:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1E83630D;
+        Mon, 13 Jun 2022 04:27:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8060AB80D31;
-        Mon, 13 Jun 2022 11:40:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6759C34114;
-        Mon, 13 Jun 2022 11:40:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACE5761225;
+        Mon, 13 Jun 2022 11:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CB4C3411C;
+        Mon, 13 Jun 2022 11:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120458;
-        bh=28hVbwrBlTsfQv2+VKD9WOmazeddOyy/E8ouUEiCXM0=;
+        s=korg; t=1655119642;
+        bh=uo0lwWJaTQsbH8CNcVD3Nc5hC4tDjxOrZxt2j38czqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EdrUK/DfVPSvIoc+43Sxwpo/btJT0LsxbGDGafhP8yVWeu5lemA6K13iIzSKpQwN1
-         LCC/7mG2plleM1ASQSgYBnjyOWU4XM2SzCScXx7+u1aJnq5K9Yi6dkQvvXNfDopgn6
-         +VpNamEKVUlaXzvARfM2uItaecH5rqP0753oZdB4=
+        b=QKGIA348tCBdukOZO2D20sOQ1Qb3HSARkDKzhO4iRbOgq+zxkNjQL3IZWJjZo+EsQ
+         vdtr8ZFSGegbuh+EqLqZk2dCFT9OIZekFmtfxD/8wn3x3zh39DetmZ6fnmY40UBmtR
+         S9vBbUFnvVCikY5Kdv/tGncpXeFNNTCER5kDQzHw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 017/298] staging: fieldbus: Fix the error handling path in anybuss_host_common_probe()
+Subject: [PATCH 5.18 086/339] amt: fix return value of amt_update_handler()
 Date:   Mon, 13 Jun 2022 12:08:31 +0200
-Message-Id: <20220613094925.451631622@linuxfoundation.org>
+Message-Id: <20220613094929.125482154@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Taehee Yoo <ap420073@gmail.com>
 
-[ Upstream commit 7079b3483a17be2cfba64cbd4feb1b7ae07f1ea7 ]
+[ Upstream commit ac1dbf55981b88d64312858ea06e3e63001f085d ]
 
-If device_register() fails, device_unregister() should not be called
-because it will free some resources that are not allocated.
-put_device() should be used instead.
+If a relay receives an update message, it lookup a tunnel.
+and if there is no tunnel for that message, it should be treated
+as an error, not a success.
+But amt_update_handler() returns false, which means success.
 
-Fixes: 308ee87a2f1e ("staging: fieldbus: anybus-s: support HMS Anybus-S bus")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/5401a519608d6e1a4e7435c20f4f20b0c5c36c23.1650610082.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/fieldbus/anybuss/host.c | 2 +-
+ drivers/net/amt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/fieldbus/anybuss/host.c b/drivers/staging/fieldbus/anybuss/host.c
-index a344410e48fe..cd86b9c9e345 100644
---- a/drivers/staging/fieldbus/anybuss/host.c
-+++ b/drivers/staging/fieldbus/anybuss/host.c
-@@ -1384,7 +1384,7 @@ anybuss_host_common_probe(struct device *dev,
- 		goto err_device;
- 	return cd;
- err_device:
--	device_unregister(&cd->client->dev);
-+	put_device(&cd->client->dev);
- err_kthread:
- 	kthread_stop(cd->qthread);
- err_reset:
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index de4ea518c793..d376ed89f836 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -2423,7 +2423,7 @@ static bool amt_update_handler(struct amt_dev *amt, struct sk_buff *skb)
+ 		}
+ 	}
+ 
+-	return false;
++	return true;
+ 
+ report:
+ 	iph = ip_hdr(skb);
 -- 
 2.35.1
 

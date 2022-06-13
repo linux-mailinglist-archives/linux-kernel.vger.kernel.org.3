@@ -2,121 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBB6547DAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB57547DAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiFMCnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
+        id S237542AbiFMCrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiFMCnj (ORCPT
+        with ESMTP id S231194AbiFMCq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:43:39 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6D63337F;
-        Sun, 12 Jun 2022 19:43:37 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id b8so5313344edj.11;
-        Sun, 12 Jun 2022 19:43:37 -0700 (PDT)
+        Sun, 12 Jun 2022 22:46:58 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEC425FF
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 19:46:57 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 187so4572417pfu.9
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 19:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sUZpw0LopGjc0FjmXPxeWU9L6hvwiZttSZ8ZRDX50kI=;
-        b=TpFDyiS2s1I3InqSYo4+CxTLgKRw9ZSzvWWVldgOy8MQhrsa3g5q9Ba8Xm53N8R4mz
-         rS1Jy8ogN814wmB4ML3WYL3OFeA61dB1s+z1NRIJRrleQPUnvBDeuemygYSEx4f4uP8A
-         OGOeFtUtiAc1vSQeng+Fazaqigh6JB4zwXQynQBhJWGXNbhLkRWeJBH6o8lTK3FlWYbl
-         0ezDUct+wHCTcJMikPShyZZ4iD7gcvFMFREvBahPYlNo7EtnDj6YQyA8TfCxNrDEyRK7
-         X36eUtMTZCMD0DSpf83VdQD+2Je9I0/rm5BsOoEiuRtae9Pbo1ZG1AlpvxR3QNoLnxNh
-         9/8A==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=X9KlT/th/NEPHvU/mvKmYtxJ9mQBWC3ItPq9ZAOwK9Q=;
+        b=Cgc+WHAN9bqJckXfuAa0sPbHyJRa/IXuhmUxjX+4d22yoEd8foos1ijobXnMprDHrs
+         trykDs4W4P/ZuSD8jk75ZohL/euGgmk82ptlH0Oj/8NFKrSvCafL6pKwkQFxUzNB3tn8
+         O+679vEge3sFNz0Ax/AXtxL7V4Kfn8rwhrlbINdWSP0HETyyApvnLCKlezl4O7mco8WZ
+         /Yl15yhicY3S/hJiq9e15b+GM+pzDi6uCXgOO9MHjt5xN7NyplzvLlNtvRoI3DFtRQvu
+         SthtPOOR05m5vm0dxSCb6lhPLtUkDeF56aZytaGWd6mRL3sCgPrP3me3swqwelNbJkbG
+         mv0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sUZpw0LopGjc0FjmXPxeWU9L6hvwiZttSZ8ZRDX50kI=;
-        b=PR1vyI47smMP015klPJpUO6leVk5AkQKQdpdU8shvqHNXoBCYYOzOno9NW35QablMF
-         tgStaF0ngSnd11PZ3PM/eOgoDM1ZWlSx8xgORLnEyiVu8H0m/Fym7ZUzOicvvg/czIjj
-         BcbLPVtrqcH0e5tZmcXBQpcrMM6ERKWw+M5kgCp/G3+f73LLLhUgzIjfE8Mjbj8Pi+7f
-         6OEk8YdF+RagHD+r+oYQM/eZpmHO1KcJaHoz0hUa8tPHU3YffFBAHNaY8bCUftBzVlKo
-         +IRvSyWjXhevvLBSBfNm7FUl/Iy5uuRHCVOdCw3gn8pZWwq/G65QZCLYGS9AFfHnZsuQ
-         rP7A==
-X-Gm-Message-State: AOAM5313J/oj6AXmlmucsgjN2gWF7z2UwXUCcGis3FY/bM1S8wDCcfRt
-        rTlzkhxtz8UT8XHIrp7szxpNVsQQMhx7AN1gRcQ=
-X-Google-Smtp-Source: ABdhPJyVgn8f9OWyOe0jpedEkgpDjBY7BGGJpgJbfyZ768+ya+RQtM3Jvm3BzpT1/IGaeFaG2PAK1BADDFHcEsWeSdk=
-X-Received: by 2002:a05:6402:709:b0:431:3a54:5cbb with SMTP id
- w9-20020a056402070900b004313a545cbbmr47506349edx.355.1655088216420; Sun, 12
- Jun 2022 19:43:36 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=X9KlT/th/NEPHvU/mvKmYtxJ9mQBWC3ItPq9ZAOwK9Q=;
+        b=XRVtgSPAq0TCr4Y+6TMl/YsK2AJP+BseAsniTngTQscsTz9ilyQsX9T7URin0KIAOC
+         NoR+9dkq6XwvYEbMOFzOk0Yp4AB3r8jwHEFZNDqpT8w8B4lukpyMybjH50qjHJsH8NYj
+         szY4ID+cef93SaScw5lPs9QZ9mKHSX04ZMXOcPMDcRq3kzoxsdVmE/xA3lL8tNCU4S4U
+         sxNahsEW7EAlpYr+wT/UljjGAEsXEm9Bw9Hy3tbPKNyKA8O9SkKfhmvKyWgweHyPlJVF
+         jjbyrcoDcBcU1OHN2NDGimNoM8OUbpZZDpSEehFOEE3V1H27mRi0pO4Zl/oCDPBPkHsZ
+         75BQ==
+X-Gm-Message-State: AOAM532DxQzkXAMReJeI7pBFFwE6uui9vgugX8L9VkAc3Hq2yHrqReX+
+        Bdds4jq5B3KV8HER4ogwoYb8aSEqoJI=
+X-Google-Smtp-Source: ABdhPJzFLVCRMUr200HJoIyk015wY4pPFJJXfMuHySdBPiZ5UqU+lE8FhDkbq2t/CHpF04o9Otkl9A==
+X-Received: by 2002:a63:2a97:0:b0:3fe:1929:d05 with SMTP id q145-20020a632a97000000b003fe19290d05mr25540441pgq.58.1655088417331;
+        Sun, 12 Jun 2022 19:46:57 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id k6-20020a17090a3cc600b001e345c579d5sm3838119pjd.26.2022.06.12.19.46.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 19:46:56 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sun, 12 Jun 2022 16:46:54 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 1/4] kernfs: make ->attr.open RCU protected.
+Message-ID: <YqalHuEB6OjjUosV@slm.duckdns.org>
+References: <20220602063907.136569-1-imran.f.khan@oracle.com>
+ <20220602063907.136569-2-imran.f.khan@oracle.com>
+ <YqYpTShTDLvAp4vx@slm.duckdns.org>
+ <6d1c5a49-fc16-5fc7-e527-8cb91ec0d25c@oracle.com>
 MIME-Version: 1.0
-References: <20220610034204.67901-1-imagedong@tencent.com> <20220610034204.67901-6-imagedong@tencent.com>
- <CANn89i+NV1DgxaQbqPu2o0Du-94gDkM8DUrX_DK7=AGqvvPKdg@mail.gmail.com>
-In-Reply-To: <CANn89i+NV1DgxaQbqPu2o0Du-94gDkM8DUrX_DK7=AGqvvPKdg@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Mon, 13 Jun 2022 10:43:25 +0800
-Message-ID: <CADxym3Yy1hK7g670zW__yZUmtyH-aKYnckeJfGfKTDReopEgdA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 5/9] net: tcp: make tcp_rcv_state_process()
- return drop reason
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d1c5a49-fc16-5fc7-e527-8cb91ec0d25c@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 4:56 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Thu, Jun 9, 2022 at 8:45 PM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > For now, the return value of tcp_rcv_state_process() is treated as bool.
-> > Therefore, we can make it return the reasons of the skb drops.
-> >
-> > Meanwhile, the return value of tcp_child_process() comes from
-> > tcp_rcv_state_process(), make it drop reasons by the way.
-> >
-> > The new drop reason SKB_DROP_REASON_TCP_LINGER is added for skb dropping
-> > out of TCP linger.
-> >
-> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> > Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > v3:
-> > - instead SKB_DROP_REASON_TCP_ABORTONDATA with SKB_DROP_REASON_TCP_LINGER
-> > ---
-> >  include/net/dropreason.h |  6 ++++++
-> >  include/net/tcp.h        |  8 +++++---
-> >  net/ipv4/tcp_input.c     | 36 ++++++++++++++++++++----------------
-> >  net/ipv4/tcp_ipv4.c      | 20 +++++++++++++-------
-> >  net/ipv4/tcp_minisocks.c | 11 ++++++-----
-> >  net/ipv6/tcp_ipv6.c      | 19 ++++++++++++-------
-> >  6 files changed, 62 insertions(+), 38 deletions(-)
-> >
->
-> I am sorry, this patch is too invasive, and will make future bug fix
-> backports a real nightmare.
+Hello,
 
-Is there any advice to save this patch? Or should we just skip this
-part (for now) ?
+On Mon, Jun 13, 2022 at 12:36:12PM +1000, Imran Khan wrote:
+> >> +static struct kernfs_open_node *
+> >> +kernfs_check_open_node_protected(struct kernfs_node *kn)
+> >> +{
+> >> +	return rcu_dereference_check(kn->attr.open,
+> >> +				      lockdep_is_held(&kernfs_open_file_mutex));
+> >> +}
+> > 
+> > I don't understand why the above is necessary. Whether you're a reader or
+> > writer, you can deref the pointer w/ _protected as long as you're holding
+> > the lock, right?
+> 
+> As per [1], we should use rcu_dereference_check() for the reader side when we
+> are holding the lock.
 
-Thanks!
-Menglong Dong
+Hmm.... can you quote the exact phrase that you took the above from?
+
+Thanks.
+
+-- 
+tejun

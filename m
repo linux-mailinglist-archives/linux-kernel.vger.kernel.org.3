@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3832B549592
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408385490C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356464AbiFMLof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S1378903AbiFMNc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355713AbiFMLje (ORCPT
+        with ESMTP id S1377540AbiFMN21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:39:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646072CC98;
-        Mon, 13 Jun 2022 03:49:48 -0700 (PDT)
+        Mon, 13 Jun 2022 09:28:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E846CF69;
+        Mon, 13 Jun 2022 04:24:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED7E3B80E8D;
-        Mon, 13 Jun 2022 10:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B8AC3411E;
-        Mon, 13 Jun 2022 10:49:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 852186114A;
+        Mon, 13 Jun 2022 11:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97AB2C34114;
+        Mon, 13 Jun 2022 11:24:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117385;
-        bh=o5pO4LCMS5/b+2fU+WThBdm9r/1xafoD8Nszr9ODGqE=;
+        s=korg; t=1655119483;
+        bh=tkpOGYV1bTpItAosshOafBc2iiWyrT1W7PBhzciJ1F4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SaYbDVZpeqrENWPyW7jtFIUczHbbBj/xCfQR4qPEotQ6BdFBgIL4IFvg+UNW9IiAa
-         PeFiVEimtczMwwiOhC1TsVaPznPbuZ5fU+yEnATHQpgzEvcH4ytAXi2jt8yISD1KhF
-         tDO2DB/LuePyrfBQTRiLWn9eicuIKK8zmxba+Cu4=
+        b=RuD9SBO6Rw3wG+iXlkzI1x+4qvt92f9kzfwNyHaCRjUIosdU6S0IafIqD373Oviaj
+         bGnMsTKUc8MRqiK2IXz9K5rwno4Ge1qWt4dDawF9ft+i7bdnsT/fwIaKOSjqBZ0s0N
+         vAI4lKucZqQ7kz4CbCi39Vy5RJ1A91HDk2ID4w+8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Richter <tmricht@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 031/287] s390/preempt: disable __preempt_count_add() optimization for PROFILE_ALL_BRANCHES
-Date:   Mon, 13 Jun 2022 12:07:35 +0200
-Message-Id: <20220613094924.807804000@linuxfoundation.org>
+Subject: [PATCH 5.18 031/339] rpmsg: virtio: Fix possible double free in rpmsg_probe()
+Date:   Mon, 13 Jun 2022 12:07:36 +0200
+Message-Id: <20220613094927.458668370@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Carstens <hca@linux.ibm.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 63678eecec57fc51b778be3da35a397931287170 ]
+[ Upstream commit c2eecefec5df1306eafce28ccdf1ca159a552ecc ]
 
-gcc 12 does not (always) optimize away code that should only be generated
-if parameters are constant and within in a certain range. This depends on
-various obscure kernel config options, however in particular
-PROFILE_ALL_BRANCHES can trigger this compile error:
+vch will be free in virtio_rpmsg_release_device() when
+rpmsg_ns_register_device() fails. There is no need to call kfree() again.
 
-In function ‘__atomic_add_const’,
-    inlined from ‘__preempt_count_add.part.0’ at ./arch/s390/include/asm/preempt.h:50:3:
-./arch/s390/include/asm/atomic_ops.h:80:9: error: impossible constraint in ‘asm’
-   80 |         asm volatile(                                                   \
-      |         ^~~
+Fix this by changing error path from free_vch to free_ctrldev.
 
-Workaround this by simply disabling the optimization for
-PROFILE_ALL_BRANCHES, since the kernel will be so slow, that this
-optimization won't matter at all.
-
-Reported-by: Thomas Richter <tmricht@linux.ibm.com>
-Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Tested-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Link: https://lore.kernel.org/r/20220426060536.15594-2-hbh25y@gmail.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/include/asm/preempt.h | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/rpmsg/virtio_rpmsg_bus.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
-index 23a14d187fb1..1aebf09fbcd8 100644
---- a/arch/s390/include/asm/preempt.h
-+++ b/arch/s390/include/asm/preempt.h
-@@ -50,10 +50,17 @@ static inline bool test_preempt_need_resched(void)
+diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+index 3ede25b1f2e4..d4e453062062 100644
+--- a/drivers/rpmsg/virtio_rpmsg_bus.c
++++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+@@ -973,7 +973,8 @@ static int rpmsg_probe(struct virtio_device *vdev)
  
- static inline void __preempt_count_add(int val)
- {
--	if (__builtin_constant_p(val) && (val >= -128) && (val <= 127))
--		__atomic_add_const(val, &S390_lowcore.preempt_count);
--	else
--		__atomic_add(val, &S390_lowcore.preempt_count);
-+	/*
-+	 * With some obscure config options and CONFIG_PROFILE_ALL_BRANCHES
-+	 * enabled, gcc 12 fails to handle __builtin_constant_p().
-+	 */
-+	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES)) {
-+		if (__builtin_constant_p(val) && (val >= -128) && (val <= 127)) {
-+			__atomic_add_const(val, &S390_lowcore.preempt_count);
-+			return;
-+		}
-+	}
-+	__atomic_add(val, &S390_lowcore.preempt_count);
- }
+ 		err = rpmsg_ns_register_device(rpdev_ns);
+ 		if (err)
+-			goto free_vch;
++			/* vch will be free in virtio_rpmsg_release_device() */
++			goto free_ctrldev;
+ 	}
  
- static inline void __preempt_count_sub(int val)
+ 	/*
+@@ -997,8 +998,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+ 
+ 	return 0;
+ 
+-free_vch:
+-	kfree(vch);
+ free_ctrldev:
+ 	rpmsg_virtio_del_ctrl_dev(rpdev_ctrl);
+ free_coherent:
 -- 
 2.35.1
 

@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CD4548C5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254D154947A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353019AbiFMLY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S1354106AbiFML2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353729AbiFMLQQ (ORCPT
+        with ESMTP id S1353862AbiFMLUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:16:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4603B13E1F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:39:43 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C69E66601652;
-        Mon, 13 Jun 2022 11:39:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655116781;
-        bh=3fY9PYB9PhNS2MZFOLYAaBtLhPjrOVQJSWIC+nCM9cs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LRgmghN5uXYInfi0t0BsNuDg6Z/oiZRcZJ2Jo4VKcPd0KQnwD5IwZ+4eKNPJnVDl0
-         dfollf3m/u9jySVLhfKv9tjgIAcj8Fbcc4SV6gU6eJGEoNS6ArXDUNWE/btMnF6do9
-         Wc4hDJYmPWNZ3f6yWm9iI8UR+gmlTO3glvth8BK5H0vDgFHWlA1K3h04nrjQBlqlxv
-         Rbghe6kn6Mtk6+z1HtYV1EUmEc6WGATD3NAE72CtskD0uk5yxNiqyyODl0Bv2tWhi0
-         i+ESeZ0SD6+nirCaEnQQNsbL7LN4rgsNv4LwBfXMkazFIZGM89y1DQ18qGg87lOZhY
-         Llu96jmftJGPA==
-Message-ID: <8a87d094-1c9e-d899-6671-ebf8c80ffbe6@collabora.com>
-Date:   Mon, 13 Jun 2022 12:39:37 +0200
+        Mon, 13 Jun 2022 07:20:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88225DEB1;
+        Mon, 13 Jun 2022 03:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655116912; x=1686652912;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7rsKUR+6MiJx8UgfRHWwQNo6ucuWpz2ctrmFovdOBQU=;
+  b=n3Dw3EkjF2DMD4xxdypbleoBI7aKSWmyX+v1Ll3AssSECEK2lZQ1Mh4J
+   ngNHuvr4sKfHx41UU5zItynRrfTdesmDYXECbWB5rEKqTn/xFPoBmAtFk
+   AAjNN1chHw9taQjeROy3NSdfGzmBn78hUwL32vwnQNKOEKQeqd9jJpCKl
+   NfVn0jIuPTWUyyOBmClnCZgoxH/uwc18tDqcglCKncQDr+snlyHqUECND
+   +3+RaJFKCJ3Ep3Z0r53oRgLDZNE5PJ3wBukOsy6SKKfEduEh0vv5OzKDm
+   OuoKzPAPpqDxFHvMMkBXL4SNTcPwfhUF/wzBw4EpEY1ACMPPL92Lm4htI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="258074900"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="258074900"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 03:41:43 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="639666709"
+Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 03:41:41 -0700
+Date:   Mon, 13 Jun 2022 11:41:34 +0100
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Rob Herring <robh@kernel.org>, Yoan Picchi <yoan.picchi@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH 2/2] Removes the x86 dependency on the QAT drivers
+Message-ID: <YqcUXrFGO+QVMKBd@silpixa00400314>
+References: <20220607165840.66931-1-yoan.picchi@arm.com>
+ <20220607165840.66931-3-yoan.picchi@arm.com>
+ <20220609213652.GA115440-robh@kernel.org>
+ <20220610114840.10db23ea@donnerap.cambridge.arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v11 1/1] phy: phy-mtk-dp: Add driver for DP phy
-Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, chunfeng.yun@mediatek.com, kishon@ti.com,
-        vkoul@kernel.org, matthias.bgg@gmail.com, airlied@linux.ie
-Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
-        wenst@chromium.org, ck.hu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220613072648.11081-1-rex-bc.chen@mediatek.com>
- <20220613072648.11081-2-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220613072648.11081-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610114840.10db23ea@donnerap.cambridge.arm.com>
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
+ Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/06/22 09:26, Bo-Chen Chen ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Fri, Jun 10, 2022 at 11:48:40AM +0100, Andre Przywara wrote:
+> On Thu, 9 Jun 2022 15:36:52 -0600
+> Rob Herring <robh@kernel.org> wrote:
 > 
-> This is a new driver that supports the integrated DisplayPort phy for
-> mediatek SoCs, especially the mt8195. The phy is integrated into the
-> DisplayPort controller and will be created by the mtk-dp driver. This
-> driver expects a struct regmap to be able to work on the same registers
-> as the DisplayPort controller. It sets the device data to be the struct
-> phy so that the DisplayPort controller can easily work with it.
+> Hi,
 > 
-> The driver does not have any devicetree bindings because the datasheet
-> does not list the controller and the phy as distinct units.
+> > On Tue, Jun 07, 2022 at 04:58:40PM +0000, Yoan Picchi wrote:
+> > > This dependency looks outdated. After the previous patch, we have been able
+> > > to use this driver to encrypt some data and to create working VF on arm64.
+> > > We have not tested it yet on any big endian machine, hence the new dependency  
+> > 
+> > For the subject, use prefixes matching the subsystem (like you did on 
+> > patch 1).
+Just to add on this, patches to the qat driver should have the following
+headline:
+    crypto: qat -
+not
+    crypto: qat:
+
+> > 
+> > The only testing obligation you have is compiling for BE.
 > 
-> The interaction with the controller can be covered by the configure
-> callback of the phy framework and its displayport parameters.
+> So I just compiled for arm64 BE, powerpc BE & LE, and riscv again:
+> $ file qat_c62xvf.ko
+> qat_c62xvf.ko: ELF 64-bit MSB relocatable, ARM aarch64, version 1 (SYSV),
+> BuildID[sha1]=630cc0ee5586c7aeb6e0ab5567ce2f2f7cc46adf, with debug_info,
+> not stripped
+> qat_c62xvf.ko: ELF 64-bit MSB relocatable, 64-bit PowerPC or cisco 7500,
+> version 1 (SYSV), BuildID[sha1]=4090ba181cf95f27108bf3ecde0776f12ef2b636,
+> not stripped
+> qat_c62xvf.ko: ELF 64-bit LSB relocatable, 64-bit PowerPC or cisco 7500,
+> version 1 (SYSV), BuildID[sha1]=2cb0fd09d5bc36c8918fcd061c9f3dac1546cf0d,
+> not stripped
+> qat_c62xvf.ko: ELF 64-bit LSB relocatable, UCB RISC-V, version 1 (SYSV),
+> BuildID[sha1]=bfaa53df7e9aad79d3ab4c05e75ca9169227f6b8, not stripped
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Modify reviewers' comments.]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> All built without errors or warnings, for every of the enabled drivers.
+> 
+> > If kconfig was
+> > supposed to capture what endianness drivers have been tested or not
+> > tested with, then lots of drivers are missing the dependency. Kconfig
+> > depends/select entries should generally be either to prevent compile
+> > failures (you checked PPC, RiscV, etc.?) or to hide drivers *really*
+> > specific to a platform. IMO, we should only have !CPU_BIG_ENDIAN if it 
+> > is known not to work and not easily fixed.
+> 
+> Fair enough, I leave that decision to Giovanni. I have plans to test this
+> with BE, but getting a BE setup on a server is not trivial, both for
+> userland and actual booting, so this will take some time. We just didn't
+> want to block this on some BE concerns.
+Just inspecting the code I can see we are not handling BE in the logic
+that builds FW descriptors.
+My preference would be to keep !CPU_BIG_ENDIAN until the driver is fixed
+and tested.
 
-There's no power_on()/power_off() callbacks and looks a bit weird, but it's
-also right... the only thing that's missing, IMO, is a comment in the actual
-file explaining that power for this PHY is always on when the DP block is on
-and that no PHY specific power sequence has to be carried on (being managed
-elsewhere and strongly tied to the specific DP IP).
+> > Also, with the dependency, no one can test the driver without modifying 
+> > the kernel and if it does work as-is, then one has to upstream a change 
+> > and then wait for it to show up in distro kernels. You could mitigate 
+> > the first part with COMPILE_TEST.
+> 
+> Yeah, that's a good point, we were already bitten by this, the initial
+> testing was done on a stable distro kernel (v5.4), and it worked fine
+> already there.
+> 
+> Cheers,
+> Andre
 
-Besides that,
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+-- 
+Giovanni

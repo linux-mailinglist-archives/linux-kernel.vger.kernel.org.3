@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D9C548A08
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F13548C15
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355061AbiFMLiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S1352850AbiFMMww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353189AbiFML1i (ORCPT
+        with ESMTP id S1351091AbiFMMwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:27:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA7E3E0C0;
-        Mon, 13 Jun 2022 03:42:52 -0700 (PDT)
+        Mon, 13 Jun 2022 08:52:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0514641C;
+        Mon, 13 Jun 2022 04:12:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F231B80D19;
-        Mon, 13 Jun 2022 10:42:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2418C34114;
-        Mon, 13 Jun 2022 10:42:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A81FECE118D;
+        Mon, 13 Jun 2022 11:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95614C3411C;
+        Mon, 13 Jun 2022 11:12:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116970;
-        bh=H04nuasDhByeIQ8tzxm8K5QHJn8KANKlDqZR9DBDYMs=;
+        s=korg; t=1655118741;
+        bh=MK2DExhRzPuMniHrsCO4Hu8aINQml8/b84nZ7z6XkVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HUN8Y1FhWnskAoQcws1zZRydLj032p/n4noOtjJ6a2avyq1R82lx50FMc+rNfWjqG
-         9ud4HEQnxj+UtdQ43Geu+K5M3b2wWD+pQ4ZsKacb5cZQyj3UNr+7uAdjq5A1y3VIY6
-         qdNFrh9K627mVRz45ci8tnqjmHzkPNLkGVf/zIbs=
+        b=1R3jqXY68C5574H2ggQZFdOerKqQxUDSx5R1uLgu0pWCVqSgaJjpkvL/L+WnM+sFH
+         fENdGXkZS7hr0F5VGl8S5FfFvx7Ex9LrZ//cK2/xhfY/6P/OkRZAnaSDVX8F/jaOiQ
+         uvOspqP/2M4qBktoXn7Urv967/tBXqmJGg0+b/hI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-Subject: [PATCH 5.4 240/411] drm/etnaviv: check for reaped mapping in etnaviv_iommu_unmap_gem
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 011/247] remoteproc: imx_rproc: Ignore create mem entry for resource table
 Date:   Mon, 13 Jun 2022 12:08:33 +0200
-Message-Id: <20220613094935.977094823@linuxfoundation.org>
+Message-Id: <20220613094923.264637509@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Peng Fan <peng.fan@nxp.com>
 
-commit e168c25526cd0368af098095c2ded4a008007e1b upstream.
+[ Upstream commit 58b7c856519fe946620ee68dd0c37bd3c695484a ]
 
-When the mapping is already reaped the unmap must be a no-op, as we
-would otherwise try to remove the mapping twice, corrupting the involved
-data structures.
+Resource table is used by Linux to get information published by
+remote processor. It should be not be used for memory allocation, so
+not create rproc mem entry.
 
-Cc: stable@vger.kernel.org # 5.4
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Tested-by: Guido Günther <agx@sigxcpu.org>
-Acked-by: Guido Günther <agx@sigxcpu.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b29b4249f8f0 ("remoteproc: imx_rproc: add i.MX specific parse fw hook")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Link: https://lore.kernel.org/r/20220415025737.1561976-1-peng.fan@oss.nxp.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_mmu.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/remoteproc/imx_rproc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_mmu.c
-@@ -289,6 +289,12 @@ void etnaviv_iommu_unmap_gem(struct etna
+diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+index 05c39e1c56b4..59eae605ad59 100644
+--- a/drivers/remoteproc/imx_rproc.c
++++ b/drivers/remoteproc/imx_rproc.c
+@@ -447,6 +447,9 @@ static int imx_rproc_prepare(struct rproc *rproc)
+ 		if (!strcmp(it.node->name, "vdev0buffer"))
+ 			continue;
  
- 	mutex_lock(&context->lock);
- 
-+	/* Bail if the mapping has been reaped by another thread */
-+	if (!mapping->context) {
-+		mutex_unlock(&context->lock);
-+		return;
-+	}
++		if (!strcmp(it.node->name, "rsc-table"))
++			continue;
 +
- 	/* If the vram node is on the mm, unmap and remove the node */
- 	if (mapping->vram_node.mm == &context->mm)
- 		etnaviv_iommu_remove_mapping(context, mapping);
+ 		rmem = of_reserved_mem_lookup(it.node);
+ 		if (!rmem) {
+ 			dev_err(priv->dev, "unable to acquire memory-region\n");
+-- 
+2.35.1
+
 
 

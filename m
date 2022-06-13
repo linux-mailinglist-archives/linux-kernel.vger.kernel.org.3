@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E40B549271
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2625493DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236653AbiFMKc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S1379747AbiFMNvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344926AbiFMK3U (ORCPT
+        with ESMTP id S1379549AbiFMNo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:29:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67125C62;
-        Mon, 13 Jun 2022 03:20:31 -0700 (PDT)
+        Mon, 13 Jun 2022 09:44:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B36D9D;
+        Mon, 13 Jun 2022 04:32:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C975560C5B;
-        Mon, 13 Jun 2022 10:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D540AC34114;
-        Mon, 13 Jun 2022 10:20:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9075B80EA8;
+        Mon, 13 Jun 2022 11:32:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2527DC3411C;
+        Mon, 13 Jun 2022 11:32:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115630;
-        bh=x3KhVWC0ll/qL0hqYrVnjfMXp95Ww5ZMIt+AkkTdFUI=;
+        s=korg; t=1655119942;
+        bh=gHar6usD+Ov4HeHkYWCEF6ZCkOmCyCmYj6jZWl6X/+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tQhjKnmM1IaxxqE1S65zO138h7QMwu+ewagLP4ABhLJ0r6wGCPyJatpEMPFsB5yle
-         W+qfO2KvkgUwtLrda5tFq/7UKAuVjz7KfaWqQmQiS4P2YTUBL/IVoBRtWyXZEmd037
-         eOha7KgaNnLGhWFxiaLIcthPQjvGl7q3LHl0JDBg=
+        b=rJDlhTbyQQbw5nw0+rcAMye5x3gegHMPygUwn4Dp71qgKFCkfhoUTfDylqDIAJ/T1
+         2jx8dSwZZ6x0aV6VwHBI6zviGTHn+AY0GuugGRVD/qstT9ZsX/RlurMdF9/f3rKmVj
+         OWQc0jxvY3dokQXSufMxFlzapbU2QS9A3r/m7BTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 144/167] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+Subject: [PATCH 5.18 193/339] amt: fix wrong type string definition
 Date:   Mon, 13 Jun 2022 12:10:18 +0200
-Message-Id: <20220613094914.656704097@linuxfoundation.org>
+Message-Id: <20220613094932.523723111@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Taehee Yoo <ap420073@gmail.com>
 
-[ Upstream commit 62b2caef400c1738b6d22f636c628d9f85cd4c4c ]
+[ Upstream commit d7970039d87c926bb648982e920cb9851c19f3e1 ]
 
-There is a deadlock in sa1100_set_termios(), which is shown
-below:
+amt message type definition starts from 1, not 0.
+But type_str[] starts from 0.
+So, it prints wrong type information.
 
-   (Thread 1)              |      (Thread 2)
-                           | sa1100_enable_ms()
-sa1100_set_termios()       |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | sa1100_timeout()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
-
-We hold sport->port.lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need sport->port.lock in position (2) of thread 2. As a result,
-sa1100_set_termios() will block forever.
-
-This patch moves del_timer_sync() before spin_lock_irqsave()
-in order to prevent the deadlock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417111626.7802-1-duoming@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sa1100.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/amt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
-index fd3d1329d48c..68eb1c9faa29 100644
---- a/drivers/tty/serial/sa1100.c
-+++ b/drivers/tty/serial/sa1100.c
-@@ -452,6 +452,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
- 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
- 	quot = uart_get_divisor(port, baud);
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index 2815db7ee2a3..14fe03dbd9b1 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -51,6 +51,7 @@ static char *status_str[] = {
+ };
  
-+	del_timer_sync(&sport->timer);
-+
- 	spin_lock_irqsave(&sport->port.lock, flags);
- 
- 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
-@@ -482,8 +484,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
- 				UTSR1_TO_SM(UTSR1_ROR);
- 	}
- 
--	del_timer_sync(&sport->timer);
--
- 	/*
- 	 * Update the per-port timeout.
- 	 */
+ static char *type_str[] = {
++	"", /* Type 0 is not defined */
+ 	"AMT_MSG_DISCOVERY",
+ 	"AMT_MSG_ADVERTISEMENT",
+ 	"AMT_MSG_REQUEST",
 -- 
 2.35.1
 

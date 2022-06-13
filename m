@@ -2,64 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEAE548B61
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BF85497C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376289AbiFMNR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S1359390AbiFMNPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359325AbiFMNJt (ORCPT
+        with ESMTP id S1359258AbiFMNJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:09:49 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F431F2C3;
-        Mon, 13 Jun 2022 04:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655119208; x=1686655208;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Py8zRXdzOiFvbMocJpc5Z5DwAynLOWkd9TOuzKCbQu8=;
-  b=eBulPHkUg4syZ9EmsaTAT5IRpb/e+7rNus4jc+AQ5VELvxBhUER4tDRs
-   vYgit07mGTvAB412VaHowoD5wqjnHk86tq5rxqld0RewRNf8yomC/kPVJ
-   NSOluJ++y5GYEAf7SmOZC2ZU9stzFx9JgLfQOxMtRNPy7zgKQqA7u/o5K
-   lVATRxRoYBCmWhuxSHN8CR12vk6HXOF7KigfM3hgAA0fMIlr5IwQlI8O3
-   xs3mIhU3f0WLYT8TUgR49ypHalEqpuoJjzBuY9/N2OtxO0DAioYiassse
-   K9etMkTObI2r1qqq3V0JgLAmDQnHWNTuzl2OKybh7RIY5o78cku+A/Tur
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="163066307"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2022 04:20:08 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 13 Jun 2022 04:20:06 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 13 Jun 2022 04:20:04 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Lee Jones" <lee.jones@linaro.org>
-CC:     Daire McNamara <daire.mcnamara@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 2/2] MAINTAINERS: add pwm to PolarFire SoC entry
-Date:   Mon, 13 Jun 2022 12:18:00 +0100
-Message-ID: <20220613111759.1550578-3-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613111759.1550578-1-conor.dooley@microchip.com>
-References: <20220613111759.1550578-1-conor.dooley@microchip.com>
+        Mon, 13 Jun 2022 09:09:44 -0400
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE6E20183
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:19:47 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1655119156t8v5z557
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 13 Jun 2022 19:19:09 +0800 (CST)
+X-QQ-SSF: 01400000002000G0Q000B00A0000000
+X-QQ-FEAT: JRmPfD6HWhzxxqXoKc4lDmEGgd/42n5znbX7pLGemLE3r5lVrjvC2ONwBaySs
+        /HuRfbQD393oA3em2mY77GLsVsnkiePKD5SadgPjLo1d13QXsIMi0BBoqV4FR251RVPdAAs
+        3t/1R1R8pTObL98w6dYSHSzn4JYEpq8Rr5OjkUICeUm80FPrex1f/2BM2RWJ6fMW4sGubQx
+        CjqSv/kzt7T+KbtAbE+gElb/ABHEYlBRJhZlbMc+SzeBUWOWUi4Vwve+MsCeFvueQUpIlD7
+        p1dYJbRoy1fNE56Qu+Cvc7iB64jitvBFbq6E7fWNsF1H91xV9Jhja84L9IWckKPCix1uJTO
+        Hpx1Ugp4Hr0w4quf70Pi9YlK4FRrdgreGz7M7jN
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, bhelgaas@google.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH 5.10 1/2] commit 1d71eb53e451 ("Revert "PCI: Make pci_enable_ptm() private"")
+Date:   Mon, 13 Jun 2022 19:19:06 +0800
+Message-Id: <20220613111907.25490-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,25 +52,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the newly introduced pwm driver to the existing PolarFire SoC entry.
+From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Make pci_enable_ptm() accessible from the drivers.
+
+Exposing this to the driver enables the driver to use the
+'ptm_enabled' field of 'pci_dev' to check if PTM is enabled or not.
+
+This reverts commit ac6c26da29c1 ("PCI: Make pci_enable_ptm() private").
+
+In the 5.10 kernel version, even to the latest confirmed version,
+the following error will still be reported when I225-V network card
+is used.
+
+kernel: [    1.031581] igc: probe of 0000:01:00.0 failed with error -2
+kernel: [    1.066574] igc: probe of 0000:02:00.0 failed with error -2
+kernel: [    1.096152] igc: probe of 0000:03:00.0 failed with error -2
+kernel: [    1.127251] igc: probe of 0000:04:00.0 failed with error -2
+
+Even though I confirmed that 7c496de538eebd8212dc2a3c9a468386b2640d4
+and 47bca7de6a4fb8dcb564c7ca4d885c91ed19e03 have been merged into the
+kernel 5.10, the bug is still occurred, and the
+"commit 1b5d73fb8624 ("igc: Enable PCIe PTM")" can fixes it.
+
+And this patch is the pre-patch of
+1b5d73fb862414106cf270a1a7300ce8ae77de83.
+
+Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pci/pci.h   | 3 ---
+ include/linux/pci.h | 7 +++++++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1b4b77daa5f..d0b39fa4f309 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17091,6 +17091,7 @@ L:	linux-riscv@lists.infradead.org
- S:	Supported
- F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
-+F:	drivers/pwm/pwm-microchip-core.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index a96dc6f53076..4084764bf0b1 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -585,11 +585,8 @@ static inline void pcie_ecrc_get_policy(char *str) { }
  
+ #ifdef CONFIG_PCIE_PTM
+ void pci_ptm_init(struct pci_dev *dev);
+-int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
+ #else
+ static inline void pci_ptm_init(struct pci_dev *dev) { }
+-static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+-{ return -EINVAL; }
+ #endif
+ 
+ struct pci_dev_reset_methods {
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index bc5a1150f072..692ce678c5f1 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1599,6 +1599,13 @@ static inline bool pci_aer_available(void) { return false; }
+ 
+ bool pci_ats_disabled(void);
+ 
++#ifdef CONFIG_PCIE_PTM
++int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
++#else
++static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
++{ return -EINVAL; }
++#endif
++
+ void pci_cfg_access_lock(struct pci_dev *dev);
+ bool pci_cfg_access_trylock(struct pci_dev *dev);
+ void pci_cfg_access_unlock(struct pci_dev *dev);
 -- 
-2.36.1
+2.20.1
+
+
 

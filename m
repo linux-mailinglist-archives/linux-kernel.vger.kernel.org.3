@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AA0547D6F
+	by mail.lfdr.de (Postfix) with ESMTP id D1E2D547D71
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 03:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbiFMBbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 21:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S235064AbiFMBbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 21:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbiFMBbU (ORCPT
+        with ESMTP id S233258AbiFMBbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 21:31:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46CC10FFD;
-        Sun, 12 Jun 2022 18:31:15 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LLvBp6Zk0zjXZc;
-        Mon, 13 Jun 2022 09:30:10 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 09:31:13 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 09:31:12 +0800
-Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
- accessed in filemap_read()
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Kent Overstreet <kent.overstreet@gmail.com>,
-        <akpm@linux-foundation.org>, <axboe@kernel.dk>,
-        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220602082129.2805890-1-yukuai3@huawei.com>
- <YpkB1+PwIZ3AKUqg@casper.infradead.org>
- <c49af4f7-5005-7cf1-8b58-a398294472ab@huawei.com>
- <YqNWY46ZRoK6Cwbu@casper.infradead.org>
- <YqNW8cYn9gM7Txg6@casper.infradead.org>
- <c5f97e2f-8a48-2906-91a2-1d84629b3641@gmail.com>
- <YqOOsHecZUWlHEn/@casper.infradead.org>
- <dfa6d60d-0efd-f12d-9e71-a6cd24188bba@huawei.com>
- <YqTUEZ+Pa24p09Uc@casper.infradead.org>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <7e9889b7-8eeb-5e97-3f4b-cdc914a032f4@huawei.com>
-Date:   Mon, 13 Jun 2022 09:31:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 12 Jun 2022 21:31:25 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D262F10FFD;
+        Sun, 12 Jun 2022 18:31:22 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id e9so4302330pju.5;
+        Sun, 12 Jun 2022 18:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B/tXSka1WN37Dsk7yd+7cqxFlK5QPU6UEZJReaGSWJg=;
+        b=OUsHOmGhX8vvwvZCdkcj65eCPKECMo6pROFKQ0ec1bcNFSWCd1UnbqMACAd0kgWPWT
+         0F1jeYwLOVAfRvNOZQWzWSxRUqTM/ZEJD3kt5msfYEKTkkniU3iC2++x+cD+VaFC1gL/
+         DpoWIahwHcBT0sAver63ndgcEoyDx1GIqGsr5WP+tLib7+G1HJqwhiwpLJ63hhmzO5Lt
+         7Ek8Mt8M27JKjRz0uWrwBe33PAFdyCl/1xsF7RPVJv1AdXRdljZIa4j3T2k12g0eB0pm
+         Qh2T+OCfBgncAAzUKGIX22TcgzCFoxC0VgpY8FZnwc08DC9Cw91oSTTX6E2BRio8utSY
+         teXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B/tXSka1WN37Dsk7yd+7cqxFlK5QPU6UEZJReaGSWJg=;
+        b=OiKT2N9bICLoE3z4wu+HqaRG0bdrJ7sEQLtINhiPZsIEVZZJFUGbVQyEBz6FZ57PFY
+         wChDIQUQm9DgqDkTQdqD8krDddygo7o5ex4QQgqnfcBNY30iN+bgmOsOCVpK8msygrpq
+         hWX474l25sv6mjC2ekWMEuJnqmSApXIhBMiVgqRUC4cXj4U0ptiAy6jG70s7I4mb6w5Q
+         eel+u/flGz49nkNyc0iIHI5qTlb2MUWKBXdXeq2Ou1az0WWIm+SkFm4TnR+vTeQJBfb0
+         5UCkkxHQevfkxi0swlrkDbDgbaTvJEJOlOnzdPo6TYshuUKLL0V+5x6GW0h0RNEPO37E
+         w6hg==
+X-Gm-Message-State: AOAM533XFTOwzwOfKl5fq7UyybJmxVPLRkndq1rahwz9Dm1FCV5t9v0G
+        V+J45CKVC2DI/Dx0t2k6CNFn8mJTxpY=
+X-Google-Smtp-Source: ABdhPJxdFcKpYemPoANAFGgzGDgwyCVgJlJvWhDv5N3f+o8H7h5ZxbIq4WYXg7ygYLWEDxS54XjNUw==
+X-Received: by 2002:a17:90b:1a8d:b0:1e8:a809:af4b with SMTP id ng13-20020a17090b1a8d00b001e8a809af4bmr13093766pjb.76.1655083882346;
+        Sun, 12 Jun 2022 18:31:22 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id jg21-20020a17090326d500b001679a4711d9sm3669050plb.162.2022.06.12.18.31.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 18:31:21 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     gregkh@linuxfoundation.org
+Cc:     olebowle@gmx.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH V2] usb: core: Remove redundant NULL checks before kfree
+Date:   Mon, 13 Jun 2022 01:31:16 +0000
+Message-Id: <20220613013116.900591-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YqTUEZ+Pa24p09Uc@casper.infradead.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,72 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/06/12 1:42, Matthew Wilcox Ð´µÀ:
-> On Sat, Jun 11, 2022 at 04:23:42PM +0800, Yu Kuai wrote:
->>> This is going to mark the folio as accessed multiple times if it's
->>> a multi-page folio.  How about this one?
->>>
->> Hi, Matthew
->>
->> Thanks for the patch, it looks good to me.
-> 
-> Did you test it?  This is clearly a little subtle ;-)
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Yes, I confirmed that with this patch, small sequential read will mark
-page accessed. However, multi-page folio is not tested yet.
+Checking a pointer for NULL before calling kfree() on it is redundant,
+kfree() deals with NULL pointers just fine.
 
-> 
->> BTW, I still think the fix should be commit 06c0444290ce ("mm/filemap.c:
->> generic_file_buffered_read() now uses find_get_pages_contig").
-> 
-> Hmm, yes.  That code also has problems, but they're more subtle and
-> probably don't amount to much.
-> 
-> -       iocb->ki_pos += copied;
-> -
-> -       /*
-> -        * When a sequential read accesses a page several times,
-> -        * only mark it as accessed the first time.
-> -        */
-> -       if (iocb->ki_pos >> PAGE_SHIFT != ra->prev_pos >> PAGE_SHIFT)
-> -               mark_page_accessed(page);
-> -
-> -       ra->prev_pos = iocb->ki_pos;
-> 
-> This will mark the page accessed when we _exit_ a page.  So reading
-> 512-bytes at a time from offset 0, we'll mark page 0 as accessed on the
-> first read (because the prev_pos is initialised to -1).  Then on the
-> eighth read, we'll mark page 0 as accessed again (because ki_pos will
-> now be 4096 and prev_pos is 3584).  We'll then read chunks of page 1
-> without marking it as accessed, until we're about to step into page 2.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+v1->v2:
+	remove "quirk_list = NULL"
+ drivers/usb/core/quirks.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-You are right, I didn't think of that situation.
-> 
-> Marking page 0 accessed twice is bad; it'll set the referenced bit the
-> first time, and then the second time, it'll activate it.  So it'll be
-> thought to be part of the workingset when it's really just been part of
-> a streaming read.
-> 
-> And the last page we read will never be marked accessed unless it
-> happens to finish at the end of a page.
-> 
-> Before Kent started his refactoring, I think it worked:
-> 
-> -       pgoff_t prev_index;
-> -       unsigned int prev_offset;
-> ...
-> -       prev_index = ra->prev_pos >> PAGE_SHIFT;
-> -       prev_offset = ra->prev_pos & (PAGE_SIZE-1);
-> ...
-> -               if (prev_index != index || offset != prev_offset)
-> -                       mark_page_accessed(page);
-> -               prev_index = index;
-> -               prev_offset = offset;
-> ...
-> -       ra->prev_pos = prev_index;
-> -       ra->prev_pos <<= PAGE_SHIFT;
-> -       ra->prev_pos |= prev_offset;
-> 
-> At least, I don't detect any bugs in this.
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f99a65a64588..9ec12c42db30 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -56,10 +56,7 @@ static int quirks_param_set(const char *value, const
+struct kernel_param *kp)
+ 		if (val[i] == ',')
+ 			quirk_count++;
+ 
+-	if (quirk_list) {
+-		kfree(quirk_list);
+-		quirk_list = NULL;
+-	}
++	kfree(quirk_list);
+ 
+ 	quirk_list = kcalloc(quirk_count, sizeof(struct quirk_entry),
+ 			     GFP_KERNEL);
+-- 
+2.25.1
 
-Sure, thanks for your explanation.

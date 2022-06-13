@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92665498B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C94F5495C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379556AbiFMN7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S1355262AbiFMNPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380240AbiFMNx4 (ORCPT
+        with ESMTP id S1359022AbiFMNJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:53:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2361C377EC;
-        Mon, 13 Jun 2022 04:34:16 -0700 (PDT)
+        Mon, 13 Jun 2022 09:09:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E563438BDC;
+        Mon, 13 Jun 2022 04:19:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9411B80EC6;
-        Mon, 13 Jun 2022 11:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18AE9C34114;
-        Mon, 13 Jun 2022 11:34:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8236260EAD;
+        Mon, 13 Jun 2022 11:19:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 904F5C34114;
+        Mon, 13 Jun 2022 11:19:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120053;
-        bh=iBHXIOeiRVVBCYsNK7bbGrVtLssRBgvab2AS9555VOM=;
+        s=korg; t=1655119146;
+        bh=bjCov4Y9DLbFjB8BXxX7IMPqUiV4CxC0V0beRBBTnsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HdcVyrkJOofU02LttY09qdwCqZJeu1HRVp3d522TrwpuAtc1gg5HUHN0aDyBbOObS
-         9as+zeY1703fUXhMP7I84CNrLp0xIfjFGR1mpPoFa8UwU9pEVnjYEotZSgnJ1zoLcU
-         0cCXcWr4B+Io5c/+RWBtEHz3EYuvPtolgdL2feZE=
+        b=l4iAOpKejL2b1NRb/IA0nhqv8Zv8ra6IidleGwG3NdlWTQDjt8FoeP8s7YN/x2OO+
+         V51+Ccczz3NiOhYT8aBUBYiyyjA8BqLMHTdr5z5r9qCQNyVb5U+ZwHH7vRZSQuHBFu
+         ACg+Yf4Rj01t12BHM9d7EO6B6frqIMpKZ1HOl4B4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 234/339] drivers: staging: rtl8192e: Fix deadlock in rtllib_beacons_stop()
+Subject: [PATCH 5.15 157/247] net/mlx5: fs, fail conflicting actions
 Date:   Mon, 13 Jun 2022 12:10:59 +0200
-Message-Id: <20220613094933.755884856@linuxfoundation.org>
+Message-Id: <20220613094927.718179456@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Mark Bloch <mbloch@nvidia.com>
 
-[ Upstream commit 9b6bdbd9337de3917945847bde262a34a87a6303 ]
+[ Upstream commit 8fa5e7b20e01042b14f8cd684d2da9b638460c74 ]
 
-There is a deadlock in rtllib_beacons_stop(), which is shown
-below:
+When combining two steering rules into one check
+not only do they share the same actions but those
+actions are also the same. This resolves an issue where
+when creating two different rules with the same match
+the actions are overwritten and one of the rules is deleted
+a FW syndrome can be seen in dmesg.
 
-   (Thread 1)              |      (Thread 2)
-                           | rtllib_send_beacon()
-rtllib_beacons_stop()      |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | rtllib_send_beacon_cb()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
+mlx5_core 0000:03:00.0: mlx5_cmd_check:819:(pid 2105): DEALLOC_MODIFY_HEADER_CONTEXT(0x941) op_mod(0x0) failed, status bad resource state(0x9), syndrome (0x1ab444)
 
-We hold ieee->beacon_lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need ieee->beacon_lock in position (2) of thread 2.
-As a result, rtllib_beacons_stop() will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain
-the needed lock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417141641.124388-1-duoming@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0d235c3fabb7 ("net/mlx5: Add hash table to search FTEs in a flow-group")
+Signed-off-by: Mark Bloch <mbloch@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8192e/rtllib_softmac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../net/ethernet/mellanox/mlx5/core/fs_core.c | 35 +++++++++++++++++--
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 4b6c2295a3cf..b5a38f0a8d79 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -651,9 +651,9 @@ static void rtllib_beacons_stop(struct rtllib_device *ieee)
- 	spin_lock_irqsave(&ieee->beacon_lock, flags);
- 
- 	ieee->beacon_txing = 0;
--	del_timer_sync(&ieee->beacon_timer);
- 
- 	spin_unlock_irqrestore(&ieee->beacon_lock, flags);
-+	del_timer_sync(&ieee->beacon_timer);
- 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+index 379130ed300c..cb3f9de3d00b 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+@@ -1527,9 +1527,22 @@ static struct mlx5_flow_rule *find_flow_rule(struct fs_fte *fte,
+ 	return NULL;
  }
  
+-static bool check_conflicting_actions(u32 action1, u32 action2)
++static bool check_conflicting_actions_vlan(const struct mlx5_fs_vlan *vlan0,
++					   const struct mlx5_fs_vlan *vlan1)
+ {
+-	u32 xored_actions = action1 ^ action2;
++	return vlan0->ethtype != vlan1->ethtype ||
++	       vlan0->vid != vlan1->vid ||
++	       vlan0->prio != vlan1->prio;
++}
++
++static bool check_conflicting_actions(const struct mlx5_flow_act *act1,
++				      const struct mlx5_flow_act *act2)
++{
++	u32 action1 = act1->action;
++	u32 action2 = act2->action;
++	u32 xored_actions;
++
++	xored_actions = action1 ^ action2;
+ 
+ 	/* if one rule only wants to count, it's ok */
+ 	if (action1 == MLX5_FLOW_CONTEXT_ACTION_COUNT ||
+@@ -1546,6 +1559,22 @@ static bool check_conflicting_actions(u32 action1, u32 action2)
+ 			     MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2))
+ 		return true;
+ 
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_PACKET_REFORMAT &&
++	    act1->pkt_reformat != act2->pkt_reformat)
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
++	    act1->modify_hdr != act2->modify_hdr)
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH &&
++	    check_conflicting_actions_vlan(&act1->vlan[0], &act2->vlan[0]))
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2 &&
++	    check_conflicting_actions_vlan(&act1->vlan[1], &act2->vlan[1]))
++		return true;
++
+ 	return false;
+ }
+ 
+@@ -1553,7 +1582,7 @@ static int check_conflicting_ftes(struct fs_fte *fte,
+ 				  const struct mlx5_flow_context *flow_context,
+ 				  const struct mlx5_flow_act *flow_act)
+ {
+-	if (check_conflicting_actions(flow_act->action, fte->action.action)) {
++	if (check_conflicting_actions(flow_act, &fte->action)) {
+ 		mlx5_core_warn(get_dev(&fte->node),
+ 			       "Found two FTEs with conflicting actions\n");
+ 		return -EEXIST;
 -- 
 2.35.1
 

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EBE5490B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4AD549751
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348438AbiFMMho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S1383480AbiFMObl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348647AbiFMMhD (ORCPT
+        with ESMTP id S1382830AbiFMOZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:37:03 -0400
+        Mon, 13 Jun 2022 10:25:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0411CFD4;
-        Mon, 13 Jun 2022 04:08:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BF24A3D2;
+        Mon, 13 Jun 2022 04:47:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE78F60A66;
-        Mon, 13 Jun 2022 11:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CB4C34114;
-        Mon, 13 Jun 2022 11:07:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2D0761425;
+        Mon, 13 Jun 2022 11:47:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3C6AC34114;
+        Mon, 13 Jun 2022 11:47:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118477;
-        bh=x6jj/3Ud8+RYmtbJP9U9fUw4lyvC3AWeIlH9Z4/R6Mo=;
+        s=korg; t=1655120829;
+        bh=yRje9zJj6k4Qpu7HfECVlAhlL7PYsk56cdaU6S3uQd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iswx2IzguSKqMo3fEzZ4wI5CgEYtxZKiME5Z1oqvM5yLFIXblP9QuPFvxIl/dUqVX
-         o5aHMokiLBA049DB1zshaCrTDsgQRfDoQTzp4OJVxDrrYYPvnE0SHZ5UMdhnSmTdvn
-         LUO2sN4/tIih5L6hmU5kNDt4jfv+C7+HfH6+smDY=
+        b=k5sMlRsbyaQhtQsl7dQ5UnU53shZ3I361q4lzxcqMd0h3zpS8knsj+7c+4y9IS7Yd
+         U/gM0L2dOLDyxtJuoA4h0fdgjXvP0m3GactqiuU9W86gLz2DBwYevhY8JWzRiqUxgH
+         onQ7H5Z10je7w5SKScsNBWyTk0IWqyPtO0lahNhU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com,
-        Jon Maloy <jmaloy@redhat.com>,
-        Hoang Le <hoang.h.le@dektech.com.au>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 072/172] tipc: check attribute length for bearer name
+Subject: [PATCH 5.17 138/298] tracing: Make tp_printk work on syscall tracepoints
 Date:   Mon, 13 Jun 2022 12:10:32 +0200
-Message-Id: <20220613094907.720711594@linuxfoundation.org>
+Message-Id: <20220613094929.128988826@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,56 +55,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hoang Le <hoang.h.le@dektech.com.au>
+From: Jeff Xie <xiehuan09@gmail.com>
 
-[ Upstream commit 7f36f798f89bf32c0164049cb0e3fd1af613d0bb ]
+[ Upstream commit cb1c45fb68b8a4285ccf750842b1136f26cfe267 ]
 
-syzbot reported uninit-value:
-=====================================================
-BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:644 [inline]
-BUG: KMSAN: uninit-value in string+0x4f9/0x6f0 lib/vsprintf.c:725
- string_nocheck lib/vsprintf.c:644 [inline]
- string+0x4f9/0x6f0 lib/vsprintf.c:725
- vsnprintf+0x2222/0x3650 lib/vsprintf.c:2806
- vprintk_store+0x537/0x2150 kernel/printk/printk.c:2158
- vprintk_emit+0x28b/0xab0 kernel/printk/printk.c:2256
- vprintk_default+0x86/0xa0 kernel/printk/printk.c:2283
- vprintk+0x15f/0x180 kernel/printk/printk_safe.c:50
- _printk+0x18d/0x1cf kernel/printk/printk.c:2293
- tipc_enable_bearer net/tipc/bearer.c:371 [inline]
- __tipc_nl_bearer_enable+0x2022/0x22a0 net/tipc/bearer.c:1033
- tipc_nl_bearer_enable+0x6c/0xb0 net/tipc/bearer.c:1042
- genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+Currently the tp_printk option has no effect on syscall tracepoint.
+When adding the kernel option parameter tp_printk, then:
 
-- Do sanity check the attribute length for TIPC_NLA_BEARER_NAME.
-- Do not use 'illegal name' in printing message.
+echo 1 > /sys/kernel/debug/tracing/events/syscalls/enable
 
-Reported-by: syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com
-Fixes: cb30a63384bc ("tipc: refactor function tipc_enable_bearer()")
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
-Link: https://lore.kernel.org/r/20220602063053.5892-1-hoang.h.le@dektech.com.au
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+When running any application, no trace information is printed on the
+terminal.
+
+Now added printk for syscall tracepoints.
+
+Link: https://lkml.kernel.org/r/20220410145025.681144-1-xiehuan09@gmail.com
+
+Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/bearer.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/trace/trace_syscalls.c | 35 +++++++++++------------------------
+ 1 file changed, 11 insertions(+), 24 deletions(-)
 
-diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
-index 6911f1cab206..72c31ef985eb 100644
---- a/net/tipc/bearer.c
-+++ b/net/tipc/bearer.c
-@@ -249,9 +249,8 @@ static int tipc_enable_bearer(struct net *net, const char *name,
- 	u32 i;
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index f755bde42fd0..b69e207012c9 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -154,7 +154,7 @@ print_syscall_enter(struct trace_iterator *iter, int flags,
+ 			goto end;
  
- 	if (!bearer_name_validate(name, &b_names)) {
--		errstr = "illegal name";
- 		NL_SET_ERR_MSG(extack, "Illegal name");
--		goto rejected;
-+		return res;
- 	}
+ 		/* parameter types */
+-		if (tr->trace_flags & TRACE_ITER_VERBOSE)
++		if (tr && tr->trace_flags & TRACE_ITER_VERBOSE)
+ 			trace_seq_printf(s, "%s ", entry->types[i]);
  
- 	if (prio > TIPC_MAX_LINK_PRI && prio != TIPC_MEDIA_LINK_PRI) {
+ 		/* parameter values */
+@@ -296,9 +296,7 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 	struct trace_event_file *trace_file;
+ 	struct syscall_trace_enter *entry;
+ 	struct syscall_metadata *sys_data;
+-	struct ring_buffer_event *event;
+-	struct trace_buffer *buffer;
+-	unsigned int trace_ctx;
++	struct trace_event_buffer fbuffer;
+ 	unsigned long args[6];
+ 	int syscall_nr;
+ 	int size;
+@@ -321,20 +319,16 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 
+ 	size = sizeof(*entry) + sizeof(unsigned long) * sys_data->nb_args;
+ 
+-	trace_ctx = tracing_gen_ctx();
+-
+-	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+-			sys_data->enter_event->event.type, size, trace_ctx);
+-	if (!event)
++	entry = trace_event_buffer_reserve(&fbuffer, trace_file, size);
++	if (!entry)
+ 		return;
+ 
+-	entry = ring_buffer_event_data(event);
++	entry = ring_buffer_event_data(fbuffer.event);
+ 	entry->nr = syscall_nr;
+ 	syscall_get_arguments(current, regs, args);
+ 	memcpy(entry->args, args, sizeof(unsigned long) * sys_data->nb_args);
+ 
+-	event_trigger_unlock_commit(trace_file, buffer, event, entry,
+-				    trace_ctx);
++	trace_event_buffer_commit(&fbuffer);
+ }
+ 
+ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+@@ -343,9 +337,7 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 	struct trace_event_file *trace_file;
+ 	struct syscall_trace_exit *entry;
+ 	struct syscall_metadata *sys_data;
+-	struct ring_buffer_event *event;
+-	struct trace_buffer *buffer;
+-	unsigned int trace_ctx;
++	struct trace_event_buffer fbuffer;
+ 	int syscall_nr;
+ 
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+@@ -364,20 +356,15 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 	if (!sys_data)
+ 		return;
+ 
+-	trace_ctx = tracing_gen_ctx();
+-
+-	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+-			sys_data->exit_event->event.type, sizeof(*entry),
+-			trace_ctx);
+-	if (!event)
++	entry = trace_event_buffer_reserve(&fbuffer, trace_file, sizeof(*entry));
++	if (!entry)
+ 		return;
+ 
+-	entry = ring_buffer_event_data(event);
++	entry = ring_buffer_event_data(fbuffer.event);
+ 	entry->nr = syscall_nr;
+ 	entry->ret = syscall_get_return_value(current, regs);
+ 
+-	event_trigger_unlock_commit(trace_file, buffer, event, entry,
+-				    trace_ctx);
++	trace_event_buffer_commit(&fbuffer);
+ }
+ 
+ static int reg_event_syscall_enter(struct trace_event_file *file,
 -- 
 2.35.1
 

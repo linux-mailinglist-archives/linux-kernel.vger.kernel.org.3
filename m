@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB862548FB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B794549578
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385446AbiFMObM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S1379947AbiFMNvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383797AbiFMOYE (ORCPT
+        with ESMTP id S1379258AbiFMNn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DDC2E9D7;
-        Mon, 13 Jun 2022 04:45:19 -0700 (PDT)
+        Mon, 13 Jun 2022 09:43:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D923EF28;
+        Mon, 13 Jun 2022 04:31:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F560B80EA7;
-        Mon, 13 Jun 2022 11:45:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFAC8C34114;
-        Mon, 13 Jun 2022 11:45:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EC91B80EA7;
+        Mon, 13 Jun 2022 11:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB3DC34114;
+        Mon, 13 Jun 2022 11:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120717;
-        bh=2e7f9p/M1b3H6BOVz8uxSqJ142fxFtSnRyMgJr8u4UE=;
+        s=korg; t=1655119911;
+        bh=mnT08aQ9pGcT/TYriH3ev0VLk1IzDUDUxRReQgPBTWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2JkYhKsbzlkzWgFV3220YXPn1YB6jFh050yihJEEUOSK1ntUoc+9wi0GKI3ZO9iTh
-         Cc9SV9Ex4pqoZv7i6GiBelNw36MbaXUV6cl23bOHBTSS3DfyMqjepR2qAHq1bQ0LU4
-         OM7ZzGgFjW4qzyP8IVeQ17CW6/zPJwcLQzSHNtME=
+        b=let610Dsg6iWx6o2ssljQHcvx5e0VDj+pg7FljXX7ubjBFCtgswK2vm3ic8Re1K5t
+         pk5Z5Dys8I6lZ6ScYrlf7msTKbGFo+h5k9eTXsiCgnCY+YJnExAOXG4zEbzslEhKEa
+         siTM+2zzZHkQrSm2BnZ2GXzU8nWOt93Sbrd1qTo4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guoju Fang <gjfang@linux.alibaba.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 114/298] net: sched: add barrier to fix packet stuck problem for lockless qdisc
+Subject: [PATCH 5.18 183/339] powerpc/kasan: Force thread size increase with KASAN
 Date:   Mon, 13 Jun 2022 12:10:08 +0200
-Message-Id: <20220613094928.403820927@linuxfoundation.org>
+Message-Id: <20220613094932.228579127@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guoju Fang <gjfang@linux.alibaba.com>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit 2e8728c955ce0624b958eee6e030a37aca3a5d86 ]
+[ Upstream commit 3e8635fb2e072672cbc650989ffedf8300ad67fb ]
 
-In qdisc_run_end(), the spin_unlock() only has store-release semantic,
-which guarantees all earlier memory access are visible before it. But
-the subsequent test_bit() has no barrier semantics so may be reordered
-ahead of the spin_unlock(). The store-load reordering may cause a packet
-stuck problem.
+KASAN causes increased stack usage, which can lead to stack overflows.
 
-The concurrent operations can be described as below,
-         CPU 0                      |          CPU 1
-   qdisc_run_end()                  |     qdisc_run_begin()
-          .                         |           .
- ----> /* may be reorderd here */   |           .
-|         .                         |           .
-|     spin_unlock()                 |         set_bit()
-|         .                         |         smp_mb__after_atomic()
- ---- test_bit()                    |         spin_trylock()
-          .                         |          .
+The logic in Kconfig to suggest a larger default doesn't work if a user
+has CONFIG_EXPERT enabled and has an existing .config with a smaller
+value.
 
-Consider the following sequence of events:
-    CPU 0 reorder test_bit() ahead and see MISSED = 0
-    CPU 1 calls set_bit()
-    CPU 1 calls spin_trylock() and return fail
-    CPU 0 executes spin_unlock()
+Follow the lead of x86 and arm64, and force the thread size to be
+increased when KASAN is enabled.
 
-At the end of the sequence, CPU 0 calls spin_unlock() and does nothing
-because it see MISSED = 0. The skb on CPU 1 has beed enqueued but no one
-take it, until the next cpu pushing to the qdisc (if ever ...) will
-notice and dequeue it.
+That also has the effect of enlarging the stack for 64-bit KASAN builds,
+which is also desirable.
 
-This patch fix this by adding one explicit barrier. As spin_unlock() and
-test_bit() ordering is a store-load ordering, a full memory barrier
-smp_mb() is needed here.
-
-Fixes: a90c57f2cedd ("net: sched: fix packet stuck problem for lockless qdisc")
-Signed-off-by: Guoju Fang <gjfang@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20220528101628.120193-1-gjfang@linux.alibaba.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: edbadaf06710 ("powerpc/kasan: Fix stack overflow by increasing THREAD_SHIFT")
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+[mpe: Use MIN_THREAD_SHIFT as suggested by Christophe]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220601143114.133524-1-mpe@ellerman.id.au
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/sch_generic.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/powerpc/Kconfig                   |  1 -
+ arch/powerpc/include/asm/thread_info.h | 10 ++++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index 4fe0892dde1a..6764fc265745 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -209,6 +209,12 @@ static inline void qdisc_run_end(struct Qdisc *qdisc)
- 	if (qdisc->flags & TCQ_F_NOLOCK) {
- 		spin_unlock(&qdisc->seqlock);
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 174edabb74fa..efb03d8d1f8b 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -771,7 +771,6 @@ config THREAD_SHIFT
+ 	range 13 15
+ 	default "15" if PPC_256K_PAGES
+ 	default "14" if PPC64
+-	default "14" if KASAN
+ 	default "13"
+ 	help
+ 	  Used to define the stack size. The default is almost always what you
+diff --git a/arch/powerpc/include/asm/thread_info.h b/arch/powerpc/include/asm/thread_info.h
+index 125328d1b980..af58f1ed3952 100644
+--- a/arch/powerpc/include/asm/thread_info.h
++++ b/arch/powerpc/include/asm/thread_info.h
+@@ -14,10 +14,16 @@
  
-+		/* spin_unlock() only has store-release semantic. The unlock
-+		 * and test_bit() ordering is a store-load ordering, so a full
-+		 * memory barrier is needed here.
-+		 */
-+		smp_mb();
+ #ifdef __KERNEL__
+ 
+-#if defined(CONFIG_VMAP_STACK) && CONFIG_THREAD_SHIFT < PAGE_SHIFT
++#ifdef CONFIG_KASAN
++#define MIN_THREAD_SHIFT	(CONFIG_THREAD_SHIFT + 1)
++#else
++#define MIN_THREAD_SHIFT	CONFIG_THREAD_SHIFT
++#endif
 +
- 		if (unlikely(test_bit(__QDISC_STATE_MISSED,
- 				      &qdisc->state)))
- 			__netif_schedule(qdisc);
++#if defined(CONFIG_VMAP_STACK) && MIN_THREAD_SHIFT < PAGE_SHIFT
+ #define THREAD_SHIFT		PAGE_SHIFT
+ #else
+-#define THREAD_SHIFT		CONFIG_THREAD_SHIFT
++#define THREAD_SHIFT		MIN_THREAD_SHIFT
+ #endif
+ 
+ #define THREAD_SIZE		(1 << THREAD_SHIFT)
 -- 
 2.35.1
 

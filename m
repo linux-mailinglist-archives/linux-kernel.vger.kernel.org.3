@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710CA54981F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01165492AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355953AbiFMLnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S1344897AbiFMKcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354988AbiFMLh4 (ORCPT
+        with ESMTP id S244885AbiFMK1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:37:56 -0400
+        Mon, 13 Jun 2022 06:27:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AB24507F;
-        Mon, 13 Jun 2022 03:48:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845A4248E1;
+        Mon, 13 Jun 2022 03:19:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8859460AEB;
-        Mon, 13 Jun 2022 10:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988DCC34114;
-        Mon, 13 Jun 2022 10:48:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E65E60AE6;
+        Mon, 13 Jun 2022 10:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A544C3411E;
+        Mon, 13 Jun 2022 10:19:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117301;
-        bh=6CXYLaPR3cZEPhBGn7qYmfqLElRp0KzwtIAkLwt4JR4=;
+        s=korg; t=1655115591;
+        bh=ed7VVvdw4t2MKJRqh0XTJkAClqEeyiyAAAC9Zn40VzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XoDnEN2mEbJ0IdLEdRmRn2TynUmPfBabAWtVlbeGPIs11zS5ax3ljEQ+SYfDh1A+r
-         iLpg5VzfK1/OzaS5lvnpWjRDkeB/+hY1XPLVBxnZR6tPDMDgFV9zl8X+qKpukHZmfV
-         WD4EBX1ovse7toSJghF73m5A7+LmW6b/po9yfVOY=
+        b=yLyBycWkTNKexXYgLCVxizy+1H1gCryYYAnrQ4BCAy9AAT5YFkfNK6lLBmQ+Maw8I
+         wza0GZLnipCK2obmZwrmwtCrifMg0PFvYkqb7uFb3zYxggUXLiUyII2XVIch27f9r4
+         2KfagM3LLonUCPKPDg2Gp0O4AJKh1JemZ9AytdSs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 341/411] i2c: cadence: Increase timeout per message if necessary
+        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Zheyu Ma <zheyuma97@gmail.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 140/167] tty: synclink_gt: Fix null-pointer-dereference in slgt_clean()
 Date:   Mon, 13 Jun 2022 12:10:14 +0200
-Message-Id: <20220613094938.937589519@linuxfoundation.org>
+Message-Id: <20220613094913.700228741@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanureal@opensource.cirrus.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 96789dce043f5bff8b7d62aa28d52a7c59403a84 ]
+[ Upstream commit 689ca31c542687709ba21ec2195c1fbce34fd029 ]
 
-Timeout as 1 second sets an upper limit on the length
-of the transfer executed, but there is no maximum length
-of a write or read message set in i2c_adapter_quirks for
-this controller.
+When the driver fails at alloc_hdlcdev(), and then we remove the driver
+module, we will get the following splat:
 
-This upper limit affects devices that require sending
-large firmware blobs over I2C.
+[   25.065966] general protection fault, probably for non-canonical address 0xdffffc0000000182: 0000 [#1] PREEMPT SMP KASAN PTI
+[   25.066914] KASAN: null-ptr-deref in range [0x0000000000000c10-0x0000000000000c17]
+[   25.069262] RIP: 0010:detach_hdlc_protocol+0x2a/0x3e0
+[   25.077709] Call Trace:
+[   25.077924]  <TASK>
+[   25.078108]  unregister_hdlc_device+0x16/0x30
+[   25.078481]  slgt_cleanup+0x157/0x9f0 [synclink_gt]
 
-To remove that limitation, calculate the minimal time
-necessary, plus some wiggle room, for every message and
-use it instead of the default one second, if more than
-one second.
+Fix this by checking whether the 'info->netdev' is a null pointer first.
 
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Link: https://lore.kernel.org/r/20220410114814.3920474-1-zheyuma97@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/tty/synclink_gt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 17f0dd1f891e..8a3a0991bc1c 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -506,7 +506,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
- static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 		struct i2c_adapter *adap)
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 7446ce29f677..b5d053763263 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -1823,6 +1823,8 @@ static int hdlcdev_init(struct slgt_info *info)
+  */
+ static void hdlcdev_exit(struct slgt_info *info)
  {
--	unsigned long time_left;
-+	unsigned long time_left, msg_timeout;
- 	u32 reg;
- 
- 	id->p_msg = msg;
-@@ -531,8 +531,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 	else
- 		cdns_i2c_msend(id);
- 
-+	/* Minimal time to execute this message */
-+	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
-+	/* Plus some wiggle room */
-+	msg_timeout += msecs_to_jiffies(500);
-+
-+	if (msg_timeout < adap->timeout)
-+		msg_timeout = adap->timeout;
-+
- 	/* Wait for the signal of completion */
--	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
-+	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
- 	if (time_left == 0) {
- 		cdns_i2c_master_reset(adap);
- 		dev_err(id->adap.dev.parent,
++	if (!info->netdev)
++		return;
+ 	unregister_hdlc_device(info->netdev);
+ 	free_netdev(info->netdev);
+ 	info->netdev = NULL;
 -- 
 2.35.1
 

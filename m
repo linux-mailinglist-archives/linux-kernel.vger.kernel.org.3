@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776A35490E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D55F549929
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356892AbiFMLvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        id S1377900AbiFMNfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357508AbiFMLqS (ORCPT
+        with ESMTP id S1378668AbiFMNb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:46:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2108DFB4;
-        Mon, 13 Jun 2022 03:52:26 -0700 (PDT)
+        Mon, 13 Jun 2022 09:31:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59814719CD;
+        Mon, 13 Jun 2022 04:26:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 661E4B80D3C;
-        Mon, 13 Jun 2022 10:52:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3451C34114;
-        Mon, 13 Jun 2022 10:52:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C74A60F18;
+        Mon, 13 Jun 2022 11:26:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACFBDC3411C;
+        Mon, 13 Jun 2022 11:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117544;
-        bh=24sRiz/VOPd2PerhxZy50zuvyOVyAEZFwoB5KZep7hE=;
+        s=korg; t=1655119587;
+        bh=rCSIA7RsX1fxH+QSFK64nbPN6ho0+M4zZF4daOD5wXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IVe2HyZl0sTyz3sn6sSzrnYSXgRHdYZY7/Mabg8eh50kqGnIetSOddJgSu7Xo3mTz
-         cjLrrqVj75Vrd1DkvOYlJzwBKpENkfpNxBZ26kywkGDGCHMgVxC+G/CUy7gbZBAH8A
-         UJ1qsrUmID+Qo07t524Qi4XY4B9IWgDapOkeNe7U=
+        b=1FHFyxWCKFEGeAwdDJmuXRqnTTxmghhmEZ3e/H04Je7yYrq7EfAZR7E1DKswPPRRp
+         twl/rw3m9pQG8TNQrIPY03q3WQz+BWeWlXUbDjNVTz6vY00I1U7UpmS5iLFLIG5H8X
+         cE6h6a04KFZVU8KBz8miAR+GDeaeR0nkfnl6phAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        qianfan <qianfanguijin@163.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 048/287] fat: add ratelimit to fat*_ent_bread()
+Subject: [PATCH 5.18 047/339] watchdog: rzg2l_wdt: Fix 32bit overflow issue
 Date:   Mon, 13 Jun 2022 12:07:52 +0200
-Message-Id: <20220613094925.324907545@linuxfoundation.org>
+Message-Id: <20220613094927.950446747@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-[ Upstream commit 183c3237c928109d2008c0456dff508baf692b20 ]
+[ Upstream commit ea2949df22a533cdf75e4583c00b1ce94cd5a83b ]
 
-fat*_ent_bread() can be the cause of too many report on I/O error path.
-So use fat_msg_ratelimit() instead.
+The value of timer_cycle_us can be 0 due to 32bit overflow.
+For eg:- If we assign the counter value "0xfff" for computing
+maxval.
 
-Link: https://lkml.kernel.org/r/87bkxogfeq.fsf@mail.parknet.co.jp
-Signed-off-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Reported-by: qianfan <qianfanguijin@163.com>
-Tested-by: qianfan <qianfanguijin@163.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+This patch fixes this issue by appending ULL to 1024, so that
+it is promoted to 64bit.
+
+This patch also fixes the warning message, 'watchdog: Invalid min and
+max timeout values, resetting to 0!'.
+
+Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20220225175320.11041-2-biju.das.jz@bp.renesas.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/fat/fatent.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/watchdog/rzg2l_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/fat/fatent.c b/fs/fat/fatent.c
-index 4c6c635bc8aa..5e35307a3d6b 100644
---- a/fs/fat/fatent.c
-+++ b/fs/fat/fatent.c
-@@ -93,7 +93,8 @@ static int fat12_ent_bread(struct super_block *sb, struct fat_entry *fatent,
- err_brelse:
- 	brelse(bhs[0]);
- err:
--	fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)", (llu)blocknr);
-+	fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
-+			  (llu)blocknr);
- 	return -EIO;
- }
+diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+index 6b426df34fd6..96f2a018ab62 100644
+--- a/drivers/watchdog/rzg2l_wdt.c
++++ b/drivers/watchdog/rzg2l_wdt.c
+@@ -53,7 +53,7 @@ static void rzg2l_wdt_wait_delay(struct rzg2l_wdt_priv *priv)
  
-@@ -106,8 +107,8 @@ static int fat_ent_bread(struct super_block *sb, struct fat_entry *fatent,
- 	fatent->fat_inode = MSDOS_SB(sb)->fat_inode;
- 	fatent->bhs[0] = sb_bread(sb, blocknr);
- 	if (!fatent->bhs[0]) {
--		fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
--		       (llu)blocknr);
-+		fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
-+				  (llu)blocknr);
- 		return -EIO;
- 	}
- 	fatent->nr_bhs = 1;
+ static u32 rzg2l_wdt_get_cycle_usec(unsigned long cycle, u32 wdttime)
+ {
+-	u64 timer_cycle_us = 1024 * 1024 * (wdttime + 1) * MICRO;
++	u64 timer_cycle_us = 1024 * 1024ULL * (wdttime + 1) * MICRO;
+ 
+ 	return div64_ul(timer_cycle_us, cycle);
+ }
 -- 
 2.35.1
 

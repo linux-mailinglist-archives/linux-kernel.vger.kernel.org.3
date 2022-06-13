@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208A95493A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762835494F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356109AbiFMMof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S1384186AbiFMOdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354640AbiFMMi5 (ORCPT
+        with ESMTP id S1384699AbiFMO36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:38:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6515C87D;
-        Mon, 13 Jun 2022 04:08:30 -0700 (PDT)
+        Mon, 13 Jun 2022 10:29:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DACA76CC;
+        Mon, 13 Jun 2022 04:48:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FE07B80EA8;
-        Mon, 13 Jun 2022 11:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 884C7C34114;
-        Mon, 13 Jun 2022 11:08:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6D296124E;
+        Mon, 13 Jun 2022 11:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D04C34114;
+        Mon, 13 Jun 2022 11:47:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118508;
-        bh=IvR3eCCtOZ3XtPUngNCBjuA5lrHcVgGvsgXLK6fYnZY=;
+        s=korg; t=1655120862;
+        bh=/KZlrmAG9MD6AIoMpaa5iSedaR3bX++VdsOxGzPYYiE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EvkS9xOOTryeXOT9XMTmcTEEVyMIKtwXY0caXo5ZIvYm9+PuZl7OA9sNl6xBeNgQF
-         a/R8lgqGsgkFd+3GAshyzgwjlfAg7vOLiObNis/Kgf1jbpSrUr8M9gw/CeFK7EsaPC
-         aPpbMYnpJ/kODKqHtwtM2L7mw8GioMrkoiwsGwJU=
+        b=dlMy9jlay4L2Hd2zLElQQizvB4ornJ56yhwxZQSt+JvFeseR+7tF7JVEViUVIcyCa
+         3wk5f3jNgiX/h7uVdoxrcyiVrf9+vHtpjmR8e+eerk0Fe6Zko+nc1y5w3axhdwVXyp
+         HCHRHLX1GtuF4k8XokYjSj4BEuZNBPaFoWBjzW2o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 101/172] bpf, arm64: Clear prog->jited_len along prog->jited
+Subject: [PATCH 5.17 167/298] netfilter: nf_tables: bail out early if hardware offload is not supported
 Date:   Mon, 13 Jun 2022 12:11:01 +0200
-Message-Id: <20220613094914.647323821@linuxfoundation.org>
+Message-Id: <20220613094929.997532200@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,98 +54,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 10f3b29c65bb2fe0d47c2945cd0b4087be1c5218 ]
+[ Upstream commit 3a41c64d9c1185a2f3a184015e2a9b78bfc99c71 ]
 
-syzbot reported an illegal copy_to_user() attempt
-from bpf_prog_get_info_by_fd() [1]
+If user requests for NFT_CHAIN_HW_OFFLOAD, then check if either device
+provides the .ndo_setup_tc interface or there is an indirect flow block
+that has been registered. Otherwise, bail out early from the preparation
+phase. Moreover, validate that family == NFPROTO_NETDEV and hook is
+NF_NETDEV_INGRESS.
 
-There was no repro yet on this bug, but I think
-that commit 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
-is exposing a prior bug in bpf arm64.
-
-bpf_prog_get_info_by_fd() looks at prog->jited_len
-to determine if the JIT image can be copied out to user space.
-
-My theory is that syzbot managed to get a prog where prog->jited_len
-has been set to 43, while prog->bpf_func has ben cleared.
-
-It is not clear why copy_to_user(uinsns, NULL, ulen) is triggering
-this particular warning.
-
-I thought find_vma_area(NULL) would not find a vm_struct.
-As we do not hold vmap_area_lock spinlock, it might be possible
-that the found vm_struct was garbage.
-
-[1]
-usercopy: Kernel memory exposure attempt detected from vmalloc (offset 792633534417210172, size 43)!
-kernel BUG at mm/usercopy.c:101!
-Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 25002 Comm: syz-executor.1 Not tainted 5.18.0-syzkaller-10139-g8291eaafed36 #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : usercopy_abort+0x90/0x94 mm/usercopy.c:101
-lr : usercopy_abort+0x90/0x94 mm/usercopy.c:89
-sp : ffff80000b773a20
-x29: ffff80000b773a30 x28: faff80000b745000 x27: ffff80000b773b48
-x26: 0000000000000000 x25: 000000000000002b x24: 0000000000000000
-x23: 00000000000000e0 x22: ffff80000b75db67 x21: 0000000000000001
-x20: 000000000000002b x19: ffff80000b75db3c x18: 00000000fffffffd
-x17: 2820636f6c6c616d x16: 76206d6f72662064 x15: 6574636574656420
-x14: 74706d6574746120 x13: 2129333420657a69 x12: 73202c3237313031
-x11: 3237313434333533 x10: 3336323937207465 x9 : 657275736f707865
-x8 : ffff80000a30c550 x7 : ffff80000b773830 x6 : ffff80000b773830
-x5 : 0000000000000000 x4 : ffff00007fbbaa10 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : f7ff000028fc0000 x0 : 0000000000000064
-Call trace:
- usercopy_abort+0x90/0x94 mm/usercopy.c:89
- check_heap_object mm/usercopy.c:186 [inline]
- __check_object_size mm/usercopy.c:252 [inline]
- __check_object_size+0x198/0x36c mm/usercopy.c:214
- check_object_size include/linux/thread_info.h:199 [inline]
- check_copy_size include/linux/thread_info.h:235 [inline]
- copy_to_user include/linux/uaccess.h:159 [inline]
- bpf_prog_get_info_by_fd.isra.0+0xf14/0xfdc kernel/bpf/syscall.c:3993
- bpf_obj_get_info_by_fd+0x12c/0x510 kernel/bpf/syscall.c:4253
- __sys_bpf+0x900/0x2150 kernel/bpf/syscall.c:4956
- __do_sys_bpf kernel/bpf/syscall.c:5021 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5019 [inline]
- __arm64_sys_bpf+0x28/0x40 kernel/bpf/syscall.c:5019
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
- do_el0_svc+0xa0/0xc0 arch/arm64/kernel/syscall.c:206
- el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x1ac/0x1b0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
-Code: aa0003e3 d00038c0 91248000 97fff65f (d4210000)
-
-Fixes: db496944fdaa ("bpf: arm64: add JIT support for multi-function programs")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20220531215113.1100754-1-eric.dumazet@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: c9626a2cbdb2 ("netfilter: nf_tables: add hardware offload support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/net/bpf_jit_comp.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/net/flow_offload.h                |  1 +
+ include/net/netfilter/nf_tables_offload.h |  2 +-
+ net/core/flow_offload.c                   |  6 ++++++
+ net/netfilter/nf_tables_api.c             |  2 +-
+ net/netfilter/nf_tables_offload.c         | 23 ++++++++++++++++++++++-
+ 5 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 9c6cab71ba98..18627cbd6da4 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1111,6 +1111,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 			bpf_jit_binary_free(header);
- 			prog->bpf_func = NULL;
- 			prog->jited = 0;
-+			prog->jited_len = 0;
- 			goto out_off;
- 		}
- 		bpf_jit_binary_lock_ro(header);
+diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
+index 5b8c54eb7a6b..7a10e4ed5540 100644
+--- a/include/net/flow_offload.h
++++ b/include/net/flow_offload.h
+@@ -591,5 +591,6 @@ int flow_indr_dev_setup_offload(struct net_device *dev, struct Qdisc *sch,
+ 				enum tc_setup_type type, void *data,
+ 				struct flow_block_offload *bo,
+ 				void (*cleanup)(struct flow_block_cb *block_cb));
++bool flow_indr_dev_exists(void);
+ 
+ #endif /* _NET_FLOW_OFFLOAD_H */
+diff --git a/include/net/netfilter/nf_tables_offload.h b/include/net/netfilter/nf_tables_offload.h
+index 797147843958..3568b6a2f5f0 100644
+--- a/include/net/netfilter/nf_tables_offload.h
++++ b/include/net/netfilter/nf_tables_offload.h
+@@ -92,7 +92,7 @@ int nft_flow_rule_offload_commit(struct net *net);
+ 	NFT_OFFLOAD_MATCH(__key, __base, __field, __len, __reg)		\
+ 	memset(&(__reg)->mask, 0xff, (__reg)->len);
+ 
+-int nft_chain_offload_priority(struct nft_base_chain *basechain);
++bool nft_chain_offload_support(const struct nft_base_chain *basechain);
+ 
+ int nft_offload_init(void);
+ void nft_offload_exit(void);
+diff --git a/net/core/flow_offload.c b/net/core/flow_offload.c
+index 73f68d4625f3..929f6379a279 100644
+--- a/net/core/flow_offload.c
++++ b/net/core/flow_offload.c
+@@ -595,3 +595,9 @@ int flow_indr_dev_setup_offload(struct net_device *dev,	struct Qdisc *sch,
+ 	return (bo && list_empty(&bo->cb_list)) ? -EOPNOTSUPP : count;
+ }
+ EXPORT_SYMBOL(flow_indr_dev_setup_offload);
++
++bool flow_indr_dev_exists(void)
++{
++	return !list_empty(&flow_block_indr_dev_list);
++}
++EXPORT_SYMBOL(flow_indr_dev_exists);
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 5a2d585e180c..8eac1915ec73 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -2087,7 +2087,7 @@ static int nft_basechain_init(struct nft_base_chain *basechain, u8 family,
+ 	chain->flags |= NFT_CHAIN_BASE | flags;
+ 	basechain->policy = NF_ACCEPT;
+ 	if (chain->flags & NFT_CHAIN_HW_OFFLOAD &&
+-	    nft_chain_offload_priority(basechain) < 0)
++	    !nft_chain_offload_support(basechain))
+ 		return -EOPNOTSUPP;
+ 
+ 	flow_block_init(&basechain->flow_block);
+diff --git a/net/netfilter/nf_tables_offload.c b/net/netfilter/nf_tables_offload.c
+index 2d36952b1392..910ef881c3b8 100644
+--- a/net/netfilter/nf_tables_offload.c
++++ b/net/netfilter/nf_tables_offload.c
+@@ -208,7 +208,7 @@ static int nft_setup_cb_call(enum tc_setup_type type, void *type_data,
+ 	return 0;
+ }
+ 
+-int nft_chain_offload_priority(struct nft_base_chain *basechain)
++static int nft_chain_offload_priority(const struct nft_base_chain *basechain)
+ {
+ 	if (basechain->ops.priority <= 0 ||
+ 	    basechain->ops.priority > USHRT_MAX)
+@@ -217,6 +217,27 @@ int nft_chain_offload_priority(struct nft_base_chain *basechain)
+ 	return 0;
+ }
+ 
++bool nft_chain_offload_support(const struct nft_base_chain *basechain)
++{
++	struct net_device *dev;
++	struct nft_hook *hook;
++
++	if (nft_chain_offload_priority(basechain) < 0)
++		return false;
++
++	list_for_each_entry(hook, &basechain->hook_list, list) {
++		if (hook->ops.pf != NFPROTO_NETDEV ||
++		    hook->ops.hooknum != NF_NETDEV_INGRESS)
++			return false;
++
++		dev = hook->ops.dev;
++		if (!dev->netdev_ops->ndo_setup_tc && !flow_indr_dev_exists())
++			return false;
++	}
++
++	return true;
++}
++
+ static void nft_flow_cls_offload_setup(struct flow_cls_offload *cls_flow,
+ 				       const struct nft_base_chain *basechain,
+ 				       const struct nft_rule *rule,
 -- 
 2.35.1
 

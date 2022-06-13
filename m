@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF79548B24
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476BE54942B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383958AbiFMO2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S1380021AbiFMNwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383860AbiFMOYL (ORCPT
+        with ESMTP id S1379247AbiFMNrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:11 -0400
+        Mon, 13 Jun 2022 09:47:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6121803;
-        Mon, 13 Jun 2022 04:45:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4624B222B0;
+        Mon, 13 Jun 2022 04:32:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 086A8B80D31;
-        Mon, 13 Jun 2022 11:45:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC41C3411C;
-        Mon, 13 Jun 2022 11:45:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65D70B80E59;
+        Mon, 13 Jun 2022 11:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69ADC3411C;
+        Mon, 13 Jun 2022 11:32:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120733;
-        bh=cFMng5oSijTo5gpNi/AeI5RyKOms4r0P6/RbIrF9OBc=;
+        s=korg; t=1655119976;
+        bh=rnyRN8uJNieEChc6O58lyP6uWMUtgSC8w2CYZauwB94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bH8oi/h2/XJHNnm31Mo901Z1No2Mdq/4ZBT8LEInYUDlhbg5iiv2G6bGTpPFya9yQ
-         /ayHXdhVzwCXnbjUiG6TkEeToQEuBLpeNwrLEVQJ4W0DflncyunhFmJRL4KVqtTuO4
-         WUwrwihZmGQhVrBOuPposeyznFrHfsEH38na/xU4=
+        b=o9rBv3zhL1rJBd9z/Me6YyQpdn1nf4ZVgFAd8fh77X9d/jOBnvJ0mmxQDdAVEpVPa
+         blNPLkBF7+Kc8o2h5bsTIchYJKZUZvVrsodCsL3Xu0XxZZf7bEqqEi+IUpbwA66N1x
+         Y3sARP1ghwkAj5Rw2bqYZl443EdRL2287m3vkXTQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 137/298] bootconfig: Make the bootconfig.o as a normal object file
+Subject: [PATCH 5.18 206/339] net: mdio: unexport __init-annotated mdio_bus_init()
 Date:   Mon, 13 Jun 2022 12:10:31 +0200
-Message-Id: <20220613094929.099497550@linuxfoundation.org>
+Message-Id: <20220613094932.911618579@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,43 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 6014a23638cdee63a71ef13c51d7c563eb5829ee ]
+[ Upstream commit 35b42dce619701f1300fb8498dae82c9bb1f0263 ]
 
-Since the APIs defined in the bootconfig.o are not individually used,
-it is meaningless to build it as library by lib-y. Use obj-y for that.
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Link: https://lkml.kernel.org/r/164921225875.1090670.15565363126983098971.stgit@devnote2
+modpost used to detect it, but it has been broken for a decade.
 
-Cc: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Reported-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
+
+There are two ways to fix it:
+
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because the only in-tree call-site,
+drivers/net/phy/phy_device.c is never compiled as modular.
+(CONFIG_PHYLIB is boolean)
+
+Fixes: 90eff9096c01 ("net: phy: Allow splitting MDIO bus/device support from PHYs")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/phy/mdio_bus.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/lib/Makefile b/lib/Makefile
-index 300f569c626b..4c0220cb4329 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -279,7 +279,7 @@ $(foreach file, $(libfdt_files), \
- 	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
- lib-$(CONFIG_LIBFDT) += $(libfdt_files)
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index 58d602985877..8a2dbe849866 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -1046,7 +1046,6 @@ int __init mdio_bus_init(void)
  
--lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
-+obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(mdio_bus_init);
  
- obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
- obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
+ #if IS_ENABLED(CONFIG_PHYLIB)
+ void mdio_bus_exit(void)
 -- 
 2.35.1
 

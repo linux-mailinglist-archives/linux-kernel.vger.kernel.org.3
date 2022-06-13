@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D8E549300
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9E3548892
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378482AbiFMNlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S1357011AbiFMNBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378860AbiFMNjX (ORCPT
+        with ESMTP id S1358078AbiFMMzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:23 -0400
+        Mon, 13 Jun 2022 08:55:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FF17937A;
-        Mon, 13 Jun 2022 04:28:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEAC639E;
+        Mon, 13 Jun 2022 04:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C853E6114A;
-        Mon, 13 Jun 2022 11:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C44C34114;
-        Mon, 13 Jun 2022 11:28:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A27560B6B;
+        Mon, 13 Jun 2022 11:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85703C34114;
+        Mon, 13 Jun 2022 11:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119686;
-        bh=AWG9gvMcYACCQztBZWgs0FhjmGr5NkuGSG93WBuDqX0=;
+        s=korg; t=1655118856;
+        bh=GuEZAMVML4UAVYbxjDfUyMZcQpxhrVaDmupRrwOZv/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vSPKZZyETxh8CWR9KMqGeaFYMQAhR0Cyz//y5oacxXDu8g2RgOoodqICl8tnBzqDr
-         UWd/6OHqRldU86Z21jkV1pHsXpOJWjVBuh1DV1mrKBURkNiuaIsENZa82zXBBapIwH
-         oCYJXw/+9vsD2SxpXtz989T2z7ZAG/ze0XOXALWA=
+        b=HZNt3qlqcLbsqK67KzAaNX4AuCbUOOj6G+xWvKjOZDwbpJ1HsSiWwoYPDB/XBF6M0
+         MvwACUIltnqgZK4q687I8SmxVKdOLaU7jBJ3pRznrEe8cIAsDIZ9K1ZbrKYBkdEbPE
+         3XmrYs7k6uNrsMIr51yxpiclfjyixkfgxIe6Qb3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mykola Lysenko <mykolal@fb.com>,
-        Song Liu <song@kernel.org>, David Vernet <void@manifault.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 103/339] selftests/bpf: fix stacktrace_build_id with missing kprobe/urandom_read
+Subject: [PATCH 5.15 026/247] rpmsg: virtio: Fix possible double free in rpmsg_virtio_add_ctrl_dev()
 Date:   Mon, 13 Jun 2022 12:08:48 +0200
-Message-Id: <20220613094929.637161973@linuxfoundation.org>
+Message-Id: <20220613094923.728521855@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Liu <song@kernel.org>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 59ed76fe2f981bccde37bdddb465f260a96a2404 ]
+[ Upstream commit 1680939e9ecf7764fba8689cfb3429c2fe2bb23c ]
 
-Kernel function urandom_read is replaced with urandom_read_iter.
-Therefore, kprobe on urandom_read is not working any more:
+vch will be free in virtio_rpmsg_release_device() when
+rpmsg_ctrldev_register_device() fails. There is no need to call
+kfree() again.
 
-[root@eth50-1 bpf]# ./test_progs -n 161
-test_stacktrace_build_id:PASS:skel_open_and_load 0 nsec
-libbpf: kprobe perf_event_open() failed: No such file or directory
-libbpf: prog 'oncpu': failed to create kprobe 'urandom_read+0x0' \
-        perf event: No such file or directory
-libbpf: prog 'oncpu': failed to auto-attach: -2
-test_stacktrace_build_id:FAIL:attach_tp err -2
-161     stacktrace_build_id:FAIL
-
-Fix this by replacing urandom_read with urandom_read_iter in the test.
-
-Fixes: 1b388e7765f2 ("random: convert to using fops->read_iter()")
-Reported-by: Mykola Lysenko <mykolal@fb.com>
-Signed-off-by: Song Liu <song@kernel.org>
-Acked-by: David Vernet <void@manifault.com>
-Link: https://lore.kernel.org/r/20220526191608.2364049-1-song@kernel.org
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Tested-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Link: https://lore.kernel.org/r/20220426060536.15594-3-hbh25y@gmail.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c | 2 +-
+ drivers/rpmsg/virtio_rpmsg_bus.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-index 6c62bfb8bb6f..0c4426592a26 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-@@ -39,7 +39,7 @@ struct {
- 	__type(value, stack_trace_t);
- } stack_amap SEC(".maps");
+diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+index 834a0811e371..3a62e6197151 100644
+--- a/drivers/rpmsg/virtio_rpmsg_bus.c
++++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+@@ -842,7 +842,7 @@ static struct rpmsg_device *rpmsg_virtio_add_ctrl_dev(struct virtio_device *vdev
  
--SEC("kprobe/urandom_read")
-+SEC("kprobe/urandom_read_iter")
- int oncpu(struct pt_regs *args)
- {
- 	__u32 max_len = sizeof(struct bpf_stack_build_id)
+ 	err = rpmsg_chrdev_register_device(rpdev_ctrl);
+ 	if (err) {
+-		kfree(vch);
++		/* vch will be free in virtio_rpmsg_release_device() */
+ 		return ERR_PTR(err);
+ 	}
+ 
 -- 
 2.35.1
 

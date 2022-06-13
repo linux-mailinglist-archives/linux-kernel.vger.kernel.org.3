@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E31548EF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F2B549078
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353998AbiFML0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
+        id S1377793AbiFMNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352748AbiFMLSw (ORCPT
+        with ESMTP id S1377862AbiFMNaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:18:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6FE393F4;
-        Mon, 13 Jun 2022 03:40:35 -0700 (PDT)
+        Mon, 13 Jun 2022 09:30:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F196E8C8;
+        Mon, 13 Jun 2022 04:25:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1796CB80EAA;
-        Mon, 13 Jun 2022 10:40:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF4EC34114;
-        Mon, 13 Jun 2022 10:40:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DD1C9CE110D;
+        Mon, 13 Jun 2022 11:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEA2C3411E;
+        Mon, 13 Jun 2022 11:25:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116832;
-        bh=JUMJrRn2MFoitAKiQ7vLxyLVqADgMHjCg2hZ3QND8Zo=;
+        s=korg; t=1655119504;
+        bh=u3g6ye2lF1PUMaUH3OK098oauGnVr/Y/SqRnFmjCthM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JKK7+lUEXfJC4nngZSEMLeDbdOWNAdD+LAaOzE/JAbBtheu8BczQDFLWYDIN2nlIl
-         tR7Vz+9oszTT/quiXRDUtanXi9zd5AdgPePpxjamohnm8TO0KUTPscb1LlI+Un65aW
-         6HGtuoXT7SgS0FoExEOHOaqwlym3qU94/ZH2dYXw=
+        b=P1+bBFlKjO0ob4Dn1ZmUccCVO/lZpPhj7yvTApMcIdMEjXYG0gvFBWzOOsLo4G11Z
+         0qHPSxUZT6yADIuMtt5hobed5QIPG6r/6mbyOzMa68JxQD5DNRzG+qvPvwIKycxILm
+         cS78wJd1lsUjpce5XrOhv1CLOsr0tqgqqIuEpqUw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kajol Jain <kjain@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 189/411] powerpc/perf: Fix the threshold compare group constraint for power9
+Subject: [PATCH 5.18 037/339] iio: adc: sc27xx: Fine tune the scale calibration values
 Date:   Mon, 13 Jun 2022 12:07:42 +0200
-Message-Id: <20220613094934.328504894@linuxfoundation.org>
+Message-Id: <20220613094927.644650258@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kajol Jain <kjain@linux.ibm.com>
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-[ Upstream commit ab0cc6bbf0c812731c703ec757fcc3fc3a457a34 ]
+[ Upstream commit 5a7a184b11c6910f47600ff5cbbee34168f701a8 ]
 
-Thresh compare bits for a event is used to program thresh compare
-field in Monitor Mode Control Register A (MMCRA: 9-18 bits for power9).
-When scheduling events as a group, all events in that group should
-match value in threshold bits (like thresh compare, thresh control,
-thresh select). Otherwise event open for the sibling events should fail.
-But in the current code, incase thresh compare bits are not valid,
-we are not failing in group_constraint function which can result
-in invalid group schduling.
+Small adjustment the scale calibration value for the sc2731,
+use new name sc2731_[big|small]_scale_graph_calib, and remove
+the origin [big|small]_scale_graph_calib struct for unused.
 
-Fix the issue by returning -1 incase event is threshold and threshold
-compare value is not valid.
-
-Thresh control bits in the event code is used to program thresh_ctl
-field in Monitor Mode Control Register A (MMCRA: 48-55). In below example,
-the scheduling of group events PM_MRK_INST_CMPL (873534401e0) and
-PM_THRESH_MET (8734340101ec) is expected to fail as both event
-request different thresh control bits and invalid thresh compare value.
-
-Result before the patch changes:
-
-[command]# perf stat -e "{r8735340401e0,r8734340101ec}" sleep 1
-
- Performance counter stats for 'sleep 1':
-
-            11,048      r8735340401e0
-             1,967      r8734340101ec
-
-       1.001354036 seconds time elapsed
-
-       0.001421000 seconds user
-       0.000000000 seconds sys
-
-Result after the patch changes:
-
-[command]# perf stat -e "{r8735340401e0,r8734340101ec}" sleep 1
-Error:
-The sys_perf_event_open() syscall returned with 22 (Invalid argument)
-for event (r8735340401e0).
-/bin/dmesg | grep -i perf may provide additional information.
-
-Fixes: 78a16d9fc1206 ("powerpc/perf: Avoid FAB_*_MATCH checks for power9")
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-Reviewed-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220506061015.43916-2-kjain@linux.ibm.com
+Fixes: 8ba0dbfd07a35 (iio: adc: sc27xx: Add ADC scale calibration)
+Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Link: https://lore.kernel.org/r/20220419142458.884933-4-gengcixi@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/perf/isa207-common.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/iio/adc/sc27xx_adc.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/perf/isa207-common.c b/arch/powerpc/perf/isa207-common.c
-index 944180f55a3c..25eda98f3b1b 100644
---- a/arch/powerpc/perf/isa207-common.c
-+++ b/arch/powerpc/perf/isa207-common.c
-@@ -326,7 +326,8 @@ int isa207_get_constraint(u64 event, unsigned long *maskp, unsigned long *valp)
- 		if (event_is_threshold(event) && is_thresh_cmp_valid(event)) {
- 			mask  |= CNST_THRESH_MASK;
- 			value |= CNST_THRESH_VAL(event >> EVENT_THRESH_SHIFT);
--		}
-+		} else if (event_is_threshold(event))
-+			return -1;
+diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+index aee076c8e2b1..cfe003cc4f0b 100644
+--- a/drivers/iio/adc/sc27xx_adc.c
++++ b/drivers/iio/adc/sc27xx_adc.c
+@@ -103,14 +103,14 @@ static struct sc27xx_adc_linear_graph small_scale_graph = {
+ 	100, 341,
+ };
+ 
+-static const struct sc27xx_adc_linear_graph big_scale_graph_calib = {
+-	4200, 856,
+-	3600, 733,
++static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph_calib = {
++	4200, 850,
++	3600, 728,
+ };
+ 
+-static const struct sc27xx_adc_linear_graph small_scale_graph_calib = {
+-	1000, 833,
+-	100, 80,
++static const struct sc27xx_adc_linear_graph sc2731_small_scale_graph_calib = {
++	1000, 838,
++	100, 84,
+ };
+ 
+ static int sc27xx_adc_get_calib_data(u32 calib_data, int calib_adc)
+@@ -130,11 +130,11 @@ static int sc27xx_adc_scale_calibration(struct sc27xx_adc_data *data,
+ 	size_t len;
+ 
+ 	if (big_scale) {
+-		calib_graph = &big_scale_graph_calib;
++		calib_graph = &sc2731_big_scale_graph_calib;
+ 		graph = &big_scale_graph;
+ 		cell_name = "big_scale_calib";
  	} else {
- 		/*
- 		 * Special case for PM_MRK_FAB_RSP_MATCH and PM_MRK_FAB_RSP_MATCH_CYC,
+-		calib_graph = &small_scale_graph_calib;
++		calib_graph = &sc2731_small_scale_graph_calib;
+ 		graph = &small_scale_graph;
+ 		cell_name = "small_scale_calib";
+ 	}
 -- 
 2.35.1
 

@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBADB54833F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3F2548328
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240773AbiFMJc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        id S239393AbiFMJeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiFMJcq (ORCPT
+        with ESMTP id S229926AbiFMJd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:32:46 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B760B18B20;
-        Mon, 13 Jun 2022 02:32:45 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id fu3so9986540ejc.7;
-        Mon, 13 Jun 2022 02:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ouugFA4wvIvBuAMFZVHlrzyWmRsNThmM8N7DKEf0gGY=;
-        b=oblnuSouSDHMuqqARXqLd++pJVy0ujuQRDiQLY4ejPoBD5wsxfGqhSrTcVzAt5Gt26
-         QiFuWxurpt5YZkOQSm0Tp3o+xudHbm87PKyI1FPii/mfmTQp3wb57k39LNfQgEWzcUuw
-         1XsQCib9W/SQti9C/PVNRuWN7jfnY4msyCtg4/4eRZqlPqy+XogtJ7RCKQJr82OPwibF
-         cyIX2cItdXwXnywtg5EwwRXFHO1cje+97NICmD3MxynF8a9kt00y+/PvexlP0UuJExTA
-         tpA6vBc642YpKduVNWMGqRHC66OD1i1VwG/rWg+nhOpRhi0vKSBXjAayFRyguvLNUNwy
-         Pv7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ouugFA4wvIvBuAMFZVHlrzyWmRsNThmM8N7DKEf0gGY=;
-        b=XH7pkNp1MJJEUkN8ugSWGiZHhIFTp7l+ifY0qwUqmwlQtuUKEqmFrQu2fUr7V6cgyH
-         vu+dWFfRxonQdgjYeSNbyWFBzGPR2otEKsNObJ2qePCkUPNamp3YZ00qS744kYli4us5
-         RJSyzic3ABtQrzz7sRCmclkOdm/AK23jYg27bMArCYgt1M0kw28/afUIE2JEdP1SG4t2
-         LzTYdSotJLRMHWkK78nLbCM26zlGu5s0XKJOd2l5UOwb4WUJRiOAij3EHr4YyXuUoxvC
-         EGoiLDjEZn1RaWdB9fz/QudLVNR/uXnh2Thfnfg2V64b9YJ92WfN+h70rOcEyw4jQhd0
-         CfrQ==
-X-Gm-Message-State: AOAM5308zj8033xJ1N6I6Rq47azbZ5CM+uOniOQlcOrkpQUDtL0YG1Lv
-        aWv18kcUd/HimU5IE6z9QJM=
-X-Google-Smtp-Source: ABdhPJwAs1tRfFppx8kO1Vel1dF59AAvl8ss/jjooMB0Wgg9BxIlvxBNGJxskC/qCCUplkShMlSgzA==
-X-Received: by 2002:a17:906:fb0f:b0:715:7e23:bbbc with SMTP id lz15-20020a170906fb0f00b007157e23bbbcmr6489946ejb.373.1655112764229;
-        Mon, 13 Jun 2022 02:32:44 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id h1-20020a17090791c100b006f3ef214dc7sm3614269ejz.45.2022.06.13.02.32.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 02:32:43 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 12:32:42 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [RFC Patch net-next v2 07/15] net: dsa: microchip: update the
- ksz_phylink_get_caps
-Message-ID: <20220613093242.ja2jbmhi5uucsavn@skbuf>
-References: <20220530104257.21485-1-arun.ramadoss@microchip.com>
- <20220530104257.21485-8-arun.ramadoss@microchip.com>
+        Mon, 13 Jun 2022 05:33:56 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A971119
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=MEL5DS0eisNERPPTvN+7r0EBXpeTnXMy7Oai9HNn+Wg=; b=MCqM2X7RM26GpCYEj74b/XZbeE
+        Uf0SXov50kDFdkC2ihtgf7zTbcoa4RJRvy8ZoGoR0ZyeKceC6I/J5AKeEkxoPmjUbJyZQFUQOvC8S
+        WXefaEWhMPa6TbrACOWoREcpFDMPhEdH7rVskcbO3yNXtXqGthZ5qsyZLtdKDtyApZiA/45o3BuIP
+        jGxu1ZLKL/gsQjxnSSQeEi9r6UWi6hgqhyBfolB5cBgGJvzfyjQM//BTQ3gK2oJTTBJYhBPHYoNy3
+        Gq4GgnP8pO6X5k6/9XJb2AI7d02dAYha6H6aPZbEuRuiUNlOrt3p0AcQszaGEctpBNo1yeUIBs4pW
+        tksjZ/WQ==;
+Received: from [165.90.126.25] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1o0gSG-000P7j-1J; Mon, 13 Jun 2022 11:33:52 +0200
+Date:   Mon, 13 Jun 2022 08:33:38 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>
+Cc:     Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        andrealmeid@riseup.net
+Subject: Re: [PATCH v2 1/2] drm/vkms: check plane_composer->map[0] before
+ using it
+Message-ID: <20220613093322.zpikmetwdptzt7iz@mail.igalia.com>
+References: <20220415111300.61013-1-tales.aparecida@gmail.com>
+ <20220415111300.61013-2-tales.aparecida@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bkggbyddtyrzuax4"
 Content-Disposition: inline
-In-Reply-To: <20220530104257.21485-8-arun.ramadoss@microchip.com>
+In-Reply-To: <20220415111300.61013-2-tales.aparecida@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 04:12:49PM +0530, Arun Ramadoss wrote:
-> This patch assigns the phylink_get_caps in ksz8795 and ksz9477 to
-> ksz_phylink_get_caps. And update their mac_capabilities in the
-> respective ksz_dev_ops.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+--bkggbyddtyrzuax4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 04/15, Tales Lelo da Aparecida wrote:
+> Fix a copypasta error. The caller of compose_plane() already checks
+> primary_composer->map. In contrast, plane_composer->map is never
+> verified here before handling.
+>=20
+> Fixes: 7938f4218168 ("dma-buf-map: Rename to iosys-map")
+> Reviewed-by: Andr=E9 Almeida <andrealmeid@riseup.net>
+> Signed-off-by: Tales Lelo da Aparecida <tales.aparecida@gmail.com>
+> ---
+> v2: detail the commit message with more information
+>=20
+>  drivers/gpu/drm/vkms/vkms_composer.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/=
+vkms_composer.c
+> index c6a1036bf2ea..b47ac170108c 100644
+> --- a/drivers/gpu/drm/vkms/vkms_composer.c
+> +++ b/drivers/gpu/drm/vkms/vkms_composer.c
+> @@ -157,7 +157,7 @@ static void compose_plane(struct vkms_composer *prima=
+ry_composer,
+>  	void *vaddr;
+>  	void (*pixel_blend)(const u8 *p_src, u8 *p_dst);
+> =20
+> -	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0])))
+> +	if (WARN_ON(iosys_map_is_null(&plane_composer->map[0])))
+>  		return;
+
+I cherry-picked this one and applied to drm-misc-next.
+
+Thanks,
+
+Melissa
+
+> =20
+>  	vaddr =3D plane_composer->map[0].vaddr;
+> --=20
+> 2.35.1
+>=20
+
+--bkggbyddtyrzuax4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmKnBHIACgkQwqF3j0dL
+ehyPXA//ZOSSI3d6rcOd682oWAZsvh9K8dCpKcS75nKQgBx89u1E3s44VwKZp7uB
++zeIOO07h74t7cKiF33fvCAVyIVSfpV1jMCueclTrxsz1p+DIl2Aq91tnv46WXwa
+6URbiuUez8MO7yRZBZAfD5yEp6IOzrI46/QSrLgGKCnCOLgZzO+/stRypjZ9YMfp
+RdfUHFUybX8bbHagQc7qXYdReN7PsLz1GjB1vHlbHwar5ScAoNdQ/QBCP0vtNNS3
+j0vee4qWmXPvh3gcRbK2YAgeFAzCbORNKQ97WE2sHLuhEP14cFB2ydvb87k7guvd
+qmhk49y0ONOAq7LAqqXuR+5rAmw493JbAjcrtOovBKhwsEIRGe+BiRzflbdevtE1
+u/WUQd3lERv0JNQiLjO41rzhQTD2SWwxkT/zPeYnn7TitBqAOTFddmszW2kOG8V8
+00UN32TOFNEOSqWclGMQzyNdL/dq9egtiH+Mu9KQyVg2EtieRzND22CxaUR6NU9W
+nkXbJqwaTUUoMnWyOkCHPu3D4zyc5JXGDS7HhLNI9rmj5LR1rRzRqg3ZSYBLPp22
+fYCeuZ3+AY9NMKhoq6ZRh1ayVrfYgxAg5l6sjgYTl8FEaLyAFBtMyzl0jVoNnRzK
+cqwXzIYvwGSTHJVaLG2ROLyFJsV5dmSO4e0V9Y8+1hR0gkBRsQc=
+=5Ak+
+-----END PGP SIGNATURE-----
+
+--bkggbyddtyrzuax4--

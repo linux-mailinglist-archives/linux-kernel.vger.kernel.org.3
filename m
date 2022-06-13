@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FBD54973F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7585E549048
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359375AbiFMNUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
+        id S1354668AbiFMMsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359788AbiFMNKg (ORCPT
+        with ESMTP id S1354704AbiFMMoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:10:36 -0400
+        Mon, 13 Jun 2022 08:44:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598B43BA6C;
-        Mon, 13 Jun 2022 04:21:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D3160AA8;
+        Mon, 13 Jun 2022 04:11:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9578B80EA8;
-        Mon, 13 Jun 2022 11:21:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D746EC34114;
-        Mon, 13 Jun 2022 11:21:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA5F7B80EA8;
+        Mon, 13 Jun 2022 11:10:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDDDC34114;
+        Mon, 13 Jun 2022 11:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119292;
-        bh=9iiuiFCgsrm+sHgYub5Z3TgK2n+4XPqxCQptH1jhPjk=;
+        s=korg; t=1655118648;
+        bh=ua+LlB7d4j6pczyE2flMrBxTn4ieE98JQ4SQv/GOwMU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tl9r6qSTky8d2uYjFcuEYVRa6KJMye0bGXOjHdhV8OcDcAlbENNJPcyanw8nZYKK1
-         laFRw9b9dYI0ksnWzQYQV1H3ZGA09Wzw0AZa60toj6sZOBlMM/ybRWghHuUAEh8xuC
-         ua8gwKpE88DyDmzBlYN58TxHwkMOBCnUyxQyD7RM=
+        b=WRahkgiCxGbuT0u8vW/n7Uuw4lksUfh2jYsPiCUqd9WLP30uKmuXQZfymaPJpZ5tQ
+         sR97YMcXEEhpxK+1O+uiSp5+s14A3DRKb6mqS+IS0/WpMal47K445aW/vkvKdLmNNG
+         Gn458QPmNwa+HIsoqgdbFjQ1KOtcWoF9XtiX9Xjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 210/247] drm/amd/pm: use bitmap_{from,to}_arr32 where appropriate
+        stable@vger.kernel.org, Cameron Berkenpas <cam@neo-zeon.de>,
+        Takashi Iwai <tiwai@suse.de>,
+        Songine <donglingluoying@gmail.com>
+Subject: [PATCH 5.10 152/172] ALSA: hda/realtek: Fix for quirk to enable speaker output on the Lenovo Yoga DuetITL 2021
 Date:   Mon, 13 Jun 2022 12:11:52 +0200
-Message-Id: <20220613094929.310086712@linuxfoundation.org>
+Message-Id: <20220613094922.794764649@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,59 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
+From: Cameron Berkenpas <cam@neo-zeon.de>
 
-[ Upstream commit 525d6515604eb1373ce5e6372a6b6640953b2d6a ]
+commit 85743a847caeab696dafc4ce1a7e1e2b7e29a0f6 upstream.
 
-The smu_v1X_0_set_allowed_mask() uses bitmap_copy() to convert
-bitmap to 32-bit array. This may be wrong due to endiannes issues.
-Fix it by switching to bitmap_{from,to}_arr32.
+Enables the ALC287_FIXUP_YOGA7_14ITL_SPEAKERS quirk for the Lenovo
+Yoga DuetITL 2021 laptop to fix speaker output.
 
-CC: Alexander Gordeev <agordeev@linux.ibm.com>
-CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Christian Borntraeger <borntraeger@linux.ibm.com>
-CC: Claudio Imbrenda <imbrenda@linux.ibm.com>
-CC: David Hildenbrand <david@redhat.com>
-CC: Heiko Carstens <hca@linux.ibm.com>
-CC: Janosch Frank <frankja@linux.ibm.com>
-CC: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-CC: Sven Schnelle <svens@linux.ibm.com>
-CC: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[ re-sorted in the SSID order by tiwai ]
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=208555
+Signed-off-by: Cameron Berkenpas <cam@neo-zeon.de>
+Co-authored-by: Songine <donglingluoying@gmail.com>
+Cc: stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220606002329.215330-1-cam@neo-zeon.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c | 2 +-
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-index 87b055466a33..e6c93396434f 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-@@ -772,7 +772,7 @@ int smu_v11_0_set_allowed_mask(struct smu_context *smu)
- 		goto failed;
- 	}
- 
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
- 
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					  feature_mask[1], NULL);
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-index 8d4aa16b2ae7..6211570fb64f 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-@@ -721,7 +721,7 @@ int smu_v13_0_set_allowed_mask(struct smu_context *smu)
- 	if (bitmap_empty(feature->allowed, SMU_FEATURE_MAX) || feature->feature_num < 64)
- 		goto failed;
- 
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
- 
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					      feature_mask[1], NULL);
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8977,6 +8977,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x17aa, 0x3176, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x17aa, 0x3178, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
++	SND_PCI_QUIRK(0x17aa, 0x3802, "Lenovo Yoga DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
+ 	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
 
 

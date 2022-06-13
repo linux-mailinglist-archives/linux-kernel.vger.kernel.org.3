@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A69548C65
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE315494CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385461AbiFMOmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S1380832AbiFMOHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385768AbiFMOko (ORCPT
+        with ESMTP id S1380551AbiFMN7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:40:44 -0400
+        Mon, 13 Jun 2022 09:59:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AECB0A69;
-        Mon, 13 Jun 2022 04:50:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499A98CB2E;
+        Mon, 13 Jun 2022 04:37:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF042B80ECD;
-        Mon, 13 Jun 2022 11:50:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B77DC34114;
-        Mon, 13 Jun 2022 11:50:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C4DFB80E2C;
+        Mon, 13 Jun 2022 11:37:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA73DC3411C;
+        Mon, 13 Jun 2022 11:37:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121028;
-        bh=KgLkVpm/eCq7pTrqhy/1TWHRr1bnRifLYUD1rkYJal0=;
+        s=korg; t=1655120265;
+        bh=FnCeao+/GWV3XE4N4cPu+iNp9VP0bsdVQ0g152ZehB8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xS1dLV3sbAz8O+tiJMl0Wl4Ur+eXe22Z/fKf7qvMn1ZHdzE5fO/PVh6i3yw8uM3u3
-         DQghM07KY+wvNy9Nn8tLCccOQe7BgNZcoz7OzB8u/YSjr/9f3Xytlr91X4aizoxUnK
-         1Ap3pIa1RFd/qEuCJ5524FjSAN9d7KBM9+KdYmFg=
+        b=QLK6tsiAg3+A3EWoGSEmDILytSiWTC8shJVJAxeS/38CBX/DGlH+oZydRzy5DCB72
+         f4aTaB14ht0WtXenmG0iziLljC8P8f49Gnk9TL4EM7t4zut9q56ZO6vBIFXE3f/TJN
+         gpU2W2T8wJxo/9vooPtig+/10S8DgWegkaG5xQGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>,
+        stable@vger.kernel.org, Jorge Lopez <jorge.lopez2@hp.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 222/298] serial: msm_serial: disable interrupts in __msm_console_write()
+Subject: [PATCH 5.18 291/339] platform/x86: hp-wmi: Resolve WMI query failures on some devices
 Date:   Mon, 13 Jun 2022 12:11:56 +0200
-Message-Id: <20220613094931.833826222@linuxfoundation.org>
+Message-Id: <20220613094935.462088879@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,57 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Ogness <john.ogness@linutronix.de>
+From: Jorge Lopez <jorge.lopez2@hp.com>
 
-[ Upstream commit aabdbb1b7a5819e18c403334a31fb0cc2c06ad41 ]
+[ Upstream commit dc6a6ab58379f25bf991d8e4a13b001ed806e881 ]
 
-__msm_console_write() assumes that interrupts are disabled, but
-with threaded console printers it is possible that the write()
-callback of the console is called with interrupts enabled.
+WMI queries fail on some devices where the ACPI method HWMC
+unconditionally attempts to create Fields beyond the buffer
+if the buffer is too small, this breaks essential features
+such as power profiles:
 
-Explicitly disable interrupts using local_irq_save() to preserve
-the assumed context.
+         CreateByteField (Arg1, 0x10, D008)
+         CreateByteField (Arg1, 0x11, D009)
+         CreateByteField (Arg1, 0x12, D010)
+         CreateDWordField (Arg1, 0x10, D032)
+         CreateField (Arg1, 0x80, 0x0400, D128)
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Link: https://lore.kernel.org/r/20220506213324.470461-1-john.ogness@linutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In cases where args->data had zero length, ACPI BIOS Error
+(bug): AE_AML_BUFFER_LIMIT, Field [D008] at bit
+offset/length 128/8 exceeds size of target Buffer (128 bits)
+(20211217/dsopcode-198) was obtained.
+
+ACPI BIOS Error (bug): AE_AML_BUFFER_LIMIT, Field [D009] at bit
+offset/length 136/8 exceeds size of target Buffer (136bits)
+(20211217/dsopcode-198)
+
+The original code created a buffer size of 128 bytes regardless if
+the WMI call required a smaller buffer or not.  This particular
+behavior occurs in older BIOS and reproduced in OMEN laptops.  Newer
+BIOS handles buffer sizes properly and meets the latest specification
+requirements.  This is the reason why testing with a dynamically
+allocated buffer did not uncover any failures with the test systems at
+hand.
+
+This patch was tested on several OMEN, Elite, and Zbooks.  It was
+confirmed the patch resolves HPWMI_FAN GET/SET calls in an OMEN
+Laptop 15-ek0xxx.  No problems were reported when testing on several Elite
+and Zbooks notebooks.
+
+Fixes: 4b4967cbd268 ("platform/x86: hp-wmi: Changing bios_args.data to be dynamically allocated")
+Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220608212923.8585-2-jorge.lopez2@hp.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/msm_serial.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/platform/x86/hp-wmi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
-index 23c94b927776..e676ec761f18 100644
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -1599,6 +1599,7 @@ static inline struct uart_port *msm_get_port_from_line(unsigned int line)
- static void __msm_console_write(struct uart_port *port, const char *s,
- 				unsigned int count, bool is_uartdm)
- {
-+	unsigned long flags;
- 	int i;
- 	int num_newlines = 0;
- 	bool replaced = false;
-@@ -1616,6 +1617,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
- 			num_newlines++;
- 	count += num_newlines;
+diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+index 0e9a25b56e0e..d3540dd62d06 100644
+--- a/drivers/platform/x86/hp-wmi.c
++++ b/drivers/platform/x86/hp-wmi.c
+@@ -290,14 +290,16 @@ static int hp_wmi_perform_query(int query, enum hp_wmi_command command,
+ 	struct bios_return *bios_return;
+ 	union acpi_object *obj = NULL;
+ 	struct bios_args *args = NULL;
+-	int mid, actual_outsize, ret;
++	int mid, actual_insize, actual_outsize;
+ 	size_t bios_args_size;
++	int ret;
  
-+	local_irq_save(flags);
-+
- 	if (port->sysrq)
- 		locked = 0;
- 	else if (oops_in_progress)
-@@ -1661,6 +1664,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
+ 	mid = encode_outsize_for_pvsz(outsize);
+ 	if (WARN_ON(mid < 0))
+ 		return mid;
  
- 	if (locked)
- 		spin_unlock(&port->lock);
-+
-+	local_irq_restore(flags);
- }
- 
- static void msm_console_write(struct console *co, const char *s,
+-	bios_args_size = struct_size(args, data, insize);
++	actual_insize = max(insize, 128);
++	bios_args_size = struct_size(args, data, actual_insize);
+ 	args = kmalloc(bios_args_size, GFP_KERNEL);
+ 	if (!args)
+ 		return -ENOMEM;
 -- 
 2.35.1
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC815497FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1DA5490CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351909AbiFMLIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S241066AbiFMN6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351420AbiFMLEH (ORCPT
+        with ESMTP id S1380150AbiFMNxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:04:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D823531DCC;
-        Mon, 13 Jun 2022 03:33:30 -0700 (PDT)
+        Mon, 13 Jun 2022 09:53:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B1B71A0B;
+        Mon, 13 Jun 2022 04:33:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AA0260AE6;
-        Mon, 13 Jun 2022 10:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76841C34114;
-        Mon, 13 Jun 2022 10:33:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AAF7B80E93;
+        Mon, 13 Jun 2022 11:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF7E3C34114;
+        Mon, 13 Jun 2022 11:33:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116408;
-        bh=qldU0Sv45lUi0OHgVAjUVTQCnhPsejX2xCEvURu9IC0=;
+        s=korg; t=1655120031;
+        bh=fOGyiO/Q/y/xv0Yi8FkPvSRMF+bUyYruvb+2AB7CZhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JkWYvcO/bJyTVkR/O1KTI3yqoAuhlO9vmDGrav7LyG0IUs9T48LfQ7Y5niCDhLpny
-         J9F61kcN5MzetH+phIF8zWoZdeYxCeWYKEr5UNNqiUYL7DzZDFzdldJBH+WYW9YXTy
-         grNLqVsEKCwvmPJU796TWdNqnIqPcD3DiL0OcgYQ=
+        b=PkoLljmDJnhdnsO3kyscN417GtRbSbNuLbk+IEwIJphy9HdPz6KlIRxdM/Zs2Rf8Q
+         9FS0CaeK7TWaXqacNvmT7LDfkG+49Q34AyNnMNkaBh9xi5rTDNHWG4I2x/I4B3hkHx
+         Zv7gSsxQ5UzBCmlWCPcBlrgzgYmNY5r22NB3HjJg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 185/218] drivers: staging: rtl8192e: Fix deadlock in rtllib_beacons_stop()
+Subject: [PATCH 5.18 218/339] tcp: use alloc_large_system_hash() to allocate table_perturb
 Date:   Mon, 13 Jun 2022 12:10:43 +0200
-Message-Id: <20220613094926.223004255@linuxfoundation.org>
+Message-Id: <20220613094933.272162896@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Muchun Song <songmuchun@bytedance.com>
 
-[ Upstream commit 9b6bdbd9337de3917945847bde262a34a87a6303 ]
+[ Upstream commit e67b72b90b7e19a4be4d9c29f3feea6f58ab43f8 ]
 
-There is a deadlock in rtllib_beacons_stop(), which is shown
-below:
+In our server, there may be no high order (>= 6) memory since we reserve
+lots of HugeTLB pages when booting.  Then the system panic.  So use
+alloc_large_system_hash() to allocate table_perturb.
 
-   (Thread 1)              |      (Thread 2)
-                           | rtllib_send_beacon()
-rtllib_beacons_stop()      |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | rtllib_send_beacon_cb()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
-
-We hold ieee->beacon_lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need ieee->beacon_lock in position (2) of thread 2.
-As a result, rtllib_beacons_stop() will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain
-the needed lock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417141641.124388-1-duoming@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e9261476184b ("tcp: dynamically allocate the perturb table used by source ports")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220607070214.94443-1-songmuchun@bytedance.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8192e/rtllib_softmac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/inet_hashtables.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index e4be85af31e7..1edece694fff 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -654,9 +654,9 @@ static void rtllib_beacons_stop(struct rtllib_device *ieee)
- 	spin_lock_irqsave(&ieee->beacon_lock, flags);
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index a5d57fa679ca..55654e335d43 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -917,10 +917,12 @@ void __init inet_hashinfo2_init(struct inet_hashinfo *h, const char *name,
+ 	init_hashinfo_lhash2(h);
  
- 	ieee->beacon_txing = 0;
--	del_timer_sync(&ieee->beacon_timer);
- 
- 	spin_unlock_irqrestore(&ieee->beacon_lock, flags);
-+	del_timer_sync(&ieee->beacon_timer);
- 
+ 	/* this one is used for source ports of outgoing connections */
+-	table_perturb = kmalloc_array(INET_TABLE_PERTURB_SIZE,
+-				      sizeof(*table_perturb), GFP_KERNEL);
+-	if (!table_perturb)
+-		panic("TCP: failed to alloc table_perturb");
++	table_perturb = alloc_large_system_hash("Table-perturb",
++						sizeof(*table_perturb),
++						INET_TABLE_PERTURB_SIZE,
++						0, 0, NULL, NULL,
++						INET_TABLE_PERTURB_SIZE,
++						INET_TABLE_PERTURB_SIZE);
  }
  
+ int inet_hashinfo2_init_mod(struct inet_hashinfo *h)
 -- 
 2.35.1
 

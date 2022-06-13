@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B77454952D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48CB5494E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380122AbiFMN7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S1353243AbiFMMmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380296AbiFMNyC (ORCPT
+        with ESMTP id S1355145AbiFMMjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:54:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F41D42A2A;
-        Mon, 13 Jun 2022 04:34:31 -0700 (PDT)
+        Mon, 13 Jun 2022 08:39:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD6F5DD02;
+        Mon, 13 Jun 2022 04:08:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C535612AC;
-        Mon, 13 Jun 2022 11:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B143C34114;
-        Mon, 13 Jun 2022 11:34:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB7C96062B;
+        Mon, 13 Jun 2022 11:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB8E0C34114;
+        Mon, 13 Jun 2022 11:08:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120070;
-        bh=Dw/3gXXoXHY7mgJ/HZYNJmtxF73sLdFYSq0budvTY5M=;
+        s=korg; t=1655118524;
+        bh=c2OJ11D3xmrT4o/HryZPy13gLRSwfwgVtCso28A74sk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uFp7G5NH1Q8KUlkNM9yFM2SCme2PNhNSxkAj6St4GzpKwyK3Ye4phpewVSVSpYP9H
-         xP8eWMFM6GVi3OJb1PHEUjfTi8IvzdRpQVdMngpTSCXYtroXLzyRCmRgHqhbY4wVbT
-         /iy+8gTPehFxynxisE9yQZaB2LkKEsNJ1OL5tgYs=
+        b=N3GlWb7TL88feHDQd21Ej1+Whe6i1Z2ytw8dpudy0/+GlltT9szH5oVrNyWTV2K0z
+         gmxJjlFTvq/vbw3XgzxbTDnlij+io4Y70T19dqwXh+5GgL7szWyQwhuMNCIF/LQk64
+         ELjaJmawRdyMVMhrqPZHjkGljyA9Qht0QOvP4hhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Xiaoke Wang <xkernel.wang@foxmail.com>,
+        stable@vger.kernel.org, Kinglong Mee <kinglongmee@gmail.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 224/339] staging: rtl8712: fix a potential memory leak in r871xu_drv_init()
-Date:   Mon, 13 Jun 2022 12:10:49 +0200
-Message-Id: <20220613094933.451318867@linuxfoundation.org>
+Subject: [PATCH 5.10 090/172] xprtrdma: treat all calls not a bcall when bc_serv is NULL
+Date:   Mon, 13 Jun 2022 12:10:50 +0200
+Message-Id: <20220613094912.013528051@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Kinglong Mee <kinglongmee@gmail.com>
 
-[ Upstream commit 7288ff561de650d4139fab80e9cb0da9b5b32434 ]
+[ Upstream commit 11270e7ca268e8d61b5d9e5c3a54bd1550642c9c ]
 
-In r871xu_drv_init(), if r8712_init_drv_sw() fails, then the memory
-allocated by r8712_alloc_io_queue() in r8712_usb_dvobj_init() is not
-properly released as there is no action will be performed by
-r8712_usb_dvobj_deinit().
-To properly release it, we should call r8712_free_io_queue() in
-r8712_usb_dvobj_deinit().
+When a rdma server returns a fault format reply, nfs v3 client may
+treats it as a bcall when bc service is not exist.
 
-Besides, in r871xu_dev_remove(), r8712_usb_dvobj_deinit() will be called
-by r871x_dev_unload() under condition `padapter->bup` and
-r8712_free_io_queue() is called by r8712_free_drv_sw().
-However, r8712_usb_dvobj_deinit() does not rely on `padapter->bup` and
-calling r8712_free_io_queue() in r8712_free_drv_sw() is negative for
-better understading the code.
-So I move r8712_usb_dvobj_deinit() into r871xu_dev_remove(), and remove
-r8712_free_io_queue() from r8712_free_drv_sw().
+The debug message at rpcrdma_bc_receive_call are,
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Link: https://lore.kernel.org/r/tencent_B8048C592777830380A23A7C4409F9DF1305@qq.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[56579.837169] RPC:       rpcrdma_bc_receive_call: callback XID
+00000001, length=20
+[56579.837174] RPC:       rpcrdma_bc_receive_call: 00 00 00 01 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 04
+
+After that, rpcrdma_bc_receive_call will meets NULL pointer as,
+
+[  226.057890] BUG: unable to handle kernel NULL pointer dereference at
+00000000000000c8
+...
+[  226.058704] RIP: 0010:_raw_spin_lock+0xc/0x20
+...
+[  226.059732] Call Trace:
+[  226.059878]  rpcrdma_bc_receive_call+0x138/0x327 [rpcrdma]
+[  226.060011]  __ib_process_cq+0x89/0x170 [ib_core]
+[  226.060092]  ib_cq_poll_work+0x26/0x80 [ib_core]
+[  226.060257]  process_one_work+0x1a7/0x360
+[  226.060367]  ? create_worker+0x1a0/0x1a0
+[  226.060440]  worker_thread+0x30/0x390
+[  226.060500]  ? create_worker+0x1a0/0x1a0
+[  226.060574]  kthread+0x116/0x130
+[  226.060661]  ? kthread_flush_work_fn+0x10/0x10
+[  226.060724]  ret_from_fork+0x35/0x40
+...
+
+Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
+Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8712/os_intfs.c | 1 -
- drivers/staging/rtl8712/usb_intf.c | 6 +++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ net/sunrpc/xprtrdma/rpc_rdma.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
-index d15d52c0d1a7..003e97205124 100644
---- a/drivers/staging/rtl8712/os_intfs.c
-+++ b/drivers/staging/rtl8712/os_intfs.c
-@@ -332,7 +332,6 @@ void r8712_free_drv_sw(struct _adapter *padapter)
- 	r8712_free_evt_priv(&padapter->evtpriv);
- 	r8712_DeInitSwLeds(padapter);
- 	r8712_free_mlme_priv(&padapter->mlmepriv);
--	r8712_free_io_queue(padapter);
- 	_free_xmit_priv(&padapter->xmitpriv);
- 	_r8712_free_sta_priv(&padapter->stapriv);
- 	_r8712_free_recv_priv(&padapter->recvpriv);
-diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
-index ee4c61f85a07..56450ede9f23 100644
---- a/drivers/staging/rtl8712/usb_intf.c
-+++ b/drivers/staging/rtl8712/usb_intf.c
-@@ -265,6 +265,7 @@ static uint r8712_usb_dvobj_init(struct _adapter *padapter)
- 
- static void r8712_usb_dvobj_deinit(struct _adapter *padapter)
+diff --git a/net/sunrpc/xprtrdma/rpc_rdma.c b/net/sunrpc/xprtrdma/rpc_rdma.c
+index ca267a855a12..b8174c77dfe1 100644
+--- a/net/sunrpc/xprtrdma/rpc_rdma.c
++++ b/net/sunrpc/xprtrdma/rpc_rdma.c
+@@ -1137,6 +1137,7 @@ static bool
+ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
+ #if defined(CONFIG_SUNRPC_BACKCHANNEL)
  {
-+	r8712_free_io_queue(padapter);
- }
++	struct rpc_xprt *xprt = &r_xprt->rx_xprt;
+ 	struct xdr_stream *xdr = &rep->rr_stream;
+ 	__be32 *p;
  
- void rtl871x_intf_stop(struct _adapter *padapter)
-@@ -302,9 +303,6 @@ void r871x_dev_unload(struct _adapter *padapter)
- 			rtl8712_hal_deinit(padapter);
- 		}
+@@ -1160,6 +1161,10 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
+ 	if (*p != cpu_to_be32(RPC_CALL))
+ 		return false;
  
--		/*s6.*/
--		if (padapter->dvobj_deinit)
--			padapter->dvobj_deinit(padapter);
- 		padapter->bup = false;
- 	}
- }
-@@ -607,6 +605,8 @@ static void r871xu_dev_remove(struct usb_interface *pusb_intf)
- 	/* Stop driver mlme relation timer */
- 	r8712_stop_drv_timers(padapter);
- 	r871x_dev_unload(padapter);
-+	if (padapter->dvobj_deinit)
-+		padapter->dvobj_deinit(padapter);
- 	r8712_free_drv_sw(padapter);
- 	free_netdev(pnetdev);
- 
++	/* No bc service. */
++	if (xprt->bc_serv == NULL)
++		return false;
++
+ 	/* Now that we are sure this is a backchannel call,
+ 	 * advance to the RPC header.
+ 	 */
 -- 
 2.35.1
 

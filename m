@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E055488AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D98549600
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358627AbiFMMHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S1347614AbiFMKzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358882AbiFMME5 (ORCPT
+        with ESMTP id S1346651AbiFMKvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:04:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE36506F6;
-        Mon, 13 Jun 2022 03:58:13 -0700 (PDT)
+        Mon, 13 Jun 2022 06:51:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E377D11448;
+        Mon, 13 Jun 2022 03:27:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BD2B60F9A;
-        Mon, 13 Jun 2022 10:58:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558CFC34114;
-        Mon, 13 Jun 2022 10:58:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDF97B80E95;
+        Mon, 13 Jun 2022 10:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 416E0C34114;
+        Mon, 13 Jun 2022 10:27:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117892;
-        bh=b0ZlisX7/IqoqsnBaopZqkxVW1lwSjtN4FFL+OLFuF8=;
+        s=korg; t=1655116042;
+        bh=YyyKSCE/z4DN7afLGPXBmdG056sAxbf9rYSROttyKCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QdxJO3ny97NTD3iDo/evyKm93lUp31/MGRAG32ze1Ctwdg5Mfdrxn61+6YRkj/bS5
-         SKMRAKqc8iVt9s04Q+iRDkucHx7IVMG7A92XyVe3qM+YE960QIfgTSz5hxE325OvPw
-         G13Hr8QJr3qMQmpDM4M0SKD1GlOmSv53Sn5SQsCY=
+        b=W2Cp1m9R+AeLhoZ8RenhktdNWJbpmTdEINGz5D3u43kiwhtW8Z/dYf9YyFdP4SfEw
+         YKKNxjbJbUGhKRKqukpDAW/qOb1/8Cy+NMbqwLixQr70ZE2+z99kSpuHayNmfFe138
+         pbvN6YRBrjP6kbKkPSx+EFU7//fHd0YC2iSoBBEM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        David Teigland <teigland@redhat.com>
-Subject: [PATCH 4.19 156/287] dlm: fix missing lkb refcount handling
+        stable@vger.kernel.org, Catrinel Catrinescu <cc@80211.de>,
+        Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.14 122/218] mac80211: upgrade passive scan to active scan on DFS channels after beacon rx
 Date:   Mon, 13 Jun 2022 12:09:40 +0200
-Message-Id: <20220613094928.610149634@linuxfoundation.org>
+Message-Id: <20220613094924.271799424@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Felix Fietkau <nbd@nbd.name>
 
-commit 1689c169134f4b5a39156122d799b7dca76d8ddb upstream.
+commit b041b7b9de6e1d4362de855ab90f9d03ef323edd upstream.
 
-We always call hold_lkb(lkb) if we increment lkb->lkb_wait_count.
-So, we always need to call unhold_lkb(lkb) if we decrement
-lkb->lkb_wait_count. This patch will add missing unhold_lkb(lkb) if we
-decrement lkb->lkb_wait_count. In case of setting lkb->lkb_wait_count to
-zero we need to countdown until reaching zero and call unhold_lkb(lkb).
-The waiters list unhold_lkb(lkb) can be removed because it's done for
-the last lkb_wait_count decrement iteration as it's done in
-_remove_from_waiters().
-
-This issue was discovered by a dlm gfs2 test case which use excessively
-dlm_unlock(LKF_CANCEL) feature. Probably the lkb->lkb_wait_count value
-never reached above 1 if this feature isn't used and so it was not
-discovered before.
-
-The testcase ended in a rsb on the rsb keep data structure with a
-refcount of 1 but no lkb was associated with it, which is itself
-an invalid behaviour. A side effect of that was a condition in which
-the dlm was sending remove messages in a looping behaviour. With this
-patch that has not been reproduced.
+In client mode, we can't connect to hidden SSID APs or SSIDs not advertised
+in beacons on DFS channels, since we're forced to passive scan. Fix this by
+sending out a probe request immediately after the first beacon, if active
+scan was requested by the user.
 
 Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David Teigland <teigland@redhat.com>
+Reported-by: Catrinel Catrinescu <cc@80211.de>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20220420104907.36275-1-nbd@nbd.name
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/dlm/lock.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ net/mac80211/ieee80211_i.h |    5 +++++
+ net/mac80211/scan.c        |   20 ++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
---- a/fs/dlm/lock.c
-+++ b/fs/dlm/lock.c
-@@ -1553,6 +1553,7 @@ static int _remove_from_waiters(struct d
- 		lkb->lkb_wait_type = 0;
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
- 		lkb->lkb_wait_count--;
-+		unhold_lkb(lkb);
- 		goto out_del;
- 	}
+--- a/net/mac80211/ieee80211_i.h
++++ b/net/mac80211/ieee80211_i.h
+@@ -1067,6 +1067,9 @@ struct tpt_led_trigger {
+  *	a scan complete for an aborted scan.
+  * @SCAN_HW_CANCELLED: Set for our scan work function when the scan is being
+  *	cancelled.
++ * @SCAN_BEACON_WAIT: Set whenever we're passive scanning because of radar/no-IR
++ *	and could send a probe request after receiving a beacon.
++ * @SCAN_BEACON_DONE: Beacon received, we can now send a probe request
+  */
+ enum {
+ 	SCAN_SW_SCANNING,
+@@ -1075,6 +1078,8 @@ enum {
+ 	SCAN_COMPLETED,
+ 	SCAN_ABORTED,
+ 	SCAN_HW_CANCELLED,
++	SCAN_BEACON_WAIT,
++	SCAN_BEACON_DONE,
+ };
  
-@@ -1579,6 +1580,7 @@ static int _remove_from_waiters(struct d
- 		log_error(ls, "remwait error %x reply %d wait_type %d overlap",
- 			  lkb->lkb_id, mstype, lkb->lkb_wait_type);
- 		lkb->lkb_wait_count--;
-+		unhold_lkb(lkb);
- 		lkb->lkb_wait_type = 0;
- 	}
+ /**
+--- a/net/mac80211/scan.c
++++ b/net/mac80211/scan.c
+@@ -205,6 +205,16 @@ void ieee80211_scan_rx(struct ieee80211_
+ 	if (likely(!sdata1 && !sdata2))
+ 		return;
  
-@@ -5314,11 +5316,16 @@ int dlm_recover_waiters_post(struct dlm_
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_UNLOCK;
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
- 		lkb->lkb_wait_type = 0;
--		lkb->lkb_wait_count = 0;
-+		/* drop all wait_count references we still
-+		 * hold a reference for this iteration.
++	if (test_and_clear_bit(SCAN_BEACON_WAIT, &local->scanning)) {
++		/*
++		 * we were passive scanning because of radar/no-IR, but
++		 * the beacon/proberesp rx gives us an opportunity to upgrade
++		 * to active scan
 +		 */
-+		while (lkb->lkb_wait_count) {
-+			lkb->lkb_wait_count--;
-+			unhold_lkb(lkb);
-+		}
- 		mutex_lock(&ls->ls_waiters_mutex);
- 		list_del_init(&lkb->lkb_wait_reply);
- 		mutex_unlock(&ls->ls_waiters_mutex);
--		unhold_lkb(lkb); /* for waiters list */
++		 set_bit(SCAN_BEACON_DONE, &local->scanning);
++		 ieee80211_queue_delayed_work(&local->hw, &local->scan_work, 0);
++	}
++
+ 	if (ieee80211_is_probe_resp(mgmt->frame_control)) {
+ 		struct cfg80211_scan_request *scan_req;
+ 		struct cfg80211_sched_scan_request *sched_scan_req;
+@@ -646,6 +656,8 @@ static int __ieee80211_start_scan(struct
+ 						IEEE80211_CHAN_RADAR)) ||
+ 		    !req->n_ssids) {
+ 			next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
++			if (req->n_ssids)
++				set_bit(SCAN_BEACON_WAIT, &local->scanning);
+ 		} else {
+ 			ieee80211_scan_state_send_probe(local, &next_delay);
+ 			next_delay = IEEE80211_CHANNEL_TIME;
+@@ -826,6 +838,8 @@ static void ieee80211_scan_state_set_cha
+ 	    !scan_req->n_ssids) {
+ 		*next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
+ 		local->next_scan_state = SCAN_DECISION;
++		if (scan_req->n_ssids)
++			set_bit(SCAN_BEACON_WAIT, &local->scanning);
+ 		return;
+ 	}
  
- 		if (oc || ou) {
- 			/* do an unlock or cancel instead of resending */
+@@ -918,6 +932,8 @@ void ieee80211_scan_work(struct work_str
+ 			goto out;
+ 	}
+ 
++	clear_bit(SCAN_BEACON_WAIT, &local->scanning);
++
+ 	/*
+ 	 * as long as no delay is required advance immediately
+ 	 * without scheduling a new work
+@@ -928,6 +944,10 @@ void ieee80211_scan_work(struct work_str
+ 			goto out_complete;
+ 		}
+ 
++		if (test_and_clear_bit(SCAN_BEACON_DONE, &local->scanning) &&
++		    local->next_scan_state == SCAN_DECISION)
++			local->next_scan_state = SCAN_SEND_PROBE;
++
+ 		switch (local->next_scan_state) {
+ 		case SCAN_DECISION:
+ 			/* if no more bands/channels left, complete scan */
 
 

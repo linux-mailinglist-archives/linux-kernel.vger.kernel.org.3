@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6517E5488AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF3E549084
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384504AbiFMOZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
+        id S1351893AbiFMMbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382866AbiFMOWn (ORCPT
+        with ESMTP id S1354149AbiFMM0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:22:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39879A26FF;
-        Mon, 13 Jun 2022 04:44:13 -0700 (PDT)
+        Mon, 13 Jun 2022 08:26:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D3D32EC5;
+        Mon, 13 Jun 2022 04:05:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9EFDB80D31;
-        Mon, 13 Jun 2022 11:44:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB21C34114;
-        Mon, 13 Jun 2022 11:44:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 07F74CE1177;
+        Mon, 13 Jun 2022 11:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96EEC385A2;
+        Mon, 13 Jun 2022 11:05:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120650;
-        bh=hHXElzreZ9LF69NloOsVdVXf/pv3tv3lyHSk/iLVSBM=;
+        s=korg; t=1655118342;
+        bh=86sd+ZyuINOe+Ky2TjC6U6tznTHkwS9NCAVL+gQG+WM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y1uW94obYBJyfTICNxeXGx+Ze5MzwqIADCL5XPEKP9n8mrLR3+1aC3SAXQayeMMR9
-         uv/gRzACib/JAdxMreUswFqE/eB+uGxbv15ZuLTgjxxEGsLAkaW3njyjMKn9R29EVh
-         h+3R3Aw1pXigdFGp8NuKLnVtpXSFEcrvN9HMG4YQ=
+        b=xED4I/baVtQxwqQJeFbUjGz0Rf60p6AbGyREVVKfe9LcEW5QhPABJfLP8BIB38P7O
+         G75eSR1rr5sAuz4tJIUSLHmDANd9TCDySNgLCPhcYdwk+Vh9NyL9kXw0VNDTNswFv0
+         J2xvy4XzcpI6tpdP/3ayrS7vzz9Jxr35mWPFH1Os=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 107/298] virtio: pci: Fix an error handling path in vp_modern_probe()
+Subject: [PATCH 5.10 041/172] firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle
 Date:   Mon, 13 Jun 2022 12:10:01 +0200
-Message-Id: <20220613094928.194453365@linuxfoundation.org>
+Message-Id: <20220613094900.263636949@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 7a836a2aba09479c8e71fa43249eecc4af945f61 ]
+[ Upstream commit 660ba678f9998aca6db74f2dd912fa5124f0fa31 ]
 
-If an error occurs after a successful pci_request_selected_regions() call,
-it should be undone by a corresponding pci_release_selected_regions() call,
-as already done in vp_modern_remove().
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()
 
-Fixes: fd502729fbbf ("virtio-pci: introduce modern device module")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Message-Id: <237109725aad2c3c03d14549f777b1927c84b045.1648977064.git.christophe.jaillet@wanadoo.fr>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
+
+Fix this issue by calling kobject_put().
+
+Fixes: 948af1f0bbc8 ("firmware: Basic dmi-sysfs support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220511071421.9769-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/virtio/virtio_pci_modern_dev.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/firmware/dmi-sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
-index e8b3ff2b9fbc..6f6187fe8893 100644
---- a/drivers/virtio/virtio_pci_modern_dev.c
-+++ b/drivers/virtio/virtio_pci_modern_dev.c
-@@ -340,6 +340,7 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
- err_map_isr:
- 	pci_iounmap(pci_dev, mdev->common);
- err_map_common:
-+	pci_release_selected_regions(pci_dev, mdev->modern_bars);
- 	return err;
- }
- EXPORT_SYMBOL_GPL(vp_modern_probe);
+diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+index 8b8127fa8955..4a93fb490cb4 100644
+--- a/drivers/firmware/dmi-sysfs.c
++++ b/drivers/firmware/dmi-sysfs.c
+@@ -603,7 +603,7 @@ static void __init dmi_sysfs_register_handle(const struct dmi_header *dh,
+ 				    "%d-%d", dh->type, entry->instance);
+ 
+ 	if (*ret) {
+-		kfree(entry);
++		kobject_put(&entry->kobj);
+ 		return;
+ 	}
+ 
 -- 
 2.35.1
 

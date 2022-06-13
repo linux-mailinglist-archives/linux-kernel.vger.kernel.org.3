@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4AE549E65
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CC3549E9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346268AbiFMUGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
+        id S245090AbiFMUJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345008AbiFMUF4 (ORCPT
+        with ESMTP id S234677AbiFMUJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:05:56 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D6FBCE98;
-        Mon, 13 Jun 2022 11:40:50 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id ef63b3d874cfdc90; Mon, 13 Jun 2022 20:40:48 +0200
-Received: from kreacher.localnet (unknown [213.134.187.64])
+        Mon, 13 Jun 2022 16:09:45 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7545B2646;
+        Mon, 13 Jun 2022 11:43:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id C8C8666C81D;
-        Mon, 13 Jun 2022 20:40:47 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v2 16/16] ACPI: bus: Drop unused list heads from struct acpi_device
-Date:   Mon, 13 Jun 2022 20:38:00 +0200
-Message-ID: <13478936.RDIVbhacDa@kreacher>
-In-Reply-To: <2653857.mvXUDI8C0e@kreacher>
-References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2F34321B82;
+        Mon, 13 Jun 2022 18:43:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655145826;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AX/+RA0lmZ3PC7RQsZdCzoesVFiJPYP6V1mryNynG5Y=;
+        b=x5WMV1sCNz8I4lHXpXaVnTvXRRU16yh6He84tewjyDrRrs/4E/zlmN8dx0ND9OkjWgk71a
+        aQ3zLx+I3RwtkBAiVIUyIYy4gk4ne7N5pgJpKhq50rT8EQPqEIEv+thUMqKGAzDxSCrnMq
+        Fp5u8zKGTD+3XZ0kGuFvqpjgm50Qais=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655145826;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AX/+RA0lmZ3PC7RQsZdCzoesVFiJPYP6V1mryNynG5Y=;
+        b=Zg4G+uKUbECnf4hmaH1iNz+wwSxO+y8Vlr5n+vJMT+DcZIZFaAZXreHjKjvt1pQp2Do22X
+        w/3R8Q/iWtG8cgBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D67AC134CF;
+        Mon, 13 Jun 2022 18:43:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WjxBM2GFp2KhIgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Mon, 13 Jun 2022 18:43:45 +0000
+Date:   Mon, 13 Jun 2022 20:39:13 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Filipe Manana <fdmanana@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Message-ID: <20220613183913.GD20633@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Filipe Manana <fdmanana@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>
+References: <20220611135203.27992-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.187.64
-X-CLIENT-HOSTNAME: 213.134.187.64
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddujedguddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekjedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekjedrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhn
- thgvlhdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehsrghkrghrihdrrghilhhusheslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220611135203.27992-1-fmdefrancesco@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,87 +82,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sat, Jun 11, 2022 at 03:52:03PM +0200, Fabio M. De Francesco wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page(). With
+> kmap_local_page(), the mapping is per thread, CPU local and not globally
+> visible.
+> 
+> Therefore, use kmap_local_page() / kunmap_local() in zstd.c because in
+> this file the mappings are per thread and are not visible in other
+> contexts; meanwhile refactor zstd_compress_pages() to comply with nested
+> local mapping / unmapping ordering rules.
+> 
+> Tested with xfstests on a QEMU + KVM 32 bits VM with 4GB of RAM and
+> HIGHMEM64G enabled.
+> 
+> Cc: Filipe Manana <fdmanana@kernel.org>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+> 
+> @@ -477,15 +479,16 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+>  		/* Check if we need more input */
+>  		if (workspace->in_buf.pos == workspace->in_buf.size) {
+>  			tot_in += PAGE_SIZE;
+> -			kunmap(in_page);
+> +			kunmap_local(workspace->out_buf.dst);
+> +			kunmap_local((void *)workspace->in_buf.src);
 
-Drop the children and node list heads that have no more users
-from struct acpi_device and the code manipulating them from
-__acpi_device_add() and acpi_device_del().
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-
-v1 -> v2:
-   * Add R-by from Andy.
-
----
- drivers/acpi/scan.c     |   11 +----------
- include/acpi/acpi_bus.h |    2 --
- 2 files changed, 1 insertion(+), 12 deletions(-)
-
-Index: linux-pm/include/acpi/acpi_bus.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_bus.h
-+++ linux-pm/include/acpi/acpi_bus.h
-@@ -365,8 +365,6 @@ struct acpi_device {
- 	acpi_handle handle;		/* no handle for fixed hardware */
- 	struct fwnode_handle fwnode;
- 	struct acpi_device *parent;
--	struct list_head children;
--	struct list_head node;
- 	struct list_head wakeup_list;
- 	struct list_head del_list;
- 	struct acpi_device_status status;
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -465,8 +465,6 @@ static void acpi_device_del(struct acpi_
- 	struct acpi_device_bus_id *acpi_device_bus_id;
- 
- 	mutex_lock(&acpi_device_lock);
--	if (device->parent)
--		list_del(&device->node);
- 
- 	list_for_each_entry(acpi_device_bus_id, &acpi_bus_id_list, node)
- 		if (!strcmp(acpi_device_bus_id->bus_id,
-@@ -482,6 +480,7 @@ static void acpi_device_del(struct acpi_
- 		}
- 
- 	list_del(&device->wakeup_list);
-+
- 	mutex_unlock(&acpi_device_lock);
- 
- 	acpi_power_add_remove_device(device, false);
-@@ -674,8 +673,6 @@ static int __acpi_device_add(struct acpi
- 	 * -------
- 	 * Link this device to its parent and siblings.
- 	 */
--	INIT_LIST_HEAD(&device->children);
--	INIT_LIST_HEAD(&device->node);
- 	INIT_LIST_HEAD(&device->wakeup_list);
- 	INIT_LIST_HEAD(&device->physical_node_list);
- 	INIT_LIST_HEAD(&device->del_list);
-@@ -715,9 +712,6 @@ static int __acpi_device_add(struct acpi
- 		list_add_tail(&acpi_device_bus_id->node, &acpi_bus_id_list);
- 	}
- 
--	if (device->parent)
--		list_add_tail(&device->node, &device->parent->children);
--
- 	if (device->wakeup.flags.valid)
- 		list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
- 
-@@ -746,9 +740,6 @@ static int __acpi_device_add(struct acpi
- err:
- 	mutex_lock(&acpi_device_lock);
- 
--	if (device->parent)
--		list_del(&device->node);
--
- 	list_del(&device->wakeup_list);
- 
- err_unlock:
-
-
-
+Why is the cast needed? I see that it leads to a warning but we pass a
+const buffer and that breaks the API contract as in kunmap it would be
+accessed as non-const and potentially changed without warning or
+compiler error. If kunmap_local does not touch the buffer and 'const
+void*' would work too, then it should be fixed.

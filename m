@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB40B548874
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE3A5498B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353582AbiFMMdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S1382071AbiFMOZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353230AbiFMM1E (ORCPT
+        with ESMTP id S1383171AbiFMOXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:27:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CCD326FF;
-        Mon, 13 Jun 2022 04:05:46 -0700 (PDT)
+        Mon, 13 Jun 2022 10:23:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF392E695;
+        Mon, 13 Jun 2022 04:44:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CC83614BF;
-        Mon, 13 Jun 2022 11:05:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9971C34114;
-        Mon, 13 Jun 2022 11:05:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97B83B80D3A;
+        Mon, 13 Jun 2022 11:44:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5231C34114;
+        Mon, 13 Jun 2022 11:44:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118345;
-        bh=EUTDtY3A60DHC0r/RLOq13/jsTP5MMXGOG1l/cmd1y8=;
+        s=korg; t=1655120656;
+        bh=sQDDK3XzDT9XTOjob34oVZrWYjo77eKCe3vf9L7Dbyw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E8L/A+nVfT6oYRg2CP+sOrMhH0Q0Ym+tQ02C5xu9GVkOV9g+NsE2uf3iHagjcWr1X
-         +M28JfF7OD5u6a/XH4OXG9f3Dlj5f47l6fN12MOSuWKXKP0jPAy9H4/y+QNX577UFO
-         /s2csxjtWQvkklLUEihjKXW+nj22JwShFlRsbvhs=
+        b=FUfSM5wHg1c67YmevKNHwAhkkWQp8TFt8eYBIN3xOKRaKXIWL09EEOJLV4hqWxLB4
+         ehCjDD2JpuWCX7Prz5X/A748C6yrfcDg7Oy5mWqu5DGYmfJn6WSqSegMFcDn7mEn5I
+         lbEmh6GudyGRpnZJ2NTMFB3VCZCmEpVdlmh5wO/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Romain Naour <romain.naour@smile.fr>,
-        Tony Lindgren <tony@atomide.com>,
+        stable@vger.kernel.org, Maor Dickman <maord@nvidia.com>,
+        Paul Blakey <paulb@nvidia.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 042/172] bus: ti-sysc: Fix warnings for unbind for serial
-Date:   Mon, 13 Jun 2022 12:10:02 +0200
-Message-Id: <20220613094900.470349013@linuxfoundation.org>
+Subject: [PATCH 5.17 109/298] net/mlx5e: TC NIC mode, fix tc chains miss table
+Date:   Mon, 13 Jun 2022 12:10:03 +0200
+Message-Id: <20220613094928.253098331@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +57,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Maor Dickman <maord@nvidia.com>
 
-[ Upstream commit c337125b8834f9719dfda0e40b25eaa266f1b8cf ]
+[ Upstream commit 66cb64e292d21588bdb831f08a7ec0ff04d6380d ]
 
-We can get "failed to disable" clock_unprepare warnings on unbind at least
-for the serial console device if the unbind is done before the device has
-been idled.
+The cited commit changed promisc table to be created on demand with the
+highest priority in the NIC table replacing the vlan table, this caused
+tc NIC tables miss flow to skip the prmoisc table because it use vlan
+table as miss table.
 
-As some devices are using deferred idle, we must check the status for
-pending idle work to idle the device.
+OVS offload in NIC mode use promisc by default so any unicast packet
+which will be handled by tc NIC tables miss flow will skip the promisc
+rule and will be dropped.
 
-Fixes: 76f0f772e469 ("bus: ti-sysc: Improve handling for no-reset-on-init and no-idle-on-init")
-Cc: Romain Naour <romain.naour@smile.fr>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Link: https://lore.kernel.org/r/20220512053021.61650-1-tony@atomide.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix this by adding new empty table in new tc level with low priority and
+point the nic tc chain miss to it, the new table is managed so it will
+point to vlan table if promisc is disabled and to promisc table if enabled.
+
+Fixes: 1c46d7409f30 ("net/mlx5e: Optimize promiscuous mode")
+Signed-off-by: Maor Dickman <maord@nvidia.com>
+Reviewed-by: Paul Blakey <paulb@nvidia.com>
+Reviewed-by: Ariel Levkovich <lariel@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bus/ti-sysc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../net/ethernet/mellanox/mlx5/core/en/fs.h   |  2 +
+ .../net/ethernet/mellanox/mlx5/core/en_tc.c   | 38 ++++++++++++++++++-
+ .../net/ethernet/mellanox/mlx5/core/fs_core.c |  2 +-
+ 3 files changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-index ac559c262033..4ee20be76508 100644
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -3291,7 +3291,9 @@ static int sysc_remove(struct platform_device *pdev)
- 	struct sysc *ddata = platform_get_drvdata(pdev);
- 	int error;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h b/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h
+index 678ffbb48a25..e3e8c1c3ff24 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/fs.h
+@@ -12,6 +12,7 @@ struct mlx5e_post_act;
+ enum {
+ 	MLX5E_TC_FT_LEVEL = 0,
+ 	MLX5E_TC_TTC_FT_LEVEL,
++	MLX5E_TC_MISS_LEVEL,
+ };
  
--	cancel_delayed_work_sync(&ddata->idle_work);
-+	/* Device can still be enabled, see deferred idle quirk in probe */
-+	if (cancel_delayed_work_sync(&ddata->idle_work))
-+		ti_sysc_idle(&ddata->idle_work.work);
+ struct mlx5e_tc_table {
+@@ -20,6 +21,7 @@ struct mlx5e_tc_table {
+ 	 */
+ 	struct mutex			t_lock;
+ 	struct mlx5_flow_table		*t;
++	struct mlx5_flow_table		*miss_t;
+ 	struct mlx5_fs_chains           *chains;
+ 	struct mlx5e_post_act		*post_act;
  
- 	error = pm_runtime_get_sync(ddata->dev);
- 	if (error < 0) {
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+index e0f45cef97c3..deff6698f395 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+@@ -4284,6 +4284,33 @@ static int mlx5e_tc_nic_get_ft_size(struct mlx5_core_dev *dev)
+ 	return tc_tbl_size;
+ }
+ 
++static int mlx5e_tc_nic_create_miss_table(struct mlx5e_priv *priv)
++{
++	struct mlx5_flow_table **ft = &priv->fs.tc.miss_t;
++	struct mlx5_flow_table_attr ft_attr = {};
++	struct mlx5_flow_namespace *ns;
++	int err = 0;
++
++	ft_attr.max_fte = 1;
++	ft_attr.autogroup.max_num_groups = 1;
++	ft_attr.level = MLX5E_TC_MISS_LEVEL;
++	ft_attr.prio = 0;
++	ns = mlx5_get_flow_namespace(priv->mdev, MLX5_FLOW_NAMESPACE_KERNEL);
++
++	*ft = mlx5_create_auto_grouped_flow_table(ns, &ft_attr);
++	if (IS_ERR(*ft)) {
++		err = PTR_ERR(*ft);
++		netdev_err(priv->netdev, "failed to create tc nic miss table err=%d\n", err);
++	}
++
++	return err;
++}
++
++static void mlx5e_tc_nic_destroy_miss_table(struct mlx5e_priv *priv)
++{
++	mlx5_destroy_flow_table(priv->fs.tc.miss_t);
++}
++
+ int mlx5e_tc_nic_init(struct mlx5e_priv *priv)
+ {
+ 	struct mlx5e_tc_table *tc = &priv->fs.tc;
+@@ -4316,19 +4343,23 @@ int mlx5e_tc_nic_init(struct mlx5e_priv *priv)
+ 	}
+ 	tc->mapping = chains_mapping;
+ 
++	err = mlx5e_tc_nic_create_miss_table(priv);
++	if (err)
++		goto err_chains;
++
+ 	if (MLX5_CAP_FLOWTABLE_NIC_RX(priv->mdev, ignore_flow_level))
+ 		attr.flags = MLX5_CHAINS_AND_PRIOS_SUPPORTED |
+ 			MLX5_CHAINS_IGNORE_FLOW_LEVEL_SUPPORTED;
+ 	attr.ns = MLX5_FLOW_NAMESPACE_KERNEL;
+ 	attr.max_ft_sz = mlx5e_tc_nic_get_ft_size(dev);
+ 	attr.max_grp_num = MLX5E_TC_TABLE_NUM_GROUPS;
+-	attr.default_ft = mlx5e_vlan_get_flowtable(priv->fs.vlan);
++	attr.default_ft = priv->fs.tc.miss_t;
+ 	attr.mapping = chains_mapping;
+ 
+ 	tc->chains = mlx5_chains_create(dev, &attr);
+ 	if (IS_ERR(tc->chains)) {
+ 		err = PTR_ERR(tc->chains);
+-		goto err_chains;
++		goto err_miss;
+ 	}
+ 
+ 	tc->post_act = mlx5e_tc_post_act_init(priv, tc->chains, MLX5_FLOW_NAMESPACE_KERNEL);
+@@ -4351,6 +4382,8 @@ int mlx5e_tc_nic_init(struct mlx5e_priv *priv)
+ 	mlx5_tc_ct_clean(tc->ct);
+ 	mlx5e_tc_post_act_destroy(tc->post_act);
+ 	mlx5_chains_destroy(tc->chains);
++err_miss:
++	mlx5e_tc_nic_destroy_miss_table(priv);
+ err_chains:
+ 	mapping_destroy(chains_mapping);
+ err_mapping:
+@@ -4391,6 +4424,7 @@ void mlx5e_tc_nic_cleanup(struct mlx5e_priv *priv)
+ 	mlx5e_tc_post_act_destroy(tc->post_act);
+ 	mapping_destroy(tc->mapping);
+ 	mlx5_chains_destroy(tc->chains);
++	mlx5e_tc_nic_destroy_miss_table(priv);
+ }
+ 
+ int mlx5e_tc_esw_init(struct rhashtable *tc_ht)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+index 298c614c631b..bd52b0b4eefa 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+@@ -116,7 +116,7 @@
+ #define KERNEL_MIN_LEVEL (KERNEL_NIC_PRIO_NUM_LEVELS + 1)
+ 
+ #define KERNEL_NIC_TC_NUM_PRIOS  1
+-#define KERNEL_NIC_TC_NUM_LEVELS 2
++#define KERNEL_NIC_TC_NUM_LEVELS 3
+ 
+ #define ANCHOR_NUM_LEVELS 1
+ #define ANCHOR_NUM_PRIOS 1
 -- 
 2.35.1
 

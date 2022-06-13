@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D385499C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07DE549874
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241989AbiFMRVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S1354956AbiFMPSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241022AbiFMRUt (ORCPT
+        with ESMTP id S237863AbiFMPRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:20:49 -0400
+        Mon, 13 Jun 2022 11:17:48 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0715E5BE48;
-        Mon, 13 Jun 2022 05:35:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8B351269A6;
+        Mon, 13 Jun 2022 05:36:14 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5285681CC;
-        Mon, 13 Jun 2022 12:30:34 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 15:35:14 +0300
+        by muru.com (Postfix) with ESMTPS id 87B6681D6;
+        Mon, 13 Jun 2022 12:31:31 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 15:36:11 +0300
 From:   Tony Lindgren <tony@atomide.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -78,15 +78,14 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: Re: [PATCH 34/36] cpuidle,omap3: Push RCU-idle into omap_sram_idle()
-Message-ID: <YqcvAmiDSOAOAdA9@atomide.com>
+Subject: Re: [PATCH 33/36] cpuidle,omap3: Use WFI for omap3_pm_idle()
+Message-ID: <YqcvO0xSmlEVMef3@atomide.com>
 References: <20220608142723.103523089@infradead.org>
- <20220608144518.073801916@infradead.org>
- <YqC6iJx4ygSmry0G@hirez.programming.kicks-ass.net>
+ <20220608144518.010587032@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqC6iJx4ygSmry0G@hirez.programming.kicks-ass.net>
+In-Reply-To: <20220608144518.010587032@infradead.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
@@ -96,27 +95,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Peter Zijlstra <peterz@infradead.org> [220608 15:00]:
-> On Wed, Jun 08, 2022 at 04:27:57PM +0200, Peter Zijlstra wrote:
-> > @@ -254,11 +255,18 @@ void omap_sram_idle(void)
-> >  	 */
-> >  	if (save_state)
-> >  		omap34xx_save_context(omap3_arm_context);
-> > +
-> > +	if (rcuidle)
-> > +		cpuidle_rcu_enter();
-> > +
-> >  	if (save_state == 1 || save_state == 3)
-> >  		cpu_suspend(save_state, omap34xx_do_sram_idle);
-> >  	else
-> >  		omap34xx_do_sram_idle(save_state);
-> >  
-> > +	if (rcuidle)
-> > +		rcuidle_rcu_exit();
+* Peter Zijlstra <peterz@infradead.org> [220608 14:52]:
+> arch_cpu_idle() is a very simple idle interface and exposes only a
+> single idle state and is expected to not require RCU and not do any
+> tracing/instrumentation.
 > 
-> *sigh* so much for this having been exposed to the robots for >2 days :/
+> As such, omap_sram_idle() is not a valid implementation. Replace it
+> with the simple (shallow) omap3_do_wfi() call. Leaving the more
+> complicated idle states for the cpuidle driver.
 
-I tested your git branch of these patches, so:
-
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Tested-by: Tony Lindgren <tony@atomide.com>
+Acked-by: Tony Lindgren <tony@atomide.com>

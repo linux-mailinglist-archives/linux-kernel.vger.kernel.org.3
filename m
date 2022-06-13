@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1378B548782
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8AE548658
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377955AbiFMNhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S1354076AbiFMLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377515AbiFMNc7 (ORCPT
+        with ESMTP id S1353663AbiFMLYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:32:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2733272E01;
-        Mon, 13 Jun 2022 04:26:56 -0700 (PDT)
+        Mon, 13 Jun 2022 07:24:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECE813D67;
+        Mon, 13 Jun 2022 03:42:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77F3E61154;
-        Mon, 13 Jun 2022 11:26:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F12C34114;
-        Mon, 13 Jun 2022 11:26:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 023E3B80E94;
+        Mon, 13 Jun 2022 10:42:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FCC9C34114;
+        Mon, 13 Jun 2022 10:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119614;
-        bh=uocWnAIGDj1N1SgxSfZcGZiwjslXY7sezSgDHKrzoow=;
+        s=korg; t=1655116939;
+        bh=n+qJvALMCv5MoMuwEOWidACoeDxGUQxdZNNnpfPP+fc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qX8o1cNPidfKQs+uWMO5f1q4MPpCnlQ7Ds2R7CYWS4PHwNNEKaL5p+GPUVo9KPzIw
-         rPWhlTFycNfPgbRPT4uavsf+MA+sh/O1X6d7VvRga4HoKDvZ2W1EckLGcIA8c8tcwW
-         HyHRLcLa+MJu5w3FJUG8CkAlNSYqBw2mijNzi0Ag=
+        b=2QoUi/3HubrgQtAZHVwC/MznUxZipF8peLJ+uR3UYkZxZli8yrwm/Bne0dXJKbuuA
+         PlrckQCiwi+S4gRRg+21Aj2GEm9PUATEdKH66rQev2/k0PaeK9PSsF0AMK4Tt0l1JR
+         Z2oQW8pGyFNHrpLYAdXZsOk0nqjeY9+HnOP6ORpI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 077/339] driver: base: fix UAF when driver_attach failed
-Date:   Mon, 13 Jun 2022 12:08:22 +0200
-Message-Id: <20220613094928.855379902@linuxfoundation.org>
+        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH 5.4 230/411] PCI/PM: Fix bridge_d3_blacklist[] Elo i2 overwrite of Gigabyte X299
+Date:   Mon, 13 Jun 2022 12:08:23 +0200
+Message-Id: <20220613094935.538317127@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Schspa Shi <schspa@gmail.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-[ Upstream commit 310862e574001a97ad02272bac0fd13f75f42a27 ]
+commit 12068bb346db5776d0ec9bb4cd073f8427a1ac92 upstream.
 
-When driver_attach(drv); failed, the driver_private will be freed.
-But it has been added to the bus, which caused a UAF.
+92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold") omitted
+braces around the new Elo i2 entry, so it overwrote the existing Gigabyte
+X299 entry.  Add the appropriate braces.
 
-To fix it, we need to delete it from the bus when failed.
+Found by:
 
-Fixes: 190888ac01d0 ("driver core: fix possible missing of device probe")
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-Link: https://lore.kernel.org/r/20220513112444.45112-1-schspa@gmail.com
+  $ make W=1 drivers/pci/pci.o
+    CC      drivers/pci/pci.o
+  drivers/pci/pci.c:2974:12: error: initialized field overwritten [-Werror=override-init]
+   2974 |   .ident = "Elo i2",
+        |            ^~~~~~~~
+
+Link: https://lore.kernel.org/r/20220526221258.GA409855@bhelgaas
+Fixes: 92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold")
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: stable@vger.kernel.org  # v5.15+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/bus.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/pci/pci.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-index 97936ec49bde..7ca47e5b3c1f 100644
---- a/drivers/base/bus.c
-+++ b/drivers/base/bus.c
-@@ -617,7 +617,7 @@ int bus_add_driver(struct device_driver *drv)
- 	if (drv->bus->p->drivers_autoprobe) {
- 		error = driver_attach(drv);
- 		if (error)
--			goto out_unregister;
-+			goto out_del_list;
- 	}
- 	module_add_driver(drv->owner, drv);
- 
-@@ -644,6 +644,8 @@ int bus_add_driver(struct device_driver *drv)
- 
- 	return 0;
- 
-+out_del_list:
-+	klist_del(&priv->knode_bus);
- out_unregister:
- 	kobject_put(&priv->kobj);
- 	/* drv->p is freed in driver_release()  */
--- 
-2.35.1
-
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2613,6 +2613,8 @@ static const struct dmi_system_id bridge
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
+ 			DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
+ 		},
++	},
++	{
+ 		/*
+ 		 * Downstream device is not accessible after putting a root port
+ 		 * into D3cold and back into D0 on Elo i2.
 
 

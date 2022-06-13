@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A9F548F52
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA428548E54
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379696AbiFMNuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S1350150AbiFMLBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379373AbiFMNoJ (ORCPT
+        with ESMTP id S1350218AbiFMKyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:44:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6493FBE8;
-        Mon, 13 Jun 2022 04:32:03 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73253CE8;
+        Mon, 13 Jun 2022 03:30:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58846B80EAB;
-        Mon, 13 Jun 2022 11:32:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9FFC3411C;
-        Mon, 13 Jun 2022 11:31:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9388B80E5E;
+        Mon, 13 Jun 2022 10:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC53C34114;
+        Mon, 13 Jun 2022 10:30:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119920;
-        bh=dT2l33uv6GhCpXb1oLlsKyZNKaNp+QotPFkoIfnKgag=;
+        s=korg; t=1655116220;
+        bh=PVI05kPBXQYxAUafjp6oKDIM1E+3bVSwSqCRqIipfZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WMNr4tpD8EkfpK84hIuWu1IfgM+Ko9TnOX76oZq5XlKt+23p1v7SO+m5bF4iWsJHQ
-         2OawHKck9L1i/TXSw+luirS10H5cm8bfBiJ//ZYdjM8bFrTkK0fz+SYs25jVDUG4OI
-         bp/ACEhkmFChrs2JtNNaraUT3TZmPwcHQuS1SYcI=
+        b=N+ovfpKbC0jxTmfSjmVRSiZ76d+j79eB4ePCiQDce/xNKwBpgQd9/tMCqadbr2p2N
+         xjWF8lEC9NoF0Qg0i2bS7GQ+Wgor1FbQKsqoDZ7qRLZq3WpQFJBAH7R6mN0+C54WLo
+         TQmzKdTBGtXEXJv47KO7BPbaMplCINcop6eUJBRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 186/339] netfilter: nf_tables: always initialize flowtable hook list in transaction
+Subject: [PATCH 4.14 153/218] serial: txx9: Dont allow CS5-6
 Date:   Mon, 13 Jun 2022 12:10:11 +0200
-Message-Id: <20220613094932.317098656@linuxfoundation.org>
+Message-Id: <20220613094925.233523219@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 2c9e4559773c261900c674a86b8e455911675d71 ]
+[ Upstream commit 79ac88655dc0551e3571ad16bdabdbe65d61553e ]
 
-The hook list is used if nft_trans_flowtable_update(trans) == true. However,
-initialize this list for other cases for safety reasons.
+Only CS7 and CS8 are supported but CSIZE is not sanitized with
+CS5 or CS6 to CS8.
 
-Fixes: 78d9f48f7f44 ("netfilter: nf_tables: add devices to existing flowtable")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
+
+Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-5-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/serial_txx9.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index f23c40e6caa6..e515fa7d1ca2 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -544,6 +544,7 @@ static int nft_trans_flowtable_add(struct nft_ctx *ctx, int msg_type,
- 	if (msg_type == NFT_MSG_NEWFLOWTABLE)
- 		nft_activate_next(ctx->net, flowtable);
- 
-+	INIT_LIST_HEAD(&nft_trans_flowtable_hooks(trans));
- 	nft_trans_flowtable(trans) = flowtable;
- 	nft_trans_commit_list_add_tail(ctx->net, trans);
+diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
+index ba77e72057a9..5d41884f5012 100644
+--- a/drivers/tty/serial/serial_txx9.c
++++ b/drivers/tty/serial/serial_txx9.c
+@@ -652,6 +652,8 @@ serial_txx9_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	case CS6:	/* not supported */
+ 	case CS8:
+ 		cval |= TXX9_SILCR_UMODE_8BIT;
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
+ 		break;
+ 	}
  
 -- 
 2.35.1

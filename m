@@ -2,199 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B6D548288
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01276548226
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240398AbiFMIyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
+        id S233860AbiFMIyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240541AbiFMIxO (ORCPT
+        with ESMTP id S240716AbiFMIxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:53:14 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E635F92
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:53:13 -0700 (PDT)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 13 Jun 2022 04:53:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3305FF7;
+        Mon, 13 Jun 2022 01:53:47 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 229AE21ABC;
+        Mon, 13 Jun 2022 08:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655110426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+b4LT3xPTRW/dQ/mepnuYj9rWjiXM198baJsJGnsgOM=;
+        b=Pr8t0e6gDUCHZT61ZzMzfLGEmfZEVNv75Jwznn3nfx5sGzrE5YlDyVrqMTqymogDf96Ej4
+        09e7vdpknuZgxsqO4aifChvvDSDdaivsiIh7GRuTYzS3rq7TB4hxQpNUUpiF6OoWoNzdou
+        wVX/v9RHweIqoC4Tf7/lS7dEkoOWDts=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655110426;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+b4LT3xPTRW/dQ/mepnuYj9rWjiXM198baJsJGnsgOM=;
+        b=qDM3E2M2KMhXDlcZ3whqqeNinFtpdP5WkWoD8Nd+Klu49E/yD7MrWa8u54+l4xgm8hkhTk
+        AtVCto9/lL6TepCg==
+Received: from [10.168.4.8] (unknown [10.168.4.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 295CC3FDE5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:53:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1655110390;
-        bh=fhdPlI5rmS+APeBJNR4lTD/VgT4RAcbvyvwt5HUOiAU=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=QZppZfZQC9zfTlLFsdKR0nR4BzrR1pk4aSQuV2X8ILjYJiwsNMnkwaDhobT0lGKon
-         /JuuXVmbnqb4gfruYvhWMWdXPHpPutDflTJDJ3LukehvWxI7FXJJHm/bJhx+8vdrC9
-         8MPZT9Ow+zwo6NLN9hj2Vbi4nr/zxdI0+1ISB+xRydnb5wTXzZ+Uvy2MipdsyIsZNm
-         DOtaPZgqJEH2u/VP1siOD3Q6BQV47Usdi13KiwHXklpNUn4c5osl+psRp1GNmAbWGZ
-         qO5GRnKpoL45sUh29OexeffsFOqvboi7EP2HBwT035CRzzrJTfD/A+4XMj+KY8avLD
-         V7BOfQzjC0Zcw==
-Received: by mail-wr1-f69.google.com with SMTP id i10-20020a5d55ca000000b002103d76ffcaso609898wrw.17
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:53:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fhdPlI5rmS+APeBJNR4lTD/VgT4RAcbvyvwt5HUOiAU=;
-        b=pUc2dL0WZywitCeexKxgRDIHstbjNWvpOUW5boRevvj5TW7TuqUwIUZl3Cdh8ezlhI
-         xkDOXz7eU2TXu3ob/NrrtliAlTaMh6dEmsBtSigfSShzqpRrjmJPObNVUwzwimddgaHN
-         9eP+6HevX8E3F8V2UhoHHQcvEa5D2iHnICH+BoaAqa+eVFiB/T6gcNd/F7z371+VOQgT
-         LgQOyRCUwmAKe8uqk0w3kZ6qAVw0iqLqDG9EXWTv2gbNOhebCuwYY2PQuDXvhKMQDWSC
-         5hffJTcWS2lPwDXyeyH987tVvZssce6gRWbVT2oBZyZIsL4YjRpYV4hn4M7eWCnLA1dF
-         hBMw==
-X-Gm-Message-State: AOAM533oeoiSQQAUn0nHHP63mk5jGUWcrY9OhN0U14OGTTwX/V/+Bk2j
-        jE0HWzYo8p+9cn/6ToS45HibMmih4JEYkT3MIOfJiajRpLmGa7xfExtzC9ghRPy8GZ7Wp9QCG+9
-        aQFPNBFOFnOBlCPFXR7zEO/isfzaajPnC0IuMWx5oug==
-X-Received: by 2002:a05:600c:3d98:b0:39c:5cad:ab58 with SMTP id bi24-20020a05600c3d9800b0039c5cadab58mr13009692wmb.100.1655110389699;
-        Mon, 13 Jun 2022 01:53:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw4t5KV7LAtTb4dE0wLpkTfSRrdGgNSzReoTM8ZcUo1rFG7gBn3Z6s34yNb3QgrtEjmt4i1Jg==
-X-Received: by 2002:a05:600c:3d98:b0:39c:5cad:ab58 with SMTP id bi24-20020a05600c3d9800b0039c5cadab58mr13009667wmb.100.1655110389455;
-        Mon, 13 Jun 2022 01:53:09 -0700 (PDT)
-Received: from alex.home (lfbn-gre-1-146-29.w90-112.abo.wanadoo.fr. [90.112.113.29])
-        by smtp.gmail.com with ESMTPSA id z16-20020adfec90000000b0020cff559b1dsm7957794wrn.47.2022.06.13.01.53.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 01:53:09 -0700 (PDT)
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-To:     =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: [PATCH -fixes v2] riscv: Fix missing PAGE_PFN_MASK
-Date:   Mon, 13 Jun 2022 10:53:07 +0200
-Message-Id: <20220613085307.260256-1-alexandre.ghiti@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        by relay2.suse.de (Postfix) with ESMTPS id 0425C2C141;
+        Mon, 13 Jun 2022 08:53:44 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 10:53:44 +0200 (CEST)
+From:   Richard Biener <rguenther@suse.de>
+To:     =?ISO-8859-2?Q?Mateusz_Jo=F1czyk?= <mat.jonczyk@o2.pl>
+cc:     Jason Gunthorpe <jgg@ziepe.ca>, netdev@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-rdma@vger.kernel.org, gcc@gcc.gnu.org
+Subject: Re: Linux kernel: "mm: uninline copy_overflow()" breaks i386 build
+ in Mellanox MLX4
+In-Reply-To: <9cec2686-c2dc-2750-7e07-42e450ab6081@o2.pl>
+Message-ID: <158898q2-nn8q-q31r-412s-no7475r53qp7@fhfr.qr>
+References: <dbd203b1-3988-4c9c-909c-2d1f7f173a0d@o2.pl> <20220425231305.GY64706@ziepe.ca> <9cec2686-c2dc-2750-7e07-42e450ab6081@o2.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1609908220-854494629-1655110426=:3672"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are a bunch of functions that use the PFN from a page table entry
-that end up with the svpbmt upper-bits because they are missing the newly
-introduced PAGE_PFN_MASK which leads to wrong addresses conversions and
-then crash: fix this by adding this mask.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Fixes: 100631b48ded ("riscv: Fix accessing pfn bits in PTEs for non-32bit variants")
-Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
----
- arch/riscv/include/asm/pgtable-64.h | 12 ++++++------
- arch/riscv/include/asm/pgtable.h    |  6 +++---
- arch/riscv/kvm/mmu.c                |  2 +-
- 3 files changed, 10 insertions(+), 10 deletions(-)
+---1609908220-854494629-1655110426=:3672
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-index 5c2aba5efbd0..dc42375c2357 100644
---- a/arch/riscv/include/asm/pgtable-64.h
-+++ b/arch/riscv/include/asm/pgtable-64.h
-@@ -175,7 +175,7 @@ static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
- 
- static inline unsigned long _pud_pfn(pud_t pud)
- {
--	return pud_val(pud) >> _PAGE_PFN_SHIFT;
-+	return __page_val_to_pfn(pud_val(pud));
- }
- 
- static inline pmd_t *pud_pgtable(pud_t pud)
-@@ -278,13 +278,13 @@ static inline p4d_t pfn_p4d(unsigned long pfn, pgprot_t prot)
- 
- static inline unsigned long _p4d_pfn(p4d_t p4d)
- {
--	return p4d_val(p4d) >> _PAGE_PFN_SHIFT;
-+	return __page_val_to_pfn(p4d_val(p4d));
- }
- 
- static inline pud_t *p4d_pgtable(p4d_t p4d)
- {
- 	if (pgtable_l4_enabled)
--		return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
-+		return (pud_t *)pfn_to_virt(__page_val_to_pfn(p4d_val(p4d)));
- 
- 	return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
- }
-@@ -292,7 +292,7 @@ static inline pud_t *p4d_pgtable(p4d_t p4d)
- 
- static inline struct page *p4d_page(p4d_t p4d)
- {
--	return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
-+	return pfn_to_page(__page_val_to_pfn(p4d_val(p4d)));
- }
- 
- #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
-@@ -347,7 +347,7 @@ static inline void pgd_clear(pgd_t *pgd)
- static inline p4d_t *pgd_pgtable(pgd_t pgd)
- {
- 	if (pgtable_l5_enabled)
--		return (p4d_t *)pfn_to_virt(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
-+		return (p4d_t *)pfn_to_virt(__page_val_to_pfn(pgd_val(pgd)));
- 
- 	return (p4d_t *)p4d_pgtable((p4d_t) { pgd_val(pgd) });
- }
-@@ -355,7 +355,7 @@ static inline p4d_t *pgd_pgtable(pgd_t pgd)
- 
- static inline struct page *pgd_page(pgd_t pgd)
- {
--	return pfn_to_page(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
-+	return pfn_to_page(__page_val_to_pfn(pgd_val(pgd)));
- }
- #define pgd_page(pgd)	pgd_page(pgd)
- 
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 1d1be9d9419c..5dbd6610729b 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -261,7 +261,7 @@ static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
- 
- static inline unsigned long _pgd_pfn(pgd_t pgd)
- {
--	return pgd_val(pgd) >> _PAGE_PFN_SHIFT;
-+	return __page_val_to_pfn(pgd_val(pgd));
- }
- 
- static inline struct page *pmd_page(pmd_t pmd)
-@@ -590,14 +590,14 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
- 	return __pmd(pmd_val(pmd) & ~(_PAGE_PRESENT|_PAGE_PROT_NONE));
- }
- 
--#define __pmd_to_phys(pmd)  (pmd_val(pmd) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
-+#define __pmd_to_phys(pmd)  (__page_val_to_pfn(pmd_val(pmd)) << PAGE_SHIFT)
- 
- static inline unsigned long pmd_pfn(pmd_t pmd)
- {
- 	return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
- }
- 
--#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
-+#define __pud_to_phys(pud)  (__page_val_to_pfn(pud_val(pud)) << PAGE_SHIFT)
- 
- static inline unsigned long pud_pfn(pud_t pud)
- {
-diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-index 1c00695ebee7..9826073fbc67 100644
---- a/arch/riscv/kvm/mmu.c
-+++ b/arch/riscv/kvm/mmu.c
-@@ -54,7 +54,7 @@ static inline unsigned long gstage_pte_index(gpa_t addr, u32 level)
- 
- static inline unsigned long gstage_pte_page_vaddr(pte_t pte)
- {
--	return (unsigned long)pfn_to_virt(pte_val(pte) >> _PAGE_PFN_SHIFT);
-+	return (unsigned long)pfn_to_virt(__page_val_to_pfn(pte_val(pte)));
- }
- 
- static int gstage_page_size_to_level(unsigned long page_size, u32 *out_level)
+On Thu, 9 Jun 2022, Mateusz Jończyk wrote:
+
+> W dniu 26.04.2022 o 01:13, Jason Gunthorpe pisze:
+> > On Thu, Apr 21, 2022 at 10:47:01PM +0200, Mateusz Jończyk wrote:
+> >> Hello,
+> >>
+> >> commit ad7489d5262d ("mm: uninline copy_overflow()")
+> >>
+> >> breaks for me a build for i386 in the Mellanox MLX4 driver:
+> >>
+> >>         In file included from ./arch/x86/include/asm/preempt.h:7,
+> >>                          from ./include/linux/preempt.h:78,
+> >>                          from ./include/linux/percpu.h:6,
+> >>                          from ./include/linux/context_tracking_state.h:5,
+> >>                          from ./include/linux/hardirq.h:5,
+> >>                          from drivers/net/ethernet/mellanox/mlx4/cq.c:37:
+> >>         In function ‘check_copy_size’,
+> >>             inlined from ‘copy_to_user’ at ./include/linux/uaccess.h:159:6,
+> >>             inlined from ‘mlx4_init_user_cqes’ at drivers/net/ethernet/mellanox/mlx4/cq.c:317:9,
+> >>             inlined from ‘mlx4_cq_alloc’ at drivers/net/ethernet/mellanox/mlx4/cq.c:394:10:
+> >>         ./include/linux/thread_info.h:228:4: error: call to ‘__bad_copy_from’ declared with attribute error: copy source size is too small
+> >>           228 |    __bad_copy_from();
+> >>               |    ^~~~~~~~~~~~~~~~~
+> >>         make[5]: *** [scripts/Makefile.build:288: drivers/net/ethernet/mellanox/mlx4/cq.o] Błąd 1
+> >>         make[4]: *** [scripts/Makefile.build:550: drivers/net/ethernet/mellanox/mlx4] Błąd 2
+> >>         make[3]: *** [scripts/Makefile.build:550: drivers/net/ethernet/mellanox] Błąd 2
+> >>         make[2]: *** [scripts/Makefile.build:550: drivers/net/ethernet] Błąd 2
+> >>         make[1]: *** [scripts/Makefile.build:550: drivers/net] Błąd 2
+> >>
+> >> Reverting this commit fixes the build. Disabling Mellanox Ethernet drivers
+> >> in Kconfig (tested only with also disabling of all Infiniband support) also fixes the build.
+> >>
+> >> It appears that uninlining of copy_overflow() causes GCC to analyze the code deeper.
+> > This looks like a compiler bug to me, array_size(entries, cqe_size)
+> > cannot be known at compile time, so the __builtin_constant_p(bytes)
+> > should be compile time false meaning the other two bad branches should
+> > have been eliminated.
+> >
+> > Jason
+> 
+> Hello,
+> 
+> This problem also exists in Linux v5.19-rc1. Compiling with GCC 8 and GCC 9 fails,
+> but with GCC10 it compiles successfully.
+> 
+> I have extracted a standalone code snippet that triggers this bug, attaching
+> it at the bottom of this e-mail.
+> 
+> This indeed looks like a compiler bug for me, as cqe_size cannot be known at compile
+> time. What is interesting, replacing
+> 
+>         err = copy_to_user2((void  *)buf, init_ents,
+>                                 size_mul2(4096, cqe_size)) ? -14 : 0;
+> 
+> with
+> 
+>         err = copy_to_user2((void  *)buf, init_ents,
+>                                 4096 * cqe_size) ? -14 : 0;
+> 
+> makes the code compile successfully.
+> 
+> I have bisected GCC to find which commit in GCC fixes this problem and
+> obtained this:
+> 
+>         46dfa8ad6c18feb45d35734eae38798edb7c38cd is the first fixed commit
+>         commit 46dfa8ad6c18feb45d35734eae38798edb7c38cd
+>         Author: Richard Biener <rguenther@suse.de>
+>         Date:   Wed Sep 11 11:16:54 2019 +0000
+> 
+>             re PR tree-optimization/90387 (__builtin_constant_p and -Warray-bounds warnings)
+> 
+>             2019-09-11  Richard Biener  <rguenther@suse.de>
+> 
+>                     PR tree-optimization/90387
+>                     * vr-values.c (vr_values::extract_range_basic): After inlining
+>                     simplify non-constant __builtin_constant_p to false.
+> 
+>                     * gcc.dg/Warray-bounds-44.c: New testcase.
+> 
+>             From-SVN: r275639
+> 
+>          gcc/ChangeLog                           |  6 ++++++
+>          gcc/testsuite/ChangeLog                 |  5 +++++
+>          gcc/testsuite/gcc.dg/Warray-bounds-44.c | 23 +++++++++++++++++++++++
+>          gcc/vr-values.c                         | 11 ++---------
+>          4 files changed, 36 insertions(+), 9 deletions(-)
+>          create mode 100644 gcc/testsuite/gcc.dg/Warray-bounds-44.c
+> 
+> Applying this patch on top of releases/gcc-9.5.0 fixes the build (of the attached snippet and of
+> drivers/net/ethernet/mellanox/mlx4/cq.c ).
+> 
+> Ccing Mr Richard Biener, as he is the author of this patch.
+
+Note the patch simply avoids some instances of path isolation with
+__builtin_constant_p by committing to constant/non-constant earlier.
+
+Think of
+
+ for (i = 0; i < n; ++i)
+   if (__builtin_constant_p (i)) foo (); else bar ();
+
+and GCC peeling the first iteration - then to GCC i is constant zero
+in this first iteration but the remaining iterations will have i
+non-constant.
+
+The semantics of __builtin_constant_p are not strongly enough
+defined to say whether that's "correct" or not given the
+documentation suggests it is evaluated after optimization
+(inlining given as example).
+
+Richard.
+
+> I'm on Ubuntu 20.04, which ships with gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1).
+> It was with this compiler version that I have found the problem.
+> 
+> It looks unlikely that GCC in Ubuntu 20.04 will be updated meaningfully.
+> Would a following workaround for Linux be acceptable?
+> 
+> ====================
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx4/cq.c b/drivers/net/ethernet/mellanox/mlx4/cq.c
+> index 4d4f9cf9facb..a40701859721 100644
+> --- a/drivers/net/ethernet/mellanox/mlx4/cq.c
+> +++ b/drivers/net/ethernet/mellanox/mlx4/cq.c
+> @@ -314,8 +314,11 @@ static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
+>                         buf += PAGE_SIZE;
+>                 }
+>         } else {
+> +                /* Don't use array_size() as this triggers a bug in GCC < 10
+> +                 * for i386. (entries * cqe_size) is guaranteed to be small.
+> +                 */
+>                 err = copy_to_user((void __user *)buf, init_ents,
+> -                                  array_size(entries, cqe_size)) ?
+> +                                  entries * cqe_size) ?
+>                         -EFAULT : 0;
+>         }
+> 
+> ====================
+> 
+> Greetings,
+> 
+> Mateusz Jończyk
+> 
+> --------------------------------------------------
+> 
+> /* Compile with
+>  * gcc -Wall -std=gnu11 -m32 -march=i686 -O2 -c -o bugtrigger.o bugtrigger.c
+>  */
+> 
+> #include <stddef.h>
+> #include <stdbool.h>
+> #include <stdint.h>
+> 
+> void *__kmalloc2(size_t size) __attribute__((alloc_size(1)));
+> extern unsigned long
+> _copy_to_user(void *, const void *, unsigned long);
+> 
+> extern void __attribute__((__error__("copy source size is too small")))
+> __bad_copy_from2(void);
+> extern void __attribute__((__error__("copy destination size is too small")))
+> __bad_copy_to2(void);
+> 
+> void copy_overflow2(int size, unsigned long count);
+> 
+> static bool
+> check_copy_size2(const void *addr, size_t bytes, bool is_source)
+> {
+>     int sz = __builtin_object_size(addr, 0);
+>     if (sz >= 0 && sz < bytes) {
+>         if (!__builtin_constant_p(bytes))
+>             copy_overflow2(sz, bytes);
+>         else if (is_source)
+>             __bad_copy_from2();
+>         else
+>             __bad_copy_to2();
+>         return false;
+>     }
+>     return true;
+> }
+> 
+> static unsigned long
+> copy_to_user2(void *to, const void *from, unsigned long n)
+> {
+>     if (check_copy_size2(from, n, true))
+>         n = _copy_to_user(to, from, n);
+>     return n;
+> }
+> 
+> static inline size_t size_mul2(size_t factor1, size_t factor2)
+> {
+>     size_t bytes;
+>     if (__builtin_mul_overflow(factor1, factor2, &bytes))
+>         return SIZE_MAX;
+> 
+>     return bytes;
+> }
+> 
+> int foobar(void *buf, int cqe_size)
+> {
+>         int err;
+>         void *init_ents = __kmalloc2(4096);
+>         err = copy_to_user2((void  *)buf, init_ents,
+>                                 size_mul2(4096, cqe_size)) ? -14 : 0;
+> 
+>     return err;
+> }
+> 
+> 
+
 -- 
-2.34.1
-
+Richard Biener <rguenther@suse.de>
+SUSE Software Solutions Germany GmbH, Frankenstraße 146, 90461 Nuernberg,
+Germany; GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman;
+HRB 36809 (AG Nuernberg)
+---1609908220-854494629-1655110426=:3672--

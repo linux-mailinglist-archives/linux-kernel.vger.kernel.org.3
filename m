@@ -2,83 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446205483D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4195A548436
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbiFMKFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
+        id S229577AbiFMKDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiFMKF3 (ORCPT
+        with ESMTP id S241439AbiFMKCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:05:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39ADDBA;
-        Mon, 13 Jun 2022 03:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655114725; x=1686650725;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m172As3IWVYcn+TF8WEERe47LseaOb5+mE8bYw135yI=;
-  b=Y797UceSDkbIky172FNxvqeKz+SCEjlemGimdPOM2YRBvhYONm3mCk+3
-   aKL3arm++jaBfZv59IifzBpY8faxko5LhHfVTXaYJz2ExabVoz20z5zi9
-   fIuvfYqBkPLkywa9/sSYiOEmSZJNdAu5XxakFfcmBEaqBvOr4Qssq04O3
-   7C3XGrWrcNvyR0CFKILKH7uOjqmXfo6zLXe0DSfkrF9zwwgs3HzLU4gtO
-   YiPSN/mg3T0Ui3p3X6zzYCNxmjl2+WiNM9dsnw9zu+mtsTfAynJAxjZnV
-   whvzjC/TSAm1CuBS5c/58DviE7DT2tT99l0gYRN0G/8oJdW7iybL+7w3i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="275767614"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="275767614"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 03:05:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="726189170"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 Jun 2022 03:05:21 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 13 Jun 2022 13:05:20 +0300
-Date:   Mon, 13 Jun 2022 13:05:20 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v9 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/
-Message-ID: <YqcL4NyPD6JZkPxZ@kuha.fi.intel.com>
-References: <20220309023404.1221453-1-xji@analogixsemi.com>
- <YqMaUroS87rjnCny@kroah.com>
- <YqMyxQGzPSs/HwVi@kuha.fi.intel.com>
- <20220613093948.GA1454902@anxtwsw-Precision-3640-Tower>
+        Mon, 13 Jun 2022 06:02:31 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4F710A7;
+        Mon, 13 Jun 2022 03:02:28 -0700 (PDT)
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LM6Tf4bCNz682DK;
+        Mon, 13 Jun 2022 17:58:46 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 12:02:26 +0200
+Received: from [10.195.33.253] (10.195.33.253) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 11:02:25 +0100
+Message-ID: <5a2047e3-5e71-141a-ec3a-2e22749d3c49@huawei.com>
+Date:   Mon, 13 Jun 2022 11:05:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613093948.GA1454902@anxtwsw-Precision-3640-Tower>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
+ handling
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <brking@us.ibm.com>, <hare@suse.de>,
+        <hch@lst.de>
+CC:     <linux-block@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <chenxiang66@hisilicon.com>
+References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
+ <1654770559-101375-4-git-send-email-john.garry@huawei.com>
+ <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
+ <7f80f3b6-84f6-de48-4e69-4562c96e62c5@huawei.com>
+ <e4b108ba-cbc9-5237-f873-2fcea94f2b85@opensource.wdc.com>
+ <53fa2856-54f2-c075-2eed-4f05c3459597@huawei.com>
+ <d2e452cd-6a91-f25d-748e-94f560deb1bb@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <d2e452cd-6a91-f25d-748e-94f560deb1bb@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.33.253]
+X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 13/06/2022 10:43, Damien Le Moal wrote:
+>>> Currently, that is not possible to do cleanly as there are no guarantees
+>>> we can get a free tag (there is a race between block layer tag allocation
+>>> and libata internal tag counting). So a reserved tag for that would be
+>>> nice. We would end up with 31 IO tags at most + 1 reserved tag for NCQ
+>>> commands + ATA_TAG_INTERNAL for non-NCQ. That last one would be rendered
+>>> rather useless. But that also means that we kind-of go back to the days
+>>> when Linux showed ATA drives max QD of 31...
+>> So must the ATA_TAG_INTERNAL qc always be available for non-NCQ action
+>> like EH, and that is why you cannot reuse for this internal NCQ
+>> (queuable) command?
+> Currently, ATA_TAG_INTERNAL is always used for non-NCQ commands. Seeing a
+> qc with that tag means it is*not*  NCQ.
+> 
+> I am trying to see if I can reuse the tag from one of the commands that
+> completed with that weird good status/sense data available. The problem
+> though is that this all needs to be done*before*  calling
+> qc->complete_fn() which will free the tag. So we endup with 2 qcs that
+> have the same tag, the second one (for the read log command) temporarily
+> using the tag but still going through the same completion path without the
+> original command fully completed yet. It is a real mess.
+> 
 
-On Mon, Jun 13, 2022 at 05:39:48PM +0800, Xin Ji wrote:
-> Hi heikki, OK, I'll rebase on the latest code and resend.
+Reusing tags seems really messy, but then reserving an NCQ command seems 
+wasteful.
 
-Before you resend, please make sure you check the comments I made to
-the patch 3/3.
-
-thanks,
-
--- 
-heikki
+Thanks,
+John

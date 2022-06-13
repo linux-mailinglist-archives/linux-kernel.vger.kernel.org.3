@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F65C548A81
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D8D548A18
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356918AbiFMMou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S1385055AbiFMOae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353284AbiFMMiq (ORCPT
+        with ESMTP id S1384101AbiFMOYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:38:46 -0400
+        Mon, 13 Jun 2022 10:24:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F865D1AA;
-        Mon, 13 Jun 2022 04:08:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87CD4833D;
+        Mon, 13 Jun 2022 04:46:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7557B80E93;
-        Mon, 13 Jun 2022 11:08:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCC6C34114;
-        Mon, 13 Jun 2022 11:08:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B0FAB80EDF;
+        Mon, 13 Jun 2022 11:46:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E0FEC36B1F;
+        Mon, 13 Jun 2022 11:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118496;
-        bh=LjqkLXe4TiAkVdoQ812veZ0hiOZkMRIo+tjBfAknxy0=;
+        s=korg; t=1655120804;
+        bh=y9SXt+bQi5aBs6eJhgSvGHInIugvcxyjyGV49YwQ698=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y/1S2UecZcDJtHJRh0RcEzpwylCyyRcM+C0xjU+JO00YiHtT6QCcAxxOwsHeR7hfC
-         caBy5olUW9MYKCqNHwyB5ZgFGEGcmUJxrHaQK+mt/wFmSPCeErtNR5+/lqPgwe+EVH
-         KxvKSUwspSY2NT/IAFFyH3MawAr+UATsmc2h9kE4=
+        b=dTzy0zbLWtS03tywTE/aFIxNEnXF7pqit1sVTzrylnqTxqYsfIinO7JbZCRHimHuq
+         jnCQKK7BRh6jdnHuDU0hz3fOOuZh62vMJp7QTHPyDu+S84nuLKICwzxhXy0ih5+bVG
+         u1IA1KyTUDxTZZkgzi5I/ijZDr33XnhwSB11NIXY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 097/172] netfilter: nf_tables: memleak flow rule from commit path
+Subject: [PATCH 5.17 163/298] netfilter: nf_tables: always initialize flowtable hook list in transaction
 Date:   Mon, 13 Jun 2022 12:10:57 +0200
-Message-Id: <20220613094913.714272040@linuxfoundation.org>
+Message-Id: <20220613094929.876748145@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +56,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 9dd732e0bdf538b1b76dc7c157e2b5e560ff30d3 ]
+[ Upstream commit 2c9e4559773c261900c674a86b8e455911675d71 ]
 
-Abort path release flow rule object, however, commit path does not.
-Update code to destroy these objects before releasing the transaction.
+The hook list is used if nft_trans_flowtable_update(trans) == true. However,
+initialize this list for other cases for safety reasons.
 
-Fixes: c9626a2cbdb2 ("netfilter: nf_tables: add hardware offload support")
+Fixes: 78d9f48f7f44 ("netfilter: nf_tables: add devices to existing flowtable")
 Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ net/netfilter/nf_tables_api.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 2872722488c9..8507c1bdd736 100644
+index a7ed8fe46af1..ee7adb42a97d 100644
 --- a/net/netfilter/nf_tables_api.c
 +++ b/net/netfilter/nf_tables_api.c
-@@ -7587,6 +7587,9 @@ static void nft_commit_release(struct nft_trans *trans)
- 		nf_tables_chain_destroy(&trans->ctx);
- 		break;
- 	case NFT_MSG_DELRULE:
-+		if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
-+			nft_flow_rule_destroy(nft_trans_flow_rule(trans));
-+
- 		nf_tables_rule_destroy(&trans->ctx, nft_trans_rule(trans));
- 		break;
- 	case NFT_MSG_DELSET:
-@@ -7946,6 +7949,9 @@ static int nf_tables_commit(struct net *net, struct sk_buff *skb)
- 			nf_tables_rule_notify(&trans->ctx,
- 					      nft_trans_rule(trans),
- 					      NFT_MSG_NEWRULE);
-+			if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
-+				nft_flow_rule_destroy(nft_trans_flow_rule(trans));
-+
- 			nft_trans_destroy(trans);
- 			break;
- 		case NFT_MSG_DELRULE:
+@@ -544,6 +544,7 @@ static int nft_trans_flowtable_add(struct nft_ctx *ctx, int msg_type,
+ 	if (msg_type == NFT_MSG_NEWFLOWTABLE)
+ 		nft_activate_next(ctx->net, flowtable);
+ 
++	INIT_LIST_HEAD(&nft_trans_flowtable_hooks(trans));
+ 	nft_trans_flowtable(trans) = flowtable;
+ 	nft_trans_commit_list_add_tail(ctx->net, trans);
+ 
 -- 
 2.35.1
 

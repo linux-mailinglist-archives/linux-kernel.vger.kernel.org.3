@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78999549C3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D412549C3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242452AbiFMSyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S244667AbiFMSyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237272AbiFMSxJ (ORCPT
+        with ESMTP id S243812AbiFMSxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:53:09 -0400
+        Mon, 13 Jun 2022 14:53:12 -0400
 Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83684F3FB8;
-        Mon, 13 Jun 2022 08:55:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA6AF45CA;
+        Mon, 13 Jun 2022 08:55:08 -0700 (PDT)
 Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx2.veeam.com (Postfix) with ESMTPS id 0FACC431BD;
-        Mon, 13 Jun 2022 11:55:00 -0400 (EDT)
+        by mx2.veeam.com (Postfix) with ESMTPS id 10A14431CB;
+        Mon, 13 Jun 2022 11:55:04 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx2-2022; t=1655135700;
-        bh=2oYqbmrxBkF8dx7hebfZp8AvExIQpaI2EAryDffClnY=;
+        s=mx2-2022; t=1655135704;
+        bh=J6II4Dmn3qQVJe/t6k11phsdt0yI20fexOrwnohZmkg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=WBPMbWfM93FI4wxPR/KjsjIUueVgyWi2Tet90AdtJgujkfe+V3kuzgaa4Qd/iL7Zm
-         w+5htKpA4yKf9rVtyWb7V+l2EI/CJ/Idpow6JbhBUn+4AepodsDuGBO7tiA2+/WT+P
-         GSJgzr24eI8XUEJnwf9ktiXuqrPoleQPiNkc9jBMwli2ZlU93mhJrAp1ta7yEyYKzM
-         fbqHInY4hlRmEt6HILKQEnOxahKcC4Jb5xbtcohkFEa0sLrcnCggZwqUPSi+2rehoa
-         l72Z0rBKIstGvBfTw2+NNFKirQWknANcYc9xKStb2SZQ/Z9y47HY5XUsT6s2zUrvEW
-         39t6DDuTgRM+w==
+        b=OUHXDFRwYFOGkmRTTP9Xs0V3hgoTOmwRlczKXjhEn4ZOuE1XgK/eSBjA3i+AfQlVo
+         AoLrE+HnUS/Dzd1k57whKmUA/l19WFLJ/gg41Jt2a5w79QPLg1NpL55HyOFIrsgCIl
+         q3SzGjXdQeLmcSKEmM+/7wDkdoWgOoAAcSo3Hv9+qFr4xYkTbBlkN9HBvpSKIkRXSR
+         bNVR/JZe0Av1fLnzuz6jjnEvlbn3VUtcPzySOB0NS0ILSrNYPoi9AbXEz5ldRUvdOR
+         ET3wMWKXW81IQy3Rzs669i//r77tvcT8N9FfMGo8gR4XkaKh+mVlIeb7SimXjQExNK
+         F+u7i1KclyVkA==
 Received: from prgdevlinuxpatch01.amust.local (172.24.14.5) by
  prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.9; Mon, 13 Jun 2022 17:54:44 +0200
+ 15.2.1118.9; Mon, 13 Jun 2022 17:54:47 +0200
 From:   Sergei Shtepa <sergei.shtepa@veeam.com>
 To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Subject: [PATCH 14/20] block, blksnap: owner of information about overwritten blocks of the original block device
-Date:   Mon, 13 Jun 2022 18:53:07 +0300
-Message-ID: <1655135593-1900-15-git-send-email-sergei.shtepa@veeam.com>
+Subject: [PATCH 15/20] block, blksnap: snapshot image block device
+Date:   Mon, 13 Jun 2022 18:53:08 +0300
+Message-ID: <1655135593-1900-16-git-send-email-sergei.shtepa@veeam.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
 References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [172.24.14.5]
 X-ClientProxiedBy: prgmbx01.amust.local (172.24.128.102) To
  prgmbx01.amust.local (172.24.128.102)
@@ -63,820 +62,440 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is perhaps the key component of the module. It stores information
-about the modified blocks of the original device and the location of the
-regions where these blocks are stored in the difference storage.
-This information allows to restore the state of the block device at the
-time of taking the snapshot and represent the snapshot image as a block
-device.
-When reading from a snapshot, if the block on the original device has
-not yet been changed since the snapshot was taken, then the data is read
-from the original block device. If the data on the original block device
-has been overwritten, then the block is read from the difference storage.
-Reads and writes are performed with minimal data storage blocks (struct
-chunk).
+Provides the operation of block devices of snapshot images. Read and
+write operations are redirected to the regions of difference blocks for
+block device (struct diff_area).
 
 Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
 ---
- drivers/block/blksnap/diff_area.c | 602 ++++++++++++++++++++++++++++++
- drivers/block/blksnap/diff_area.h | 179 +++++++++
- 2 files changed, 781 insertions(+)
- create mode 100644 drivers/block/blksnap/diff_area.c
- create mode 100644 drivers/block/blksnap/diff_area.h
+ drivers/block/blksnap/snapimage.c | 345 ++++++++++++++++++++++++++++++
+ drivers/block/blksnap/snapimage.h |  65 ++++++
+ 2 files changed, 410 insertions(+)
+ create mode 100644 drivers/block/blksnap/snapimage.c
+ create mode 100644 drivers/block/blksnap/snapimage.h
 
-diff --git a/drivers/block/blksnap/diff_area.c b/drivers/block/blksnap/diff_area.c
+diff --git a/drivers/block/blksnap/snapimage.c b/drivers/block/blksnap/snapimage.c
 new file mode 100644
-index 000000000000..2bad7f610656
+index 000000000000..df69e989056f
 --- /dev/null
-+++ b/drivers/block/blksnap/diff_area.c
-@@ -0,0 +1,602 @@
++++ b/drivers/block/blksnap/snapimage.c
+@@ -0,0 +1,345 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#define pr_fmt(fmt) KBUILD_MODNAME "-diff-area: " fmt
-+#include <linux/blkdev.h>
++#define pr_fmt(fmt) KBUILD_MODNAME "-snapimage: " fmt
 +#include <linux/slab.h>
++#include <linux/cdrom.h>
++#include <linux/blk-mq.h>
 +#include <linux/blk_snap.h>
 +#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
 +#include "memory_checker.h"
 +#endif
-+#include "params.h"
-+#include "chunk.h"
++#include "snapimage.h"
 +#include "diff_area.h"
-+#include "diff_buffer.h"
-+#include "diff_storage.h"
-+#include "diff_io.h"
++#include "chunk.h"
++#include "cbt_map.h"
 +
-+static inline unsigned long chunk_number(struct diff_area *diff_area,
-+					 sector_t sector)
-+{
-+	return (unsigned long)(sector >>
-+			       (diff_area->chunk_shift - SECTOR_SHIFT));
-+};
++#define SNAPIMAGE_MAX_DEVICES 2048
 +
-+static inline sector_t chunk_sector(struct chunk *chunk)
++static unsigned int _major;
++static DEFINE_IDR(_minor_idr);
++static DEFINE_SPINLOCK(_minor_lock);
++
++static void free_minor(int minor)
 +{
-+	return (sector_t)(chunk->number)
-+	       << (chunk->diff_area->chunk_shift - SECTOR_SHIFT);
++	spin_lock(&_minor_lock);
++	idr_remove(&_minor_idr, minor);
++	spin_unlock(&_minor_lock);
 +}
 +
-+static inline void recalculate_last_chunk_size(struct chunk *chunk)
-+{
-+	sector_t capacity;
-+
-+	capacity = bdev_nr_sectors(chunk->diff_area->orig_bdev);
-+	if (capacity > round_down(capacity, chunk->sector_count))
-+		chunk->sector_count =
-+			capacity - round_down(capacity, chunk->sector_count);
-+}
-+
-+static inline unsigned long long count_by_shift(sector_t capacity,
-+						unsigned long long shift)
-+{
-+	return round_up(capacity, 1ull << (shift - SECTOR_SHIFT)) >>
-+	       (shift - SECTOR_SHIFT);
-+}
-+
-+static void diff_area_calculate_chunk_size(struct diff_area *diff_area)
-+{
-+	unsigned long long shift = chunk_minimum_shift;
-+	unsigned long long count;
-+	sector_t capacity;
-+	sector_t min_io_sect;
-+
-+	min_io_sect =
-+		(sector_t)(bdev_io_min(diff_area->orig_bdev) >> SECTOR_SHIFT);
-+	capacity = bdev_nr_sectors(diff_area->orig_bdev);
-+
-+	count = count_by_shift(capacity, shift);
-+	while ((count > chunk_maximum_count) ||
-+	       (diff_area_chunk_sectors(diff_area) < min_io_sect)) {
-+		shift = shift << 1;
-+		count = count_by_shift(capacity, shift);
-+	}
-+
-+	diff_area->chunk_shift = shift;
-+	diff_area->chunk_count = count;
-+
-+	pr_info("The optimal chunk size was calculated as %llu bytes for device [%d:%d]\n",
-+		(1ull << diff_area->chunk_shift),
-+		MAJOR(diff_area->orig_bdev->bd_dev),
-+		MINOR(diff_area->orig_bdev->bd_dev));
-+}
-+
-+void diff_area_free(struct kref *kref)
-+{
-+	unsigned long inx = 0;
-+	u64 start_waiting;
-+	struct chunk *chunk;
-+	struct diff_area *diff_area =
-+		container_of(kref, struct diff_area, kref);
-+
-+	might_sleep();
-+	start_waiting = jiffies_64;
-+	while (atomic_read(&diff_area->pending_io_count)) {
-+		schedule_timeout_interruptible(1);
-+		if (jiffies_64 > (start_waiting + HZ)) {
-+			start_waiting = jiffies_64;
-+			inx++;
-+			pr_warn("Waiting for pending I/O to complete\n");
-+			if (inx > 5) {
-+				pr_err("Failed to complete pending I/O\n");
-+				break;
-+			}
-+		}
-+	}
-+
-+	atomic_set(&diff_area->corrupt_flag, 1);
-+	flush_work(&diff_area->cache_release_work);
-+	xa_for_each(&diff_area->chunk_map, inx, chunk)
-+		chunk_free(chunk);
-+	xa_destroy(&diff_area->chunk_map);
-+
-+	if (diff_area->orig_bdev) {
-+		blkdev_put(diff_area->orig_bdev, FMODE_READ | FMODE_WRITE);
-+		diff_area->orig_bdev = NULL;
-+	}
-+
-+	/* Clean up free_diff_buffers */
-+	diff_buffer_cleanup(diff_area);
-+
-+	kfree(diff_area);
-+#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
-+	memory_object_dec(memory_object_diff_area);
-+#endif
-+}
-+
-+static inline struct chunk *
-+get_chunk_from_cache_and_write_lock(spinlock_t *caches_lock,
-+				    struct list_head *cache_queue,
-+				    atomic_t *cache_count)
-+{
-+	struct chunk *iter;
-+	struct chunk *chunk = NULL;
-+
-+	spin_lock(caches_lock);
-+	list_for_each_entry(iter, cache_queue, cache_link) {
-+		if (!down_trylock(&iter->lock)) {
-+			chunk = iter;
-+			break;
-+		}
-+		/*
-+		 * If it is not possible to lock a chunk for writing,
-+		 * then it is currently in use, and we try to clean up the
-+		 * next chunk.
-+		 */
-+	}
-+	if (likely(chunk)) {
-+		atomic_dec(cache_count);
-+		list_del_init(&chunk->cache_link);
-+	}
-+	spin_unlock(caches_lock);
-+
-+	return chunk;
-+}
-+
-+static struct chunk *
-+diff_area_get_chunk_from_cache_and_write_lock(struct diff_area *diff_area)
-+{
-+	if (atomic_read(&diff_area->read_cache_count) >
-+	    chunk_maximum_in_cache) {
-+		struct chunk *chunk = get_chunk_from_cache_and_write_lock(
-+			&diff_area->caches_lock, &diff_area->read_cache_queue,
-+			&diff_area->read_cache_count);
-+		if (chunk)
-+			return chunk;
-+	}
-+
-+	if (atomic_read(&diff_area->write_cache_count) >
-+	    chunk_maximum_in_cache) {
-+		struct chunk *chunk = get_chunk_from_cache_and_write_lock(
-+			&diff_area->caches_lock, &diff_area->write_cache_queue,
-+			&diff_area->write_cache_count);
-+		if (chunk)
-+			return chunk;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void diff_area_cache_release(struct diff_area *diff_area)
-+{
-+	struct chunk *chunk;
-+
-+	while (!diff_area_is_corrupted(diff_area) &&
-+	       (chunk = diff_area_get_chunk_from_cache_and_write_lock(
-+			diff_area))) {
-+
-+		if (WARN(!chunk_state_check(chunk, CHUNK_ST_BUFFER_READY),
-+			 "Cannot release empty buffer for chunk #%ld",
-+			 chunk->number)) {
-+			up(&chunk->lock);
-+			continue;
-+		}
-+
-+		if (chunk_state_check(chunk, CHUNK_ST_DIRTY)) {
-+			int ret;
-+
-+			ret = chunk_schedule_storing(chunk, false);
-+			if (ret)
-+				chunk_store_failed(chunk, ret);
-+		} else {
-+			chunk_diff_buffer_release(chunk);
-+			up(&chunk->lock);
-+		}
-+	}
-+}
-+
-+static void diff_area_cache_release_work(struct work_struct *work)
-+{
-+	struct diff_area *diff_area =
-+		container_of(work, struct diff_area, cache_release_work);
-+
-+	diff_area_cache_release(diff_area);
-+}
-+
-+struct diff_area *diff_area_new(dev_t dev_id, struct diff_storage *diff_storage)
-+{
-+	int ret = 0;
-+	struct diff_area *diff_area = NULL;
-+	struct block_device *bdev;
-+	unsigned long number;
-+	struct chunk *chunk;
-+
-+	pr_debug("Open device [%u:%u]\n", MAJOR(dev_id), MINOR(dev_id));
-+
-+	bdev = blkdev_get_by_dev(dev_id, FMODE_READ | FMODE_WRITE, NULL);
-+	if (IS_ERR(bdev)) {
-+		pr_err("Failed to open device. errno=%d\n",
-+		       abs((int)PTR_ERR(bdev)));
-+		return ERR_PTR(PTR_ERR(bdev));
-+	}
-+
-+	diff_area = kzalloc(sizeof(struct diff_area), GFP_KERNEL);
-+	if (!diff_area) {
-+		blkdev_put(bdev, FMODE_READ | FMODE_WRITE);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
-+	memory_object_inc(memory_object_diff_area);
-+#endif
-+	diff_area->orig_bdev = bdev;
-+	diff_area->diff_storage = diff_storage;
-+
-+	diff_area_calculate_chunk_size(diff_area);
-+	pr_debug("Chunk size %llu in bytes\n", 1ULL << diff_area->chunk_shift);
-+	pr_debug("Chunk count %lu\n", diff_area->chunk_count);
-+
-+	kref_init(&diff_area->kref);
-+	xa_init(&diff_area->chunk_map);
-+
-+	if (!diff_storage->capacity) {
-+#ifdef CONFIG_BLK_SNAP_ALLOW_DIFF_STORAGE_IN_MEMORY
-+		diff_area->in_memory = true;
-+		pr_debug("Difference storage is empty.\n");
-+		pr_debug("Only the memory cache will be used to store the snapshots difference.\n");
-+#else
-+		pr_err("Difference storage is empty.\n");
-+		pr_err("In-memory difference storage is not supported");
-+		return ERR_PTR(-EFAULT);
-+#endif
-+	}
-+
-+	spin_lock_init(&diff_area->caches_lock);
-+	INIT_LIST_HEAD(&diff_area->read_cache_queue);
-+	atomic_set(&diff_area->read_cache_count, 0);
-+	INIT_LIST_HEAD(&diff_area->write_cache_queue);
-+	atomic_set(&diff_area->write_cache_count, 0);
-+	INIT_WORK(&diff_area->cache_release_work, diff_area_cache_release_work);
-+
-+	spin_lock_init(&diff_area->free_diff_buffers_lock);
-+	INIT_LIST_HEAD(&diff_area->free_diff_buffers);
-+	atomic_set(&diff_area->free_diff_buffers_count, 0);
-+
-+	atomic_set(&diff_area->corrupt_flag, 0);
-+	atomic_set(&diff_area->pending_io_count, 0);
-+
-+	/**
-+	 * Allocating all chunks in advance allows to avoid doing this in
-+	 * the process of filtering bio.
-+	 * In addition, the chunk structure has an rw semaphore that allows
-+	 * to lock data of a single chunk.
-+	 * Different threads can read, write, or dump their data to diff storage
-+	 * independently of each other, provided that different chunks are used.
-+	 */
-+	for (number = 0; number < diff_area->chunk_count; number++) {
-+		chunk = chunk_alloc(diff_area, number);
-+		if (!chunk) {
-+			pr_err("Failed allocate chunk\n");
-+			ret = -ENOMEM;
-+			break;
-+		}
-+		chunk->sector_count = diff_area_chunk_sectors(diff_area);
-+
-+		ret = xa_insert(&diff_area->chunk_map, number, chunk,
-+				GFP_KERNEL);
-+		if (ret) {
-+			pr_err("Failed insert chunk to chunk map\n");
-+			chunk_free(chunk);
-+			break;
-+		}
-+	}
-+	if (ret) {
-+		diff_area_put(diff_area);
-+		return ERR_PTR(ret);
-+	}
-+
-+	recalculate_last_chunk_size(chunk);
-+
-+	atomic_set(&diff_area->corrupt_flag, 0);
-+
-+	return diff_area;
-+}
-+
-+static void diff_area_take_chunk_from_cache(struct diff_area *diff_area,
-+					    struct chunk *chunk)
-+{
-+	spin_lock(&diff_area->caches_lock);
-+	if (!list_is_first(&chunk->cache_link, &chunk->cache_link)) {
-+		list_del_init(&chunk->cache_link);
-+
-+		if (chunk_state_check(chunk, CHUNK_ST_DIRTY))
-+			atomic_dec(&diff_area->write_cache_count);
-+		else
-+			atomic_dec(&diff_area->read_cache_count);
-+	}
-+	spin_unlock(&diff_area->caches_lock);
-+}
-+
-+/**
-+ * diff_area_copy() - Implements the copy-on-write mechanism.
-+ *
-+ *
-+ */
-+int diff_area_copy(struct diff_area *diff_area, sector_t sector, sector_t count,
-+		   const bool is_nowait)
-+{
-+	int ret = 0;
-+	sector_t offset;
-+	struct chunk *chunk;
-+	struct diff_buffer *diff_buffer;
-+	sector_t area_sect_first;
-+	sector_t chunk_sectors = diff_area_chunk_sectors(diff_area);
-+
-+	area_sect_first = round_down(sector, chunk_sectors);
-+	for (offset = area_sect_first; offset < (sector + count);
-+	     offset += chunk_sectors) {
-+		chunk = xa_load(&diff_area->chunk_map,
-+				chunk_number(diff_area, offset));
-+		if (!chunk) {
-+			diff_area_set_corrupted(diff_area, -EINVAL);
-+			return -EINVAL;
-+		}
-+		WARN_ON(chunk_number(diff_area, offset) != chunk->number);
-+		if (is_nowait) {
-+			if (down_trylock(&chunk->lock))
-+				return -EAGAIN;
-+		} else {
-+			ret = down_killable(&chunk->lock);
-+			if (unlikely(ret))
-+				return ret;
-+		}
-+
-+		if (chunk_state_check(chunk, CHUNK_ST_FAILED | CHUNK_ST_DIRTY |
-+						     CHUNK_ST_STORE_READY)) {
-+			/*
-+			 * The сhunk has already been:
-+			 * - Failed, when the snapshot is corrupted
-+			 * - Overwritten in the snapshot image
-+			 * - Already stored in the diff storage
-+			 */
-+			up(&chunk->lock);
-+			continue;
-+		}
-+
-+		if (unlikely(chunk_state_check(
-+			    chunk, CHUNK_ST_LOADING | CHUNK_ST_STORING))) {
-+			pr_err("Invalid chunk state\n");
-+			ret = -EFAULT;
-+			goto fail_unlock_chunk;
-+		}
-+
-+		if (chunk_state_check(chunk, CHUNK_ST_BUFFER_READY)) {
-+			diff_area_take_chunk_from_cache(diff_area, chunk);
-+			/**
-+			 * The chunk has already been read, but now we need
-+			 * to store it to diff_storage.
-+			 */
-+			ret = chunk_schedule_storing(chunk, is_nowait);
-+			if (unlikely(ret))
-+				goto fail_unlock_chunk;
-+		} else {
-+			diff_buffer =
-+				diff_buffer_take(chunk->diff_area, is_nowait);
-+			if (IS_ERR(diff_buffer)) {
-+				ret = PTR_ERR(diff_buffer);
-+				goto fail_unlock_chunk;
-+			}
-+			WARN(chunk->diff_buffer, "Chunks buffer has been lost");
-+			chunk->diff_buffer = diff_buffer;
-+
-+			ret = chunk_async_load_orig(chunk, is_nowait);
-+			if (unlikely(ret))
-+				goto fail_unlock_chunk;
-+		}
-+	}
-+
-+	return ret;
-+fail_unlock_chunk:
-+	WARN_ON(!chunk);
-+	chunk_store_failed(chunk, ret);
-+	return ret;
-+}
-+
-+static inline void diff_area_image_put_chunk(struct chunk *chunk, bool is_write)
-+{
-+	if (is_write) {
-+		/**
-+		 * Since the chunk was taken to perform writing,
-+		 * we mark it as dirty.
-+		 */
-+		chunk_state_set(chunk, CHUNK_ST_DIRTY);
-+	}
-+
-+	chunk_schedule_caching(chunk);
-+}
-+
-+void diff_area_image_ctx_done(struct diff_area_image_ctx *io_ctx)
-+{
-+	if (!io_ctx->chunk)
-+		return;
-+
-+	diff_area_image_put_chunk(io_ctx->chunk, io_ctx->is_write);
-+}
-+
-+static int diff_area_load_chunk_from_storage(struct diff_area *diff_area,
-+					     struct chunk *chunk)
-+{
-+	struct diff_buffer *diff_buffer;
-+
-+	diff_buffer = diff_buffer_take(diff_area, false);
-+	if (IS_ERR(diff_buffer))
-+		return PTR_ERR(diff_buffer);
-+
-+	WARN_ON(chunk->diff_buffer);
-+	chunk->diff_buffer = diff_buffer;
-+
-+	if (chunk_state_check(chunk, CHUNK_ST_STORE_READY))
-+		return chunk_load_diff(chunk);
-+
-+	return chunk_load_orig(chunk);
-+}
-+
-+static struct chunk *
-+diff_area_image_context_get_chunk(struct diff_area_image_ctx *io_ctx,
-+				  sector_t sector)
++static int new_minor(int *minor, void *ptr)
 +{
 +	int ret;
-+	struct chunk *chunk;
-+	struct diff_area *diff_area = io_ctx->diff_area;
-+	unsigned long new_chunk_number = chunk_number(diff_area, sector);
 +
-+	chunk = io_ctx->chunk;
-+	if (chunk) {
-+		if (chunk->number == new_chunk_number)
-+			return chunk;
++	idr_preload(GFP_KERNEL);
++	spin_lock(&_minor_lock);
 +
-+		/*
-+		 * If the sector falls into a new chunk, then we release
-+		 * the old chunk.
-+		 */
-+		diff_area_image_put_chunk(chunk, io_ctx->is_write);
-+		io_ctx->chunk = NULL;
++	ret = idr_alloc(&_minor_idr, ptr, 0, 1 << MINORBITS, GFP_NOWAIT);
++
++	spin_unlock(&_minor_lock);
++	idr_preload_end();
++
++	if (ret < 0)
++		return ret;
++
++	*minor = ret;
++	return 0;
++}
++
++static inline void snapimage_unprepare_worker(struct snapimage *snapimage)
++{
++	kthread_flush_worker(&snapimage->worker);
++	kthread_stop(snapimage->worker_task);
++}
++
++static int snapimage_kthread_worker_fn(void *worker_ptr)
++{
++	current->flags |= PF_LOCAL_THROTTLE | PF_MEMALLOC_NOIO;
++	return kthread_worker_fn(worker_ptr);
++}
++
++static inline int snapimage_prepare_worker(struct snapimage *snapimage)
++{
++	struct task_struct *task;
++
++	kthread_init_worker(&snapimage->worker);
++
++	task = kthread_run(snapimage_kthread_worker_fn, &snapimage->worker,
++			   BLK_SNAP_IMAGE_NAME "%d",
++			   MINOR(snapimage->image_dev_id));
++	if (IS_ERR(task))
++		return -ENOMEM;
++
++	set_user_nice(task, MIN_NICE);
++
++	snapimage->worker_task = task;
++	return 0;
++}
++
++struct snapimage_cmd {
++	struct kthread_work work;
++};
++
++static void snapimage_queue_work(struct kthread_work *work)
++{
++	struct snapimage_cmd *cmd =
++		container_of(work, struct snapimage_cmd, work);
++	struct request *rq = blk_mq_rq_from_pdu(cmd);
++	struct snapimage *snapimage = rq->q->queuedata;
++	blk_status_t status = BLK_STS_OK;
++	struct bio_vec bvec;
++	struct req_iterator iter;
++	struct diff_area_image_ctx io_ctx;
++	sector_t pos = blk_rq_pos(rq);
++
++	diff_area_throttling_io(snapimage->diff_area);
++	diff_area_image_ctx_init(&io_ctx, snapimage->diff_area,
++				 op_is_write(req_op(rq)));
++	rq_for_each_segment(bvec, rq, iter) {
++		status = diff_area_image_io(&io_ctx, &bvec, &pos);
++		if (unlikely(status != BLK_STS_OK))
++			break;
 +	}
++	diff_area_image_ctx_done(&io_ctx);
 +
-+	//pr_err("Take chunk #%ld\n", new_chunk_number);
-+	/* Take a next chunk. */
-+	chunk = xa_load(&diff_area->chunk_map, new_chunk_number);
-+	if (unlikely(!chunk))
-+		return ERR_PTR(-EINVAL);
++	blk_mq_end_request(rq, status);
++}
 +
-+	ret = down_killable(&chunk->lock);
-+	if (ret)
-+		return ERR_PTR(ret);
++static int snapimage_init_request(struct blk_mq_tag_set *set,
++				  struct request *rq, unsigned int hctx_idx,
++				  unsigned int numa_node)
++{
++	struct snapimage_cmd *cmd = blk_mq_rq_to_pdu(rq);
 +
-+	if (unlikely(chunk_state_check(chunk, CHUNK_ST_FAILED))) {
-+		pr_err("Chunk #%ld corrupted\n", chunk->number);
++	kthread_init_work(&cmd->work, snapimage_queue_work);
++	return 0;
++}
 +
-+		pr_debug("new_chunk_number=%ld\n", new_chunk_number);
-+		pr_debug("sector=%llu\n", sector);
-+		pr_debug("Chunk size %llu in bytes\n",
-+		       (1ULL << diff_area->chunk_shift));
-+		pr_debug("Chunk count %lu\n", diff_area->chunk_count);
-+
-+		ret = -EIO;
-+		goto fail_unlock_chunk;
-+	}
++static blk_status_t snapimage_queue_rq(struct blk_mq_hw_ctx *hctx,
++				       const struct blk_mq_queue_data *bd)
++{
++	int ret;
++	struct request *rq = bd->rq;
++	struct snapimage *snapimage = rq->q->queuedata;
++	struct snapimage_cmd *cmd = blk_mq_rq_to_pdu(rq);
 +
 +	/*
-+	 * If there is already data in the buffer, then nothing needs to be loaded.
-+	 * Otherwise, the chunk needs to be loaded from the original device or
-+	 * from the difference storage.
++	 * Cannot fall asleep in the context of this function,
++	 * as we are under rwsem lockdown.
 +	 */
-+	if (!chunk_state_check(chunk, CHUNK_ST_BUFFER_READY)) {
-+		ret = diff_area_load_chunk_from_storage(diff_area, chunk);
-+		if (unlikely(ret))
-+			goto fail_unlock_chunk;
 +
-+		/* Set the flag that the buffer contains the required data. */
-+		chunk_state_set(chunk, CHUNK_ST_BUFFER_READY);
-+	} else
-+		diff_area_take_chunk_from_cache(diff_area, chunk);
++	blk_mq_start_request(rq);
 +
-+	io_ctx->chunk = chunk;
-+	return chunk;
++	if (unlikely(!snapimage->is_ready)) {
++		blk_mq_end_request(rq, BLK_STS_IOERR);
++		return BLK_STS_IOERR;
++	}
 +
-+fail_unlock_chunk:
-+	pr_err("Failed to load chunk #%ld\n", chunk->number);
-+	up(&chunk->lock);
-+	return ERR_PTR(ret);
-+}
-+
-+static inline sector_t diff_area_chunk_start(struct diff_area *diff_area,
-+					     struct chunk *chunk)
-+{
-+	return (sector_t)(chunk->number) << diff_area->chunk_shift;
-+}
-+
-+/**
-+ * diff_area_image_io - Implements copying data from the chunk to bio_vec when
-+ *	reading or from bio_tec to the chunk when writing.
-+ */
-+blk_status_t diff_area_image_io(struct diff_area_image_ctx *io_ctx,
-+				const struct bio_vec *bvec, sector_t *pos)
-+{
-+	unsigned int bv_len = bvec->bv_len;
-+	struct iov_iter iter;
-+
-+	iov_iter_bvec(&iter, io_ctx->is_write ? WRITE : READ, bvec, 1, bv_len);
-+
-+	while (bv_len) {
-+		struct diff_buffer_iter diff_buffer_iter;
-+		struct chunk *chunk;
-+		sector_t buff_offset;
-+
-+		chunk = diff_area_image_context_get_chunk(io_ctx, *pos);
-+		if (IS_ERR(chunk))
++	if (op_is_write(req_op(rq))) {
++		ret = cbt_map_set_both(snapimage->cbt_map, blk_rq_pos(rq),
++				       blk_rq_sectors(rq));
++		if (unlikely(ret)) {
++			blk_mq_end_request(rq, BLK_STS_IOERR);
 +			return BLK_STS_IOERR;
-+
-+		buff_offset = *pos - chunk_sector(chunk);
-+		while (bv_len &&
-+		       diff_buffer_iter_get(chunk->diff_buffer, buff_offset,
-+					    &diff_buffer_iter)) {
-+			ssize_t sz;
-+
-+			if (io_ctx->is_write)
-+				sz = copy_page_from_iter(
-+					diff_buffer_iter.page,
-+					diff_buffer_iter.offset,
-+					diff_buffer_iter.bytes, &iter);
-+			else
-+				sz = copy_page_to_iter(diff_buffer_iter.page,
-+						       diff_buffer_iter.offset,
-+						       diff_buffer_iter.bytes,
-+						       &iter);
-+			if (!sz)
-+				return BLK_STS_IOERR;
-+
-+			buff_offset += (sz >> SECTOR_SHIFT);
-+			*pos += (sz >> SECTOR_SHIFT);
-+			bv_len -= sz;
 +		}
 +	}
 +
++	kthread_queue_work(&snapimage->worker, &cmd->work);
 +	return BLK_STS_OK;
 +}
 +
-+static inline void diff_area_event_corrupted(struct diff_area *diff_area,
-+					     int err_code)
-+{
-+	struct blk_snap_event_corrupted data = {
-+		.orig_dev_id.mj = MAJOR(diff_area->orig_bdev->bd_dev),
-+		.orig_dev_id.mn = MINOR(diff_area->orig_bdev->bd_dev),
-+		.err_code = abs(err_code),
-+	};
++static const struct blk_mq_ops mq_ops = {
++	.queue_rq = snapimage_queue_rq,
++	.init_request = snapimage_init_request,
++};
 +
-+	event_gen(&diff_area->diff_storage->event_queue, GFP_NOIO,
-+		  blk_snap_event_code_corrupted, &data,
-+		  sizeof(struct blk_snap_event_corrupted));
++const struct block_device_operations bd_ops = {
++	.owner = THIS_MODULE,
++	//.open = snapimage_open,
++	//.ioctl = snapimage_ioctl,
++	//.release = snapimage_close,
++};
++
++static inline int snapimage_alloc_tag_set(struct snapimage *snapimage)
++{
++	struct blk_mq_tag_set *set = &snapimage->tag_set;
++
++	set->ops = &mq_ops;
++	set->nr_hw_queues = 1;
++	set->nr_maps = 1;
++	set->queue_depth = 128;
++	set->numa_node = NUMA_NO_NODE;
++	set->flags = BLK_MQ_F_SHOULD_MERGE | BLK_MQ_F_STACKING;
++
++	set->cmd_size = sizeof(struct snapimage_cmd);
++	set->driver_data = snapimage;
++
++	return blk_mq_alloc_tag_set(set);
 +}
 +
-+void diff_area_set_corrupted(struct diff_area *diff_area, int err_code)
++void snapimage_free(struct snapimage *snapimage)
 +{
-+	if (atomic_inc_return(&diff_area->corrupt_flag) != 1)
-+		return;
++	pr_info("Snapshot image disk [%u:%u] delete\n",
++		MAJOR(snapimage->image_dev_id), MINOR(snapimage->image_dev_id));
 +
-+	diff_area_event_corrupted(diff_area, err_code);
++	blk_mq_freeze_queue(snapimage->disk->queue);
++	snapimage->is_ready = false;
++	blk_mq_unfreeze_queue(snapimage->disk->queue);
 +
-+	pr_err("Set snapshot device is corrupted for [%u:%u] with error code %d\n",
-+	       MAJOR(diff_area->orig_bdev->bd_dev),
-+	       MINOR(diff_area->orig_bdev->bd_dev), abs(err_code));
++	snapimage_unprepare_worker(snapimage);
++
++	del_gendisk(snapimage->disk);
++	blk_cleanup_disk(snapimage->disk);
++	blk_mq_free_tag_set(&snapimage->tag_set);
++
++	diff_area_put(snapimage->diff_area);
++	cbt_map_put(snapimage->cbt_map);
++
++	free_minor(MINOR(snapimage->image_dev_id));
++	kfree(snapimage);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	memory_object_dec(memory_object_snapimage);
++#endif
 +}
 +
-+void diff_area_throttling_io(struct diff_area *diff_area)
++struct snapimage *snapimage_create(struct diff_area *diff_area,
++				   struct cbt_map *cbt_map)
 +{
-+	u64 start_waiting;
++	int ret = 0;
++	int minor;
++	struct snapimage *snapimage = NULL;
++	struct gendisk *disk;
 +
-+	start_waiting = jiffies_64;
-+	while (atomic_read(&diff_area->pending_io_count)) {
-+		schedule_timeout_interruptible(0);
-+		if (jiffies_64 > (start_waiting + HZ / 10))
-+			break;
++	pr_info("Create snapshot image for device [%u:%u]\n",
++		MAJOR(diff_area->orig_bdev->bd_dev),
++		MINOR(diff_area->orig_bdev->bd_dev));
++
++	snapimage = kzalloc(sizeof(struct snapimage), GFP_KERNEL);
++	if (snapimage == NULL)
++		return ERR_PTR(-ENOMEM);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	memory_object_inc(memory_object_snapimage);
++#endif
++	ret = new_minor(&minor, snapimage);
++	if (ret) {
++		pr_err("Failed to allocate minor for snapshot image device. errno=%d\n",
++		       abs(ret));
++		goto fail_free_image;
 +	}
++
++	snapimage->is_ready = true;
++	snapimage->capacity = cbt_map->device_capacity;
++	snapimage->image_dev_id = MKDEV(_major, minor);
++	pr_info("Snapshot image device id [%u:%u]\n",
++		MAJOR(snapimage->image_dev_id), MINOR(snapimage->image_dev_id));
++
++	ret = snapimage_prepare_worker(snapimage);
++	if (ret) {
++		pr_err("Failed to prepare worker thread. errno=%d\n", abs(ret));
++		goto fail_free_minor;
++	}
++
++	ret = snapimage_alloc_tag_set(snapimage);
++	if (ret) {
++		pr_err("Failed to allocate tag set. errno=%d\n", abs(ret));
++		goto fail_free_worker;
++	}
++
++	disk = blk_mq_alloc_disk(&snapimage->tag_set, snapimage);
++	if (IS_ERR(disk)) {
++		ret = PTR_ERR(disk);
++		pr_err("Failed to allocate disk. errno=%d\n", abs(ret));
++		goto fail_free_tagset;
++	}
++
++	blk_queue_max_hw_sectors(disk->queue, BLK_DEF_MAX_SECTORS);
++	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, disk->queue);
++
++	if (snprintf(disk->disk_name, DISK_NAME_LEN, "%s%d",
++		     BLK_SNAP_IMAGE_NAME, minor) < 0) {
++		pr_err("Unable to set disk name for snapshot image device: invalid minor %u\n",
++		       minor);
++		ret = -EINVAL;
++		goto fail_cleanup_disk;
++	}
++	pr_info("Snapshot image disk name [%s]\n", disk->disk_name);
++
++	disk->flags = 0;
++	//disk->flags |= GENHD_FL_HIDDEN;
++	//disk->flags |= GENHD_FL_REMOVABLE;
++#ifdef GENHD_FL_NO_PART_SCAN
++	disk->flags |= GENHD_FL_NO_PART_SCAN;
++#else
++	disk->flags |= GENHD_FL_NO_PART;
++#endif
++
++
++	disk->major = _major;
++	disk->first_minor = minor;
++	disk->minors = 1; // One disk has only one partition.
++
++	disk->fops = &bd_ops;
++	disk->private_data = snapimage;
++	snapimage->disk = disk;
++
++	set_capacity(disk, snapimage->capacity);
++	pr_debug("Snapshot image device capacity %lld bytes\n",
++		 (u64)(snapimage->capacity << SECTOR_SHIFT));
++
++	diff_area_get(diff_area);
++	snapimage->diff_area = diff_area;
++	cbt_map_get(cbt_map);
++	snapimage->cbt_map = cbt_map;
++
++	ret = add_disk(disk);
++	if (ret) {
++		pr_err("Failed to add disk [%s] for snapshot image device\n",
++		       disk->disk_name);
++		goto fail_cleanup_disk;
++	}
++
++	return snapimage;
++
++fail_cleanup_disk:
++	blk_cleanup_disk(disk);
++fail_free_tagset:
++	blk_mq_free_tag_set(&snapimage->tag_set);
++fail_free_worker:
++	snapimage_unprepare_worker(snapimage);
++fail_free_minor:
++	free_minor(minor);
++fail_free_image:
++	kfree(snapimage);
++#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
++	memory_object_dec(memory_object_snapimage);
++#endif
++	return ERR_PTR(ret);
 +}
-diff --git a/drivers/block/blksnap/diff_area.h b/drivers/block/blksnap/diff_area.h
++
++int snapimage_init(void)
++{
++	int mj = 0;
++
++	mj = register_blkdev(mj, BLK_SNAP_IMAGE_NAME);
++	if (mj < 0) {
++		pr_err("Failed to register snapshot image block device. errno=%d\n",
++		       abs(mj));
++		return mj;
++	}
++	_major = mj;
++	pr_info("Snapshot image block device major %d was registered\n",
++		_major);
++
++	return 0;
++}
++
++void snapimage_done(void)
++{
++	unregister_blkdev(_major, BLK_SNAP_IMAGE_NAME);
++	pr_info("Snapshot image block device [%d] was unregistered\n", _major);
++
++	idr_destroy(&_minor_idr);
++}
++
++int snapimage_major(void)
++{
++	return _major;
++}
+diff --git a/drivers/block/blksnap/snapimage.h b/drivers/block/blksnap/snapimage.h
 new file mode 100644
-index 000000000000..d8f2959a979a
+index 000000000000..e978711004f0
 --- /dev/null
-+++ b/drivers/block/blksnap/diff_area.h
-@@ -0,0 +1,179 @@
++++ b/drivers/block/blksnap/snapimage.h
+@@ -0,0 +1,65 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#pragma once
-+#include <linux/slab.h>
-+#include <linux/uio.h>
-+#include <linux/kref.h>
-+#include <linux/list.h>
-+#include <linux/spinlock.h>
++#include <linux/blk_types.h>
 +#include <linux/blkdev.h>
-+#include <linux/xarray.h>
-+#include "event_queue.h"
++#include <linux/blk-mq.h>
++#include <linux/kthread.h>
 +
-+struct diff_storage;
-+struct chunk;
-+
-+/**
-+ * struct diff_area - Discribes the difference area for one original device.
-+ * @kref:
-+ *	The reference counter. The &struct diff_area can be shared between
-+ *	the &struct tracker and &struct snapimage.
-+ * @orig_bdev:
-+ *	A pointer to the structure of an opened block device.
-+ * @diff_storage:
-+ *	Pointer to difference storage for storing difference data.
-+ * @chunk_shift:
-+ *	Power of 2 used to specify the chunk size. This allows to set different chunk sizes for
-+ *	huge and small block devices.
-+ * @chunk_count:
-+ *	Count of chunks. The number of chunks into which the block device
-+ *	is divided.
-+ * @chunk_map:
-+ *	A map of chunks.
-+ * @in_memory:
-+ *	A sign that difference storage is not prepared and all differences are
-+ *	stored in RAM.
-+ * @caches_lock:
-+ *	This spinlock guarantees consistency of the linked lists of chunk
-+ *	caches.
-+ * @read_cache_queue:
-+ *	Queue for the read cache.
-+ * @read_cache_count:
-+ *	The number of chunks in the read cache.
-+ * @write_cache_queue:
-+ *	Queue for the write cache.
-+ * @write_cache_count:
-+ *	The number of chunks in the write cache.
-+ * @cache_release_work:
-+ *	The workqueue work item. This worker limits the number of chunks
-+ *	that store their data in RAM.
-+ * @free_diff_buffers_lock:
-+ *	This spinlock guarantees consistency of the linked lists of
-+ *	free difference buffers.
-+ * @free_diff_buffers:
-+ *	Linked list of free difference buffers allows to reduce the number
-+ *	of buffer allocation and release operations.
-+ * @free_diff_buffers_count:
-+ *	The number of free difference buffers in the linked list.
-+ * @corrupt_flag:
-+ *	The flag is set if an error occurred in the operation of the data
-+ *	saving mechanism in the diff area. In this case, an error will be
-+ *	generated when reading from the snapshot image.
-+ * @pending_io_count:
-+ *	Counter of incomplete I/O operations. Allows to wait for all I/O
-+ *	operations to be completed before releasing this structure.
-+ *
-+ * The &struct diff_area is created for each block device in the snapshot.
-+ * It is used to save the differences between the original block device and
-+ * the snapshot image. That is, when writing data to the original device,
-+ * the differences are copied as chunks to the difference storage.
-+ * Reading and writing from the snapshot image is also performed using
-+ * &struct diff_area.
-+ *
-+ * The xarray has a limit on the maximum size. This can be especially
-+ * noticeable on 32-bit systems. This creates a limit in the size of
-+ * supported disks.
-+ *
-+ * For example, for a 256 TiB disk with a block size of 65536 bytes, the
-+ * number of elements in the chunk map will be equal to 2 with a power of 32.
-+ * Therefore, the number of chunks into which the block device is divided is
-+ * limited.
-+ *
-+ * To provide high performance, a read cache and a write cache for chunks are
-+ * used. The cache algorithm is the simplest. If the data of the chunk was
-+ * read to the difference buffer, then the buffer is not released immediately,
-+ * but is placed at the end of the queue. The worker thread checks the number
-+ * of chunks in the queue and releases a difference buffer for the first chunk
-+ * in the queue, but only if the binary semaphore of the chunk is not locked.
-+ * If the read thread accesses the chunk from the cache again, it returns
-+ * back to the end of the queue.
-+ *
-+ * The linked list of difference buffers allows to have a certain number of
-+ * "hot" buffers. This allows to reduce the number of allocations and releases
-+ * of memory.
-+ *
-+ *
-+ */
-+struct diff_area {
-+	struct kref kref;
-+
-+	struct block_device *orig_bdev;
-+	struct diff_storage *diff_storage;
-+
-+	unsigned long long chunk_shift;
-+	unsigned long chunk_count;
-+	struct xarray chunk_map;
-+#ifdef CONFIG_BLK_SNAP_ALLOW_DIFF_STORAGE_IN_MEMORY
-+	bool in_memory;
-+#endif
-+	spinlock_t caches_lock;
-+	struct list_head read_cache_queue;
-+	atomic_t read_cache_count;
-+	struct list_head write_cache_queue;
-+	atomic_t write_cache_count;
-+	struct work_struct cache_release_work;
-+
-+	spinlock_t free_diff_buffers_lock;
-+	struct list_head free_diff_buffers;
-+	atomic_t free_diff_buffers_count;
-+
-+	atomic_t corrupt_flag;
-+	atomic_t pending_io_count;
-+};
-+
-+struct diff_area *diff_area_new(dev_t dev_id,
-+				struct diff_storage *diff_storage);
-+void diff_area_free(struct kref *kref);
-+static inline void diff_area_get(struct diff_area *diff_area)
-+{
-+	kref_get(&diff_area->kref);
-+};
-+static inline void diff_area_put(struct diff_area *diff_area)
-+{
-+	if (likely(diff_area))
-+		kref_put(&diff_area->kref, diff_area_free);
-+};
-+void diff_area_set_corrupted(struct diff_area *diff_area, int err_code);
-+static inline bool diff_area_is_corrupted(struct diff_area *diff_area)
-+{
-+	return !!atomic_read(&diff_area->corrupt_flag);
-+};
-+static inline sector_t diff_area_chunk_sectors(struct diff_area *diff_area)
-+{
-+	return (sector_t)(1ULL << (diff_area->chunk_shift - SECTOR_SHIFT));
-+};
-+int diff_area_copy(struct diff_area *diff_area, sector_t sector, sector_t count,
-+		   const bool is_nowait);
++struct diff_area;
++struct cbt_map;
 +
 +/**
-+ * struct diff_area_image_ctx - The context for processing an io request to
-+ *	the snapshot image.
++ * struct snapimage - Snapshot image block device.
++ *
++ * @image_dev_id:
++ *	ID of the snapshot image block device.
++ * @capacity:
++ *	The size of the snapshot image in sectors must be equal to the size
++ *	of the original device at the time of taking the snapshot.
++ * @is_ready:
++ *	The flag means that the snapshot image is ready for processing
++ *	I/O requests.
++ * @worker:
++ *	The worker thread for processing I/O requests.
++ * @worker_task:
++ *	A pointer to the &struct task of the worker thread.
++ * @tag_set:
++ *	Area to keep a shared tag map.
++ * @disk:
++ *	A pointer to the &struct gendisk for the image block device.
 + * @diff_area:
-+ *	Pointer to &struct diff_area for the current snapshot image.
-+ * @is_write:
-+ *	Distinguishes between the behavior of reading or writing when
-+ *	processing a request.
-+ * @chunk:
-+ *	Current chunk.
-+ */
-+struct diff_area_image_ctx {
-+	struct diff_area *diff_area;
-+	bool is_write;
-+	struct chunk *chunk;
-+};
-+
-+static inline void diff_area_image_ctx_init(struct diff_area_image_ctx *io_ctx,
-+					    struct diff_area *diff_area,
-+					    bool is_write)
-+{
-+	io_ctx->diff_area = diff_area;
-+	io_ctx->is_write = is_write;
-+	io_ctx->chunk = NULL;
-+};
-+void diff_area_image_ctx_done(struct diff_area_image_ctx *io_ctx);
-+blk_status_t diff_area_image_io(struct diff_area_image_ctx *io_ctx,
-+				const struct bio_vec *bvec, sector_t *pos);
-+
-+/**
++ *	A pointer to the owned &struct diff_area.
++ * @cbt_map:
++ *	A pointer to the owned &struct cbt_map.
 + *
++ * The snapshot image is presented in the system as a block device. But
++ * when reading or writing a snapshot image, the data is redirected to
++ * the original block device or to the block device of the difference storage.
++ *
++ * The module does not prohibit reading and writing data to the snapshot
++ * from different threads in parallel. To avoid the problem with simultaneous
++ * access, it is enough to open the snapshot image block device with the
++ * FMODE_EXCL parameter.
 + */
-+void diff_area_throttling_io(struct diff_area *diff_area);
++struct snapimage {
++	dev_t image_dev_id;
++	sector_t capacity;
++	bool is_ready;
++
++	struct kthread_worker worker;
++	struct task_struct *worker_task;
++
++	struct blk_mq_tag_set tag_set;
++	struct gendisk *disk;
++
++	struct diff_area *diff_area;
++	struct cbt_map *cbt_map;
++};
++
++int snapimage_init(void);
++void snapimage_done(void);
++int snapimage_major(void);
++
++void snapimage_free(struct snapimage *snapimage);
++struct snapimage *snapimage_create(struct diff_area *diff_area,
++				   struct cbt_map *cbt_map);
 -- 
 2.20.1
 

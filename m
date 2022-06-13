@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23BB548784
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2A854873F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385230AbiFMOlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S1385243AbiFMOl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385569AbiFMOkT (ORCPT
+        with ESMTP id S1385615AbiFMOka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:40:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E803CAF33E;
-        Mon, 13 Jun 2022 04:50:10 -0700 (PDT)
+        Mon, 13 Jun 2022 10:40:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B5CAFAEF;
+        Mon, 13 Jun 2022 04:50:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 294D1613CA;
-        Mon, 13 Jun 2022 11:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED22C3411B;
-        Mon, 13 Jun 2022 11:50:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3DA4B80EC8;
+        Mon, 13 Jun 2022 11:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA651C34114;
+        Mon, 13 Jun 2022 11:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121009;
-        bh=QdW5IVRRLKo71re9r2YRDwGAFRACROVCQNfLS2U15ao=;
+        s=korg; t=1655121012;
+        bh=QNxyg8a/EeMSToOh3j6ZgqqKkIM/59Fix+XBI1emb1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WqjW5uTplvbihVVj56nnfRDh+IUm/W5+UdTnar/6o3TSpxMAdpEF/Kiqi2Q/WiSg9
-         ePNgwt7i8iE6epigIP0t3M5bZFgTmV5WewMG9t6pOqH4eSaicDTQDYn23pl3eLwqmd
-         ZBDVCQWcU2iy+VbniRKgKGvshJWbKYYrAoUIrk5o=
+        b=qtL9EsBRdgpvuYnw/9Ykn0SVsqQv6Sze/s0RszbzJcoL6TJSWo6rtuIrreTxKLeQ9
+         Ppjag1myR/fLJMdp/3ShYiilp+v1MLiyzm5BYAv4sAO6ic5NTguUVZ6/6wtAMe861h
+         uI9WZQkXxPViyl36Wbmken7TDxOgoCy66hH88iIc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 238/298] modpost: fix undefined behavior of is_arm_mapping_symbol()
-Date:   Mon, 13 Jun 2022 12:12:12 +0200
-Message-Id: <20220613094932.308081477@linuxfoundation.org>
+Subject: [PATCH 5.17 239/298] x86/cpu: Elide KCSAN for cpu_has() and friends
+Date:   Mon, 13 Jun 2022 12:12:13 +0200
+Message-Id: <20220613094932.337292827@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -55,61 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit d6b732666a1bae0df3c3ae06925043bba34502b1 ]
+[ Upstream commit a6a5eb269f6f3a2fe392f725a8d9052190c731e2 ]
 
-The return value of is_arm_mapping_symbol() is unpredictable when "$"
-is passed in.
+As x86 uses the <asm-generic/bitops/instrumented-*.h> headers, the
+regular forms of all bitops are instrumented with explicit calls to
+KASAN and KCSAN checks. As these are explicit calls, these are not
+suppressed by the noinstr function attribute.
 
-strchr(3) says:
-  The strchr() and strrchr() functions return a pointer to the matched
-  character or NULL if the character is not found. The terminating null
-  byte is considered part of the string, so that if c is specified as
-  '\0', these functions return a pointer to the terminator.
+This can result in calls to those check functions in noinstr code, which
+objtool warns about:
 
-When str[1] is '\0', strchr("axtd", str[1]) is not NULL, and str[2] is
-referenced (i.e. buffer overrun).
+vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
 
-Test code
----------
+Prevent this by using the arch_*() bitops, which are the underlying
+bitops without explciit instrumentation.
 
-  char str1[] = "abc";
-  char str2[] = "ab";
-
-  strcpy(str1, "$");
-  strcpy(str2, "$");
-
-  printf("test1: %d\n", is_arm_mapping_symbol(str1));
-  printf("test2: %d\n", is_arm_mapping_symbol(str2));
-
-Result
-------
-
-  test1: 0
-  test2: 1
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+[null: Changelog]
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220502111216.290518605@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/mod/modpost.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/cpufeature.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 3b098e26938e..eae6ae9d3c3b 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1260,7 +1260,8 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+index 1261842d006c..49a3b122279e 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -51,7 +51,7 @@ extern const char * const x86_power_flags[32];
+ extern const char * const x86_bug_flags[NBUGINTS*32];
  
- static inline int is_arm_mapping_symbol(const char *str)
- {
--	return str[0] == '$' && strchr("axtd", str[1])
-+	return str[0] == '$' &&
-+	       (str[1] == 'a' || str[1] == 'd' || str[1] == 't' || str[1] == 'x')
- 	       && (str[2] == '\0' || str[2] == '.');
- }
+ #define test_cpu_cap(c, bit)						\
+-	 test_bit(bit, (unsigned long *)((c)->x86_capability))
++	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
  
+ /*
+  * There are 32 bits/features in each mask word.  The high bits
 -- 
 2.35.1
 

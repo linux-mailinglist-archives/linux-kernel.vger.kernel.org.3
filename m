@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7974D549D7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0008C549D76
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349430AbiFMTWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S1348647AbiFMTV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348621AbiFMTVW (ORCPT
+        with ESMTP id S1348629AbiFMTVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 15:21:22 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E79B1FA5D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:17:48 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id r187-20020a1c44c4000000b0039c76434147so4933450wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:17:48 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ADC1FA61
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:17:49 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id i17-20020a7bc951000000b0039c4760ec3fso4396271wml.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pND07IjUi7Nx4XC5+/AEJ436yBfHgMDn/iUw0DqnEmg=;
-        b=UsJF7TH60A7l1RZn8ij0aH+0Cb9cxMAvucUlaQ7stS5YRrsZem6rXXWIGD1eH/eQOq
-         xSIZ864+UWhpOVq2PXc7etly3451uxTOdQ2VuqRCG2OBDDnknPr1w4bwFG/GEZtMQ5NA
-         8IkL4zi6qxZ5d0mTaBkNbu9rWt+sQZrnHVoofGR9tqPbPe7azOZgwbF33AicgX3OiZRG
-         IuJv3QYQhSBxeDxEk7Qjsgm4HvLucFuMydOI/0ryZ6hiFz4G9bINup2eF1kqlTC8QMB+
-         nG6UCqFdZnienPgdZfEBo99xHwrv0BowjhYq15uGdvznL4PCxwlY/hWn8DTCoc1zeWhD
-         aDsw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oTgKLvjLuTzO7UM/mQsy+9BhRmEEwbTxiHwdzXn+Bis=;
+        b=GCqt0jHDbbSAEtN+nQobnMYuspNmhWO31Jlw3BkNbBf4JuoBPhaTz0IqkCqndu0yTD
+         XEwFvO18vMq2x/zYuP5VPzM6C0GXCH1I+T7FuwfX+Xm/eS0o66cQKMSnc9vGmcbtS3qn
+         kVUxCXGnNvfc20nSneMcBtPI3GxeM/pWq5php6GklT52+D+OYf4wSJ0j8sFvUd0b46UK
+         TB2d/JBO3OhcD1A0VMlyA89+trntVh6ygLkNqYmxKlw3kzPSlyfyry7hzFAm7Z6D7oGF
+         inGWMPjHahuf5WdtUGZsdgXaytjRrsEafpH3TYIMSbmAWjV4EudB7pPINesAvIhvdcth
+         rzqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pND07IjUi7Nx4XC5+/AEJ436yBfHgMDn/iUw0DqnEmg=;
-        b=ASa8EyMDPm7xzgI4T46C+hUtYyiTuP5+zZSLY3xEKe0JRFc6yt5XidHmrMVFNIq8fr
-         WgPLc5W/POG4lHUoX5lXIup3MTtX0LckzdcPVDv1hVtmDZiPyP2HpOPFWg9O4XlwUJwm
-         ED7ImNApRsstk6QvyQ8FsaAH2oQND65mAiyTPcasTU3qrTUK/v4WOb/ctNf9HnyL1ciz
-         14AkFz5OhVfM59maEgcOl4vWXoHLEd93lNswzoVKcna43DzHENSg59yUzZWjRRb0X798
-         25Ag43XoTs7oyik1tSmTKA93ZymkTd0N0XrGB08jzCuf07iTR8vcXKoGn+nLAlddZjWE
-         Puyw==
-X-Gm-Message-State: AOAM5311SVxjXk1Too7gbviFiXnpPnBrBM8gGqJHHIPt0MLz9ueSSYND
-        N6eZlOLagXPjBXye24MGaW8=
-X-Google-Smtp-Source: ABdhPJwaZorMRFk5irMBRXjwuJdiDDebX+XtYnqXQ1rbRV3iYvd5x2d9LtUgLlPVFhDdoC0ehIxIIw==
-X-Received: by 2002:a05:600c:1e2a:b0:39c:51f8:80d4 with SMTP id ay42-20020a05600c1e2a00b0039c51f880d4mr550978wmb.192.1655140666586;
-        Mon, 13 Jun 2022 10:17:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oTgKLvjLuTzO7UM/mQsy+9BhRmEEwbTxiHwdzXn+Bis=;
+        b=T7MhDy2vySL52Zt29K+XGJTKWPlEcp5MmUtg0AZLl9zzkY7tVwk+Ae4PDQJ3GKoPXC
+         dlszmrtEK826Rpv82yWhjWmJeLs9th152IUEnEgoUPVNH7fWYfiHxEwomGd3BNXq8UVW
+         TMVwjpNS9uac7zgoex4tZdJ0E3N40AD85+I85N7LpuZt36gm8fLds6HVGvVD3lig/p4/
+         SP24xRiTs+hwlzjPEu2qk4Wbot6ang37vEmubVH5t+exmPd7NEh0KB9l7mcG2WjrC4e8
+         ghW0qPCYUyG+WDOA3ClMjxxnuYCJvvkFEI86Mo2NNTWOFsPXqTbdzeTiLlIzyy3K34h8
+         I/mQ==
+X-Gm-Message-State: AOAM532k2ofkcpLme72cMUl+OmoT9Uk/dJfMkvfm6PaTmaAgaDjgxsnY
+        Dn9o0lXMWHTfjiQDA43VL4Y=
+X-Google-Smtp-Source: ABdhPJzigC+Zu4VdUjf/vJ/zZ+ckaaLhD1Hmrd5dgKce1PLsqWQFWFA/i0izU2+UeTXMvSspFJJtgQ==
+X-Received: by 2002:a1c:7901:0:b0:39c:4252:d7f1 with SMTP id l1-20020a1c7901000000b0039c4252d7f1mr537938wme.178.1655140667601;
+        Mon, 13 Jun 2022 10:17:47 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id a10-20020a056000100a00b0020d106c0386sm9016129wrx.89.2022.06.13.10.17.45
+        by smtp.gmail.com with ESMTPSA id a10-20020a056000100a00b0020d106c0386sm9016129wrx.89.2022.06.13.10.17.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:17:45 -0700 (PDT)
+        Mon, 13 Jun 2022 10:17:47 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     javierm@redhat.com
 Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
@@ -56,10 +56,12 @@ Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
         dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v3 0/3] KUnit tests for drm_format_helper
-Date:   Mon, 13 Jun 2022 19:17:35 +0200
-Message-Id: <20220613171738.111013-1-jose.exposito89@gmail.com>
+Subject: [PATCH v3 1/3] drm/rect: Add DRM_RECT_INIT() macro
+Date:   Mon, 13 Jun 2022 19:17:36 +0200
+Message-Id: <20220613171738.111013-2-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220613171738.111013-1-jose.exposito89@gmail.com>
+References: <20220613171738.111013-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,53 +75,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello everyone,
+Add a helper macro to initialize a rectangle from x, y, width and
+height information.
 
-Here is the v3 of the series, including the documentation, previously
-sent as a standalone patch [1], and changes suggested during review.
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ include/drm/drm_rect.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Thanks a lot,
-José Expósito
-
-RFC -> v1: https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89@gmail.com/T/
-
- - Add .kunitconfig (Maxime Ripard)
- - Fix memory leak (Daniel Latypov)
- - Make config option generic (Javier Martinez Canillas):
-   DRM_FORMAR_HELPER_TEST -> DRM_KUNIT_TEST
- - Remove DISABLE_STRUCTLEAK_PLUGIN (Daniel Latypov)
-
-v1 -> v2: https://lore.kernel.org/dri-devel/20220606095516.938934-1-jose.exposito89@gmail.com/T/
-
- Thomas Zimmermann:
- - Add DRM_RECT_INIT() macro
- - Move tests to drivers/gpu/drm/kunit
- - Improve test documentation
-
-v2 -> v3: https://lore.kernel.org/dri-devel/20220612161248.271590-1-jose.exposito89@gmail.com/T/
-
- - Use designated initializer in DRM_RECT_INIT (Jani Nikula)
- - Simplify the "conversion_buf_size" helper
-
-[1] https://lore.kernel.org/dri-devel/20220606180940.43371-1-jose.exposito89@gmail.com/T/
-
-José Expósito (3):
-  drm/rect: Add DRM_RECT_INIT() macro
-  drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
-  drm/doc: Add KUnit documentation
-
- Documentation/gpu/drm-internals.rst           |  32 ++++
- drivers/gpu/drm/Kconfig                       |  16 ++
- drivers/gpu/drm/Makefile                      |   1 +
- drivers/gpu/drm/kunit/.kunitconfig            |   3 +
- drivers/gpu/drm/kunit/Makefile                |   3 +
- .../gpu/drm/kunit/drm_format_helper_test.c    | 160 ++++++++++++++++++
- include/drm/drm_rect.h                        |  16 ++
- 7 files changed, 231 insertions(+)
- create mode 100644 drivers/gpu/drm/kunit/.kunitconfig
- create mode 100644 drivers/gpu/drm/kunit/Makefile
- create mode 100644 drivers/gpu/drm/kunit/drm_format_helper_test.c
-
+diff --git a/include/drm/drm_rect.h b/include/drm/drm_rect.h
+index 6f6e19bd4dac..e8d94fca2703 100644
+--- a/include/drm/drm_rect.h
++++ b/include/drm/drm_rect.h
+@@ -47,6 +47,22 @@ struct drm_rect {
+ 	int x1, y1, x2, y2;
+ };
+ 
++/**
++ * DRM_RECT_INIT - initialize a rectangle from x/y/w/h
++ * @x: x coordinate
++ * @y: y coordinate
++ * @w: width
++ * @h: height
++ *
++ * RETURNS:
++ * A new rectangle of the specified size.
++ */
++#define DRM_RECT_INIT(x, y, w, h) ((struct drm_rect){ \
++		.x1 = (x), \
++		.y1 = (y), \
++		.x2 = (x) + (w), \
++		.y2 = (y) + (h) })
++
+ /**
+  * DRM_RECT_FMT - printf string for &struct drm_rect
+  */
 -- 
 2.25.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFFE548D16
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF7F548D21
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383297AbiFMOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S1348858AbiFMK4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383218AbiFMOPb (ORCPT
+        with ESMTP id S1349190AbiFMKyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:15:31 -0400
+        Mon, 13 Jun 2022 06:54:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24699CF51;
-        Mon, 13 Jun 2022 04:42:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7402F382;
+        Mon, 13 Jun 2022 03:27:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A976B80EDD;
-        Mon, 13 Jun 2022 11:42:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14FBC34114;
-        Mon, 13 Jun 2022 11:42:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63EC0B80E94;
+        Mon, 13 Jun 2022 10:27:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE998C34114;
+        Mon, 13 Jun 2022 10:27:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120577;
-        bh=nrF/adwgwx9MgAPpcT7qaXo0qs8+u+oOf8h/HKdJwhM=;
+        s=korg; t=1655116075;
+        bh=E5T8XFXdHMh26thn7ulMZBY1jVHtv/4aHE/TTVK12Cw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V6c2pywff9FQqjzDNkXyQRQ21+Jbuky3Ot3PUc50cS901Fsff5jOOTgI/fawP2drZ
-         fBnEWAC9L/2cI+zEc5aI4kLMDtk6req4fmmkYkqMt20K37GIiuZ/zbAkjwG+rCC/Vi
-         vXyC/lDAenmQJxHYmzl36QR6VTZVzFomr1uNbvYc=
+        b=SXvFUtM3sQV1PqUCDkWRj3MsbAGprjUA620WK7XgU3XlBxIWk+O/OZybbbHNYl7TG
+         ocPmRGfcPIJgxmxzCOu1I+947fYSC37LYlWk1FupagS/B8fmdAHYDOboOmWZ3gaKdZ
+         p8QZer5u3rfvj4RkimKRMlhXg+oCmVaO6mmyKN8g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 082/298] net: lan966x: check devm_of_phy_get() for -EDEFER_PROBE
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 4.14 118/218] md: fix an incorrect NULL check in md_reload_sb
 Date:   Mon, 13 Jun 2022 12:09:36 +0200
-Message-Id: <20220613094927.433965236@linuxfoundation.org>
+Message-Id: <20220613094924.148433301@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit b58cdd4388b1d8f5bee9f5a3897a7e780d1eaa48 ]
+commit 64c54d9244a4efe9bc6e9c98e13c4bbb8bb39083 upstream.
 
-At the moment, if devm_of_phy_get() returns an error the serdes
-simply isn't set. While it is bad to ignore an error in general, there
-is a particular bug that network isn't working if the serdes driver is
-compiled as a module. In that case, devm_of_phy_get() returns
--EDEFER_PROBE and the error is silently ignored.
+The bug is here:
+	if (!rdev || rdev->desc_nr != nr) {
 
-The serdes is optional, it is not there if the port is using RGMII, in
-which case devm_of_phy_get() returns -ENODEV. Rearrange the error
-handling so that -ENODEV will be handled but other error codes will
-abort the probing.
+The list iterator value 'rdev' will *always* be set and non-NULL
+by rdev_for_each_rcu(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+found (In fact, it will be a bogus pointer to an invalid struct
+object containing the HEAD). Otherwise it will bypass the check
+and lead to invalid memory access passing the check.
 
-Fixes: d28d6d2e37d1 ("net: lan966x: add port module support")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20220525231239.1307298-1-michael@walle.cc
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To fix the bug, use a new variable 'iter' as the list iterator,
+while using the original variable 'pdev' as a dedicated pointer to
+point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: 70bcecdb1534 ("md-cluster: Improve md_reload_sb to be less error prone")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/md/md.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index fee148bbf13e..b0cb3b65cd5b 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -948,8 +948,13 @@ static int lan966x_probe(struct platform_device *pdev)
- 		lan966x->ports[p]->fwnode = fwnode_handle_get(portnp);
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -9266,16 +9266,18 @@ static int read_rdev(struct mddev *mddev
  
- 		serdes = devm_of_phy_get(lan966x->dev, to_of_node(portnp), NULL);
--		if (!IS_ERR(serdes))
--			lan966x->ports[p]->serdes = serdes;
-+		if (PTR_ERR(serdes) == -ENODEV)
-+			serdes = NULL;
-+		if (IS_ERR(serdes)) {
-+			err = PTR_ERR(serdes);
-+			goto cleanup_ports;
+ void md_reload_sb(struct mddev *mddev, int nr)
+ {
+-	struct md_rdev *rdev;
++	struct md_rdev *rdev = NULL, *iter;
+ 	int err;
+ 
+ 	/* Find the rdev */
+-	rdev_for_each_rcu(rdev, mddev) {
+-		if (rdev->desc_nr == nr)
++	rdev_for_each_rcu(iter, mddev) {
++		if (iter->desc_nr == nr) {
++			rdev = iter;
+ 			break;
 +		}
-+		lan966x->ports[p]->serdes = serdes;
- 
- 		lan966x_port_init(lan966x->ports[p]);
  	}
--- 
-2.35.1
-
+ 
+-	if (!rdev || rdev->desc_nr != nr) {
++	if (!rdev) {
+ 		pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
+ 		return;
+ 	}
 
 

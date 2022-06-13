@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5EF548744
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B105487F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384234AbiFMO3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S1359196AbiFMMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383885AbiFMOYP (ORCPT
+        with ESMTP id S1359236AbiFMMFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168464738D;
-        Mon, 13 Jun 2022 04:45:43 -0700 (PDT)
+        Mon, 13 Jun 2022 08:05:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37212611E;
+        Mon, 13 Jun 2022 03:59:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A74C661342;
-        Mon, 13 Jun 2022 11:45:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4EECC34114;
-        Mon, 13 Jun 2022 11:45:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 584F0B80E93;
+        Mon, 13 Jun 2022 10:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E32C34114;
+        Mon, 13 Jun 2022 10:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120742;
-        bh=1JQ4qHdskVmuPivd+HmbW+0hYLsKp+c9rycRC6J69Q4=;
+        s=korg; t=1655117984;
+        bh=soJ/Lp0mYEdmHuiQSIXPEH2zl0L9SqY1vManfWUOxD8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WStaeBNIoWAXs5wlYF57wTE9aLYGV/x3cITkzCHiqYD7jNkqOfJ2Tt9GKbIxWpoHI
-         Sdok2hEJH3szaDC7zfyO7ujn1uJO9y6pu159I/ZxvrD97MPhm4K5SDSEdKN1f5Go93
-         /IHmA8kNNlyMWBXevVJ+pbDi6xcxZrlwm7s4eiUg=
+        b=pAgXhi/sOxtYcQiaqi6xCNIZeBsyYtjGl8AqT6y+pfzw8scBp9SXrVB1nJ9b2uM80
+         1PR7LWaatlUGAdMCjIbg3mj1kYgc5SGUJ9oBSQB2PYvZRE6Z4A2HXTP+yfOWKkYmu8
+         8w2RusLnr+JVedFw/nl+FEg83vfwdYnR0EjHlgnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 117/298] octeontx2-af: fix error code in is_valid_offset()
-Date:   Mon, 13 Jun 2022 12:10:11 +0200
-Message-Id: <20220613094928.493521587@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>, Coly Li <colyli@suse.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 4.19 188/287] md: bcache: check the return value of kzalloc() in detached_dev_do_request()
+Date:   Mon, 13 Jun 2022 12:10:12 +0200
+Message-Id: <20220613094929.568061189@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit f3d671c711097a133bc36bd2bde52f1fcca783a6 ]
+commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
 
-The is_valid_offset() function returns success/true if the call to
-validate_and_get_cpt_blkaddr() fails.
+The function kzalloc() in detached_dev_do_request() can fail, so its
+return value should be checked.
 
-Fixes: ecad2ce8c48f ("octeontx2-af: cn10k: Add mailbox to configure reassembly timeout")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YpXDrTPb8qV01JSP@kili
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Signed-off-by: Coly Li <colyli@suse.de>
+Link: https://lore.kernel.org/r/20220527152818.27545-4-colyli@suse.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/bcache/request.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c
-index a73a8017e0ee..e3a317442c8c 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c
-@@ -579,7 +579,7 @@ static bool is_valid_offset(struct rvu *rvu, struct cpt_rd_wr_reg_msg *req)
- 
- 	blkaddr = validate_and_get_cpt_blkaddr(req->blkaddr);
- 	if (blkaddr < 0)
--		return blkaddr;
-+		return false;
- 
- 	/* Registers that can be accessed from PF/VF */
- 	if ((offset & 0xFF000) ==  CPT_AF_LFX_CTL(0) ||
--- 
-2.35.1
-
+--- a/drivers/md/bcache/request.c
++++ b/drivers/md/bcache/request.c
+@@ -1102,6 +1102,12 @@ static void detached_dev_do_request(stru
+ 	 * which would call closure_get(&dc->disk.cl)
+ 	 */
+ 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
++	if (!ddip) {
++		bio->bi_status = BLK_STS_RESOURCE;
++		bio->bi_end_io(bio);
++		return;
++	}
++
+ 	ddip->d = d;
+ 	ddip->start_time = jiffies;
+ 	ddip->bi_end_io = bio->bi_end_io;
 
 

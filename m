@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA3E549F70
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28752549F72
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbiFMUfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S241492AbiFMUfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235650AbiFMUdc (ORCPT
+        with ESMTP id S239731AbiFMUfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:33:32 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C6A11C1C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:23:51 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-fe15832ce5so9678815fac.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:23:51 -0700 (PDT)
+        Mon, 13 Jun 2022 16:35:01 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946AC39813;
+        Mon, 13 Jun 2022 12:25:03 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id v14so8351921wra.5;
+        Mon, 13 Jun 2022 12:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YZDl+BeJBBUNeWrG7VoTjaSxaL0rjbKuIsna+kCnVcs=;
-        b=C4a0u44356yrDzoiMXiH0yh1rCpFmnwV16f8JH9dgz0S7w1HwWuD1BLLwo2Vhx3ep6
-         uHlXsNIo7Z79+xivE9s0T25Pik2MDVpcYx9KQ7pGfsg8DH9yauG5yHw6UZOGPhM8IMH8
-         Tgh9ZKY0izl9GIBlPJpPtNOhc5Htc0GD0utqZA8kWGjaHXOrskn0RvCyJ2LlYWYS9RSQ
-         OF/TViH3ts/9sg2i55v2tFtACPjALjxjZaGNmPeW7V/woz+bhoAgPvgzrF1qjjiIB4uu
-         qsSZZTV/Acf3GfTkxzmENAD3BprAJGKhkaoZmKeNKJk5On4LF4SEIFLlTI62r+IeeHAU
-         yQ1w==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=P8UEDHDMT+jpQAXSUmhS5cnDmYTJqZrHS8auMDkB9iM=;
+        b=S1sqEUWptAMoNsL/yZl9X9liiQgbDSLBMK1KkPHulgqqQnYj7jDHIUdfDSG42r6P9p
+         kzOLpvQ0N2CVfDlTb+IqemtVyiTJOD7iZaE0mzCaDdqWnEoydjpxqhpMR+ZEYOYN2rjS
+         5MANGV2gGUT+ARXhNV9G4YAWhuDkG+egcnvDcAs+KWj/0IV8tssuoH7vuby+7ujFGbcl
+         hX9QRVGjS+amsgARu8kxWYe8ApJ4Y0lbtlc5Z6NFw5ZnSq1uZiTkgCiYVhZ1m/tSsJzH
+         rcfC9uAZWa/9KPdNOe/dLgIp4yLgPSKqmw+IRtuOWmxVs/8KpVqO2nWfCsQyEv195TSg
+         pTaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YZDl+BeJBBUNeWrG7VoTjaSxaL0rjbKuIsna+kCnVcs=;
-        b=qUpINImobqxUKNCHhsCzrKuoR4MW54um8Bj2svVeUkalSY0BWqksPzN2juxyxeLtgV
-         dQVQDJRBVOI0GpARHCjZz3hxvlLvtAkzva02S1fa7J06+4owo0ohetwx5UmTWV7mJnYs
-         IhK4x6HgQLUzXMUWYMraWvU+fcMyCOomUZ0KH7JOCvqZBGITi9r5XQPp8mhI/Ai6GNTc
-         tEfGhUnnjPyxhLRBhSW3FxyYMuC9jFLpSWtWbA4blQjYbihK4c6IoYVoVk4jsbh9WIxk
-         hPv5is/MmhBNH4fM3/flCwQWFRY/+pIOUMzfK3Bz8osqC826xcHFA5PYxhiecnxXUuKf
-         YB/A==
-X-Gm-Message-State: AJIora+ASjOYPjtEyCa4F5yFDvgPgVbEHvq4C+fQAcZsixt5bShlAroD
-        23w7ptmrMCAlKruEKgXungGEdJI6U4dsaXpvZsFscw==
-X-Google-Smtp-Source: AGRyM1vqV3PQsIBk7abRGQ7bZp/MfN8B1K4jzpADb8cNiNLxbClWmSDAJ7JvffXirhfrpiJbld0bxmv1Lq5zRvEX5uI=
-X-Received: by 2002:a05:6870:d60d:b0:f3:2e4f:4907 with SMTP id
- a13-20020a056870d60d00b000f32e4f4907mr186903oaq.13.1655148230894; Mon, 13 Jun
- 2022 12:23:50 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=P8UEDHDMT+jpQAXSUmhS5cnDmYTJqZrHS8auMDkB9iM=;
+        b=2607QojOAg1/UwUXqDixX/b3VLu2TNIUJ0Gc/kd5nfSit3oGPjibVoQ7+EtgQH4iII
+         feTDaiGaC1Ymg2IK57W6wA+BmblhukSWeqkqPlJHeE++TFqavjEF5hQhoK4XA3NubiiS
+         HFjSHDLwhZwDRO9c2AInIs727a0vzLkdyiWPIguzNlI4dMUDdoSWYHhsyptQzYQMnzpI
+         KaaDvOGhracgK/9LzpifQeisjkiOTBRzYMAy51PrA+rZnktWSdiB8XW1fsSR/E6DC4Nl
+         W5DyKkCiZLH+6cJe8+tVQQ2TY+eo/37ECpzp6CjldFk2SdqlfaxxnHp+I0cdesDSV6O5
+         mtIQ==
+X-Gm-Message-State: AJIora+qnUeeZfiFxzmVAu0c5qTaaqQs22hd/pBqxykZFZTO+ocV1Y2C
+        0YhlN+WGU6eb+OgsQvybCuI=
+X-Google-Smtp-Source: AGRyM1slSf3w814vQAIijwzMlXdNSr5rvAEgtNAg31xiBcBaLcqPq/W4p4cZy7cnhYm/OEWTOpEJWQ==
+X-Received: by 2002:a05:6000:1f8b:b0:219:bee5:6b77 with SMTP id bw11-20020a0560001f8b00b00219bee56b77mr1244672wrb.658.1655148301948;
+        Mon, 13 Jun 2022 12:25:01 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id a4-20020adff7c4000000b0021033caa332sm9669422wrq.42.2022.06.13.12.25.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 12:25:01 -0700 (PDT)
+Message-ID: <62a78f0d.1c69fb81.574dd.13b8@mx.google.com>
+X-Google-Original-Message-ID: <YqePGfEbLTutoYrN@Ansuel-xps.>
+Date:   Mon, 13 Jun 2022 21:25:13 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: mtd: partitions: Support label only
+ partition
+References: <20220606151417.19227-1-ansuelsmth@gmail.com>
+ <20220606151417.19227-2-ansuelsmth@gmail.com>
+ <20220609183252.GA4072951-robh@kernel.org>
+ <62a250c4.1c69fb81.addd2.0eae@mx.google.com>
+ <20220610170205.GD1787330-robh@kernel.org>
 MIME-Version: 1.0
-References: <161188083424.28787.9510741752032213167.stgit@bmoger-ubuntu>
- <161188100955.28787.11816849358413330720.stgit@bmoger-ubuntu>
- <CALMp9eTU5h4juDyGePnuDN39FudYUqyAnnQdALZM8KfiMo93YA@mail.gmail.com> <5d380b11-079f-e941-25cf-747f66310695@amd.com>
-In-Reply-To: <5d380b11-079f-e941-25cf-747f66310695@amd.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 13 Jun 2022 12:23:40 -0700
-Message-ID: <CALMp9eRnC1RgRwj64TJcXdhhL6g835N_-E8FbeHVre6aX=18-A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] KVM: SVM: Add support for Virtual SPEC_CTRL
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Babu Moger <babu.moger@amd.com>, pbonzini@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        fenghua.yu@intel.com, tony.luck@intel.com, wanpengli@tencent.com,
-        kvm@vger.kernel.org, peterz@infradead.org, seanjc@google.com,
-        joro@8bytes.org, x86@kernel.org, kyung.min.park@intel.com,
-        linux-kernel@vger.kernel.org, krish.sadhukhan@oracle.com,
-        hpa@zytor.com, mgross@linux.intel.com, vkuznets@redhat.com,
-        kim.phillips@amd.com, wei.huang2@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220610170205.GD1787330-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,66 +86,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 8:10 AM Tom Lendacky <thomas.lendacky@amd.com> wrot=
-e:
+On Fri, Jun 10, 2022 at 11:02:05AM -0600, Rob Herring wrote:
+> On Thu, Jun 09, 2022 at 09:57:52PM +0200, Ansuel Smith wrote:
+> > On Thu, Jun 09, 2022 at 12:32:52PM -0600, Rob Herring wrote:
+> > > On Mon, Jun 06, 2022 at 05:14:15PM +0200, Ansuel Smith wrote:
+> > > > Document new partition nodes that declare only the label instead of the
+> > > > reg used to provide an OF node for partition registred at runtime by
+> > > > parsers. This is required for nvmem system to declare and detect
+> > > > nvmem-cells.
+> > > > 
+> > > > With these special partitions, the reg / offset is not required.
+> > > > The label binding is used to match the partition allocated by the
+> > > > parser at runtime and the parser will provide reg and offset of the mtd.
+> > > > 
+> > > > NVMEM will use the data from the parser and provide the NVMEM cells
+> > > > declared in the DTS, "connecting" the dynamic partition with a
+> > > > static declaration of cells in them.
+> > > > 
+> > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > > ---
+> > > >  .../bindings/mtd/partitions/partition.yaml       | 16 ++++++++++++++--
+> > > >  1 file changed, 14 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
+> > > > index e1ac08064425..bff6fb980e6b 100644
+> > > > --- a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
+> > > > +++ b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
+> > > > @@ -11,6 +11,13 @@ description: |
+> > > >    relative offset and size specified. Depending on partition function extra
+> > > >    properties can be used.
+> > > >  
+> > > > +  A partition may be dynamically allocated by a specific parser at runtime.
+> > > > +  In this specific case, the label is required instead of the reg.
+> > > > +  This is used to assign an OF node to the dynamiccally allocated partition
+> > > > +  so that subsystem like NVMEM can provide an OF node and declare NVMEM cells.
+> > > > +  The OF node will be assigned only if the partition label declared match the
+> > > > +  one assigned by the parser at runtime.
+> > > > +
+> > > >  maintainers:
+> > > >    - Rafał Miłecki <rafal@milecki.pl>
+> > > >  
+> > > > @@ -22,6 +29,8 @@ properties:
+> > > >    label:
+> > > >      description: The label / name for this partition. If omitted, the label
+> > > >        is taken from the node name (excluding the unit address).
+> > > > +      With dynamically allocated partition the label is required and won't
+> > > > +      fallback to the node name.
+> > > 
+> > > Generally, label is never required being something for humans rather 
+> > > than the s/w to consume. I don't see any reason why we can't still use 
+> > > the node name (with 'partition-' stripped off).
+> > > 
+> > 
+> > How to enforce the use of 'partition-'? Should the driver then check the
+> > node name and reject any wrong node name (and return error)?
+> 
+> The schema can do it either in the parent (of partition nodes) schema or 
+> with $nodename 'property'.
+> 
+> $nodename:
+>   oneOf:
+>     - pattern: '^.*@.*$'
+>     - pattern: '^partition-.*$'
+> 
+> or:
+> 
+> if:
+>   not:
+>     required:
+>       - reg
+> then:
+>   properties:
+>     $nodename:
+>       pattern: '^partition-.*$'
+> 
+> 
+> The latter is a bit clearer on the intent I think.
 >
-> On 6/3/22 22:11, Jim Mattson wrote:
-> > On Thu, Jan 28, 2021 at 4:43 PM Babu Moger <babu.moger@amd.com> wrote:
-> >
-> >> This support also fixes an issue where a guest may sometimes see an
-> >> inconsistent value for the SPEC_CTRL MSR on processors that support
-> >> this feature. With the current SPEC_CTRL support, the first write to
-> >> SPEC_CTRL is intercepted and the virtualized version of the SPEC_CTRL
-> >> MSR is not updated. When the guest reads back the SPEC_CTRL MSR, it
-> >> will be 0x0, instead of the actual expected value. There isn=E2=80=99t=
- a
-> >> security concern here, because the host SPEC_CTRL value is or=E2=80=99=
-ed with
-> >> the Guest SPEC_CTRL value to generate the effective SPEC_CTRL value.
-> >> KVM writes with the guest's virtualized SPEC_CTRL value to SPEC_CTRL
-> >> MSR just before the VMRUN, so it will always have the actual value
-> >> even though it doesn=E2=80=99t appear that way in the guest. The guest=
- will
-> >> only see the proper value for the SPEC_CTRL register if the guest was
-> >> to write to the SPEC_CTRL register again. With Virtual SPEC_CTRL
-> >> support, the save area spec_ctrl is properly saved and restored.
-> >> So, the guest will always see the proper value when it is read back.
-> >
-> > Note that there are actually two significant problems with the way the
-> > new feature interacts with the KVM code before this patch:
-> > 1) All bits set by the first non-zero write become sticky until the
-> > vCPU is reset (because svm->spec_ctrl is never modified after the
-> > first non-zero write).
->
-> When X86_FEATURE_V_SPEC_CTRL is set, then svm->spec_ctrl isn't used.
 
-Post-patch, yes. I'm talking about how this new hardware feature broke
-versions of KVM *before* this patch was submitted.
+Hi, I'm testing this but I'm having some difficulties.
+I put your second solution in partition.yaml
 
-> > 2) The current guest IA32_SPEC_CTRL value isn't actually known to the
-> > hypervisor.
->
-> The hypervisor can read the value as long as it is not an SEV-ES or
-> SEV-SNP guest.
+But I notice that if for example qcom,smem-part.yaml have
 
-Yes, it can, but KVM prior to this patch did not. Again, I'm talking
-about how this new hardware feature broke *existing* versions of KVM.
+patternProperties:
+  "^partition3-[0-9a-z]+$":
+    $ref: partition.yaml#
 
-> > It thinks that there are no writes to the MSR after the
-> > first non-zero write, so that sticky value will be returned to
-> > KVM_GET_MSRS. This breaks live migration.
->
-> KVM_GET_MSRS should go through the normal read MSR path, which will read
-> the guest MSR value from either svm->vmcb->save.spec_ctrl if
-> X86_FEATURE_V_SPEC_CTRL is set or from svm->spec_ctrl, otherwise. And the
-> write MSR path will do similar.
+Then the $nodename is ignored (or overwtitten?). Can't find a correct
+way to declare a patternProperties that ref another schema.
 
-You really are gaslighting me, aren't you?
+I'm trying and searching a way to ref the partition.yaml but I can't
+find anything. Can you help with this? It does seem uselss putting a
+limitation in partition.yaml if then someone can just set a different
+one in the parser Documentation.
 
-> I'm probably missing something here, because I'm not good with the whole
-> live migration thing as it relates to host and guest features.
+> > > If the purpose is to define what the partition contains, then 
+> > > 'compatible' is the right thing for that.
+> > >
+> > 
+> > Introducing a compatible means creating another scheme I think or we can
+> > add that special compatible in the partition scheme?
+> 
+> It would be another schema. You could make 'compatible' required here 
+> perhaps, but maybe there's a use for an empty node?
+> 
+> Rob
 
-AMD added a new VMCB field that existing hypervisors knew nothing
-about. This VMCB field contains the current value of the guest's
-IA32_SPEC_CTRL. Since the hypervisor doesn't know that this field even
-exists, it cannot migrate it.
+-- 
+	Ansuel

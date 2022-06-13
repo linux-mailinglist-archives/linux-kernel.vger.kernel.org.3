@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C459854883D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A807954863A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355916AbiFMLml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S1355934AbiFMLmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354855AbiFMLgK (ORCPT
+        with ESMTP id S1355060AbiFMLhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:36:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8D944A28;
-        Mon, 13 Jun 2022 03:48:09 -0700 (PDT)
+        Mon, 13 Jun 2022 07:37:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EC945064;
+        Mon, 13 Jun 2022 03:48:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58FA7B80E5E;
-        Mon, 13 Jun 2022 10:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9B3C34114;
-        Mon, 13 Jun 2022 10:48:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E82860FDB;
+        Mon, 13 Jun 2022 10:48:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D39CC34114;
+        Mon, 13 Jun 2022 10:48:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117287;
-        bh=y7GlcwRD3danYGc5bP/xB3Bm0BKDs6VAvErmOMRmARM=;
+        s=korg; t=1655117295;
+        bh=6kkjtfCyfPoYBDHlyShtWXsEIIe4ji9MKuIrYfI44CM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NYfZmrmXvMnCBQSR2JbgSpUMUOegKvlozvL64wYdr3JegO6tXU1NZ8caEurAE95PG
-         Cb2dl1w2nnqiMlVU1k0DfquG2JFj4N8iFMVrFH78SG6d6QSmevqEJWdmo2ZhcvTbo1
-         J4IEO4tIEQ4RMCEBEzt7v3zVPst7LxkKi06Q9jzY=
+        b=OnS37yOBHeDzU4vqAM77QCifXmtc5GsOMJzkkuGZL9tAx+RrGMtAna4VPpfTmC4fK
+         CGUsahPLZjir+yBnSSSyTtIn//RUOkFfZ5roqSi9JUe4ksGdArydrvAqRbAIF++GHd
+         KNYuDSWIwdMQ6ypU2wwzcY9SeTOQyhvcvFpeV+FU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 349/411] ata: pata_octeon_cf: Fix refcount leak in octeon_cf_probe
-Date:   Mon, 13 Jun 2022 12:10:22 +0200
-Message-Id: <20220613094939.171474968@linuxfoundation.org>
+Subject: [PATCH 5.4 350/411] netfilter: nf_tables: memleak flow rule from commit path
+Date:   Mon, 13 Jun 2022 12:10:23 +0200
+Message-Id: <20220613094939.199850634@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -56,50 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 10d6bdf532902be1d8aa5900b3c03c5671612aa2 ]
+[ Upstream commit 9dd732e0bdf538b1b76dc7c157e2b5e560ff30d3 ]
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it when not need anymore.
-Add missing put_device() to avoid refcount leak.
+Abort path release flow rule object, however, commit path does not.
+Update code to destroy these objects before releasing the transaction.
 
-Fixes: 43f01da0f279 ("MIPS/OCTEON/ata: Convert pata_octeon_cf.c to use device tree.")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: c9626a2cbdb2 ("netfilter: nf_tables: add hardware offload support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ata/pata_octeon_cf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/netfilter/nf_tables_api.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-index ac3b1fda820f..c240d8cbfd41 100644
---- a/drivers/ata/pata_octeon_cf.c
-+++ b/drivers/ata/pata_octeon_cf.c
-@@ -888,12 +888,14 @@ static int octeon_cf_probe(struct platform_device *pdev)
- 				int i;
- 				res_dma = platform_get_resource(dma_dev, IORESOURCE_MEM, 0);
- 				if (!res_dma) {
-+					put_device(&dma_dev->dev);
- 					of_node_put(dma_node);
- 					return -EINVAL;
- 				}
- 				cf_port->dma_base = (u64)devm_ioremap_nocache(&pdev->dev, res_dma->start,
- 									 resource_size(res_dma));
- 				if (!cf_port->dma_base) {
-+					put_device(&dma_dev->dev);
- 					of_node_put(dma_node);
- 					return -EINVAL;
- 				}
-@@ -903,6 +905,7 @@ static int octeon_cf_probe(struct platform_device *pdev)
- 					irq = i;
- 					irq_handler = octeon_cf_interrupt;
- 				}
-+				put_device(&dma_dev->dev);
- 			}
- 			of_node_put(dma_node);
- 		}
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index b51c192105fc..58a7d89719b1 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -6570,6 +6570,9 @@ static void nft_commit_release(struct nft_trans *trans)
+ 		nf_tables_chain_destroy(&trans->ctx);
+ 		break;
+ 	case NFT_MSG_DELRULE:
++		if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
++			nft_flow_rule_destroy(nft_trans_flow_rule(trans));
++
+ 		nf_tables_rule_destroy(&trans->ctx, nft_trans_rule(trans));
+ 		break;
+ 	case NFT_MSG_DELSET:
+@@ -6891,6 +6894,9 @@ static int nf_tables_commit(struct net *net, struct sk_buff *skb)
+ 			nf_tables_rule_notify(&trans->ctx,
+ 					      nft_trans_rule(trans),
+ 					      NFT_MSG_NEWRULE);
++			if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
++				nft_flow_rule_destroy(nft_trans_flow_rule(trans));
++
+ 			nft_trans_destroy(trans);
+ 			break;
+ 		case NFT_MSG_DELRULE:
 -- 
 2.35.1
 

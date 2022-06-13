@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E295489F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959F35489E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241719AbiFMKRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S1357549AbiFMLy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241683AbiFMKOv (ORCPT
+        with ESMTP id S1355489AbiFMLtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:14:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAB35F49;
-        Mon, 13 Jun 2022 03:14:39 -0700 (PDT)
+        Mon, 13 Jun 2022 07:49:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79F44D63C;
+        Mon, 13 Jun 2022 03:53:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7431B61499;
-        Mon, 13 Jun 2022 10:14:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D10C34114;
-        Mon, 13 Jun 2022 10:14:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96004B80D3A;
+        Mon, 13 Jun 2022 10:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D35C34114;
+        Mon, 13 Jun 2022 10:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115277;
-        bh=8Ic3YfIspf4SZu0wJZZZYDsTRyDu74+FGba6hXMd06o=;
+        s=korg; t=1655117599;
+        bh=BrrK6Azpxq5MO4FFWidoZfrt84Dqx8yGjW+U+k+lDso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fJp70URJjVFQbFlBfP34w/mOt2CzMg+a5LA+PVJ2sVo1SVzUQang1qOICrumFQcXb
-         /qVNVLt/inUoxkmibJ7/zSAy9k3YaP858DXL90diZ9t6jsKLA5dsE5UNKczU5dPyC8
-         YW4bfzsAEcpZZYz33Ey3PrAe3ZUTWGNbGJievAjY=
+        b=IUHzzF6p2DtorAvbIObGn3qJShWoylmbZs9xwi9zkhAQ9pMnKISSHeM+wbMSPLpGt
+         AXKpGMuFk0mCwuhBn2nmF7oppIwLv3rVGNaJmVKaD1mQw1OOVAhsRw59eA5W48aBXd
+         mxQe4dA6AE6KLqqsaBmeNy0bEpdkwDsbremrFekI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 018/167] ASoC: dapm: Dont fold register value changes into notifications
+Subject: [PATCH 4.19 068/287] spi: spi-ti-qspi: Fix return value handling of wait_for_completion_timeout
 Date:   Mon, 13 Jun 2022 12:08:12 +0200
-Message-Id: <20220613094845.163516319@linuxfoundation.org>
+Message-Id: <20220613094925.932573454@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit ad685980469b9f9b99d4d6ea05f4cb8f57cb2234 ]
+[ Upstream commit 8b1ea69a63eb62f97cef63e6d816b64ed84e8760 ]
 
-DAPM tracks and reports the value presented to the user from DAPM controls
-separately to the register value, these may diverge during initialisation
-or when an autodisable control is in use.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-When writing DAPM controls we currently report that a change has occurred
-if either the DAPM value or the value stored in the register has changed,
-meaning that if the two are out of sync we may appear to report a spurious
-event to userspace. Since we use this folded in value for nothing other
-than the value reported to userspace simply drop the folding in of the
-register change.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220428161833.3690050-1-broonie@kernel.org
+Fixes: 5720ec0a6d26 ("spi: spi-ti-qspi: Add DMA support for QSPI mmap read")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220411111034.24447-1-linmq006@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-dapm.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/spi/spi-ti-qspi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
-index 878a4fc97f04..40bf50cd87bc 100644
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -3165,7 +3165,6 @@ int snd_soc_dapm_put_volsw(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
- 		}
--		change |= reg_change;
+diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+index c70b1790a959..c248b1c38ca6 100644
+--- a/drivers/spi/spi-ti-qspi.c
++++ b/drivers/spi/spi-ti-qspi.c
+@@ -408,6 +408,7 @@ static int ti_qspi_dma_xfer(struct ti_qspi *qspi, dma_addr_t dma_dst,
+ 	enum dma_ctrl_flags flags = DMA_CTRL_ACK | DMA_PREP_INTERRUPT;
+ 	struct dma_async_tx_descriptor *tx;
+ 	int ret;
++	unsigned long time_left;
  
- 		ret = soc_dapm_mixer_update_power(card, kcontrol, connect);
+ 	tx = dmaengine_prep_dma_memcpy(chan, dma_dst, dma_src, len, flags);
+ 	if (!tx) {
+@@ -427,9 +428,9 @@ static int ti_qspi_dma_xfer(struct ti_qspi *qspi, dma_addr_t dma_dst,
+ 	}
  
-@@ -3270,7 +3269,6 @@ int snd_soc_dapm_put_enum_double(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
- 		}
--		change |= reg_change;
- 
- 		ret = soc_dapm_mux_update_power(card, kcontrol, item[0], e);
- 
+ 	dma_async_issue_pending(chan);
+-	ret = wait_for_completion_timeout(&qspi->transfer_complete,
++	time_left = wait_for_completion_timeout(&qspi->transfer_complete,
+ 					  msecs_to_jiffies(len));
+-	if (ret <= 0) {
++	if (time_left == 0) {
+ 		dmaengine_terminate_sync(chan);
+ 		dev_err(qspi->dev, "DMA wait_for_completion_timeout\n");
+ 		return -ETIMEDOUT;
 -- 
 2.35.1
 

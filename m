@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2E4548B89
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950795488F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348410AbiFMMMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
+        id S1351634AbiFMLHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359088AbiFMMJA (ORCPT
+        with ESMTP id S1350904AbiFMK7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:09:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5CF527E9;
-        Mon, 13 Jun 2022 04:00:33 -0700 (PDT)
+        Mon, 13 Jun 2022 06:59:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7EB25EB7;
+        Mon, 13 Jun 2022 03:32:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50D8DCE1176;
-        Mon, 13 Jun 2022 11:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F2FC34114;
-        Mon, 13 Jun 2022 11:00:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6505FB80EAA;
+        Mon, 13 Jun 2022 10:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC926C34114;
+        Mon, 13 Jun 2022 10:32:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118022;
-        bh=BuYpkRohhh6zgzbDCXf9vLh18Y+3V8DmdGwu0Fm7HNk=;
+        s=korg; t=1655116359;
+        bh=Q01MA/xE19LFBgpdqYkg0EJBDx4BvOaJ2SbB90FT5Ek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e7qjBrmScmpy1VpBVM8rHSf5BI4k0MiHuOjHmC90YbaEGrZ5n1EAwhGj3DBo/GvLh
-         j7G7fXJVuiXOVI6ozg0HK8+iO4gxvwMpV0hHR8MX1bTExg5UIL05+3g0MI6uLDiNSD
-         EMAI9k2zw7LUZnfWFJNwWo3LG61sX+xhM3T0enxE=
+        b=ZfPRCIWc/qjbYbanx4jHhxZwiO7yR0B9xsQsqrfTEckqbNzJI6CrQl4TPn8AQjy1/
+         iRyNNtbCmGS2xM6u3L3bffDv4y5LLkOicYdZLtRqMGe20Otg1Pe4p68gElKkVqyCke
+         /jDoV9CaowIgp5oHxz0O7VD22QwX6lTXtmHWVauk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 201/287] coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier
+Subject: [PATCH 4.14 167/218] tracing: Avoid adding tracer option before update_tracer_options
 Date:   Mon, 13 Jun 2022 12:10:25 +0200
-Message-Id: <20220613094929.958548258@linuxfoundation.org>
+Message-Id: <20220613094925.667541682@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,61 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guilherme G. Piccoli <gpiccoli@igalia.com>
+From: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 
-[ Upstream commit 1adff542d67a2ed1120955cb219bfff8a9c53f59 ]
+[ Upstream commit ef9188bcc6ca1d8a2ad83e826b548e6820721061 ]
 
-The panic notifier infrastructure executes registered callbacks when
-a panic event happens - such callbacks are executed in atomic context,
-with interrupts and preemption disabled in the running CPU and all other
-CPUs disabled. That said, mutexes in such context are not a good idea.
+To prepare for support asynchronous tracer_init_tracefs initcall,
+avoid calling create_trace_option_files before __update_tracer_options.
+Otherwise, create_trace_option_files will show warning because
+some tracers in trace_types list are already in tr->topts.
 
-This patch replaces a regular mutex with a mutex_trylock safer approach;
-given the nature of the mutex used in the driver, it should be pretty
-uncommon being unable to acquire such mutex in the panic path, hence
-no functional change should be observed (and if it is, that would be
-likely a deadlock with the regular mutex).
+For example, hwlat_tracer call register_tracer in late_initcall,
+and global_trace.dir is already created in tracing_init_dentry,
+hwlat_tracer will be put into tr->topts.
+Then if the __update_tracer_options is executed after hwlat_tracer
+registered, create_trace_option_files find that hwlat_tracer is
+already in tr->topts.
 
-Fixes: 2227b7c74634 ("coresight: add support for CPU debug module")
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Link: https://lore.kernel.org/r/20220427224924.592546-10-gpiccoli@igalia.com
+Link: https://lkml.kernel.org/r/20220426122407.17042-2-mark-pk.tsai@mediatek.com
+
+Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwtracing/coresight/coresight-cpu-debug.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ kernel/trace/trace.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/hwtracing/coresight/coresight-cpu-debug.c b/drivers/hwtracing/coresight/coresight-cpu-debug.c
-index e8819d750938..a4eba09691b4 100644
---- a/drivers/hwtracing/coresight/coresight-cpu-debug.c
-+++ b/drivers/hwtracing/coresight/coresight-cpu-debug.c
-@@ -379,9 +379,10 @@ static int debug_notifier_call(struct notifier_block *self,
- 	int cpu;
- 	struct debug_drvdata *drvdata;
- 
--	mutex_lock(&debug_lock);
-+	/* Bail out if we can't acquire the mutex or the functionality is off */
-+	if (!mutex_trylock(&debug_lock))
-+		return NOTIFY_DONE;
- 
--	/* Bail out if the functionality is disabled */
- 	if (!debug_enable)
- 		goto skip_dump;
- 
-@@ -400,7 +401,7 @@ static int debug_notifier_call(struct notifier_block *self,
- 
- skip_dump:
- 	mutex_unlock(&debug_lock);
--	return 0;
-+	return NOTIFY_DONE;
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index aaf1194be551..60a1733abbb7 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -5363,12 +5363,18 @@ static void tracing_set_nop(struct trace_array *tr)
+ 	tr->current_trace = &nop_trace;
  }
  
- static struct notifier_block debug_notifier = {
++static bool tracer_options_updated;
++
+ static void add_tracer_options(struct trace_array *tr, struct tracer *t)
+ {
+ 	/* Only enable if the directory has been created already. */
+ 	if (!tr->dir)
+ 		return;
+ 
++	/* Only create trace option files after update_tracer_options finish */
++	if (!tracer_options_updated)
++		return;
++
+ 	create_trace_option_files(tr, t);
+ }
+ 
+@@ -7733,6 +7739,7 @@ static void __update_tracer_options(struct trace_array *tr)
+ static void update_tracer_options(struct trace_array *tr)
+ {
+ 	mutex_lock(&trace_types_lock);
++	tracer_options_updated = true;
+ 	__update_tracer_options(tr);
+ 	mutex_unlock(&trace_types_lock);
+ }
 -- 
 2.35.1
 

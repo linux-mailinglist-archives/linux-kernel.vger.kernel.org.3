@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437BA548E31
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDEC5494A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377909AbiFMNfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S1345621AbiFMKgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378712AbiFMNcC (ORCPT
+        with ESMTP id S1346091AbiFMKeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:32:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882EB719F5;
-        Mon, 13 Jun 2022 04:26:32 -0700 (PDT)
+        Mon, 13 Jun 2022 06:34:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D042728983;
+        Mon, 13 Jun 2022 03:22:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1235CB80E59;
-        Mon, 13 Jun 2022 11:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67862C34114;
-        Mon, 13 Jun 2022 11:26:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 184A260AEA;
+        Mon, 13 Jun 2022 10:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CFFC3411E;
+        Mon, 13 Jun 2022 10:22:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119589;
-        bh=rc1qJxIc+5g16Bihj4I702HMC+qtROUwShXb0CBt2RA=;
+        s=korg; t=1655115737;
+        bh=GrWLWaSLHF51KZIi2EHXFUL6XhRTYx1kmBuSqh2OfRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i/hsO7d2Q4jW8PYJYqOonSRsCazCvGsZ2Iv/dgmle49TBtsekuA/E2Yk18F9JEf3Z
-         4MxlBtKIXAmDJ+NETVpanAxYnCo7h2FgARny3ivKfW9orFfLBuIryiJH145G0ckGgW
-         SNynkAtk8sGRL43srbf8fdlBUb466phRvzj66Gjs=
+        b=qSwvPcfJCEbDZjIjZ8dsIuPwe80j3XP6w0E9Jp2ncfNargcJu3pmWIio4kzdRTaIi
+         5fVxaeKimpmC2ELSGtlba49bY8AU+oAD0P2etrS3XOByp2dw9aofSLrv0sbYXiCI37
+         ayS0oIK5r4u6xj1BcUwku0xS7CHV8K5DLDP3uexs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        stable@vger.kernel.org,
+        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 048/339] watchdog: rzg2l_wdt: Fix Runtime PM usage
+Subject: [PATCH 4.14 015/218] drm/amd/pm: fix double free in si_parse_power_table()
 Date:   Mon, 13 Jun 2022 12:07:53 +0200
-Message-Id: <20220613094927.980856236@linuxfoundation.org>
+Message-Id: <20220613094911.963871635@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,78 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
 
-[ Upstream commit 95abafe76297fa057de6c3486ef844bd446bdf18 ]
+[ Upstream commit f3fa2becf2fc25b6ac7cf8d8b1a2e4a86b3b72bd ]
 
-Both rzg2l_wdt_probe() and rzg2l_wdt_start() calls pm_runtime_get() which
-results in a usage counter imbalance. This patch fixes this issue by
-removing pm_runtime_get() call from probe.
+In function si_parse_power_table(), array adev->pm.dpm.ps and its member
+is allocated. If the allocation of each member fails, the array itself
+is freed and returned with an error code. However, the array is later
+freed again in si_dpm_fini() function which is called when the function
+returns an error.
 
-Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220225175320.11041-3-biju.das.jz@bp.renesas.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+This leads to potential double free of the array adev->pm.dpm.ps, as
+well as leak of its array members, since the members are not freed in
+the allocation function and the array is not nulled when freed.
+In addition adev->pm.dpm.num_ps, which keeps track of the allocated
+array member, is not updated until the member allocation is
+successfully finished, this could also lead to either use after free,
+or uninitialized variable access in si_dpm_fini().
+
+Fix this by postponing the free of the array until si_dpm_fini() and
+increment adev->pm.dpm.num_ps everytime the array member is allocated.
+
+Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/rzg2l_wdt.c | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/si_dpm.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 96f2a018ab62..0fc73b8a9567 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -151,12 +151,11 @@ static const struct watchdog_ops rzg2l_wdt_ops = {
- 	.restart = rzg2l_wdt_restart,
- };
+diff --git a/drivers/gpu/drm/amd/amdgpu/si_dpm.c b/drivers/gpu/drm/amd/amdgpu/si_dpm.c
+index 55613f425931..288ac692f536 100644
+--- a/drivers/gpu/drm/amd/amdgpu/si_dpm.c
++++ b/drivers/gpu/drm/amd/amdgpu/si_dpm.c
+@@ -7238,17 +7238,15 @@ static int si_parse_power_table(struct amdgpu_device *adev)
+ 	if (!adev->pm.dpm.ps)
+ 		return -ENOMEM;
+ 	power_state_offset = (u8 *)state_array->states;
+-	for (i = 0; i < state_array->ucNumEntries; i++) {
++	for (adev->pm.dpm.num_ps = 0, i = 0; i < state_array->ucNumEntries; i++) {
+ 		u8 *idx;
+ 		power_state = (union pplib_power_state *)power_state_offset;
+ 		non_clock_array_index = power_state->v2.nonClockInfoIndex;
+ 		non_clock_info = (struct _ATOM_PPLIB_NONCLOCK_INFO *)
+ 			&non_clock_info_array->nonClockInfo[non_clock_array_index];
+ 		ps = kzalloc(sizeof(struct  si_ps), GFP_KERNEL);
+-		if (ps == NULL) {
+-			kfree(adev->pm.dpm.ps);
++		if (ps == NULL)
+ 			return -ENOMEM;
+-		}
+ 		adev->pm.dpm.ps[i].ps_priv = ps;
+ 		si_parse_pplib_non_clock_info(adev, &adev->pm.dpm.ps[i],
+ 					      non_clock_info,
+@@ -7270,8 +7268,8 @@ static int si_parse_power_table(struct amdgpu_device *adev)
+ 			k++;
+ 		}
+ 		power_state_offset += 2 + power_state->v2.ucNumDPMLevels;
++		adev->pm.dpm.num_ps++;
+ 	}
+-	adev->pm.dpm.num_ps = state_array->ucNumEntries;
  
--static void rzg2l_wdt_reset_assert_pm_disable_put(void *data)
-+static void rzg2l_wdt_reset_assert_pm_disable(void *data)
- {
- 	struct watchdog_device *wdev = data;
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
- 
--	pm_runtime_put(wdev->parent);
- 	pm_runtime_disable(wdev->parent);
- 	reset_control_assert(priv->rstc);
- }
-@@ -206,11 +205,6 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 
- 	reset_control_deassert(priv->rstc);
- 	pm_runtime_enable(&pdev->dev);
--	ret = pm_runtime_resume_and_get(&pdev->dev);
--	if (ret < 0) {
--		dev_err(dev, "pm_runtime_resume_and_get failed ret=%pe", ERR_PTR(ret));
--		goto out_pm_get;
--	}
- 
- 	priv->wdev.info = &rzg2l_wdt_ident;
- 	priv->wdev.ops = &rzg2l_wdt_ops;
-@@ -222,7 +216,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 
- 	watchdog_set_drvdata(&priv->wdev, priv);
- 	ret = devm_add_action_or_reset(&pdev->dev,
--				       rzg2l_wdt_reset_assert_pm_disable_put,
-+				       rzg2l_wdt_reset_assert_pm_disable,
- 				       &priv->wdev);
- 	if (ret < 0)
- 		return ret;
-@@ -235,12 +229,6 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 		dev_warn(dev, "Specified timeout invalid, using default");
- 
- 	return devm_watchdog_register_device(&pdev->dev, &priv->wdev);
--
--out_pm_get:
--	pm_runtime_disable(dev);
--	reset_control_assert(priv->rstc);
--
--	return ret;
- }
- 
- static const struct of_device_id rzg2l_wdt_ids[] = {
+ 	/* fill in the vce power states */
+ 	for (i = 0; i < adev->pm.dpm.num_of_vce_states; i++) {
 -- 
 2.35.1
 

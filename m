@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C931C547D8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F648547D90
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbiFMCIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S236503AbiFMCJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiFMCIj (ORCPT
+        with ESMTP id S231376AbiFMCJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:08:39 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973AE201B0;
-        Sun, 12 Jun 2022 19:08:37 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so2817381pjl.5;
-        Sun, 12 Jun 2022 19:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+3pr9uOc2+xB/06ujAwee6065J1tqxQJUyenAY58NrY=;
-        b=XLPFoFjeAFpIhjYc7RrxDgI1JQQcEA6qdwX654uAfMjDFJLTmESBCwnOMqHgfX0g+r
-         LzgC/VYxpsUgjBFYHH/I2ubbNdEeHXZG4bthbrUpcX4Cr5QLW9Ck2zXqfROKCIO7acRO
-         FS0lPxc74W/q+u0aFFyPk88zyg16grTaVKOTPLhEgQFjGvZLqY8jWCct0RCVIDvNk3jv
-         9tK9vcKVcKvI1TG5775bl2f5zPxDNJqWzXzUrrypXsl/66d43PsN+pVO4tcI/2wKAmkX
-         QbtmB0NDhE02JCksbm974cHWRJGr/6q8auFq+upwKRC4cqFimhRNeyQkIJdKXwEyj/yj
-         UMhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+3pr9uOc2+xB/06ujAwee6065J1tqxQJUyenAY58NrY=;
-        b=hEOODaUBbnWRK6D3bxkQ32KtLO2gvyHGXtjN8CRIGZZHW2QIAQE7IOC/3AqgnAkPBw
-         R1uUeDUIDnI/g6BTGl1rDmKjC8JyZ6wJqbadvTG5GhM9DXOZh8aUtQdlt0QGuEfpAKoY
-         Tr1eMflWUjp4pJKinCApOErrPhlmAxr613PE8deWHynyQi5igoCLNWTuPhHN/vccd9ya
-         KHxiyJQQnUPiXroX1iyt8S8n7OIf9Z4NbBEsPC3kh6GMWinBy+6kgVb+0ffCHuacriLC
-         xnDSpclWQIZfQC4vb7VwuNxPYuHexHqDJaH51rAMvNGGFBaHDvXFbwlVVQs40pXOTX+1
-         RysA==
-X-Gm-Message-State: AOAM531vrOrCXEPzW79MHU67C43PagakKlBFs+uW3LVuC97AGSL0Nv2j
-        iDrAkRtUw40p/ev6wqORzxM=
-X-Google-Smtp-Source: ABdhPJwk9edjXzK1cRjyu7FIFuyGFeOmiuXy87Jlhm5MaGBv8fbIwrnZBH1j3UjyOkQETO3j1+Y+tw==
-X-Received: by 2002:a17:902:e8d6:b0:161:ea52:cd52 with SMTP id v22-20020a170902e8d600b00161ea52cd52mr55528700plg.71.1655086117029;
-        Sun, 12 Jun 2022 19:08:37 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id l130-20020a633e88000000b003fdf49f161bsm4009285pga.21.2022.06.12.19.08.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 19:08:36 -0700 (PDT)
-From:   Chao Liu <chaoliu719@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Wayne Zhang <zhangwen@coolpad.com>,
-        Chao Liu <liuchao@coolpad.com>
-Subject: [PATCH v2] docs: filesystems: f2fs: fix description about compress ioctl
-Date:   Mon, 13 Jun 2022 10:08:00 +0800
-Message-Id: <20220613020800.3379482-1-chaoliu719@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 12 Jun 2022 22:09:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCBC21250;
+        Sun, 12 Jun 2022 19:09:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655086188; x=1686622188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=+fem5FyudAz01p+w/Af/9mmPzXNj8Wp0IAnkI0tnZHI=;
+  b=UuZBV9GPahHME/ZhZLAoX/3R0Qmgi9pphWTMAe1Jke9hd7wLXC+9Zdgm
+   B76F/osL4vRXkqnBY2ma3dc/WK8qOabL2pSjSPLzEMY0Qu6FjAvFw2Ch2
+   dW+EI/AOiLzEIGrwnOmlK53qk/zO5l9seS4TFND1T8lY5q+z61aqWFMjs
+   /PTAd2yOOWzKi/PRL74SPjVRvZLayD1YAMO/VBdw7QTpwJ0AqeifTQilv
+   1DDyDlkYcG4XOua70QDWH2wLlZRq8kAcOfN4ZI/a+0zMSKtRAbaTD4blX
+   kFx1fN71ZD1pZlObBULmCQC/+G/d9SwYIl202WfBXHMUDPy1CUgIvvGIe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="303526704"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="303526704"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 19:09:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="587525050"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Jun 2022 19:09:43 -0700
+Date:   Mon, 13 Jun 2022 10:09:43 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Willy Tarreau <w@1wt.eu>, Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        fengwei.yin@intel.com
+Cc:     Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        kernel test robot <oliver.sang@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com, ying.huang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+Subject: Re: [tcp] e926147618: stress-ng.icmp-flood.ops_per_sec -8.7%
+ regression
+Message-ID: <20220613020943.GD75244@shbuild999.sh.intel.com>
+References: <20220608060802.GA22428@xsang-OptiPlex-9020>
+ <20220608064822.GC7547@1wt.eu>
+ <CACi_AuAr70bDB79zg9aAF1rD7e1qGgFwCGCAPYtS-zCp_zA0iw@mail.gmail.com>
+ <20220608073441.GE7547@1wt.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220608073441.GE7547@1wt.eu>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,58 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Liu <liuchao@coolpad.com>
+Hi,
 
-Since commit c61404153eb6 ("f2fs: introduce FI_COMPRESS_RELEASED
-instead of using IMMUTABLE bit"), we no longer use the IMMUTABLE
-bit to prevent writing data for compression. Let's correct the
-corresponding documentation.
+On Wed, Jun 08, 2022 at 09:34:41AM +0200, Willy Tarreau wrote:
+> On Wed, Jun 08, 2022 at 10:26:12AM +0300, Moshe Kol wrote:
+> > Hmm, How is the ICMP flood stress test related to TCP connections?
+> 
+> To me it's not directly related, unless the test pre-establishes many
+> connections, or is affected in a way or another by a larger memory
+> allocation of this part.
 
-BTW, this patch fixes some alignment issues in the compress
-metadata layout.
+Fengwei and I discussed and thought this could be a data alignment
+related case, that one module's data alignment change affects other
+modules' alignment, and we had a patch for detecting similar cases [1]
 
-Signed-off-by: Chao Liu <liuchao@coolpad.com>
----
-v2:
-- s/file size/filesize/
- Documentation/filesystems/f2fs.rst | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+After some debugging, this could be related with the bss section
+alignment changes, that if we forced all module's bss section to be
+4KB aligned, then the stress-ng icmp-flood case will have almost no
+performance difference for the 2 commits: 
 
-diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
-index ad8dc8c040a2..531b0f8a3946 100644
---- a/Documentation/filesystems/f2fs.rst
-+++ b/Documentation/filesystems/f2fs.rst
-@@ -818,10 +818,11 @@ Compression implementation
-   Instead, the main goal is to reduce data writes to flash disk as much as
-   possible, resulting in extending disk life time as well as relaxing IO
-   congestion. Alternatively, we've added ioctl(F2FS_IOC_RELEASE_COMPRESS_BLOCKS)
--  interface to reclaim compressed space and show it to user after putting the
--  immutable bit. Immutable bit, after release, it doesn't allow writing/mmaping
--  on the file, until reserving compressed space via
--  ioctl(F2FS_IOC_RESERVE_COMPRESS_BLOCKS) or truncating filesize to zero.
-+  interface to reclaim compressed space and show it to user after setting a
-+  special flag to the inode. Once the compressed space is released, the flag
-+  will block writing data to the file until either the compressed space is
-+  reserved via ioctl(F2FS_IOC_RESERVE_COMPRESS_BLOCKS) or the filesize is
-+  truncated to zero.
+10025135            +0.8%   10105711 ±  2%  stress-ng.icmp-flood.ops_per_sec
+
+The debug patch is:
+
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 7fda7f27e7620..7eb626b98620c 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -378,7 +378,9 @@ SECTIONS
  
- Compress metadata layout::
- 
-@@ -830,12 +831,12 @@ Compress metadata layout::
- 		| cluster 1 | cluster 2 | ......... | cluster N |
- 		+-----------------------------------------------+
- 		.           .                       .           .
--	.                       .                .                      .
-+	  .                      .                .                      .
-     .         Compressed Cluster       .        .        Normal Cluster            .
-     +----------+---------+---------+---------+  +---------+---------+---------+---------+
-     |compr flag| block 1 | block 2 | block 3 |  | block 1 | block 2 | block 3 | block 4 |
-     +----------+---------+---------+---------+  +---------+---------+---------+---------+
--	    .                             .
-+	       .                             .
- 	    .                                           .
- 	.                                                           .
- 	+-------------+-------------+----------+----------------------------+
--- 
-2.36.1
+ 	/* BSS */
+ 	. = ALIGN(PAGE_SIZE);
+-	.bss : AT(ADDR(.bss) - LOAD_OFFSET) {
++	.bss : AT(ADDR(.bss) - LOAD_OFFSET)
++	SUBALIGN(PAGE_SIZE)
++	{
+ 		__bss_start = .;
+ 		*(.bss..page_aligned)
+ 		. = ALIGN(PAGE_SIZE);
 
+The 'table_perturb[]' used to be in bss section, and with the commit
+of moving it to runtime allocation, other data structures following it
+in the .bss section will get affected accordingly.
+
+Thanks,
+Feng
+
+
+> Willy

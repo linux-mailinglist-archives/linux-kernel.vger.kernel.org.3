@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7F254969C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A3054975B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352241AbiFMM2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S243849AbiFMKZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355547AbiFMMX5 (ORCPT
+        with ESMTP id S244680AbiFMKYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E57A27B20;
-        Mon, 13 Jun 2022 04:05:07 -0700 (PDT)
+        Mon, 13 Jun 2022 06:24:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66553201B0;
+        Mon, 13 Jun 2022 03:18:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7FB860F9A;
-        Mon, 13 Jun 2022 11:05:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05BBBC34114;
-        Mon, 13 Jun 2022 11:05:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 72A50CE1167;
+        Mon, 13 Jun 2022 10:18:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EFF5C3411C;
+        Mon, 13 Jun 2022 10:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118306;
-        bh=pl/Mo2zTG3iyAG3IF2rzNQ79wq94PhZgwe/irXGYYwc=;
+        s=korg; t=1655115497;
+        bh=evjWngNGeNm6DvB7V1mSzF/NAi9a3OjoFJYLZg6iysE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ri5XAINXBhLaBiaj+DqjdCUEVcmf5GfmRurfbc+X8zdeBjJk8S+IOtpdsNuJj+saf
-         dThEvfFsIWt6hezckLYi1GWAyhvmZDfKhBELhyiezhdyDTEQcZ1eCHmJPL0DBH+Fki
-         ENBebYb4+k/oS8Ae/T9DFhs17KG/9G8n/5aoRxaI=
+        b=t1sHtrUs/g8EDSEnPAbIf0m+3YJEPOLOZ5AqUAv+eQRFOA3NRkQLlIcUNQbjZVHbB
+         DiS8D/Xh28KpfPK6euWQGIexl9nF+Syd3g/AusF63xGWbm7oD98Cmy7D4N0XoeghbU
+         2ap7pzXOeSMwrGQe8gQ3zSOeKDOpGdjWf8UTGCC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Niels Dossche <dossche.niels@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 010/172] usb: usbip: add missing device lock on tweak configuration cmd
-Date:   Mon, 13 Jun 2022 12:09:30 +0200
-Message-Id: <20220613094852.876973328@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe de Dinechin <christophe@dinechin.org>,
+        Christophe de Dinechin <dinechin@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Segall <bsegall@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH 4.9 097/167] nodemask.h: fix compilation error with GCC12
+Date:   Mon, 13 Jun 2022 12:09:31 +0200
+Message-Id: <20220613094903.631747075@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Christophe de Dinechin <dinechin@redhat.com>
 
-[ Upstream commit d088fabace2ca337b275d1d4b36db4fe7771e44f ]
+commit 37462a920392cb86541650a6f4121155f11f1199 upstream.
 
-The function documentation of usb_set_configuration says that its
-callers should hold the device lock. This lock is held for all
-callsites except tweak_set_configuration_cmd. The code path can be
-executed for example when attaching a remote USB device.
-The solution is to surround the call by the device lock.
+With gcc version 12.0.1 20220401 (Red Hat 12.0.1-0), building with
+defconfig results in the following compilation error:
 
-This bug was found using my experimental own-developed static analysis
-tool, which reported the missing lock on v5.17.2. I manually verified
-this bug report by doing code review as well. I runtime checked that
-the required lock is not held. I compiled and runtime tested this on
-x86_64 with a USB mouse. After applying this patch, my analyser no
-longer reports this potential bug.
+|   CC      mm/swapfile.o
+| mm/swapfile.c: In function `setup_swap_info':
+| mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds
+|  of `struct plist_node[]' [-Werror=array-bounds]
+|  2291 |                                 p->avail_lists[i].prio = 1;
+|       |                                 ~~~~~~~~~~~~~~^~~
+| In file included from mm/swapfile.c:16:
+| ./include/linux/swap.h:292:27: note: while referencing `avail_lists'
+|   292 |         struct plist_node avail_lists[]; /*
+|       |                           ^~~~~~~~~~~
 
-Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-Link: https://lore.kernel.org/r/20220412165055.257113-1-dossche.niels@gmail.com
+This is due to the compiler detecting that the mask in
+node_states[__state] could theoretically be zero, which would lead to
+first_node() returning -1 through find_first_bit.
+
+I believe that the warning/error is legitimate.  I first tried adding a
+test to check that the node mask is not emtpy, since a similar test exists
+in the case where MAX_NUMNODES == 1.
+
+However, adding the if statement causes other warnings to appear in
+for_each_cpu_node_but, because it introduces a dangling else ambiguity.
+And unfortunately, GCC is not smart enough to detect that the added test
+makes the case where (node) == -1 impossible, so it still complains with
+the same message.
+
+This is why I settled on replacing that with a harmless, but relatively
+useless (node) >= 0 test.  Based on the warning for the dangling else, I
+also decided to fix the case where MAX_NUMNODES == 1 by moving the
+condition inside the for loop.  It will still only be tested once.  This
+ensures that the meaning of an else following for_each_node_mask or
+derivatives would not silently have a different meaning depending on the
+configuration.
+
+Link: https://lkml.kernel.org/r/20220414150855.2407137-3-dinechin@redhat.com
+Signed-off-by: Christophe de Dinechin <christophe@dinechin.org>
+Signed-off-by: Christophe de Dinechin <dinechin@redhat.com>
+Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Cc: Zhen Lei <thunder.leizhen@huawei.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/usbip/stub_rx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/nodemask.h |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-index 325c22008e53..5dd41e8215e0 100644
---- a/drivers/usb/usbip/stub_rx.c
-+++ b/drivers/usb/usbip/stub_rx.c
-@@ -138,7 +138,9 @@ static int tweak_set_configuration_cmd(struct urb *urb)
- 	req = (struct usb_ctrlrequest *) urb->setup_packet;
- 	config = le16_to_cpu(req->wValue);
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -365,14 +365,13 @@ static inline void __nodes_fold(nodemask
+ }
  
-+	usb_lock_device(sdev->udev);
- 	err = usb_set_configuration(sdev->udev, config);
-+	usb_unlock_device(sdev->udev);
- 	if (err && err != -ENODEV)
- 		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
- 			config, err);
--- 
-2.35.1
-
+ #if MAX_NUMNODES > 1
+-#define for_each_node_mask(node, mask)			\
+-	for ((node) = first_node(mask);			\
+-		(node) < MAX_NUMNODES;			\
+-		(node) = next_node((node), (mask)))
++#define for_each_node_mask(node, mask)				    \
++	for ((node) = first_node(mask);				    \
++	     (node >= 0) && (node) < MAX_NUMNODES;		    \
++	     (node) = next_node((node), (mask)))
+ #else /* MAX_NUMNODES == 1 */
+-#define for_each_node_mask(node, mask)			\
+-	if (!nodes_empty(mask))				\
+-		for ((node) = 0; (node) < 1; (node)++)
++#define for_each_node_mask(node, mask)                                  \
++	for ((node) = 0; (node) < 1 && !nodes_empty(mask); (node)++)
+ #endif /* MAX_NUMNODES */
+ 
+ /*
 
 

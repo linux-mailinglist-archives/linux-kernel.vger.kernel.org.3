@@ -2,196 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9DE549C2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37F7549C4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344742AbiFMSwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S1345579AbiFMSzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiFMSvv (ORCPT
+        with ESMTP id S245063AbiFMSzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:51:51 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61548F073D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:52:46 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so1769189wma.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=OCL5aWKRbj0ROQTskl1q1tCaL14mdMWA6juXly3fSBY=;
-        b=Knn6GmPZQULHNfmfoeI4Fpg+udRaQGh5orUc4dJD4WbSTCQCnxwcWiNs993WqlEUWs
-         /6dHHJAhYJXBD7Va9MK0UFIRRSTwEiqPoMPoIzSY+23D8k94rLcFIKpuMi18R1m3IWSh
-         3NiJMMEsxpXeaiWNV7fWwvBZiSynlf72E1S6jqf9Mr+jY75/8l2OJed49AXo/ENVEthc
-         Tkol+fq+LvPAWmT/LxapbDTbjAKe8Ml4vXGcnH1To03kPwyRe/68RiV6UaWxzWYUlfwu
-         AYDngHNUGy6AxTykccByw6LHJvLS3ZwZb+RGAuBop5BjyTNj1VbSlh37MV5pNYlFBxXh
-         AjGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=OCL5aWKRbj0ROQTskl1q1tCaL14mdMWA6juXly3fSBY=;
-        b=OGrUqQ7on8ZIgYD+z8EqKxyOos9Gri5m0Ek+3x/ZeTzylaHzjfu/G5YG/MywzJ408x
-         FGcBAzjN5HtNuNNzKDz+85v+j1leyH+BRX9iI6iCWpZlRdTKW7Ni4hpmJqfFzhWRs4ip
-         o1CZAPZTim/N/stWAmKG3kLlof0UMNL5713JHVXbRf5L7KvC2g+l3V87RrhcZC0w3N4q
-         F0GVWp3FvfUALqN6d+tezb6DNFwN4MVCvQyh6jxI5e1Y07pbhBPHwRZxPkjexNTefHNa
-         EfS44jCCxfKZM1TScCrZeXFLnH+ddRZHmji35IAcG4/qOBA4ZXBFq60XtVHFEdbDomin
-         2TFQ==
-X-Gm-Message-State: AOAM530ZKgREGnjUlTzCf/sieN70GHJ6O3VCmfUb+ntGcWDjnVpbMkLK
-        wrVuU8w6QqUf/XGSbojV+tk=
-X-Google-Smtp-Source: ABdhPJxb8jGNR9Uj1sykaV4sMfYHmhnT+dMd4lOi3/Cadt9gYuj/PJgSkxQCaPTx4jhhNoioc0o5Nw==
-X-Received: by 2002:a05:600c:22d9:b0:39c:4b1b:5f99 with SMTP id 25-20020a05600c22d900b0039c4b1b5f99mr118995wmg.151.1655135564826;
-        Mon, 13 Jun 2022 08:52:44 -0700 (PDT)
-Received: from [192.168.0.36] ([37.223.143.134])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600c129100b0039754d1d327sm9736322wmd.13.2022.06.13.08.52.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 08:52:43 -0700 (PDT)
-Message-ID: <606c3409-0e27-e993-8657-0c8d36a16a97@gmail.com>
-Date:   Mon, 13 Jun 2022 17:52:42 +0200
+        Mon, 13 Jun 2022 14:55:23 -0400
+Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87F5FC83C;
+        Mon, 13 Jun 2022 08:59:53 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.veeam.com (Postfix) with ESMTPS id 071F243194;
+        Mon, 13 Jun 2022 11:53:52 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx2-2022; t=1655135632;
+        bh=MTBFqtYh8vFqi/JPaarIPLoyKboTzrz+Y7pswS/tquw=;
+        h=From:To:CC:Subject:Date:From;
+        b=TZ/zgaRe7hf0qksdwP7DMkjvez1ETKht2Y7kbgb20D0+HFNzonsQwi2KDvekQcpL9
+         tiulLR1yz071OQr/rIRExLGY3OXWpDUFRFv27wThhOPXu/FhJq+VjaDqEtNsc7iNtw
+         BGVmj8Ri89xTw6ZXFlxgAaeDi4IAzl//UK1OE310TgZuYewkCZcM9zFKIPmq7VFFwQ
+         GERwyRsiPYhre4+bXokU0+G7l7SiFz3oypwnTm4X+LJASTyTsg8QUeaPSJ4T8T6n1o
+         bTnMGfg4Xvhk9uXkKsPdF7GqG+ubn+y6IBb+IZ5FnVHzggqAdnB3trsTfr6MYuEtnM
+         AVaYCU781r+Pg==
+Received: from prgdevlinuxpatch01.amust.local (172.24.14.5) by
+ prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.9; Mon, 13 Jun 2022 17:53:49 +0200
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Subject: [PATCH 00/20] blksnap - creating non-persistent snapshots for backup
+Date:   Mon, 13 Jun 2022 18:52:53 +0300
+Message-ID: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     "moudy.ho" <moudy.ho@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220608144055.27562-1-chunkuang.hu@kernel.org>
- <55b84b36832b0da24c267d06a43b9db4ee345176.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] mailbox: mtk-cmdq: Remove proprietary cmdq_task_cb
-In-Reply-To: <55b84b36832b0da24c267d06a43b9db4ee345176.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.24.14.5]
+X-ClientProxiedBy: prgmbx01.amust.local (172.24.128.102) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29D2A50A536D7766
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all.
 
+I suggest the blksnap kernel module for consideration. It allows to create
+non-persistent snapshots of any block devices. The main purpose of such
+snapshots is to create a backup of block devices.
 
-On 10/06/2022 04:49, moudy.ho wrote:
-> On Wed, 2022-06-08 at 22:40 +0800, Chun-Kuang Hu wrote:
->> rx_callback is a standard mailbox callback mechanism and could cover
->> the
->> function of proprietary cmdq_task_cb, so use the standard one instead
->> of
->> the proprietary one. Client driver has changed to use standard
->> rx_callback, so remove proprietary cmdq_task_cb.
->>
->> Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> 
-> Depends on:
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/1650102868-26219-1-git-send-email-chunkuang.hu@kernel.org/
-> 
-> Tested-by: Moudy Ho <Moudy.Ho@mediatek.com>
-> 
+A snapshot is created simultaneously for several block devices, ensuring
+their mutual consistency in the backup.
 
-Thanks for helping by testing this, although:
+A change tracker is implemented in the module. It allows to determine
+which blocks were changed during the time between the last snapshot
+created and any of the previous snapshots of the same generation.
+This allows to implement incremental and differential backups.
 
-Your message makes me think that you didn't test against v5.19-rc1 nor against 
-v5.18 (!) based kernel but something older. Giving a Tested-by tag to an older 
-kernel with lots of out-of-tree patches on top can be critical as the kernel 
-evolves and changes pretty much over time.
-Upstream development should always be done against an upstream kernel, as 
-otherwise bugs in the upstream kernel could stay unnoticed and show up as 
-"regressions" later on, when you update your base kernel version.
+An arbitrary range of sectors on any block device can be used to store
+snapshot changes. The size of the storage for changes can be increased after the
+snapshot is created by adding new sector ranges. This allows to create a
+storage of differences in individual files on a file system that can occupy
+the entire space of a block device and increase the storage of differences
+as needed.
 
-Best regards,
-Matthias
+To create images of snapshots of block devices, the module stores blocks
+of the original block device that have been changed since the snapshot was
+taken. To do this, the module intercepts write requests and reads blocks
+that need to be overwritten. This algorithm guarantees the safety of the
+data of the original block device in case of overflow of the snapshot and
+even in case of unpredictable critical errors.
 
->> ---
->>   drivers/mailbox/mtk-cmdq-mailbox.c       | 11 -----------
->>   include/linux/mailbox/mtk-cmdq-mailbox.h | 10 ----------
->>   2 files changed, 21 deletions(-)
->>
->> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c
->> b/drivers/mailbox/mtk-cmdq-mailbox.c
->> index 2578e5aaa935..9465f9081515 100644
->> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
->> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
->> @@ -192,15 +192,10 @@ static bool cmdq_thread_is_in_wfe(struct
->> cmdq_thread *thread)
->>   
->>   static void cmdq_task_exec_done(struct cmdq_task *task, int sta)
->>   {
->> -	struct cmdq_task_cb *cb = &task->pkt->async_cb;
->>   	struct cmdq_cb_data data;
->>   
->>   	data.sta = sta;
->> -	data.data = cb->data;
->>   	data.pkt = task->pkt;
->> -	if (cb->cb)
->> -		cb->cb(data);
->> -
->>   	mbox_chan_received_data(task->thread->chan, &data);
->>   
->>   	list_del(&task->list_entry);
->> @@ -448,7 +443,6 @@ static void cmdq_mbox_shutdown(struct mbox_chan
->> *chan)
->>   static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long
->> timeout)
->>   {
->>   	struct cmdq_thread *thread = (struct cmdq_thread *)chan-
->>> con_priv;
->> -	struct cmdq_task_cb *cb;
->>   	struct cmdq_cb_data data;
->>   	struct cmdq *cmdq = dev_get_drvdata(chan->mbox->dev);
->>   	struct cmdq_task *task, *tmp;
->> @@ -465,13 +459,8 @@ static int cmdq_mbox_flush(struct mbox_chan
->> *chan, unsigned long timeout)
->>   
->>   	list_for_each_entry_safe(task, tmp, &thread->task_busy_list,
->>   				 list_entry) {
->> -		cb = &task->pkt->async_cb;
->>   		data.sta = -ECONNABORTED;
->> -		data.data = cb->data;
->>   		data.pkt = task->pkt;
->> -		if (cb->cb)
->> -			cb->cb(data);
->> -
->>   		mbox_chan_received_data(task->thread->chan, &data);
->>   		list_del(&task->list_entry);
->>   		kfree(task);
->> diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h
->> b/include/linux/mailbox/mtk-cmdq-mailbox.h
->> index 44365aab043c..a8f0070c7aa9 100644
->> --- a/include/linux/mailbox/mtk-cmdq-mailbox.h
->> +++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
->> @@ -67,24 +67,14 @@ enum cmdq_code {
->>   
->>   struct cmdq_cb_data {
->>   	int			sta;
->> -	void			*data;
->>   	struct cmdq_pkt		*pkt;
->>   };
->>   
->> -typedef void (*cmdq_async_flush_cb)(struct cmdq_cb_data data);
->> -
->> -struct cmdq_task_cb {
->> -	cmdq_async_flush_cb	cb;
->> -	void			*data;
->> -};
->> -
->>   struct cmdq_pkt {
->>   	void			*va_base;
->>   	dma_addr_t		pa_base;
->>   	size_t			cmd_buf_size; /* command occupied
->> size */
->>   	size_t			buf_size; /* real buffer size */
->> -	struct cmdq_task_cb	cb;
->> -	struct cmdq_task_cb	async_cb;
->>   	void			*cl;
->>   };
->>   
-> 
+To connect and disconnect the module to the block layer, the concept of a
+block device filter is introduced. Functions for connecting filters are
+added to the block layer and the ability to intercept I/O requests is
+provided.
+
+The blksnap module was created specifically for upstream based on the
+experience of operating the out-of-tree veeamsnap module, which is part of
+the Veeam Agent for Linux product. I am sure that the module will be in
+demand by other creators of backup tools and will save them from having to
+use their out-of-tree kernel modules.
+
+A tool, a library for working with blksnap, tests and some documentations
+can be found at www.github.com/veeam/blksnap.
+
+Sergei Shtepa (20):
+  block, blk_filter: enable block device filters
+  block, blksnap: header file of the module interface
+  block, blksnap: module management interface functions
+  block, blksnap: init() and exit() functions
+  block, blksnap: interaction with sysfs
+  block, blksnap: attaching and detaching the filter and handling a bios
+  block, blksnap: map of change block tracking
+  block, blksnap: big buffer in the form of an array of pages
+  block, blksnap: minimum data storage unit of the original block device
+  block, blksnap: buffer in memory for the minimum data storage unit
+  block, blksnap: functions and structures for performing block I/O
+    operations
+  block, blksnap: storage for storing difference blocks
+  block, blksnap: event queue from the difference storage
+  block, blksnap: owner of information about overwritten blocks of the
+    original block device
+  block, blksnap: snapshot image block device
+  block, blksnap: snapshot
+  block, blksnap: debugging mechanism for monitoring memory consumption
+  block, blksnap: Kconfig
+  block, blksnap: Makefile
+  block, blksnap: adds a blksnap to the kernel tree
+
+ block/Kconfig                          |   8 +
+ block/bdev.c                           | 129 +++++
+ block/blk-core.c                       |  88 ++++
+ drivers/block/Kconfig                  |   2 +
+ drivers/block/Makefile                 |   1 +
+ drivers/block/blksnap/Kconfig          | 101 ++++
+ drivers/block/blksnap/Makefile         |  20 +
+ drivers/block/blksnap/big_buffer.c     | 218 ++++++++
+ drivers/block/blksnap/big_buffer.h     |  27 +
+ drivers/block/blksnap/cbt_map.c        | 280 ++++++++++
+ drivers/block/blksnap/cbt_map.h        | 112 ++++
+ drivers/block/blksnap/chunk.c          | 352 +++++++++++++
+ drivers/block/blksnap/chunk.h          | 129 +++++
+ drivers/block/blksnap/ctrl.c           | 445 ++++++++++++++++
+ drivers/block/blksnap/ctrl.h           |   7 +
+ drivers/block/blksnap/diff_area.c      | 602 +++++++++++++++++++++
+ drivers/block/blksnap/diff_area.h      | 179 +++++++
+ drivers/block/blksnap/diff_buffer.c    | 146 ++++++
+ drivers/block/blksnap/diff_buffer.h    |  78 +++
+ drivers/block/blksnap/diff_io.c        | 204 ++++++++
+ drivers/block/blksnap/diff_io.h        | 122 +++++
+ drivers/block/blksnap/diff_storage.c   | 316 +++++++++++
+ drivers/block/blksnap/diff_storage.h   |  94 ++++
+ drivers/block/blksnap/event_queue.c    |  90 ++++
+ drivers/block/blksnap/event_queue.h    |  64 +++
+ drivers/block/blksnap/main.c           | 109 ++++
+ drivers/block/blksnap/memory_checker.c | 100 ++++
+ drivers/block/blksnap/memory_checker.h |  41 ++
+ drivers/block/blksnap/params.h         |  10 +
+ drivers/block/blksnap/snapimage.c      | 345 ++++++++++++
+ drivers/block/blksnap/snapimage.h      |  65 +++
+ drivers/block/blksnap/snapshot.c       | 671 ++++++++++++++++++++++++
+ drivers/block/blksnap/snapshot.h       |  76 +++
+ drivers/block/blksnap/sysfs.c          |  81 +++
+ drivers/block/blksnap/sysfs.h          |   5 +
+ drivers/block/blksnap/tracker.c        | 693 +++++++++++++++++++++++++
+ drivers/block/blksnap/tracker.h        |  71 +++
+ drivers/block/blksnap/version.h        |   8 +
+ include/linux/blk_snap.h               | 460 ++++++++++++++++
+ include/linux/blk_types.h              |  22 +
+ include/linux/blkdev.h                 |  81 +++
+ 41 files changed, 6652 insertions(+)
+ create mode 100644 drivers/block/blksnap/Kconfig
+ create mode 100644 drivers/block/blksnap/Makefile
+ create mode 100644 drivers/block/blksnap/big_buffer.c
+ create mode 100644 drivers/block/blksnap/big_buffer.h
+ create mode 100644 drivers/block/blksnap/cbt_map.c
+ create mode 100644 drivers/block/blksnap/cbt_map.h
+ create mode 100644 drivers/block/blksnap/chunk.c
+ create mode 100644 drivers/block/blksnap/chunk.h
+ create mode 100644 drivers/block/blksnap/ctrl.c
+ create mode 100644 drivers/block/blksnap/ctrl.h
+ create mode 100644 drivers/block/blksnap/diff_area.c
+ create mode 100644 drivers/block/blksnap/diff_area.h
+ create mode 100644 drivers/block/blksnap/diff_buffer.c
+ create mode 100644 drivers/block/blksnap/diff_buffer.h
+ create mode 100644 drivers/block/blksnap/diff_io.c
+ create mode 100644 drivers/block/blksnap/diff_io.h
+ create mode 100644 drivers/block/blksnap/diff_storage.c
+ create mode 100644 drivers/block/blksnap/diff_storage.h
+ create mode 100644 drivers/block/blksnap/event_queue.c
+ create mode 100644 drivers/block/blksnap/event_queue.h
+ create mode 100644 drivers/block/blksnap/main.c
+ create mode 100644 drivers/block/blksnap/memory_checker.c
+ create mode 100644 drivers/block/blksnap/memory_checker.h
+ create mode 100644 drivers/block/blksnap/params.h
+ create mode 100644 drivers/block/blksnap/snapimage.c
+ create mode 100644 drivers/block/blksnap/snapimage.h
+ create mode 100644 drivers/block/blksnap/snapshot.c
+ create mode 100644 drivers/block/blksnap/snapshot.h
+ create mode 100644 drivers/block/blksnap/sysfs.c
+ create mode 100644 drivers/block/blksnap/sysfs.h
+ create mode 100644 drivers/block/blksnap/tracker.c
+ create mode 100644 drivers/block/blksnap/tracker.h
+ create mode 100644 drivers/block/blksnap/version.h
+ create mode 100644 include/linux/blk_snap.h
+
+-- 
+2.20.1
+

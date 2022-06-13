@@ -2,97 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81A3549B4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28707549B47
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244501AbiFMSRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
+        id S230033AbiFMSRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244010AbiFMSRa (ORCPT
+        with ESMTP id S238429AbiFMSRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:17:30 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEAE37A18;
-        Mon, 13 Jun 2022 07:15:50 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-30c2f288f13so52886037b3.7;
-        Mon, 13 Jun 2022 07:15:50 -0700 (PDT)
+        Mon, 13 Jun 2022 14:17:01 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70402A27C;
+        Mon, 13 Jun 2022 07:15:37 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id m20so11418444ejj.10;
+        Mon, 13 Jun 2022 07:15:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YWdwEmU6cz3JA10QQ644kKHbnA8ElW/c1q4MJrDh3Ic=;
-        b=ixm/NKcovdWUOfA86VJFXawWospGoFsoennDCjLbyl9qD8s+Lls97D/aLHRDrRlxNG
-         JMXpQOT/teuMiiCEdz7Gi/mHQ4eelG8PcZ4O+OpycaHwnEzvErhtdoW01diQL+/EqP+T
-         eRyAT9hXp052vpsHjeMujgEVRCuky2059j3xCuycW2mXQsMx3Fl2wkqI2M33HSsSk/4t
-         DEPKAaWNVHRVMhw5nguPP3ukyFyZJqzM2Px+8LduhCFjaJ2mnW4MhLf22ypv0RTyWlW/
-         pE3LUHdAuynklAq4FwdnTuIuGElI2t0zoCWV5tHhxHFmuTgyNl/QQG2LF5Zyq4pP6PEf
-         LrAA==
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=WkY6YC/lq+OgUkV6SbT7L02is3iwBHoji0O6PsezbEM=;
+        b=A/CxupUz2JYW2TKhVixeYcs9exwjKCwCOqMjHjgSygAeb5arPOL/UsaLIkfXyyovsp
+         DwMJlxVOrxmGv5S4qlkbRZKZPhW+tWHMoYiiqdcdVHf3/Iovay5N/IKd16o5RTSaKGoo
+         Jkmgkg83Ib1+rQzR30SbUSo8EM4zP76tKI/Vefzn/qEBnkpxhW2ftInhjS3qi+Jsn48Z
+         G9Dik31zGIIv8/EdAT1DHCAsNkFONfchVE1E59nr+t4rdqcd+dSCiJncQ+Eg149nppRi
+         xTrAxURHbN0O3rzw6CK8TSlhTCHbrvUnsm8AM1ZbNDpQr0jsxqCyaQgrB25m97RdirSK
+         wrHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YWdwEmU6cz3JA10QQ644kKHbnA8ElW/c1q4MJrDh3Ic=;
-        b=fJNpm3diICmD2i3X9Q7xMrcKzOPHb067jikLHLyHL+8ukp6H6xicSrMzYa+RQrtK8o
-         GzRynpD+sFhBiihzwWqvNwR1wRZ5PgHibgqKOW9S5YH33m1EWrRE7ePEmArIb93Q/V68
-         vNZERtVBS44/QU6cVn1agHxbI4PT6QAIhh0Skxchza/oBmYkI+tb6JAGV1A9ID4xLKJa
-         /9ft0vEKdTY7HXH/YopCEdJrSo4lXpjx/UGt8+kYOdlRbMHQ4NhulkDttzu4paIl/kWF
-         nyVUew8NOr73LCYflAp9JjqHzfNJ6uVFNL5KJ+31om0mdfVRtt+aDzgVLA58pZGqy7q1
-         G1QA==
-X-Gm-Message-State: AOAM533QHsCqlsRX4S7QflYjHGfbooD+EZLgkzStTkr/pRp58rC4adnC
-        MnIgIKM3bEsMeHfSlS8vyncJlJMg73/CysHozJvY4V9rw4PGkQ==
-X-Google-Smtp-Source: ABdhPJxYOhmW3DAPX2IL/CcItOqjV2ZWF6ro4pUuLDKaJBi+TkZZxSd0bFjb2nN90fRkk42kyMWulXwUGY6IK8lA+Rw=
-X-Received: by 2002:a81:4885:0:b0:30c:4632:5722 with SMTP id
- v127-20020a814885000000b0030c46325722mr65218118ywa.16.1655129749905; Mon, 13
- Jun 2022 07:15:49 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WkY6YC/lq+OgUkV6SbT7L02is3iwBHoji0O6PsezbEM=;
+        b=n+urkEzTxljUIuAHofVujttzmwXm0tXSG4RZ+7tGh4fhv7r6o8HhVlF3ahxs12A5GX
+         uJKbH2LPdszXmW7loLvwVP4ZulizaWBUSmijiHQxeKr6eVrHk24Dq2z/MGAfAGWMl9qs
+         czfP2qQdkDBRgxWFKqBmHERvbMG6Xk9I2+IxFiHSynVEqvj19PHHOjgJ17TDMC+5ge2D
+         stRlX838Awa6+rKUEANIRjZ6U+L/UIyrGAErNTJfhFY7r1TYziOCJlzLlgkQaT/8xbSL
+         jqoZxfeBv4ibXn4h9bNUH7ARZV4SOOTvVGBzXsrLcy3lqHQ0MtIGp3WDBZAZMkaGCDQ+
+         Z+iA==
+X-Gm-Message-State: AOAM533jokuQX+vscCPV0DMWE7m+kBOD+rUFkB1sU9haU6CmHyeBmhrI
+        /9A0K09aV/5qUf8dndMQdDw=
+X-Google-Smtp-Source: ABdhPJwWib14oqzfqvcsAH0wLXOfpeOSyAk0CLRuFBAN3USZ/7s60hA59eOGyM6r1Dtydm6AzGpTbQ==
+X-Received: by 2002:a17:906:730f:b0:711:db1a:fdb0 with SMTP id di15-20020a170906730f00b00711db1afdb0mr115357ejc.54.1655129736364;
+        Mon, 13 Jun 2022 07:15:36 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id jt18-20020a170906ca1200b00711edab7622sm3896839ejb.40.2022.06.13.07.15.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 07:15:35 -0700 (PDT)
+Message-ID: <ad084c13-55fc-8506-f768-49a0c6ae4f7f@gmail.com>
+Date:   Mon, 13 Jun 2022 16:15:34 +0200
 MIME-Version: 1.0
-References: <20220316200633.28974-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMSo37US03pKhPR=a1sJnWMF6L+WDvhWz469G=+0XY2WX-p=bg@mail.gmail.com>
- <CA+V-a8t2w14bJVCiiHQq8bwgetw5za1-t_OSfyr6Cwo4eZOt2Q@mail.gmail.com> <CAMSo37V4ye8wb_ctKQO0QE6QCJXUEaPC1-27911zCcXHN-+C2Q@mail.gmail.com>
-In-Reply-To: <CAMSo37V4ye8wb_ctKQO0QE6QCJXUEaPC1-27911zCcXHN-+C2Q@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 13 Jun 2022 15:15:23 +0100
-Message-ID: <CA+V-a8uL6_Ac33=romJE=AyVHR49jmwow=gtiFWTRbq_7UHJTg@mail.gmail.com>
-Subject: Re: [RFC PATCH] of/platform: Drop static setup of IRQ resource from
- DT core
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH V3 1/2] mtd: allow getting MTD device associated with a
+ specific DT node
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tom Rini <trini@konsulko.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220611204651.19947-1-zajec5@gmail.com>
+ <20220613160411.48b07515@xps-13>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220613160411.48b07515@xps-13>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 1:41 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
->
-> Hi, Lad
->
-> Thanks a lot for the links and suggestions!
-> Finally I resolved the problem with the call of
-> platform_get_irq_byname and irq_get_trigger_type.
->
-> Btw, I just have a question about  the of_irq_to_resource function.
-> At the beginning I tried to use platform_get_irq and of_irq_to_resource
-> to get the irq name and flags information, but it seems of_irq_to_resource
-> does not work as expected, maybe I called incorrectly somewhere,
-> here I just want to ask, do you think that if of_irq_to_resource still
-> could be used to
-> get the resource with the irq returned from platform_get_irq?
->
->
-Yes of_irq_to_resource() can be used to get the irq number.
+On 13.06.2022 16:04, Miquel Raynal wrote:
+>> @@ -1154,6 +1154,34 @@ int __get_mtd_device(struct mtd_info *mtd)
+>>   }
+>>   EXPORT_SYMBOL_GPL(__get_mtd_device);
+>>   
+>> +/**
+>> + * of_get_mtd_device_by_node - obtain an MTD device associated with a given node
+>> + *
+>> + * @np: device tree node
+>> + */
+>> +struct mtd_info *of_get_mtd_device_by_node(struct device_node *np)
+> 
+> Shall we try to use a more of-agnostic syntax or is it too complex here?
 
-Cheers,
-Prabhakar
+I need some extra hint, please. This is how many similar functions look
+like:
+
+$ grep -E -r "(get|find).*_by_node" ./include/*
+./include/drm/drm_mipi_dsi.h:struct mipi_dsi_host *of_find_mipi_dsi_host_by_node(struct device_node *node);
+./include/drm/drm_mipi_dsi.h:struct mipi_dsi_device *of_find_mipi_dsi_device_by_node(struct device_node *np);
+./include/linux/usb/phy.h:extern struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
+./include/linux/usb/phy.h:static inline struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
+./include/linux/extcon.h:struct extcon_dev *extcon_find_edev_by_node(struct device_node *node);
+./include/linux/extcon.h:static inline struct extcon_dev *extcon_find_edev_by_node(struct device_node *node)
+./include/linux/of_net.h:extern struct net_device *of_find_net_device_by_node(struct device_node *np);
+./include/linux/of_net.h:static inline struct net_device *of_find_net_device_by_node(struct device_node *np)
+./include/linux/devfreq.h:struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node);
+./include/linux/devfreq.h:static inline struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)
+./include/linux/of_platform.h:extern struct platform_device *of_find_device_by_node(struct device_node *np);
+./include/linux/of_platform.h:static inline struct platform_device *of_find_device_by_node(struct device_node *np)
+./include/linux/backlight.h:struct backlight_device *of_find_backlight_by_node(struct device_node *node);
+./include/linux/backlight.h:of_find_backlight_by_node(struct device_node *node)
+./include/linux/i2c.h:struct i2c_client *of_find_i2c_device_by_node(struct device_node *node);
+./include/linux/i2c.h:struct i2c_adapter *of_find_i2c_adapter_by_node(struct device_node *node);
+./include/linux/i2c.h:struct i2c_adapter *of_get_i2c_adapter_by_node(struct device_node *node);
+./include/linux/i2c.h:static inline struct i2c_client *of_find_i2c_device_by_node(struct device_node *node)
+./include/linux/i2c.h:static inline struct i2c_adapter *of_find_i2c_adapter_by_node(struct device_node *node)
+./include/linux/i2c.h:static inline struct i2c_adapter *of_get_i2c_adapter_by_node(struct device_node *node)
+
+
+>> +{
+>> +	struct mtd_info *mtd = NULL;
+>> +	struct mtd_info *tmp;
+>> +	int err;
+>> +
+>> +	mutex_lock(&mtd_table_mutex);
+>> +
+>> +	err = -ENODEV;
+>> +	mtd_for_each_device(tmp) {
+>> +		if (mtd_get_of_node(tmp) == np) {
+>> +			mtd = tmp;
+>> +			err = __get_mtd_device(mtd);
+>> +			break;
+>> +		}
+>> +	}
+>> +
+>> +	mutex_unlock(&mtd_table_mutex);
+>> +
+>> +	return err ? ERR_PTR(err) : mtd;
+>> +}
+>> +EXPORT_SYMBOL_GPL(of_get_mtd_device_by_node);
+>> +
+>>   /**
+>>    *	get_mtd_device_nm - obtain a validated handle for an MTD device by
+>>    *	device name
+

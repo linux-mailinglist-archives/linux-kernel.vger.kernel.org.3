@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2C9548AB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF36F5494D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358873AbiFMNIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        id S1356926AbiFMNBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356122AbiFMMzR (ORCPT
+        with ESMTP id S1358140AbiFMMzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2DFB850;
-        Mon, 13 Jun 2022 04:15:40 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A076763B7;
+        Mon, 13 Jun 2022 04:14:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B34860B6B;
-        Mon, 13 Jun 2022 11:15:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BBCC3411E;
-        Mon, 13 Jun 2022 11:15:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A773B80EA8;
+        Mon, 13 Jun 2022 11:14:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B53B0C34114;
+        Mon, 13 Jun 2022 11:14:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118939;
-        bh=TGB8fvzfl3YhMocGqLbDYunFAdllXXLShxgvHAoCEIk=;
+        s=korg; t=1655118865;
+        bh=PCCk4JNQgklISFIHqCeoOkSALeamK3gJwPOwyQM9VkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2UWtuJOIwEoCDkf3NOw5hQDkL3XMzufJDx4G0U1vVNi3SvIegXE5y+uSZZvWV3nq5
-         rF60nfqyhf//cnfP1STUq4+yx9oWWtDj2h1vunp3G4BfoTQdDmaqUIg5DQm/LSEx8L
-         mWf0a+WFYA9ILHvwDwKyEyyCmKR7dzpGFoBVcQ2k=
+        b=XwYm9EYipDjYyIsJt0FFrGWkrjkBFqieDlkWbNw3zmDew6/nMeiJeJXdegdexs3Ey
+         9hdjhecTHtxpvwauta/WsjT7vsnxjljRmhiK+XpklAlJ+6uD/0WilfP4/3szEUfH3G
+         iUUX7cfJuJuFGW6eFrtJrrUFYO/0i1FLklzU/Yw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+        stable@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 055/247] serial: digicolor-usart: Dont allow CS5-6
-Date:   Mon, 13 Jun 2022 12:09:17 +0200
-Message-Id: <20220613094924.624580201@linuxfoundation.org>
+Subject: [PATCH 5.15 056/247] serial: rda-uart: Dont allow CS5-6
+Date:   Mon, 13 Jun 2022 12:09:18 +0200
+Message-Id: <20220613094924.655940983@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
 References: <20220613094922.843438024@linuxfoundation.org>
@@ -57,39 +57,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit fd63031b8c0763addcecdefe0e0c59d49646204e ]
+[ Upstream commit 098333a9c7d12bb3ce44c82f08b4d810c44d31b0 ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized to CS8 in
-the default: block.
+Only CS7 and CS8 are supported but CSIZE is not sanitized after
+fallthrough from CS5 or CS6 to CS7.
 
 Set CSIZE correctly so that userspace knows the effective value.
 Incorrect CSIZE also results in miscalculation of the frame bits in
 tty_get_char_size() or in its predecessor where the roughly the same
 code is directly within uart_update_timeout().
 
-Fixes: 5930cb3511df (serial: driver for Conexant Digicolor USART)
-Acked-by: Baruch Siach <baruch@tkos.co.il>
+Fixes: c10b13325ced (tty: serial: Add RDA8810PL UART driver)
+Cc: Manivannan Sadhasivam <mani@kernel.org>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-3-ilpo.jarvinen@linux.intel.com
+Link: https://lore.kernel.org/r/20220519081808.3776-4-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/digicolor-usart.c | 2 ++
+ drivers/tty/serial/rda-uart.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
-index c7f81aa1ce91..5fea9bf86e85 100644
---- a/drivers/tty/serial/digicolor-usart.c
-+++ b/drivers/tty/serial/digicolor-usart.c
-@@ -309,6 +309,8 @@ static void digicolor_uart_set_termios(struct uart_port *port,
- 	case CS8:
- 	default:
- 		config |= UA_CONFIG_CHAR_LEN;
+diff --git a/drivers/tty/serial/rda-uart.c b/drivers/tty/serial/rda-uart.c
+index d550d8fa2fab..a8fe1c3ebcd9 100644
+--- a/drivers/tty/serial/rda-uart.c
++++ b/drivers/tty/serial/rda-uart.c
+@@ -262,6 +262,8 @@ static void rda_uart_set_termios(struct uart_port *port,
+ 		fallthrough;
+ 	case CS7:
+ 		ctrl &= ~RDA_UART_DBITS_8;
 +		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
++		termios->c_cflag |= CS7;
  		break;
- 	}
- 
+ 	default:
+ 		ctrl |= RDA_UART_DBITS_8;
 -- 
 2.35.1
 

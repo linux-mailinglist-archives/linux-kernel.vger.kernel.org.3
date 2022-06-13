@@ -2,219 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE68454806D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABB1548065
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239116AbiFMHRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 03:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S239171AbiFMHRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 03:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239129AbiFMHQ5 (ORCPT
+        with ESMTP id S239158AbiFMHRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:16:57 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D81ADAB;
-        Mon, 13 Jun 2022 00:16:52 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LM2rZ4tCvzgYpR;
-        Mon, 13 Jun 2022 15:14:54 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 15:16:49 +0800
-Subject: Re: [PATCH -next] ext4: Fix warning in ext4_da_release_space
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-References: <20220520025540.3189247-1-yebin10@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <62A6E461.9060209@huawei.com>
-Date:   Mon, 13 Jun 2022 15:16:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Mon, 13 Jun 2022 03:17:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DA71AD95
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:17:34 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o0eKC-00041a-Sm; Mon, 13 Jun 2022 09:17:24 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EDEF5938D8;
+        Mon, 13 Jun 2022 07:17:22 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 09:17:22 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v3 07/13] can: slcan: set bitrate by CAN device driver API
+Message-ID: <20220613071722.agougqdrxpwjk2ox@pengutronix.de>
+References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
+ <20220612213927.3004444-8-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-In-Reply-To: <20220520025540.3189247-1-yebin10@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qztqhaetrzuoaczy"
+Content-Disposition: inline
+In-Reply-To: <20220612213927.3004444-8-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping...
 
-On 2022/5/20 10:55, Ye Bin wrote:
-> We got issue as follows:
-> WARNING: CPU: 2 PID: 1936 at fs/ext4/inode.c:1511 ext4_da_release_space+0x1b9/0x266
-> Modules linked in:
-> CPU: 2 PID: 1936 Comm: dd Not tainted 5.10.0+ #344
-> RIP: 0010:ext4_da_release_space+0x1b9/0x266
-> RSP: 0018:ffff888127307848 EFLAGS: 00010292
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffffffff843f67cc
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffed1024e60ed9
-> RBP: ffff888124dc8140 R08: 0000000000000083 R09: ffffed1075da6d23
-> R10: ffff8883aed36917 R11: ffffed1075da6d22 R12: ffff888124dc83f0
-> R13: ffff888124dc844c R14: ffff888124dc8168 R15: 000000000000000c
-> FS:  00007f6b7247d740(0000) GS:ffff8883aed00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffc1a0b7dd8 CR3: 00000001065ce000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   ext4_es_remove_extent+0x187/0x230
->   mpage_release_unused_pages+0x3af/0x470
->   ext4_writepages+0xb9b/0x1160
->   do_writepages+0xbb/0x1e0
->   __filemap_fdatawrite_range+0x1b1/0x1f0
->   file_write_and_wait_range+0x80/0xe0
->   ext4_sync_file+0x13d/0x800
->   vfs_fsync_range+0x75/0x140
->   do_fsync+0x4d/0x90
->   __x64_sys_fsync+0x1d/0x30
->   do_syscall_64+0x33/0x40
->   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> Above issue may happens as follows:
-> 	process1                        process2
-> ext4_da_write_begin
->    ext4_da_reserve_space
->      ext4_es_insert_delayed_block[1/1]
->                                      ext4_da_write_begin
-> 				      ext4_es_insert_delayed_block[0/1]
-> ext4_writepages
->    ****Delayed block allocation failed****
->    mpage_release_unused_pages
->      ext4_es_remove_extent[1/1]
->        ext4_da_release_space [reserved 0]
->
-> ext4_da_write_begin
->    ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)
->     ->As there exist [0, 1] extent, so will return true
->                                     ext4_writepages
-> 				   ****Delayed block allocation failed****
->                                       mpage_release_unused_pages
-> 				       ext4_es_remove_extent[0/1]
-> 				         ext4_da_release_space [reserved 1]
-> 					   ei->i_reserved_data_blocks [1->0]
->
->    ext4_es_insert_delayed_block[1/1]
->
-> ext4_writepages
->    ****Delayed block allocation failed****
->    mpage_release_unused_pages
->    ext4_es_remove_extent[1/1]
->     ext4_da_release_space [reserved 1]
->      ei->i_reserved_data_blocks[0, -1]
->      ->As ei->i_reserved_data_blocks already is zero but to_free is 1,
->      will trigger warning.
->
-> To solve above issue, introduce i_clu_lock to protect insert delayed
-> block and remove block under cluster delay allocate mode.
->
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+--qztqhaetrzuoaczy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 12.06.2022 23:39:21, Dario Binacchi wrote:
+> It allows to set the bitrate via ip tool, as it happens for the other
+> CAN device drivers. It still remains possible to set the bitrate via
+> slcand or slcan_attach utilities. In case the ip tool is used, the
+> driver will send the serial command to the adapter.
+>=20
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>=20
 > ---
->   fs/ext4/ext4.h           |  3 +++
->   fs/ext4/extents_status.c |  5 +++++
->   fs/ext4/inode.c          | 11 +++++++++--
->   fs/ext4/super.c          |  1 +
->   4 files changed, 18 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index bcd3b9bf8069..47c88ac4d4a8 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -1169,6 +1169,9 @@ struct ext4_inode_info {
->   	__u32 i_csum_seed;
->   
->   	kprojid_t i_projid;
+>=20
+> Changes in v3:
+> - Remove the slc_do_set_bittiming().
+> - Set the bitrate in the ndo_open().
+> - Replace -1UL with -1U in setting a fake value for the bitrate.
+>=20
+> Changes in v2:
+> - Use the CAN framework support for setting fixed bit rates.
+>=20
+>  drivers/net/can/slcan.c | 39 ++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 36 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+> index 4639a63c3af8..be3f7e5c685b 100644
+> --- a/drivers/net/can/slcan.c
+> +++ b/drivers/net/can/slcan.c
+> @@ -105,6 +105,11 @@ struct slcan {
+>  static struct net_device **slcan_devs;
+>  static DEFINE_SPINLOCK(slcan_lock);
+> =20
+> +static const u32 slcan_bitrate_const[] =3D {
+> +	10000, 20000, 50000, 100000, 125000,
+> +	250000, 500000, 800000, 1000000
+> +};
 > +
-> +	/* Protect concurrent add cluster delayed block and remove block */
-> +	struct mutex i_clu_lock;
->   };
->   
->   /*
-> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> index 9a3a8996aacf..dd679014db98 100644
-> --- a/fs/ext4/extents_status.c
-> +++ b/fs/ext4/extents_status.c
-> @@ -1433,6 +1433,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->   int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->   			  ext4_lblk_t len)
->   {
-> +	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
->   	ext4_lblk_t end;
->   	int err = 0;
->   	int reserved = 0;
-> @@ -1455,9 +1456,13 @@ int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->   	 * so that we are sure __es_shrink() is done with the inode before it
->   	 * is reclaimed.
->   	 */
-> +	if (sbi->s_cluster_ratio != 1)
-> +		mutex_lock(&EXT4_I(inode)->i_clu_lock);
->   	write_lock(&EXT4_I(inode)->i_es_lock);
->   	err = __es_remove_extent(inode, lblk, end, &reserved);
->   	write_unlock(&EXT4_I(inode)->i_es_lock);
-> +	if (sbi->s_cluster_ratio != 1)
-> +		mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->   	ext4_es_print_tree(inode);
->   	ext4_da_release_space(inode, reserved);
->   	return err;
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 01c9e4f743ba..1109d77ad60b 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -1649,17 +1649,22 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
->   			goto errout;
->   		reserved = true;
->   	} else {   /* bigalloc */
-> +		mutex_lock(&EXT4_I(inode)->i_clu_lock);
->   		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
->   			if (!ext4_es_scan_clu(inode,
->   					      &ext4_es_is_mapped, lblk)) {
->   				ret = ext4_clu_mapped(inode,
->   						      EXT4_B2C(sbi, lblk));
-> -				if (ret < 0)
-> +				if (ret < 0) {
-> +					mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->   					goto errout;
-> +				}
->   				if (ret == 0) {
->   					ret = ext4_da_reserve_space(inode);
-> -					if (ret != 0)   /* ENOSPC */
-> +					if (ret != 0) {   /* ENOSPC */
-> +						mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->   						goto errout;
-> +					}
->   					reserved = true;
->   				} else {
->   					allocated = true;
-> @@ -1671,6 +1676,8 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
->   	}
->   
->   	ret = ext4_es_insert_delayed_block(inode, lblk, allocated);
-> +	if (sbi->s_cluster_ratio != 1)
-> +		mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->   	if (ret && reserved)
->   		ext4_da_release_space(inode, 1);
->   
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index c5021ca0a28a..aa6f2a68bf41 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1347,6 +1347,7 @@ static struct inode *ext4_alloc_inode(struct super_block *sb)
->   	INIT_WORK(&ei->i_rsv_conversion_work, ext4_end_io_rsv_work);
->   	ext4_fc_init_inode(&ei->vfs_inode);
->   	mutex_init(&ei->i_fc_lock);
-> +	mutex_init(&ei->i_clu_lock);
->   	return &ei->vfs_inode;
->   }
->   
+>   /**********************************************************************=
+**
+>    *			SLCAN ENCAPSULATION FORMAT			 *
+>    **********************************************************************=
+**/
+> @@ -440,6 +445,7 @@ static int slc_close(struct net_device *dev)
+>  	netif_stop_queue(dev);
+>  	close_candev(dev);
+>  	sl->can.state =3D CAN_STATE_STOPPED;
+> +	sl->can.bittiming.bitrate =3D 0;
 
+If the bitrate is configured, please keep that value.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--qztqhaetrzuoaczy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKm5H8ACgkQrX5LkNig
+011Txgf/Z+krb/OgFsK0a5I9hXIEgAOooMeXJd1CEXtskwHF9fVY59+JxpG7gE1o
+Y6fc+rRJKEFCitOsa+Y65LmQirJKhHFf9kXj3RFS5THLT9XLh64q+d9xRvQ2kgik
+YfjRtFoLGCXgBvJavzKuclVLoIgn3ptf82q31sawHHMbanZDJB3ZzRgwWcHnsD60
+KJVRWAnrdXrpS+scLst0WL2PFIPkdpOayxD9BhsfqMdSXwzdgptApZlUBINwCVPT
+pv1HH8FI1t7JvMF70U6kUYQ7tEysoPffnWO/LM0OdC6eOeai/Knt4mBQJViKDXiG
+H0j1P9D++18cYSg8D0DexqVT1LbGwQ==
+=MkiP
+-----END PGP SIGNATURE-----
+
+--qztqhaetrzuoaczy--

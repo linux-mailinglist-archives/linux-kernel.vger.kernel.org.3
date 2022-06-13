@@ -2,45 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01EE549324
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5C6548FD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358239AbiFMMDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
+        id S1379795AbiFMNpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358206AbiFMMCE (ORCPT
+        with ESMTP id S1379209AbiFMNkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:02:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4607525281;
-        Mon, 13 Jun 2022 03:57:11 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4A8BF76;
+        Mon, 13 Jun 2022 04:30:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7067960F9A;
-        Mon, 13 Jun 2022 10:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82416C34114;
-        Mon, 13 Jun 2022 10:57:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD3E61236;
+        Mon, 13 Jun 2022 11:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6A3C34114;
+        Mon, 13 Jun 2022 11:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117829;
-        bh=WyNvYaeIaFn1e3T9TbMqhmV83evlF4BHXtllGDXuot8=;
+        s=korg; t=1655119805;
+        bh=EkK8Cyw/3AmtJUTRATVTiQo+YL8K0C8A+Mz2dBKdb/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lYi85ezFOQMPEgMrJUdzPfst5Qu+Da2ddHL23rLHhrc9D3SjC4YaXgLxtHikO3FZY
-         Z6F1/iHBtbgWWeLqKm43e92Py0L24mHOZ3o84HFzVbYIByzxpYFYtN84br4KSd4atq
-         I2+O38X3Ylw9FnoNUiJxC/Wqy3tV92nkyFADRSx8=
+        b=nRWPb0L3vEG+wGeeK9aszJXkzkRmqbcIBHBIj1mCfPGXv22BYNCamhWSWVyUiXdwc
+         At8DOiRq2AN4XrForFhbaaKKIq/1bY4ciU13nowxoRBocJte5jbAW9Tuztmzj2kOZc
+         +fNgNNDjhDw/Nd/kFL5b2YIsNC1CPsppa5RFe4z8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 4.19 147/287] ext4: fix use-after-free in ext4_rename_dir_prepare
+        stable@vger.kernel.org, John Stultz <jstultz@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 146/339] driver core: Fix wait_for_device_probe() & deferred_probe_timeout interaction
 Date:   Mon, 13 Jun 2022 12:09:31 +0200
-Message-Id: <20220613094928.333857721@linuxfoundation.org>
+Message-Id: <20220613094931.111416541@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,125 +75,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Saravana Kannan <saravanak@google.com>
 
-commit 0be698ecbe4471fcad80e81ec6a05001421041b3 upstream.
+[ Upstream commit 5ee76c256e928455212ab759c51d198fedbe7523 ]
 
-We got issue as follows:
-EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
-ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
-ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
-ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
-==================================================================
-BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
-Read of size 4 at addr ffff88810beee6ae by task rep/1895
+Mounting NFS rootfs was timing out when deferred_probe_timeout was
+non-zero [1].  This was because ip_auto_config() initcall times out
+waiting for the network interfaces to show up when
+deferred_probe_timeout was non-zero. While ip_auto_config() calls
+wait_for_device_probe() to make sure any currently running deferred
+probe work or asynchronous probe finishes, that wasn't sufficient to
+account for devices being deferred until deferred_probe_timeout.
 
-CPU: 13 PID: 1895 Comm: rep Not tainted 5.10.0+ #241
-Call Trace:
- dump_stack+0xbe/0xf9
- print_address_description.constprop.0+0x1e/0x220
- kasan_report.cold+0x37/0x7f
- ext4_rename_dir_prepare+0x152/0x220
- ext4_rename+0xf44/0x1ad0
- ext4_rename2+0x11c/0x170
- vfs_rename+0xa84/0x1440
- do_renameat2+0x683/0x8f0
- __x64_sys_renameat+0x53/0x60
- do_syscall_64+0x33/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7f45a6fc41c9
-RSP: 002b:00007ffc5a470218 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f45a6fc41c9
-RDX: 0000000000000005 RSI: 0000000020000180 RDI: 0000000000000005
-RBP: 00007ffc5a470240 R08: 00007ffc5a470160 R09: 0000000020000080
-R10: 00000000200001c0 R11: 0000000000000246 R12: 0000000000400bb0
-R13: 00007ffc5a470320 R14: 0000000000000000 R15: 0000000000000000
+Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
+until the deferred_probe_timeout fires") tried to fix that by making
+sure wait_for_device_probe() waits for deferred_probe_timeout to expire
+before returning.
 
-The buggy address belongs to the page:
-page:00000000440015ce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x10beee
-flags: 0x200000000000000()
-raw: 0200000000000000 ffffea00043ff4c8 ffffea0004325608 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+However, if wait_for_device_probe() is called from the kernel_init()
+context:
 
-Memory state around the buggy address:
- ffff88810beee580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88810beee600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff88810beee680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                  ^
- ffff88810beee700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88810beee780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-Disabling lock debugging due to kernel taint
-ext4_rename_dir_prepare: [2] parent_de->inode=3537895424
-ext4_rename_dir_prepare: [3] dir=0xffff888124170140
-ext4_rename_dir_prepare: [4] ino=2
-ext4_rename_dir_prepare: ent->dir->i_ino=2 parent=-757071872
+- Before deferred_probe_initcall() [2], it causes the boot process to
+  hang due to a deadlock.
 
-Reason is first directory entry which 'rec_len' is 34478, then will get illegal
-parent entry. Now, we do not check directory entry after read directory block
-in 'ext4_get_first_dir_block'.
-To solve this issue, check directory entry in 'ext4_get_first_dir_block'.
+- After deferred_probe_initcall() [3], it blocks kernel_init() from
+  continuing till deferred_probe_timeout expires and beats the point of
+  deferred_probe_timeout that's trying to wait for userspace to load
+  modules.
 
-[ Trigger an ext4_error() instead of just warning if the directory is
-  missing a '.' or '..' entry.   Also make sure we return an error code
-  if the file system is corrupted.  -TYT ]
+Neither of this is good. So revert the changes to
+wait_for_device_probe().
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220414025223.4113128-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
+[1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
+[2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
+[3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
+
+Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
+Cc: John Stultz <jstultz@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Basil Eljuse <Basil.Eljuse@arm.com>
+Cc: Ferry Toth <fntoth@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Anders Roxell <anders.roxell@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: John Stultz <jstultz@google.com>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/namei.c |   30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
+ drivers/base/dd.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -3333,6 +3333,9 @@ static struct buffer_head *ext4_get_firs
- 	struct buffer_head *bh;
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index ed02a529a896..d6980f33afc4 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -257,7 +257,6 @@ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
  
- 	if (!ext4_has_inline_data(inode)) {
-+		struct ext4_dir_entry_2 *de;
-+		unsigned int offset;
-+
- 		/* The first directory block must not be a hole, so
- 		 * treat it as DIRENT_HTREE
- 		 */
-@@ -3341,9 +3344,30 @@ static struct buffer_head *ext4_get_firs
- 			*retval = PTR_ERR(bh);
- 			return NULL;
- 		}
--		*parent_de = ext4_next_entry(
--					(struct ext4_dir_entry_2 *)bh->b_data,
--					inode->i_sb->s_blocksize);
-+
-+		de = (struct ext4_dir_entry_2 *) bh->b_data;
-+		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
-+					 bh->b_size, 0) ||
-+		    le32_to_cpu(de->inode) != inode->i_ino ||
-+		    strcmp(".", de->name)) {
-+			EXT4_ERROR_INODE(inode, "directory missing '.'");
-+			brelse(bh);
-+			*retval = -EFSCORRUPTED;
-+			return NULL;
-+		}
-+		offset = ext4_rec_len_from_disk(de->rec_len,
-+						inode->i_sb->s_blocksize);
-+		de = ext4_next_entry(de, inode->i_sb->s_blocksize);
-+		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
-+					 bh->b_size, offset) ||
-+		    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
-+			EXT4_ERROR_INODE(inode, "directory missing '..'");
-+			brelse(bh);
-+			*retval = -EFSCORRUPTED;
-+			return NULL;
-+		}
-+		*parent_de = de;
-+
- 		return bh;
- 	}
+ int driver_deferred_probe_timeout;
+ EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
+-static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
  
+ static int __init deferred_probe_timeout_setup(char *str)
+ {
+@@ -312,7 +311,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
+ 	list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
+ 		dev_info(p->device, "deferred probe pending\n");
+ 	mutex_unlock(&deferred_probe_mutex);
+-	wake_up_all(&probe_timeout_waitqueue);
+ }
+ static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
+ 
+@@ -716,9 +714,6 @@ int driver_probe_done(void)
+  */
+ void wait_for_device_probe(void)
+ {
+-	/* wait for probe timeout */
+-	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
+-
+ 	/* wait for the deferred probe workqueue to finish */
+ 	flush_work(&deferred_probe_work);
+ 
+-- 
+2.35.1
+
 
 

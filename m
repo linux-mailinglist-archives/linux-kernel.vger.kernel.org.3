@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7459C549BB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15987549BB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243590AbiFMSiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
+        id S1343558AbiFMSiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343558AbiFMShy (ORCPT
+        with ESMTP id S243192AbiFMShz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:37:54 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6550D12C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:39:12 -0700 (PDT)
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CA0F93FBEC
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1655134750;
-        bh=qIyjHtlgmZ2mGqkFBQdbyeKZViSqALiGs38sp6wvC98=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=NWN6xl1rQc3IeMce4T2C756RdXCnpI1wKrY5L8VKAvWYMxLujkqawnukKEnyt1my3
-         PlpPqe8rew0yUFUlmBh0aEuY2RA3WzPwx2aGyNtF8G3FqU31jE0Hi5in50rae8OJZc
-         ISbwryEsg6LZoidnoUz8GA2pbNylVk6sy3f63FiqLJWy+Y1ZowcVyx5I900y8CTZLi
-         7AN/yZdQ1qMD85BxpHC1RUiqfy3LWy8EetociBl8ho+cR/7XUDyLy98UVcvl37WNUU
-         zOjCnwlWNXCwxSSa53ucXz880GTB/XKNH7tr5GqeW8/VA+51ElXKvt9ov9rra+oLh8
-         lB0SbW5ZZmBNw==
-Received: by mail-il1-f198.google.com with SMTP id a2-20020a923302000000b002d1ad5053feso4795442ilf.17
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:39:10 -0700 (PDT)
+        Mon, 13 Jun 2022 14:37:55 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE262130
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:40:11 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-f2a4c51c45so8865032fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BGAIi+/Ft53DX8CUrCtDAbQTz9ZPUzipX2JK4m40Fyc=;
+        b=RPluaBvzdSvJ5njD15mxkw0ob6qmuyOBJo1hMaQ2AFBjUq++UqkyqjMZzoFpoAhmIr
+         ec01sWqSFKsJB6FZgwGP7drgPr4gYSWF10aZZIvHqpTM4uKuRPArOtlTZ65e2oWlcIJc
+         0gAKcSwnh35acodyjWgGJzwhHUz3FRGrcu+tA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qIyjHtlgmZ2mGqkFBQdbyeKZViSqALiGs38sp6wvC98=;
-        b=3A2oqwtceBHJRzkIYOgD0d0tJLbOZS7sxSJ148MyVNSEbyi737ZPam3SmzU6O/m+Jc
-         43VFMQuK4AAmsWuZwrQ2awQaS5G+5FlcgLWQVnttIajJ8nhfoPuCwo3eFwtFSlG3KYNM
-         PQ5L2pBInn5qf/bYj34Xk8nkxO+xbJy83Cocfy/nEi2ppxBBM0Dica37sIzVvz/xTgqW
-         AEde7JnDgYNGx9qgvh+atdstpVuXWbhSfKNE9Eh13prkncGeNY3eQQ+74532zNUFnrzR
-         j3WFd0yr806KwNserpOXs0QIO6nc/DSogDAeNs0ywwkAf6hMMknSyTwNnFQmgp6frgY1
-         /FhA==
-X-Gm-Message-State: AOAM533O2y9FakibhCBf+DPCRHxAyYJXjRDMPPNF/LZuXrQk7pDhVtE6
-        B1yeaWQuNG9auuOzSicUKMzbSsHvuqRxcnBw27DRYdYSGnGwsBEX401mw79NKBOpbk1r36bFETL
-        TIuvKX1/TiLrfOcHBykV7SkJV7lp+F3EZWyXqqKU0H3O/+c7jgVCqLStpRQ==
-X-Received: by 2002:a05:6638:144d:b0:332:fa9:28a9 with SMTP id l13-20020a056638144d00b003320fa928a9mr201877jad.237.1655134749717;
-        Mon, 13 Jun 2022 08:39:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwXNtA+ciI6OWgaT4ebrOdHTZuUKQ3+cRYrYw1j3M7psuLRVjd2hmONX/3HkZzlJ0grCgnTwnE68cXxcjLf3ns=
-X-Received: by 2002:a05:6638:144d:b0:332:fa9:28a9 with SMTP id
- l13-20020a056638144d00b003320fa928a9mr201863jad.237.1655134749505; Mon, 13
- Jun 2022 08:39:09 -0700 (PDT)
+        bh=BGAIi+/Ft53DX8CUrCtDAbQTz9ZPUzipX2JK4m40Fyc=;
+        b=jgPCyeeumVTPBk3gR5vo8QDRR0lq1FHjEulJvK3DzyITBf32nzxYKMOSahyn3d7yig
+         nE8CDiDjF/bKZYBAjV5h7oQMvdi6ZkSzh6zNsapzxIWqNc5Wdd7BhDzLQpaiZ8/3GcpM
+         F+xF+FJl/vBrwcByZQNJOyh6cpQ1EqejHvH051dLUbs8wngn2IUxG4cxZlZ91fj8EHil
+         315dBHVwvqfmdw6tFQRBILGsd8Sac3sXkpwjpKDs/OowcRtf1kS44NmAkZrXFt6mB/09
+         z1KkbKQVeVAVjLocsXiQxh8ns7MoeaXj8L2miEN4C0rgJ6QePniNRFiCba6XsD5pDY9d
+         +78A==
+X-Gm-Message-State: AJIora8BzgoICP4PNiYb7ppXphYINEqb7KSkB4LsFfXt02QSio+eWsw7
+        NbiAIWY0UoAcrXA9+0f8wfyPsDHtMve1+Q==
+X-Google-Smtp-Source: AGRyM1vAMwcuZxsPx/DI9VXQo93C3zKZTAZw7mg0yuWJVCCuLjhTGftPOASOOng0WhDhkQkO9miAWA==
+X-Received: by 2002:a05:6871:290:b0:f3:426e:e74e with SMTP id i16-20020a056871029000b000f3426ee74emr177187oae.31.1655134810045;
+        Mon, 13 Jun 2022 08:40:10 -0700 (PDT)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com. [209.85.160.46])
+        by smtp.gmail.com with ESMTPSA id n3-20020a0568301e8300b0060603221281sm3542478otr.81.2022.06.13.08.40.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 08:40:08 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-fe51318ccfso8956966fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:40:08 -0700 (PDT)
+X-Received: by 2002:a05:6870:5247:b0:fb:2e60:26c6 with SMTP id
+ o7-20020a056870524700b000fb2e6026c6mr157351oai.241.1655134808192; Mon, 13 Jun
+ 2022 08:40:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516103329.516952-1-dimitri.ledkov@canonical.com>
-In-Reply-To: <20220516103329.516952-1-dimitri.ledkov@canonical.com>
-From:   =?UTF-8?B?RGltaXRyaSBKb2huIExlZGtvdiDwn4+z77iP4oCN8J+MiA==?= 
-        <dimitri.ledkov@canonical.com>
-Date:   Mon, 13 Jun 2022 16:38:33 +0100
-Message-ID: <CADWks+ZBZo1OQyV4wwx9=tnXa4Vn+KVNpQyAZq7HULJmO1D97A@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: btintel: Correctly declare all module
- firmware files
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220611061825.4119270-1-swboyd@chromium.org>
+In-Reply-To: <20220611061825.4119270-1-swboyd@chromium.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Mon, 13 Jun 2022 08:39:32 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7ZJ3PP=A8FMUs1O6FnRacjrceeYzeoJ8_9q5AffuLBPw@mail.gmail.com>
+Message-ID: <CAE=gft7ZJ3PP=A8FMUs1O6FnRacjrceeYzeoJ8_9q5AffuLBPw@mail.gmail.com>
+Subject: Re: [PATCH v2] platform/chrome: cros_ec: Always expose last resume result
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, Rajat Jain <rajatja@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,84 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcel
-
-Does this v2 patch address the concerns you mentioned in your review
-of the v1 patch at
-https://lore.kernel.org/linux-bluetooth/3EA82A93-D167-482D-AAF4-D781B77A4646@holtmann.org/
-?
-
-Or can you explain a bit more how I misunderstood your request?
-
-This patch correctly documents the strict patterns of dozens or so
-existing firmware files which this driver can load for each of the hw
-variants.
-
-On Mon, 16 May 2022 at 11:33, Dimitri John Ledkov
-<dimitri.ledkov@canonical.com> wrote:
+On Fri, Jun 10, 2022 at 11:18 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> Strictly encode patterns of supported hw_variants of firmware files
-> the kernel driver supports requesting. This now includes many missing
-> and previously undeclared module firmware files for 0x07, 0x08,
-> 0x11-0x14 hw_variants.
+> The last resume result exposing logic in cros_ec_sleep_event()
+> incorrectly requires S0ix support, which doesn't work on ARM based
+> systems where S0ix doesn't exist. That's because cros_ec_sleep_event()
+> only reports the last resume result when the EC indicates the last sleep
+> event was an S0ix resume. On ARM systems, the last sleep event is always
+> S3 resume, but the EC can still detect sleep hang events in case some
+> other part of the AP is blocking sleep.
 >
-> This especially affects environments that only install firmware files
-> declared and referenced by the kernel modules. In such environments,
-> only the declared firmware files are copied resulting in most Intel
-> Bluetooth devices not working. I.e. host-only dracut-install initrds,
-> or Ubuntu Core kernel snaps.
+> Always expose the last resume result if the EC supports it so that this
+> works on all devices regardless of S0ix support. This fixes sleep hang
+> detection on ARM based chromebooks like Trogdor.
 >
-> BugLink: https://bugs.launchpad.net/bugs/1970819
-> Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+> Cc: Evan Green <evgreen@chromium.org>
+> Cc: Rajat Jain <rajatja@chromium.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Fixes: 7235560ac77a ("platform/chrome: Add support for v1 of host sleep event")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+
+I looked at the EC code for firmware-hatch-12669.B, which is I think
+the oldest board shipping the suspend_transitions support, and saw
+that it correctly initializes resume_response.sleep_transitions for
+both S0IX_RESUME and S3_RESUME. I think that mitigates my only concern
+that we might be interpreting garbage sleep_transitions from the EC on
+some older platforms. So,
+
+Reviewed-by: Evan Green <evgreen@chromium.org>
+
 > ---
 >
->  Changes since v1:
->  - encode strict patterns of supported firmware files for each of the
->    supported hw_variant generations.
+> Changes from v1 (https://lore.kernel.org/r/20220610223703.3387691-1-swboyd@chromium.org):
+>  * Fixed typo
 >
->  v1 submission link
->   https://lore.kernel.org/linux-bluetooth/20220509163259.1513242-1-dimitri.ledkov@canonical.com/
+>  drivers/platform/chrome/cros_ec.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
->  drivers/bluetooth/btintel.c | 23 +++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
+> diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+> index b3e94cdf7d1a..3abef9747482 100644
+> --- a/drivers/platform/chrome/cros_ec.c
+> +++ b/drivers/platform/chrome/cros_ec.c
+> @@ -135,10 +135,10 @@ static int cros_ec_sleep_event(struct cros_ec_device *ec_dev, u8 sleep_event)
+>         buf.msg.command = EC_CMD_HOST_SLEEP_EVENT;
 >
-> diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-> index 06514ed66022..17022758b5bd 100644
-> --- a/drivers/bluetooth/btintel.c
-> +++ b/drivers/bluetooth/btintel.c
-> @@ -2654,7 +2654,22 @@ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
->  MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
->  MODULE_VERSION(VERSION);
->  MODULE_LICENSE("GPL");
-> -MODULE_FIRMWARE("intel/ibt-11-5.sfi");
-> -MODULE_FIRMWARE("intel/ibt-11-5.ddc");
-> -MODULE_FIRMWARE("intel/ibt-12-16.sfi");
-> -MODULE_FIRMWARE("intel/ibt-12-16.ddc");
-> +/* hw_variant 0x07 0x08 */
-> +MODULE_FIRMWARE("intel/ibt-hw-37.7.*-fw-*.*.*.*.*.bseq");
-> +MODULE_FIRMWARE("intel/ibt-hw-37.7.bseq");
-> +MODULE_FIRMWARE("intel/ibt-hw-37.8.*-fw-*.*.*.*.*.bseq");
-> +MODULE_FIRMWARE("intel/ibt-hw-37.8.bseq");
-> +/* hw_variant 0x0b 0x0c */
-> +MODULE_FIRMWARE("intel/ibt-11-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-12-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-11-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-12-*.ddc");
-> +/* hw_variant 0x11 0x12 0x13 0x14 */
-> +MODULE_FIRMWARE("intel/ibt-17-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-18-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-19-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-20-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-17-*-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-18-*-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-19-*-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-20-*-*.ddc");
+>         ret = cros_ec_cmd_xfer_status(ec_dev, &buf.msg);
+> -
+> -       /* For now, report failure to transition to S0ix with a warning. */
+> +       /* Report failure to transition to system wide suspend with a warning. */
+>         if (ret >= 0 && ec_dev->host_sleep_v1 &&
+> -           (sleep_event == HOST_SLEEP_EVENT_S0IX_RESUME)) {
+> +           (sleep_event == HOST_SLEEP_EVENT_S0IX_RESUME ||
+> +            sleep_event == HOST_SLEEP_EVENT_S3_RESUME)) {
+>                 ec_dev->last_resume_result =
+>                         buf.u.resp1.resume_response.sleep_transitions;
+>
+>
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 > --
-> 2.32.0
+> https://chromeos.dev
 >
-
-
--- 
-Happy Pride,
-
-Dimitri

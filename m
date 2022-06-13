@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E057548CDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4636548DB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350114AbiFMMbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S245540AbiFMK2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353582AbiFMM1p (ORCPT
+        with ESMTP id S236753AbiFMK1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:27:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A2C58E55;
-        Mon, 13 Jun 2022 04:06:00 -0700 (PDT)
+        Mon, 13 Jun 2022 06:27:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F6A248F7;
+        Mon, 13 Jun 2022 03:19:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C76FCB80E92;
-        Mon, 13 Jun 2022 11:05:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B0DC34114;
-        Mon, 13 Jun 2022 11:05:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F121260AE6;
+        Mon, 13 Jun 2022 10:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00BAAC34114;
+        Mon, 13 Jun 2022 10:19:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118350;
-        bh=FW9vedLK+UgK0iFW3Wb9k2OYR5Brh62myF1UZRa+n90=;
+        s=korg; t=1655115594;
+        bh=3Gqq0IHeoCCTwiXZU/qrGZQ0JxgYAq2T0t46vBklZ4I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izZBDpSzoz6jykx+lvsVXUuBrXBdPTsFGuVGHmyu0LkRQxZI/nSr3yeiquK8WmcWA
-         8lG+dTvTirdfh8fTjmeUwbcy+laYsjV51h4PUsimREuz9W+DqVu+UAVEAhXzPvz9mT
-         lkntuP36u9No1LAh4jyEV7z/+awgtitW1W7RRCHw=
+        b=XGyiVnJR3yRFYCMbra/aVbaRsYmr+B2XkGyI7Jwn+veEPpmlm9ZEdXY8pLmyt0uXd
+         aYX9/cSVNLcRbg6oniEVD55llMb4UMeKR+RAOKro4McycfRr0EJzL1BiCs9fvQGfhF
+         Rha1vOLNuE2sOVObp/X/I6iLuLtl/A4tyVujMMOc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Wensheng <zhangwensheng5@huawei.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 044/172] driver core: fix deadlock in __device_attach
+Subject: [PATCH 4.9 130/167] m68knommu: fix undefined reference to `_init_sp
 Date:   Mon, 13 Jun 2022 12:10:04 +0200
-Message-Id: <20220613094900.980500360@linuxfoundation.org>
+Message-Id: <20220613094911.393517691@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,77 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Wensheng <zhangwensheng5@huawei.com>
+From: Greg Ungerer <gerg@linux-m68k.org>
 
-[ Upstream commit b232b02bf3c205b13a26dcec08e53baddd8e59ed ]
+[ Upstream commit a71b9e66fee47c59b3ec34e652b5c23bc6550794 ]
 
-In __device_attach function, The lock holding logic is as follows:
-...
-__device_attach
-device_lock(dev)      // get lock dev
-  async_schedule_dev(__device_attach_async_helper, dev); // func
-    async_schedule_node
-      async_schedule_node_domain(func)
-        entry = kzalloc(sizeof(struct async_entry), GFP_ATOMIC);
-	/* when fail or work limit, sync to execute func, but
-	   __device_attach_async_helper will get lock dev as
-	   well, which will lead to A-A deadlock.  */
-	if (!entry || atomic_read(&entry_count) > MAX_WORK) {
-	  func;
-	else
-	  queue_work_node(node, system_unbound_wq, &entry->work)
-  device_unlock(dev)
+When configuring a nommu classic m68k system enabling the uboot parameter
+passing support (CONFIG_UBOOT) will produce the following compile error:
 
-As shown above, when it is allowed to do async probes, because of
-out of memory or work limit, async work is not allowed, to do
-sync execute instead. it will lead to A-A deadlock because of
-__device_attach_async_helper getting lock dev.
+   m68k-linux-ld: arch/m68k/kernel/uboot.o: in function `process_uboot_commandline':
+   uboot.c:(.init.text+0x32): undefined reference to `_init_sp'
 
-To fix the deadlock, move the async_schedule_dev outside device_lock,
-as we can see, in async_schedule_node_domain, the parameter of
-queue_work_node is system_unbound_wq, so it can accept concurrent
-operations. which will also not change the code logic, and will
-not lead to deadlock.
+The logic to support this option is only used on ColdFire based platforms
+(in its head.S startup code). So make the selection of this option
+depend on building for a ColdFire based platform.
 
-Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
-Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
-Link: https://lore.kernel.org/r/20220518074516.1225580-1-zhangwensheng5@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/dd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/m68k/Kconfig.machine | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 2728223c1fbc..4f4e8aedbd2c 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -897,6 +897,7 @@ static void __device_attach_async_helper(void *_dev, async_cookie_t cookie)
- static int __device_attach(struct device *dev, bool allow_async)
- {
- 	int ret = 0;
-+	bool async = false;
+diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
+index f622c3ccafc3..9f2896493ca0 100644
+--- a/arch/m68k/Kconfig.machine
++++ b/arch/m68k/Kconfig.machine
+@@ -302,6 +302,7 @@ comment "Machine Options"
  
- 	device_lock(dev);
- 	if (dev->p->dead) {
-@@ -935,7 +936,7 @@ static int __device_attach(struct device *dev, bool allow_async)
- 			 */
- 			dev_dbg(dev, "scheduling asynchronous probe\n");
- 			get_device(dev);
--			async_schedule_dev(__device_attach_async_helper, dev);
-+			async = true;
- 		} else {
- 			pm_request_idle(dev);
- 		}
-@@ -945,6 +946,8 @@ static int __device_attach(struct device *dev, bool allow_async)
- 	}
- out_unlock:
- 	device_unlock(dev);
-+	if (async)
-+		async_schedule_dev(__device_attach_async_helper, dev);
- 	return ret;
- }
- 
+ config UBOOT
+ 	bool "Support for U-Boot command line parameters"
++	depends on COLDFIRE
+ 	help
+ 	  If you say Y here kernel will try to collect command
+ 	  line parameters from the initial u-boot stack.
 -- 
 2.35.1
 

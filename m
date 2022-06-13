@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D58F54974A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7D654936E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359140AbiFMNMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
+        id S238545AbiFMMNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357548AbiFMNGX (ORCPT
+        with ESMTP id S1359452AbiFMMJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:06:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C3437A99;
-        Mon, 13 Jun 2022 04:18:37 -0700 (PDT)
+        Mon, 13 Jun 2022 08:09:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10F152E64;
+        Mon, 13 Jun 2022 04:00:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B66160F18;
-        Mon, 13 Jun 2022 11:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178D4C34114;
-        Mon, 13 Jun 2022 11:18:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B334B80D31;
+        Mon, 13 Jun 2022 11:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62652C34114;
+        Mon, 13 Jun 2022 11:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119108;
-        bh=UArQUhck6Fc5jufA0UWjZnQNQgFHa5m1QG8+p+nZfk8=;
+        s=korg; t=1655118041;
+        bh=rPe07Deot0v6PeT7/7ZX4/Bgr3ydWwdA5qx2jX6RFQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=00zX5ACwzmBfapae7btg+ioch7drrn7ICVgS5xSE7j4LxRJ5zxa7qETBdlVjvTWYG
-         XNxHDpfUlRjIwN/9Iu8ZeAOhgd/UNzlPrRjoqpP5fmyTntMUNYGIcBnO7PEtNFAeHr
-         Y/OUPghGaWzll8BPxW5B4irdWY2E6dRJWpk5Av0A=
+        b=dWzWobkbZwtBfwqOKAeWiD2LWItUwhFqBBW07rshGVkd65iAZpbh2QoBn/Qek6b/w
+         Ttdae5yHhK4Vyg5L+w1UeBSBzMtS4ClPewfBYiXFe+mW+w9RWPH2qL6ace5k6JB2sr
+         2HaD7/PJZCppKpIgukQyev+b0mcz8r51wYPdYVVI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 144/247] af_unix: Fix a data-race in unix_dgram_peer_wake_me().
+Subject: [PATCH 4.19 222/287] net/mlx5e: Update netdev features after changing XDP state
 Date:   Mon, 13 Jun 2022 12:10:46 +0200
-Message-Id: <20220613094927.322167391@linuxfoundation.org>
+Message-Id: <20220613094930.590311847@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 662a80946ce13633ae90a55379f1346c10f0c432 ]
+[ Upstream commit f6279f113ad593971999c877eb69dc3d36a75894 ]
 
-unix_dgram_poll() calls unix_dgram_peer_wake_me() without `other`'s
-lock held and check if its receive queue is full.  Here we need to
-use unix_recvq_full_lockless() instead of unix_recvq_full(), otherwise
-KCSAN will report a data-race.
+Some features (LRO, HW GRO) conflict with XDP. If there is an attempt to
+enable such features while XDP is active, they will be set to `off
+[requested on]`. In order to activate these features after XDP is turned
+off, the driver needs to call netdev_update_features(). This commit adds
+this missing call after XDP state changes.
 
-Fixes: 7d267278a9ec ("unix: avoid use-after-free in ep_remove_wait_queue")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Link: https://lore.kernel.org/r/20220605232325.11804-1-kuniyu@amazon.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: cf6e34c8c22f ("net/mlx5e: Properly block LRO when XDP is enabled")
+Fixes: b0617e7b3500 ("net/mlx5e: Properly block HW GRO when XDP is enabled")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/unix/af_unix.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 62f47821d783..b7be8d066753 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -446,7 +446,7 @@ static int unix_dgram_peer_wake_me(struct sock *sk, struct sock *other)
- 	 * -ECONNREFUSED. Otherwise, if we haven't queued any skbs
- 	 * to other and its full, we will hang waiting for POLLOUT.
- 	 */
--	if (unix_recvq_full(other) && !sock_flag(other, SOCK_DEAD))
-+	if (unix_recvq_full_lockless(other) && !sock_flag(other, SOCK_DEAD))
- 		return 1;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 75872aef44d0..6ecb92f55e97 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -4327,6 +4327,11 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
  
- 	if (connected)
+ unlock:
+ 	mutex_unlock(&priv->state_lock);
++
++	/* Need to fix some features. */
++	if (!err)
++		netdev_update_features(netdev);
++
+ 	return err;
+ }
+ 
 -- 
 2.35.1
 

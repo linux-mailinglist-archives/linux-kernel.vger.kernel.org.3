@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FFF54935D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767D954894F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354082AbiFML2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S1344691AbiFMKlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353853AbiFMLUB (ORCPT
+        with ESMTP id S1347838AbiFMKjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:20:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A00E3BA62;
-        Mon, 13 Jun 2022 03:41:49 -0700 (PDT)
+        Mon, 13 Jun 2022 06:39:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DDC1400C;
+        Mon, 13 Jun 2022 03:23:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EFDDACE110D;
-        Mon, 13 Jun 2022 10:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9220C34114;
-        Mon, 13 Jun 2022 10:41:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64A8DB80E95;
+        Mon, 13 Jun 2022 10:23:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B28FAC341C5;
+        Mon, 13 Jun 2022 10:23:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116906;
-        bh=6WO8gK6ml+7o/mL16azwD6uIXPNzX9aqICY3DvZqYVs=;
+        s=korg; t=1655115790;
+        bh=93gbBQ1CW6fW04ZVr6GhHTgR39LR4XV+Y+o+LtQyr4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0GGboXGwnGgFOiqqL4EtBcWo0w+Njawr3U1ymC8kns/7/Gj52ldDddh00kTfQDRv/
-         9fG4SThCP9zfItFW/JfQBFlkz2OLKUsGKJ3i5/pWOAjlu8x3YbMutGfg/hA2BgSIFX
-         2ex4sRYNxMK8pXzq2kco+QUZrpTK9wEn1FZUU12o=
+        b=vQvV3RYlHGkbnIQT9q94CdPssc8d5/PJZZML9JEC1hBUcrXfBgZZE6jBpJpB2bwRs
+         aFb7rcILVpF276JbHBNkomakUcGTetum+w9ctHNiCaTzAss/qjwxl4YMDeLIDHugRV
+         7xzqqUfJL/fIYQkabwrbo7BuXOnGVDR2uCCbeQok=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 216/411] iwlwifi: mvm: fix assert 1F04 upon reconfig
+        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 031/218] net: phy: micrel: Allow probing without .driver_data
 Date:   Mon, 13 Jun 2022 12:08:09 +0200
-Message-Id: <20220613094935.128615230@linuxfoundation.org>
+Message-Id: <20220613094915.666422390@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+From: Fabio Estevam <festevam@denx.de>
 
-commit 9d096e3d3061dbf4ee10e2b59fc2c06e05bdb997 upstream.
+[ Upstream commit f2ef6f7539c68c6bd6c32323d8845ee102b7c450 ]
 
-When we reconfig we must not send the MAC_POWER command that relates to
-a MAC that was not yet added to the firmware.
+Currently, if the .probe element is present in the phy_driver structure
+and the .driver_data is not, a NULL pointer dereference happens.
 
-Ignore those in the iterator.
+Allow passing .probe without .driver_data by inserting NULL checks
+for priv->type.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20220517120044.ed2ffc8ce732.If786e19512d0da4334a6382ea6148703422c7d7b@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220513114613.762810-1-festevam@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/power.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/phy/micrel.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/drivers/net/wireless/intel/iwlwifi/mvm/power.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
-@@ -626,6 +626,9 @@ static void iwl_mvm_power_get_vifs_itera
- 	struct iwl_power_vifs *power_iterator = _data;
- 	bool active = mvmvif->phy_ctxt && mvmvif->phy_ctxt->id < NUM_PHY_CTX;
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 755aa6741292..6f15cd5d4e7a 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -285,7 +285,7 @@ static int kszphy_config_reset(struct phy_device *phydev)
+ 		}
+ 	}
  
-+	if (!mvmvif->uploaded)
-+		return;
-+
- 	switch (ieee80211_vif_type_p2p(vif)) {
- 	case NL80211_IFTYPE_P2P_DEVICE:
- 		break;
+-	if (priv->led_mode >= 0)
++	if (priv->type && priv->led_mode >= 0)
+ 		kszphy_setup_led(phydev, priv->type->led_mode_reg, priv->led_mode);
+ 
+ 	return 0;
+@@ -301,10 +301,10 @@ static int kszphy_config_init(struct phy_device *phydev)
+ 
+ 	type = priv->type;
+ 
+-	if (type->has_broadcast_disable)
++	if (type && type->has_broadcast_disable)
+ 		kszphy_broadcast_disable(phydev);
+ 
+-	if (type->has_nand_tree_disable)
++	if (type && type->has_nand_tree_disable)
+ 		kszphy_nand_tree_disable(phydev);
+ 
+ 	return kszphy_config_reset(phydev);
+@@ -764,7 +764,7 @@ static int kszphy_probe(struct phy_device *phydev)
+ 
+ 	priv->type = type;
+ 
+-	if (type->led_mode_reg) {
++	if (type && type->led_mode_reg) {
+ 		ret = of_property_read_u32(np, "micrel,led-mode",
+ 				&priv->led_mode);
+ 		if (ret)
+@@ -785,7 +785,8 @@ static int kszphy_probe(struct phy_device *phydev)
+ 		unsigned long rate = clk_get_rate(clk);
+ 		bool rmii_ref_clk_sel_25_mhz;
+ 
+-		priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
++		if (type)
++			priv->rmii_ref_clk_sel = type->has_rmii_ref_clk_sel;
+ 		rmii_ref_clk_sel_25_mhz = of_property_read_bool(np,
+ 				"micrel,rmii-reference-clock-select-25-mhz");
+ 
+-- 
+2.35.1
+
 
 

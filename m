@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E201B54870A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7124D548820
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352303AbiFMLLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S1352284AbiFMLLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351734AbiFMLIB (ORCPT
+        with ESMTP id S1352008AbiFMLJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:08:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A64338A8;
-        Mon, 13 Jun 2022 03:35:13 -0700 (PDT)
+        Mon, 13 Jun 2022 07:09:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540E6338B2;
+        Mon, 13 Jun 2022 03:35:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36A24B80EA7;
-        Mon, 13 Jun 2022 10:35:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D74DC36AFF;
-        Mon, 13 Jun 2022 10:35:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2450B80EAA;
+        Mon, 13 Jun 2022 10:35:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128BAC34114;
+        Mon, 13 Jun 2022 10:35:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116506;
-        bh=JsZE5AxHTbW00VZnJgu/U+JfgGO6KlUPjLQsTZoemWU=;
+        s=korg; t=1655116511;
+        bh=T4cvfR4WHCduCcFXKo/nqm80YevLxO60ECFJam+FNdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DRAzjsfuakEGwXNF8g26bCy7cRS52tt4OO71l3bz9i8sCXtMyvOvBABX1pWcjCvgH
-         /fvACpHzlu5nxZCIcbw4LDPVjlcQS1DXTsEGjHQ6y8UuBiDW0RXw8pbzhfzQAxU1z2
-         TBGszImSeY0OmYCOeW8LhTnj6jhECPhMlCrwGBzw=
+        b=Xi6nIHw2pjyhUFJVF3PKz+DAgn2OtmFdrrCd9H80n25dT93V3KWCDIef8sO98vYJp
+         YNpbfjPA6lsx1X4m9RL98VCtebA0QV6/gk1AhOCuXpM2KCVHh/hSSioTQJR30B1jdh
+         9Va5InyHst9IxmnO4/D/qXoJXMirCrm8ujxvsIyc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 098/411] HID: hid-led: fix maximum brightness for Dream Cheeky
-Date:   Mon, 13 Jun 2022 12:06:11 +0200
-Message-Id: <20220613094931.619142292@linuxfoundation.org>
+Subject: [PATCH 5.4 099/411] HID: elan: Fix potential double free in elan_input_configured
+Date:   Mon, 13 Jun 2022 12:06:12 +0200
+Message-Id: <20220613094931.649108885@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -54,36 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Teh <jonathan.teh@outlook.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 116c3f4a78ebe478d5ad5a038baf931e93e7d748 ]
+[ Upstream commit 1af20714fedad238362571620be0bd690ded05b6 ]
 
-Increase maximum brightness for Dream Cheeky to 63. Emperically
-determined based on testing in kernel 4.4 on this device:
+'input' is a managed resource allocated with devm_input_allocate_device(),
+so there is no need to call input_free_device() explicitly or
+there will be a double free.
 
-Bus 003 Device 002: ID 1d34:0004 Dream Cheeky Webmail Notifier
+According to the doc of devm_input_allocate_device():
+ * Managed input devices do not need to be explicitly unregistered or
+ * freed as it will be done automatically when owner device unbinds from
+ * its driver (or binding fails).
 
-Fixes: 6c7ad07e9e05 ("HID: migrate USB LED driver from usb misc to hid")
-Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
+Fixes: b7429ea53d6c ("HID: elan: Fix memleak in elan_input_configured")
+Fixes: 9a6a4193d65b ("HID: Add driver for USB ELAN Touchpad")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-led.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/hid-elan.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/hid/hid-led.c b/drivers/hid/hid-led.c
-index c2c66ceca132..7d82f8d426bb 100644
---- a/drivers/hid/hid-led.c
-+++ b/drivers/hid/hid-led.c
-@@ -366,7 +366,7 @@ static const struct hidled_config hidled_configs[] = {
- 		.type = DREAM_CHEEKY,
- 		.name = "Dream Cheeky Webmail Notifier",
- 		.short_name = "dream_cheeky",
--		.max_brightness = 31,
-+		.max_brightness = 63,
- 		.num_leds = 1,
- 		.report_size = 9,
- 		.report_type = RAW_REQUEST,
+diff --git a/drivers/hid/hid-elan.c b/drivers/hid/hid-elan.c
+index 0e8f424025fe..838673303f77 100644
+--- a/drivers/hid/hid-elan.c
++++ b/drivers/hid/hid-elan.c
+@@ -188,7 +188,6 @@ static int elan_input_configured(struct hid_device *hdev, struct hid_input *hi)
+ 	ret = input_mt_init_slots(input, ELAN_MAX_FINGERS, INPUT_MT_POINTER);
+ 	if (ret) {
+ 		hid_err(hdev, "Failed to init elan MT slots: %d\n", ret);
+-		input_free_device(input);
+ 		return ret;
+ 	}
+ 
+@@ -200,7 +199,6 @@ static int elan_input_configured(struct hid_device *hdev, struct hid_input *hi)
+ 		hid_err(hdev, "Failed to register elan input device: %d\n",
+ 			ret);
+ 		input_mt_destroy_slots(input);
+-		input_free_device(input);
+ 		return ret;
+ 	}
+ 
 -- 
 2.35.1
 

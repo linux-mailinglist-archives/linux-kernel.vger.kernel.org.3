@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DAC5492C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B02549101
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383994AbiFMOlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
+        id S1354179AbiFMMwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384938AbiFMOhy (ORCPT
+        with ESMTP id S1353061AbiFMMuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:37:54 -0400
+        Mon, 13 Jun 2022 08:50:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D49E4D602;
-        Mon, 13 Jun 2022 04:49:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9716350D;
+        Mon, 13 Jun 2022 04:12:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 784C36146E;
-        Mon, 13 Jun 2022 11:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8374CC34114;
-        Mon, 13 Jun 2022 11:49:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A03A860B6B;
+        Mon, 13 Jun 2022 11:12:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD06DC3411C;
+        Mon, 13 Jun 2022 11:12:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120989;
-        bh=aitm0DDS0jj0cpMndljk1lZmzQ3kflQqheX4kr0zhTM=;
+        s=korg; t=1655118725;
+        bh=yLGGIpjfaSSs9oeLf7Wm2id6cx9cbdcnV4O2hHcE/yQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nQeNFyYSOVAh/wZXcWwT82YQ4yMryC+zQ7UzH3UX6xaTVjEfuN6YSskhFx4u/Iv3b
-         sv3zY5U9xO43pEhVwyoV1TTbe6VEyq8TbF1rDdqDFuuZ6RqAxuKVW3au3CRzzgyphB
-         xDVIuXll6JbP7kE8IU3T3SHUtBUVrJSrvIk/4+Zw=
+        b=B9uid5G9ULaRtqzww9iIl7dHxtG7fdNAEGPmwheJyYY82Xz2Wts9vCkAg4y8eMVVl
+         727lc1V86Tw42ENWGOepXp8P0zSH+Uy8gRl+legR1vJeqzbPW4kc4G6hHQ3Ba0MkI3
+         QG61fS/Op0eu5HMSxSNzycSuSZpQ4ZeSqA2pRZSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yuwei Wang <wangyuweihx@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 232/298] net, neigh: Set lower cap for neigh_managed_work rearming
-Date:   Mon, 13 Jun 2022 12:12:06 +0200
-Message-Id: <20220613094932.129477522@linuxfoundation.org>
+        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 167/172] powerpc/mm: Switch obsolete dssall to .long
+Date:   Mon, 13 Jun 2022 12:12:07 +0200
+Message-Id: <20220613094923.337831369@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +54,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
 
-[ Upstream commit ed6cd6a17896561b9f51ab4c0d9bbb29e762b597 ]
+commit d51f86cfd8e378d4907958db77da3074f6dce3ba upstream.
 
-Yuwei reported that plain reuse of DELAY_PROBE_TIME to rearm work queue
-in neigh_managed_work is problematic if user explicitly configures the
-DELAY_PROBE_TIME to 0 for a neighbor table. Such misconfig can then hog
-CPU to 100% processing the system work queue. Instead, set lower interval
-bound to HZ which is totally sufficient. Yuwei is additionally looking
-into making the interval separately configurable from DELAY_PROBE_TIME.
+The dssall ("Data Stream Stop All") instruction is obsolete altogether
+with other Data Cache Instructions since ISA 2.03 (year 2006).
 
-Reported-by: Yuwei Wang <wangyuweihx@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/netdev/797c3c53-ce1b-9f60-e253-cda615788f4a@iogearbox.net
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-Link: https://lore.kernel.org/r/3b8c5aa906c52c3a8c995d1b2e8ccf650ea7c716.1653432794.git.daniel@iogearbox.net
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+LLVM IAS does not support it but PPC970 seems to be using it.
+This switches dssall to .long as there is no much point in fixing LLVM.
+
+Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211221055904.555763-6-aik@ozlabs.ru
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/neighbour.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/include/asm/ppc-opcode.h   |    2 ++
+ arch/powerpc/kernel/idle.c              |    2 +-
+ arch/powerpc/kernel/idle_6xx.S          |    2 +-
+ arch/powerpc/kernel/l2cr_6xx.S          |    6 +++---
+ arch/powerpc/kernel/swsusp_32.S         |    2 +-
+ arch/powerpc/kernel/swsusp_asm64.S      |    2 +-
+ arch/powerpc/mm/mmu_context.c           |    2 +-
+ arch/powerpc/platforms/powermac/cache.S |    4 ++--
+ 8 files changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index ec0bf737b076..a252f4090d75 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -1579,7 +1579,7 @@ static void neigh_managed_work(struct work_struct *work)
- 	list_for_each_entry(neigh, &tbl->managed_list, managed_list)
- 		neigh_event_send_probe(neigh, NULL, false);
- 	queue_delayed_work(system_power_efficient_wq, &tbl->managed_work,
--			   NEIGH_VAR(&tbl->parms, DELAY_PROBE_TIME));
-+			   max(NEIGH_VAR(&tbl->parms, DELAY_PROBE_TIME), HZ));
- 	write_unlock_bh(&tbl->lock);
- }
+--- a/arch/powerpc/include/asm/ppc-opcode.h
++++ b/arch/powerpc/include/asm/ppc-opcode.h
+@@ -212,6 +212,7 @@
+ #define PPC_INST_COPY			0x7c20060c
+ #define PPC_INST_DCBA			0x7c0005ec
+ #define PPC_INST_DCBA_MASK		0xfc0007fe
++#define PPC_INST_DSSALL			0x7e00066c
+ #define PPC_INST_ISEL			0x7c00001e
+ #define PPC_INST_ISEL_MASK		0xfc00003e
+ #define PPC_INST_LSWI			0x7c0004aa
+@@ -517,6 +518,7 @@
+ #define	PPC_DCBZL(a, b)		stringify_in_c(.long PPC_RAW_DCBZL(a, b))
+ #define	PPC_DIVDE(t, a, b)	stringify_in_c(.long PPC_RAW_DIVDE(t, a, b))
+ #define	PPC_DIVDEU(t, a, b)	stringify_in_c(.long PPC_RAW_DIVDEU(t, a, b))
++#define PPC_DSSALL		stringify_in_c(.long PPC_INST_DSSALL)
+ #define PPC_LQARX(t, a, b, eh)	stringify_in_c(.long PPC_RAW_LQARX(t, a, b, eh))
+ #define PPC_LDARX(t, a, b, eh)	stringify_in_c(.long PPC_RAW_LDARX(t, a, b, eh))
+ #define PPC_LWARX(t, a, b, eh)	stringify_in_c(.long PPC_RAW_LWARX(t, a, b, eh))
+--- a/arch/powerpc/kernel/idle.c
++++ b/arch/powerpc/kernel/idle.c
+@@ -82,7 +82,7 @@ void power4_idle(void)
+ 		return;
  
--- 
-2.35.1
-
+ 	if (cpu_has_feature(CPU_FTR_ALTIVEC))
+-		asm volatile("DSSALL ; sync" ::: "memory");
++		asm volatile(PPC_DSSALL " ; sync" ::: "memory");
+ 
+ 	power4_idle_nap();
+ 
+--- a/arch/powerpc/kernel/idle_6xx.S
++++ b/arch/powerpc/kernel/idle_6xx.S
+@@ -129,7 +129,7 @@ BEGIN_FTR_SECTION
+ END_FTR_SECTION_IFCLR(CPU_FTR_NO_DPM)
+ 	mtspr	SPRN_HID0,r4
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ 	lwz	r8,TI_LOCAL_FLAGS(r2)	/* set napping bit */
+--- a/arch/powerpc/kernel/l2cr_6xx.S
++++ b/arch/powerpc/kernel/l2cr_6xx.S
+@@ -96,7 +96,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_L2CR)
+ 
+ 	/* Stop DST streams */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ 
+@@ -292,7 +292,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_L3CR)
+ 	isync
+ 
+ 	/* Stop DST streams */
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ 
+ 	/* Get the current enable bit of the L3CR into r4 */
+@@ -401,7 +401,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_L3CR)
+ _GLOBAL(__flush_disable_L1)
+ 	/* Stop pending alitvec streams and memory accesses */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+  	sync
+ 
+--- a/arch/powerpc/kernel/swsusp_32.S
++++ b/arch/powerpc/kernel/swsusp_32.S
+@@ -181,7 +181,7 @@ _GLOBAL(swsusp_arch_resume)
+ #ifdef CONFIG_ALTIVEC
+ 	/* Stop pending alitvec streams and memory accesses */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ #endif
+  	sync
+--- a/arch/powerpc/kernel/swsusp_asm64.S
++++ b/arch/powerpc/kernel/swsusp_asm64.S
+@@ -142,7 +142,7 @@ END_FW_FTR_SECTION_IFCLR(FW_FEATURE_LPAR
+ _GLOBAL(swsusp_arch_resume)
+ 	/* Stop pending alitvec streams and memory accesses */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ 	sync
+ 
+--- a/arch/powerpc/mm/mmu_context.c
++++ b/arch/powerpc/mm/mmu_context.c
+@@ -79,7 +79,7 @@ void switch_mm_irqs_off(struct mm_struct
+ 	 * context
+ 	 */
+ 	if (cpu_has_feature(CPU_FTR_ALTIVEC))
+-		asm volatile ("dssall");
++		asm volatile (PPC_DSSALL);
+ 
+ 	if (new_on_cpu)
+ 		radix_kvm_prefetch_workaround(next);
+--- a/arch/powerpc/platforms/powermac/cache.S
++++ b/arch/powerpc/platforms/powermac/cache.S
+@@ -48,7 +48,7 @@ flush_disable_75x:
+ 
+ 	/* Stop DST streams */
+ BEGIN_FTR_SECTION
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
+ 
+@@ -197,7 +197,7 @@ flush_disable_745x:
+ 	isync
+ 
+ 	/* Stop prefetch streams */
+-	DSSALL
++	PPC_DSSALL
+ 	sync
+ 
+ 	/* Disable L2 prefetching */
 
 

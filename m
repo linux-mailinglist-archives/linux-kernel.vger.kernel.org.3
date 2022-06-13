@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D62D548F99
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005325494BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348717AbiFMMcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S1346380AbiFMK75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357717AbiFMM31 (ORCPT
+        with ESMTP id S1350174AbiFMKyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:29:27 -0400
+        Mon, 13 Jun 2022 06:54:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010C65A14D;
-        Mon, 13 Jun 2022 04:06:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3580CE1B;
+        Mon, 13 Jun 2022 03:29:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58434B80EAA;
-        Mon, 13 Jun 2022 11:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE69C34114;
-        Mon, 13 Jun 2022 11:06:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B7B8B80E94;
+        Mon, 13 Jun 2022 10:29:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFE7BC34114;
+        Mon, 13 Jun 2022 10:29:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118375;
-        bh=eVVGLClJE3cjfMM7K64saHd3yZhNqEe/Dyi1Il2NU1k=;
+        s=korg; t=1655116190;
+        bh=96ceQgJASxyzZfSQvr0juwSMRmN1lL3Esf2pvX28VOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XbpvHDjXPOFXcU3DC4MjFuqFo5xRFqqnENsdrAG1K3wcpMyhB+0lpkDtDvJK9POrb
-         UuZ3P+zIp8cITxbtw3ov+7yvNAkCE/ddRbGtJQ+EIvq7wMGP/qa8+QKsspzERZBhpk
-         Oe/pOhIlzxaUpgX/O7OE9jrmV83DWp04d8G0lP68=
+        b=URykTnEE1IqZGcMHZCwLp+VIkX/wivHEJ2khv6wh9SapA8sulsUEEHrA6Bht+aMm7
+         5LLdmq0SdPWia6C++UU8L49XjCDETRmbGvBUYJlG2qUR4ShxU/ZDo7CLurWMJFI6J7
+         M1Oj2dkzOm/hEkxuKczY38P1qrasjQn8Tgro3EyA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 036/172] serial: txx9: Dont allow CS5-6
+        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Stephen Zhang <starzhangzsd@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH 4.14 138/218] MIPS: IP27: Remove incorrect `cpu_has_fpu override
 Date:   Mon, 13 Jun 2022 12:09:56 +0200
-Message-Id: <20220613094859.052644494@linuxfoundation.org>
+Message-Id: <20220613094924.771143010@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-[ Upstream commit 79ac88655dc0551e3571ad16bdabdbe65d61553e ]
+commit 424c3781dd1cb401857585331eaaa425a13f2429 upstream.
 
-Only CS7 and CS8 are supported but CSIZE is not sanitized with
-CS5 or CS6 to CS8.
+Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
+kernel parameter non-functional, and also causes a link error:
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+ld: arch/mips/kernel/traps.o: in function `trap_init':
+./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
+ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
+ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
 
-Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-5-ilpo.jarvinen@linux.intel.com
+where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
+Fixes: 0ebb2f4159af ("MIPS: IP27: Update/restructure CPU overrides")
+Cc: stable@vger.kernel.org # v4.2+
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial_txx9.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
-index 7a07e7272de1..7beec331010c 100644
---- a/drivers/tty/serial/serial_txx9.c
-+++ b/drivers/tty/serial/serial_txx9.c
-@@ -644,6 +644,8 @@ serial_txx9_set_termios(struct uart_port *port, struct ktermios *termios,
- 	case CS6:	/* not supported */
- 	case CS8:
- 		cval |= TXX9_SILCR_UMODE_8BIT;
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
- 		break;
- 	}
- 
--- 
-2.35.1
-
+--- a/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
++++ b/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
+@@ -28,7 +28,6 @@
+ #define cpu_has_6k_cache		0
+ #define cpu_has_8k_cache		0
+ #define cpu_has_tx39_cache		0
+-#define cpu_has_fpu			1
+ #define cpu_has_nofpuex			0
+ #define cpu_has_32fpr			1
+ #define cpu_has_counter			1
 
 

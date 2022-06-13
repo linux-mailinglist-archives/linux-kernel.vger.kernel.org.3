@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86135493FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A005F54916F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244516AbiFMK0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S1383672AbiFMO1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245439AbiFMKYl (ORCPT
+        with ESMTP id S1383676AbiFMOXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:24:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DFBDEEB;
-        Mon, 13 Jun 2022 03:19:06 -0700 (PDT)
+        Mon, 13 Jun 2022 10:23:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06AA46CB9;
+        Mon, 13 Jun 2022 04:44:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E24DB60AE6;
-        Mon, 13 Jun 2022 10:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA524C34114;
-        Mon, 13 Jun 2022 10:19:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73937B80EA7;
+        Mon, 13 Jun 2022 11:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB9FC34114;
+        Mon, 13 Jun 2022 11:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115545;
-        bh=UXNWwokMFBEXV9YK4jvGcZ5ekW+m7+NpJOTBgQ5x0mQ=;
+        s=korg; t=1655120684;
+        bh=Lb60rln3aOojiHgVdkvSl8i3tDqPa2q1r9uXhxhDlsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f8GdETM9jM9Ua8jozdDFeDZnObF4HVA3DlC4g0v5ExDf9fu3DHQYe5wBFbk9ZK9eA
-         hk2Rak73sJrswLxqiYUUC+89lkU+QF5jzRExs50dAFmW/HoF1N6TRsEFNMNNEgbsjV
-         HsF8OKnMl4dv01QZJejyE03J0UVm6Rb4qnilVAXQ=
+        b=Vkp2/CPHzYqvmJPX5nzaGg/FPBLfi9KgkaHAvnwTKqLVgjo8ogCEnA+oY6QbBessu
+         V20E4uW1x+BRPM03w1yvCeJpTzwJLf9mP1F3yCi5IxdUlwQlpAasTggVwsWvMi9meD
+         oOmt0Erv2ARrCW0jxYrOAApRsKOykrZFUZPLNsjM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiao Yang <yangx.jy@fujitsu.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 4.9 105/167] RDMA/rxe: Generate a completion for unsupported/invalid opcode
-Date:   Mon, 13 Jun 2022 12:09:39 +0200
-Message-Id: <20220613094905.390238755@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 086/298] net: dsa: mv88e6xxx: Fix refcount leak in mv88e6xxx_mdios_register
+Date:   Mon, 13 Jun 2022 12:09:40 +0200
+Message-Id: <20220613094927.556818493@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiao Yang <yangx.jy@fujitsu.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 2f917af777011c88e977b9b9a5d00b280d3a59ce upstream.
+[ Upstream commit 02ded5a173619b11728b8bf75a3fd995a2c1ff28 ]
 
-Current rxe_requester() doesn't generate a completion when processing an
-unsupported/invalid opcode. If rxe driver doesn't support a new opcode
-(e.g. RDMA Atomic Write) and RDMA library supports it, an application
-using the new opcode can reproduce this issue. Fix the issue by calling
-"goto err;".
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
 
-Fixes: 8700e3e7c485 ("Soft RoCE driver")
-Link: https://lore.kernel.org/r/20220410113513.27537-1-yangx.jy@fujitsu.com
-Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+mv88e6xxx_mdio_register() pass the device node to of_mdiobus_register().
+We don't need the device node after it.
+
+Add missing of_node_put() to avoid refcount leak.
+
+Fixes: a3c53be55c95 ("net: dsa: mv88e6xxx: Support multiple MDIO busses")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/rxe/rxe_req.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/dsa/mv88e6xxx/chip.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/infiniband/sw/rxe/rxe_req.c
-+++ b/drivers/infiniband/sw/rxe/rxe_req.c
-@@ -677,7 +677,7 @@ next_wqe:
- 	opcode = next_opcode(qp, wqe, wqe->wr.opcode);
- 	if (unlikely(opcode < 0)) {
- 		wqe->status = IB_WC_LOC_QP_OP_ERR;
--		goto exit;
-+		goto err;
- 	}
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index cf7754dddad7..283ae376f469 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -3482,6 +3482,7 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
+ 	 */
+ 	child = of_get_child_by_name(np, "mdio");
+ 	err = mv88e6xxx_mdio_register(chip, child, false);
++	of_node_put(child);
+ 	if (err)
+ 		return err;
  
- 	mask = rxe_opcode[opcode].mask;
+-- 
+2.35.1
+
 
 

@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5F7549878
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1843B54928F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348471AbiFMKtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S1378513AbiFMNpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244569AbiFMKqY (ORCPT
+        with ESMTP id S1379219AbiFMNkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:46:24 -0400
+        Mon, 13 Jun 2022 09:40:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF402BB08;
-        Mon, 13 Jun 2022 03:25:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D13CE1A;
+        Mon, 13 Jun 2022 04:30:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B60460F13;
-        Mon, 13 Jun 2022 10:25:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E26C3411E;
-        Mon, 13 Jun 2022 10:25:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3611F61037;
+        Mon, 13 Jun 2022 11:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 459DBC34114;
+        Mon, 13 Jun 2022 11:30:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115948;
-        bh=oApSn8bhkmu3ZHZl6cHkPXdUbNMGrllZUuT2wqqkiJE=;
+        s=korg; t=1655119821;
+        bh=iEiLZMAi4r23IEn/jxT1qzEzPzoZvPtxWJI0p2hAUP4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQRF0BoSeZWnlQ+X+4covATnaBh0VE6vi41/F50VCeM6V25wxq0XmnLpRZ0WP3kf3
-         2ElAn3gxVty5rpHYHlLIBvsSM9zuQmEM8fWefk9v0Lf2bCILatFJrY6uYXnEZATCRJ
-         QbhKwmqPs0Smnn1h1B4+TE2n8Wn0bQmJvw+PLS9I=
+        b=O4feMX9mu3Pj0ROzlD2J75oG2VmH9okh5idkHfKtmyFC7j6ZRASi5jYS68Xpr1kzP
+         SZeCWuk/718DSvAlpQmsV8ofkq2jdXPgWti5yvBCITY6D6lsfdncs7ELxd5VvPggy6
+         RE0nty4aSuowzDJjHFtXvH4XqL8TfcfH2ChuTItg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        Jonathan Toppins <jtoppins@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 100/218] perf c2c: Use stdio interface if slang is not supported
+Subject: [PATCH 5.18 133/339] bonding: guard ns_targets by CONFIG_IPV6
 Date:   Mon, 13 Jun 2022 12:09:18 +0200
-Message-Id: <20220613094923.584769204@linuxfoundation.org>
+Message-Id: <20220613094930.543814055@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,80 +56,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit c4040212bc97d16040712a410335f93bc94d2262 ]
+[ Upstream commit c4caa500ffebf64795d1c0f6f9d6f179b502c6b7 ]
 
-If the slang lib is not installed on the system, perf c2c tool disables TUI
-mode and roll back to use stdio mode;  but the flag 'c2c.use_stdio' is
-missed to set true and thus it wrongly applies UI quirks in the function
-ui_quirks().
+Guard ns_targets in struct bond_params by CONFIG_IPV6, which could save
+256 bytes if IPv6 not configed. Also add this protection for function
+bond_is_ip6_target_ok() and bond_get_targets_ip6().
 
-This commit forces to use stdio interface if slang is not supported, and
-it can avoid to apply the UI quirks and show the correct metric header.
+Remove the IS_ENABLED() check for bond_opts[] as this will make
+BOND_OPT_NS_TARGETS uninitialized if CONFIG_IPV6 not enabled. Add
+a dummy bond_option_ns_ip6_targets_set() for this situation.
 
-Before:
-
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-    0.00%    0.00%    6.06%    0.00%    0.00%    0.00%   0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-    0.00%    0.00%   93.94%    0.00%    0.00%    0.00%   0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-After:
-
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------------------------
-      0        0        0       99        0        0        0      0xaaaac17d6000
-  -------------------------------------------------------------------------------
-           0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-           0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-
-Fixes: 5a1a99cd2e4e1557 ("perf c2c report: Add main TUI browser")
-Reported-by: Joe Mario <jmario@redhat.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: http://lore.kernel.org/lkml/20220526145400.611249-1-leo.yan@linaro.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Acked-by: Jonathan Toppins <jtoppins@redhat.com>
+Link: https://lore.kernel.org/r/20220531063727.224043-1-liuhangbin@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/builtin-c2c.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_main.c    |  2 ++
+ drivers/net/bonding/bond_options.c | 10 ++++++----
+ include/net/bonding.h              |  6 ++++++
+ 3 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index 264d458bfe2a..9cbd8b0d5b77 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -2552,9 +2552,7 @@ static int perf_c2c__report(int argc, const char **argv)
- 		   "the input file to process"),
- 	OPT_INCR('N', "node-info", &c2c.node_info,
- 		 "show extra node info in report (repeat for more info)"),
--#ifdef HAVE_SLANG_SUPPORT
- 	OPT_BOOLEAN(0, "stdio", &c2c.use_stdio, "Use the stdio interface"),
--#endif
- 	OPT_BOOLEAN(0, "stats", &c2c.stats_only,
- 		    "Display only statistic tables (implies --stdio)"),
- 	OPT_BOOLEAN(0, "full-symbols", &c2c.symbol_full,
-@@ -2581,6 +2579,10 @@ static int perf_c2c__report(int argc, const char **argv)
- 	if (argc)
- 		usage_with_options(report_c2c_usage, options);
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index b5c5196e03ee..26a6573adf0f 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -6159,7 +6159,9 @@ static int bond_check_params(struct bond_params *params)
+ 		strscpy_pad(params->primary, primary, sizeof(params->primary));
  
-+#ifndef HAVE_SLANG_SUPPORT
-+	c2c.use_stdio = true;
+ 	memcpy(params->arp_targets, arp_target, sizeof(arp_target));
++#if IS_ENABLED(CONFIG_IPV6)
+ 	memset(params->ns_targets, 0, sizeof(struct in6_addr) * BOND_MAX_NS_TARGETS);
 +#endif
-+
- 	if (c2c.stats_only)
- 		c2c.use_stdio = true;
  
+ 	return 0;
+ }
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+index 64f7db2627ce..1f8323ad5282 100644
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -34,10 +34,8 @@ static int bond_option_arp_ip_target_add(struct bonding *bond, __be32 target);
+ static int bond_option_arp_ip_target_rem(struct bonding *bond, __be32 target);
+ static int bond_option_arp_ip_targets_set(struct bonding *bond,
+ 					  const struct bond_opt_value *newval);
+-#if IS_ENABLED(CONFIG_IPV6)
+ static int bond_option_ns_ip6_targets_set(struct bonding *bond,
+ 					  const struct bond_opt_value *newval);
+-#endif
+ static int bond_option_arp_validate_set(struct bonding *bond,
+ 					const struct bond_opt_value *newval);
+ static int bond_option_arp_all_targets_set(struct bonding *bond,
+@@ -299,7 +297,6 @@ static const struct bond_option bond_opts[BOND_OPT_LAST] = {
+ 		.flags = BOND_OPTFLAG_RAWVAL,
+ 		.set = bond_option_arp_ip_targets_set
+ 	},
+-#if IS_ENABLED(CONFIG_IPV6)
+ 	[BOND_OPT_NS_TARGETS] = {
+ 		.id = BOND_OPT_NS_TARGETS,
+ 		.name = "ns_ip6_target",
+@@ -307,7 +304,6 @@ static const struct bond_option bond_opts[BOND_OPT_LAST] = {
+ 		.flags = BOND_OPTFLAG_RAWVAL,
+ 		.set = bond_option_ns_ip6_targets_set
+ 	},
+-#endif
+ 	[BOND_OPT_DOWNDELAY] = {
+ 		.id = BOND_OPT_DOWNDELAY,
+ 		.name = "downdelay",
+@@ -1254,6 +1250,12 @@ static int bond_option_ns_ip6_targets_set(struct bonding *bond,
+ 
+ 	return 0;
+ }
++#else
++static int bond_option_ns_ip6_targets_set(struct bonding *bond,
++					  const struct bond_opt_value *newval)
++{
++	return -EPERM;
++}
+ #endif
+ 
+ static int bond_option_arp_validate_set(struct bonding *bond,
+diff --git a/include/net/bonding.h b/include/net/bonding.h
+index b14f4c0b4e9e..cb904d356e31 100644
+--- a/include/net/bonding.h
++++ b/include/net/bonding.h
+@@ -149,7 +149,9 @@ struct bond_params {
+ 	struct reciprocal_value reciprocal_packets_per_slave;
+ 	u16 ad_actor_sys_prio;
+ 	u16 ad_user_port_key;
++#if IS_ENABLED(CONFIG_IPV6)
+ 	struct in6_addr ns_targets[BOND_MAX_NS_TARGETS];
++#endif
+ 
+ 	/* 2 bytes of padding : see ether_addr_equal_64bits() */
+ 	u8 ad_actor_system[ETH_ALEN + 2];
+@@ -503,12 +505,14 @@ static inline int bond_is_ip_target_ok(__be32 addr)
+ 	return !ipv4_is_lbcast(addr) && !ipv4_is_zeronet(addr);
+ }
+ 
++#if IS_ENABLED(CONFIG_IPV6)
+ static inline int bond_is_ip6_target_ok(struct in6_addr *addr)
+ {
+ 	return !ipv6_addr_any(addr) &&
+ 	       !ipv6_addr_loopback(addr) &&
+ 	       !ipv6_addr_is_multicast(addr);
+ }
++#endif
+ 
+ /* Get the oldest arp which we've received on this slave for bond's
+  * arp_targets.
+@@ -746,6 +750,7 @@ static inline int bond_get_targets_ip(__be32 *targets, __be32 ip)
+ 	return -1;
+ }
+ 
++#if IS_ENABLED(CONFIG_IPV6)
+ static inline int bond_get_targets_ip6(struct in6_addr *targets, struct in6_addr *ip)
+ {
+ 	int i;
+@@ -758,6 +763,7 @@ static inline int bond_get_targets_ip6(struct in6_addr *targets, struct in6_addr
+ 
+ 	return -1;
+ }
++#endif
+ 
+ /* exported from bond_main.c */
+ extern unsigned int bond_net_id;
 -- 
 2.35.1
 

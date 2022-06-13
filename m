@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7E3548AF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2E3548AB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385132AbiFMOlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S1376874AbiFMNXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385479AbiFMOkK (ORCPT
+        with ESMTP id S1377383AbiFMNUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:40:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD699AF304;
-        Mon, 13 Jun 2022 04:50:05 -0700 (PDT)
+        Mon, 13 Jun 2022 09:20:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDE76A051;
+        Mon, 13 Jun 2022 04:23:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0243614AD;
-        Mon, 13 Jun 2022 11:50:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD43C341C4;
-        Mon, 13 Jun 2022 11:50:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DE2061036;
+        Mon, 13 Jun 2022 11:23:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB3BC34114;
+        Mon, 13 Jun 2022 11:23:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121004;
-        bh=kvqvrS7aBXFQLen3K2YQokr1nKqkLNmgu1NIMizyz9w=;
+        s=korg; t=1655119407;
+        bh=kfEY3QRZjbQFex0x+RE6UPxEfcV2bewxyvgnel+V6pY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KJxv0mwnEiTnfqtWX1noyk2B5YCddbVWC2jG+H0ZnKir4vcj4If3I/nu+RG2EBbG2
-         q4EFedcIc9fGdiyFmTQg8H1WBPCK/lHqQlLkfyShK/St7PUvuSaftl1f03QndthmT8
-         uwMIQTSAH4kQ6eLNuQ7pyf8rsGeukgodXd7MSX+s=
+        b=cX6ePzuIE8shcInaqpgxNptix4ZJwMe2VR2x/pLHIG2HLHnq/Z8BNuG/mJDqfE2+b
+         ummBYnWxAcECEQl4PVieZX5DREy6rvp7Sc2+r22fuAXNuKFsi/WFfzzdET0vhucnJ5
+         HHlncT2kJ8dKm+5HTEMdDxjPcScWBWnapnd4kU88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lijo Lazar <lijo.lazar@amd.com>,
-        Yang Wang <kevinyang.wang@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 236/298] drm/amd/pm: Fix missing thermal throttler status
+        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 228/247] nfc: st21nfca: fix memory leaks in EVT_TRANSACTION handling
 Date:   Mon, 13 Jun 2022 12:12:10 +0200
-Message-Id: <20220613094932.248975905@linuxfoundation.org>
+Message-Id: <20220613094929.861633356@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lijo Lazar <lijo.lazar@amd.com>
+From: Martin Faltesek <mfaltesek@google.com>
 
-[ Upstream commit b0f4d663fce6a4232d3c20ce820f919111b1c60b ]
+commit 996419e0594abb311fb958553809f24f38e7abbe upstream.
 
-On aldebaran, when thermal throttling happens due to excessive GPU
-temperature, the reason for throttling event is missed in warning
-message. This patch fixes it.
+Error paths do not free previously allocated memory. Add devm_kfree() to
+those failure paths.
 
-Signed-off-by: Lijo Lazar <lijo.lazar@amd.com>
-Reviewed-by: Yang Wang <kevinyang.wang@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
+Fixes: 4fbcc1a4cb20 ("nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION")
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Faltesek <mfaltesek@google.com>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/nfc/st21nfca/se.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-index 4885c4ae78b7..27a54145d352 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-@@ -1643,6 +1643,7 @@ static const struct throttling_logging_label {
- 	uint32_t feature_mask;
- 	const char *label;
- } logging_label[] = {
-+	{(1U << THROTTLER_TEMP_GPU_BIT), "GPU"},
- 	{(1U << THROTTLER_TEMP_MEM_BIT), "HBM"},
- 	{(1U << THROTTLER_TEMP_VR_GFX_BIT), "VR of GFX rail"},
- 	{(1U << THROTTLER_TEMP_VR_MEM_BIT), "VR of HBM rail"},
--- 
-2.35.1
-
+--- a/drivers/nfc/st21nfca/se.c
++++ b/drivers/nfc/st21nfca/se.c
+@@ -330,22 +330,29 @@ int st21nfca_connectivity_event_received
+ 		transaction->aid_len = skb->data[1];
+ 
+ 		/* Checking if the length of the AID is valid */
+-		if (transaction->aid_len > sizeof(transaction->aid))
++		if (transaction->aid_len > sizeof(transaction->aid)) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
+ 
+ 		memcpy(transaction->aid, &skb->data[2],
+ 		       transaction->aid_len);
+ 
+ 		/* Check next byte is PARAMETERS tag (82) */
+ 		if (skb->data[transaction->aid_len + 2] !=
+-		    NFC_EVT_TRANSACTION_PARAMS_TAG)
++		    NFC_EVT_TRANSACTION_PARAMS_TAG) {
++			devm_kfree(dev, transaction);
+ 			return -EPROTO;
++		}
+ 
+ 		transaction->params_len = skb->data[transaction->aid_len + 3];
+ 
+ 		/* Total size is allocated (skb->len - 2) minus fixed array members */
+-		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
++		if (transaction->params_len > ((skb->len - 2) -
++		    sizeof(struct nfc_evt_transaction))) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
+ 
+ 		memcpy(transaction->params, skb->data +
+ 		       transaction->aid_len + 4, transaction->params_len);
 
 

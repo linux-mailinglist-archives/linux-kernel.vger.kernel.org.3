@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0355D549C7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17F3549C74
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345853AbiFMS7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S1345231AbiFMS7V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Jun 2022 14:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346453AbiFMS6m (ORCPT
+        with ESMTP id S1346492AbiFMS6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 14:58:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF74345041;
-        Mon, 13 Jun 2022 09:10:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4827B61517;
-        Mon, 13 Jun 2022 16:10:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11614C34114;
-        Mon, 13 Jun 2022 16:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655136645;
-        bh=vDGoVyz7P2imouhGRqKcXTMbxxpUemh4hqy3lJLfAus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ib6hfQBqRr57ddK363WydGfoo7U25V23nCdwpOGrxXpCFAKVarA1lUuHhtoad7Vfw
-         UGjftOcUsSs8wpTImEfj6ZAEfef0zddkF5GUJbNeVLJ/iJuiSFoH1Jmiv92Tq6MDq7
-         sYXvY+EUZM8szo2wmhJyODYo+gMFwPtq8x1WEL/Qlrw02D0EMJ1aO7Iq4VBVyP4fX6
-         9sM+xoK4oMrZirvXc0k6RrRuafW3ToEvPnXeTDjuU8wAKUCNabXph/SccJosxaB4oK
-         mj5UGRxuLoznh9ZSbgVoBlod7K2djNvhwGzQxhpH58slofsKsMoUHrStQHb3zmQh2e
-         hHcxfOagf9R3w==
-Date:   Mon, 13 Jun 2022 09:10:43 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v3 15/20] objtool: Disable CFI warnings
-Message-ID: <20220613161043.4wiqservfyxeme4f@treble>
-References: <20220610233513.1798771-1-samitolvanen@google.com>
- <20220610233513.1798771-16-samitolvanen@google.com>
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFFBF8CCD6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:11:30 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-188-UKF4EeJcNpOg5PEFD63RQQ-1; Mon, 13 Jun 2022 17:11:24 +0100
+X-MC-Unique: UKF4EeJcNpOg5PEFD63RQQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 13 Jun 2022 17:11:19 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 13 Jun 2022 17:11:19 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Petr Mladek' <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+CC:     John Ogness <john.ogness@linutronix.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Subject: RE: [BUG] Threaded printk breaks early debugging
+Thread-Topic: [BUG] Threaded printk breaks early debugging
+Thread-Index: AQHYfw5tEBAMEt7XXEKQmWQ8WlSw2q1Nf9Zw
+Date:   Mon, 13 Jun 2022 16:11:19 +0000
+Message-ID: <c81870cef50f4e1fac5083f0b780983d@AcuMS.aculab.com>
+References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
+ <87y1y48spg.fsf@jogness.linutronix.de> <YqVZ4CyWTiDgngkA@google.com>
+ <8735g9mqo0.fsf@jogness.linutronix.de> <Yqazr060OLp2Rpbk@google.com>
+ <87wndlge43.fsf@jogness.linutronix.de> <Yqb9xOBiY/262lhk@google.com>
+ <YqcN9mH/aVwBoIMQ@alley>
+In-Reply-To: <YqcN9mH/aVwBoIMQ@alley>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220610233513.1798771-16-samitolvanen@google.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,30 +66,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 04:35:08PM -0700, Sami Tolvanen wrote:
-> The __cfi_ preambles contain int3 padding and a mov instruction that
-> embeds the KCFI type identifier in the following format:
+From: Petr Mladek
+> Sent: 13 June 2022 11:14
+...
+> Another interesting alternative is the Peter Zijlstra's mode
+> where all messages are printed to the console "immediately".
+> They are serialized only by the CPU-reentrant lock.
 > 
->   ; type preamble
->   __cfi_function:
->     int3
->     int3
->     mov <id>, %eax
->     int3
->     int3
->   function:
->     ...
-> 
-> While the preamble symbols are STT_FUNC and contain valid
-> instructions, they are never executed and always fall through. Skip
-> the warning for them.
-> 
-> .kcfi_traps sections point to CFI traps in text sections. Also skip
-> the warning about them referencing !ENDBR instructions.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> This mode is not good for production system. But it might
+> be good for debugging. The good thing is that the behavior
+> is well defined.
 
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+ISTM that all messages should be output (even if this means
+that cpu spin waiting for a serial console) until userspace
+has a chance to set an option to change the behaviour.
 
--- 
-Josh
+Oh, and can someone stop the distros hiding the console output.
+I want to see the 'oops' traceback when I break the kernel!
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

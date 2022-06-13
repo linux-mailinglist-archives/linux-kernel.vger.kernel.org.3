@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF87549B3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09971549B06
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244233AbiFMSAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        id S244466AbiFMSDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243003AbiFMR4m (ORCPT
+        with ESMTP id S244032AbiFMSCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:56:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FDE475230
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655127636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hzd84XxXzfPPIlQv7XV/4oKJPld/hmyrXSDbHO9qJX0=;
-        b=ffHmGoHKhfrZ/dv/To73FFeUA36m3CgzdXq8QdewvdpDasqo79KMwSg6NXIJGiL7n1lgbt
-        ykfiNraBXGkWlEn/P8KX4JG7wowMI9aThAWwqbKx33wsVL/MBUDeqSNUZkxrtOvXvw9sUD
-        /u5FjHkBWgi9Phrohn9o/fkQicKca2Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-W_oynW2_N2G9fgvCR8UOyQ-1; Mon, 13 Jun 2022 09:40:35 -0400
-X-MC-Unique: W_oynW2_N2G9fgvCR8UOyQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB79C384F814;
-        Mon, 13 Jun 2022 13:40:34 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9631492CA2;
-        Mon, 13 Jun 2022 13:40:32 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 25/39] KVM: selftests: Move HYPERV_LINUX_OS_ID definition to a common header
-Date:   Mon, 13 Jun 2022 15:39:08 +0200
-Message-Id: <20220613133922.2875594-26-vkuznets@redhat.com>
-In-Reply-To: <20220613133922.2875594-1-vkuznets@redhat.com>
-References: <20220613133922.2875594-1-vkuznets@redhat.com>
+        Mon, 13 Jun 2022 14:02:20 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849D8CE4;
+        Mon, 13 Jun 2022 06:45:12 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id o8so7216222wro.3;
+        Mon, 13 Jun 2022 06:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xqt6o5xeA7H2Z1sbf12TbkTBeucsVcaM2qYUUouRmsE=;
+        b=nS9MOmChlPbvpzLEPXlBOJ9l5totUFJHG+Rb7e/yt17MKC539uvdcUKKT+akKIaQMy
+         da9YJJ2RrGTR/FsX3jGTUxHgzV1h/hIb305oQC38lU16BOPknTF51+/tm1MWj62vIowR
+         8H7iUnn6Vsopad+WQDoK7JA8MXva+YVmVWRjXpBlOW1zZ93GdFN3hpWwVCYzYuct1d6+
+         6ZEpssKwvRVe79wXh7ZyZ+bEoh0A9+VlLP3plXij6I7SaqN2wUNXze1eoav/KBrS+UEQ
+         LzIxVzxU8wxwF4LbHN2EdCsCcE52dW5ti69bRxVTTktlzl+gsZU4N28hYqJzHMvqK8ix
+         opEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xqt6o5xeA7H2Z1sbf12TbkTBeucsVcaM2qYUUouRmsE=;
+        b=j5611nlTnygxbaj4QdE728aNWkKZwpiUsVbjws7d/WNTpYQHaqf8M7fLh697iXU9tX
+         uAfJ8AAsUouXC9/8Yh7GyVrxlkauZQ3/VOCtSjYuRppLIsHnvvnIFKLhpSzdiAy/HE25
+         pGAm8Ww+QuPVoUFwpWYPHopzspReMQB9TRyuZ/I0HUp7Tmc5j/fM9OxvQc2K8Xl5Uhpz
+         EGfXVMxNgI6qhZBk3YApiFKp6TXLM/h7bI6Lt1v5jQokWGZLPX0td7o5MfPg7AqOKtVi
+         5yj8D6p+yqcBAPLHYGB9O8xuYUmcuC0AuAIfeVUG+smVMXKGh5o930xYcDmLHhUUghmm
+         lV8A==
+X-Gm-Message-State: AOAM5311u/TppQkg4aqJWcgm7kCTsbwmuD1mniygEmY7eoesaJo6RXp6
+        YLBezIJ5O0s5AMNmALYAQCc=
+X-Google-Smtp-Source: ABdhPJx8Zhg/1/+HyFqPEsxzGt+S2hzJPy+bosUdcRdorVNuXH9/fl9Gvu8Yx9FJrQtB2xcnxBaAQA==
+X-Received: by 2002:a5d:584d:0:b0:216:a2a9:5f2c with SMTP id i13-20020a5d584d000000b00216a2a95f2cmr47600441wrf.184.1655127910879;
+        Mon, 13 Jun 2022 06:45:10 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id i1-20020a5d5221000000b002103aebe8absm8647510wra.93.2022.06.13.06.45.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 06:45:10 -0700 (PDT)
+From:   Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <skannan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v2 0/5] PM / devfreq: Various Fixes to cpufreq based passive governor
+Date:   Mon, 13 Jun 2022 15:42:08 +0200
+Message-Id: <20220613134213.8904-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HYPERV_LINUX_OS_ID needs to be written to HV_X64_MSR_GUEST_OS_ID by
-each Hyper-V specific selftest.
+While developing a krait cache scaling devfreq driver I encounter tons
+of panics and errors with using the new cpufreq passive governor
+functions. While the krait cache scaling is still WIP and required some
+testing I would like to push all the fixes to make the new
+implementation wroking since currently with a the governor
+PROBE_DEFERRing all sort of things happen from kernel panic from invalid
+address access to freq_table getting corrupted.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- tools/testing/selftests/kvm/include/x86_64/hyperv.h  | 3 +++
- tools/testing/selftests/kvm/x86_64/hyperv_features.c | 6 ++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
+With the following fixes my WIP driver works correctly without any
+warning/problems. 
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-index b66910702c0a..f0a8a93694b2 100644
---- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-@@ -185,4 +185,7 @@
- /* hypercall options */
- #define HV_HYPERCALL_FAST_BIT		BIT(16)
- 
-+/* Proper HV_X64_MSR_GUEST_OS_ID value */
-+#define HYPERV_LINUX_OS_ID ((u64)0x8100 << 48)
-+
- #endif /* !SELFTEST_KVM_HYPERV_H */
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-index d5f37495ade8..4f061b7a9ed9 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-@@ -13,8 +13,6 @@
- #include "processor.h"
- #include "hyperv.h"
- 
--#define LINUX_OS_ID ((u64)0x8100 << 48)
--
- extern unsigned char rdmsr_start;
- extern unsigned char rdmsr_end;
- 
-@@ -126,7 +124,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
- 	int i = 0;
- 	u64 res, input, output;
- 
--	wrmsr(HV_X64_MSR_GUEST_OS_ID, LINUX_OS_ID);
-+	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
- 	wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
- 
- 	while (hcall->control) {
-@@ -226,7 +224,7 @@ static void guest_test_msrs_access(void)
- 			 */
- 			msr->idx = HV_X64_MSR_GUEST_OS_ID;
- 			msr->write = 1;
--			msr->write_val = LINUX_OS_ID;
-+			msr->write_val = HYPERV_LINUX_OS_ID;
- 			msr->available = 1;
- 			break;
- 		case 3:
+v2:
+- Fix wrong list_for_each_entry reported by Dan Carpenter
+
+Christian 'Ansuel' Marangi (5):
+  PM / devfreq: Fix cpufreq passive unregister erroring on PROBE_DEFER
+  PM / devfreq: Fix kernel warning with cpufreq passive register fail
+  PM / devfreq: Fix kernel panic with cpu based scaling to passive gov
+  PM / devfreq: Rework freq_table to be local to devfreq struct
+  PM / devfreq: Mute warning on governor PROBE_DEFER
+
+ drivers/devfreq/devfreq.c          | 75 ++++++++++++++----------------
+ drivers/devfreq/governor_passive.c | 39 ++++++----------
+ include/linux/devfreq.h            |  4 ++
+ 3 files changed, 53 insertions(+), 65 deletions(-)
+
 -- 
-2.35.3
+2.36.1
 

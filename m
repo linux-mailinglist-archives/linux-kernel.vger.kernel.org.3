@@ -2,121 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F3E547F40
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DBB547F3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbiFMFrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 01:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S234772AbiFMFto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 01:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236378AbiFMFqn (ORCPT
+        with ESMTP id S237003AbiFMFtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 01:46:43 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025F46581;
-        Sun, 12 Jun 2022 22:46:39 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25D5kccK099819;
-        Mon, 13 Jun 2022 00:46:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655099198;
-        bh=YGrd/7kl44LtBnocymnKeoW4pEzFWqJ8jpENxUsO5Ug=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=cXuRNnIsDUbn1d/dCjQoZ9pn56r+PMRmMYMsJa60XoJO/WOv5vjBD9roceAjAq8Zf
-         TVMx5jXH8rQc3IuA15atWOMarprN7LMGaY9SX1uom0MagJ2uQlqTXwGor2CKKDm3Mo
-         0z26zVtgZ8w6/BYOY6MDKJSzbGyA0YqV/eGSevHg=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25D5kcUj118310
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Jun 2022 00:46:38 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 13
- Jun 2022 00:46:38 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 13 Jun 2022 00:46:38 -0500
-Received: from [172.24.145.198] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25D5kZtT073781;
-        Mon, 13 Jun 2022 00:46:35 -0500
-Message-ID: <2aa6259b-92b8-e169-7004-1876a7aaa1fd@ti.com>
-Date:   Mon, 13 Jun 2022 11:16:34 +0530
+        Mon, 13 Jun 2022 01:49:11 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5222607
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:48:54 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25D5FFCP037328;
+        Mon, 13 Jun 2022 05:48:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=39W8RlxrwOaMEwVU56Gyx8hQG96IHYffjy4iH+NWIu0=;
+ b=SMwwAo03iKeK4AspDY0tD6v0/sAxBa6MhFqY6B8cIr2WZlZHcafizwad0IuyD18YdijX
+ lGCj7zAP84o8uP6QiPMOMJAZCJYLBCS1OLqYSbiFl18JfTteSjb4bXpECsP+w7rEq9/X
+ UhErmOe34zc9s6ezhwB7ocv+kzCKINJnj8C58sLTR+sGhdeN2ZAw9snEP9rkX0bumRPZ
+ VXm/OwKLzj/Yz3AqEI9WDmc7HxS9bA0F97TRre3EOo8pZWoDVlJyk3CuzF1oTDSIQEcd
+ 6tr4Hrklb2/z788pEsiLyYExM1Iry/eU8sMWRbBWT2uW9zT1LsfB/MKErR7tC5p+Fgah cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gn53qgk6w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 05:48:37 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25D5jU1c016687;
+        Mon, 13 Jun 2022 05:48:36 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gn53qgk6k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 05:48:36 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25D5ablv013329;
+        Mon, 13 Jun 2022 05:48:34 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gmjaja7ey-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 05:48:34 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25D5mWnx17564066
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Jun 2022 05:48:32 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 044EBA405F;
+        Mon, 13 Jun 2022 05:48:32 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B9BA6A405C;
+        Mon, 13 Jun 2022 05:48:25 +0000 (GMT)
+Received: from [9.43.31.74] (unknown [9.43.31.74])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Jun 2022 05:48:25 +0000 (GMT)
+Message-ID: <e1e25713-3c06-5f31-e98f-20faa28d4ef9@linux.ibm.com>
+Date:   Mon, 13 Jun 2022 11:18:23 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] gpio: davinci: Add support for system suspend/resume
- PM
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 03/13] mm/demotion: Return error on write to
+ numa_demotion sysfs
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220610054622.21281-1-a-govindraju@ti.com>
- <CAHp75VdPXHF96B5QWNOS3zfF+EOnWeRe+LCGnjvLBcb30kVzWg@mail.gmail.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-In-Reply-To: <CAHp75VdPXHF96B5QWNOS3zfF+EOnWeRe+LCGnjvLBcb30kVzWg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Ying Huang <ying.huang@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220610135229.182859-1-aneesh.kumar@linux.ibm.com>
+ <20220610135229.182859-4-aneesh.kumar@linux.ibm.com>
+ <7ed1f9f544937b5c82ab380a4977e5ae22a98c43.camel@intel.com>
+ <9da3c6ef-ba0d-6229-2188-0956222b04f1@linux.ibm.com>
+ <33b42a802a07721c639db99ed208ed43f743bb37.camel@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <33b42a802a07721c639db99ed208ed43f743bb37.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jgh2KiALuHqjNDHhb_MdO_XDgKx05fcS
+X-Proofpoint-ORIG-GUID: gHN1GEzleRD5iJChut3EoOhIQu4ngYnv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-13_02,2022-06-09_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206130026
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-On 10/06/22 17:50, Andy Shevchenko wrote:
-> On Fri, Jun 10, 2022 at 8:08 AM Aswath Govindraju <a-govindraju@ti.com> wrote:
+On 6/13/22 11:03 AM, Ying Huang wrote:
+> On Mon, 2022-06-13 at 09:05 +0530, Aneesh Kumar K V wrote:
+>> On 6/13/22 8:56 AM, Ying Huang wrote:
+>>> On Fri, 2022-06-10 at 19:22 +0530, Aneesh Kumar K.V wrote:
+>>>> With CONFIG_MIGRATION disabled return EINVAL on write.
+>>>>
+>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>>> ---
+>>>>    mm/memory-tiers.c | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+>>>> index 9c6b40d7e0bf..c3123a457d90 100644
+>>>> --- a/mm/memory-tiers.c
+>>>> +++ b/mm/memory-tiers.c
+>>>> @@ -105,6 +105,9 @@ static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
+>>>>    {
+>>>>    	ssize_t ret;
+>>>>    
+>>>>
+>>>>
+>>>> +	if (!IS_ENABLED(CONFIG_MIGRATION))
+>>>> +		return -EINVAL;
+>>>> +
+>>>
+>>> How about enclose numa_demotion_enabled_xxx related code with CONFIG_MIGRATION?
+>>>
 >>
->> From: Devarsh Thakkar <devarsht@ti.com>
->>
->> Add support for system suspend/resume PM hooks, save the
->> register context of all the required gpio registers on suspend
->> and restore the context on resume.
+>> IIUC there is a desire to use IS_ENABLED() in the kernel instead of
+>> #ifdef since that helps in more compile time checks. Because there are
+>> no dead codes during compile now with IS_ENABLED().
 > 
-> the resume
+> IS_ENABLED() is used to reduce usage of "#ifdef" in ".c" file,
+> especially inside a function.  We have good build test coverage with
+> 0Day now.
+> 
+> To avoid code size inflate, it's better to use #ifdef CONFIG_MIGRATION.
 > 
 
-Fixed this in respin
-> ...
-> 
->> +       writel_relaxed(0xFFFFFFFF, &g->intstat);
-> 
-> GENMASK(31, 0) ?
+For a diff like below I am finding IS_ENABLED better.
 
-Used this instead of the direct value in the respin
+size memory-tiers.o.isenabled memory-tiers.o
+    text    data     bss     dec     hex filename
+    4776     989       5    5770    168a memory-tiers.o.isenabled
+    5257     990       5    6252    186c memory-tiers.o
 
-> 
-> ...
-> 
->> +static int __maybe_unused davinci_gpio_suspend(struct device *dev)
-> 
->> +static int __maybe_unused davinci_gpio_resume(struct device *dev)
-> 
->> +static const struct dev_pm_ops davinci_gpio_dev_pm_ops = {
->> +       SET_SYSTEM_SLEEP_PM_OPS(davinci_gpio_suspend, davinci_gpio_resume)
->> +};
-> 
->> +               .pm = &davinci_gpio_dev_pm_ops,
-> 
-> Can you utilize pm_sleep_ptr() and corresponding macros instead of
-> __maybe_unused?
 
-Used pm_sleep_ptr instead of the __maybe_unused in the respin.
+modified   mm/memory-tiers.c
+@@ -710,12 +710,11 @@ static int __meminit 
+migrate_on_reclaim_callback(struct notifier_block *self,
 
-Thank you for the review. I have posted a respin(v3) for this patch,
+  static void __init migrate_on_reclaim_init(void)
+  {
+-
+-	if (IS_ENABLED(CONFIG_MIGRATION)) {
++#ifdef CONFIG_MIGRATION
+  		node_demotion = kcalloc(MAX_NUMNODES, sizeof(struct demotion_nodes),
+  					GFP_KERNEL);
+  		WARN_ON(!node_demotion);
+-	}
++#endif
+  	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
+  }
 
-https://patchwork.ozlabs.org/project/linux-gpio/patch/20220613054310.21186-1-a-govindraju@ti.com/
+@@ -844,14 +843,19 @@ static ssize_t numa_demotion_enabled_show(struct 
+kobject *kobj,
+  			  numa_demotion_enabled ? "true" : "false");
+  }
 
--- 
-Thanks,
-Aswath
++#ifdef CONFIG_MIGRATION
+  static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
+  					   struct kobj_attribute *attr,
+  					   const char *buf, size_t count)
+  {
+-	ssize_t ret;
+-
+-	if (!IS_ENABLED(CONFIG_MIGRATION))
+-		return -EINVAL;
++	return -EINVAL;
++}
++#else
++static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
++					   struct kobj_attribute *attr,
++					   const char *buf, size_t count)
++{
++		ssize_t ret;
+
+  	ret = kstrtobool(buf, &numa_demotion_enabled);
+  	if (ret)
+@@ -859,6 +863,7 @@ static ssize_t numa_demotion_enabled_store(struct 
+kobject *kobj,
+
+  	return count;
+  }
++#endif
+
+  static struct kobj_attribute numa_demotion_enabled_attr =
+  	__ATTR(demotion_enabled, 0644, numa_demotion_enabled_show,
+
+I also find that #ifdef config not easier to the eyes. If there is a 
+large code that we can end up #ifdef out, then it might be worth it. 
+IIUC, we might want to keep the establish_migration target to find 
+top_tier rank and lower_tier mask. Once we do that only thing that we 
+could comment out is the node_demotion sysfs creation and I was 
+considering to keep that even if migration is disabled with a write to 
+the file returning EINVAL. I could switch that if you strongly feel that 
+we should hide node_demotion sysfs file.
+
+-aneesh

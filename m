@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A3554824F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C7754827A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiFMIz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S239801AbiFMInq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239397AbiFMIn0 (ORCPT
+        with ESMTP id S239488AbiFMIn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:43:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E97C45;
-        Mon, 13 Jun 2022 01:43:26 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 08:43:23 -0000
+        Mon, 13 Jun 2022 04:43:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FB6C45;
+        Mon, 13 Jun 2022 01:43:27 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 08:43:24 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1655109804;
+        s=2020; t=1655109805;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PHjuPIMbgdG2lR+qQVtbOKhjK916xLaRY2n9UJBw2Cs=;
-        b=3n1AJdDxkYWxTvX4BubnRkoE5gGX5CHyTSD3JnTUGC5/C2IO2BOzvvIWwQk9S3zsDOiZF5
-        rD3S7SRmDKRBNueFnmMfszfZMYOtQ4XrSZvzpNqp7/DkmGAnq5tM13l5gnHuwxY2WZNchW
-        RXsfsCjj/HWOqJjWQF+OcUON16++oT5E4wFfkV9rQMbgezp2L0fYGPJDWa2M0wyXD5pN3o
-        eOD1IfZf1k2Fql2T41JV5xhuxvd3AXSpeAozllHSO4fxjRB5m7Af5mod11tIT61bfiiYGg
-        hgdJxep1dlrYD9I+HjB/0w9VfcUaV2treEOKGxMBU4XmPTbaoLR3DZiSdQopOw==
+        bh=3okKoR/CVCiKXgcwp0iBGz3FvDwOvZJISWblwbYi/vE=;
+        b=AbnN4E7Tmol75xO6g7uUAy+0993Qtb+8vfMMM/Ib0oblNCSthHUZ3ecWt6l24t41BG3jyU
+        Fpfkhs89EfFPEHgZB2HE153FSc1K1Fou9/9phgtCo5rDHhTKFKXphovTEiSZMIefoBin6J
+        62/te4+CV7xIfDcUKdacT9dJDHB2T8gOilA0CcqC7OD2RuQuMOZbD1vdtJ32zJTPoLwifT
+        OCQZoCKm6uyBMU5STyWARRbe24aol7wR4jEuEiNAxXlQU6qm8Yq2VkIlgiiwT4oBpRp8+P
+        tuLGXbhTKK4Fesvt03/MS26ipVyjMIRVsAxKBvFq6VbILDYevae/5UqyGyRZDA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1655109804;
+        s=2020e; t=1655109805;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PHjuPIMbgdG2lR+qQVtbOKhjK916xLaRY2n9UJBw2Cs=;
-        b=N6P2/Y+gsKq1Uj2HVSh/ousT7E8uMViHXs1BGeRQOR5mzfW32TXfx+SvyiK5/JtwGN5r6b
-        HzPuQ1MLQM/gVWDg==
-From:   "tip-bot2 for Tianchen Ding" <tip-bot2@linutronix.de>
+        bh=3okKoR/CVCiKXgcwp0iBGz3FvDwOvZJISWblwbYi/vE=;
+        b=iu1tSyKl+wwAUQXFCWwJp92/2sU7PZnG1aabrKgxs5criIIm6tAKLhcquYSVK5wqiYBQFK
+        YhlR0N7jAF2fKKBA==
+From:   "tip-bot2 for Josh Don" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched: Fix the check of nr_running at queue wakelist
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
+Subject: [tip: sched/core] sched: Allow newidle balancing to bail out of load_balance
+Cc:     Josh Don <joshdon@google.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220608233412.327341-2-dtcccc@linux.alibaba.com>
-References: <20220608233412.327341-2-dtcccc@linux.alibaba.com>
+In-Reply-To: <20220609025515.2086253-1-joshdon@google.com>
+References: <20220609025515.2086253-1-joshdon@google.com>
 MIME-Version: 1.0
-Message-ID: <165510980360.4207.9149154297957353437.tip-bot2@tip-bot2>
+Message-ID: <165510980461.4207.16837948600111903560.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,53 +67,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     28156108fecb1f808b21d216e8ea8f0d205a530c
-Gitweb:        https://git.kernel.org/tip/28156108fecb1f808b21d216e8ea8f0d205a530c
-Author:        Tianchen Ding <dtcccc@linux.alibaba.com>
-AuthorDate:    Thu, 09 Jun 2022 07:34:11 +08:00
+Commit-ID:     792b9f65a568f48c50b3175536db9cde5a1edcc0
+Gitweb:        https://git.kernel.org/tip/792b9f65a568f48c50b3175536db9cde5a1edcc0
+Author:        Josh Don <joshdon@google.com>
+AuthorDate:    Wed, 08 Jun 2022 19:55:15 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 13 Jun 2022 10:30:01 +02:00
 
-sched: Fix the check of nr_running at queue wakelist
+sched: Allow newidle balancing to bail out of load_balance
 
-The commit 2ebb17717550 ("sched/core: Offload wakee task activation if it
-the wakee is descheduling") checked rq->nr_running <= 1 to avoid task
-stacking when WF_ON_CPU.
+While doing newidle load balancing, it is possible for new tasks to
+arrive, such as with pending wakeups. newidle_balance() already accounts
+for this by exiting the sched_domain load_balance() iteration if it
+detects these cases. This is very important for minimizing wakeup
+latency.
 
-Per the ordering of writes to p->on_rq and p->on_cpu, observing p->on_cpu
-(WF_ON_CPU) in ttwu_queue_cond() implies !p->on_rq, IOW p has gone through
-the deactivate_task() in __schedule(), thus p has been accounted out of
-rq->nr_running. As such, the task being the only runnable task on the rq
-implies reading rq->nr_running == 0 at that point.
+However, if we are already in load_balance(), we may stay there for a
+while before returning back to newidle_balance(). This is most
+exacerbated if we enter a 'goto redo' loop in the LBF_ALL_PINNED case. A
+very straightforward workaround to this is to adjust should_we_balance()
+to bail out if we're doing a CPU_NEWLY_IDLE balance and new tasks are
+detected.
 
-The benchmark result is in [1].
+This was tested with the following reproduction:
+- two threads that take turns sleeping and waking each other up are
+  affined to two cores
+- a large number of threads with 100% utilization are pinned to all
+  other cores
 
-[1] https://lore.kernel.org/all/e34de686-4e85-bde1-9f3c-9bbc86b38627@linux.alibaba.com/
+Without this patch, wakeup latency was ~120us for the pair of threads,
+almost entirely spent in load_balance(). With this patch, wakeup latency
+is ~6us.
 
-Suggested-by: Valentin Schneider <vschneid@redhat.com>
-Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+Signed-off-by: Josh Don <joshdon@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Link: https://lore.kernel.org/r/20220608233412.327341-2-dtcccc@linux.alibaba.com
+Link: https://lkml.kernel.org/r/20220609025515.2086253-1-joshdon@google.com
 ---
- kernel/sched/core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ kernel/sched/fair.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index bfa7452..294b918 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3829,8 +3829,12 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
- 	 * CPU then use the wakelist to offload the task activation to
- 	 * the soon-to-be-idle CPU as the current CPU is likely busy.
- 	 * nr_running is checked to avoid unnecessary task stacking.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 7d8ef01..8bed757 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9824,9 +9824,15 @@ static int should_we_balance(struct lb_env *env)
+ 	/*
+ 	 * In the newly idle case, we will allow all the CPUs
+ 	 * to do the newly idle load balance.
 +	 *
-+	 * Note that we can only get here with (wakee) p->on_rq=0,
-+	 * p->on_cpu can be whatever, we've done the dequeue, so
-+	 * the wakee has been accounted out of ->nr_running.
++	 * However, we bail out if we already have tasks or a wakeup pending,
++	 * to optimize wakeup latency.
  	 */
--	if ((wake_flags & WF_ON_CPU) && cpu_rq(cpu)->nr_running <= 1)
-+	if ((wake_flags & WF_ON_CPU) && !cpu_rq(cpu)->nr_running)
- 		return true;
+-	if (env->idle == CPU_NEWLY_IDLE)
++	if (env->idle == CPU_NEWLY_IDLE) {
++		if (env->dst_rq->nr_running > 0 || env->dst_rq->ttwu_pending)
++			return 0;
+ 		return 1;
++	}
  
- 	return false;
+ 	/* Try to find first idle CPU */
+ 	for_each_cpu_and(cpu, group_balance_mask(sg), env->cpus) {

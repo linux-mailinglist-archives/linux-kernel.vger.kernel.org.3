@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3F2548A72
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4FC549322
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384739AbiFMOaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S1384486AbiFMOhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384004AbiFMOY1 (ORCPT
+        with ESMTP id S1384396AbiFMOeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:27 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33351638D;
-        Mon, 13 Jun 2022 04:46:28 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id r187-20020a1c44c4000000b0039c76434147so4423518wma.1;
-        Mon, 13 Jun 2022 04:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=nzaFuqeqvJmB+vA6LsJ/YIozE1oz1rXm/JebgazMuEU=;
-        b=IAqpgc2xZnZ+91W8mYh0XvQIRGp7yMZMBwyhb3u+Foh3q0B0bl3569VjsdWwxgV1nj
-         dkjaEnc6Lo/OTbaFFBXlL8YFHq9t6cRKOyuMFNl1MN9DEfPWnutQUnNVaBo9YAyYOIhT
-         SRWhSrwSOpalMGtmb9GmtEZVWnrrvIp+pyespACJtJVsqxE1idVR9f2HIMOYtN9rdg21
-         Y3RQ5qRUb1jwV0sEqTh4VXOOs+RfdiQSUSF40nSEPqVtanfgr8NjRUp2WRgvoEu8wuMI
-         etlVQkzv43kwRfLEaHqS7SvUarzl/24SJ+wddjBtA8lB4U/75QsRV6gnXlY3FX0a24ho
-         aU3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=nzaFuqeqvJmB+vA6LsJ/YIozE1oz1rXm/JebgazMuEU=;
-        b=RXIwHMvnZ78kmVn55Zbb1P9cL5O9YRGx2ncD0zhcClmwNsmuKPLDyVlUV5OPYiADBb
-         os9i8OTHvfbzFFuEQT6VVRFIRfVuB/uUkdv1G4h7GpMP5ASLVNozuCTxjAI7vMFTrpQ1
-         1EzyTmSLkJXoCdpoNQORjx31Q0m8NBdTYVs1cI6bBY2j12EvbZo2kfDgsmBzbgP2G0yO
-         vwoBta2MOuyU/hutw9GfKw4Ei2pPU66hu0nVZO2/kAEBqXezxL64PUMJfq2kl231x1+Y
-         0HpBV3/rUuFmM0FU4zRn16bcfGTfwbAcTisELPYpfvBOSWgNVpY3D/XvgvELOtmbLSQG
-         Qg1w==
-X-Gm-Message-State: AOAM532foy959KKaWgbv19tPgsBTmuW8TvVy04dRPVeSG6ps/Q0k6giB
-        Qc3qMq0q3iL9GyQ+g0llxbVD0voJNQw=
-X-Google-Smtp-Source: ABdhPJy0C/teHFxhSocotTFSMCKEjUpwHCBJ3epDSRMMDU5ZO7byMB8eGZhDeIBmW+HpQDRdVu4C8A==
-X-Received: by 2002:a7b:c404:0:b0:39c:4389:5834 with SMTP id k4-20020a7bc404000000b0039c43895834mr14333606wmi.70.1655120787320;
-        Mon, 13 Jun 2022 04:46:27 -0700 (PDT)
-Received: from felia.fritz.box (200116b8260df50011e978c0f780de03.dip.versatel-1u1.de. [2001:16b8:260d:f500:11e9:78c0:f780:de03])
-        by smtp.gmail.com with ESMTPSA id q16-20020a5d5750000000b0020e63ab5d78sm8263311wrw.26.2022.06.13.04.46.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 04:46:26 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: add include/dt-bindings/i2c to I2C SUBSYSTEM HOST DRIVERS
-Date:   Mon, 13 Jun 2022 13:46:14 +0200
-Message-Id: <20220613114614.21510-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Jun 2022 10:34:01 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDB4ADBCF;
+        Mon, 13 Jun 2022 04:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655120957; x=1686656957;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ip7LDyLvG35PweXXiZXDcl0rYNLBHjbyNoPhnAv4A5k=;
+  b=jTEqqbovheovyfWDNgt2SKwbdHEAYvD6WjS84ok6mYYs0hyZ5UmeMipW
+   5bAD2a6QphiyQoYwrn+1GAMYumCt3B0JmMYZG+BxJ++x2Ufhg4Xo6MDSS
+   MMdb2op62uc76nO0p+OMJj9fPXyAn2lcTMtKBoAfrsAzrtcgeNQR4YFYH
+   35PwVG2fxlJ4brs9LdC/yfEqMhggjO9yH4OPKIz6ryb35ZtF9rSEaJI5k
+   QUY9YGWJscfDFN6ehWlRTLzTU+pVGZDOMDiuO6FB9c9CTU5PIgkTPeANU
+   emtis43FWMQPpHOjfoICtOFViDKA7KVgzJ1Y7n/hIQzefpLIguYAv+sBP
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="177684159"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2022 04:48:29 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 13 Jun 2022 04:48:29 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 13 Jun 2022 04:48:26 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 0/2] Add support for PolarFire SoC's musb controller
+Date:   Mon, 13 Jun 2022 12:46:41 +0100
+Message-ID: <20220613114642.1615292-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maintainers of the directory Documentation/devicetree/bindings/i2c
-are also the maintainers of the corresponding directory
-include/dt-bindings/i2c.
+Hey Bin, Greg,
+Short series here adding support for USB on Microchip PolarFire SoC FPGAs.
+The kconfig dependency for INVENTRA_DMA has become a bit of a mouthful,
+is there a better way of dealing with that?
+Thanks,
+Conor.
 
-Add the file entry for include/dt-bindings/i2c to the appropriate
-section in MAINTAINERS.
+Changes since v1:
+- Drop unneeded resource copying as per Rob's changes to the other drivers
+- Drop the dts patch
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Wolfram, please pick this MAINTAINERS addition to the I2C HOST DRIVERS.
+Conor Dooley (2):
+  usb: musb: Add support for PolarFire SoC's musb controller
+  MAINTAINERS: add musb to PolarFire SoC entry
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ MAINTAINERS               |   1 +
+ drivers/usb/musb/Kconfig  |  13 +-
+ drivers/usb/musb/Makefile |   1 +
+ drivers/usb/musb/mpfs.c   | 265 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 279 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/usb/musb/mpfs.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d04e74ade88a..2b8aec742e6e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9331,6 +9331,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
- F:	Documentation/devicetree/bindings/i2c/
- F:	drivers/i2c/algos/
- F:	drivers/i2c/busses/
-+F:	include/dt-bindings/i2c/
- 
- I2C-TAOS-EVM DRIVER
- M:	Jean Delvare <jdelvare@suse.com>
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-2.17.1
+2.36.1
 

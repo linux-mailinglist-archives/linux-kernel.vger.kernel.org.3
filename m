@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF2A548C48
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E235488FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353794AbiFMLZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
+        id S1377301AbiFMNcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352475AbiFMLSA (ORCPT
+        with ESMTP id S1377725AbiFMNaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:18:00 -0400
+        Mon, 13 Jun 2022 09:30:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD77E39171;
-        Mon, 13 Jun 2022 03:40:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD356D4F8;
+        Mon, 13 Jun 2022 04:25:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB47361214;
-        Mon, 13 Jun 2022 10:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51C0C34114;
-        Mon, 13 Jun 2022 10:40:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7311E61037;
+        Mon, 13 Jun 2022 11:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858D7C3411C;
+        Mon, 13 Jun 2022 11:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116827;
-        bh=F+Ejk3TJqvM9iJL5X57Am9LXrVwli2Qkgi0+4c09buY=;
+        s=korg; t=1655119498;
+        bh=dUEd1nJ1TGgsOkj8BXb0S0dzjSUW0ry9MJ2v6OX4Hqg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1o3irwpHLV/TUWsDmN0fwR7XJ359dQfIL5PlRcorgxkWa1Si6UAj8uGMZ68CC5MRh
-         zrvRIcEsJdS/hRd+Sh4xBDHfsDfbSOIps4ZFdkm+jLpWQN+XlmsBRdWgelX2mPSXm/
-         YjhOp3dI0gyaejpnUBmvyLlx49+y+9WEbYo8vShU=
+        b=MHe+A2xb7LYAkiRwsYT2cn6TIW8LFCfsoWLP+kahhmuT6CKUcW1ipiojDO+aP78/3
+         rrYsIyvijo1QgK3WBLwJm7WwH/4Yg+KadOv8mMC3Q+/rbuFLWXdHkSWueZq8sF70aB
+         B6i7DNd1+0sJ+fOvK1KUQ27baB+OYOnPm593M0nA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 187/411] Input: sparcspkr - fix refcount leak in bbc_beep_probe
+Subject: [PATCH 5.18 035/339] iio: proximity: vl53l0x: Fix return value check of wait_for_completion_timeout
 Date:   Mon, 13 Jun 2022 12:07:40 +0200
-Message-Id: <20220613094934.267357727@linuxfoundation.org>
+Message-Id: <20220613094927.583528772@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,34 +57,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit c8994b30d71d64d5dcc9bc0edbfdf367171aa96f ]
+[ Upstream commit 50f2959113cb6756ffd73c4fedc712cf2661f711 ]
 
-of_find_node_by_path() calls of_find_node_opts_by_path(),
-which returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-Fixes: 9c1a5077fdca ("input: Rewrite sparcspkr device probing.")
+Fixes: 3cef2e31b54b ("iio: proximity: vl53l0x: Add IRQ support")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220516081018.42728-1-linmq006@gmail.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Link: https://lore.kernel.org/r/20220412064210.10734-1-linmq006@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/misc/sparcspkr.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/proximity/vl53l0x-i2c.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/input/misc/sparcspkr.c b/drivers/input/misc/sparcspkr.c
-index fe43e5557ed7..cdcb7737c46a 100644
---- a/drivers/input/misc/sparcspkr.c
-+++ b/drivers/input/misc/sparcspkr.c
-@@ -205,6 +205,7 @@ static int bbc_beep_probe(struct platform_device *op)
+diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
+index 661a79ea200d..a284b20529fb 100644
+--- a/drivers/iio/proximity/vl53l0x-i2c.c
++++ b/drivers/iio/proximity/vl53l0x-i2c.c
+@@ -104,6 +104,7 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
+ 	u16 tries = 20;
+ 	u8 buffer[12];
+ 	int ret;
++	unsigned long time_left;
  
- 	info = &state->u.bbc;
- 	info->clock_freq = of_getintprop_default(dp, "clock-frequency", 0);
-+	of_node_put(dp);
- 	if (!info->clock_freq)
- 		goto out_free;
+ 	ret = i2c_smbus_write_byte_data(client, VL_REG_SYSRANGE_START, 1);
+ 	if (ret < 0)
+@@ -112,10 +113,8 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
+ 	if (data->client->irq) {
+ 		reinit_completion(&data->completion);
  
+-		ret = wait_for_completion_timeout(&data->completion, HZ/10);
+-		if (ret < 0)
+-			return ret;
+-		else if (ret == 0)
++		time_left = wait_for_completion_timeout(&data->completion, HZ/10);
++		if (time_left == 0)
+ 			return -ETIMEDOUT;
+ 
+ 		vl53l0x_clear_irq(data);
 -- 
 2.35.1
 

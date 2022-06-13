@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81EC5490D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63DA54903C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355794AbiFMLlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S1379935AbiFMNvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354885AbiFMLeN (ORCPT
+        with ESMTP id S1379279AbiFMNn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:34:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0244242A34;
-        Mon, 13 Jun 2022 03:47:39 -0700 (PDT)
+        Mon, 13 Jun 2022 09:43:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3053F334;
+        Mon, 13 Jun 2022 04:31:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27853B80D3F;
-        Mon, 13 Jun 2022 10:47:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54601C3411F;
-        Mon, 13 Jun 2022 10:47:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 015F8B80E59;
+        Mon, 13 Jun 2022 11:31:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CDD5C34114;
+        Mon, 13 Jun 2022 11:31:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117256;
-        bh=F0EYgoPzitgp8Y9vT+TpnbuD2i0rrUHXv1A1VLg05qg=;
+        s=korg; t=1655119914;
+        bh=tGBlJ7JY+s3B2/qOb54Hys5f330KW69tkUwoYC4ttqk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MrtJCdE/TIzGwMQEsuLdPp4NKWjK81RULXDZCvyc1PNdsXAn+hk8ymjB9E6CcwCj0
-         yjKea39WClxQ+zqekkcwqV6MR1EOvCFirJNvVCZyRMEyHfP4UY6ist62w0NhuW/NI5
-         BLVum0H0PSiaunBfzvgnMyQIcyTPWifjPiMHYbyQ=
+        b=0VUuNy2635MEfkFBWjdjPVOARutxL+9tcawq7+iSVdMNNOG6GsxbUl1FtpyQFoeuZ
+         bJf2pMsuWMbJMxDznasNpZ/lOhslw2A8jK024Oha7ibyFc/MCoMnlAVGTjvD1LaFrn
+         1y/VjtOLIPmVU82861v8Lmou4Hp/TtwRBlyAINAg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com,
-        Jon Maloy <jmaloy@redhat.com>,
-        Hoang Le <hoang.h.le@dektech.com.au>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Trond Myklebust <trondmy@hammerspace.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 335/411] tipc: check attribute length for bearer name
-Date:   Mon, 13 Jun 2022 12:10:08 +0200
-Message-Id: <20220613094938.765432242@linuxfoundation.org>
+Subject: [PATCH 5.18 184/339] NFSD: Fix potential use-after-free in nfsd_file_put()
+Date:   Mon, 13 Jun 2022 12:10:09 +0200
+Message-Id: <20220613094932.258210982@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,56 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hoang Le <hoang.h.le@dektech.com.au>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-[ Upstream commit 7f36f798f89bf32c0164049cb0e3fd1af613d0bb ]
+[ Upstream commit b6c71c66b0ad8f2b59d9bc08c7a5079b110bec01 ]
 
-syzbot reported uninit-value:
-=====================================================
-BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:644 [inline]
-BUG: KMSAN: uninit-value in string+0x4f9/0x6f0 lib/vsprintf.c:725
- string_nocheck lib/vsprintf.c:644 [inline]
- string+0x4f9/0x6f0 lib/vsprintf.c:725
- vsnprintf+0x2222/0x3650 lib/vsprintf.c:2806
- vprintk_store+0x537/0x2150 kernel/printk/printk.c:2158
- vprintk_emit+0x28b/0xab0 kernel/printk/printk.c:2256
- vprintk_default+0x86/0xa0 kernel/printk/printk.c:2283
- vprintk+0x15f/0x180 kernel/printk/printk_safe.c:50
- _printk+0x18d/0x1cf kernel/printk/printk.c:2293
- tipc_enable_bearer net/tipc/bearer.c:371 [inline]
- __tipc_nl_bearer_enable+0x2022/0x22a0 net/tipc/bearer.c:1033
- tipc_nl_bearer_enable+0x6c/0xb0 net/tipc/bearer.c:1042
- genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+nfsd_file_put_noref() can free @nf, so don't dereference @nf
+immediately upon return from nfsd_file_put_noref().
 
-- Do sanity check the attribute length for TIPC_NLA_BEARER_NAME.
-- Do not use 'illegal name' in printing message.
-
-Reported-by: syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com
-Fixes: cb30a63384bc ("tipc: refactor function tipc_enable_bearer()")
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
-Link: https://lore.kernel.org/r/20220602063053.5892-1-hoang.h.le@dektech.com.au
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Suggested-by: Trond Myklebust <trondmy@hammerspace.com>
+Fixes: 999397926ab3 ("nfsd: Clean up nfsd_file_put()")
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/bearer.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/nfsd/filecache.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
-index 8bd2454cc89d..577f71dd63fb 100644
---- a/net/tipc/bearer.c
-+++ b/net/tipc/bearer.c
-@@ -248,9 +248,8 @@ static int tipc_enable_bearer(struct net *net, const char *name,
- 	u32 i;
- 
- 	if (!bearer_name_validate(name, &b_names)) {
--		errstr = "illegal name";
- 		NL_SET_ERR_MSG(extack, "Illegal name");
--		goto rejected;
-+		return res;
- 	}
- 
- 	if (prio > TIPC_MAX_LINK_PRI && prio != TIPC_MEDIA_LINK_PRI) {
+diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+index 2c1b027774d4..0326bdec5de7 100644
+--- a/fs/nfsd/filecache.c
++++ b/fs/nfsd/filecache.c
+@@ -306,11 +306,12 @@ nfsd_file_put(struct nfsd_file *nf)
+ 	if (test_bit(NFSD_FILE_HASHED, &nf->nf_flags) == 0) {
+ 		nfsd_file_flush(nf);
+ 		nfsd_file_put_noref(nf);
+-	} else {
++	} else if (nf->nf_file) {
+ 		nfsd_file_put_noref(nf);
+-		if (nf->nf_file)
+-			nfsd_file_schedule_laundrette();
+-	}
++		nfsd_file_schedule_laundrette();
++	} else
++		nfsd_file_put_noref(nf);
++
+ 	if (atomic_long_read(&nfsd_filecache_count) >= NFSD_FILE_LRU_LIMIT)
+ 		nfsd_file_gc();
+ }
 -- 
 2.35.1
 

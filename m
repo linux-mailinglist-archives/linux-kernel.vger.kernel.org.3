@@ -2,141 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2E1549D9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E229549DA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350453AbiFMTZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
+        id S1349753AbiFMTZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350474AbiFMTZH (ORCPT
+        with ESMTP id S1349243AbiFMTZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:25:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AA83614E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:41:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E84F860F71
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F7E0C34114;
-        Mon, 13 Jun 2022 17:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1655142089;
-        bh=EhXZ8nwjvG7Is/AQKsJc4Np8BsZB+E9sA9nAWAwc81g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Vata14MZ1y1CEXhew/wz5vQ6tAhOTuM64dK67d4bxfkvLS7WXKFiOWhJUJ3nnL/Os
-         lCOX3h53QRC79qTwRYrQyAHN9Th4W/4FOexMwfTn0EncBhpztxgOfNbkwH9uK0DcuV
-         BgZj/uf/b834Jijd46OZQNHRkP+xTQnbvjaxlSg0=
-Date:   Mon, 13 Jun 2022 10:41:28 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     syzbot <syzbot+3f1e5c1dea3a2e66ea9a@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>
-Subject: Re: [syzbot] kernel BUG in mcopy_continue
-Message-Id: <20220613104128.fc55ed6ab63c428e502bc483@linux-foundation.org>
-In-Reply-To: <00000000000039bfb905e14ea9d0@google.com>
-References: <00000000000039bfb905e14ea9d0@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 13 Jun 2022 15:25:13 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E990D38790;
+        Mon, 13 Jun 2022 10:41:40 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8A73220C28A2;
+        Mon, 13 Jun 2022 10:41:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8A73220C28A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1655142100;
+        bh=O+F8BlTbN+pAhHpDZpkKrVVMTdsPZdsLp7LznEJHvpc=;
+        h=From:To:Subject:Date:From;
+        b=CtlP3O8MV4MUNxdtuwngW0OSjmjgc4DBZRZEMgnOD0z/NipOGr5/4zcyNBrO5knav
+         L8EeMRKp3tPjMhdex8lZ7fNsoQcbL2qmohRXWq2LyU7WNLXuidSJEC9iJOpTrjEgRP
+         De/8G7piFjspU9WeFDa0QZbiTq7FrRNUI4ARx1hs=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com
+Subject: [PATCH v2] scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+Date:   Mon, 13 Jun 2022 10:41:36 -0700
+Message-Id: <1655142096-3591-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Jun 2022 23:47:26 -0700 syzbot <syzbot+3f1e5c1dea3a2e66ea9a@syzkaller.appspotmail.com> wrote:
+Current code is based on the idea that the max number of SGL entries
+also determines the max size of an I/O request.  While this idea was
+true in older versions of the storvsc driver when SGL entry length
+was limited to 4 Kbytes, commit 3d9c3dcc58e9 ("scsi: storvsc: Enable
+scatterlist entry lengths > 4Kbytes") removed that limitation. It's
+now theoretically possible for the block layer to send requests that
+exceed the maximum size supported by Hyper-V. This problem doesn't
+currently happen in practice because the block layer defaults to a
+512 Kbyte maximum, while Hyper-V in Azure supports 2 Mbyte I/O sizes.
+But some future configuration of Hyper-V could have a smaller max I/O
+size, and the block layer could exceed that max.
 
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    6d0c80680317 Add linux-next specific files for 20220610
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13a777f7f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a30d6e3e814e5931
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3f1e5c1dea3a2e66ea9a
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3f1e5c1dea3a2e66ea9a@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> kernel BUG at mm/userfaultfd.c:642!
+Fix this by correctly setting max_sectors as well as sg_tablesize to
+reflect the maximum I/O size that Hyper-V reports. While allowing
+I/O sizes larger than the block layer default of 512 Kbytes doesn’t
+provide any noticeable performance benefit in the tests we ran, it's
+still appropriate to report the correct underlying Hyper-V capabilities
+to the Linux block layer.
 
-Thanks.  I'm looking suspiciously at "mm: userfaultfd: fix
-UFFDIO_CONTINUE on fallocated shmem pages"?
+Also tweak the virt_boundary_mask to reflect that the required
+alignment derives from Hyper-V communication using a 4 Kbyte page size,
+and not on the guest page size, which might be bigger (eg. ARM64).
 
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 14685 Comm: syz-executor.4 Not tainted 5.19.0-rc1-next-20220610-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:__mcopy_atomic mm/userfaultfd.c:642 [inline]
-> RIP: 0010:mcopy_continue+0x80f/0x1360 mm/userfaultfd.c:699
-> Code: a8 ff 49 83 fd fe 0f 85 bd fd ff ff e8 ba ca a8 ff 0f 1f 44 00 00 e8 b0 ca a8 ff e8 ab ca a8 ff 48 8b 7c 24 20 e8 51 76 8b ff <0f> 0b e8 9a ca a8 ff 0f 0b e8 93 ca a8 ff 4d 89 ee 31 ff 41 81 e6
-> RSP: 0018:ffffc900058f7b70 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: ffff8880226dee58 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a0b4228
-> RBP: 0000000020531000 R08: 0000000000000001 R09: ffff88801a0b422f
-> R10: ffffed1003416845 R11: 0000000000000001 R12: 0000000000000000
-> R13: fffffffffffffffe R14: 00000000fffffffe R15: ffff88801a0b4140
-> FS:  00007f91409ee700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000001b2c522000 CR3: 000000001d578000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  userfaultfd_continue fs/userfaultfd.c:1893 [inline]
->  userfaultfd_ioctl+0x1818/0x41f0 fs/userfaultfd.c:2017
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:870 [inline]
->  __se_sys_ioctl fs/ioctl.c:856 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f913f889109
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f91409ee168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007f913f99c030 RCX: 00007f913f889109
-> RDX: 0000000020000040 RSI: 00000000c020aa07 RDI: 0000000000000004
-> RBP: 00007f913f8e30ad R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffcb29c401f R14: 00007f91409ee300 R15: 0000000000022000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:__mcopy_atomic mm/userfaultfd.c:642 [inline]
-> RIP: 0010:mcopy_continue+0x80f/0x1360 mm/userfaultfd.c:699
-> Code: a8 ff 49 83 fd fe 0f 85 bd fd ff ff e8 ba ca a8 ff 0f 1f 44 00 00 e8 b0 ca a8 ff e8 ab ca a8 ff 48 8b 7c 24 20 e8 51 76 8b ff <0f> 0b e8 9a ca a8 ff 0f 0b e8 93 ca a8 ff 4d 89 ee 31 ff 41 81 e6
-> RSP: 0018:ffffc900058f7b70 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: ffff8880226dee58 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a0b4228
-> RBP: 0000000020531000 R08: 0000000000000001 R09: ffff88801a0b422f
-> R10: ffffed1003416845 R11: 0000000000000001 R12: 0000000000000000
-> R13: fffffffffffffffe R14: 00000000fffffffe R15: ffff88801a0b4140
-> FS:  00007f91409ee700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f91409cd718 CR3: 000000001d578000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Fixes: '3d9c3dcc58e9 ("scsi: storvsc: Enable scatter list entry lengths > 4Kbytes")'
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+V2
+ - More descriptive commit subject and message
+ - Better logic by considering max_transfer_bytes aligning to HV_HYP_PAGE_SIZE
+
+ drivers/scsi/storvsc_drv.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index ca3530982e52..99d3be1b6089 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -1844,7 +1844,7 @@ static struct scsi_host_template scsi_driver = {
+ 	.cmd_per_lun =		2048,
+ 	.this_id =		-1,
+ 	/* Ensure there are no gaps in presented sgls */
+-	.virt_boundary_mask =	PAGE_SIZE-1,
++	.virt_boundary_mask =	HV_HYP_PAGE_SIZE - 1,
+ 	.no_write_same =	1,
+ 	.track_queue_depth =	1,
+ 	.change_queue_depth =	storvsc_change_queue_depth,
+@@ -1895,6 +1895,7 @@ static int storvsc_probe(struct hv_device *device,
+ 	int target = 0;
+ 	struct storvsc_device *stor_device;
+ 	int max_sub_channels = 0;
++	u32 max_tx_bytes;
+ 
+ 	/*
+ 	 * We support sub-channels for storage on SCSI and FC controllers.
+@@ -1968,12 +1969,27 @@ static int storvsc_probe(struct hv_device *device,
+ 	}
+ 	/* max cmd length */
+ 	host->max_cmd_len = STORVSC_MAX_CMD_LEN;
+-
++	/* Any reasonable Hyper-V configuration should provide
++	 * max_transfer_bytes value aligning to HV_HYP_PAGE_SIZE,
++	 * protecting it from any weird value.
++	 */
++	max_tx_bytes = round_down(stor_device->max_transfer_bytes, HV_HYP_PAGE_SIZE);
++	/* max_hw_sectors_kb */
++	host->max_sectors = max_tx_bytes >> 9;
+ 	/*
+-	 * set the table size based on the info we got
+-	 * from the host.
++	 * There are 2 requirements for Hyper-V storvsc sgl segments,
++	 * based on which the below calculation for max segments is
++	 * done:
++	 *
++	 * 1. Except for the first and last sgl segment, all sgl segments
++	 *    should be align to HV_HYP_PAGE_SIZE, that also means the
++	 *    maximum number of segments in a sgl can be calculated by
++	 *    dividing the total max transfer length by HV_HYP_PAGE_SIZE.
++	 *
++	 * 2. Except for the first and last, each entry in the SGL must
++	 *    have an offset that is a multiple of HV_HYP_PAGE_SIZE.
+ 	 */
+-	host->sg_tablesize = (stor_device->max_transfer_bytes >> PAGE_SHIFT);
++	host->sg_tablesize = (max_tx_bytes >> HV_HYP_PAGE_SHIFT) + 1;
+ 	/*
+ 	 * For non-IDE disks, the host supports multiple channels.
+ 	 * Set the number of HW queues we are supporting.
+-- 
+2.25.1
+

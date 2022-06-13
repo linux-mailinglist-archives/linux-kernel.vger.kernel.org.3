@@ -2,202 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBC154A0C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FC854A0CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347654AbiFMVFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S1351708AbiFMVGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352125AbiFMVEJ (ORCPT
+        with ESMTP id S1352217AbiFMVEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:04:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59899344E5;
-        Mon, 13 Jun 2022 13:38:13 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CA3FD6601687;
-        Mon, 13 Jun 2022 21:38:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655152691;
-        bh=PZkwmDEMPHlMVYu46SGLuTz7ZFvWU8pB2VTaRlvFwiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cRsmNCUb0UyZdvroSbeDYzV+HZKrogRGU1DzzKl105cp5S3RXSNz5gdrsWVOK+Ael
-         muB45NmzAKVwrDkhN+ihSkz2mWtHReTERwNJlVotC7nr2dcDaBCZJGffST95c+PgBD
-         mRgDNCqpSD2Pcc5XLpONQ1ZTaT6tzGrzlsDcXr3M8oxYxlkLbfkB8x2fELgrCqD/Wj
-         XNGqXavYGRKhddltYnZCJZEJ8iesNuCZVNyg45QcnM5MPgkjsLkvLC79THFcIRa4Ee
-         zaji90f6/DIDchoUWlLt9cGnGQhcR0cN2Gs7lg+UKBu3sxUHRpubF3nJ0mYPuEdS2+
-         59t251l7Xr5cA==
-Date:   Mon, 13 Jun 2022 16:38:04 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Xin Ji <xji@analogixsemi.com>
-Subject: Re: [PATCH v2 3/7] dt-bindings: usb: Add Type-C switch binding
-Message-ID: <20220613203804.3d23gxidkw657ggq@notapiano>
-References: <20220609181106.3695103-1-pmalani@chromium.org>
- <20220609181106.3695103-4-pmalani@chromium.org>
+        Mon, 13 Jun 2022 17:04:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64B5C36306
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655152726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=miyd1T3+stkgi1mrJ4phi+uWQilLr1GqB1Dxvn0GUOs=;
+        b=W1kdgea77zNwKf+TaNoVHt3TgM1XSPAi+0pwxot1AO07XaSMeB2bER4K/PHEu4dWPKIwVS
+        R01sYEZXq3bPSlx/QHYFANqE4MJUvzhmz01MR8iqn1l1ay41VDIo3xtnTpD4VH8GBV95j1
+        jMssrUcxrwOiVCvel05ho6K1qktC2OI=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-155-Zfq_V0t7P1S-F7yxESNwyQ-1; Mon, 13 Jun 2022 16:38:45 -0400
+X-MC-Unique: Zfq_V0t7P1S-F7yxESNwyQ-1
+Received: by mail-pg1-f197.google.com with SMTP id a15-20020a65604f000000b00401a9baf7d5so3907422pgp.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:38:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=miyd1T3+stkgi1mrJ4phi+uWQilLr1GqB1Dxvn0GUOs=;
+        b=dSUqI+NJQQtYswzKEcqVPfHeIVT+pUBPNPsAaEu4H2AGMyXV7oFsm7s1SC3j59xBnJ
+         /QyG3CKN/I15XSPw786b6ESr1xS/tGjcWHhyKyLtnwlVZeI8Y4VVGMwvE8wm7Ra4M1h/
+         6qUwQmB3P/AQAeKht4oDkSKc5oleUPmHR8uEXCL1+HuzACXnkly2WXvayIIYfmhdc7ZM
+         QzxfCx7xujZSX1ZWPJWF4fwMn7fpANaVN02Wm08brDnlLCv1YDLd7wxxmNPEXolM/w2Z
+         kaLpatkWMt3TZVG7UJj5uZH20l4gjgn1MYpO3i/iQekUxY5XalEOrNrvYBkcwquLxcK5
+         WxLA==
+X-Gm-Message-State: AJIora/lLpYEzbqYLu6BLOz2HRy7b9DWX2NSZ63p2Cm/azqJaF+WQiRE
+        0fiirsBMyTfuPSz5kmPoUS2ocXVlZhL7T8eLwlpHnvFudFwq/cYdBgdUx514lVaNN3krEg+BVke
+        IRg1uSnPpqwio+3zmspwsD6jX
+X-Received: by 2002:a17:902:7604:b0:168:cca6:1b38 with SMTP id k4-20020a170902760400b00168cca61b38mr1113743pll.174.1655152724278;
+        Mon, 13 Jun 2022 13:38:44 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sXs1WFaIXkc6CwFKtbKlij7wvfOFwhTNHBGbcdQcBmY3+wFKnIyMn1hhRSLuPxBKdX7sAxag==
+X-Received: by 2002:a17:902:7604:b0:168:cca6:1b38 with SMTP id k4-20020a170902760400b00168cca61b38mr1113720pll.174.1655152723983;
+        Mon, 13 Jun 2022 13:38:43 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id ja2-20020a170902efc200b0015e8d4eb2c0sm5526354plb.266.2022.06.13.13.38.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 13:38:43 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 13:38:42 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <jroedel@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
+Message-ID: <20220613203842.zyncvndwfauef2yh@cantor>
+References: <20220505194658.246121-1-steve.wahl@hpe.com>
+ <20220512151309.330068-1-steve.wahl@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609181106.3695103-4-pmalani@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220512151309.330068-1-steve.wahl@hpe.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prashant,
-
-thanks for the patch. Please see sugestions below.
-
-On Thu, Jun 09, 2022 at 06:09:42PM +0000, Prashant Malani wrote:
-> Introduce a binding which represents a component that can control the
-> routing of USB Type-C data lines as well as address data line
-> orientation (based on CC lines' orientation).
+On Thu, May 12, 2022 at 10:13:09AM -0500, Steve Wahl wrote:
+> To support up to 64 sockets with 10 DMAR units each (640), make the
+> value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
+> CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
+> set.
 > 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
+> to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
+> allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
+> remapping doesn't support X2APIC mode x2apic disabled"; and the system
+> fails to boot properly.
+> 
+> Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
 > ---
 > 
-> Changes since v1:
-> - Removed "items" from compatible.
-> - Fixed indentation in example.
+> Note that we could not find a reason for connecting
+> DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
+> it seemed like the two would continue to match on earlier processors.
+> There doesn't appear to be kernel code that assumes that the value of
+> one is related to the other.
 > 
->  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+> v2: Make this value a config option, rather than a fixed constant.  The default
+> values should match previous configuration except in the MAXSMP case.  Keeping the
+> value at a power of two was requested by Kevin Tian.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> new file mode 100644
-> index 000000000000..78b0190c8543
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> @@ -0,0 +1,74 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: USB Type-C Switch
-> +
-> +maintainers:
-> +  - Prashant Malani <pmalani@chromium.org>
-> +
-> +description:
-> +  A USB Type-C switch represents a component which routes USB Type-C data
-> +  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
-> +  Thunderbolt etc.) depending on which mode the Type-C port, port partner
-> +  and cable are operating in. It can also modify lane routing based on
-> +  the orientation of a connected Type-C peripheral.
-> +
-> +properties:
-> +  compatible:
-> +    const: typec-switch
-> +
-> +  mode-switch:
-> +    type: boolean
-> +    description: Specify that this switch can handle alternate mode switching.
-> +
-> +  orientation-switch:
-> +    type: boolean
-> +    description: Specify that this switch can handle orientation switching.
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description: OF graph binding modelling data lines to the Type-C switch.
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Link between the switch and a Type-C connector.
-
-Since you have a single port, you can omit the ports node.
-
-> +
-> +    required:
-> +      - port@0
-> +
-> +required:
-> +  - compatible
-> +  - ports
-> +
-> +anyOf:
-> +  - required:
-> +      - mode-switch
-> +  - required:
-> +      - orientation-switch
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    drm-bridge {
-> +        usb-switch {
-> +            compatible = "typec-switch";
-> +            mode-switch;
-> +            orientation-switch;
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    anx_ep: endpoint {
-> +                        remote-endpoint = <&typec_controller>;
-> +                    };
-> +                };
-> +            };
-
-So instead of ports you would have just 
-
-               port {
-                   anx_ep: endpoint {
-                       remote-endpoint = <&typec_controller>;
-                   };
-               };
-
-And the same simplification on patch 4, for the anx7625 dt-binding.
-
-Thanks,
-Nícolas
-
-> +        };
-> +    };
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
+>  drivers/iommu/intel/Kconfig | 6 ++++++
+>  include/linux/dmar.h        | 6 +-----
+>  2 files changed, 7 insertions(+), 5 deletions(-)
 > 
+
+Baolu do you have this queued up for v5.20? Also do you have a public repo where
+you keep the vt-d changes before sending Joerg the patches for a release?
+
+Regards,
+Jerry
+

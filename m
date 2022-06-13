@@ -2,182 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3CB5497E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9B1549939
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236533AbiFMQfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 12:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S237110AbiFMQkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 12:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244371AbiFMQep (ORCPT
+        with ESMTP id S236744AbiFMQjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 12:34:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E223D46141
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:23:40 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25DDtNxM020577;
-        Mon, 13 Jun 2022 14:23:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=KSx5EN7o9Db5WN+FNVkIxbtaI4ppCzlB5T3plRq5fcM=;
- b=ReN6AAiZEGfERTluqOfPq//mrfxAAVYQPWO9DbdjTv9f7tJGQWkYglM9LNVzc9IgPTo7
- PP5LWMrIp8PSs6tMVcxB6iynCg4CU2gN4LZbObwIpg57Xnx5CEfLHyyHjGMRjO22qaBE
- gCTyOj19VcTfkLnIRFIzTpbdfgRO+0YkTrK90+wcRFkIF0MCTquF5jHVzDrM82hnPqLY
- eAPxk8C59W4xKmBQkMILPkRFL2vY21oN5RjXzChAXdOBmYmiVxslBohM+9+kcGKn0md5
- cH6WeznrgdrGP9kWBC/XCE5WqUD1UaI59xiNjd5QPJMoiKsBYPgFS9S8WX60gLIaw1YC Bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gn4c9s702-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 14:23:18 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25DDtWxX023985;
-        Mon, 13 Jun 2022 14:23:17 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gn4c9s6xw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 14:23:17 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25DEKaYF027989;
-        Mon, 13 Jun 2022 14:23:14 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gmjp9axbt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 14:23:14 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25DENF2221430750
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Jun 2022 14:23:15 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F049DA405F;
-        Mon, 13 Jun 2022 14:23:11 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C0C8A405B;
-        Mon, 13 Jun 2022 14:23:05 +0000 (GMT)
-Received: from [9.43.31.74] (unknown [9.43.31.74])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Jun 2022 14:23:05 +0000 (GMT)
-Message-ID: <4297bd21-e984-9d78-2bca-e70c11749a72@linux.ibm.com>
-Date:   Mon, 13 Jun 2022 19:53:03 +0530
+        Mon, 13 Jun 2022 12:39:09 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73DB1DF111;
+        Mon, 13 Jun 2022 07:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655130497; x=1686666497;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KP/RtJ4ZbidU6pQAsuDuxGJHOq1DZRgu4MLwVnb1vSc=;
+  b=nZ4f2sDTG15jrz1DGLOnhQHXv3GhUXrvyz47ym57C/DAuKNt7wDDJ0Se
+   3mE8LSmvW3SiDyFth8uXdNANq09zBAuCoOgjLdJJUiKsfKG1NtMEqCquY
+   nYqHUtutoc5XrVutVvFOyshKO4JgjkA5XFWO3YSlFi2gAf67tsEltOHUN
+   duLUeSdv2TbTx6amjXiBl0UKruQtKhj18TsVACiZ+wQ5iMjaqrvnb2Aup
+   RliFsKqg11hMzvijo5XML9KuoVYmHkYKVcRBXohqEad+jVWjII1p/8t/m
+   Ps+PBQIzFVQS7Wv8C/+uKjqiJOQkPt6S/UVilueZMfqJkw6C2zYFbtszk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="303696222"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="303696222"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 07:28:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="651457890"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Jun 2022 07:28:06 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25DES5uk026148;
+        Mon, 13 Jun 2022 15:28:05 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] bitops: let optimize out non-atomic bitops on compile-time constants
+Date:   Mon, 13 Jun 2022 16:26:45 +0200
+Message-Id: <20220613142645.1176423-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <CAMuHMdUZCaPN2B6bvmja9rDm3qCc4mYYAOSEB2W0R0pws8peqw@mail.gmail.com>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory tiers
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
- <YqCuE87gCcrnAiXG@cmpxchg.org> <YqDGYjgjcS5OoS3P@cmpxchg.org>
- <a4af7598-7bd3-0e70-a434-b1237ca403d6@linux.ibm.com>
- <YqDncfLeEeBaosrY@cmpxchg.org>
- <02ee2c97-3bca-8eb6-97d8-1f8743619453@linux.ibm.com>
- <YqH74WaUzJlb+smt@cmpxchg.org> <20220609152243.00000332@Huawei.com>
- <YqJa4N/VlS4zN4vf@cmpxchg.org> <20220610105708.0000679b@Huawei.com>
- <YqdEEhJFr3SlfvSJ@cmpxchg.org>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <YqdEEhJFr3SlfvSJ@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KaKBm1vH7dsTp6c7uSo-wBq2VCVXRLkG
-X-Proofpoint-ORIG-GUID: g4mFP2TOUU9Fk2O5Ore_l5Gza6me581L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-13_06,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 suspectscore=0 adultscore=0 mlxscore=0
- malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2206130063
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 7:35 PM, Johannes Weiner wrote:
-> On Fri, Jun 10, 2022 at 10:57:08AM +0100, Jonathan Cameron wrote:
->>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 13 Jun 2022 09:35:16 +0200
 
-....
-
->> I'm not sure completely read only is flexible enough (though mostly RO is fine)
->> as we keep sketching out cases where any attempt to do things automatically
->> does the wrong thing and where we need to add an extra tier to get
->> everything to work.  Short of having a lot of tiers I'm not sure how
->> we could have the default work well.  Maybe a lot of "tiers" is fine
->> though perhaps we need to rename them if going this way and then they
->> don't really work as current concept of tier.
->>
->> Imagine a system with subtle difference between different memories such
->> as 10% latency increase for same bandwidth.  To get an advantage from
->> demoting to such a tier will require really stable usage and long
->> run times. Whilst you could design a demotion scheme that takes that
->> into account, I think we are a long way from that today.
+> Hi Alexander,
 > 
-> Good point: there can be a clear hardware difference, but it's a
-> policy choice whether the MM should treat them as one or two tiers.
+> On Fri, Jun 10, 2022 at 1:35 PM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> > While I was working on converting some structure fields from a fixed
+> > type to a bitmap, I started observing code size increase not only in
+> > places where the code works with the converted structure fields, but
+> > also where the converted vars were on the stack. That said, the
+> > following code:
+> >
+> >         DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
+> >         unsigned long bar = BIT(BAR_BIT);
+> >         unsigned long baz = 0;
+> >
+> >         __set_bit(FOO_BIT, foo);
+> >         baz |=3D BIT(BAZ_BIT);
+> >
+> >         BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
+> >         BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
+> >         BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
+> >
+> > triggers the first assertion on x86_64, which means that the
+> > compiler is unable to evaluate it to a compile-time initializer
+> > when the architecture-specific bitop is used even if it's obvious.
+> > I found that this is due to that many architecture-specific
+> > non-atomic bitop implementations use inline asm or other hacks which
+> > are faster or more robust when working with "real" variables (i.e.
+> > fields from the structures etc.), but the compilers have no clue how
+> > to optimize them out when called on compile-time constants.
+> >
+> > So, in order to let the compiler optimize out such cases, expand the
+> > test_bit() and __*_bit() definitions with a compile-time condition
+> > check, so that they will pick the generic C non-atomic bitop
+> > implementations when all of the arguments passed are compile-time
+> > constants, which means that the result will be a compile-time
+> > constant as well and the compiler will produce more efficient and
+> > simple code in 100% cases (no changes when there's at least one
+> > non-compile-time-constant argument).
+> > The condition itself:
+> >
+> > if (
+> > __builtin_constant_p(nr) &&     /* <- bit position is constant */
+> > __builtin_constant_p(!!addr) && /* <- compiler knows bitmap addr is
+> >                                       always either NULL or not */
+> > addr &&                         /* <- bitmap addr is not NULL */
+> > __builtin_constant_p(*addr)     /* <- compiler knows the value of
+> >                                       the target bitmap */
+> > )
+> >         /* then pick the generic C variant
+> > else
+> >         /* old code path, arch-specific
+> >
+> > I also tried __is_constexpr() as suggested by Andy, but it was
+> > always returning 0 ('not a constant') for the 2,3 and 4th
+> > conditions.
+> >
+> > The savings are architecture, compiler and compiler flags dependent,
+> > for example, on x86_64 -O2:
+> >
+> > GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> > LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> > LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> >
+> > and ARM64 (courtesy of Mark[0]):
+> >
+> > GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> > LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
+> >
+> > And the following:
+> >
+> >         DECLARE_BITMAP(flags, __IP_TUNNEL_FLAG_NUM) = { };
+> >         __be16 flags;
+> >
+> >         __set_bit(IP_TUNNEL_CSUM_BIT, flags);
+> >
+> >         tun_flags = cpu_to_be16(*flags & U16_MAX);
+> >
+> >         if (test_bit(IP_TUNNEL_VTI_BIT, flags))
+> >                 tun_flags |= VTI_ISVTI;
+> >
+> >         BUILD_BUG_ON(!__builtin_constant_p(tun_flags));
+> >
+> > doesn't blow up anymore, so that we now can e.g. use fixed bitmaps
+> > in compile-time assertions etc.
+> >
+> > The series has been in intel-next for a while with no reported issues.
+> >
+> > From v1[1]:
+> > * change 'gen_' prefixes to '_generic' to disambiguate from
+> >   'generated' etc. (Mark);
+> > * define a separate 'const_' set to use in the optimization to keep
+> >   the generic test_bit() atomic-safe (Marco);
+> > * unify arch_{test,__*}_bit() as well and include them in the type
+> >   check;
+> > * add more relevant and up-to-date bloat-o-meter results, including
+> >   ARM64 (me, Mark);
+> > * pick a couple '*-by' tags (Mark, Yury).
 > 
-> What do you think of a per-driver/per-device (overridable) distance
-> number, combined with a configurable distance cutoff for what
-> constitutes separate tiers. E.g. cutoff=20 means two devices with
-> distances of 10 and 20 respectively would be in the same tier, devices
-> with 10 and 100 would be in separate ones. The kernel then generates
-> and populates the tiers based on distances and grouping cutoff, and
-> populates the memtier directory tree and nodemasks in sysfs.
+> Thanks for the update!
 > 
+> On m68k, using gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04), this
+> blows up immediately with:
 
-Right now core/generic code doesn't get involved in building tiers. It 
-just defines three tiers where drivers could place the respective 
-devices they manage. The above suggestion would imply we are moving 
-quite a lot of policy decision logic into the generic code?.
+Yeah I saw the kernel bot report already, sorry for that >_< Fixed
+in v3 already, will send in 1-2 days.
 
-At some point, we will have to depend on more attributes other than 
-distance(may be HMAT?) and each driver should have the flexibility to 
-place the device it is managing in a specific tier? By then we may 
-decide to support more than 3 static tiers which the core kernel 
-currently does.
-
-If the kernel still can't make the right decision, userspace could 
-rearrange them in any order using rank values. Without something like 
-rank, if userspace needs to fix things up,  it gets hard with device
-hotplugging. ie, the userspace policy could be that any new PMEM tier 
-device that is hotplugged, park it with a very low-rank value and hence 
-lowest in demotion order by default. (echo 10 > 
-/sys/devices/system/memtier/memtier2/rank) . After that userspace could 
-selectively move the new devices to the correct memory tier?
-
-
-> It could be simple tier0, tier1, tier2 numbering again, but the
-> numbers now would mean something to the user. A rank tunable is no
-> longer necessary.
 > 
-> I think even the nodemasks in the memtier tree could be read-only
-> then, since corrections should only be necessary when either the
-> device distance is wrong or the tier grouping cutoff.
-> 
-> Can you think of scenarios where that scheme would fall apart?
+>   CC      kernel/bounds.s
+> In file included from include/linux/bits.h:22,
 
--aneesh
+[...]
+
+>       | ^~~~~~~~~~~~~~~~
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+
+Thanks,
+Olek

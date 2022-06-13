@@ -2,45 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D08549586
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA04549094
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355590AbiFMLqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S1351312AbiFMMfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356017AbiFMLnh (ORCPT
+        with ESMTP id S1356758AbiFMMeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:43:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CBD46143;
-        Mon, 13 Jun 2022 03:50:22 -0700 (PDT)
+        Mon, 13 Jun 2022 08:34:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBF41A813;
+        Mon, 13 Jun 2022 04:07:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE188B80D41;
-        Mon, 13 Jun 2022 10:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1570DC3411C;
-        Mon, 13 Jun 2022 10:50:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C04A2B80EAA;
+        Mon, 13 Jun 2022 11:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DA2C34114;
+        Mon, 13 Jun 2022 11:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117413;
-        bh=+Zu52xhLNEr3n86vyYiWyA+bk3Zs5E5WLkGRppu9zUk=;
+        s=korg; t=1655118441;
+        bh=NpwyQtAgrx0bKs8vBVpJf/f7o47VdkRdV2KjNRgFA8A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kkXwwYhORDUEcuo6uSP8Vb8cUI1b26DuxGzQLW0RG2D8CYz4VX/zkEzs00pEKf+x2
-         IUAINvcLsd9O64hvx1dv43APqIJBwFCnKdCxE2ruibP55LP2nKay7jQf4vi5A91Te7
-         GcS/0ph44Pk0WFKktRopNVXqPMWw81178fTuOulI=
+        b=sBqF6DwRzm4O6+K3kwKWvMu+ep2imDiElncgpa0cHlBluY5PKID3TuciP32Qy/NRZ
+         jNGA4r2VuTaib/ojinTg0Djn86MDGtuusJa6ja7AMwgxOKFJsp4SCZ99fsPR+M9FyW
+         DpQlVyqq8mkvYX0zCEtD45QbjkBQicPGHAGtRoR8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 364/411] drm: imx: fix compiler warning with gcc-12
+Subject: [PATCH 5.10 077/172] bootconfig: Make the bootconfig.o as a normal object file
 Date:   Mon, 13 Jun 2022 12:10:37 +0200
-Message-Id: <20220613094939.604690419@linuxfoundation.org>
+Message-Id: <20220613094908.906993447@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit 7aefd8b53815274f3ef398d370a3c9b27dd9f00c ]
+[ Upstream commit 6014a23638cdee63a71ef13c51d7c563eb5829ee ]
 
-Gcc-12 correctly warned about this code using a non-NULL pointer as a
-truth value:
+Since the APIs defined in the bootconfig.o are not individually used,
+it is meaningless to build it as library by lib-y. Use obj-y for that.
 
-  drivers/gpu/drm/imx/ipuv3-crtc.c: In function ‘ipu_crtc_disable_planes’:
-  drivers/gpu/drm/imx/ipuv3-crtc.c:72:21: error: the comparison will always evaluate as ‘true’ for the address of ‘plane’ will never be NULL [-Werror=address]
-     72 |                 if (&ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
-        |                     ^
+Link: https://lkml.kernel.org/r/164921225875.1090670.15565363126983098971.stgit@devnote2
 
-due to the extraneous '&' address-of operator.
-
-Philipp Zabel points out that The mistake had no adverse effect since
-the following condition doesn't actually dereference the NULL pointer,
-but the intent of the code was obviously to check for it, not to take
-the address of the member.
-
-Fixes: eb8c88808c83 ("drm/imx: add deferred plane disabling")
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/imx/ipuv3-crtc.c | 2 +-
+ lib/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/imx/ipuv3-crtc.c b/drivers/gpu/drm/imx/ipuv3-crtc.c
-index 2256c9789fc2..f19264e91d4d 100644
---- a/drivers/gpu/drm/imx/ipuv3-crtc.c
-+++ b/drivers/gpu/drm/imx/ipuv3-crtc.c
-@@ -68,7 +68,7 @@ static void ipu_crtc_disable_planes(struct ipu_crtc *ipu_crtc,
- 	drm_atomic_crtc_state_for_each_plane(plane, old_crtc_state) {
- 		if (plane == &ipu_crtc->plane[0]->base)
- 			disable_full = true;
--		if (&ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
-+		if (ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
- 			disable_partial = true;
- 	}
+diff --git a/lib/Makefile b/lib/Makefile
+index d415fc7067c5..69b8217652ed 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -274,7 +274,7 @@ $(foreach file, $(libfdt_files), \
+ 	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+ lib-$(CONFIG_LIBFDT) += $(libfdt_files)
  
+-lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
++obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+ 
+ obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+ obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
 -- 
 2.35.1
 

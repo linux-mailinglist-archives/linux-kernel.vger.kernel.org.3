@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365EB549614
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625D55493AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384198AbiFMOfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S1354332AbiFMMVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385510AbiFMObQ (ORCPT
+        with ESMTP id S1358990AbiFMMTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:31:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47663ABE73;
-        Mon, 13 Jun 2022 04:49:00 -0700 (PDT)
+        Mon, 13 Jun 2022 08:19:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA8E56FAE;
+        Mon, 13 Jun 2022 04:03:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BE136124E;
-        Mon, 13 Jun 2022 11:48:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A88FC34114;
-        Mon, 13 Jun 2022 11:48:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1681C614A8;
+        Mon, 13 Jun 2022 11:03:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245DDC34114;
+        Mon, 13 Jun 2022 11:03:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120910;
-        bh=C3p8V+CShGR7nozEVmR7aMQKSLK+SVYLvPNgHctlLf8=;
+        s=korg; t=1655118189;
+        bh=Aq5IGVpLu/dgzqu2jUzOzzSrBhplJ3oD1IJZ1ojJFc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rIvUQ6Gy9XyKOslJr8fVcZgN6x4PpkOnvhFmCs7RSwtZzy3DJgGpcVaz45Zf3Iydm
-         N8ejKfLU+4Rwr8/hxmxRi0FC221Fv7p0i7HhX0U6psG3u2QOLPhIFm7HYrl9Sy9HOy
-         nRuSBLv6ZXJPNOjl2XXB07LDuFTwU2TqNsIjVgvE=
+        b=vJwSb62q7r9RMgltp6wgENga5f24aAzNstdzGl6qD17qI4U+N2dwguqfEJ6TAcwzk
+         c1leEEx7hVzGA/0nuBD/RX060W0iH4qMdKVIXUGN6OpmzZIOod2daPvxbjaye+oetg
+         JKv8/Zw1zfNBgv5KO8NLUjqvYtwr6gQoJWAMOwXo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Huang Guobin <huangguobin4@huawei.com>,
+        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 203/298] tty: Fix a possible resource leak in icom_probe
-Date:   Mon, 13 Jun 2022 12:11:37 +0200
-Message-Id: <20220613094931.262131598@linuxfoundation.org>
+Subject: [PATCH 4.19 274/287] vringh: Fix loop descriptors check in the indirect cases
+Date:   Mon, 13 Jun 2022 12:11:38 +0200
+Message-Id: <20220613094932.306134383@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huang Guobin <huangguobin4@huawei.com>
+From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit ee157a79e7c82b01ae4c25de0ac75899801f322c ]
+[ Upstream commit dbd29e0752286af74243cf891accf472b2f3edd8 ]
 
-When pci_read_config_dword failed, call pci_release_regions() and
-pci_disable_device() to recycle the resource previously allocated.
+We should use size of descriptor chain to test loop condition
+in the indirect case. And another statistical count is also introduced
+for indirect descriptors to avoid conflict with the statistical count
+of direct descriptors.
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Huang Guobin <huangguobin4@huawei.com>
-Link: https://lore.kernel.org/r/20220331091005.3290753-1-huangguobin4@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f87d0fbb5798 ("vringh: host-side implementation of virtio rings.")
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Signed-off-by: Fam Zheng <fam.zheng@bytedance.com>
+Message-Id: <20220505100910.137-1-xieyongji@bytedance.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/icom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vhost/vringh.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
-index 03a2fe9f4c9a..02b375ba2f07 100644
---- a/drivers/tty/serial/icom.c
-+++ b/drivers/tty/serial/icom.c
-@@ -1501,7 +1501,7 @@ static int icom_probe(struct pci_dev *dev,
- 	retval = pci_read_config_dword(dev, PCI_COMMAND, &command_reg);
- 	if (retval) {
- 		dev_err(&dev->dev, "PCI Config read FAILED\n");
--		return retval;
-+		goto probe_exit0;
- 	}
+diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+index 97aa9b87e572..6b2efff1c297 100644
+--- a/drivers/vhost/vringh.c
++++ b/drivers/vhost/vringh.c
+@@ -263,7 +263,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 	     gfp_t gfp,
+ 	     int (*copy)(void *dst, const void *src, size_t len))
+ {
+-	int err, count = 0, up_next, desc_max;
++	int err, count = 0, indirect_count = 0, up_next, desc_max;
+ 	struct vring_desc desc, *descs;
+ 	struct vringh_range range = { -1ULL, 0 }, slowrange;
+ 	bool slow = false;
+@@ -320,7 +320,12 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 			continue;
+ 		}
  
- 	pci_write_config_dword(dev, PCI_COMMAND,
+-		if (count++ == vrh->vring.num) {
++		if (up_next == -1)
++			count++;
++		else
++			indirect_count++;
++
++		if (count > vrh->vring.num || indirect_count > desc_max) {
+ 			vringh_bad("Descriptor loop in %p", descs);
+ 			err = -ELOOP;
+ 			goto fail;
+@@ -382,6 +387,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 				i = return_from_indirect(vrh, &up_next,
+ 							 &descs, &desc_max);
+ 				slow = false;
++				indirect_count = 0;
+ 			} else
+ 				break;
+ 		}
 -- 
 2.35.1
 

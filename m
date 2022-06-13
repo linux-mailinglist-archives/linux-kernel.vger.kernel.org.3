@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBE45494EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D66D549396
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356675AbiFMLzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S1381918AbiFMOLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356218AbiFMLuI (ORCPT
+        with ESMTP id S1381465AbiFMOEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BF6DF9E;
-        Mon, 13 Jun 2022 03:53:55 -0700 (PDT)
+        Mon, 13 Jun 2022 10:04:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6659C24096;
+        Mon, 13 Jun 2022 04:39:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EBF461347;
-        Mon, 13 Jun 2022 10:53:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 540DCC34114;
-        Mon, 13 Jun 2022 10:53:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01DCA612AB;
+        Mon, 13 Jun 2022 11:39:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA19C34114;
+        Mon, 13 Jun 2022 11:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117634;
-        bh=OfLKBwkvjgZ1dEQH2KtDudeVtOi5GUi1XjvryIsDyjg=;
+        s=korg; t=1655120385;
+        bh=nWlHbFt5Uap75riJ2GUbp+TbOqb9iuUikZhFb+SDzRI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=azv/XTHUBtBusykysyQk3O9lslOa+f1W7E+orDY9Y+X1bvdMizWivgIRaVajQnJqm
-         85lybH372aayE3nui/G2QEvRTNTpEDOUVYv7KiJRxzNA0pg503N7P9hbeoIDICBb6Q
-         TmyC07Q/dpo7ptXQgWg97kSptq86qU/k32Km6N2w=
+        b=yLtEcLt7Zhoj6NHDGhYLx9eVV0dllPg4hN48XT7N/pEQoI+E+6AOI2k8wip4gnDz/
+         X/L+MW2PIMm0l6xCYSer6pEUjcOMeRqGjr2eMcwIlBAZdRXcCYJKvJ4AF1HErX/XM3
+         OZXlyr/Enjl2JOntdntDEjMDHWw8GmaeX4k7+u8o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Khazhismel Kumykov <khazhy@google.com>,
-        Amir Goldstein <amir73il@gmail.com>, Jan Kara <jack@suse.cz>,
+        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 076/287] fsnotify: fix wrong lockdep annotations
+Subject: [PATCH 5.17 006/298] tty: goldfish: Use tty_port_destroy() to destroy port
 Date:   Mon, 13 Jun 2022 12:08:20 +0200
-Message-Id: <20220613094926.178589085@linuxfoundation.org>
+Message-Id: <20220613094925.113878706@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Wang Weiyang <wangweiyang2@huawei.com>
 
-[ Upstream commit 623af4f538b5df9b416e1b82f720af7371b4c771 ]
+[ Upstream commit 507b05063d1b7a1fcb9f7d7c47586fc4f3508f98 ]
 
-Commit 6960b0d909cd ("fsnotify: change locking order") changed some
-of the mark_mutex locks in direct reclaim path to use:
-  mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
+In goldfish_tty_probe(), the port initialized through tty_port_init()
+should be destroyed in error paths.In goldfish_tty_remove(), qtty->port
+also should be destroyed or else might leak resources.
 
-This change is explained:
- "...It uses nested locking to avoid deadlock in case we do the final
-  iput() on an inode which still holds marks and thus would take the
-  mutex again when calling fsnotify_inode_delete() in destroy_inode()."
+Fix the above by calling tty_port_destroy().
 
-The problem is that the mutex_lock_nested() is not a nested lock at
-all. In fact, it has the opposite effect of preventing lockdep from
-warning about a very possible deadlock.
-
-Due to these wrong annotations, a deadlock that was introduced with
-nfsd filecache in kernel v5.4 went unnoticed in v5.4.y for over two
-years until it was reported recently by Khazhismel Kumykov, only to
-find out that the deadlock was already fixed in kernel v5.5.
-
-Fix the wrong lockdep annotations.
-
-Cc: Khazhismel Kumykov <khazhy@google.com>
-Fixes: 6960b0d909cd ("fsnotify: change locking order")
-Link: https://lore.kernel.org/r/20220321112310.vpr7oxro2xkz5llh@quack3.lan/
-Link: https://lore.kernel.org/r/20220422120327.3459282-4-amir73il@gmail.com
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+Fixes: 666b7793d4bf ("goldfish: tty driver")
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
+Link: https://lore.kernel.org/r/20220328115844.86032-1-wangweiyang2@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/notify/mark.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/goldfish.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-index 09535f6423fc..3afd58170984 100644
---- a/fs/notify/mark.c
-+++ b/fs/notify/mark.c
-@@ -434,7 +434,7 @@ void fsnotify_free_mark(struct fsnotify_mark *mark)
- void fsnotify_destroy_mark(struct fsnotify_mark *mark,
- 			   struct fsnotify_group *group)
- {
--	mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
-+	mutex_lock(&group->mark_mutex);
- 	fsnotify_detach_mark(mark);
- 	mutex_unlock(&group->mark_mutex);
- 	fsnotify_free_mark(mark);
-@@ -703,7 +703,7 @@ void fsnotify_clear_marks_by_group(struct fsnotify_group *group,
- 	 * move marks to free to to_free list in one go and then free marks in
- 	 * to_free list one by one.
- 	 */
--	mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
-+	mutex_lock(&group->mark_mutex);
- 	list_for_each_entry_safe(mark, lmark, &group->marks_list, g_list) {
- 		if ((1U << mark->connector->type) & type_mask)
- 			list_move(&mark->g_list, &to_free);
-@@ -712,7 +712,7 @@ void fsnotify_clear_marks_by_group(struct fsnotify_group *group,
- 
- clear:
- 	while (1) {
--		mutex_lock_nested(&group->mark_mutex, SINGLE_DEPTH_NESTING);
-+		mutex_lock(&group->mark_mutex);
- 		if (list_empty(head)) {
- 			mutex_unlock(&group->mark_mutex);
- 			break;
+diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+index 10c13b93ed52..9355d97ff591 100644
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -405,6 +405,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+ err_tty_register_device_failed:
+ 	free_irq(irq, qtty);
+ err_dec_line_count:
++	tty_port_destroy(&qtty->port);
+ 	goldfish_tty_current_line_count--;
+ 	if (goldfish_tty_current_line_count == 0)
+ 		goldfish_tty_delete_driver();
+@@ -426,6 +427,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
+ 	iounmap(qtty->base);
+ 	qtty->base = NULL;
+ 	free_irq(qtty->irq, pdev);
++	tty_port_destroy(&qtty->port);
+ 	goldfish_tty_current_line_count--;
+ 	if (goldfish_tty_current_line_count == 0)
+ 		goldfish_tty_delete_driver();
 -- 
 2.35.1
 

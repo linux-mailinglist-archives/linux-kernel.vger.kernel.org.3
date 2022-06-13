@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210995487F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97576548695
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353344AbiFMLTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S237085AbiFMLVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353184AbiFMLPL (ORCPT
+        with ESMTP id S1353246AbiFMLPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:15:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1021706C;
-        Mon, 13 Jun 2022 03:37:44 -0700 (PDT)
+        Mon, 13 Jun 2022 07:15:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12EB248EF;
+        Mon, 13 Jun 2022 03:37:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67C82610A0;
-        Mon, 13 Jun 2022 10:37:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74790C34114;
-        Mon, 13 Jun 2022 10:37:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C156CB80E94;
+        Mon, 13 Jun 2022 10:37:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A47C34114;
+        Mon, 13 Jun 2022 10:37:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116663;
-        bh=ZxbUcwez3WdEnE9tY/sNxfsE6rTp4gQ6TFB5pkMV2RI=;
+        s=korg; t=1655116666;
+        bh=odwwFRkk68+klX+IXiBeGcqimMANVc67CuJI9VaA7pE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gxrEoKg6Nv78L/lLL3vrYe/mSTsz5dCkvRu//X18lEmRKv7chzcqNnA68G00SwjIe
-         TfScTzNH7fk5uKGtkom+sE2cxF26qs8rN+I8PsCS4t+ariMnAnMlODHyNR86rc+MUh
-         PZ5BEeEj4BPMCDI570sa8aWn3u2odVHt/0ofzU3o=
+        b=BGLMRLD2kDrqiNPGcJrt4+ClkEZzegMzYGj0Xl7ZEnI4jES5cHxC4slXRRntBzack
+         LMY6mV9dQcYJiDOczs0d3x3X1EYi2RYWjQdgUSMimYqnauGngtQJJ4FJrLPn5/iOTY
+         r2t5XO+8MDilgzYU1H1vp+8+8YvjL63ngE2AzySs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
+        stable@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 128/411] iomap: iomap_write_failed fix
-Date:   Mon, 13 Jun 2022 12:06:41 +0200
-Message-Id: <20220613094932.510827363@linuxfoundation.org>
+Subject: [PATCH 5.4 129/411] Revert "cpufreq: Fix possible race in cpufreq online error path"
+Date:   Mon, 13 Jun 2022 12:06:42 +0200
+Message-Id: <20220613094932.540761266@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,36 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit b71450e2cc4b3c79f33c5bd276d152af9bd54f79 ]
+[ Upstream commit 85f0e42bd65d01b351d561efb38e584d4c596553 ]
 
-The @lend parameter of truncate_pagecache_range() should be the offset
-of the last byte of the hole, not the first byte beyond it.
+This reverts commit f346e96267cd76175d6c201b40f770c0116a8a04.
 
-Fixes: ae259a9c8593 ("fs: introduce iomap infrastructure")
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+The commit tried to fix a possible real bug but it made it even worse.
+The fix was simply buggy as now an error out to out_offline_policy or
+out_exit_policy will try to release a semaphore which was never taken in
+the first place. This works fine only if we failed late, i.e. via
+out_destroy_policy.
+
+Fixes: f346e96267cd ("cpufreq: Fix possible race in cpufreq online error path")
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/iomap/buffered-io.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/cpufreq/cpufreq.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-index 5c73751adb2d..53cd7b2bb580 100644
---- a/fs/iomap/buffered-io.c
-+++ b/fs/iomap/buffered-io.c
-@@ -535,7 +535,8 @@ iomap_write_failed(struct inode *inode, loff_t pos, unsigned len)
- 	 * write started inside the existing inode size.
- 	 */
- 	if (pos + len > i_size)
--		truncate_pagecache_range(inode, max(pos, i_size), pos + len);
-+		truncate_pagecache_range(inode, max(pos, i_size),
-+					 pos + len - 1);
- }
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 7ea07764988e..af9f34804862 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1509,6 +1509,8 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
  
- static int
++	up_write(&policy->rwsem);
++
+ out_offline_policy:
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->offline(policy);
+@@ -1517,9 +1519,6 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->exit)
+ 		cpufreq_driver->exit(policy);
+ 
+-	cpumask_clear(policy->cpus);
+-	up_write(&policy->rwsem);
+-
+ out_free_policy:
+ 	cpufreq_policy_free(policy);
+ 	return ret;
 -- 
 2.35.1
 

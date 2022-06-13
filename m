@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20AF548D24
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4076E548A3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356089AbiFMLtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S1352929AbiFMMnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357475AbiFMLqM (ORCPT
+        with ESMTP id S1355817AbiFMMjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:46:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B298637B;
-        Mon, 13 Jun 2022 03:52:22 -0700 (PDT)
+        Mon, 13 Jun 2022 08:39:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D629D33891;
+        Mon, 13 Jun 2022 04:09:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 050566135C;
-        Mon, 13 Jun 2022 10:52:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C88C34114;
-        Mon, 13 Jun 2022 10:52:20 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 48470CE1184;
+        Mon, 13 Jun 2022 11:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6118BC34114;
+        Mon, 13 Jun 2022 11:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117541;
-        bh=8XodZh5sCr/MfT0L5lf3vACVky82khXDRn8yFleVMQg=;
+        s=korg; t=1655118571;
+        bh=1jCg8Kfy0hEEFe172v9re+mnxyKLpW4fnDkJcsLiSq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PxdRnd1Xk+rdgTUnB0r0m3kTicm1yI4wL80mgjHvnmdrwNwmvU/yRjVz6gTurywKO
-         7Em2TUFgUjX0x5rN2ejSqvF/ffjnU3QnQ8jATHLg5r2Xdbr0thPzZL8s8Lue836Fhg
-         IOhIEBk0XhOAQk9jCaPW4BzusJYkt+TfBQ5zbZiw=
+        b=F4jF5WqxVe5ETVjpa7JmYlw6VmKXNtr+bPBGMB7j0XwEWWrc1wSaH3xb8XNaZ+tjl
+         c7AgE9snofGbBR4IH4i5hMMFGwmnr2UgQsxKTxwdZWxIhrFjTIZkO+Pfu+7VqKxVmo
+         ZAA3AA5zI6LICZ1oqFDXfR5A2hg5KyGg3CziJt70=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 396/411] cifs: version operations for smb20 unneeded when legacy support disabled
+Subject: [PATCH 5.10 109/172] net/mlx5: fs, fail conflicting actions
 Date:   Mon, 13 Jun 2022 12:11:09 +0200
-Message-Id: <20220613094940.538389739@linuxfoundation.org>
+Message-Id: <20220613094916.482487517@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,94 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Mark Bloch <mbloch@nvidia.com>
 
-[ Upstream commit 7ef93ffccd55fb0ba000ed16ef6a81cd7dee07b5 ]
+[ Upstream commit 8fa5e7b20e01042b14f8cd684d2da9b638460c74 ]
 
-We should not be including unused smb20 specific code when legacy
-support is disabled (CONFIG_CIFS_ALLOW_INSECURE_LEGACY turned
-off).  For example smb2_operations and smb2_values aren't used
-in that case.  Over time we can move more and more SMB1/CIFS and SMB2.0
-code into the insecure legacy ifdefs
+When combining two steering rules into one check
+not only do they share the same actions but those
+actions are also the same. This resolves an issue where
+when creating two different rules with the same match
+the actions are overwritten and one of the rules is deleted
+a FW syndrome can be seen in dmesg.
 
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+mlx5_core 0000:03:00.0: mlx5_cmd_check:819:(pid 2105): DEALLOC_MODIFY_HEADER_CONTEXT(0x941) op_mod(0x0) failed, status bad resource state(0x9), syndrome (0x1ab444)
+
+Fixes: 0d235c3fabb7 ("net/mlx5: Add hash table to search FTEs in a flow-group")
+Signed-off-by: Mark Bloch <mbloch@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifsglob.h | 4 +++-
- fs/cifs/smb2ops.c  | 7 ++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ .../net/ethernet/mellanox/mlx5/core/fs_core.c | 35 +++++++++++++++++--
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-index 9c0e348cb00f..414936989255 100644
---- a/fs/cifs/cifsglob.h
-+++ b/fs/cifs/cifsglob.h
-@@ -1930,11 +1930,13 @@ extern mempool_t *cifs_mid_poolp;
- 
- /* Operations for different SMB versions */
- #define SMB1_VERSION_STRING	"1.0"
-+#define SMB20_VERSION_STRING    "2.0"
-+#ifdef CONFIG_CIFS_ALLOW_INSECURE_LEGACY
- extern struct smb_version_operations smb1_operations;
- extern struct smb_version_values smb1_values;
--#define SMB20_VERSION_STRING	"2.0"
- extern struct smb_version_operations smb20_operations;
- extern struct smb_version_values smb20_values;
-+#endif /* CIFS_ALLOW_INSECURE_LEGACY */
- #define SMB21_VERSION_STRING	"2.1"
- extern struct smb_version_operations smb21_operations;
- extern struct smb_version_values smb21_values;
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 7985fe25850b..57164563eec6 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -3487,11 +3487,13 @@ smb3_set_oplock_level(struct cifsInodeInfo *cinode, __u32 oplock,
- 	}
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+index 15472fb15d7d..4bdcceffe9d3 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+@@ -1520,9 +1520,22 @@ static struct mlx5_flow_rule *find_flow_rule(struct fs_fte *fte,
+ 	return NULL;
  }
  
-+#ifdef CONFIG_CIFS_ALLOW_INSECURE_LEGACY
- static bool
- smb2_is_read_op(__u32 oplock)
+-static bool check_conflicting_actions(u32 action1, u32 action2)
++static bool check_conflicting_actions_vlan(const struct mlx5_fs_vlan *vlan0,
++					   const struct mlx5_fs_vlan *vlan1)
  {
- 	return oplock == SMB2_OPLOCK_LEVEL_II;
+-	u32 xored_actions = action1 ^ action2;
++	return vlan0->ethtype != vlan1->ethtype ||
++	       vlan0->vid != vlan1->vid ||
++	       vlan0->prio != vlan1->prio;
++}
++
++static bool check_conflicting_actions(const struct mlx5_flow_act *act1,
++				      const struct mlx5_flow_act *act2)
++{
++	u32 action1 = act1->action;
++	u32 action2 = act2->action;
++	u32 xored_actions;
++
++	xored_actions = action1 ^ action2;
+ 
+ 	/* if one rule only wants to count, it's ok */
+ 	if (action1 == MLX5_FLOW_CONTEXT_ACTION_COUNT ||
+@@ -1539,6 +1552,22 @@ static bool check_conflicting_actions(u32 action1, u32 action2)
+ 			     MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2))
+ 		return true;
+ 
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_PACKET_REFORMAT &&
++	    act1->pkt_reformat != act2->pkt_reformat)
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
++	    act1->modify_hdr != act2->modify_hdr)
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH &&
++	    check_conflicting_actions_vlan(&act1->vlan[0], &act2->vlan[0]))
++		return true;
++
++	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2 &&
++	    check_conflicting_actions_vlan(&act1->vlan[1], &act2->vlan[1]))
++		return true;
++
+ 	return false;
  }
-+#endif /* CIFS_ALLOW_INSECURE_LEGACY */
  
- static bool
- smb21_is_read_op(__u32 oplock)
-@@ -4573,7 +4575,7 @@ smb2_make_node(unsigned int xid, struct inode *inode,
- 	return rc;
- }
- 
--
-+#ifdef CONFIG_CIFS_ALLOW_INSECURE_LEGACY
- struct smb_version_operations smb20_operations = {
- 	.compare_fids = smb2_compare_fids,
- 	.setup_request = smb2_setup_request,
-@@ -4670,6 +4672,7 @@ struct smb_version_operations smb20_operations = {
- 	.fiemap = smb3_fiemap,
- 	.llseek = smb3_llseek,
- };
-+#endif /* CIFS_ALLOW_INSECURE_LEGACY */
- 
- struct smb_version_operations smb21_operations = {
- 	.compare_fids = smb2_compare_fids,
-@@ -4987,6 +4990,7 @@ struct smb_version_operations smb311_operations = {
- 	.llseek = smb3_llseek,
- };
- 
-+#ifdef CONFIG_CIFS_ALLOW_INSECURE_LEGACY
- struct smb_version_values smb20_values = {
- 	.version_string = SMB20_VERSION_STRING,
- 	.protocol_id = SMB20_PROT_ID,
-@@ -5007,6 +5011,7 @@ struct smb_version_values smb20_values = {
- 	.signing_required = SMB2_NEGOTIATE_SIGNING_REQUIRED,
- 	.create_lease_size = sizeof(struct create_lease),
- };
-+#endif /* ALLOW_INSECURE_LEGACY */
- 
- struct smb_version_values smb21_values = {
- 	.version_string = SMB21_VERSION_STRING,
+@@ -1546,7 +1575,7 @@ static int check_conflicting_ftes(struct fs_fte *fte,
+ 				  const struct mlx5_flow_context *flow_context,
+ 				  const struct mlx5_flow_act *flow_act)
+ {
+-	if (check_conflicting_actions(flow_act->action, fte->action.action)) {
++	if (check_conflicting_actions(flow_act, &fte->action)) {
+ 		mlx5_core_warn(get_dev(&fte->node),
+ 			       "Found two FTEs with conflicting actions\n");
+ 		return -EEXIST;
 -- 
 2.35.1
 

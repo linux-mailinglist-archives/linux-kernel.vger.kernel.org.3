@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099C05498F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CCB5498F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239111AbiFMPzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S232621AbiFMPzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242358AbiFMPxI (ORCPT
+        with ESMTP id S241453AbiFMPxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:53:08 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA1218AD9A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:37:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v14so7192540wra.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XGj+H+fpRO/LlJr3MV24WDf1h9Fmi9x6UfIbBDjSN90=;
-        b=XgUlqfja5ZWiDngd5yxO9/A1rS+TiHjFwM3lWMNUhKXVo7oN0cM2pEcuNzjygpwG0N
-         zC2JLXdgQdEii9jwUAeOyRgUxAqj62g3h7raBCksbi3LPGkqSX3vzlsasioqRRgXm9i5
-         CFYZ0By5rNs1B/MPFZqefiDSoLn1v+a8pYIfqXanwBk+9f0Ff4eXO017wO3U1t1P/+eH
-         7geD1a34tzn5fR5kOJQZyiA8ksdj0S3W49L5lZtaqswzgIOb7gFVpFF6TIlmHDZuSSlY
-         Av0b7yZDsFI1rdOo3sREPKsWUya6vCf32OX0VG6wAk6fEKVLdNEeBJJPYW2ede+t/aOD
-         eKYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XGj+H+fpRO/LlJr3MV24WDf1h9Fmi9x6UfIbBDjSN90=;
-        b=WM9qM5ru8bNC+6rX7wApp0bansc86PxbkOCRhj5P9/+KCxlLBR9afaH9eWg6lpVnjp
-         IQuL19xAzs53z/cXNDxJyLysEJoaFYBlf0nSEbQliZFGdTJQXE8Hj/4veOIO4F15qgPh
-         /W39HSWt03nWj1qOq9k/Z65stL/mmXNiFbjI5+D4b7Fdnkxx3bNpW7/FokSQqYMsVx+P
-         OFhl+DNNPR6avbZ0AQfba+XQPHWgMBffO/GtdAgRIcOO00YULlKc9Qv5rpNTL+ZmGl8J
-         m19Gr9GVfuMUNPX5bGFZr3bsaL9U+E7LQ3j0pjElqEISjeGlE12C8RmhA24IJDfNxWbR
-         CmKQ==
-X-Gm-Message-State: AOAM532Xu7xA94tLtM4vrFmvFkVvK1AacwZN4CsFCG7nqe70BH1YOogi
-        BUJ8JMAY25CJyDOPviLwK2WBhQ==
-X-Google-Smtp-Source: ABdhPJxfsxvmar0ZLVRQAyA6Vm11jGskO+L1U7Ei7cvzrtTdVvlRU7aetpFzUu8VNL7M/6NFe1vTTw==
-X-Received: by 2002:adf:9cca:0:b0:210:2f76:93fe with SMTP id h10-20020adf9cca000000b002102f7693femr55711451wre.12.1655127472493;
-        Mon, 13 Jun 2022 06:37:52 -0700 (PDT)
-Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
-        by smtp.gmail.com with ESMTPSA id ay4-20020a5d6f04000000b00219b391c2d2sm10529791wrb.36.2022.06.13.06.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 06:37:52 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 14:37:48 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
-        vschneid@redhat.com, kernel-team@android.com,
-        Derek Dolney <z23@posteo.net>
-Subject: Re: [PATCH v2] cpu/hotplug: Do not bail-out in DYING/STARTING
- sections
-Message-ID: <Yqc9rOIlYhywk3HT@google.com>
-References: <20220523160536.2889162-1-vdonnefort@google.com>
- <87mteg3flp.ffs@tglx>
+        Mon, 13 Jun 2022 11:53:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C242318C077;
+        Mon, 13 Jun 2022 06:38:25 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5BF86660166D;
+        Mon, 13 Jun 2022 14:38:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655127504;
+        bh=TETKvO7yzhsJVee/QiNgQ4n1RUjV1Q6NM9vNQ/zTq6g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ISTT2qz2Uyfiiw/NGE69FIQJpUcFunEyQIjA0OPA0lQm6Y2JP2VYTXkZXjfLK6cRU
+         jA00XhL5XBc3E0JDjP6ionTLRksMHx8CewzRBrOrNiEJtKwuOuBdTDF58856O+6Mcc
+         857EqIUc0PM69AoGuYR+GqBpbRbGdUOZ/Q60jYnmvTgOF5rQ3582ba/Tb7QcZ51+qB
+         sEJQDFU7uMGxABrvDyIPJgO5YyygHQbRdFWbJbyUQSwBoGcnvpxbFK9YW6Eck6g+u6
+         a749PHjxH5RZohl9hFeuqJAuXMH91HqdVyKV0995iMMv8iP2sEMHTyUHzkzuZ9At8z
+         z7qx0gXheIO5w==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     daniel.lezcano@linaro.org
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v4 0/2] MediaTek SoC ARM/ARM64 System Timer
+Date:   Mon, 13 Jun 2022 15:38:17 +0200
+Message-Id: <20220613133819.35318-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mteg3flp.ffs@tglx>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 02:36:18PM +0200, Thomas Gleixner wrote:
-> Vincent,
-> 
-> On Mon, May 23 2022 at 17:05, Vincent Donnefort wrote:
-> > +static int _cpuhp_invoke_callback_range(bool bringup,
-> > +					unsigned int cpu,
-> > +					struct cpuhp_cpu_state *st,
-> > +					enum cpuhp_state target,
-> > +					bool nofail)
-> >  {
-> >  	enum cpuhp_state state;
-> > -	int err = 0;
-> > +	int ret = 0;
-> >  
-> >  	while (cpuhp_next_state(bringup, &state, st, target)) {
-> > +		int err;
-> > +
-> >  		err = cpuhp_invoke_callback(cpu, state, bringup, NULL, NULL);
-> > -		if (err)
-> > +		if (!err)
-> > +			continue;
-> > +
-> > +		if (nofail) {
-> > +			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
-> > +				cpu, bringup ? "UP" : "DOWN",
-> > +				cpuhp_get_step(st->state)->name,
-> > +				st->state, err);
-> > +			ret = -1;
-> 
-> I have a hard time to map this to the changelog:
-> 
-> > those sections. In that case, there's nothing the hotplug machinery can do,
-> > so let's just proceed and log the failures.
-> 
-> That's still returning an error code at the end. Confused.
+In an effort to give some love to the apparently forgotten MT6795 SoC,
+I am upstreaming more components that are necessary to support platforms
+powered by this one apart from a simple boot to serial console.
 
-It is, but after returning from this function, only a warning will be raised
-(cpuhp_invoke_callback_range_nofail()) instead of stopping the HP machinery
-(cpuhp_invoke_callback_range()). How about this changelog?
+This series introduces support to start the System Timer for the CPU
+cores found in various MediaTek SoCs including, but not limited to the
+MT6795 Helio X10 - and will most probably unblock many developers for
+the upstreaming of various platforms.
 
-  The DYING/STARTING callbacks are not expected to fail. However, as reported by
-  Derek, drivers such as tboot are still free to return errors within those
-  sections, which halts the hot(un)plug and leaves the CPU in an unrecoverable
-  state.
-  
-  No rollback being possible there, let's only log the failures and proceed
-  with the following steps. This restores the hotplug behaviour prior to
-  453e41085183 (cpu/hotplug: Add cpuhp_invoke_callback_range())
+For a broad overview of why/what/when, please look at the description
+of patch [2/2] in this series.
 
-> 
-> Thanks,
-> 
->         tglx
+Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
+
+Changes in v4:
+ - Changed statement in documentation, now saying:
+   "MediaTek SoCs have different timers on different platforms"
+
+Changes in v3:
+ - Merged mtk_cpux_{enable,disable}_irq() as one mtk_cpux_set_irq() function
+   as suggested by Matthias
+
+Changes in v2:
+ - Added back a lost line in commit 2/2 (sorry, commit didn't get amended...!)
+ - Tested again for safety
+
+AngeloGioacchino Del Regno (2):
+  dt-bindings: timer: mediatek: Add CPUX System Timer and MT6795
+    compatible
+  clocksource/drivers/timer-mediatek: Implement CPUXGPT timers
+
+ .../bindings/timer/mediatek,mtk-timer.txt     |   6 +-
+ drivers/clocksource/timer-mediatek.c          | 114 ++++++++++++++++++
+ 2 files changed, 119 insertions(+), 1 deletion(-)
+
+-- 
+2.35.1
+

@@ -2,200 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1535490C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFF2549003
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242583AbiFMPYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S1349009AbiFMPVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344931AbiFMPWu (ORCPT
+        with ESMTP id S244020AbiFMPU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:22:50 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D868134E14;
-        Mon, 13 Jun 2022 05:48:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bN78CyO3E8gkbrjHR+FZKG7fKuxmwE4yOb0XTXoycoxg7s3Wnc4R7b6jqBVequ4wLoNpcsbkzUY0JJMFNIxp9vZ5sfjCLWMP+tpK4gqC//qNlU8NYeoQfWk4rF4sxgjF0tfOWdEM5qMaAaGuDGfg4zuGOraTYVkw4IGBB3AfOCZffIknTVPygCy/2tmqK/ny9Dr2eWK/khswWHZ99EszMno+ttnC0899qt4PHAmApYq1Rlx4QMiyppas9hr51w1TTvORihglKglutNTY9hCBwi56frPIYcc5OhIG+ZKhwuyldHNu9KfGNu5h4xMsnF/LFQ29W8BMTPLDkNV8lDiqsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3pKvlrH7EySADPgK8hGccZXgaNUi+eD1UkNtbN2kINc=;
- b=A7xpdMpnsmyVwGUfpJA4KsoH4sZVp0eZgU75zRu5ELZZ1iUm9L/tVsqk6kNSWDG1xmCPDb6nv1a4QL4XlExUHGZcid9TPxcG6xpQiuFcZ8WXSdauHOvpkp1AUwignNIiPgwxhaDE4o3EShnQAma6A4oMp/6CfxBhrxWTIVIbzuNU5n5Fsr2T0mcnb1fiUfYW8nldkRXaY/6Ncf+rUMy6ZiY8f/0jolpt1J+HrSYPnBDC6/MvP/qFqZFRkHrhYFxhaZaWgSprr7gGzYhCVXgEgWZkYYGaBYW/KAvQIdAeaLZ6718TIuzQKkabD4tk3V3Xyk7FKkGJSFZAV9h5dm3wOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3pKvlrH7EySADPgK8hGccZXgaNUi+eD1UkNtbN2kINc=;
- b=L8dsLzwYBBL5GL0tUSAx+rOXthts49kHjC06dqiXb0zwIa2oMRT3ChzodL+3eWQA5n06Z8PwehjzJU9I4JyP6r3nxQEntWsgM/+gVACCLjAWoxz1cPuCdDxtWdL6NFB/Gsn4iD/tqMdjC+0QhgDye0L8sVngbWc39ljRmUtK4YM=
-Received: from BN0PR04CA0043.namprd04.prod.outlook.com (2603:10b6:408:e8::18)
- by BN6PR02MB2625.namprd02.prod.outlook.com (2603:10b6:404:57::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Mon, 13 Jun
- 2022 12:48:17 +0000
-Received: from BN1NAM02FT027.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:e8:cafe::59) by BN0PR04CA0043.outlook.office365.com
- (2603:10b6:408:e8::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.17 via Frontend
- Transport; Mon, 13 Jun 2022 12:48:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT027.mail.protection.outlook.com (10.13.2.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5332.12 via Frontend Transport; Mon, 13 Jun 2022 12:48:17 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 13 Jun 2022 05:48:08 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 13 Jun 2022 05:48:08 -0700
-Envelope-to: git@xilinx.com,
- gregkh@linuxfoundation.org,
- robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org,
- balbi@kernel.org,
- linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.18] (port=39406 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <piyush.mehta@xilinx.com>)
-        id 1o0jUF-000A8B-UT; Mon, 13 Jun 2022 05:48:08 -0700
-From:   Piyush Mehta <piyush.mehta@xilinx.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <balbi@kernel.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <michal.simek@xilinx.com>
-CC:     <git@xilinx.com>, <sivadur@xilinx.com>,
-        Piyush Mehta <piyush.mehta@xilinx.com>
-Subject: [PATCH 2/2] usb: dwc3: core: Enable GUCTL1 bit 10 for fixing crc error after resume bug
-Date:   Mon, 13 Jun 2022 18:17:03 +0530
-Message-ID: <20220613124703.4493-3-piyush.mehta@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220613124703.4493-1-piyush.mehta@xilinx.com>
-References: <20220613124703.4493-1-piyush.mehta@xilinx.com>
+        Mon, 13 Jun 2022 11:20:57 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B3C12E83F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:47:09 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id e4-20020a056e020b2400b002d5509de6f3so4519399ilu.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:47:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=rTgFkwumsnbufKY7S9wSNP6dppaQAEhkOhZkIrZ1EJQ=;
+        b=1k/OImlY14CiBRf6ijDchMbg67m5me4WekDT+mIQL7EGHNPr+7nUbcqtMjDkbMDirn
+         ABuC5gUYh8p5051qr819HSE+KNs6ZL2ZA8cK0feIp94eODM0bTTJwg3gEmm6cPaIRHmz
+         ypbSi87WdDavL0uWpAkEF1VT/E9u5zEOSjiIBMBMYjDVa/hnA2s/BzW9ig4cS1+5/60R
+         opt6oqa2QPQEWj/bMxaJkY/2skFdvYppCVGTSskeuqmegblSo8DSqKvmAqOXQBIu00WO
+         lOIqTOXj1ZdCYb2h0lCJs2R0LaYJiq7Sv4JymlKiPyL7MyvxRYkiVtpr0J55LXexofyY
+         TUAQ==
+X-Gm-Message-State: AOAM530slmH70Q1U/62HtRbRdgi0ba4dwXeqmYtjeuQp9lLFar2kJtUY
+        6qXLUTo9/ZG/0Oe2iFFNTvld9GtJGDibX20upHyg/VSUXKhc
+X-Google-Smtp-Source: ABdhPJxU8sGkFGwVMoB6BzvhnQgeCCqMhvZiJ9bYYo/SWwXGh8XSgpgF8o4pKBSSCUv026a+zPY+zfFCawSVNvzD/N3vKlDnMawA
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f14ed4ed-9c3a-408f-ceb1-08da4d3afcf0
-X-MS-TrafficTypeDiagnostic: BN6PR02MB2625:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR02MB262554B161E8FFB217190EC2D4AB9@BN6PR02MB2625.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rGH8V7Wv4m7GNz+n0Odmcshqv/BWpr5shajwSot+7g9hWT9evHg4HZbNaKDTVds6uIW5L6BAonMUvj30QiSm+UnjQRWf0tfTvxBrLZ6jfVJkQMKo0gXuWmtl/EKLn0NZYCtC8uz0WYmJsMHJg0d92ftuEvG473pG0shU7zw+m3qYSWax3gIXUyRDI5Nf6cHpanGyCSmJClGxpQE5AleXhP6+j8as6cmKMr5wzw+MHOXDjwOFprN/KbzpYcnxeYphjVwbW137nSGxvCBiPjtZnC2ncs7N6lFg0jQn8DlrF/muC+wAyTx2k4+rh/qobdoOls80N68zSlQjDiBCYSMx2x7+fYIDZurAqHGqmXSB8sT6HaocqTtQrYcpHPfeWnCC+haSTcqQewwI/5hfjWesL4hgIAJicuUcFHbnvtkKmMBOZQPoc8fb0taDjKakU9qq8Kf1CRUJRDgMIcBY1vbGmWK0lg8m3IjsJy1noUIfo/bknkxCKyViPi9mkZPDeBzEsedx3aayTgbVkpY1ltYGa3jIGY6zVI5UFQu4VxJh7T9Va7nlcBgUtkyjIiFLp1Y1uvwSc+uh2pWWjXt+bQQEetLFOkZAr53yF4PSCXKus9WHk/XpI/RIw1hf+4f7Sc2JnCgWhM+BdpX+oRYU+84BTVwJhjPOhn0GVbVa3KP5P5IwzZhWOVQK5tvsMUeKJsMvxSdDSuUMhqDFDjU0cNRG9A==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(46966006)(36840700001)(508600001)(9786002)(316002)(70586007)(70206006)(8676002)(8936002)(2616005)(36860700001)(5660300002)(6636002)(44832011)(110136005)(36756003)(40460700003)(54906003)(4326008)(2906002)(7696005)(6666004)(7636003)(26005)(356005)(82310400005)(83380400001)(426003)(47076005)(336012)(1076003)(186003)(107886003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 12:48:17.2022
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f14ed4ed-9c3a-408f-ceb1-08da4d3afcf0
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT027.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2625
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d851:0:b0:2d5:52a0:28be with SMTP id
+ h17-20020a92d851000000b002d552a028bemr18854253ilq.313.1655124428284; Mon, 13
+ Jun 2022 05:47:08 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 05:47:08 -0700
+In-Reply-To: <20220613104713.1829-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009b692105e153af25@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in __vma_adjust
+From:   syzbot <syzbot+68771c0e74f7bb7804e5@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When configured in HOST mode, after issuing U3/L2 exit controller fails
-to send proper CRC checksum in CRC5 field. Because of this behavior
-Transaction Error is generated, resulting in reset and re-enumeration of
-usb device attached. Enabling chicken bit 10 of GUCTL1 will correct this
-problem.
+Hello,
 
-When this bit is set to '1', the UTMI/ULPI opmode will be changed to
-"normal" along with HS terminations after EOR. This option is to support
-certain legacy UTMI/ULPI PHYs.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Write in userfaultfd_release
 
-Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
----
- drivers/usb/dwc3/core.c | 16 ++++++++++++++++
- drivers/usb/dwc3/core.h |  6 ++++++
- 2 files changed, 22 insertions(+)
+==================================================================
+BUG: KASAN: use-after-free in userfaultfd_release+0x651/0x670 fs/userfaultfd.c:897
+Write of size 8 at addr ffff8880781dfe78 by task syz-executor.0/4090
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index e027c0420dc3..8afc025390d2 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1140,6 +1140,20 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
- 	}
- 
-+	/*
-+	 * When configured in HOST mode, after issuing U3/L2 exit controller
-+	 * fails to send proper CRC checksum in CRC5 feild. Because of this
-+	 * behaviour Transaction Error is generated, resulting in reset and
-+	 * re-enumeration of usb device attached. Enabling bit 10 of GUCTL1
-+	 * will correct this problem. This option is to support certain
-+	 * legacy ULPI PHYs.
-+	 */
-+	if (dwc->enable_guctl1_resume_quirk) {
-+		reg = dwc3_readl(dwc->regs, DWC3_GUCTL1);
-+		reg |= DWC3_GUCTL1_RESUME_QUIRK;
-+		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
-+	}
-+
- 	if (!DWC3_VER_IS_PRIOR(DWC3, 250A)) {
- 		reg = dwc3_readl(dwc->regs, DWC3_GUCTL1);
- 
-@@ -1483,6 +1497,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 				"snps,dis-del-phy-power-chg-quirk");
- 	dwc->dis_tx_ipgap_linecheck_quirk = device_property_read_bool(dev,
- 				"snps,dis-tx-ipgap-linecheck-quirk");
-+	dwc->enable_guctl1_resume_quirk = device_property_read_bool(dev,
-+				"snps,enable_guctl1_resume_quirk");
- 	dwc->parkmode_disable_ss_quirk = device_property_read_bool(dev,
- 				"snps,parkmode-disable-ss-quirk");
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 81c486b3941c..e386209f0e1b 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -397,6 +397,9 @@
- #define DWC3_GUCTL_REFCLKPER_MASK		0xffc00000
- #define DWC3_GUCTL_REFCLKPER_SEL		22
- 
-+/* Global User Control Register 1 */
-+#define DWC3_GUCTL1_RESUME_QUIRK		BIT(10)
-+
- /* Global User Control Register 2 */
- #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
- 
-@@ -1093,6 +1096,8 @@ struct dwc3_scratchpad_array {
-  *			change quirk.
-  * @dis_tx_ipgap_linecheck_quirk: set if we disable u2mac linestate
-  *			check during HS transmit.
-+ * @enable_guctl1_resume_quirk: Set if we enable quirk for fixing improper crc
-+ *			generation after resume from suspend.
-  * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
-  *			instances in park mode.
-  * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
-@@ -1308,6 +1313,7 @@ struct dwc3 {
- 	unsigned		dis_u2_freeclk_exists_quirk:1;
- 	unsigned		dis_del_phy_power_chg_quirk:1;
- 	unsigned		dis_tx_ipgap_linecheck_quirk:1;
-+	unsigned		enable_guctl1_resume_quirk:1;
- 	unsigned		parkmode_disable_ss_quirk:1;
- 
- 	unsigned		tx_de_emphasis_quirk:1;
--- 
-2.17.1
+CPU: 0 PID: 4090 Comm: syz-executor.0 Not tainted 5.19.0-rc1-next-20220610-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ userfaultfd_release+0x651/0x670 fs/userfaultfd.c:897
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ get_signal+0x1c5/0x2600 kernel/signal.c:2634
+ arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f734c489109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f734d629168 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: fffffffffffffe00 RBX: 00007f734c59bf60 RCX: 00007f734c489109
+RDX: 000000000000003c RSI: 0000000020000180 RDI: 0000000000000003
+RBP: 00007f734d6291d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007ffcee01460f R14: 00007f734d629300 R15: 0000000000022000
+ </TASK>
+
+Allocated by task 4069:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:750 [inline]
+ slab_alloc_node mm/slub.c:3214 [inline]
+ slab_alloc mm/slub.c:3222 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
+ kmem_cache_alloc+0x204/0x3b0 mm/slub.c:3239
+ vm_area_dup+0x81/0x380 kernel/fork.c:466
+ dup_mmap+0x656/0x1090 kernel/fork.c:640
+ dup_mm+0x91/0x370 kernel/fork.c:1520
+ copy_mm kernel/fork.c:1569 [inline]
+ copy_process+0x3c95/0x7080 kernel/fork.c:2234
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2649
+ __do_sys_clone+0xba/0x100 kernel/fork.c:2783
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Freed by task 4090:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1727 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
+ slab_free mm/slub.c:3507 [inline]
+ kmem_cache_free+0xdd/0x5a0 mm/slub.c:3524
+ __vma_adjust+0x9ae/0x1910 mm/mmap.c:889
+ vma_merge+0x590/0x870 mm/mmap.c:1123
+ userfaultfd_release+0x4c5/0x670 fs/userfaultfd.c:888
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ get_signal+0x1c5/0x2600 kernel/signal.c:2634
+ arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+The buggy address belongs to the object at ffff8880781dfe58
+ which belongs to the cache vm_area_struct of size 152
+The buggy address is located 32 bytes inside of
+ 152-byte region [ffff8880781dfe58, ffff8880781dfef0)
+
+The buggy address belongs to the physical page:
+page:ffffea0001e077c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x781df
+memcg:ffff88801e8b2f01
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea0000973500 dead000000000007 ffff888140006b40
+raw: 0000000000000000 0000000000120012 00000001ffffffff ffff88801e8b2f01
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 3812, tgid 3812 (sed), ts 62101588097, free_ts 62100288733
+ prep_new_page mm/page_alloc.c:2460 [inline]
+ get_page_from_freelist+0xa64/0x3d10 mm/page_alloc.c:4279
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5500
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+ alloc_slab_page mm/slub.c:1797 [inline]
+ allocate_slab+0x26c/0x3c0 mm/slub.c:1942
+ new_slab mm/slub.c:2002 [inline]
+ ___slab_alloc+0x985/0xd90 mm/slub.c:3002
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
+ slab_alloc_node mm/slub.c:3180 [inline]
+ slab_alloc mm/slub.c:3222 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
+ kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3239
+ vm_area_alloc+0x1c/0xf0 kernel/fork.c:458
+ __install_special_mapping+0x2e/0x3a0 mm/mmap.c:3489
+ map_vdso+0x131/0x390 arch/x86/entry/vdso/vma.c:268
+ load_elf_binary+0x206e/0x4ec0 fs/binfmt_elf.c:1287
+ search_binary_handler fs/exec.c:1728 [inline]
+ exec_binprm fs/exec.c:1769 [inline]
+ bprm_execve fs/exec.c:1838 [inline]
+ bprm_execve+0x7ef/0x1970 fs/exec.c:1800
+ do_execveat_common+0x724/0x890 fs/exec.c:1943
+ do_execve fs/exec.c:2017 [inline]
+ __do_sys_execve fs/exec.c:2093 [inline]
+ __se_sys_execve fs/exec.c:2088 [inline]
+ __x64_sys_execve+0x8f/0xc0 fs/exec.c:2088
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1375 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1425
+ free_unref_page_prepare mm/page_alloc.c:3311 [inline]
+ free_unref_page_list+0x184/0x1530 mm/page_alloc.c:3475
+ release_pages+0xff1/0x2290 mm/swap.c:980
+ tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:58
+ tlb_flush_mmu_free mm/mmu_gather.c:255 [inline]
+ tlb_flush_mmu mm/mmu_gather.c:262 [inline]
+ tlb_finish_mmu+0x147/0x7e0 mm/mmu_gather.c:353
+ exit_mmap+0x217/0x750 mm/mmap.c:3209
+ __mmput+0x128/0x4c0 kernel/fork.c:1180
+ mmput+0x5c/0x70 kernel/fork.c:1201
+ exec_mmap fs/exec.c:1038 [inline]
+ begin_new_exec+0xfbd/0x2e50 fs/exec.c:1297
+ load_elf_binary+0x15a3/0x4ec0 fs/binfmt_elf.c:1002
+ search_binary_handler fs/exec.c:1728 [inline]
+ exec_binprm fs/exec.c:1769 [inline]
+ bprm_execve fs/exec.c:1838 [inline]
+ bprm_execve+0x7ef/0x1970 fs/exec.c:1800
+ do_execveat_common+0x724/0x890 fs/exec.c:1943
+ do_execve fs/exec.c:2017 [inline]
+ __do_sys_execve fs/exec.c:2093 [inline]
+ __se_sys_execve fs/exec.c:2088 [inline]
+ __x64_sys_execve+0x8f/0xc0 fs/exec.c:2088
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Memory state around the buggy address:
+ ffff8880781dfd00: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+ ffff8880781dfd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880781dfe00: 00 00 00 fc fc fc fc fc fc fc fc fa fb fb fb fb
+                                                                ^
+ ffff8880781dfe80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc
+ ffff8880781dff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+Tested on:
+
+commit:         6d0c8068 Add linux-next specific files for 20220610
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=13e7c01bf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a30d6e3e814e5931
+dashboard link: https://syzkaller.appspot.com/bug?extid=68771c0e74f7bb7804e5
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1679062ff00000
 

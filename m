@@ -2,227 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DFA54A101
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6581454A110
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352088AbiFMVNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S1352183AbiFMVOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352050AbiFMVMp (ORCPT
+        with ESMTP id S1352090AbiFMVNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:12:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC9A6571;
-        Mon, 13 Jun 2022 13:51:24 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B2E006601668;
-        Mon, 13 Jun 2022 21:51:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655153483;
-        bh=8qUc74bLu4+4c99EHIFyhvDd9mzPx8O2XOjdFV43U5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYNVheWXO6w9qtes6hbwKf505NJi25Db4LnlIm04il/DtSS11i7s7OJivXqeJAMBa
-         XfhS1OI2O4SE07CFs/Qd7MCrBrTdCW7yujHHv63RkvUoSKSup2r+C4iAcEHLxmUBJj
-         kIKNRhishKcRtOY9mcKyWfVZXn8tjtg/Vs/BKIwHcSTfkEgQHAx3Kz7RR+Jf3Z04Mk
-         Xiyu2BS6DWEuPt5ahU9OQRW0QJZKLv+oK61xsDijFX24wstblsr6nLE4qFIbQ869r+
-         kKCLvTBylvo7v8LYk0+9IkL05/IOFEVoRyCrwni+xut8M71Lr+z/oBNSkOvpUDobXP
-         m2azljGgHY6Sg==
-Date:   Mon, 13 Jun 2022 16:51:17 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Xin Ji <xji@analogixsemi.com>
-Subject: Re: [PATCH v2 7/7] drm/bridge: anx7625: Add typec_mux_set callback
- function
-Message-ID: <20220613205117.aewpbdjolxmys4vy@notapiano>
-References: <20220609181106.3695103-1-pmalani@chromium.org>
- <20220609181106.3695103-8-pmalani@chromium.org>
+        Mon, 13 Jun 2022 17:13:08 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80F2393DF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:52:41 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id q11so9153918oih.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ie2xrfdugqSnUY/lUmZJBYqEw/Jj5HQgDROYZDI7Ljg=;
+        b=q8Sos2zHH2cqeJpqAWGopwq4BFpy5d162ZHvWsGBGzD8dXmnX4TsH4oGd9xtjxFj3k
+         kkiT7ORHTaWO7TVdzrFrUtvSJwyodFHKf3kDLk5zfyB6+Q4t7bACoSZoThK4QulFXt66
+         4eu47sTHknmVkiiSbjTEY+HxauLbTxzPeZ3t8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ie2xrfdugqSnUY/lUmZJBYqEw/Jj5HQgDROYZDI7Ljg=;
+        b=2BTagNmBRGJKz/ZTRxxdjqJTzA/79KBvd8kRgwKLGEXSwrqp8MDigqb+uLTFATWVn0
+         zhdPb7sy3W4CLmN+ssYS8jRFXcCTAurin51vg+4ZxhBAf923rcLPBfOhiXBVCbbRlZNL
+         UqnK3UC0ZLtQu4gpLSVaywfwUxZuLhDa4SxEnMELatRnDN1jmgJwJ6CM/iEZwu22shFI
+         ++n4u1cGVXP+spHifOqH8ZwxsEECmss5pvPPEs7K7kioh7tlWKb65priM065pa3+RIka
+         W4nSQaZ+euFdODEBEcUJaWSQHAz6aDNEgLPu89LSr6fO/9cwfe3je4hSczNAK7kDvlrX
+         Cz2w==
+X-Gm-Message-State: AOAM531+gspUQfDPTzRz97z4rQH/BlZdnSfK3vL4miik1O7Ok0xDWIr+
+        PRlDKk81HOxg+zjIPEp9CvkFKA==
+X-Google-Smtp-Source: ABdhPJxwqO943xteTGAgFieA/vZp5/Zn/6Qxyj5rF6Le0Sf8rKMQHGa/+OpWxWOapQGjDXa0MQVMLw==
+X-Received: by 2002:a05:6808:2394:b0:326:d5d6:a4ba with SMTP id bp20-20020a056808239400b00326d5d6a4bamr321996oib.67.1655153561069;
+        Mon, 13 Jun 2022 13:52:41 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id dv8-20020a056870d88800b000f5eb6b409bsm4444747oab.45.2022.06.13.13.52.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 13:52:40 -0700 (PDT)
+Message-ID: <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com>
+Date:   Mon, 13 Jun 2022 15:52:38 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609181106.3695103-8-pmalani@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, selinux@vger.kernel.org,
+        serge@hallyn.com, amir73il@gmail.com, kernel-team@cloudflare.com,
+        Jeff Moyer <jmoyer@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+References: <20220608150942.776446-1-fred@cloudflare.com>
+ <87tu8oze94.fsf@email.froward.int.ebiederm.org>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <87tu8oze94.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prashant,
+Hi Eric,
 
-On Thu, Jun 09, 2022 at 06:09:46PM +0000, Prashant Malani wrote:
-> From: Pin-Yen Lin <treapking@chromium.org>
+On 6/13/22 12:04 PM, Eric W. Biederman wrote:
+> Frederick Lawler <fred@cloudflare.com> writes:
 > 
-> Add the callback function when the driver receives state
-> changes of the Type-C port. The callback function configures the
-> crosspoint switch of the anx7625 bridge chip, which can change the
-> output pins of the signals according to the port state.
+>> While experimenting with the security_prepare_creds() LSM hook, we
+>> noticed that our EPERM error code was not propagated up the callstack.
+>> Instead ENOMEM is always returned.  As a result, some tools may send a
+>> confusing error message to the user:
+>>
+>> $ unshare -rU
+>> unshare: unshare failed: Cannot allocate memory
+>>
+>> A user would think that the system didn't have enough memory, when
+>> instead the action was denied.
+>>
+>> This problem occurs because prepare_creds() and prepare_kernel_cred()
+>> return NULL when security_prepare_creds() returns an error code. Later,
+>> functions calling prepare_creds() and prepare_kernel_cred() return
+>> ENOMEM because they assume that a NULL meant there was no memory
+>> allocated.
+>>
+>> Fix this by propagating an error code from security_prepare_creds() up
+>> the callstack.
 > 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
-> 
-> Changes since v2:
-> - No changes.
-> 
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 58 +++++++++++++++++++++++
->  drivers/gpu/drm/bridge/analogix/anx7625.h | 13 +++++
->  2 files changed, 71 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index d41a21103bd3..2c308d12fab2 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -15,6 +15,7 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
-> +#include <linux/usb/typec_dp.h>
->  #include <linux/usb/typec_mux.h>
->  #include <linux/workqueue.h>
->  
-> @@ -2582,9 +2583,66 @@ static void anx7625_runtime_disable(void *data)
->  	pm_runtime_disable(data);
->  }
->  
-> +static void anx7625_set_crosspoint_switch(struct anx7625_data *ctx,
-> +					  enum typec_orientation orientation)
-> +{
-> +	if (orientation == TYPEC_ORIENTATION_NORMAL) {
-> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
-> +				  SW_SEL1_SSRX_RX1 | SW_SEL1_DPTX0_RX2);
-> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
-> +				  SW_SEL2_SSTX_TX1 | SW_SEL2_DPTX1_TX2);
-> +	} else if (orientation == TYPEC_ORIENTATION_REVERSE) {
-> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
-> +				  SW_SEL1_SSRX_RX2 | SW_SEL1_DPTX0_RX1);
-> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
-> +				  SW_SEL2_SSTX_TX2 | SW_SEL2_DPTX1_TX1);
-> +	}
-> +}
-> +
-> +static void anx7625_typec_two_ports_update(struct anx7625_data *ctx)
-> +{
-> +	if (ctx->typec_ports[0].dp_connected && ctx->typec_ports[1].dp_connected)
-> +		/* Both ports available, do nothing to retain the current one. */
-> +		return;
-> +	else if (ctx->typec_ports[0].dp_connected)
-> +		anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_NORMAL);
-> +	else if (ctx->typec_ports[1].dp_connected)
-> +		anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_REVERSE);
-> +}
-> +
->  static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
->  				 struct typec_mux_state *state)
->  {
-> +	struct anx7625_port_data *data = typec_mux_get_drvdata(mux);
-> +	struct anx7625_data *ctx = data->ctx;
-> +	struct device *dev = &ctx->client->dev;
-> +
-> +	bool old_dp_connected = (ctx->typec_ports[0].dp_connected ||
-> +				 ctx->typec_ports[1].dp_connected);
+> Why would it make sense for security_prepare_creds to return an error
+> code other than ENOMEM?
+>  > That seems a bit of a violation of what that function is supposed to do
+>
 
-Here you're assuming you have 2 switches. Given that this on its own doesn't do
-anything, just move it after the 
+The API allows LSM authors to decide what error code is returned from 
+the cred_prepare hook. security_task_alloc() is a similar hook, and has 
+its return code propagated.
 
-	if (ctx->num_typec_switches == 1)
-		return 0;
+I'm proposing we follow security_task_allocs() pattern, and add 
+visibility for failure cases in prepare_creds().
 
-check.
-
-Thanks,
-Nícolas
-
-> +	bool new_dp_connected;
-> +
-> +	if (ctx->num_typec_switches == 1)
-> +		return 0;
-> +
-> +	dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
-> +		ctx->typec_ports[0].dp_connected, ctx->typec_ports[1].dp_connected);
-> +
-> +	data->dp_connected = (state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
-> +			      state->alt->mode == USB_TYPEC_DP_MODE);
-> +
-> +	new_dp_connected = (ctx->typec_ports[0].dp_connected ||
-> +			    ctx->typec_ports[1].dp_connected);
-> +
-> +	/* dp on, power on first */
-> +	if (!old_dp_connected && new_dp_connected)
-> +		pm_runtime_get_sync(dev);
-> +
-> +	anx7625_typec_two_ports_update(ctx);
-> +
-> +	/* dp off, power off last */
-> +	if (old_dp_connected && !new_dp_connected)
-> +		pm_runtime_put_sync(dev);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> index 76cfc64f7574..7d6c6fdf9a3a 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> @@ -55,6 +55,18 @@
->  #define HPD_STATUS_CHANGE 0x80
->  #define HPD_STATUS 0x80
->  
-> +#define TCPC_SWITCH_0 0xB4
-> +#define SW_SEL1_DPTX0_RX2 BIT(0)
-> +#define SW_SEL1_DPTX0_RX1 BIT(1)
-> +#define SW_SEL1_SSRX_RX2 BIT(4)
-> +#define SW_SEL1_SSRX_RX1 BIT(5)
-> +
-> +#define TCPC_SWITCH_1 0xB5
-> +#define SW_SEL2_DPTX1_TX2 BIT(0)
-> +#define SW_SEL2_DPTX1_TX1 BIT(1)
-> +#define SW_SEL2_SSTX_TX2 BIT(4)
-> +#define SW_SEL2_SSTX_TX1 BIT(5)
-> +
->  /******** END of I2C Address 0x58 ********/
->  
->  /***************************************************************/
-> @@ -444,6 +456,7 @@ struct anx7625_i2c_client {
->  };
->  
->  struct anx7625_port_data {
-> +	bool dp_connected;
->  	struct typec_mux_dev *typec_mux;
->  	struct anx7625_data *ctx;
->  };
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
+> I have probably missed a very interesting discussion where that was
+> mentioned but I don't see link to the discussion or anything explaining
+> why we want to do that in this change.
 > 
+
+AFAIK, this is the start of the discussion.
+
+> Eric
+> 
+
+

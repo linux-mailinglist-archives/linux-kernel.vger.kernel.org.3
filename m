@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FD554949C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53C9549002
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241658AbiFMKQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S240855AbiFMON0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241859AbiFMKPw (ORCPT
+        with ESMTP id S1382482AbiFMOFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:15:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D3EDF49;
-        Mon, 13 Jun 2022 03:15:01 -0700 (PDT)
+        Mon, 13 Jun 2022 10:05:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E129548C;
+        Mon, 13 Jun 2022 04:40:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 911BB61481;
-        Mon, 13 Jun 2022 10:15:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98021C36B08;
-        Mon, 13 Jun 2022 10:14:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34B00B80ECE;
+        Mon, 13 Jun 2022 11:40:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BC1C34114;
+        Mon, 13 Jun 2022 11:40:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115300;
-        bh=Web0D2RT+WjSuITvbC651iGdO+wK1BU0c4P35f/fpqw=;
+        s=korg; t=1655120449;
+        bh=pl/Mo2zTG3iyAG3IF2rzNQ79wq94PhZgwe/irXGYYwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=edBSdwb+BLfGeMy5C8U3S0k+QXizo6UCJmKpmxu/XlD8Hiel+v1ocWpZ9xSgj1LWK
-         Mjz1RGGnP0b3i0jPIDx+0dA3vmrFtEyOfSYfFX7OnaHP+hUIC/ACzr/b5PWGSzFaKe
-         TRkzeSdaNUUfA6VhfBCrlHobt2VIlaUdgDZBH2lE=
+        b=GrrSeoXvsdcToW/SzVyJfu38fParPZv7dSafNM9JhlObWbBv1RyGfQxvllMIa1k5B
+         Ra44+DeeTV706Np/9VvwnKUityZF1GFBLBBOtH4OwGfZQ0GWY/abBgAt0QW8UwSzza
+         WFdsvs7bevhycM3dKBbbJCk64eIRwxfQcMV9tEow=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        Niels Dossche <dossche.niels@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 034/167] powerpc/xics: fix refcount leak in icp_opal_init()
+Subject: [PATCH 5.17 014/298] usb: usbip: add missing device lock on tweak configuration cmd
 Date:   Mon, 13 Jun 2022 12:08:28 +0200
-Message-Id: <20220613094848.827284651@linuxfoundation.org>
+Message-Id: <20220613094925.358309711@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit 5dd9e27ea4a39f7edd4bf81e9e70208e7ac0b7c9 ]
+[ Upstream commit d088fabace2ca337b275d1d4b36db4fe7771e44f ]
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, use of_node_put() on it when done.
+The function documentation of usb_set_configuration says that its
+callers should hold the device lock. This lock is held for all
+callsites except tweak_set_configuration_cmd. The code path can be
+executed for example when attaching a remote USB device.
+The solution is to surround the call by the device lock.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220402013419.2410298-1-lv.ruyi@zte.com.cn
+This bug was found using my experimental own-developed static analysis
+tool, which reported the missing lock on v5.17.2. I manually verified
+this bug report by doing code review as well. I runtime checked that
+the required lock is not held. I compiled and runtime tested this on
+x86_64 with a USB mouse. After applying this patch, my analyser no
+longer reports this potential bug.
+
+Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Link: https://lore.kernel.org/r/20220412165055.257113-1-dossche.niels@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/sysdev/xics/icp-opal.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/usbip/stub_rx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/powerpc/sysdev/xics/icp-opal.c b/arch/powerpc/sysdev/xics/icp-opal.c
-index b53f80f0b4d8..80a4fa6dcc55 100644
---- a/arch/powerpc/sysdev/xics/icp-opal.c
-+++ b/arch/powerpc/sysdev/xics/icp-opal.c
-@@ -199,6 +199,7 @@ int icp_opal_init(void)
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index 325c22008e53..5dd41e8215e0 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -138,7 +138,9 @@ static int tweak_set_configuration_cmd(struct urb *urb)
+ 	req = (struct usb_ctrlrequest *) urb->setup_packet;
+ 	config = le16_to_cpu(req->wValue);
  
- 	printk("XICS: Using OPAL ICP fallbacks\n");
- 
-+	of_node_put(np);
- 	return 0;
- }
- 
++	usb_lock_device(sdev->udev);
+ 	err = usb_set_configuration(sdev->udev, config);
++	usb_unlock_device(sdev->udev);
+ 	if (err && err != -ENODEV)
+ 		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
+ 			config, err);
 -- 
 2.35.1
 

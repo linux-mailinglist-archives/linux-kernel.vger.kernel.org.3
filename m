@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D2E549760
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C886E549044
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382792AbiFMOGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S1354913AbiFMMuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240537AbiFMN72 (ORCPT
+        with ESMTP id S1357577AbiFMMtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:59:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82268CCF5;
-        Mon, 13 Jun 2022 04:37:53 -0700 (PDT)
+        Mon, 13 Jun 2022 08:49:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC7362A3C;
+        Mon, 13 Jun 2022 04:11:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27F32B80EA7;
-        Mon, 13 Jun 2022 11:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793E7C34114;
-        Mon, 13 Jun 2022 11:37:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DA8860B6B;
+        Mon, 13 Jun 2022 11:11:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F796C34114;
+        Mon, 13 Jun 2022 11:11:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120270;
-        bh=ovWdpCpgjdPMTIbsc5BY64f75f6dLt9SBIE24tqDEoA=;
+        s=korg; t=1655118694;
+        bh=YP+r8NsOlTXW2d7RbwUjxMYxl+IUDMWpsp0BdIt/vHE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aLxxLu7qu5fCcQ34UsRyLRQLpMGbuYm/09On9osp+HoBHJNa8g4b/gGIwD0BTUE+m
-         5X2edPB66PAYZeSgbVgzKdl6XzofNYel/9SLUEWnJ0LrHqbQNqHSC+nHWuxtuX21VS
-         jIxQjMemMiyTao9+3VfAP2aqg9/QmTywUGP7A0MU=
+        b=Ib704iZKUMtnj143DQv7yfNLHVLMyx8hDnTev4XGLi49i9lownVxdtieXs9T2tGfK
+         Ozjm2Oq/amCXKz1WFqNRrLzhlLV4YMONcFTK6ujWIAuAh/A4dbAEEcUUnI0sPuZI2k
+         pN+7sVLrOaOzSsjn8SPXk2Xgl4Rfxve/g22r6ZIk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.18 304/339] scsi: lpfc: Address NULL pointer dereference after starget_to_rport()
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Alex Elder <elder@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Georgi Djakov <djakov@kernel.org>
+Subject: [PATCH 5.10 169/172] interconnect: Restore sync state by ignoring ipa-virt in provider count
 Date:   Mon, 13 Jun 2022 12:12:09 +0200
-Message-Id: <20220613094935.979173117@linuxfoundation.org>
+Message-Id: <20220613094923.400137096@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +59,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Stephen Boyd <swboyd@chromium.org>
 
-commit 6f808bd78e8296b4ded813b7182988d57e1f6176 upstream.
+commit 20ce30fb4750f2ffc130cdcb26232b1dd87cd0a5 upstream.
 
-Calls to starget_to_rport() may return NULL.  Add check for NULL rport
-before dereference.
+Ignore compatible strings for the IPA virt drivers that were removed in
+commits 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0
+interconnects") and 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0
+interconnects") so that the sync state logic can kick in again.
+Otherwise all the interconnects in the system will stay pegged at max
+speeds because 'providers_count' is always going to be one larger than
+the number of drivers that will ever probe on sc7180 or sdx55. This
+fixes suspend on sc7180 and sdx55 devices when you don't have a
+devicetree patch to remove the ipa-virt compatible node.
 
-Link: https://lore.kernel.org/r/20220603174329.63777-5-jsmart2021@gmail.com
-Fixes: bb21fc9911ee ("scsi: lpfc: Use fc_block_rport()")
-Cc: <stable@vger.kernel.org> # v5.18
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Doug Anderson <dianders@chromium.org>
+Cc: Alex Elder <elder@linaro.org>
+Cc: Taniya Das <quic_tdas@quicinc.com>
+Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+Cc: <stable@vger.kernel.org>	# 5.10.x
+Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 interconnects")
+Fixes: 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0 interconnects")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Alex Elder <elder@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Link: https://lore.kernel.org/r/20220427013226.341209-1-swboyd@chromium.org
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+Signed-off-by: Alex Elder <elder@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/interconnect/core.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -6316,6 +6316,9 @@ lpfc_device_reset_handler(struct scsi_cm
- 	int status;
- 	u32 logit = LOG_FCP;
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -1084,9 +1084,14 @@ static int of_count_icc_providers(struct
+ {
+ 	struct device_node *child;
+ 	int count = 0;
++	const struct of_device_id __maybe_unused ignore_list[] = {
++		{ .compatible = "qcom,sc7180-ipa-virt" },
++		{}
++	};
  
-+	if (!rport)
-+		return FAILED;
-+
- 	rdata = rport->dd_data;
- 	if (!rdata || !rdata->pnode) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
-@@ -6394,6 +6397,9 @@ lpfc_target_reset_handler(struct scsi_cm
- 	unsigned long flags;
- 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
- 
-+	if (!rport)
-+		return FAILED;
-+
- 	rdata = rport->dd_data;
- 	if (!rdata || !rdata->pnode) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
+ 	for_each_available_child_of_node(np, child) {
+-		if (of_property_read_bool(child, "#interconnect-cells"))
++		if (of_property_read_bool(child, "#interconnect-cells") &&
++		    likely(!of_match_node(ignore_list, child)))
+ 			count++;
+ 		count += of_count_icc_providers(child);
+ 	}
 
 

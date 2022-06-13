@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498E75481CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D5C548165
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239504AbiFMIGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S239525AbiFMIHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbiFMIGN (ORCPT
+        with ESMTP id S234954AbiFMIGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:06:13 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3567D1DA66
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:06:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8ffIOw5XsQfPp5hHz5PV6qY3XyAav+N05RmGhN9z6Ps=; b=SINAdsM/DQ9UeRWwaSUKeDaP6d
-        uupQQcpR1Zntn2XNgifUeiWUXFaS+Tmt9lYuEHWqemLTXYKxTHbZuasn/oaHvhELKH9E+Ec6uK3mM
-        iCE+/35L6vE0RRFzMDMuGJ+kY8WTlnmvmR/JFN/rDwidc7fOR2b8/c5co9aOZwx4Qb9uXp9Ba9AD3
-        66Ncl0QNU2H6ZkVodeohuTkbtGMs8wpnYw7c/wvSH5z77DoyftwHYlUSUltxV3PvOEvcoUH+EFRS3
-        sdsIHbm+St+aAVFx8ATx67w18dsc8qg+3bqIW/40kkeW1YDyYeSVsC1+5010tTyxToHkxQVbeBmTz
-        f3Obi5jg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o0f50-007VHj-6I; Mon, 13 Jun 2022 08:05:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6CDF3005B7;
-        Mon, 13 Jun 2022 10:05:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D1CDE28498CA5; Mon, 13 Jun 2022 10:05:43 +0200 (CEST)
-Date:   Mon, 13 Jun 2022 10:05:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] locking/lockdep: Use sched_clock() for random numbers.
-Message-ID: <Yqbv17P9eLH0YdPG@hirez.programming.kicks-ass.net>
-References: <YoNn3pTkm5+QzE5k@linutronix.de>
- <YoNwp+9ko89Tf1ep@zx2c4.com>
+        Mon, 13 Jun 2022 04:06:48 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD8A193D5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655107607; x=1686643607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gwxLCDMvuI9jTp3aOqw0S9fllcBjdOln7NM/mKbpqHs=;
+  b=VMJO6WoR9OYcEmUu6SEXsFT4uDRdRuwccRGw1lj7wbTKlDJXx6dRbJ67
+   XzC7zmcZo8fJnQiuNfHGqigRJMp3hVVSzFOWgNurNYg+//r4ojFSdSaJh
+   V7ynAJnku4rzcPZ/2yIYehqorrPSykL8ls/Tl7G840F4XMKFa7gpJbWjr
+   K8/sc6qXae+L5rvrRHLks4HSdOdmGZdLrCgc+Gb1g5vLmjvWrxjzBA6Ii
+   1O1R+dbIpz7QCOWLusYzWGUIbjEtCBtei2jnZMe05mOAUrYNTiCEY/KMM
+   kcwScVe8E9u8hm8IFhUsyOlaZLcuZE6kBds2E51cwCXqFMNsszoEDowvt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="364534105"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="364534105"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 01:06:47 -0700
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="673147817"
+Received: from xiruzha-mobl1.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.249.169.88])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 01:06:40 -0700
+Date:   Mon, 13 Jun 2022 16:06:36 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Mel Gorman <mgorman@suse.de>, yangyicong@hisilicon.com,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>, linux-kernel@vger.kernel.org,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Mohini Narkhede <mohini.narkhede@intel.com>
+Subject: Re: [PATCH v4] sched/fair: Introduce SIS_UTIL to search idle CPU
+ based on sum of util_avg
+Message-ID: <20220613080636.GA32587@chenyu5-mobl1>
+References: <20220612163428.849378-1-yu.c.chen@intel.com>
+ <ca59e113-d5df-7dec-6bab-a8d239b50c0b@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoNwp+9ko89Tf1ep@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ca59e113-d5df-7dec-6bab-a8d239b50c0b@huawei.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 11:53:43AM +0200, Jason A. Donenfeld wrote:
-> Hi Sebastian,
+On Mon, Jun 13, 2022 at 03:40:52PM +0800, Yicong Yang wrote:
+> On 2022/6/13 0:34, Chen Yu wrote:
+> >  
+[cut...]
+> >  #define NUMA_IMBALANCE_MIN 2
+> > diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+> > index 1cf435bbcd9c..3334a1b93fc6 100644
+> > --- a/kernel/sched/features.h
+> > +++ b/kernel/sched/features.h
+> > @@ -61,6 +61,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+> >   * When doing wakeups, attempt to limit superfluous scans of the LLC domain.
+> >   */
+> >  SCHED_FEAT(SIS_PROP, true)
+> > +SCHED_FEAT(SIS_UTIL, true)
+> >  
 > 
-> Interesting RT consideration. I hope there aren't too many of these
-> special cases that would necessitate a general mechanism. Fingers
-> crossed this is the only one.
-> 
-> On Tue, May 17, 2022 at 11:16:14AM +0200, Sebastian Andrzej Siewior wrote:
-> > -			cookie.val = 1 + (prandom_u32() >> 16);
-> > +			cookie.val = 1 + (sched_clock() & 0xffff);
-> >  			hlock->pin_count += cookie.val;
->  
-> I have no idea what the requirements here are.
+> confused here that shouldn't we have SCHED_FEAT(SIS_PROP, false)? With SIS_UTIL enabled, SIS_PROP will have no
+> effect since nr is overridden by SIS_UTIL.
+Yes, no matter what SIS_PROP is set, the result of SIS_UTIL would be used to decide
+the scan depth. We don't change the default value of SIS_PROP here, as this patch
+tends to only touch one feature at one time. And the options could be tuned by user via
+sysfs manually. Besides, the target is to replace SIS_PROP with another search policy,
+Peter mentioned that "And ideally we're remove SIS_PROP after a few releases if this
+works out", so I assume that changing the default value of SIS_PROP does not matter
+in current patch.
 
-Mostly nothing. It's debug code, and if someone wants to circumvent they
-can, but then their code is ugly and stands out like a sort thumb which
-then serves its goal as it won't pass review etc..
-
-> What would happen if you
-> just did atomic_inc_return(&some_global) instead? That'd be faster
-> anyhow, and it's not like 16 bits gives you much variance anyway...
-
-That would in fact be slower, sched_clock() will, on any sane hardware,
-be a rdtsc, mul and shr, which are all local.
+thanks,
+Chenyu

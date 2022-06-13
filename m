@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8005494B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBBB54943E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359271AbiFMNMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        id S1344361AbiFMKbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357591AbiFMNGX (ORCPT
+        with ESMTP id S1345551AbiFMK3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:06:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACB037A82;
-        Mon, 13 Jun 2022 04:18:33 -0700 (PDT)
+        Mon, 13 Jun 2022 06:29:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EAA20F77;
+        Mon, 13 Jun 2022 03:20:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BE0E60F91;
-        Mon, 13 Jun 2022 11:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBDBC341C4;
-        Mon, 13 Jun 2022 11:18:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BF2ACCE0EEB;
+        Mon, 13 Jun 2022 10:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD311C34114;
+        Mon, 13 Jun 2022 10:20:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119097;
-        bh=yRje9zJj6k4Qpu7HfECVlAhlL7PYsk56cdaU6S3uQd0=;
+        s=korg; t=1655115650;
+        bh=8HQm4g74yzZGpbnIQ9UppM7IGC+JDkrxAdIatCQcOfc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EVYUKhtT2Yl8tTkNbjervx1cYsdzUMp7EB6ktNtCJTt6MB9NunHnyi0ezFfQpOwc4
-         rjAxmfqstNI3B64gpwcg6osITSS3mojUNBNItUe3EMQ0B+ZeHZZxWsesNfuG5/Rd9A
-         IDmwI5QFGdvdwlQ48OxtVa9nK13h7+Kap74k3aKw=
+        b=aY2snc2+gFAHB3Amx+3Ufv5/omV3MT0cKvE33fOy2o52JI3O2ITAaFTeMy+jHYOOE
+         btzqc6SOFH3CrjnoeQgL4ivuWuqrza9a1Bn8EdGWJyTymWWKFb1maPVG7YytjU5wUP
+         q79rqi1O5pSX311H4ky+DY09WFLdSbqgOjtglt4Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Huang Guobin <huangguobin4@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 113/247] tracing: Make tp_printk work on syscall tracepoints
+Subject: [PATCH 4.9 141/167] tty: Fix a possible resource leak in icom_probe
 Date:   Mon, 13 Jun 2022 12:10:15 +0200
-Message-Id: <20220613094926.390787166@linuxfoundation.org>
+Message-Id: <20220613094913.926872686@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,114 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Xie <xiehuan09@gmail.com>
+From: Huang Guobin <huangguobin4@huawei.com>
 
-[ Upstream commit cb1c45fb68b8a4285ccf750842b1136f26cfe267 ]
+[ Upstream commit ee157a79e7c82b01ae4c25de0ac75899801f322c ]
 
-Currently the tp_printk option has no effect on syscall tracepoint.
-When adding the kernel option parameter tp_printk, then:
+When pci_read_config_dword failed, call pci_release_regions() and
+pci_disable_device() to recycle the resource previously allocated.
 
-echo 1 > /sys/kernel/debug/tracing/events/syscalls/enable
-
-When running any application, no trace information is printed on the
-terminal.
-
-Now added printk for syscall tracepoints.
-
-Link: https://lkml.kernel.org/r/20220410145025.681144-1-xiehuan09@gmail.com
-
-Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Huang Guobin <huangguobin4@huawei.com>
+Link: https://lore.kernel.org/r/20220331091005.3290753-1-huangguobin4@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_syscalls.c | 35 +++++++++++------------------------
- 1 file changed, 11 insertions(+), 24 deletions(-)
+ drivers/tty/serial/icom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-index f755bde42fd0..b69e207012c9 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -154,7 +154,7 @@ print_syscall_enter(struct trace_iterator *iter, int flags,
- 			goto end;
+diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
+index c60a8d5e4020..a3e420669674 100644
+--- a/drivers/tty/serial/icom.c
++++ b/drivers/tty/serial/icom.c
+@@ -1515,7 +1515,7 @@ static int icom_probe(struct pci_dev *dev,
+ 	retval = pci_read_config_dword(dev, PCI_COMMAND, &command_reg);
+ 	if (retval) {
+ 		dev_err(&dev->dev, "PCI Config read FAILED\n");
+-		return retval;
++		goto probe_exit0;
+ 	}
  
- 		/* parameter types */
--		if (tr->trace_flags & TRACE_ITER_VERBOSE)
-+		if (tr && tr->trace_flags & TRACE_ITER_VERBOSE)
- 			trace_seq_printf(s, "%s ", entry->types[i]);
- 
- 		/* parameter values */
-@@ -296,9 +296,7 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
- 	struct trace_event_file *trace_file;
- 	struct syscall_trace_enter *entry;
- 	struct syscall_metadata *sys_data;
--	struct ring_buffer_event *event;
--	struct trace_buffer *buffer;
--	unsigned int trace_ctx;
-+	struct trace_event_buffer fbuffer;
- 	unsigned long args[6];
- 	int syscall_nr;
- 	int size;
-@@ -321,20 +319,16 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
- 
- 	size = sizeof(*entry) + sizeof(unsigned long) * sys_data->nb_args;
- 
--	trace_ctx = tracing_gen_ctx();
--
--	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
--			sys_data->enter_event->event.type, size, trace_ctx);
--	if (!event)
-+	entry = trace_event_buffer_reserve(&fbuffer, trace_file, size);
-+	if (!entry)
- 		return;
- 
--	entry = ring_buffer_event_data(event);
-+	entry = ring_buffer_event_data(fbuffer.event);
- 	entry->nr = syscall_nr;
- 	syscall_get_arguments(current, regs, args);
- 	memcpy(entry->args, args, sizeof(unsigned long) * sys_data->nb_args);
- 
--	event_trigger_unlock_commit(trace_file, buffer, event, entry,
--				    trace_ctx);
-+	trace_event_buffer_commit(&fbuffer);
- }
- 
- static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
-@@ -343,9 +337,7 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
- 	struct trace_event_file *trace_file;
- 	struct syscall_trace_exit *entry;
- 	struct syscall_metadata *sys_data;
--	struct ring_buffer_event *event;
--	struct trace_buffer *buffer;
--	unsigned int trace_ctx;
-+	struct trace_event_buffer fbuffer;
- 	int syscall_nr;
- 
- 	syscall_nr = trace_get_syscall_nr(current, regs);
-@@ -364,20 +356,15 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
- 	if (!sys_data)
- 		return;
- 
--	trace_ctx = tracing_gen_ctx();
--
--	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
--			sys_data->exit_event->event.type, sizeof(*entry),
--			trace_ctx);
--	if (!event)
-+	entry = trace_event_buffer_reserve(&fbuffer, trace_file, sizeof(*entry));
-+	if (!entry)
- 		return;
- 
--	entry = ring_buffer_event_data(event);
-+	entry = ring_buffer_event_data(fbuffer.event);
- 	entry->nr = syscall_nr;
- 	entry->ret = syscall_get_return_value(current, regs);
- 
--	event_trigger_unlock_commit(trace_file, buffer, event, entry,
--				    trace_ctx);
-+	trace_event_buffer_commit(&fbuffer);
- }
- 
- static int reg_event_syscall_enter(struct trace_event_file *file,
+ 	pci_write_config_dword(dev, PCI_COMMAND,
 -- 
 2.35.1
 

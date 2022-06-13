@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3B554946F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0980549547
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358993AbiFMNIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S1353332AbiFMMNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357313AbiFMM6j (ORCPT
+        with ESMTP id S1359382AbiFMMJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:58:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43562BC3;
-        Mon, 13 Jun 2022 04:17:43 -0700 (PDT)
+        Mon, 13 Jun 2022 08:09:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A6152B01;
+        Mon, 13 Jun 2022 04:00:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B342360F0D;
-        Mon, 13 Jun 2022 11:17:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B8AC34114;
-        Mon, 13 Jun 2022 11:17:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BF0AB80EA3;
+        Mon, 13 Jun 2022 11:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CBB0C34114;
+        Mon, 13 Jun 2022 11:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119062;
-        bh=orI7NLzyYAo4r79BAJZsq8oCnJd/A00pdqYpG0bPBhw=;
+        s=korg; t=1655118030;
+        bh=HsZcmkg6963w6+CWvPSwchal4G13F0zd1gvDD7VJV8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tLkrBctfky2R9cv4dnvIPfr8qTqSgi/Dx899ummZqwnn3yzolAw3LCAWLrVJqEkZZ
-         JmpWd8XJnioqA9ryqu6M9fDSyg4F/f1cIeBr3pPgLIixHts5uyNR7bBvtjNvFtB83F
-         NTi6HCe3NDWYkQhScd77R8ezfwquxoMFVezdHK0M=
+        b=PH7OUMH+32COC+JjmmD1qTVUqgLLDjrCtv/IJF0Qj9JcXUxm4n3MSQM4WM1JNROXx
+         QZ/jH7ii0IAcd3FWmI29YFgofYGf7TtKIPazHEjCLn3DLdlt3vrmlwlky1Ejdd0HBu
+         uQ+/+JI3iebUbHjgKldrrYHrJphmV1oeu3dO52D0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liao Chang <liaochang1@huawei.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 126/247] RISC-V: use memcpy for kexec_file mode
+Subject: [PATCH 4.19 204/287] rtc: mt6397: check return value after calling platform_get_resource()
 Date:   Mon, 13 Jun 2022 12:10:28 +0200
-Message-Id: <20220613094926.782568314@linuxfoundation.org>
+Message-Id: <20220613094930.048494926@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liao Chang <liaochang1@huawei.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit b7fb4d78a6ade6026d9e5cf438c2a46ab962e032 ]
+[ Upstream commit d3b43eb505bffb8e4cdf6800c15660c001553fe6 ]
 
-The pointer to buffer loading kernel binaries is in kernel space for
-kexec_fil mode, When copy_from_user copies data from pointer to a block
-of memory, it checkes that the pointer is in the user space range, on
-RISCV-V that is:
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-static inline bool __access_ok(unsigned long addr, unsigned long size)
-{
-	return size <= TASK_SIZE && addr <= TASK_SIZE - size;
-}
-
-and TASK_SIZE is 0x4000000000 for 64-bits, which now causes
-copy_from_user to reject the access of the field 'buf' of struct
-kexec_segment that is in range [CONFIG_PAGE_OFFSET - VMALLOC_SIZE,
-CONFIG_PAGE_OFFSET), is invalid user space pointer.
-
-This patch fixes this issue by skipping access_ok(), use mempcy() instead.
-
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
-Link: https://lore.kernel.org/r/20220408100914.150110-3-lizhengyu3@huawei.com
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220505125043.1594771-1-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/kernel/machine_kexec.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-mt6397.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
-index cbef0fc73afa..df8e24559035 100644
---- a/arch/riscv/kernel/machine_kexec.c
-+++ b/arch/riscv/kernel/machine_kexec.c
-@@ -65,7 +65,9 @@ machine_kexec_prepare(struct kimage *image)
- 		if (image->segment[i].memsz <= sizeof(fdt))
- 			continue;
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index 964ed91416e1..671b6d275da3 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -339,6 +339,8 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
--		if (copy_from_user(&fdt, image->segment[i].buf, sizeof(fdt)))
-+		if (image->file_mode)
-+			memcpy(&fdt, image->segment[i].buf, sizeof(fdt));
-+		else if (copy_from_user(&fdt, image->segment[i].buf, sizeof(fdt)))
- 			continue;
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
+ 	rtc->addr_base = res->start;
  
- 		if (fdt_check_header(&fdt))
+ 	rtc->irq = platform_get_irq(pdev, 0);
 -- 
 2.35.1
 

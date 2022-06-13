@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C525495F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF244549180
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385092AbiFMOah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S1356196AbiFMLs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384127AbiFMOYx (ORCPT
+        with ESMTP id S1356781AbiFMLpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:53 -0400
+        Mon, 13 Jun 2022 07:45:02 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEC54832A;
-        Mon, 13 Jun 2022 04:46:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF0E46;
+        Mon, 13 Jun 2022 03:51:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51826B80EB2;
-        Mon, 13 Jun 2022 11:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8AAC36B0A;
-        Mon, 13 Jun 2022 11:46:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A20B0B80E56;
+        Mon, 13 Jun 2022 10:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD56C34114;
+        Mon, 13 Jun 2022 10:51:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120802;
-        bh=bFOZl1c9xmgdlvh+sQk2E6uWOw4KyEixfTX6tBQkcWU=;
+        s=korg; t=1655117471;
+        bh=Swyo9kPE4Q9+YBx8+848IwPjmWR8lTv5QeR8J+CHChA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p0tAjvIeBsG8onGNIii/4KE4cKc8wYPjSvBgTuxstBv6akP5bvB0y/rIo0yHjjUSg
-         INcHC6IEnS9KEZMnQhojVmoJOGI6T5cGRlD5kKPAIfxLhB3MbQjrGsXECEkwL40Nfy
-         VaKnZSc4btK4cAR+GxL5vKFVkenGCDUA/cQEr8v0=
+        b=NqRvotWlTO5DjzMoFEL9Ub8jbswqqJA+z44mekK31zl568xDJhEHRcT1eFf2/JD+e
+         86ZQrpQ7uVqlYRpJEmAx250qiieabcEA1rBnT/nfsfpwj/RXSuIGshIGTToJ0i7kU1
+         xPCznI2hPSuOTOrgVfF4TJT06HY/Ote5vFUuLpv4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 162/298] SUNRPC: Trap RDMA segment overflows
+        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Hao Luo <haoluo@google.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 383/411] kernfs: Separate kernfs_pr_cont_buf and rename_lock.
 Date:   Mon, 13 Jun 2022 12:10:56 +0200
-Message-Id: <20220613094929.847724426@linuxfoundation.org>
+Message-Id: <20220613094940.149851134@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +54,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Hao Luo <haoluo@google.com>
 
-[ Upstream commit f012e95b377c73c0283f009823c633104dedb337 ]
+[ Upstream commit 1a702dc88e150487c9c173a249b3d236498b9183 ]
 
-Prevent svc_rdma_build_writes() from walking off the end of a Write
-chunk's segment array. Caught with KASAN.
+Previously the protection of kernfs_pr_cont_buf was piggy backed by
+rename_lock, which means that pr_cont() needs to be protected under
+rename_lock. This can cause potential circular lock dependencies.
 
-The test that this fix replaces is invalid, and might have been left
-over from an earlier prototype of the PCL work.
+If there is an OOM, we have the following call hierarchy:
 
-Fixes: 7a1cbfa18059 ("svcrdma: Use parsed chunk lists to construct RDMA Writes")
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+ -> cpuset_print_current_mems_allowed()
+   -> pr_cont_cgroup_name()
+     -> pr_cont_kernfs_name()
+
+pr_cont_kernfs_name() will grab rename_lock and call printk. So we have
+the following lock dependencies:
+
+ kernfs_rename_lock -> console_sem
+
+Sometimes, printk does a wakeup before releasing console_sem, which has
+the dependence chain:
+
+ console_sem -> p->pi_lock -> rq->lock
+
+Now, imagine one wants to read cgroup_name under rq->lock, for example,
+printing cgroup_name in a tracepoint in the scheduler code. They will
+be holding rq->lock and take rename_lock:
+
+ rq->lock -> kernfs_rename_lock
+
+Now they will deadlock.
+
+A prevention to this circular lock dependency is to separate the
+protection of pr_cont_buf from rename_lock. In principle, rename_lock
+is to protect the integrity of cgroup name when copying to buf. Once
+pr_cont_buf has got its content, rename_lock can be dropped. So it's
+safe to drop rename_lock after kernfs_name_locked (and
+kernfs_path_from_node_locked) and rely on a dedicated pr_cont_lock
+to protect pr_cont_buf.
+
+Acked-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Hao Luo <haoluo@google.com>
+Link: https://lore.kernel.org/r/20220516190951.3144144-1-haoluo@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprtrdma/svc_rdma_rw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/kernfs/dir.c | 31 +++++++++++++++++++------------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
 
-diff --git a/net/sunrpc/xprtrdma/svc_rdma_rw.c b/net/sunrpc/xprtrdma/svc_rdma_rw.c
-index 5f0155fdefc7..11cf7c646644 100644
---- a/net/sunrpc/xprtrdma/svc_rdma_rw.c
-+++ b/net/sunrpc/xprtrdma/svc_rdma_rw.c
-@@ -478,10 +478,10 @@ svc_rdma_build_writes(struct svc_rdma_write_info *info,
- 		unsigned int write_len;
- 		u64 offset;
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 7d4af6cea2a6..99ee657596b5 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -19,7 +19,15 @@
  
--		seg = &info->wi_chunk->ch_segments[info->wi_seg_no];
--		if (!seg)
-+		if (info->wi_seg_no >= info->wi_chunk->ch_segcount)
- 			goto out_overflow;
+ DEFINE_MUTEX(kernfs_mutex);
+ static DEFINE_SPINLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
+-static char kernfs_pr_cont_buf[PATH_MAX];	/* protected by rename_lock */
++/*
++ * Don't use rename_lock to piggy back on pr_cont_buf. We don't want to
++ * call pr_cont() while holding rename_lock. Because sometimes pr_cont()
++ * will perform wakeups when releasing console_sem. Holding rename_lock
++ * will introduce deadlock if the scheduler reads the kernfs_name in the
++ * wakeup path.
++ */
++static DEFINE_SPINLOCK(kernfs_pr_cont_lock);
++static char kernfs_pr_cont_buf[PATH_MAX];	/* protected by pr_cont_lock */
+ static DEFINE_SPINLOCK(kernfs_idr_lock);	/* root->ino_idr */
  
-+		seg = &info->wi_chunk->ch_segments[info->wi_seg_no];
- 		write_len = min(remaining, seg->rs_length - info->wi_seg_off);
- 		if (!write_len)
- 			goto out_overflow;
+ #define rb_to_kn(X) rb_entry((X), struct kernfs_node, rb)
+@@ -230,12 +238,12 @@ void pr_cont_kernfs_name(struct kernfs_node *kn)
+ {
+ 	unsigned long flags;
+ 
+-	spin_lock_irqsave(&kernfs_rename_lock, flags);
++	spin_lock_irqsave(&kernfs_pr_cont_lock, flags);
+ 
+-	kernfs_name_locked(kn, kernfs_pr_cont_buf, sizeof(kernfs_pr_cont_buf));
++	kernfs_name(kn, kernfs_pr_cont_buf, sizeof(kernfs_pr_cont_buf));
+ 	pr_cont("%s", kernfs_pr_cont_buf);
+ 
+-	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
++	spin_unlock_irqrestore(&kernfs_pr_cont_lock, flags);
+ }
+ 
+ /**
+@@ -249,10 +257,10 @@ void pr_cont_kernfs_path(struct kernfs_node *kn)
+ 	unsigned long flags;
+ 	int sz;
+ 
+-	spin_lock_irqsave(&kernfs_rename_lock, flags);
++	spin_lock_irqsave(&kernfs_pr_cont_lock, flags);
+ 
+-	sz = kernfs_path_from_node_locked(kn, NULL, kernfs_pr_cont_buf,
+-					  sizeof(kernfs_pr_cont_buf));
++	sz = kernfs_path_from_node(kn, NULL, kernfs_pr_cont_buf,
++				   sizeof(kernfs_pr_cont_buf));
+ 	if (sz < 0) {
+ 		pr_cont("(error)");
+ 		goto out;
+@@ -266,7 +274,7 @@ void pr_cont_kernfs_path(struct kernfs_node *kn)
+ 	pr_cont("%s", kernfs_pr_cont_buf);
+ 
+ out:
+-	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
++	spin_unlock_irqrestore(&kernfs_pr_cont_lock, flags);
+ }
+ 
+ /**
+@@ -870,13 +878,12 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
+ 
+ 	lockdep_assert_held(&kernfs_mutex);
+ 
+-	/* grab kernfs_rename_lock to piggy back on kernfs_pr_cont_buf */
+-	spin_lock_irq(&kernfs_rename_lock);
++	spin_lock_irq(&kernfs_pr_cont_lock);
+ 
+ 	len = strlcpy(kernfs_pr_cont_buf, path, sizeof(kernfs_pr_cont_buf));
+ 
+ 	if (len >= sizeof(kernfs_pr_cont_buf)) {
+-		spin_unlock_irq(&kernfs_rename_lock);
++		spin_unlock_irq(&kernfs_pr_cont_lock);
+ 		return NULL;
+ 	}
+ 
+@@ -888,7 +895,7 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
+ 		parent = kernfs_find_ns(parent, name, ns);
+ 	}
+ 
+-	spin_unlock_irq(&kernfs_rename_lock);
++	spin_unlock_irq(&kernfs_pr_cont_lock);
+ 
+ 	return parent;
+ }
 -- 
 2.35.1
 

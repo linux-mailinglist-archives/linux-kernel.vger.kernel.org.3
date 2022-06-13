@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBB2548D71
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A828654967A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354174AbiFMMRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        id S240937AbiFMN7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358604AbiFMMON (ORCPT
+        with ESMTP id S1380186AbiFMNxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:14:13 -0400
+        Mon, 13 Jun 2022 09:53:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6427544CB;
-        Mon, 13 Jun 2022 04:01:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FF97B9E9;
+        Mon, 13 Jun 2022 04:34:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62CDEB80EAA;
-        Mon, 13 Jun 2022 11:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD275C34114;
-        Mon, 13 Jun 2022 11:01:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57418B80EC7;
+        Mon, 13 Jun 2022 11:34:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4658C34114;
+        Mon, 13 Jun 2022 11:34:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118107;
-        bh=VqAMPoH5+kWOt4BqtobU1JYoJnLNPNgyY9qIFzitJ4Q=;
+        s=korg; t=1655120045;
+        bh=C3p8V+CShGR7nozEVmR7aMQKSLK+SVYLvPNgHctlLf8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xTtQ+cPQGYwclCzGrTwMYIec/h4oaPl+9MKocAXY8/6JKqDJOZkZlL/9LMwsbavU9
-         K6/kXO1/zBZhHKbe5DZQMfYICeu17hEeCqzuMef7NfYX1rZ8MpKGClwn5TNORqkvU7
-         7Q6Kb2f2oCxJ7fyscTdf8lafDNOOJ0W6gVJeD0V0=
+        b=jfRLKbTwMrt23MV0DMJ2I4/WDLKQyyYjBQ2u5LYLvKnA8dOCrzWczturCfLqxuckp
+         PbB36Eiyl4Egbg8g4LRlo8Vg7dRlmQaDPXFWgjTyI+2J2s8MqiIUlOV5BzVTLCTmPw
+         DyYmJ5qWWmhyNaZg6/pZKNZ12S+clCzuZcy4/yQU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
+        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Huang Guobin <huangguobin4@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 232/287] m68knommu: fix undefined reference to `_init_sp
+Subject: [PATCH 5.18 231/339] tty: Fix a possible resource leak in icom_probe
 Date:   Mon, 13 Jun 2022 12:10:56 +0200
-Message-Id: <20220613094931.051415816@linuxfoundation.org>
+Message-Id: <20220613094933.665375943@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Ungerer <gerg@linux-m68k.org>
+From: Huang Guobin <huangguobin4@huawei.com>
 
-[ Upstream commit a71b9e66fee47c59b3ec34e652b5c23bc6550794 ]
+[ Upstream commit ee157a79e7c82b01ae4c25de0ac75899801f322c ]
 
-When configuring a nommu classic m68k system enabling the uboot parameter
-passing support (CONFIG_UBOOT) will produce the following compile error:
+When pci_read_config_dword failed, call pci_release_regions() and
+pci_disable_device() to recycle the resource previously allocated.
 
-   m68k-linux-ld: arch/m68k/kernel/uboot.o: in function `process_uboot_commandline':
-   uboot.c:(.init.text+0x32): undefined reference to `_init_sp'
-
-The logic to support this option is only used on ColdFire based platforms
-(in its head.S startup code). So make the selection of this option
-depend on building for a ColdFire based platform.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Huang Guobin <huangguobin4@huawei.com>
+Link: https://lore.kernel.org/r/20220331091005.3290753-1-huangguobin4@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/m68k/Kconfig.machine | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/icom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index 0c451081432a..d07f3009a4a0 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -315,6 +315,7 @@ comment "Machine Options"
+diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
+index 03a2fe9f4c9a..02b375ba2f07 100644
+--- a/drivers/tty/serial/icom.c
++++ b/drivers/tty/serial/icom.c
+@@ -1501,7 +1501,7 @@ static int icom_probe(struct pci_dev *dev,
+ 	retval = pci_read_config_dword(dev, PCI_COMMAND, &command_reg);
+ 	if (retval) {
+ 		dev_err(&dev->dev, "PCI Config read FAILED\n");
+-		return retval;
++		goto probe_exit0;
+ 	}
  
- config UBOOT
- 	bool "Support for U-Boot command line parameters"
-+	depends on COLDFIRE
- 	help
- 	  If you say Y here kernel will try to collect command
- 	  line parameters from the initial u-boot stack.
+ 	pci_write_config_dword(dev, PCI_COMMAND,
 -- 
 2.35.1
 

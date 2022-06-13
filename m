@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C103D548AB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8554548EF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357160AbiFMLxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
+        id S239535AbiFMMnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356164AbiFMLsZ (ORCPT
+        with ESMTP id S1356295AbiFMMjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:48:25 -0400
+        Mon, 13 Jun 2022 08:39:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485794BBB9;
-        Mon, 13 Jun 2022 03:53:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED4833E04;
+        Mon, 13 Jun 2022 04:09:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F536B80D3A;
-        Mon, 13 Jun 2022 10:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A44FC34114;
-        Mon, 13 Jun 2022 10:52:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88ED9B80EB0;
+        Mon, 13 Jun 2022 11:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E19C3411F;
+        Mon, 13 Jun 2022 11:09:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117577;
-        bh=7ZJdOB8NWztNFmJga+HULPqObVqV573O24/WNfw5IOk=;
+        s=korg; t=1655118588;
+        bh=QjdCu1aptZA0HMTYSO5wIg0K7eKoSRF/GSpxcxLlggo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EcdjCwRQQm7yHPUpOsdHnQ0tah7oFB9cmULcnaNVs2WrsjbpNw5QL75iNwHktVks6
-         mUpuNYOdNomt8jt6P7io9oItPAtoQTNfDJhNaKP+JsLb+SwcZRc4PXR5RTjxxN9SOV
-         gI+EMonlyNkxs60oGEtb4GNRQlej9eLMs3ECa8bc=
+        b=eywlPfNCyJmY0kT5rbQtwNVQSLPaXV6VpREsz9t/ITc5LoteiIU8oXhQvVg6hJCLU
+         rayYMQcct6BypejPqz5tdZjn4L7iwXmzPhb9eLAR7QnlvHsWvKEfgsbwjQhwcn8dna
+         29KpbON/2wuCTi6bZmREUQtcaybAgFnpjpQ3vZGA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.4 402/411] ata: libata-transport: fix {dma|pio|xfer}_mode sysfs files
+        stable@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 115/172] iio: st_sensors: Add a local lock for protecting odr
 Date:   Mon, 13 Jun 2022 12:11:15 +0200
-Message-Id: <20220613094940.879082162@linuxfoundation.org>
+Message-Id: <20220613094917.930672997@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +57,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit 72aad489f992871e908ff6d9055b26c6366fb864 upstream.
+[ Upstream commit 474010127e2505fc463236470908e1ff5ddb3578 ]
 
-The {dma|pio}_mode sysfs files are incorrectly documented as having a
-list of the supported DMA/PIO transfer modes, while the corresponding
-fields of the *struct* ata_device hold the transfer mode IDs, not masks.
+Right now the (framework) mlock lock is (ab)used for multiple purposes:
+1- protecting concurrent accesses over the odr local cache
+2- avoid changing samplig frequency whilst buffer is running
 
-To match these docs, the {dma|pio}_mode (and even xfer_mode!) sysfs
-files are handled by the ata_bitfield_name_match() macro which leads to
-reading such kind of nonsense from them:
+Let's start by handling situation #1 with a local lock.
 
-$ cat /sys/class/ata_device/dev3.0/pio_mode
-XFER_UDMA_7, XFER_UDMA_6, XFER_UDMA_5, XFER_UDMA_4, XFER_MW_DMA_4,
-XFER_PIO_6, XFER_PIO_5, XFER_PIO_4, XFER_PIO_3, XFER_PIO_2, XFER_PIO_1,
-XFER_PIO_0
-
-Using the correct ata_bitfield_name_search() macro fixes that:
-
-$ cat /sys/class/ata_device/dev3.0/pio_mode
-XFER_PIO_4
-
-While fixing the file documentation, somewhat reword the {dma|pio}_mode
-file doc and add a note about being mostly useful for PATA devices to
-the xfer_mode file doc...
-
-Fixes: d9027470b886 ("[libata] Add ATA transport class")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Jonathan Cameron <jic23@kernel.org>
+Cc: Denis Ciocca <denis.ciocca@st.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/r/20220207143840.707510-7-miquel.raynal@bootlin.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-ata |   11 ++++++-----
- drivers/ata/libata-transport.c      |    2 +-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ .../iio/common/st_sensors/st_sensors_core.c   | 24 ++++++++++++++-----
+ include/linux/iio/common/st_sensors.h         |  3 +++
+ 2 files changed, 21 insertions(+), 6 deletions(-)
 
---- a/Documentation/ABI/testing/sysfs-ata
-+++ b/Documentation/ABI/testing/sysfs-ata
-@@ -107,13 +107,14 @@ Description:
- 				described in ATA8 7.16 and 7.17. Only valid if
- 				the device is not a PM.
+diff --git a/drivers/iio/common/st_sensors/st_sensors_core.c b/drivers/iio/common/st_sensors/st_sensors_core.c
+index 7a69c1be7393..56206fdbceb9 100644
+--- a/drivers/iio/common/st_sensors/st_sensors_core.c
++++ b/drivers/iio/common/st_sensors/st_sensors_core.c
+@@ -70,16 +70,18 @@ static int st_sensors_match_odr(struct st_sensor_settings *sensor_settings,
  
--		pio_mode:	(RO) Transfer modes supported by the device when
--				in PIO mode. Mostly used by PATA device.
-+		pio_mode:	(RO) PIO transfer mode used by the device.
-+				Mostly used by PATA devices.
+ int st_sensors_set_odr(struct iio_dev *indio_dev, unsigned int odr)
+ {
+-	int err;
++	int err = 0;
+ 	struct st_sensor_odr_avl odr_out = {0, 0};
+ 	struct st_sensor_data *sdata = iio_priv(indio_dev);
  
--		xfer_mode:	(RO) Current transfer mode
-+		xfer_mode:	(RO) Current transfer mode. Mostly used by
-+				PATA devices.
++	mutex_lock(&sdata->odr_lock);
++
+ 	if (!sdata->sensor_settings->odr.mask)
+-		return 0;
++		goto unlock_mutex;
  
--		dma_mode:	(RO) Transfer modes supported by the device when
--				in DMA mode. Mostly used by PATA device.
-+		dma_mode:	(RO) DMA transfer mode used by the device.
-+				Mostly used by PATA devices.
+ 	err = st_sensors_match_odr(sdata->sensor_settings, odr, &odr_out);
+ 	if (err < 0)
+-		goto st_sensors_match_odr_error;
++		goto unlock_mutex;
  
- 		class:		(RO) Device class. Can be "ata" for disk,
- 				"atapi" for packet device, "pmp" for PM, or
---- a/drivers/ata/libata-transport.c
-+++ b/drivers/ata/libata-transport.c
-@@ -196,7 +196,7 @@ static struct {
- 	{ XFER_PIO_0,			"XFER_PIO_0" },
- 	{ XFER_PIO_SLOW,		"XFER_PIO_SLOW" }
+ 	if ((sdata->sensor_settings->odr.addr ==
+ 					sdata->sensor_settings->pw.addr) &&
+@@ -102,7 +104,9 @@ int st_sensors_set_odr(struct iio_dev *indio_dev, unsigned int odr)
+ 	if (err >= 0)
+ 		sdata->odr = odr_out.hz;
+ 
+-st_sensors_match_odr_error:
++unlock_mutex:
++	mutex_unlock(&sdata->odr_lock);
++
+ 	return err;
+ }
+ EXPORT_SYMBOL(st_sensors_set_odr);
+@@ -364,6 +368,8 @@ int st_sensors_init_sensor(struct iio_dev *indio_dev,
+ 	struct st_sensors_platform_data *of_pdata;
+ 	int err = 0;
+ 
++	mutex_init(&sdata->odr_lock);
++
+ 	/* If OF/DT pdata exists, it will take precedence of anything else */
+ 	of_pdata = st_sensors_dev_probe(indio_dev->dev.parent, pdata);
+ 	if (IS_ERR(of_pdata))
+@@ -557,18 +563,24 @@ int st_sensors_read_info_raw(struct iio_dev *indio_dev,
+ 		err = -EBUSY;
+ 		goto out;
+ 	} else {
++		mutex_lock(&sdata->odr_lock);
+ 		err = st_sensors_set_enable(indio_dev, true);
+-		if (err < 0)
++		if (err < 0) {
++			mutex_unlock(&sdata->odr_lock);
+ 			goto out;
++		}
+ 
+ 		msleep((sdata->sensor_settings->bootime * 1000) / sdata->odr);
+ 		err = st_sensors_read_axis_data(indio_dev, ch, val);
+-		if (err < 0)
++		if (err < 0) {
++			mutex_unlock(&sdata->odr_lock);
+ 			goto out;
++		}
+ 
+ 		*val = *val >> ch->scan_type.shift;
+ 
+ 		err = st_sensors_set_enable(indio_dev, false);
++		mutex_unlock(&sdata->odr_lock);
+ 	}
+ out:
+ 	mutex_unlock(&indio_dev->mlock);
+diff --git a/include/linux/iio/common/st_sensors.h b/include/linux/iio/common/st_sensors.h
+index 33e939977444..c16a9dda3ad5 100644
+--- a/include/linux/iio/common/st_sensors.h
++++ b/include/linux/iio/common/st_sensors.h
+@@ -228,6 +228,7 @@ struct st_sensor_settings {
+  * @hw_irq_trigger: if we're using the hardware interrupt on the sensor.
+  * @hw_timestamp: Latest timestamp from the interrupt handler, when in use.
+  * @buffer_data: Data used by buffer part.
++ * @odr_lock: Local lock for preventing concurrent ODR accesses/changes
+  */
+ struct st_sensor_data {
+ 	struct device *dev;
+@@ -253,6 +254,8 @@ struct st_sensor_data {
+ 	s64 hw_timestamp;
+ 
+ 	char buffer_data[ST_SENSORS_MAX_BUFFER_SIZE] ____cacheline_aligned;
++
++	struct mutex odr_lock;
  };
--ata_bitfield_name_match(xfer,ata_xfer_names)
-+ata_bitfield_name_search(xfer, ata_xfer_names)
  
- /*
-  * ATA Port attributes
+ #ifdef CONFIG_IIO_BUFFER
+-- 
+2.35.1
+
 
 

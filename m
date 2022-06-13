@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D3B5493D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5E6548CB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355035AbiFMM21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S1358764AbiFMMIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355465AbiFMMX4 (ORCPT
+        with ESMTP id S1358744AbiFMMEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:56 -0400
+        Mon, 13 Jun 2022 08:04:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68BC27B07;
-        Mon, 13 Jun 2022 04:05:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4A750032;
+        Mon, 13 Jun 2022 03:57:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8359261435;
-        Mon, 13 Jun 2022 11:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F18C3411E;
-        Mon, 13 Jun 2022 11:05:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A49A261346;
+        Mon, 13 Jun 2022 10:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E00C341C5;
+        Mon, 13 Jun 2022 10:57:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118301;
-        bh=QI3AuAZvr75V5aJQHl56NIamTjjLOnw/1y4LERXWWoI=;
+        s=korg; t=1655117871;
+        bh=2MiGSPVt5iRNA+MRCvEt8ZV/VW9I8RfZ6xa1RC7f6sg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ILqZDHDqUJ2zd3qKT824WgWe4bxzPMqOeHGZPwnVA/CGOSuJCWSrDe5QJZkz1rcse
-         cLriIpqaJI4FJAd+SZClJDPVVadYIdAwWgsQkM8oLULGYJlh1WWOc4MdQ07uYjyTPY
-         pqUMVytzF2jiRpnlxLVSPZqbz78dEd4gd1yHQR0A=
+        b=lqfVkHhdzUDnp33pTMVLRxNbLej5DJ8az3twn3UkEXIy2JZRmxAZ9xQ1xvsRAnEq7
+         KzjDfHlbwvK+63LAWYcoQaczZf42U4AAgzBHqBZdM7sVSimj2Qt3q1SREW0fcZx1M7
+         9wfmHOxh5HGjUB9VLewYFAjA7e3YyeskvQZ7Nopw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 026/172] serial: sifive: Report actual baud base rather than fixed 115200
+        stable@vger.kernel.org, Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH 4.19 162/287] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
 Date:   Mon, 13 Jun 2022 12:09:46 +0200
-Message-Id: <20220613094856.690320361@linuxfoundation.org>
+Message-Id: <20220613094928.790591935@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit 0a7ff843d507ce2cca2c3b7e169ee56e28133530 ]
+commit 8fb6c44fe8468f92ac7b8bbfcca4404a4e88645f upstream.
 
-The base baud value reported is supposed to be the highest baud rate
-that can be set for a serial port.  The SiFive FU740-C000 SOC's on-chip
-UART supports baud rates of up to 1/16 of the input clock rate, which is
-the bus clock `tlclk'[1], often at 130MHz in the case of the HiFive
-Unmatched board.
+If the display is not enable()d, then we aren't holding a runtime PM
+reference here. Thus, it's easy to accidentally cause a hang, if user
+space is poking around at /dev/drm_dp_aux0 at the "wrong" time.
 
-However the sifive UART driver reports a fixed value of 115200 instead:
+Let's get a runtime PM reference, and check that we "see" the panel.
+Don't force any panel power-up, etc., because that can be intrusive, and
+that's not what other drivers do (see
+drivers/gpu/drm/bridge/ti-sn65dsi86.c and
+drivers/gpu/drm/bridge/parade-ps8640.c.)
 
-10010000.serial: ttySIF0 at MMIO 0x10010000 (irq = 1, base_baud = 115200) is a SiFive UART v0
-10011000.serial: ttySIF1 at MMIO 0x10011000 (irq = 2, base_baud = 115200) is a SiFive UART v0
-
-even though we already support setting higher baud rates, e.g.:
-
-$ tty
-/dev/ttySIF1
-$ stty speed
-230400
-
-The baud base value is computed by the serial core by dividing the UART
-clock recorded in `struct uart_port' by 16, which is also the minimum
-value of the clock divider supported, so correct the baud base value
-reported by setting the UART clock recorded to the input clock rate
-rather than 115200:
-
-10010000.serial: ttySIF0 at MMIO 0x10010000 (irq = 1, base_baud = 8125000) is a SiFive UART v0
-10011000.serial: ttySIF1 at MMIO 0x10011000 (irq = 2, base_baud = 8125000) is a SiFive UART v0
-
-
-[1] "SiFive FU740-C000 Manual", v1p3, SiFive, Inc., August 13, 2021,
-    Section 16.9 "Baud Rate Divisor Register (div)", pp.143-144
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Fixes: 1f1496a923b6 ("riscv: Fix sifive serial driver")
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2204291656280.9383@angie.orcam.me.uk
+Fixes: 0d97ad03f422 ("drm/bridge: analogix_dp: Remove duplicated code")
+Cc: <stable@vger.kernel.org>
+Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220301181107.v4.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sifive.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
-index 214bf3086c68..24036a02a424 100644
---- a/drivers/tty/serial/sifive.c
-+++ b/drivers/tty/serial/sifive.c
-@@ -999,7 +999,7 @@ static int sifive_serial_probe(struct platform_device *pdev)
- 	/* Set up clock divider */
- 	ssp->clkin_rate = clk_get_rate(ssp->clk);
- 	ssp->baud_rate = SIFIVE_DEFAULT_BAUD_RATE;
--	ssp->port.uartclk = ssp->baud_rate * 16;
-+	ssp->port.uartclk = ssp->clkin_rate;
- 	__ssp_update_div(ssp);
+--- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
++++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+@@ -1514,8 +1514,19 @@ static ssize_t analogix_dpaux_transfer(s
+ 				       struct drm_dp_aux_msg *msg)
+ {
+ 	struct analogix_dp_device *dp = to_dp(aux);
++	int ret;
  
- 	platform_set_drvdata(pdev, ssp);
--- 
-2.35.1
-
+-	return analogix_dp_transfer(dp, msg);
++	pm_runtime_get_sync(dp->dev);
++
++	ret = analogix_dp_detect_hpd(dp);
++	if (ret)
++		goto out;
++
++	ret = analogix_dp_transfer(dp, msg);
++out:
++	pm_runtime_put(dp->dev);
++
++	return ret;
+ }
+ 
+ struct analogix_dp_device *
 
 

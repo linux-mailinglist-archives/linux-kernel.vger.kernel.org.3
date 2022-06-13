@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBD4548E75
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6334A5494FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243316AbiFMKcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S1350093AbiFMK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344083AbiFMK2u (ORCPT
+        with ESMTP id S1350158AbiFMKyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:28:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E002E252AC;
-        Mon, 13 Jun 2022 03:20:17 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3C5E019;
+        Mon, 13 Jun 2022 03:29:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07DD060B8B;
-        Mon, 13 Jun 2022 10:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1242FC34114;
-        Mon, 13 Jun 2022 10:20:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1F6AB80E90;
+        Mon, 13 Jun 2022 10:29:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0ABC34114;
+        Mon, 13 Jun 2022 10:29:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115616;
-        bh=du0eATYz8AcUzrUh6DHs+n4PUByRCeS13TXKdzW3pbA=;
+        s=korg; t=1655116173;
+        bh=cefGdlLahZht4DCk4W/uEms6OKiLdtZrYlYbfZNw/Fk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YqUgSzmJlG4ha6fEe1TFP+rhRO2cXxAyjero6msk5uEquRad35yNS6rHPW4EhJTag
-         tCFE64uqKnecTMO4tXogrZNRfjAQyeV3k4sn2ofi/xC0GaGWxnA1kE2eb+3nbKXd8Q
-         7crpQwGpMFZFNERjvReS55HlLU0C+nkprukXy2Og=
+        b=r5lXW9WNcnv4GSRgoCD8YSXcd0jRiZJkAZA8TuSA+DWqnh8gl+9xKNdntjtgwoIk4
+         bYaiW5gqCTIrYzXuQziMPISmwxnh+tQre5HGsuSm3u301/DXw9vHQ4V5H5S9Z8JbzY
+         duaoodvrLWdXbCoyse1IvuNGQeJvKu+RNbB7tTio=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 128/167] i2c: cadence: Increase timeout per message if necessary
+        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        Niels Dossche <dossche.niels@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 144/218] usb: usbip: add missing device lock on tweak configuration cmd
 Date:   Mon, 13 Jun 2022 12:10:02 +0200
-Message-Id: <20220613094910.870657093@linuxfoundation.org>
+Message-Id: <20220613094924.957242447@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanureal@opensource.cirrus.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit 96789dce043f5bff8b7d62aa28d52a7c59403a84 ]
+[ Upstream commit d088fabace2ca337b275d1d4b36db4fe7771e44f ]
 
-Timeout as 1 second sets an upper limit on the length
-of the transfer executed, but there is no maximum length
-of a write or read message set in i2c_adapter_quirks for
-this controller.
+The function documentation of usb_set_configuration says that its
+callers should hold the device lock. This lock is held for all
+callsites except tweak_set_configuration_cmd. The code path can be
+executed for example when attaching a remote USB device.
+The solution is to surround the call by the device lock.
 
-This upper limit affects devices that require sending
-large firmware blobs over I2C.
+This bug was found using my experimental own-developed static analysis
+tool, which reported the missing lock on v5.17.2. I manually verified
+this bug report by doing code review as well. I runtime checked that
+the required lock is not held. I compiled and runtime tested this on
+x86_64 with a USB mouse. After applying this patch, my analyser no
+longer reports this potential bug.
 
-To remove that limitation, calculate the minimal time
-necessary, plus some wiggle room, for every message and
-use it instead of the default one second, if more than
-one second.
-
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Link: https://lore.kernel.org/r/20220412165055.257113-1-dossche.niels@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/usb/usbip/stub_rx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 23ee1a423654..a29ac9bae6d5 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -511,7 +511,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
- static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 		struct i2c_adapter *adap)
- {
--	unsigned long time_left;
-+	unsigned long time_left, msg_timeout;
- 	u32 reg;
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index cb24b22252e4..bf4a6dca95c6 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -152,7 +152,9 @@ static int tweak_set_configuration_cmd(struct urb *urb)
+ 	req = (struct usb_ctrlrequest *) urb->setup_packet;
+ 	config = le16_to_cpu(req->wValue);
  
- 	id->p_msg = msg;
-@@ -536,8 +536,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 	else
- 		cdns_i2c_msend(id);
- 
-+	/* Minimal time to execute this message */
-+	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
-+	/* Plus some wiggle room */
-+	msg_timeout += msecs_to_jiffies(500);
-+
-+	if (msg_timeout < adap->timeout)
-+		msg_timeout = adap->timeout;
-+
- 	/* Wait for the signal of completion */
--	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
-+	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
- 	if (time_left == 0) {
- 		cdns_i2c_master_reset(adap);
- 		dev_err(id->adap.dev.parent,
++	usb_lock_device(sdev->udev);
+ 	err = usb_set_configuration(sdev->udev, config);
++	usb_unlock_device(sdev->udev);
+ 	if (err && err != -ENODEV)
+ 		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
+ 			config, err);
 -- 
 2.35.1
 

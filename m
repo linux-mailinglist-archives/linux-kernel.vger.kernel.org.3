@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AEAE549845
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE50954958F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376546AbiFMNTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
+        id S1352629AbiFMLQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359509AbiFMNKA (ORCPT
+        with ESMTP id S237886AbiFMLNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:10:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0113A5D1;
-        Mon, 13 Jun 2022 04:21:03 -0700 (PDT)
+        Mon, 13 Jun 2022 07:13:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2C435274;
+        Mon, 13 Jun 2022 03:36:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDDE360EF1;
-        Mon, 13 Jun 2022 11:21:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5697C341C4;
-        Mon, 13 Jun 2022 11:21:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6572F60FFD;
+        Mon, 13 Jun 2022 10:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 708FEC34114;
+        Mon, 13 Jun 2022 10:36:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119262;
-        bh=EbHpsNQsZRgTMF45CSYfLlirVAaStJQ+cyuj+aVwgLI=;
+        s=korg; t=1655116571;
+        bh=L49VcE1mdqHm6k2wDn2/QF3e8WJpoFCIOCQ1+PsOY2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u7pfJXCr1G397fPKbAM8yU7cdLkgmkFe1Gv9y4NV2GpTwQOAzzAylA0sAkfNiSBae
-         Ox8iC3Wtd6IH0l7XjNiN2BX1cFZ+caMeiNt2wsHn+fs08fvFr5emmnfFCKmNZWDi+9
-         DJPWgf7F4sXvnhhbjYap9rCu5DvBvTr/tDhLXfMc=
+        b=w2lRxYdXbvnBAZ9O+W0OFWr3NjZuZ+LLqzwdTqN/BXzJobawBPnFjPUGsIQGAz5WM
+         7uvXdWiBnj2aqbZpw9y/RaHHRqOdsymG6vcMIkKunLK7m5U1PXQptVJDWlAUCKua5F
+         0v5DalBMTugitwBiL0e9bOz/KSNeGQ7iIwR2V7fU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Zheyu Ma <zheyuma97@gmail.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 171/247] tty: synclink_gt: Fix null-pointer-dereference in slgt_clean()
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Pascal Hambourg <pascal@plouf.fr.eu.org>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 4.14 215/218] md/raid0: Ignore RAID0 layout if the second zone has only one device
 Date:   Mon, 13 Jun 2022 12:11:13 +0200
-Message-Id: <20220613094928.144777699@linuxfoundation.org>
+Message-Id: <20220613094927.148467137@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Pascal Hambourg <pascal@plouf.fr.eu.org>
 
-[ Upstream commit 689ca31c542687709ba21ec2195c1fbce34fd029 ]
+commit ea23994edc4169bd90d7a9b5908c6ccefd82fa40 upstream.
 
-When the driver fails at alloc_hdlcdev(), and then we remove the driver
-module, we will get the following splat:
+The RAID0 layout is irrelevant if all members have the same size so the
+array has only one zone. It is *also* irrelevant if the array has two
+zones and the second zone has only one device, for example if the array
+has two members of different sizes.
 
-[   25.065966] general protection fault, probably for non-canonical address 0xdffffc0000000182: 0000 [#1] PREEMPT SMP KASAN PTI
-[   25.066914] KASAN: null-ptr-deref in range [0x0000000000000c10-0x0000000000000c17]
-[   25.069262] RIP: 0010:detach_hdlc_protocol+0x2a/0x3e0
-[   25.077709] Call Trace:
-[   25.077924]  <TASK>
-[   25.078108]  unregister_hdlc_device+0x16/0x30
-[   25.078481]  slgt_cleanup+0x157/0x9f0 [synclink_gt]
+So in that case it makes sense to allow assembly even when the layout is
+undefined, like what is done when the array has only one zone.
 
-Fix this by checking whether the 'info->netdev' is a null pointer first.
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Link: https://lore.kernel.org/r/20220410114814.3920474-1-zheyuma97@gmail.com
+Reviewed-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Pascal Hambourg <pascal@plouf.fr.eu.org>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/synclink_gt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/md/raid0.c |   31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-index 25c558e65ece..9bc2a9265277 100644
---- a/drivers/tty/synclink_gt.c
-+++ b/drivers/tty/synclink_gt.c
-@@ -1746,6 +1746,8 @@ static int hdlcdev_init(struct slgt_info *info)
-  */
- static void hdlcdev_exit(struct slgt_info *info)
- {
-+	if (!info->netdev)
-+		return;
- 	unregister_hdlc_device(info->netdev);
- 	free_netdev(info->netdev);
- 	info->netdev = NULL;
--- 
-2.35.1
-
+--- a/drivers/md/raid0.c
++++ b/drivers/md/raid0.c
+@@ -150,21 +150,6 @@ static int create_strip_zones(struct mdd
+ 	pr_debug("md/raid0:%s: FINAL %d zones\n",
+ 		 mdname(mddev), conf->nr_strip_zones);
+ 
+-	if (conf->nr_strip_zones == 1) {
+-		conf->layout = RAID0_ORIG_LAYOUT;
+-	} else if (mddev->layout == RAID0_ORIG_LAYOUT ||
+-		   mddev->layout == RAID0_ALT_MULTIZONE_LAYOUT) {
+-		conf->layout = mddev->layout;
+-	} else if (default_layout == RAID0_ORIG_LAYOUT ||
+-		   default_layout == RAID0_ALT_MULTIZONE_LAYOUT) {
+-		conf->layout = default_layout;
+-	} else {
+-		pr_err("md/raid0:%s: cannot assemble multi-zone RAID0 with default_layout setting\n",
+-		       mdname(mddev));
+-		pr_err("md/raid0: please set raid0.default_layout to 1 or 2\n");
+-		err = -ENOTSUPP;
+-		goto abort;
+-	}
+ 	/*
+ 	 * now since we have the hard sector sizes, we can make sure
+ 	 * chunk size is a multiple of that sector size
+@@ -293,6 +278,22 @@ static int create_strip_zones(struct mdd
+ 			 (unsigned long long)smallest->sectors);
+ 	}
+ 
++	if (conf->nr_strip_zones == 1 || conf->strip_zone[1].nb_dev == 1) {
++		conf->layout = RAID0_ORIG_LAYOUT;
++	} else if (mddev->layout == RAID0_ORIG_LAYOUT ||
++		   mddev->layout == RAID0_ALT_MULTIZONE_LAYOUT) {
++		conf->layout = mddev->layout;
++	} else if (default_layout == RAID0_ORIG_LAYOUT ||
++		   default_layout == RAID0_ALT_MULTIZONE_LAYOUT) {
++		conf->layout = default_layout;
++	} else {
++		pr_err("md/raid0:%s: cannot assemble multi-zone RAID0 with default_layout setting\n",
++		       mdname(mddev));
++		pr_err("md/raid0: please set raid0.default_layout to 1 or 2\n");
++		err = -EOPNOTSUPP;
++		goto abort;
++	}
++
+ 	pr_debug("md/raid0:%s: done.\n", mdname(mddev));
+ 	*private_conf = conf;
+ 
 
 

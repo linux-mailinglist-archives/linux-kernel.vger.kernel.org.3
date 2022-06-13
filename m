@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8A3549437
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33309549314
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386027AbiFMOqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S1381297AbiFMOIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386068AbiFMOo2 (ORCPT
+        with ESMTP id S1380985AbiFMODV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:44:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0C7B5797;
-        Mon, 13 Jun 2022 04:51:15 -0700 (PDT)
+        Mon, 13 Jun 2022 10:03:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BAD8FFB6;
+        Mon, 13 Jun 2022 04:38:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0E57B80EDD;
-        Mon, 13 Jun 2022 11:50:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22905C34114;
-        Mon, 13 Jun 2022 11:50:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1195B80ECE;
+        Mon, 13 Jun 2022 11:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121FCC34114;
+        Mon, 13 Jun 2022 11:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121050;
-        bh=k+/pVrIT8QfqIWbATLK3wlWEq5hh0GwRx7H7a3D01Zw=;
+        s=korg; t=1655120303;
+        bh=eSd1ELFsAoy1oMuc2JFhD/6t5LSqKBh+HAHIcUu/rcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2qJKPbi2sd55ww31qqX5xUI8c5guD7y4dKXQzxEOxe+lWwSD1/oQrY7alrMTqBSEf
-         nX4FEoTA7Dm9D9zC0Cv1Pmi9pxPocfUEGucSEn7VvIXIU5/3pSVZJJ990ADzeKcUFz
-         XFPpXyoQ53ZimJZKojJF24Ck3i5O2QIoVlgvE7qA=
+        b=qAHWOzl2ur08n/jPOAim6QO9PyiVR1qSvbwcwxeclPSssqbo1mA/BW6jvRvR0Oh1O
+         UrK5LQca5yAWpTszyCipHb1+3OOVz1YlZyHmEq3YN4lUlJo4ayCWU8T+hOmGAW+uur
+         tFtJFe7atnoJ4+0IWRk/5XEdaHBgyA4E4NINWGNA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 254/298] scripts/gdb: change kernel config dumping method
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.18 323/339] vduse: Fix NULL pointer dereference on sysfs access
 Date:   Mon, 13 Jun 2022 12:12:28 +0200
-Message-Id: <20220613094932.783737782@linuxfoundation.org>
+Message-Id: <20220613094936.543634199@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit 1f7a6cf6b07c74a17343c2559cd5f5018a245961 ]
+commit b27ee76c74dc831d6e092eaebc2dfc9c0beed1c9 upstream.
 
-MAGIC_START("IKCFG_ST") and MAGIC_END("IKCFG_ED") are moved out
-from the kernel_config_data variable.
+The control device has no drvdata. So we will get a
+NULL pointer dereference when accessing control
+device's msg_timeout attribute via sysfs:
 
-Thus, we parse kernel_config_data directly instead of considering
-offset of MAGIC_START and MAGIC_END.
+[ 132.841881][ T3644] BUG: kernel NULL pointer dereference, address: 00000000000000f8
+[ 132.850619][ T3644] RIP: 0010:msg_timeout_show (drivers/vdpa/vdpa_user/vduse_dev.c:1271)
+[ 132.869447][ T3644] dev_attr_show (drivers/base/core.c:2094)
+[ 132.870215][ T3644] sysfs_kf_seq_show (fs/sysfs/file.c:59)
+[ 132.871164][ T3644] ? device_remove_bin_file (drivers/base/core.c:2088)
+[ 132.872082][ T3644] kernfs_seq_show (fs/kernfs/file.c:164)
+[ 132.872838][ T3644] seq_read_iter (fs/seq_file.c:230)
+[ 132.873578][ T3644] ? __vmalloc_area_node (mm/vmalloc.c:3041)
+[ 132.874532][ T3644] kernfs_fop_read_iter (fs/kernfs/file.c:238)
+[ 132.875513][ T3644] __kernel_read (fs/read_write.c:440 (discriminator 1))
+[ 132.876319][ T3644] kernel_read (fs/read_write.c:459)
+[ 132.877129][ T3644] kernel_read_file (fs/kernel_read_file.c:94)
+[ 132.877978][ T3644] kernel_read_file_from_fd (include/linux/file.h:45 fs/kernel_read_file.c:186)
+[ 132.879019][ T3644] __do_sys_finit_module (kernel/module.c:4207)
+[ 132.879930][ T3644] __ia32_sys_finit_module (kernel/module.c:4189)
+[ 132.880930][ T3644] do_int80_syscall_32 (arch/x86/entry/common.c:112 arch/x86/entry/common.c:132)
+[ 132.881847][ T3644] entry_INT80_compat (arch/x86/entry/entry_64_compat.S:419)
 
-Fixes: 13610aa908dc ("kernel/configs: use .incbin directive to embed config_data.gz")
-Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To fix it, don't create the unneeded attribute for
+control device anymore.
+
+Fixes: c8a6153b6c59 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Message-Id: <20220426073656.229-1-xieyongji@bytedance.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/gdb/linux/config.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/vdpa/vdpa_user/vduse_dev.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/scripts/gdb/linux/config.py b/scripts/gdb/linux/config.py
-index 90e1565b1967..8843ab3cbadd 100644
---- a/scripts/gdb/linux/config.py
-+++ b/scripts/gdb/linux/config.py
-@@ -24,9 +24,9 @@ class LxConfigDump(gdb.Command):
-             filename = arg
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -1344,9 +1344,9 @@ static int vduse_create_dev(struct vduse
  
-         try:
--            py_config_ptr = gdb.parse_and_eval("kernel_config_data + 8")
--            py_config_size = gdb.parse_and_eval(
--                    "sizeof(kernel_config_data) - 1 - 8 * 2")
-+            py_config_ptr = gdb.parse_and_eval("&kernel_config_data")
-+            py_config_ptr_end = gdb.parse_and_eval("&kernel_config_data_end")
-+            py_config_size = py_config_ptr_end - py_config_ptr
-         except gdb.error as e:
-             raise gdb.GdbError("Can't find config, enable CONFIG_IKCONFIG?")
+ 	dev->minor = ret;
+ 	dev->msg_timeout = VDUSE_MSG_DEFAULT_TIMEOUT;
+-	dev->dev = device_create(vduse_class, NULL,
+-				 MKDEV(MAJOR(vduse_major), dev->minor),
+-				 dev, "%s", config->name);
++	dev->dev = device_create_with_groups(vduse_class, NULL,
++				MKDEV(MAJOR(vduse_major), dev->minor),
++				dev, vduse_dev_groups, "%s", config->name);
+ 	if (IS_ERR(dev->dev)) {
+ 		ret = PTR_ERR(dev->dev);
+ 		goto err_dev;
+@@ -1595,7 +1595,6 @@ static int vduse_init(void)
+ 		return PTR_ERR(vduse_class);
  
--- 
-2.35.1
-
+ 	vduse_class->devnode = vduse_devnode;
+-	vduse_class->dev_groups = vduse_dev_groups;
+ 
+ 	ret = alloc_chrdev_region(&vduse_major, 0, VDUSE_DEV_MAX, "vduse");
+ 	if (ret)
 
 

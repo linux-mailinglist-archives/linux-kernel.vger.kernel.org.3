@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C067354929C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0C1548FDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352913AbiFMMUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S1357508AbiFMLyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354714AbiFMMRA (ORCPT
+        with ESMTP id S1355406AbiFMLtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:17:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E0E55499;
-        Mon, 13 Jun 2022 04:02:37 -0700 (PDT)
+        Mon, 13 Jun 2022 07:49:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17F84D691;
+        Mon, 13 Jun 2022 03:53:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C31961346;
-        Mon, 13 Jun 2022 11:02:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96769C34114;
-        Mon, 13 Jun 2022 11:02:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1065B80E59;
+        Mon, 13 Jun 2022 10:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449EAC34114;
+        Mon, 13 Jun 2022 10:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118156;
-        bh=o3Wu0J4jFNlg/VFDmbxPFZwL8LXmJMBJygGAvRw29Zs=;
+        s=korg; t=1655117607;
+        bh=XZ3DXHceYrXFRJWGQOc38JciDUeO9kXH2roFkHG6OwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GFcxw3gpdBRCwDFw/gWq95IVp9DWYYrupCyNGNvSeBaWGSuecDFIRoxKb2ucmO3m5
-         2mRzGz2jzNiKq/5Mk/z4d8O1tzsjOuHgFVdx9Ls9EhG/CipNrBKOdX8on9nq29hmQI
-         mrOsrzpaEYICZSmRWEtxl+kq48gPnNO/3lRXKorM=
+        b=BFoaS6HOEwA4foEds9f8QNWcEr/k4UMFFlH/yzDUWVm28IKr3bJyxnPdEODqgo6ei
+         QbG2TWLlb3IIEsOfey7SgcZChFO9U8bN5rvR59FNjSC2ur6tvyYxDiuMw9no6qzyYa
+         ktjLKMKSZOGd1A6N6ow8l2bSa4plS9tXYhlh6hyA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 246/287] net: altera: Fix refcount leak in altera_tse_mdio_create
-Date:   Mon, 13 Jun 2022 12:11:10 +0200
-Message-Id: <20220613094931.474674146@linuxfoundation.org>
+Subject: [PATCH 5.4 398/411] vringh: Fix loop descriptors check in the indirect cases
+Date:   Mon, 13 Jun 2022 12:11:11 +0200
+Message-Id: <20220613094940.596787076@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit 11ec18b1d8d92b9df307d31950dcba0b3dd7283c ]
+[ Upstream commit dbd29e0752286af74243cf891accf472b2f3edd8 ]
 
-Every iteration of for_each_child_of_node() decrements
-the reference count of the previous node.
-When break from a for_each_child_of_node() loop,
-we need to explicitly call of_node_put() on the child node when
-not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+We should use size of descriptor chain to test loop condition
+in the indirect case. And another statistical count is also introduced
+for indirect descriptors to avoid conflict with the statistical count
+of direct descriptors.
 
-Fixes: bbd2190ce96d ("Altera TSE: Add main and header file for Altera Ethernet Driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220607041144.7553-1-linmq006@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: f87d0fbb5798 ("vringh: host-side implementation of virtio rings.")
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Signed-off-by: Fam Zheng <fam.zheng@bytedance.com>
+Message-Id: <20220505100910.137-1-xieyongji@bytedance.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/altera/altera_tse_main.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/vhost/vringh.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
-index 1b4dfd357383..1b9fb78ef824 100644
---- a/drivers/net/ethernet/altera/altera_tse_main.c
-+++ b/drivers/net/ethernet/altera/altera_tse_main.c
-@@ -174,7 +174,8 @@ static int altera_tse_mdio_create(struct net_device *dev, unsigned int id)
- 	mdio = mdiobus_alloc();
- 	if (mdio == NULL) {
- 		netdev_err(dev, "Error allocating MDIO bus\n");
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto put_node;
- 	}
+diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+index 4653de001e26..264cbe385a63 100644
+--- a/drivers/vhost/vringh.c
++++ b/drivers/vhost/vringh.c
+@@ -264,7 +264,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 	     gfp_t gfp,
+ 	     int (*copy)(void *dst, const void *src, size_t len))
+ {
+-	int err, count = 0, up_next, desc_max;
++	int err, count = 0, indirect_count = 0, up_next, desc_max;
+ 	struct vring_desc desc, *descs;
+ 	struct vringh_range range = { -1ULL, 0 }, slowrange;
+ 	bool slow = false;
+@@ -321,7 +321,12 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 			continue;
+ 		}
  
- 	mdio->name = ALTERA_TSE_RESOURCE_NAME;
-@@ -191,6 +192,7 @@ static int altera_tse_mdio_create(struct net_device *dev, unsigned int id)
- 			   mdio->id);
- 		goto out_free_mdio;
- 	}
-+	of_node_put(mdio_node);
- 
- 	if (netif_msg_drv(priv))
- 		netdev_info(dev, "MDIO bus %s: created\n", mdio->id);
-@@ -200,6 +202,8 @@ static int altera_tse_mdio_create(struct net_device *dev, unsigned int id)
- out_free_mdio:
- 	mdiobus_free(mdio);
- 	mdio = NULL;
-+put_node:
-+	of_node_put(mdio_node);
- 	return ret;
- }
- 
+-		if (count++ == vrh->vring.num) {
++		if (up_next == -1)
++			count++;
++		else
++			indirect_count++;
++
++		if (count > vrh->vring.num || indirect_count > desc_max) {
+ 			vringh_bad("Descriptor loop in %p", descs);
+ 			err = -ELOOP;
+ 			goto fail;
+@@ -383,6 +388,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
+ 				i = return_from_indirect(vrh, &up_next,
+ 							 &descs, &desc_max);
+ 				slow = false;
++				indirect_count = 0;
+ 			} else
+ 				break;
+ 		}
 -- 
 2.35.1
 

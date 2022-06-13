@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB864549350
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A92B548C0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358038AbiFMNGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S1355753AbiFMLlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354587AbiFMMzm (ORCPT
+        with ESMTP id S1354480AbiFMLcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:42 -0400
+        Mon, 13 Jun 2022 07:32:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1FC1117B;
-        Mon, 13 Jun 2022 04:16:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A0ABF64;
+        Mon, 13 Jun 2022 03:47:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A51B0B80EAA;
-        Mon, 13 Jun 2022 11:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E99CC3411E;
-        Mon, 13 Jun 2022 11:16:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1FBDB80D3C;
+        Mon, 13 Jun 2022 10:47:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DEBC34114;
+        Mon, 13 Jun 2022 10:47:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118992;
-        bh=cbX6OY6RNJbguBJonjIdBD44LgzCrkQUfXN+abLuJMI=;
+        s=korg; t=1655117240;
+        bh=JLpxzX6Ra9Gwh88TaUwLoR3OG6uxLuu6Y7TrfmKyxU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OLHK5hxpAFhjxnPXgYS+EffwwMBrOU2Q+AzPou0psvyWbQ/z2R1pc2kbbfZTsShkT
-         0y+XTwpdA3m+Ivvbm5fAcOzBHxgO9usM2g6ojj0WLwzNbNZmxr5s6t2ZMJ1DpOvZYM
-         D+xAHsjDI+FUBzmco4Hk+MZqJxkfnr4IM95Jl9GY=
+        b=QgVvARS1As51bXtFtz/icsfggc7hslCsj49wI9PaNga/3meXdPCj/y1KAjwULDTAH
+         Kzn42u+LRM4h8jZPKjCiNP5Fu+MXZPdzFXo6Pj4sSzFMpD/4VM+iXbJS8GxgbB5jNg
+         /4Q0ZlOTO/OxavUfNSDfyEl+b/m21XhAP5ow+28E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 101/247] octeontx2-af: fix error code in is_valid_offset()
+Subject: [PATCH 5.4 330/411] net/mlx5: Dont use already freed action pointer
 Date:   Mon, 13 Jun 2022 12:10:03 +0200
-Message-Id: <20220613094926.019685814@linuxfoundation.org>
+Message-Id: <20220613094938.621794979@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-[ Upstream commit f3d671c711097a133bc36bd2bde52f1fcca783a6 ]
+[ Upstream commit 80b2bd737d0e833e6a2b77e482e5a714a79c86a4 ]
 
-The is_valid_offset() function returns success/true if the call to
-validate_and_get_cpt_blkaddr() fails.
+The call to mlx5dr_action_destroy() releases "action" memory. That
+pointer is set to miss_action later and generates the following smatch
+error:
 
-Fixes: ecad2ce8c48f ("octeontx2-af: cn10k: Add mailbox to configure reassembly timeout")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YpXDrTPb8qV01JSP@kili
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+ drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c:53 set_miss_action()
+ warn: 'action' was already freed.
+
+Make sure that the pointer is always valid by setting NULL after destroy.
+
+Fixes: 6a48faeeca10 ("net/mlx5: Add direct rule fs_cmd implementation")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c
-index 1f90a7403392..4895faa667b5 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cpt.c
-@@ -206,7 +206,7 @@ static bool is_valid_offset(struct rvu *rvu, struct cpt_rd_wr_reg_msg *req)
- 
- 	blkaddr = validate_and_get_cpt_blkaddr(req->blkaddr);
- 	if (blkaddr < 0)
--		return blkaddr;
-+		return false;
- 
- 	/* Registers that can be accessed from PF/VF */
- 	if ((offset & 0xFF000) ==  CPT_AF_LFX_CTL(0) ||
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
+index 348f02e336f6..d64368506754 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
+@@ -43,11 +43,10 @@ static int set_miss_action(struct mlx5_flow_root_namespace *ns,
+ 	err = mlx5dr_table_set_miss_action(ft->fs_dr_table.dr_table, action);
+ 	if (err && action) {
+ 		err = mlx5dr_action_destroy(action);
+-		if (err) {
+-			action = NULL;
+-			mlx5_core_err(ns->dev, "Failed to destroy action (%d)\n",
+-				      err);
+-		}
++		if (err)
++			mlx5_core_err(ns->dev,
++				      "Failed to destroy action (%d)\n", err);
++		action = NULL;
+ 	}
+ 	ft->fs_dr_table.miss_action = action;
+ 	if (old_miss_action) {
 -- 
 2.35.1
 

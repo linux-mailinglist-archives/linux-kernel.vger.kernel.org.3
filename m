@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED67B548770
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C0B548817
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358660AbiFMM7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S243298AbiFMKWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358014AbiFMMy4 (ORCPT
+        with ESMTP id S242956AbiFMKUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:54:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F2B3585E;
-        Mon, 13 Jun 2022 04:13:57 -0700 (PDT)
+        Mon, 13 Jun 2022 06:20:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AFCC2D;
+        Mon, 13 Jun 2022 03:17:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 406F6B80D31;
-        Mon, 13 Jun 2022 11:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA719C34114;
-        Mon, 13 Jun 2022 11:13:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 932D260AE8;
+        Mon, 13 Jun 2022 10:17:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2F0C34114;
+        Mon, 13 Jun 2022 10:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118835;
-        bh=E0PNwa8PTWwpNlvA8MPTBnOppFaVoKuvNEia0x55WP8=;
+        s=korg; t=1655115440;
+        bh=kH8SKf4VDViUQlEzsMYh3YB5EgApZM0I6GdA+2BlqmI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VvkyC51ZRW4yXRYCe61yIpQdTzPABrlCJGFGv5XABII2GOXDCDZ3nJOJiBvcRBCd/
-         Pw0NV8gbwgnHH2ftpZPD7BgX36s9BZsx91OBO4QXXjI/Miv5e7aM22iScVAvnzB1qJ
-         CqGuBxn9c1Kni2zCpFsj7Unu6tkvWsHtLIRWhwnU=
+        b=pfsk84X5fltx1Og6bWVcAiUWzqP3pOlOWgEyplB5t5fVPe990hl3nUyUJM8S9cwVc
+         Ansq/FPrFKiKkgboR68B+EwiXr02ntS77Np0Xu8r6NPaIR8GsCGMEjVnH+p0v7PmyV
+         eC4LBNmu2wGsdxLbueoKFdQZJHECMHca18AXWq+4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Anup Patel <anup@brainfault.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 044/247] clocksource/drivers/riscv: Events are stopped during CPU suspend
-Date:   Mon, 13 Jun 2022 12:09:06 +0200
-Message-Id: <20220613094924.285706093@linuxfoundation.org>
+        stable@vger.kernel.org, "D. Ziegfeld" <dzigg@posteo.de>,
+        =?UTF-8?q?J=C3=B6rg-Volker=20Peetz?= <jvpeetz@web.de>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 074/167] iommu/amd: Increase timeout waiting for GA log enablement
+Date:   Mon, 13 Jun 2022 12:09:08 +0200
+Message-Id: <20220613094858.247719382@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Joerg Roedel <jroedel@suse.de>
 
-[ Upstream commit 232ccac1bd9b5bfe73895f527c08623e7fa0752d ]
+[ Upstream commit 42bb5aa043382f09bef2cc33b8431be867c70f8e ]
 
-Some implementations of the SBI time extension depend on hart-local
-state (for example, CSRs) that are lost or hardware that is powered
-down when a CPU is suspended. To be safe, the clockevents driver
-cannot assume that timer IRQs will be received during CPU suspend.
+On some systems it can take a long time for the hardware to enable the
+GA log of the AMD IOMMU. The current wait time is only 0.1ms, but
+testing showed that it can take up to 14ms for the GA log to enter
+running state after it has been enabled.
 
-Fixes: 62b019436814 ("clocksource: new RISC-V SBI timer driver")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Link: https://lore.kernel.org/r/20220509012121.40031-1-samuel@sholland.org
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Sometimes the long delay happens when booting the system, sometimes
+only on resume. Adjust the timeout accordingly to not print a warning
+when hardware takes a longer than usual.
+
+There has already been an attempt to fix this with commit
+
+	9b45a7738eec ("iommu/amd: Fix loop timeout issue in iommu_ga_log_enable()")
+
+But that commit was based on some wrong math and did not fix the issue
+in all cases.
+
+Cc: "D. Ziegfeld" <dzigg@posteo.de>
+Cc: Jörg-Volker Peetz <jvpeetz@web.de>
+Fixes: 8bda0cfbdc1a ("iommu/amd: Detect and initialize guest vAPIC log")
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20220520102214.12563-1-joro@8bytes.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/timer-riscv.c | 2 +-
+ drivers/iommu/amd_iommu_init.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-index c51c5ed15aa7..0e7748df4be3 100644
---- a/drivers/clocksource/timer-riscv.c
-+++ b/drivers/clocksource/timer-riscv.c
-@@ -32,7 +32,7 @@ static int riscv_clock_next_event(unsigned long delta,
- static unsigned int riscv_clock_event_irq;
- static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
- 	.name			= "riscv_timer_clockevent",
--	.features		= CLOCK_EVT_FEAT_ONESHOT,
-+	.features		= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
- 	.rating			= 100,
- 	.set_next_event		= riscv_clock_next_event,
- };
--- 
-2.35.1
-
+--- a/drivers/iommu/amd_iommu_init.c
++++ b/drivers/iommu/amd_iommu_init.c
+@@ -86,7 +86,7 @@
+ #define ACPI_DEVFLAG_LINT1              0x80
+ #define ACPI_DEVFLAG_ATSDIS             0x10000000
+ 
+-#define LOOP_TIMEOUT	100000
++#define LOOP_TIMEOUT	2000000
+ /*
+  * ACPI table definitions
+  *
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2C95493AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579E5548C30
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355694AbiFMMKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
+        id S1348527AbiFMM1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358605AbiFMMEW (ORCPT
+        with ESMTP id S1355213AbiFMMXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:04:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBB7427D3;
-        Mon, 13 Jun 2022 03:57:32 -0700 (PDT)
+        Mon, 13 Jun 2022 08:23:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3103152C;
+        Mon, 13 Jun 2022 04:04:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43F9A61346;
-        Mon, 13 Jun 2022 10:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5014FC34114;
-        Mon, 13 Jun 2022 10:57:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DF0BB80E42;
+        Mon, 13 Jun 2022 11:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 650EFC34114;
+        Mon, 13 Jun 2022 11:04:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117851;
-        bh=+7lMIGEEM0SyYdAaiK7TVCobrDsuPE+uowxjx/D62q8=;
+        s=korg; t=1655118272;
+        bh=TzlHtR3LNAMSh2GvVDP3oC07worqPWNyvIT9pg2lMoo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mONa9Q4/t44pm63p3Ac2DnWeoUbvu2Jd2dTcWlY/TkJx2rp7BBv/98OH3DvlLALx6
-         3OcmV26ZGNBaz1+PyTYosNUXF03lHhIMOw/V6MAFukJO1MknDrxOcd+umLcXyQL3mA
-         yxTZRdoq1objwEqUetnGRqPIIuBJ4i6LPe5hUiAI=
+        b=VOeXmjCw+CJcj5yxrBB+KBGcpU5cEZLAVas9E1IWKPdo0+vFf4/82s1ers/YFUo2C
+         gM0S5nTLXwg8Ri/K4q1unfUe2MD+WloVNELdee1poT/QVT9aoE8ypxfTJ/He385V+v
+         TsgCoMRA1811QWiIm7ihVawN4/3yYsR9dt26Lw7k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 4.19 143/287] wifi: mac80211: fix use-after-free in chanctx code
-Date:   Mon, 13 Jun 2022 12:09:27 +0200
-Message-Id: <20220613094928.212812400@linuxfoundation.org>
+        stable@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 008/172] tty: serial: fsl_lpuart: fix potential bug when using both of_alias_get_id and ida_simple_get
+Date:   Mon, 13 Jun 2022 12:09:28 +0200
+Message-Id: <20220613094852.374038844@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +54,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Sherry Sun <sherry.sun@nxp.com>
 
-commit 2965c4cdf7ad9ce0796fac5e57debb9519ea721e upstream.
+[ Upstream commit f398e0aa325c61fa20903833a5b534ecb8e6e418 ]
 
-In ieee80211_vif_use_reserved_context(), when we have an
-old context and the new context's replace_state is set to
-IEEE80211_CHANCTX_REPLACE_NONE, we free the old context
-in ieee80211_vif_use_reserved_reassign(). Therefore, we
-cannot check the old_ctx anymore, so we should set it to
-NULL after this point.
+Now fsl_lpuart driver use both of_alias_get_id() and ida_simple_get() in
+.probe(), which has the potential bug. For example, when remove the
+lpuart7 alias in dts, of_alias_get_id() will return error, then call
+ida_simple_get() to allocate the id 0 for lpuart7, this may confilct
+with the lpuart4 which has alias 0.
 
-However, since the new_ctx replace state is clearly not
-IEEE80211_CHANCTX_REPLACES_OTHER, we're not going to do
-anything else in this function and can just return to
-avoid accessing the freed old_ctx.
+    aliases {
+	...
+        serial0 = &lpuart4;
+        serial1 = &lpuart5;
+        serial2 = &lpuart6;
+        serial3 = &lpuart7;
+    }
 
-Cc: stable@vger.kernel.org
-Fixes: 5bcae31d9cb1 ("mac80211: implement multi-vif in-place reservations")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220601091926.df419d91b165.I17a9b3894ff0b8323ce2afdb153b101124c821e5@changeid
+So remove the ida_simple_get() in .probe(), return an error directly
+when calling of_alias_get_id() fails, which is consistent with other
+uart drivers behavior.
+
+Fixes: 3bc3206e1c0f ("serial: fsl_lpuart: Remove the alias node dependence")
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+Link: https://lore.kernel.org/r/20220321112211.8895-1-sherry.sun@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/chan.c |    7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
---- a/net/mac80211/chan.c
-+++ b/net/mac80211/chan.c
-@@ -1638,12 +1638,9 @@ int ieee80211_vif_use_reserved_context(s
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index b9f8add284e3..52a603a6f9b8 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -229,8 +229,6 @@
+ /* IMX lpuart has four extra unused regs located at the beginning */
+ #define IMX_REG_OFF	0x10
  
- 	if (new_ctx->replace_state == IEEE80211_CHANCTX_REPLACE_NONE) {
- 		if (old_ctx)
--			err = ieee80211_vif_use_reserved_reassign(sdata);
--		else
--			err = ieee80211_vif_use_reserved_assign(sdata);
-+			return ieee80211_vif_use_reserved_reassign(sdata);
+-static DEFINE_IDA(fsl_lpuart_ida);
+-
+ enum lpuart_type {
+ 	VF610_LPUART,
+ 	LS1021A_LPUART,
+@@ -265,7 +263,6 @@ struct lpuart_port {
+ 	int			rx_dma_rng_buf_len;
+ 	unsigned int		dma_tx_nents;
+ 	wait_queue_head_t	dma_wait;
+-	bool			id_allocated;
+ };
  
--		if (err)
--			return err;
-+		return ieee80211_vif_use_reserved_assign(sdata);
+ struct lpuart_soc_data {
+@@ -2638,23 +2635,18 @@ static int lpuart_probe(struct platform_device *pdev)
+ 
+ 	ret = of_alias_get_id(np, "serial");
+ 	if (ret < 0) {
+-		ret = ida_simple_get(&fsl_lpuart_ida, 0, UART_NR, GFP_KERNEL);
+-		if (ret < 0) {
+-			dev_err(&pdev->dev, "port line is full, add device failed\n");
+-			return ret;
+-		}
+-		sport->id_allocated = true;
++		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", ret);
++		return ret;
  	}
+ 	if (ret >= ARRAY_SIZE(lpuart_ports)) {
+ 		dev_err(&pdev->dev, "serial%d out of range\n", ret);
+-		ret = -EINVAL;
+-		goto failed_out_of_range;
++		return -EINVAL;
+ 	}
+ 	sport->port.line = ret;
  
- 	/*
+ 	ret = lpuart_enable_clks(sport);
+ 	if (ret)
+-		goto failed_clock_enable;
++		return ret;
+ 	sport->port.uartclk = lpuart_get_baud_clk_rate(sport);
+ 
+ 	lpuart_ports[sport->port.line] = sport;
+@@ -2697,10 +2689,6 @@ static int lpuart_probe(struct platform_device *pdev)
+ failed_attach_port:
+ failed_irq_request:
+ 	lpuart_disable_clks(sport);
+-failed_clock_enable:
+-failed_out_of_range:
+-	if (sport->id_allocated)
+-		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
+ 	return ret;
+ }
+ 
+@@ -2710,9 +2698,6 @@ static int lpuart_remove(struct platform_device *pdev)
+ 
+ 	uart_remove_one_port(&lpuart_reg, &sport->port);
+ 
+-	if (sport->id_allocated)
+-		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
+-
+ 	lpuart_disable_clks(sport);
+ 
+ 	if (sport->dma_tx_chan)
+@@ -2842,7 +2827,6 @@ static int __init lpuart_serial_init(void)
+ 
+ static void __exit lpuart_serial_exit(void)
+ {
+-	ida_destroy(&fsl_lpuart_ida);
+ 	platform_driver_unregister(&lpuart_driver);
+ 	uart_unregister_driver(&lpuart_reg);
+ }
+-- 
+2.35.1
+
 
 

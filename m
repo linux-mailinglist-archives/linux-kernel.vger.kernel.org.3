@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B628754985D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091AB549455
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358459AbiFMM7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S1383468AbiFMOP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357993AbiFMMyx (ORCPT
+        with ESMTP id S1380850AbiFMOHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:54:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723D935856;
-        Mon, 13 Jun 2022 04:13:50 -0700 (PDT)
+        Mon, 13 Jun 2022 10:07:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81768985A6;
+        Mon, 13 Jun 2022 04:41:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D21C60B60;
-        Mon, 13 Jun 2022 11:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18468C34114;
-        Mon, 13 Jun 2022 11:13:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 198516124E;
+        Mon, 13 Jun 2022 11:41:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC30C3411C;
+        Mon, 13 Jun 2022 11:41:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118829;
-        bh=1okDpxG+2HAeH3YlR9vj5KO6UWz/SMYp93/ULZFDgus=;
+        s=korg; t=1655120485;
+        bh=/lWHFpte0nQhGTo7XI8GUdlZRuC2Mn0hannG7wMM4LU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iw956nQMs36xhrt3N0WaLcOJNbQLPf8C5henAe0AzcemJWAnFJE8j2BrNiOB+3+FF
-         i8pfEROP+H9LGv6xp223iwTjcdSxusYC9kTSI+ukacZ9U0UrSc9xPvlD0Wx3m9yH7Z
-         FJt0daMWrOZiH5yhtbiJxjbtt6XGqXanSY82jZZo=
+        b=BkdZfkwT6KMg2EQ1awNSizNnfr8jfYYUa7levQrapJStFgg7rkJqCAm68DkXbYf3s
+         0WeXkEMmzUXhUi1l9WV7nSTFbqWufhiyxUd/oMmVjJlFMybgVR0WzPUXsCschDayQ0
+         sPTomRTe4TsmvAf1dlvEJyy3QCrs9JxpCSCJ6rV0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Li Jun <jun.li@nxp.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 042/247] extcon: ptn5150: Add queue work sync before driver release
+Subject: [PATCH 5.17 050/298] soc: rockchip: Fix refcount leak in rockchip_grf_init
 Date:   Mon, 13 Jun 2022 12:09:04 +0200
-Message-Id: <20220613094924.224079902@linuxfoundation.org>
+Message-Id: <20220613094926.468096123@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 782cd939cbe0f569197cd1c9b0477ee213167f04 ]
+[ Upstream commit 9b59588d8be91c96bfb0371e912ceb4f16315dbf ]
 
-Add device managed action to sync pending queue work, otherwise
-the queued work may run after the work is destroyed.
+of_find_matching_node_and_match returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 4ed754de2d66 ("extcon: Add support for ptn5150 extcon driver")
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Fixes: 4c58063d4258 ("soc: rockchip: add driver handling grf setup")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220516072013.19731-1-linmq006@gmail.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/extcon/extcon-ptn5150.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/soc/rockchip/grf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/extcon/extcon-ptn5150.c b/drivers/extcon/extcon-ptn5150.c
-index 5b9a3cf8df26..2a7874108df8 100644
---- a/drivers/extcon/extcon-ptn5150.c
-+++ b/drivers/extcon/extcon-ptn5150.c
-@@ -194,6 +194,13 @@ static int ptn5150_init_dev_type(struct ptn5150_info *info)
- 	return 0;
- }
- 
-+static void ptn5150_work_sync_and_put(void *data)
-+{
-+	struct ptn5150_info *info = data;
-+
-+	cancel_work_sync(&info->irq_work);
-+}
-+
- static int ptn5150_i2c_probe(struct i2c_client *i2c)
- {
- 	struct device *dev = &i2c->dev;
-@@ -284,6 +291,10 @@ static int ptn5150_i2c_probe(struct i2c_client *i2c)
- 	if (ret)
+diff --git a/drivers/soc/rockchip/grf.c b/drivers/soc/rockchip/grf.c
+index 494cf2b5bf7b..343ff61ccccb 100644
+--- a/drivers/soc/rockchip/grf.c
++++ b/drivers/soc/rockchip/grf.c
+@@ -148,12 +148,14 @@ static int __init rockchip_grf_init(void)
+ 		return -ENODEV;
+ 	if (!match || !match->data) {
+ 		pr_err("%s: missing grf data\n", __func__);
++		of_node_put(np);
  		return -EINVAL;
+ 	}
  
-+	ret = devm_add_action_or_reset(dev, ptn5150_work_sync_and_put, info);
-+	if (ret)
-+		return ret;
-+
- 	/*
- 	 * Update current extcon state if for example OTG connection was there
- 	 * before the probe
+ 	grf_info = match->data;
+ 
+ 	grf = syscon_node_to_regmap(np);
++	of_node_put(np);
+ 	if (IS_ERR(grf)) {
+ 		pr_err("%s: could not get grf syscon\n", __func__);
+ 		return PTR_ERR(grf);
 -- 
 2.35.1
 

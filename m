@@ -2,166 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330465494DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCE754964F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239907AbiFMNPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S1354985AbiFMMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359096AbiFMNJR (ORCPT
+        with ESMTP id S1354676AbiFMMi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:09:17 -0400
+        Mon, 13 Jun 2022 08:38:57 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F5138BE1;
-        Mon, 13 Jun 2022 04:19:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB625DA18;
+        Mon, 13 Jun 2022 04:08:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B012BB80D3A;
-        Mon, 13 Jun 2022 11:19:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBEDC3411E;
-        Mon, 13 Jun 2022 11:19:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5F8AB80EA7;
+        Mon, 13 Jun 2022 11:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC5AC34114;
+        Mon, 13 Jun 2022 11:08:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119155;
-        bh=0kTaFpef1BwMfsjh+msVDWsWfwPI65+qIGZ47BekVm4=;
+        s=korg; t=1655118510;
+        bh=tu/8KKiOkbWt2AvZ7ioCyRwCklb4rKIQxJpxvnK/u+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D2n0rDRr5p5qX/G3eD9WbutetdRc1O2IR9jrkyV2fkqbGsd7++oKKo4o09rswY7tP
-         0kpjkCZ0NyQrmRUP567ytmtVzB7Yhnx455naEE9PJVkW3EQwEbxTZjApqKDyHrUwwP
-         CFSK/XG9Nv+b1Q4tnOjOr02T9FjraTas9Z6bbC48=
+        b=TZNNfLnVVEue4RzC7GHG60Y3KnWd+8ZJO4sm6zJJKiFsQsOF/F9auB64xMzgfVwgN
+         H7CU9qWASGcDdi4iTZ1+YuS9bV6BRKYA8RLlci7zepAygBIXwc9t2fxhq4uaWWysZu
+         IL595KUZ4PC7/pI5PLJ3yw4difr18LiJIpg4ZSlA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 160/247] net: dsa: mv88e6xxx: use BMSR_ANEGCOMPLETE bit for filling an_complete
+Subject: [PATCH 5.10 102/172] net: dsa: lantiq_gswip: Fix refcount leak in gswip_gphy_fw_list
 Date:   Mon, 13 Jun 2022 12:11:02 +0200
-Message-Id: <20220613094927.808373111@linuxfoundation.org>
+Message-Id: <20220613094914.853031341@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Behún <kabel@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 47e96930d6e6106d5252e85b868d3c7e29296de0 ]
+[ Upstream commit 0737e018a05e2aa352828c52bdeed3b02cff2930 ]
 
-Commit ede359d8843a ("net: dsa: mv88e6xxx: Link in pcs_get_state() if AN
-is bypassed") added the ability to link if AN was bypassed, and added
-filling of state->an_complete field, but set it to true if AN was
-enabled in BMCR, not when AN was reported complete in BMSR.
+Every iteration of for_each_available_child_of_node() decrements
+the reference count of the previous node.
+when breaking early from a for_each_available_child_of_node() loop,
+we need to explicitly call of_node_put() on the gphy_fw_np.
+Add missing of_node_put() to avoid refcount leak.
 
-This was done because for some reason, when I wanted to use BMSR value
-to infer an_complete, I was looking at BMSR_ANEGCAPABLE bit (which was
-always 1), instead of BMSR_ANEGCOMPLETE bit.
-
-Use BMSR_ANEGCOMPLETE for filling state->an_complete.
-
-Fixes: ede359d8843a ("net: dsa: mv88e6xxx: Link in pcs_get_state() if AN is bypassed")
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Fixes: 14fceff4771e ("net: dsa: Add Lantiq / Intel DSA driver for vrx200")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220605072335.11257-1-linmq006@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/serdes.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+ drivers/net/dsa/lantiq_gswip.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
-index 2b05ead515cd..6ae7a0ed9e0b 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -50,22 +50,17 @@ static int mv88e6390_serdes_write(struct mv88e6xxx_chip *chip,
- }
- 
- static int mv88e6xxx_serdes_pcs_get_state(struct mv88e6xxx_chip *chip,
--					  u16 ctrl, u16 status, u16 lpa,
-+					  u16 bmsr, u16 lpa, u16 status,
- 					  struct phylink_link_state *state)
- {
- 	state->link = !!(status & MV88E6390_SGMII_PHY_STATUS_LINK);
-+	state->an_complete = !!(bmsr & BMSR_ANEGCOMPLETE);
- 
- 	if (status & MV88E6390_SGMII_PHY_STATUS_SPD_DPL_VALID) {
- 		/* The Spped and Duplex Resolved register is 1 if AN is enabled
- 		 * and complete, or if AN is disabled. So with disabled AN we
--		 * still get here on link up. But we want to set an_complete
--		 * only if AN was enabled, thus we look at BMCR_ANENABLE.
--		 * (According to 802.3-2008 section 22.2.4.2.10, we should be
--		 *  able to get this same value from BMSR_ANEGCAPABLE, but tests
--		 *  show that these Marvell PHYs don't conform to this part of
--		 *  the specificaion - BMSR_ANEGCAPABLE is simply always 1.)
-+		 * still get here on link up.
- 		 */
--		state->an_complete = !!(ctrl & BMCR_ANENABLE);
- 		state->duplex = status &
- 				MV88E6390_SGMII_PHY_STATUS_DUPLEX_FULL ?
- 			                         DUPLEX_FULL : DUPLEX_HALF;
-@@ -191,12 +186,12 @@ int mv88e6352_serdes_pcs_config(struct mv88e6xxx_chip *chip, int port,
- int mv88e6352_serdes_pcs_get_state(struct mv88e6xxx_chip *chip, int port,
- 				   int lane, struct phylink_link_state *state)
- {
--	u16 lpa, status, ctrl;
-+	u16 bmsr, lpa, status;
- 	int err;
- 
--	err = mv88e6352_serdes_read(chip, MII_BMCR, &ctrl);
-+	err = mv88e6352_serdes_read(chip, MII_BMSR, &bmsr);
- 	if (err) {
--		dev_err(chip->dev, "can't read Serdes PHY control: %d\n", err);
-+		dev_err(chip->dev, "can't read Serdes BMSR: %d\n", err);
- 		return err;
+diff --git a/drivers/net/dsa/lantiq_gswip.c b/drivers/net/dsa/lantiq_gswip.c
+index 4abae06499a9..70895e480683 100644
+--- a/drivers/net/dsa/lantiq_gswip.c
++++ b/drivers/net/dsa/lantiq_gswip.c
+@@ -1981,8 +1981,10 @@ static int gswip_gphy_fw_list(struct gswip_priv *priv,
+ 	for_each_available_child_of_node(gphy_fw_list_np, gphy_fw_np) {
+ 		err = gswip_gphy_fw_probe(priv, &priv->gphy_fw[i],
+ 					  gphy_fw_np, i);
+-		if (err)
++		if (err) {
++			of_node_put(gphy_fw_np);
+ 			goto remove_gphy;
++		}
+ 		i++;
  	}
  
-@@ -212,7 +207,7 @@ int mv88e6352_serdes_pcs_get_state(struct mv88e6xxx_chip *chip, int port,
- 		return err;
- 	}
- 
--	return mv88e6xxx_serdes_pcs_get_state(chip, ctrl, status, lpa, state);
-+	return mv88e6xxx_serdes_pcs_get_state(chip, bmsr, lpa, status, state);
- }
- 
- int mv88e6352_serdes_pcs_an_restart(struct mv88e6xxx_chip *chip, int port,
-@@ -915,13 +910,13 @@ int mv88e6390_serdes_pcs_config(struct mv88e6xxx_chip *chip, int port,
- static int mv88e6390_serdes_pcs_get_state_sgmii(struct mv88e6xxx_chip *chip,
- 	int port, int lane, struct phylink_link_state *state)
- {
--	u16 lpa, status, ctrl;
-+	u16 bmsr, lpa, status;
- 	int err;
- 
- 	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
--				    MV88E6390_SGMII_BMCR, &ctrl);
-+				    MV88E6390_SGMII_BMSR, &bmsr);
- 	if (err) {
--		dev_err(chip->dev, "can't read Serdes PHY control: %d\n", err);
-+		dev_err(chip->dev, "can't read Serdes PHY BMSR: %d\n", err);
- 		return err;
- 	}
- 
-@@ -939,7 +934,7 @@ static int mv88e6390_serdes_pcs_get_state_sgmii(struct mv88e6xxx_chip *chip,
- 		return err;
- 	}
- 
--	return mv88e6xxx_serdes_pcs_get_state(chip, ctrl, status, lpa, state);
-+	return mv88e6xxx_serdes_pcs_get_state(chip, bmsr, lpa, status, state);
- }
- 
- static int mv88e6390_serdes_pcs_get_state_10g(struct mv88e6xxx_chip *chip,
 -- 
 2.35.1
 

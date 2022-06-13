@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B7854983D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3256954951C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354847AbiFMMUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S1380729AbiFMOBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354622AbiFMMQx (ORCPT
+        with ESMTP id S1380730AbiFMNzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:16:53 -0400
+        Mon, 13 Jun 2022 09:55:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C833555347;
-        Mon, 13 Jun 2022 04:02:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A2D814AD;
+        Mon, 13 Jun 2022 04:35:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B97466143A;
-        Mon, 13 Jun 2022 11:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C069DC34114;
-        Mon, 13 Jun 2022 11:02:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04E6561046;
+        Mon, 13 Jun 2022 11:35:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16398C34114;
+        Mon, 13 Jun 2022 11:35:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118153;
-        bh=4y/TH+BGvWi9BxSGtfzR9Wpn6hPZbGvg9CcdA4l6WNk=;
+        s=korg; t=1655120138;
+        bh=ABD3YVlI2vm6/FS72Qxvu6Bn0pNQypERcbxOP8PiQ8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t0eR3BbcaGv733QUcbwZjAiDGwGnVgjbkKiU/GrJuwvV8XPE5hn7DP8NmgiKHuDe5
-         A4iyaLdFlJgLf+U26eoy6/lazS52eNZfSzWcuZs3Z1y7bJfO8N/fhuWfo67P7QI0sb
-         X8Ai87hw0YV6f1D0iHcKxgEx+X44V58lTx2wUZL8=
+        b=CHCQvz8FxnSwKAelPMdcoNRwYVMLkfLJfIFFGfJkXTjRx6pl62vHzWhXoNDE2xu3X
+         L3GrNaliFagthV64fl/7BfOFx2g5UMlR/8IRavAOTMCPWkRWaWDUFsJqFthcGzRZU2
+         zoGaaVW6+RbiKIwJoFZQ9eLQMELSg+mugzmR1/lI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 245/287] ip_gre: test csum_start instead of transport header
+        stable@vger.kernel.org,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 244/339] soundwire: qcom: adjust autoenumeration timeout
 Date:   Mon, 13 Jun 2022 12:11:09 +0200
-Message-Id: <20220613094931.444438535@linuxfoundation.org>
+Message-Id: <20220613094934.054470733@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,85 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit 8d21e9963bec1aad2280cdd034c8993033ef2948 ]
+[ Upstream commit 74da272400b46f2e898f115d1b1cd60828766919 ]
 
-GRE with TUNNEL_CSUM will apply local checksum offload on
-CHECKSUM_PARTIAL packets.
+Currently timeout for autoenumeration during probe and bus reset is set to
+2 secs which is really a big value. This can have an adverse effect on
+boot time if the slave device is not ready/reset.
+This was the case with wcd938x which was not reset yet but we spent 2
+secs waiting in the soundwire controller probe. Reduce this time to
+1/10 of Hz which should be good enough time to finish autoenumeration
+if any slaves are available on the bus.
 
-ipgre_xmit must validate csum_start after an optional skb_pull,
-else lco_csum may trigger an overflow. The original check was
-
-	if (csum && skb_checksum_start(skb) < skb->data)
-		return -EINVAL;
-
-This had false positives when skb_checksum_start is undefined:
-when ip_summed is not CHECKSUM_PARTIAL. A discussed refinement
-was straightforward
-
-	if (csum && skb->ip_summed == CHECKSUM_PARTIAL &&
-	    skb_checksum_start(skb) < skb->data)
-		return -EINVAL;
-
-But was eventually revised more thoroughly:
-- restrict the check to the only branch where needed, in an
-  uncommon GRE path that uses header_ops and calls skb_pull.
-- test skb_transport_header, which is set along with csum_start
-  in skb_partial_csum_set in the normal header_ops datapath.
-
-Turns out skbs can arrive in this branch without the transport
-header set, e.g., through BPF redirection.
-
-Revise the check back to check csum_start directly, and only if
-CHECKSUM_PARTIAL. Do leave the check in the updated location.
-Check field regardless of whether TUNNEL_CSUM is configured.
-
-Link: https://lore.kernel.org/netdev/YS+h%2FtqCJJiQei+W@shredder/
-Link: https://lore.kernel.org/all/20210902193447.94039-2-willemdebruijn.kernel@gmail.com/T/#u
-Fixes: 8a0ed250f911 ("ip_gre: validate csum_start only on pull")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-Link: https://lore.kernel.org/r/20220606132107.3582565-1-willemdebruijn.kernel@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220506084705.18525-1-srinivas.kandagatla@linaro.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_gre.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/soundwire/qcom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index 41d0f9bb5191..cf60d0e07965 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -678,21 +678,20 @@ static netdev_tx_t ipgre_xmit(struct sk_buff *skb,
- 	}
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index b38525b35bec..7b8ef45abee4 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -105,7 +105,7 @@
  
- 	if (dev->header_ops) {
--		const int pull_len = tunnel->hlen + sizeof(struct iphdr);
--
- 		if (skb_cow_head(skb, 0))
- 			goto free_skb;
- 
- 		tnl_params = (const struct iphdr *)skb->data;
- 
--		if (pull_len > skb_transport_offset(skb))
--			goto free_skb;
--
- 		/* Pull skb since ip_tunnel_xmit() needs skb->data pointing
- 		 * to gre header.
- 		 */
--		skb_pull(skb, pull_len);
-+		skb_pull(skb, tunnel->hlen + sizeof(struct iphdr));
- 		skb_reset_mac_header(skb);
-+
-+		if (skb->ip_summed == CHECKSUM_PARTIAL &&
-+		    skb_checksum_start(skb) < skb->data)
-+			goto free_skb;
- 	} else {
- 		if (skb_cow_head(skb, dev->needed_headroom))
- 			goto free_skb;
+ #define SWRM_SPECIAL_CMD_ID	0xF
+ #define MAX_FREQ_NUM		1
+-#define TIMEOUT_MS		(2 * HZ)
++#define TIMEOUT_MS		100
+ #define QCOM_SWRM_MAX_RD_LEN	0x1
+ #define QCOM_SDW_MAX_PORTS	14
+ #define DEFAULT_CLK_FREQ	9600000
 -- 
 2.35.1
 

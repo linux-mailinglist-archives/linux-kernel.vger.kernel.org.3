@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C779F548966
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92665498B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353917AbiFMMnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S1379556AbiFMN7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354172AbiFMMix (ORCPT
+        with ESMTP id S1380240AbiFMNx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:38:53 -0400
+        Mon, 13 Jun 2022 09:53:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76F65D651;
-        Mon, 13 Jun 2022 04:08:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2361C377EC;
+        Mon, 13 Jun 2022 04:34:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9529B80EB3;
-        Mon, 13 Jun 2022 11:08:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BADAEC34114;
-        Mon, 13 Jun 2022 11:08:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9411B80EC6;
+        Mon, 13 Jun 2022 11:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18AE9C34114;
+        Mon, 13 Jun 2022 11:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118502;
-        bh=4oxHm1p9md4OCeao8DceTL8n6o67+unER+HdBMgk2n8=;
+        s=korg; t=1655120053;
+        bh=iBHXIOeiRVVBCYsNK7bbGrVtLssRBgvab2AS9555VOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dI3wDfagjDAdt+kvYQbIEGMN+O2TbRuAz0D6R6+szbb/nb3TsZ9367h+zMQsQC9VN
-         JUjKCPTx7qcet8uydpqI4UxbRvUyvLELZ33qkHxi94IXITMUrCfGWJggpPfh4qGQXm
-         IW46tH2czzlnbSvdbgi2uicsxlwsaFnY6BOElp2A=
+        b=HdcVyrkJOofU02LttY09qdwCqZJeu1HRVp3d522TrwpuAtc1gg5HUHN0aDyBbOObS
+         9as+zeY1703fUXhMP7I84CNrLp0xIfjFGR1mpPoFa8UwU9pEVnjYEotZSgnJ1zoLcU
+         0cCXcWr4B+Io5c/+RWBtEHz3EYuvPtolgdL2feZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 099/172] xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
+Subject: [PATCH 5.18 234/339] drivers: staging: rtl8192e: Fix deadlock in rtllib_beacons_stop()
 Date:   Mon, 13 Jun 2022 12:10:59 +0200
-Message-Id: <20220613094914.186773478@linuxfoundation.org>
+Message-Id: <20220613094933.755884856@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,53 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit dbac14a5a05ff8e1ce7c0da0e1f520ce39ec62ea ]
+[ Upstream commit 9b6bdbd9337de3917945847bde262a34a87a6303 ]
 
-EXPORT_SYMBOL and __init is a bad combination because the .init.text
-section is freed up after the initialization. Hence, modules cannot
-use symbols annotated __init. The access to a freed symbol may end up
-with kernel panic.
+There is a deadlock in rtllib_beacons_stop(), which is shown
+below:
 
-modpost used to detect it, but it has been broken for a decade.
+   (Thread 1)              |      (Thread 2)
+                           | rtllib_send_beacon()
+rtllib_beacons_stop()      |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | rtllib_send_beacon_cb()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-Recently, I fixed modpost so it started to warn it again, then this
-showed up in linux-next builds.
+We hold ieee->beacon_lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need ieee->beacon_lock in position (2) of thread 2.
+As a result, rtllib_beacons_stop() will block forever.
 
-There are two ways to fix it:
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain
+the needed lock.
 
-  - Remove __init
-  - Remove EXPORT_SYMBOL
-
-I chose the latter for this case because none of the in-tree call-sites
-(arch/arm/xen/enlighten.c, arch/x86/xen/grant-table.c) is compiled as
-modular.
-
-Fixes: 243848fc018c ("xen/grant-table: Move xlated_setup_gnttab_pages to common place")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Acked-by: Stefano Stabellini <sstabellini@kernel.org>
-Link: https://lore.kernel.org/r/20220606045920.4161881-1-masahiroy@kernel.org
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417141641.124388-1-duoming@zju.edu.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/xen/xlate_mmu.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/rtl8192e/rtllib_softmac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/xen/xlate_mmu.c b/drivers/xen/xlate_mmu.c
-index 34742c6e189e..f17c4c03db30 100644
---- a/drivers/xen/xlate_mmu.c
-+++ b/drivers/xen/xlate_mmu.c
-@@ -261,7 +261,6 @@ int __init xen_xlate_map_ballooned_pages(xen_pfn_t **gfns, void **virt,
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+index 4b6c2295a3cf..b5a38f0a8d79 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+@@ -651,9 +651,9 @@ static void rtllib_beacons_stop(struct rtllib_device *ieee)
+ 	spin_lock_irqsave(&ieee->beacon_lock, flags);
  
- 	return 0;
+ 	ieee->beacon_txing = 0;
+-	del_timer_sync(&ieee->beacon_timer);
+ 
+ 	spin_unlock_irqrestore(&ieee->beacon_lock, flags);
++	del_timer_sync(&ieee->beacon_timer);
+ 
  }
--EXPORT_SYMBOL_GPL(xen_xlate_map_ballooned_pages);
  
- struct remap_pfn {
- 	struct mm_struct *mm;
 -- 
 2.35.1
 

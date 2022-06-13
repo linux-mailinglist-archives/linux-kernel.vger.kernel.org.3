@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476BE54942B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6E3548959
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380021AbiFMNwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S1352102AbiFMLJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379247AbiFMNrn (ORCPT
+        with ESMTP id S1351726AbiFMLE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:47:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4624B222B0;
-        Mon, 13 Jun 2022 04:32:59 -0700 (PDT)
+        Mon, 13 Jun 2022 07:04:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF19727CC2;
+        Mon, 13 Jun 2022 03:33:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65D70B80E59;
-        Mon, 13 Jun 2022 11:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69ADC3411C;
-        Mon, 13 Jun 2022 11:32:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50D3D60FFD;
+        Mon, 13 Jun 2022 10:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6067AC34114;
+        Mon, 13 Jun 2022 10:33:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119976;
-        bh=rnyRN8uJNieEChc6O58lyP6uWMUtgSC8w2CYZauwB94=;
+        s=korg; t=1655116431;
+        bh=7v32VIHi+bnTgyc1ohffWIDjBE4jlxBrlnNUcO/jBT8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o9rBv3zhL1rJBd9z/Me6YyQpdn1nf4ZVgFAd8fh77X9d/jOBnvJ0mmxQDdAVEpVPa
-         blNPLkBF7+Kc8o2h5bsTIchYJKZUZvVrsodCsL3Xu0XxZZf7bEqqEi+IUpbwA66N1x
-         Y3sARP1ghwkAj5Rw2bqYZl443EdRL2287m3vkXTQ=
+        b=OYBj2Xmsd3zF0T/+l2aueY2zI7MgEsB4V1iLhmB15OE0Ppji+d0HdIgD+TfGTKI4v
+         Sv9IOTL48DNFZofwlL3qvdJrUi4ngf/EHOf5npEKGzCHEJywNBHo5CqwiQerq5xO0O
+         5hAXB7aUoLv4VVi5HHSmXdweJMt1XvFdEsMAkcNo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 206/339] net: mdio: unexport __init-annotated mdio_bus_init()
-Date:   Mon, 13 Jun 2022 12:10:31 +0200
-Message-Id: <20220613094932.911618579@linuxfoundation.org>
+Subject: [PATCH 4.14 174/218] net/mlx4_en: Fix wrong return value on ioctl EEPROM query failure
+Date:   Mon, 13 Jun 2022 12:10:32 +0200
+Message-Id: <20220613094925.882868378@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,52 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Gal Pressman <gal@nvidia.com>
 
-[ Upstream commit 35b42dce619701f1300fb8498dae82c9bb1f0263 ]
+[ Upstream commit f5826c8c9d57210a17031af5527056eefdc2b7eb ]
 
-EXPORT_SYMBOL and __init is a bad combination because the .init.text
-section is freed up after the initialization. Hence, modules cannot
-use symbols annotated __init. The access to a freed symbol may end up
-with kernel panic.
+The ioctl EEPROM query wrongly returns success on read failures, fix
+that by returning the appropriate error code.
 
-modpost used to detect it, but it has been broken for a decade.
-
-Recently, I fixed modpost so it started to warn it again, then this
-showed up in linux-next builds.
-
-There are two ways to fix it:
-
-  - Remove __init
-  - Remove EXPORT_SYMBOL
-
-I chose the latter for this case because the only in-tree call-site,
-drivers/net/phy/phy_device.c is never compiled as modular.
-(CONFIG_PHYLIB is boolean)
-
-Fixes: 90eff9096c01 ("net: phy: Allow splitting MDIO bus/device support from PHYs")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Fixes: 7202da8b7f71 ("ethtool, net/mlx4_en: Cable info, get_module_info/eeprom ethtool support")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220606115718.14233-1-tariqt@nvidia.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/mdio_bus.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx4/en_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index 58d602985877..8a2dbe849866 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -1046,7 +1046,6 @@ int __init mdio_bus_init(void)
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
+index 565e1ac241aa..cca7aaf03777 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
+@@ -2055,7 +2055,7 @@ static int mlx4_en_get_module_eeprom(struct net_device *dev,
+ 			en_err(priv,
+ 			       "mlx4_get_module_info i(%d) offset(%d) bytes_to_read(%d) - FAILED (0x%x)\n",
+ 			       i, offset, ee->len - i, ret);
+-			return 0;
++			return ret;
+ 		}
  
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(mdio_bus_init);
- 
- #if IS_ENABLED(CONFIG_PHYLIB)
- void mdio_bus_exit(void)
+ 		i += ret;
 -- 
 2.35.1
 

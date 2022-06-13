@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E260548B9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9675495C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357319AbiFMMtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S1384598AbiFMOg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357512AbiFMMo7 (ORCPT
+        with ESMTP id S1385499AbiFMObP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:44:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB7B60DB5;
-        Mon, 13 Jun 2022 04:11:24 -0700 (PDT)
+        Mon, 13 Jun 2022 10:31:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB182ABE6D;
+        Mon, 13 Jun 2022 04:48:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0537F60B7C;
-        Mon, 13 Jun 2022 11:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CC6C3411E;
-        Mon, 13 Jun 2022 11:11:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CC15B80EB3;
+        Mon, 13 Jun 2022 11:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DFDAC34114;
+        Mon, 13 Jun 2022 11:48:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118670;
-        bh=pX0nzPf64Gi4N4lq58ZN23VDkANWV2A2CBadwxo9BvY=;
+        s=korg; t=1655120938;
+        bh=qEFM6Y/m49ew+bIdAWMk/6fCX+AMxgaGnAGMbhM9BJo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cy2W3Gn9qNt9Z3fQfBkkdDcoEXTVjFYDFD/s0dYRO4ev3KyelwI3D7Pv8UL3F0ZrA
-         QxAArOMcqQNXTJWBmqOKvwq7Tm+lraczYS8D5s4mnutXzBocUv1tIS8aol2MqpYLUg
-         HghLBa7OZIKO0DGb4wJl0iSDm8ZZBO6I0/7nhd3w=
+        b=zVFJUOHkYCQRXd90ncD1Jv7Hthxx3wpWfZ3iU8po3cRf+wfBmP4oSXBYTyFUeVet/
+         8J0Agqc48xzKZwFm5LTPz53N5fHNECkVsAn+ydMPMhNUF97rJFMRDIDbVf6+07McEG
+         +zEENMmP0uUMzbKJSuIzm41Y9IV8JqjcgnYAZ7V0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
+        stable@vger.kernel.org, Changbin Du <changbin.du@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 146/172] s390/gmap: voluntarily schedule during key setting
+Subject: [PATCH 5.17 212/298] sysrq: do not omit current cpu when showing backtrace of all active CPUs
 Date:   Mon, 13 Jun 2022 12:11:46 +0200
-Message-Id: <20220613094922.433992166@linuxfoundation.org>
+Message-Id: <20220613094931.535137747@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,84 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Borntraeger <borntraeger@linux.ibm.com>
+From: Changbin Du <changbin.du@gmail.com>
 
-[ Upstream commit 6d5946274df1fff539a7eece458a43be733d1db8 ]
+[ Upstream commit 5390e7f46b9d5546d45a83e6463bc656678b1d0e ]
 
-With large and many guest with storage keys it is possible to create
-large latencies or stalls during initial key setting:
+The backtrace of current CPU also should be printed as it is active. This
+change add stack trace for current CPU and print a hint for idle CPU for
+the generic workqueue based printing. (x86 already does this)
 
-rcu: INFO: rcu_sched self-detected stall on CPU
-rcu:   18-....: (2099 ticks this GP) idle=54e/1/0x4000000000000002 softirq=35598716/35598716 fqs=998
-       (t=2100 jiffies g=155867385 q=20879)
-Task dump for CPU 18:
-CPU 1/KVM       R  running task        0 1030947 256019 0x06000004
-Call Trace:
-sched_show_task
-rcu_dump_cpu_stacks
-rcu_sched_clock_irq
-update_process_times
-tick_sched_handle
-tick_sched_timer
-__hrtimer_run_queues
-hrtimer_interrupt
-do_IRQ
-ext_int_handler
-ptep_zap_key
+Now it looks like below:
+[  279.401567] sysrq: Show backtrace of all active CPUs
+[  279.407234] sysrq: CPU5:
+[  279.407505] Call Trace:
+[  279.408789] [<ffffffff8000606c>] dump_backtrace+0x2c/0x3a
+[  279.411698] [<ffffffff800060ac>] show_stack+0x32/0x3e
+[  279.411809] [<ffffffff80542258>] sysrq_handle_showallcpus+0x4c/0xc6
+[  279.411929] [<ffffffff80542f16>] __handle_sysrq+0x106/0x26c
+[  279.412034] [<ffffffff805436a8>] write_sysrq_trigger+0x64/0x74
+[  279.412139] [<ffffffff8029cd48>] proc_reg_write+0x8e/0xe2
+[  279.412252] [<ffffffff8021a8f8>] vfs_write+0x90/0x2be
+[  279.412362] [<ffffffff8021acd2>] ksys_write+0xa6/0xce
+[  279.412467] [<ffffffff8021ad24>] sys_write+0x2a/0x38
+[  279.412689] [<ffffffff80003ff8>] ret_from_syscall+0x0/0x2
+[  279.417173] sysrq: CPU6: backtrace skipped as idling
+[  279.417185] sysrq: CPU4: backtrace skipped as idling
+[  279.417187] sysrq: CPU0: backtrace skipped as idling
+[  279.417181] sysrq: CPU7: backtrace skipped as idling
+[  279.417190] sysrq: CPU1: backtrace skipped as idling
+[  279.417193] sysrq: CPU3: backtrace skipped as idling
+[  279.417219] sysrq: CPU2:
+[  279.419179] Call Trace:
+[  279.419440] [<ffffffff8000606c>] dump_backtrace+0x2c/0x3a
+[  279.419782] [<ffffffff800060ac>] show_stack+0x32/0x3e
+[  279.420015] [<ffffffff80542b30>] showacpu+0x5c/0x96
+[  279.420317] [<ffffffff800ba71c>] flush_smp_call_function_queue+0xd6/0x218
+[  279.420569] [<ffffffff800bb438>] generic_smp_call_function_single_interrupt+0x14/0x1c
+[  279.420798] [<ffffffff800079ae>] handle_IPI+0xaa/0x13a
+[  279.421024] [<ffffffff804dcb92>] riscv_intc_irq+0x56/0x70
+[  279.421274] [<ffffffff80a05b70>] generic_handle_arch_irq+0x6a/0xfa
+[  279.421518] [<ffffffff80004006>] ret_from_exception+0x0/0x10
+[  279.421750] [<ffffffff80096492>] rcu_idle_enter+0x16/0x1e
 
-The mmap lock is held during the page walking but since this is a
-semaphore scheduling is still possible. Same for the kvm srcu.
-To minimize overhead do this on every segment table entry or large page.
-
-Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220530092706.11637-2-borntraeger@linux.ibm.com
-Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
+Link: https://lore.kernel.org/r/20220117154300.2808-1-changbin.du@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/mm/gmap.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/tty/sysrq.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-index f2d19d40272c..2db097c14cec 100644
---- a/arch/s390/mm/gmap.c
-+++ b/arch/s390/mm/gmap.c
-@@ -2596,6 +2596,18 @@ static int __s390_enable_skey_pte(pte_t *pte, unsigned long addr,
- 	return 0;
- }
+diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+index bbfd004449b5..34cfdda4aff5 100644
+--- a/drivers/tty/sysrq.c
++++ b/drivers/tty/sysrq.c
+@@ -232,8 +232,10 @@ static void showacpu(void *dummy)
+ 	unsigned long flags;
  
-+/*
-+ * Give a chance to schedule after setting a key to 256 pages.
-+ * We only hold the mm lock, which is a rwsem and the kvm srcu.
-+ * Both can sleep.
-+ */
-+static int __s390_enable_skey_pmd(pmd_t *pmd, unsigned long addr,
-+				  unsigned long next, struct mm_walk *walk)
-+{
-+	cond_resched();
-+	return 0;
-+}
+ 	/* Idle CPUs have no interesting backtrace. */
+-	if (idle_cpu(smp_processor_id()))
++	if (idle_cpu(smp_processor_id())) {
++		pr_info("CPU%d: backtrace skipped as idling\n", smp_processor_id());
+ 		return;
++	}
+ 
+ 	raw_spin_lock_irqsave(&show_lock, flags);
+ 	pr_info("CPU%d:\n", smp_processor_id());
+@@ -260,10 +262,13 @@ static void sysrq_handle_showallcpus(int key)
+ 
+ 		if (in_hardirq())
+ 			regs = get_irq_regs();
+-		if (regs) {
+-			pr_info("CPU%d:\n", smp_processor_id());
 +
- static int __s390_enable_skey_hugetlb(pte_t *pte, unsigned long addr,
- 				      unsigned long hmask, unsigned long next,
- 				      struct mm_walk *walk)
-@@ -2618,12 +2630,14 @@ static int __s390_enable_skey_hugetlb(pte_t *pte, unsigned long addr,
- 	end = start + HPAGE_SIZE - 1;
- 	__storage_key_init_range(start, end);
- 	set_bit(PG_arch_1, &page->flags);
-+	cond_resched();
- 	return 0;
++		pr_info("CPU%d:\n", smp_processor_id());
++		if (regs)
+ 			show_regs(regs);
+-		}
++		else
++			show_stack(NULL, NULL, KERN_INFO);
++
+ 		schedule_work(&sysrq_showallcpus);
+ 	}
  }
- 
- static const struct mm_walk_ops enable_skey_walk_ops = {
- 	.hugetlb_entry		= __s390_enable_skey_hugetlb,
- 	.pte_entry		= __s390_enable_skey_pte,
-+	.pmd_entry		= __s390_enable_skey_pmd,
- };
- 
- int s390_enable_skey(void)
 -- 
 2.35.1
 

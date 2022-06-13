@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF244549180
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F65C548A81
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356196AbiFMLs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S1356918AbiFMMou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356781AbiFMLpC (ORCPT
+        with ESMTP id S1353284AbiFMMiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:45:02 -0400
+        Mon, 13 Jun 2022 08:38:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF0E46;
-        Mon, 13 Jun 2022 03:51:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F865D1AA;
+        Mon, 13 Jun 2022 04:08:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A20B0B80E56;
-        Mon, 13 Jun 2022 10:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD56C34114;
-        Mon, 13 Jun 2022 10:51:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7557B80E93;
+        Mon, 13 Jun 2022 11:08:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCC6C34114;
+        Mon, 13 Jun 2022 11:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117471;
-        bh=Swyo9kPE4Q9+YBx8+848IwPjmWR8lTv5QeR8J+CHChA=;
+        s=korg; t=1655118496;
+        bh=LjqkLXe4TiAkVdoQ812veZ0hiOZkMRIo+tjBfAknxy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NqRvotWlTO5DjzMoFEL9Ub8jbswqqJA+z44mekK31zl568xDJhEHRcT1eFf2/JD+e
-         86ZQrpQ7uVqlYRpJEmAx250qiieabcEA1rBnT/nfsfpwj/RXSuIGshIGTToJ0i7kU1
-         xPCznI2hPSuOTOrgVfF4TJT06HY/Ote5vFUuLpv4=
+        b=Y/1S2UecZcDJtHJRh0RcEzpwylCyyRcM+C0xjU+JO00YiHtT6QCcAxxOwsHeR7hfC
+         caBy5olUW9MYKCqNHwyB5ZgFGEGcmUJxrHaQK+mt/wFmSPCeErtNR5+/lqPgwe+EVH
+         KxvKSUwspSY2NT/IAFFyH3MawAr+UATsmc2h9kE4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Hao Luo <haoluo@google.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 383/411] kernfs: Separate kernfs_pr_cont_buf and rename_lock.
-Date:   Mon, 13 Jun 2022 12:10:56 +0200
-Message-Id: <20220613094940.149851134@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 097/172] netfilter: nf_tables: memleak flow rule from commit path
+Date:   Mon, 13 Jun 2022 12:10:57 +0200
+Message-Id: <20220613094913.714272040@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,140 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Luo <haoluo@google.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 1a702dc88e150487c9c173a249b3d236498b9183 ]
+[ Upstream commit 9dd732e0bdf538b1b76dc7c157e2b5e560ff30d3 ]
 
-Previously the protection of kernfs_pr_cont_buf was piggy backed by
-rename_lock, which means that pr_cont() needs to be protected under
-rename_lock. This can cause potential circular lock dependencies.
+Abort path release flow rule object, however, commit path does not.
+Update code to destroy these objects before releasing the transaction.
 
-If there is an OOM, we have the following call hierarchy:
-
- -> cpuset_print_current_mems_allowed()
-   -> pr_cont_cgroup_name()
-     -> pr_cont_kernfs_name()
-
-pr_cont_kernfs_name() will grab rename_lock and call printk. So we have
-the following lock dependencies:
-
- kernfs_rename_lock -> console_sem
-
-Sometimes, printk does a wakeup before releasing console_sem, which has
-the dependence chain:
-
- console_sem -> p->pi_lock -> rq->lock
-
-Now, imagine one wants to read cgroup_name under rq->lock, for example,
-printing cgroup_name in a tracepoint in the scheduler code. They will
-be holding rq->lock and take rename_lock:
-
- rq->lock -> kernfs_rename_lock
-
-Now they will deadlock.
-
-A prevention to this circular lock dependency is to separate the
-protection of pr_cont_buf from rename_lock. In principle, rename_lock
-is to protect the integrity of cgroup name when copying to buf. Once
-pr_cont_buf has got its content, rename_lock can be dropped. So it's
-safe to drop rename_lock after kernfs_name_locked (and
-kernfs_path_from_node_locked) and rely on a dedicated pr_cont_lock
-to protect pr_cont_buf.
-
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Hao Luo <haoluo@google.com>
-Link: https://lore.kernel.org/r/20220516190951.3144144-1-haoluo@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c9626a2cbdb2 ("netfilter: nf_tables: add hardware offload support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/kernfs/dir.c | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
+ net/netfilter/nf_tables_api.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 7d4af6cea2a6..99ee657596b5 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -19,7 +19,15 @@
- 
- DEFINE_MUTEX(kernfs_mutex);
- static DEFINE_SPINLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
--static char kernfs_pr_cont_buf[PATH_MAX];	/* protected by rename_lock */
-+/*
-+ * Don't use rename_lock to piggy back on pr_cont_buf. We don't want to
-+ * call pr_cont() while holding rename_lock. Because sometimes pr_cont()
-+ * will perform wakeups when releasing console_sem. Holding rename_lock
-+ * will introduce deadlock if the scheduler reads the kernfs_name in the
-+ * wakeup path.
-+ */
-+static DEFINE_SPINLOCK(kernfs_pr_cont_lock);
-+static char kernfs_pr_cont_buf[PATH_MAX];	/* protected by pr_cont_lock */
- static DEFINE_SPINLOCK(kernfs_idr_lock);	/* root->ino_idr */
- 
- #define rb_to_kn(X) rb_entry((X), struct kernfs_node, rb)
-@@ -230,12 +238,12 @@ void pr_cont_kernfs_name(struct kernfs_node *kn)
- {
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	spin_lock_irqsave(&kernfs_pr_cont_lock, flags);
- 
--	kernfs_name_locked(kn, kernfs_pr_cont_buf, sizeof(kernfs_pr_cont_buf));
-+	kernfs_name(kn, kernfs_pr_cont_buf, sizeof(kernfs_pr_cont_buf));
- 	pr_cont("%s", kernfs_pr_cont_buf);
- 
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	spin_unlock_irqrestore(&kernfs_pr_cont_lock, flags);
- }
- 
- /**
-@@ -249,10 +257,10 @@ void pr_cont_kernfs_path(struct kernfs_node *kn)
- 	unsigned long flags;
- 	int sz;
- 
--	spin_lock_irqsave(&kernfs_rename_lock, flags);
-+	spin_lock_irqsave(&kernfs_pr_cont_lock, flags);
- 
--	sz = kernfs_path_from_node_locked(kn, NULL, kernfs_pr_cont_buf,
--					  sizeof(kernfs_pr_cont_buf));
-+	sz = kernfs_path_from_node(kn, NULL, kernfs_pr_cont_buf,
-+				   sizeof(kernfs_pr_cont_buf));
- 	if (sz < 0) {
- 		pr_cont("(error)");
- 		goto out;
-@@ -266,7 +274,7 @@ void pr_cont_kernfs_path(struct kernfs_node *kn)
- 	pr_cont("%s", kernfs_pr_cont_buf);
- 
- out:
--	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
-+	spin_unlock_irqrestore(&kernfs_pr_cont_lock, flags);
- }
- 
- /**
-@@ -870,13 +878,12 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
- 
- 	lockdep_assert_held(&kernfs_mutex);
- 
--	/* grab kernfs_rename_lock to piggy back on kernfs_pr_cont_buf */
--	spin_lock_irq(&kernfs_rename_lock);
-+	spin_lock_irq(&kernfs_pr_cont_lock);
- 
- 	len = strlcpy(kernfs_pr_cont_buf, path, sizeof(kernfs_pr_cont_buf));
- 
- 	if (len >= sizeof(kernfs_pr_cont_buf)) {
--		spin_unlock_irq(&kernfs_rename_lock);
-+		spin_unlock_irq(&kernfs_pr_cont_lock);
- 		return NULL;
- 	}
- 
-@@ -888,7 +895,7 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
- 		parent = kernfs_find_ns(parent, name, ns);
- 	}
- 
--	spin_unlock_irq(&kernfs_rename_lock);
-+	spin_unlock_irq(&kernfs_pr_cont_lock);
- 
- 	return parent;
- }
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 2872722488c9..8507c1bdd736 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -7587,6 +7587,9 @@ static void nft_commit_release(struct nft_trans *trans)
+ 		nf_tables_chain_destroy(&trans->ctx);
+ 		break;
+ 	case NFT_MSG_DELRULE:
++		if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
++			nft_flow_rule_destroy(nft_trans_flow_rule(trans));
++
+ 		nf_tables_rule_destroy(&trans->ctx, nft_trans_rule(trans));
+ 		break;
+ 	case NFT_MSG_DELSET:
+@@ -7946,6 +7949,9 @@ static int nf_tables_commit(struct net *net, struct sk_buff *skb)
+ 			nf_tables_rule_notify(&trans->ctx,
+ 					      nft_trans_rule(trans),
+ 					      NFT_MSG_NEWRULE);
++			if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
++				nft_flow_rule_destroy(nft_trans_flow_rule(trans));
++
+ 			nft_trans_destroy(trans);
+ 			break;
+ 		case NFT_MSG_DELRULE:
 -- 
 2.35.1
 

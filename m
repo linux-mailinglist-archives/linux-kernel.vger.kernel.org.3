@@ -2,145 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCDA5488AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DCC54918E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352800AbiFMMYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
+        id S1351225AbiFMMW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348009AbiFMMWl (ORCPT
+        with ESMTP id S1359388AbiFMMUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:22:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A604557B15
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655118211; x=1686654211;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I0+AQdJdP0W9uMbzGijxcDYistK8Ld2UH8HmZHjvd38=;
-  b=NTTcVcTeAXZDv3MLrWhiLxEhI/ecERZ0G1tp3Ho8MsSO2CJ00v6lqKEB
-   EPJE4DTN7UJG5KWg89DMxFvaPkP8qmyrsiTFMOEMoUkgcNfiBZqgDHbNX
-   cLJ6dD6WWOLmHKpdhMr6OEVyQ/OPhaN88pXesImmzJOHyUZn/smHu/53m
-   MdCvxY/NcExYekKo27KjFr0dHNz05eslts+/7s/kIUm8+pjixqJvZjsuV
-   ZdW+bCOKq42r+QrJc5KMQj3yDetbTpraHxOZfFTUK6pxcWO2NLuWItjNg
-   lC6tGbNTkuVpAutWtWLfNOXCyVK382ggpiKKTeeYLb3QOPwlvNbd1Dtlp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="342220115"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="342220115"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 04:03:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="829742491"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2022 04:03:28 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0hqy-000KkH-4J;
-        Mon, 13 Jun 2022 11:03:28 +0000
-Date:   Mon, 13 Jun 2022 19:03:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Subject: arch/x86/kvm/svm/sev.c:1605:30: warning: parameter 'role' set but
- not used
-Message-ID: <202206131853.x4KJwC5Q-lkp@intel.com>
+        Mon, 13 Jun 2022 08:20:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 617195712D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:03:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655118197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j5D3sK3qxzP9CGnwsiLKPN/J+KjY10e+k7sKDOcqT5o=;
+        b=BpQnBRJkM+s/JPW3AwqucdVXJhFoPad+rXc4rMel291fDEE1AjZBJQ88JKERjhwpplUGai
+        DGZ4TwlSg4wGbtLQMq+9g3npiZCOgkqTcQuNFKN/X0Fj/yyXdrwBb/3ABekRgqiTHfQ2oV
+        0mtJwwvbcaZFCI9nUr/hdp0tQssaqLQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-wPg0jZeZMPWH7Wo7fLryEw-1; Mon, 13 Jun 2022 07:03:16 -0400
+X-MC-Unique: wPg0jZeZMPWH7Wo7fLryEw-1
+Received: by mail-wm1-f69.google.com with SMTP id m23-20020a05600c3b1700b0039c6e3c169aso3027049wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:03:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=j5D3sK3qxzP9CGnwsiLKPN/J+KjY10e+k7sKDOcqT5o=;
+        b=SPRDYBj9xh2HXZQoseBZuwuzNVDDLNn+MEyboAJMstEhttcCoH59H7zMtwsJepcf02
+         oNsQcyMfSQ8WAFC/dwKEfQMn9rmABAQLlw6JTxOuoArCffGH1elKb9XG7XImh8b7TGcA
+         Ks5XhLAjEfMdb8XHa9HmOI5sm7MU3GctNIACyu+JEdImnDx2QQiqYbIqxedV4h/pBRQT
+         UXZ5mB31Dj4s+p1qmEwznRm/B8gk+PbX1uK8jtL0c0dWzRPO/Fy30ogbk6LKnz0e44SA
+         fQr2MWLRDthosYBc/SPhDcZWNGEvDQXvGMZawfs0T1IGgwE82Csb5fcJpXtZf7VI7t1G
+         cpUA==
+X-Gm-Message-State: AOAM530JiPJHXWJd04n+HTzCKT66HRHCIJTgyMg8/LgGtKRexU14Qm2H
+        lSc+RZF7BSihvM0kHUw/+wxkYysIcXzqBTIGaiOUeBfAu9n7tABhbGh9Xa/6XM7LdlvkmpS4sCu
+        jvRCndPPmN1Ai0J+/o9ioPbL2
+X-Received: by 2002:a05:600c:3508:b0:39c:8240:5538 with SMTP id h8-20020a05600c350800b0039c82405538mr13049414wmq.165.1655118195260;
+        Mon, 13 Jun 2022 04:03:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyDoO2UACoWH0XUMegJUwRA9D70xt70UBbXMGCQlKNX3UWoHBV/NMn9vGGLzctDprJh1GcUdg==
+X-Received: by 2002:a05:600c:3508:b0:39c:8240:5538 with SMTP id h8-20020a05600c350800b0039c82405538mr13049370wmq.165.1655118194993;
+        Mon, 13 Jun 2022 04:03:14 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:bd00:963c:5455:c10e:fa6f? (p200300cbc706bd00963c5455c10efa6f.dip0.t-ipconnect.de. [2003:cb:c706:bd00:963c:5455:c10e:fa6f])
+        by smtp.gmail.com with ESMTPSA id s7-20020a5d4247000000b0021018642ff8sm8136796wrr.76.2022.06.13.04.03.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 04:03:14 -0700 (PDT)
+Message-ID: <4c4cf0a8-aab6-2a17-e1f9-59d6700821b7@redhat.com>
+Date:   Mon, 13 Jun 2022 13:03:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 4/6] mm: Limit warning message in vmemmap_verify() to
+ once
+Content-Language: en-US
+To:     Wupeng Ma <mawupeng1@huawei.com>, corbet@lwn.net, will@kernel.org,
+        ardb@kernel.org, catalin.marinas@arm.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        dvhart@infradead.org, andy@infradead.org, rppt@kernel.org,
+        akpm@linux-foundation.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, paulmck@kernel.org,
+        keescook@chromium.org, songmuchun@bytedance.com,
+        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
+        swboyd@chromium.org, wei.liu@kernel.org, robin.murphy@arm.com,
+        anshuman.khandual@arm.com, thunder.leizhen@huawei.com,
+        wangkefeng.wang@huawei.com, gpiccoli@igalia.com,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org
+References: <20220613082147.183145-1-mawupeng1@huawei.com>
+ <20220613082147.183145-5-mawupeng1@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220613082147.183145-5-mawupeng1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On 13.06.22 10:21, Wupeng Ma wrote:
+> From: Ma Wupeng <mawupeng1@huawei.com>
+> 
+> For a system only have limited mirrored memory or some numa node without
+> mirrored memory, the per node vmemmap page_structs prefer to allocate
+> memory from mirrored region, which will lead to vmemmap_verify() in
+> vmemmap_populate_basepages() report lots of warning message.
+> 
+> This patch change the frequency of "potential offnode page_structs" warning
+> messages to only once to avoid a very long print during bootup.
+> 
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> ---
+>  mm/sparse-vmemmap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> index f4fa61dbbee3..f34c6889b0a6 100644
+> --- a/mm/sparse-vmemmap.c
+> +++ b/mm/sparse-vmemmap.c
+> @@ -528,7 +528,7 @@ void __meminit vmemmap_verify(pte_t *pte, int node,
+>  	int actual_node = early_pfn_to_nid(pfn);
+>  
+>  	if (node_distance(actual_node, node) > LOCAL_DISTANCE)
+> -		pr_warn("[%lx-%lx] potential offnode page_structs\n",
+> +		pr_warn_once("[%lx-%lx] potential offnode page_structs\n",
+>  			start, end - 1);
+>  }
+>  
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-commit: 0c2c7c069285374fc8feacddc0498f8ab7627117 KVM: SEV: Mark nested locking of vcpu->lock
-date:   5 weeks ago
-config: x86_64-buildonly-randconfig-r005-20220613 (https://download.01.org/0day-ci/archive/20220613/202206131853.x4KJwC5Q-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0c2c7c069285374fc8feacddc0498f8ab7627117
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0c2c7c069285374fc8feacddc0498f8ab7627117
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/ drivers/media/platform/qcom/camss/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/svm/sev.c:1605:30: warning: parameter 'role' set but not used [-Wunused-but-set-parameter]
-                                           enum sev_migration_role role)
-                                                                   ^
-   1 warning generated.
-
-
-vim +/role +1605 arch/x86/kvm/svm/sev.c
-
-  1603	
-  1604	static int sev_lock_vcpus_for_migration(struct kvm *kvm,
-> 1605						enum sev_migration_role role)
-  1606	{
-  1607		struct kvm_vcpu *vcpu;
-  1608		unsigned long i, j;
-  1609		bool first = true;
-  1610	
-  1611		kvm_for_each_vcpu(i, vcpu, kvm) {
-  1612			if (mutex_lock_killable_nested(&vcpu->mutex, role))
-  1613				goto out_unlock;
-  1614	
-  1615			if (first) {
-  1616				/*
-  1617				 * Reset the role to one that avoids colliding with
-  1618				 * the role used for the first vcpu mutex.
-  1619				 */
-  1620				role = SEV_NR_MIGRATION_ROLES;
-  1621				first = false;
-  1622			} else {
-  1623				mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
-  1624			}
-  1625		}
-  1626	
-  1627		return 0;
-  1628	
-  1629	out_unlock:
-  1630	
-  1631		first = true;
-  1632		kvm_for_each_vcpu(j, vcpu, kvm) {
-  1633			if (i == j)
-  1634				break;
-  1635	
-  1636			if (first)
-  1637				first = false;
-  1638			else
-  1639				mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
-  1640	
-  1641	
-  1642			mutex_unlock(&vcpu->mutex);
-  1643		}
-  1644		return -EINTR;
-  1645	}
-  1646	
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+

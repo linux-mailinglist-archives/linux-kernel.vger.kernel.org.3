@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4405549483
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF0554962E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354298AbiFMMNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S1358898AbiFMNI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358685AbiFMMJn (ORCPT
+        with ESMTP id S1355093AbiFMM4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:09:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D8452E67;
-        Mon, 13 Jun 2022 04:00:44 -0700 (PDT)
+        Mon, 13 Jun 2022 08:56:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E9A13DFC;
+        Mon, 13 Jun 2022 04:17:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBC8F60F9A;
-        Mon, 13 Jun 2022 11:00:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072A8C34114;
-        Mon, 13 Jun 2022 11:00:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83DC760F16;
+        Mon, 13 Jun 2022 11:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B17C3411C;
+        Mon, 13 Jun 2022 11:17:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118036;
-        bh=yWhz9TOyrS1uXK3v/oK9K3AnSwUT7ipuFe3JPeHhx50=;
+        s=korg; t=1655119036;
+        bh=S/LOKUcd3huiVgmImvposNmZVMjk3aFMSXDN/g80QKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BOmw7Z4b6Hj6p0+BfolQvP3lkyGJ/nj4jmpPh985THy5iKkaALuzUym/6PgTKBpD4
-         GC0nzOIgstng8fd54Xi9EKL3RWB3lNX2t3VU6rDoa5HI4iQ1SeFgZEGa9jKf6YRVHo
-         XqIZ+XHdgipP4l5Mdc4ZKSbNNjuK8PM3jRnhKRBo=
+        b=XIsewHl3pHmlsj5YD0+ktVQxPLTTvXegibt/mRaAh111ZZWRsW3PaGbeNpvsdRkZO
+         2aAauBwcTZc036braPMD/zoRaiDAYlbEtgYE5a5f3EFUPl9mMTtnlXmykgibPR/uT4
+         SldV3xV5w9lWBL8sWWwcMScVhifz+wQsO7se9Ye4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 196/287] pwm: lp3943: Fix duty calculation in case period was clamped
+Subject: [PATCH 5.15 118/247] f2fs: remove WARN_ON in f2fs_is_valid_blkaddr
 Date:   Mon, 13 Jun 2022 12:10:20 +0200
-Message-Id: <20220613094929.807154557@linuxfoundation.org>
+Message-Id: <20220613094926.543127769@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 5e3b07ca5cc78cd4a987e78446849e41288d87cb ]
+[ Upstream commit dc2f78e2d4cc844a1458653d57ce1b54d4a29f21 ]
 
-The hardware only supports periods <= 1.6 ms and if a bigger period is
-requested it is clamped to 1.6 ms. In this case duty_cycle might be bigger
-than 1.6 ms and then the duty cycle register is written with a value
-bigger than LP3943_MAX_DUTY. So clamp duty_cycle accordingly.
+Syzbot triggers two WARNs in f2fs_is_valid_blkaddr and
+__is_bitmap_valid. For example, in f2fs_is_valid_blkaddr,
+if type is DATA_GENERIC_ENHANCE or DATA_GENERIC_ENHANCE_READ,
+it invokes WARN_ON if blkaddr is not in the right range.
+The call trace is as follows:
 
-Fixes: af66b3c0934e ("pwm: Add LP3943 PWM driver")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
+ f2fs_get_node_info+0x45f/0x1070
+ read_node_page+0x577/0x1190
+ __get_node_page.part.0+0x9e/0x10e0
+ __get_node_page
+ f2fs_get_node_page+0x109/0x180
+ do_read_inode
+ f2fs_iget+0x2a5/0x58b0
+ f2fs_fill_super+0x3b39/0x7ca0
+
+Fix these two WARNs by replacing WARN_ON with dump_stack.
+
+Reported-by: syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pwm/pwm-lp3943.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/f2fs/checkpoint.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pwm/pwm-lp3943.c b/drivers/pwm/pwm-lp3943.c
-index 5055ba2c6c94..a5f4c39eeb21 100644
---- a/drivers/pwm/pwm-lp3943.c
-+++ b/drivers/pwm/pwm-lp3943.c
-@@ -128,6 +128,7 @@ static int lp3943_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
- 	if (err)
- 		return err;
- 
-+	duty_ns = min(duty_ns, period_ns);
- 	val = (u8)(duty_ns * LP3943_MAX_DUTY / period_ns);
- 
- 	return lp3943_write_byte(lp3943, reg_duty, val);
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 70d898ad2d1d..f2fe4940a8cd 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -151,7 +151,7 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
+ 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
+ 			 blkaddr, exist);
+ 		set_sbi_flag(sbi, SBI_NEED_FSCK);
+-		WARN_ON(1);
++		dump_stack();
+ 	}
+ 	return exist;
+ }
+@@ -189,7 +189,7 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
+ 			f2fs_warn(sbi, "access invalid blkaddr:%u",
+ 				  blkaddr);
+ 			set_sbi_flag(sbi, SBI_NEED_FSCK);
+-			WARN_ON(1);
++			dump_stack();
+ 			return false;
+ 		} else {
+ 			return __is_bitmap_valid(sbi, blkaddr, type);
 -- 
 2.35.1
 
